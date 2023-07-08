@@ -9,6 +9,7 @@ import personal_missions
 from adisp import adisp_async, adisp_process
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
+from chat_shared import SYS_MESSAGE_TYPE
 from comp7_common import Comp7QuestType
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
@@ -26,13 +27,13 @@ from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter
-from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter
+from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IRankedBattlesController, ISeniorityAwardsController, IWinbackController
+from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController
 from helpers import dependency
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
@@ -658,7 +659,9 @@ class LootBoxTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
 
 class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
     __MESSAGE_TEMPLATE = 'BattlePassDefaultRewardMessage'
+    __COLLECTION_ITEMS_TEMPLATE = 'CollectionItemsSysMessage'
     __BATTLE_PASS_TOKEN_QUEST_PATTERN = 'battle_pass'
+    __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
     def __init__(self):
         super(BattlePassDefaultAwardsFormatter, self).__init__()
@@ -674,8 +677,8 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
             completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
             for qID in completedQuestIDs:
                 messageData = self.__buildMessage(qID, message)
-                if messageData is not None:
-                    messageDataList.append(messageData)
+                if messageData:
+                    messageDataList.extend(messageData)
 
         if messageDataList:
             callback(messageDataList)
@@ -687,9 +690,11 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
         return cls.__BATTLE_PASS_TOKEN_QUEST_PATTERN in questID
 
     def __buildMessage(self, questID, message):
+        result = []
         data = message.data or {}
         questData = {}
         rewards = data.get('detailedRewards', {}).get(questID, {})
+        collectionEntitlements = popCollectionEntitlements(rewards)
         questData.update(rewards)
         header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.voted())
         fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
@@ -698,9 +703,22 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
              'header': header}
             settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
             formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
-            return MessageData(formatted, settings)
-        else:
-            return
+            result.append(MessageData(formatted, settings))
+        if collectionEntitlements and self.__collectionsSystem.isEnabled():
+            result.append(self.__makeCollectionMessage(collectionEntitlements, message))
+        return result
+
+    def __makeCollectionMessage(self, entitlements, message):
+        messages = R.strings.collections.notifications
+        collectionID = int(first(entitlements).split('_')[-2])
+        collection = self.__collectionsSystem.getCollection(collectionID).name
+        feature = backport.text(messages.feature.dyn(collection)())
+        season = backport.text(messages.season.dyn(collection)())
+        title = backport.text(messages.title.collectionName(), feature=feature, season=season)
+        text = backport.text(messages.newItemsReceived.text(), items=CollectionsFormatter.formatQuestAchieves({'entitlements': entitlements}, False))
+        formatted = g_settings.msgTemplates.format(self.__COLLECTION_ITEMS_TEMPLATE, ctx={'title': title,
+         'text': text}, data={'savedData': {'collectionId': collectionID}})
+        return MessageData(formatted, self._getGuiSettings(message, self.__COLLECTION_ITEMS_TEMPLATE, messageType=SYS_MESSAGE_TYPE.collectionsItems.index()))
 
 
 class RankedYearLeaderFormatter(RankedTokenQuestFormatter):

@@ -1,8 +1,10 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
+    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
@@ -1045,4 +1047,76 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_57mm_BR-281_FEP>
+    <id>	601	</id>
+    <userString>	#czech_vehicles:_57mm_BR-281_FEP	</userString>
+    <icon>	aap	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	fepQfgSmallArmorPiercing	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	35	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_57mm_BR-281_FEP>
+  <_57mm_BR-281U_FEP>
+    <id>	602	</id>
+    <userString>	#czech_vehicles:_57mm_BR-281U_FEP	</userString>
+    <icon>	aap_cr	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <mechanics>	GUARANTEED_DAMAGE	</mechanics>
+    <guaranteedDamages>
+      <damage>
+        <armor>	17.0	</armor>
+      </damage>
+    </guaranteedDamages>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	fepQfgSmallArmorPiercing	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgSmallArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	35	</armor>
+      <devices>	17	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_57mm_BR-281U_FEP>
 </shells.xml>

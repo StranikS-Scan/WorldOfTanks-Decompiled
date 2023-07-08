@@ -17,7 +17,7 @@ class BattleRoyaleQuestsTooltip(BlocksTooltipData):
         super(BattleRoyaleQuestsTooltip, self).__init__(context, TOOLTIP_TYPE.EPIC_QUESTS)
         self._setContentMargin(top=0, left=0, bottom=0, right=0)
         self._setMargins(afterBlock=0)
-        self._setWidth(320)
+        self._setWidth(322)
 
     def _packBlocks(self, *args, **kwargs):
         allQuests = self.__eventsCache.getAllQuests()

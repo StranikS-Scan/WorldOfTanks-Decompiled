@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/vehicles_count_ctrl.py
-from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.arena_info.interfaces import IVehicleCountController
@@ -21,9 +20,6 @@ class IVehicleCountListener(object):
     def setPlayerVehicleAlive(self, isAlive):
         pass
 
-    def setLives(self, lives):
-        pass
-
 
 class VehicleCountController(IVehicleCountController):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -40,21 +36,16 @@ class VehicleCountController(IVehicleCountController):
         self.__frags = 0
         self.__isAlive = True
         self.__attachedVehicleID = None
-        self.__isSquadMode = None
         return
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL
 
     def startControl(self, *args):
-        bonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
-        self.__isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
-        componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
-        componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate += self._onDefeatedTeamsUpdated
+        pass
 
     def stopControl(self):
-        componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()
-        componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate -= self._onDefeatedTeamsUpdated
+        pass
 
     def setViewComponents(self, *components):
         self._viewComponents = list(components)
@@ -78,7 +69,7 @@ class VehicleCountController(IVehicleCountController):
         self.__vehicles.clear()
         for vInfo in arenaDP.getVehiclesInfoIterator():
             if not vInfo.isObserver():
-                self.__updateVehicleInfo(vInfo, arenaDP)
+                self.__addToVehicles(vInfo)
             if vInfo.vehicleID == arenaDP.getPlayerVehicleID():
                 self.__isAlive = vInfo.isAlive()
 
@@ -88,7 +79,8 @@ class VehicleCountController(IVehicleCountController):
         self.__updateData()
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
-        if self.__updateVehicleInfo(vInfoVO, arenaDP):
+        if not vInfoVO.isAlive():
+            self.__setDead(vInfoVO)
             self.__updateData()
         if vInfoVO.vehicleID == arenaDP.getPlayerVehicleID():
             self.__isAlive = vInfoVO.isAlive()
@@ -104,21 +96,6 @@ class VehicleCountController(IVehicleCountController):
 
                 self.__frags = vStats.frags
 
-    def updateVehiclesInfo(self, updated, arenaDP):
-        statusUpdated = False
-        for _, vInfo in updated:
-            statusUpdated = self.__updateVehicleInfo(vInfo, arenaDP) or statusUpdated
-
-        if statusUpdated:
-            self.__updateData()
-
-    def updateLives(self, lives):
-        for view in self._viewComponents:
-            view.setLives(lives)
-
-    def _onDefeatedTeamsUpdated(self, *args):
-        self.invalidateVehiclesInfo(self.__sessionProvider.getArenaDP())
-
     def updateAttachedVehicle(self, vehicleID):
         self.__attachedVehicleID = vehicleID
         arenaDP = self.__sessionProvider.getArenaDP()
@@ -133,7 +110,7 @@ class VehicleCountController(IVehicleCountController):
 
     def addVehicleInfo(self, vInfoVO, arenaDP):
         if vInfoVO.isAlive() and vInfoVO.isPlayer():
-            self.__updateVehicleInfo(vInfoVO, arenaDP)
+            self.__addToVehicles(vInfoVO)
             self.__updateData()
 
     def getEnemiesCount(self):
@@ -151,34 +128,22 @@ class VehicleCountController(IVehicleCountController):
     def getEnemiesTeamCount(self):
         return self.__enemiesTeamCount
 
-    def __updateVehicleInfo(self, vInfoVO, arenaDP):
-        if not vInfoVO.isPlayer():
-            return False
+    def __addToVehicles(self, vInfoVO):
         classType, _, _ = vInfoVO.getTypeInfo()
-        team = arenaDP.getVehicleInfo().team
-        defeatedTeams = set(self.__sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.defeatedTeams)
         vehicleInfo = [not vInfoVO.isAlive(),
          classType,
-         team != vInfoVO.team,
-         vInfoVO.team,
-         vInfoVO.isPlayer() and not self.__isSquadMode and vInfoVO.team not in defeatedTeams]
-        if classType not in self.__vehicles:
+         True,
+         vInfoVO.team]
+        if self.__vehicles.get(classType, None) is None:
             self.__vehicles[classType] = {}
-        if self.__vehicles[classType].get(vInfoVO.vehicleID) != vehicleInfo:
-            self.__vehicles[classType][vInfoVO.vehicleID] = vehicleInfo
-            return True
-        return False
+        self.__vehicles[classType][vInfoVO.vehicleID] = vehicleInfo
+        return
 
-    def __updateAliveStatus(self, vInfoVO):
+    def __setDead(self, vInfoVO):
         classType, _, _ = vInfoVO.getTypeInfo()
         vehByClassType = self.__vehicles.get(classType)
-        isDead = not vInfoVO.isAlive()
         if vehByClassType and vInfoVO.vehicleID in vehByClassType:
-            if vehByClassType[vInfoVO.vehicleID][0] != isDead:
-                vehByClassType[vInfoVO.vehicleID][0] = isDead
-                return True
-            return False
-        return False
+            vehByClassType[vInfoVO.vehicleID][0] = True
 
     def invalidateArenaInfo(self):
         self.__updateData()
@@ -194,6 +159,7 @@ class VehicleCountController(IVehicleCountController):
             view.setPlayerVehicleAlive(self.__isAlive)
 
     def __updateData(self):
+        self.__updateFriends()
         self.__calculateVehicleCount()
         for view in self._viewComponents:
             view.setTotalCount(self.__totalCount, self.__enemiesTeamCount + 1)
@@ -220,8 +186,8 @@ class VehicleCountController(IVehicleCountController):
         teams = set()
         for _, v in self.__vehicles.items():
             for data in v.itervalues():
-                isDead, _, isEnemy, team, isRespawn = data
-                if not isDead or isRespawn:
+                isDead, _, isEnemy, team = data
+                if not isDead:
                     if isEnemy:
                         self.__enemiesCount += 1
                     else:

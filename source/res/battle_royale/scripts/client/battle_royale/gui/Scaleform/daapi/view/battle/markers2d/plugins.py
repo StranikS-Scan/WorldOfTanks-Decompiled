@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import Veh
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
-from items.battle_royale import isSpawnedBot, isHunterBot
+from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 _logger = logging.getLogger(__name__)
@@ -22,9 +22,9 @@ _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STAT
  (BATTLE_MARKER_STATES.SHOT_PASSION_STATE,),
  (BATTLE_MARKER_STATES.ADAPTATION_HEALTH_RESTORE_STATE,),
  (BATTLE_MARKER_STATES.HEALING_STATE,),
+ (BATTLE_MARKER_STATES.REPAIRING_STATE,),
  (BATTLE_MARKER_STATES.INSPIRING_STATE,),
- (BATTLE_MARKER_STATES.INSPIRED_STATE,),
- (BATTLE_MARKER_STATES.REPAIRING_STATE,))
+ (BATTLE_MARKER_STATES.INSPIRED_STATE,))
 _MARKERS_WITH_TIMER = (BATTLE_MARKER_STATES.INSPIRING_STATE, BATTLE_MARKER_STATES.HEALING_STATE)
 
 class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
@@ -41,7 +41,6 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
         self.__sessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
-        self._isSquadIndicatorEnabled = False
         return
 
     def stop(self):
@@ -54,20 +53,13 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         return
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
-        if not vInfo.isAlive() and (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)):
+        if not vInfo.isAlive() and isSpawnedBot(vInfo.vehicleType.tags):
             self._hideVehicleMarker(vInfo.vehicleID)
-
-    def _hideVehicleMarker(self, vehicleID):
-        if vehicleID in self.__markersStatesExtended:
-            del self.__markersStatesExtended[vehicleID]
-        if vehicleID in self.__cache:
-            del self.__cache[vehicleID]
-        self._destroyVehicleMarker(vehicleID)
 
     def updateVehiclesInfo(self, updated, arenaDP):
         super(BattleRoyaleVehicleMarkerPlugin, self).updateVehiclesInfo(updated, arenaDP)
         for _, vInfo in updated:
-            if not vInfo.isAlive() and (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)):
+            if not vInfo.isAlive() and isSpawnedBot(vInfo.vehicleType.tags):
                 self._hideVehicleMarker(vInfo.vehicleID)
 
     def _getMarkerSymbol(self, vehicleID):
@@ -136,6 +128,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         if isShown and not self.__statusInActive(vehicleID, statusID):
             hasNeighbor = self.__hasNeighborInPrioritizes
             extendedStatuses.append((statusID, -BigWorld.serverTime() if hasNeighbor(statusID) else 0.0))
+            self.__markersStatesExtended[vehicleID] = extendedStatuses
         elif not isShown and self.__statusInActive(vehicleID, statusID):
             self.__removeStatus(vehicleID, statusID)
         if self.__markersStatesExtended[vehicleID]:

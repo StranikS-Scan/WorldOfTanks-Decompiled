@@ -69,7 +69,7 @@ class Comp7MainWidget(ViewImpl):
             self.__updateData()
 
     def __updateData(self, *_, **__):
-        if not self.__comp7Controller.isAvailable():
+        if self.__comp7Controller.isFrozen() or not self.__comp7Controller.isEnabled():
             return
         division = comp7_shared.getPlayerDivision()
         rating = self.__comp7Controller.rating

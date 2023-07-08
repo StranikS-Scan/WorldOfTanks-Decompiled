@@ -60,6 +60,7 @@ class RewardsSelectionView(SelectableRewardBase):
     def _onOkClick(self):
         super(RewardsSelectionView, self)._onOkClick()
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS_SELECTION_CONFIRM.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
+        self.destroyWindow()
 
     def _onCloseClick(self):
         super(RewardsSelectionView, self)._onCloseClick()

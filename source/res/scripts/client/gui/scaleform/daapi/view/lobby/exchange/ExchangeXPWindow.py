@@ -27,7 +27,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
 
     def __init__(self, ctx=None, needXP=None):
         super(ExchangeXPWindow, self).__init__(ctx)
-        self.__needXP = needXP
+        self.__needXP = needXP or (ctx or {}).get('needXP', 0)
 
     def _populate(self):
         super(ExchangeXPWindow, self)._populate()
@@ -37,9 +37,8 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
         self.__prepareAndPassVehiclesData()
         self.as_setWalletStatusS(self.wallet.status, True)
-        if self.__needXP is not None:
+        if self.__needXP > 0:
             self.as_setTargetXPS(self.__needXP)
-        return
 
     def _subscribe(self):
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._setGoldCallBack)
@@ -131,7 +130,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         xpToExchange = min(commonXp, exchangeXP)
         money = self.itemsCache.items.stats.money
         price = self.__getConversionPrice(xpToExchange).price
-        if money.gold < price.gold:
+        if self.wallet.isAvailable and money.gold < price.gold:
             self._goToGoldBuy(price.gold)
         else:
             result = yield FreeXPExchanger(xpToExchange, vehTypeCompDescrs, freeConversion=self.__xpForFree).request()

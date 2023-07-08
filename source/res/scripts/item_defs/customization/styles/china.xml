@@ -767,4 +767,44 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch58_111_Vz51	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	815	</id>
+      <texture>	gui/maps/vehicles/styles/Ch58_111_Vz51_PLA_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch58_111_Vz51_PLA_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	Ch58_111_Vz51_PLA_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch58_111_Vz51_PLA_3DSt	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </china.xml>

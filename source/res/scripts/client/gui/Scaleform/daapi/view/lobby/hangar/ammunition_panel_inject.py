@@ -6,34 +6,40 @@ from frameworks.wulf import ViewFlags
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelInjectMeta import AmmunitionPanelInjectMeta
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar_view import HangarAmmunitionPanelView
 from gui.impl.lobby.tank_setup.bootcamp.ammunition_panel import BootcampAmmunitionPanelView
-from gui.impl.lobby.tank_setup.comp7.ammunition_panel import Comp7AmmunitionPanelView
 from gui.impl.lobby.tank_setup.frontline.ammunition_panel import FrontlineAmmunitionPanelView
-from battle_royale.gui.impl.lobby.tank_setup.ammunition_panel import BattleRoyaleAmmunitionPanelView
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared.system_factory import collectAmmunitionPanelView
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IBattleRoyaleController
+from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController, IFunRandomController, IHangarGuiController
 
 class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     __bootcampController = dependency.descriptor(IBootcampController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
+    __funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     def onPrbEntitySwitching(self):
         self.getInjectView().setPrbSwitching(True)
 
     def onPrbEntitySwitched(self):
-        injectView = self.getInjectView()
-        if type(injectView) is self.__getInjectViewClass():
-            injectView.update()
-        else:
-            nextTick(self.__recreateInjectView)()
+        self.__invalidateInjectView()
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         self.getInjectView().update()
 
     def onHangarSwitchAnimComplete(self, isComplete):
         self.getInjectView().setHangarSwitchAnimState(isComplete)
+
+    def _populate(self):
+        super(AmmunitionPanelInject, self)._populate()
+        self.__funRandomCtrl.subscription.addSubModesWatcher(self.__invalidateInjectView, True)
+
+    def _onPopulate(self):
+        self._createInjectView()
+
+    def _dispose(self):
+        self.__funRandomCtrl.subscription.removeSubModesWatcher(self.__invalidateInjectView, True)
+        super(AmmunitionPanelInject, self)._dispose()
 
     def _makeInjectView(self):
         viewClass = self.__getInjectViewClass()
@@ -68,11 +74,18 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     def __getInjectViewClass(self):
         if self.__bootcampController.isInBootcamp():
             return BootcampAmmunitionPanelView
-        if self.__comp7Controller.isComp7PrbActive():
-            return Comp7AmmunitionPanelView
-        if self.__epicController.isEpicPrbActive():
+        elif self.__epicController.isEpicPrbActive():
             return FrontlineAmmunitionPanelView
-        return BattleRoyaleAmmunitionPanelView if self.__battleRoyaleController.isBattleRoyaleMode() else HangarAmmunitionPanelView
+        else:
+            ammunitionPanelViewCls = collectAmmunitionPanelView(self.__hangarComponentsCtrl.getAmmoInjectViewAlias())
+            return ammunitionPanelViewCls if ammunitionPanelViewCls is not None else HangarAmmunitionPanelView
+
+    def __invalidateInjectView(self, *_):
+        injectView = self.getInjectView()
+        if type(injectView) is self.__getInjectViewClass():
+            injectView.update()
+        else:
+            nextTick(self.__recreateInjectView)()
 
     def __recreateInjectView(self):
         self._destroyInjected()

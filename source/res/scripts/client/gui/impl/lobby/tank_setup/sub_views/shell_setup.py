@@ -28,15 +28,20 @@ class ShellSetupSubView(DealBaseSetupSubView):
         self._addSlotAction(BaseSetupModel.SWAP_SLOTS_ACTION, partial(self.__onSwapSlots, BaseSetupModel.SWAP_SLOTS_ACTION))
         self._addSlotAction(BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION, partial(self.__onSwapSlots, BaseSetupModel.DRAG_AND_DROP_SLOT_ACTION))
         self._viewModel.onShellUpdate += self.__onShellUpdate
+        self._itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
 
     def _removeListeners(self):
         super(ShellSetupSubView, self)._removeListeners()
         self._viewModel.onShellUpdate -= self.__onShellUpdate
+        self._itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
 
     def _updateSlots(self, fullUpdate=True, updateData=True):
         self._viewModel.setMaxCount(self._interactor.getItem().ammoMaxSize)
         self._viewModel.setInstalledCount(sum((shell.count for shell in self._interactor.getCurrentLayout())))
         super(ShellSetupSubView, self)._updateSlots(fullUpdate, updateData)
+
+    def __onItemsSyncCompleted(self, *_):
+        self._updateSlots()
 
     def __onSwapSlots(self, actionType, args):
         leftID = int(args.get('leftID'))

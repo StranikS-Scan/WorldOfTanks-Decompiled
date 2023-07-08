@@ -153,7 +153,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
 
     def __onCurrentVehicleChanged(self):
         self.__vehicle = g_currentVehicle.item
-        if not self.__vehicle or self.__vehicle.isOnlyForBattleRoyaleBattles:
+        if not self.__vehicle or self.__vehicle.isCrewLocked:
             self.destroy()
         else:
             self.__updateAllData()

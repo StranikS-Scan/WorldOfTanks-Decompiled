@@ -3,7 +3,7 @@
 from collections import defaultdict
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import TYPE_CHECKING, List, Optional
-from wg_async import wg_async, wg_await, distributeLoopOverTicks
+from wg_async import wg_async, wg_await, distributeLoopOverTicks, AsyncEvent
 from perks.PerksLoadStrategy import getLoadStarategy, LoadType, LoadState
 from perks.vse_plan import VsePlan
 if IS_CELLAPP or IS_BASEAPP:
@@ -17,7 +17,8 @@ class PCPlanHolder(object):
         self._plans = []
         self._owner = owner
         self._scopedPerks = scopedPerks
-        self._isReadyForEvent = False
+        self.isAllPlansLoaded = AsyncEvent(False, None)
+        self._isReadyForEvent = AsyncEvent(False, None)
         self._contextEventsScheme = None
         self._delayedEvents = []
         self._loader = getLoadStarategy(loadType)(self._plans, self._scopedPerks, self._owner, self._onPlanReady)
@@ -47,17 +48,19 @@ class PCPlanHolder(object):
 
     def loadPlan(self, owner, loadScopeID, loadPerkID, isAutostart=False):
         scope, creator = self._scopedPerks[loadScopeID]
+        callback = self._loader._onStatusChanged() if self._loader else self._onPlanReady()
         for perkID, (level, args) in scope:
             if perkID != loadPerkID:
                 continue
-            plan = VsePlan(owner, loadScopeID, level, loadPerkID, self._onPlanReady, args)
+            plan = VsePlan(owner, loadScopeID, level, loadPerkID, callback, args)
+            self.isAllPlansLoaded.clear()
             self._setReady(False)
             plan.load(creator, isAutostart)
             self._plans.append(plan)
             break
 
     def triggerVSPlanEvent(self, event):
-        if not self._isReadyForEvent:
+        if not self._isReadyForEvent.is_set():
             if self._loader and self._loader.state in LoadState.STATUS_LOADED:
                 self._delayedEvents.append(event)
             return
@@ -87,6 +90,8 @@ class PCPlanHolder(object):
 
     @wg_async
     def clean(self):
+        self.isAllPlansLoaded.clear()
+        self._setReady(False)
 
         def asyncLoop():
             for plan in self._plans:
@@ -101,13 +106,6 @@ class PCPlanHolder(object):
                 plan.destroy()
                 del self._plans[index]
                 break
-
-    @property
-    def isReadyForUse(self):
-        if not self._isReadyForEvent:
-            if self._loader and self._loader.state in LoadState.STATUS_LOADED:
-                return True
-        return self._isReadyForEvent
 
     def _getContextEventsScheme(self):
         events = defaultdict(list)
@@ -125,11 +123,14 @@ class PCPlanHolder(object):
         return None
 
     def _setReady(self, ready=True):
-        self._isReadyForEvent = ready
+        self._isReadyForEvent.clear()
         if ready:
+            self._isReadyForEvent.set()
             self._setContextEventsScheme()
 
     def _forceClean(self):
+        self.isAllPlansLoaded.clear()
+        self._setReady(False)
         for plan in self._plans:
             plan.destroy()
 
@@ -139,6 +140,8 @@ class PCPlanHolder(object):
         self._contextEventsScheme = self._getContextEventsScheme()
 
     def _onPlanReady(self):
+        if self._checkIsAllPlansLoaded():
+            self.isAllPlansLoaded.set()
         if self._checkIsAllPlansReady():
             self._setReady()
             self._loader = None
@@ -153,3 +156,6 @@ class PCPlanHolder(object):
 
     def _checkIsAllPlansReady(self):
         return all((plan.isPlanStarted for plan in self._plans))
+
+    def _checkIsAllPlansLoaded(self):
+        return all((plan.isPlanLoaded for plan in self._plans))

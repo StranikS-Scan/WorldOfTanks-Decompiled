@@ -236,36 +236,11 @@ def get2DAngleFromCamera(vector):
 class FovExtended(object):
     __instance = None
     arWide = 16.0 / 9.0
-    vFovNarrow = {70: 44.2105,
-     75: 47.3684,
-     80: 50.5263,
-     85: 53.6842,
-     90: 56.8421,
-     95: 60,
-     100: 63.1579,
-     105: 66.3158,
-     110: 69.4737,
-     115: 72.6316,
-     120: 75.7895}
-    vFovWide = {70: 39.375,
-     75: 42.1875,
-     80: 45,
-     85: 47.8125,
-     90: 50.625,
-     95: 53.4375,
-     100: 56.25,
-     105: 59.0625,
-     110: 61.875,
-     115: 64.6875,
-     120: 67.5}
+    arNormal = 95.0 / 60.0
 
     @staticmethod
-    def lookupVerticalFov(horizontalFovValue):
-        lookupDict = FovExtended.vFovWide if BigWorld.getAspectRatio() > FovExtended.arWide else FovExtended.vFovNarrow
-        if horizontalFovValue not in lookupDict.keys():
-            horizontalFovValue = (int(horizontalFovValue / 5) + 1) * 5
-            horizontalFovValue = math_utils.clamp(lookupDict.keys()[0], lookupDict.keys()[-1], horizontalFovValue)
-        return math.radians(lookupDict[horizontalFovValue])
+    def calculateVerticalFov(horizontalFovValue):
+        return math.radians(horizontalFovValue / FovExtended.arWide) if BigWorld.getAspectRatio() > FovExtended.arWide else math.radians(horizontalFovValue / FovExtended.arNormal)
 
     @staticmethod
     def clampFov(fov):
@@ -285,14 +260,14 @@ class FovExtended(object):
 
     def __setHorizontalFov(self, value):
         self.__horizontalFov = value
-        self.__verticalFov = FovExtended.lookupVerticalFov(value)
+        self.__verticalFov = FovExtended.calculateVerticalFov(value)
         self.setFovByMultiplier(self.__multiplier)
         self.onSetFovSettingEvent()
 
     horizontalFov = property(lambda self: self.__horizontalFov, __setHorizontalFov)
 
     def __getActualDefaultVerticalFov(self):
-        return FovExtended.lookupVerticalFov(self.horizontalFov)
+        return FovExtended.calculateVerticalFov(self.horizontalFov)
 
     actualDefaultVerticalFov = property(__getActualDefaultVerticalFov)
 
@@ -303,7 +278,7 @@ class FovExtended(object):
         BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
         self.onSetFovSettingEvent = Event.Event()
         self.horizontalFov = 90
-        self.defaultVerticalFov = FovExtended.lookupVerticalFov(self.horizontalFov)
+        self.defaultVerticalFov = FovExtended.calculateVerticalFov(self.horizontalFov)
         from gui import g_guiResetters
         g_guiResetters.add(self.refreshFov)
 

@@ -10,7 +10,7 @@ from constants import ATTACK_REASON_INDICES as _AR_INDICES
 from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-from items.battle_royale import isSpawnedBot, isHunterBot
+from items.battle_royale import isSpawnedBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _ENTITY_TYPE(object):
@@ -133,23 +133,23 @@ class BattleMessagesController(IBattleController):
         self.onShowVehicleErrorByKey(key, args, None)
         return
 
-    def showAllyHitMessage(self, vehicleID=None):
-        self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
+        self.onShowPlayerMessageByKey('ALLY_MULTI_HIT' if isMultiHit else 'ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
     def _getAttackReasonCodes(self, reason):
         return self._attackReasonCodes.get(reason)
 
+    def _getEntityType(self, avatar, entityID):
+        if entityID == avatar.playerVehicleID:
+            return _ENTITY_TYPE.SELF
+        if self._battleCtx.isAlly(entityID):
+            return _ENTITY_TYPE.ALLY
+        return _ENTITY_TYPE.ENEMY if self._battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
+
     def __getEntityString(self, avatar, entityID, code):
         func = self.__specEntityStringByCode.get(code)
         res = func(avatar, entityID, code) if func is not None else None
-        if res:
-            return res
-        elif entityID == avatar.playerVehicleID:
-            return _ENTITY_TYPE.SELF
-        elif self._battleCtx.isAlly(entityID):
-            return _ENTITY_TYPE.ALLY
-        else:
-            return _ENTITY_TYPE.ENEMY if self._battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
+        return res if res else self._getEntityType(avatar, entityID)
 
     def __getEntityStringDeathZone(self, avatar, entityID, code):
         observedVehicleID = BigWorld.player().getObservedVehicleID()
@@ -239,10 +239,10 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleError(key, args)
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+        super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showInfoMessage(self, key, withBuffer=False, args=None):
         if withBuffer and not self._isUIPopulated:
@@ -303,10 +303,10 @@ class EpicBattleMessagesController(BattleMessagesController):
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
-def _isHideVehicleKilledMsg(vehicleID, battleSessionProvider=None):
+def _isVehicleSpawnedBot(vehicleID, battleSessionProvider=None):
     ctx = battleSessionProvider.getCtx()
     vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(vehicleID).vehicleType
-    return isSpawnedBot(vTypeInfoVO.tags) or isHunterBot(vTypeInfoVO.tags)
+    return isSpawnedBot(vTypeInfoVO.tags)
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
@@ -323,35 +323,46 @@ def _getSpawnedBotMsgData(vehicleID, battleSessionProvider=None):
 
 class BattleRoyaleBattleMessagesController(BattleMessagesController):
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         spawnBotData = _getSpawnedBotMsgData(vehicleID)
         if spawnBotData:
             self.onShowPlayerMessageByKey(*spawnBotData)
             return
-        super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID)
+        super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
-        if _isHideVehicleKilledMsg(targetID):
+        if _isVehicleSpawnedBot(targetID):
             return
         equipmentID = 0
         super(BattleRoyaleBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
+    def _getEntityType(self, avatar, entityID):
+        if entityID == avatar.playerVehicleID:
+            return _ENTITY_TYPE.SELF
+        if self._battleCtx.isEnemy(entityID) or self._battleCtx.isAlly(entityID) and self.__playerChangedTeam():
+            return _ENTITY_TYPE.ENEMY
+        return _ENTITY_TYPE.ALLY if self._battleCtx.isAlly(entityID) else _ENTITY_TYPE.UNKNOWN
+
+    def __playerChangedTeam(self):
+        arenaDP = self._battleCtx.getArenaDP()
+        return False if not arenaDP else arenaDP.getAllyTeams()[0] != BigWorld.player().team
+
 
 class BattleRoyaleBattleMessagesPlayer(BattleMessagesPlayer):
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         spawnBotData = _getSpawnedBotMsgData(vehicleID)
         if spawnBotData:
             self.onShowPlayerMessageByKey(*spawnBotData)
             return
-        super(BattleRoyaleBattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+        super(BattleRoyaleBattleMessagesPlayer, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        if _isHideVehicleKilledMsg(targetID):
+        if _isVehicleSpawnedBot(targetID):
             return
         equipmentID = 0
         super(BattleRoyaleBattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)

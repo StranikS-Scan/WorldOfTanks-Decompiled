@@ -245,7 +245,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getTooltipsPackers(cls):
-        return {BATTLE_BONUS_X5_TOKEN: TokenBonusFormatter.getBattleBonusX5Tooltip,
+        return {BATTLE_BONUS_X5_TOKEN: cls.__getBattleBonusX5Tooltip,
          COMPLEX_TOKEN: cls.__getComplexToolTip,
          YEAR_POINTS_TOKEN: cls.__getRankedPointToolTip,
          GOLD_MISSION: cls.__getGoldMissionTooltip}
@@ -285,6 +285,10 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(name)()))
         model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
         return model
+
+    @classmethod
+    def __getBattleBonusX5Tooltip(cls, *_):
+        return createTooltipData(TokenBonusFormatter.getBattleBonusX5Tooltip([]))
 
     @classmethod
     def __getComplexToolTip(cls, complexToken, *_):

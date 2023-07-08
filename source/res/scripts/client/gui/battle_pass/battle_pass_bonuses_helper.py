@@ -99,7 +99,9 @@ class _CustomizationSubTypeGetter(_BaseSubTypeGetter):
     def getSubType(bonus):
         customizations = bonus.getCustomizations()
         itemData = first(customizations)
-        return itemData.get('custType', '')
+        c11nItem = bonus.getC11nItem(itemData)
+        itemType = c11nItem.itemTypeName
+        return _HelperConsts.STYLE_3D_TYPE if itemType == 'style' and c11nItem.modelsSet else itemType
 
 
 class _RewardSelectSubTypeGetter(_BaseSubTypeGetter):
@@ -326,13 +328,21 @@ class _TankmanTokenTextGetter(_BaseTextGetter):
         return ''
 
 
+class _RandomQuestTokenTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        return backport.text(R.strings.battle_pass.randomQuestBonus(), vehicle=item.vehicle.shortUserName)
+
+
 _TEXT_GETTERS_MAP = {'default': _BaseTextGetter,
  'crewBooks': _CrewBookTextGetter,
  'crewSkins': _CrewSkinTextGetter,
  'dossier': _DossierTextGetter,
  'battlePassSelectToken': _SelectTokenTextGetter,
  'styleProgressToken': _StyleProgressTokenTextGetter,
- 'tmanToken': _TankmanTokenTextGetter}
+ 'tmanToken': _TankmanTokenTextGetter,
+ 'randomQuestToken': _RandomQuestTokenTextGetter}
 
 class _HelperConsts(object):
     HTML_BONUS_PATH = 'html_templates:lobby/quests/bonuses'
@@ -348,3 +358,4 @@ class _HelperConsts(object):
     CONSUMABLE_TYPE = 'consumable'
     CREW_BATTLE_BOOSTER_TYPE = 'crewBattleBooster'
     DEVICE_BATTLE_BOOSTER_TYPE = 'deviceBattleBooster'
+    STYLE_3D_TYPE = 'style3D'

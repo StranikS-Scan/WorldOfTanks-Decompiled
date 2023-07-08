@@ -592,7 +592,7 @@ class PersonalCaseDataProvider(object):
         maxResearchedLevel = items.stats.getMaxResearchedLevel(tankman.nationID)
         criteria = ~(~REQ_CRITERIA.UNLOCKED | ~(REQ_CRITERIA.COLLECTIBLE | REQ_CRITERIA.VEHICLE.LEVELS(range(1, maxResearchedLevel + 1))))
         criteria |= REQ_CRITERIA.NATIONS([tankman.nationID]) | ~REQ_CRITERIA.VEHICLE.OBSERVER
-        criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
+        criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN
         criteria |= ~(REQ_CRITERIA.SECRET | ~REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING

@@ -805,6 +805,8 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 
 class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
+    _BRANCHES_SHOW_ORDER = {personal_missions.PM_BRANCH.PERSONAL_MISSION_2: 1,
+     personal_missions.PM_BRANCH.REGULAR: 2}
 
     def __init__(self, awardCtrl):
         super(BattleQuestsAutoWindowHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.personalMissionRebalance.index()), awardCtrl)
@@ -827,7 +829,7 @@ class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
                     quest = _getBlueprintActualBonus(blueprintDict, quest)
                     completedQuests[questID] = (quest, ctx)
 
-        values = sorted(completedQuests.values(), key=lambda v: v[0].getID())
+        values = sorted(completedQuests.values(), key=self.__questShowOrderKey)
         for quest, context in values:
             if isDailyQuest(str(quest.getID())):
                 continue
@@ -847,6 +849,15 @@ class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
         return (uniqueQuestID, {})
+
+    def __questShowOrderKey(self, completedQuest):
+        quest, _ = completedQuest
+        questId = quest.getID()
+        missionsCache = personal_missions.g_cache
+        if missionsCache.hasMission(questId):
+            branchType = missionsCache.questByPotapovQuestID(questId).branch
+            return self._BRANCHES_SHOW_ORDER.get(branchType, questId)
+        return questId
 
 
 class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
@@ -927,7 +938,7 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
                     pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
                     if pqType.isFinal:
                         self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
-                for operationID, prefix in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+                for operationID, prefix in self.__getFinalTokenQuestIdsByOperationId():
                     if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
                         return True
                     if uniqueQuestID.startswith(prefix):
@@ -948,7 +959,7 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
         _, message = ctx
         completedQuestIDs = message.data.get('completedQuestIDs', set())
         allQuests = self.eventsCache.getHiddenQuests()
-        for operationId, prefix in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+        for operationId, prefix in self.__getFinalTokenQuestIdsByOperationId():
             quests = []
             for uniqueQuestID in completedQuestIDs:
                 if (uniqueQuestID.startswith(prefix) or self.__isChampionBadgeQuest(uniqueQuestID, operationId)) and uniqueQuestID in allQuests:
@@ -983,6 +994,9 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
         operations = [ data[1] for data in self.__openedOperationsAwards ]
         if opID not in operations and opID in self.__delayedWindows:
             quests_events.showPersonalMissionsOperationAwardsScreen(self.__delayedWindows.pop(opID))
+
+    def __getFinalTokenQuestIdsByOperationId(self):
+        return sorted(PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.items(), key=lambda v: self._BRANCHES_SHOW_ORDER.get(getBranchByOperationId(v[0])))
 
 
 class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):

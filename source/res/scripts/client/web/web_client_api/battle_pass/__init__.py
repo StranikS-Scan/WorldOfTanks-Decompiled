@@ -12,7 +12,6 @@ from web.web_client_api import Field, W2CSchema, WebCommandException, w2c, w2cap
 _logger = logging.getLogger(__name__)
 _R_VIEWS = R.views.lobby.battle_pass
 _VIEWS_IDS = {'intro': _R_VIEWS.BattlePassIntroView(),
- 'intro_extra': _R_VIEWS.ExtraIntroView(),
  'chapter_choice': _R_VIEWS.ChapterChoiceView(),
  'progression': _R_VIEWS.BattlePassProgressionsView()}
 

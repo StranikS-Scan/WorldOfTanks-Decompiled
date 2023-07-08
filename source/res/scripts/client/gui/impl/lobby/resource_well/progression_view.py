@@ -160,7 +160,7 @@ class ProgressionView(ViewImpl):
         yield ResourceWellTakeBackProcessor().request()
 
     def __showEventInfo(self):
-        showBrowserOverlayView(GUI_SETTINGS.resourceWell.get('infoPage'), VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW)
+        showBrowserOverlayView(GUI_SETTINGS.resourceWellInfoPage, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW)
 
     def __onEventStateUpdated(self):
         if not self.__resourceWell.isActive():

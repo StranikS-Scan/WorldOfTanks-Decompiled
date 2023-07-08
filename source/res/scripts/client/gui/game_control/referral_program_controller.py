@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, REF_RPOGRAM_PDATA_KEY
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.impl.lobby.common.sound_constants import SUBVIEW_SOUND_SPACE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
@@ -94,7 +95,8 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
          'useSpecialKeys': True,
          'showWaiting': True,
          'showActionBtn': False,
-         'allowRightClick': True}
+         'allowRightClick': True,
+         'soundSpaceID': SUBVIEW_SOUND_SPACE.name}
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resetBubbleCount()
         self.__setButtonCirclesShown()

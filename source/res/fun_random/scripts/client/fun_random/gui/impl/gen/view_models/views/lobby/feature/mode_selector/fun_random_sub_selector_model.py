@@ -10,7 +10,7 @@ from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_r
 class FunRandomSubSelectorModel(ViewModel):
     __slots__ = ('onItemClicked', 'onInfoClicked', 'onBackBtnClicked', 'onClosed')
 
-    def __init__(self, properties=4, commands=4):
+    def __init__(self, properties=5, commands=4):
         super(FunRandomSubSelectorModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,12 +47,19 @@ class FunRandomSubSelectorModel(ViewModel):
     def getCardListType():
         return FunRandomSubSelectorCardModel
 
+    def getAssetsPointer(self):
+        return self._getString(4)
+
+    def setAssetsPointer(self, value):
+        self._setString(4, value)
+
     def _initialize(self):
         super(FunRandomSubSelectorModel, self)._initialize()
         self._addViewModelProperty('state', FunRandomProgressionState())
         self._addViewModelProperty('condition', FunRandomProgressionCondition())
         self._addViewModelProperty('currentStage', FunRandomProgressionStage())
         self._addArrayProperty('cardList', Array())
+        self._addStringProperty('assetsPointer', 'undefined')
         self.onItemClicked = self._addCommand('onItemClicked')
         self.onInfoClicked = self._addCommand('onInfoClicked')
         self.onBackBtnClicked = self._addCommand('onBackBtnClicked')

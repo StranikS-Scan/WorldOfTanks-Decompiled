@@ -38,8 +38,6 @@
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
     <density>	1.04 1.04	</density>
   </camouflage>
   <hull>
@@ -52,7 +50,7 @@
       <armor_6>	16	</armor_6>
       <armor_7>	30	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_9>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -70,8 +68,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
-      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
+      <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
       <sensitivityToImpulse>	0.35	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -86,46 +84,35 @@
       <collisionModelClient>	vehicles/french/F113_Bretagne_Panther/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/french/F113_Bretagne_Panther/Bretagne_Panther_HangarShadowMap.dds	</hangarShadowTexture>
-    <customization>
-      <customizableVehicleAreas>
-        <paint></paint>
-        <camouflage></camouflage>
-      </customizableVehicleAreas>
-    </customization>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
         <rayStart>	-0.497376 0.271781 2.66241	</rayStart>
         <rayEnd>	-0.497376 0.19083 2.6037	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayUp>	0 0 -1	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
-        <anchorPosition>	0.000000 0.566582 2.16868	</anchorPosition>
-        <anchorDirection>	0.000000 0.252772 0.967526	</anchorDirection>
+        <anchorPosition>	0 0.566582 2.16868	</anchorPosition>
+        <anchorDirection>	0 0.252772 0.967526	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	12000	</slotId>
-        <anchorPosition>	0.000000 0.566582 2.16868	</anchorPosition>
-        <anchorDirection>	0.000000 0.252772 0.967526	</anchorDirection>
+        <anchorPosition>	0 0.566582 2.16868	</anchorPosition>
+        <anchorDirection>	0 0.252772 0.967526	</anchorDirection>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15000	</slotId>
         <tags>	formfactor_square	</tags>
-        <compatibleModels>	default	</compatibleModels>
         <position>	0.285864 1.32173 2.84787	</position>
-        <rotation>	0.593934 0.000389352 3.13447	</rotation>
+        <rotation>	0.593934 0.000389 3.13447	</rotation>
         <scale>	0.874949 0.874948 0.874946	</scale>
-        <doubleSided>	false	</doubleSided>
         <showOn>	16	</showOn>
-        <clipAngle>	0.000000	</clipAngle>
         <anchorShift>	0.000932	</anchorShift>
       </slot>
       <slot>
@@ -133,24 +120,26 @@
         <slotId>	17000	</slotId>
         <rayStart>	1.61597 0.449204 -1.76211	</rayStart>
         <rayEnd>	1.46276 0.320646 -1.76211	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayUp>	0 1 0	</rayUp>
         <emblemId>	14901	</emblemId>
         <size>	0.703226	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	fixedInscription	</slotType>
         <slotId>	17001	</slotId>
         <rayStart>	-1.61597 0.449204 -1.76211	</rayStart>
         <rayEnd>	-1.46276 0.320646 -1.76211	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayUp>	0 1 0	</rayUp>
         <emblemId>	14901	</emblemId>
         <size>	0.703226	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
   </hull>
   <chassis>
     <Chassis_F113_Bretagne_Panther>
@@ -383,19 +372,6 @@
       <topRightCarryingPoint>	1.30957 1.95724	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <splineDesc>
-        <segmentModelLeft>	vehicles/french/F113_Bretagne_Panther/track/segment.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/french/F113_Bretagne_Panther/track/segment.model	</segmentModelRight>
-        <left>	vehicles/french/F113_Bretagne_Panther/track/left.track	</left>
-        <right>	vehicles/french/F113_Bretagne_Panther/track/right.track	</right>
-        <segmentLength>	0.152	</segmentLength>
-        <segmentOffset>	0.336983	</segmentOffset>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
-      </splineDesc>
       <groundNodes>
         <group>
           <template>	Track_L	</template>
@@ -414,6 +390,20 @@
           <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.63942 0.713297 0.13646	</anchorPosition>
+          <anchorDirection>	-0.914307 0.397807 0.076104	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0.000052 2.74191 -0.182475	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -449,7 +439,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.6	</backwardElastK>
           <offset>	-0.165227	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
@@ -458,7 +447,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.65	</backwardElastK>
           <offset>	-0.139309	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
@@ -467,7 +455,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
           <offset>	-0.13067	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
@@ -476,7 +463,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
           <offset>	-0.132829	</offset>
           <leftSibling>	Track_VT_R4	</leftSibling>
@@ -485,7 +471,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R6	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.113391	</offset>
           <leftSibling>	Track_VT_R5	</leftSibling>
@@ -494,7 +479,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.9	</backwardElastK>
           <offset>	-0.0896328	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
@@ -519,7 +503,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.6	</backwardElastK>
           <offset>	-0.165227	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
@@ -528,7 +511,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.65	</backwardElastK>
           <offset>	-0.139309	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
@@ -537,7 +519,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
           <offset>	-0.13067	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
@@ -546,7 +527,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L5	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
           <offset>	-0.132829	</offset>
           <leftSibling>	Track_VT_L4	</leftSibling>
@@ -555,7 +535,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L6	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.113391	</offset>
           <leftSibling>	Track_VT_L5	</leftSibling>
@@ -564,7 +543,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L7	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.9	</backwardElastK>
           <offset>	-0.0896328	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
@@ -578,9 +556,7 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
-          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -591,16 +567,30 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
-          <offset>	0.000000	</offset>
         </node>
       </trackNodes>
+      <splineDesc>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <segmentModelLeft>	vehicles/french/F113_Bretagne_Panther/track/segment.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/french/F113_Bretagne_Panther/track/segment.model	</segmentModelRight>
+          <left>	vehicles/french/F113_Bretagne_Panther/track/left.track	</left>
+          <right>	vehicles/french/F113_Bretagne_Panther/track/right.track	</right>
+          <segmentLength>	0.152	</segmentLength>
+          <segmentOffset>	0.336983	</segmentOffset>
+          <atlas>
+            <UTiles>	1	</UTiles>
+            <VTiles>	1	</VTiles>
+          </atlas>
+        </trackPair>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+      </splineDesc>
       <physicalTracks>
         <left>
           <segmentsCount>	88	</segmentsCount>
           <segmentsOuterThickness>	0.10518	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00135502	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.001355	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.31	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -658,7 +648,7 @@
             <bottomBack>
               <wheelName>	W_L7	</wheelName>
               <basePos>	-1.96024 0.527313	</basePos>
-              <shiftVec>	0.0149457 -0.445645	</shiftVec>
+              <shiftVec>	0.014946 -0.445645	</shiftVec>
               <jointIdx>	61	</jointIdx>
             </bottomBack>
             <bottomFront>
@@ -680,15 +670,15 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-27.293	</startAngle>
+              <startAngle>	-27.292999	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-30.2688	</startAngle>
+              <startAngle>	-30.268801	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
           </teethSyncs>
@@ -733,7 +723,7 @@
                 <point>	-1.27249 1.4733 -0.326099	</point>
                 <point>	-1.27249 1.4733 -0.250382	</point>
                 <point>	-1.27249 1.4733 -0.174665	</point>
-                <point>	-1.51248 1.45685 -0.0989458	</point>
+                <point>	-1.51248 1.45685 -0.098946	</point>
                 <point>	-1.27248 1.4733 -0.023231	</point>
                 <point>	-1.27248 1.4733 0.052486	</point>
                 <point>	-1.27248 1.4733 0.128203	</point>
@@ -777,26 +767,26 @@
                 <point>	-1.51246 1.46521 3.00545	</point>
               </range>
             </top>
-            <bottom></bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </left>
         <right>
           <segmentsCount>	88	</segmentsCount>
           <segmentsOuterThickness>	0.10518	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00135514	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.001355	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.31	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
               <back>	0.151848	</back>
               <top>	0.151018	</top>
               <front>	0.144126	</front>
-              <bottom>	0.0967215	</bottom>
+              <bottom>	0.096722	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.14264	</back>
               <top>	0.145496	</top>
               <front>	0.151994	</front>
-              <bottom>	0.0868733	</bottom>
+              <bottom>	0.086873	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
@@ -808,7 +798,7 @@
             <top>
               <part>
                 <xStart>	-2.97621	</xStart>
-                <xStep>	0.0757171	</xStep>
+                <xStep>	0.075717	</xStep>
                 <ySamples>	1.13883 1.13131 1.15917 1.16528 1.1714 1.17751 1.18363 1.18974 1.19586 1.20197 1.20809 1.2142 1.22032 1.22643 1.23255 1.23866 1.24477 1.25089 1.257 1.26312 1.26923 1.27535 1.29129 1.32103 1.35077 1.34529 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.36173 1.34528 1.36173 1.36173 1.36173 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.34528 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36172 1.36171 1.36171 1.36171 1.36171 1.34527 1.36171 1.40467 1.43209 1.42631 1.4201 1.40387 1.38396 1.35364	</ySamples>
               </part>
             </top>
@@ -863,10 +853,10 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-27.2928	</startAngle>
+              <startAngle>	-27.292801	</startAngle>
               <teethCount>	17	</teethCount>
             </sync>
             <sync>
@@ -916,7 +906,7 @@
                 <point>	1.27249 1.4733 -0.326099	</point>
                 <point>	1.27249 1.4733 -0.250382	</point>
                 <point>	1.27249 1.4733 -0.174665	</point>
-                <point>	1.51248 1.45685 -0.0989458	</point>
+                <point>	1.51248 1.45685 -0.098946	</point>
                 <point>	1.27248 1.4733 -0.023231	</point>
                 <point>	1.27248 1.4733 0.052486	</point>
                 <point>	1.27248 1.4733 0.128203	</point>
@@ -960,24 +950,10 @@
                 <point>	1.51246 1.46521 3.00545	</point>
               </range>
             </top>
-            <bottom></bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	21000	</slotId>
-          <anchorPosition>	-1.63942 0.713297 0.13646	</anchorPosition>
-          <anchorDirection>	-0.914307 0.397807 0.0761039	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	style	</slotType>
-          <slotId>	29000	</slotId>
-          <anchorPosition>	0.000052 2.74191 -0.182475	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
-        </slot>
-      </customizationSlots>
       <repairTime>	6.85714293	</repairTime>
     </Chassis_F113_Bretagne_Panther>
   </chassis>
@@ -1026,13 +1002,13 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <gun>	20	</gun>
           </armor>
@@ -1051,47 +1027,43 @@
           </hitTester>
           <effects>	shot_medium_mb	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.001649 0.003651 2.21921	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.23799 0.23799	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.001649 0.003651 2.21921	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.003299 -0.005698 2.88573	</rayStart>
+              <rayEnd>	-0.003299 -0.005698 3.38573	</rayEnd>
+              <rayUp>	0.096 0 0	</rayUp>
+              <size>	0.5	</size>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>
               <camouflage></camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.00164943 0.00365121 2.21921	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000000 0.23799 0.23799	</anchorPosition>
-              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00164943 0.00365121 2.21921	</anchorPosition>
-              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.00329885 -0.00569758 2.88573	</rayStart>
-              <rayEnd>	0.881837 -0.158029 2.86255	</rayEnd>
-              <rayUp>	0.096 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
-          </customizationSlots>
         </_75mm_Kw_K_42_L_70>
       </guns>
       <notInShop>	true	</notInShop>
@@ -1105,63 +1077,48 @@
         <collisionModelClient>	vehicles/french/F113_Bretagne_Panther/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4563 1.12456	</gunPosition>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.012 -0.028 1.007 0.009 0.588 0.066 0.654 0.359 0.194 0.500 0.307 0.500 0.156 1.000 0.066	</physicsShape>
+      <physicsShape>	1.012 -0.028 1.007 0.009 0.588 0.066 0.654 0.359 0.194 0.5 0.307 0.5 0.156 1 0.066	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <customization>
-        <customizableVehicleAreas>
-          <paint></paint>
-          <camouflage></camouflage>
-        </customizableVehicleAreas>
-      </customization>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	31000	</slotId>
-          <anchorPosition>	0.000000 0.822428 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	0 0.822428 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
         <slot>
           <slotType>	camouflage	</slotType>
           <slotId>	32000	</slotId>
-          <anchorPosition>	0.000000 0.822428 0.000000	</anchorPosition>
-          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+          <anchorPosition>	0 0.822428 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35000	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	default	</compatibleModels>
-          <position>	-0.858711 2.25413 0.0715901	</position>
+          <position>	-0.858711 2.25413 0.07159	</position>
           <rotation>	1.1432 -1.5223 3.12839	</rotation>
           <scale>	0.820583 0.820582 0.820578	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
-          <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	0.182145	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35001	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	default	</compatibleModels>
-          <position>	0.858747 2.25411 0.0715903	</position>
+          <position>	0.858747 2.25411 0.07159	</position>
           <rotation>	1.14322 1.52227 3.12833	</rotation>
           <scale>	0.820583 0.820582 0.820578	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
-          <clipAngle>	0.000000	</clipAngle>
           <anchorShift>	0.182145	</anchorShift>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35002	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	default	</compatibleModels>
           <position>	-0.281996 2.83493 0.125543	</position>
-          <rotation>	0.0912099 -0.00457718 3.13364	</rotation>
+          <rotation>	0.09121 -0.004577 3.13364	</rotation>
           <scale>	0.786791 0.78679 0.78679	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.87209	</clipAngle>
           <anchorShift>	-0.097914	</anchorShift>
@@ -1170,11 +1127,9 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35003	</slotId>
           <tags>	formfactor_square	</tags>
-          <compatibleModels>	default	</compatibleModels>
           <position>	0.450991 2.78697 -0.795772	</position>
-          <rotation>	-3.09624 -0.00424814 -0.0080843	</rotation>
+          <rotation>	-3.09624 -0.004248 -0.008084	</rotation>
           <scale>	0.78679 0.2 0.786792	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	1.10758	</clipAngle>
           <anchorShift>	-0.015537	</anchorShift>
@@ -1184,25 +1139,27 @@
           <slotId>	37000	</slotId>
           <rayStart>	-0.927895 0.437737 1.16106	</rayStart>
           <rayEnd>	-0.728084 0.437729 1.15233	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayUp>	0 1 0	</rayUp>
           <emblemId>	15504	</emblemId>
           <size>	0.22	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	fixedEmblem	</slotType>
           <slotId>	37001	</slotId>
+          <isMirrored>	true	</isMirrored>
           <rayStart>	0.928663 0.435697 1.14655	</rayStart>
           <rayEnd>	0.728853 0.435689 1.13783	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <isMirrored>	true	</isMirrored>
+          <rayUp>	0 1 0	</rayUp>
           <emblemId>	15504	</emblemId>
           <size>	0.22	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
     </Turret_1_F113_Bretagne_Panther>
   </turrets0>
   <engines>

@@ -12,7 +12,7 @@
   <minimap>	spaces/251_br_battle_city3/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <wwmusicSetup>
-    <wwmusicLoading>	ev_br_arcade_2023_music	</wwmusicLoading>
+    <wwmusicLoading>	ev_br_2020_music	</wwmusicLoading>
     <wwmusicIntensive>	ev_br_2020_music_battle	</wwmusicIntensive>
     <wwmusicRelaxed>	ev_br_2020_music_battle	</wwmusicRelaxed>
     <wwmusicStop></wwmusicStop>
@@ -40,11 +40,6 @@
       <minTeamsInArena>	7	</minTeamsInArena>
       <maxPlayersInTeam>	3	</maxPlayersInTeam>
       <squadTeamNumbers>	1 2 3 4	5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21	</squadTeamNumbers>
-      <visualScript>
-        <server>
-          <plan>	spawn_bot	</plan>
-        </server>
-      </visualScript>
     </ctf>
   </gameplayTypes>
   <mapActivities></mapActivities>

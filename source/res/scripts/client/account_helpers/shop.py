@@ -434,7 +434,7 @@ class Shop(object):
             self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.__getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
             return
 
-    def buyBattlePass(self, seasonID, chapterID, callback):
+    def buyBattlePass(self, seasonID, chapterID, priceID, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -444,7 +444,7 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, chapterID, proxy)
+            self.__account._doCmdInt3Str(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, chapterID, priceID, proxy)
             return
 
     def buyBattlePassLevels(self, seasonID, chapterID, levels, callback):

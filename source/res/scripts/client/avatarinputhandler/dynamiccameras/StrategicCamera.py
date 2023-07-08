@@ -55,6 +55,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__activeDistRangeSettings = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__cameraYaw = 0.0
+        self.__useShotMaxDistance = True
         self.__switchers = CameraSwitcherCollection(cameraSwitchers=[CameraSwitcher(switchType=SwitchTypes.FROM_TRANSITION_DIST_AS_MIN, switchToName=CTRL_MODE_NAME.ARTY, switchToPos=1.0)], isEnabled=True)
         self._readConfigs(dataSec)
         self.__cam = BigWorld.CursorCamera()
@@ -77,7 +78,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def _getConfigsKey():
         return StrategicCamera.__name__
 
-    def create(self, onChangeControlMode=None):
+    def create(self, onChangeControlMode=None, useShotMaxDistance=True):
         aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
         self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
         super(StrategicCamera, self).create()
@@ -90,6 +91,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
         self.__scrollSmoother.setTime(self._cfg['scrollSmoothingTime'])
         self.__enableSwitchers()
+        self.__useShotMaxDistance = useShotMaxDistance
 
     def destroy(self):
         self.__saveDist = False
@@ -267,7 +269,9 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__aimOffset = aimOffset
         self.__updateCameraYaw()
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
+        target = BigWorld.target
+        targetMaxDistance = target.maxDistance if target is not None else 710
+        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance if self.__useShotMaxDistance else targetMaxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime

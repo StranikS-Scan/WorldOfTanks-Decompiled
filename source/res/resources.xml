@@ -193,6 +193,8 @@
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
+      <module>	client.cgf_components.auto_shoot_guns_component	</module>
+      <module>	client.cgf_components.gun_spin_animator_component	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -226,6 +228,12 @@
       <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_Obj140_shot_30.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_Xm551_shot_60.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_EBR105_shot_60.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_JagdPz100_shot_60.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_T5051_shot_60.prefab	</path>
+      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_MVY_shot_90.prefab	</path>
       <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
       <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01.prefab	</path>
       <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01_fwd.prefab	</path>

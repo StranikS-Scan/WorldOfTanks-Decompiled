@@ -122,12 +122,12 @@ def getAllResearchedVehicles(defaultUnlocks=frozenset()):
     return getHelperCache()['vehiclesInTrees'] - defaultUnlocks
 
 
-def getResearchableVehiclesWithout1Lvl(defaultUnlocks=frozenset()):
-    return getHelperCache()['vehiclesInTreesWithout1Lvl'] - defaultUnlocks
+def getResearchableVehiclesWithout1Lvl(unlocks=frozenset(), initialUnlocks=frozenset()):
+    return getHelperCache()['vehiclesInTreesWithout1Lvl'] - unlocks - initialUnlocks
 
 
-def getUnlockedVehicles(defaultUnlocks=frozenset()):
-    return getHelperCache()['vehiclesInTrees'] & defaultUnlocks
+def getUnlockedVehicles(unlocks=frozenset(), initialUnlocks=frozenset()):
+    return getHelperCache()['vehiclesInTrees'] & unlocks.union(initialUnlocks)
 
 
 def isNationResearched(nationID, defaultUnlocks=frozenset(), unlocks=frozenset()):

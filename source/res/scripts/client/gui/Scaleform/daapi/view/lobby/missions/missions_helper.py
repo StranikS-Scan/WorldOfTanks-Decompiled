@@ -637,6 +637,8 @@ class _DetailedMissionInfo(_MissionInfo):
                         criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
                     if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
                         criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+                    if constants.ARENA_BONUS_TYPE.FUN_RANDOM not in arenaTypes:
+                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.FUN_RANDOM
                     if constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD in arenaTypes or constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in arenaTypes:
                         isQuestForBattleRoyale = True
         xpMultCond = conds.find('hasReceivedMultipliedXP')

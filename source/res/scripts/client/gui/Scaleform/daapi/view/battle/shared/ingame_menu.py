@@ -5,6 +5,7 @@ from functools import partial
 import constants
 import BattleReplay
 from adisp import adisp_process
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control.event_dispatcher import showIngameMenu
 from wg_async import wg_async, wg_await
 from gui import DialogsInterface, GUI_SETTINGS
@@ -26,7 +27,6 @@ from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IServerStatsController, IBootcampController
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
@@ -39,7 +39,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     connectionMgr = dependency.descriptor(IConnectionManager)
     bootcampController = dependency.descriptor(IBootcampController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def onWindowClose(self):
         self.destroy()
@@ -57,7 +56,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         shared_event_dispatcher.showSettingsWindow(redefinedKeyMode=True, isBattleSettings=True)
 
     def helpClick(self):
-        self.destroy()
         battle_event_dispatcher.toggleHelp()
 
     def cancelClick(self):
@@ -80,6 +78,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.__setServerStats()
         self.__setMenuButtonsLabels()
         self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not self.bootcampController.isInBootcamp())
+        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
         isInBootcamp = self.bootcampController.isInBootcamp()
         self.as_showBootcampButtonS(isInBootcamp)
         self.as_showHelpButtonS(not isInBootcamp)
@@ -96,6 +95,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def _dispose(self):
         if self.app is not None:
             self.app.unregisterGuiKeyHandler(self)
+        self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(IngameMenu, self)._dispose()
         return
 
@@ -178,3 +178,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def __showBootcampExitWindow(self):
         window = BootcampExitWindow(partial(self.bootcampController.stopBootcamp, True), True, showIngameMenu)
         window.load()
+
+    def __onViewLoaded(self, view, *args, **kwargs):
+        if view.alias == VIEW_ALIAS.INGAME_HELP:
+            self.destroy()

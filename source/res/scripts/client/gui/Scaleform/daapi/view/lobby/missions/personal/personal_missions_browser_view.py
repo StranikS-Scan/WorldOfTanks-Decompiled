@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SOUND_SPACE, SOUNDS
 
 class PersonalMissionsBrowserView(BrowserView):
-    _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SOUND_SPACE
+    _BROWSER_SOUND_SPACE = PERSONAL_MISSIONS_SOUND_SPACE
 
     def _populate(self):
         super(PersonalMissionsBrowserView, self)._populate()

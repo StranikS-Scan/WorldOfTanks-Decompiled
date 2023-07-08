@@ -8,6 +8,7 @@ from PerkPlanHolder import PCPlanHolder
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from data_structures import DynamicFactorCollectorKeyError
 from constants import IS_DEVELOPMENT
+from wg_async import wg_async, wg_await
 from perks.PerksLoadStrategy import LoadType
 if TYPE_CHECKING:
     from constants import PerkData
@@ -187,7 +188,10 @@ class BasePerksController(object):
         self.dynamicFactorCollectors = {}
         self._buildDynamicFactorsCollectorMap()
 
+    @wg_async
     def updateScopedPerks(self, newScopedPerks):
+        if self._isScopeHasContent(self._scopeContextMap, self._scopedPerks):
+            yield wg_await(self._planHolder.isAllPlansLoaded.wait())
         newScopedPerks = self._assignContextsToScopes(newScopedPerks)
         self._planHolder.setScopedPerks(newScopedPerks)
         for scope in self._scopeContextMap.iterkeys():
@@ -215,12 +219,12 @@ class BasePerksController(object):
                     if perkID not in changedPerks:
                         continue
                     self.dropAllPerkModifiers(scope, perkID)
-                    isReadyForUse = self._planHolder.isReadyForUse
-                    if isReadyForUse:
-                        plan = self._planHolder.getPlan(scope, perkID)
+                    plan = self._planHolder.getPlan(scope, perkID)
+                    if plan is not None:
                         plan.stop()
                         plan.setContextArgs(perkData.args)
                         plan.start()
+                    LOG_ERROR('[PerksController] No plan for perkID:{0} vehicleID:{1} after applySelectedSetup '.format(perkID, self.vehicleID))
 
         self._scopedPerks = newScopedPerks
         return
@@ -239,6 +243,10 @@ class BasePerksController(object):
                 perkIDs.add(perkID)
 
             return perkIDs
+
+    @classmethod
+    def _isScopeHasContent(cls, scopeContextMap, scopedPerks):
+        return any((cls._getPerkIDs(scopedPerks.get(scope)) for scope in scopeContextMap.iterkeys()))
 
     def _logUpdatedPerks(self, message, vehID, scope, perks):
         if not perks:

@@ -2,21 +2,29 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/hangar/carousel/carousel_data_provider.py
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_BONUS_TYPE, Configs
-from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
+from fun_random.gui.feature.util.fun_helpers import getVehicleComparisonKey
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
-from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_provider import BattlePassCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.carousel_helpers import getUnsuitable2queueTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import server_settings
 
-class FunRandomCarouselDataProvider(BattlePassCarouselDataProvider, FunSubModesWatcher):
+class FunRandomCarouselDataProvider(BattlePassCarouselDataProvider, FunAssetPacksMixin, FunSubModesWatcher):
 
     def __init__(self, carouselFilter, itemsCache):
         super(FunRandomCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self.__isCrystalsFarmEnabled = self.__isCrystalsFarmPossible()
+
+    def onSubModeSelected(self):
+        self.filter.update({}, False)
+        self._setBaseCriteria()
+
+    @classmethod
+    def _vehicleComparisonKey(cls, vehicle):
+        return (not cls._isSuitableForQueue(vehicle),) + getVehicleComparisonKey(vehicle)
 
     def _populate(self):
         super(FunRandomCarouselDataProvider, self)._populate()
@@ -26,18 +34,17 @@ class FunRandomCarouselDataProvider(BattlePassCarouselDataProvider, FunSubModesW
         self._lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
         super(FunRandomCarouselDataProvider, self)._dispose()
 
-    @classmethod
-    def _vehicleComparisonKey(cls, vehicle):
-        return (cls._isSuitableForQueue(vehicle),
-         not vehicle.isInInventory,
-         not vehicle.isEvent,
-         not vehicle.isOnlyForBattleRoyaleBattles,
-         not vehicle.isFavorite,
-         GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
-         VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
-         vehicle.level,
-         tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
-         vehicle.userName)
+    def _isBattlePassHidden(self, vehicle):
+        result = super(FunRandomCarouselDataProvider, self)._isBattlePassHidden(vehicle)
+        return result or not self.battlePassController.isGameModeEnabled(ARENA_BONUS_TYPE.FUN_RANDOM)
+
+    def _getVehicleStats(self, vehicle):
+        return {'statsText': '',
+         'visibleStats': False}
+
+    def _setBaseCriteria(self):
+        super(FunRandomCarouselDataProvider, self)._setBaseCriteria()
+        self._baseCriteria = self.__getBaseCriteria() or self._baseCriteria
 
     def _buildVehicle(self, vehicle):
         result = super(FunRandomCarouselDataProvider, self)._buildVehicle(vehicle)
@@ -50,13 +57,13 @@ class FunRandomCarouselDataProvider(BattlePassCarouselDataProvider, FunSubModesW
             result['xpImgSource'] = ''
         return result
 
-    def _isBattlePassHidden(self, vehicle):
-        result = super(FunRandomCarouselDataProvider, self)._isBattlePassHidden(vehicle)
-        return result or not self.battlePassController.isGameModeEnabled(ARENA_BONUS_TYPE.FUN_RANDOM)
-
     def __isCrystalsFarmPossible(self):
         config = self._serverSettings.getCrystalRewardConfig()
         return config.isCrystalEarnPossible(ARENA_BONUS_TYPE.FUN_RANDOM)
+
+    @hasDesiredSubMode()
+    def __getBaseCriteria(self):
+        return self.getDesiredSubMode().getCarouselBaseCriteria()
 
     @server_settings.serverSettingsChangeListener(Configs.CRYSTAL_REWARDS_CONFIG.value)
     def __onServerSettingsChanged(self, *_, **_FunRandomCarouselDataProvider__kwargs):
@@ -67,5 +74,5 @@ class FunRandomCarouselDataProvider(BattlePassCarouselDataProvider, FunSubModesW
         validationResult = self.getDesiredSubMode().isSuitableVehicle(vehicle)
         if validationResult is not None:
             resPath = R.strings.fun_random.funRandomCarousel.lockedTooltip
-            result['lockedTooltip'] = getUnsuitable2queueTooltip(validationResult, resPath)
+            result['lockedTooltip'] = getUnsuitable2queueTooltip(validationResult, resPath, modeName=self.getModeUserName())
         return

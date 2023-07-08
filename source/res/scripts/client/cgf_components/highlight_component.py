@@ -5,7 +5,7 @@ import CGF
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from GenericComponents import DynamicModelComponent
-from hover_component import IsHovered
+from hover_component import IsHoveredComponent
 
 @registerComponent
 class IsHighlighted(object):
@@ -24,11 +24,11 @@ class HighlightComponent(object):
 
 class HighlightManager(CGF.ComponentManager):
 
-    @onAddedQuery(IsHovered, CGF.GameObject)
+    @onAddedQuery(IsHoveredComponent, CGF.GameObject)
     def onHoverAdded(self, _, gameObject):
         gameObject.createComponent(IsHighlighted)
 
-    @onRemovedQuery(IsHovered, CGF.GameObject)
+    @onRemovedQuery(IsHoveredComponent, CGF.GameObject)
     def onHoverRemoved(self, _, gameObject):
         gameObject.removeComponentByType(IsHighlighted)
 

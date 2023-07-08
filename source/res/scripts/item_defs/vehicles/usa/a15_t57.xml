@@ -36,8 +36,6 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
     <density>	0.96 0.96	</density>
   </camouflage>
   <damageByStaticsChances>
@@ -66,8 +64,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.30 36.00 0.38 1.00 0.05 0.32	</pitchParams>
-      <rollParams>	1.00 0.30 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <pitchParams>	0.3 36 0.38 1 0.05 0.32	</pitchParams>
+      <rollParams>	1 0.3 36 0.38 1 0.05 0.32	</rollParams>
       <sensitivityToImpulse>	0.83	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -82,65 +80,58 @@
       <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
-    <customization>
-      <customizableVehicleAreas>
-        <paint></paint>
-        <camouflage>	HULL	</camouflage>
-      </customizableVehicleAreas>
-    </customization>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.0477792 0.400514 2.13818	</rayStart>
-        <rayEnd>	-0.0477792 0.103689 1.87005	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	-0.047779 0.400514 2.13818	</rayStart>
+        <rayEnd>	-0.047779 0.103689 1.87005	</rayEnd>
+        <rayUp>	0 0 -1	</rayUp>
         <size>	0.3	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	player	</slotType>
         <slotId>	13000	</slotId>
         <rayStart>	-1.42538 0.782193 0.753349	</rayStart>
         <rayEnd>	-1.0555 0.629917 0.753349	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayUp>	0 1 0	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	player	</slotType>
+        <slotId>	13001	</slotId>
+        <isMirrored>	true	</isMirrored>
+        <rayStart>	1.42538 0.782193 0.753349	</rayStart>
+        <rayEnd>	1.0555 0.629917 0.753349	</rayEnd>
+        <rayUp>	0 1 0	</rayUp>
+        <size>	0.34	</size>
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
         <slotId>	14000	</slotId>
         <rayStart>	1.42764 0.776693 0.06987	</rayStart>
-        <rayEnd>	1.05776 0.624417 0.0698701	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayEnd>	1.05776 0.624417 0.06987	</rayEnd>
+        <rayUp>	0 1 0	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
-      </slot>
-      <slot>
-        <slotType>	player	</slotType>
-        <slotId>	13001	</slotId>
-        <rayStart>	1.42538 0.782193 0.753349	</rayStart>
-        <rayEnd>	1.0555 0.629917 0.753349	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.34	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	inscription	</slotType>
         <slotId>	14001	</slotId>
         <rayStart>	-1.42764 0.776693 0.06987	</rayStart>
-        <rayEnd>	-1.05776 0.624417 0.0698701	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayEnd>	-1.05776 0.624417 0.06987	</rayEnd>
+        <rayUp>	0 1 0	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <density>	16.2785 16.0146	</density>
       <aoTextureSize>	128 128	</aoTextureSize>
@@ -184,9 +175,12 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.18	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.18	</textureScale>
+        </trackPair>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -343,8 +337,7 @@
         <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.019607 0.457312 1.01427	</gunPosition>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.000 0.500 0.000 0.500 0.000 0.100 0.508	</physicsShape>
+      <physicsShape>	1 0 1 0 1 0 0.5 0.1 0 0.5 0 0.5 0 0.1 0.508	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>

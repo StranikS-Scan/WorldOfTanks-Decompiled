@@ -2,13 +2,13 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_progression_tooltip_view.py
 from frameworks.wulf import ViewSettings
 from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_progression_tooltip_view_model import FunRandomProgressionTooltipViewModel
-from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packProgressionActiveStage, packProgressionCondition, packProgressionState
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 
-class FunRandomProgressionTooltipView(ViewImpl, FunProgressionWatcher):
+class FunRandomProgressionTooltipView(ViewImpl, FunAssetPacksMixin, FunProgressionWatcher):
     __slots__ = ()
 
     def __init__(self):
@@ -31,9 +31,10 @@ class FunRandomProgressionTooltipView(ViewImpl, FunProgressionWatcher):
     def __invalidateAll(self, *_):
         progression = self.getActiveProgression()
         with self.viewModel.transaction() as model:
-            packProgressionState(progression, model.state)
-            packProgressionCondition(progression, model.condition)
+            model.setAssetsPointer(self.getModeAssetsPointer())
             packProgressionActiveStage(progression, model.currentStage)
+            packProgressionCondition(progression, model.condition)
+            packProgressionState(progression, model.state)
 
     @hasActiveProgression()
     def __invalidateTimer(self, *_):

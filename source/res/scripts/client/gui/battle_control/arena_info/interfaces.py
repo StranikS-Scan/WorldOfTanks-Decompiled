@@ -5,6 +5,7 @@ from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOP
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
 if typing.TYPE_CHECKING:
+    from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
     from Math import Matrix
     from EmptyEntity import EmptyEntity
     from items.vehicles import VehicleDescr
@@ -321,9 +322,6 @@ class IVehicleCountController(IArenaVehiclesController, ViewComponentsController
     def updateAttachedVehicle(self, vehicleID):
         raise NotImplementedError
 
-    def updateLives(self, lives):
-        raise NotImplementedError
-
 
 class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, ViewComponentsController):
 
@@ -516,4 +514,63 @@ class IMapZonesController(IBattleController):
         raise NotImplementedError
 
     def getTransformedZones(self):
+        raise NotImplementedError
+
+
+class IAutoShootGunController(IBattleController):
+
+    class IBurstController(object):
+
+        def isBurstActive(self):
+            raise NotImplementedError
+
+        def processShootCmd(self):
+            raise NotImplementedError
+
+    class IBurstPredictor(object):
+        onStateChanged = None
+        onStateUpdated = None
+
+        def isShootingPossible(self):
+            raise NotImplementedError
+
+        def isShootingProcess(self):
+            raise NotImplementedError
+
+        def canConfirmShooting(self):
+            raise NotImplementedError
+
+        def getPredictionState(self):
+            raise NotImplementedError
+
+        def activateCooldown(self):
+            raise NotImplementedError
+
+        def setShootingPossible(self, isShootingPossible):
+            raise NotImplementedError
+
+        def activateShooting(self):
+            raise NotImplementedError
+
+        def deactivateShooting(self):
+            raise NotImplementedError
+
+        def killShooting(self):
+            raise NotImplementedError
+
+        def synchronizeShooting(self, state):
+            raise NotImplementedError
+
+    @property
+    def burstController(self):
+        raise NotImplementedError
+
+    @property
+    def burstPredictor(self):
+        raise NotImplementedError
+
+    def startControl(self, *args):
+        pass
+
+    def getControllerID(self):
         raise NotImplementedError

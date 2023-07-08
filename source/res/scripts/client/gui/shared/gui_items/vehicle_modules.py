@@ -358,6 +358,10 @@ class Shell(FittingItem):
     def isModernMechanics(self):
         return self.type in (SHELL_TYPES.HIGH_EXPLOSIVE,) and self.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.MODERN
 
+    @property
+    def isGuaranteedDamage(self):
+        return self.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.GUARANTEED_DAMAGE
+
     def _getAltPrice(self, buyPrice, proxy):
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 

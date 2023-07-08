@@ -36,8 +36,6 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
     <density>	1.05 1.05	</density>
   </camouflage>
   <hull>
@@ -71,8 +69,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
-      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <pitchParams>	0.26 34 0.42 1 0.05 0.3	</pitchParams>
+      <rollParams>	1 0.26 34 0.42 1 0.05 0.3	</rollParams>
       <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -90,24 +88,22 @@
       <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/german/G64_Panther_II/Panther_II_HangarShadowMap.dds	</hangarShadowTexture>
-    <customization>
-      <customizableVehicleAreas>
-        <paint>	HULL	</paint>
-        <camouflage>	HULL	</camouflage>
-      </customizableVehicleAreas>
-    </customization>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
         <rayStart>	-0.980247 0.693576 2.30679	</rayStart>
         <rayEnd>	-0.980248 0.365911 2.07736	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayUp>	0 0 -1	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
     <camouflage>
       <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
       <density>	100.667 101.168	</density>
@@ -153,9 +149,12 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.95	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-0.95	</textureScale>
+        </trackPair>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -209,34 +208,18 @@
           <startIndex>	0	</startIndex>
           <count>	7	</count>
           <isLeft>	true	</isLeft>
-          <minOffset>	-0.0537572	</minOffset>
-          <maxOffset>	0.0630058	</maxOffset>
+          <minOffset>	-0.053757	</minOffset>
+          <maxOffset>	0.063006	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	7	</count>
           <isLeft>	false	</isLeft>
-          <minOffset>	-0.0537572	</minOffset>
-          <maxOffset>	0.0630058	</maxOffset>
+          <minOffset>	-0.053757	</minOffset>
+          <maxOffset>	0.063006	</maxOffset>
         </group>
       </groundNodes>
-      <splineDesc>
-        <segmentModelLeft>	vehicles/german/G64_Panther_II/track/segment_1_L.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/german/G64_Panther_II/track/segment_1_R.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/german/G64_Panther_II/track/segment_2_L.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/german/G64_Panther_II/track/segment_2_R.model	</segment2ModelRight>
-        <left>	vehicles/german/G64_Panther_II/track/left.track	</left>
-        <right>	vehicles/german/G64_Panther_II/track/right.track	</right>
-        <segmentLength>	0.303	</segmentLength>
-        <segmentOffset>	0.092	</segmentOffset>
-        <segment2Offset>	0.149	</segment2Offset>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
-      </splineDesc>
       <trackThickness>	-0.0397	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
@@ -382,26 +365,18 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -537,11 +512,30 @@
           <leftSibling>	Track_VT_R13	</leftSibling>
         </node>
       </trackNodes>
+      <splineDesc>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <segmentModelLeft>	vehicles/german/G64_Panther_II/track/segment_1_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/german/G64_Panther_II/track/segment_1_R.model	</segmentModelRight>
+          <segment2ModelLeft>	vehicles/german/G64_Panther_II/track/segment_2_L.model	</segment2ModelLeft>
+          <segment2ModelRight>	vehicles/german/G64_Panther_II/track/segment_2_R.model	</segment2ModelRight>
+          <left>	vehicles/german/G64_Panther_II/track/left.track	</left>
+          <right>	vehicles/german/G64_Panther_II/track/right.track	</right>
+          <segmentLength>	0.303	</segmentLength>
+          <segmentOffset>	0.092	</segmentOffset>
+          <segment2Offset>	0.149	</segment2Offset>
+          <atlas>
+            <UTiles>	1	</UTiles>
+            <VTiles>	1	</VTiles>
+          </atlas>
+        </trackPair>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+      </splineDesc>
       <physicalTracks>
         <left>
           <segmentsCount>	90	</segmentsCount>
-          <segmentsOuterThickness>	0.0349733	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0281268	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.034973	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.028127	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.329	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -570,7 +564,7 @@
             <top>
               <part>
                 <xStart>	-3.02034	</xStart>
-                <xStep>	0.0746292	</xStep>
+                <xStep>	0.074629	</xStep>
                 <ySamples>	1.24013 1.24498 1.24982 1.25467 1.25952 1.26436 1.26921 1.27305 1.27618 1.2793 1.28242 1.28555 1.28867 1.2918 1.29492 1.29805 1.30117 1.3043 1.30742 1.31055 1.31367 1.3168 1.31992 1.32304 1.32617 1.32929 1.33226 1.33505 1.33785 1.34064 1.34343 1.34622 1.34901 1.35181 1.3546 1.35739 1.36018 1.36297 1.36577 1.36856 1.37135 1.37414 1.37693 1.37973 1.38252 1.38531 1.3881 1.39089 1.39369 1.39648 1.39927 1.40206 1.40485 1.40765 1.41044 1.41323 1.41602 1.41881 1.42161 1.4244 1.42719 1.4186 1.43277 1.43557 1.43836 1.44115 1.44394 1.44673 1.44953 1.45232 1.45511 1.4579 1.46069 1.46349 1.46613 1.46939 1.46588 1.46237 1.47649 1.44198 1.3982 1.31688	</ySamples>
               </part>
             </top>
@@ -602,13 +596,13 @@
             <bottomBack>
               <wheelName>	W_L6	</wheelName>
               <basePos>	-1.97277 0.443404	</basePos>
-              <shiftVec>	0.00323844 -0.434482	</shiftVec>
+              <shiftVec>	0.003238 -0.434482	</shiftVec>
               <jointIdx>	64	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
               <basePos>	1.82922 0.443401	</basePos>
-              <shiftVec>	0.0194662 -0.434046	</shiftVec>
+              <shiftVec>	0.019466 -0.434046	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -624,15 +618,15 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-461.975	</startAngle>
+              <startAngle>	-461.975006	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-458.659	</startAngle>
+              <startAngle>	-458.658997	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
           </teethSyncs>
@@ -679,8 +673,8 @@
                 <point>	-1.5587 1.41512 -0.259047	</point>
                 <point>	-1.5587 1.41791 -0.184417	</point>
                 <point>	-1.5587 1.4207 -0.109788	</point>
-                <point>	-1.5587 1.4235 -0.0351591	</point>
-                <point>	-1.4987 1.42629 0.0394702	</point>
+                <point>	-1.5587 1.4235 -0.035159	</point>
+                <point>	-1.4987 1.42629 0.03947	</point>
                 <point>	-1.5387 1.42908 0.114099	</point>
                 <point>	-1.4687 1.43187 0.188729	</point>
                 <point>	-1.5587 1.43466 0.263358	</point>
@@ -723,13 +717,13 @@
                 <point>	-1.4487 1.36903 3.02464	</point>
               </range>
             </top>
-            <bottom></bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </left>
         <right>
           <segmentsCount>	90	</segmentsCount>
-          <segmentsOuterThickness>	0.0337139	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.0293862	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.033714	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.029386	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.329	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -758,7 +752,7 @@
             <top>
               <part>
                 <xStart>	-3.02145	</xStart>
-                <xStep>	0.0746022	</xStep>
+                <xStep>	0.074602	</xStep>
                 <ySamples>	1.14676 1.1516 1.15644 1.16129 1.16613 1.17098 1.17582 1.17969 1.18282 1.18594 1.18906 1.19219 1.19531 1.19843 1.20156 1.20468 1.2078 1.21093 1.21405 1.21717 1.2203 1.22342 1.22654 1.22967 1.23279 1.23591 1.23889 1.24168 1.24447 1.24726 1.25005 1.25284 1.25564 1.25843 1.26122 1.26401 1.2668 1.26959 1.27238 1.27517 1.27796 1.28075 1.28355 1.28634 1.28913 1.29192 1.29471 1.2975 1.30029 1.30308 1.30587 1.30866 1.31146 1.31425 1.31704 1.31983 1.32262 1.32541 1.3282 1.33099 1.33378 1.32529 1.33937 1.34216 1.34495 1.34774 1.35053 1.35332 1.35611 1.3589 1.36169 1.36449 1.36728 1.37007 1.37272 1.40337 1.4045 1.39576 1.36132 1.30877 1.23725 1.10945	</ySamples>
               </part>
             </top>
@@ -790,13 +784,13 @@
             <bottomBack>
               <wheelName>	W_R6	</wheelName>
               <basePos>	-2.03852 0.443362	</basePos>
-              <shiftVec>	0.0619121 -0.435741	</shiftVec>
+              <shiftVec>	0.061912 -0.435741	</shiftVec>
               <jointIdx>	64	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	1.80179 0.443359	</basePos>
-              <shiftVec>	0.0421219 -0.433701	</shiftVec>
+              <shiftVec>	0.042122 -0.433701	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -812,15 +806,15 @@
           </radiusOverrides>
           <teethSyncs>
             <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-461.971	</startAngle>
+              <startAngle>	-461.971008	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-459.363	</startAngle>
+              <startAngle>	-459.363007	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
           </teethSyncs>
@@ -867,8 +861,8 @@
                 <point>	1.5487 1.41509 -0.261159	</point>
                 <point>	1.5687 1.41788 -0.186557	</point>
                 <point>	1.5687 1.42067 -0.111955	</point>
-                <point>	1.5587 1.42346 -0.0373524	</point>
-                <point>	1.5487 1.42625 0.0372497	</point>
+                <point>	1.5587 1.42346 -0.037352	</point>
+                <point>	1.5487 1.42625 0.03725	</point>
                 <point>	1.5287 1.42905 0.111852	</point>
                 <point>	1.5587 1.43184 0.186454	</point>
                 <point>	1.5587 1.43463 0.261056	</point>
@@ -911,8 +905,8 @@
                 <point>	1.58871 1.25496 3.02134	</point>
               </range>
             </top>
-            <bottom></bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
       <effects>
@@ -965,7 +959,7 @@
         <armor_7>	120	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	60	</armor_9>
-        <armor_16>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <armor_16>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
@@ -994,15 +988,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <gun>	35	</gun>
           </armor>
@@ -1024,25 +1018,22 @@
             <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.000086 -0.004048 4.45219	</rayStart>
+              <rayEnd>	0.000086 -0.004048 4.86819	</rayEnd>
+              <rayUp>	0.083 0.079 5	</rayUp>
+              <size>	0.416	</size>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000086 -0.00404843 4.45219	</rayStart>
-              <rayEnd>	0.0444522 0.0556111 4.45216	</rayEnd>
-              <rayUp>	0.083 0.079 5	</rayUp>
-              <size>	0.416	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
-          </customizationSlots>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
             <density>	129.476 101.926	</density>
@@ -1060,58 +1051,50 @@
         <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.001878 0.433931 1.21073	</gunPosition>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.961 -0.149 1.010 0.000 0.794 0.137 0.912 0.275 0.377 0.500 0.306 0.500 0.313 0.595 0.000	</physicsShape>
+      <physicsShape>	0.961 -0.149 1.01 0 0.794 0.137 0.912 0.275 0.377 0.5 0.306 0.5 0.313 0.595 0	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <customization>
-        <customizableVehicleAreas>
-          <paint>	TURRET	</paint>
-          <camouflage>	TURRET	</camouflage>
-        </customizableVehicleAreas>
-      </customization>
       <customizationSlots>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
           <rayStart>	-0.955438 0.412965 0.668649	</rayStart>
           <rayEnd>	-0.679559 0.285139 0.5689	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayUp>	0 1 0	</rayUp>
           <size>	0.32	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	inscription	</slotType>
-          <slotId>	34000	</slotId>
-          <rayStart>	-1.10862 0.399357 0.0703965	</rayStart>
-          <rayEnd>	-0.936177 0.319555 0.00797268	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.678	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
+          <isMirrored>	true	</isMirrored>
           <rayStart>	0.955438 0.412965 0.668649	</rayStart>
           <rayEnd>	0.679559 0.285139 0.5689	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayUp>	0 1 0	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34000	</slotId>
+          <rayStart>	-1.10862 0.399357 0.070396	</rayStart>
+          <rayEnd>	-0.936177 0.319555 0.007973	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.678	</size>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34001	</slotId>
           <rayStart>	1.19483 0.439257 0.101608	</rayStart>
-          <rayEnd>	0.849959 0.279654 -0.0232391	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <rayEnd>	0.849959 0.279654 -0.023239	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
           <size>	0.678	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
       <camouflage>
         <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
         <density>	106.26 105.786	</density>

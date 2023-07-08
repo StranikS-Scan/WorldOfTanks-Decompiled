@@ -1044,15 +1044,8 @@
               <progressionLevel>	0	</progressionLevel>
             </item>
           </decals>
-          <modifications></modifications>
-          <projection_decals></projection_decals>
-          <personal_numbers></personal_numbers>
-          <sequences></sequences>
-          <attachments></attachments>
-          <styleProgressionLevel>	0	</styleProgressionLevel>
         </outfit>
       </outfits>
-      <modelsSet></modelsSet>
     </style>
     <modelsSet></modelsSet>
   </itemGroup>
@@ -1508,7 +1501,6 @@
             <item>
               <id>	843	</id>
               <showOn>	TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
               <position>
                 <p0>	-1.27996	</p0>
                 <p1>	2.37547	</p1>
@@ -1559,6 +1551,46 @@
           </camouflages>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F97_ELC_EVEN_90	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	766	</id>
+      <texture>	gui/maps/vehicles/styles/F97_ELC_EVEN_PANV_3DSt.png	</texture>
+      <modelsSet>	F97_ELC_EVEN_PANV_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F97_ELC_EVEN_PANV_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F97_ELC_EVEN_PANV_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>

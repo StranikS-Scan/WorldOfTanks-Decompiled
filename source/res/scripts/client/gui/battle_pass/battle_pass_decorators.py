@@ -9,6 +9,7 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_lock_icon_tooltip_view impo
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_points_view import BattlePassPointsTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_quests_chain_tooltip_view import BattlePassQuestsChainTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_upgrade_style_tooltip_view import BattlePassUpgradeStyleTooltipView
+from gui.impl.lobby.battle_pass.tooltips.random_quest_tooltip import RandomQuestTooltip
 if typing.TYPE_CHECKING:
     from gui.impl.backport import TooltipData
 
@@ -52,6 +53,12 @@ def createTooltipContentDecorator():
                 if tooltipData is None:
                     return
                 return BattlePassQuestsChainTooltipView(*tooltipData.specialArgs)
+            elif contentID == R.views.lobby.battle_pass.tooltips.RandomQuestTooltip():
+                if event.hasArgument('tokenID'):
+                    return RandomQuestTooltip(event.getArgument('tokenID'))
+                if tooltipData is None:
+                    return
+                return RandomQuestTooltip(*tooltipData.specialArgs)
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView():
                 return BattlePassCoinTooltipView()
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassPointsView():

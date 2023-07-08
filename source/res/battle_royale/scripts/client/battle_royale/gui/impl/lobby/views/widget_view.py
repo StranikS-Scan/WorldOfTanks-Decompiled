@@ -33,7 +33,6 @@ class WidgetView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setCurrentProgression(currentStage)
             model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress or not isPrimeTime else BattleStatus.COMPLETED)
-            model.setIsAlertMode(not isPrimeTime)
 
     def _onLoading(self, *args, **kwargs):
         super(WidgetView, self)._onLoading(args, kwargs)

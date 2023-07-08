@@ -13,6 +13,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import cooldown
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.entity import LegacyEntryPoint, LegacyIntroEntryPoint, LegacyIntroEntity, LegacyEntity
+from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx, SetPlayerObserverStateCtx
 from gui.prb_control.entities.training.legacy.limits import TrainingLimits
 from gui.prb_control.entities.training.legacy.permissions import TrainingPermissions, TrainingIntroPermissions
@@ -26,7 +27,6 @@ from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType, LoadGuiImplViewEvent
 from prebattle_shared import decodeRoster
-from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -76,7 +76,7 @@ class TrainingIntroEntity(LegacyIntroEntity):
         result = super(TrainingIntroEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         g_eventDispatcher.loadTrainingList()
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
-        self.__watcher = TrainingVehiclesWatcher()
+        self.__watcher = BaseVehiclesWatcher()
         self.__watcher.start()
         return result
 
@@ -147,7 +147,7 @@ class TrainingEntity(LegacyEntity):
         g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
-        self.__watcher = TrainingVehiclesWatcher()
+        self.__watcher = BaseVehiclesWatcher()
         self.__watcher.start()
         return result
 

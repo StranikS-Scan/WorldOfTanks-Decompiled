@@ -44,7 +44,7 @@ elif CURRENT_REALM in ('CT', 'SB'):
 elif IS_CLIENT:
     _logLevel = LOG_LEVEL.RELEASE
 else:
-    _logLevel = LOG_LEVEL.SVR_RELEASE
+    _logLevel = LOG_LEVEL.CT
 
 class _LogWrapper(object):
 

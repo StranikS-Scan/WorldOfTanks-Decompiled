@@ -13,7 +13,7 @@ class State(IntEnum):
 class FunRandomEntryPointViewModel(ViewModel):
     __slots__ = ('onActionClick',)
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=5, commands=1):
         super(FunRandomEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getStartTime(self):
@@ -40,10 +40,17 @@ class FunRandomEntryPointViewModel(ViewModel):
     def setState(self, value):
         self._setNumber(3, value.value)
 
+    def getAssetsPointer(self):
+        return self._getString(4)
+
+    def setAssetsPointer(self, value):
+        self._setString(4, value)
+
     def _initialize(self):
         super(FunRandomEntryPointViewModel, self)._initialize()
         self._addNumberProperty('startTime', -1)
         self._addNumberProperty('endTime', -1)
         self._addNumberProperty('leftTime', -1)
         self._addNumberProperty('state')
+        self._addStringProperty('assetsPointer', 'undefined')
         self.onActionClick = self._addCommand('onActionClick')

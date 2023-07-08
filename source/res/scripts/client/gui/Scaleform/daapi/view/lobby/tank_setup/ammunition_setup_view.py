@@ -11,10 +11,8 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AmmunitionSetupViewEvent
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.shared import IItemsCache
 
 class AmmunitionSetupView(AmmunitionSetupViewMeta):
-    _itemsCache = dependency.descriptor(IItemsCache)
     _appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, ctx):

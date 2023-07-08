@@ -3,6 +3,7 @@
 import logging
 from collections import namedtuple
 import typing
+from shared_utils import first
 from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
@@ -10,6 +11,8 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
 from gui.battle_pass.sounds import AwardVideoSoundControl
 from gui.impl.gen import R
+from gui.impl.gen.view_models.common.price_model import PriceModel
+from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.event_dispatcher import showBattlePassDailyQuestsIntroWindow
@@ -18,17 +21,17 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
 from nations import INDICES
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
     from typing import Dict, List
+    from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
     from gui.server_events.bonuses import TmanTemplateTokensBonus
     from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
-_TANKMAN_BONUS_NAME = 'tmanToken'
+TANKMAN_BONUS_NAME = 'tmanToken'
 TokenPositions = namedtuple('TokenPositions', ['free', 'paid'])
 
 def chaptersIDsComparator(firstID, secondID):
@@ -83,6 +86,10 @@ def getIntroSlidesNames():
 
 def isIntroVideoExist():
     return bool(GUI_SETTINGS.battlePass.get('introVideo'))
+
+
+def isExtraIntroVideoExist():
+    return bool(GUI_SETTINGS.battlePass.get('extraIntroVideo'))
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
@@ -194,7 +201,7 @@ def getRecruitNation(recruitInfo):
 def getTankmanInfo(bonus):
     if bonus is None:
         return
-    elif bonus.getName() != _TANKMAN_BONUS_NAME:
+    elif bonus.getName() != TANKMAN_BONUS_NAME:
         return
     else:
         tmanToken = first(bonus.getValue().keys())
@@ -214,6 +221,20 @@ def getDataByTankman(tankman):
 
 def getOfferTokenByGift(tokenID):
     return tokenID.replace('_gift', '')
+
+
+def fillBattlePassCompoundPrice(compoundPriceModel, compoundPrice):
+    prices = compoundPriceModel.getPrices()
+    prices.clear()
+    pricesData = compoundPrice.items()
+    prices.reserve(len(pricesData))
+    for priceID, price in pricesData:
+        priceModel = PriceModel()
+        PriceModelBuilder.fillPriceModel(priceModel, price, None, None, False, priceID)
+        prices.addViewModel(priceModel)
+
+    prices.invalidate()
+    return
 
 
 @replace_none_kwargs(settingsCore=ISettingsCore, battlePass=IBattlePassController)

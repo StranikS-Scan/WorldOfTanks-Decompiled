@@ -15,6 +15,7 @@ from skeletons.connection_mgr import IConnectionManager
 
 class SeasonProvider(ISeasonProvider):
     _ALERT_DATA_CLASS = AlertData
+    _PERIOD_INFO_CLASS = PeriodInfo
     __connectionMgr = dependency.descriptor(IConnectionManager)
 
     def isAvailable(self):
@@ -145,7 +146,7 @@ class SeasonProvider(ISeasonProvider):
     def getPeriodInfo(self, now=None, peripheryID=None):
         now = now or self.__getNow()
         if not self.hasAnySeason():
-            return PeriodInfo(now, PeriodType.UNDEFINED)
+            return self._PERIOD_INFO_CLASS(now, PeriodType.UNDEFINED)
         else:
             currSeason = self.getCurrentSeason(now)
             if currSeason is None:
@@ -158,7 +159,7 @@ class SeasonProvider(ISeasonProvider):
                     periodType = PeriodType.BEFORE_SEASON
                 elif nextSeason is None:
                     periodType = PeriodType.AFTER_SEASON
-                return PeriodInfo(now, periodType, PeriodInfo.rightSeasonBorder(prevSeason), PeriodInfo.leftSeasonBorder(nextSeason), PeriodInfo.rightCycleBorder(prevCycle), PeriodInfo.leftCycleBorder(nextCycle))
+                return self._PERIOD_INFO_CLASS(now, periodType, PeriodInfo.rightSeasonBorder(prevSeason), PeriodInfo.leftSeasonBorder(nextSeason), PeriodInfo.rightCycleBorder(prevCycle), PeriodInfo.leftCycleBorder(nextCycle))
             nextCycle = currSeason.getNextByTimeCycle(now)
             currCycle = currSeason.getCycleInfo()
             prevCycle = currSeason.getLastActiveCycleInfo(now)
@@ -168,7 +169,7 @@ class SeasonProvider(ISeasonProvider):
                     periodType = PeriodType.BEFORE_CYCLE
                 elif nextCycle is None:
                     periodType = PeriodType.AFTER_CYCLE
-                return PeriodInfo(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.rightCycleBorder(prevCycle), PeriodInfo.leftCycleBorder(nextCycle))
+                return self._PERIOD_INFO_CLASS(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.rightCycleBorder(prevCycle), PeriodInfo.leftCycleBorder(nextCycle))
             periodType = PeriodType.AVAILABLE
             status, primeDelta, _ = self.getPrimeTimeStatus(now, peripheryID)
             if status in (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN):
@@ -190,7 +191,7 @@ class SeasonProvider(ISeasonProvider):
                         periodType = PeriodType.ALL_NOT_AVAILABLE_END
             if self.__connectionMgr.isStandalone():
                 periodType = PERIOD_TO_STANDALONE.get(periodType, periodType)
-            return PeriodInfo(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.leftCycleBorder(currCycle), PeriodInfo.rightCycleBorder(currCycle), primeDelta)
+            return self._PERIOD_INFO_CLASS(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.leftCycleBorder(currCycle), PeriodInfo.rightCycleBorder(currCycle), primeDelta)
 
     def getPreviousSeason(self, now=None):
         seasonsPassed = self.getSeasonPassed(now)

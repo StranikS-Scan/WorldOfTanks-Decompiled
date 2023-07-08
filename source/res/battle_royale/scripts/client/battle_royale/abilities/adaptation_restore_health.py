@@ -55,6 +55,12 @@ def findEffectRoots(gameObject):
     return result
 
 
+def findEquipComp(gameObject):
+    h = CGF.HierarchyManager(gameObject.spaceID)
+    rootGameObject = h.getTopMostParent(gameObject)
+    return bool(rootGameObject.findComponentByType(VehicleAdaptationHealthRestoreComponent))
+
+
 def getChildren(gameObject):
     return CGF.HierarchyManager(gameObject.spaceID).getChildren(gameObject) or []
 
@@ -115,6 +121,8 @@ class AdaptationHealthRestoreEffectManager(CGF.ComponentManager):
 
     @onAddedQuery(ResourceLoaded, CGF.GameObject)
     def onResourcesLoadedAdded(self, resource, effectRoot):
+        if not findEquipComp(effectRoot):
+            return
         for partComponent, partGO in self.iterParts(effectRoot):
             if resource.elapsedTime < _START_ANIMATION_THRESHOLD:
                 self.spawnStartAnimation(partComponent, partGO)

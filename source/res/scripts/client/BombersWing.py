@@ -112,7 +112,7 @@ class CompoundBomber(Bomber):
     def destroy(self):
         self.__flyAnimation = None
         player = BigWorld.player()
-        if player is not None and self._model is not None:
+        if player is not None and self._model is not None and self._model in player.models:
             player.delModel(self._model)
         self._model = None
         super(CompoundBomber, self).destroy()
@@ -149,13 +149,15 @@ class CompoundBomber(Bomber):
             LOG_ERROR('Could not load model %s' % self._desc.modelName)
 
     def __onFlightStarted(self):
-        if self._model:
-            BigWorld.player().addModel(self._model)
+        player = BigWorld.player()
+        if self._model and player is not None:
+            player.addModel(self._model)
             self.__flyAnimation.bindTo(AnimationSequence.CompoundWrapperContainer(self._model))
             self.__flyAnimation.start()
             if self.motor:
                 self._model.matrix = self.motor.getMatrix()
             self._playSound()
+        return
 
 
 class BombersWing(CallbackDelayer):

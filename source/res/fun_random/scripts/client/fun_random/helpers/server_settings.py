@@ -17,17 +17,17 @@ class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl
         return cls(FunSubModeImpl.DEFAULT, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, (), '')
 
 
-class FunSubModeFiltrationConfig(namedtuple('FunSubModeFiltrationConfig', ('levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
+class FunSubModeFiltrationConfig(namedtuple('FunSubModeFiltrationConfig', ('levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'allowedVehTypes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set())
+        defaults = dict(levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set(), allowedVehTypes=set())
         defaults.update(kwargs)
         return super(FunSubModeFiltrationConfig, cls).__new__(cls, **defaults)
 
     @classmethod
     def defaults(cls):
-        return cls((), set(), set())
+        return cls((), set(), set(), set())
 
 
 class FunSubModeSeasonalityConfig(namedtuple('FunSubModeSeasonalityConfig', ('isEnabled', 'peripheryIDs', 'seasons', 'primeTimes', 'cycleTimes'))):
@@ -109,11 +109,11 @@ class FunMetaProgressionConfig(namedtuple('_FunMetaProgressionConfig', ('isEnabl
         data['progressions'] = tuple((makeTupleByDict(FunProgressionConfig, p) for p in data['progressions']))
 
 
-class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', 'metaProgression', 'settingsKey', 'infoPageUrl'))):
+class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', 'metaProgression', 'assetsPointer', 'settingsKey', 'infoPageUrl'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, subModes={}, metaProgression={}, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
+        defaults = dict(isEnabled=False, subModes={}, metaProgression={}, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, infoPageUrl='')
         allowedFields = defaults.keys()
         defaults.update(kwargs)
         cls.__packSubModesConfigs(defaults)
@@ -123,7 +123,7 @@ class FunRandomConfig(namedtuple('_FunRandomConfig', ('isEnabled', 'subModes', '
 
     @classmethod
     def defaults(cls):
-        return cls(False, {}, {}, DEFAULT_SETTINGS_KEY, '')
+        return cls(False, {}, {}, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, '')
 
     def replace(self, data):
         data = self.__packSubModesConfigs(data)

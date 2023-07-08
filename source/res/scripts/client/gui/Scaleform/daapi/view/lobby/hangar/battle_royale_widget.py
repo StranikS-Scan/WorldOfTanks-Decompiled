@@ -5,7 +5,7 @@ from battle_royale.gui.impl.lobby.views.widget_view import WidgetView
 from gui.Scaleform.daapi.view.meta.BattleRoyaleHangarWidgetContentMeta import BattleRoyaleHangarWidgetContentMeta
 from helpers import int2roman
 from helpers import dependency
-from gui.Scaleform.locale.BATTLE_ROYALE import BATTLE_ROYALE
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.meta.BattleRoyaleHangarWidgetMeta import BattleRoyaleHangarWidgetMeta
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -83,7 +83,7 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
                     key = rAlertMsgBlock.singleModeHalt
                 else:
                     key = rAlertMsgBlock.allPeripheriesHalt
-                timeLeftStr = time_utils.getTillTimeString(timeLeft, BATTLE_ROYALE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
                 alertStr = backport.text(key(), time=timeLeftStr)
             else:
                 nextSeason = currSeason or self.__battleRoyaleController.getNextSeason()
@@ -91,7 +91,7 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
                         cycleNumber = nextCycle.getEpicCycleNumber()
-                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, BATTLE_ROYALE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
                         alertStr = backport.text(rAlertMsgBlock.startIn.single() if nextSeason.isSingleCycleSeason() else rAlertMsgBlock.startIn.multi(), cycle=int2roman(cycleNumber), time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.__battleRoyaleController.getPreviousSeason()

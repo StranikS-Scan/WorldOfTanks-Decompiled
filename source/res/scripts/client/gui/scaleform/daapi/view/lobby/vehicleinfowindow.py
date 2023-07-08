@@ -2,12 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
 import typing
 from debug_utils import LOG_ERROR
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -19,8 +22,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from gui.impl import backport
-from gui.impl.gen import R
 if typing.TYPE_CHECKING:
     from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
 
@@ -158,10 +159,15 @@ class VehicleInfoWindow(VehicleInfoMeta):
 
     def __updateChangeNationButtonState(self):
         vehicle = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr)
+        tooltip = ''
+        enabled = vehicle.isNationChangeAvailable
+        if not enabled and vehicle.isBroken:
+            tooltip = makeTooltip(backport.text(R.strings.tooltips.hangar.nationChange.disabled.header()), backport.text(R.strings.tooltips.hangar.nationChange.disabled.body.destroyed()))
         self.as_setChangeNationButtonDataS({'visible': vehicle.hasNationGroup and vehicle.isInInventory,
-         'enabled': vehicle.isNationChangeAvailable,
+         'enabled': enabled,
          'label': backport.text(R.strings.menu.vehicleInfo.nationChangeBtn.label()),
-         'isNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED)})
+         'isNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED),
+         'tooltip': tooltip})
 
     def __updateNationChangeBtn(self, *args, **kwargs):
         self.__updateChangeNationButtonState()

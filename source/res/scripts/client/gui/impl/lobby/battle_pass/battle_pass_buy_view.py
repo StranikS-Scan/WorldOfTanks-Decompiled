@@ -9,6 +9,7 @@ from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltip
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice
 from gui.battle_pass.battle_pass_package import generatePackages
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
@@ -21,15 +22,18 @@ from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showHangar, showShop
 from gui.shared.events import BattlePassEvent
+from gui.shared.money import Currency
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IWalletController
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 WINDOW_IS_NOT_OPENED = -1
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
  ChapterState.PAUSED: ChapterStates.PAUSED,
  ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
+_CURRENCY_PRIORITY = (Currency.GOLD, Currency.FREE_XP)
 
 class BattlePassBuyViewStates(object):
 
@@ -46,7 +50,6 @@ class BattlePassBuyViewStates(object):
 
 
 g_BPBuyViewStates = BattlePassBuyViewStates()
-_logger = logging.getLogger(__name__)
 
 class BattlePassBuyView(ViewImpl):
     __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID')
@@ -182,16 +185,17 @@ class BattlePassBuyView(ViewImpl):
         self.__selectedPackage = self.__packages[self.__packageID]
         self.__showConfirm()
 
-    def __setConfirmModel(self):
+    @replaceNoneKwargsModel
+    def __setConfirmModel(self, model=None):
         if self.__selectedPackage is None:
             return
         else:
             self.__clearTooltips()
-            chapterID = self.__selectedPackage.getChapterID()
-            self.viewModel.confirm.setPrice(self.__selectedPackage.getPrice())
-            self.viewModel.confirm.setChapterID(chapterID)
-            isChapterActive = self.__selectedPackage.getChapterState() in (ChapterState.ACTIVE, ChapterState.COMPLETED)
-            self.viewModel.confirm.setIsActive(isChapterActive)
+            model.confirm.setPrice(self.__selectedPackage.getPrice())
+            model.confirm.setChapterID(self.__selectedPackage.getChapterID())
+            model.confirm.setIsActive(self.__selectedPackage.getChapterState() in (ChapterState.ACTIVE, ChapterState.COMPLETED))
+            model.confirm.setCompoundPriceDefaultID(self.__getCompoundPriceDefaultID(self.__selectedPackage.getCompoundPrice()))
+            fillBattlePassCompoundPrice(model.confirm.compoundPrice, self.__selectedPackage.getCompoundPrice())
             self.__updateDetailRewards()
             return
 
@@ -211,10 +215,10 @@ class BattlePassBuyView(ViewImpl):
         packBonusModelAndTooltipData(self.__selectedPackage.getFutureAwards(), self.viewModel.rewards.futureRewards, self.__tooltipItems)
         packBonusModelAndTooltipData(self.__selectedPackage.getTopPriorityAwards(), self.viewModel.rewards.topPriorityRewards, self.__tooltipItems)
 
-    def __onBuyBattlePassClick(self):
+    def __onBuyBattlePassClick(self, ctx):
         if self.__selectedPackage is not None:
             self.__battlePass.onLevelUp -= self.__onLevelUp
-            BattlePassBuyer.buyBP(self.__selectedPackage.getSeasonID(), chapterID=self.__selectedPackage.getChapterID(), onBuyCallback=self.__onBuyBPCallback)
+            BattlePassBuyer.buyBP(self.__selectedPackage.getSeasonID(), self.__selectedPackage.getChapterID(), ctx.get('priceID'), self.__onBuyBPCallback)
         return
 
     def __onBuyBPCallback(self, result):
@@ -249,9 +253,13 @@ class BattlePassBuyView(ViewImpl):
             item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
             item.setCurrentLevel(package.getCurrentLevel() + 1)
             item.setExpireTime(self.__battlePass.getChapterRemainingTime(package.getChapterID()))
+            fillBattlePassCompoundPrice(item.compoundPrice, package.getCompoundPrice())
             model.packages.addViewModel(item)
 
         model.packages.invalidate()
+
+    def __getCompoundPriceDefaultID(self, compoundPrice):
+        return next((priceID for currency in _CURRENCY_PRIORITY for priceID, priceData in compoundPrice.iteritems() if priceData.get(currency)))
 
     def __onBattlePassSettingsChanged(self, *_):
         self.__update()

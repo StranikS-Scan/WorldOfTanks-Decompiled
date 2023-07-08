@@ -32,7 +32,7 @@ def getQuestsDescriptionForHangarFlag(battleRoyaleController=None):
     elif all((q.isCompleted() for _, q in quests.items())):
         data = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
         valueStyle = text_styles.tutorial
-        timeToStr = valueStyle(getTimeStr(data, R.strings.menu.Time.timeLeftShort))
+        timeToStr = valueStyle(getTimeStr(data, R.strings.battle_royale.questsTooltip.timeLeftShort))
         icon = icons.clockGold()
         textStyle = text_styles.tutorial
         description = textStyle(backport.text(_R_BATTLE_ROYALE.startIn(), time=timeToStr))
@@ -43,7 +43,7 @@ def getQuestsDescriptionForHangarFlag(battleRoyaleController=None):
         icon = icons.inProgress(vspace=-3)
         textStyle = text_styles.main
         valueStyle = text_styles.stats
-        timeToStr = valueStyle(getTimeStr(getDate(cycle) - currentTime, R.strings.menu.Time.timeLeftShort))
+        timeToStr = valueStyle(getTimeStr(getDate(cycle) - currentTime, R.strings.battle_royale.questsTooltip.timeLeftShort))
         description = textStyle(backport.text(messageID(), cycle=int2roman(cycle.ordinalNumber), time=timeToStr))
         return text_styles.concatStylesWithSpace(icon, description)
 

@@ -178,6 +178,7 @@
     <V_2>	328	</V_2>
     <V-55U_FL>	501	</V-55U_FL>
     <V-12_7x7>	503	</V-12_7x7>
+    <TD-12_FEP>	601	</TD-12_FEP>
     <Development_Engine>	65000	</Development_Engine>
     <GMC_MapsTraining_Dummy_LT_1>	25	</GMC_MapsTraining_Dummy_LT_1>
     <T-26F_MapsTraining_Dummy_SPG_1>	26	</T-26F_MapsTraining_Dummy_SPG_1>
@@ -2980,6 +2981,23 @@
       <rpm_min>	445	</rpm_min>
       <rpm_max>	2172	</rpm_max>
     </Observer>
+    <TD-12_FEP>
+      <userString>	#ussr_vehicles:TD-12_FEP	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
+    </TD-12_FEP>
     <V-5_IGR>
       <userString>	#igr_vehicles:V-5_IGR	</userString>
       <tags>	diesel	</tags>
@@ -3124,7 +3142,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	800	</power>
+      <power>	600	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
@@ -3141,7 +3159,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1580	</power>
+      <power>	1615	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
@@ -3158,7 +3176,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1270	</power>
+      <power>	1230	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>

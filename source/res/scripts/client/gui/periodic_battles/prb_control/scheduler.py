@@ -10,7 +10,6 @@ from gui.periodic_battles.models import PrimeTimeStatus
 from shared_utils import first
 
 class PeriodicScheduler(BaseScheduler):
-    _RES_ROOT = None
 
     def __init__(self, entity):
         super(PeriodicScheduler, self).__init__(entity)
@@ -37,14 +36,20 @@ class PeriodicScheduler(BaseScheduler):
         controller = controller or self._getController()
         return first(controller.getPrimeTimeStatus()) if controller else None
 
+    def _getResRoot(self):
+        raise NotImplementedError
+
     def _checkLeave(self, controller=None, status=None):
         controller = controller or self._getController()
         status = status if status is not None else self._getPrimeTimeStatus(controller)
-        if controller is None or status is None or not controller.isAvailable():
+        if controller is None or status is None or self._checkControllerLeave(controller):
             BigWorld.callback(0.0, self._doLeave)
             return True
         else:
             return False
+
+    def _checkControllerLeave(self, controller):
+        return not controller.isAvailable()
 
     def _doLeave(self):
         if self._entity is None:
@@ -84,9 +89,9 @@ class PeriodicScheduler(BaseScheduler):
             return
         else:
             if not self.__isConfigured and self._hasConfiguredNotification():
-                SystemMessages.pushMessage(backport.text(self._RES_ROOT.notification.notSet(), **self._getMessageParams()), messageData={'title': backport.text(self._RES_ROOT.notification.notSet.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesNotSet)
+                SystemMessages.pushMessage(backport.text(self._getResRoot().notification.notSet(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.notSet.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesNotSet)
             elif not self.__isPrimeTime:
-                SystemMessages.pushMessage(backport.text(self._RES_ROOT.notification.primeTime(), **self._getMessageParams()), messageData={'title': backport.text(self._RES_ROOT.notification.primeTime.title())}, type=SystemMessages.SM_TYPE.PrimeTime)
+                SystemMessages.pushMessage(backport.text(self._getResRoot().notification.primeTime(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.primeTime.title())}, type=SystemMessages.SM_TYPE.PrimeTime)
             elif not isInit:
-                SystemMessages.pushMessage(backport.text(self._RES_ROOT.notification.available(), **self._getMessageParams()), messageData={'title': backport.text(self._RES_ROOT.notification.available.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesAvailable)
+                SystemMessages.pushMessage(backport.text(self._getResRoot().notification.available(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.available.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesAvailable)
             return

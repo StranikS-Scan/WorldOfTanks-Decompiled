@@ -73,3 +73,8 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
 
     def __onEscKeyDown(self):
         g_eventBus.handleEvent(AmmunitionPanelViewEvent(AmmunitionPanelViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
+
+    def _updateView(self):
+        isFullUpdate = not self._wasVehicleOnLoading and self.vehItem is not None
+        self.update(fullUpdate=isFullUpdate)
+        return

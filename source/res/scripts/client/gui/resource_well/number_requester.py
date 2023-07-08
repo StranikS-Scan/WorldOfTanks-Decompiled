@@ -12,18 +12,19 @@ from skeletons.gui.game_control import IReactiveCommunicationService
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Optional
+_NO_VEHICLES_VALUE = 0
 
 class ResourceWellNumberRequester(object):
-    __slots__ = ('onUpdated', '__isSerial', '__subscription', '__remainingValues', '__givenValues', '__isActive')
+    __slots__ = ('onUpdated', '__isSerial', '__subscription', '__remainingValues', '__givenValues', '__isActive', '__initialValues')
     __reactiveCommunication = dependency.descriptor(IReactiveCommunicationService)
 
     def __init__(self, isSerial):
-        super(ResourceWellNumberRequester, self).__init__()
         self.onUpdated = Event()
         self.__isSerial = isSerial
         self.__subscription = None
         self.__remainingValues = None
         self.__givenValues = None
+        self.__initialValues = None
         self.__isActive = False
         return
 
@@ -41,17 +42,24 @@ class ResourceWellNumberRequester(object):
         self.__subscription = None
         self.__remainingValues = None
         self.__givenValues = None
+        self.__initialValues = None
         self.__isActive = False
         return
 
+    def setInitialValues(self, initialValues):
+        if initialValues is not None:
+            self.__initialValues = initialValues
+        self.onUpdated()
+        return
+
     def getRemainingValues(self):
-        return self.__remainingValues
+        return self.__remainingValues if self.__remainingValues is not None and self.__reactiveCommunication.isChannelSubscriptionAvailable and self.__initialValues != _NO_VEHICLES_VALUE else self.__initialValues
 
     def getGivenValues(self):
         return self.__givenValues
 
     def isDataAvailable(self):
-        return self.__remainingValues is not None and self.__givenValues is not None
+        return self.__remainingValues is not None or self.__initialValues is not None
 
     @wg_async
     def __subscribe(self):

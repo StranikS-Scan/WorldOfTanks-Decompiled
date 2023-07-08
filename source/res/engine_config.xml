@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -245,7 +245,7 @@
       </pool>
     </playbackPools>
     <WWISE_active_profile>	WWISE_adv_profile	</WWISE_active_profile>
-    <WWISE_emergency_profile>	WWISE_low_profile	</WWISE_emergency_profile>
+    <WWISE_emergency_profile>	WWISE_nil_profile	</WWISE_emergency_profile>
     <WWISE_adv_profile>
       <memoryManager>
         <IOPoolSize>	4	</IOPoolSize>
@@ -762,6 +762,24 @@
         </bank>
       </SFX_soundbanks_editor>
     </WWISE_low_profile>
+    <WWISE_nil_profile>
+      <memoryManager>
+        <IOPoolSize>	4	</IOPoolSize>
+        <IOGranularity>	16	</IOGranularity>
+      </memoryManager>
+      <memoryManager_64bit>
+        <IOPoolSize>	4	</IOPoolSize>
+        <IOGranularity>	16	</IOGranularity>
+      </memoryManager_64bit>
+      <soundRender>
+        <use_config>	true	</use_config>
+        <HDR_lower_threshold>	-40	</HDR_lower_threshold>
+        <max_voices>	70	</max_voices>
+        <low_sample_rate>	false	</low_sample_rate>
+        <ambients>	false	</ambients>
+        <reverbs>	false	</reverbs>
+      </soundRender>
+    </WWISE_nil_profile>
   </soundMgr>
   <logging>
     <suppress>
@@ -819,7 +837,7 @@
     <logVerbosity>	disable	</logVerbosity>
     <enableFlash>	true	</enableFlash>
     <ignoreCertErrors>	false	</ignoreCertErrors>
-    <debugPort>	-1	</debugPort>
+    <debugPort>	9999	</debugPort>
     <maxFrameRate>	60	</maxFrameRate>
     <acceptLangList></acceptLangList>
     <locale></locale>

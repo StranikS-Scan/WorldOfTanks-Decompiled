@@ -126,7 +126,7 @@ class RankedBattlesInfoPage(RankedBrowserPage):
 
 
 class RankedLandingView(BrowserView):
-    _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
+    _BROWSER_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def onEscapePress(self):

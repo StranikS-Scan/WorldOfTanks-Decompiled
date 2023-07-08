@@ -14,6 +14,7 @@ from gui.impl import backport
 from gui.Scaleform.genConsts.QUEST_AWARD_BLOCK_ALIASES import QUEST_AWARD_BLOCK_ALIASES
 from gui.shared.formatters import text_styles, icons as gui_icons
 from gui.shared.money import Currency
+from gui.shared.system_factory import collectModeNameKwargsByBonusType, collectPrebattleConditionIcon
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
 COMPLEX_TOKEN = 'complex_token'
@@ -334,8 +335,9 @@ def packMissionBonusTypeElements(bonusTypes, width=32, height=32, vSpace=-11):
     uniqueTypes = getUniqueBonusTypes(bonusTypes)
     elements = []
     for bonusType in uniqueTypes:
-        label = i18n.makeString('#menu:bonusType/%d' % bonusType)
-        icon = gui_icons.makeImageTag(RES_ICONS.getPrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
+        kwargs = collectModeNameKwargsByBonusType(bonusType) or {}
+        label = i18n.makeString(('#menu:bonusType/%d' % bonusType), **kwargs)
+        icon = gui_icons.makeImageTag(collectPrebattleConditionIcon(bonusType) or RES_ICONS.getPrebattleConditionIcon(bonusType), width=width, height=height, vSpace=vSpace)
         elements.append(_IconData(icon, label))
 
     return elements

@@ -42,7 +42,7 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
 
         def checkPointsList(pointsList, path):
             if len(pointsList) != self.getTeamSize():
-                raise SoftException('BattlePass len(season/points/{}) {} != {}'.format(path, len(pointsList), self.getTeamSize()))
+                raise SoftException('[BattlePass] len(season/points/{}) {} != {}'.format(path, len(pointsList), self.getTeamSize()))
 
         checkPointsList(winPoints, '{}/win'.format(self.bonusTypeName))
         checkPointsList(losePoints, '{}/lose'.format(self.bonusTypeName))
@@ -50,7 +50,7 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
             if key != 'win' and key != 'lose' and key != 'enabled':
                 vehCD = key
                 if not vehicles.g_list.isVehicleExistingByCD(vehCD):
-                    raise SoftException('BattlePass wrong vehCD={}'.format(vehCD))
+                    raise SoftException('[BattlePass] wrong vehCD={}'.format(vehCD))
                 winPoints = points[vehCD]['win']
                 losePoints = points[vehCD]['lose']
                 checkPointsList(winPoints, '{}/{}/win'.format(self.bonusTypeName, str(vehCD)))
@@ -77,7 +77,7 @@ class BattlePassIntegrationEpicBattle(BattlePassIntegrationRandom):
 
         def checkPointsList(path):
             if len(points[path]) != placesCount:
-                raise SoftException('BattlePass len(season/points/{}/{}) {} != {}'.format(bonusTypeName, path, points[path], placesCount))
+                raise SoftException('[BattlePass] len(season/points/{}/{}) {} != {}'.format(bonusTypeName, path, points[path], placesCount))
 
         checkPointsList('win')
         checkPointsList('lose')
@@ -95,14 +95,14 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
 
     def validatePoints(self, season):
         if self.twinBonusType not in season['points']:
-            raise SoftException('BattlePass bonus type {} must be present with {}'.format(self.twinBonusType, self.bonusType))
+            raise SoftException('[BattlePass] bonus type {} must be present with {}'.format(self.twinBonusType, self.bonusType))
         points = season['points'][self.bonusType]
         if points['enabled'] != season['points'][self.twinBonusType]['enabled']:
-            raise SoftException('BattlePass bonus type {} must has same enabled flag as {}'.format(self.twinBonusType, self.bonusType))
+            raise SoftException('[BattlePass] bonus type {} must has same enabled flag as {}'.format(self.twinBonusType, self.bonusType))
 
         def checkPointsList(path):
             if len(points[path]) != self.getTeamSize():
-                raise SoftException('BattlePass len(season/points/{}/{}) {} != {}'.format(self.bonusType, path, points[path], self.getTeamSize()))
+                raise SoftException('[BattlePass] len(season/points/{}/{}) {} != {}'.format(self.bonusType, path, points[path], self.getTeamSize()))
 
         checkPointsList('win')
         checkPointsList('lose')

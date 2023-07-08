@@ -3,7 +3,7 @@
 import logging
 from adisp import adisp_process
 from constants import EnhancementsConfig as config
-from constants import MAX_VEHICLE_LEVEL
+from constants import MAX_VEHICLE_LEVEL, BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN
 from helpers import dependency
 from gui.wgcg.craftmachine.contexts import CraftmachineModulesInfoCtx
 from gui.wgcg.states import WebControllerStates
@@ -67,8 +67,7 @@ class CraftmachineController(ICraftmachineController):
     @staticmethod
     def __filterEnabledVehiclesCriteria(criteria):
         criteria = criteria | REQ_CRITERIA.VEHICLE.LEVEL(MAX_VEHICLE_LEVEL)
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-        criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN)
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         return criteria
 

@@ -418,17 +418,14 @@ class CommonTankAppearance(ScriptGameObject):
         self._initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
 
     def multiGunRecoil(self, indexes):
-        if self.gunAnimators is None:
-            return
-        else:
-            for index in indexes:
-                typeDescr = self.typeDescriptor
-                gunNodeName = typeDescr.turret.multiGun[index].node
-                gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
-                gunAnimator = self.gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator)
-                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+        gunAnimators = self.gunAnimators
+        for index in indexes:
+            typeDescr = self.typeDescriptor
+            gunNodeName = typeDescr.turret.multiGun[index].node
+            gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+            self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator) if gunAnimators else None)
 
-            return
+        return
 
     def computeFullVehicleLength(self):
         vehicleLength = 0.0
@@ -442,7 +439,8 @@ class CommonTankAppearance(ScriptGameObject):
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.typeDescriptor.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        gunAnimator.recoil()
+        if gunAnimator is not None:
+            gunAnimator.recoil()
         return impulseDir
 
     def _connectCollider(self):

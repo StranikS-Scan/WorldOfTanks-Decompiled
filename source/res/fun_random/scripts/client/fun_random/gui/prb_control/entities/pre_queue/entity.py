@@ -50,13 +50,13 @@ class FunRandomEntryPoint(PreQueueEntryPoint):
             _logger.debug('Trying to get into fun random sub mode %s when it is not available.', desiredSubModeID)
             self.__abortSelection(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE, callback)
         else:
-            self.__funRandomController.subModesHolder.setDesiredSubModeID(desiredSubModeID)
+            self.__funRandomController.setDesiredSubModeID(desiredSubModeID)
             super(FunRandomEntryPoint, self).select(ctx, callback)
         return
 
     def __abortSelection(self, reason, callback=None):
         self.__desiredSubModeID = UNKNOWN_EVENT_ID
-        self.__funRandomController.subModesHolder.setDesiredSubModeID(UNKNOWN_EVENT_ID)
+        self.__funRandomController.setDesiredSubModeID(UNKNOWN_EVENT_ID)
         notifyCaller(callback, False)
         g_prbCtrlEvents.onPreQueueJoinFailure(reason)
 
@@ -91,15 +91,15 @@ class FunRandomEntity(PreQueueEntity):
             squadEntryPoint.setExtData({FUN_EVENT_ID_KEY: self.__funRandomController.subModesHolder.getDesiredSubModeID()})
             return SelectResult(True, squadEntryPoint)
         elif action.actionName == PREBATTLE_ACTION_NAME.FUN_RANDOM:
-            desiredSubModeID = action.extData.get(FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID)
-            self.__funRandomController.subModesHolder.setDesiredSubModeID(desiredSubModeID)
+            self.__funRandomController.setDesiredSubModeID(action.extData.get(FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID))
             g_eventDispatcher.loadHangar()
             return SelectResult(True, None)
         else:
             return super(FunRandomEntity, self).doSelectAction(action)
 
     def leave(self, ctx, callback=None):
-        self.__funRandomController.subModesHolder.setDesiredSubModeID(UNKNOWN_EVENT_ID)
+        if not ctx.hasFlags(FUNCTIONAL_FLAG.FUN_RANDOM):
+            self.__funRandomController.setDesiredSubModeID(UNKNOWN_EVENT_ID)
         super(FunRandomEntity, self).leave(ctx, callback)
 
     @vehicleAmmoCheck

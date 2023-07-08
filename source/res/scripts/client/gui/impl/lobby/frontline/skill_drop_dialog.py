@@ -77,7 +77,7 @@ class SkillDropDialog(DialogTemplateView):
         self.__uiEpicBattleLogger.reset()
 
     def _setResult(self, result):
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=result, parentScreen=EpicBattleLogKeys.DROP_SKILL_DIALOG_CONFIRM.value)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=result, parentScreen=EpicBattleLogKeys.DROP_SKILL_DIALOG_CONFIRM.value, info='blanks' if self.__isBlank else ('free' if self.__freeDropSave100 else self.itemPrice.price.getCurrency()))
         if result == DialogButtons.SUBMIT and not self.__isBlank and not self.__freeDropSave100:
             shortage = self._itemsCache.items.stats.money.getShortage(self.itemPrice.price)
             if shortage and shortage.getCurrency() == Currency.GOLD:

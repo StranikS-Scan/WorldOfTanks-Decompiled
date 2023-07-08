@@ -116,6 +116,7 @@
     <Continental_AV_1790_5B_3>	140	</Continental_AV_1790_5B_3>
     <Continental_AV_1790_7_12B>	141	</Continental_AV_1790_7_12B>
     <Continental_AV-1790-3_M>	142	</Continental_AV-1790-3_M>
+    <LVDS_1100_2>	143	</LVDS_1100_2>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
@@ -133,6 +134,8 @@
     <Continental_AV-1790-7B_7x7>	503	</Continental_AV-1790-7B_7x7>
     <Continental_AOSI-895-5A_FL>	504	</Continental_AOSI-895-5A_FL>
     <AOI-1490_7x7>	505	</AOI-1490_7x7>
+    <Continental_AOSI_1195_5_Y_V_FEP>	601	</Continental_AOSI_1195_5_Y_V_FEP>
+    <General_Motors_6V53T_FEP>	602	</General_Motors_6V53T_FEP>
     <Wright_Continental_R-975C1_bootcamp>	64004	</Wright_Continental_R-975C1_bootcamp>
     <Development_Engine>	65535	</Development_Engine>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>	6	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>
@@ -1032,6 +1035,23 @@
       <rpm_min>	495	</rpm_min>
       <rpm_max>	2013	</rpm_max>
     </AOI-1490_7x7>
+    <LVDS_1100_2>
+      <userString>	#usa_vehicles:LVDS_1100_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	59000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	2050	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </LVDS_1100_2>
     <Continental_AV-1790-5B>
       <userString>	#usa_vehicles:Continental_AV-1790-5B	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV-1790-5B_short	</shortUserString>
@@ -2248,6 +2268,42 @@
       <rpm_min>	337	</rpm_min>
       <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R_975_C4_858>
+    <Continental_AOSI_1195_5_Y_V_FEP>
+      <userString>	#usa_vehicles:Continental_AOSI_1195_5_Y_V_FEP	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI_1195_5_Y_V_FEP_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	998	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+    </Continental_AOSI_1195_5_Y_V_FEP>
+    <General_Motors_6V53T_FEP>
+      <userString>	#usa_vehicles:General_Motors_6V53T_FEP	</userString>
+      <shortUserString>	#usa_vehicles:General_Motors_6V53T_FEP_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	495	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </General_Motors_6V53T_FEP>
     <Continental_AOI-628-2_IGR>
       <userString>	#igr_vehicles:Continental_AOI-628-2_IGR	</userString>
       <shortUserString>	#igr_vehicles:Continental_AOI-628-2_IGR_short	</shortUserString>

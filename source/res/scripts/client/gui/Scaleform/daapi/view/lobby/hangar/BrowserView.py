@@ -9,11 +9,11 @@ from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.common.sound_constants import BROWSER_VIEW_SOUND_SPACES
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
-from sound_constants import BROWSER_VIEW_SOUND_SPACES
 
 def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False, bgAlpha=1.0, isCloseBtnVisible=False):
     if not waitingMessage:
@@ -27,12 +27,13 @@ def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False,
 
 class BrowserView(LobbySubView, BrowserScreenMeta):
     __background_alpha__ = 1.0
+    _BROWSER_SOUND_SPACE = None
     browserCtrl = dependency.descriptor(IBrowserController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
-        self.__initSoundSpace()
+        self.__initSoundSpace(self.__getFromCtx('soundSpaceID'))
         super(BrowserView, self).__init__(ctx)
         self.__browserId = None
         self.__hasFocus = False
@@ -44,12 +45,6 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         self.__isBrowserLoading = True
         self.__pendingRequest = None
         self.__viewSize = None
-        return
-
-    def __initSoundSpace(self):
-        soundSpaceID = self.__getFromCtx('soundSpaceID')
-        if soundSpaceID is not None:
-            self._COMMON_SOUND_SPACE = BROWSER_VIEW_SOUND_SPACES.get(soundSpaceID)
         return
 
     def onFocusChange(self, hasFocus):
@@ -113,6 +108,10 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(BrowserView, self)._dispose()
         return
+
+    @classmethod
+    def __initSoundSpace(cls, soundSpaceID):
+        cls._COMMON_SOUND_SPACE = BROWSER_VIEW_SOUND_SPACES.get(soundSpaceID) or cls._BROWSER_SOUND_SPACE
 
     def __onError(self):
         self.__errorOccurred = True

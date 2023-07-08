@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/periodic_battles/models.py
 import logging
+from functools import partial
 import typing
 from enum import Enum
-from functools import partial
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.utils.decorators import ReprInjector
 from gui.shared.formatters import text_styles
+from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from shared_utils import collapseIntervals, findFirst, first, CONST_CONTAINER

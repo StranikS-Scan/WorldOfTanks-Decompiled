@@ -6,7 +6,7 @@ from items.components import component_constants
 from Math import Vector3
 import ResMgr
 
-def writeWheelsAndGroups(wheelsConfig, section):
+def writeWheelsAndGroups(wheelsConfig, section, materialData, chassisName):
     wheelId = 0
     groupId = 0
     defSyncAngle = section.readFloat('wheels/leadingWheelSyncAngle', 60)
@@ -28,11 +28,13 @@ def writeWheelsAndGroups(wheelsConfig, section):
             _xml.rewriteInt(subsection, 'index', wheelId, createNew=False)
             _xml.rewriteFloat(subsection, radiusKey, wheel.radius)
             _xml.rewriteString(subsection, 'name', wheel.nodeName)
-            _xml.rewriteBool(subsection, 'isLeading', wheel.isLeading)
+            _xml.rewriteBool(subsection, 'isLeading', wheel.isLeading, False)
             _xml.rewriteFloat(subsection, 'syncAngle', wheel.leadingSyncAngle, defSyncAngle)
             _xml.rewriteVector3(subsection, 'wheelPos', wheel.position, Vector3(0, 0, 0))
             _writeHitTester(wheel.hitTesterManager, None, subsection, 'hitTester')
-            _writeArmor(wheel.materials, None, subsection, 'armor', optional=True, index=wheelId)
+            wheelMatData = materialData.get('wheel' + str(wheelId), None)
+            wheelMatData = wheelMatData.get(chassisName, None) if wheelMatData is not None else None
+            _writeArmor(wheel.materials, subsection, wheelMatData)
             wheelId += 1
 
     return
@@ -170,23 +172,18 @@ def writeGroundNodes(groups, section):
         _xml.rewriteBool(curSection, 'isLeft', curGroup.isLeft)
         _xml.rewriteFloat(curSection, 'minOffset', curGroup.minOffset)
         _xml.rewriteFloat(curSection, 'maxOffset', curGroup.maxOffset)
+        _xml.rewriteString(curSection, 'affectedWheelsTemplate', curGroup.affectedWheelsTemplate)
 
     if len(groups) == 0:
         return
-    else:
-        sectionParent = section['groundNodes'] if section.has_key('groundNodes') else section.createSection('groundNodes')
-        sectionToSave = None
-        for node in groups:
-            for childSectionName, childSection in sectionParent.items():
-                if childSectionName == 'group' and node.nodesTemplate == childSection.readString('template'):
-                    sectionToSave = childSection
-                    break
-            else:
-                sectionToSave = sectionParent.createSection('group')
+    sectionParent = section['groundNodes'] if section.has_key('groundNodes') else section.createSection('groundNodes')
+    for childSectionName, childSection in sectionParent.items():
+        if childSectionName == 'group':
+            sectionParent.deleteSection(childSection)
 
-            writeGroundNode(node, sectionToSave)
-
-        return
+    for node in groups:
+        sectionToSave = sectionParent.createSection('group')
+        writeGroundNode(node, sectionToSave)
 
 
 def writeSplineDesc(splineDesc, section, cache):
@@ -197,7 +194,7 @@ def writeSplineDesc(splineDesc, section, cache):
         def writeTrackPairParams(item, section):
             segment2ModelLeft = item.segment2ModelLeft()
             segment2ModelRight = item.segment2ModelRight()
-            _xml.rewriteInt(section, 'trackPairIdx', item.trackPairIdx, 0)
+            _xml.rewriteInt(section, 'trackPairIdx', item.trackPairIdx)
             _xml.rewriteString(section, 'segmentModelLeft', item.segmentModelLeft())
             _xml.rewriteString(section, 'segmentModelRight', item.segmentModelRight())
             if segment2ModelLeft is not None:
@@ -224,24 +221,14 @@ def writeSplineDesc(splineDesc, section, cache):
                 currentModelSetSection = modelSetsSection.createSection(modelSetName)
                 _xml.rewriteString(currentModelSetSection, 'segmentModelLeft', modelSet.editorLeft)
                 _xml.rewriteString(currentModelSetSection, 'segmentModelRight', modelSet.editorRight)
-                _xml.rewriteString(currentModelSetSection, 'segment2ModelLeft', modelSet.editorSecondLeft)
-                _xml.rewriteString(currentModelSetSection, 'segment2ModelRight', modelSet.editorSecondRight)
+                _xml.rewriteString(currentModelSetSection, 'segment2ModelLeft', modelSet.editorSecondLeft, '')
+                _xml.rewriteString(currentModelSetSection, 'segment2ModelRight', modelSet.editorSecondRight, '')
 
         if section.has_key('splineDesc'):
             section.deleteSection('splineDesc')
-        prioritySection = section.getPrioritySection()
-        sectionItems = prioritySection.items()
-        precedingSectionIndex = shared_writers.getPrecedingSectionIndex(sectionItems, 'physicalTracks')
-        newSplineDescSection = None
-        if precedingSectionIndex is not None:
-            newSplineDescSection = prioritySection.insertSection('splineDesc', precedingSectionIndex)
-        else:
-            newSplineDescSection = section.createSection('splineDesc')
-        newTrackPairsSection = True
-        if len(splineDesc.trackPairs) == 1:
-            newTrackPairsSection = False
+        newSplineDescSection = section.insertSection('splineDesc', section.getFirstIndex('physicalTracks'))
         for trackPair in splineDesc.trackPairs.values():
-            pairSection = newSplineDescSection.createSection('trackPair') if newTrackPairsSection else newSplineDescSection
+            pairSection = newSplineDescSection.createSection('trackPair')
             writeTrackPairParams(trackPair, pairSection)
             writeModelSets(trackPair, pairSection)
 

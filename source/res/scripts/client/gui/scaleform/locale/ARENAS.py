@@ -65,8 +65,6 @@ class ARENAS(object):
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'
     C_07_LAKEVILLE_DESCRIPTION = '#arenas:07_lakeville/description'
-    C_07_LAKEVILLE_NB_NAME = '#arenas:07_lakeville_nb/name'
-    C_07_LAKEVILLE_NB_DESCRIPTION = '#arenas:07_lakeville_nb/description'
     C_08_RUINBERG_NAME = '#arenas:08_ruinberg/name'
     C_08_RUINBERG_DESCRIPTION = '#arenas:08_ruinberg/description'
     C_10_HILLS_NAME = '#arenas:10_hills/name'
@@ -104,8 +102,6 @@ class ARENAS(object):
     C_23_WESTFELD_DESCRIPTION = '#arenas:23_westfeld/description'
     C_28_DESERT_NAME = '#arenas:28_desert/name'
     C_28_DESERT_DESCRIPTION = '#arenas:28_desert/description'
-    C_28_DESERT_NB_NAME = '#arenas:28_desert_nb/name'
-    C_28_DESERT_NB_DESCRIPTION = '#arenas:28_desert_nb/description'
     C_29_EL_HALLOUF_NAME = '#arenas:29_el_hallouf/name'
     C_45_NORTH_AMERICA_NAME = '#arenas:45_north_america/name'
     C_45_NORTH_AMERICA_DESCRIPTION = '#arenas:45_north_america/description'
@@ -118,8 +114,6 @@ class ARENAS(object):
     C_101_DDAY_NAME = '#arenas:101_dday/name'
     C_101_DDAY_DESCRIPTION = '#arenas:101_dday/description'
     C_115_SWEDEN_DESCRIPTION = '#arenas:115_sweden/description'
-    C_115_SWEDEN_NB_NAME = '#arenas:115_sweden_nb/name'
-    C_115_SWEDEN_NB_DESCRIPTION = '#arenas:115_sweden_nb/description'
     C_112_EIFFEL_TOWER_CTF_NAME = '#arenas:112_eiffel_tower_ctf/name'
     C_112_EIFFEL_TOWER_CTF_DESCRIPTION = '#arenas:112_eiffel_tower_ctf/description'
     C_212_EPIC_RANDOM_VALLEY_NAME = '#arenas:212_epic_random_valley/name'
@@ -230,8 +224,6 @@ class ARENAS(object):
      C_06_ENSK_DESCRIPTION,
      C_07_LAKEVILLE_NAME,
      C_07_LAKEVILLE_DESCRIPTION,
-     C_07_LAKEVILLE_NB_NAME,
-     C_07_LAKEVILLE_NB_DESCRIPTION,
      C_08_RUINBERG_NAME,
      C_08_RUINBERG_DESCRIPTION,
      C_10_HILLS_NAME,
@@ -269,8 +261,6 @@ class ARENAS(object):
      C_23_WESTFELD_DESCRIPTION,
      C_28_DESERT_NAME,
      C_28_DESERT_DESCRIPTION,
-     C_28_DESERT_NB_NAME,
-     C_28_DESERT_NB_DESCRIPTION,
      C_29_EL_HALLOUF_NAME,
      C_45_NORTH_AMERICA_NAME,
      C_45_NORTH_AMERICA_DESCRIPTION,
@@ -283,8 +273,6 @@ class ARENAS(object):
      C_101_DDAY_NAME,
      C_101_DDAY_DESCRIPTION,
      C_115_SWEDEN_DESCRIPTION,
-     C_115_SWEDEN_NB_NAME,
-     C_115_SWEDEN_NB_DESCRIPTION,
      C_112_EIFFEL_TOWER_CTF_NAME,
      C_112_EIFFEL_TOWER_CTF_DESCRIPTION,
      C_212_EPIC_RANDOM_VALLEY_NAME,

@@ -5,12 +5,11 @@ from collections import defaultdict
 import BigWorld
 import personal_missions
 from adisp import adisp_async, adisp_process
-from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from constants import BATTLE_MODE_VEHICLE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.server_events import event_items
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from gui.shared.gui_items import checkForTags
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
 from helpers import dependency
 from items import tankmen
@@ -31,7 +30,7 @@ def vehicleRequirementsCheck(quest, invVehicles, vehGetter):
         _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehCD)
         vehType = vehicles.g_cache.vehicle(nationID, vehicleTypeID)
         if vehType.level >= level and classifier.matchVehicle(vehType):
-            if not checkForTags(vehType.tags, VEHICLE_TAGS.EVENT):
+            if not checkForTags(vehType.tags, BATTLE_MODE_VEHICLE_TAGS):
                 return vehGetter(vehCD).activeInNationGroup and True
 
     return False

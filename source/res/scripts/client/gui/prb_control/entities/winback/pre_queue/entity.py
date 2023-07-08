@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
-from gui.prb_control.entities.random.pre_queue.vehicles_watcher import RandomVehiclesWatcher
+from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
 from gui.prb_control.entities.special_mode.pre_queue.ctx import SpecialModeQueueCtx
 from gui.prb_control.entities.winback.pre_queue.permissions import WinbackPermissions
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -31,7 +31,7 @@ class WinbackEntity(PreQueueEntity):
         return
 
     def init(self, ctx=None):
-        self.__watcher = RandomVehiclesWatcher()
+        self.__watcher = BaseVehiclesWatcher()
         self.__watcher.start()
         self.storage.release()
         return super(WinbackEntity, self).init(ctx)

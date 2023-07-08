@@ -449,11 +449,14 @@ class PersonalVehiclesRegularStatsBlock(base.StatsBlock):
         add = self.addNextComponent
         stunFilter = _getStunFilter()
         for data in info.getVehiclesIterator():
-            block = RegularVehicleStatValuesBlock()
+            block = self._createVehicleStatValuesBlock()
             block.setPersonal(True)
             block.addFilters(stunFilter)
             block.setRecord(data, reusable)
             add(block)
+
+    def _createVehicleStatValuesBlock(self):
+        return RegularVehicleStatValuesBlock()
 
 
 class PersonalVehiclesRankedStatsBlock(base.StatsBlock):

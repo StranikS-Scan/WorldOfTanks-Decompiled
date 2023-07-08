@@ -11,7 +11,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventBattleModeSettings, getStrongholdEventEnabled
 from gui.clans.clan_helpers import isStrongholdsEnabled, isLeaguesEnabled
-from gui.clans.stronghold_event_requester import FrozenVehiclesRequester
+from gui.clans.stronghold_event_requester import FrozenVehiclesRequester, FrozenVehiclesConstants
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prb_getters
@@ -680,7 +680,8 @@ class StrongholdEntity(UnitEntity):
                 vehicle = slotInfo.vehicle
                 if player is not None and vehicle:
                     frozenVehicles = self.getEventFrozenVehicles(player.dbID)
-                    if frozenVehicles and vehicle.vehTypeCompDescr in frozenVehicles:
+                    isFrozen = frozenVehicles is not None and (frozenVehicles == FrozenVehiclesConstants.ALL_VEHICLES_FROZEN or vehicle.vehTypeCompDescr in frozenVehicles)
+                    if isFrozen:
                         return True
 
             return False

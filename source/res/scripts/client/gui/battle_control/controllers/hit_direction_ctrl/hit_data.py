@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/hit_direction_ctrl/hit_data.py
+import math
 from gui.battle_control.battle_constants import HIT_FLAGS
 from constants import ATTACK_REASON_INDICES, ATTACK_REASON
 from shared_utils import BitmaskHelper
 from helpers import i18n
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+_HIT_YAW_MIN_SMOOTHING = math.radians(1.0)
+_HIT_YAW_MAX_SMOOTHING = 2 * math.pi - _HIT_YAW_MIN_SMOOTHING
 _NONE_PLAYER_ATTACK_REASON_TAG = {ATTACK_REASON_INDICES['artillery_protection']: (INGAME_GUI.ATTACKREASON_ARTILLERYPROTECTION, 'artillery'),
  ATTACK_REASON_INDICES['artillery_sector']: (INGAME_GUI.ATTACKREASON_ARTILLERY_SECTOR, 'artillery'),
  ATTACK_REASON_INDICES['bombers']: (INGAME_GUI.ATTACKREASON_BOMBERS, 'bomber')}
@@ -27,7 +30,9 @@ class SimpleHitData(object):
         return self.__soundName if self.__soundName is not None else ''
 
     def extend(self, hitData):
-        self.__yaw = hitData.getYaw()
+        newYaw = hitData.getYaw()
+        if _HIT_YAW_MIN_SMOOTHING <= abs(self.__yaw - newYaw) <= _HIT_YAW_MAX_SMOOTHING:
+            self.__yaw = newYaw
 
 
 class HitData(SimpleHitData):

@@ -11,7 +11,7 @@ import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from serializable_types.types import C11nSerializationTypes as _C11nSerializationTypes
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION
 from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
@@ -45,7 +45,7 @@ def resizeSection(section, newSize, newName):
 
 
 def saveCustomizationItems(cache, folder):
-    writeItemType(PaintXmlWriter(), cache, folder, 'paint', PaintXmlWriter.EndGroupWriter())
+    writeItemType(PaintXmlWriter(), cache, folder, 'paint')
     writeItemType(DecalXmlWriter(), cache, folder, 'decal')
     writeItemType(ProjectionDecalXmlWriter(), cache, folder, 'projection_decal')
     writeItemType(CamouflageXmlWriter(), cache, folder, 'camouflage')
@@ -453,18 +453,6 @@ class PaintXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= self.writeBaseGroup(item, section)
         return changed
 
-    class EndGroupWriter(object):
-
-        def write(self, section):
-            changed = False
-            if not section.has_key('usages'):
-                section = section.createSection('usages')
-                section = section.createSection('item')
-                section.writeString('componentType', 'ALL')
-                section.writeInt('cost', 1)
-                changed = True
-            return changed
-
 
 class DecalXmlWriter(BaseCustomizationItemXmlWriter):
 
@@ -706,21 +694,30 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
         seasonName = encodeEnum(SeasonType, season)
         oSection = oSections.next(lambda s: s.readString('season').lower() == seasonName)
         changed |= _xml.rewriteString(oSection, 'season', seasonName)
+        defaultValuesDict = {'styleProgressionLevel': 0,
+         'slotId': 0,
+         'scaleFactorId': DEFAULT_SCALE_FACTOR_ID,
+         'options': 0}
         for projectionDecal in outfit.projection_decals:
             if projectionDecal.editorData.decalType == ProjectionDecalType.POSITION:
                 projectionDecal.tags = None
                 projectionDecal.scaleFactorId = None
                 projectionDecal.options = None
+
+                def checkDefault(val, defaultVal):
+                    return val if tuple(val) != defaultVal else None
+
+                projectionDecal.position = checkDefault(projectionDecal.position, DEFAULT_POSITION)
+                projectionDecal.rotation = checkDefault(projectionDecal.rotation, DEFAULT_ROTATION)
+                projectionDecal.scale = checkDefault(projectionDecal.scale, DEFAULT_SCALE)
+                defaultValuesDict['showOn'] = encodeFlagEnum(ApplyArea, ApplyArea.NONE).upper()
+                defaultValuesDict['doubleSided'] = 0
             projectionDecal.position = None
             projectionDecal.rotation = None
             projectionDecal.scale = None
             projectionDecal.doubleSided = None
             projectionDecal.showOn = None
 
-        defaultValuesDict = {'styleProgressionLevel': 0,
-         'slotId': 0,
-         'scaleFactorId': DEFAULT_SCALE_FACTOR_ID,
-         'options': 0}
         deprecatedFieldsToWrite = {_C11nSerializationTypes.SEQUENCE: ('position', 'rotation'),
          _C11nSerializationTypes.ATTACHMENT: ('position', 'rotation'),
          _C11nSerializationTypes.PROJECTION_DECAL: ('tintColor', 'preview', 'progressionLevel'),
@@ -846,6 +843,7 @@ class PersonalNumberXmlWriter(BaseCustomizationItemXmlWriter):
         changed = self.writeBase(item, section)
         if group:
             changed |= rewriteInt(section, 'digitsCount', item, 'digitsCount')
+            changed |= rewriteInt(section, 'fontId', item, 'fontId')
             changed |= rewriteString(section, 'preview_texture', item, 'previewTexture')
         changed |= self.writeBaseGroup(item, section)
         return changed
@@ -1014,7 +1012,10 @@ def rewritePalettes(section, item):
              str(a)])
             changed |= _xml.rewriteString(paletteSection, sectName(i), colorStr)
 
-    changed |= _xml.rewriteInt(getEditorOnlySection(section, True), 'paletteIndex', item.editorData.paletteIndex)
+    editorOnlySection = getEditorOnlySection(section, True)
+    changed |= _xml.rewriteInt(editorOnlySection, 'paletteIndex', item.editorData.paletteIndex, 0)
+    if len(editorOnlySection.items()) == 0:
+        section.deleteSection(editorOnlySection)
     return changed
 
 

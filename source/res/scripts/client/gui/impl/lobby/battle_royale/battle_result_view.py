@@ -19,6 +19,7 @@ from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battl
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
 from gui.shared.events import LobbyHeaderMenuEvent
+from gui.shared.lock_overlays import lockNotificationManager
 from gui.server_events.battle_royale_formatters import BRSections
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -35,6 +36,7 @@ from constants import ATTACK_REASON_INDICES, ATTACK_REASON, DEATH_REASON_ALIVE
 from gui.server_events import events_dispatcher
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
+from gui.impl.lobby.battle_royale import BATTLE_ROYALE_LOCK_SOURCE_NAME
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from skeletons.connection_mgr import IConnectionManager
 from battle_pass_common import getPresentLevel
@@ -44,16 +46,13 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
 
-def _getAttackReason(vehicleState, killerInfo):
+def _getAttackReason(vehicleState, hasKiller):
     if vehicleState == DEATH_REASON_ALIVE:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.alive()
     elif vehicleState == ATTACK_REASON_INDICES[ATTACK_REASON.DEATH_ZONE]:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByZone()
-    elif killerInfo:
-        if killerInfo.get('isBot', False):
-            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByBot()
-        else:
-            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
+    elif hasKiller:
+        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
     else:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.other()
     return reason
@@ -153,6 +152,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         event_dispatcher.hideSquadWindow()
 
     def _finalize(self):
+        lockNotificationManager(False, source=BATTLE_ROYALE_LOCK_SOURCE_NAME)
         BREvents.playSound(BREvents.BR_RESULT_PROGRESS_BAR_STOP)
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__tooltipsData = None
@@ -193,7 +193,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if not self.__isObserverResult:
             killerInfo = statusInfo['killer']
             hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
-            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), killerInfo))
+            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller))
             if hasKiller:
                 self.__setUserName(statusModel.killer, killerInfo)
         return
@@ -231,6 +231,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         battlePassModel.setChapterID(chapterID)
         state = BattlePassProgress.BP_STATE_DISABLED
         bpController = self.__battlePassController
+        hasExtra = bpController.hasExtra()
         isBought = all((bpController.isBought(chapterID=chapter) for chapter in bpController.getChapterIDs()))
         if self.__brController.isBattlePassAvailable(self.__arenaBonusType) and not self.__isObserverResult:
             state = BattlePassProgress.BP_STATE_BOUGHT if isBought else BattlePassProgress.BP_STATE_NORMAL
@@ -241,6 +242,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
             battlePassModel.setFreePoints(currentLevelPoints)
             battlePassModel.setProgressionState(BattlePassProgress.PROGRESSION_IN_PROGRESS)
         battlePassModel.setIsBattlePassPurchased(battlePassData['hasBattlePass'])
+        battlePassModel.setHasExtra(hasExtra)
         battlePassModel.setBattlePassState(state)
 
     def __setLeaderboard(self, leaderboardModel):
@@ -292,12 +294,9 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getFinishReason(self):
         isWinner = self.__data[BRSections.COMMON]['playerPlace'] == _THE_BEST_PLACE
-        isWinnerPlace = self.__data[BRSections.COMMON]['playerPlace'] in (2, 3, 4, 5)
         isInSquad = self.__data[BRSections.COMMON]['isSquadMode']
         if isWinner:
-            finishReason = R.strings.battle_royale.battleResult.title.victoryFirst()
-        elif isWinnerPlace:
-            finishReason = R.strings.battle_royale.battleResult.title.victoryOther()
+            finishReason = R.strings.battle_royale.battleResult.title.victory()
         elif isInSquad:
             finishReason = R.strings.battle_royale.battleResult.title.squadDestroyed()
         else:

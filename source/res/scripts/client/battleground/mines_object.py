@@ -23,7 +23,7 @@ def _getEffectResourceMapping(name):
 
 
 @dependency.replace_none_kwargs(dynamicObjectsCache=IBattleDynamicObjectsCache, battleSession=IBattleSessionProvider)
-def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=None):
+def loadMines(ownerVehicleID, callback, startEffectEnabled=True, dynamicObjectsCache=None, battleSession=None):
     loaders = {}
     effDescr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getMinesEffect()
     isAlly = False
@@ -38,7 +38,7 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
         isAlly = playerTeam == ownerVehicleInfo.team
     idleEff = effDescr.idleEffect.ally if isAlly else effDescr.idleEffect.enemy
     hasActivationEffect = hasattr(effDescr, 'activationEffect') and effDescr.activationEffect
-    gameObject = MinesObject(isAlly, hasActivationEffect)
+    gameObject = MinesObject(isAlly, hasActivationEffect, startEffectEnabled)
     gameObject.prepareCompositeLoader(callback)
     spaceId = BigWorld.player().spaceID
     loadComponentSystem(gameObject.startEffectPlayer, gameObject.appendPiece, _getSequenceResourceMapping(effDescr.plantEffect.effectDescr.path, spaceId))
@@ -54,10 +54,11 @@ def loadMines(ownerVehicleID, callback, dynamicObjectsCache=None, battleSession=
 
 class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
 
-    def __init__(self, isAllyMine, hasActivationDelay):
+    def __init__(self, isAllyMine, hasActivationDelay, startEffectEnabled=True):
         super(MinesObject, self).__init__(BigWorld.player().spaceID)
         self.__position = Math.Vector3()
-        self.__isAllyMine = isAllyMine
+        self.isAllyMine = isAllyMine
+        self.__startEffectEnabled = startEffectEnabled
         self.__isEnemyMarkerEnabled = False
         self.__isActivated = False
         self.activationTimeDelay = 0
@@ -136,7 +137,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
         self.__playEffectOnAvatarReady(self.__playDetonateEffects)
 
     def enableEnemyIdleEffect(self, isEnabled):
-        if self.__isAllyMine:
+        if self.isAllyMine:
             return
         if isEnabled == self.__isEnemyMarkerEnabled:
             return
@@ -165,9 +166,10 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
         return player is not None and player.userSeesWorld()
 
     def __playStartEffects(self):
-        self.startEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
+        if self.__startEffectEnabled:
+            self.startEffectPlayer.bindAndStart(self.__position, self._nativeSystem.spaceID)
         if not self.hasActivationEffect() or self.__isActivated:
-            if self.__isAllyMine or self.__isEnemyMarkerEnabled:
+            if self.isAllyMine or self.__isEnemyMarkerEnabled:
                 self.__playIdleEffects()
         elif self.__isFirstMine() and self.__soundTimerObjStart:
             self.__soundTimerObjStart.play(self.__soundTimerEventStart)
@@ -180,7 +182,7 @@ class MinesObject(TerrainAreaGameObject, CompositeLoaderMixin):
                 self.__soundTimerObjStart.stopAll()
             if self.__soundTimerObjEnd:
                 self.__soundTimerObjEnd.play(self.__soundTimerEventEnd)
-        if self.__isAllyMine or self.__isEnemyMarkerEnabled:
+        if self.isAllyMine or self.__isEnemyMarkerEnabled:
             self.__playIdleEffects()
         self.activationEffectPlayer.start(self.__position)
 

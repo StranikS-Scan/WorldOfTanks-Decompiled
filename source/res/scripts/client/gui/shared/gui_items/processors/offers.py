@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/offers.py
-import cPickle
+import json
 import logging
 from functools import partial
 import BigWorld
@@ -83,7 +83,7 @@ class ReceiveMultipleOfferGiftsProcessor(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to receive offers gifts. Choices: %s', self.__chosenGifts)
         Waiting.show('loadContent')
-        choices = cPickle.dumps(self.__chosenGifts)
+        choices = json.dumps(self.__chosenGifts)
         BigWorld.player().receiveMultipleOfferGifts(choices, lambda requestID, resultID, errStr, ext=None: self._response(resultID, callback, ctx=ext, errStr=errStr))
         return
 

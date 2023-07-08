@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/ClientInvitations.py
 from collections import namedtuple
 from functools import partial
+from shared_utils import safeCancelCallback
 import BigWorld
 import AccountCommands
 from constants import INVITATION_STATUS
@@ -106,7 +107,7 @@ class ClientInvitations(object):
 
     def _clearExpiryCallback(self):
         if self.__expCbID is not None:
-            BigWorld.cancelCallback(self.__expCbID)
+            safeCancelCallback(self.__expCbID)
             self.__expCbID = None
         return
 

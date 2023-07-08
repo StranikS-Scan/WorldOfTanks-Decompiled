@@ -160,10 +160,8 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
             contexts = getFilterPopoverSetupContexts(xpRateMultiplier)
             filterCtx = contexts.get(entry, FilterSetupContext())
             tooltipRes = R.strings.tank_carousel_filter.tooltip.dyn(entry)
-            dataVO['specials'].append({'value': getButtonsAssetPath(filterCtx.asset or entry),
-             'tooltip': makeTooltip(backport.text(tooltipRes.header()) if tooltipRes else '', backport.text(tooltipRes.body(), **filterCtx.ctx)) if tooltipRes else '',
-             'selected': isSelected(entry),
-             'enabled': not (entry == FILTER_KEYS.BONUS and self._isFrontline)})
+            enabled = not (entry == FILTER_KEYS.BONUS and self._isFrontline)
+            dataVO['specials'].append(self._packSpecial(entry, filterCtx, isSelected(entry), tooltipRes, enabled))
 
         for entry in mapping[FILTER_SECTION.PROGRESSIONS]:
             contexts = getFilterPopoverSetupContexts(xpRateMultiplier)
@@ -184,6 +182,12 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
         if self._withRoles and vehType is not None and vehType is not VEHICLE_CLASS_NAME.SPG:
             dataVO['rolesSectionVisible'] = True
         return dataVO
+
+    def _packSpecial(self, entry, filterCtx, isSelected, tooltipRes, enabled):
+        return {'value': getButtonsAssetPath(filterCtx.asset or entry),
+         'tooltip': makeTooltip(backport.text(tooltipRes.header()) if tooltipRes else '', backport.text(tooltipRes.body(), **filterCtx.ctx)) if tooltipRes else '',
+         'selected': isSelected,
+         'enabled': enabled}
 
     def _dispose(self):
         if self._carousel is not None and self._carousel.filter is not None:

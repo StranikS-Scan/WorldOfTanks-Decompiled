@@ -7,7 +7,6 @@ from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasBattleSubMode
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HintPriority
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.plugins import PreBattleHintPlugin, HelpPlugin
-from gui.impl.gen import R
 
 def updatePlugins(plugins):
     if FunRandomPreBattleHintPlugin.isSuitable():
@@ -32,7 +31,8 @@ class FunRandomPreBattleHintPlugin(PreBattleHintPlugin, FunSubModesWatcher):
 class FunRandomHelpPlugin(HelpPlugin, FunSubModesWatcher):
 
     def __init__(self, parentObj):
-        super(FunRandomHelpPlugin, self).__init__(FUN_RANDOM_HINT_SECTION, self.getBattleSubMode().getSettings().client.settingsKey, R.strings.ingame_gui.helpScreen.funRandom, HintPriority.HELP, HelpHintContext.FUN_RANDOM, parentObj)
+        battleSubMode = self.getBattleSubMode()
+        super(FunRandomHelpPlugin, self).__init__(FUN_RANDOM_HINT_SECTION, battleSubMode.getSettings().client.settingsKey, battleSubMode.getLocalsResRoot().detailsHelpHint, HintPriority.HELP, HelpHintContext.FUN_RANDOM, parentObj)
 
     @classmethod
     @hasBattleSubMode(defReturn=False)

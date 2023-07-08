@@ -96,7 +96,7 @@ class OffersBannerController(IOffersBannerController):
         self._serverSettings.onServerSettingsChange += self._loadBanners
 
     def __hasNotSeenOffers(self):
-        return bool(list(self.__iNotSeenOffers()))
+        return any(self.__iNotSeenOffers())
 
     def __iNotSeenOffers(self):
         for offer in self._offersProvider.iAvailableOffers(onlyVisible=True):

@@ -424,7 +424,7 @@ class PrbInviteDecorator(_NotificationDecorator):
         else:
             submitState = cancelState = 0
         message = g_settings.msgTemplates.format('invite', ctx={'text': formatter.getText(invite)}, data={'timestamp': invite.createTime,
-         'icon': makePathToIcon(formatter.getIconName(invite)),
+         'icon': formatter.getIconPath(invite, pathMaker=makePathToIcon),
          'defaultIcon': makePathToIcon('prebattleInviteIcon'),
          'buttonsStates': {'submit': submitState,
                            'cancel': cancelState}})

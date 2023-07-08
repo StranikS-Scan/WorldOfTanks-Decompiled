@@ -37,5 +37,3 @@ class MarkersAs3Descr(object):
     AS_ADD_MARKER_ENEMY_VEHICLE_BIG = 'enemyVehicle_big'
     AS_ADD_MARKER_SQUAD_VEHICLE = 'squadVehicle'
     AS_ADD_MARKER_BOT_VEHICLE = 'ally_bot_vehicle'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE = 'botVehicle'
-    AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG = 'botVehicle_big'

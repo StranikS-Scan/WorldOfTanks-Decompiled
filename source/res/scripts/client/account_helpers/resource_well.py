@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/resource_well.py
-import cPickle
+import json
 from functools import partial
 import typing
 import AccountCommands
@@ -48,7 +48,7 @@ class ResourceWell(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr)
             else:
                 proxy = None
-            resourcesStr = cPickle.dumps(resources)
+            resourcesStr = json.dumps(resources)
             self.__commandsProxy.perform(AccountCommands.CMD_RESOURCE_WELL_PUT, [reward, resourcesStr], proxy)
             return
 

@@ -8,8 +8,7 @@ from constants import SEASON_TYPE_BY_NAME, RentType
 from debug_utils import LOG_ERROR
 import type_traits
 import collections
-if TYPE_CHECKING:
-    import ResMgr
+import ResMgr
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -163,7 +162,9 @@ def readInt(xmlCtx, section, subsectionName, minVal=None, maxVal=None):
     if v == wrongVal:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     if minVal is not None and v < minVal or maxVal is not None and v > maxVal:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        msg = 'subsection is wrong with restrictions {} {} {}'
+        msg.format('minVal = {}'.format(minVal) if minVal is not None else '', 'maxVal = {}'.format(minVal) if maxVal is not None else '', ', value = {}'.format(v) if v != wrongVal else '')
+        raiseWrongXml(xmlCtx, subsectionName if subsectionName else section.name, msg)
     return v
 
 
@@ -288,8 +289,11 @@ def readMatrix(xmlCtx, section, subsectionName):
 
 
 @cacheFloatTuples
-def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
-    strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
+def readTupleOfFloats(xmlCtx, section, subsectionName, count=None, defaultValue=None):
+    subsection = getSubsection(xmlCtx, section, subsectionName, False)
+    if subsection is None and defaultValue is None:
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    strings = subsection.asString.split() if subsection is not None else defaultValue
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d floats expected' % count)
     try:
@@ -536,9 +540,19 @@ def rewriteMatrix(section, subsectionName, value, defaultValue=None, createNew=T
     return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Matrix')
 
 
-def rewriteData(section, subsectionName, value, defaultValue, createNew, accessFunSuffix):
+def rewriteTupleOfFloats(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'String', lambda v: tupleToString(v, 'Float'))
+
+
+def rewriteTupleOfInts(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'String', lambda v: tupleToString(v, 'Int'))
+
+
+def rewriteData(section, subsectionName, value, defaultValue, createNew, accessFunSuffix, valueConverter=None):
     equal = type_traits.equalComparator(accessFunSuffix)
-    isDefaultValue = equal(value, defaultValue)
+    convertedValue = value if valueConverter is None else valueConverter(value)
+    convertedDefault = defaultValue if valueConverter is None else valueConverter(defaultValue)
+    isDefaultValue = equal(convertedValue, convertedDefault)
     if subsectionName is not None:
         readFunc = getattr(section, 'read' + accessFunSuffix)
         writeFunc = getattr(section, 'write' + accessFunSuffix)
@@ -546,21 +560,38 @@ def rewriteData(section, subsectionName, value, defaultValue, createNew, accessF
             if isDefaultValue:
                 section.deleteSection(subsectionName)
                 return True
-            if not equal(value, readFunc(subsectionName)):
-                writeFunc(subsectionName, value)
+            if not equal(convertedValue, readFunc(subsectionName)):
+                writeFunc(subsectionName, convertedValue)
                 return True
         elif createNew and not isDefaultValue:
-            writeFunc(subsectionName, value)
+            writeFunc(subsectionName, convertedValue)
             return True
     else:
         asProp = 'as' + accessFunSuffix
         if isDefaultValue:
             section.parentSection().deleteSection(section)
             return True
-        if getattr(section, 'asString') == '' or not equal(value, getattr(section, asProp)):
-            setattr(section, asProp, value)
+        if getattr(section, 'asString') == '' or not equal(convertedValue, getattr(section, asProp)):
+            setattr(section, asProp, convertedValue)
             return True
     return False
+
+
+def tupleToString(values, writeFunSuffix):
+    if values is None or len(values) == 0:
+        return ''
+    else:
+        ds = ResMgr.DataSection()
+        asProp = 'as' + writeFunSuffix
+        if not hasattr(ds, asProp):
+            LOG_ERROR('tupleToString(): There is no property ' + asProp)
+            return ''
+        strings = []
+        for v in values:
+            setattr(ds, asProp, v)
+            strings.append(ds.asString)
+
+        return ' '.join(strings)
 
 
 def deleteAndCleanup(section, path):

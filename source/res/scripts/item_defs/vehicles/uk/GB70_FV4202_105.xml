@@ -37,8 +37,6 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
     <density>	0.96 0.96	</density>
   </camouflage>
   <hull>
@@ -60,8 +58,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.22 32.00 0.38 1.00 0.05 0.28	</pitchParams>
-      <rollParams>	1.00 0.22 32.00 0.38 1.00 0.05 0.28	</rollParams>
+      <pitchParams>	0.22 32 0.38 1 0.05 0.28	</pitchParams>
+      <rollParams>	1 0.22 32 0.38 1 0.05 0.28	</rollParams>
       <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -76,34 +74,32 @@
       <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	1.995 0.000549 2.92079	</rayStart>
+        <rayEnd>	1.595 0.000549 2.92079	</rayEnd>
+        <rayUp>	0 1 0	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	inscription	</slotType>
+        <slotId>	14000	</slotId>
+        <rayStart>	-1.995 -0.036562 2.40785	</rayStart>
+        <rayEnd>	-1.595 -0.036562 2.40785	</rayEnd>
+        <rayUp>	0 1 0	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+    </customizationSlots>
     <customization>
       <customizableVehicleAreas>
         <paint></paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
-    <customizationSlots>
-      <slot>
-        <slotType>	clan	</slotType>
-        <slotId>	10000	</slotId>
-        <rayStart>	1.995 0.000549048 2.92079	</rayStart>
-        <rayEnd>	1.595 0.000549048 2.92079	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
-      </slot>
-      <slot>
-        <slotType>	inscription	</slotType>
-        <slotId>	14000	</slotId>
-        <rayStart>	-1.995 -0.0365621 2.40785	</rayStart>
-        <rayEnd>	-1.595 -0.0365621 2.40785	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.74	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
-      </slot>
-    </customizationSlots>
     <camouflage>
       <density>	16.2785 16.0146	</density>
       <aoTextureSize>	128 128	</aoTextureSize>
@@ -147,9 +143,12 @@
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.72	</textureScale>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-0.72	</textureScale>
+        </trackPair>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -281,25 +280,23 @@
           </hitTester>
           <effects>	shot_large	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <customizationSlots>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0 -0.0021 2.84651	</rayStart>
+              <rayEnd>	0 -0.0021 3.51351	</rayEnd>
+              <rayUp>	0.092 0.089 4	</rayUp>
+              <size>	0.667	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </slot>
+          </customizationSlots>
           <customization>
             <customizableVehicleAreas>
               <paint></paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <customizationSlots>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000000 -0.00209996 2.84651	</rayStart>
-              <rayEnd>	-0.0270928 0.000708699 2.84587	</rayEnd>
-              <rayUp>	0.092 0.089 4	</rayUp>
-              <size>	0.667	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-              <isUVProportional>	true	</isUVProportional>
-            </slot>
-          </customizationSlots>
           <camouflage>
             <density>	29.281 29.2776	</density>
             <aoTextureSize>	128 128	</aoTextureSize>
@@ -316,48 +313,44 @@
         <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.019607 0.457312 1.01427	</gunPosition>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.104 -0.022 1.071 -0.000 1.000 0.000 0.500 0.448 0.631 0.500 0.000 0.500 0.270 0.100 0.347	</physicsShape>
+      <physicsShape>	1.104 -0.022 1.071 0 1 0 0.5 0.448 0.631 0.5 0 0.5 0.27 0.1 0.347	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <customizationSlots>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33000	</slotId>
+          <rayStart>	-1.54344 0.512023 -0.86285	</rayStart>
+          <rayEnd>	-1.16619 0.512023 -0.729881	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <isMirrored>	true	</isMirrored>
+          <rayStart>	1.54344 0.512023 -0.86285	</rayStart>
+          <rayEnd>	1.16619 0.512023 -0.729881	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34000	</slotId>
+          <rayStart>	0.010553 0.641244 -1.69184	</rayStart>
+          <rayEnd>	0.010553 0.641244 -1.29184	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </slot>
+      </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
-      <customizationSlots>
-        <slot>
-          <slotType>	inscription	</slotType>
-          <slotId>	34000	</slotId>
-          <rayStart>	0.010553 0.641244 -1.69184	</rayStart>
-          <rayEnd>	0.010553 0.641244 -1.29184	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.68	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33000	</slotId>
-          <rayStart>	-1.54344 0.512023 -0.86285	</rayStart>
-          <rayEnd>	-1.16619 0.512023 -0.729881	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33001	</slotId>
-          <rayStart>	1.54344 0.512023 -0.86285	</rayStart>
-          <rayEnd>	1.16619 0.512023 -0.729881	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-          <isUVProportional>	true	</isUVProportional>
-        </slot>
-      </customizationSlots>
       <camouflage>
         <density>	25.1497 25.1514	</density>
         <aoTextureSize>	128 128	</aoTextureSize>

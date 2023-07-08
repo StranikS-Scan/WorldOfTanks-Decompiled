@@ -13,10 +13,11 @@ from gui.shared.event_dispatcher import showStylePreview, showVehiclePreviewWith
 from shared_utils import first
 if typing.TYPE_CHECKING:
     from typing import Dict, Optional, Tuple
+    from gui.shared.gui_items.customization.c11n_items import Style
 _logger = logging.getLogger(__name__)
 _TAB_COMMAND = {TabID.VEHICLE: showVehiclePreviewWithoutBottomPanel,
  TabID.STYLE: showStylePreview}
-_TAB_CUSTOM_NAME_GETTER = {TabID.STYLE: lambda ctx: ctx['style'].userName if ctx.get('style') else ''}
+_TAB_CUSTOM_NAME_GETTER = {TabID.STYLE: lambda style: style.userName if style is not None else ''}
 PERSONAL_NUMBER_STYLE_TABS = (TabID.PERSONAL_NUMBER_VEHICLE, TabID.BASE_VEHICLE)
 
 class VehiclePreviewTopPanelTabs(VehiclePreviewTopPanelTabsMeta):
@@ -27,7 +28,7 @@ class VehiclePreviewTopPanelTabs(VehiclePreviewTopPanelTabsMeta):
         return
 
     def setData(self, **kwargs):
-        self.__view.setData(kwargs.get('tabIDs'), kwargs.get('currentTabID'))
+        self.__view.setData(kwargs.get('tabIDs'), kwargs.get('currentTabID'), kwargs.get('style'))
 
     def setParentCtx(self, **kwargs):
         self.__view.setParentCtx(**kwargs)
@@ -47,15 +48,17 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         self.__parentCtx = {}
         self.__tabIDs = tuple()
         self.__currentTabID = None
+        self.__style = None
         return
 
     @property
     def viewModel(self):
         return super(VehiclePreviewTopPanelTabsView, self).getViewModel()
 
-    def setData(self, tabIDs, currentTabID):
+    def setData(self, tabIDs, currentTabID, style):
         self.__tabIDs = tabIDs
         self.__currentTabID = currentTabID
+        self.__style = style
 
     def setParentCtx(self, **kwargs):
         self.__parentCtx = kwargs
@@ -73,7 +76,7 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
             for tabID in self.__tabIDs:
                 tabIDs.addNumber(tabID.value)
                 getTabName = _TAB_CUSTOM_NAME_GETTER.get(tabID)
-                tabNames.addString(getTabName(self.__parentCtx) if callable(getTabName) else '')
+                tabNames.addString(getTabName(self.__style) if callable(getTabName) else '')
 
             tx.setTabIDs(tabIDs)
             tx.setTabCustomNames(tabNames)
@@ -85,14 +88,16 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         command = _TAB_COMMAND.get(self.__currentTabID)
         if callable(command):
             backCallback = self.__parentCtx.get('backCallback') or self.__parentCtx.get('previewBackCb')
-            command(self.__parentCtx.get('itemCD'), style=self.__parentCtx.get('style'), topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback)
+            command(self.__parentCtx.get('itemCD'), style=self.__style if self.__currentTabID == TabID.STYLE else None, topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback)
         elif self.__currentTabID in PERSONAL_NUMBER_STYLE_TABS:
             self.__processPersonalNumberStyleTab()
+        return
 
     def __makeTopPanelData(self):
         return {'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': self.__tabIDs,
-         'currentTabID': self.__currentTabID}
+         'currentTabID': self.__currentTabID,
+         'style': self.__style}
 
     def __processPersonalNumberStyleTab(self):
         style = self.__parentCtx.get('numberStyle') if self.__currentTabID == TabID.PERSONAL_NUMBER_VEHICLE else None

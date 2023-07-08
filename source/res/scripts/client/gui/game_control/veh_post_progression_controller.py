@@ -56,7 +56,7 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
 
     def isDisabledFor(self, veh, settings=None, skipRentalIsOver=False):
         settings = settings or self.__postProgressionSettings
-        inEnabledRented = veh.intCD in settings.enabledRentedVehicles
+        inEnabledRented = settings is not None and veh.intCD in settings.enabledRentedVehicles
         return veh.isRented and not inEnabledRented or veh.rentalIsOver and inEnabledRented and not skipRentalIsOver
 
     def isEnabled(self):
@@ -64,8 +64,11 @@ class VehiclePostProgressionController(IVehiclePostProgressionController):
 
     def isExistsFor(self, vehType, settings=None):
         settings = settings or self.__postProgressionSettings
-        vehicleIsNotForbidden = vehType.compactDescr not in settings.forbiddenVehicles
-        return settings.isEnabled and vehicleIsNotForbidden and vehType.postProgressionTree is not None
+        if settings is None:
+            return False
+        else:
+            vehicleIsNotForbidden = vehType.compactDescr not in settings.forbiddenVehicles
+            return settings.isEnabled and vehicleIsNotForbidden and vehType.postProgressionTree is not None
 
     def isSwitchSetupFeatureEnabled(self):
         featureDisabled = set(FEATURE_BY_GROUP_ID.values()).isdisjoint(self.__postProgressionSettings.enabledFeatures)

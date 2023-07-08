@@ -30,7 +30,7 @@ from gui.shop import showBuyGoldForBerth
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency, time_utils
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import IRestoreController, IWalletController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -48,6 +48,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
     restore = dependency.descriptor(IRestoreController)
+    wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, ctx=None):
         super(Barracks, self).__init__()
@@ -87,7 +88,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def buyBerths(self):
         price, _ = self.itemsCache.items.shop.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
         availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price.gold:
+        if price and self.wallet.isAvailable and availableMoney.gold < price.gold:
             showBuyGoldForBerth(price.gold)
         else:
             ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
@@ -197,7 +198,9 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING).values()
+        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN
+        criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        modulesAll = self.itemsCache.items.getVehicles(criteria).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:

@@ -232,6 +232,10 @@ def success(text):
     return _formatText('successText', text)
 
 
+def successBright(text):
+    return _formatText('successBrightText', text)
+
+
 def statsIncrease(text):
     return _formatText('statsIncrease', text)
 

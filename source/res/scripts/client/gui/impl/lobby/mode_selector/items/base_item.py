@@ -5,13 +5,13 @@ import typing
 import Event
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import ModeSelectorNormalCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
 from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
@@ -185,13 +185,16 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
     def _isNeedToHideCard(self):
         return False
 
+    def _getModeStringsRoot(self):
+        return _rMode.dyn(self.modeName)
+
     def _onInitializing(self):
         super(ModeSelectorNormalCardItem, self)._onInitializing()
         modeName = self.modeName
         if R.images.gui.maps.icons.mode_selector.mode.dyn(modeName).isValid():
             self.viewModel.setResourcesFolderName(modeName)
         self._preferredColumn, self._priority = self._getPositionByModeName()
-        modeStrings = _rMode.dyn(modeName)
+        modeStrings = self._getModeStringsRoot()
         if modeStrings.isValid():
             condition = modeStrings.dyn('condition')
             self.viewModel.setConditions(backport.text(condition()) if condition.exists() else '')

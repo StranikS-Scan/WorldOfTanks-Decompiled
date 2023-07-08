@@ -406,9 +406,12 @@ class Quest(ServerEventAbstract):
     def getProgressData(self):
         return self._progress or {}
 
+    def getRawBonuses(self):
+        return self.getData().get('bonus', {})
+
     def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None, ctx=None):
         result = []
-        bonusData = bonusData or self._data.get('bonus', {})
+        bonusData = bonusData or self.getRawBonuses()
         if bonusName is None:
             for name, value in bonusData.iteritems():
                 for bonus in getBonuses(self, name, value, isCompensation, ctx=ctx):

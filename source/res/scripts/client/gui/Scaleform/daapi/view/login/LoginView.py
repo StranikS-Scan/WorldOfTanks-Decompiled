@@ -190,7 +190,9 @@ class LoginView(LoginPageMeta):
          'memberMe': self._loginMode.rememberUser,
          'memberMeVisible': self._loginMode.rememberPassVisible,
          'isIgrCredentialsReset': GUI_SETTINGS.igrCredentialsReset,
-         'showRecoveryLink': not GUI_SETTINGS.isEmpty('recoveryPswdURL')})
+         'showRecoveryLink': not GUI_SETTINGS.isEmpty('recoveryPswdURL'),
+         'keyboardLang': self.__lang,
+         'capsLockState': self.__capsLockState})
         self._loginMode.updateForm()
         self.__updateServersList()
 

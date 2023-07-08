@@ -241,7 +241,8 @@ class ShellKind(object):
 class ModifiersWithRemapping(object):
     GUN_EFFECTS = 'gunEffects'
     SHOT_EFFECTS = 'shotEffects'
-    ALL = {GUN_EFFECTS, SHOT_EFFECTS}
+    SOUND_NOTIFICATIONS = 'soundNotifications'
+    ALL = {GUN_EFFECTS, SHOT_EFFECTS, SOUND_NOTIFICATIONS}
 
 
 class RemappingConditionNames(object):
@@ -252,5 +253,5 @@ class RemappingConditionNames(object):
 
 class RemappingNames(object):
     TEST = 'test'
-    FEP_NIGHT_BATTLES = 'fep_nb'
-    ALL = set((FEP_NIGHT_BATTLES,) + ((TEST,) if IS_DEVELOPMENT else ()))
+    AUTO_SHOOT_GUNS = 'auto_shoot_guns'
+    ALL = set((AUTO_SHOOT_GUNS,) + ((TEST,) if IS_DEVELOPMENT else ()))

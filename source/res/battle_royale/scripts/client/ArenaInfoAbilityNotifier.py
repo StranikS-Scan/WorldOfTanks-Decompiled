@@ -7,22 +7,13 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items import vehicles
 import GenericComponents
-from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import AirDropEvent
-from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
-from debug_utils import LOG_DEBUG_DEV
 
-class ArenaInfoAbilityNotifier(DynamicScriptComponent, CallbackDelayer):
+class ArenaInfoAbilityNotifier(BigWorld.DynamicScriptComponent, CallbackDelayer):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
-        DynamicScriptComponent.__init__(self)
         CallbackDelayer.__init__(self)
-
-    def _onAvatarReady(self):
-        self.set_nextDropWave(None)
-        return
 
     def onLeaveWorld(self, *args):
         self.destroy()
@@ -46,8 +37,3 @@ class ArenaInfoAbilityNotifier(DynamicScriptComponent, CallbackDelayer):
             go.createComponent(GenericComponents.RemoveGoDelayedComponent, duration)
 
         CGF.loadGameObject(equipment.usagePrefab, self.entity.spaceID, position, postloadSetup)
-
-    def set_nextDropWave(self, prev):
-        LOG_DEBUG_DEV('set_nextDropWave', self.nextDropWave)
-        event = AirDropEvent(AirDropEvent.AIR_DROP_NXT_SPAWNED, ctx={'timeout': self.nextDropWave})
-        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.BATTLE)

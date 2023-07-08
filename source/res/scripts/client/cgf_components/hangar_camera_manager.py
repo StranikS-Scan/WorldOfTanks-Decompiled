@@ -172,6 +172,8 @@ class HangarCameraManager(CGF.ComponentManager):
 
     @onAddedQuery(CGF.GameObject, CameraComponent, TransformComponent, tickGroup='postHierarchyUpdate')
     def onCameraAdded(self, go, cameraComponent, transformComponent):
+        if not self.__isActive:
+            return
         if cameraComponent.name == self.__cameraMode:
             self.switchToTank()
             _logger.info('HangarCameraManager::onCameraAdded')
@@ -237,12 +239,12 @@ class HangarCameraManager(CGF.ComponentManager):
                 self.__startFlight(matrix, Math.Matrix(self.__cam.matrix))
             return
 
-    def resetCameraTarget(self, duration=0):
+    def resetCameraTarget(self, duration=0, resetRotation=True):
         if BigWorld.camera() != self.__cam:
-            return None
+            return
         else:
             currentCameraQuery = CGF.Query(self.spaceID, (CGF.GameObject, CurrentCameraObject))
-            targetPos, yaw, pitch, distance = (None, None, None, None)
+            targetPos, yaw, pitch, distance, distConstraints = (None, None, None, None, None)
             for gameObject, _ in currentCameraQuery:
                 hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
                 parent = hierarchy.getParent(gameObject)
@@ -250,16 +252,17 @@ class HangarCameraManager(CGF.ComponentManager):
                 transformComponent = gameObject.findComponentByType(TransformComponent)
                 orbitComponent = gameObject.findComponentByType(OrbitComponent)
                 if not orbitComponent or not parentTransformComponent or not transformComponent:
-                    return None
+                    return
                 targetPos = parentTransformComponent.worldTransform.translation
                 worldYaw = parentTransformComponent.worldTransform.yaw
                 worldPitch = parentTransformComponent.worldTransform.pitch
-                yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi)
-                pitch = self.__normaliseAngle(orbitComponent.currentPitch + worldPitch)
-                distance = orbitComponent.currentDist
+                yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi) if resetRotation else None
+                pitch = self.__normaliseAngle(orbitComponent.currentPitch + worldPitch) if resetRotation else None
+                distance = orbitComponent.currentDist if resetRotation else None
+                distConstraints = orbitComponent.distLimits
 
-            self.moveCamera(targetPos, yaw=yaw, pitch=pitch, distance=distance, duration=duration)
-            return None
+            self.moveCamera(targetPos, yaw=yaw, pitch=pitch, distance=distance, duration=duration, distConstraints=distConstraints)
+            return
 
     def enableMovementByMouse(self, enableRotation=True, enableZoom=True):
         self.__cameraParallax.setEnabled(enableRotation)
@@ -291,7 +294,7 @@ class HangarCameraManager(CGF.ComponentManager):
                 self.__currentHorizontalFov = dynamicFov
             return
 
-    def moveCamera(self, targetPos=None, yaw=None, pitch=None, distance=None, duration=0):
+    def moveCamera(self, targetPos=None, yaw=None, pitch=None, distance=None, duration=0, distConstraints=None):
         targetMatrix = Math.Matrix(self.__cam.target)
         sourceMatrix = Math.Matrix(self.__cam.source)
         pivotMaxDist = self.__cam.pivotMaxDist
@@ -303,6 +306,10 @@ class HangarCameraManager(CGF.ComponentManager):
             cameraYaw = self.__yawCameraFilter.toLimit(yaw)
         if pitch is not None:
             cameraPitch = math_utils.clamp(self.__mouseMoveParams.pitchConstraints[0], self.__mouseMoveParams.pitchConstraints[1], pitch)
+        if distConstraints is not None:
+            self.__mouseMoveParams.distConstraints = distConstraints
+            self.__mouseMoveParams.updateLength()
+            self.setMinDist(distConstraints[0])
         if distance is not None:
             pivotMaxDist = math_utils.clamp(self.__mouseMoveParams.distConstraints[0], self.__mouseMoveParams.distConstraints[1], distance)
         sourceMatrix.setRotateYPR(Math.Vector3(cameraYaw, cameraPitch, 0.0))

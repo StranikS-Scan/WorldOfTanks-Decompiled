@@ -10,7 +10,6 @@ from adisp import adisp_process, adisp_async
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.hangar.sound_constants import BROWSER_VIEW_SOUND_SPACES
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -367,16 +366,13 @@ def _showBrowserView(url, returnClb, soundSpaceID=None, guiLoader=None):
     if guiLoader.windowsManager.findViews(_predicate):
         _logger.debug('BrowserView with url %s is already opened', url)
         return
-    else:
-        webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
 
-        def _returnCallback(*args, **kwargs):
-            if kwargs.pop('forceClosed', False):
-                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
-            if returnClb is not None:
-                returnClb(*args, **kwargs)
-            return
-
-        soundSettings = BROWSER_VIEW_SOUND_SPACES.get(soundSpaceID) if soundSpaceID is not None else None
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, BrowserView, ScopeTemplates.LOBBY_SUB_SCOPE), settings=makeSettings(url=url, webHandlers=webHandlers, returnClb=_returnCallback, soundSpaceSettings=soundSettings)))
+    def _returnCallback(*args, **kwargs):
+        if kwargs.pop('forceClosed', False):
+            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+        if returnClb is not None:
+            returnClb(*args, **kwargs)
         return
+
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, BrowserView, ScopeTemplates.LOBBY_SUB_SCOPE), settings=makeSettings(url=url, webHandlers=webHandlers, returnClb=_returnCallback, soundSpaceID=soundSpaceID)))

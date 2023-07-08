@@ -15,9 +15,13 @@ def getViewSettings():
     from fun_random.gui.Scaleform.daapi.view.common.filter_popover import FunRandomCarouselFilterPopover
     from fun_random.gui.Scaleform.daapi.view.lobby.feature.prime_time_view import FunRandomPrimeTimeView
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.carousel.tank_carousel import FunRandomTankCarousel
+    from fun_random.gui.Scaleform.daapi.view.lobby.hangar.qfg_carousel.tank_carousel import FunRandomQuickFireGunsCarousel
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_entry_point import FunRandomEntryPoint
     from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_widget import FunRandomHangarWidgetComponent
-    return (ComponentSettings(HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL, FunRandomTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
+    from fun_random.gui.Scaleform.daapi.view.lobby.hangar.fun_random_strengths_weaknesses_panel import StrengthsWeaknessesPanelInject
+    return (ComponentSettings(HANGAR_ALIASES.STRENGTHS_WEAKNESSES_PANEL, StrengthsWeaknessesPanelInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL, FunRandomTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.FUN_RANDOM_QFG_TANK_CAROUSEL, FunRandomQuickFireGunsCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT, FunRandomEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(FUNRANDOM_ALIASES.FUN_RANDOM_HANGAR_WIDGET, FunRandomHangarWidgetComponent, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FUNRANDOM_ALIASES.FUN_RANDOM_PRIME_TIME, FunRandomPrimeTimeView, HANGAR_ALIASES.RANKED_PRIME_TIME, WindowLayer.SUB_VIEW, FUNRANDOM_ALIASES.FUN_RANDOM_PRIME_TIME, ScopeTemplates.LOBBY_SUB_SCOPE, True),

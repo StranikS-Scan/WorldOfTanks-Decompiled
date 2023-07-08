@@ -181,6 +181,7 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
     def _getInvVehicleCriteria(self):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED
+        criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         return criteria

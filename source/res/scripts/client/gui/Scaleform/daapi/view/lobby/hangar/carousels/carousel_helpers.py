@@ -7,19 +7,19 @@ from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.utils.functions import makeTooltip
 
-def getUnsuitable2queueTooltip(validationResult, resPath):
+def getUnsuitable2queueTooltip(validationResult, resPath, **kwargs):
     header, body = ('', '')
     if validationResult.restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
         levelStr = toRomanRangeString(validationResult.ctx['levels'])
         levelSubStr = backport.text(resPath.vehLvl.levelSubStr(), levels=levelStr)
         header = backport.text(resPath.vehLvl.header())
-        body = backport.text(resPath.vehLvl.body(), levelSubStr=levelSubStr)
+        body = backport.text(resPath.vehLvl.body(), levelSubStr=levelSubStr, **kwargs)
     elif validationResult.restriction == PRE_QUEUE_RESTRICTION.LIMIT_VEHICLE_TYPE:
         typeSubStr = text_styles.neutral(validationResult.ctx['forbiddenType'])
         header = backport.text(resPath.vehType.header())
-        body = backport.text(resPath.vehType.body(), forbiddenType=typeSubStr)
+        body = backport.text(resPath.vehType.body(), forbiddenType=typeSubStr, **kwargs)
     elif validationResult.restriction == PRE_QUEUE_RESTRICTION.LIMIT_VEHICLE_CLASS:
         classSubStr = text_styles.neutral(getTypeUserName(validationResult.ctx['forbiddenClass'], False))
         header = backport.text(resPath.vehClass.header())
-        body = backport.text(resPath.vehClass.body(), forbiddenClass=classSubStr)
+        body = backport.text(resPath.vehClass.body(), forbiddenClass=classSubStr, **kwargs)
     return makeTooltip(header, body)

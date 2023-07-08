@@ -10,7 +10,7 @@ from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.social import SocialWebApi
 from web.web_client_api.sound import SoundWebApi
 from web.web_client_api.loot_boxes import LootBoxWebApi
-from web.web_client_api.ui import OpenWindowWebApi, OpenTabWebApi, UtilWebApi, ContextMenuWebApi, CloseWindowWebApi
+from web.web_client_api.ui import OpenWindowWebApi, OpenTabWebApi, UtilWebApi, ContextMenuWebApi, CloseWindowWebApi, NotificationWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 
@@ -25,4 +25,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createReferralWebHandlers():
-    return webApiCollection(SoundWebApi, RequestWebApi, ReferralProgramWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi, LootBoxWebApi)
+    return webApiCollection(SoundWebApi, RequestWebApi, ReferralProgramWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi, LootBoxWebApi, NotificationWebApi)

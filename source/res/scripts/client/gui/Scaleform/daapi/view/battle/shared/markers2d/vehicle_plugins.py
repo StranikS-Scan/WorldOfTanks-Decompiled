@@ -28,7 +28,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
-from items.battle_royale import isSpawnedBot, isHunterBot
+from items.battle_royale import isSpawnedBot
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -544,7 +544,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     @staticmethod
     def __needsMarker(vInfo):
-        return vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))
+        return vInfo.isAlive() or not isSpawnedBot(vInfo.vehicleType.tags)
 
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID

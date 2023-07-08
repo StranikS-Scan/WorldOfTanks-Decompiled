@@ -48,10 +48,6 @@ class SelectRespawnComponent(InjectComponentAdaptor, ISpawnListener):
         if self.__view:
             self.__view.updatePoint(vehicleId, pointId, prevPointId)
 
-    def onSelectPoint(self, pointId):
-        if self.__view:
-            self.__view.updateSelectedPoint(pointId)
-
     def showSpawnPoints(self):
         if self.__view:
             self.__view.setKeyHandlerState(isActive=True)
@@ -129,10 +125,6 @@ class SelectRespawnView(ViewImpl):
                 vmPoints.addViewModel(pointVM)
 
             vmPoints.invalidate()
-
-    def updateSelectedPoint(self, pointId):
-        with self.viewModel.transaction() as vm:
-            vm.setSelectedPointID(pointId)
 
     def updatePoint(self, vehicleId, pointId, prevPointId):
         arenaDP = self.__sessionProvider.getArenaDP()

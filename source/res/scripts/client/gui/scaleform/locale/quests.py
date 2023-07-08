@@ -1143,6 +1143,7 @@ class QUESTS(object):
     MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
     MISSIONDETAILS_NEXTPAGEBTN_LABEL = '#quests:missionDetails/nextPageBtn/label'
     MISSIONDETAILS_PREVPAGEBTN_LABEL = '#quests:missionDetails/prevPageBtn/label'
+    MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
     MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
     MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
     MISSIONS_TOKENPOPOVER_BUYBTN_LABEL = '#quests:missions/tokenPopover/buyBtn/label'

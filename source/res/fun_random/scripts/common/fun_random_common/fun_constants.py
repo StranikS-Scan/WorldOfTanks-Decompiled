@@ -12,7 +12,8 @@ UNKNOWN_WWISE_REMAPPING = 'unknownRemapping'
 class FunSubModeImpl(object):
     DEV_TEST = 0
     DEFAULT = 1
-    ALL = (DEFAULT,) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
+    QUICK_FIRE_GUNS = 2
+    ALL = (DEFAULT, QUICK_FIRE_GUNS) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
 
 
 class FunProgressionCondition(object):

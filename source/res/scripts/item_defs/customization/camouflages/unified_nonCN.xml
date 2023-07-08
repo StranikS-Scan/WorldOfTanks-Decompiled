@@ -4933,15 +4933,48 @@
           <c3>	0 0 0 255	</c3>
         </palette>
       </palettes>
-      <rotation>
-        <HULL>	0	</HULL>
-        <TURRET>	0	</TURRET>
-        <GUN>	0	</GUN>
-      </rotation>
       <tilingSettings>
         <type>	relativeWithFactor	</type>
         <factor>	2.5 2.5	</factor>
         <offset>	-0.22 -0.23	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	739	</id>
+      <texture>	vehicles/russian/Camouflage/sparta.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/sparta/label	</userString>
+      <description>	#vehicle_customization:camouflage/sparta/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	hiddenInUI styleOnly fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.471239	</HULL>
+        <TURRET>	0.471239	</TURRET>
+        <GUN>	0.471239	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	-0.15 -0.08	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

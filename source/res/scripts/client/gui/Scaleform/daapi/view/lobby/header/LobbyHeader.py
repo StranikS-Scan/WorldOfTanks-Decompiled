@@ -1159,7 +1159,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     elif isRanked:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
                     elif isFunRandom:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_FUNRANDOMSQUAD
+                        tooltip = squadSelected.tooltip if hasattr(squadSelected, 'tooltip') else ''
                     elif isRoyale or isRoyaleTournament:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD if isRoyale else ''
                     elif isComp7:

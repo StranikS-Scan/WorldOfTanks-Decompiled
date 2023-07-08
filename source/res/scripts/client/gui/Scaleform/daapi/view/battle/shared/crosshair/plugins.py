@@ -3,9 +3,9 @@
 import logging
 import math
 from collections import defaultdict, namedtuple
+import BigWorld
 from enum import IntEnum
 import BattleReplay
-import BigWorld
 from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
@@ -36,10 +36,10 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
+from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-from helpers.time_utils import MS_IN_SECOND
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
@@ -71,7 +71,8 @@ def createPlugins():
      'siegeMode': SiegeModePlugin,
      'dualgun': DualGunPlugin,
      'artyCamDist': ArtyCameraDistancePlugin,
-     'spgShotResultIndicator': SPGShotResultIndicatorPlugin}
+     'spgShotResultIndicator': SPGShotResultIndicatorPlugin,
+     'temperatureMechanics': TemperatureGunPlugin}
     return resultPlugins
 
 
@@ -114,7 +115,7 @@ def _createAmmoSettings(gunSettings):
     clip = gunSettings.clip
     burst = gunSettings.burst.size
     if clip.size > 1:
-        state = _CassetteSettings(clip, burst, gunSettings.hasAutoReload())
+        state = _CassetteSettings(clip, burst, gunSettings.hasAutoReload(), gunSettings.hasAutoShoot())
     else:
         state = _AmmoSettings(clip, burst)
     return state
@@ -122,15 +123,20 @@ def _createAmmoSettings(gunSettings):
 
 class _AmmoSettings(object):
 
-    def __init__(self, clip, burst, hasAutoReload=False):
+    def __init__(self, clip, burst, hasAutoReload=False, hasAutoShoot=False):
         super(_AmmoSettings, self).__init__()
         self._clip = clip
         self._burst = burst
         self.__hasAutoReload = hasAutoReload
+        self.__hasAutoShoot = hasAutoShoot
 
     @property
     def hasAutoReload(self):
         return self.__hasAutoReload
+
+    @property
+    def hasAutoShoot(self):
+        return self.__hasAutoShoot
 
     def getClipCapacity(self):
         return self._clip.size
@@ -142,14 +148,13 @@ class _AmmoSettings(object):
         return self._burst
 
     def getState(self, quantity, quantityInClip):
-        return (quantity < 3, 'normal')
+        pass
 
 
 class _CassetteSettings(_AmmoSettings):
 
     def getState(self, quantity, quantityInClip):
-        isLow, state = super(_CassetteSettings, self).getState(quantity, quantityInClip)
-        isLow |= quantity <= self.getClipCapacity()
+        state = super(_CassetteSettings, self).getState(quantity, quantityInClip)
         if self._burst > 1:
             total = math.ceil(self.getClipCapacity() / float(self._burst))
             current = math.ceil(quantityInClip / float(self._burst))
@@ -157,8 +162,9 @@ class _CassetteSettings(_AmmoSettings):
             total = self.getClipCapacity()
             current = quantityInClip
         if current <= 0.5 * total:
-            state = 'critical' if current == 1 else 'warning'
-        return (isLow, state)
+            criticalCount = max(0.2 * total, 1) if self.hasAutoShoot else 1
+            state = 'critical' if current <= criticalCount else 'warning'
+        return state
 
 
 class CrosshairPlugin(IPlugin):
@@ -453,7 +459,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
         ctrl.onCurrentShellReset += self.__onCurrentShellReset
-        ctrl.onQuickShellChangerUpdated += self.__onQuickShellChangerUpdated
+        ctrl.onShellChangeTimeUpdated += self.__onShellChangeTimeUpdated
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
         g_replayEvents.onPause += self.__onReplayPaused
         return
@@ -466,7 +472,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.ammo
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onQuickShellChangerUpdated -= self.__onQuickShellChangerUpdated
+            ctrl.onShellChangeTimeUpdated -= self.__onShellChangeTimeUpdated
             ctrl.onGunSettingsSet -= self.__onGunSettingsSet
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunAutoReloadBoostUpdated -= self.__onGunAutoReloadBoostUpd
@@ -495,15 +501,15 @@ class AmmoPlugin(CrosshairPlugin):
         self.__setupGuiSettings(ctrl.getGunSettings())
         quantity, quantityInClip = ctrl.getCurrentShells()
         if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
-            isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
+            state = self.__guiSettings.getState(quantity, quantityInClip)
+            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, state, False)
         reloadingState = ctrl.getGunReloadingState()
         self.__setReloadingState(reloadingState)
         if self.__guiSettings.hasAutoReload:
             self.__reloadAnimator.setClipAutoLoading(reloadingState.getActualValue(), reloadingState.getBaseValue(), isStun=False)
         if self._isHideAmmo():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
-        self._parentObj.as_setShellChangeTimeS(ctrl.canQuickShellChange(), ctrl.getQuickShellChangeTime())
+        self._parentObj.as_setShellChangeTimeS(*ctrl.updateShellChangeTime())
 
     def __setReloadingState(self, state):
         self.__reloadAnimator.setReloading(state)
@@ -596,8 +602,8 @@ class AmmoPlugin(CrosshairPlugin):
         if not result & SHELL_SET_RESULT.CURRENT:
             return
         self.__shellsInClip = quantityInClip
-        isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+        state = self.__guiSettings.getState(quantity, quantityInClip)
+        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
         if quantity + quantityInClip == 0:
             self.__reloadAnimator.setClipAutoLoading(0, 0, isRedText=True)
 
@@ -605,14 +611,14 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
             quantity, quantityInClip = ctrl.getCurrentShells()
-            isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
+            state = self.__guiSettings.getState(quantity, quantityInClip)
+            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, state, False)
         return
 
     def __onCurrentShellReset(self):
-        self._parentObj.as_setAmmoStockS(0, 0, False, 'normal', False)
+        self._parentObj.as_setAmmoStockS(0, 0, 'normal', False)
 
-    def __onQuickShellChangerUpdated(self, isActive, time):
+    def __onShellChangeTimeUpdated(self, isActive, time):
         self._parentObj.as_setShellChangeTimeS(isActive, time)
 
 
@@ -1155,7 +1161,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
-        if vTypeDesc.hasSpeedometer and vehicle.health > 0:
+        if vTypeDesc.hasSpeedometer and vehicle.isAlive():
             if vStateCtrl.isInPostmortem:
                 self.__resetSpeedometer()
             self.__updateBurnoutWarning(vStateCtrl)
@@ -1582,3 +1588,52 @@ class SPGShotResultIndicatorPlugin(CrosshairPlugin):
 
     def __flyTimeIsActive(self, shotResult, shellState):
         return shotResult == SPGShotResultEnum.HIT and shellState not in (SPGShotIndicatorState.ACTIVE_EMPTY_SHELL, SPGShotIndicatorState.EMPTY_SHELL)
+
+
+class TemperatureGunPlugin(CrosshairPlugin):
+
+    def __init__(self, parentObj):
+        super(TemperatureGunPlugin, self).__init__(parentObj)
+        self.__temperatureGunCtrl = None
+        return
+
+    def start(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vehicle = vStateCtrl.getControllingVehicle()
+            self.__onVehicleControlling(vehicle)
+        return
+
+    def stop(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        self.__unsubscribeTemperatureCtrl()
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        vTypeDesc = vehicle.typeDescriptor
+        if vTypeDesc.isTemperatureGun:
+            self.__subscribeTemperatureCtrl(vehicle.dynamicComponents.get('temperatureGunController'))
+            self.parentObj.as_addOverheatS(self.__temperatureGunCtrl.overheatMarkPercent if self.__temperatureGunCtrl else 0.0)
+        else:
+            self.__unsubscribeTemperatureCtrl()
+            self.parentObj.as_removeOverheatS()
+
+    def __subscribeTemperatureCtrl(self, temperatureGunCtrl):
+        if temperatureGunCtrl:
+            self.__temperatureGunCtrl = temperatureGunCtrl
+            self.__temperatureGunCtrl.onTemperatureProgress += self.__onTemperatureProgress
+            self.__temperatureGunCtrl.onSetOverheat += self.__onTemperatureProgress
+
+    def __unsubscribeTemperatureCtrl(self):
+        if self.__temperatureGunCtrl:
+            self.__temperatureGunCtrl.onTemperatureProgress -= self.__onTemperatureProgress
+            self.__temperatureGunCtrl.onSetOverheat -= self.__onTemperatureProgress
+            self.__temperatureGunCtrl = None
+        return
+
+    def __onTemperatureProgress(self, _):
+        if self.__temperatureGunCtrl:
+            self.parentObj.as_setOverheatProgressS(self.__temperatureGunCtrl.overheatPercent, self.__temperatureGunCtrl.isOverheated)

@@ -3,7 +3,7 @@
 import functools
 import Math
 import nations
-from constants import SHELL_TYPES, ATTACK_REASON, IS_EDITOR
+from constants import SHELL_TYPES, ATTACK_REASON
 from items import ITEM_TYPES, ITEM_TYPE_NAMES, makeIntCompactDescrByID
 from items.basic_item import BasicItem
 from items.components import chassis_components
@@ -90,7 +90,7 @@ class InstallableItem(VehicleItem):
         self.hitTesterManager = None
         self.modelsSets = None
         self.models = None
-        self.camouflage = shared_components.Camouflage(None, None, None, None) if IS_EDITOR else shared_components.DEFAULT_CAMOUFLAGE
+        self.camouflage = shared_components.EMPTY_CAMOUFLAGE
         self.sounds = None
         self.soundsSets = None
         self.emblemSlots = component_constants.EMPTY_TUPLE
@@ -251,7 +251,7 @@ class Radio(InstallableItem):
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -274,6 +274,7 @@ class Turret(InstallableItem):
         self.turretDetachmentEffects = None
         self.customizableVehicleAreas = None
         self.prefabs = component_constants.EMPTY_TUPLE
+        self.multiGunState = None
         return
 
     @property
@@ -284,13 +285,14 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'burstStartEffects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'forcedReloadTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'burstStartEffects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'shootImpulses', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'autoShoot', 'spin', 'edgeByVisualModel', 'prefabs', 'spinEffect', 'temperature', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.reloadTime = component_constants.ZERO_FLOAT
         self.aimingTime = component_constants.ZERO_FLOAT
+        self.forcedReloadTime = component_constants.ZERO_FLOAT
         self.maxAmmo = component_constants.ZERO_INT
         self.invisibilityFactorAtShot = component_constants.ZERO_FLOAT
         self.turretYawLimits = None
@@ -306,6 +308,8 @@ class Gun(InstallableItem):
         self.clip = component_constants.DEFAULT_GUN_CLIP
         self.shots = component_constants.EMPTY_TUPLE
         self.dualGun = component_constants.DEFAULT_GUN_DUALGUN
+        self.autoShoot = component_constants.DEFAULT_GUN_AUTOSHOOT
+        self.spin = component_constants.DEFAULT_SPIN_GUN
         self.drivenJoints = None
         self.effects = None
         self.burstStartEffects = None
@@ -313,11 +317,13 @@ class Gun(InstallableItem):
         self.reloadEffectSets = None
         self.impulse = component_constants.ZERO_FLOAT
         self.recoil = None
+        self.spinEffect = None
         self.animateEmblemSlots = True
         self.customizableVehicleAreas = None
         self.edgeByVisualModel = True
         self.prefabs = component_constants.EMPTY_TUPLE
         self.shootImpulses = component_constants.EMPTY_TUPLE
+        self.temperature = None
         return
 
 
@@ -348,7 +354,7 @@ class Hull(BasicItem):
         self.swinging = None
         self.customEffects = component_constants.EMPTY_TUPLE
         self.AODecals = component_constants.EMPTY_TUPLE
-        self.camouflage = shared_components.Camouflage(None, None, None, None) if IS_EDITOR else shared_components.DEFAULT_CAMOUFLAGE
+        self.camouflage = shared_components.EMPTY_CAMOUFLAGE
         self.hangarShadowTexture = component_constants.EMPTY_STRING
         self.customizableVehicleAreas = None
         self.burnoutAnimation = None
@@ -364,7 +370,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -377,6 +383,7 @@ class Shell(BasicItem):
         self.stun = None
         self.type = None
         self.effectsIndex = component_constants.ZERO_INT
+        self.dynamicEffectsIndexes = component_constants.EMPTY_TUPLE
         self.isGold = False
         self.icon = None
         self.iconName = None
@@ -401,6 +408,10 @@ class Shell(BasicItem):
     @property
     def isAmmoPercingType(self):
         return self.kind in (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_HE, SHELL_TYPES.ARMOR_PIERCING_CR)
+
+    @property
+    def prereqEffectIndexes(self):
+        return (self.effectsIndex,) + tuple((item.effectsIndex for item in self.dynamicEffectsIndexes))
 
 
 _TYPE_ID_TO_CLASS = {ITEM_TYPES.vehicleChassis: Chassis,

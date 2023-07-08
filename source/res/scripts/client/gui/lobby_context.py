@@ -5,7 +5,7 @@ import BigWorld
 from Event import Event, EventManager
 from account_helpers import isRoamingEnabled
 from adisp import adisp_async, adisp_process
-from constants import CURRENT_REALM
+from constants import CURRENT_REALM, Configs
 from debug_utils import LOG_ERROR, LOG_NOTE
 from gui.lobby_ctx_listener import LobbyContextChangeListener
 from helpers import dependency
@@ -241,3 +241,5 @@ class LobbyContext(ILobbyContext):
     def __notifyToUpdate(self, diff, itemsCache=None):
         if 'lootBoxes_config' in diff:
             itemsCache.items.tokens.updateAllLootBoxes(diff['lootBoxes_config'])
+        if Configs.RESTORE_CONFIG.value in diff:
+            itemsCache.items.invalidateCache({Configs.RESTORE_CONFIG.value: diff[Configs.RESTORE_CONFIG.value]})

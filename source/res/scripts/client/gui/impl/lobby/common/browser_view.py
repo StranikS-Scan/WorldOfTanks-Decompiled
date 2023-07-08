@@ -6,9 +6,9 @@ from gui.impl import backport
 from gui.impl.common.browser import Browser, BrowserSettings
 from gui.impl.gen.view_models.views.browser_view_model import BrowserViewModel
 from gui.impl.gen import R
+from gui.impl.lobby.common.sound_constants import BROWSER_VIEW_SOUND_SPACES
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from sound_gui_manager import CommonSoundSpaceSettings
 from web.web_client_api import webApiCollection
 BrowserViewSettings = typing.NamedTuple('BrowserViewSettings', (('url', str),
  ('webHandlers', typing.Optional[webApiCollection]),
@@ -19,11 +19,11 @@ BrowserViewSettings = typing.NamedTuple('BrowserViewSettings', (('url', str),
  ('restoreBackground', bool),
  ('waitingMessageID', int),
  ('disabledKeys', typing.Iterable[typing.Tuple[str, bool, bool, bool, bool]]),
- ('soundSpaceSettings', typing.Optional[CommonSoundSpaceSettings]),
+ ('soundSpaceID', typing.Optional[str]),
  ('returnClb', typing.Optional[typing.Callable])))
 
-def makeSettings(url, webHandlers=None, isClosable=False, useSpecialKeys=False, allowRightClick=False, viewFlags=ViewFlags.LOBBY_SUB_VIEW, restoreBackground=False, waitingMessageID=R.invalid(), disabledKeys=(), soundSpaceSettings=None, returnClb=None):
-    return BrowserViewSettings(url, webHandlers, isClosable, useSpecialKeys, allowRightClick, viewFlags, restoreBackground, waitingMessageID, disabledKeys, soundSpaceSettings, returnClb)
+def makeSettings(url, webHandlers=None, isClosable=False, useSpecialKeys=False, allowRightClick=False, viewFlags=ViewFlags.LOBBY_SUB_VIEW, restoreBackground=False, waitingMessageID=R.invalid(), disabledKeys=(), soundSpaceID=None, returnClb=None):
+    return BrowserViewSettings(url, webHandlers, isClosable, useSpecialKeys, allowRightClick, viewFlags, restoreBackground, waitingMessageID, disabledKeys, soundSpaceID, returnClb)
 
 
 class BrowserView(Browser[BrowserViewModel]):
@@ -32,7 +32,7 @@ class BrowserView(Browser[BrowserViewModel]):
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, layoutID, settings):
-        BrowserView._COMMON_SOUND_SPACE = settings.soundSpaceSettings
+        self.__initSoundSpace(settings.soundSpaceID)
         super(BrowserView, self).__init__(url=settings.url, settings=BrowserSettings(layoutID=layoutID, flags=settings.viewFlags, model=BrowserViewModel()), webHandlersMap=settings.webHandlers, preload=True)
         self.__settings = settings
         self.__closedByUser = False
@@ -73,6 +73,10 @@ class BrowserView(Browser[BrowserViewModel]):
             self.__appLoader.getApp().setBackgroundAlpha(self.__savedBackAlpha)
         super(BrowserView, self)._finalize()
         return
+
+    @classmethod
+    def __initSoundSpace(cls, soundSpaceID):
+        cls._COMMON_SOUND_SPACE = BROWSER_VIEW_SOUND_SPACES.get(soundSpaceID)
 
     def __onClose(self):
         self.__closedByUser = True

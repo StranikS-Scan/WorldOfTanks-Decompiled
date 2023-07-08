@@ -78,8 +78,7 @@ class BattlePackageBusinessHandler(PackageBusinessHandler):
         window = self.findViewByAlias(WindowLayer.WINDOW, VIEW_ALIAS.INGAME_HELP)
         if window is not None:
             window.destroy()
-        elif self._app is None or not self._app.isModalViewShown():
-            self.loadViewWithDefName(VIEW_ALIAS.INGAME_HELP)
+        self.loadViewWithDefName(VIEW_ALIAS.INGAME_HELP)
         return
 
     def __handleDetailsHelpEvent(self, event):

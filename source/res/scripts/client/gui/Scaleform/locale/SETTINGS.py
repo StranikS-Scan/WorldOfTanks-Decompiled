@@ -516,8 +516,6 @@ class SETTINGS(object):
     MARKER_NAME_TYPE2 = '#settings:marker/name/type2'
     MARKER_ICON = '#settings:marker/icon'
     MARKER_LEVEL = '#settings:marker/level'
-    MARKER_LEVEL_TOOLTIP_HEADER = '#settings:marker/level/tooltip/header'
-    MARKER_LEVEL_TOOLTIP_BODY = '#settings:marker/level/tooltip/body'
     MARKER_HPINDICATOR = '#settings:marker/hpIndicator'
     MARKER_AIMMARKER2D = '#settings:marker/aimMarker2D'
     MARKER_DAMAGE = '#settings:marker/damage'

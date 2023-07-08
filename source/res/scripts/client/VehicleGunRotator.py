@@ -103,7 +103,7 @@ class VehicleGunRotator(object):
                     self._avatar.inputHandler.showGunMarker2(True)
             return
 
-    def stop(self):
+    def stop(self, *_, **__):
         if self.__timerID is not None:
             BigWorld.cancelCallback(self.__timerID)
             self.__timerID = None

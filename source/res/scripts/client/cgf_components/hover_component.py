@@ -3,6 +3,7 @@
 import BigWorld
 import CGF
 import GUI
+import Event
 from GenericComponents import VSEComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
 from cgf_script.component_meta_class import registerComponent
@@ -14,49 +15,55 @@ if IS_CLIENT:
     from AvatarInputHandler import cameras
 
 @registerComponent
-class IsHoverable(object):
+class SelectionComponent(object):
+    editorTitle = 'Selection'
+    category = 'Common'
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+
+    def __init__(self):
+        super(SelectionComponent, self).__init__()
+        self.onClickAction = Event.Event()
 
 
 @registerComponent
-class IsHovered(object):
+class IsHoveredComponent(object):
     domain = CGF.DomainOption.DomainClient
 
 
 class HoverManager(CGF.ComponentManager):
     _hangarSpace = dependency.descriptor(IHangarSpace)
 
-    @onAddedQuery(VSEComponent, IsHovered)
+    @onAddedQuery(VSEComponent, IsHoveredComponent)
     def onIsHoveredAdded(self, vseComponent, *args):
         vseComponent.context.onGameObjectHoverIn()
 
-    @onRemovedQuery(VSEComponent, IsHovered)
+    @onRemovedQuery(VSEComponent, IsHoveredComponent)
     def onIsHoveredRemoved(self, vseComponent, *args):
         vseComponent.context.onGameObjectHoverOut()
 
-    @onRemovedQuery(CGF.GameObject, IsHoverable)
-    def onIsHoverableRemoved(self, gameObject, *args):
-        if gameObject.findComponentByType(IsHovered):
-            gameObject.removeComponentByType(IsHovered)
+    @onRemovedQuery(CGF.GameObject, SelectionComponent)
+    def onIsSelectableRemoved(self, gameObject, *args):
+        if gameObject.findComponentByType(IsHoveredComponent):
+            gameObject.removeComponentByType(IsHoveredComponent)
 
     @tickGroup(groupName='Simulation')
     def tick(self):
         gameObjectID = None
         if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled and self._hangarSpace.isCursorOver3DScene:
             gameObjectID = self.__getGameObjectUnderCursor()
-        hoveredGameObject = CGF.Query(self.spaceID, (CGF.GameObject, IsHovered))
+        hoveredGameObject = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent))
         for gameObject, _ in hoveredGameObject:
             if gameObject.id != gameObjectID:
-                gameObject.removeComponentByType(IsHovered)
+                gameObject.removeComponentByType(IsHoveredComponent)
             return
 
-        if gameObjectID is None:
+        if gameObjectID == 0:
             return
         else:
-            hoverableGameObjects = CGF.Query(self.spaceID, (CGF.GameObject, IsHoverable))
+            hoverableGameObjects = CGF.Query(self.spaceID, (CGF.GameObject, SelectionComponent))
             for gameObject, _ in hoverableGameObjects:
                 if gameObject.id == gameObjectID:
-                    gameObject.createComponent(IsHovered)
+                    gameObject.createComponent(IsHoveredComponent)
 
             return
 
@@ -64,5 +71,5 @@ class HoverManager(CGF.ComponentManager):
         cursorPosition = GUI.mcursor().position
         ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
         skipFlags = CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE | CollisionFlags.TRIANGLE_NOCOLLIDE
-        res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1500, skipFlags, 0, -1, ColliderTypes.HANGAR_FLAG)
-        return res[2] if res is not None else None
+        res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1500, skipFlags, -1, -1, ColliderTypes.HANGAR_FLAG)
+        return res[5] if res is not None else None

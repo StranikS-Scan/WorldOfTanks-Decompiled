@@ -252,7 +252,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = self.itemsCache.items.getAccountDossier(None)
-        if vehicle is None:
+        if vehicle is None or vehicle.isContextMenuHidden:
             return options
         else:
             isEventVehicle = vehicle.isOnlyForEventBattles

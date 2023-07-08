@@ -10,7 +10,7 @@ import items.customizations as c11n
 import items.vehicles as iv
 import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
-from constants import IS_CLIENT, IS_EDITOR, IS_WEB, IS_LOAD_GLOSSARY, DEFAULT_QUEST_FINISH_TIME
+from constants import IS_CLIENT, IS_EDITOR, IS_UE_EDITOR, IS_WEB, IS_LOAD_GLOSSARY, DEFAULT_QUEST_FINISH_TIME
 from items.components import shared_components
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
 from realm_utils import ResMgr
@@ -876,7 +876,8 @@ def readQuestProgression(cache, xmlCtx, section, sectionName):
                         if count > 0:
                             item.requiredToken = token
                             item.requiredTokenCount = count
-                        item.tags = item.tags.union(frozenset((ItemTags.QUESTS_PROGRESSION,)))
+                        if not IS_UE_EDITOR:
+                            item.tags = item.tags.union(frozenset((ItemTags.QUESTS_PROGRESSION,)))
                         cache.itemToQuestProgressionStyle[item.compactDescr] = style
 
                 items.update({count: (unlockItems, levelFinishTime)})

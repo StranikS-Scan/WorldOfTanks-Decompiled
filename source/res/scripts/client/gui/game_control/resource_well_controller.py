@@ -3,8 +3,10 @@
 import logging
 import typing
 from Event import Event, EventManager
+from PlayerEvents import g_playerEvents
 from constants import Configs
 from gui.resource_well.number_requester import ResourceWellNumberRequester
+from gui.resource_well.resource_well_constants import RESOURCE_WELL_PDATA_KEY
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from helpers.events_handler import EventsHandler
@@ -14,7 +16,7 @@ from skeletons.gui.game_control import IResourceWellController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Dict
+    from typing import Dict, Optional
     from helpers.server_settings import ResourceWellConfig
 _logger = logging.getLogger(__name__)
 
@@ -29,12 +31,13 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         self.onNumberRequesterUpdated = Event(self.__eventsManager)
         self.onEventStateChanged = Event(self.__eventsManager)
         self.__notifier = SimpleNotifier(self.__getTimeLeft, self.__onEventStateChange)
-        self.__serialNumberRequester = ResourceWellNumberRequester(isSerial=True)
-        self.__regularNumberRequester = ResourceWellNumberRequester(isSerial=False)
+        self.__serialNumberRequester = ResourceWellNumberRequester(True)
+        self.__regularNumberRequester = ResourceWellNumberRequester(False)
 
     def onLobbyInited(self, event):
         self._subscribe()
         self.__notifier.startNotification()
+        self.__setNumberInitialValues()
 
     def onAvatarBecomePlayer(self):
         self.__stop()
@@ -95,7 +98,7 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         return findFirst(lambda reward: reward.isSerial == isTop, self.__getConfig().rewards.itervalues()).sequence
 
     def getRewardLeftCount(self, isTop):
-        return self.__getSerialRewardLeftCount() if isTop else self.__getRegularRewardLeftCount()
+        return (self.__getSerialRewardLeftCount() if isTop else self.__getRegularRewardLeftCount()) or 0
 
     def isRewardEnabled(self, isTop):
         topRewardLeftCount = self.getRewardLeftCount(isTop=True)
@@ -122,6 +125,7 @@ class ResourceWellController(IResourceWellController, EventsHandler):
 
     def startNumberRequesters(self):
         if self.isEnabled():
+            self.__setNumberInitialValues()
             self.__serialNumberRequester.start()
             self.__regularNumberRequester.start()
 
@@ -130,7 +134,10 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         self.__regularNumberRequester.stop()
 
     def _getEvents(self):
-        return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged), (self.__serialNumberRequester.onUpdated, self.__onRequesterUpdated), (self.__regularNumberRequester.onUpdated, self.__onRequesterUpdated))
+        return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
+         (self.__serialNumberRequester.onUpdated, self.__onRequesterUpdated),
+         (self.__regularNumberRequester.onUpdated, self.__onRequesterUpdated),
+         (g_playerEvents.onClientUpdated, self.__onClientUpdated))
 
     def __getConfig(self):
         return self.__lobbyContext.getServerSettings().resourceWellConfig
@@ -153,28 +160,49 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         remainingValuesCount = self.__serialNumberRequester.getRemainingValues()
         givenValuesCount = self.__serialNumberRequester.getGivenValues()
         rewardLimit = self.getRewardLimit(True)
-        if remainingValuesCount > rewardLimit or givenValuesCount > rewardLimit:
-            _logger.error('remainingValuesCount and givenValuesCount cannot exceed rewardLimit!')
+        if remainingValuesCount > rewardLimit:
+            _logger.error('Remaining values count cannot exceed reward limit!')
             return 0
-        return remainingValuesCount if remainingValuesCount < rewardLimit / 2.0 else rewardLimit - givenValuesCount
+        elif remainingValuesCount < rewardLimit / 2.0 or givenValuesCount is None:
+            return remainingValuesCount
+        elif givenValuesCount > rewardLimit:
+            _logger.error('Given values count cannot exceed reward limit!')
+            return 0
+        else:
+            return rewardLimit - givenValuesCount
+
+    def __getInitialRemainingValues(self, isSerial):
+        return self.__itemsCache.items.resourceWell.getInitialNumberAmounts().get(self.getRewardSequence(isSerial))
 
     @serverSettingsChangeListener(Configs.RESOURCE_WELL.value)
     def __onServerSettingsChanged(self, diff):
         resourceWellDiff = diff[Configs.RESOURCE_WELL.value]
         if 'finishTime' in resourceWellDiff or 'startTime' in resourceWellDiff:
-            self.__notifier.startNotification()
-            self.onEventUpdated()
+            self.__onEventUpdated()
         if 'isEnabled' in resourceWellDiff:
-            self.__notifier.startNotification()
-            self.onEventUpdated()
+            self.__onEventUpdated()
         if not self.isActive():
             self.stopNumberRequesters()
         self.onSettingsChanged()
 
+    def __onClientUpdated(self, diff, _):
+        if RESOURCE_WELL_PDATA_KEY in diff and 'initialAmounts' in diff[RESOURCE_WELL_PDATA_KEY]:
+            self.__setNumberInitialValues()
+
     def __onRequesterUpdated(self):
         self.onNumberRequesterUpdated()
+
+    def __onEventUpdated(self):
+        self.__setNumberInitialValues()
+        self.__notifier.startNotification()
+        self.onEventUpdated()
 
     def __stop(self):
         self._unsubscribe()
         self.__notifier.stopNotification()
         self.stopNumberRequesters()
+
+    def __setNumberInitialValues(self):
+        if self.__getConfig().rewards:
+            self.__serialNumberRequester.setInitialValues(self.__getInitialRemainingValues(isSerial=True))
+            self.__regularNumberRequester.setInitialValues(self.__getInitialRemainingValues(isSerial=False))

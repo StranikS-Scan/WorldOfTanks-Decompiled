@@ -14,6 +14,7 @@ from debug_utils import LOG_WARNING
 from dualgun_sounds import DualGunSounds
 from items.utils import getFirstReloadTime
 from gui.Scaleform.daapi.view.meta.DualGunPanelMeta import DualGunPanelMeta
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID, DestroyTimerViewState
 from gui.battle_control.controllers.prebattle_setups_ctrl import IPrebattleSetupsListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -21,6 +22,7 @@ from gui.shared.events import GameEvent
 from helpers import dependency
 from helpers.time_utils import MS_IN_SECOND
 from skeletons.gui.battle_session import IBattleSessionProvider
+from wotdecorators import noexceptReturn
 
 class GunStatesUI(object):
     EMPTY = 1
@@ -464,9 +466,11 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         player = BigWorld.player()
         return player.vehicle.isPlayerVehicle if player is not None and player.vehicle is not None else False
 
+    @noexceptReturn(False)
     def __isVisible(self):
-        ctrl = self.__sessionProvider.shared.vehicleState
         isVisible = self.__isEnabled and self.__isAllowedByContext
-        if ctrl is not None:
-            isVisible = isVisible and not ctrl.isInPostmortem
+        if isVisible:
+            ctrl = self.__sessionProvider.shared.vehicleState
+            if ctrl.isInPostmortem and avatar_getter.getInputHandler().ctrlModeName == CTRL_MODE_NAME.POSTMORTEM:
+                isVisible = False
         return isVisible

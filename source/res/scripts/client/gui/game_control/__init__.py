@@ -86,6 +86,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.achievements20_controller import Achievements20Controller as _Ach20Ctrl
     from gui.limited_ui.lui_controller import LimitedUIController
     from gui.game_control.collections_controller import CollectionsSystemController
+    from gui.hangar_presets.hangar_gui_controller import HangarGuiController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -168,4 +169,5 @@ def getGameControllersConfig(manager):
     _config(_interface.ICollectiveGoalMarathonsController, CollectiveGoalMarathonsController())
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
+    _config(_interface.IHangarGuiController, HangarGuiController())
     collectGameControllers(_config)

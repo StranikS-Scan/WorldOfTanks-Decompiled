@@ -34,7 +34,6 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
@@ -365,7 +364,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __modeEntered(self):
         if self.isBattleRoyaleMode() and not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
             SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
-            self.showIntroWindow()
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -442,7 +440,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__isBRLogicEnabled = False
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         if not storedVehInvID:
-            criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
+            criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
+            criteria |= ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
             vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID

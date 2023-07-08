@@ -10,6 +10,7 @@ from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
+from gui.battle_control.controllers.auto_shoot_guns import auto_shoot_gun_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
@@ -184,6 +185,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     @property
     def mapZones(self):
         return self._repository.getController(BATTLE_CTRL_ID.MAP_ZONES_CONTROLLER)
+
+    @property
+    def autoShootGunCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AUTOSHOOT_GUN_CTRL)
 
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
@@ -404,6 +409,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
         repository.addController(ingame_help_ctrl.IngameHelpController(setup))
         repository.addController(map_zones_ctrl.MapZonesController(setup))
+        repository.addController(auto_shoot_gun_ctrl.AutoShootGunController(setup))
         return repository
 
 

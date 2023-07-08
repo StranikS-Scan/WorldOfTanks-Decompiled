@@ -627,7 +627,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'elite': False,
                                               'igr': False,
                                               'rented': True,
-                                              'event': True,
+                                              'event': False,
                                               'gameMode': False,
                                               'favorite': False,
                                               'bonus': False,
@@ -1344,7 +1344,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 62
+    version = 61
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1940,15 +1940,6 @@ class AccountSettings(object):
                     obsoleteKey = 'awards'
                     if obsoleteKey in accSessionSettings.keys():
                         accSessionSettings.deleteSection(obsoleteKey)
-
-            if currVersion < 62:
-                for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
-                    if KNOWN_SELECTOR_BATTLES in accSettings.keys():
-                        known = _unpack(accSettings[KNOWN_SELECTOR_BATTLES].asString)
-                        if SELECTOR_BATTLE_TYPES.BATTLE_ROYALE in known:
-                            known.remove(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
-                            accSettings.write(KNOWN_SELECTOR_BATTLES, _pack(known))
 
             ads.writeInt('version', AccountSettings.version)
         return

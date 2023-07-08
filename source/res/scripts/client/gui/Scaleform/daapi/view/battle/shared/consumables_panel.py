@@ -4,22 +4,21 @@ import logging
 import math
 from functools import partial
 from types import NoneType
-from typing import TYPE_CHECKING
 import BigWorld
+from typing import TYPE_CHECKING
 import CommandMapping
 from constants import EQUIPMENT_STAGES, SHELL_TYPES
-from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
-from items import vehicles
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
-from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
+from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, CROSSHAIR_VIEW_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
+from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.impl import backport
@@ -30,6 +29,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from items import vehicles
 from items.artefacts import SharedCooldownConsumableConfigReader
 from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -433,8 +433,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched += self._onPostMortemSwitched
-            vehicleCtrl.onRespawnBaseMoving += self._onRespawnBaseMoving
-            vehicleCtrl.onVehicleStateUpdated += self._onVehicleStateUpdated
+            vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             self.__fillShells(ammoCtrl)
@@ -482,8 +482,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
-            vehicleCtrl.onRespawnBaseMoving -= self._onRespawnBaseMoving
-            vehicleCtrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
+            vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+            vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onShellsAdded -= self._onShellsAdded
@@ -531,7 +531,11 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
         if GUI_SETTINGS.technicalInfo:
-            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))]
+            vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+            damageStr = backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))
+            if vehicle is not None and vehicle.typeDescriptor.isAutoShootGunVehicle:
+                damageStr = backport.text(R.strings.ingame_gui.shells_kinds.params.damagePerSecond(), value=backport.getIntegralFormat(int(round(descriptor.damage[0] / vehicle.typeDescriptor.gun.clip[1]))))
+            params = [damageStr]
             if piercingPower != 0:
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=backport.getNiceNumberFormat(piercingPower)))
             params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(int(round(shotSpeed / projSpeedFactor)))))
@@ -726,10 +730,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if not BigWorld.player().isObserver():
                 self.__removeListeners()
 
-    def _onRespawnBaseMoving(self):
+    def __onRespawnBaseMoving(self):
         self._reset()
 
-    def _onVehicleStateUpdated(self, state, value):
+    def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DESTROYED:
             self.__clearAllEquipmentGlow()
             return

@@ -12,7 +12,6 @@ from gui.shared import event_dispatcher
 from gui.shared.formatters import getBWFormatter, text_styles
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeSuccess, plugins
 from gui.shared.gui_items.processors.plugins import MessageConfirmator, SyncValidator
-from gui.shared.money import Currency
 from helpers import dependency
 from messenger import g_settings
 from skeletons.gui.game_control import IBattlePassController
@@ -83,12 +82,13 @@ class BattlePassActivateChapterProcessor(Processor):
 
 
 class BuyBattlePass(Processor):
-    __battlePassController = dependency.descriptor(IBattlePassController)
+    __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, seasonID, chapterID):
+    def __init__(self, seasonID, chapterID, priceID):
         super(BuyBattlePass, self).__init__()
         self.__seasonID = seasonID
         self.__chapterID = chapterID
+        self.__priceID = priceID
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='battlePass_buy/server_error')
@@ -97,18 +97,19 @@ class BuyBattlePass(Processor):
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
         return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
          'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName)),
-         'additionalText': self.__makeGoldString(self.__battlePassController.getBattlePassCost(self.__chapterID).get(Currency.GOLD, 0))})
+         'additionalText': self.__makePriceString()})
+
+    def __makePriceString(self):
+        return self.__makeCurrencyString(*next(self.__battlePass.getBattlePassCost(self.__chapterID)[self.__priceID].iteritems()))
 
     @staticmethod
-    def __makeGoldString(gold):
-        if not gold:
-            return ''
-        formatter = getBWFormatter(Currency.GOLD)
-        return g_settings.htmlTemplates.format('battlePassGold', {Currency.GOLD: formatter(gold)})
+    def __makeCurrencyString(currency, amount):
+        return g_settings.htmlTemplates.format('battlePassCurrency', {'currency': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buy.dyn(currency)()),
+         'amount': getBWFormatter(currency)(amount)}) if amount else ''
 
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass %d for chapter %d', self.__seasonID, self.__chapterID)
-        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapterID, lambda resID, code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().shop.buyBattlePass(self.__seasonID, self.__chapterID, self.__priceID, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
 class BuyBattlePassLevels(Processor):

@@ -35,6 +35,7 @@
     <AN_VRC-3_cl>	75	</AN_VRC-3_cl>
     <T23radio>	1000	</T23radio>
     <SCR_528_M>	76	</SCR_528_M>
+    <AN_VRC_12>	77	</AN_VRC_12>
     <AN_GRC_7A>	80	</AN_GRC_7A>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
@@ -48,6 +49,7 @@
     <AN-VRC-7_7x7>	501	</AN-VRC-7_7x7>
     <AN-ARC-27_FL>	502	</AN-ARC-27_FL>
     <AN_VRC-3_7x7>	503	</AN_VRC-3_7x7>
+    <AN_VRC-3_FEP>	601	</AN_VRC-3_FEP>
     <SCR_508_bootcamp>	64002	</SCR_508_bootcamp>
     <Development_Radio>	65535	</Development_Radio>
     <SCR_506_MapsTraining_Dummy_MT_1>	6	</SCR_506_MapsTraining_Dummy_MT_1>
@@ -453,6 +455,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </AN-VRC-12>
+    <AN_VRC_12>
+      <userString>	#usa_vehicles:AN_VRC_12	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	70	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC_12>
     <AN_PRC_8>
       <userString>	#usa_vehicles:AN_PRC_8	</userString>
       <tags></tags>
@@ -511,6 +525,18 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG_7_Ausf_F>
+    <AN_VRC-3_FEP>
+      <userString>	#usa_vehicles:AN_VRC-3_FEP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	160	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3_FEP>
     <T23radio>
       <userString>	#usa_vehicles:SCR_508A	</userString>
       <tags></tags>

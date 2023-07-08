@@ -794,6 +794,19 @@
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
   </G40_Nashorn_MapsTraining_Dummy_ATSPG_2>
+  <G168_KJpz_T_III>
+    <id>	129	</id>
+    <userString>	#germany_vehicles:G168_KJpz_T_III	</userString>
+    <shortUserString>	#germany_vehicles:G168_KJpz_T_III_short	</shortUserString>
+    <description>	#germany_vehicles:G168_KJpz_T_III_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G168_KJpz_T_III_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G168_KJpz_T_III_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </G168_KJpz_T_III>
   <G65_JagdTiger_SdKfz_185_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:JagdTiger_SdKfz_185_IGR	</userString>
@@ -954,36 +967,6 @@
     <tags>	lightTank private event_battles secret HD spawned battle_royale unobservable	</tags>
     <level>	1	</level>
   </G00_Bomber_SH>
-  <G25_PzII_Luchs_SHXXI_B>
-    <id>	175	</id>
-    <userString>	#germany_vehicles:G25_PzII_Luchs_SHXXI_B	</userString>
-    <shortUserString>	#germany_vehicles:G25_PzII_Luchs_SHXXI_B_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	lightTank private event_battles secret HD battle_royale unobservable bot_hunter cannot_be_sold	</tags>
-    <level>	1	</level>
-  </G25_PzII_Luchs_SHXXI_B>
-  <G77_PzIV_Schmalturm_SHXXI_B>
-    <id>	176	</id>
-    <userString>	#germany_vehicles:G77_PzIV_Schmalturm_SHXXI_B	</userString>
-    <shortUserString>	#germany_vehicles:G77_PzIV_Schmalturm_SHXXI_B_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank private event_battles secret HD battle_royale unobservable bot_hunter cannot_be_sold	</tags>
-    <level>	1	</level>
-  </G77_PzIV_Schmalturm_SHXXI_B>
-  <G04_PzVI_Tiger_I_SHXXI_B>
-    <id>	177	</id>
-    <userString>	#germany_vehicles:G04_PzVI_Tiger_I_SHXXI_B	</userString>
-    <shortUserString>	#germany_vehicles:G04_PzVI_Tiger_I_SHXXI_B_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank private event_battles secret HD battle_royale unobservable bot_hunter cannot_be_sold	</tags>
-    <level>	1	</level>
-  </G04_PzVI_Tiger_I_SHXXI_B>
   <G81_Pz_IV_AusfH_GuP>
     <id>	178	</id>
     <userString>	#germany_vehicles:G81_Pz_IV_AusfH_GuP	</userString>
@@ -1823,7 +1806,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <tags>	heavyTank role_HT_universal HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
     <level>	10	</level>
   </G162_Project_Kpz_07P_E>
   <Env_Artillery>
@@ -1849,4 +1832,24 @@
     <tags>	heavyTank private HD beast epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </G51_Lowe_FL>
+  <G42_Maus_FEP23>
+    <id>	103	</id>
+    <userString>	#germany_vehicles:G42_Maus_FEP23	</userString>
+    <shortUserString>	#germany_vehicles:G42_Maus_FEP23_short	</shortUserString>
+    <description>	#germany_vehicles:G42_Maus_FEP23_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD fun_random mode_hidden cm_hidden heavyTank1 secret cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </G42_Maus_FEP23>
+  <G72_JagdPz_E100_FEP23>
+    <id>	91	</id>
+    <userString>	#germany_vehicles:G72_JagdPz_E100_FEP23	</userString>
+    <description>	#germany_vehicles:G72_JagdPz_E100_FEP23_descr	</description>
+    <shortUserString>	#germany_vehicles:G72_JagdPz_E100_FEP23_short	</shortUserString>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD fun_random mode_hidden cm_hidden heavyAT-SPG AT-SPG2 secret cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </G72_JagdPz_E100_FEP23>
 </list.xml>

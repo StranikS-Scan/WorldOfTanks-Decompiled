@@ -57,7 +57,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
     def _updateVisuals(self, isShow=True):
         self._updateTimer(self._getTimerData(isShow))
-        self._updateMarker(self._getMarkerData(isShow), isHide=not isShow)
+        self._updateMarker(self._getMarkerData(isShow))
 
     def _updateTimer(self, data):
         if self._timerViewID is None:

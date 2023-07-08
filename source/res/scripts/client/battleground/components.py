@@ -38,7 +38,7 @@ class ModelComponent(Component):
 
     def deactivate(self):
         player = BigWorld.player()
-        if self.__isInWorld and self.compoundModel is not None and player is not None:
+        if self.__isInWorld and self.compoundModel is not None and player is not None and self.compoundModel in player.models:
             player.delModel(self.compoundModel)
         return
 

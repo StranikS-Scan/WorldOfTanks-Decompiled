@@ -11,3 +11,5 @@ def fillVehicleInfo(vehInfo, vehicle):
     vehInfo.setVehicleLvl(vehicle.level)
     vehInfo.setVehicleName(vehicle.userName)
     vehInfo.setVehicleType(vehicle.type)
+    vehInfo.setVehicleNation(vehicle.nationName)
+    vehInfo.setVehicleShortName(vehicle.shortUserName)

@@ -22,10 +22,12 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip, TankmanRecruitAndEquip
 from gui.shared.money import Money, Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
+from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
 
 class RecruitWindow(RecruitWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, ctx=None):
         super(RecruitWindow, self).__init__()
@@ -253,7 +255,7 @@ class RecruitWindow(RecruitWindowMeta):
         studyTypeIdx = int(studyType)
         studyGoldCost = self.itemsCache.items.shop.tankmanCost[studyTypeIdx][Currency.GOLD] or 0
         currentMoney = self.itemsCache.items.stats.money
-        if currentMoney.gold < studyGoldCost:
+        if self.wallet.isAvailable and currentMoney.gold < studyGoldCost:
             showBuyGoldForCrew(studyGoldCost)
             return
         else:

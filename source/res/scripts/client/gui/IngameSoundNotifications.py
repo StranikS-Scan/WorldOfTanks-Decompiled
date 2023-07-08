@@ -68,6 +68,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self.__fxCooldowns = {}
         self.__circumstancesWeights = {}
         self.__circumstancesGroupsWeights = {}
+        self.__remappedNotifications = {}
         return
 
     def isPlaying(self, eventName):

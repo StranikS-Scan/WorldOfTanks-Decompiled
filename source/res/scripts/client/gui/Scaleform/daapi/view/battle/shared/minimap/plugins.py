@@ -478,7 +478,6 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __onRespawnBaseMoving(self):
         self.__isAlive = True
-        self.__isAlive = True
         self._invalidateMarkup(True)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):

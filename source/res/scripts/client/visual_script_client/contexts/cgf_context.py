@@ -22,7 +22,7 @@ class CGFGameObjectContext(VScriptContext):
     def getSelf(self):
         return weakref.proxy(self.gameObject)
 
-    @vse_event_out((), display_name='OnClick', description='Reacts on click on game object                      (only if go have CollisionComponent, OnClickComponent, VSEComponent)', aspects=[ASPECT.CLIENT, ASPECT.HANGAR])
+    @vse_event_out((), display_name='OnClick', description='Reacts on click on game object                      (only if go have CollisionComponent, IsSelectableComponent, VSEComponent)', aspects=[ASPECT.CLIENT, ASPECT.HANGAR])
     def onGameObjectClick(self):
         pass
 

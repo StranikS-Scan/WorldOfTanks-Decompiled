@@ -86,6 +86,7 @@ class StorageCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.CAN_NOT_BE_SOLD
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.RENT
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
 

@@ -25,14 +25,13 @@ _logger = logging.getLogger(__name__)
 class BaseAmmunitionPanelView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    __slots__ = ('_ammunitionPanel', 'onSizeChanged', 'onPanelSectionResized', 'onVehicleChanged')
+    __slots__ = ('_ammunitionPanel', '_wasVehicleOnLoading', 'onSizeChanged', 'onPanelSectionResized', 'onVehicleChanged')
 
-    def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
-        settings.flags = flags
-        settings.model = AmmunitionPanelViewModel()
+    def __init__(self, layoutID=R.views.lobby.tanksetup.AmmunitionPanel(), flags=ViewFlags.VIEW, model=None):
+        settings = ViewSettings(layoutID=layoutID, flags=flags, model=model or AmmunitionPanelViewModel())
         super(BaseAmmunitionPanelView, self).__init__(settings)
         self._ammunitionPanel = None
+        self._wasVehicleOnLoading = False
         self.onSizeChanged = Event()
         self.onPanelSectionResized = Event()
         self.onVehicleChanged = Event()
@@ -101,8 +100,10 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BaseAmmunitionPanelView, self)._onLoading(*args, **kwargs)
+        self._wasVehicleOnLoading = self.vehItem is not None
         self._ammunitionPanel = self._createAmmunitionPanel()
         self._ammunitionPanel.onLoading()
+        return
 
     def _onLoaded(self, *args, **kwargs):
         super(BaseAmmunitionPanelView, self)._onLoaded(*args, **kwargs)
@@ -112,7 +113,7 @@ class BaseAmmunitionPanelView(ViewImpl):
         super(BaseAmmunitionPanelView, self)._initialize()
         self._addListeners()
         self._ammunitionPanel.initialize()
-        self.update(fullUpdate=False)
+        self._updateView()
 
     def _finalize(self):
         self._removeListeners()
@@ -175,3 +176,6 @@ class BaseAmmunitionPanelView(ViewImpl):
             if permission is not None:
                 return permission.canChangeVehicle()
         return True
+
+    def _updateView(self):
+        self.update(fullUpdate=False)

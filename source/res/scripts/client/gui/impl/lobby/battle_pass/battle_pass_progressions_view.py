@@ -3,11 +3,11 @@
 import logging
 from functools import partial
 from operator import itemgetter
-import SoundGroups
+from shared_utils import findFirst, first
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, CurrencyBP, FinalReward
+from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BattlePassConsts, CurrencyBP, FinalReward
 from frameworks.wulf import Array, ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, updateBuyAnimationFlag, isIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag, isIntroVideoExist
 from gui.collection.collections_helpers import getCollectionRes
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
@@ -36,7 +36,6 @@ from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattle
 from gui.shared.formatters.time_formatters import formatDate
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
 from helpers import dependency, int2roman, time_utils
-from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IWalletController
 from skeletons.gui.impl import IGuiLoader
@@ -169,7 +168,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__setShowBuyAnimations()
 
     def _finalize(self):
-        SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__tooltipItems = None
         self.__specialTooltipItems = None
         if self.__notifier is not None:
@@ -211,6 +209,7 @@ class BattlePassProgressionsView(ViewImpl):
         self.__updateData(model=model)
         self.__updateBalance(model=model)
         self.__updateWalletAvailability(model=model)
+        self.__updatePrice(model=model)
 
     def __setAwards(self, model):
         bpController = self.__battlePass
@@ -243,18 +242,23 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __setStyleWidget(self, model):
         style = getStyleForChapter(self.__chapterID)
-        model.widget3dStyle.setStyleName(style.userName if style else '')
-        model.widget3dStyle.setStyleId(style.id if style else 0)
         if style is not None:
             vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
             vehicle = getVehicleByIntCD(vehicleCD)
             fillVehicleInfo(model.widget3dStyle.vehicleInfo, vehicle)
+            model.widget3dStyle.setStyleName(style.userName)
+            model.widget3dStyle.setStyleId(style.id)
+        _, maxLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
+        rewards = self.__battlePass.getSingleAward(self.__chapterID, maxLevel, BattlePassConsts.REWARD_BOTH)
+        extraReward = findFirst(lambda b: b.getName() == BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, rewards)
+        if extraReward is not None:
+            model.widget3dStyle.setExtraRewardId(extraReward.tokenID)
         return
 
     def __setCharacterWidget(self, model):
         _, maxLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
         freeRewards = self.__battlePass.getSingleAward(chapterId=self.__chapterID, level=maxLevel)
-        characterBonus = findFirst(lambda b: b.getName() == 'tmanToken', freeRewards)
+        characterBonus = findFirst(lambda b: b.getName() == TANKMAN_BONUS_NAME, freeRewards)
         if characterBonus is None:
             self.__clearChapterCharacter(model)
             return
@@ -497,7 +501,8 @@ class BattlePassProgressionsView(ViewImpl):
         itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
         showStylePreview(vehicleCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': (TabID.VEHICLE, TabID.STYLE),
-         'currentTabID': TabID.STYLE}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
+         'currentTabID': TabID.STYLE,
+         'style': styleInfo}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
 
     def __getPreviewCallback(self):
         return partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
@@ -650,6 +655,11 @@ class BattlePassProgressionsView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateBalance(self, value=None, model=None):
         model.setBpcoinCount(self.__itemsCache.items.stats.bpcoin)
+
+    @replaceNoneKwargsModel
+    def __updatePrice(self, model=None):
+        compoundPrice = self.__battlePass.getBattlePassCost(self.__chapterID)
+        fillBattlePassCompoundPrice(model.price, compoundPrice)
 
     @replaceNoneKwargsModel
     def __resetReplaceRewardAnimations(self, model=None):

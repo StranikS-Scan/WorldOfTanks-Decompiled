@@ -135,6 +135,12 @@ class BattleContext(IBattleContext):
     def getFrameLabel(self):
         return self.__arenaDP.getPersonalDescription().getFrameLabel()
 
+    def getBattleTypeIconPathBig(self):
+        return self.__arenaDP.getPersonalDescription().getBattleTypeIconPath('c_136x136')
+
+    def getBattleTypeIconPathSmall(self):
+        return self.__arenaDP.getPersonalDescription().getBattleTypeIconPath('c_64x64')
+
     def getGuiEventType(self):
         return self.__arenaDP.getPersonalDescription().getGuiEventType()
 

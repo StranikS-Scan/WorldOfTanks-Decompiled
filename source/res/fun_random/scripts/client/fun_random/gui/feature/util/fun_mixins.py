@@ -9,6 +9,7 @@ from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasAnySubMode, hasSingleSubMode, hasSpecifiedSubMode
 from fun_random.gui.shared.events import FunEventType, FunEventScope
 from fun_random.gui.shared.event_dispatcher import showFunRandomInfoPage, showFunRandomProgressionWindow, showFunRandomModeSubSelectorWindow
+from gui.impl import backport
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
 from shared_utils import first
@@ -19,6 +20,38 @@ if typing.TYPE_CHECKING:
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
     from skeletons.gui.battle_session import IClientArenaVisitor
 _logger = logging.getLogger(__name__)
+
+class FunAssetPacksMixin(object):
+    _funRandomCtrl = dependency.descriptor(IFunRandomController)
+
+    @classmethod
+    def getModeAssetsPointer(cls):
+        return cls._funRandomCtrl.getAssetsPointer()
+
+    @classmethod
+    def getModeIconsResRoot(cls):
+        return cls._funRandomCtrl.getIconsResRoot()
+
+    @classmethod
+    def getModeLocalsResRoot(cls):
+        return cls._funRandomCtrl.getLocalsResRoot()
+
+    @classmethod
+    def getModeNameKwargs(cls):
+        return {'modeName': cls.getModeUserName()}
+
+    @classmethod
+    def getModeUserName(cls):
+        return backport.text(cls.getModeLocalsResRoot().userName())
+
+    @classmethod
+    def getModeDetailedUserName(cls, **kwargs):
+        return backport.text(cls.getModeLocalsResRoot().detailedUserName(), modeName=cls.getModeUserName(), **kwargs)
+
+    @classmethod
+    def getPrebattleConditionIcon(cls):
+        return backport.image(cls.getModeIconsResRoot().battle_type.c_32x32.fun_random())
+
 
 class FunProgressionWatcher(object):
     _funRandomCtrl = dependency.descriptor(IFunRandomController)

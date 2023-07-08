@@ -368,7 +368,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
          'winText': battleCtx.getArenaWinString(),
          'winTextShort': self._getArenaWinTextShort(),
          'battleTypeLocaleStr': battleCtx.getArenaDescriptionString(isInBattle=False),
-         'battleTypeFrameLabel': battleCtx.getFrameLabel(),
+         'battleTypeIconPathBig': battleCtx.getBattleTypeIconPathBig(),
+         'battleTypeIconPathSmall': battleCtx.getBattleTypeIconPathSmall(),
          'allyTeamName': battleCtx.getTeamName(enemy=False),
          'enemyTeamName': battleCtx.getTeamName(enemy=True)}
         self.as_setArenaInfoS(arenaInfoData)

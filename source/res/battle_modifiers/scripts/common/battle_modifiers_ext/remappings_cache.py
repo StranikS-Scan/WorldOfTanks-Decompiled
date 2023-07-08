@@ -23,7 +23,11 @@ class RemappingCache(object):
 
     def getValue(self, modifierName, remappingName, oldValue, ctx):
         composer = self.__remapping.get(remappingName, {}).get(modifierName)
-        return composer(ctx, oldValue) if composer is not None else None
+        return composer.getValue(ctx, oldValue) if composer is not None else None
+
+    def getValues(self, modifierName, remappingName, oldValue):
+        composer = self.__remapping.get(remappingName, {}).get(modifierName)
+        return composer.getValues(oldValue) if composer is not None else None
 
     def __readConfig(self):
         config = ResMgr.openSection(REMAPPING_XML_PATH)

@@ -8,6 +8,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.formatters import getPrebattleFullDescription, getPrebattleStartTimeString
 from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
+from gui.prb_control.prb_helpers import getModeNameKwargs
 from gui.prb_control.settings import PRB_INVITE_STATE
 from gui.shared.system_factory import collectPrbInviteHtmlFormatter, registerPrbInvitesHtmlFormatter
 from helpers import dependency
@@ -93,14 +94,16 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext, winbackController=IWinbackController)
-def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None, winbackController=None):
+def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None, winbackController=None, funRandom=None):
     isAnotherPeriphery = lobbyContext is not None and lobbyContext.isAnotherPeriphery(peripheryID)
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
+            kwargs = getModeNameKwargs(funcState.entityTypeID, isQueue=False)
         elif funcState.isInPreQueue():
             entityName = QUEUE_LEAVE_PREFIX + getPreQueueName(funcState.entityTypeID)
+            kwargs = getModeNameKwargs(funcState.entityTypeID)
         else:
             _logger.error('Can not resolve name of entity. %s', funcState)
             return text
@@ -108,7 +111,7 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
         isPermanentlyWinbackLeave = winbackController is not None and winbackController.isModeAvailable() and invitePrbType == PREBATTLE_TYPE.SQUAD
         if isAnotherPeriphery:
             if not isInWinback or not isPermanentlyWinbackLeave:
-                text = backport.text(_R_INVITES.note.change_and_leave.dyn(entityName)(), host=lobbyContext.getPeripheryName(peripheryID) or '')
+                text = backport.text(_R_INVITES.note.change_and_leave.dyn(entityName)(), host=(lobbyContext.getPeripheryName(peripheryID) or ''), **kwargs)
             if isPermanentlyWinbackLeave:
                 if text:
                     text = ''.join((text, '\n\n'))
@@ -117,7 +120,7 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
             text = ' '.join((text, backport.text(_R_INVITES.note.serverSelectionIsRemembered())))
         else:
             if not isInWinback or not isPermanentlyWinbackLeave:
-                text = backport.text(_R_INVITES.note.leave.dyn(entityName)())
+                text = backport.text(_R_INVITES.note.leave.dyn(entityName)(), **kwargs)
             if isPermanentlyWinbackLeave:
                 if text:
                     text = ''.join((text, '\n\n'))
@@ -156,6 +159,9 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
 
     def getIconName(self, invite):
         return '{0:>s}InviteIcon'.format(getPrbName(invite.type, True))
+
+    def getIconPath(self, invite, pathMaker=None):
+        return pathMaker(self.getIconName(invite))
 
     def getTitle(self, invite):
         creatorName = _formatInvite(_PrbInvitePart.TITLE_CREATOR_NAME, (invite.senderFullName,))
@@ -204,7 +210,8 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return message
 
     def _getTitle(self, invite):
-        return backport.text(R.strings.invites.invites.text.dyn(getPrbName(invite.type))())
+        kwargs = getModeNameKwargs(invite.type, isQueue=False)
+        return backport.text(R.strings.invites.invites.text.dyn(getPrbName(invite.type))(), **kwargs)
 
 
 class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):

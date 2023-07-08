@@ -44,6 +44,15 @@
       <Arg>	STRING	</Arg>
       <Exposed></Exposed>
     </doCmdInt2Str>
+    <doCmdInt3Str>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <Exposed></Exposed>
+    </doCmdInt3Str>
     <doCmdIntArr>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>

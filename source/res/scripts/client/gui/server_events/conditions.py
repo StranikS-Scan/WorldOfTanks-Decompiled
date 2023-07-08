@@ -12,6 +12,7 @@ from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters, events_constants
 from gui.server_events.formatters import getUniqueBonusTypes
+from gui.shared.system_factory import collectModeNameKwargsByBonusType
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
@@ -1148,7 +1149,8 @@ class BattlesCount(_Cumulativable):
     def getUserString(self):
         result = []
         for bType in self._bonusTypes:
-            result.append(unicode(i18n.makeString(QUESTS.getDetailsDossier(bType, self.getKey()))))
+            kwargs = collectModeNameKwargsByBonusType(bType) or {}
+            result.append(unicode(i18n.makeString(QUESTS.getDetailsDossier(bType, self.getKey()), **kwargs)))
 
         if not result:
             _logger.warning('There are no matching condition strings for selected arenaBonusTypes')

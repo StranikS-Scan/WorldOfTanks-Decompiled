@@ -3,7 +3,6 @@
 from functools import partial
 import BigWorld
 import Event
-import WWISE
 from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 
 class MemoryCriticalController(object):
@@ -66,7 +65,6 @@ class MemoryCriticalController(object):
             self.__postponeLogMemCritEvent(memCriticalEvent)
         if self.__needReboot:
             return
-        WWISE.WW_onMemoryCritical()
         self.__selfCheckInProgress = False
         self.__needReboot = True
         self.__loweredSettings = [ t for t in BigWorld.graphicsSettings() if t[0] == 'TEXTURE_QUALITY' ]

@@ -174,6 +174,9 @@
     <BATTLE_ROYALE_TRN_SQUAD>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
+    <FUN_RANDOM>
+      <estimatedLoad>	0.8	</estimatedLoad>
+    </FUN_RANDOM>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -261,7 +264,7 @@
         <frontLineInit>	400.	</frontLineInit>
         <transitionFrontLineBoundBackward>	300.	</transitionFrontLineBoundBackward>
         <transitionFrontLineBoundForward>	250.	</transitionFrontLineBoundForward>
-        <defenderMotivationFactors>	0.875 0.5625 0.375	</defenderMotivationFactors>
+        <defenderMotivationFactors>	0.875 0.5625 0.425	</defenderMotivationFactors>
         <overtimeMaxFrontlineOffset>	-600.	</overtimeMaxFrontlineOffset>
       </epicSectorSettings>
       <winnerIfTimeout>	2	</winnerIfTimeout>
@@ -372,5 +375,59 @@
         </loadBanks>
       </soundRemapping>
     </comp7>
+    <fep_auto_shoot_guns>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	ev_fep_fast_gun.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_fep_fast_gun.pck	</name>
+          </bank>
+        </loadBanks>
+        <events>
+          <event>
+            <name>	imp_medium_pierce_AP_NPC_PC	</name>
+            <mod>	imp_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_medium_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_auto_pierce_AP_NPC_PC	</name>
+            <mod>	imp_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_auto_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_small_pierce_AP_NPC_PC	</name>
+            <mod>	imp_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_small_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_main_pierce_HE_NPC_PC	</name>
+            <mod>	imp_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_main_pierce_HE_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_medium_not_pierce_AP_NPC_PC	</name>
+            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_medium_not_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_auto_not_pierce_AP_NPC_PC	</name>
+            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_auto_not_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_small_not_pierce_AP_NPC_PC	</name>
+            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_small_not_pierce_AP_NPC_PC	</modAUX>
+          </event>
+          <event>
+            <name>	imp_main_not_pierce_HE_NPC_PC	</name>
+            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
+            <modAUX>	imp_main_not_pierce_HE_NPC_PC	</modAUX>
+          </event>
+        </events>
+      </soundRemapping>
+    </fep_auto_shoot_guns>
   </extraSoundRemapping>
 </_default_.xml>

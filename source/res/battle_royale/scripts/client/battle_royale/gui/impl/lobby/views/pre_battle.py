@@ -7,6 +7,7 @@ from battle_royale.gui.impl.gen.view_models.views.lobby.views.pre_battle_view_mo
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.team_model import TeamModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.user_extended_model import UserExtendedModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.user_model import UserModel
+from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from wg_async import wg_async, wg_await
 from constants import IS_DEVELOPMENT
@@ -41,6 +42,7 @@ class PreBattleView(ViewImpl, LobbySubView):
         self.__isSolo = True
         self.__countOfReady = 0
         self.__maps = []
+        Waiting.show('loadPage')
 
     @prbEntityProperty
     def prbEntity(self):
@@ -56,6 +58,7 @@ class PreBattleView(ViewImpl, LobbySubView):
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
+        Waiting.hide('loadPage')
 
     def _finalize(self):
         self.viewModel.onBattleClick -= self.__onBattleClick

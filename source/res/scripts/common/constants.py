@@ -36,7 +36,7 @@ IS_CHINA = CURRENT_REALM == 'CN'
 IS_KOREA = CURRENT_REALM == 'KR'
 IS_SINGAPORE = CURRENT_REALM == 'ASIA'
 IS_SANDBOX = CURRENT_REALM == 'SB'
-IS_CT = CURRENT_REALM == 'CT'
+IS_CT = CURRENT_REALM == 'RU'
 REALMS = frozenset(['RU',
  'EU',
  'NA',
@@ -93,7 +93,7 @@ elif CURRENT_REALM == 'CT':
     AUTH_REALM = 'CT'
 elif CURRENT_REALM == 'RU':
     DEFAULT_LANGUAGE = 'ru'
-    AUTH_REALM = 'RU'
+    AUTH_REALM = 'CT'
 elif CURRENT_REALM in ('EU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
@@ -929,6 +929,7 @@ class Configs(enum.Enum):
     AB_FEATURE_TEST = 'ab_feature_test'
     LIMITED_UI_CONFIG = 'limited_ui_config'
     REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
+    RESTORE_CONFIG = 'restore_config'
 
 
 INBATTLE_CONFIGS = ('spgRedesignFeatures',
@@ -1221,6 +1222,7 @@ class ATTACK_REASON(object):
     BRANDER_RAM = 'ram_brander'
     FORT_ARTILLERY_EQ = 'fort_artillery_eq'
     STATIC_DEATH_ZONE = 'static_deathzone'
+    AUTOSHOOT = 'autoshoot'
     NONE = 'none'
 
     @classmethod
@@ -1256,7 +1258,8 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.CLING_BRANDER_RAM,
  ATTACK_REASON.BRANDER_RAM,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
- ATTACK_REASON.STATIC_DEATH_ZONE)
+ ATTACK_REASON.STATIC_DEATH_ZONE,
+ ATTACK_REASON.AUTOSHOOT)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 DEATH_REASON_ALIVE = -1
@@ -1571,6 +1574,7 @@ class INVOICE_EMITTER:
     WGCW = 11
     PSS = 12
     WOTRP = 13
+    WOTRP_CASHBACK = 14
     NEGATIVE = (BACKYARD,
      COMMUNITY,
      PORTAL,
@@ -1592,7 +1596,8 @@ class INVOICE_EMITTER:
      WG,
      WGCW,
      PSS,
-     WOTRP)
+     WOTRP,
+     WOTRP_CASHBACK)
 
 
 class INVOICE_ASSET:
@@ -2594,6 +2599,7 @@ AVAILABLE_STUN_TYPES_NAMES = [ key for key, value in StunTypes.__members__.iteri
 class SHELL_MECHANICS_TYPE:
     LEGACY = 'LEGACY'
     MODERN = 'MODERN'
+    GUARANTEED_DAMAGE = 'GUARANTEED_DAMAGE'
 
 
 class BATTLE_LOG_SHELL_TYPES(enum.IntEnum):
@@ -3292,7 +3298,11 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'clanWarsBattles',
  'fun_random',
  'comp7'}
+BATTLE_MODE_VEH_TAGS_EXCEPT_EVENT = BATTLE_MODE_VEHICLE_TAGS - {'event_battles'}
+BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC = BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}
+BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN = BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_FUN = BATTLE_MODE_VEHICLE_TAGS - {'fun_random'}
+BATTLE_MODE_VEH_TAGS_EXCEPT_COMP7 = BATTLE_MODE_VEHICLE_TAGS - {'comp7'}
 
 @enum.unique
 class EventPhase(enum.Enum):

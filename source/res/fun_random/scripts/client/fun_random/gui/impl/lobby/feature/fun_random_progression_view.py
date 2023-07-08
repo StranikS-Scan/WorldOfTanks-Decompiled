@@ -2,7 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_progression_view.py
 from frameworks.wulf import ViewFlags, ViewSettings
 from fun_random.gui.feature.fun_sounds import FUN_PROGRESSION_SOUND_SPACE
-from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_progression_view_model import FunRandomProgressionViewModel
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packAdditionalRewards, packProgressionCondition, packProgressionStages, packProgressionState
@@ -14,7 +14,7 @@ from gui.shared.event_dispatcher import showHangar
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 _DESTROY_ACTION_NAME = 'showHangar'
 
-class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunProgressionWatcher, FunSubModesWatcher):
+class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher):
     __slots__ = ('__tooltips',)
     _COMMON_SOUND_SPACE = FUN_PROGRESSION_SOUND_SPACE
 
@@ -76,9 +76,10 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunProgressionWa
         self.__tooltips.clear()
         progression = self.getActiveProgression()
         with self.viewModel.transaction() as model:
-            packProgressionState(progression, model.state)
-            packProgressionCondition(progression, model.condition)
+            model.setAssetsPointer(self.getModeAssetsPointer())
             packProgressionStages(progression, model.getStages(), self.__tooltips)
+            packProgressionCondition(progression, model.condition)
+            packProgressionState(progression, model.state)
 
     @hasActiveProgression(abortAction=_DESTROY_ACTION_NAME)
     def __invalidateTimer(self, *_):

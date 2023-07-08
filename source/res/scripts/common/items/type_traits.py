@@ -5,8 +5,8 @@ from typing import *
 
 def allowEqualNone(eq):
 
-    def wrap(lhs, rhs):
-        return lhs == rhs if lhs is None or rhs is None else eq(lhs, rhs)
+    def wrap(lhs, rhs, *args):
+        return lhs == rhs if lhs is None or rhs is None else eq(lhs, rhs, *args)
 
     return wrap
 

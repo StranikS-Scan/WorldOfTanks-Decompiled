@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/feature/prime_time_view.py
-from helpers import dependency
-from fun_random.gui.feature.util.fun_mixins import FunSubModeHolder
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModeHolder
 from fun_random.gui.feature.util.fun_wrappers import hasHoldingSubMode, filterHoldingSubModeUpdates
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPresenter
 from gui.Scaleform.daapi.view.meta.RankedPrimeTimeMeta import RankedPrimeTimeMeta
+from gui.impl import backport
+from gui.impl.gen import R
+from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 
 class FunRandomServerPresenter(ServerListItemPresenter):
@@ -20,7 +20,7 @@ class FunRandomServerPresenter(ServerListItemPresenter):
         return result if result else self.orderID - other.orderID
 
 
-class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunSubModeHolder):
+class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunAssetPacksMixin, FunSubModeHolder):
     _RES_ROOT = R.strings.fun_random.primeTimes
     _serverPresenterClass = FunRandomServerPresenter
 
@@ -35,9 +35,9 @@ class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunSubModeHolder):
     @hasHoldingSubMode(abortAction='closeView')
     def _initView(self):
         super(FunRandomPrimeTimeView, self)._initView()
-        modeName = backport.text(self.getHoldingSubMode().getLocalsResRoot().userName())
-        self.as_setHeaderDataS({'title': backport.text(R.strings.fun_random.primeTimes.title(), subModeName=modeName)})
-        self.as_setBackgroundSourceS(backport.image(R.images.fun_random.gui.maps.icons.feature.prime_times.bg()))
+        subModeName = backport.text(self.getHoldingSubMode().getLocalsResRoot().userName())
+        self.as_setHeaderDataS({'title': self.getModeDetailedUserName(subModeName=subModeName)})
+        self.as_setBackgroundSourceS(backport.image(self.getModeIconsResRoot().library.prime_times_bg()))
 
     @hasHoldingSubMode()
     def _clearView(self):

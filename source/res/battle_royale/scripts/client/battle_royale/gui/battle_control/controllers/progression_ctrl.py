@@ -3,26 +3,26 @@
 import logging
 import BigWorld
 import Event
+import BattleReplay
 from adisp import adisp_process
-from battle_royale.gui.battle_control.controllers.notification_manager import INotificationManagerListener
 from constants import UpgradeProhibitionReason
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.app_loader.decorators import sf_battle
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IProgressionController
-from gui.battle_control.battle_cache.cache_records import TmpBRProgressionCacheRecord, BRInitialModules
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
+from gui.battle_control.battle_cache.cache_records import TmpBRProgressionCacheRecord, BRInitialModules
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
-from helpers import dependency
 from items import getTypeOfCompactDescr
+from helpers import dependency
+from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from items.battle_royale import ModulesInstaller
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.game_control import IBattleRoyaleController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _MAX_PERCENT_AMOUNT = 100
@@ -141,7 +141,7 @@ class _BattleRoyaleArenaLevel(object):
         self.__level = 0
         self.__percent = 0
         self.__baseXP = 0
-        self.__targetXP = self.__xpToLevel[0] if self.__xpToLevel else 0
+        self.__targetXP = self.__xpToLevel[0]
         self.__diffXp = 0
         self.__diffXpAfterLevel = 0
         self.__levelIsChanged = False
@@ -522,11 +522,11 @@ class _ModuleChangeRequester(object):
 
 
 class ProgressionController(IProgressionController, ViewComponentsController):
-    __slots__ = ('onPageTriggered', '__progressionWindowCtrl', '_viewComponents', '__modulesStorage', '__averageLevel', '__enemiesAmount', '__vehicleModulesStorage', '__enemyTeamsAmount', '__isStarted', '__upgradesAvailability', '__tmpProgressionRecord', 'onVehicleUpgradeStarted', 'onVehicleUpgradeFinished', '__vehicleHolder', '__moduleChangeReq', '__initialModulesRecord', '__battleRoyaleArenaLevel', 'notificationManager')
+    __slots__ = ('onPageTriggered', '__progressionWindowCtrl', '_viewComponents', '__modulesStorage', '__averageLevel', '__enemiesAmount', '__vehicleModulesStorage', '__enemyTeamsAmount', '__isStarted', '__upgradesAvailability', '__tmpProgressionRecord', 'onVehicleUpgradeStarted', 'onVehicleUpgradeFinished', '__vehicleHolder', '__moduleChangeReq', '__initialModulesRecord', '__battleRoyaleArenaLevel')
     __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, notificationManager):
+    def __init__(self):
         super(ProgressionController, self).__init__()
         self.__modulesStorage = None
         self.__progressionWindowCtrl = None
@@ -543,7 +543,6 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         self.onVehicleUpgradeStarted = Event.Event()
         self.onVehicleUpgradeFinished = Event.Event()
         self.__battleRoyaleArenaLevel = _BattleRoyaleArenaLevel()
-        self.notificationManager = notificationManager
         return
 
     @property
@@ -584,9 +583,8 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         avatar = BigWorld.player()
         avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
         ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
+        if ctrl is not None and BattleReplay.g_replayCtrl.isPlaying:
             ctrl.onVehicleControlling += self.__onVehicleControlling
-            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         self.__modulesStorage = _SelectedModulesStorage()
         self.__moduleChangeReq = _ModuleChangeRequester()
         self.__loadCachedProgress()
@@ -615,17 +613,13 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         if avatar.inputHandler is not None:
             avatar.inputHandler.onCameraChanged -= self.__onCameraChanged
         ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
+        if ctrl is not None and BattleReplay.g_replayCtrl.isPlaying:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
-            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self.clearViewComponents()
         self.onVehicleUpgradeStarted.clear()
         self.onVehicleUpgradeFinished.clear()
         self.__tmpProgressionRecord = None
         self.__initialModulesRecord = None
-        if self.notificationManager:
-            self.notificationManager.fini()
-        self.notificationManager = None
         super(ProgressionController, self).stopControl()
         return
 
@@ -639,10 +633,6 @@ class ProgressionController(IProgressionController, ViewComponentsController):
     def setViewComponents(self, *components):
         self.__progressionWindowCtrl = _ProgressionWindowCtrl()
         self._viewComponents = list(components)
-        for component in components:
-            if isinstance(component, INotificationManagerListener):
-                component.addNotificationManager(self.notificationManager)
-
         self.__upgradesAvailability = _UpgradesAvailability(self._viewComponents)
         avatar = BigWorld.player()
         if avatar.inputHandler is not None:
@@ -800,10 +790,3 @@ class ProgressionController(IProgressionController, ViewComponentsController):
     def __onVehicleControlling(self, vehicle):
         if vehicle:
             self.updateXP(vehicle.battleXP.battleXP, vehicle.id)
-
-    def __onRespawnBaseMoving(self):
-        avatar = BigWorld.player()
-        avatar.setVehicleOverturned(False)
-        if self.__upgradesAvailability is not None:
-            self.__upgradesAvailability.onVehicleStatusChanged()
-        return

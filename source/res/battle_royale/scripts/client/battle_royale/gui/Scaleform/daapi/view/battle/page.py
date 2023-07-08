@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/page.py
 import BigWorld
-from battle_royale.gui.Scaleform.daapi.view.battle.respawn_message_panel import RespawnMessagePanel
 from shared_utils import CONST_CONTAINER
 from constants import ARENA_PERIOD
 from aih_constants import CTRL_MODE_NAME
@@ -38,7 +37,6 @@ class _DynamicAliases(CONST_CONTAINER):
     VEH_UPGRADE_EFFECT_PLAYER = 'vehicleUpgradeEffectPlayer'
     SPAWNED_BOT_MSG_PUBLISHER = 'SpawnedBotMsgPublisher'
     MINEFIELD_MSG_PUBLISHER = 'MinefieldMsgPublisher'
-    RESPAWN_PANEL = 'RespawnPanel'
 
 
 class _BattleRoyaleComponentsConfig(ComponentsConfig):
@@ -52,11 +50,9 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.RADAR_BUTTON,
            _DynamicAliases.ARENA_PERIOD_SOUND_PLAYER,
            _DynamicAliases.SELECT_RESPAWN_SOUND_PLAYER,
-           BATTLE_VIEW_ALIASES.CORRODING_SHOT_INDICATOR,
-           BATTLE_VIEW_ALIASES.BR_TIMERS_PANEL)),
+           BATTLE_VIEW_ALIASES.CORRODING_SHOT_INDICATOR)),
          (BATTLE_CTRL_ID.PERKS, (BATTLE_VIEW_ALIASES.PERKS_PANEL,)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER, BATTLE_VIEW_ALIASES.PLAYERS_PANEL)),
-         (BATTLE_CTRL_ID.BATTLE_HINTS, (BATTLE_VIEW_ALIASES.BATTLE_HINT,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.PROGRESSION_CTRL, (BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL,
@@ -72,11 +68,7 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
          (BATTLE_CTRL_ID.RADAR_CTRL, (BATTLE_VIEW_ALIASES.RADAR_BUTTON, _DynamicAliases.RADAR_SOUND_PLAYER)),
-         (BATTLE_CTRL_ID.SPAWN_CTRL, (BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN,
-           BATTLE_VIEW_ALIASES.BR_RESPAWN_MESSAGE_PANEL,
-           _DynamicAliases.SELECT_RESPAWN_SOUND_PLAYER,
-           BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
-           BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL)),
+         (BATTLE_CTRL_ID.SPAWN_CTRL, (BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, _DynamicAliases.SELECT_RESPAWN_SOUND_PLAYER, BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL)),
          (BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL, (BATTLE_VIEW_ALIASES.FRAG_PANEL,
            BATTLE_VIEW_ALIASES.FULL_STATS,
            _DynamicAliases.ENEMIES_AMOUNT_SOUND_PLAYER,
@@ -97,8 +89,7 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
          (_DynamicAliases.VEH_UPGRADE_EFFECT_PLAYER, BRUpgradeEffectPlayer),
          (_DynamicAliases.EQUIPMENT_SOUND_PLAYER, EquipmentSoundPlayer),
          (_DynamicAliases.SPAWNED_BOT_MSG_PUBLISHER, SpawnedBotMsgPlayerMsgs),
-         (_DynamicAliases.MINEFIELD_MSG_PUBLISHER, MinefieldPlayerMessenger),
-         (_DynamicAliases.RESPAWN_PANEL, RespawnMessagePanel)))
+         (_DynamicAliases.MINEFIELD_MSG_PUBLISHER, MinefieldPlayerMessenger)))
 
 
 _BATTLE_ROYALE_CFG = _BattleRoyaleComponentsConfig()
@@ -143,35 +134,21 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def isFullStatsShown(self):
         return self.__isFullStatsShown
 
-    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        self._updatePostmortemTips()
-        if not self.sessionProvider.getCtx().isPlayerObserver():
-            self._isInPostmortem = True
-            self._switchToPostmortem()
-
-    @property
-    def isPostmortemTispVisible(self):
+    def _canShowPostmortemTips(self):
         if avatar_getter.isObserverSeesAll():
             return False
-        bonusType = BigWorld.player().arenaBonusType
-        isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
-        vehicleCountCtrl = self.sessionProvider.dynamic.vehicleCount
-        if vehicleCountCtrl and vehicleCountCtrl.getTeamCount() <= 1 or isTournament:
-            return False
-        if not (self._canShowPostmortemTips() and not self.__isFullStatsShown and BigWorld.player().isFollowWinner()):
-            return False
-        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-        if componentSystem and componentSystem.battleRoyaleComponent:
-            playerTeam = self.sessionProvider.getArenaDP().getVehicleInfo().team
-            defeatedTeams = set(componentSystem.battleRoyaleComponent.defeatedTeams)
-            return playerTeam in defeatedTeams
-        return False
-
-    def _updatePostmortemTips(self):
-        self.as_setPostmortemTipsVisibleS(self.isPostmortemTispVisible)
-
-    def _onDefeatedTeamsUpdated(self, *_):
-        self._updatePostmortemTips()
+        else:
+            arenaDP = self.sessionProvider.getArenaDP()
+            enemiesTeamCount = len({vInfo.team for vInfo, _ in arenaDP.getActiveVehiclesGenerator() if vInfo.isAlive()})
+            bonusType = BigWorld.player().arenaBonusType
+            isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
+            if enemiesTeamCount <= 1 or isTournament:
+                postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+                if postmortemPanel is not None:
+                    postmortemPanel.as_setSpectatorPanelVisibleS(False)
+                    super(BattleRoyalePage, self).as_setPostmortemTipsVisibleS(True)
+                    return False
+            return not self.__isFullStatsShown and super(BattleRoyalePage, self)._canShowPostmortemTips() and BigWorld.player().isFollowWinner()
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
@@ -189,7 +166,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             if self.__selectSpawnToggling:
                 return
             super(BattleRoyalePage, self)._toggleFullStats(isShown, permanent, tabAlias)
-            self._updatePostmortemTips()
             return
 
     def _populate(self):
@@ -223,9 +199,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
-        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-        if componentSystem and componentSystem.battleRoyaleComponent:
-            componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate += self._onDefeatedTeamsUpdated
         return
 
     def _stopBattleSession(self):
@@ -236,9 +209,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
-        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
-        if componentSystem and componentSystem.battleRoyaleComponent:
-            componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate -= self._onDefeatedTeamsUpdated
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -333,7 +303,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self._setComponentsVisibility(visible=self.__PANELS_FOR_SHOW_HIDE)
             self.__panelsIsVisible = True
         if vehicle and not vehicle.isAlive():
-            if avatar_getter.isBecomeObserverAfterDeath() and BigWorld.player().isObserverBothTeams:
+            if avatar_getter.isBecomeObserverAfterDeath():
                 self._setComponentsVisibility(visible=[BATTLE_VIEW_ALIASES.PLAYERS_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL])
                 BigWorld.player().setIsObserver()
         return

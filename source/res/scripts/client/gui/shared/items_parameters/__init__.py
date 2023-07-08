@@ -40,6 +40,10 @@ def isDualGun(gun):
     return _DUAL_GUN_TAG in gun.tags if gun is not None else False
 
 
+def isAutoShootGun(gun):
+    return 'autoShoot' in gun.tags if gun is not None else False
+
+
 def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
     clip = descriptor.clip
     burst = descriptor.burst

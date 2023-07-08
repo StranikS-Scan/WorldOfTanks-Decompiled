@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/battle_upgrade_panel.py
 import logging
-import weakref
 import BigWorld
 from ReplayEvents import g_replayEvents
-from battle_royale.gui.battle_control.controllers.notification_manager import INotificationManagerListener
 from gui.battle_control import avatar_getter
 from helpers import dependency
 import BattleReplay
@@ -75,8 +73,8 @@ class _AttentionEffectPlayer(object):
         return
 
 
-class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProgressionListener, INotificationManagerListener):
-    __slots__ = ('__level', '__upgrades', '__localVisible', '__isEnabled', '__attentionEffect', 'notificationManager')
+class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProgressionListener):
+    __slots__ = ('__level', '__upgrades', '__localVisible', '__isEnabled', '__attentionEffect')
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -87,8 +85,6 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         self.__localVisible = False
         self.__isEnabled = True
         self.__textInited = False
-        self.notificationManager = None
-        return
 
     def onSelectItem(self, itemID):
         if self.__sessionProvider.isReplayPlaying:
@@ -125,10 +121,6 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
             self.__playEffect(True)
         return
 
-    def addNotificationManager(self, notificationManager):
-        self.notificationManager = weakref.ref(notificationManager)
-        self.notificationManager().addUpgradePanelHandler(self.__updateUpgrades)
-
     def selectVehicleModule(self, index):
         if index < len(self.__upgrades):
             self.as_showSelectAnimS(index)
@@ -140,7 +132,6 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-            vehicleStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
         return
@@ -149,13 +140,11 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         vehicleStateCtrl = self.__getVehicleStateCtrl()
         if vehicleStateCtrl is not None:
             vehicleStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-            vehicleStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
         self.__sessionProvider.removeArenaCtrl(self)
         self.__attentionEffect.destroy()
         self.__attentionEffect = None
-        self.notificationManager = None
         super(BattleUpgradePanel, self)._dispose()
         return
 
@@ -175,10 +164,7 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
             self.as_setVisibleS(False)
             self.__localVisible = False
 
-    def __updateVisibility(self, isVisible, addToManager=True):
-        if addToManager and self.notificationManager():
-            self.notificationManager().setUpgradeVisibility(isVisible)
-            return
+    def __updateVisibility(self, isVisible):
         if self.__localVisible != isVisible:
             self.__attentionEffect.setVisible(isVisible)
             self.as_setVisibleS(isVisible)
@@ -196,27 +182,24 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         return
 
     def __onVehicleStateUpdated(self, stateID, _):
-        if stateID == VEHICLE_VIEW_STATE.DESTROYED:
-            self.__updateUpgrades()
-
-    def __onRespawnBaseMoving(self):
-        self.__updateUpgrades()
+        if stateID == VEHICLE_VIEW_STATE.DEATH_INFO:
+            self.__upgrades = []
+            self.__updateVisibility(False)
 
     def __getVehicleStateCtrl(self):
         return self.__sessionProvider.shared.vehicleState
 
     def __getUpgradeItems(self):
-        battleVehicle = BigWorld.player().getVehicleAttached()
-        guiVehicle = self._getVehicle()
-        if not guiVehicle or not battleVehicle:
+        vehicle = self._getVehicle()
+        if not vehicle:
             return
         currentLevel = self.__getCurrentLvl()
         nextVehicleLevel = currentLevel + 1
         upgrades = []
         upgradeCds = []
-        if battleVehicle.isAlive() and self.__level > currentLevel:
+        if vehicle.isAlive and self.__level > currentLevel:
             progressionCtrl = self.__getProgressionCtrl()
-            for _, _, intCD, unlocks in guiVehicle.getUnlocksDescrs():
+            for _, _, intCD, unlocks in vehicle.getUnlocksDescrs():
                 if intCD not in upgradeCds:
                     item = self.__getModuleItem(intCD)
                     itemLvl = item.level
@@ -227,7 +210,7 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
 
         return upgrades
 
-    def __updateUpgrades(self, addToManager=True):
+    def __updateUpgrades(self):
         upgrades = self.__getUpgradeItems()
         self.__upgrades = []
         if upgrades:
@@ -251,11 +234,11 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
                     data['isInitData'] = True
                     self.__textInited = True
                 self.as_setDataS(data)
-                self.__updateVisibility(hasTwoModules and avatar_getter.isVehicleAlive(), addToManager)
+                self.__updateVisibility(hasTwoModules and avatar_getter.isVehicleAlive())
             else:
                 logger.warning('Unexpected modules count. Modules list: %s', str(upgrades))
         else:
-            self.__updateVisibility(False, addToManager)
+            self.__updateVisibility(False)
         return
 
     def __getModuleInfo(self, moduleItem, index):

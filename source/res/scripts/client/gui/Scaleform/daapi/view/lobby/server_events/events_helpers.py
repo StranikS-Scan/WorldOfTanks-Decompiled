@@ -6,8 +6,9 @@ import typing
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
-from battle_pass_common import BattlePassConsts
+from battle_pass_common import BattlePassConsts, BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
 from constants import EVENT_TYPE
+from gui.server_events.bonuses import BattleTokensBonus
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
 from gui import makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
@@ -24,6 +25,7 @@ from gui.server_events.personal_progress.formatters import PostBattleConditionsF
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
 from nations import ALLIANCE_TO_NATIONS
+from optional_bonuses import TrackVisitor
 from personal_missions import PM_BRANCH
 from potapov_quests import ClassifierByAlliance, ClassifierByClass
 from quest_xml_source import MAX_BONUS_LIMIT
@@ -316,8 +318,20 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
                 msg = i18n.makeString(key, count=bonusLimit)
             return (MISSIONS_STATES.NONE, msg)
 
+    def _getBonusDataFromOneOfBonuses(self, pCur=None):
+        bonusData = self.event.getRawBonuses()
+        trackResult = {}
+        if pCur is not None:
+            pCurInnerDict = pCur.itervalues().next()
+            bonusTracks = pCurInnerDict.get('bonusTracks', [])
+            if bonusTracks:
+                trackReplay = TrackVisitor(bonusTracks[-1], 1, None)
+                trackReplay.walkBonuses(bonusData, trackResult)
+        return trackResult
+
     def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
-        bonuses = bonuses or self.event.getBonuses()
+        bonusData = self._getBonusDataFromOneOfBonuses(pCur)
+        bonuses = bonuses or self.event.getBonuses(bonusData=bonusData)
         result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(bonuses)
         if result:
             return [ award.getDict() for award in result ]
@@ -430,6 +444,18 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
         return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS, msg)
 
 
+class _BattlePassRandomQuestPostBattleInfo(QuestPostBattleInfo):
+
+    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
+        bonusData = self._getBonusDataFromOneOfBonuses(pCur)
+        bonuses = bonuses or self.event.getBonuses(bonusData=bonusData)
+        postBattleBonuses = [ bonus for bonus in bonuses if not isinstance(bonus, BattleTokensBonus) ]
+        result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(postBattleBonuses)
+        if result:
+            return [ award.getDict() for award in result ]
+        return [formatters.packTextBlock(text_styles.alert(backport.text(R.strings.quests.bonuses.notAvailable()))).getDict()]
+
+
 class MotiveQuestPostBattleInfo(QuestPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
@@ -471,6 +497,8 @@ class _BattleMattersQuestInfo(QuestPostBattleInfo):
 def _getEventInfoData(event):
     if str(event.getID()).startswith(BATTLE_MATTERS_QUEST_ID):
         return _BattleMattersQuestInfo(event)
+    if str(event.getID()).startswith(BATTLE_PASS_RANDOM_QUEST_ID_PREFIX):
+        return _BattlePassRandomQuestPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return PersonalMissionPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:

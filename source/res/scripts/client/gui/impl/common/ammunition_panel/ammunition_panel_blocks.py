@@ -165,7 +165,6 @@ class OptDeviceBlock(BaseBlock):
         slotModel.specializations.setIsDynamic(isDynamic)
         if slotItem is not None:
             itemCategories = slotItem.descriptor.categories
-            slotModel.setLevel(slotItem.level)
         else:
             itemCategories = set()
         slotModel.setActiveSpecsMask(getCategoriesMask(itemCategories & optDeviceItem.categories))
@@ -192,6 +191,8 @@ class OptDeviceBlock(BaseBlock):
         return
 
     def _updateOverlayAspects(self, slotModel, slotItem):
+        if slotItem is not None:
+            slotModel.setLevel(slotItem.level)
         if slotItem.isDeluxe:
             slotModel.setOverlayType(ItemHighlightTypes.EQUIPMENT_PLUS)
         elif slotItem.isModernized:
@@ -202,6 +203,7 @@ class OptDeviceBlock(BaseBlock):
             slotModel.setOverlayType(ItemHighlightTypes.TROPHY_UPGRADED)
         else:
             slotModel.setOverlayType(ItemHighlightTypes.EMPTY)
+        return
 
     def _getSlot(self, idx):
         return self._vehicle.optDevices.getSlot(idx)

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
 from adisp import adisp_process
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from constants import ROLE_TYPE
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
@@ -88,6 +89,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             if onlyMoneyUpdate and self.__hangarMessage == hangarMessage:
                 return
             vehicle = g_currentVehicle.item
+            viewState = g_currentVehicle.getViewState()
             self.__hangarMessage = hangarMessage
             statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
@@ -104,14 +106,15 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': msg})
             self.__applyCustomizationNewCounter(vehicle)
             self.__updateDevices(vehicle)
+            isElite = vehicle.isElite and viewState.isEliteShown()
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
-             'isElite': vehicle.isElite,
-             'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-             'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
+             'isElite': isElite,
+             'tankType': '{}_elite'.format(vehicle.type) if isElite else vehicle.type,
+             'vehicleLevel': '{}'.format(int2roman(vehicle.level)) if viewState.isLevelShown() else '',
              'vehicleName': '{}'.format(vehicle.shortUserName),
-             'roleId': vehicle.role,
-             'roleMessage': getRoleMessage(g_currentVehicle.item.role),
+             'roleId': vehicle.role if viewState.isRoleShown() else ROLE_TYPE.NOT_DEFINED,
+             'roleMessage': getRoleMessage(g_currentVehicle.item.role) if viewState.isRoleShown() else '',
              'vehicleCD': vehicle.intCD})
             serverSettings = self.__settingsCore.serverSettings
             tutorialStorage = getTutorialGlobalStorage()

@@ -8,4 +8,5 @@ class FunRandomPermissions(PreQueuePermissions, FunSubModesWatcher):
 
     @hasDesiredSubMode(defReturn=False)
     def canCreateSquad(self):
-        return super(FunRandomPermissions, self).canCreateSquad()
+        canCreateSquad = super(FunRandomPermissions, self).canCreateSquad()
+        return canCreateSquad and self.getDesiredSubMode().isSquadAvailable()

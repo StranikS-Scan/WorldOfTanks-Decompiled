@@ -32,6 +32,14 @@ class BattlePassTankCarousel(TankCarousel):
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(BattlePassTankCarousel, self)._dispose()
 
+    def _updateFilter(self):
+        carouselFilter = self._carouselDPConfig.get('carouselFilter', None)
+        if carouselFilter is not None:
+            if carouselFilter.currentSeasonID != self._battlePassController.getSeasonID():
+                carouselFilter.currentSeasonID = self._battlePassController.getSeasonID()
+                carouselFilter.save()
+        return
+
     def __onPointsUpdated(self):
         self.updateVehicles()
 
@@ -41,12 +49,4 @@ class BattlePassTankCarousel(TankCarousel):
 
     def __onServerSettingChanged(self, *_):
         self.updateVehicles()
-        self.__updateFilter()
-
-    def __updateFilter(self):
-        carouselFilter = self._carouselDPConfig.get('carouselFilter', None)
-        if carouselFilter is not None:
-            if carouselFilter.currentSeasonID != self._battlePassController.getSeasonID():
-                carouselFilter.currentSeasonID = self._battlePassController.getSeasonID()
-                carouselFilter.save()
-        return
+        self._updateFilter()

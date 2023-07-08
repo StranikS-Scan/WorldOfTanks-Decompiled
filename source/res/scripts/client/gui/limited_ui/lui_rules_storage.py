@@ -43,6 +43,8 @@ class LuiRules(enum.Enum):
     PR_HANGAR_BUTTON = 'PersonalReservesHangarButton'
     STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'
     BR_ENTRY_POINT = 'BREntryPoint'
+    FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
+    FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

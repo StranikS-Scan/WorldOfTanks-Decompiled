@@ -20,6 +20,9 @@ class ResourceWellRequester(AbstractSyncDataRequester, IResourceWellRequester):
     def getReward(self):
         return self.getCacheValue('reward', None)
 
+    def getInitialNumberAmounts(self):
+        return self.getCacheValue('initialAmounts', {})
+
     def _preprocessValidData(self, data):
         return dict(data.get(RESOURCE_WELL_PDATA_KEY, {}))
 

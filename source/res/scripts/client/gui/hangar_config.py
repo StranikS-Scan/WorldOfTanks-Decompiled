@@ -17,7 +17,10 @@ class HangarConfig(object):
      'shadowDefaultTextureName',
      'shadowEmptyTextureName',
      'vehicleGunPitch',
-     'vehicleTurretYaw']
+     'vehicleTurretYaw',
+     'camMinDistVehicleHullLengthK',
+     'camCapsuleScale',
+     'camCapsuleGunScale']
 
     def __init__(self):
         self.cfg = {}
@@ -33,6 +36,9 @@ class HangarConfig(object):
         self.shadowEmptyTextureName = component_constants.EMPTY_STRING
         self.vehicleGunPitch = component_constants.ZERO_FLOAT
         self.vehicleTurretYaw = component_constants.ZERO_FLOAT
+        self.camMinDistVehicleHullLengthK = component_constants.ZERO_FLOAT
+        self.camCapsuleScale = Vector3()
+        self.camCapsuleGunScale = Vector3()
 
     def __iter__(self):
         return iter(self.cfg)
@@ -71,6 +77,9 @@ class HangarConfig(object):
         for i in range(0, 3):
             self.vStartAngles[i] = self['v_start_angles'][i] = math.radians(self['v_start_angles'][i])
 
+        self.camMinDistVehicleHullLengthK = self.loadConfigValue('cam_min_dist_vehicle_hull_length_k', xml, xml.readFloat, defaultCfg)
+        self.camCapsuleScale = self.loadConfigValue('cam_capsule_scale', xml, xml.readVector3, defaultCfg)
+        self.camCapsuleGunScale = self.loadConfigValue('cam_capsule_gun_scale', xml, xml.readVector3, defaultCfg)
         return
 
     def loadDefaultHangarConfig(self, xml, hangarPathKey):

@@ -1,23 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale_progression/scripts/client/battle_royale_progression/gui/impl/lobby/views/quests_packer.py
-import logging
-from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker
 import constants
-from gui.shared.missions.packers.bonus import BonusUIPacker
-from gui.shared.missions.packers.events import DailyQuestUIDataPacker, packQuestBonusModelAndTooltipData
-_logger = logging.getLogger(__name__)
-
-class BRDailyQuestUIDataPacker(DailyQuestUIDataPacker):
-
-    def _packBonuses(self, model):
-        packer = getBonusPacker()
-        self._tooltipData = {}
-        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
-
+from gui.server_events.events_helpers import isPremium, isDailyQuest
+from gui.shared.missions.packers.events import TokenUIDataPacker, PrivateMissionUIDataPacker, DailyQuestUIDataPacker
 
 def getEventUIDataPacker(event):
-    if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS:
-        return BRDailyQuestUIDataPacker(event)
+    if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
+        return TokenUIDataPacker(event)
+    elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
+        return PrivateMissionUIDataPacker(event)
     else:
-        _logger.warning('Only LIKE_BATTLE_QUESTS allowed')
-        return None
+        return DailyQuestUIDataPacker(event) if isPremium(event.getID()) or isDailyQuest(event.getID()) or event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None

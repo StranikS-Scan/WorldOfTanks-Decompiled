@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class TournamentsView(BrowserView):
     __background_alpha__ = 1.0
-    _COMMON_SOUND_SPACE = TOURNAMENTS_SOUND_SPACE
+    _BROWSER_SOUND_SPACE = TOURNAMENTS_SOUND_SPACE
 
     def _checkDestroy(self):
         pass

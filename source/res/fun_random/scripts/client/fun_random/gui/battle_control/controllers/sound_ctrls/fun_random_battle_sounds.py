@@ -7,21 +7,12 @@ import BattleReplay
 from fun_random_common.fun_constants import UNKNOWN_WWISE_REMAPPING
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasBattleSubMode
-from gui.battle_control.controllers.sound_ctrls.common import ISoundPlayer, SoundPlayersBattleController
+from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersBattleController
 from shared_utils import nextTick
 if typing.TYPE_CHECKING:
     from gui.battle_control.controllers import BattleSessionSetup
+    from gui.battle_control.controllers.sound_ctrls.common import SoundPlayer
     from skeletons.gui.battle_session import IClientArenaVisitor
-
-class FunRandomStates(object):
-    STATE_NIGHT_BATTLES = 'STATE_night_battle'
-    STATE_NIGHT_BATTLES_ON = 'STATE_night_battle_on'
-    STATE_NIGHT_BATTLES_OFF = 'STATE_night_battle_off'
-
-    @staticmethod
-    def setState(stateName, stateValue):
-        WWISE.WW_setState(stateName, stateValue)
-
 
 class FunRandomBattleSoundController(SoundPlayersBattleController, FunSubModesWatcher):
 
@@ -38,7 +29,7 @@ class FunRandomBattleSoundController(SoundPlayersBattleController, FunSubModesWa
         super(FunRandomBattleSoundController, self).stopControl()
 
     def _initializeSoundPlayers(self):
-        return (ArenaTypeSoundPlayer(),)
+        pass
 
     def _activateRemapping(self):
         if self._remappingName != UNKNOWN_WWISE_REMAPPING:
@@ -74,15 +65,6 @@ class FunRandomBattleReplaySoundController(FunRandomBattleSoundController):
     def __onSubModesLoaded(self, *_):
         self._remappingName = self._getRemappingName()
         self._activateRemapping()
-
-
-class ArenaTypeSoundPlayer(ISoundPlayer):
-
-    def init(self):
-        FunRandomStates.setState(FunRandomStates.STATE_NIGHT_BATTLES, FunRandomStates.STATE_NIGHT_BATTLES_ON)
-
-    def destroy(self):
-        FunRandomStates.setState(FunRandomStates.STATE_NIGHT_BATTLES, FunRandomStates.STATE_NIGHT_BATTLES_OFF)
 
 
 def createFunRandomBattleSoundsController(setup):

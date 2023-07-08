@@ -116,6 +116,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def _setBaseCriteria(self):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
     def _buildTelecomRentalVehicleItems(self):

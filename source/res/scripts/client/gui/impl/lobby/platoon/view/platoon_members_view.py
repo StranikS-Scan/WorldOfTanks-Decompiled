@@ -387,16 +387,19 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             model.setWindowTooltipBody(body)
             layoutStyle = self.__getLayoutStyle()
             fileName = '{battleType}_{layout}_list'.format(battleType=self._prebattleType.value, layout=layoutStyle.value)
-            fileNameRes = R.images.gui.maps.icons.platoon.members_window.backgrounds.dyn(fileName)
-            if fileNameRes.exists():
-                model.header.setBackgroundImage(backport.image(fileNameRes()))
-            else:
-                _logger.warning('R.images.gui.maps.icons.platoon.members_window.backgrounds %s not found', fileName)
+            self._setHeaderBg(fileName, model)
             model.setIsHorizontal(layoutStyle in (_LayoutStyle.HORIZONTAL, _LayoutStyle.HORIZONTAL_SHORT))
             model.setIsShort(layoutStyle == _LayoutStyle.HORIZONTAL_SHORT)
             model.setPrebattleType(self._prebattleType)
             self._initWindowModeSpecificData(model)
         self._setBonusInformation(self._getBonusState())
+
+    def _setHeaderBg(self, fileName, model):
+        fileNameRes = R.images.gui.maps.icons.platoon.members_window.backgrounds.dyn(fileName)
+        if fileNameRes.exists():
+            model.header.setBackgroundImage(backport.image(fileNameRes()))
+        else:
+            _logger.warning('R.images.gui.maps.icons.platoon.members_window.backgrounds %s not found', fileName)
 
     def _initWindowModeSpecificData(self, model):
         pass
@@ -722,6 +725,17 @@ class BattleRoyalMembersView(SquadMembersView):
 
     def _getWTRStatus(self):
         return False
+
+    @staticmethod
+    def __sortCurrentUser(slot):
+        accID = BigWorld.player().id
+        player = slot['player'] or {}
+        return accID != player.get('accID')
+
+    def _getPlatoonSlotsData(self):
+        slots = super(BattleRoyalMembersView, self)._getPlatoonSlotsData()
+        slots.sort(key=self.__sortCurrentUser)
+        return slots
 
 
 class MapboxMembersView(SquadMembersView):

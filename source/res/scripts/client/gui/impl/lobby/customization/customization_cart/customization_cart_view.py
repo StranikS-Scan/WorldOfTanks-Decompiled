@@ -38,6 +38,7 @@ from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import SeasonType
 from helpers import dependency, uniprof
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IWalletController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -97,6 +98,7 @@ class CustomizationCartView(ViewImpl):
     __service = dependency.descriptor(ICustomizationService)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
+    __wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, layoutID, ctx=None):
         settings = ViewSettings(layoutID)
@@ -331,12 +333,13 @@ class CustomizationCartView(ViewImpl):
         positive = yield wg_await(tryToShowReplaceExistingStyleDialog(self))
         if not positive:
             return
-        if self.__moneyState is MoneyForPurchase.NOT_ENOUGH:
+        isWalletAvailable = self.__wallet.isAvailable
+        if isWalletAvailable and self.__moneyState is MoneyForPurchase.NOT_ENOUGH:
             cart = getTotalPurchaseInfo(self.__purchaseItems)
             totalPriceGold = cart.totalPrice.price.get(Currency.GOLD, 0)
             showBuyGoldForCustomization(totalPriceGold)
             return
-        if self.__moneyState is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
+        if isWalletAvailable and self.__moneyState is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
             self.__showExchangeDialog()
             return
         if containsVehicleBound(self.__purchaseItems):

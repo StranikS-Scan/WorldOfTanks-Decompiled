@@ -201,6 +201,27 @@ def updateStaticSizeBlockRecords(updateCtx, block, records):
     updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
 
 
+def updateBinaryBlockRecords(updateCtx, block, records):
+    header = updateCtx['header']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    dossierCompDescr = updateCtx['dossierCompDescr']
+    blockOffset = updateCtx['headerLength'] + sum(header[1:blockIndex + 1])
+    blockDescr = dossierCompDescr[blockOffset:blockOffset + blockSize]
+    for byteNum, bitNum, value in records:
+        if byteNum >= len(blockDescr):
+            blockDescr += '\x00' * (byteNum - len(blockDescr) + 1)
+        unpackedByte = struct.unpack_from('<B', blockDescr, byteNum)[0]
+        unpackedByte &= ~(1 << bitNum)
+        unpackedByte |= bool(value) << bitNum
+        newValue = struct.pack('<B', unpackedByte)
+        blockDescr = blockDescr[:byteNum] + newValue + blockDescr[byteNum + 1:]
+
+    dossierCompDescr = dossierCompDescr[:blockOffset] + blockDescr + dossierCompDescr[blockOffset + blockSize:]
+    header[blockIndex + 1] = len(blockDescr)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
+
+
 def removeRecords(updateCtx, block, recordsPacking):
     header = updateCtx['header']
     blockIndex = updateCtx['blocksLayout'].index(block)

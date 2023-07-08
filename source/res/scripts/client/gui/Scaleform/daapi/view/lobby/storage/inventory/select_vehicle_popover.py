@@ -72,6 +72,7 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
     def updateData(self):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(self._searchStr)
+        criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         allVehicles = self._itemsCache.items.getVehicles(criteria)

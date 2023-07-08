@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/quests.py
 import constants
+from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
@@ -128,7 +129,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     bonusNames.extend(bonusFormat.split(', '))
 
         isAvailable, _ = quest.isAvailable()
-        return self._packQuest(quest.getUserName(), bonusNames, isAvailable)
+        return self._packBattlePassRandomQuest(quest.getUserName(), isAvailable) if str(quest.getID()).startswith(BATTLE_PASS_RANDOM_QUEST_ID_PREFIX) else self._packQuest(quest.getUserName(), bonusNames, isAvailable)
 
     def _getHeader(self, count, vehicleName, description):
         if self.__battleRoyaleController.isBattleRoyaleMode():
@@ -152,6 +153,12 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
             tooltipText = R.strings.tooltips.hangar.header.quests.bottom.empty()
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
          'message': formater('{0}{1}'.format(icon, backport.text(tooltipText, count=value)))}), padding=formatters.packPadding(top=-10, bottom=10))
+
+    def _packBattlePassRandomQuest(self, questName, isAvailable):
+        blocks = []
+        title = questName if isAvailable else '{} {}'.format(icons.notAvailableRed(), questName)
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(title), desc='', imgPadding=formatters.packPadding(top=-13, left=-2), txtPadding=formatters.packPadding(top=-2), txtGap=6, padding=formatters.packPadding(bottom=15), txtOffset=20))
+        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def _packQuest(self, questName, bonuses, isAvailable):
         blocks = []

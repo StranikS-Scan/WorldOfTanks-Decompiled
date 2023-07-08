@@ -6,6 +6,8 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataP
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleRestoreInfo, enoughCreditsForRestore
 from gui.Scaleform.daapi.view.meta.RestoreVehiclesTabViewMeta import RestoreVehiclesTabViewMeta
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -45,13 +47,15 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
         restorePrice = ItemPrice(item.restorePrice, item.restorePrice)
         enoughCredits, _ = enoughCreditsForRestore(restoreCreditsPrice, self._itemsCache)
         restoreAvailable, timerText, description, timerIcon = getVehicleRestoreInfo(item)
+        actionButtonLabel = backport.text(R.strings.storage.buttonLabel.restore())
         vo.update({'price': getItemPricesVO(restorePrice)[0],
          'isMoneyEnough': enoughCredits,
          'enabled': enoughCredits and restoreAvailable,
          'description': description,
          'timerText': timerText,
          'timerIcon': timerIcon,
-         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM})
+         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM,
+         'actionButtonLabel': actionButtonLabel})
         return vo
 
 

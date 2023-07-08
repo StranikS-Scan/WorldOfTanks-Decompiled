@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_buyer.py
 import logging
-from gui import SystemMessages
 from adisp import adisp_async, adisp_process
+from gui import SystemMessages
 from gui.battle_pass.battle_pass_constants import ChapterState
+from gui.shared.event_dispatcher import showExchangeXPWindow
 from gui.shared.gui_items.processors.battle_pass import BuyBattlePass, BuyBattlePassLevels
-from gui.shared.utils import decorators
 from gui.shared.money import Currency
+from gui.shared.utils import decorators
 from gui.shop import showBuyGoldForBattlePass, showBuyGoldForBattlePassLevels
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController, ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -20,18 +22,18 @@ class BattlePassBuyer(object):
 
     @classmethod
     @decorators.adisp_process('buyBattlePass')
-    def buyBP(cls, seasonID, chapterID, onBuyCallback=None):
-        spendMoneyGold = 0
+    def buyBP(cls, seasonID, chapterID, priceID, onBuyCallback=None):
         if chapterID not in cls.__battlePassController.getChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
-        if not cls.__battlePassController.isBought(chapterID=chapterID):
-            spendMoneyGold += cls.__battlePassController.getBattlePassCost(chapterID).get(Currency.GOLD, 0)
+        currency, amount = first(cls.__battlePassController.getBattlePassCost(chapterID)[priceID].iteritems())
         result = False
-        if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
-            showBuyGoldForBattlePass(spendMoneyGold)
+        if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
+            showBuyGoldForBattlePass(amount)
+        elif currency == Currency.FREE_XP and cls.__itemsCache.items.stats.actualFreeXP < amount:
+            showExchangeXPWindow(amount)
         else:
-            result = yield cls.__buyBattlePass(seasonID, chapterID)
+            result = yield cls.__buyBattlePass(seasonID, chapterID, priceID)
         if onBuyCallback:
             onBuyCallback(result)
 
@@ -60,8 +62,8 @@ class BattlePassBuyer(object):
     @classmethod
     @adisp_async
     @adisp_process
-    def __buyBattlePass(cls, seasonID, chapterID, callback):
-        result = yield BuyBattlePass(seasonID, chapterID).request()
+    def __buyBattlePass(cls, seasonID, chapterID, priceID, callback):
+        result = yield BuyBattlePass(seasonID, chapterID, priceID).request()
         startLevel, _ = cls.__battlePassController.getChapterLevelInterval(chapterID)
         if cls.__battlePassController.getLevelInChapter(chapterID) != startLevel - 1:
             callback(result.success)

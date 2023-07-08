@@ -3,7 +3,7 @@
 import logging
 from contextlib import contextmanager
 import typing
-from battle_pass_common import BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
+from battle_pass_common import BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getSingleVehicleForCustomization, getStyleForChapter
 from gui.impl import backport
@@ -26,7 +26,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
+    from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, BattlePassRandomQuestTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -48,6 +48,7 @@ def getBattlePassBonusPacker():
      'token': BattlePassTokenBonusPacker(),
      'vehicles': BattlePassVehiclesBonusUIPacker(),
      BATTLE_PASS_Q_CHAIN_BONUS_NAME: QuestChainBonusPacker(),
+     BATTLE_PASS_RANDOM_QUEST_BONUS_NAME: RandomQuestBonusPacker(),
      BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
      BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
      Currency.BPCOIN: CoinBonusPacker(),
@@ -185,15 +186,14 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
         iconName = customizationItem.itemTypeName
         if iconName == 'style' and customizationItem.modelsSet:
             iconName = 'style_3d'
+        bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
+        if not R.images.gui.maps.icons.battlePass.rewards.dyn(bigIcon).exists():
+            bigIcon = iconName
         model.setValue(str(data.get('value', '')))
         model.setIcon(iconName)
+        model.setBigIcon(bigIcon)
         model.setUserName(cls._getUserName(customizationItem))
         model.setLabel(cls._getLabel(customizationItem))
-        if customizationItem.itemTypeName == 'style':
-            bigIcon = iconName
-        else:
-            bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
-        model.setBigIcon(bigIcon)
         model.setIsCollectionEntity(cls._isCollectionItem(customizationItem.intCD))
         cls._injectAwardID(model, str(customizationItem.intCD))
         return model
@@ -474,6 +474,29 @@ class QuestChainBonusPacker(SimpleBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         return [R.views.lobby.battle_pass.tooltips.BattlePassQuestsChainTooltipView()]
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        return [TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[bonus.tokenID])]
+
+
+class RandomQuestBonusPacker(SimpleBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        return [cls._packSingleBonus(bonus, None)]
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = RewardItemModel()
+        model.setName(bonus.getName())
+        model.setBigIcon(bonus.getName())
+        model.setUserName(backport.text(R.strings.battle_pass.randomQuestBonus(), vehicle=bonus.vehicle.shortUserName if bonus.vehicle is not None else ''))
+        return model
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [R.views.lobby.battle_pass.tooltips.RandomQuestTooltip()]
 
     @classmethod
     def _getToolTip(cls, bonus):

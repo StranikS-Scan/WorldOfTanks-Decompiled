@@ -38,7 +38,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IArmoryYardController, IReferralProgramController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IEventLootBoxesController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IWinbackController, IArmoryYardController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -1368,14 +1368,14 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenEventLootBoxesShopHandler,
+ _OpenReferralProgramMainViewHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenWinbackSelectableRewardView,
  _OpenWinbackSelectableRewardViewFromQuest,
  _OpenArmoryYardMain,
  _OpenArmoryYardQuest,
- _OpenAchievementsScreen,
- _OpenReferralProgramMainViewHandler)
+ _OpenAchievementsScreen)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

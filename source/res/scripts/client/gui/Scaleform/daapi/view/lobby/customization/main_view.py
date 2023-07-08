@@ -426,7 +426,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             highlightingMode = chooseMode(slotType, modeId, g_currentVehicle.item)
             self.service.startHighlighter(highlightingMode)
         if self.__ctx.c11nCameraManager is not None:
-            self.__resetCustomizationCamera()
+            self.__resetCustomizationCamera(False)
         self.__setAnchorsInitData()
         self.__updateAnchorsData()
         self.__updateDnd()
@@ -587,6 +587,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 else:
                     relativeSize = MainView._ZOOM_ON_INSCRIPTION
                 located = self.__ctx.c11nCameraManager.locateCameraOnDecal(location=anchorParams.location, width=anchorParams.descriptor.size, slotId=anchorParams.id, relativeSize=relativeSize, forceRotate=forceRotate)
+            elif slotId.slotType in (GUI_ITEM_TYPE.STYLE, GUI_ITEM_TYPE.MODIFICATION):
+                located = self.__ctx.c11nCameraManager.locateCameraOnAnchor(position=None, normal=None, up=anchorParams.location.up, slotId=anchorParams.id, forceRotate=forceRotate)
+            elif slotId.slotType == GUI_ITEM_TYPE.PAINT:
+                located = self.__ctx.c11nCameraManager.locateCameraOnAnchor(position=anchorParams.location.position, normal=None, up=anchorParams.location.up, slotId=anchorParams.id, forceRotate=forceRotate)
             else:
                 if slotId.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                     normal = anchorParams.location.normal
@@ -599,18 +603,18 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                         normal.setPitchYaw(anchorParams.location.normal.pitch, worldRotation.yaw)
                 else:
                     normal = None
-                located = self.__ctx.c11nCameraManager.locateCameraOnAnchor(position=anchorParams.location.position, normal=normal, up=anchorParams.location.up, slotId=anchorParams.id, forceRotate=forceRotate)
+                located = self.__ctx.c11nCameraManager.locateCameraOnAnchor(position=anchorParams.location.position, normal=normal, up=anchorParams.location.up, slotId=anchorParams.id, forceRotate=forceRotate, customConstraints=True)
             if located and not forceRotate:
                 self.__selectedSlot = slotId
                 self.__propertiesSheet.locateOnAnchor(slotId)
                 self.__ctx.vehicleAnchorsUpdater.onCameraLocated(self.__selectedSlot)
             return
 
-    def __resetCustomizationCamera(self):
+    def __resetCustomizationCamera(self, resetRotation=True):
         if self.__ctx.c11nCameraManager is None:
             return
         else:
-            self.__ctx.c11nCameraManager.resetCustomizationCamera()
+            self.__ctx.c11nCameraManager.resetCustomizationCamera(resetRotation)
             self.__selectedSlot = C11nId()
             self.__propertiesSheet.locateToCustomizationPreview()
             self.__ctx.vehicleAnchorsUpdater.onCameraLocated()
@@ -988,13 +992,15 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             item = self.__ctx.mode.getItemFromSlot(slotId)
             if item is not None:
                 self.__locateCameraOnAnchor(slotId)
+            else:
+                self.__resetCustomizationCamera(False)
         else:
             self.__locateCameraOnAnchor(slotId)
         self.__updateDnd()
         return
 
     def __onSlotUnselected(self):
-        self.__resetCustomizationCamera()
+        self.__resetCustomizationCamera(False)
         self.__updateAnchorsData()
         if self.__ctx.mode.isRegion:
             self.service.selectRegions(ApplyArea.NONE)
@@ -1157,7 +1163,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             if toBuyWindow:
                 self.changeVisible(False)
             else:
-                self.__resetCustomizationCamera()
+                self.__resetCustomizationCamera(False)
                 self.service.resumeHighlighter()
             self.__styleInfo.hide()
             return

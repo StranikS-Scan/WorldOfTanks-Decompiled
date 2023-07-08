@@ -56,6 +56,7 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
 
     def __canShowRentTab(self):
         criteria = REQ_CRITERIA.VEHICLE.RENT
+        criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE
         return bool(self._itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, criteria))

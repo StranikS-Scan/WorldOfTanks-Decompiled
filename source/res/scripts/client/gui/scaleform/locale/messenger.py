@@ -982,6 +982,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUYPROGRESS_TEXT = '#messenger:serviceChannelMessages/battlePassReward/buyProgress/text'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUYPROGRESS_FINALTEXT = '#messenger:serviceChannelMessages/battlePassReward/buyProgress/finalText'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUY_GOLD = '#messenger:serviceChannelMessages/battlePassReward/buy/gold'
+    SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUY_FREEXP = '#messenger:serviceChannelMessages/battlePassReward/buy/freeXP'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_BUTTON = '#messenger:serviceChannelMessages/battlePassReward/button'
     SERVICECHANNELMESSAGES_BATTLEPASSREWARD_TMAN = '#messenger:serviceChannelMessages/battlePassReward/tman'
     SERVICECHANNELMESSAGES_BATTLEPASSEXTRASTART_BUTTON = '#messenger:serviceChannelMessages/battlePassExtraStart/button'

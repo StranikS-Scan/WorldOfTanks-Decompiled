@@ -12,5 +12,5 @@ class FunRandomStorage(SessionStorage):
         desiredSubMode = self.__funRandomController.subModesHolder.getDesiredSubMode()
         isSelected = desiredSubMode is not None and desiredSubMode.isAvailable()
         desiredSubModeID = desiredSubMode.getSubModeID() if isSelected else UNKNOWN_EVENT_ID
-        self.__funRandomController.subModesHolder.setDesiredSubModeID(desiredSubModeID)
+        self.__funRandomController.setDesiredSubModeID(desiredSubModeID)
         return isSelected

@@ -51,7 +51,7 @@ class IntroView(ViewImpl):
         model.setRegularRewardVehiclesCount(self.__resourceWell.getRewardLimit(isTop=False))
 
     def __showVideo(self):
-        showBrowserOverlayView(GUI_SETTINGS.resourceWell.get('introVideoUrl'), VIEW_ALIAS.WEB_VIEW_TRANSPARENT)
+        showBrowserOverlayView(GUI_SETTINGS.resourceWellIntroVideoUrl, VIEW_ALIAS.WEB_VIEW_TRANSPARENT)
 
     def __onClose(self):
         self.destroyWindow()

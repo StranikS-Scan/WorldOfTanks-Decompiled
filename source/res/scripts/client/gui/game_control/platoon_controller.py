@@ -195,6 +195,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         prebattleType = self.getPrbEntityType()
         self.__destroy(hideOnly=False)
         self.__prevPrbEntityInfo = PrbEntityInfo(queueType, prebattleType)
+        self.__clearPlatoonTankInfo()
 
     def onAccountBecomeNonPlayer(self):
         self.__stopListening()
@@ -247,6 +248,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
         self.__executeQueue = False
         self.prbDispatcher.doAction(PrbAction(''))
+        self.__updatePlatoonTankInfo()
 
     def leavePlatoon(self, isExit=True, ignoreConfirmation=False):
         action = LeavePrbAction(isExit=isExit, ignoreConfirmation=ignoreConfirmation)
@@ -986,6 +988,13 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
             self.onPlatoonTankUpdated(result)
             return
+
+    def __clearPlatoonTankInfo(self):
+        entity = self.prbEntity
+        if entity is not None and hasattr(entity, 'getRosterSettings'):
+            unitSlotCount = entity.getRosterSettings().getMaxSlots()
+            self.onPlatoonTankUpdated({i:False for i in range(unitSlotCount)})
+        return
 
     def __hasEnoughSlots(self, slots):
         return len(self.__availablePlatoonTanks) + 1 >= slots

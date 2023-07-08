@@ -12,6 +12,7 @@ import BigWorld
 from backports.functools_lru_cache import lru_cache
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
+from ItemRestore import RESTORE_VEHICLE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui import GUI_SETTINGS
@@ -151,10 +152,14 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
+    CREW_HIDDEN = 'hideCrew'
     OUTFIT_LOCKED = 'lockOutfit'
     PROGRESSION_DECALS_ONLY = 'lockExceptProgression'
     OPTIONAL_DEVICES_LOCKED = 'lockOptionalDevices'
     EQUIPMENT_LOCKED = 'lockEquipment'
+    STORAGE_HIDDEN = 'hideStorage'
+    MODE_HIDDEN = 'mode_hidden'
+    CM_HIDDEN = 'cm_hidden'
     EPIC_BATTLES = 'epic_battles'
     BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
@@ -162,6 +167,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     MAPS_TRAINING = 'maps_training'
     T34_DISCLAIMER = 't34_disclaimer'
     CLAN_WARS_BATTLES = 'clanWarsBattles'
+    FUN_RANDOM = 'fun_random'
     COMP7_BATTLES = 'comp7'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
@@ -1229,6 +1235,10 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.CREW_LOCKED)
 
     @property
+    def isCrewHidden(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.CREW_HIDDEN)
+
+    @property
     def isOutfitLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.OUTFIT_LOCKED)
 
@@ -1343,6 +1353,14 @@ class Vehicle(FittingItem):
         return None not in crew and len(crew)
 
     @property
+    def isModeHidden(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.MODE_HIDDEN)
+
+    @property
+    def isContextMenuHidden(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.CM_HIDDEN)
+
+    @property
     def isOnlyForEventBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
@@ -1367,6 +1385,10 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.CLAN_WARS_BATTLES)
 
     @property
+    def isOnlyForFunRandomBattles(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.FUN_RANDOM)
+
+    @property
     def isOnlyForComp7Battles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.COMP7_BATTLES)
 
@@ -1389,6 +1411,10 @@ class Vehicle(FittingItem):
     @property
     def isOptionalDevicesLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.OPTIONAL_DEVICES_LOCKED)
+
+    @property
+    def isStorageHidden(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.STORAGE_HIDDEN)
 
     @property
     def isEarnCrystals(self):
@@ -1759,7 +1785,7 @@ class Vehicle(FittingItem):
         return vehicleDisclaimerURLs.get(self.getDisclaimerTag(), None) is not None
 
     def hasLimitedRestore(self):
-        return self.isRestorePossible() and self.restoreInfo.isLimited() and self.restoreInfo.getRestoreTimeLeft() > 0
+        return self.restoreInfo.isUnlimited() or self.restoreInfo.isLimited() and self.restoreInfo.getRestoreTimeLeft() > 0 if self.isRestorePossible() and self.restoreInfo.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else False
 
     def hasRestoreCooldown(self):
         return self.isRestorePossible() and self.restoreInfo.isInCooldown()
@@ -1929,11 +1955,19 @@ def getNationLessName(vehicleName):
     return vehicleName.split(':')[1]
 
 
-def getIconShopPath(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+def getUnicName(vehicleName):
     name = getNationLessName(vehicleName)
-    unicName = getIconResourceName(name)
-    path = getShopVehicleIconPath(size, unicName)
+    return getIconResourceName(name)
+
+
+def getIconShopPath(vehicleName, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+    path = getShopVehicleIconPath(size, getUnicName(vehicleName))
     return path or backport.image(R.images.gui.maps.shop.vehicles.num(size).empty_tank())
+
+
+def getIconShopResource(vehicleName, size):
+    resID = R.images.gui.maps.shop.vehicles.num(size).dyn(getUnicName(vehicleName))()
+    return resID or R.images.gui.maps.shop.vehicles.num(size).empty_tank()
 
 
 def getIconResource(vehicleName):

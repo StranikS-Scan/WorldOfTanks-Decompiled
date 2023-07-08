@@ -21,8 +21,12 @@ class FunRandomHelpPagesBuilder(DetailedHelpPagesBuilder, FunSubModesWatcher):
     def buildPages(cls, _):
         pages = []
         battleSubMode = cls.getBattleSubMode()
+        iconsRoot = battleSubMode.getIconsResRoot()
         localsRoot = battleSubMode.getLocalsResRoot()
-        addPage(pages, backport.text(localsRoot.detailsHelp.commonTitle()), backport.text(localsRoot.detailsHelp.title()), text_styles.mainBig(backport.text(localsRoot.detailsHelp.description())), [], [], backport.image(battleSubMode.getIconsResRoot().battleHelp.detailsHelp()), hintCtx=HelpHintContext.FUN_RANDOM)
+        commonTitle = backport.text(localsRoot.detailsHelpTitle())
+        for pageID, pageRes in sorted(localsRoot.detailsHelp.items()):
+            addPage(pages, commonTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [], [], backport.image(iconsRoot.battle_help.dyn(pageID)()), hintCtx=HelpHintContext.FUN_RANDOM)
+
         return pages
 
     @classmethod

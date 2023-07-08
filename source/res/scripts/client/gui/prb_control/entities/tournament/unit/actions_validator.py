@@ -5,10 +5,6 @@ from gui.prb_control.entities.base.unit.actions_validator import UnitVehiclesVal
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
 
-class TournamentVehiclesValidator(UnitVehiclesValidator):
-    pass
-
-
 class TournamentUnitSlotsValidator(CommanderValidator):
 
     def _validate(self):
@@ -41,7 +37,7 @@ class TournamentUnitStateValidator(UnitStateValidator):
 class TournamentActionsValidator(UnitActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return TournamentVehiclesValidator(entity)
+        return UnitVehiclesValidator(entity)
 
     def _createSlotsValidator(self, entity):
         return TournamentUnitSlotsValidator(entity)

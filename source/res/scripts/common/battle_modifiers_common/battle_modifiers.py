@@ -75,6 +75,7 @@ class BattleParams(object):
     MODE_CREDITS_FACTOR = 62
     INVISIBILITY_FACTOR_AT_SHOT = 63
     VEHICLE_AOI_RADIUS = 64
+    SOUND_NOTIFICATIONS = 65
     ALL = None
     MAX = None
 

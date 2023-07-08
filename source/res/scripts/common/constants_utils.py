@@ -388,6 +388,14 @@ class AbstractBattleMode(object):
     def _client_limitedUITokensInfos(self):
         return []
 
+    @property
+    def _client_ammunitionPanelViews(self):
+        return []
+
+    @property
+    def _client_vehicleViewStates(self):
+        return []
+
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
         addUnitMgrFlagToQueueType(self._UNIT_MGR_FLAGS, self._QUEUE_TYPE, self._personality)
@@ -561,3 +569,13 @@ class AbstractBattleMode(object):
         if tokensInfos:
             from gui.shared.system_factory import registerLimitedUITokens
             registerLimitedUITokens(tokensInfos)
+
+    def registerAmmunitionPanelViews(self):
+        from gui.shared.system_factory import registerAmmunitionPanelView
+        for viewCls in self._client_ammunitionPanelViews:
+            registerAmmunitionPanelView(viewCls)
+
+    def registerVehicleViewStates(self):
+        from gui.shared.system_factory import registerVehicleViewState
+        for viewState in self._client_vehicleViewStates:
+            registerVehicleViewState(viewState)

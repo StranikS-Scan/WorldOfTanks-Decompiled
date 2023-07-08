@@ -10,15 +10,6 @@ from constants import IS_UE_EDITOR
 if IS_UE_EDITOR:
     from combined_data_section import CombinedDataSection
 
-def getPrecedingSectionIndex(sectionItems, beforeSubsectionName):
-    precedingSectionIndex = None
-    for index in [ index for index, item in enumerate(sectionItems) if item[0] == beforeSubsectionName ]:
-        precedingSectionIndex = index - 1
-        break
-
-    return precedingSectionIndex
-
-
 def writeProjectionSlots(slotDS, slot):
     if slot.type == 'projectionDecal':
         slotDS.write('tags', ' '.join(slot.tags))
@@ -32,14 +23,13 @@ def writeProjectionSlots(slotDS, slot):
     _xml.rewriteBool(slotDS, 'doubleSided', slot.doubleSided, False)
     _xml.rewriteBool(slotDS, 'hiddenForUser', slot.hiddenForUser, False)
     slotDS.write('showOn', slot.showOn)
-    _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, None)
+    _xml.rewriteFloat(slotDS, 'clipAngle', slot.clipAngle, c11n_constants.DEFAULT_DECAL_CLIP_ANGLE)
     _xml.rewriteBool(slotDS, 'verticalMirror', slot.canBeMirroredVertically, False)
     if slot.type == 'projectionDecal':
-        slotDS.write('anchorShift', slot.anchorShift)
+        _xml.rewriteFloat(slotDS, 'anchorShift', slot.anchorShift, c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT)
     elif slot.type == 'fixedProjectionDecal':
         slotDS.write('itemId', slot.itemId)
         slotDS.write('options', slot.options)
-    return
 
 
 def writeAnchorSlots(slotDS, slot):
@@ -67,48 +57,34 @@ def writeEmblemSlots(slotDS, slot):
         _xml.rewriteBool(slotDS, 'planeProjection', slot.planeProjection, False)
     slotDS.write('size', slot.size)
     _xml.rewriteBool(slotDS, 'hideIfDamaged', slot.hideIfDamaged, False)
-    _xml.rewriteBool(slotDS, 'isUVProportional', slot.isUVProportional, None)
-    return
+    _xml.rewriteBool(slotDS, 'isUVProportional', slot.isUVProportional, True)
 
 
 def writeMiscSlots(slotDS, slot):
-    if slot.position is not None:
-        slotDS.write('position', slot.position)
-    if slot.rotation is not None:
-        slotDS.write('rotation', slot.rotation)
-    if slot.attachNode is not None:
-        slotDS.write('attachNode', slot.attachNode)
-    return
+    slotDS.write('position', slot.position)
+    slotDS.write('rotation', slot.rotation)
+    _xml.rewriteString(slotDS, 'attachNode', slot.attachNode, '')
 
 
 def writeCustomizationSlots(slots, section, subsectionName):
     section.deleteSection(subsectionName)
     if not slots:
         return
-    else:
-        sectionItems = section.items()
-        precedingSectionIndex = getPrecedingSectionIndex(sectionItems, 'customization')
-        if precedingSectionIndex is not None:
-            baseSection = section.getPrioritySection() if isinstance(section, CombinedDataSection) else section
-            subsection = baseSection.insertSection(subsectionName, precedingSectionIndex)
-        else:
-            subsection = section.createSection(subsectionName)
-        slots.sort(key=lambda x: x.slotId)
-        for slot in slots:
-            slotDS = subsection.createSection('slot')
-            slotDS.write('slotType', slot.type)
-            slotDS.write('slotId', slot.slotId)
-            if slot.type in ALLOWED_PROJECTION_DECALS_ANCHORS:
-                writeProjectionSlots(slotDS, slot)
-            if slot.type in ALLOWED_SLOTS_ANCHORS:
-                writeAnchorSlots(slotDS, slot)
-            if slot.type in ALLOWED_EMBLEM_SLOTS:
-                writeEmblemSlots(slotDS, slot)
-            if slot.type in component_constants.ALLOWED_MISC_SLOTS:
-                writeMiscSlots(slotDS, slot)
-            LOG_ERROR('unexpected slot type: {}'.format(slot.type))
-
-        return
+    subsection = section.insertSection(subsectionName, section.getFirstIndex('customization'))
+    slots.sort(key=lambda x: x.slotId)
+    for slot in slots:
+        slotDS = subsection.createSection('slot')
+        slotDS.write('slotType', slot.type)
+        slotDS.write('slotId', slot.slotId)
+        if slot.type in ALLOWED_PROJECTION_DECALS_ANCHORS:
+            writeProjectionSlots(slotDS, slot)
+        if slot.type in ALLOWED_SLOTS_ANCHORS:
+            writeAnchorSlots(slotDS, slot)
+        if slot.type in ALLOWED_EMBLEM_SLOTS:
+            writeEmblemSlots(slotDS, slot)
+        if slot.type in component_constants.ALLOWED_MISC_SLOTS:
+            writeMiscSlots(slotDS, slot)
+        LOG_ERROR('unexpected slot type: {}'.format(slot.type))
 
 
 def writeModelsSets(item, section):
@@ -142,13 +118,9 @@ def writeModelsSets(item, section):
 
 
 def writeSwingingSettings(item, section):
-
-    def paramsToString(floatTuple):
-        return ' '.join([ '{:.2f}'.format(x) for x in floatTuple ])
-
     _xml.rewriteFloat(section, 'sensitivityToImpulse', item.sensitivityToImpulse)
-    _xml.rewriteString(section, 'pitchParams', paramsToString(item.pitchParams))
-    _xml.rewriteString(section, 'rollParams', paramsToString(item.rollParams))
+    _xml.rewriteTupleOfFloats(section, 'pitchParams', item.pitchParams)
+    _xml.rewriteTupleOfFloats(section, 'rollParams', item.rollParams)
 
 
 def writeLodDist(dist, section, subsectionName, cache):

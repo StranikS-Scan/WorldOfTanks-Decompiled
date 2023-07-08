@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/intro_view.py
-import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
@@ -17,7 +16,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattleRoyaleController, IHangarSpaceSwitchController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
-from battle_royale.gui.Scaleform.daapi.view.lobby.battle_royale_sounds import Sounds
 
 class IntroView(ViewImpl, IGlobalListener):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -68,10 +66,7 @@ class IntroView(ViewImpl, IGlobalListener):
         self.destroyWindow()
 
     def __onVideo(self):
-        showBrowserOverlayView(self.__urlIntroVideo, VIEW_ALIAS.BROWSER_OVERLAY, callbackOnLoad=self.__onBrowserLoaded)
-
-    def __onBrowserLoaded(self):
-        SoundGroups.g_instance.playSound2D(Sounds.MUTE_EVENT)
+        showBrowserOverlayView(self.__urlIntroVideo, VIEW_ALIAS.BROWSER_OVERLAY)
 
     def __onSpaceUpdated(self):
         if not self.__isPageWasShow:
@@ -88,8 +83,10 @@ class IntroView(ViewImpl, IGlobalListener):
             tx.setAbout(texts.aboutButton())
             tx.setButtonLabel(texts.button())
             slides = tx.getSlides()
-            slides.addViewModel(self.__createSlideModel(images.newMechanics(), texts.slide1.title(), backport.text(texts.slide1.text())))
-            slides.addViewModel(self.__createSlideModel(images.progressionAndShop(), texts.slide2.title(), backport.text(texts.slide2.text())))
+            slides.addViewModel(self.__createSlideModel(images.tanks(), texts.slide1.title(), backport.text(texts.slide1.text())))
+            slides.addViewModel(self.__createSlideModel(images.rent(), texts.slide2.title(), backport.text(texts.slide2.text())))
+            slides.addViewModel(self.__createSlideModel(images.mining(), texts.slide3.title(), backport.text(texts.slide3.text())))
+            slides.addViewModel(self.__createSlideModel(images.map(), texts.slide4.title(), backport.text(texts.slide4.text())))
 
     @staticmethod
     def __createSlideModel(icon, title, description):

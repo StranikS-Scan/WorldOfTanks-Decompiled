@@ -40,11 +40,16 @@ def _exhaustEffectApplier(_, paramVal, __=None):
     return vehicles.g_cache.exhaustEffect(paramVal)
 
 
+def _soundNotificationsApplier(value, paramVal, ctx=None):
+    return remappings_cache.g_cache.getValues(ModifiersWithRemapping.SOUND_NOTIFICATIONS, paramVal, value) if isinstance(value, dict) else remappings_cache.g_cache.getValue(ModifiersWithRemapping.SOUND_NOTIFICATIONS, paramVal, value, ctx)
+
+
 _customAppliers = {BattleParams.VEHICLE_HEALTH: {UseType.MUL: lambda val, paramVal, _=None: int(ceilTo(val * paramVal, VEHICLE_HEALTH_DECIMALS))},
  BattleParams.SHOT_EFFECTS: _shotEffectsApplier,
  BattleParams.GUN_EFFECTS: _gunEffectsApplier,
  BattleParams.ENGINE_SOUNDS: _engineSoundsApplier,
- BattleParams.EXHAUST_EFFECT: _exhaustEffectApplier}
+ BattleParams.EXHAUST_EFFECT: _exhaustEffectApplier,
+ BattleParams.SOUND_NOTIFICATIONS: _soundNotificationsApplier}
 
 def registerParamAppliers(paramId, dataType):
     global g_cache

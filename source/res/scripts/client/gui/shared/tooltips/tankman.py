@@ -196,7 +196,7 @@ class TankmanStatusField(ToolTipDataField):
                         if role not in inactiveRoles:
                             inactiveRoles.append(role)
 
-            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
+            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID and not vehicle.isWotPlus:
                 if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
                     header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
                     text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
@@ -394,16 +394,13 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         for freeSkill in freeSkills:
             commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(freeSkill.userName), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.dyn(freeSkill.extensionLessIconName)()), **self._skillIconNamePadding))
 
-    def _crewSpecialSkillsTitle(self):
-        return makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)
-
     def _createEarnedSkillsBlock(self, commonStatsBlock):
         field = self._getSkillList()
         _, value = field.buildData()
-        skills = self._getEarnedSkills(value)
+        skills = value[self.item.chosenFreeSkillsCount:]
         if not skills:
             return
-        commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': self._crewSpecialSkillsTitle()})))
+        commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)})))
         maxPopUpBlocks = 14
         for skill in skills[:maxPopUpBlocks]:
             commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
@@ -424,9 +421,6 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
             newSkillItems.append(self._getNewSkillsBlock(isFree=False))
         if newSkillItems:
             items.append(formatters.packBuildUpBlockData(newSkillItems))
-
-    def _getEarnedSkills(self, skills):
-        return skills[self.item.chosenFreeSkillsCount:]
 
     @classmethod
     def _getNewSkillsBlock(cls, isFree):
@@ -458,9 +452,6 @@ class BattleRoyaleTankmanTooltipDataBlock(TankmanTooltipDataBlock):
     def _makeRoleLevelBlock(self, item):
         return None
 
-    def _crewSpecialSkillsTitle(self):
-        return backport.text(R.strings.battle_royale.commanderTooltip.specialty_skills())
-
     def _getTankmanDescription(self, _):
         return backport.text(R.strings.battle_royale.commanderInfo.commonRank())
 
@@ -479,12 +470,6 @@ class BattleRoyaleTankmanTooltipDataBlock(TankmanTooltipDataBlock):
 
     def _createMoreInfoBlock(self, items):
         pass
-
-    def _createFreeSkillsBlock(self, commonStatsBlock):
-        pass
-
-    def _getEarnedSkills(self, skills):
-        return skills
 
 
 class TankmanTooltipData(ToolTipData):

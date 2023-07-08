@@ -7,44 +7,44 @@ class DealPanelModel(PriceModel):
     GENERAL = 'general'
     REPAIR = 'repair'
 
-    def __init__(self, properties=9, commands=3):
+    def __init__(self, properties=10, commands=3):
         super(DealPanelModel, self).__init__(properties=properties, commands=commands)
 
     def getDealType(self):
-        return self._getString(3)
+        return self._getString(4)
 
     def setDealType(self, value):
-        self._setString(3, value)
+        self._setString(4, value)
 
     def getCanAccept(self):
-        return self._getBool(4)
-
-    def setCanAccept(self, value):
-        self._setBool(4, value)
-
-    def getCanCancel(self):
         return self._getBool(5)
 
-    def setCanCancel(self, value):
+    def setCanAccept(self, value):
         self._setBool(5, value)
 
-    def getIsAutoRenewalEnabled(self):
+    def getCanCancel(self):
         return self._getBool(6)
 
-    def setIsAutoRenewalEnabled(self, value):
+    def setCanCancel(self, value):
         self._setBool(6, value)
 
-    def getIsDisabled(self):
+    def getIsAutoRenewalEnabled(self):
         return self._getBool(7)
 
-    def setIsDisabled(self, value):
+    def setIsAutoRenewalEnabled(self, value):
         self._setBool(7, value)
 
+    def getIsDisabled(self):
+        return self._getBool(8)
+
+    def setIsDisabled(self, value):
+        self._setBool(8, value)
+
     def getTotalItemsInStorage(self):
-        return self._getNumber(8)
+        return self._getNumber(9)
 
     def setTotalItemsInStorage(self, value):
-        self._setNumber(8, value)
+        self._setNumber(9, value)
 
     def _initialize(self):
         super(DealPanelModel, self)._initialize()

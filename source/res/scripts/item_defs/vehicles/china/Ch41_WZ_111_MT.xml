@@ -37,8 +37,6 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
     <density>	1.11 1.11	</density>
   </camouflage>
   <hull>
@@ -70,8 +68,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.32	</pitchParams>
-      <rollParams>	1.00 0.26 36.00 0.48 1.00 0.05 0.32	</rollParams>
+      <pitchParams>	0.26 36 0.48 1 0.05 0.32	</pitchParams>
+      <rollParams>	1 0.26 36 0.48 1 0.05 0.32	</rollParams>
       <sensitivityToImpulse>	0.28	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -85,6 +83,7 @@
       <collisionModelServer>	vehicles/chinese/Ch41_WZ_111_5A/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/chinese/Ch41_WZ_111_5A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
+    <hangarShadowTexture>	vehicles/chinese/Ch41_WZ_111_5A/WZ_111_5A_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
@@ -94,7 +93,6 @@
         <rayUp>	0.600289 0.042375 -0.79866	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isUVProportional>	true	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -127,7 +125,6 @@
         <rotation>	3.14159 -0.000008 -0.00006	</rotation>
         <scale>	3.36105 0.999997 3.36104	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <verticalMirror>	true	</verticalMirror>
         <anchorShift>	0.114589	</anchorShift>
       </slot>
@@ -227,7 +224,6 @@
         <rotation>	3.14159 -0.000007 -0.000059	</rotation>
         <scale>	3.38825 0.699999 3.38823	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <anchorShift>	0.043039	</anchorShift>
       </slot>
       <slot>
@@ -249,7 +245,6 @@
         <rotation>	3.14159 -0.00001 -0.00006	</rotation>
         <scale>	3.14681 0.5 3.14678	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <anchorShift>	0.047723	</anchorShift>
       </slot>
       <slot>
@@ -499,7 +494,6 @@
         <rotation>	3.14159 -0.000008 -0.00006	</rotation>
         <scale>	1.51359 0.450333 1.51359	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <verticalMirror>	true	</verticalMirror>
         <anchorShift>	0.173414	</anchorShift>
       </slot>
@@ -511,7 +505,6 @@
         <rotation>	3.14159 -0.000008 -0.00006	</rotation>
         <scale>	1.51359 0.450333 1.51359	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <verticalMirror>	true	</verticalMirror>
         <anchorShift>	0.164245	</anchorShift>
       </slot>
@@ -578,7 +571,6 @@
         <rotation>	3.14159 -0.000007 -0.000059	</rotation>
         <scale>	2.89294 2.89293 2.89293	</scale>
         <showOn>	16	</showOn>
-        <clipAngle>	0	</clipAngle>
         <anchorShift>	-0.884219	</anchorShift>
       </slot>
       <slot>
@@ -852,7 +844,6 @@
         <anchorShift>	0.331168	</anchorShift>
       </slot>
     </customizationSlots>
-    <hangarShadowTexture>	vehicles/chinese/Ch41_WZ_111_5A/WZ_111_5A_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
         <paint>	HULL	</paint>
@@ -1253,32 +1244,21 @@
         </node>
       </trackNodes>
       <splineDesc>
-        <segmentModelLeft>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</segmentModelRight>
-        <left>	vehicles/chinese/Ch41_WZ_111_5A/track/left.track	</left>
-        <right>	vehicles/chinese/Ch41_WZ_111_5A/track/right.track	</right>
-        <segmentLength>	0.155	</segmentLength>
-        <segmentOffset>	0.14	</segmentOffset>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <segmentModelLeft>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</segmentModelRight>
+          <left>	vehicles/chinese/Ch41_WZ_111_5A/track/left.track	</left>
+          <right>	vehicles/chinese/Ch41_WZ_111_5A/track/right.track	</right>
+          <segmentLength>	0.155	</segmentLength>
+          <segmentOffset>	0.14	</segmentOffset>
+          <atlas>
+            <UTiles>	1	</UTiles>
+            <VTiles>	1	</VTiles>
+          </atlas>
+        </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	21000	</slotId>
-          <anchorPosition>	-1.72723 0.56399 0.02012	</anchorPosition>
-          <anchorDirection>	-0.950548 0.310381 0.011073	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	style	</slotType>
-          <slotId>	29000	</slotId>
-          <anchorPosition>	0.000077 2.27275 0.697559	</anchorPosition>
-          <anchorDirection>	-0 1 0	</anchorDirection>
-        </slot>
-      </customizationSlots>
       <physicalTracks>
         <left>
           <segmentsCount>	98	</segmentsCount>
@@ -1608,6 +1588,7 @@
               </range>
             </bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </left>
         <right>
           <segmentsCount>	98	</segmentsCount>
@@ -1917,8 +1898,23 @@
               </range>
             </bottom>
           </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.72723 0.56399 0.02012	</anchorPosition>
+          <anchorDirection>	-0.950548 0.310381 0.011073	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0.000077 2.27275 0.697559	</anchorPosition>
+          <anchorDirection>	-0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -2068,10 +2064,8 @@
               <rayEnd>	0.000065 -0.026 2.36874	</rayEnd>
               <rayUp>	0.126 0 0	</rayUp>
               <size>	0.75	</size>
-              <isUVProportional>	true	</isUVProportional>
             </slot>
           </customizationSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2097,6 +2091,7 @@
       </hitTester>
       <gunPosition>	-0.005454 0.334779 1.28907	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.018 -0.023 1.045 0 0.493 0.415 0.568 0.378 0.5 0.5 0.386 0.5 0.181 0.852 0.302	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2117,7 +2112,6 @@
           <rayEnd>	-1.22182 0.253952 -0.026401	</rayEnd>
           <rayUp>	0 1 0	</rayUp>
           <size>	0.35	</size>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	player	</slotType>
@@ -2127,7 +2121,6 @@
           <rayEnd>	1.22182 0.253952 -0.026401	</rayEnd>
           <rayUp>	0 1 0	</rayUp>
           <size>	0.35	</size>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
@@ -2137,7 +2130,6 @@
           <rayUp>	0 1 0	</rayUp>
           <size>	0.651	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
@@ -2147,7 +2139,6 @@
           <rayUp>	0 1 0	</rayUp>
           <size>	0.651	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -2289,7 +2280,6 @@
           <rotation>	1.18511 1.52559 -3.05276	</rotation>
           <scale>	2.22391 3.46132 2.2239	</scale>
           <showOn>	256	</showOn>
-          <clipAngle>	0	</clipAngle>
           <anchorShift>	0.110607	</anchorShift>
         </slot>
         <slot>
@@ -2393,7 +2383,6 @@
           <rotation>	1.01456 1.04106 2.996	</rotation>
           <scale>	0.854303 0.854301 0.854302	</scale>
           <showOn>	256	</showOn>
-          <clipAngle>	0	</clipAngle>
           <anchorShift>	0.120515	</anchorShift>
         </slot>
         <slot>
@@ -2404,7 +2393,6 @@
           <rotation>	1.49751 1.33316 2.97377	</rotation>
           <scale>	2.52489 3.92978 2.52488	</scale>
           <showOn>	256	</showOn>
-          <clipAngle>	0	</clipAngle>
           <anchorShift>	1.232316	</anchorShift>
         </slot>
         <slot>
@@ -2462,7 +2450,6 @@
           <scale>	0.485161 0.395686 0.48516	</scale>
           <hiddenForUser>	true	</hiddenForUser>
           <showOn>	256	</showOn>
-          <clipAngle>	0	</clipAngle>
           <anchorShift>	0.120515	</anchorShift>
         </slot>
         <slot>
@@ -2502,7 +2489,6 @@
           <anchorShift>	0.19589	</anchorShift>
         </slot>
       </customizationSlots>
-      <physicsShape>	1.018 -0.023 1.045 0.000 0.493 0.415 0.568 0.378 0.500 0.500 0.386 0.500 0.181 0.852 0.302	</physicsShape>
       <customization>
         <customizableVehicleAreas>
           <paint>	TURRET	</paint>

@@ -57,16 +57,7 @@ class SoundPlayersBattleController(IBattleController):
         return
 
 
-class ISoundPlayer(object):
-
-    def init(self):
-        raise NotImplementedError
-
-    def destroy(self):
-        raise NotImplementedError
-
-
-class SoundPlayer(ISoundPlayer):
+class SoundPlayer(object):
 
     def init(self):
         nextTick(self._subscribe)()

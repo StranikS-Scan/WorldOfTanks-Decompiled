@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/wrappers/user_compound_price_model.py
 import logging
-from typing import Tuple, Optional
+import typing
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.common.compound_price_model import CompoundPriceModel
 from gui.impl.gen.view_models.common.price_model import PriceModel
@@ -11,6 +11,9 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from typing import Dict, Tuple, Optional, Union
+    Price = Union[Money, Dict]
 
 class UserCompoundPriceModel(CompoundPriceModel):
     __slots__ = ()
@@ -47,15 +50,16 @@ class PriceModelBuilder(object):
         priceModel.getDefPrice().clear()
 
     @classmethod
-    def fillPriceModelByItemPrice(cls, priceModel, itemPrice, checkBalanceAvailability=False):
+    def fillPriceModelByItemPrice(cls, priceModel, itemPrice, checkBalanceAvailability=False, priceID=''):
         action = itemPrice.getActionPrcAsMoney()
         if action.isDefined():
             cls.fillPriceModel(priceModel, itemPrice.price, action, itemPrice.defPrice, checkBalanceAvailability=checkBalanceAvailability)
         else:
             cls.fillPriceModel(priceModel, itemPrice.price, checkBalanceAvailability=checkBalanceAvailability)
+        priceModel.setPriceID(priceID)
 
     @classmethod
-    def fillPriceModel(cls, priceModel, price, action=None, defPrice=None, checkBalanceAvailability=False):
+    def fillPriceModel(cls, priceModel, price, action=None, defPrice=None, checkBalanceAvailability=False, priceID=''):
         cls.fillPriceItemModel(priceModel.getPrice(), price, checkBalanceAvailability=checkBalanceAvailability)
         if action is not None:
             cls.fillPriceItemModel(priceModel.getDiscount(), action, checkBalanceAvailability=checkBalanceAvailability)
@@ -63,6 +67,7 @@ class PriceModelBuilder(object):
                 cls.fillPriceItemModel(priceModel.getDefPrice(), defPrice, checkBalanceAvailability=checkBalanceAvailability)
             else:
                 _logger.error('action and defPrice should be set both')
+        priceModel.setPriceID(priceID)
         return
 
     @classmethod

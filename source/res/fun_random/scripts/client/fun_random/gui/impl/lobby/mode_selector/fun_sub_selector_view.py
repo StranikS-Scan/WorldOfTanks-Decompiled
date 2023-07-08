@@ -7,11 +7,11 @@ from battle_modifiers_ext.constants_ext import ClientDomain
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowFlags
 from fun_random.gui.feature.fun_constants import FunSubModesState
 from fun_random.gui.feature.models.common import FunSubModesStatus
-from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasMultipleSubModes, avoidSubModesStates
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_random_sub_selector_card_model import FunRandomSubSelectorCardModel, CardState
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_random_sub_selector_model import FunRandomSubSelectorModel
-from fun_random.gui.impl.lobby.common.fun_view_helpers import getFormattedTimeLeft
+from fun_random.gui.impl.lobby.common.fun_view_helpers import getFormattedTimeLeft, getConditionText
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packAdditionalRewards, packProgressionActiveStage, packProgressionCondition, packProgressionState, defineProgressionStatus
 from fun_random.gui.impl.lobby.tooltips.fun_random_domain_tooltip_view import FunRandomDomainTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
@@ -25,7 +25,6 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared import events, g_eventBus
 from gui.shared.events import ModeSelectorLoadedEvent, ModeSubSelectorEvent, FullscreenModeSelectorEvent
-from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import dependency, time_utils
 from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
@@ -42,7 +41,7 @@ _SUB_MODE_CARD_STATE_MAP = {FunSubModesState.AFTER_SEASON: CardState.FINISHED,
  FunSubModesState.NOT_AVAILABLE: CardState.ACTIVE,
  FunSubModesState.AVAILABLE: CardState.ACTIVE}
 
-class FunModeSubSelectorView(ViewImpl, FunSubModesWatcher, FunProgressionWatcher):
+class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, FunProgressionWatcher):
     __slots__ = ('__tooltips',)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -140,9 +139,6 @@ class FunModeSubSelectorView(ViewImpl, FunSubModesWatcher, FunProgressionWatcher
         assetsPointer = event.getArgument('modeName', DEFAULT_ASSETS_PACK)
         return findFirst(lambda sm: sm.getAssetsPointer() == assetsPointer, self.getSubModes())
 
-    def __getSubModeCondition(self, subMode):
-        return backport.text(subMode.getLocalsResRoot().subModeCard.condition(), levels=toRomanRangeString(subMode.getSettings().filtration.levels))
-
     def __getSubModeStartDelta(self, status):
         return time_utils.getTimeDeltaFromNowInLocal(status.rightBorder) if status.state in FunSubModesState.BEFORE_STATES else 0
 
@@ -160,7 +156,7 @@ class FunModeSubSelectorView(ViewImpl, FunSubModesWatcher, FunProgressionWatcher
         card.setSubModeId(subModeID)
         card.setAssetsPointer(subMode.getAssetsPointer())
         card.setIsSelected(subModeID == selectedSubModeID)
-        card.setConditions(self.__getSubModeCondition(subMode))
+        card.setConditions(getConditionText(subMode.getLocalsResRoot().subModeCard, subMode.getSettings().filtration.levels))
         status = self.getSubModesStatus(subModesIDs=[subModeID])
         card.setState(_SUB_MODE_CARD_STATE_MAP.get(status.state, CardState.DISABLED))
         card.setTimeToStart(self.__getSubModeStartDelta(status))
@@ -206,6 +202,7 @@ class FunModeSubSelectorView(ViewImpl, FunSubModesWatcher, FunProgressionWatcher
 
     def __invalidate(self, status):
         with self.viewModel.transaction() as model:
+            model.setAssetsPointer(self.getModeAssetsPointer())
             self.__invalidateSubModesCards(model.getCardList())
             if status.state in FunSubModesState.INNER_STATES:
                 self.__fillProgression(model)

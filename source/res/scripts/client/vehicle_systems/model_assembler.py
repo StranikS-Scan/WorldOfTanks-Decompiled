@@ -384,12 +384,19 @@ def assembleVehicleTraces(appearance, f, lodStateLink=None):
     return
 
 
-def assembleRecoil(appearance, lodLink):
+def createGunRecoil(appearance, lodLink):
     gunAnimatorNode = appearance.compoundModel.node(TankNodeNames.GUN_RECOIL)
     localGunMatrix = gunAnimatorNode.localMatrix
-    appearance.gunRecoil = gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
+    gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
     gunRecoilMProv = gunRecoil.animatedMProv
     appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
+    return gunRecoil
+
+
+def assembleRecoil(appearance, lodLink):
+    recoil = appearance.typeDescriptor.gun.recoil
+    appearance.gunRecoil = createGunRecoil(appearance, lodLink) if recoil is not None else None
+    return
 
 
 def createMultiGunRecoils(appearance, lodLink, gunNodes):
@@ -410,9 +417,12 @@ def createMultiGunRecoils(appearance, lodLink, gunNodes):
 
 
 def assembleMultiGunRecoil(appearance, lodLink):
+    recoil = appearance.typeDescriptor.gun.recoil
     multiGun = appearance.typeDescriptor.turret.multiGun
-    if multiGun is not None:
+    if multiGun is not None and recoil is not None:
         appearance.gunAnimators = createMultiGunRecoils(appearance, lodLink, multiGun)
+    else:
+        appearance.gunAnimators = None
     return
 
 

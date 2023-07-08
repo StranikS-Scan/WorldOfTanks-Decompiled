@@ -6,6 +6,7 @@ from account_helpers.AccountSettings import FUN_RANDOM_LAST_PRESET
 from adisp import adisp_async, adisp_process
 from constants import Configs
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, DEFAULT_SETTINGS_KEY
+from fun_random.gui.feature.sub_systems.fun_hidden_vehicles import FunHiddenVehicles
 from fun_random.gui.feature.sub_systems.fun_notifications import FunNotifications
 from fun_random.gui.feature.sub_systems.fun_progressions import FunProgressions
 from fun_random.gui.feature.sub_systems.fun_sub_modes_holder import FunSubModesHolder
@@ -21,6 +22,7 @@ from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from helpers import dependency
 from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.impl.gen import R
 if typing.TYPE_CHECKING:
     from helpers.server_settings import ServerSettings
 
@@ -35,6 +37,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         self.__subModesHolder = FunSubModesHolder(self.__subscription)
         self.__subModesInfo = FunSubModesInfo(self.__subModesHolder)
         self.__progressions = FunProgressions(self.__subscription)
+        self.__hiddenVehicles = FunHiddenVehicles(self.__subModesHolder)
         self.__notifications = FunNotifications(self.__progressions, self.__subModesHolder)
         return
 
@@ -68,13 +71,13 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         return
 
     def onLobbyInited(self, event=None):
+        self.__hiddenVehicles.startVehiclesListening()
         self.__notifications.startNotificationPushing()
         self.__subModesHolder.startNotification()
         self.startGlobalListening()
 
     def onLobbyStarted(self, ctx):
-        desiredSubModeID = ctx.get(FUN_EVENT_ID_KEY, self.__subModesHolder.getDesiredSubModeID())
-        self.__subModesHolder.setDesiredSubModeID(desiredSubModeID)
+        self.setDesiredSubModeID(ctx.get(FUN_EVENT_ID_KEY, self.__subModesHolder.getDesiredSubModeID()))
 
     @property
     def notifications(self):
@@ -102,8 +105,25 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def isFunRandomPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.FUN_RANDOM)
 
+    def getAssetsPointer(self):
+        return self.__funRandomSettings.assetsPointer
+
+    def getIconsResRoot(self):
+        assetsPointer = self.__funRandomSettings.assetsPointer
+        return R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.dyn(assetsPointer, R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.undefined)
+
+    def getLocalsResRoot(self):
+        assetsPointer = self.__funRandomSettings.assetsPointer
+        return R.strings.fun_random.modes.dyn(assetsPointer, R.strings.fun_random.modes.undefined)
+
     def getSettings(self):
         return self.__funRandomSettings
+
+    def setDesiredSubModeID(self, subModeID, trustedSource=False):
+        self.__subscription.suspend()
+        self.__subModesHolder.setDesiredSubModeID(subModeID, trustedSource)
+        self.__hiddenVehicles.updateCurrentVehicle(self.__subModesHolder.getDesiredSubMode())
+        self.__subscription.resume()
 
     @adisp_async
     @adisp_process
@@ -113,7 +133,8 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         notifyCaller(callback, result)
 
     def __getSubSystems(self):
-        return (self.__notifications,
+        return (self.__hiddenVehicles,
+         self.__notifications,
          self.__progressions,
          self.__subscription,
          self.__subModesInfo,
@@ -139,6 +160,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def __clearListening(self):
         self.__progressions.stopProgressListening()
         self.__notifications.stopNotificationPushing()
+        self.__hiddenVehicles.stopVehiclesListening()
         self.__subModesHolder.stopNotification()
         self.stopGlobalListening()
 

@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/squad/ctx.py
 from constants import PREBATTLE_TYPE
-from fun_random.gui.fun_gui_constants import REQUEST_TYPE
+from fun_random.gui.fun_gui_constants import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.unit.ctx import UnitRequestCtx
-from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.withParent(('getDesiredSubModeID', 'desiredSubModeID'))
@@ -13,6 +12,7 @@ class FunSquadSettingsCtx(SquadSettingsCtx):
 
     def __init__(self, desiredSubModeID, flags=FUNCTIONAL_FLAG.UNDEFINED, accountsToInvite=None, isForced=False):
         prebattleType, waitingID = PREBATTLE_TYPE.FUN_RANDOM, 'prebattle/create'
+        flags |= FUNCTIONAL_FLAG.FUN_RANDOM
         super(FunSquadSettingsCtx, self).__init__(prebattleType, waitingID, flags, accountsToInvite, isForced)
         self.__desiredSubModeID = desiredSubModeID
 

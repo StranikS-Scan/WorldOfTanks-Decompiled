@@ -12,6 +12,8 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
+    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
     <flame>	FLAME.png 0 0	</flame>
   </icons>
   <_12.7mm_AP_B32>
@@ -4290,18 +4292,19 @@
   <_122mm_BP450SO_SH>
     <id>	277	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO_SH	</userString>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
-      <armor>	270	</armor>
+      <armor>	230	</armor>
       <devices>	23	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BP450SO_SH>
   <_122mm_UBR_472PM_SH>
     <id>	275	</id>
@@ -4315,25 +4318,26 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	215	</armor>
+      <armor>	170	</armor>
       <devices>	23	</devices>
     </damage>
   </_122mm_UBR_472PM_SH>
   <_100mm_3UBK4M_SH>
     <id>	278	</id>
     <userString>	#ussr_vehicles:_100mm_3UBK4M_SH	</userString>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	310	</armor>
+      <armor>	320	</armor>
       <devices>	32	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_3UBK4M_SH>
   <_100mm_3VBM2_SH>
     <id>	267	</id>
@@ -4347,25 +4351,26 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	250	</armor>
+      <armor>	220	</armor>
       <devices>	32	</devices>
     </damage>
   </_100mm_3VBM2_SH>
   <_122mm_BP450S_SH>
     <id>	279	</id>
     <userString>	#ussr_vehicles:_122mm_BP450S_SH	</userString>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
-      <armor>	380	</armor>
+      <armor>	400	</armor>
       <devices>	40	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BP450S_SH>
   <_122mm_VBR472B_SH>
     <id>	282	</id>
@@ -4379,7 +4384,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	305	</armor>
+      <armor>	290	</armor>
       <devices>	40	</devices>
     </damage>
   </_122mm_VBR472B_SH>
@@ -4387,16 +4392,17 @@
     <id>	270	</id>
     <userString>	#ussr_vehicles:_122mm_BR_471PM_SH	</userString>
     <improved>	true	</improved>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
-      <armor>	440	</armor>
+      <armor>	450	</armor>
       <devices>	45	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_122mm_BR_471PM_SH>
   <_122mm_UBR-472PBM_SH>
     <id>	271	</id>
@@ -4410,25 +4416,26 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	350	</armor>
+      <armor>	320	</armor>
       <devices>	45	</devices>
     </damage>
   </_122mm_UBR-472PBM_SH>
   <_107mm_BP450M_SH>
     <id>	280	</id>
     <userString>	#ussr_vehicles:_107mm_BP450M_SH	</userString>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	107	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRmainHollowCharge	</effects>
     <damage>
-      <armor>	500	</armor>
+      <armor>	550	</armor>
       <devices>	55	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_107mm_BP450M_SH>
   <_107mm_UBR-420PM_SH>
     <id>	273	</id>
@@ -4442,25 +4449,26 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainAPCR	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	390	</armor>
       <devices>	55	</devices>
     </damage>
   </_107mm_UBR-420PM_SH>
   <_130mm_3VBK_SH>
     <id>	281	</id>
     <userString>	#ussr_vehicles:_130mm_3VBK_SH	</userString>
-    <icon>	ap_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	0	</price>
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	130	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	BRlargeArmorPiercing	</effects>
+    <effects>	BRlargeHollowCharge	</effects>
     <damage>
-      <armor>	610	</armor>
+      <armor>	650	</armor>
       <devices>	65	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_130mm_3VBK_SH>
   <_130mm_3VBM_SH>
     <id>	269	</id>
@@ -4474,7 +4482,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	450	</armor>
       <devices>	65	</devices>
     </damage>
   </_130mm_3VBM_SH>
@@ -4554,6 +4562,78 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_107mm_UBR-420_MapsTraining_Dummy_HT_2>
+  <_23mm_BZT_FEP>
+    <id>	601	</id>
+    <userString>	#ussr_vehicles:_23mm_BZT_FEP	</userString>
+    <icon>	aap	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	23	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	fepQfgAutoArmorPiercing	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_23mm_BZT_FEP>
+  <_23mm_BZK_FEP>
+    <id>	602	</id>
+    <userString>	#ussr_vehicles:_23mm_BZK_FEP	</userString>
+    <icon>	aap_cr	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <mechanics>	GUARANTEED_DAMAGE	</mechanics>
+    <guaranteedDamages>
+      <damage>
+        <armor>	2.0	</armor>
+      </damage>
+    </guaranteedDamages>
+    <caliber>	23	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	fepQfgAutoArmorPiercing	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	fepQfgAutoArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	4	</armor>
+      <devices>	2	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_23mm_BZK_FEP>
   <_25mm_AP_1_flameshell>
     <id>	31002	</id>
     <userString>	#ussr_vehicles:_25mm_AP_1_flameshell	</userString>

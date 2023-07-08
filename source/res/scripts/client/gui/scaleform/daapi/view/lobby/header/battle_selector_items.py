@@ -850,6 +850,7 @@ class EpicBattleItem(SelectorItem):
         self.__epicController.storeCycle()
         if self._selectorType is not None:
             self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)
+        self._isLocked = not self.__epicController.isEnabled()
         return
 
     def __getScheduleStr(self):

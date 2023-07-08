@@ -96,8 +96,18 @@ class EquipmentCMHandler(_ArmingCMHandler):
         else:
             super(EquipmentCMHandler, self).buy()
 
+    def _initFlashValues(self, ctx):
+        super(EquipmentCMHandler, self)._initFlashValues(ctx)
+        self._enabled = bool(ctx.enabled)
+
     def _getHighlightedLabels(self):
         return (CMLabel.BUY_MORE,)
+
+    def _getOptionCustomData(self, label):
+        optionData = super(EquipmentCMHandler, self)._getOptionCustomData(label)
+        if label == CMLabel.SELL:
+            optionData.enabled = self._enabled
+        return optionData
 
 
 class OptionalDeviceCMHandler(_ArmingCMHandler):

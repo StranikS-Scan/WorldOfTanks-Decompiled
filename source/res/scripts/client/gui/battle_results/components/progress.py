@@ -283,7 +283,7 @@ class BattlePassProgressBlock(base.StatsBlock):
         bpp = reusable.battlePassProgress
         if not bpp.hasProgress:
             return
-        isNewPoints = bpp.pointsNew > 0 or bpp.questPoints > 0 or bpp.bonusCapPoints > 0
+        isNewPoints = bpp.pointsNew > 0 or bpp.questPoints > 0 or bpp.bonusCapPoints > 0 or bpp.bpTopPoints > 0
         isNewLevel = bpp.currLevel > bpp.prevLevel
         if isNewPoints or isNewLevel:
             self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgressPoints(bpp, bpp.currLevel)))

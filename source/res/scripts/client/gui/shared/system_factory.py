@@ -38,6 +38,14 @@ MESSENGER_SERVER_FORMATTERS = 34
 CAROUSEL_EVENTS_ENTRIES = 35
 BANNER_ENTRY_POINT_LUI_RULE = 36
 LIMITED_UI_TOKENS = 37
+PRB_MODE_NAME_KWARGS = 38
+QUEUE_MODE_NAME_KWARGS = 39
+BONUS_TYPE_MODE_NAME_KWARGS = 40
+PRB_CONDITION_ICON = 41
+HANGAR_PRESETS_READERS = 42
+HANGAR_PRESETS_PROCESSORS = 43
+AMMUNITION_PANEL_VIEW = 44
+VEHICLE_VIEW_STATE = 45
 
 class _CollectEventsManager(object):
 
@@ -388,6 +396,58 @@ def collectPrbInviteHtmlFormatter(prbType):
     return __collectEM.handleEvent((PRB_INVITE_HTML_FORMATTER, prbType), ctx={}).get('formatter')
 
 
+def registerModeNameKwargsGetterByPrb(prbType, prbModeNameKwargsKwargsGetter):
+
+    def onCollect(ctx):
+        ctx['prbModeNameKwargsGetter'] = prbModeNameKwargsKwargsGetter
+
+    __collectEM.addListener((PRB_MODE_NAME_KWARGS, prbType), onCollect)
+
+
+def collectModeNameKwargsByPrbType(prbType):
+    getter = __collectEM.handleEvent((PRB_MODE_NAME_KWARGS, prbType), ctx={}).get('prbModeNameKwargsGetter')
+    return getter() if getter is not None else {}
+
+
+def registerModeNameKwargsGetterByQueue(queueType, queueModeNameKwargsKwargsGetter):
+
+    def onCollect(ctx):
+        ctx['queueModeNameKwargsGetter'] = queueModeNameKwargsKwargsGetter
+
+    __collectEM.addListener((QUEUE_MODE_NAME_KWARGS, queueType), onCollect)
+
+
+def collectModeNameKwargsByQueueType(queueType):
+    getter = __collectEM.handleEvent((QUEUE_MODE_NAME_KWARGS, queueType), ctx={}).get('queueModeNameKwargsGetter')
+    return getter() if getter is not None else {}
+
+
+def registerModeNameKwargsGetterByBonusType(bonusType, prbModeNameKwargsKwargsGetter):
+
+    def onCollect(ctx):
+        ctx['bonusModeNameKwargsGetter'] = prbModeNameKwargsKwargsGetter
+
+    __collectEM.addListener((BONUS_TYPE_MODE_NAME_KWARGS, bonusType), onCollect)
+
+
+def collectModeNameKwargsByBonusType(bonusType):
+    getter = __collectEM.handleEvent((BONUS_TYPE_MODE_NAME_KWARGS, bonusType), ctx={}).get('bonusModeNameKwargsGetter')
+    return getter() if getter is not None else {}
+
+
+def registerPrebattleConditionIconGetter(bonusType, prebattleConditionIconGetter):
+
+    def onCollect(ctx):
+        ctx['prbConditionIconGetter'] = prebattleConditionIconGetter
+
+    __collectEM.addListener((PRB_CONDITION_ICON, bonusType), onCollect)
+
+
+def collectPrebattleConditionIcon(bonusType):
+    getter = __collectEM.handleEvent((PRB_CONDITION_ICON, bonusType), ctx={}).get('prbConditionIconGetter')
+    return getter() if getter is not None else None
+
+
 def registerModeSelectorItem(prbActionName, itemCls):
 
     def onCollect(ctx):
@@ -593,3 +653,52 @@ def registerLimitedUITokens(tokensInfos):
 
 def collectLimitedUITokens():
     return __collectEM.handleEvent(LIMITED_UI_TOKENS, ctx={'tokens': []})['tokens']
+
+
+def registerHangarPresetGetter(queueType, processor):
+
+    def onCollect(ctx):
+        ctx['presetsGetters'][queueType] = processor(ctx['config'])
+
+    __collectEM.addListener(HANGAR_PRESETS_PROCESSORS, onCollect)
+
+
+def collectHangarPresetsGetters(config):
+    return __collectEM.handleEvent(HANGAR_PRESETS_PROCESSORS, {'presetsGetters': {},
+     'config': config})['presetsGetters']
+
+
+def registerHangarPresetsReader(reader):
+
+    def onCollect(ctx):
+        ctx['presetsReaders'].append(reader)
+
+    __collectEM.addListener(HANGAR_PRESETS_READERS, onCollect)
+
+
+def collectHangarPresetsReaders():
+    return __collectEM.handleEvent(HANGAR_PRESETS_READERS, ctx={'presetsReaders': []})['presetsReaders']
+
+
+def registerAmmunitionPanelView(viewCls):
+
+    def onCollect(ctx):
+        ctx[viewCls.__name__] = viewCls
+
+    __collectEM.addListener((AMMUNITION_PANEL_VIEW, viewCls.__name__), onCollect)
+
+
+def collectAmmunitionPanelView(viewAlias):
+    return __collectEM.handleEvent((AMMUNITION_PANEL_VIEW, viewAlias), ctx={}).get(viewAlias, None)
+
+
+def registerVehicleViewState(viewState):
+
+    def onCollect(ctx):
+        ctx['viewStates'].append(viewState)
+
+    __collectEM.addListener(VEHICLE_VIEW_STATE, onCollect)
+
+
+def collectVehicleViewStates():
+    return __collectEM.handleEvent(VEHICLE_VIEW_STATE, ctx={'viewStates': []})['viewStates']

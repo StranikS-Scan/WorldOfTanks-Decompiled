@@ -80,7 +80,8 @@ class StorageCategoryOffersView(StorageCategoryOffersViewMeta):
         description = '\n'.join([gifts, expiration])
         localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(offer.cdnLocFilePath, relative=False))
         title = localization.readString('name') if localization else ''
-        vo = createStorageDefVO(offer.id, title, description, 0, None, self._offersProvider.getCdnResourcePath(offer.cdnLogoPath, relative=False), 'altimage', contextMenuId=None)
+        actionButtonLabel = backport.text(R.strings.storage.buttonLabel.select())
+        vo = createStorageDefVO(offer.id, title, description, 0, None, self._offersProvider.getCdnResourcePath(offer.cdnLogoPath, relative=False), 'altimage', contextMenuId=None, actionButtonLabel=actionButtonLabel)
         return vo
 
     def scrolledToBottom(self):

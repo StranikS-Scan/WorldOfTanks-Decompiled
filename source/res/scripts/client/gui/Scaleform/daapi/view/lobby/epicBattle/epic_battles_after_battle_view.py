@@ -159,7 +159,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
             if awardTooltip is not None:
                 tooltipToBonusNameMapping[str(awardTooltip)] = bonus.getName()
 
-        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, skipAdditionalInfoTooltips=(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP), overrideTooltipsId=tooltipToBonusNameMapping)
+        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.AFTER_BATTLE_VIEW.value, skipAdditionalInfoTooltips=(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP,), overrideTooltipsId=tooltipToBonusNameMapping)
         fameBarVisible = True
         dailyQuestAvailable = False
         if prevPMetaLevel >= maxMetaLevel or pMetaLevel >= maxMetaLevel:

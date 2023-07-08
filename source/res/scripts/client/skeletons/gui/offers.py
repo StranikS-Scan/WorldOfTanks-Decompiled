@@ -14,11 +14,16 @@ class IOffersNovelty(INovelty):
 
 
 class IOffersBannerController(object):
+    onShowBanners = None
+    onHideBanners = None
 
     def init(self):
         raise NotImplementedError
 
     def fini(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
         raise NotImplementedError
 
     def showBanners(self):

@@ -55,9 +55,6 @@ class HangarMeta(View):
     def as_setCarouselS(self, linkage, alias):
         return self.flashObject.as_setCarousel(linkage, alias) if self._isDAAPIInited() else None
 
-    def as_setAlertMessageBlockVisibleS(self, isVisible):
-        return self.flashObject.as_setAlertMessageBlockVisible(isVisible) if self._isDAAPIInited() else None
-
     def as_showTeaserS(self, data):
         return self.flashObject.as_showTeaser(data) if self._isDAAPIInited() else None
 
@@ -79,14 +76,14 @@ class HangarMeta(View):
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
-    def as_toggleBattleRoyaleS(self, isBattleRoyale):
-        return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
-
     def as_toggleCnSubscriptionS(self, isCnSubscription):
         return self.flashObject.as_toggleCnSubscription(isCnSubscription) if self._isDAAPIInited() else None
 
-    def as_setDQWidgetLayoutS(self, lyout):
-        return self.flashObject.as_setDQWidgetLayout(lyout) if self._isDAAPIInited() else None
+    def as_setDQWidgetLayoutS(self, layout):
+        return self.flashObject.as_setDQWidgetLayout(layout) if self._isDAAPIInited() else None
 
     def as_updateCarouselEventEntryStateS(self, isVisible):
         return self.flashObject.as_updateCarouselEventEntryState(isVisible) if self._isDAAPIInited() else None
+
+    def as_updateHangarComponentsS(self, showComponents=None, hideComponents=None):
+        return self.flashObject.as_updateHangarComponents(showComponents, hideComponents) if self._isDAAPIInited() else None

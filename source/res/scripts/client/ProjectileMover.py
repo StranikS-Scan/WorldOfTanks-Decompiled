@@ -238,7 +238,7 @@ class EntityCollisionData(object):
 
 
 def collideDynamicAndStatic(startPoint, endPoint, exceptIDs, collisionFlags=128, skipGun=False):
-    ignoreDynamicID = 0
+    ignoreDynamicID = -1
     if exceptIDs:
         ignoreDynamicID = exceptIDs[0]
     testRes = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, -1 if not skipGun else TankPartNames.getIdx(TankPartNames.GUN), 0)

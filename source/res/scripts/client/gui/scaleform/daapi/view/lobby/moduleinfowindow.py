@@ -9,7 +9,6 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.crew_book import CrewBookTooltipDataBlock
 from gui.shared.tooltips.module import ModuleBlockTooltipData
-from gui.shared.tooltips.shell import ShellBlockToolTipData
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -46,6 +45,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
             dataProvider = CrewBookTooltipDataBlock(context=contexts.CrewBookContext())
             tooltipArgs = [self.moduleCompactDescr]
         elif itemTypeID == GUI_ITEM_TYPE.SHELL:
+            from gui.shared.tooltips.shell import ShellBlockToolTipData
             dataProvider = ShellBlockToolTipData(context=contexts.ModuleInfoContext())
         else:
             dataProvider = ModuleBlockTooltipData(context=contexts.ModuleInfoContext())

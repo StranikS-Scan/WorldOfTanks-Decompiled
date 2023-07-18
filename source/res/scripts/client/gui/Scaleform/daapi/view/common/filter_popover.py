@@ -313,6 +313,8 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
             mapping[FILTER_SECTION.SPECIALS].append(FILTER_KEYS.RANKED)
         if kwargs.get('isComp7', False):
             mapping[FILTER_SECTION.SPECIALS].append('comp7')
+        if kwargs.get('debut_boxes', False):
+            mapping[FILTER_SECTION.SPECIALS].append('debut_boxes')
         return mapping
 
     @classmethod

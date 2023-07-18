@@ -12,6 +12,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IDebutBoxesController
 
 class FILTER_KEYS(object):
     ELITE = 'elite'
@@ -26,6 +27,7 @@ class FILTER_KEYS(object):
     EVENT = 'event'
     BATTLE_ROYALE = 'battleRoyale'
     RANKED = 'ranked'
+    DEBUT_BOXES = 'debut_boxes'
 
 
 def _filterDict(dictionary, keys):
@@ -235,6 +237,7 @@ class SessionCarouselFilter(_CarouselFilter):
 
 
 class BasicCriteriesGroup(CriteriesGroup):
+    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
 
     @staticmethod
     def isApplicableFor(vehicle):
@@ -252,6 +255,7 @@ class BasicCriteriesGroup(CriteriesGroup):
         self._setFavoriteVehicleCriteria(filters)
         self._setEarnCrystalsCriteria(filters)
         self._setVehicleNameCriteria(filters)
+        self._setDebutBoxesCriteria(filters)
 
     def _setNationsCriteria(self, filters):
         selectedVehiclesIds = []
@@ -315,6 +319,14 @@ class BasicCriteriesGroup(CriteriesGroup):
     def _setVehicleNameCriteria(self, filters):
         if filters[FILTER_KEYS.SEARCH_NAME_VEHICLE]:
             self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters[FILTER_KEYS.SEARCH_NAME_VEHICLE]))
+
+    def _setDebutBoxesCriteria(self, filters):
+        if filters.get(FILTER_KEYS.DEBUT_BOXES):
+            self._criteria |= REQ_CRITERIA.CUSTOM(self._debutBoxesCriteria)
+
+    @classmethod
+    def _debutBoxesCriteria(cls, vehicle):
+        return cls.__debutBoxesController.isQuestsAvailableOnVehicle(vehicle)
 
 
 class RoleCriteriesGroup(BasicCriteriesGroup):

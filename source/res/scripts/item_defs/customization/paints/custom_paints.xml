@@ -4824,4 +4824,25 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	Compendium 3	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31032	</id>
+      <color>	21 56 39 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/compendium_3_2023_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/repaints/czech_color_02.png	</texture>
+    </paint>
+  </itemGroup>
 </custom_paints.xml>

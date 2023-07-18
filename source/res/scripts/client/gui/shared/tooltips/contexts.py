@@ -51,7 +51,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals', 'showDebutBoxes')
 
     def __init__(self):
         self.vehicle = None
@@ -75,6 +75,7 @@ class StatsConfiguration(object):
         self.withSlots = False
         self.isStaticInfoOnly = False
         self.showEarnCrystals = True
+        self.showDebutBoxes = True
         return
 
 
@@ -195,6 +196,7 @@ class DefaultContext(ToolTipContext):
         value = super(DefaultContext, self).getStatsConfiguration(item)
         value.xp = False
         value.dailyXP = False
+        value.showDebutBoxes = False
         return value
 
     def getParamsConfiguration(self, item):

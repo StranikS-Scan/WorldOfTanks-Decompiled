@@ -20,7 +20,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController
+from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -274,6 +274,12 @@ def showMission(eventID, eventType=None):
                 showDailyQuests(subTab=DailyTabs.QUESTS)
             elif events_helpers.isPremium(quest.getID()):
                 showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
+            elif events_helpers.isDebutBoxesQuest(quest.getID()):
+                debutBoxesController = dependency.instance(IDebutBoxesController)
+                if debutBoxesController.isEnabled():
+                    showMissionsGrouped(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
+                else:
+                    showMissionsGrouped(groupID=quest.getGroupID(), anchor=quest.getGroupID())
             else:
                 showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
         return

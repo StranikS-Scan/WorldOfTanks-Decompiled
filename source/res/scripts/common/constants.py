@@ -930,6 +930,7 @@ class Configs(enum.Enum):
     LIMITED_UI_CONFIG = 'limited_ui_config'
     REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
     RESTORE_CONFIG = 'restore_config'
+    DEBUT_BOXES_CONFIG = 'debut_boxes_config'
 
 
 INBATTLE_CONFIGS = ('spgRedesignFeatures',

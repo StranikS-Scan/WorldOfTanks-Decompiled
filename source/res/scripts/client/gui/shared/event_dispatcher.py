@@ -2060,3 +2060,15 @@ def showAchievementEditView(*args, **kwargs):
     from gui.impl.lobby.achievements.edit_view import EditWindow
     window = EditWindow(parent=getParentWindow(), *args, **kwargs)
     window.load()
+
+
+def showDebutBoxesInfoPage(url, returnCallback=None, parent=None):
+    from gui.impl.lobby.debut_boxes.debut_boxes_browser_view import DebutBoxesBrowserView
+    from gui.impl.lobby.common.browser_view import makeSettings
+    from web.web_client_api.promo import PromoWebApi
+    from web.web_client_api.request import RequestWebApi
+    from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+    webHandlers = webApiCollection(PromoWebApi, RequestWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
+    layoutID = R.views.lobby.common.BrowserView()
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(loadParams=GuiImplViewLoadParams(layoutID, DebutBoxesBrowserView, ScopeTemplates.DEFAULT_SCOPE, parent if parent is not None else getParentWindow()), settings=makeSettings(url=url, isClosable=True, webHandlers=webHandlers, viewFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, returnClb=returnCallback, restoreBackground=False)))
+    return

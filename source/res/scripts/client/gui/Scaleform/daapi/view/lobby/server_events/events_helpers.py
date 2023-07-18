@@ -465,6 +465,43 @@ class MotiveQuestPostBattleInfo(QuestPostBattleInfo):
         return info
 
 
+class DebutBoxesQuestPostBattleInfo(QuestPostBattleInfo):
+
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
+        info = super(DebutBoxesQuestPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        status, _ = self._getStatus(pCur, progressData['vehicleCDs'])
+        info['questInfo'].update({'linkTooltip': backport.text(R.strings.tooltips.quests.linkBtn.debutBoxes()),
+         'status': status})
+        return info
+
+    def _getStatus(self, pCur=None, vehicleCDs=None):
+        state, text = super(DebutBoxesQuestPostBattleInfo, self)._getStatus(pCur)
+        if state == MISSIONS_STATES.NONE and vehicleCDs:
+            if any((self.event.isCompletedByGroup(vehCD) for vehCD in vehicleCDs)):
+                state = MISSIONS_STATES.COMPLETED
+            else:
+                state = MISSIONS_STATES.IN_PROGRESS
+        return (state, text)
+
+    def _getProgresses(self, pCur, pPrev):
+        progresses = []
+        for cond in self.event.bonusCond.getConditions().items:
+            if isinstance(cond, conditions._Cumulativable):
+                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    label = cond.getUserString()
+                    if not diff or not label:
+                        continue
+                    progresses.append({'progrTooltip': None,
+                     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                     'maxProgrVal': totalProg,
+                     'currentProgrVal': curProg,
+                     'description': label,
+                     'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
+                     'progressDiffTooltip': backport.text(R.strings.tooltips.quests.progress.debutBoxes())})
+
+        return progresses
+
+
 class _BattleMattersQuestInfo(QuestPostBattleInfo):
 
     def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):

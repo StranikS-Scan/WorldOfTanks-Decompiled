@@ -25,7 +25,7 @@ from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditi
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium, isDebutBoxesQuest
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
 from gui.shared.formatters import text_styles, icons, time_formatters
@@ -39,7 +39,7 @@ from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IDebutBoxesController
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 CARD_AWARDS_EPIC_COUNT = 4
@@ -610,6 +610,15 @@ class _PremiumMissionInfo(_MissionInfo):
         statusLabel = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.neutral(backport.text(R.strings.quests.personalMission.status.inProgress())))
         return {'statusLabel': statusLabel,
          'status': MISSIONS_STATES.NONE}
+
+
+class _DebutBoxesMissionInfo(_MissionInfo):
+
+    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
+        data = super(_DebutBoxesMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        if data['status'] == MISSIONS_STATES.NONE:
+            data['statusLabel'] = ''
+        return data
 
 
 class _DetailedMissionInfo(_MissionInfo):
@@ -1263,6 +1272,26 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return self.eventsCache.getPersonalMissions().getFreeTokensCount(quest.getPMType().branch) >= quest.getPawnCost()
 
 
+class _DebutBoxesDetailedMissionInfo(_DetailedMissionInfo):
+    __debutBoxes = dependency.descriptor(IDebutBoxesController)
+
+    def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
+        data = super(_DebutBoxesDetailedMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)
+        data.update({'titleTooltip': None})
+        return data
+
+    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
+        data = super(_DebutBoxesDetailedMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        if data['status'] == MISSIONS_STATES.NONE:
+            data['statusLabel'] = ''
+        return data
+
+    def getVehicleRequirementsCriteria(self):
+        criteria, extraConditions, isQuestForBattleRoyale = super(_DebutBoxesDetailedMissionInfo, self).getVehicleRequirementsCriteria()
+        criteria |= REQ_CRITERIA.CUSTOM(self.__debutBoxes.isQuestsAvailableOnVehicle)
+        return (criteria, extraConditions, isQuestForBattleRoyale)
+
+
 def getMissionInfoData(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _TokenMissionInfo(event)
@@ -1279,6 +1308,8 @@ def getMissionInfoData(event):
         return _BattleRoyaleDailyMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedMissionInfo(event)
+    elif isDebutBoxesQuest(event.getID()):
+        return _DebutBoxesMissionInfo(event)
     else:
         return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -1298,6 +1329,8 @@ def getDetailedMissionData(event):
         return _BattleRoyaleDetailedMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedDetailedMissionInfo(event)
+    elif isDebutBoxesQuest(event.getID()):
+        return _DebutBoxesDetailedMissionInfo(event)
     elif event.getGroupID() == FUN_RANDOM_GROUP_ID:
         return _FunRandomDetailedMissionInfo(event)
     else:

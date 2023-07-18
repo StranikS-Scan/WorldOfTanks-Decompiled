@@ -3302,3 +3302,30 @@ class IHangarGuiController(IGameController):
 
     def updateComponentsVisibility(self, preset=None):
         raise NotImplementedError
+
+
+class IDebutBoxesController(IGameController):
+    onConfigChanged = None
+    onStateChanged = None
+    onQuestsChanged = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isQuestsCompletedOnVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def isQuestsAvailableOnVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def getQuestForVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def getQuestsIDs(self):
+        raise NotImplementedError
+
+    def getGroupID(self):
+        raise NotImplementedError
+
+    def getInfoPageUrl(self):
+        raise NotImplementedError

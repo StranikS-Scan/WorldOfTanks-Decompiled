@@ -1704,6 +1704,11 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
     DETAILS_CONDITIONS_CUMULATIVE_COMP7PRESTIGEPOINTS = '#quests:details/conditions/cumulative/comp7PrestigePoints'
+    DEBUTBOXES_MISSIONS_HEADER_CAPTION1 = '#quests:debutBoxes/missions/header/caption1'
+    DEBUTBOXES_MISSIONS_HEADER_CAPTION2 = '#quests:debutBoxes/missions/header/caption2'
+    DEBUTBOXES_MISSIONS_HEADER_CAPTION3 = '#quests:debutBoxes/missions/header/caption3'
+    DEBUTBOXES_MISSIONS_HEADER_DISABLED = '#quests:debutBoxes/missions/header/disabled'
+    DEBUTBOXES_MISSIONS_HEADER_INFO = '#quests:debutBoxes/missions/header/info'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,

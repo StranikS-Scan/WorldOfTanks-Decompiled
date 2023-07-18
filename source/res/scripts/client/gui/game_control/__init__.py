@@ -85,6 +85,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
     from gui.game_control.achievements20_controller import Achievements20Controller as _Ach20Ctrl
     from gui.limited_ui.lui_controller import LimitedUIController
+    from gui.game_control.debut_boxes_controller import DebutBoxesController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
     tracker = GameStateTracker()
@@ -170,4 +171,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
+    _config(_interface.IDebutBoxesController, DebutBoxesController())
     collectGameControllers(_config)

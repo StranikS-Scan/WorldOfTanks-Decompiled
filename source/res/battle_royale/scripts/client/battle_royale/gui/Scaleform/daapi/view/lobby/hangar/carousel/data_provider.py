@@ -62,6 +62,7 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
              'level': 0,
              'tankType': vehicle.type,
              'xpImgSource': '',
+             'debutBoxesImgSource': '',
              'isUseRightBtn': True,
              'isTestDriveEnabled': isTestDriveEnabled,
              'lockBackground': isBgLocked or isRentAvailable,

@@ -35,6 +35,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import MapboxTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import Comp7TankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import DebutBoxesTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView, StrongholdAdsView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -89,6 +90,7 @@ def getViewSettings():
      ConditionalViewSettings(HANGAR_ALIASES.HEADER, BootcampComponentOverride(HangarHeader, BCHangarHeader), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.SWITCH_MODE_PANEL, SwitchModePanel, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.TANK_CAROUSEL, BootcampComponentOverride(TankCarousel, BCTankCarousel), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(HANGAR_ALIASES.DEBUT_BOXES_TANK_CAROUSEL, BootcampComponentOverride(DebutBoxesTankCarousel, BCTankCarousel), None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RANKED_TANK_CAROUSEL, RankedTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL, MapboxTankCarousel, ScopeTemplates.DEFAULT_SCOPE),

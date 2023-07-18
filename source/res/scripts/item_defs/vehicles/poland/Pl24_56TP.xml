@@ -69,6 +69,13 @@
       <undamaged>	vehicles/poland/Pl24_56TP/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl24_56TP/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl24_56TP/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <PL24_56TP_bisontis_3Dst>
+          <undamaged>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Hull.model	</exploded>
+        </PL24_56TP_bisontis_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -990,6 +997,54 @@
         <clipAngle>	0.510443	</clipAngle>
         <anchorShift>	0.14	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+        <position>	-0.413855 1.241164 2.6216	</position>
+        <rotation>	0.39122 -0.00175 -2.921149	</rotation>
+        <scale>	0.551228 0.134973 0.551228	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.510442	</clipAngle>
+        <anchorShift>	0.048993	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+        <position>	-1.727478 0.949037 -0.026685	</position>
+        <rotation>	1.534908 -0.98 -2.55165	</rotation>
+        <scale>	0.376615 0.302351 0.376614	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0463	</clipAngle>
+        <anchorShift>	0.05	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+        <position>	1.813273 0.950787 -0.060027	</position>
+        <rotation>	1.534908 0.979995 2.517086	</rotation>
+        <scale>	0.376615 0.302351 0.376614	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.0463	</clipAngle>
+        <anchorShift>	-0.06745	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+        <position>	0.000015 0.984929 -3.49726	</position>
+        <rotation>	2.060411 -0.000019 -0.000021	</rotation>
+        <scale>	0.382502 0.093658 0.382498	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.455221	</clipAngle>
+        <anchorShift>	0.03	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1032,6 +1087,13 @@
         <undamaged>	vehicles/poland/Pl24_56TP/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl24_56TP/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl24_56TP/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <PL24_56TP_bisontis_3Dst>
+            <undamaged>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Chassis.model	</exploded>
+          </PL24_56TP_bisontis_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1948,6 +2010,13 @@
             <undamaged>	vehicles/poland/Pl24_56TP/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/poland/Pl24_56TP/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/poland/Pl24_56TP/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <PL24_56TP_bisontis_3Dst>
+                <undamaged>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </PL24_56TP_bisontis_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl24_56TP/collision/Gun_01.model	</collisionModelServer>
@@ -1982,6 +2051,13 @@
         <undamaged>	vehicles/poland/Pl24_56TP/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/poland/Pl24_56TP/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/poland/Pl24_56TP/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <PL24_56TP_bisontis_3Dst>
+            <undamaged>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl24_56TP/_skins/PL24_56TP_bisontis_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </PL24_56TP_bisontis_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/poland/Pl24_56TP/collision/Turret_01.model	</collisionModelServer>
@@ -2531,6 +2607,42 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.706331	</clipAngle>
           <anchorShift>	1.65718	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+          <position>	1.156082 1.988358 0.937499	</position>
+          <rotation>	1.031502 1.173679 -3.098939	</rotation>
+          <scale>	0.476622 0.388734 0.476621	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.360299	</clipAngle>
+          <anchorShift>	0.05	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+          <position>	-1.113437 1.974403 -0.442217	</position>
+          <rotation>	1.808969 1.551274 0.204821	</rotation>
+          <scale>	0.352584 0.161847 0.352584	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.21058	</clipAngle>
+          <anchorShift>	0.1	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	PL24_56TP_bisontis_3Dst	</compatibleModels>
+          <position>	0.004217 2.426564 1.092396	</position>
+          <rotation>	0.145173 -0.001748 3.126579	</rotation>
+          <scale>	0.427227 0.38479 0.427225	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.360299	</clipAngle>
+          <anchorShift>	0.05	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

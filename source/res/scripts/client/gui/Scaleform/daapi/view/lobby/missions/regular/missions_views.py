@@ -27,15 +27,15 @@ from gui.event_boards.settings import expandGroup, isGroupMinimized
 from gui.server_events import settings, caches
 from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
-from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
+from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium, isDebutBoxesQuest
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showTankPremiumAboutPage
+from gui.shared.event_dispatcher import showTankPremiumAboutPage, showDebutBoxesInfoPage
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -58,12 +58,21 @@ class _GroupedMissionsView(MissionsGroupedViewMeta):
 
 
 class MissionsGroupedView(_GroupedMissionsView):
+    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
 
     def dummyClicked(self, eventType):
         if eventType == 'OpenCategoriesEvent':
             showMissionsCategories()
         else:
             super(MissionsGroupedView, self).dummyClicked(eventType)
+
+    def _populate(self):
+        self.__debutBoxesController.onStateChanged += self._onEventsUpdate
+        super(MissionsGroupedView, self)._populate()
+
+    def _dispose(self):
+        self.__debutBoxesController.onStateChanged -= self._onEventsUpdate
+        super(MissionsGroupedView, self)._dispose()
 
     @staticmethod
     def _getBackground():
@@ -81,7 +90,10 @@ class MissionsGroupedView(_GroupedMissionsView):
          'btnLinkage': BUTTON_LINKAGES.BUTTON_LINK}
 
     def _getViewQuestFilter(self):
-        return lambda q: isMarathon(q.getGroupID())
+        return lambda q: isMarathon(q.getGroupID()) or isDebutBoxesQuest(q.getID(), debutBoxesController=self.__debutBoxesController)
+
+    def onClickInfoBtn(self):
+        showDebutBoxesInfoPage(self.__debutBoxesController.getInfoPageUrl())
 
 
 class MissionsMarathonView(MissionsMarathonViewMeta):
@@ -346,7 +358,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     @staticmethod
     def getViewQuestFilter():
-        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID()))
+        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID()) or isDebutBoxesQuest(q.getID()))
 
     @staticmethod
     def getViewQuestFilterIncludingDailyQuests():

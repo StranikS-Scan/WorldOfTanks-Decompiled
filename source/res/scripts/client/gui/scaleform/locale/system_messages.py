@@ -1352,6 +1352,10 @@ class SYSTEM_MESSAGES(object):
     LIMITEDUI_SWITCHON = '#system_messages:limitedUI/switchOn'
     LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
     REFERRAL_PROGRAM_DISABLED = '#system_messages:referral_program/disabled'
+    DEBUTBOXES_ENABLED_HEADER = '#system_messages:debutBoxes/enabled/header'
+    DEBUTBOXES_ENABLED_BODY = '#system_messages:debutBoxes/enabled/body'
+    DEBUTBOXES_DISABLED_HEADER = '#system_messages:debutBoxes/disabled/header'
+    DEBUTBOXES_DISABLED_BODY = '#system_messages:debutBoxes/disabled/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2825,7 +2829,11 @@ class SYSTEM_MESSAGES(object):
      ACHIEVEMENTS_SERVER_ERROR,
      LIMITEDUI_SWITCHON,
      LIMITEDUI_SWITCHOFF,
-     REFERRAL_PROGRAM_DISABLED)
+     REFERRAL_PROGRAM_DISABLED,
+     DEBUTBOXES_ENABLED_HEADER,
+     DEBUTBOXES_ENABLED_BODY,
+     DEBUTBOXES_DISABLED_HEADER,
+     DEBUTBOXES_DISABLED_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -169,6 +169,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CLAN_WARS_BATTLES = 'clanWarsBattles'
     FUN_RANDOM = 'fun_random'
     COMP7_BATTLES = 'comp7'
+    DEBUT_BOXES = 'debutBoxes'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 

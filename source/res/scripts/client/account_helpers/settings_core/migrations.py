@@ -966,6 +966,21 @@ def _migrateTo104(_, data, __):
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
 
 
+def _migrateTo105(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+    settingOffset = 67108864
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0)
+    if storedValue & settingOffset:
+        clear[SETTINGS_SECTIONS.CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0) | settingOffset
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0)
+    if storedValue & settingOffset:
+        clear[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0) | settingOffset
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0)
+    if storedValue & settingOffset:
+        clear[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0) | settingOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1376,6 +1391,10 @@ _versions = ((1,
   False),
  (104,
   _migrateTo104,
+  False,
+  False),
+ (105,
+  _migrateTo105,
   False,
   False))
 

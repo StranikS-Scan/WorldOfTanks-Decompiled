@@ -40,6 +40,7 @@ def getEventLootBoxesBonusPacker():
      'vehicles': EventLootBoxVehiclesBonusUIPacker(),
      Currency.CREDITS: simplePacker,
      Currency.GOLD: simplePacker,
+     Currency.FREE_XP: simplePacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: EventLootBoxPremiumBonusUIPacker})
     return BonusUIPacker(mapping)
 

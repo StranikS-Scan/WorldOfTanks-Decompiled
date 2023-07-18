@@ -13,6 +13,7 @@ class HANGAR_ALIASES(object):
     FUN_RANDOM_TANK_CAROUSEL = 'funRandomTankCarousel'
     FUN_RANDOM_QFG_TANK_CAROUSEL = 'funRandomQFGTankCarousel'
     COMP7_TANK_CAROUSEL = 'comp7TankCarousel'
+    DEBUT_BOXES_TANK_CAROUSEL = 'debutBoxesTankCarousel'
     CREW = 'crew'
     AMMUNITION_PANEL = 'ammunitionPanel'
     RESEARCH_PANEL = 'researchPanel'

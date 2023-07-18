@@ -1348,6 +1348,31 @@ class RestoreConfig(namedtuple('RestoreConfig', ('tankmen', 'vehicles'))):
         return cls()
 
 
+class DebutBoxesConfig(namedtuple('DebutBoxesConfig', ('isEnabled',
+ 'startDate',
+ 'endDate',
+ 'infoPageUrl',
+ 'questIDs'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, startDate=0, endDate=0, infoPageUrl='', questIDs=[])
+        defaults.update(kwargs)
+        return super(DebutBoxesConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1399,6 +1424,7 @@ class ServerSettings(object):
         self.__limitedUIConfig = _LimitedUIConfig()
         self.__referralProgramConfig = RPConfig()
         self.__restoreConfig = RestoreConfig()
+        self.__debutBoxesConfig = DebutBoxesConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1554,6 +1580,10 @@ class ServerSettings(object):
             self.__referralProgramConfig = RPConfig.defaults()
         if Configs.RESTORE_CONFIG.value in self.__serverSettings:
             self.__restoreConfig = makeTupleByDict(RestoreConfig, self.__serverSettings[Configs.RESTORE_CONFIG.value])
+        if Configs.DEBUT_BOXES_CONFIG.value in self.__serverSettings:
+            self.__debutBoxesConfig = makeTupleByDict(DebutBoxesConfig, self.__serverSettings[Configs.DEBUT_BOXES_CONFIG.value])
+        else:
+            self.__debutBoxesConfig = DebutBoxesConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1668,6 +1698,8 @@ class ServerSettings(object):
         self.__updateLimitedUIConfig(serverSettingsDiff)
         if Configs.RESTORE_CONFIG.value in serverSettingsDiff:
             self.__updateRestoreConfig(serverSettingsDiff)
+        if Configs.DEBUT_BOXES_CONFIG.value in serverSettingsDiff:
+            self.__updateDebutBoxesCoinfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1843,6 +1875,10 @@ class ServerSettings(object):
     @property
     def restoreConfig(self):
         return self.__restoreConfig
+
+    @property
+    def debutBoxesConfig(self):
+        return self.__debutBoxesConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2342,6 +2378,9 @@ class ServerSettings(object):
 
     def __updateRestoreConfig(self, serverSettingsDiff):
         self.__restoreConfig = self.__restoreConfig.replace(serverSettingsDiff[Configs.RESTORE_CONFIG.value])
+
+    def __updateDebutBoxesCoinfig(self, diff):
+        self.__debutBoxesConfig = self.__debutBoxesConfig.replace(diff[Configs.DEBUT_BOXES_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

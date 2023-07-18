@@ -947,6 +947,7 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#tooltips:tanks_carousel/vehicleStates/fallout_broken'
     TANKS_CAROUSEL_WOT_PLUS_SLOT_HEADER = '#tooltips:tanks_carousel/wot_plus_slot/header'
     TANKS_CAROUSEL_WOT_PLUS_SLOT_BODY = '#tooltips:tanks_carousel/wot_plus_slot/body'
+    TANKCARUSEL_XPMULTIPLIER_BODY = '#tooltips:tankCarusel/xpMultiplier/body'
     TANKCARUSEL_MAINPROPERTY = '#tooltips:tankCarusel/MainProperty'
     TANKCARUSEL_LOCK_HEADER = '#tooltips:tankCarusel/lock/header'
     TANKCARUSEL_LOCK_ROTATION_HEADER = '#tooltips:tankCarusel/lock/rotation/header'
@@ -1150,6 +1151,7 @@ class TOOLTIPS(object):
     VEHICLE_AMMO = '#tooltips:vehicle/ammo'
     VEHICLE_XP = '#tooltips:vehicle/xp'
     VEHICLE_MULTIPLIED_XP = '#tooltips:vehicle/multiplied_xp'
+    VEHICLE_DEBUT_BOX_AVAILABLE = '#tooltips:vehicle/debut_box_available'
     VEHICLE_UNLOCK_PRICE = '#tooltips:vehicle/unlock_price'
     VEHICLE_BUY_PRICE = '#tooltips:vehicle/buy_price'
     VEHICLE_RESTORE_PRICE = '#tooltips:vehicle/restore_price'
@@ -1207,6 +1209,7 @@ class TOOLTIPS(object):
     QUESTS_PROGRESS_STRATEGIC = '#tooltips:quests/progress/strategic'
     QUESTS_PROGRESS_CURRENT = '#tooltips:quests/progress/current'
     QUESTS_PROGRESS_EARNEDINBATTLE = '#tooltips:quests/progress/earnedInBattle'
+    QUESTS_PROGRESS_DEBUTBOXES = '#tooltips:quests/progress/debutBoxes'
     QUESTS_IGR = '#tooltips:quests/igr'
     QUESTS_NEWLABEL_TASK = '#tooltips:quests/newLabel/task'
     QUESTS_NEWLABEL_ACTION = '#tooltips:quests/newLabel/action'
@@ -1217,6 +1220,7 @@ class TOOLTIPS(object):
     QUESTS_DISABLELINKBTN_TASK = '#tooltips:quests/disableLinkBtn/task'
     QUESTS_LINKBTN_BATTLEPASS = '#tooltips:quests/linkBtn/battlePass'
     QUESTS_LINKBTN_BATTLEPASS_SELECT = '#tooltips:quests/linkBtn/battlePass/select'
+    QUESTS_LINKBTN_DEBUTBOXES = '#tooltips:quests/linkBtn/debutBoxes'
     QUESTS_STATUS_DONE = '#tooltips:quests/status/done'
     QUESTS_STATUS_CUSTOMIZATIONPROGRESSION_DONEFIRST = '#tooltips:quests/status/customizationProgression/doneFirst'
     QUESTS_STATUS_CUSTOMIZATIONPROGRESSION_DONE = '#tooltips:quests/status/customizationProgression/done'
@@ -3629,6 +3633,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_COMMANDER_BP_KASHCHEI_LABEL = '#tooltips:notrecruitedtankman/commander_bp_Kashchei/label'
     NOTRECRUITEDTANKMAN_COMMANDER_BP_BABAYAGA_DESC = '#tooltips:notrecruitedtankman/commander_bp_BabaYaga/desc'
     NOTRECRUITEDTANKMAN_COMMANDER_BP_BABAYAGA_LABEL = '#tooltips:notrecruitedtankman/commander_bp_BabaYaga/label'
+    DEBUT_BOXES_TITLE = '#tooltips:debut_boxes/title'
+    DEBUT_BOXES_REWARD_CAPTION = '#tooltips:debut_boxes/reward/caption'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,

@@ -3,7 +3,7 @@
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY
+from gui.shared.gui_items.loot_box import EventLootBoxes
 from helpers import dependency
 from skeletons.gui.game_control import IEventLootBoxesController
 from skeletons.gui.shared import IItemsCache
@@ -63,11 +63,10 @@ class LootBoxWebApi(object):
         result = dict()
         lootBox = self.__itemsCache.items.tokens.getLootBoxByID(cmd.id)
         if lootBox is not None:
-            if lootBox.getCategory() == EVENT_LOOT_BOXES_CATEGORY:
-                result = self.__parseBoxInfo(self.__eventLootBoxes.getBoxInfo(lootBox.getType()))
-            else:
-                history = self.__itemsCache.items.tokens.getCacheValue('lootBoxes', {}).get('history', {})
-                result = self.__parseBoxInfo(lootBox.getBoxInfo(history))
+            if lootBox.getType() == EventLootBoxes.COMMON:
+                result = self.__parseBoxInfo(self.__eventLootBoxes.getCommonBoxInfo())
+            elif lootBox.getType() == EventLootBoxes.PREMIUM:
+                result = self.__parseBoxInfo(self.__eventLootBoxes.getPremiumBoxInfo())
         return result
 
     def __parseBoxInfo(self, boxInfo):
@@ -89,7 +88,7 @@ class LootBoxWebApi(object):
                             bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
                             result[idx]['bonuses'].append(bonusEntry)
                             if bonusType in ItemPackTypeGroup.VEHICLE:
-                                result[idx]['guaranteed_bonus_limit'] = boxInfo.get('limit', 0)
+                                result[idx]['guaranteed_bonus_limit'] = self.__eventLootBoxes.getGuaranteedBonusLimit(EventLootBoxes.PREMIUM)
 
                 result[idx]['bonuses'].extend([ _BONUS_WRAPPERS.get(bType, BonusAggregateWrapper).getWrappedBonus(bValue) for bType, bValue in aggregateBonus.iteritems() ])
 

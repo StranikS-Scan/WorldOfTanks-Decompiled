@@ -19,6 +19,7 @@ from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.battle_session import IBattleSessionProvider
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_TYPE_CAPS
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 EMPTY_NAME = 'empty'
@@ -342,6 +343,9 @@ class BattleAbilitiesBlock(BaseBlock):
         super(BattleAbilitiesBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.epicBattles.skills.c_48x48.dyn(slotItem.descriptor.iconName)())
         categoryName = self._getSlotCategoryName(idx)
+        model.setIsInstalled(slotItem in self._getInstalled())
+        if self.__epicMetaGameCtrl.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
+            return
         if categoryName:
             model.setCategoryImgSource(R.images.gui.maps.icons.tanksetup.panel.dyn(categoryName)())
         model.setIsInstalled(slotItem in self._getInstalled())

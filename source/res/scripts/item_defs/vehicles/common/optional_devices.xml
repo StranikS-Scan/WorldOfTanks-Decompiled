@@ -1705,11 +1705,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -1732,13 +1727,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -1779,11 +1774,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -1806,13 +1796,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -1853,11 +1843,6 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
           <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
@@ -1880,13 +1865,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -1927,17 +1912,12 @@
         <factor>
           <attribute>	miscAttrs/stunResistanceDuration	</attribute>
           <type>	add	</type>
-          <valueByLevel>	0.25 0.35	</valueByLevel>
+          <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/repeatedStunDurationFactor	</attribute>
           <type>	mul	</type>
           <valueByLevel>	0.8 0.75	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/stunResistanceEffect	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	0.1 0.15	</valueByLevel>
         </factor>
       </factors>
     </script>
@@ -1954,13 +1934,13 @@
       </mul>
       <mul>
         <name>	crewStunDuration	</name>
-        <value>	0.75	</value>
-        <specValue>	0.65	</specValue>
-      </mul>
-      <mul>
-        <name>	crewStunResistance	</name>
         <value>	0.9	</value>
         <specValue>	0.85	</specValue>
+      </mul>
+      <mul>
+        <name>	crewRepeatedStunDuration	</name>
+        <value>	0.8	</value>
+        <specValue>	0.75	</specValue>
       </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
@@ -3763,7 +3743,7 @@
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.926	</valueByLevel>
+          <valueByLevel>	0.935	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
@@ -3780,7 +3760,7 @@
     <kpi>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
-        <value>	1.08	</value>
+        <value>	1.07	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
@@ -3821,7 +3801,7 @@
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.885	</valueByLevel>
+          <valueByLevel>	0.89	</valueByLevel>
         </factor>
       </factors>
     </script>
@@ -3832,7 +3812,7 @@
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
-        <value>	0.885	</value>
+        <value>	0.89	</value>
       </mul>
     </kpi>
     <archetype>	modernizedAimDrivesAimingStabilizer	</archetype>
@@ -3847,6 +3827,100 @@
     <price>	100	  <equipCoin></equipCoin>
     </price>
     <tags>	turbocharger modernized_1	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	turbocharger	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+      <exclude>
+        <vehicle>
+          <mandatoryTags>	wheeledVehicle lightTank	</mandatoryTags>
+        </vehicle>
+      </exclude>
+    </vehicleFilter>
+    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
+      <trackRotateSpeedFactor>	1.04	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.04	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.04	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.04	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.04	</wheelMoveSpeedFactor>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.04	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.96	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/enginePowerFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	1.05	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	4	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
+          <type>	add	</type>
+          <valueByLevel>	2	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedTurbochargerRotationMechanism2	</upgradedDevice>
+        <price>	400	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.96	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	4	</value>
+      </add>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+    <archetype>	modernizedTurbochargerRotationMechanism	</archetype>
+  </modernizedTurbochargerRotationMechanism1>
+  <modernizedTurbochargerRotationMechanism2>
+    <id>	154	</id>
+    <userString>	#artefacts:modernizedTurbochargerRotationMechanism2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/long_special	</longDescriptionSpecial>
+    <icon>	modernizedTurbochargerRotationMechanism	</icon>
+    <groupName>	enhancedTurbocharger	</groupName>
+    <price>	400	  <equipCoin></equipCoin>
+    </price>
+    <tags>	turbocharger modernized_2	</tags>
     <notInShop>	true	</notInShop>
     <incompatibleTags>
       <installed>	turbocharger	</installed>
@@ -3894,12 +3968,12 @@
         <factor>
           <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
           <type>	add	</type>
-          <valueByLevel>	2	</valueByLevel>
+          <valueByLevel>	3	</valueByLevel>
         </factor>
       </factors>
       <upgradeInfo>
-        <upgradedDevice>	modernizedTurbochargerRotationMechanism2	</upgradedDevice>
-        <price>	400	  <equipCoin></equipCoin>
+        <upgradedDevice>	modernizedTurbochargerRotationMechanism3	</upgradedDevice>
+        <price>	2000	  <equipCoin></equipCoin>
         </price>
       </upgradeInfo>
     </script>
@@ -3919,100 +3993,6 @@
       <mul>
         <name>	vehicleGunShotDispersion	</name>
         <value>	0.95	</value>
-      </mul>
-      <add>
-        <name>	vehicleForwardMaxSpeed	</name>
-        <value>	4	</value>
-      </add>
-      <add>
-        <name>	vehicleBackwardMaxSpeed	</name>
-        <value>	2	</value>
-      </add>
-    </kpi>
-    <archetype>	modernizedTurbochargerRotationMechanism	</archetype>
-  </modernizedTurbochargerRotationMechanism1>
-  <modernizedTurbochargerRotationMechanism2>
-    <id>	154	</id>
-    <userString>	#artefacts:modernizedTurbochargerRotationMechanism2/name	</userString>
-    <shortDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:modernizedTurbochargerRotationMechanism2/long_special	</longDescriptionSpecial>
-    <icon>	modernizedTurbochargerRotationMechanism	</icon>
-    <groupName>	enhancedTurbocharger	</groupName>
-    <price>	400	  <equipCoin></equipCoin>
-    </price>
-    <tags>	turbocharger modernized_2	</tags>
-    <notInShop>	true	</notInShop>
-    <incompatibleTags>
-      <installed>	turbocharger	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-      <exclude>
-        <vehicle>
-          <mandatoryTags>	wheeledVehicle lightTank	</mandatoryTags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
-      <wheelRotateSpeedFactor>	1.06	</wheelRotateSpeedFactor>
-      <wheelCenterRotationFwdSpeed>	1.06	</wheelCenterRotationFwdSpeed>
-      <trackMoveSpeedFactor>	1.06	</trackMoveSpeedFactor>
-      <wheelMoveSpeedFactor>	1.06	</wheelMoveSpeedFactor>
-      <factors>
-        <factor>
-          <attribute>	miscAttrs/turretRotationSpeed	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	1.06	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	0.94	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/enginePowerFactor	</attribute>
-          <type>	mul	</type>
-          <valueByLevel>	1.075	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	4	</valueByLevel>
-        </factor>
-        <factor>
-          <attribute>	miscAttrs/backwardMaxSpeedKMHTerm	</attribute>
-          <type>	add	</type>
-          <valueByLevel>	3	</valueByLevel>
-        </factor>
-      </factors>
-      <upgradeInfo>
-        <upgradedDevice>	modernizedTurbochargerRotationMechanism3	</upgradedDevice>
-        <price>	2000	  <equipCoin></equipCoin>
-        </price>
-      </upgradeInfo>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	1.075	</value>
-      </mul>
-      <mul>
-        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
-        <value>	1.06	</value>
-      </mul>
-      <mul>
-        <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	1.06	</value>
-      </mul>
-      <mul>
-        <name>	vehicleGunShotDispersion	</name>
-        <value>	0.94	</value>
       </mul>
       <add>
         <name>	vehicleForwardMaxSpeed	</name>
@@ -4053,26 +4033,26 @@
       </exclude>
     </vehicleFilter>
     <script>	UpgradedRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
-      <wheelRotateSpeedFactor>	1.07	</wheelRotateSpeedFactor>
-      <wheelCenterRotationFwdSpeed>	1.07	</wheelCenterRotationFwdSpeed>
-      <trackMoveSpeedFactor>	1.07	</trackMoveSpeedFactor>
-      <wheelMoveSpeedFactor>	1.07	</wheelMoveSpeedFactor>
+      <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
+      <wheelRotateSpeedFactor>	1.06	</wheelRotateSpeedFactor>
+      <wheelCenterRotationFwdSpeed>	1.06	</wheelCenterRotationFwdSpeed>
+      <trackMoveSpeedFactor>	1.06	</trackMoveSpeedFactor>
+      <wheelMoveSpeedFactor>	1.06	</wheelMoveSpeedFactor>
       <factors>
         <factor>
           <attribute>	miscAttrs/turretRotationSpeed	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.07	</valueByLevel>
+          <valueByLevel>	1.06	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	0.93	</valueByLevel>
+          <valueByLevel>	0.94	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.09	</valueByLevel>
+          <valueByLevel>	1.08	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/forwardMaxSpeedKMHTerm	</attribute>
@@ -4089,19 +4069,19 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	1.09	</value>
+        <value>	1.08	</value>
       </mul>
       <mul>
         <name>	vehicleTurretOrCuttingRotationSpeed	</name>
-        <value>	1.07	</value>
+        <value>	1.06	</value>
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	1.07	</value>
+        <value>	1.06	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
-        <value>	0.93	</value>
+        <value>	0.94	</value>
       </mul>
       <add>
         <name>	vehicleForwardMaxSpeed	</name>
@@ -4142,7 +4122,7 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.08	</valueByLevel>
+          <valueByLevel>	1.06	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
@@ -4189,7 +4169,7 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.08	</value>
+        <value>	1.06	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
@@ -4238,7 +4218,7 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.09	</valueByLevel>
+          <valueByLevel>	1.07	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
@@ -4285,7 +4265,7 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.09	</value>
+        <value>	1.07	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
@@ -4334,7 +4314,7 @@
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.11	</valueByLevel>
+          <valueByLevel>	1.09	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/chassisHealthFactor	</attribute>
@@ -4344,7 +4324,7 @@
         <factor>
           <attribute>	miscAttrs/chassisRepairSpeedFactor	</attribute>
           <type>	mul	</type>
-          <valueByLevel>	1.25	</valueByLevel>
+          <valueByLevel>	1.2	</valueByLevel>
         </factor>
         <factor>
           <attribute>	miscAttrs/ammoBayHealthFactor	</attribute>
@@ -4376,7 +4356,7 @@
     <kpi>
       <mul>
         <name>	vehicleStrength	</name>
-        <value>	1.11	</value>
+        <value>	1.09	</value>
       </mul>
       <mul>
         <name>	vehicleAmmoBayEngineFuelStrength	</name>
@@ -4388,7 +4368,7 @@
       </mul>
       <mul>
         <name>	vehicleChassisRepairSpeed	</name>
-        <value>	1.25	</value>
+        <value>	1.2	</value>
       </mul>
       <mul>
         <name>	vehPenaltyForDamageEngineAndCombat	</name>

@@ -63,7 +63,6 @@ class ExcludedMapsFeature(FeatureItem):
         serverSettings = self.__lobbyContext.getServerSettings()
         enabled = serverSettings.isPreferredMapsEnabled()
         submodel.setIsEnabled(enabled)
-        submodel.setIsWotPlusEnabled(self.__wotPlus.isWotPlusEnabled())
         if not enabled:
             return
         exclMaps = submodel.getExcludedMaps()

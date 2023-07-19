@@ -26,14 +26,14 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -220,13 +220,12 @@ class GroupedEventsBlocksBuilder(_EventsBlockBuilder):
 
 
 class MissionsGroupsBuilder(GroupedEventsBlocksBuilder):
-    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
 
     def _createGroupedEventsBlock(self, group):
-        return _DebutBoxesQuestsBlockInfo(group) if isDebutBoxesGroup(group.getID(), debutBoxesController=self.__debutBoxesController) else _MissionsGroupQuestsBlockInfo(group)
+        return _MissionsGroupQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
-        return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon() or isDebutBoxesGroup(g.getID(), debutBoxesController=self.__debutBoxesController))
+        return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon())
 
 
 class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
@@ -553,28 +552,6 @@ class _MissionsGroupQuestsBlockInfo(_GroupedEventsBlockInfo):
                         'awardsData': awardsData,
                         'awardImgSource': awardImgSource,
                         'awardImgTooltip': awardImgTooltip}}
-
-
-class _DebutBoxesQuestsBlockInfo(_GroupedEventsBlockInfo):
-    blockType = GuiGroupBlockID.MARATHON_GROUPED_BLOCK
-    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
-
-    def __init__(self, group):
-        super(_DebutBoxesQuestsBlockInfo, self).__init__(group, headerLinkage=QUESTS_ALIASES.MISSION_PACK_DEBUT_BOXES_HEADER_LINKAGE, bodyLinkage=QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE)
-
-    def _getVO(self):
-        data = super(_DebutBoxesQuestsBlockInfo, self)._getVO()
-        if not self.__debutBoxesController.isEnabled():
-            data.update({'isCollapsed': True})
-        return data
-
-    def _getHeaderData(self):
-        data = super(_DebutBoxesQuestsBlockInfo, self)._getHeaderData()
-        data.update({'isEnabled': self.__debutBoxesController.isEnabled()})
-        return data
-
-    def _getBodyData(self):
-        return {'missions': []} if not self.__debutBoxesController.isEnabled() else super(_DebutBoxesQuestsBlockInfo, self)._getBodyData()
 
 
 class _UngroupedQuestsBlockInfo(_CollapsableEventsBlockInfo):

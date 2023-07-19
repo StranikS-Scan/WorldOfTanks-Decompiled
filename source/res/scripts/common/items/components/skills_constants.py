@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/skills_constants.py
-SKILL_NAMES = ('reserved', 'commander', 'radioman', 'driver', 'gunner', 'loader', 'repair', 'fireFighting', 'camouflage', 'brotherhood', 'any', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'commander_tutor', 'commander_eagleEye', 'commander_sixthSense', 'commander_expert', 'commander_universalist', 'commander_enemyShotPredictor', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_rammingMaster', 'driver_tidyPerson', 'reserved', 'reserved', 'reserved', 'reserved', 'gunner_gunsmith', 'gunner_sniper', 'gunner_smoothTurret', 'gunner_rancorous', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'reserved', 'reserved', 'reserved', 'reserved', 'radioman_inventor', 'radioman_finder', 'radioman_retransmitter', 'radioman_lastEffort', 'reserved', 'reserved', 'reserved', 'reserved')
+SKILL_NAMES = ('reserved', 'commander', 'radioman', 'driver', 'gunner', 'loader', 'repair', 'fireFighting', 'camouflage', 'brotherhood', 'any', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'commander_tutor', 'commander_eagleEye', 'commander_sixthSense', 'commander_expert', 'commander_universalist', 'commander_enemyShotPredictor', 'commander_practical', 'reserved', 'reserved', 'reserved', 'reserved', 'reserved', 'driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_rammingMaster', 'driver_tidyPerson', 'driver_motorExpert', 'reserved', 'reserved', 'reserved', 'gunner_gunsmith', 'gunner_sniper', 'gunner_smoothTurret', 'gunner_rancorous', 'gunner_focus', 'gunner_quickAiming', 'reserved', 'reserved', 'reserved', 'loader_pedant', 'loader_desperado', 'loader_intuition', 'loader_ambushMaster', 'loader_ammunitionImprove', 'loader_melee', 'reserved', 'radioman_inventor', 'radioman_finder', 'radioman_retransmitter', 'radioman_lastEffort', 'radioman_interference', 'reserved', 'reserved', 'reserved')
 SKILL_INDICES = dict(((x[1], x[0]) for x in enumerate(SKILL_NAMES) if not x[1].startswith('reserved')))
 ORDERED_ROLES = ('commander', 'gunner', 'driver', 'radioman', 'loader')
 ROLES = frozenset(('commander', 'radioman', 'driver', 'gunner', 'loader'))
+COMMON_SKILL_ROLE_TYPE = 'common'
 ROLE_LIMITS = {'commander': 1,
  'driver': 1}
-COMMON_SKILLS = frozenset(('repair', 'camouflage', 'brotherhood', 'fireFighting'))
+COMMON_SKILLS = frozenset(('repair', 'fireFighting', 'camouflage', 'brotherhood'))
 SEPARATE_SKILLS = frozenset(('radioman_lastEffort',))
 ROLES_AND_COMMON_SKILLS = ROLES | COMMON_SKILLS
 COMMANDER_SKILLS = frozenset(('commander_tutor', 'commander_expert', 'commander_universalist', 'commander_sixthSense', 'commander_eagleEye', 'commander_enemyShotPredictor'))

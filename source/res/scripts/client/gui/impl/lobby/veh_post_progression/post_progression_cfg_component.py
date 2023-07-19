@@ -98,7 +98,7 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         self.__creditsRate = self.__itemsCache.items.shop.exchangeRate
         super(PostProgressionCfgComponentView, self)._onLoading(intCD, *args, **kwargs)
 
-    def _updateAll(self, *args):
+    def _updateAll(self):
         super(PostProgressionCfgComponentView, self)._updateAll()
         self.__updateLastSeenModification()
 

@@ -14,344 +14,6 @@
       </regionCCU>
     </Properties>
   </SERVER_STATISTICS>
-  <CLIENT_SYSTEM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>	&gt;	  <isLaptop>
-        <Type>	UINT8	</Type>
-      </isLaptop>
-      <cpuVendor>
-        <Type>	UINT8	</Type>
-      </cpuVendor>
-      <cpuCores>
-        <Type>	UINT8	</Type>
-      </cpuCores>
-      <cpuFreq>
-        <Type>	INT16	</Type>
-      </cpuFreq>
-      <gpuVendor>
-        <Type>	UINT8	</Type>
-      </gpuVendor>
-      <gpuMemory>
-        <Type>	INT16	</Type>
-      </gpuMemory>
-      <os>
-        <Type>	INT32	</Type>
-      </os>
-      <graphicsEngine>
-        <Type>	UINT8	</Type>
-      </graphicsEngine>
-      <cpuScore>
-        <Type>	INT32	</Type>
-      </cpuScore>
-      <gpuScore>
-        <Type>	INT16	</Type>
-      </gpuScore>
-      <osBit>
-        <Type>	UINT8	</Type>
-      </osBit>
-      <hasMods>
-        <Type>	UINT8	</Type>
-      </hasMods>
-      <reason32bit>
-        <Type>	UINT8	</Type>
-      </reason32bit>
-      <cpuFamily>
-        <Type>	UINT32	</Type>
-      </cpuFamily>
-      <gpuFamily>
-        <Type>	UINT32	</Type>
-      </gpuFamily>
-      <crashed>
-        <Type>	UINT64	</Type>
-      </crashed>
-      <contentType>
-        <Type>	UINT8	</Type>
-      </contentType>
-      <gpuDriverVersion>
-        <Type>	INT64	</Type>
-      </gpuDriverVersion>
-      <graphicsAPIID>
-        <Type>	UINT32	</Type>
-      </graphicsAPIID>
-      <multiGPU>
-        <Type>	UINT8	</Type>
-      </multiGPU>
-      <cpuName>
-        <Type>	STRING	</Type>
-      </cpuName>
-      <hangarFirstLoadingTime>
-        <Type>	FLOAT	</Type>
-      </hangarFirstLoadingTime>
-      <clientBit>
-        <Type>	UINT8	</Type>
-      </clientBit>
-      <ramTotal>
-        <Type>	UINT32	</Type>
-      </ramTotal>
-      <virtTotal>
-        <Type>	UINT32	</Type>
-      </virtTotal>
-      <pageFileTotal>
-        <Type>	UINT32	</Type>
-      </pageFileTotal>
-      <systemHddName>
-        <Type>	STRING	</Type>
-      </systemHddName>
-      <gameHddName>
-        <Type>	STRING	</Type>
-      </gameHddName>
-    </Properties>
-  </CLIENT_SYSTEM>
-  <CLIENT_SESSION_STATS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <fpsMin>
-        <Type>	INT16	</Type>
-      </fpsMin>
-      <fpsMax>
-        <Type>	INT16	</Type>
-      </fpsMax>
-      <fpsAvg>
-        <Type>	INT16	</Type>
-      </fpsAvg>
-      <fps_0_5>
-        <Type>	INT16	</Type>
-      </fps_0_5>
-      <fps_6_10>
-        <Type>	INT16	</Type>
-      </fps_6_10>
-      <fps_11_15>
-        <Type>	INT16	</Type>
-      </fps_11_15>
-      <fps_16_20>
-        <Type>	INT16	</Type>
-      </fps_16_20>
-      <fps_21_25>
-        <Type>	INT16	</Type>
-      </fps_21_25>
-      <fps_26_30>
-        <Type>	INT16	</Type>
-      </fps_26_30>
-      <fps_31_35>
-        <Type>	INT16	</Type>
-      </fps_31_35>
-      <fps_36_40>
-        <Type>	INT16	</Type>
-      </fps_36_40>
-      <fps_gt_40>
-        <Type>	INT16	</Type>
-      </fps_gt_40>
-      <fps_41_45>
-        <Type>	INT16	</Type>
-      </fps_41_45>
-      <fps_46_50>
-        <Type>	INT16	</Type>
-      </fps_46_50>
-      <fps_51_55>
-        <Type>	INT16	</Type>
-      </fps_51_55>
-      <fps_56_60>
-        <Type>	INT16	</Type>
-      </fps_56_60>
-      <fps_61_70>
-        <Type>	INT16	</Type>
-      </fps_61_70>
-      <fps_71_80>
-        <Type>	INT16	</Type>
-      </fps_71_80>
-      <fps_81_90>
-        <Type>	INT16	</Type>
-      </fps_81_90>
-      <fps_91_100>
-        <Type>	INT16	</Type>
-      </fps_91_100>
-      <fps_101_120>
-        <Type>	INT16	</Type>
-      </fps_101_120>
-      <fps_121_140>
-        <Type>	INT16	</Type>
-      </fps_121_140>
-      <fps_141_160>
-        <Type>	INT16	</Type>
-      </fps_141_160>
-      <fps_161_180>
-        <Type>	INT16	</Type>
-      </fps_161_180>
-      <fps_gt_180>
-        <Type>	INT16	</Type>
-      </fps_gt_180>
-      <fpsDeviation>
-        <Type>	INT16	</Type>
-      </fpsDeviation>
-      <ping>
-        <Type>	INT16	</Type>
-      </ping>
-      <lag>
-        <Type>	UINT8	</Type>
-      </lag>
-      <graphicsPreset>
-        <Type>	UINT8	</Type>
-      </graphicsPreset>
-      <screenResWidth>
-        <Type>	INT16	</Type>
-      </screenResWidth>
-      <screenResHeight>
-        <Type>	INT16	</Type>
-      </screenResHeight>
-      <windowMode>
-        <Type>	UINT8	</Type>
-      </windowMode>
-      <drrScale>
-        <Type>	UINT8	</Type>
-      </drrScale>
-      <gameSessionDuration>
-        <Type>	INT16	</Type>
-      </gameSessionDuration>
-      <cameraPos>
-        <Type>	VECTOR3	</Type>
-      </cameraPos>
-      <cameraDir>
-        <Type>	VECTOR3	</Type>
-      </cameraDir>
-      <invalidStats>
-        <Type>	UINT32	</Type>
-      </invalidStats>
-      <activeTime>
-        <Type>	UINT32	</Type>
-      </activeTime>
-      <loadingTime>
-        <Type>	UINT32	</Type>
-      </loadingTime>
-      <dynamicDRR>
-        <Type>	UINT8	</Type>
-      </dynamicDRR>
-      <soundQuality>
-        <Type>	UINT8	</Type>
-      </soundQuality>
-      <graphicsSettings>
-        <Type>	UINT64	</Type>
-      </graphicsSettings>
-      <hangarLoadingTime>
-        <Type>	FLOAT	</Type>
-      </hangarLoadingTime>
-      <lastArenaUniqueID>
-        <Type>	UINT64	</Type>
-      </lastArenaUniqueID>
-      <lastArenaTypeID>
-        <Type>	UINT32	</Type>
-      </lastArenaTypeID>
-      <lastArenaTeam>
-        <Type>	UINT16	</Type>
-      </lastArenaTeam>
-      <memoryCritical>
-        <Type>	UINT32	</Type>
-      </memoryCritical>
-      <ramAvailable>
-        <Type>	UINT32	</Type>
-      </ramAvailable>
-      <ramPeak>
-        <Type>	UINT32	</Type>
-      </ramPeak>
-      <virtAvailable>
-        <Type>	UINT32	</Type>
-      </virtAvailable>
-      <virtPeak>
-        <Type>	UINT32	</Type>
-      </virtPeak>
-      <pageFileAvailable>
-        <Type>	UINT32	</Type>
-      </pageFileAvailable>
-      <pageFilePeak>
-        <Type>	UINT32	</Type>
-      </pageFilePeak>
-    </Properties>
-  </CLIENT_SESSION_STATS>
-  <MEM_CRIT_EVENT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <spaceName>
-        <Type>	STRING	</Type>
-      </spaceName>
-      <virtAvailable>
-        <Type>	UINT32	</Type>
-      </virtAvailable>
-      <processUptime>
-        <Type>	UINT32	</Type>
-      </processUptime>
-      <ramAvailable>
-        <Type>	UINT16	</Type>
-      </ramAvailable>
-      <pageFileAvailable>
-        <Type>	UINT16	</Type>
-      </pageFileAvailable>
-      <battlesCount>
-        <Type>	UINT16	</Type>
-      </battlesCount>
-      <arenaGeometryID>
-        <Type>	UINT16	</Type>
-      </arenaGeometryID>
-      <spaceType>
-        <Type>	UINT8	</Type>
-      </spaceType>
-      <reasons>
-        <Type>	UINT8	</Type>
-      </reasons>
-    </Properties>
-  </MEM_CRIT_EVENT>
-  <CLIENT_PB_20_UX_STATS>	FIXED_DICT	  <Properties>
-      <linkedsetQuestsCompleted>
-        <Type>	UINT8	</Type>
-      </linkedsetQuestsCompleted>
-      <linkedsetQuestsInProgress>
-        <Type>	UINT8	</Type>
-      </linkedsetQuestsInProgress>
-      <premiumQuestsCompleted>
-        <Type>	UINT8	</Type>
-      </premiumQuestsCompleted>
-      <premiumQuestsInProgress>
-        <Type>	UINT8	</Type>
-      </premiumQuestsInProgress>
-      <otherQuestsCompleted>
-        <Type>	UINT8	</Type>
-      </otherQuestsCompleted>
-      <otherQuestsInProgress>
-        <Type>	UINT8	</Type>
-      </otherQuestsInProgress>
-      <personalMissionsCompletedMain>
-        <Type>	UINT8	</Type>
-      </personalMissionsCompletedMain>
-      <personalMissionsCompletedFull>
-        <Type>	UINT8	</Type>
-      </personalMissionsCompletedFull>
-      <personalMissionsInProgress>
-        <Type>	UINT8	</Type>
-      </personalMissionsInProgress>
-      <vehicleProgressReady2UnlockVehicles>
-        <Type>	UINT8	</Type>
-      </vehicleProgressReady2UnlockVehicles>
-      <vehicleProgressReady2UnlockModules>
-        <Type>	UINT8	</Type>
-      </vehicleProgressReady2UnlockModules>
-      <vehicleProgressReady2BuyVehicles>
-        <Type>	UINT8	</Type>
-      </vehicleProgressReady2BuyVehicles>
-      <vehicleProgressReady2BuyModules>
-        <Type>	UINT8	</Type>
-      </vehicleProgressReady2BuyModules>
-      <vehicleProgressTankmen>
-        <Type>	UINT8	</Type>
-      </vehicleProgressTankmen>
-      <vehTypeCompDescr>
-        <Type>	VEH_TYPE_CD	</Type>
-      </vehTypeCompDescr>
-      <premiumType>
-        <Type>	UINT8	</Type>
-      </premiumType>
-      <timestamp>
-        <Type>	UINT32	</Type>
-      </timestamp>
-      <arenaTypeID>
-        <Type>	UINT32	</Type>
-      </arenaTypeID>
-    </Properties>
-  </CLIENT_PB_20_UX_STATS>
   <QUEUE_INFO>	PYTHON	</QUEUE_INFO>
   <DEFAULT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
@@ -416,7 +78,7 @@
         <Type>	UINT8	</Type>
       </marksOnGun>
       <crewGroups>
-        <Type>	ARRAY	  <of>	UINT32	</of>
+        <Type>	ARRAY	  <of>	UINT16	</of>
         </Type>
       </crewGroups>
       <commanderSkinID>
@@ -846,6 +508,9 @@
       <contourImpenetrableZone>
         <Type>	UINT8	</Type>
       </contourImpenetrableZone>
+      <crewPerks>
+        <Type>	BOOL	</Type>
+      </crewPerks>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -1306,15 +971,7 @@
       </mode>
     </Properties>
   </REMOTE_CAMERA_DATA>
-  <STUN_INFO>	FIXED_DICT	  <Properties>
-      <stunFinishTime>
-        <Type>	FLOAT64	</Type>
-      </stunFinishTime>
-      <stunType>
-        <Type>	UINT8	</Type>
-      </stunType>
-    </Properties>
-  </STUN_INFO>
+  <STUN_INFO>	FLOAT64	</STUN_INFO>
   <BOUNDS2>	TUPLE	  <of>	VECTOR2	</of>
     <size>	2	</size>
   </BOUNDS2>
@@ -1359,6 +1016,8 @@
   </FRONT_LINE_DATA>
   <LIST_OF_COMP_DESCRS>	ARRAY	  <of>	INT32	</of>
   </LIST_OF_COMP_DESCRS>
+  <LIST_OF_IDX>	ARRAY	  <of>	INT8	</of>
+  </LIST_OF_IDX>
   <AVATAR_AMMO_VIEWS>	FIXED_DICT	  <Properties>
       <vehTypeCompDescrs>
         <Type>	LIST_OF_COMP_DESCRS	</Type>
@@ -1369,6 +1028,17 @@
       </compDescrs>
     </Properties>
   </AVATAR_AMMO_VIEWS>
+  <AVATAR_AMMO_FOR_CELL>	FIXED_DICT	  <Properties>
+      <abilitiesIDs>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </abilitiesIDs>
+      <purchasedAbilities>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </purchasedAbilities>
+    </Properties>
+  </AVATAR_AMMO_FOR_CELL>
   <POST_PROGRESSION_SETUPS>	FIXED_DICT	  <Properties>
       <devicesSetups>
         <Type>	ARRAY	  <of>	ARRAY	  <of>	UINT32	</of>
@@ -2094,6 +1764,9 @@
       <totalTime>
         <Type>	INT16	</Type>
       </totalTime>
+      <index>
+        <Type>	UINT8	</Type>
+      </index>
     </Properties>
   </VEHICLE_AMMO>
   <VEHICLE_AMMO_LIST>	ARRAY	  <of>	VEHICLE_AMMO	</of>

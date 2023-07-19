@@ -61,33 +61,6 @@
         </descr>
       </UISettings>
     </camouflage>
-    <fireFighting>
-      <UISettings>
-        <tooltipSection>	skills	</tooltipSection>
-        <typeName>	common	</typeName>
-        <descr>
-          <arg>
-            <situationalParam>	false	</situationalParam>
-            <paramName>	fireExtinguishingRate	</paramName>
-            <measureType>	percents	</measureType>
-            <value>	0.008	</value>
-          </arg>
-        </descr>
-        <params>
-          <param>
-            <name>	fireExtinguishingRate	</name>
-            <situationalParam>	false	</situationalParam>
-            <value>	0.0043	</value>
-          </param>
-        </params>
-        <kpi>
-          <mul>
-            <name>	fireExtinguishingRate	</name>
-            <value>	1.8	</value>
-          </mul>
-        </kpi>
-      </UISettings>
-    </fireFighting>
     <brotherhood>
       <crewLevelIncrease>	5	</crewLevelIncrease>
       <UISettings>
@@ -176,12 +149,12 @@
     </commander_enemyShotPredictor>
     <commander_universalist>
       <efficiency>	0.5	</efficiency>
+      <chanceToHitPerLevel>	0	</chanceToHitPerLevel>
       <UISettings>
         <tooltipSection>	skills	</tooltipSection>
-        <typeName>	situational	</typeName>
         <descr>
           <arg>
-            <situationalParam>	true	</situationalParam>
+            <situationalParam>	false	</situationalParam>
             <paramName>	woundedCrewEfficiency	</paramName>
             <measureType>	percents	</measureType>
             <sign>	minus	</sign>
@@ -224,7 +197,7 @@
             <value>	0.0002	</value>
           </arg>
           <arg>
-            <situationalParam>	true	</situationalParam>
+            <situationalParam>	false	</situationalParam>
             <paramName>	circularVisionRadiusWhileSurveyingDeviceDamaged	</paramName>
             <measureType>	percents	</measureType>
             <value>	0.002	</value>
@@ -245,6 +218,26 @@
         </params>
       </UISettings>
     </commander_eagleEye>
+    <commander_practical>
+      <vsePerk>	106	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	equipmentPreparationTime	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.0015	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	equipmentPreparationTime	</name>
+            <value>	0.85	</value>
+          </mul>
+        </kpi>
+      </UISettings>
+    </commander_practical>
     <driver_tidyPerson>
       <vsePerk>	304	</vsePerk>
       <UISettings>
@@ -349,30 +342,87 @@
         <descr>
           <arg>
             <situationalParam>	false	</situationalParam>
+            <paramName>	damageEnemiesByRamming	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0015	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
             <paramName>	vehicleRamDamageResistance	</paramName>
             <measureType>	percents	</measureType>
             <sign>	minus	</sign>
             <value>	0.0015	</value>
           </arg>
-          <arg>
-            <situationalParam>	false	</situationalParam>
-            <paramName>	damageEnemiesByRamming	</paramName>
-            <measureType>	percents	</measureType>
-            <value>	0.0015	</value>
-          </arg>
         </descr>
         <kpi>
-          <mul>
-            <name>	vehicleRamDamageResistance	</name>
-            <value>	0.85	</value>
-          </mul>
           <mul>
             <name>	damageEnemiesByRamming	</name>
             <value>	1.15	</value>
           </mul>
+          <mul>
+            <name>	vehicleRamDamageResistance	</name>
+            <value>	0.85	</value>
+          </mul>
         </kpi>
       </UISettings>
     </driver_rammingMaster>
+    <driver_motorExpert>
+      <vsePerk>	306	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleEnginePower	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0005	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleForwardMaxSpeed	</paramName>
+            <measureType>	mph	</measureType>
+            <value>	0.01	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleBackwardMaxSpeed	</paramName>
+            <measureType>	mph	</measureType>
+            <value>	0.01	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	enginePower	</name>
+            <value>	0.0005	</value>
+            <situationalParam>	false	</situationalParam>
+          </param>
+          <param>
+            <name>	forwardMaxSpeedKMHTerm	</name>
+            <value>	0.01	</value>
+            <situationalParam>	false	</situationalParam>
+          </param>
+          <param>
+            <name>	backwardMaxSpeedKMHTerm	</name>
+            <value>	0.01	</value>
+            <situationalParam>	false	</situationalParam>
+          </param>
+        </params>
+        <kpi>
+          <mul>
+            <name>	vehicleEnginePower	</name>
+            <value>	1.05	</value>
+          </mul>
+          <add>
+            <name>	vehicleForwardMaxSpeed	</name>
+            <value>	1	</value>
+          </add>
+          <add>
+            <name>	vehicleBackwardMaxSpeed	</name>
+            <value>	1	</value>
+          </add>
+        </kpi>
+      </UISettings>
+    </driver_motorExpert>
     <gunner_smoothTurret>
       <vsePerk>	201	</vsePerk>
       <UISettings>
@@ -404,7 +454,6 @@
       <vsePerk>	205	</vsePerk>
       <UISettings>
         <tooltipSection>	skills	</tooltipSection>
-        <typeName>	situational	</typeName>
         <descr>
           <arg>
             <situationalParam>	false	</situationalParam>
@@ -461,6 +510,55 @@
         </kpi>
       </UISettings>
     </gunner_rancorous>
+    <gunner_focus>
+      <vsePerk>	204	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	shotDispersionAngle	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.00025	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	shotDispersionAngle	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+        </params>
+      </UISettings>
+    </gunner_focus>
+    <gunner_quickAiming>
+      <vsePerk>	206	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleGunAimSpeed	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.00025	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	vehicleGunAimSpeed	</name>
+            <value>	1.025	</value>
+          </mul>
+        </kpi>
+        <params>
+          <param>
+            <name>	vehicleGunAimSpeed	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+        </params>
+      </UISettings>
+    </gunner_quickAiming>
     <loader_pedant>
       <vsePerk>	402	</vsePerk>
       <UISettings>
@@ -491,39 +589,39 @@
             <situationalParam>	true	</situationalParam>
             <paramName>	vehicleGunReloadTime	</paramName>
             <measureType>	percents	</measureType>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </arg>
         </descr>
         <params>
           <param>
             <name>	gunReloadSpeed	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
           <param>
             <name>	reloadTime	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
           <param>
             <name>	reloadTimeSecs	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
           <param>
             <name>	avgDamagePerMinute	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
           <param>
             <name>	autoReloadTime	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
           <param>
             <name>	clipFireRate	</name>
             <situationalParam>	true	</situationalParam>
-            <value>	-0.001	</value>
+            <value>	-0.0009	</value>
           </param>
         </params>
       </UISettings>
@@ -537,17 +635,117 @@
             <situationalParam>	false	</situationalParam>
             <paramName>	vehicleReloadTimeAfterShellChange	</paramName>
             <measureType>	percents	</measureType>
-            <value>	-0.006	</value>
+            <value>	0.006	</value>
           </arg>
         </descr>
         <kpi>
           <mul>
             <name>	vehicleReloadTimeAfterShellChange	</name>
-            <value>	0.4	</value>
+            <value>	1.6	</value>
           </mul>
         </kpi>
       </UISettings>
     </loader_intuition>
+    <loader_ambushMaster>
+      <vsePerk>	404	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	shotDemaskFactor	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.001	</value>
+          </arg>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	foliageMaskingFactor	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0002	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	foliageMaskingFactor	</name>
+            <value>	1.02	</value>
+          </mul>
+        </kpi>
+        <params>
+          <param>
+            <name>	shotDemaskFactor	</name>
+            <situationalParam>	false	</situationalParam>
+            <value>	0.001	</value>
+          </param>
+        </params>
+      </UISettings>
+    </loader_ambushMaster>
+    <loader_melee>
+      <vsePerk>	405	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	situational	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	vehicleGunReloadTime	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.00025	</value>
+          </arg>
+        </descr>
+        <params>
+          <param>
+            <name>	gunReloadSpeed	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+          <param>
+            <name>	reloadTime	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+          <param>
+            <name>	reloadTimeSecs	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+          <param>
+            <name>	avgDamagePerMinute	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+          <param>
+            <name>	autoReloadTime	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+          <param>
+            <name>	clipFireRate	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.00025	</value>
+          </param>
+        </params>
+      </UISettings>
+    </loader_melee>
+    <loader_ammunitionImprove>
+      <vsePerk>	406	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	damageAndPiercingDistributionLowerBound	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.0002	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	damageAndPiercingDistributionLowerBound	</name>
+            <value>	1.02	</value>
+          </mul>
+        </kpi>
+      </UISettings>
+    </loader_ammunitionImprove>
     <radioman_finder>
       <vsePerk>	501	</vsePerk>
       <UISettings>
@@ -570,6 +768,7 @@
       </UISettings>
     </radioman_finder>
     <radioman_inventor>
+      <crewLevelIncrease>	0.0	</crewLevelIncrease>
       <vsePerk>	505	</vsePerk>
       <UISettings>
         <tooltipSection>	skills	</tooltipSection>
@@ -592,6 +791,7 @@
     </radioman_inventor>
     <radioman_lastEffort>
       <durationPerLevel>	0.02	</durationPerLevel>
+      <chanceToHitPerLevel>	0.0	</chanceToHitPerLevel>
       <UISettings>
         <tooltipSection>	skills	</tooltipSection>
         <typeName>	situational	</typeName>
@@ -614,6 +814,7 @@
       </UISettings>
     </radioman_lastEffort>
     <radioman_retransmitter>
+      <crewLevelIncrease>	0.0	</crewLevelIncrease>
       <teamRadioBonusFactorPerLevel>	0.001	</teamRadioBonusFactorPerLevel>
       <vsePerk>	502	</vsePerk>
       <UISettings>
@@ -634,5 +835,45 @@
         </kpi>
       </UISettings>
     </radioman_retransmitter>
+    <fireFighting>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <typeName>	common	</typeName>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	fireExtinguishingRate	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	0.008	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <mul>
+            <name>	fireExtinguishingRate	</name>
+            <value>	1.8	</value>
+          </mul>
+        </kpi>
+      </UISettings>
+    </fireFighting>
+    <radioman_interference>
+      <vsePerk>	503	</vsePerk>
+      <UISettings>
+        <tooltipSection>	skills	</tooltipSection>
+        <descr>
+          <arg>
+            <situationalParam>	false	</situationalParam>
+            <paramName>	vehicleOwnSpottingTime	</paramName>
+            <measureType>	seconds	</measureType>
+            <value>	-0.01	</value>
+          </arg>
+        </descr>
+        <kpi>
+          <add>
+            <name>	vehicleOwnSpottingTime	</name>
+            <value>	-1	</value>
+          </add>
+        </kpi>
+      </UISettings>
+    </radioman_interference>
   </skills>
 </tankmen.xml>

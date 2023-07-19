@@ -9,7 +9,7 @@ class EpicPermissions(PreQueuePermissions):
 
     def canCreateSquad(self):
         currentSeason = self.__epicCtrl.getCurrentSeason()
-        if currentSeason:
+        if currentSeason and super(EpicPermissions, self).canCreateSquad():
             if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
                 return True
         return False

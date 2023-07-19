@@ -5,8 +5,8 @@ import AccountCommands
 from debug_utils import LOG_DEBUG_DEV
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
-def _skipResponse(resultID, errorCode):
-    LOG_DEBUG_DEV('_skipResponse', resultID, errorCode)
+def skipResponse(resultID, errorCode):
+    LOG_DEBUG_DEV('skipResponse', resultID, errorCode)
 
 
 class ClientEpicMetaGame(object):
@@ -19,16 +19,16 @@ class ClientEpicMetaGame(object):
         self.__ignore = True
         return
 
-    def setSelectedAbilities(self, listOfAbilities, vehicleCD, callback=_skipResponse):
+    def setSelectedAbilities(self, listOfAbilities, vehicleCD, callback=skipResponse):
         self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def setSelectedAbilitiesVehsClass(self, listOfAbilities, vehicleCD, callback=_skipResponse):
+    def setSelectedAbilitiesVehsClass(self, listOfAbilities, vehicleCD, callback=skipResponse):
         self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY_VEHICLES, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def increaseAbility(self, abilityID, callback=_skipResponse):
+    def increaseAbility(self, abilityID, callback=skipResponse):
         self.__account._doCmdInt(AccountCommands.CMD_INCREASE_EPIC_META_ABILITY, abilityID, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def resetEpicMetaGame(self, metaLevel=0, abilityPoints=0, callback=_skipResponse):
+    def resetEpicMetaGame(self, metaLevel=0, abilityPoints=0, callback=skipResponse):
         self.__account._doCmdInt2(AccountCommands.CMD_RESET_EPIC_META_GAME, metaLevel, abilityPoints, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def getStoredDiscount(self):

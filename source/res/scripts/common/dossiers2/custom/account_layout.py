@@ -1146,9 +1146,6 @@ _epicBattleAchievementsPopUps = ['frontlineMedal']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 _epicBattleSeasonsBlockBuilder = DictBlockBuilder('epicSeasons', 'II', 'HHBHH', {})
 _battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II', 'HHH', {})
-MT_BLOCK_LAYOUT = ['rpBronzeMedal', 'rpSilverMedal', 'rpGoldMedal']
-_mtPopUps = ['rpBronzeMedal', 'rpSilverMedal', 'rpGoldMedal']
-_mtAchievementsBlockBuilder = StaticSizeBlockBuilder('mtAchievements', MT_BLOCK_LAYOUT, {}, _mtPopUps)
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -1234,8 +1231,7 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _comp7CutSeason1BlockBuilder,
  _comp7Season2BlockBuilder,
  _maxComp7Season2BlockBuilder,
- _comp7CutSeason2BlockBuilder,
- _mtAchievementsBlockBuilder)
+ _comp7CutSeason2BlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

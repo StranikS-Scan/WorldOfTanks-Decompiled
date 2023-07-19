@@ -22,7 +22,7 @@ from helpers import time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, compareMastery
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -292,17 +292,6 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         roleLevelBlock = self._makeRoleLevelBlock(item)
         if roleLevelBlock:
             titleBlock.append(roleLevelBlock)
-        if vehicle and vehicle.isXPToTman:
-            isLessMastered = True
-            for slotIdx, tman in vehicle.crew:
-                if tman is not None:
-                    res = compareMastery(tman.descriptor, self.item.descriptor)
-                    if res < 0 or res == 0 and slotIdx < self.item.vehicleSlotIdx:
-                        isLessMastered = False
-                        break
-
-            if isLessMastered:
-                titleBlock.append(self._makeXpToTankmanCaption())
         items.append(formatters.packBuildUpBlockData(titleBlock))
         innerBlock = []
         if vehicle:
@@ -343,9 +332,6 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
             return text_styles.main(item.roleUserName + ' ') + vehicleName
         else:
             return text_styles.main(item.roleUserName)
-
-    def _makeXpToTankmanCaption(self):
-        return formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.tman_acc_training_24x24()), padding=formatters.packPadding(bottom=0, top=16, left=0), imgPadding=formatters.packPadding(top=-2, right=6), desc=text_styles.main(backport.text(R.strings.tooltips.hangar.crew.xpToTmen())))
 
     def _getSign(self, val):
         return '' if val < 0 else '+'

@@ -18,6 +18,7 @@ class LuiRules(enum.Enum):
     LOBBY_HEADER_COUNTERS_MISSIONS = 'missions'
     MISSIONS_MARATHON_VIEW = 'MissionsMarathonView'
     LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
+    REFERRAL_BTN_COUNTER = 'referralButtonCounter'
     AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
     AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
     C7N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'

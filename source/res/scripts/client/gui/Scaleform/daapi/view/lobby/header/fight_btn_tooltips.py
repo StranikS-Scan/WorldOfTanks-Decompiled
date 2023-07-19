@@ -88,7 +88,7 @@ def getEpicFightBtnTooltipData(result):
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.header())
-        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
+        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.body())
     elif state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
         header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
         body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())

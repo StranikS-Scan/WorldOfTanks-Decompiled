@@ -66,13 +66,6 @@
       <undamaged>	vehicles/russian/R135_T_103/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R135_T_103/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R135_T_103/crash/lod0/Hull.model	</exploded>
-      <sets>
-        <R135_T_103_3dst>
-          <undamaged>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Hull.model	</exploded>
-        </R135_T_103_3dst>
-      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -835,54 +828,6 @@
         <clipAngle>	0.859029	</clipAngle>
         <anchorShift>	-0.406968	</anchorShift>
       </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15064	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <compatibleModels>	R135_T_103_3dst	</compatibleModels>
-        <position>	-0.4 1.543 3.341	</position>
-        <rotation>	0.597863 -0.001284 3.12662	</rotation>
-        <scale>	0.56 1.24235 0.56	</scale>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.875028	</clipAngle>
-        <anchorShift>	-0.02882	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15065	</slotId>
-        <tags>	formfactor_square direction_right_to_left	</tags>
-        <compatibleModels>	R135_T_103_3dst	</compatibleModels>
-        <position>	1.42 1.472 3.68	</position>
-        <rotation>	0 0 3.14159	</rotation>
-        <scale>	0.747396 0.500001 0.747388	</scale>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.875028	</clipAngle>
-        <anchorShift>	0.101183	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15066	</slotId>
-        <tags>	formfactor_square direction_left_to_right	</tags>
-        <compatibleModels>	R135_T_103_3dst	</compatibleModels>
-        <position>	-1.463 1.481 3.636	</position>
-        <rotation>	0 0 3.14159	</rotation>
-        <scale>	0.747395 0.500001 0.747387	</scale>
-        <showOn>	16	</showOn>
-        <clipAngle>	0.875028	</clipAngle>
-        <anchorShift>	0.091181	</anchorShift>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15067	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	R135_T_103_3dst	</compatibleModels>
-        <position>	0.010179 1.1878 -4.03175	</position>
-        <rotation>	1.8093 -0.000165 -0.000035	</rotation>
-        <scale>	1.36956 1.36965 1.36965	</scale>
-        <showOn>	16	</showOn>
-        <clipAngle>	1.03619	</clipAngle>
-        <anchorShift>	0.080003	</anchorShift>
-      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -925,13 +870,6 @@
         <undamaged>	vehicles/russian/R135_T_103/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R135_T_103/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R135_T_103/crash/lod0/Chassis.model	</exploded>
-        <sets>
-          <R135_T_103_3dst>
-            <undamaged>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Chassis.model	</exploded>
-          </R135_T_103_3dst>
-        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1012,27 +950,6 @@
                   <row3>	0.000000 1.541465 4.165117	</row3>
                 </boxCollider>
               </hullCollider>
-              <hullCollider>
-                <modelsSet>	R135_T_103_3dst	</modelsSet>
-                <boxCollider>
-                  <row0>	1.845022 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.694456 0.000000	</row1>
-                  <row2>	0.000000 0.000000 8.388840	</row2>
-                  <row3>	0.000000 1.331876 0.063490	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.441092 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299972 -0.004089	</row1>
-                  <row2>	0.000000 0.114134 8.373482	</row2>
-                  <row3>	0.000000 1.615709 0.219570	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.100000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 8.000000	</row2>
-                  <row3>	1.981294 1.468759 0.130196	</row3>
-                </boxCollider>
-              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1099,27 +1016,6 @@
                   <row1>	0.000000 0.215608 0.208598	</row1>
                   <row2>	0.000000 -0.438527 0.453264	</row2>
                   <row3>	0.000000 1.541465 4.165117	</row3>
-                </boxCollider>
-              </hullCollider>
-              <hullCollider>
-                <modelsSet>	R135_T_103_3dst	</modelsSet>
-                <boxCollider>
-                  <row0>	1.845022 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.694456 0.000000	</row1>
-                  <row2>	0.000000 0.000000 8.388840	</row2>
-                  <row3>	0.000000 1.331876 0.063490	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.441092 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299972 -0.004089	</row1>
-                  <row2>	0.000000 0.114134 8.373482	</row2>
-                  <row3>	0.000000 1.615709 0.219570	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.100000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 8.000000	</row2>
-                  <row3>	-1.962714 1.468807 0.130195	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1906,13 +1802,6 @@
             <undamaged>	vehicles/russian/R135_T_103/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R135_T_103/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R135_T_103/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <R135_T_103_3dst>
-                <undamaged>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Gun_01.model	</exploded>
-              </R135_T_103_3dst>
-            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R135_T_103/collision/Gun_01.model	</collisionModelServer>
@@ -1968,7 +1857,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
             <density>	123.801 125.003	</density>
@@ -1980,13 +1868,6 @@
         <undamaged>	vehicles/russian/R135_T_103/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R135_T_103/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R135_T_103/crash/lod0/Turret_01.model	</exploded>
-        <sets>
-          <R135_T_103_3dst>
-            <undamaged>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/russian/R135_T_103/_skin/R135_T_103_3dst/crash/lod0/Turret_01.model	</exploded>
-          </R135_T_103_3dst>
-        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R135_T_103/collision/Turret_01.model	</collisionModelServer>
@@ -2536,18 +2417,6 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.521032	</clipAngle>
           <anchorShift>	1.15023	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35045	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	R135_T_103_3dst	</compatibleModels>
-          <position>	0.009901 2.91096 -2.06917	</position>
-          <rotation>	2.11527 -0.000149 -0.000017	</rotation>
-          <scale>	1.54035 1.48545 1.48545	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.40132	</clipAngle>
-          <anchorShift>	-0.161269	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

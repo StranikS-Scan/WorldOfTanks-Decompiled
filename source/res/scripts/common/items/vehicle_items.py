@@ -77,7 +77,7 @@ class VehicleItem(BasicItem):
 
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
-    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTesterManager', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'soundsSets', 'emblemSlots', 'slotsAnchors')
+    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTesterManager', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots', 'slotsAnchors')
     __metaclass__ = ReflectionMetaclass
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -92,7 +92,6 @@ class InstallableItem(VehicleItem):
         self.models = None
         self.camouflage = shared_components.EMPTY_CAMOUFLAGE
         self.sounds = None
-        self.soundsSets = None
         self.emblemSlots = component_constants.EMPTY_TUPLE
         self.slotsAnchors = component_constants.EMPTY_TUPLE
         return
@@ -285,7 +284,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'forcedReloadTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'burstStartEffects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'shootImpulses', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'autoShoot', 'spin', 'edgeByVisualModel', 'prefabs', 'spinEffect', 'temperature', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'forcedReloadTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'shootImpulses', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'autoShoot', 'spin', 'edgeByVisualModel', 'prefabs', 'spinEffect', 'temperature', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -312,9 +311,7 @@ class Gun(InstallableItem):
         self.spin = component_constants.DEFAULT_SPIN_GUN
         self.drivenJoints = None
         self.effects = None
-        self.burstStartEffects = None
         self.reloadEffect = None
-        self.reloadEffectSets = None
         self.impulse = component_constants.ZERO_FLOAT
         self.recoil = None
         self.spinEffect = None
@@ -370,7 +367,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -389,8 +386,6 @@ class Shell(BasicItem):
         self.iconName = None
         self.secondaryAttackReason = ATTACK_REASON.NONE
         self.useAltDamageRandomization = False
-        self.hitDeviceChanceMultiplier = component_constants.DEFAULT_SHELL_HIT_EXTRAS_CHANCE_MULTIPLIER
-        self.hitCrewChanceMultiplier = component_constants.DEFAULT_SHELL_HIT_EXTRAS_CHANCE_MULTIPLIER
         return
 
     def __repr__(self):

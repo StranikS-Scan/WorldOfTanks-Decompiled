@@ -569,7 +569,7 @@ class PersonalCaseDataProvider(object):
             isWotPlusEnabled = self._wotPlusCtrl.isWotPlusEnabled()
             isNewSubscriptionsEnabled = serverSettings.isWotPlusNewSubscriptionEnabled()
             hasWotPlus = self._wotPlusCtrl.isEnabled()
-            secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_ACCELERATED_CREW_TRAINING if isWotPlusEnabled else RES_ICONS.MAPS_ICONS_LIBRARY_TMAN_ACC_TRAINING_20X20
+            secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_INACTIVE_ACCELERATED_CREW_TRAINING
             callbackInfo = {'achievements': packedAchieves,
              'stats': tmanDossier.getStats(self.itemsCache.items.getTankman(self.tmanInvID)),
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),

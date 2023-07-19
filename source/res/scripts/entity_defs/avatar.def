@@ -173,6 +173,10 @@
       <Type>	AVATAR_AMMO_VIEWS	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </ammoViews>
+    <ammoAdvanced>
+      <Type>	AVATAR_AMMO_FOR_CELL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </ammoAdvanced>
     <cp>
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -292,6 +296,7 @@
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
@@ -574,6 +579,7 @@
     <activateEquipment>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>
+      <Arg>	INT16	</Arg>
     </activateEquipment>
     <setEquipmentApplicationPoint>
       <Exposed>	OWN_CLIENT	</Exposed>
@@ -633,6 +639,10 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </vehicle_stopTrackingWithGun>
+    <setupRandomAmmo>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	INT64	</Arg>
+    </setupRandomAmmo>
     <vehicle_changeSetting>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT8	</Arg>
@@ -651,7 +661,6 @@
     </setClientReady>
     <leaveArena>
       <Exposed></Exposed>
-      <Arg>	CLIENT_SESSION_STATS	</Arg>
     </leaveArena>
     <unlockUnusedVehicles>
       <Arg>	ARRAY	  <of>	INT32	</of>
@@ -756,10 +765,6 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
-    <logMemoryCriticalEvent>
-      <Exposed></Exposed>
-      <Arg>	MEM_CRIT_EVENT	</Arg>
-    </logMemoryCriticalEvent>
     <releaseClientForLogin>
       <Arg>	BOOL	</Arg>
     </releaseClientForLogin>

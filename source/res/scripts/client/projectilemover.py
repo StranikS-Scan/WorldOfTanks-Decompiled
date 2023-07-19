@@ -137,9 +137,8 @@ class ProjectileMover(object):
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
-        shellType = proj['effectsDescr']['shellType']
         isOwnShot = proj['autoScaleProjectile']
-        BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, shellType, isOwnShot)
+        BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
         FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, proj, velocityDir):

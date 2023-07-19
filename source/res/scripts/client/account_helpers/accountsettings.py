@@ -13,7 +13,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS
+from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, BATTLE_EVENTS
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -240,7 +240,6 @@ COLLECTION_SHOWN_NEW_ITEMS_COUNT = 'collectionNewItemsCount'
 COLLECTION_TUTORIAL_COMPLETED = 'collectionTutorialCompleted'
 COLLECTION_WAS_ENABLED = 'collectionsWasEnabled'
 COLLECTIONS_NOTIFICATIONS = 'collectionsNotifications'
-REFERRAL_PROGRAM_PGB_FULL = 'referralProgramPgbFull'
 ACHIEVEMENTS_INFO = 'achievements20_info'
 ACHIEVEMENTS_INITIAL_BATTLE_COUNT = 'achievements20InitialBattleCount'
 ACHIEVEMENTS_MAX_WTR_POINTS = 'achievements20MaxWtrPoints'
@@ -270,18 +269,6 @@ class Winback(object):
     COMPLETED_STARTING_QUEST_COUNT = 'completedStartingQuestCount'
     INTRO_SHOWN = 'introShown'
     BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN = 'battleSelectorSettingsBulletShown'
-
-
-class ArmoryYard(object):
-    ARMORY_YARD_SETTINGS = 'armoryYardSettings'
-    ARMORY_YARD_LAST_INTRO_VIEWED = 'armoryYardLastIntroViewed'
-    ARMORY_YARD_PREV_COMPLETED_QUESTS = 'armoryYardPrevCompletedQuests'
-    EVENT_ANNOUNCEMENT = 'announcement'
-    ANNOUNCEMENT_CHAPTER_PREFIX = 'announcement_chapter'
-    CHAPTER_PREFIX = 'chapter'
-    FINISH_CHAPTER_PREFIX = 'finish_chapter'
-    START_CHAPTER_PREFIX = 'start_chapter'
-    STYLE_QUEST_ENDS = 'style_quest_ends'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -375,7 +362,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'favorite': False,
                                    'bonus': False,
                                    'crystals': False,
-                                   'debut_boxes': False,
                                    'role_HT_assault': False,
                                    'role_HT_break': False,
                                    'role_HT_support': False,
@@ -430,7 +416,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'bonus': False,
                                           'crystals': False,
                                           'ranked': True,
-                                          'debut_boxes': False,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_universal': False,
@@ -688,7 +673,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'bonus': False,
                                          'crystals': False,
                                          'comp7': True,
-                                         'debut_boxes': False,
                                          'role_HT_assault': False,
                                          'role_HT_break': False,
                                          'role_HT_support': False,
@@ -827,7 +811,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerBaseVehicleName': True,
                                      'markerBasePlayerName': False,
                                      'markerBaseAimMarker2D': False,
-                                     'markerBaseVehicleDist': False,
                                      'markerAltIcon': False,
                                      'markerAltLevel': True,
                                      'markerAltHpIndicator': True,
@@ -835,8 +818,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltHp': 1,
                                      'markerAltVehicleName': False,
                                      'markerAltPlayerName': True,
-                                     'markerAltAimMarker2D': False,
-                                     'markerAltVehicleDist': True},
+                                     'markerAltAimMarker2D': False},
                             'enemy': {'markerBaseIcon': False,
                                       'markerBaseLevel': False,
                                       'markerBaseHpIndicator': True,
@@ -845,7 +827,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                       'markerBaseVehicleName': True,
                                       'markerBasePlayerName': False,
                                       'markerBaseAimMarker2D': True,
-                                      'markerBaseVehicleDist': False,
                                       'markerAltIcon': False,
                                       'markerAltLevel': True,
                                       'markerAltHpIndicator': True,
@@ -853,8 +834,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                       'markerAltHp': 1,
                                       'markerAltVehicleName': False,
                                       'markerAltPlayerName': True,
-                                      'markerAltAimMarker2D': True,
-                                      'markerAltVehicleDist': True},
+                                      'markerAltAimMarker2D': True},
                             'dead': {'markerBaseIcon': False,
                                      'markerBaseLevel': False,
                                      'markerBaseHpIndicator': False,
@@ -863,7 +843,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerBaseVehicleName': True,
                                      'markerBasePlayerName': False,
                                      'markerBaseAimMarker2D': False,
-                                     'markerBaseVehicleDist': False,
                                      'markerAltIcon': False,
                                      'markerAltLevel': True,
                                      'markerAltHpIndicator': True,
@@ -871,8 +850,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltHp': 1,
                                      'markerAltVehicleName': False,
                                      'markerAltPlayerName': True,
-                                     'markerAltAimMarker2D': False,
-                                     'markerAltVehicleDist': False}},
+                                     'markerAltAimMarker2D': False}},
                 COMP7_PREBATTLE_CAROUSEL_ROW_VALUE: -1,
                 COMP7_PREBATTLE_MINIMAP_SIZE: -1,
                 COMP7_IS_VOIP_IN_BATTLE_ACTIVATED: False,
@@ -1015,7 +993,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        ScorePanelStorageKeys.SHOW_HP_BAR: True,
                                                                                        'progressViewType': True,
                                                                                        'progressViewConditions': True},
-                                                            'feedbackDamageIndicator': {'damageIndicatorAllies': True}},
+                                                            'feedbackDamageIndicator': {'damageIndicatorAllies': True},
+                                                            'feedbackBattleEvents': {BATTLE_EVENTS.CREW_PERKS: True}},
                                        'ControlsSettings': {'highlightLocation': True,
                                                             'showQuestProgress': True,
                                                             'chargeFire': True,
@@ -1030,10 +1009,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                        AIM.CONTOUR: {CONTOUR.ENHANCED_CONTOUR: True,
                                                                      CONTOUR.CONTOUR_PENETRABLE_ZONE: True,
                                                                      CONTOUR.CONTOUR_IMPENETRABLE_ZONE: True}},
-                                       SETTINGS_GROUP.MARKERS_SETTINGS: {MARKERS.ENEMY: {MARKER_SETTINGS.MARKER_BASE_VEHICLE_DIST: True,
-                                                                                         MARKER_SETTINGS.MARKER_ALT_VEHICLE_DIST: True},
-                                                                         MARKERS.ALLY: {MARKER_SETTINGS.MARKER_BASE_VEHICLE_DIST: True,
-                                                                                        MARKER_SETTINGS.MARKER_ALT_VEHICLE_DIST: True}},
                                        'SoundSettings': {'artyBulbVoices': True}},
                 CLAN_PREBATTLE_SORTING_KEY: 0,
                 SHOW_OPT_DEVICE_HINT: True,
@@ -1145,9 +1120,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     ACHIEVEMENTS_WTR_INFO: {ACHIEVEMENTS_WTR_PREV_POINTS: 0,
                                                             ACHIEVEMENTS_WTR_PREV_RANK: 0,
                                                             ACHIEVEMENTS_WTR_PREV_SUB_RANK: 0},
-                                    PREV_ACHIEVEMENTS_NAME_LIST: []},
-                ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
-                                                  ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}}},
+                                    PREV_ACHIEVEMENTS_NAME_LIST: []}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1184,8 +1157,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                 FUN_RANDOM_NOTIFICATIONS_SUB_MODES: set()},
                      RESOURCE_WELL_NOTIFICATIONS: {RESOURCE_WELL_START_SHOWN: set(),
                                                    RESOURCE_WELL_END_SHOWN: set()},
-                     COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: []},
-                     REFERRAL_PROGRAM_PGB_FULL: False},
+                     COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: []}},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1296,6 +1268,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'uiSpamVisited_missions': False,
                 'uiSpamVisited_MissionsMarathonView': False,
                 'uiSpamVisited_PersonalMissionOperations': False,
+                'uiSpamVisited_referralButtonCounter': False,
                 'uiSpamVisited_AmmunitionPanelHintZoneHint': False,
                 'uiSpamVisited_AmmunitionPanelBattleAbilitiesHint': False,
                 'uiSpamVisited_CustomizationProgressionViewHint': False,
@@ -1305,14 +1278,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'uiSpamVisited_PersonalReservesHangarHint': False,
                 'uiSpamVisited_ModernizedSetupTabHint': False,
                 'uiSpamVisited_OfferBannerWindow': False,
-                'uiSpamVisited_StrongholdView': False},
- ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
-                                   ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {},
-                                   ArmoryYard.EVENT_ANNOUNCEMENT: False,
-                                   ArmoryYard.ANNOUNCEMENT_CHAPTER_PREFIX: False,
-                                   ArmoryYard.CHAPTER_PREFIX: False,
-                                   ArmoryYard.FINISH_CHAPTER_PREFIX: False,
-                                   ArmoryYard.STYLE_QUEST_ENDS: False}}
+                'uiSpamVisited_StrongholdView': False}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -2101,14 +2067,6 @@ class AccountSettings(object):
             cls._setValue(BattleMatters.BATTLE_MATTERS_SETTINGS, bmSection, KEY_SETTINGS)
         else:
             _logger.error("Cann't set value in %s section.", BattleMatters.BATTLE_MATTERS_SETTINGS)
-
-    @staticmethod
-    def getArmoryYard(name):
-        return AccountSettings._getValue(name, ArmoryYard.ARMORY_YARD_SETTINGS, True)
-
-    @staticmethod
-    def setArmoryYard(name, value):
-        AccountSettings._setValue(name, value, ArmoryYard.ARMORY_YARD_SETTINGS, True)
 
     @staticmethod
     def _getValue(name, setting, force=False):

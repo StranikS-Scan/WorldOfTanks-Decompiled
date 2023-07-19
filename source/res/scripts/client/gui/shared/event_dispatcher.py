@@ -66,7 +66,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -309,16 +309,10 @@ def showChangeVehicleNationDialog(vehicleCD):
     window.load()
 
 
-@dependency.replace_none_kwargs(wotPlusController=IWotPlusController)
-def showPiggyBankView(wotPlusController=None):
+def showPiggyBankView():
     from gui.impl.lobby.currency_reserves.currency_reserves_view import CurrencyReservesView
-    from gui.impl.lobby.premacc.piggybank import PiggyBankView
-    if wotPlusController.isWotPlusEnabled():
-        viewId = R.views.lobby.currency_reserves.CurrencyReserves()
-        params = GuiImplViewLoadParams(viewId, CurrencyReservesView, ScopeTemplates.LOBBY_SUB_SCOPE)
-    else:
-        viewId = R.views.lobby.premacc.piggybank.Piggybank()
-        params = GuiImplViewLoadParams(viewId, PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE)
+    viewId = R.views.lobby.currency_reserves.CurrencyReserves()
+    params = GuiImplViewLoadParams(viewId, CurrencyReservesView, ScopeTemplates.LOBBY_SUB_SCOPE)
     uiLoader = dependency.instance(IGuiLoader)
     dtView = uiLoader.windowsManager.getViewByLayoutID(viewId)
     if dtView is not None:
@@ -335,7 +329,15 @@ def showMapsBlacklistView():
 
 def showCrew22Welcome():
     from gui.impl.lobby.crew.crew_intro_view import CrewIntroWindow
-    CrewIntroWindow().load()
+    from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+    from gui.shared.account_settings_helper import AccountSettingsHelper, WelcomeScreen
+
+    def _onClosed(props):
+        isAllSlidesViewed = props.get('isAllSlidesViewed')
+        if isAllSlidesViewed:
+            AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_22_WELCOME_SHOWN)
+
+    CrewIntroWindow(WelcomeScreen.CREW_22_WELCOME, _onClosed).load()
 
 
 def showDailyExpPageView(exitEvent=None):
@@ -575,17 +577,13 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     marathonCtrl = dependency.instance(IMarathonEventsController)
-    armoryYardCtrl = dependency.instance(IArmoryYardController)
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
             descriptor = entity.typeDescriptor
             if descriptor:
                 marathons = marathonCtrl.getMarathons()
                 activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
-                isArmoryYard = armoryYardCtrl is not None and armoryYardCtrl.isActive() and armoryYardCtrl.getFinalRewardVehicle().intCD == descriptor.type.compactDescr
-                if isArmoryYard:
-                    armoryYardCtrl.showHeroTankVehiclePreview()
-                elif activeMarathon:
+                if activeMarathon:
                     title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                     showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
                 elif isResourceWellRewardVehicle(descriptor.type.compactDescr):
@@ -1365,15 +1363,11 @@ def showFrontlineAwards(bonuses, onCloseCallback=None, onAnimationEndedCallback=
 
 
 @wg_async
-def showFrontlineConfirmDialog(skillIds, callback, confirmType=None):
-    from gui.impl.lobby.tank_setup.dialogs.frontline_confirm_dialog import FrontlineReserveConfirmDialog, ConfirmType
+def showFrontlineConfirmDialog(skillIds, vehicleType='', applyForAllOfType=False, isBuy=True):
+    from gui.impl.lobby.tank_setup.dialogs.frontline_confirm_dialog import FrontlineReserveConfirmDialog
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(skillIds=skillIds, confirmType=confirmType or ConfirmType.Buy, layoutID=FrontlineReserveConfirmDialog.LAYOUT_ID, wrappedViewClass=FrontlineReserveConfirmDialog))
-    if result.busy:
-        callback(False)
-    else:
-        isOK, _ = result.result
-        callback(isOK)
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(skillIds=skillIds, vehicleType=vehicleType, applyForAllOfType=applyForAllOfType, isBuy=isBuy, layoutID=FrontlineReserveConfirmDialog.LAYOUT_ID, wrappedViewClass=FrontlineReserveConfirmDialog))
+    raise AsyncReturn(result)
 
 
 def showBlankGiftWindow(itemCD, count):
@@ -1671,6 +1665,22 @@ def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
     window = MapsTrainingResultWindow(arenaUniqueID, isFromNotifications)
     window.load()
     return
+
+
+@wg_async
+def showAccelerateCrewTrainingDialog(successCallback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.pub.dialog_window import DialogButtons
+    from gui.impl.dialogs.gf_builders import AcceleratedCrewTrainingDialogBuilder
+    builder = AcceleratedCrewTrainingDialogBuilder()
+    stringRoot = R.strings.dialogs.xpToTmenCheckbox
+    builder.setTitle(stringRoot.title())
+    builder.setDescription(stringRoot.message())
+    builder.setConfirmButtonLabel(stringRoot.submit())
+    builder.setCancelButtonLabel(stringRoot.cancel())
+    result = yield wg_await(dialogs.show(builder.build()))
+    if result.result == DialogButtons.SUBMIT:
+        successCallback()
 
 
 @wg_async
@@ -2060,15 +2070,3 @@ def showAchievementEditView(*args, **kwargs):
     from gui.impl.lobby.achievements.edit_view import EditWindow
     window = EditWindow(parent=getParentWindow(), *args, **kwargs)
     window.load()
-
-
-def showDebutBoxesInfoPage(url, returnCallback=None, parent=None):
-    from gui.impl.lobby.debut_boxes.debut_boxes_browser_view import DebutBoxesBrowserView
-    from gui.impl.lobby.common.browser_view import makeSettings
-    from web.web_client_api.promo import PromoWebApi
-    from web.web_client_api.request import RequestWebApi
-    from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
-    webHandlers = webApiCollection(PromoWebApi, RequestWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
-    layoutID = R.views.lobby.common.BrowserView()
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(loadParams=GuiImplViewLoadParams(layoutID, DebutBoxesBrowserView, ScopeTemplates.DEFAULT_SCOPE, parent if parent is not None else getParentWindow()), settings=makeSettings(url=url, isClosable=True, webHandlers=webHandlers, viewFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, returnClb=returnCallback, restoreBackground=False)))
-    return

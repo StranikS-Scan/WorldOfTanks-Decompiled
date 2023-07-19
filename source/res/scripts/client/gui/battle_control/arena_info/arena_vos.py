@@ -189,7 +189,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isFlamethrowerVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role')
 
     def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -229,7 +229,6 @@ class VehicleTypeInfoVO(object):
             self.isPremiumIGR = isPremiumIGR(tags)
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
             self.isDualGunVehicle = vehicleDescr.isDualgunVehicle
-            self.isFlamethrowerVehicle = vehicleDescr.isFlamethrower
             self.chassisType = vehicleDescr.chassis.chassisType
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
@@ -254,7 +253,6 @@ class VehicleTypeInfoVO(object):
             self.turretYawLimits = None
             self.shortName = vehicleName
             self.isDualGunVehicle = False
-            self.isFlamethrowerVehicle = False
             self.chassisType = 0
             self.name = vehicleName
             self.guiName = vehicleName
@@ -449,9 +447,6 @@ class VehicleArenaInfoVO(object):
 
     def isDualGunVehicle(self):
         return self.vehicleType.isDualGunVehicle
-
-    def isFlamethrowerVehicle(self):
-        return self.vehicleType.isFlamethrowerVehicle
 
     def isActionsDisabled(self):
         return not self.player.avatarSessionID

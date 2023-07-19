@@ -136,7 +136,7 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
             gunNode = appearance.compoundModel.node(TankNodeNames.GUN_INCLINATION)
             if gunFireNode is None or gunNode is None:
                 return
-            BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, Math.Matrix(gunFireNode).translation, Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), self.__vehicle.typeDescriptor.shot.shell.caliber, self.__vehicle.typeDescriptor.shot.shell.kind, ShakeReason.OWN_SHOT)
+            BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, Math.Matrix(gunFireNode).translation, Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), self.__vehicle.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT)
             return
 
     def __updateBurst(self, gunSoundObject=None):

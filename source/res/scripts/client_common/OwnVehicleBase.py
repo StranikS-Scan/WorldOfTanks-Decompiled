@@ -3,6 +3,7 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
+import math
 from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
 from items import vehicles, ITEM_TYPES
 from wotdecorators import noexcept
@@ -46,10 +47,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             for vehicleAmmo in ammoList:
                 timeRemaining = vehicleAmmo.endTime
                 if timeRemaining > 0:
-                    timeRemaining = max(vehicleAmmo.endTime - self._serverTime(), 0)
-                    if timeRemaining > vehicleAmmo.totalTime:
-                        timeRemaining = vehicleAmmo.totalTime
-                avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, None if self.__isAttachingToVehicle else vehicleAmmo.previousStage, timeRemaining, vehicleAmmo.totalTime)
+                    timeRemaining = max(timeRemaining - self._serverTime(), 0)
+                avatar.updateVehicleAmmo(self.entity.id, vehicleAmmo.compactDescr, vehicleAmmo.quantity, vehicleAmmo.quantityInClip, None if self.__isAttachingToVehicle else vehicleAmmo.previousStage, math.floor(timeRemaining), vehicleAmmo.totalTime, vehicleAmmo.index)
 
             return
 
@@ -304,10 +303,10 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             return
         changedAmmo = self.vehicleAmmoList[path[0]]
         if changedAmmo.compactDescr != prev.compactDescr:
-            timeRemaining = changedAmmo.endTime - self._serverTime()
-            if 1 > timeRemaining > 0:
-                timeRemaining = -1
-            avatar.resetVehicleAmmo(oldCompactDescr=prev.compactDescr, newCompactDescr=changedAmmo.compactDescr, quantity=changedAmmo.quantity, stage=changedAmmo.previousStage, timeRemaining=timeRemaining, totalTime=changedAmmo.totalTime)
+            timeRemaining = changedAmmo.endTime
+            if timeRemaining > 0:
+                timeRemaining = max(timeRemaining - self._serverTime(), 0)
+            avatar.resetVehicleAmmo(oldCompactDescr=prev.compactDescr, newCompactDescr=changedAmmo.compactDescr, quantity=changedAmmo.quantity, stage=changedAmmo.previousStage, timeRemaining=math.floor(timeRemaining), totalTime=changedAmmo.totalTime, index=changedAmmo.index)
         else:
             self.__setNested(self.update_vehicleAmmoList, 'vehicleAmmoList', path, prev)
 

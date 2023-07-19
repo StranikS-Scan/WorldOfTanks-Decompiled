@@ -5,7 +5,6 @@ import random
 import string
 from collections import namedtuple
 from functools import partial
-from collections import defaultdict
 import AnimationSequence
 import BigWorld
 import Math
@@ -593,7 +592,8 @@ class _BaseSoundEvent(_EffectDesc):
     def delete(self, elem, reason):
         soundObject = elem.get('sound', None)
         if soundObject is not None:
-            self._handleDeleteSoundObject(soundObject, reason)
+            if reason != 0:
+                soundObject.stopAll()
             elem['sound'] = None
         if elem.has_key('node'):
             elem['node'] = None
@@ -624,10 +624,6 @@ class _BaseSoundEvent(_EffectDesc):
         elem['sound'] = sound
         effects.append(elem)
 
-    def _handleDeleteSoundObject(self, soundObject, reason):
-        if reason != 0:
-            soundObject.stopAll()
-
 
 class _ShotSoundEffectDesc(_BaseSoundEvent):
     __slots__ = ('_soundName',)
@@ -642,8 +638,8 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
         if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
             soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
             if soundObject is not None:
-                soundName, pID = self._getName(args)
-                self._registerCreatedSound(model, effects, soundObject, pID)
+                isPlayer, _ = self._isPlayer(args)
+                soundName = self._soundName[0 if isPlayer else 1]
                 if IS_EDITOR:
                     distance = vehicle.position.length
                 else:
@@ -653,50 +649,6 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
 
                 soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
         return
-
-    def _registerCreatedSound(self, model, effects, soundObject, pID):
-        pass
-
-
-class _ContinuousShotSoundEffectDesc(_ShotSoundEffectDesc):
-    __slots__ = ('_soundName', '__pcSoundObjectIDs')
-    TYPE = '_ContinuousShotSoundEffectDesc'
-
-    def __init__(self, dataSection):
-        super(_ContinuousShotSoundEffectDesc, self).__init__(dataSection)
-        self._soundName = ((dataSection.readString('soundStart/wwsoundPC', ''), dataSection.readString('soundStop/wwsoundPC', '')), (dataSection.readString('soundStart/wwsoundNPC', ''), dataSection.readString('soundStop/wwsoundNPC', '')))
-        self.__pcSoundObjectIDs = defaultdict(int)
-
-    def _getName(self, args):
-        isPlayer, pID = self._isPlayer(args)
-        soundName, _ = self._soundName[0 if isPlayer else 1]
-        return ((soundName,), pID)
-
-    def _registerCreatedSound(self, model, effects, soundObject, pID):
-        if BigWorld.player().playerVehicleID == pID:
-            self.__registerPlayerSoundObject(soundObject)
-        node = _findTargetNodeSafe(model, self._nodeName)
-        self._register(effects, node, soundObject)
-
-    def _handleDeleteSoundObject(self, soundObject, reason):
-        isPlayer = self.__isPlayerSoundObject(soundObject)
-        if isPlayer:
-            self.__unregisterPlayerSoundObject(soundObject)
-        _, stopEvent = self._soundName[0 if isPlayer else 1]
-        soundObject.play(stopEvent)
-        super(_ContinuousShotSoundEffectDesc, self)._handleDeleteSoundObject(soundObject, reason)
-
-    def __isPlayerSoundObject(self, soundObject):
-        return id(soundObject) in self.__pcSoundObjectIDs
-
-    def __registerPlayerSoundObject(self, soundObject):
-        soundObjectID = id(soundObject)
-        self.__pcSoundObjectIDs[soundObjectID] += 1
-
-    def __unregisterPlayerSoundObject(self, soundObject):
-        soundObjectID = id(soundObject)
-        newValue = self.__pcSoundObjectIDs[soundObjectID] - 1
-        self.__pcSoundObjectIDs[soundObjectID] = max(0, newValue)
 
 
 class _NodeSoundEffectDesc(_BaseSoundEvent):
@@ -777,9 +729,7 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
     def create(self, model, effects, args):
         isPlayer, _ = self._isPlayer(args)
         if self._canCreateSoundObject(isPlayer):
-            soundName, _ = self._getName(args)
-            if soundName and not soundName[0].startswith('flamer'):
-                self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
+            self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
             soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
             if soundObject is not None and self.__tracerDelaySound is not None:
                 self.__tracerDelaySound.create(soundObject, args)
@@ -790,15 +740,12 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
     def delete(self, elem, reason):
         if self.__tracerDelaySound is not None:
             self.__tracerDelaySound.delete()
-            self.__tracerDelaySound = None
-        soundObject = elem.get('sound', None)
-        if soundObject is not None:
-            if self._dopplerEffect is not None:
-                soundObject.stopDopplerEffect()
-            if self.__stopSoundEventName:
+        if reason != 0:
+            soundObject = elem.get('sound', None)
+            if soundObject is not None:
+                if self._dopplerEffect is not None:
+                    soundObject.stopDopplerEffect()
                 soundObject.play(self.__stopSoundEventName)
-            else:
-                soundObject.stopAll()
         super(_TracerSoundEffectDesc, self).delete(elem, 0)
         return
 
@@ -1079,7 +1026,6 @@ class _SoundEffectDesc(_EffectDesc):
                     for soundStartParam in startParams:
                         sound.setRTPC(soundStartParam.name, soundStartParam.value)
 
-                    elem['sound'] = sound
             elif startParams:
                 sound = SoundGroups.g_instance.WWgetSoundObject(soundName + '_POS_' + str(id(pos)), None, pos)
                 if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
@@ -1423,7 +1369,6 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'tracerSound': _TracerSoundEffectDesc,
  'pTracerSound': _PartialTracerSoundEffectDesc,
  'shotSound': _ShotSoundEffectDesc,
- 'continuousShotSound': _ContinuousShotSoundEffectDesc,
  'visibility': _VisibilityEffectDesc,
  'model': _ModelEffectDesc,
  'decal': _DecalEffectDesc,

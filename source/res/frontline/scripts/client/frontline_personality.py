@@ -7,6 +7,7 @@ from constants_utils import AbstractBattleMode
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
+from frontline.gui.Scaleform import registerFLBattlePackages, registerFLTooltipsBuilders
 LOBBY_EXT_PACKAGES = ['frontline.gui.Scaleform.daapi.view.lobby', 'frontline.gui.Scaleform.daapi.view.lobby.hangar']
 
 class ClientFrontlineBattleMode(AbstractBattleMode):
@@ -32,6 +33,8 @@ def preInit():
     battleMode = ClientFrontlineBattleMode(__name__)
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerBannerEntryPointLUIRule()
+    registerFLBattlePackages()
+    registerFLTooltipsBuilders()
 
 
 def init():

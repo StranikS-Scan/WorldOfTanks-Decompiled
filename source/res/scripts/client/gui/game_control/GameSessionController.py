@@ -107,6 +107,10 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
         LOG_DEBUG('GameSessionController::start', self.__sessionStartedAt)
         BigWorld.lobbyStarted(self.__sessionStartedAt)
 
+    @property
+    def sessionStartedAt(self):
+        return self.__sessionStartedAt
+
     def onLobbyInited(self, event):
         if self.__lastNotifyTime is None:
             self.__lastNotifyTime = time_utils.getCurrentTimestamp()

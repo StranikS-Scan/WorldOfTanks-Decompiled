@@ -58,7 +58,7 @@ from nation_change_helpers.client_nation_change_helper import getChangeNationToo
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IEventLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IEventLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -108,9 +108,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     _bootcamp = dependency.descriptor(IBootcampController)
     __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
-    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -251,7 +249,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onOfflineStatusUpdated += self.__updateAlertMessage
         self.hangarSpace.setVehicleSelectable(True)
         self.__eventLootBoxes.onStatusChange += self.__onLootBoxesEventStatusChange
-        self.__armoryYardCtrl.onStatusChange += self.__onArmoryYardStatusChange
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
         unitMgr = prb_getters.getClientUnitMgr()
@@ -262,7 +259,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self._wotPlusCtrl.onDataChanged += self.__onWotPlusDataChanged
         self.battlePassController.onSeasonStateChanged += self.__switchCarousels
-        self.__debutBoxesController.onStateChanged += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -290,7 +286,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
         self.__eventLootBoxes.onStatusChange -= self.__onLootBoxesEventStatusChange
-        self.__armoryYardCtrl.onStatusChange -= self.__onArmoryYardStatusChange
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
@@ -324,7 +319,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._wotPlusCtrl.onDataChanged -= self.__onWotPlusDataChanged
-        self.__debutBoxesController.onStateChanged -= self.__switchCarousels
         self.battlePassController.onSeasonStateChanged -= self.__switchCarousels
         self.__timer.clearCallbacks()
         self.__timer = None
@@ -366,8 +360,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
             newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL if newCarouselAlias is None else newCarouselAlias
             linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI if linkage is None else linkage
-            if self.prbDispatcher is not None and self.__debutBoxesController.isEnabled() and self.prbDispatcher.getEntity().getQueueType() == QUEUE_TYPE.RANDOMS and newCarouselAlias in (HANGAR_ALIASES.TANK_CAROUSEL, HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL):
-                newCarouselAlias = HANGAR_ALIASES.DEBUT_BOXES_TANK_CAROUSEL
             (prevCarouselAlias != newCarouselAlias or force) and self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
         return
@@ -475,31 +467,20 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __handleFightButtonUpdated(self, _):
         self.__updateNavigationInResearchPanel()
 
-    def __showMarathonVehiclePreview(self, vehicleCD):
-        marathons = self.__marathonCtrl.getMarathons()
-        activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == vehicleCD), None)
-        if activeMarathon:
-            title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
-            shared_events.showMarathonVehiclePreview(vehicleCD, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
-        return bool(activeMarathon)
-
-    def __showArmoryYardVehiclePreview(self, vehicleCD):
-        if self.__armoryYardCtrl.isActive() and self.__armoryYardCtrl.getFinalRewardVehicle().intCD == vehicleCD:
-            self.__armoryYardCtrl.showHeroTankVehiclePreview()
-            return True
-        return False
-
-    def __showEventVehiclePreview(self, vehicleCD):
-        return self.__showMarathonVehiclePreview(vehicleCD) or self.__showArmoryYardVehiclePreview(vehicleCD)
-
     def __handleSelectedEntityUpdated(self, event):
         ctx = event.ctx
         if ctx['state'] != CameraMovementStates.FROM_OBJECT:
             entity = BigWorld.entities.get(ctx['entityId'], None)
-            if isinstance(entity, HeroTank) and entity.typeDescriptor:
-                vehicleCD = entity.typeDescriptor.type.compactDescr
-                if not self.__showEventVehiclePreview(vehicleCD):
-                    if isResourceWellRewardVehicle(vehicleCD=vehicleCD):
+            if isinstance(entity, HeroTank):
+                descriptor = entity.typeDescriptor
+                if descriptor:
+                    marathons = self.__marathonCtrl.getMarathons()
+                    vehicleCD = descriptor.type.compactDescr
+                    activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == vehicleCD), None)
+                    if activeMarathon:
+                        title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
+                        shared_events.showMarathonVehiclePreview(vehicleCD, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
+                    elif isResourceWellRewardVehicle(vehicleCD=vehicleCD):
                         shared_events.showResourceWellHeroPreview(vehicleCD)
                     else:
                         shared_events.showHeroTankPreview(vehicleCD)
@@ -715,11 +696,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onLootBoxesEventStatusChange(self):
         self.__updateCarouselEventEntryState()
-
-    def __onArmoryYardStatusChange(self):
-        self.__updateCarouselEventEntryState()
-        self.__switchCarousels(True)
-        self.__updateDogTagsState()
 
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())

@@ -100,7 +100,7 @@ def _readCommanderTutorSkill(xmlCtx, section, subsectionName):
 
 def _readCommanderUniversalistSkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.CommanderUniversalistSkill(skill, _xml.readFraction(xmlCtx, section, 'efficiency'))
+    return skills_components.CommanderUniversalistSkill(skill, _xml.readFraction(xmlCtx, section, 'efficiency'), _xml.readFloat(xmlCtx, section, 'chanceToHitPerLevel'))
 
 
 def _readCommanderSkillWithDelaySkill(xmlCtx, section, subsectionName):
@@ -115,7 +115,7 @@ def _readCommonSkill(xmlCtx, section, subsectionName):
 
 def _readRadiomanLastEffortSkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.RadiomanLastEffortSkill(skill, _xml.readFloat(xmlCtx, section, 'durationPerLevel'))
+    return skills_components.RadiomanLastEffortSkill(skill, _xml.readFloat(xmlCtx, section, 'durationPerLevel'), _xml.readFloat(xmlCtx, section, 'chanceToHitPerLevel'))
 
 
 def _readCrewMasterySkill(xmlCtx, section, subsectionName):
@@ -129,6 +129,7 @@ def _readCommanderEnemyShotPredictorSkill(xmlCtx, section, subsectionName):
 
 
 _g_skillConfigReaders = {'repair': _readRole,
+ 'fireFighting': _readRole,
  'camouflage': _readRole,
  'brotherhood': _readBrotherhoodSkill,
  'commander_tutor': _readCommanderTutorSkill,
@@ -137,23 +138,30 @@ _g_skillConfigReaders = {'repair': _readRole,
  'commander_sixthSense': _readCommanderSkillWithDelaySkill,
  'commander_enemyShotPredictor': _readCommanderEnemyShotPredictorSkill,
  'commander_eagleEye': _readCommonSkill,
+ 'commander_practical': _readCommonSkill,
  'driver_tidyPerson': _readCommonSkill,
  'driver_smoothDriving': _readCommonSkill,
  'driver_virtuoso': _readCommonSkill,
  'driver_badRoadsKing': _readCommonSkill,
  'driver_rammingMaster': _readCommonSkill,
+ 'driver_motorExpert': _readCommonSkill,
  'gunner_smoothTurret': _readCommonSkill,
  'gunner_sniper': _readCommonSkill,
  'gunner_rancorous': _readCommonSkill,
  'gunner_gunsmith': _readCommonSkill,
+ 'gunner_focus': _readCommonSkill,
+ 'gunner_quickAiming': _readCommonSkill,
  'loader_pedant': _readCommonSkill,
  'loader_desperado': _readCommonSkill,
  'loader_intuition': _readCommonSkill,
+ 'loader_ambushMaster': _readCommonSkill,
+ 'loader_ammunitionImprove': _readCommonSkill,
+ 'loader_melee': _readCommonSkill,
  'radioman_finder': _readCommonSkill,
- 'radioman_inventor': _readCommonSkill,
+ 'radioman_inventor': _readCrewMasterySkill,
  'radioman_lastEffort': _readRadiomanLastEffortSkill,
- 'radioman_retransmitter': _readCommonSkill,
- 'fireFighting': _readRole}
+ 'radioman_retransmitter': _readCrewMasterySkill,
+ 'radioman_interference': _readCommonSkill}
 
 def readSkillsConfig(xmlPath):
     xmlCtx = (None, xmlPath)

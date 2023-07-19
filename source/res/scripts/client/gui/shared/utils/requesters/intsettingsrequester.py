@@ -35,9 +35,9 @@ class IntSettingsRequester(object):
      'AIM_SNIPER_1': 46,
      'AIM_SNIPER_2': 47,
      'AIM_SNIPER_3': 48,
-     'MARKERS_ENEMY_1': 49,
-     'MARKERS_DEAD_1': 50,
-     'MARKERS_ALLY_1': 51,
+     'MARKERS_ENEMY': 49,
+     'MARKERS_DEAD': 50,
+     'MARKERS_ALLY': 51,
      'GUI_START_BEHAVIOR': 52,
      'FEEDBACK': 53,
      'EULA_VERSION': constants.USER_SERVER_SETTINGS.EULA_VERSION,
@@ -85,12 +85,7 @@ class IntSettingsRequester(object):
      FUN_RANDOM_CAROUSEL_FILTER_2: 108,
      'UI_STORAGE_2': constants.USER_SERVER_SETTINGS.UI_STORAGE_2,
      COMP7_CAROUSEL_FILTER_1: 110,
-     COMP7_CAROUSEL_FILTER_2: 111,
-     'MARKERS_ENEMY_2': 112,
-     'MARKERS_DEAD_2': 113,
-     'MARKERS_ALLY_2': 114,
-     'ONCE_ONLY_HINTS_3': 115,
-     'ARMORY_YARD': 31001}
+     COMP7_CAROUSEL_FILTER_2: 111}
 
     def __init__(self):
         self.__isSynced = False

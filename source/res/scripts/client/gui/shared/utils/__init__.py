@@ -20,8 +20,6 @@ from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
 from avatar_helpers import getAvatarDatabaseID, getAvatarSessionID
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
-SHELLS_BURST_COUNT_PROP_NAME = 'shellsBurstCount'
-SHELLS_FLAME_BURST_COUNT_PROP_NAME = 'shellsFlameBurstCount'
 RELOAD_TIME_SECS_PROP_NAME = 'reloadTimeSecs'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
@@ -33,6 +31,7 @@ DAMAGE_PROP_NAME = 'damage'
 SHELLS_PROP_NAME = 'shells'
 STUN_DURATION_PROP_NAME = 'stunDuration'
 AUTO_RELOAD_PROP_NAME = 'autoReloadTime'
+GUARANTEED_STUN_DURATION_PROP_NAME = 'guaranteedStunDuration'
 CLIP_VEHICLES_PROP_NAME = 'clipVehicles'
 UNICHARGED_VEHICLES_PROP_NAME = 'uniChargedVehicles'
 VEHICLES_PROP_NAME = 'vehicles'

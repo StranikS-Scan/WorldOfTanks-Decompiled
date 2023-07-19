@@ -34,7 +34,6 @@ class HelpPagePriority(object):
     SIEGE_MODE = 9
     ROLE_TYPE = 10
     COMP7 = 11
-    FLAMETHROWER = 11
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -166,28 +165,6 @@ class WheeledPagesBuilder(DetailedHelpPagesBuilder):
         isFrenchWheeledVehicle = isRoleLtWheeled and NATIONS_NAMES[vehicle.typeDescriptor.type.id[0]] == 'france'
         ctx['isFrenchWheeledVehicle'] = isFrenchWheeledVehicle
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isFrenchWheeledVehicle
-        return
-
-
-class FlameTankPagesBuilder(DetailedHelpPagesBuilder):
-    _SUITABLE_CTX_KEYS = ('isFlamethrower',)
-
-    @classmethod
-    def priority(cls):
-        return HelpPagePriority.FLAMETHROWER
-
-    @classmethod
-    def buildPages(cls, ctx):
-        headerTitle = buildTitle(ctx)
-        pages = []
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.flameTank.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.flameTank())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.flamethrowerHelp.flame_tank()), hintCtx=HelpHintContext.MECHANICS)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.flameTank.prosCons.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.flameTank.prosCons())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.flamethrowerHelp.flame_tank_pros_cons()), hintCtx=HelpHintContext.MECHANICS)
-        return pages
-
-    @classmethod
-    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['isFlamethrower'] = isFlamethrower = vehicle is not None and vehicle.typeDescriptor.isFlamethrower
-        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isFlamethrower
         return
 
 
@@ -401,5 +378,4 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  RoleTypePagesBuilder,
  RocketAccelerationPagesBuilder,
  Comp7PagesBuilder,
- MapboxPagesBuilder,
- FlameTankPagesBuilder))
+ MapboxPagesBuilder))

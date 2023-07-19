@@ -38,7 +38,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IEventLootBoxesController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IWinbackController, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -1233,21 +1233,6 @@ class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
             self.__eventLootBoxes.openShop()
 
 
-class _OpenReferralProgramMainViewHandler(NavigationDisabledActionHandler):
-    __referralProgramController = dependency.descriptor(IReferralProgramController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        self.__referralProgramController.showWindow()
-
-
 class _OpenCollectionHandler(NavigationDisabledActionHandler):
     __collections = dependency.descriptor(ICollectionsSystemController)
 
@@ -1278,36 +1263,6 @@ class _OpenCollectionRewardHandler(NavigationDisabledActionHandler):
     def doAction(self, model, entityID, action):
         savedData = model.getNotification(self.getNotType(), entityID).getSavedData()
         showCollectionAwardsWindow(savedData['collectionId'], savedData['bonuses'])
-
-
-class _OpenArmoryYardMain(NavigationDisabledActionHandler):
-    __ctrl = dependency.descriptor(IArmoryYardController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        self.__ctrl.goToArmoryYard()
-
-
-class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
-    __ctrl = dependency.descriptor(IArmoryYardController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        self.__ctrl.goToArmoryYardQuests()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1368,13 +1323,10 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenEventLootBoxesShopHandler,
- _OpenReferralProgramMainViewHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenWinbackSelectableRewardView,
  _OpenWinbackSelectableRewardViewFromQuest,
- _OpenArmoryYardMain,
- _OpenArmoryYardQuest,
  _OpenAchievementsScreen)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 

@@ -37,10 +37,10 @@ _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
 _RENT_TYPES = ('rentDays', 'rentBattles', 'rentWins')
 
-class StringTokenBonusFormatter(TokenBonusFormatter):
+class _StringTokenBonusFormatter(TokenBonusFormatter):
 
     def format(self, bonus):
-        result = super(StringTokenBonusFormatter, self).format(bonus)
+        result = super(_StringTokenBonusFormatter, self).format(bonus)
         return [ b.userName for b in result ]
 
     def _formatComplexToken(self, complexToken, token, bonus):
@@ -112,7 +112,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         bonusNames = []
         for bonus in quest.getBonuses():
             if bonus.getName() == 'battleToken':
-                bonusNames.extend(StringTokenBonusFormatter().format(bonus))
+                bonusNames.extend(_StringTokenBonusFormatter().format(bonus))
             bonusFormat = bonus.format()
             if bonusFormat:
                 if isinstance(bonus, CustomizationsBonus):

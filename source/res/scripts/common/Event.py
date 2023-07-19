@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Event.py
-from functools import partial
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class Event(list):
@@ -159,71 +158,25 @@ class EventsSubscriber(object):
 
     def __init__(self):
         super(EventsSubscriber, self).__init__()
-        self._subscribeList = []
-        self._contextSubscribeList = []
+        self.__subscribeList = []
+        self.__contextSubscribeList = []
 
     def subscribeToContextEvent(self, event, delegate, *contextIDs):
         event.subscribe(delegate, *contextIDs)
-        self._contextSubscribeList.append((event, delegate))
+        self.__contextSubscribeList.append((event, delegate))
 
     def subscribeToEvent(self, event, delegate):
         event += delegate
-        self._subscribeList.append((event, delegate))
-
-    def subscribeToContextEvents(self, *subscribers):
-        for event, delegate, contextIDs in subscribers:
-            event.subscribe(delegate, *contextIDs)
-            self._contextSubscribeList.append((event, delegate))
-
-    def subscribeToEvents(self, *subscribers):
-        for subscriber in subscribers:
-            event, delegate = subscriber
-            event += delegate
-            self._subscribeList.append(subscriber)
+        self.__subscribeList.append((event, delegate))
 
     def unsubscribeFromAllEvents(self):
-        for event, delegate in self._subscribeList:
+        for event, delegate in self.__subscribeList:
             event -= delegate
 
-        for event, delegate in self._contextSubscribeList:
+        for event, delegate in self.__contextSubscribeList:
             event.unsubscribe(delegate)
 
-        self._subscribeList = []
-
-
-class SuspendableEventSubscriber(EventsSubscriber):
-
-    def __init__(self):
-        super(SuspendableEventSubscriber, self).__init__()
-        self.__suspendedSubscribes = []
-        self.__suspendedContextSubscribes = []
-
-    def pause(self, eventsList=None):
-        if eventsList is None:
-            for event, subscriber in self._subscribeList:
-                if eventsList is None:
-                    event -= subscriber
-                if event in eventsList:
-                    event -= subscriber
-                    self.__suspendedSubscribes.append((event, subscriber))
-
-            for event, subscriber in self._contextSubscribeList:
-                if eventsList is None:
-                    event.unsubscribe(subscriber)
-                if event in eventsList:
-                    event.unsubscribe(subscriber)
-                    self.__suspendedContextSubscribes.append((event, subscriber))
-
-        return
-
-    def resume(self):
-        subscribers = self.__suspendedSubscribes or self._subscribeList
-        for event, subscriber in subscribers:
-            event += subscriber
-
-        subscribers = self.__suspendedContextSubscribes or self._contextSubscribeList
-        for event, subscriber in subscribers:
-            event.subscribe(subscriber)
+        self.__subscribeList = []
 
 
 class ContextEvent(object):
@@ -275,56 +228,3 @@ class EventCallback(object):
     def callback(self, *args, **kwargs):
         self._callback(*args, **kwargs)
         self.event -= self.callback
-
-
-class PriorityEvent(Event):
-
-    def __repr__(self):
-        return 'PriorityEvent(%s)(%s):%s' % (self.__class__.__name__, len(self), repr(self[:]))
-
-    def __iadd__(self, delegate):
-        if not callable(delegate):
-            raise TypeError('Event listener is not callable.')
-        if not hasattr(delegate, '__cmp__'):
-            raise TypeError('Event listener is not comparable.')
-        if delegate not in self:
-            self.append(delegate)
-            self[:] = sorted(self)
-        return self
-
-
-class AroundFunctionEvents(EventManager):
-
-    class Bypass(Exception):
-        pass
-
-    __slots__ = ('callable', 'before', 'after')
-
-    def __init__(self, fun, eventClassFactory=Event):
-        super(AroundFunctionEvents, self).__init__()
-        self.callable = fun
-        self.before = eventClassFactory(self)
-        self.after = eventClassFactory(self)
-
-    def __call__(self, *args, **kwargs):
-        try:
-            self.before(*args, **kwargs)
-            res = self.callable(*args, **kwargs)
-        except AroundFunctionEvents.Bypass:
-            res = None
-
-        self.after(*args, **kwargs)
-        return res
-
-    def pre(self, handler):
-        self.before += handler
-        return handler
-
-    def post(self, handler):
-        self.after += handler
-        return handler
-
-    def around(self, handler):
-        self.before += partial(handler, isBefore=True)
-        self.after += handler
-        return handler

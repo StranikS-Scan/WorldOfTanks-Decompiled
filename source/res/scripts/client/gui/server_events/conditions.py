@@ -603,6 +603,11 @@ class Token(_Requirement):
     def isConsumable(self):
         return self._consumable
 
+    def getConsumeCount(self):
+        if self.isConsumable():
+            consumeData, _ = self._data['consume']
+            return dict(consumeData).get('value', 0)
+
     def getID(self):
         return self._id
 
@@ -806,9 +811,6 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
 
     def _isAvailable(self, vehicle):
         return vehicle.intCD in self._getVehiclesCache(self._data)
-
-    def parseFilters(self):
-        return self._parseFilters(self._data)
 
 
 class _DossierValue(_Requirement):

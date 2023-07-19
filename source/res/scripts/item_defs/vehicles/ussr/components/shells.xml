@@ -14,7 +14,6 @@
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
     <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
     <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
-    <flame>	FLAME.png 0 0	</flame>
   </icons>
   <_12.7mm_AP_B32>
     <id>	117	</id>
@@ -3682,7 +3681,9 @@
     <caliber>	152	</caliber>
     <explosionRadius>	6.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	4.6	</stunDuration>
+    <stunDuration>	6.5	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3824,7 +3825,9 @@
     <caliber>	152	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	7.7	</stunDuration>
+    <stunDuration>	11	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3897,7 +3900,9 @@
     <caliber>	152	</caliber>
     <explosionRadius>	7.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	16.1	</stunDuration>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -4185,7 +4190,9 @@
     <caliber>	180	</caliber>
     <explosionRadius>	9.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	17.0	</stunDuration>
+    <stunDuration>	29	</stunDuration>
+    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.60	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -4234,7 +4241,9 @@
     <caliber>	203	</caliber>
     <explosionRadius>	10.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	17.6	</stunDuration>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -4634,60 +4643,4 @@
     </deviceDamagePossibility>
     <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
   </_23mm_BZK_FEP>
-  <_25mm_AP_1_flameshell>
-    <id>	31002	</id>
-    <userString>	#ussr_vehicles:_25mm_AP_1_flameshell	</userString>
-    <icon>	flame	</icon>
-    <price>	4	</price>
-    <kind>	FLAME	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	25	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallFlamePneumatic	</effects>
-    <damage>
-      <armor>	20	</armor>
-      <devices>	15	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	1	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	40	</armor>
-        <devices>	10	</devices>
-      </damage>
-    </armorSpalls>
-    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
-    <hitDeviceChanceMultiplier>	1.0	</hitDeviceChanceMultiplier>
-    <hitCrewChanceMultiplier>	0.25	</hitCrewChanceMultiplier>
-  </_25mm_AP_1_flameshell>
-  <_40mm_AP_7_flameshell>
-    <id>	31001	</id>
-    <userString>	#ussr_vehicles:_40mm_AP_7_flameshell	</userString>
-    <icon>	flame	</icon>
-    <price>	57	</price>
-    <kind>	FLAME	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	40	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallFlame	</effects>
-    <hasStun>	true	</hasStun>
-    <stunType>	FLAME	</stunType>
-    <stunInPoint>	true	</stunInPoint>
-    <stunDuration>	8	</stunDuration>
-    <damage>
-      <armor>	40	</armor>
-      <devices>	40	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	3	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	120	</armor>
-        <devices>	30	</devices>
-      </damage>
-    </armorSpalls>
-    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
-    <hitDeviceChanceMultiplier>	1.0	</hitDeviceChanceMultiplier>
-    <hitCrewChanceMultiplier>	0.25	</hitCrewChanceMultiplier>
-  </_40mm_AP_7_flameshell>
 </shells.xml>

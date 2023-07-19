@@ -5,7 +5,7 @@ from battle_modifiers_common import ModifiersContext
 from battle_modifiers_common.battle_modifiers import BattleParams
 from battle_modifiers_ext.constants_ext import USE_VEHICLE_CACHE, MAX_VEHICLE_CACHE_LAYER_COUNT, DEBUG_MODIFIERS, ModifierDomain
 from battle_modifiers_ext.modification_cache.modification_cache import ModificationCache
-from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE, HAS_EXPLOSION_EFFECT
+from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, Union
@@ -93,7 +93,7 @@ class VehicleModifier(object):
                 gun.clip = (clipCount, modifiers(BattleParams.CLIP_INTERVAL, clipInterval))
             if gun.burst != DEFAULT_GUN_BURST:
                 burstCount, burstInterval = gun.burst
-                gun.burst = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval))
+                gun.clip = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval))
             if gun.autoreload != DEFAULT_GUN_AUTORELOAD:
                 modifiedReloadTime = [ modifiers(BattleParams.AUTORELOAD_TIME, reloadTime) for reloadTime in gun.autoreload.reloadTime ]
                 gun.autoreload = gun.autoreload._replace(reloadTime=tuple(modifiedReloadTime))
@@ -104,8 +104,7 @@ class VehicleModifier(object):
             dispFactors = gun.shotDispersionFactors
             gun.shotDispersionFactors = {'turretRotation': modifiers(BattleParams.DISP_FACTOR_TURRET_ROTATION, dispFactors['turretRotation']),
              'afterShot': modifiers(BattleParams.DISP_FACTOR_AFTER_SHOT, dispFactors['afterShot']),
-             'whileGunDamaged': modifiers(BattleParams.DISP_FACTOR_WHILE_GUN_DAMAGED, dispFactors['whileGunDamaged']),
-             'afterShotInBurst': dispFactors['afterShotInBurst']}
+             'whileGunDamaged': modifiers(BattleParams.DISP_FACTOR_WHILE_GUN_DAMAGED, dispFactors['whileGunDamaged'])}
             if gun.dualGun != DEFAULT_GUN_DUALGUN:
                 reloadTimes = [ modifiers(BattleParams.RELOAD_TIME, reloadTime) for reloadTime in gun.dualGun.reloadTimes ]
                 gun.dualGun = gun.dualGun._replace(reloadTimes=tuple(reloadTimes))
@@ -160,14 +159,14 @@ class VehicleModifier(object):
         shellType = copy.copy(shellType)
         isArmorPiercing = shellType.name.startswith('ARMOR_PIERCING')
         isHollowCharge = shellType.name == SHELL_TYPES.HOLLOW_CHARGE
-        hasExplosionEffect = shellType.name in HAS_EXPLOSION_EFFECT
-        isModernWithExplosionEffect = hasExplosionEffect and shellType.mechanics == SHELL_MECHANICS_TYPE.MODERN
+        isHE = shellType.name == SHELL_TYPES.HIGH_EXPLOSIVE
+        isModernHE = isHE and shellType.mechanics == SHELL_MECHANICS_TYPE.MODERN
         if isArmorPiercing:
             shellType.normalizationAngle = modifiers(BattleParams.NORMALIZATION_ANGLE, shellType.normalizationAngle)
         if BattleParams.RICOCHET_ANGLE in modifiers and (isArmorPiercing or isHollowCharge):
             initAngle = acos(shellType.ricochetAngleCos)
             shellType.ricochetAngleCos = cos(modifiers(BattleParams.RICOCHET_ANGLE, initAngle))
-        if isModernWithExplosionEffect and shellType.armorSpalls.isActive:
+        if isModernHE and shellType.armorSpalls.isActive:
             armorSpalls = copy.copy(shellType.armorSpalls)
             armorSpalls.radius = modifiers(BattleParams.ARMOR_SPALLS_IMPACT_RADIUS, armorSpalls.radius)
             armorSpalls.damageAbsorptionType = modifiers(BattleParams.ARMOR_SPALLS_DAMAGE_ABSORPTION, armorSpalls.damageAbsorptionType)

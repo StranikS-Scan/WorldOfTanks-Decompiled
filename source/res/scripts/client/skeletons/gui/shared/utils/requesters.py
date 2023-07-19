@@ -346,10 +346,6 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def refSystem20(self):
-        raise NotImplementedError
-
-    @property
     def piggyBank(self):
         raise NotImplementedError
 
@@ -1211,26 +1207,4 @@ class IAchievements20Requester(IRequester):
         raise NotImplementedError
 
     def getLayoutLength(self):
-        raise NotImplementedError
-
-
-class IArmoryYardRequester(IRequester):
-
-    @property
-    def data(self):
-        raise NotImplementedError
-
-
-class IReferralProgramRequester(IRequester):
-
-    def getRPPgbPoints(self):
-        raise NotImplementedError
-
-    def getRPExpirationTime(self):
-        raise NotImplementedError
-
-    def getRecruitDelta(self):
-        raise NotImplementedError
-
-    def getRPPassiveIncome(self):
         raise NotImplementedError

@@ -9,10 +9,11 @@ from debug_utils import LOG_WARNING
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getVehicleRequirements
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getChainVehTypeAndLevelRestrictions
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -25,7 +26,7 @@ from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditi
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium, isDebutBoxesQuest
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
 from gui.shared.formatters import text_styles, icons, time_formatters
@@ -39,7 +40,7 @@ from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IDebutBoxesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 CARD_AWARDS_EPIC_COUNT = 4
@@ -612,15 +613,6 @@ class _PremiumMissionInfo(_MissionInfo):
          'status': MISSIONS_STATES.NONE}
 
 
-class _DebutBoxesMissionInfo(_MissionInfo):
-
-    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        data = super(_DebutBoxesMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
-        if data['status'] == MISSIONS_STATES.NONE:
-            data['statusLabel'] = ''
-        return data
-
-
 class _DetailedMissionInfo(_MissionInfo):
     __AWARDS_COUNT = 6
 
@@ -1021,7 +1013,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         else:
             statusLabel = None
             status = MISSIONS_STATES.NONE
-            addBottomStatusText = self.__getAddBottomText()
+            addBottomStatusText = self.__getAddBottomInfo()
             showIcon = False
             return {'showIcon': showIcon,
              'addBottomStatusText': addBottomStatusText,
@@ -1041,8 +1033,11 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
          'status': MISSIONS_STATES.DISABLED}
 
     def _getNoVehicleStatusFields(self):
-        addBottomStatusText = self.__getAddBottomText(isLocked=True)
-        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=backport.text(R.strings.tooltips.personalMission.status.lockedByVehicleType.body.dyn(PM_BRANCH.TYPE_TO_NAME[self.event.getQuestBranch()])(), **getVehicleRequirements(self.event.getOperationID(), self.event.getQuestClassifier().getAllClassificationAttrs())))}
+        addBottomStatusText = self.__getAddBottomLocked()
+        bodyTooltip = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY
+        if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+            bodyTooltip = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY
+        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(bodyTooltip, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))}
         if self.event.isInProgress():
             statusData = self._getProgressStatusFields()
             statusData.update(addBottomStatusText=addBottomStatusText)
@@ -1099,7 +1094,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def _getCompleteStatusFields(self, *args):
         quest = self.event
-        addBottomStatusText = self.__getAddBottomText()
+        addBottomStatusText = self.__getAddBottomInfo()
         if quest.areTokensPawned():
             statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_DONEWITHPAWN_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_DONEWITHPAWN_BODY)}
             count = text_styles.stats(str(quest.getPawnCost()) + getHtmlAwardSheetIcon(quest.getQuestBranch()))
@@ -1116,7 +1111,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def _getProgressStatusFields(self):
         quest = self.event
-        addBottomStatusText = self.__getAddBottomText()
+        addBottomStatusText = self.__getAddBottomInfo()
         status = MISSIONS_STATES.IN_PROGRESS
         if quest.isOnPause:
             status = MISSIONS_STATES.IS_ON_PAUSE
@@ -1191,14 +1186,23 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         data.update({'onPauseBtnIcon': self.__getPauseBtnIcon()})
         return data
 
-    def __getAddBottomText(self, isLocked=False):
-        if isLocked:
-            resBase = R.strings.quests.personalMission.status.addBottomLocked
-        else:
-            resBase = R.strings.quests.personalMission.status.addBottomInfo
+    def __getAddBottomInfo(self):
         quest = self.event
-        style = text_styles.error if isLocked else text_styles.standard
-        return style(backport.text(resBase.dyn(PM_BRANCH.TYPE_TO_NAME[quest.getQuestBranch()])(), **getVehicleRequirements(quest.getOperationID(), quest.getQuestClassifier().getAllClassificationAttrs())))
+        pmCache = self._eventsCache.getPersonalMissions()
+        curOperation = pmCache.getAllOperations().get(quest.getOperationID())
+        vehType, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(curOperation, quest.getChainID())
+        if quest.getQuestBranch() == PM_BRANCH.REGULAR:
+            return text_styles.standard(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMINFO_REGULAR, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel))
+        return text_styles.standard(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMINFO_PM2, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if quest.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
+
+    def __getAddBottomLocked(self):
+        quest = self.event
+        pmCache = self._eventsCache.getPersonalMissions()
+        curOperation = pmCache.getAllOperations().get(quest.getOperationID())
+        vehType, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(curOperation, quest.getChainID())
+        if quest.getQuestBranch() == PM_BRANCH.REGULAR:
+            return text_styles.error(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_REGULAR, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel))
+        return text_styles.error(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_PM2, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if quest.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
 
     def __getHoldAwardSheetBtnTooltipData(self):
         if self.__isPawnAvailable(self.event):
@@ -1219,7 +1223,10 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
     def __getRetryBtnTooltip(self, isAvailable):
         tooltip = PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETRYBTN
         if not isAvailable:
-            tooltip = makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=backport.text(R.strings.tooltips.personalMission.status.lockedByVehicleType.body.dyn(PM_BRANCH.TYPE_TO_NAME[self.event.getQuestBranch()])(), **getVehicleRequirements(self.event.getOperationID(), self.event.getQuestClassifier().getAllClassificationAttrs())))
+            tooltipBody = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY
+            if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2:
+                tooltipBody = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY
+            tooltip = makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(tooltipBody, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))
         elif self.event.areTokensPawned():
             tooltip = PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETURNAWARDLISTBTN
         return tooltip
@@ -1272,26 +1279,6 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return self.eventsCache.getPersonalMissions().getFreeTokensCount(quest.getPMType().branch) >= quest.getPawnCost()
 
 
-class _DebutBoxesDetailedMissionInfo(_DetailedMissionInfo):
-    __debutBoxes = dependency.descriptor(IDebutBoxesController)
-
-    def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
-        data = super(_DebutBoxesDetailedMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)
-        data.update({'titleTooltip': None})
-        return data
-
-    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        data = super(_DebutBoxesDetailedMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
-        if data['status'] == MISSIONS_STATES.NONE:
-            data['statusLabel'] = ''
-        return data
-
-    def getVehicleRequirementsCriteria(self):
-        criteria, extraConditions, isQuestForBattleRoyale = super(_DebutBoxesDetailedMissionInfo, self).getVehicleRequirementsCriteria()
-        criteria |= REQ_CRITERIA.CUSTOM(self.__debutBoxes.isQuestsAvailableOnVehicle)
-        return (criteria, extraConditions, isQuestForBattleRoyale)
-
-
 def getMissionInfoData(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _TokenMissionInfo(event)
@@ -1308,8 +1295,6 @@ def getMissionInfoData(event):
         return _BattleRoyaleDailyMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedMissionInfo(event)
-    elif isDebutBoxesQuest(event.getID()):
-        return _DebutBoxesMissionInfo(event)
     else:
         return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -1329,8 +1314,6 @@ def getDetailedMissionData(event):
         return _BattleRoyaleDetailedMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedDetailedMissionInfo(event)
-    elif isDebutBoxesQuest(event.getID()):
-        return _DebutBoxesDetailedMissionInfo(event)
     elif event.getGroupID() == FUN_RANDOM_GROUP_ID:
         return _FunRandomDetailedMissionInfo(event)
     else:

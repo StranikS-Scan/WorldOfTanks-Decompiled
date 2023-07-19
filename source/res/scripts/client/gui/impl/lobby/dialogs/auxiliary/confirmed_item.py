@@ -57,7 +57,7 @@ class ConfirmedItem(object):
         return False
 
     def getOptItemDescKey(self):
-        return 'itemWithDemountKit' if self.canUseDemountKit() else 'item'
+        return 'itemWithDemountKit' if self.canUseDemountKit() else 'itemDeluxe'
 
     def getLevel(self):
         pass

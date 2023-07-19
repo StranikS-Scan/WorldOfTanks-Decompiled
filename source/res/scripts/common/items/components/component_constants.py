@@ -78,5 +78,3 @@ MAIN_TRACK_PAIR_IDX = 0
 DynamicShotEffect = collections.namedtuple('DynamicShotEffect', ['effectsIndex', 'minShotsCount', 'maxShotsCount'])
 DYNAMIC_SHOT_MAX_COUNT = 10000
 ShootImpulse = collections.namedtuple('ShootImpulse', ['magnitude', 'applicationPoint', 'isStillSafe'])
-DEFAULT_STUN_TYPE = 'DEFAULT'
-DEFAULT_SHELL_HIT_EXTRAS_CHANCE_MULTIPLIER = 1.0

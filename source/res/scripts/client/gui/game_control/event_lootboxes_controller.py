@@ -12,8 +12,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getEventLootBoxesUrl
 from gui.entitlements.entitlement_common import LOOT_BOX_COUNTER_ENTITLEMENT
 from gui.game_control.links import URLMacros
-from gui.impl.lobby.loot_box.loot_box_helper import parseAllOfBonusInfoSection, parseLimitBoxInfoSection
-from gui.server_events.bonuses import mergeBonuses
+from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses
 from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY, EventLootBoxes
 from gui.shared.gui_items.processors.loot_boxes import LootBoxGetInfoProcessor
@@ -200,6 +199,12 @@ class EventLootBoxesController(IEventLootBoxesController):
         else:
             showShop(getEventLootBoxesUrl())
 
+    def getCommonBoxInfo(self):
+        return self.getBoxInfo(EventLootBoxes.COMMON)
+
+    def getPremiumBoxInfo(self):
+        return self.getBoxInfo(EventLootBoxes.PREMIUM)
+
     def getBoxInfo(self, boxType):
         if not self.__boxInfo:
             self.__updateBoxInfo()
@@ -317,8 +322,8 @@ class EventLootBoxesController(IEventLootBoxesController):
                     data = lootBoxData.get('bonus', {})
                     lbType = lootBoxData['type']
                     boxData['id'] = lootBoxID
-                    boxData['limit'] = parseLimitBoxInfoSection(lootBoxData.get('config', {}))
-                    boxData['slots'] = parseAllOfBonusInfoSection(data.get('allof', {}))
+                    boxData['limit'] = self.__parseLimitSection(lootBoxData.get('config', {}))
+                    boxData['slots'] = self.__parseAllOfSection(data.get('allof', {}))
                     boxData['history'] = lootBoxData.get('history', (0, None, 0))
                     boxInfoData[lbType] = boxData
 
@@ -326,3 +331,48 @@ class EventLootBoxesController(IEventLootBoxesController):
         self.onBoxInfoUpdated()
         self.__updateBoxCountToGuaranteedBonus()
         return
+
+    def __parseLimitSection(self, data):
+        return data.get('limits', {}).get('guaranteedBonusLimit', {}).get('guaranteedFrequency', 30)
+
+    def __parseAllOfSection(self, data):
+        slots = dict()
+        if data:
+            for idx, slotsData in enumerate(data):
+                probability, bonuses = self.__parseSlotSection(slotsData)
+                slots.setdefault(idx, {}).setdefault('probability', probability)
+                slots.setdefault(idx, {}).setdefault('bonuses', bonuses)
+
+        return slots
+
+    def __parseSlotSection(self, data):
+        if isinstance(data, tuple) and len(data) == 4:
+            probability, _, _, rawData = data
+            bonuses = []
+            bonuses.extend(self.__parseGroupsSection(rawData))
+            return (probability, bonuses)
+        return (0, [])
+
+    def __parseGroupsSection(self, data):
+        groups = data.get('groups', [])
+        bonuses = []
+        for groupData in groups:
+            bonuses.extend(self.__parseOneOfSection(groupData))
+
+        return bonuses
+
+    def __parseOneOfSection(self, data):
+        oneOf = data.get('oneof', ())
+        bonuses = []
+        if oneOf and len(oneOf) == 2:
+            _, items = oneOf
+            for item in items:
+                if item and len(item) == 4:
+                    _, _, _, rawData = item
+                    if rawData:
+                        for k, v in rawData.iteritems():
+                            if k == 'groups':
+                                bonuses.extend(self.__parseGroupsSection(rawData))
+                            bonuses.extend(getNonQuestBonuses(k, v))
+
+        return bonuses

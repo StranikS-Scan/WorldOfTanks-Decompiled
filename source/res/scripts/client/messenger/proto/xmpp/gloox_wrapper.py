@@ -44,12 +44,15 @@ class ClientDecorator(object):
             if not hasattr(client, handlerName):
                 g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler no is found', handlerName)
                 continue
+            handler = getattr(client, handlerName)
+            if handler:
+                g_logOutput.warning(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler already is set', handlerName)
+                continue
             listener = getattr(self, listenerName, None)
             if listener is None or not callable(listener):
                 g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Listener no is found', listenerName)
                 continue
-            if not getattr(client, handlerName):
-                setattr(client, handlerName, listener)
+            setattr(client, handlerName, listener)
 
         ClientEventsHandler._setClient(self)
         return

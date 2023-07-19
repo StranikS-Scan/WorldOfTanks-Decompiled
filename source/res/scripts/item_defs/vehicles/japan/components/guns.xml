@@ -38,6 +38,7 @@
     <_88mm_Nameless_Gun>	38	</_88mm_Nameless_Gun>
     <_88mm_Edelweiss_Gun>	39	</_88mm_Edelweiss_Gun>
     <_127mm_Gun_Type_89>	40	</_127mm_Gun_Type_89>
+    <_105mm_Experimental_Tank_Gun_Kai_BP>	31001	</_105mm_Experimental_Tank_Gun_Kai_BP>
     <_149mm_Gun_Type_97>	41	</_149mm_Gun_Type_97>
     <_75mm_Gun_Type88>	42	</_75mm_Gun_Type88>
     <_105mm_Cannon_Type92_A>	43	</_105mm_Cannon_Type92_A>
@@ -49,7 +50,6 @@
     <_75mm_Type_90_Gun>	49	</_75mm_Type_90_Gun>
     <_75mm_Type_5_Gun_Ro>	50	</_75mm_Type_5_Gun_Ro>
     <_105mm_Type_92_Gun_Ro>	51	</_105mm_Type_92_Gun_Ro>
-    <_105mm_Experimental_Tank_Gun_Kai_BP>	31001	</_105mm_Experimental_Tank_Gun_Kai_BP>
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
@@ -2328,14 +2328,14 @@
           <speed>	916	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	215 205	</piercingPower>
+          <piercingPower>	215 188	</piercingPower>
         </_105mm_AP_Experimental_Type2_TKK>
         <_105mm_AP_Experimental_Type2_TS>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	916	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	253 231	</piercingPower>
+          <piercingPower>	253 221	</piercingPower>
         </_105mm_AP_Experimental_Type2_TS>
         <_105mm_HE_Type91>
           <defaultPortion>	0.1	</defaultPortion>
@@ -2355,7 +2355,7 @@
       <impulse>	0.38	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.24	</amplitude>
+        <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_large_mb	</effects>
@@ -2386,14 +2386,14 @@
           <speed>	916	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	215 205	</piercingPower>
+          <piercingPower>	215 188	</piercingPower>
         </_105mm_AP_Experimental_Type2_TKK>
         <_105mm_AP_Experimental_Type2_TS>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	916	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	253 231	</piercingPower>
+          <piercingPower>	253 221	</piercingPower>
         </_105mm_AP_Experimental_Type2_TS>
         <_105mm_HE_Type91>
           <defaultPortion>	0.1	</defaultPortion>

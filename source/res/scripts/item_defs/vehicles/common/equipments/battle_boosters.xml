@@ -475,7 +475,7 @@
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor	</tags>
     <script>	SkillEquipment	  <skillName>	loader_pedant	</skillName>
-      <perkLevelMultiplier>	3.0	</perkLevelMultiplier>
+      <perkLevelMultiplier>	4.0	</perkLevelMultiplier>
     </script>
     <kpi>
       <oneOf>
@@ -485,7 +485,7 @@
         </boostSkill>
         <mul>
           <name>	vehicleAmmoBayStrength	</name>
-          <value>	1.375	</value>
+          <value>	4.0	</value>
         </mul>
       </oneOf>
     </kpi>
@@ -502,7 +502,8 @@
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster reconnaissance	</tags>
     <script>	LastEffortBattleBooster	  <skillName>	radioman_lastEffort	</skillName>
-      <durationPerLevel>	0.06	</durationPerLevel>
+      <durationPerLevel>	0.03	</durationPerLevel>
+      <chanceToHitPerLevel>	0.0	</chanceToHitPerLevel>
       <perkLevelMultiplier>	1.5	</perkLevelMultiplier>
     </script>
     <kpi>
@@ -513,7 +514,7 @@
         </boostSkill>
         <add>
           <name>	crewSkillLastEffortDuration	</name>
-          <value>	3	</value>
+          <value>	1	</value>
         </add>
       </oneOf>
     </kpi>

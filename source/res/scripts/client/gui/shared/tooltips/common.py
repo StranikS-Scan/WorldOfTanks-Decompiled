@@ -4,7 +4,6 @@ import cPickle
 import logging
 import math
 from collections import namedtuple, defaultdict
-from gui.impl.lobby.debut_boxes.tooltips.debut_boxes_badge_tooltip_view import DebutBoxesBadgeTooltipView
 from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
 from gui.impl.pub import ToolTipWindow
 from helpers.i18n import makeString
@@ -1109,12 +1108,9 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         return
     icon = settings.icon
     countFormatted = text_styles.concatStylesWithSpace(settings.textStyle(_int(price)), icon)
-    if wotPlusStatus:
-        wotPlusLabel = text_styles.wotPlusText('free')
-        wotPlusIcon = icons.wotPlus()
-        wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
-    else:
-        wotPlusText = ''
+    wotPlusLabel = text_styles.wotPlusText(backport.text(R.strings.demount_kit.equipmentDemount.optionFree()))
+    wotPlusIcon = icons.wotPlus()
+    wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
     dkCount = text_styles.demountKitText('1')
     dkIcon = icons.demountKit()
     dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
@@ -1122,8 +1118,17 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         if isFreeToDemount:
             countFormatted = wotPlusText
     descr = R.strings.demount_kit.equipmentInstall
-    if wotPlusStatus or not canUseDemountKit or isDeluxe:
+    if wotPlusStatus and isFreeToDemount:
         dynAccId = descr.demount()
+    elif not canUseDemountKit and not isDeluxe:
+        dynAccId = descr.demount()
+    elif isDeluxe:
+        if isFreeDeluxeEnabled:
+            dynAccId = descr.demountNoKitOr()
+        else:
+            dynAccId = descr.demount()
+    elif isFreeDemountEnabled:
+        dynAccId = descr.demountWithKitOr()
     else:
         dynAccId = descr.demountWithKit()
     valueFormatted = backport.text(dynAccId, count=countFormatted, countDK=text_styles.main(dkText), wotPlus=text_styles.main(wotPlusText))
@@ -1434,15 +1439,6 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
-
-
-class DebutBoxesBadgeTooltipContentWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(DebutBoxesBadgeTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.DEBUT_BOXES_BADGE)
-
-    def getDisplayableData(self, intCD, *args, **kwargs):
-        return DecoratedTooltipWindow(DebutBoxesBadgeTooltipView(intCD), useDecorator=False)
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):

@@ -927,16 +927,13 @@ def _migrateTo100(core, data, initialized):
 def _migrateTo101(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_INTRO_SHOWN] = False
-    data['markersData'].setdefault('ally', {})['markerAltVehicleDist'] = True
-    data['markersData'].setdefault('enemy', {})['markerAltVehicleDist'] = True
 
 
 def _migrateTo102(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_22_WELCOME_SHOWN] = False
-    onceOnlyHintsData = data['onceOnlyHints3']
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_ENTRY_POINT_HINT] = False
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_RECRUIT_ENTRY_POINT_HINT] = False
+    feedbackBattleEvents = data.get('feedbackBattleEvents', {})
+    feedbackBattleEvents[BATTLE_EVENTS.CREW_PERKS] = True
 
 
 def _migrateTo103(core, data, initialized):
@@ -964,21 +961,6 @@ def _migrateTo104(_, data, __):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
-
-
-def _migrateTo105(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    clear = data['clear']
-    settingOffset = 67108864
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0) | settingOffset
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0) | settingOffset
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0) | settingOffset
 
 
 _versions = ((1,
@@ -1391,10 +1373,6 @@ _versions = ((1,
   False),
  (104,
   _migrateTo104,
-  False,
-  False),
- (105,
-  _migrateTo105,
   False,
   False))
 

@@ -57,18 +57,30 @@ class UILoggingCore(IUILoggingCore):
 
     @noexcept
     def log(self, feature, group, action, loglevel=LogLevels.INFO, **params):
-        if not self._isEnabled:
-            return
-        record = BootcampLogRecord if feature == FEATURES.BOOTCAMP else LogRecord
-        log = record(feature=feature, group=group, action=action, level=loglevel, params=params)
-        if log.broken:
-            self._logger.warning('Broken %s.', log)
-            return
-        self._handler.add(log)
+        log = self._createLogRecord(feature, group, action, loglevel, **params)
+        if log:
+            self._handler.add(log)
+
+    @noexcept
+    def logImmediately(self, feature, group, action, loglevel=LogLevels.INFO, **params):
+        log = self._createLogRecord(feature, group, action, loglevel, **params)
+        if log:
+            self._handler.logImmediately(log)
 
     @property
     def _disabled(self):
         return not self._lobbyContext.getServerSettings().uiLogging.enabled
+
+    def _createLogRecord(self, feature, group, action, loglevel, **params):
+        if not self._isEnabled:
+            return None
+        record = BootcampLogRecord if feature == FEATURES.BOOTCAMP else LogRecord
+        log = record(feature=feature, group=group, action=action, level=loglevel, params=params)
+        if log.broken:
+            self._logger.warning('Broken %s.', log)
+            return None
+        else:
+            return log
 
     @property
     def _isEnabled(self):

@@ -8,6 +8,8 @@ import logging
 import BigWorld
 import WWISE
 import Event
+from account_helpers.client_epic_meta_game import skipResponse
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -224,7 +226,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         season = self.getCurrentSeason()
         return season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()) if season is not None else False
 
-    def getLevelsToUPGAllReserves(self):
+    def getLevelsToUpgradeAllReserves(self):
         return self.getModeSettings().levelsToUpgrateAllReserves
 
     def isBattlePassDataEnabled(self):
@@ -265,9 +267,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getValidVehicleLevels(self):
         return self.getModeSettings().validVehicleLevels
 
-    def getForbiddenVehicles(self):
-        return self.getModeSettings().forbiddenVehTypes
-
     def getUnlockableInBattleVehLevels(self):
         return self.getModeSettings().unlockableInBattleVehLevels
 
@@ -290,6 +289,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             lvl += 1
 
         return lvl - 1
+
+    def getEpicSkills(self):
+        return {skill.getSkillInfo().eqID:skill for skill in self.__skillData.values()}
 
     def getAllSkillsInformation(self):
         return self.__skillData
@@ -318,6 +320,13 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         famePtsByRank = self.__metaSettings.metaLevel.get('famePtsByRank', {})
         fameBonusByRank = self.__metaSettings.metaLevel.get('fameBonusByRank', {})
         return {rankLvl:(extraFamePts, getRankSettings().bonus.factor100ByRank[rankLvl], fameBonusByRank[rankLvl]) for rankLvl, extraFamePts in famePtsByRank.iteritems()}
+
+    def isRandomReservesModeEnabled(self):
+        return bool(self.__metaSettings.randomReservesMode)
+
+    def getRandomReservesBonusProbability(self):
+        bonusProbability = 0 if not self.__metaSettings.randomReservesMode else self.__metaSettings.randomReservesOpt['boardingVehAmmo']['extraWeight']
+        return bonusProbability
 
     def getSeasonData(self):
         return self.__itemsCache.items.epicMetaGame.seasonData
@@ -349,12 +358,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         notRentedVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.SPECIFIC_BY_NAME(self.getModeSettings().rentVehicles) | ~REQ_CRITERIA.INVENTORY)
         return len(notRentedVehicles) > 0
 
-    def increaseSkillLevel(self, skillID, callback=None):
-        if callback is None:
-            BigWorld.player().epicMetaGame.increaseAbility(skillID)
-        else:
-            BigWorld.player().epicMetaGame.increaseAbility(skillID, callback)
-        return
+    def increaseSkillLevel(self, skillID, callback=skipResponse):
+        BigWorld.player().epicMetaGame.increaseAbility(skillID, callback)
 
     def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None, classVehs=False):
         if classVehs:
@@ -493,6 +498,30 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return count
 
+    def getCombatReserves(self):
+        return self.__metaSettings.rewards.get('combatReserves', {})
+
+    def getReserveData(self, reserve):
+        combatReserves = self.getCombatReserves()
+        for combatReserve in combatReserves.values():
+            for level in combatReserve['levels']:
+                if level == reserve:
+                    return combatReserve
+
+        return {}
+
+    def isReserveStack(self, reserve):
+        data = self.getReserveData(reserve)
+        return data.get('isStack', False)
+
+    def getReserveCategory(self, reserve):
+        data = self.getReserveData(reserve)
+        return data.get('tags', [''] * 3)[1]
+
+    def getReserveTechName(self, reserve):
+        data = self.getReserveData(reserve)
+        return data.get('name')
+
     def showProgressionDuringSomeStates(self, showDefaultTab=False):
         from frontline.gui.frontline_helpers import isHangarAvailable, getProperTabWhileHangarUnavailable
         if not isHangarAvailable():
@@ -511,6 +540,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def hasAnyOfferGiftToken(self):
         return any((token.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
+
+    @staticmethod
+    def hasBonusCap(cap):
+        return hasattr(BigWorld.player(), 'arenaBonusType') and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, cap)
 
     def replaceOfferByGift(self, bonuses):
         result = []
@@ -585,7 +618,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def __setData(self):
         self.__skillData = {}
-        skills = self.__metaSettings.rewards.get('combatReserves', {})
+        skills = self.getCombatReserves()
         maxSkillLvl = self.__metaSettings.maxCombatReserveLevel
         eqs = vehicles.g_cache.equipments()
         if skills != {}:

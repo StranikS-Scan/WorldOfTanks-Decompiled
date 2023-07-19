@@ -399,7 +399,7 @@ class ItemsRequester(IItemsRequester):
      'layout',
      'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None, refProgramRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -413,7 +413,6 @@ class ItemsRequester(IItemsRequester):
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
         self.__festivity = festivityRequester
-        self.__armoryYard = armoryYard
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
@@ -422,7 +421,6 @@ class ItemsRequester(IItemsRequester):
         self.__gameRestrictions = gameRestrictionsRequester
         self.__resourceWell = resourceWellRequester
         self.__achievements20 = achievements20Requester
-        self.__refProgram = refProgramRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -485,10 +483,6 @@ class ItemsRequester(IItemsRequester):
         return self.__festivity
 
     @property
-    def armoryYard(self):
-        return self.__armoryYard
-
-    @property
     def tokens(self):
         return self.__tokens
 
@@ -519,10 +513,6 @@ class ItemsRequester(IItemsRequester):
     @property
     def achievements20(self):
         return self.__achievements20
-
-    @property
-    def refProgram(self):
-        return self.__refProgram
 
     @adisp_async
     @adisp_process
@@ -579,9 +569,6 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
-        Waiting.show('download/festivity')
-        yield self.__armoryYard.request()
-        Waiting.hide('download/festivity')
         Waiting.show('download/giftSystem')
         yield self.__giftSystem.request()
         Waiting.hide('download/giftSystem')
@@ -594,9 +581,6 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/achievements20')
         yield self.__achievements20.request()
         Waiting.hide('download/achievements20')
-        Waiting.show('download/refProgram')
-        yield self.__refProgram.request()
-        Waiting.hide('download/refProgram')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
@@ -655,7 +639,6 @@ class ItemsRequester(IItemsRequester):
         self.epicMetaGame.clear()
         self.__blueprints.clear()
         self.__festivity.clear()
-        self.__armoryYard.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
         self.__gameRestrictions.clear()
@@ -810,9 +793,6 @@ class ItemsRequester(IItemsRequester):
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
         existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
         invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
-        if constants.Configs.RESTORE_CONFIG.value in diff:
-            vehsToUpdate = self.__recycleBin.vehiclesBuffer
-            invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehsToUpdate.keys())
         if invalidIDs:
             invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)

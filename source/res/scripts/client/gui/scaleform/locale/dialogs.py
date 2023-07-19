@@ -130,6 +130,10 @@ class DIALOGS(object):
     BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
+    XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
+    XPTOTMENCHECKBOX_MESSAGE = '#dialogs:xpToTmenCheckbox/message'
+    XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
+    XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
     IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
     IDLECREWBONUS_MESSAGE_REMOVETYPE = '#dialogs:idleCrewBonus/message/removeType'
     IDLECREWBONUS_MESSAGE_REMOVENAME = '#dialogs:idleCrewBonus/message/removeName'
@@ -1261,6 +1265,10 @@ class DIALOGS(object):
      BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
+     XPTOTMENCHECKBOX_TITLE,
+     XPTOTMENCHECKBOX_MESSAGE,
+     XPTOTMENCHECKBOX_SUBMIT,
+     XPTOTMENCHECKBOX_CANCEL,
      IDLECREWBONUS_TITLE,
      IDLECREWBONUS_MESSAGE_REMOVETYPE,
      IDLECREWBONUS_MESSAGE_REMOVENAME,

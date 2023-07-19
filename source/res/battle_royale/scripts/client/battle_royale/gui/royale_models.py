@@ -17,5 +17,5 @@ class BattleRoyaleCycle(namedtuple('BattleRoyaleCycle', 'ID, status, startDate, 
 
 class BattleRoyaleSeason(GameSeason):
 
-    def _buildCycle(self, idx, status, number, rawData):
-        return BattleRoyaleCycle(idx, status, rawData['start'], rawData['end'], number, bool(rawData.get('announce', False)))
+    def _buildCycle(self, idx, status, start, end, number, announceOnly):
+        return BattleRoyaleCycle(idx, status, start, end, number, announceOnly)

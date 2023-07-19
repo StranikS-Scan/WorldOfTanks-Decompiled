@@ -9,11 +9,6 @@ from web.web_client_api import w2c, w2capi, Field, W2CSchema
 
 class _SubscriptionSchema(W2CSchema):
     channel_name = Field(required=True, type=basestring)
-    get_last_message = Field(required=False, type=bool)
-
-
-class _UnsubscriptionSchema(W2CSchema):
-    channel_name = Field(required=True, type=basestring)
 
 
 @w2capi(name='reactive_communication_service', key='action', finiHandlerName='_finiSubscriptionsHandler')
@@ -37,21 +32,17 @@ class ReactiveCommunicationWebApi(object):
             status = yield self.__doSubscribe(subscription)
             if not status:
                 self.__subscriptions.pop(name, None)
-            elif cmd.get_last_message:
-                self.__getLastMessage(subscription)
             yield {'channel_name': name,
              'subscription_id': id(subscription),
              'status': {'client': status.client.value,
                         'server': status.server.value}}
         else:
-            if cmd.get_last_message:
-                self.__getLastMessage(self.__subscriptions[name])
             yield {'channel_name': name,
              'status': {'client': SubscriptionClientStatus.AlreadySubscribed.value,
                         'server': SubscriptionServerStatus.Subscribed.value}}
         return
 
-    @w2c(_UnsubscriptionSchema, 'unsubscribe_from_channel')
+    @w2c(_SubscriptionSchema, 'unsubscribe_from_channel')
     def unsubscribe(self, cmd):
         name = cmd.channel_name.encode('utf-8')
         success = False
@@ -76,9 +67,6 @@ class ReactiveCommunicationWebApi(object):
     def __doSubscribe(self, subscription, callback):
         status = yield wg_async.wg_await(self.__service.subscribeToChannel(subscription))
         callback(status)
-
-    def __getLastMessage(self, subscription):
-        return self.__service.getLastMessageFromChannel(subscription)
 
     def __onSubscriptionClosed(self, subscription, _):
         self.__subscriptions.pop(subscription, None)

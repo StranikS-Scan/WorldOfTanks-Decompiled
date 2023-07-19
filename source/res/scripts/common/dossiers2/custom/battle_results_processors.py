@@ -526,11 +526,10 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
         battleCut = dossierDescr['fortBattlesCut']
         vehBattles = vehDossierDescr['fortBattles']
         battleCut[vehTypeCompDescr] = (vehBattles['battlesCount'], vehBattles['wins'], vehBattles['xp'])
-    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_SUMMARY_VEHICLE_RANKED_CUT):
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
         cut = dossierDescr['rankedCut']
         veh = vehDossierDescr['ranked_10x10']
         cut[vehTypeCompDescr] = (veh['battlesCount'], veh['wins'], veh['xp'])
-    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
         seasonBlock = 'rankedCutSeason{}'.format(avatarResults['rankedSeasonNum'])
         currentCut = dossierDescr[seasonBlock]
         battlesCount, wins, xp = currentCut.get(vehTypeCompDescr, (0, 0, 0))

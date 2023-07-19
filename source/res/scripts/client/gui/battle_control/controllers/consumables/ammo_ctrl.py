@@ -9,7 +9,6 @@ import BigWorld
 import CommandMapping
 import Event
 from constants import VEHICLE_SETTING, ReloadRestriction
-from gui.battle_control.avatar_getter import getPlayerVehicle
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
@@ -40,15 +39,12 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None, None, None, False, 0.0)
 
     @classmethod
-    def make(cls, gun, modelsSet=None):
+    def make(cls, gun):
         shots = {}
         clip = _ClipBurstSettings(*gun.clip)
         burst = _ClipBurstSettings(*gun.burst)
         reloadEffect = None
-        if modelsSet and gun.reloadEffectSets and modelsSet in gun.reloadEffectSets:
-            reloadEffectDesc = gun.reloadEffectSets[modelsSet]
-        else:
-            reloadEffectDesc = gun.reloadEffect
+        reloadEffectDesc = gun.reloadEffect
         if reloadEffectDesc is not None:
             reloadEffect = ReloadEffectStrategy(reloadEffectDesc)
         for shotIdx, shotDescr in enumerate(gun.shots):
@@ -537,13 +533,8 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     @MethodsRules.delayable()
     def setGunSettings(self, gun):
-        modelsSet = None
-        vehicle = getPlayerVehicle()
-        if vehicle and hasattr(vehicle, 'appearance') and hasattr(vehicle.appearance, 'outfit'):
-            modelsSet = vehicle.appearance.outfit.modelsSet
-        self.__gunSettings = _GunSettings.make(gun, modelsSet)
+        self.__gunSettings = _GunSettings.make(gun)
         self.onGunSettingsSet(self.__gunSettings)
-        return
 
     def getNextShellCD(self):
         return self.__nextShellCD

@@ -87,7 +87,6 @@
     <_152mm_59_152JG_FT_G6_SH>	64007	</_152mm_59_152JG_FT_G6_SH>
     <Gun_Ch00_ClingeBot_SH>	64008	</Gun_Ch00_ClingeBot_SH>
     <_130mm_59_130TA_TEST>	21003	</_130mm_59_130TA_TEST>
-    <_130mm_59_130TA_MT>	31003	</_130mm_59_130TA_MT>
   </ids>
   <shared>
     <_37mm_APX_SA18>
@@ -3995,64 +3994,6 @@
         </_130mm_HE>
       </shots>
     </_130mm_59_130TA_TEST>
-    <_130mm_59_130TA_MT>
-      <userString>	#china_vehicles:_130mm_59_130TA	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	330000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.62	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.66	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	shot_largeext_mb	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	15.4	</reloadTime>
-      <maxAmmo>	28	</maxAmmo>
-      <aimingTime>	3.42	</aimingTime>
-      <weight>	3090	</weight>
-      <maxHealth>	210	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_130mm_AP>
-          <defaultPortion>	0.9	</defaultPortion>
-          <speed>	930	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	250 232	</piercingPower>
-        </_130mm_AP>
-        <_130mm_HEAT>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	930	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	340 340	</piercingPower>
-        </_130mm_HEAT>
-        <_130mm_HE>
-          <defaultPortion>	0.1	</defaultPortion>
-          <speed>	930	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
-        </_130mm_HE>
-      </shots>
-    </_130mm_59_130TA_MT>
     <_130mm_59_130TA_QL>
       <userString>	#china_vehicles:_130mm_59_130TA_QL	</userString>
       <tags></tags>

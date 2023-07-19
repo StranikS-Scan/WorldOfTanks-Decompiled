@@ -381,22 +381,6 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
-    <logClientSystem>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_SYSTEM	</Arg>
-    </logClientSystem>
-    <logClientSessionStats>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_SESSION_STATS	</Arg>
-    </logClientSessionStats>
-    <logMemoryCriticalEvent>
-      <Exposed></Exposed>
-      <Arg>	MEM_CRIT_EVENT	</Arg>
-    </logMemoryCriticalEvent>
-    <logClientPB20UXStats>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_PB_20_UX_STATS	</Arg>
-    </logClientPB20UXStats>
     <releaseClientForLogin>
       <Arg>	MAILBOX	</Arg>
       <Arg>	PYTHON	</Arg>

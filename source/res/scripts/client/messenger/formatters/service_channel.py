@@ -63,7 +63,6 @@ from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.achievements.abstract.class_progress import ClassProgressAchievement
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
-from gui.shared.gui_items.loot_box import REFERRAL_PROGRAM_CATEGORY
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money, ZERO_MONEY
 from gui.shared.notifications import NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.system_factory import collectTokenQuestsSubFormatters
@@ -85,7 +84,7 @@ from messenger.formatters.service_channel_helpers import EOL, MessageData, getCu
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, ICollectionsSystemController, IEpicBattleMetaGameController, IFunRandomController, IMapboxController, IRankedBattlesController, IResourceWellController, IWinbackController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, ICollectionsSystemController, IEpicBattleMetaGameController, IFunRandomController, IMapboxController, IRankedBattlesController, IResourceWellController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -1107,8 +1106,6 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
 
 class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __purchaseCache = dependency.descriptor(IPurchaseCache)
-    __emitterAssetHandlers = {constants.INVOICE_EMITTER.WOTRP_CASHBACK: {INVOICE_ASSET.GOLD: u'_formatWOTRPCashbackGold',
-                                                INVOICE_ASSET.DATA: u'_formatWOTRPCashbackData'}}
     __assetHandlers = {INVOICE_ASSET.GOLD: u'_formatAmount',
      INVOICE_ASSET.CREDITS: u'_formatAmount',
      INVOICE_ASSET.CRYSTAL: u'_formatAmount',
@@ -1143,8 +1140,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __blueprintsTemplateKeys = {BlueprintTypes.VEHICLE: (u'vehicleBlueprintsAccruedInvoiceReceived', u'vehicleBlueprintsDebitedInvoiceReceived'),
      BlueprintTypes.NATIONAL: (u'nationalBlueprintsAccruedInvoiceReceived', u'nationalBlueprintsDebitedInvoiceReceived'),
      BlueprintTypes.INTELLIGENCE_DATA: (u'intelligenceBlueprintsAccruedInvoiceReceived', u'intelligenceBlueprintsDebitedInvoiceReceived')}
-    __emitterMessageTemplateKeys = {constants.INVOICE_EMITTER.WOTRP_CASHBACK: {INVOICE_ASSET.GOLD: u'WOTRPCachbackInvoiceReceived',
-                                                INVOICE_ASSET.DATA: u'WOTRPCachbackInvoiceReceived'}}
     __messageTemplateKeys = {INVOICE_ASSET.GOLD: u'goldInvoiceReceived',
      INVOICE_ASSET.CREDITS: u'creditsInvoiceReceived',
      INVOICE_ASSET.CRYSTAL: u'crystalInvoiceReceived',
@@ -1155,8 +1150,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
      INVOICE_ASSET.DATA: u'dataInvoiceReceived',
      INVOICE_ASSET.PURCHASE: u'purchaseInvoiceReceived'}
     __INVALID_TYPE_ASSET = -1
-    __auxMessagesHandlers = {INVOICE_ASSET.DATA: u'getInvoiceDataAuxMessages',
-     INVOICE_ASSET.PURCHASE: u'getPurchaseDataAuxMessages'}
+    __auxMessagesHandlers = {INVOICE_ASSET.DATA: u'getInvoiceDataAuxMessages'}
     __DESTROY_PAIR_MODIFICATIONS_MSG_TEMPLATE = u'DestroyAllPairsModifications'
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -1173,13 +1167,12 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             isDataSynced = yield self.__waitForSyncData(data)
             if isDataSynced:
                 self.__prerocessRareAchievements(data)
-                emitterID = data.get(u'emitterID')
                 assetType = data.get(u'assetType', self.__INVALID_TYPE_ASSET)
-                handler = self._getMessageHandler(emitterID, assetType)
+                handler = self.__assetHandlers.get(assetType)
                 if handler is not None:
-                    formatted = getattr(self, handler)(emitterID, assetType, data)
+                    formatted = getattr(self, handler)(assetType, data)
                 if formatted is not None:
-                    settings = self._getGuiSettings(message, self._getMessageTemplateKey(emitterID, assetType))
+                    settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
             else:
                 assetType = self.__INVALID_TYPE_ASSET
                 _logger.debug(u'Message will not be shown!')
@@ -1191,9 +1184,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         result.extend(auxMassages)
         callback(result)
         return
-
-    def _getMessageHandler(self, emitterId, assetType):
-        return self.__emitterAssetHandlers.get(emitterId, {}).get(assetType, None) or self.__assetHandlers.get(assetType)
 
     @classmethod
     def getBlueprintString(cls, blueprints):
@@ -1388,11 +1378,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         result.extend(self.__getDiscardPairModificationsMsg(data))
         return result
 
-    def getPurchaseDataAuxMessages(self, data):
-        result = []
-        result.extend(self.__getReferralProgramMsg(data))
-        return result
-
     def _composeOperations(self, data):
         dataEx = data.get(u'data', {})
         if not dataEx:
@@ -1478,7 +1463,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             entitlementsStr = self.__getEntitlementsString(dataEx.get(u'entitlements', {}))
             if entitlementsStr:
                 operations.append(entitlementsStr)
-            lootBoxStr = self.__getLootBoxString(dataEx.get(u'tokens', {}), data.get(u'assetType', self.__INVALID_TYPE_ASSET))
+            lootBoxStr = self.__getLootBoxString(dataEx.get(u'tokens', {}))
             if lootBoxStr:
                 operations.append(lootBoxStr)
             rankedDailyBattles = dataEx.get(u'rankedDailyBattles', 0)
@@ -1491,20 +1476,20 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 operations.append(platformCurrenciesStr)
             return operations
 
-    def _formatData(self, emitterID, assetType, data):
+    def _formatData(self, assetType, data):
         operations = self._composeOperations(data)
         icon = u'InformationIcon'
-        return None if not operations else g_settings.msgTemplates.format(self._getMessageTemplateKey(emitterID, assetType), ctx={u'at': self._getOperationTimeString(data),
+        return None if not operations else g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={u'at': self._getOperationTimeString(data),
          u'desc': self.__getL10nDescription(data),
          u'op': u'<br/>'.join(operations)}, data={u'icon': icon})
 
-    def _formatAmount(self, emitterID, assetType, data):
+    def _formatAmount(self, assetType, data):
         amount = data.get(u'amount', None)
-        return None if amount is None else g_settings.msgTemplates.format(self._getMessageTemplateKey(emitterID, assetType), ctx={u'at': self._getOperationTimeString(data),
+        return None if amount is None else g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={u'at': self._getOperationTimeString(data),
          u'desc': self.__getL10nDescription(data),
          u'op': self.__getFinOperationString(assetType, amount)})
 
-    def _formatPurchase(self, emitterID, assetType, data):
+    def _formatPurchase(self, assetType, data):
         if u'customFormatting' in data.get(u'tags', ()):
             return None
         else:
@@ -1537,21 +1522,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     _logger.info(u'Could not find icon in the purchase descriptor!')
             ctx[u'title'] = title
             ctx[u'subtitle'] = subtitle
-            return g_settings.msgTemplates.format(self._getMessageTemplateKey(emitterID, assetType), ctx=ctx, data=templateData)
+            return g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx=ctx, data=templateData)
 
-    def _formatWOTRPCashbackGold(self, emitterID, assetType, data):
-        ctx = {u'amount': data.get(u'amount', 0)}
-        return g_settings.msgTemplates.format(self._getMessageTemplateKey(emitterID, assetType), ctx=ctx)
-
-    def _formatWOTRPCashbackData(self, emitterID, assetType, data):
-        gold = data.get(u'data', {}).get(u'gold', 0)
-        if gold == 0:
-            return self._formatData(emitterID, assetType, data)
-        ctx = {u'amount': gold}
-        return g_settings.msgTemplates.format(self._getMessageTemplateKey(emitterID, assetType), ctx=ctx)
-
-    def _getMessageTemplateKey(self, emitterID, assetType):
-        return self.__emitterMessageTemplateKeys.get(emitterID, {}).get(assetType) or self.__messageTemplateKeys[assetType]
+    def _getMessageTemplateKey(self, assetType):
+        return self.__messageTemplateKeys[assetType]
 
     @classmethod
     def _getOperationTimeString(cls, data):
@@ -1875,12 +1849,12 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             tokenStrings.append(g_settings.htmlTemplates.format(template, {u'count': count}))
         return tokenStrings
 
-    def __getLootBoxString(self, data, assetType):
+    def __getLootBoxString(self, data):
         boxesList = []
         for tokenName, tokenData in data.iteritems():
             if constants.LOOTBOX_TOKEN_PREFIX in tokenName:
                 lootBox = self._itemsCache.items.tokens.getLootBoxByTokenID(tokenName)
-                if lootBox is not None and (lootBox.getCategory() not in (REFERRAL_PROGRAM_CATEGORY,) or assetType != INVOICE_ASSET.PURCHASE):
+                if lootBox is not None:
                     boxesList.append(backport.text(R.strings.lootboxes.notification.lootBoxesAutoOpen.counter(), boxName=lootBox.getUserName(), count=tokenData.get(u'count', 0)))
 
         return g_settings.htmlTemplates.format(u'eventLootBoxesInvoiceReceived', {u'boxes': u', '.join(boxesList)}) if boxesList else u''
@@ -1958,31 +1932,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                             result.append(MessageData(formatted, self._getGuiSettings(formatted, template)))
 
             return result
-
-    def __getReferralProgramMsg(self, data):
-        dataEx = data.get(u'data', {})
-        price = data.get(u'meta', {}).get(u'price', {})
-        referralLootBoxCount = 0
-        result = []
-        if price.get(u'currency_code') == constants.RP_POINT:
-            template = u'ReferralProgramFinanceOperationSysMessage'
-            atStr = g_settings.htmlTemplates.format(u'transactionTime', ctx={u'at': self._getOperationTimeString(data)})
-            debitedStr = g_settings.htmlTemplates.format(u'rpPointsDebited', ctx={u'points': price.get(u'amount', 0)})
-            formatted = g_settings.msgTemplates.format(template, ctx={u'text': u'<br/>'.join((atStr, debitedStr)),
-             u'header': backport.text(R.strings.messenger.serviceChannelMessages.referralTransaction.header())})
-            result.append(MessageData(formatted, self._getGuiSettings(formatted, template)))
-        for tokenName, tokenData in dataEx.get(u'tokens', {}).iteritems():
-            if constants.LOOTBOX_TOKEN_PREFIX in tokenName:
-                lootBox = self._itemsCache.items.tokens.getLootBoxByTokenID(tokenName)
-                if lootBox is not None and lootBox.getCategory() == REFERRAL_PROGRAM_CATEGORY:
-                    referralLootBoxCount += tokenData.get(u'count', 0)
-
-        if referralLootBoxCount:
-            template = u'rpLootBoxesInvoiceReceived'
-            formatted = g_settings.msgTemplates.format(template, ctx={u'count': referralLootBoxCount,
-             u'at': self._getOperationTimeString(data)})
-            result.append(MessageData(formatted, self._getGuiSettings(formatted, template)))
-        return result
 
     @adisp_async
     @adisp_process
@@ -3450,7 +3399,7 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
                 _, _, rentedVehNames = self._getVehicleNames(vehicles)
             return rentedVehNames
 
-    def _getMessageTemplateKey(self, emitterID, assetType):
+    def _getMessageTemplateKey(self, data):
         pass
 
     def _getMessageContext(self, data, vehicleNames):
@@ -3473,7 +3422,7 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
 
         return ctx
 
-    def _formatData(self, emitterID, assetType, data):
+    def _formatData(self, assetType, data):
         vehicleNames = self._getVehicles(data)
         return None if not vehicleNames else g_settings.msgTemplates.format(self._getMessageTemplateKey(data), ctx=self._getMessageContext(data, vehicleNames), data={u'timestamp': time.time()})
 
@@ -3884,24 +3833,18 @@ class ProgressiveRewardFormatter(WaitItemsSyncFormatter):
 
 class PiggyBankSmashedFormatter(ServiceChannelFormatter):
     _piggyBankTemplate = u'PiggyBankSmashedMessage'
-    _piggyBankWotPlusTemplate = u'PiggyBankWotPlusSmashedMessage'
     _goldReserveTemplate = u'GoldReserveSmashedMessage'
     _currenciesTemplate = u'CurrenciesReservesSmashedMessage'
-    __wotPlusController = dependency.descriptor(IWotPlusController)
 
     def format(self, message, *args):
         if not message.data:
             return []
         credits_ = message.data.get(u'credits')
         gold = message.data.get(u'gold')
-        if self.__wotPlusController.isWotPlusEnabled():
-            piggyBankTemplate = self._piggyBankWotPlusTemplate
-        else:
-            piggyBankTemplate = self._piggyBankTemplate
         if credits_ and not gold:
             ctx = {u'credits': backport.getIntegralFormat(credits_)}
-            formatted = g_settings.msgTemplates.format(piggyBankTemplate, ctx)
-            return [MessageData(formatted, self._getGuiSettings(message, piggyBankTemplate))]
+            formatted = g_settings.msgTemplates.format(self._piggyBankTemplate, ctx)
+            return [MessageData(formatted, self._getGuiSettings(message, self._piggyBankTemplate))]
         if gold and not credits_:
             ctx = {u'gold': backport.getGoldFormat(gold)}
             formatted = g_settings.msgTemplates.format(self._goldReserveTemplate, ctx)

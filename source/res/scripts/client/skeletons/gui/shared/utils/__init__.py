@@ -91,10 +91,6 @@ class IItemsRequester(requesters.IRequester):
     def achievements20(self):
         raise NotImplementedError
 
-    @property
-    def refProgram(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

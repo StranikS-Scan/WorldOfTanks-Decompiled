@@ -162,9 +162,7 @@ def readInt(xmlCtx, section, subsectionName, minVal=None, maxVal=None):
     if v == wrongVal:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     if minVal is not None and v < minVal or maxVal is not None and v > maxVal:
-        msg = 'subsection is wrong with restrictions {} {} {}'
-        msg.format('minVal = {}'.format(minVal) if minVal is not None else '', 'maxVal = {}'.format(minVal) if maxVal is not None else '', ', value = {}'.format(v) if v != wrongVal else '')
-        raiseWrongXml(xmlCtx, subsectionName if subsectionName else section.name, msg)
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return v
 
 
@@ -236,14 +234,11 @@ def readNonNegativeFloat(xmlCtx, section, subsectionName, defaultValue=None):
 
 
 @cacheFloat
-def readFraction(xmlCtx, section, subsectionName, defaultValue=None):
-    if defaultValue is not None and not section.has_key(subsectionName):
-        return defaultValue
-    else:
-        v = section.readFloat(subsectionName, -1000000.0)
-        if not 0.0 <= v <= 1.0:
-            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-        return v
+def readFraction(xmlCtx, section, subsectionName):
+    v = section.readFloat(subsectionName, -1000000.0)
+    if not 0.0 <= v <= 1.0:
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    return v
 
 
 def readVector2(xmlCtx, section, subsectionName):

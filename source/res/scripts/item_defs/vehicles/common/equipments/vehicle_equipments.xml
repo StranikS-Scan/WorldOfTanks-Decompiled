@@ -8,10 +8,8 @@
     <icon>	handExtinguishers	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
-    <script>	Extinguisher	  <autoactivate>	true	</autoactivate>
-      <cooldownSeconds>	105	</cooldownSeconds>
+    <script>	Extinguisher	  <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <activeSeconds>	3	</activeSeconds>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </handExtinguishers>
@@ -29,7 +27,6 @@
       <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <activeSeconds>	3	</activeSeconds>
     </script>
     <kpi>
       <mul>
@@ -48,13 +45,12 @@
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
-    <script>	Repairkit	  <repairAll>	true	</repairAll>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.0	</stunResistanceDuration>
-      <cooldownSeconds>	105	</cooldownSeconds>
+      <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <activeSeconds>	3	</activeSeconds>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallMedkit>
@@ -74,7 +70,6 @@
       <stunResistanceDuration>	0.05	</stunResistanceDuration>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <activeSeconds>	3	</activeSeconds>
     </script>
     <kpi>
       <mul>
@@ -97,11 +92,10 @@
     <icon>	smallRepairkit	</icon>
     <price>	3000	</price>
     <tags>	repairkit	</tags>
-    <script>	Repairkit	  <repairAll>	true	</repairAll>
+    <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
-      <cooldownSeconds>	105	</cooldownSeconds>
+      <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
-      <activeSeconds>	3	</activeSeconds>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallRepairkit>
@@ -125,7 +119,6 @@
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.1	</bonusValue>
       <cooldownSeconds>	90	</cooldownSeconds>
-      <activeSeconds>	3	</activeSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
     <kpi>

@@ -11,9 +11,10 @@ from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from uilogging.helpers import getClientPeripheryID
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE(object):
@@ -101,6 +102,7 @@ class StatisticsCollector(IStatisticsCollector):
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
     bootcampController = dependency.descriptor(IBootcampController)
+    gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self):
         self.__state = _STATISTICS_STATE.STOPPED
@@ -213,60 +215,115 @@ class StatisticsCollector(IStatisticsCollector):
             LOG_NOTE(reportHeader + ' TOTAL = ' + str(self.__hangarLoadingTime))
             BigWorld.hangarLoaded(self.__hangarLoadingTime)
 
-    def __getSessionData(self, stat):
-        stat['graphicsPreset'] = self.settingsCore.getSetting(GRAPHICS.PRESETS)
+    def __getSessionData(self, statisticsDict):
+        lastArenaTypeID = self.__lastArenaTypeID
         windowMode = BigWorld.getWindowMode()
         windowModeLUT = {BigWorld.WindowModeWindowed: 0,
          BigWorld.WindowModeExclusiveFullscreen: 1,
          BigWorld.WindowModeBorderless: 2}
-        stat['windowMode'] = windowModeLUT.get(windowMode, 0)
         monitorSettings = monitor_settings.g_monitorSettings
         resolutionContainer = monitorSettings.currentWindowSize
         if windowMode == BigWorld.WindowModeExclusiveFullscreen:
             resolutionContainer = monitorSettings.currentVideoMode
         elif windowMode == BigWorld.WindowModeBorderless:
             resolutionContainer = monitorSettings.currentBorderlessSize
-        stat['screenResWidth'] = resolutionContainer.width
-        stat['screenResHeight'] = resolutionContainer.height
-        stat['drrScale'] = int(round(BigWorld.getDRRScale() * 100))
-        stat['dynamicDRR'] = BigWorld.isDRRAutoscalingEnabled()
-        stat['invalidStats'] |= self.__invalidStats
-        stat['soundQuality'] = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES].readInt('LQ_render', 0)
-        stat['hangarLoadingTime'] = self.__hangarLoadingTime
-        stat['lastArenaUniqueID'] = self.__lastArenaUniqueID
-        stat['lastArenaTypeID'] = self.__lastArenaTypeID
-        stat['lastArenaTeam'] = self.__lastArenaTeam
-        return stat
+        return {'started_at': int(self.gameSession.sessionStartedAt),
+         'map': lastArenaTypeID & 65535,
+         'mode': lastArenaTypeID >> 16,
+         'spawn': self.__lastArenaTeam,
+         'fps_min': statisticsDict['fpsMin'],
+         'fps_max': statisticsDict['fpsMax'],
+         'fps_avg': statisticsDict['fpsAvg'],
+         'fps_0_5': statisticsDict['fps_0_5'],
+         'fps_6_10': statisticsDict['fps_6_10'],
+         'fps_11_15': statisticsDict['fps_11_15'],
+         'fps_16_20': statisticsDict['fps_16_20'],
+         'fps_21_25': statisticsDict['fps_21_25'],
+         'fps_26_30': statisticsDict['fps_26_30'],
+         'fps_31_35': statisticsDict['fps_31_35'],
+         'fps_36_40': statisticsDict['fps_36_40'],
+         'fps_gt_40': statisticsDict['fps_gt_40'],
+         'fps_41_45': statisticsDict['fps_41_45'],
+         'fps_46_50': statisticsDict['fps_46_50'],
+         'fps_51_55': statisticsDict['fps_51_55'],
+         'fps_56_60': statisticsDict['fps_56_60'],
+         'fps_61_70': statisticsDict['fps_61_70'],
+         'fps_71_80': statisticsDict['fps_71_80'],
+         'fps_81_90': statisticsDict['fps_81_90'],
+         'fps_91_100': statisticsDict['fps_91_100'],
+         'fps_101_120': statisticsDict['fps_101_120'],
+         'fps_121_140': statisticsDict['fps_121_140'],
+         'fps_141_160': statisticsDict['fps_141_160'],
+         'fps_161_180': statisticsDict['fps_161_180'],
+         'fps_gt_180': statisticsDict['fps_gt_180'],
+         'fps_deviation': statisticsDict['fpsDeviation'],
+         'ping': statisticsDict['ping'],
+         'lag': statisticsDict['lag'],
+         'graphics_preset': self.settingsCore.getSetting(GRAPHICS.PRESETS),
+         'screen_res_width': resolutionContainer.width,
+         'screen_res_height': resolutionContainer.height,
+         'window_mode': windowModeLUT.get(windowMode, 0),
+         'drr_scale': int(round(BigWorld.getDRRScale() * 100)),
+         'game_session_duration': statisticsDict['gameSessionDuration'],
+         'arena_id': self.__lastArenaUniqueID,
+         'periphery_id': getClientPeripheryID(),
+         'camera_pos_x': statisticsDict['cameraPos'][0],
+         'camera_pos_y': statisticsDict['cameraPos'][1],
+         'camera_pos_z': statisticsDict['cameraPos'][2],
+         'camera_dir_x': statisticsDict['cameraDir'][0],
+         'camera_dir_y': statisticsDict['cameraDir'][1],
+         'camera_dir_z': statisticsDict['cameraDir'][2],
+         'invalid_stats': self.__invalidStats,
+         'graphics_settings': statisticsDict['graphicsSettings'],
+         'active_time': statisticsDict['activeTime'],
+         'loading_time': statisticsDict['loadingTime'],
+         'dynamic_drr': BigWorld.isDRRAutoscalingEnabled(),
+         'sound_quality': Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES].readInt('LQ_render', 0),
+         'hangar_loading_time': self.__hangarLoadingTime,
+         'ram_available': statisticsDict['ramAvailable'],
+         'ram_peak': statisticsDict['ramPeak'],
+         'virt_available': statisticsDict['virtAvailable'],
+         'virt_peak': statisticsDict['virtPeak'],
+         'page_file_available': statisticsDict['pageFileAvailable'],
+         'page_file_peak': statisticsDict['pageFilePeak'],
+         'memory_critical': statisticsDict['memoryCritical'],
+         'vertical_sync': statisticsDict['vertical_sync'],
+         'gpu_utilization_low_fps': statisticsDict['gpu_utilization_low_fps'],
+         'cpu_utilization_low_fps': statisticsDict['cpu_utilization_low_fps'],
+         'gpu_utilization': statisticsDict['gpu_utilization'],
+         'cpu_utilization': statisticsDict['cpu_utilization']}
 
     def __getSystemData(self, statisticsDict):
-        return {'isLaptop': statisticsDict['isLaptop'],
-         'cpuVendor': statisticsDict['cpuVendor'],
-         'cpuCores': statisticsDict['cpuCores'],
-         'cpuFreq': statisticsDict['cpuFreq'],
-         'gpuVendor': statisticsDict['gpuVendor'],
-         'gpuMemory': statisticsDict['gpuMemory'],
+        return {'started_at': int(self.gameSession.sessionStartedAt),
+         'server_name': self.connectionMgr.serverUserName,
+         'is_laptop': statisticsDict['isLaptop'],
+         'cpu_vendor': statisticsDict['cpuVendor'],
+         'cpu_cores': statisticsDict['cpuCores'],
+         'cpu_freq': statisticsDict['cpuFreq'],
+         'gpu_vendor': statisticsDict['gpuVendor'],
+         'gpumemory': statisticsDict['gpuMemory'],
          'os': statisticsDict['os'],
-         'graphicsEngine': self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE),
-         'cpuScore': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE),
-         'gpuScore': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE),
-         'osBit': statisticsDict['osBit'],
-         'hasMods': statisticsDict['hasMods'],
-         'reason32bit': statisticsDict['reason32bit'],
-         'cpuFamily': statisticsDict['cpuFamily'],
-         'gpuFamily': statisticsDict['gpuFamily'],
+         'graphics_engine': self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE),
+         'cpu_score': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE),
+         'gpu_score': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE),
+         'os_bit': statisticsDict['osBit'],
+         'has_mods': statisticsDict['hasMods'],
+         'reason_32bit': statisticsDict['reason32bit'],
+         'cpu_family': statisticsDict['cpuFamily'],
+         'gpu_family': statisticsDict['gpuFamily'],
          'crashed': statisticsDict['crashed'],
-         'contentType': ResMgr.activeContentType(),
-         'gpuDriverVersion': statisticsDict['gpuDriverVersion'],
-         'graphicsAPIID': statisticsDict['graphicsAPIID'],
-         'multiGPU': statisticsDict['multiGPU'],
-         'cpuName': statisticsDict['cpuName'],
-         'hangarFirstLoadingTime': self.__hangarLoadingTime,
-         'clientBit': statisticsDict['clientBit'],
-         'ramTotal': statisticsDict['ramTotal'],
-         'virtTotal': statisticsDict['virtTotal'],
-         'pageFileTotal': statisticsDict['pageFileTotal'],
-         'systemHddName': statisticsDict['systemHddName'],
-         'gameHddName': statisticsDict['gameHddName']}
+         'content_type': ResMgr.activeContentType(),
+         'gpu_driver_version': statisticsDict['gpuDriverVersion'],
+         'graphics_api_id': statisticsDict['graphicsAPIID'],
+         'multi_gpu': statisticsDict['multiGPU'],
+         'CPU_name': statisticsDict['cpuName'],
+         'hangar_first_loading_time': self.__hangarLoadingTime,
+         'client_bit': statisticsDict['clientBit'],
+         'ram_total': statisticsDict['ramTotal'],
+         'virt_total': statisticsDict['virtTotal'],
+         'page_file_total': statisticsDict['pageFileTotal'],
+         'system_hdd_name': statisticsDict['systemHddName'],
+         'game_hdd_name': statisticsDict['gameHddName']}
 
     def __onSettingsChanged(self, diff):
         keys = set(diff.keys())

@@ -24,6 +24,7 @@ CONVERT_BLUEPRINT_FRAGMENT = 'convertFragment'
 USE_CREW_BOOK = 'useCrewBook'
 CHANGE_NATION = 'changeNation'
 INSTALL_BATTLE_ABILITIES = 'installBattleAbilities'
+FRONTLINE_INSTALL_RESERVES = 'frontlineInstallReserves'
 BUY_BATTLE_ABILITIES = 'buyBattleAbilities'
 BUY_AND_INSTALL_OPT_DEVICES = 'buyAndInstallOptDevices'
 BUY_AND_INSTALL_CONSUMABLES = 'buyAndInstallConsumables'
@@ -58,6 +59,7 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  USE_CREW_BOOK: actions.UseCrewBookAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
  INSTALL_BATTLE_ABILITIES: actions.InstallBattleAbilities,
+ FRONTLINE_INSTALL_RESERVES: actions.FrontlineInstallReserves,
  BUY_BATTLE_ABILITIES: actions.BuyBattleAbilities,
  BUY_AND_INSTALL_OPT_DEVICES: actions.BuyAndInstallOptDevices,
  BUY_AND_INSTALL_CONSUMABLES: actions.BuyAndInstallConsumables,
@@ -108,7 +110,3 @@ def getAction(actionType, *args, **kwargs):
     else:
         _logger.error('Action type is not found %s', actionType)
         return None
-
-
-def registerAction(actionType, action):
-    _ACTION_MAP[actionType] = action

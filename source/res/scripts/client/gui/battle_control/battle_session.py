@@ -131,7 +131,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def updateVehicleEffects(self, vehicle):
         if vehicle is not None:
             vehicle.onDebuffEffectApplied(vehicle.debuff > 0)
-            if vehicle.stunInfo.stunFinishTime > 0.0:
+            if vehicle.stunInfo > 0.0:
                 vehicle.updateStunInfo()
             if vehicle.inspired:
                 vehicle.set_inspired()

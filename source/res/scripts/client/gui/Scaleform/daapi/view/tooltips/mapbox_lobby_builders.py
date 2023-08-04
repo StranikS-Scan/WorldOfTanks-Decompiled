@@ -14,5 +14,5 @@ def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.MAPBOX_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, MapboxSelectorTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.MAPBOX_PROGRESSION_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, MapboxProgressionTooltip(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SELECTABLE_CREWBOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, SelectableCrewbookTooltipData(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RandomCrewBookTooltipDataBlock(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK_MAPBOX, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RandomCrewBookTooltipDataBlock(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.MAPBOX_CALENDAR, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, MapboxCalendarTooltip(contexts.ToolTipContext(None))))

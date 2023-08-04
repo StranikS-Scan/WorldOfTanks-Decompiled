@@ -7464,6 +7464,38 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	Lesta Collections 2023	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31045	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Lesta_Collections_Decals_01_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Lesta_Collections_Decals_01_MT	</userString>
+      <tags>	formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31046	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Lesta_Collections_Decals_02_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Lesta_Collections_Decals_02_MT	</userString>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31047	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Lesta_Collections_Decals_03_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Lesta_Collections_Decals_03_MT	</userString>
+      <mirror>	true	</mirror>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>

@@ -58,7 +58,7 @@ from nation_change_helpers.client_nation_change_helper import getChangeNationToo
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IEventLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -107,7 +107,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     _bootcamp = dependency.descriptor(IBootcampController)
-    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
+    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
@@ -250,7 +250,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onBanUpdated += self.__updateAlertMessage
         self.__comp7Controller.onOfflineStatusUpdated += self.__updateAlertMessage
         self.hangarSpace.setVehicleSelectable(True)
-        self.__eventLootBoxes.onStatusChange += self.__onLootBoxesEventStatusChange
+        self.__guiLootBoxes.onStatusChange += self.__onLootBoxesEventStatusChange
         self.__armoryYardCtrl.onStatusChange += self.__onArmoryYardStatusChange
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
@@ -262,7 +262,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self._wotPlusCtrl.onDataChanged += self.__onWotPlusDataChanged
         self.battlePassController.onSeasonStateChanged += self.__switchCarousels
-        self.__debutBoxesController.onStateChanged += self.__switchCarousels
+        self.__debutBoxesController.onStateChanged += self.__onDebutBoxesStatusChange
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -270,6 +270,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY)
         g_playerEvents.onLoadingMilestoneReached(Milestones.HANGAR_UI_READY)
+        self.addListener(LobbySimpleEvent.ENTITY_TOOLTIP_SHOW, self.__onEntityTooltipShow)
+        self.addListener(LobbySimpleEvent.ENTITY_TOOLTIP_HIDE, self.__onEntityTooltipHide)
         lobbyContext = dependency.instance(ILobbyContext)
         isCrewBooksEnabled = lobbyContext.getServerSettings().isCrewBooksEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
@@ -287,9 +289,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(AmmunitionPanelViewEvent.CLOSE_VIEW, self.__oAmmunitionPanelViewClose, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(LobbySimpleEvent.ENTITY_TOOLTIP_SHOW, self.__onEntityTooltipShow)
+        self.removeListener(LobbySimpleEvent.ENTITY_TOOLTIP_HIDE, self.__onEntityTooltipHide)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleSelectedEntityUpdated)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
-        self.__eventLootBoxes.onStatusChange -= self.__onLootBoxesEventStatusChange
+        self.__guiLootBoxes.onStatusChange -= self.__onLootBoxesEventStatusChange
         self.__armoryYardCtrl.onStatusChange -= self.__onArmoryYardStatusChange
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
@@ -324,7 +328,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._wotPlusCtrl.onDataChanged -= self.__onWotPlusDataChanged
-        self.__debutBoxesController.onStateChanged -= self.__switchCarousels
+        self.__debutBoxesController.onStateChanged -= self.__onDebutBoxesStatusChange
         self.battlePassController.onSeasonStateChanged -= self.__switchCarousels
         self.__timer.clearCallbacks()
         self.__timer = None
@@ -519,6 +523,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def _fade3DEntityAndHideTT(self, entity):
+        self.as_hide3DSceneTooltipS()
+
+    def __onEntityTooltipShow(self, event):
+        itemId = event.ctx['selectionId']
+        self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
+
+    def __onEntityTooltipHide(self, event):
         self.as_hide3DSceneTooltipS()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -720,6 +731,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateCarouselEventEntryState()
         self.__switchCarousels(True)
         self.__updateDogTagsState()
+
+    def __onDebutBoxesStatusChange(self):
+        self.__switchCarousels(True)
 
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())

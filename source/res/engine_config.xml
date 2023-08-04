@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -483,6 +483,12 @@
         </bank>
         <bank>
           <name>	armory_yard.bnk	</name>
+        </bank>
+        <bank>
+          <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
+        </bank>
+        <bank>
+          <name>	lootboxes.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

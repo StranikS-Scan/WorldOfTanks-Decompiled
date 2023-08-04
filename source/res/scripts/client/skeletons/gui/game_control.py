@@ -2314,11 +2314,10 @@ class IEntitlementsController(IGameController):
         raise NotImplementedError
 
 
-class IEventLootBoxesController(IGameController, IEntitlementsConsumer):
+class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     onStatusChange = None
     onAvailabilityChange = None
     onBoxesCountChange = None
-    onIntroShownChanged = None
     onBoxesUpdate = None
     onBoxInfoUpdated = None
 
@@ -2326,16 +2325,13 @@ class IEventLootBoxesController(IGameController, IEntitlementsConsumer):
     def boxCountToGuaranteedBonus(self):
         raise NotImplementedError
 
-    def getSetting(self, category, setting):
+    def getSetting(self, setting):
         raise NotImplementedError
 
-    def setSetting(self, category, setting, value):
+    def setSetting(self, setting, value):
         raise NotImplementedError
 
     def isEnabled(self):
-        raise NotImplementedError
-
-    def isActive(self):
         raise NotImplementedError
 
     def isLootBoxesAvailable(self):
@@ -2344,25 +2340,16 @@ class IEventLootBoxesController(IGameController, IEntitlementsConsumer):
     def isBuyAvailable(self):
         raise NotImplementedError
 
-    def isLootBoxesWasStarted(self):
+    def isFirstStorageEnter(self):
         raise NotImplementedError
 
-    def isLootBoxesWasFinished(self):
-        raise NotImplementedError
-
-    def useExternalShop(self):
-        raise NotImplementedError
-
-    def setIntroWasShown(self, value):
+    def setStorageVisited(self):
         raise NotImplementedError
 
     def getDayLimit(self):
         raise NotImplementedError
 
     def getGuaranteedBonusLimit(self, boxType):
-        raise NotImplementedError
-
-    def getEventActiveTime(self):
         raise NotImplementedError
 
     def openShop(self):
@@ -2393,6 +2380,12 @@ class IEventLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def getVehicleLevels(self, boxType):
+        raise NotImplementedError
+
+    def getBonusesOrder(self, category=None):
+        raise NotImplementedError
+
+    def getHangarOptimizer(self):
         raise NotImplementedError
 
 

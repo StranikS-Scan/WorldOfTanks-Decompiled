@@ -1223,17 +1223,17 @@ class PreModerationConfig(namedtuple('_PreModerationConfig', ('prebattleDescript
         return self._replace(**dataToUpdate)
 
 
-EVENT_LOOT_BOXES_CONFIG = 'event_loot_boxes_config'
+GUI_LOOT_BOXES_CONFIG = 'gui_loot_boxes_config'
 
-class _EventLootBoxesConfig(object):
-    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit')
+class _GuiLootBoxesConfig(object):
+    __slots__ = ('__isEnabled', '__lootBoxBuyDayLimit', '__isBuyAvailable', '__shopCategoryUrl')
 
     def __init__(self, **kwargs):
-        super(_EventLootBoxesConfig, self).__init__()
+        super(_GuiLootBoxesConfig, self).__init__()
         self.__isEnabled = kwargs.get('enabled', False)
-        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
-        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
         self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
+        self.__isBuyAvailable = kwargs.get('isBuyAvailable', False)
+        self.__shopCategoryUrl = kwargs.get('shopCategoryUrl', '')
 
     @property
     def isEnabled(self):
@@ -1243,8 +1243,12 @@ class _EventLootBoxesConfig(object):
     def lootBoxBuyDayLimit(self):
         return self.__lootBoxBuyDayLimit
 
-    def getEventActiveTime(self):
-        return (self.__startDateInUTC, self.__finishDateInUTC)
+    @property
+    def isBuyAvailable(self):
+        return self.__isBuyAvailable
+
+    def getShopCategoryUrl(self):
+        return self.__shopCategoryUrl
 
 
 class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
@@ -1418,7 +1422,7 @@ class ServerSettings(object):
         self.__personalReservesConfig = PersonalReservesConfig()
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
-        self.__eventLootBoxesConfig = _EventLootBoxesConfig()
+        self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
         self.__collectionsConfig = CollectionsConfig()
         self.__winbackConfig = WinbackConfig()
         self.__limitedUIConfig = _LimitedUIConfig()
@@ -1501,7 +1505,7 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
-        self.__updateEventLootBoxesConfig(self.__serverSettings)
+        self.__updateGuiLootBoxesConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1692,7 +1696,7 @@ class ServerSettings(object):
         if Configs.REFERRAL_PROGRAM_CONFIG.value in serverSettingsDiff:
             self.__updateRPConfig(serverSettingsDiff)
         self.__updatePersonalReserves(serverSettingsDiff)
-        self.__updateEventLootBoxesConfig(serverSettingsDiff)
+        self.__updateGuiLootBoxesConfig(serverSettingsDiff)
         if Configs.COLLECTIONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectionsConfig(serverSettingsDiff)
         self.__updateLimitedUIConfig(serverSettingsDiff)
@@ -2215,8 +2219,8 @@ class ServerSettings(object):
     def getTradeInConfig(self):
         return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
-    def getEventLootBoxesConfig(self):
-        return self.__eventLootBoxesConfig
+    def getGuiLootBoxesConfig(self):
+        return self.__guiLootBoxesConfig
 
     def getAchievements20GeneralConfig(self):
         return Achievements20GeneralConfig(self.__getGlobalSetting(Configs.ACHIEVEMENTS20_CONFIG.value, {}))
@@ -2348,16 +2352,16 @@ class ServerSettings(object):
     def __updateTournamentsConfig(self, diff):
         self.__tournamentSettings = self.__tournamentSettings.replace(diff[TOURNAMENT_CONFIG])
 
-    def __updateEventLootBoxesConfig(self, settings):
-        if EVENT_LOOT_BOXES_CONFIG in settings:
-            config = settings[EVENT_LOOT_BOXES_CONFIG]
+    def __updateGuiLootBoxesConfig(self, settings):
+        if GUI_LOOT_BOXES_CONFIG in settings:
+            config = settings[GUI_LOOT_BOXES_CONFIG]
             if config is None:
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
+                self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
             elif isinstance(config, dict):
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig(**config)
+                self.__guiLootBoxesConfig = _GuiLootBoxesConfig(**config)
             else:
                 _logger.error('Unexpected format of subscriptions service config: %r', config)
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
+                self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
         return
 
     def __updateCollectionsConfig(self, diff):

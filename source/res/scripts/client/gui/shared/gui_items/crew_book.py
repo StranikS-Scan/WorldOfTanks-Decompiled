@@ -90,6 +90,9 @@ class CrewBook(FittingItem):
             iconName += '_' + self.getNation()
         return iconName
 
+    def getUniversalBonusIconName(self):
+        return self.getBookType() + '_universal'
+
     def getShopIcon(self, size='large'):
         sizeID = R.images.gui.maps.icons.crewBooks.books.dyn(size)
         if not sizeID.exists():
@@ -118,6 +121,10 @@ class CrewBook(FittingItem):
         if self.nationID != nations.NONE_INDEX:
             params['nation'] = backport.text(R.strings.nations.dyn(self.getNation())())
         return backport.text(R.strings.crew_books.items.dyn(self.getBookType()).Name(), **params)
+
+    @property
+    def randomUserName(self):
+        return backport.text(R.strings.crew_books.items.random.dyn(self.getBookType()).Name())
 
     @property
     def fullDescription(self):

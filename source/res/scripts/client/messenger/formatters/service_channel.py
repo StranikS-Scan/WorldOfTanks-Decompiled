@@ -30,7 +30,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from epic_constants import EPIC_BATTLE_LEVEL_IMAGE_INDEX
 from goodies.goodie_constants import GOODIE_VARIETY
-from gui import GUI_NATIONS, GUI_SETTINGS
+from gui import GUI_NATIONS, GUI_SETTINGS, makeHtmlString
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
@@ -50,7 +50,7 @@ from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeState
 from gui.resource_well.resource_well_constants import ResourceType
 from gui.achievements.achievements_constants import Achievements20SystemMessages
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CompletionTokensBonusFormatter
-from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, getMergedBonusesFromDicts, SelectableBonus
+from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, SelectableBonus
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
@@ -2723,6 +2723,10 @@ class QuestAchievesFormatter(object):
                 count = backport.getIntegralFormat(tokenData.get(u'count', 1))
                 if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
                     itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=backport.text(R.strings.quests.bonusName.battle_bonus_x5()), count=count))
+                if tokenID.startswith(constants.LOOTBOX_TOKEN_PREFIX):
+                    lootBox = cls.__itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
+                    itemsNames.append(makeHtmlString(u'html_templates:lobby/quests/bonuses', u'rawLootBox', {u'name': lootBox.getUserName(),
+                     u'count': int(count)}))
 
         entitlementsList = [ (eID, eData.get(u'count', 0)) for eID, eData in data.get(u'entitlements', {}).iteritems() ]
         entitlementsStr = InvoiceReceivedFormatter.getEntitlementsString(entitlementsList)
@@ -3806,55 +3810,6 @@ class CustomizationChangedFormatter(WaitItemsSyncFormatter):
         else:
             callback([MessageData(None, None)])
         return
-
-
-class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
-    __MESSAGE_TEMPLATE = u'LootBoxRewardsSysMessage'
-
-    def __init__(self, subFormatters=()):
-        super(LootBoxAutoOpenFormatter, self).__init__()
-        self._achievesFormatter = LootBoxAchievesFormatter()
-        self.__subFormatters = subFormatters
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced and message.data:
-            openedBoxesIDs = set(message.data.keys())
-            for subFormatter in self.__subFormatters:
-                subBoxesIDs = subFormatter.getBoxesOfThisGroup(openedBoxesIDs)
-                if subBoxesIDs:
-                    if subFormatter.isAsync():
-                        result = yield subFormatter.format(message)
-                    else:
-                        result = subFormatter.format(message)
-                    if result:
-                        messageDataList.extend(result)
-                    openedBoxesIDs.difference_update(subBoxesIDs)
-
-            if openedBoxesIDs:
-                messageData = self.__formatSimpleBoxes(message, openedBoxesIDs)
-                if messageData is not None:
-                    messageDataList.append(messageData)
-        if messageDataList:
-            callback(messageDataList)
-            return
-        else:
-            callback([MessageData(None, None)])
-            return
-
-    def __formatSimpleBoxes(self, message, openedBoxesIDs):
-        data = message.data
-        openedBoxesIDs.difference_update({u'rewards', u'boxIDs'})
-        oldRewards, _ = data.pop(u'rewards', {}), data.pop(u'boxIDs', None)
-        allRewards = getMergedBonusesFromDicts([ data[bID][u'rewards'] for bID in openedBoxesIDs ] + [oldRewards])
-        fmt = self._achievesFormatter.formatQuestAchieves(allRewards, asBattleFormatter=False, processTokens=False)
-        formattedRewards = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={u'text': fmt})
-        settingsRewards = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
-        settingsRewards.showAt = BigWorld.time()
-        return MessageData(formattedRewards, settingsRewards)
 
 
 class ProgressiveRewardFormatter(WaitItemsSyncFormatter):
@@ -5334,12 +5289,11 @@ class CollectionsItemsFormatter(ServiceChannelFormatter):
         if not (data and self.__collections.isEnabled()):
             return [MessageData(None, None)]
         else:
+            from gui.collection.collections_helpers import getCollectionFullFeatureName
             messages = R.strings.collections.notifications
             collectionID = data[u'collectionId']
             collection = self.__collections.getCollection(collectionID)
-            feature = backport.text(messages.feature.dyn(collection.name)())
-            season = backport.text(messages.season.dyn(collection.name)())
-            title = backport.text(messages.title.collectionName(), feature=feature, season=season)
+            title = backport.text(messages.title.collectionName(), feature=getCollectionFullFeatureName(collection))
             rewards = data[u'items'] if u'items' in data else data[u'reward']
             text = backport.text(messages.newItemsReceived.text(), items=CollectionsFormatter.formatQuestAchieves(rewards, False))
             formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'title': title,
@@ -5360,27 +5314,28 @@ class CollectionsRewardFormatter(ServiceChannelFormatter):
         else:
             collectionID = data[u'collectionId']
             collection = self.__collections.getCollection(collectionID)
-            feature = backport.text(self.__MESSAGES.feature.dyn(collection.name)())
-            season = backport.text(self.__MESSAGES.season.dyn(collection.name)())
             isFinal = data[u'requiredCount'] == self.__collections.getMaxProgressItemCount(collectionID)
-            result = [self.__makeMessageData(collectionID, feature, season, isFinal, message)]
+            result = [self.__makeMessageData(collection, isFinal, message)]
             if isFinal:
-                result.append(self.__makeFinalMessageData(collectionID, feature, season, message))
+                result.append(self.__makeFinalMessageData(collection, message))
             return result
 
-    def __makeMessageData(self, collectionID, feature, season, isFinal, message):
-        title = backport.text(self.__MESSAGES.title.collectionName(), feature=feature, season=season)
+    def __makeMessageData(self, collection, isFinal, message):
+        from gui.collection.collections_helpers import getCollectionFullFeatureName
+        title = backport.text(self.__MESSAGES.title.collectionName(), feature=getCollectionFullFeatureName(collection))
         text = backport.text(self.__MESSAGES.newRewardsReceived.text(), items=CollectionsFormatter.formatQuestAchieves(deepcopy(message.data[u'reward']), False))
-        template = self.__REWARD_TEMPLATE if isFinal else self.__ITEMS_TEMPLATE
+        template = self.__REWARD_TEMPLATE
         formatted = g_settings.msgTemplates.format(template, ctx={u'title': title,
-         u'text': text}, data={u'savedData': {u'collectionId': collectionID,
-                        u'bonuses': [message.data[u'reward']]}})
-        return MessageData(formatted, self._getGuiSettings(message, template, messageType=SYS_MESSAGE_TYPE.collectionsReward.index() if not isFinal else None))
+         u'text': text}, data={u'savedData': {u'collectionId': collection.collectionId,
+                        u'bonuses': [message.data[u'reward']],
+                        u'isFinal': isFinal}})
+        return MessageData(formatted, self._getGuiSettings(message, template, messageType=SYS_MESSAGE_TYPE.collectionsReward.index()))
 
-    def __makeFinalMessageData(self, collectionID, feature, season, message):
-        text = backport.text(self.__MESSAGES.finalReceived.text(), feature=feature, season=season)
+    def __makeFinalMessageData(self, collection, message):
+        from gui.collection.collections_helpers import getCollectionFullFeatureName
+        text = backport.text(self.__MESSAGES.finalReceived.text(), feature=getCollectionFullFeatureName(collection))
         formatted = g_settings.msgTemplates.format(self.__ITEMS_TEMPLATE, ctx={u'title': backport.text(self.__MESSAGES.title.congratulation()),
-         u'text': text}, data={u'savedData': {u'collectionId': collectionID}})
+         u'text': text}, data={u'savedData': {u'collectionId': collection.collectionId}})
         return MessageData(formatted, self._getGuiSettings(message, self.__ITEMS_TEMPLATE, messageType=SYS_MESSAGE_TYPE.collectionsItems.index()))
 
 

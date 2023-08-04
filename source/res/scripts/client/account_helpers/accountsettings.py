@@ -226,13 +226,11 @@ FUN_RANDOM_NOTIFICATIONS = 'funRandomNotifications'
 FUN_RANDOM_NOTIFICATIONS_FROZEN = 'funRandomNotificationsFrozen'
 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS = 'funRandomNotificationsProgressions'
 FUN_RANDOM_NOTIFICATIONS_SUB_MODES = 'funRandomNotificationsSubModes'
-LOOT_BOXES = 'lootBoxes'
-EVENT_LOOT_BOXES = 'eventLootBoxes'
-LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
-LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
+GUI_LOOT_BOXES = 'guiLootBoxes'
+LOOT_BOXES_INTRO_SHOWN = 'lootBoxesIntroShown'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
 LOOT_BOXES_VIEWED_COUNT = 'lootBoxesViewedCount'
-LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
+BIRTHDAY_2023_INTRO_SHOWN = 'birthday2023IntroShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTION_SHOWN_NEW_REWARDS = 'collectionsNewRewards'
 COLLECTION_SHOWN_NEW_ITEMS = 'collectionNewItems'
@@ -1124,11 +1122,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 BattleMatters.BATTLE_MATTERS_SETTINGS: {BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS: 0,
                                                         BattleMatters.QUEST_IDX_FOR_LAST_UPDATED_PORGRESS: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
-                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
-                                                LOOT_BOXES_WAS_FINISHED: False,
-                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
-                                                LOOT_BOXES_VIEWED_COUNT: 0,
-                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
@@ -1147,7 +1140,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             ACHIEVEMENTS_WTR_PREV_SUB_RANK: 0},
                                     PREV_ACHIEVEMENTS_NAME_LIST: []},
                 ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
-                                                  ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}}},
+                                                  ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}},
+                GUI_LOOT_BOXES: {LOOT_BOXES_INTRO_SHOWN: False,
+                                 LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
+                                 LOOT_BOXES_VIEWED_COUNT: 0},
+                BIRTHDAY_2023_INTRO_SHOWN: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

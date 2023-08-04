@@ -305,6 +305,8 @@ class LobbySimpleEvent(HasCtxEvent):
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
+    ENTITY_TOOLTIP_SHOW = 'entityTooltipShow'
+    ENTITY_TOOLTIP_HIDE = 'entityTooltipHide'
 
 
 class MissionsEvent(HasCtxEvent):

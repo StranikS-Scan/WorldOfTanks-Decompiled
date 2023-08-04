@@ -121,6 +121,7 @@ class CustomizationsBonusPacker(CustomizationBonusUIPacker):
         if iconName == 'style' and customizationItem.modelsSet:
             iconName = 'style_3d'
         model.setIcon(iconName)
+        model.setLabel(customizationItem.userName)
         return model
 
 

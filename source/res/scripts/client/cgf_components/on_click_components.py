@@ -12,9 +12,12 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
 from hover_component import IsHoveredComponent, SelectionComponent
 if IS_CLIENT:
+    from gui.impl import backport
+    from gui.impl.gen import R
     from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
     from gui.game_control.links import URLMacros
-    from gui.shared.event_dispatcher import showBrowserOverlayView
+    from gui.shared.event_dispatcher import showBrowserOverlayView, showCollectionWindow
+    from uilogging.collections.loggers import CollectionsLogger
 _logger = logging.getLogger(__name__)
 
 @registerComponent
@@ -44,6 +47,19 @@ def getMarathonVideoUrl():
 
 URL_PROVIDERS = {'MARATHON_VIDEO_URL_PROVIDER': getMarathonVideoUrl}
 
+@registerComponent
+class OpenCollectionOnClickComponent(object):
+    domain = CGF.DomainOption.DomainClient
+    editorTitle = 'Open collections on Click'
+    collectionID = ComponentProperty(type=CGFMetaTypes.INT, editorName='collection Id')
+
+    def doAction(self):
+        if self.collectionID:
+            backText = backport.text(R.strings.menu.viewHeader.backBtn.descrLabel.hangar())
+            CollectionsLogger().handleGameObjectClick(self.collectionID)
+            showCollectionWindow(self.collectionID, backBtnText=backText)
+
+
 @autoregister(presentInAllWorlds=False, category='lobby')
 class ClientSelectableComponentsManager(CGF.ComponentManager):
 
@@ -54,6 +70,14 @@ class ClientSelectableComponentsManager(CGF.ComponentManager):
     @onRemovedQuery(OpenBrowserOnClickComponent, SelectionComponent)
     def handleOpenBrowserOnClickRemoved(self, openBrowserOnClickComponent, selectionComponent):
         selectionComponent.onClickAction -= openBrowserOnClickComponent.doAction
+
+    @onAddedQuery(OpenCollectionOnClickComponent, SelectionComponent)
+    def handleOpenCollectionOnClickAdded(self, openCollectionOnClickComponent, selectionComponent):
+        selectionComponent.onClickAction += openCollectionOnClickComponent.doAction
+
+    @onRemovedQuery(OpenCollectionOnClickComponent, SelectionComponent)
+    def handleOpenCollectionOnClickRemoved(self, openCollectionOnClickComponent, selectionComponent):
+        selectionComponent.onClickAction -= openCollectionOnClickComponent.doAction
 
 
 @autoregister(presentInAllWorlds=True, category='lobby')

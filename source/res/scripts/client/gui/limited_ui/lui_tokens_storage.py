@@ -6,6 +6,7 @@ import typing
 from future.utils import itervalues
 import Event
 from PlayerEvents import g_playerEvents
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -20,6 +21,7 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from typing import Optional, Union, Tuple, Callable
 LimitedUITokenInfo = namedtuple('LimitedUITokenInfo', ('tokenID', 'clazz', 'args'))
@@ -271,6 +273,23 @@ class _WereRealMoneyExpenses(LimitedUICondition):
             self._update()
 
 
+class _LootboxesAvailability(LimitedUICondition):
+    __slots__ = ()
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def _getValue(self):
+        uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
+        isEntryPointEnabled = uiStorage.get(UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT)
+        return isEntryPointEnabled
+
+    def _getEvents(self):
+        return ((self.__settingsCore.onSettingsChanged, self._updateLootBoxes),)
+
+    def _updateLootBoxes(self, diff):
+        if SETTINGS_SECTIONS.UI_STORAGE_2 in diff:
+            self._update()
+
+
 _VEHICLE_LEVEL_TOKENS = tuple((tokenInfo for tokenInfo in chain.from_iterable(((LimitedUITokenInfo('minVehicleLevel_{}'.format(vehLevel), _MinVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minNonPremiumVehicleLevel_{}'.format(vehLevel), _MinNonPremiumVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minUnlockedVehicleLevel_{}'.format(vehLevel), _MinUnlockedVehicleLevel, (vehLevel,))) for vehLevel in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)))))
 _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('permanentFalse', _PermanentFalse, None),
@@ -281,7 +300,8 @@ _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('pmHasActiveMission', _PersonalMissionsActive, None),
  LimitedUITokenInfo('hasBlueprint', _BluePrintsAvailability, None),
  LimitedUITokenInfo('hasPersonalReserve', _PersonalReservesAvailability, None),
- LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None)) + _VEHICLE_LEVEL_TOKENS
+ LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None),
+ LimitedUITokenInfo('hadLootboxes', _LootboxesAvailability, None)) + _VEHICLE_LEVEL_TOKENS
 registerLimitedUITokens(_REGISTER_TOKENS)
 
 def getTokensInfo():

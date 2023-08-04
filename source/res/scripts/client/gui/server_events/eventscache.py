@@ -14,6 +14,7 @@ from adisp import adisp_async, adisp_process
 from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from gui.collection.collections_constants import COLLECTION_ITEM_TOKEN_PREFIX_NAME
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
 from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isFunRandomQuest
@@ -38,10 +39,11 @@ from skeletons.gui.shared.utils import IRaresCache
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest
-NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
+NOT_FOR_PERSONAL_MISSIONS_TOKENS = [LOOTBOX_TOKEN_PREFIX,
  RECRUIT_TMAN_TOKEN_PREFIX,
  TWITCH_TOKEN_PREFIX,
- OFFER_TOKEN_PREFIX)
+ OFFER_TOKEN_PREFIX,
+ COLLECTION_ITEM_TOKEN_PREFIX_NAME]
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):

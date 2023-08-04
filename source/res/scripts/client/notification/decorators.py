@@ -32,7 +32,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IGuiLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
@@ -1136,16 +1136,16 @@ class SeniorityAwardsDecorator(MessageDecorator):
 
 
 class EventLootBoxesDecorator(MessageDecorator):
-    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
+    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
 
     def __init__(self, entityID, message, model):
         super(EventLootBoxesDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
-        self.__eventLootBoxes.onStatusChange += self.__update
-        self.__eventLootBoxes.onAvailabilityChange += self.__update
+        self.__guiLootBoxes.onStatusChange += self.__update
+        self.__guiLootBoxes.onAvailabilityChange += self.__update
 
     def clear(self):
-        self.__eventLootBoxes.onStatusChange -= self.__update
-        self.__eventLootBoxes.onAvailabilityChange -= self.__update
+        self.__guiLootBoxes.onStatusChange -= self.__update
+        self.__guiLootBoxes.onAvailabilityChange -= self.__update
 
     def _make(self, formatted=None, settings=None):
         self.__updateEntityButtons()
@@ -1162,10 +1162,10 @@ class EventLootBoxesDecorator(MessageDecorator):
             return
         else:
             labelText = backport.text(R.strings.lootboxes.notification.eventStart.button())
-            if self.__eventLootBoxes.useExternalShop():
+            if self.__guiLootBoxes.useExternalShop():
                 labelText = text_styles.concatStylesWithSpace(labelText, icons.webLink())
             self._entity['buttonsLayout'][0]['label'] = labelText
-            if self.__eventLootBoxes.isActive() and self.__eventLootBoxes.isLootBoxesAvailable():
+            if self.__guiLootBoxes.isEnabled() and self.__guiLootBoxes.isLootBoxesAvailable():
                 state = NOTIFICATION_BUTTON_STATE.DEFAULT
             else:
                 state = NOTIFICATION_BUTTON_STATE.VISIBLE

@@ -12,6 +12,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.collection.collections_helpers import getCollectionRes
 from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.money import Currency, Money, MONEY_ZERO_GOLD
 from gui.shared.utils.functions import makeTooltip
@@ -124,7 +125,8 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_MODULE,
  ItemPackType.OFFER_BATTLE_BOOSTER: TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP,
  ItemPackType.BLUEPRINT_NATIONAL_ANY: TOOLTIPS_CONSTANTS.BLUEPRINT_RANDOM_NATIONAL_INFO,
  ItemPackType.DEMOUNT_KITS: TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT,
- ItemPackType.TMAN_TOKEN: TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED}
+ ItemPackType.TMAN_TOKEN: TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED,
+ ItemPackType.CREW_BOOK_RANDOM: TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -305,6 +307,10 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.header())
     elif rawItem.type == ItemPackType.CREW_BOOK_RANDOM:
         title = backport.text(R.strings.tooltips.awardItem.randomBooklet.header())
+    elif rawItem.type == ItemPackType.CUSTOM_ANY_COLLECTION_ITEM:
+        title = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.header())
+    elif rawItem.type == ItemPackType.CUSTOM_FREE_XP:
+        title = backport.text(R.strings.tooltips.awardItem.freeXP.header())
     else:
         title = rawItem.title or ''
     return title
@@ -345,6 +351,10 @@ def getItemDescription(rawItem, item):
         description = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.body())
     elif rawItem.type == ItemPackType.CREW_BOOK_RANDOM:
         description = backport.text(R.strings.tooltips.awardItem.randomBooklet.body())
+    elif rawItem.type == ItemPackType.CUSTOM_ANY_COLLECTION_ITEM:
+        description = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.body())
+    elif rawItem.type == ItemPackType.CUSTOM_FREE_XP:
+        description = backport.text(R.strings.tooltips.awardItem.freeXP.body())
     else:
         description = rawItem.description or ''
     return description

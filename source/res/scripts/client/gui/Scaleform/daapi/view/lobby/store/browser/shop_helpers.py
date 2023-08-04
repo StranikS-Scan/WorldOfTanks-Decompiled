@@ -140,10 +140,6 @@ def getIntegratedAuctionUrl():
     return _getUrl('integratedAuction')
 
 
-def getEventLootBoxesUrl():
-    return _getUrl('eventLootboxes')
-
-
 def getShowcaseUrl():
     return _getUrl('showcase')
 

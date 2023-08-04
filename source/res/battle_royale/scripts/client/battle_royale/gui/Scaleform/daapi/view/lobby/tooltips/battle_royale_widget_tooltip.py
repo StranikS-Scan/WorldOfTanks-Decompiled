@@ -26,7 +26,6 @@ class BattleRoyaleWidgetTooltip(RankedSelectorTooltip):
         items = [formatters.packBuildUpBlockData([self.__packMainBlock()], padding=formatters.packPadding(right=20, bottom=-15))]
         if self._battleController.getCurrentCycleInfo()[1]:
             items.append(formatters.packBuildUpBlockData(self.__packTimeTableWidgetBlock(), 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=20, bottom=-15)))
-        items.append(formatters.packBuildUpBlockData([self.__packTimeLeftSeasonBlock()], padding=formatters.packPadding(left=20, bottom=-15, top=-5)))
         items.append(packPerformanceWarningBlock(self._battleController.getPerformanceGroup(), leftPadding=20, rightPadding=10))
         return items
 
@@ -45,8 +44,3 @@ class BattleRoyaleWidgetTooltip(RankedSelectorTooltip):
         primeTime = self._battleController.getPrimeTimes().get(self.__connectionMgr.peripheryID)
         currentCycleEnd = self._battleController.getCurrentSeason().getCycleEndDate()
         return getPrimeTableWidgetBlocks(primeTime, currentCycleEnd, R.strings.tooltips.battleTypes.battleRoyale.widget, tableTopPadding=-4, ignoreHeaderImageSize=True)
-
-    def __packTimeLeftSeasonBlock(self):
-        timeLeft = 10000
-        description = ' '.join((text_styles.main(backport.text(R.strings.tooltips.battleTypes.battleRoyale.widget.tillEnd())), text_styles.stats(backport.getTillTimeStringByRClass(timeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability))))
-        return formatters.packTextBlockData(text=description)

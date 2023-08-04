@@ -1,13 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/collection/awards_view_model.py
+from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.collection.reward_model import RewardModel
 
-class AwardsViewModel(ViewModel):
-    __slots__ = ('onOpenCollection',)
+class CollectionAwardState(Enum):
+    COMPLETED = 'completed'
+    ACTIVE = 'active'
 
-    def __init__(self, properties=3, commands=1):
+
+class AwardsViewModel(ViewModel):
+    __slots__ = ('onOpenCollection', 'onCloseCollection')
+
+    def __init__(self, properties=4, commands=2):
         super(AwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCollectionName(self):
@@ -22,11 +28,17 @@ class AwardsViewModel(ViewModel):
     def setIsDisabled(self, value):
         self._setBool(1, value)
 
+    def getState(self):
+        return CollectionAwardState(self._getString(2))
+
+    def setState(self, value):
+        self._setString(2, value.value)
+
     def getRewards(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setRewards(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getRewardsType():
@@ -36,5 +48,7 @@ class AwardsViewModel(ViewModel):
         super(AwardsViewModel, self)._initialize()
         self._addStringProperty('collectionName', '')
         self._addBoolProperty('isDisabled', False)
+        self._addStringProperty('state')
         self._addArrayProperty('rewards', Array())
         self.onOpenCollection = self._addCommand('onOpenCollection')
+        self.onCloseCollection = self._addCommand('onCloseCollection')

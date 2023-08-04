@@ -8,7 +8,7 @@ if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.missions.packers.bonus import BonusUIPacker
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, startIndex=0):
     packer = packer or getDefaultBonusPacker()
     tooltipIndex = 0 if tooltipData is None else len(tooltipData)
     for bonus in (b for b in bonuses if b.isShowInGUI()):
@@ -17,7 +17,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
         bTooltipList = packer.getToolTip(bonus) if withTooltips else []
         bContentIdList = packer.getContentId(bonus) if withTooltips else []
         for bIndex, bModel in enumerate(bonusList):
-            bModel.setIndex(bIndex)
+            bModel.setIndex(bIndex + startIndex)
             tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
             bonusModelsList.addViewModel(bModel)
 

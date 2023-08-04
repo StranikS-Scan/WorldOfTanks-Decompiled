@@ -74,6 +74,13 @@
       <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G162_Project_Kpz_07P_E_KL_3DSt>
+          <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Hull.model	</exploded>
+        </G162_Project_Kpz_07P_E_KL_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -97,9 +104,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.806051 0.653473 3.468946	</rayStart>
-        <rayEnd>	-0.806051 -0.037925 2.98483	</rayEnd>
-        <rayUp>	-0 0.573572 -0.819155	</rayUp>
+        <rayStart>	-0.880639 0.327089 3.206347	</rayStart>
+        <rayEnd>	-0.880639 0.163258 3.091632	</rayEnd>
+        <rayUp>	0 0.573571 -0.819156	</rayUp>
         <size>	0.3	</size>
       </slot>
       <slot>
@@ -510,6 +517,51 @@
         <showOn>	16	</showOn>
         <anchorShift>	0.03	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15036	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+        <position>	-0.863462 1.29 3.83708	</position>
+        <rotation>	0.571512 0.000021 3.14158	</rotation>
+        <scale>	0.450669 0.204496 0.45067	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.03	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15037	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+        <position>	-1.85113 0.932449 2.65455	</position>
+        <rotation>	1.61104 1.5491 -0.022132	</rotation>
+        <scale>	0.418135 0.189733 0.418137	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	-0.01	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15038	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+        <position>	1.83614 0.941084 2.79344	</position>
+        <rotation>	1.61103 -1.54914 0.022171	</rotation>
+        <scale>	0.393894 0.178734 0.393896	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.01	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -551,6 +603,13 @@
         <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G162_Project_Kpz_07P_E_KL_3DSt>
+            <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G162_Project_Kpz_07P_E_KL_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -640,6 +699,39 @@
                   <row3>	0.000003 0.890008 -3.668012	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G162_Project_Kpz_07P_E_KL_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.167000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.208027 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.211587	</row2>
+                  <row3>	0.000000 1.040028 0.277083	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.537000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.354658	</row2>
+                  <row3>	0.000000 1.380003 0.054318	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.601552 -0.000003 0.000002	</row0>
+                  <row1>	0.000000 0.413443 0.502176	</row1>
+                  <row2>	-0.000001 -0.641856 0.528443	</row2>
+                  <row3>	0.000000 1.332094 3.955525	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.611429 0.000003 -0.000001	</row0>
+                  <row1>	0.000000 0.011208 -0.299791	</row1>
+                  <row2>	-0.000001 1.005782 0.037603	</row2>
+                  <row3>	0.000003 0.890008 -3.668012	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.554782 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.326000	</row2>
+                  <row3>	-1.927000 0.982470 0.211000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -715,6 +807,39 @@
                   <row1>	0.000000 0.011208 -0.299791	</row1>
                   <row2>	-0.000001 1.005780 0.037603	</row2>
                   <row3>	0.000003 0.890008 -3.668010	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G162_Project_Kpz_07P_E_KL_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.167000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.208030 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.211590	</row2>
+                  <row3>	0.000000 1.040030 0.277083	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.537000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.354658	</row2>
+                  <row3>	0.000000 1.380003 0.177624	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.601550 -0.000003 0.000002	</row0>
+                  <row1>	0.000000 0.413443 0.502176	</row1>
+                  <row2>	-0.000001 -0.641856 0.528443	</row2>
+                  <row3>	0.000000 1.332090 3.955530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.611430 0.000003 -0.000001	</row0>
+                  <row1>	0.000000 0.011208 -0.299791	</row1>
+                  <row2>	-0.000001 1.005780 0.037603	</row2>
+                  <row3>	0.000003 0.890008 -3.668010	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.554782 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.326000	</row2>
+                  <row3>	1.927000 0.982470 0.211000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1517,6 +1642,15 @@
               <rayUp>	0.1 0 0	</rayUp>
               <size>	0.46	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 3.825	</rayStart>
+              <rayEnd>	0 0 4.285	</rayEnd>
+              <rayUp>	0.13 0 0	</rayUp>
+              <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+              <size>	0.46	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1528,6 +1662,13 @@
             <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G162_Project_Kpz_07P_E_KL_3DSt>
+                <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G162_Project_Kpz_07P_E_KL_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G162_Project_Kpz_07P_E/collision/Gun_01.model	</collisionModelServer>
@@ -1545,6 +1686,13 @@
         <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G162_Project_Kpz_07P_E/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G162_Project_Kpz_07P_E_KL_3DSt>
+            <undamaged>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G162_Project_Kpz_07P_E/_skins/G162_Project_Kpz_07P_E_KL_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G162_Project_Kpz_07P_E_KL_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G162_Project_Kpz_07P_E/collision/Turret_01.model	</collisionModelServer>
@@ -2028,6 +2176,30 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.869174	</clipAngle>
           <anchorShift>	1.26161	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+          <position>	-0.696534 2.55824 0.550246	</position>
+          <rotation>	0.017745 0.000029 3.14158	</rotation>
+          <scale>	0.563109 0.2 0.563115	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.14911	</clipAngle>
+          <anchorShift>	0.02	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G162_Project_Kpz_07P_E_KL_3DSt	</compatibleModels>
+          <position>	-1.16743 1.93586 -2.05106	</position>
+          <rotation>	2.0427 1.51293 -0.000595	</rotation>
+          <scale>	0.394207 0.178876 0.39421	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.14911	</clipAngle>
+          <anchorShift>	0.02	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

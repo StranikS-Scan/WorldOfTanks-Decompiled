@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/collection/collection.py
 from gui.impl.gen.view_models.views.lobby.collection.tab_model import TabModel
+from gui.impl.lobby.collection.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus
 from gui.collection.collections_helpers import composeBonuses, getImagePath, getItemResKey, getShownNewItemsCount, isItemNew, isRewardNew, setItemShown, setRewardShown, setShownNewItemsCount, setCollectionTutorialCompleted, isTutorialCompleted
-from gui.collection.sounds import COLLECTIONS_SOUND_SPACE, Sounds
+from gui.collection.sounds import COLLECTIONS_SOUND_SPACE, Sounds, COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE
 from gui.impl.auxiliary.collections_helper import getCollectionsBonusPacker
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.collection_view_model import CollectionViewModel
@@ -24,10 +25,11 @@ from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.impl import IGuiLoader
 _INITIAL_PAGE = -1
+_SEPARATOR = ','
+_COLLECTION_NAME_TO_SOUNDSPACE = {'mt_birthday2023': COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE}
 
 class CollectionView(ViewImpl):
-    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__rewardTooltips')
-    _COMMON_SOUND_SPACE = COLLECTIONS_SOUND_SPACE
+    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__rewardTooltips', '__bonusData', '_COMMON_SOUND_SPACE')
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
     __guiLoader = dependency.descriptor(IGuiLoader)
 
@@ -39,7 +41,9 @@ class CollectionView(ViewImpl):
         self.__backBtnText = backBtnText
         self.__collection = self.__collectionsSystem.getCollection(collectionId)
         self.__rewardTooltips = {}
+        self.__bonusData = []
         self.__page = page
+        self._COMMON_SOUND_SPACE = _COLLECTION_NAME_TO_SOUNDSPACE.get(self.__collection.name, COLLECTIONS_SOUND_SPACE)
         super(CollectionView, self).__init__(settings)
 
     @property
@@ -60,6 +64,10 @@ class CollectionView(ViewImpl):
                 tooltipData = self.getTooltipData(event)
                 if tooltipData is not None:
                     return CollectionItemTooltipView(*tooltipData.specialArgs)
+            if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
+                tooltipIds = map(int, event.getArgument('hiddenRewards').split(_SEPARATOR))
+                bonuses = [ bonus for index, bonus in enumerate(self.__bonusData) if index in tooltipIds ]
+                return AdditionalRewardsTooltip(bonuses)
             return super(CollectionView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
@@ -175,11 +183,14 @@ class CollectionView(ViewImpl):
         rewardInfoModels = model.getRewardsInfo()
         rewardInfoModels.clear()
         self.__rewardTooltips.clear()
+        self.__bonusData = []
         for requiredCount, rewards in rewardItems:
             rewardInfoModel = RewardInfoModel()
             rewardInfoModel.setRequiredItemsCount(requiredCount)
             rewardInfoModel.setState(self.__getRewardState(requiredCount))
-            packBonusModelAndTooltipData(composeBonuses([rewards]), rewardInfoModel.getRewards(), self.__rewardTooltips, getCollectionsBonusPacker())
+            composedBonuses = composeBonuses([rewards])
+            packBonusModelAndTooltipData(composedBonuses, rewardInfoModel.getRewards(), self.__rewardTooltips, getCollectionsBonusPacker())
+            self.__bonusData.extend((bonus for bonus in composedBonuses if bonus.isShowInGUI()))
             rewardInfoModels.addViewModel(rewardInfoModel)
 
         rewardInfoModels.invalidate()

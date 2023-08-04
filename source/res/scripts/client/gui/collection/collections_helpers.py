@@ -11,7 +11,7 @@ import nations
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLLECTIONS_SECTION, COLLECTION_SHOWN_NEW_ITEMS, COLLECTION_SHOWN_NEW_ITEMS_COUNT, COLLECTION_SHOWN_NEW_REWARDS, COLLECTION_TUTORIAL_COMPLETED
-from collections_common import CollectionItem, UNUSABLE_COLLECTION_ENTITIES, USABLE_COLLECTION_ENTITIES
+from collections_common import CollectionItem, UNUSABLE_COLLECTION_ENTITIES, USABLE_COLLECTION_ENTITIES, Collection
 from gui.collection.collections_constants import COLLECTION_ITEM_RES_KEY_TEMPLATE, COLLECTION_RES_PREFIX
 from gui.impl import backport
 from gui.impl.gen import R
@@ -98,6 +98,13 @@ def getItemName(collectionId, item, collectionsSystem=None):
     return getUnusableItemName(collectionId, item, collectionsSystem=collectionsSystem) if item.type in UNUSABLE_COLLECTION_ENTITIES else getUsableItemName(item)
 
 
+def getCollectionFullFeatureName(collection):
+    notifications = R.strings.collections.notifications
+    feature = notifications.feature.dyn(collection.name)
+    season = notifications.season.dyn(collection.name)
+    return backport.text(notifications.templates.featureSeason(), feature=backport.text(feature()), season=backport.text(season())) if season.isValid() else backport.text(feature())
+
+
 def getUsableItemName(item):
     if item.type == 'customizationItem':
         return getCustomizationName(item.relatedId)
@@ -108,8 +115,9 @@ def getUsableItemName(item):
 
 @replace_none_kwargs(collectionsSystem=ICollectionsSystemController)
 def getUnusableItemName(collectionId, item, collectionsSystem=None):
-    itemTextRes = getCollectionRes(collectionId, collectionsSystem=collectionsSystem).item
-    return backport.text(itemTextRes.name.dyn(getItemResKey(collectionId, item))())
+    collRes = getCollectionRes(collectionId, collectionsSystem=collectionsSystem)
+    itemTextRes = collRes.dyn('item') if collRes else None
+    return backport.text(itemTextRes.name.dyn(getItemResKey(collectionId, item))()) if itemTextRes else ''
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

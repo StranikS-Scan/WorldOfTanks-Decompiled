@@ -11,6 +11,9 @@ class Sounds(Enum):
     STATE_PLACE_ACHIEVEMENTS = 'STATE_hangar_place_achievements'
     STATE_PLACE_TASKS = 'STATE_hangar_place_tasks'
     REWARD_SCREEN = 'bp_reward_screen'
+    MT_BIRTHDAY23_ENTER = 'collections_anniversary13_enter'
+    MT_BIRTHDAY23_EXIT = 'collections_anniversary13_exit'
 
 
 COLLECTIONS_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.SPACE.value, entranceStates={Sounds.STATE_PLACE.value: Sounds.STATE_PLACE_ACHIEVEMENTS.value}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.COMMON_ENTER.value, exitEvent=Sounds.COMMON_EXIT.value)
+COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.SPACE.value, entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.MT_BIRTHDAY23_ENTER.value, exitEvent=Sounds.MT_BIRTHDAY23_EXIT.value)

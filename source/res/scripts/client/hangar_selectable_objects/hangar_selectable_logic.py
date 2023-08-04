@@ -20,7 +20,7 @@ class HangarSelectableLogic(BaseSelectableLogic):
         return
 
     def init(self, callback=None):
-        super(HangarSelectableLogic, self).init()
+        super(HangarSelectableLogic, self).init(callback=callback)
         self._hangarSpace.setSelectionEnabled(True)
         self._onNotifyCursorOver3dScene(self.__hangarSpace.isCursorOver3DScene)
 

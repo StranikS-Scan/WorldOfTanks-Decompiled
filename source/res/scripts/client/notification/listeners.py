@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COLLECTIONS_NOTIFICATIONS, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL
+from account_helpers.AccountSettings import COLLECTIONS_NOTIFICATIONS, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN
 from adisp import adisp_process
 from armory_yard_constants import State
 from battle_pass_common import FinalReward
@@ -28,6 +28,7 @@ from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.collection.collections_constants import COLLECTION_START_EVENT_TYPE, COLLECTION_START_SEEN
+from gui.collection.collections_helpers import getCollectionFullFeatureName
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
@@ -39,7 +40,6 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import events, g_eventBus
 from gui.shared.formatters import text_styles, time_formatters
-from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
@@ -57,10 +57,10 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController, IReferralProgramController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IGuiLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController, IReferralProgramController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -1731,20 +1731,18 @@ class IntegratedAuctionListener(_NotificationListener):
 
 
 class EventLootBoxesListener(_NotificationListener, EventsHandler):
-    __slots__ = ('__isActive', '__isLootBoxesWasStarted')
-    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
+    __slots__ = ('__isActive',)
+    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __START_ENTITY_ID = 0
 
     def __init__(self):
         super(EventLootBoxesListener, self).__init__()
         self.__isActive = False
-        self.__isLootBoxesWasStarted = False
 
     def start(self, model):
         super(EventLootBoxesListener, self).start(model)
         self._subscribe()
-        self.__isActive = self.__eventLootBoxes.isActive()
-        self.__isLootBoxesWasStarted = self.__eventLootBoxes.isLootBoxesWasStarted()
+        self.__isActive = self.__guiLootBoxes.isEnabled()
         return True
 
     def stop(self):
@@ -1752,23 +1750,10 @@ class EventLootBoxesListener(_NotificationListener, EventsHandler):
         super(EventLootBoxesListener, self).stop()
 
     def _getEvents(self):
-        return ((self.__eventLootBoxes.onIntroShownChanged, self.__onIntroShownChanged),
-         (self.__eventLootBoxes.onStatusChange, self.__onStatusChange),
-         (self.__eventLootBoxes.onBoxInfoUpdated, self.__onStatusChange),
-         (self.__eventLootBoxes.onAvailabilityChange, self.__onAvailabilityChange))
-
-    def __onIntroShownChanged(self, wasShown):
-        if self.__eventLootBoxes.isActive() and not self.__isLootBoxesWasStarted and wasShown:
-            self.__pushStarted()
-            self.__isLootBoxesWasStarted = wasShown
+        return ((self.__guiLootBoxes.onStatusChange, self.__onStatusChange), (self.__guiLootBoxes.onBoxInfoUpdated, self.__onStatusChange), (self.__guiLootBoxes.onAvailabilityChange, self.__onAvailabilityChange))
 
     def __onStatusChange(self):
-        isActive = self.__eventLootBoxes.isActive()
-        isLootBoxesWasStarted = self.__eventLootBoxes.isLootBoxesWasStarted()
-        isLootBoxesWasFinished = self.__eventLootBoxes.isLootBoxesWasFinished()
-        if isLootBoxesWasStarted and not isActive and not isLootBoxesWasFinished:
-            self.__pushFinished(self.__eventLootBoxes.getBoxesCount())
-        self.__isActive = isActive
+        self.__isActive = self.__guiLootBoxes.isEnabled()
 
     def __onAvailabilityChange(self, previous, current):
         if previous is not None and previous != current and self.__isActive:
@@ -1777,22 +1762,6 @@ class EventLootBoxesListener(_NotificationListener, EventsHandler):
             else:
                 self.__pushLootBoxesDisabled()
         return
-
-    def __pushStarted(self):
-        model = self._model()
-        if model is not None:
-            _, finish = self.__eventLootBoxes.getEventActiveTime()
-            localFinishTime = time_utils.makeLocalServerTime(finish)
-            messageData = {'title': backport.text(R.strings.lootboxes.notification.eventStart.title()),
-             'text': backport.text(R.strings.lootboxes.notification.eventStart.text(), date=TimeFormatter.getShortDateFormat(localFinishTime))}
-            model.addNotification(EventLootBoxesDecorator(message=messageData, entityID=self.__START_ENTITY_ID, model=model))
-        return
-
-    @staticmethod
-    @dependency.replace_none_kwargs(ctrl=IEventLootBoxesController)
-    def __pushFinished(boxesCount, ctrl=None):
-        SystemMessages.pushMessage(text=backport.text(R.strings.lootboxes.notification.eventFinish.text()) if boxesCount > 0 else '', priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.EventLootBoxFinish, messageData={'title': backport.text(R.strings.lootboxes.notification.eventFinish.title())})
-        ctrl.setSetting(EVENT_LOOT_BOXES_CATEGORY, LOOT_BOXES_WAS_FINISHED, True)
 
     @staticmethod
     def __pushLootBoxesEnabled():
@@ -1903,8 +1872,9 @@ class CollectionsListener(_NotificationListener, EventsHandler):
 
     def __pushStarted(self, collection):
         feature = backport.text(self.__NOTIFICATIONS.feature.dyn(collection.name)())
+        fullFeature = getCollectionFullFeatureName(collection)
         title = backport.text(self.__NOTIFICATIONS.eventStart.title(), feature=feature)
-        text = backport.text(self.__NOTIFICATIONS.eventStart.text(), feature=feature)
+        text = backport.text(self.__NOTIFICATIONS.eventStart.text(), feature=fullFeature)
         SystemMessages.pushMessage(text=text, priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.CollectionStart, messageData={'title': title}, savedData={'collectionId': collection.collectionId})
 
     def __pushDisabled(self):
@@ -2079,6 +2049,33 @@ class ReferralProgramListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.ReferralProgramPGBFull, priority=NotificationPriorityLevel.MEDIUM)
 
 
+class Birthday2023Listener(_NotificationListener):
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+
+    def start(self, model):
+        result = super(Birthday2023Listener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(Birthday2023Listener, self).stop()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType == 'birthday2023Start':
+                introShown = AccountSettings.getSettings(BIRTHDAY_2023_INTRO_SHOWN)
+                if introShown:
+                    return
+                from gui.shared.event_dispatcher import showBirthday2023Intro
+                showBirthday2023Intro()
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2103,7 +2100,8 @@ registerNotificationsListeners((ServiceChannelListener,
  WinbackSelectableRewardReminder,
  ArmoryYardListener,
  ReferralProgramListener,
- WinbackSelectableRewardReminder))
+ WinbackSelectableRewardReminder,
+ Birthday2023Listener))
 
 class NotificationsListeners(_NotificationListener):
 

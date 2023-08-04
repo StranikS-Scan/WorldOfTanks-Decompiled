@@ -130,4 +130,4 @@ class MapboxRandomCrewbookPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK, specialArgs=[item]) for item in sorted(bonus.getItems()) ]
+        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK_MAPBOX, specialArgs=[item]) for item in sorted(bonus.getItems()) ]

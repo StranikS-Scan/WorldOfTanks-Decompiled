@@ -62,7 +62,7 @@ class ClientFunRandomBattleMode(AbstractBattleMode):
     @property
     def _client_selectorColumn(self):
         from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
-        return (ModeSelectorColumns.COLUMN_1, 20)
+        return (ModeSelectorColumns.COLUMN_2, 20)
 
     @property
     def _client_selectorItemsCreator(self):

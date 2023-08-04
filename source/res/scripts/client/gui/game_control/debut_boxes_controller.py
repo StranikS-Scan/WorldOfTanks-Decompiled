@@ -4,6 +4,8 @@ import logging
 import typing
 import Event
 from Event import EventManager
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import CAROUSEL_FILTER_2, RANKED_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_2
 from constants import Configs
 from shared_utils import findFirst
 from gui import SystemMessages
@@ -16,6 +18,7 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from helpers.server_settings import serverSettingsChangeListener
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IDebutBoxesController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -29,11 +32,13 @@ UNSUPPORTED_TAGS = (VEHICLE_TAGS.EVENT,
  VEHICLE_TAGS.BATTLE_ROYALE,
  VEHICLE_TAGS.MAPS_TRAINING,
  VEHICLE_TAGS.FUN_RANDOM)
+_SETTINGS_SECTIONS = (CAROUSEL_FILTER_2, RANKED_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_2)
 
 class DebutBoxesController(IDebutBoxesController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         self.__eventsManager = EventManager()
@@ -54,6 +59,8 @@ class DebutBoxesController(IDebutBoxesController):
         if self.__enabled is not None:
             self.__tryNotifyStateChanged()
         self.__enabled = self.__getConfig().isEnabled
+        if not self.isEnabled():
+            self.__clearCarouselFilters()
         return
 
     def onAccountBecomeNonPlayer(self):
@@ -104,6 +111,8 @@ class DebutBoxesController(IDebutBoxesController):
         return config.endDate - serverTime if serverTime < config.endDate else 0
 
     def __onTimerUpdated(self):
+        if not self.isEnabled():
+            self.__clearCarouselFilters()
         self.onStateChanged()
 
     def __tryNotifyStateChanged(self):
@@ -131,9 +140,18 @@ class DebutBoxesController(IDebutBoxesController):
         if {'isEnabled', 'startDate', 'endDate'}.intersection(debutBoxesDiff):
             self.__notifier.startNotification()
             self.__tryNotifyStateChanged()
+            if not self.isEnabled():
+                self.__clearCarouselFilters()
             self.onStateChanged()
         self.__enabled = self.__getConfig().isEnabled
         self.onConfigChanged()
+
+    def __clearCarouselFilters(self):
+        for section in _SETTINGS_SECTIONS:
+            defaults = AccountSettings.getFilterDefault(section)
+            settings = self.__settingsCore.serverSettings.getSection(section, defaults)
+            settings['debut_boxes'] = False
+            self.__settingsCore.serverSettings.setSectionSettings(section, settings)
 
     def __getAllQuests(self):
         questIDs = set(self.__getConfig().questIDs)

@@ -273,6 +273,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     def __packBattleBonusX5Token(cls, model, bonus, *args):
         name = cls._BATTLE_BONUS_X5_TOKEN_SOURCE
         model.setName(BATTLE_BONUS_X5_TOKEN)
+        model.setLabel(bonus.getUserName())
         model.setValue(str(bonus.getCount()))
         model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(name)()))
         model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
@@ -389,12 +390,16 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packIconBonusModel(cls, bonus, icon, count, label):
-        model = IconBonusModel()
+        model = cls._getBonusModel()
         cls._packCommon(bonus, model)
         model.setValue(str(count))
         model.setIcon(icon)
         model.setLabel(label)
         return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return IconBonusModel()
 
     @classmethod
     def _getToolTip(cls, bonus):
@@ -431,6 +436,7 @@ class BlueprintBonusUIPacker(BaseBonusUIPacker):
     def _pack(cls, bonus):
         model = cls._getBonusModel()
         cls._packCommon(bonus, model)
+        model.setLabel(bonus.getBlueprintTooltipName())
         model.setValue(str(bonus.getCount()))
         model.setType(bonus.getBlueprintName())
         model.setIcon(bonus.getImageCategory())
@@ -857,6 +863,23 @@ class BattlePassPointsBonusPacker(SimpleBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         return [TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_POINTS, specialArgs=[])]
+
+
+class PremiumDaysBonusPacker(SimpleBonusUIPacker):
+    _ICONS_AVAILABLE = (1, 2, 3, 7, 14, 30, 90, 180, 360)
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        days = bonus.getValue()
+        if days in cls._ICONS_AVAILABLE:
+            model.setName(bonus.getName())
+        else:
+            model.setName('premium_universal')
+        model.setValue(str(bonus.getValue()))
+        model.setLabel(label)
+        return model
 
 
 class CurrenciesBonusUIPacker(SimpleBonusUIPacker):

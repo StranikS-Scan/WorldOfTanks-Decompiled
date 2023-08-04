@@ -823,7 +823,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateCollectiveGoalEntryPoint(self):
         isCollecitveGoalVisible = self.__collectiveGoalEntryPointController.isEnabled()
-        self.as_setCollectiveGoalEntryPointS(isCollecitveGoalVisible)
+        isVisibleInBonusType = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM)
+        self.as_setCollectiveGoalEntryPointS(isCollecitveGoalVisible and isVisibleInBonusType)
 
     def __updateArmoryYardEntryPoint(self):
         self.as_setArmoryYardEntryPointS(self.__armoryYardCtrl.isEnabled())

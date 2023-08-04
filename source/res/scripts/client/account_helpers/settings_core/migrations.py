@@ -981,6 +981,11 @@ def _migrateTo105(core, data, initialized):
         clear[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0) | settingOffset
 
 
+def _migrateTo106(_, data, __):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
+    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1395,6 +1400,10 @@ _versions = ((1,
   False),
  (105,
   _migrateTo105,
+  False,
+  False),
+ (106,
+  _migrateTo106,
   False,
   False))
 

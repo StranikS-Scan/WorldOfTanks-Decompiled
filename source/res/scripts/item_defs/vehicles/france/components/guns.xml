@@ -91,6 +91,7 @@
     <_120mm_D_1203_P>	110	</_120mm_D_1203_P>
     <_100mm_SA_47_58>	111	</_100mm_SA_47_58>
     <_100mm_SA_47_75>	112	</_100mm_SA_47_75>
+    <_75mm_SA49>	114	</_75mm_SA49>
     <_120mm_D_1203_A_FL>	501	</_120mm_D_1203_A_FL>
     <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <_105mm_D1504_7x7>	503	</_105mm_D1504_7x7>
@@ -1213,6 +1214,64 @@
         </_75mm_OE_mle_1939>
       </shots>
     </_75mm_SA49_EBR>
+    <_75mm_SA49>
+      <userString>	#france_vehicles:_75mm_SA49	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	35000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4.28571428571429	</reloadTime>
+      <maxAmmo>	87	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1520	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_M61_APCT>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	790	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	108 98	</piercingPower>
+        </_75mm_M61_APCT>
+        <_75mm_M61A1_APCT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	988	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	148 122	</piercingPower>
+        </_75mm_M61A1_APCT>
+        <_75mm_M48_HE>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	790	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_M48_HE>
+      </shots>
+    </_75mm_SA49>
     <Canon_de_75mm_Vo_920_m_s>
       <userString>	#france_vehicles:Canon_de_75mm_Vo_920_m_s	</userString>
       <tags></tags>

@@ -862,6 +862,59 @@
       </damage>
     </armorSpalls>
   </_75mm_M48>
+  <_75mm_M61_APCT>
+    <id>	170	</id>
+    <userString>	#france_vehicles:_75mm_M61_APCT	</userString>
+    <icon>	ap	</icon>
+    <price>	64	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_M61_APCT>
+  <_75mm_M61A1_APCT>
+    <id>	171	</id>
+    <userString>	#france_vehicles:_75mm_M61A1_APCT	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_M61A1_APCT>
+  <_75mm_M48_HE>
+    <id>	172	</id>
+    <userString>	#france_vehicles:_75mm_M48_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	160	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_M48_HE>
   <_76mm_OEO_mle._1917>
     <id>	17	</id>
     <userString>	#france_vehicles:_76mm_OEO_mle._1917	</userString>

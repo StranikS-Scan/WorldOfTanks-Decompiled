@@ -75,7 +75,7 @@ class InfluenceZoneEquipmentComponent(object):
         self.zoneRadius = equipment.influenceZone.radius
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class InfluenceZoneVisualizationManager(CGF.ComponentManager):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     ALLY_MARKER_POSTFIX = 'Ally'

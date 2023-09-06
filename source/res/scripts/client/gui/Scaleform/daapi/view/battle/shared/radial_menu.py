@@ -179,6 +179,14 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
 
     def onHideCompleted(self):
         self.__setVisibility(False)
+        ctrl = self.sessionProvider.shared.calloutCtrl
+        if ctrl is not None and ctrl.isRadialMenuOpened():
+            ctrl.resetRadialMenuData()
+        if self.app is not None:
+            self.app.unregisterGuiKeyHandler(self)
+            if self.app.hasGuiControlModeConsumers(self.getAlias()):
+                self.app.leaveGuiControlMode(self.getAlias())
+        return
 
     def onRefresh(self):
         if self.__isVisible:

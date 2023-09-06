@@ -19,6 +19,12 @@ class WotPlusKeys(Enum):
     RESERVE_AWARD_VIEW = 'reserve_award_view'
     HEADER_TOOLTIP = 'header_tooltip'
     CLOSE_BUTTON = 'close_button'
+    DETAILS_BUTTON = 'details_button'
+    INFO_BUTTON = 'info_button'
+    NOTIFICATION_CENTER = 'notification_center'
+    ATTENDANCE_REWARD_SCREEN = 'attendance_reward_screen'
+    ACCOUNT_DASHBOARD = 'account_dashboard'
+    SUBSCRIPTION_PAGE = 'subscription_page'
 
 
 class RewardScreenTooltips(Enum):
@@ -27,24 +33,56 @@ class RewardScreenTooltips(Enum):
     PASSIVE_CREW_XP = 'passive_crew_xp_tooltip'
     EXCLUDED_MAP = 'excluded_map_tooltip'
     FREE_EQUIPMENT_MOVEMENT = 'free_equipment_movement_tooltip'
+    ATTENDANCE_REWARD = 'attendance_reward_tooltip'
 
 
 class ReservesKeys(Enum):
-    ACTIVATE_WP = 'activate_wp_button'
-    ACTIVATE_PA = 'activate_pa_button'
+    GOLD_ACTIVATE = 'activate_wp_button'
+    CREDITS_ACTIVATE = 'activate_pa_button'
     INFO_TOOLTIP = 'info_tooltip'
-    WP_INFO = 'wp_info_button'
-    PA_INFO = 'pa_info_button'
+    GOLD_INFO = 'wp_info_button'
+    CREDITS_INFO = 'pa_info_button'
 
 
-class HeaderItemState(Enum):
+class WotPlusStateStr(Enum):
     ACTIVE = 'active'
     INACTIVE = 'inactive'
     SUSPENDED = 'suspended'
 
 
+class PremiumAccountStateStr(Enum):
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+
+
+class HeaderAdditionalData(Enum):
+    NEW_ATTENDANCE_REWARD = 'new'
+
+
+class NotificationAdditionalData(Enum):
+    RELEASE_NOTIFICATION = 'release_notification'
+    SPECIAL_NOTIFICATION = 'special_notification'
+
+
 class WotPlusInfoPageSource(Enum):
     SHOP = InfoPageInfo('card_details_button', 'shop')
-    REWARD_SCREEN = InfoPageInfo('details_button', WotPlusKeys.REWARD_SCREEN)
-    SUBSCRIPTION_PAGE = InfoPageInfo('info_button', 'subscription_page')
-    GOLD_RESERVES = InfoPageInfo('info_button', WotPlusKeys.RESERVE_VIEW)
+    REWARD_SCREEN = InfoPageInfo(WotPlusKeys.DETAILS_BUTTON, WotPlusKeys.REWARD_SCREEN)
+    SUBSCRIPTION_PAGE = InfoPageInfo(WotPlusKeys.INFO_BUTTON, WotPlusKeys.SUBSCRIPTION_PAGE)
+    GOLD_RESERVES = InfoPageInfo(ReservesKeys.GOLD_INFO, WotPlusKeys.RESERVE_VIEW)
+    ATTENDANCE_REWARDS_SCREEN = InfoPageInfo(WotPlusKeys.INFO_BUTTON, WotPlusKeys.ATTENDANCE_REWARD_SCREEN)
+
+
+class AccountDashboardFeature(Enum):
+    SUBSCRIPTION_WIDGET = 'subscription_widget'
+    RESERVE_WIDGET = 'reserve_widget'
+    EXCLUDED_MAPS_WIDGET = 'excluded_maps_widget'
+
+
+class SubscriptionPageKeys(Enum):
+    INFO_BUTTON = WotPlusKeys.INFO_BUTTON
+    CTA_BUTTON = 'cta_button'
+
+
+class SubscriptionStateMixinKeys(Enum):
+    WOT_PLUS = 'wotp'
+    PREMIUM = 'pa'

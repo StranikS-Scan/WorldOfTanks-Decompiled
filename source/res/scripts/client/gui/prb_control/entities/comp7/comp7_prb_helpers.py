@@ -49,7 +49,7 @@ class Comp7IntroPresenter(object):
         pass
 
     def init(self):
-        if self.__isComp7IntroShown():
+        if self.__isComp7OnboardingShown() and self.__isComp7WhatsNewShown():
             return
         if self.__isHangarViewLoaded():
             self.__showIntro()
@@ -70,6 +70,12 @@ class Comp7IntroPresenter(object):
         if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
             self.__showIntro()
 
+    def __showIntro(self):
+        if not self.__isComp7OnboardingShown():
+            self.__showOnboarding()
+        else:
+            self.__showWhatsNew()
+
     @classmethod
     def __isHangarViewLoaded(cls):
         container = cls.__app.containerManager.getContainer(WindowLayer.SUB_VIEW)
@@ -80,10 +86,19 @@ class Comp7IntroPresenter(object):
         return False
 
     @classmethod
-    def __isComp7IntroShown(cls):
+    def __isComp7OnboardingShown(cls):
         section = cls.__settingsCore.serverSettings.getSection(section=GUI_START_BEHAVIOR, defaults=AccountSettings.getFilterDefault(GUI_START_BEHAVIOR))
         return section.get(GuiSettingsBehavior.COMP7_INTRO_SHOWN)
 
+    @classmethod
+    def __isComp7WhatsNewShown(cls):
+        section = cls.__settingsCore.serverSettings.getSection(section=GUI_START_BEHAVIOR, defaults=AccountSettings.getFilterDefault(GUI_START_BEHAVIOR))
+        return section.get(GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN)
+
     @staticmethod
-    def __showIntro():
+    def __showOnboarding():
         event_dispatcher.showComp7IntroScreen()
+
+    @staticmethod
+    def __showWhatsNew():
+        event_dispatcher.showComp7WhatsNewScreen()

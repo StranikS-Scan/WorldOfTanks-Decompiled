@@ -220,7 +220,19 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def denunciationsLeft(self):
-        return self.getCacheValue('denunciationsLeft', 0)
+        return self.getCacheValue('denunciations', {}).get('left', (0, 0))
+
+    @property
+    def battleDenunciationsLeft(self):
+        return self.denunciationsLeft[1]
+
+    @property
+    def hangarDenunciationsLeft(self):
+        return self.denunciationsLeft[0]
+
+    @property
+    def hangarDenunciations(self):
+        return self.getCacheValue('denunciations', {}).get('hangarDenunciations', {})
 
     @property
     def freeVehiclesLeft(self):
@@ -307,6 +319,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def dynamicCurrencies(self):
         return self.getCacheValue('dynamicCurrencies', {})
+
+    @property
+    def isEmergencyModeEnabled(self):
+        return self.getCacheValue('isEmergencyModeEnabled', False)
 
     def getMapsBlackList(self):
         blackList = self.getCacheValue('preferredMaps', {}).get('blackList', ())

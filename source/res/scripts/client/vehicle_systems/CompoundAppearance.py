@@ -518,13 +518,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def __onModelsRefresh(self, modelState, resourceList):
         if not self.damageState.isCurrentModelDamaged:
             _logger.error('Current model is not damaged. Wrong refresh request!')
-        if BattleReplay.isFinished():
+        if modelState != self.damageState.modelState:
+            _logger.error('Required modelState differs from actual one. Wrong refresh request!')
+        if self._vehicle is None:
             return
         else:
-            if modelState != self.damageState.modelState:
-                _logger.error('Required modelState differs from actual one. Wrong refresh request!')
-            if self._vehicle is None:
-                return
             self.highlighter.highlight(False)
             oldHolder = self.findComponentByType(CompoundHolder)
             if oldHolder is not None:

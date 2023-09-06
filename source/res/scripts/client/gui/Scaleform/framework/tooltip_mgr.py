@@ -107,7 +107,7 @@ class ToolTip(ToolTipMgrMeta):
                 uniprof.enterToRegion(region, LOADING_REGION_COLOR)
                 BigWorld.notify(BigWorld.EventType.LOADING_VIEW, name, id, name)
                 try:
-                    data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                    data, drawData, linkage = builder.build(stateType, self.__isAdvancedKeyPressed, *args)
                 except:
                     BigWorld.notify(BigWorld.EventType.LOAD_FAILED, name, id, name)
                     uniprof.exitFromRegion(region)
@@ -115,8 +115,11 @@ class ToolTip(ToolTipMgrMeta):
 
                 BigWorld.notify(BigWorld.EventType.VIEW_LOADED, name, id, name)
                 uniprof.exitFromRegion(region)
+                if drawData:
+                    self.show(drawData, linkage)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
+                BigWorld.notify(BigWorld.EventType.LOAD_FAILED, name, id, name)
                 return
             self.__cacheTooltipData(_TOOLTIP_VARIANT_TYPED, tooltipType, args, stateType)
             self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
@@ -132,7 +135,7 @@ class ToolTip(ToolTipMgrMeta):
         else:
             builder = self._builders.getBuilder(tooltipType)
             if builder is not None:
-                data = builder.build(self, None, self.__isAdvancedKeyPressed, *args)
+                data = builder.build(None, self.__isAdvancedKeyPressed, *args)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
@@ -153,7 +156,9 @@ class ToolTip(ToolTipMgrMeta):
             info = ToolTipInfo(id, region, None)
             self.__tooltipInfos.append(info)
             uniprof.enterToRegion(region, LIVE_REGION_COLOR)
-            self._complex.build(self, stateType, self.__isAdvancedKeyPressed, tooltipID)
+            _, drawData, linkage = self._complex.build(stateType, self.__isAdvancedKeyPressed, tooltipID)
+            if drawData:
+                self.show(drawData, linkage)
             self.__cacheTooltipData(_TOOLTIP_VARIANT_COMPLEX, tooltipID, tuple(), stateType)
             self.onShow(tooltipID, None, self.__isAdvancedKeyPressed)
             return

@@ -167,6 +167,10 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
         pass
 
     @property
+    def sessionStartedAt(self):
+        return self.__sessionStartedAt
+
+    @property
     def sessionDuration(self):
         return _getSevUtc() - self.__sessionStartedAt
 

@@ -44,20 +44,20 @@
           <position1>	175.783722 -305.848389	</position1>
         </team1>
         <team2>
-          <position1>	-236.649124 329.674500	</position1>
+          <position1>	-236.649323 329.638184	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-14 -330	</position>
+          <position>	-14.000000 -330.000000	</position>
         </team1>
         <team2>
-          <position>	-177 305	</position>
+          <position>	-177.000000 305.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	258.448517 132.453354	</controlPoint>
+      <controlPoint>	258.448547 132.453369	</controlPoint>
     </domination>
     <assault2>
       <roundLength>	420	</roundLength>
@@ -65,17 +65,18 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	86.705 -311.497	</position>
+          <position>	86.705002 -311.497009	</position>
         </team1>
         <team2>
-          <position>	-172.927 264.269	</position>
+          <position>	-172.927002 264.269012	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	195.064713 -18.873474	</position1>
-          <position2>	-222.885651 -81.280098	</position2>
+          <position1>	195.064728 -18.873474	</position1>
+          <position2>	-222.885666 -81.280106	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
     <bootcamp>
@@ -91,10 +92,10 @@
       </wwmusicSetup>
       <teamBasePositions>
         <team1>
-          <position1>	175.783722 -305.848389	</position1>
+          <position1>	175.658508 -305.792603	</position1>
         </team1>
         <team2>
-          <position1>	-236.649109 329.674500	</position1>
+          <position1>	-236.649323 329.638184	</position1>
         </team2>
       </teamBasePositions>
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
@@ -114,10 +115,57 @@
           <position1>	175.783722 -305.848389	</position1>
         </team1>
         <team2>
-          <position1>	-236.649124 329.674500	</position1>
+          <position1>	-236.649323 329.638184	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/10_hills/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-210.890121 -6.761281	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	184.469055 67.789528	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	79.613525 23.822180	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-320.713806 -26.193348	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-19.039597 -292.898560	</position>
+        </team1>
+        <team2>
+          <position>	-62.687927 258.237152	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-66.412109 12.933237	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
 </10_hills.xml>

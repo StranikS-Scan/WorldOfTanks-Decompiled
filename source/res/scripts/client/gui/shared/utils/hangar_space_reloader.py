@@ -63,7 +63,7 @@ class HangarSpaceReloader(IHangarSpaceReloader):
                 _logger.error('Abnormal behaviour: hangarSpace.spacePath is not initialized')
                 reloadValid = False
                 errCode |= ErrorFlags.SPACE_PATH_NOT_INITED
-            spacePath = spaceName if spaceName.startswith('space') else 'spaces/{}'.format(spaceName)
+            spacePath = self.buildHangarSpacePath(spaceName)
             if spacePath == hangarSpacePath:
                 _logger.warning('No need to load space "%s", because it is already loaded', spaceName)
                 reloadValid = False
@@ -77,6 +77,10 @@ class HangarSpaceReloader(IHangarSpaceReloader):
             from gui.ClientHangarSpace import g_clientHangarSpaceOverride
             g_clientHangarSpaceOverride.setPath(spacePath, visibilityMask=visibilityMask, isReload=True, event=self.hangarSpace.onSpaceChangedByAction if actionChange else None)
             return (reloadValid, errCode)
+
+    @staticmethod
+    def buildHangarSpacePath(spaceId):
+        return spaceId if spaceId.startswith('space') else 'spaces/{}'.format(spaceId)
 
     @property
     def hangarSpacePath(self):

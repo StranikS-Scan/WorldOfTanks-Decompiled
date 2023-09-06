@@ -22,7 +22,7 @@ _PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: u'{0:>s} ({2:>s})',
  _FORMAT_MASK.VEH_REGION: u'{0:>s} {3:>s} ({2:>s})',
  _FORMAT_MASK.REG_CLAN: u'{0:>s}[{1:>s}] {3:>s}',
  _FORMAT_MASK.ALL: u'{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
-_PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'playerFakeName', 'clanAbbrev', 'regionCode', 'vehicleName'))
+PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'playerFakeName', 'clanAbbrev', 'regionCode', 'vehicleName'))
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRegionCode(accountDBID, lobbyContext=None):
@@ -89,7 +89,7 @@ class PlayerFullNameFormatter(object):
             fullName = playerName
         else:
             fullName = _PLAYER_FULL_NAME_FORMATS.get(key, u'{0:>s}').format(playerName, clanAbbrev, vehShortName, regionCode)
-        return _PlayerFormatResult(fullName, playerName, fakePlayerName, clanAbbrev, regionCode, vehName)
+        return PlayerFormatResult(fullName, playerName, fakePlayerName, clanAbbrev, regionCode, vehName)
 
     @staticmethod
     def _normalizePlayerName(name):

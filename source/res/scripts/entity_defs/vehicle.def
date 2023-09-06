@@ -41,6 +41,15 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isStrafing>
+    <postmortemViewPointName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </postmortemViewPointName>
+    <isHidden>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isHidden>
     <physicsMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -375,7 +384,7 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT8	</Arg>
+      <Arg>	UINT8	</Arg>
     </showShooting>
     <updateLaserSight>
       <Arg>	OBJECT_ID	</Arg>

@@ -77,6 +77,12 @@ class VScriptEnum(object):
             for item in enum:
                 entriesData[item.name] = item.value
 
+        elif isinstance(cls.vs_enum(), dict):
+            enum = cls.vs_enum()
+            for name, value in enum.iteritems():
+                if isinstance(name, str) and isinstance(value, int):
+                    entriesData[name] = value
+
         else:
             for name, member in getmembers(cls.vs_enum()):
                 if not name.startswith('_') and isinstance(member, int):

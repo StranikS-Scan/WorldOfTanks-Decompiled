@@ -366,12 +366,14 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
                 elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
                     newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
+                elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.VERSUS_AI) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.VERSUS_AI):
+                    newCarouselAlias = HANGAR_ALIASES.VERSUS_AI_TANK_CAROUSEL
             if self.prbDispatcher is not None and self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
                 newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
-            newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL if newCarouselAlias is None else newCarouselAlias
-            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI if linkage is None else linkage
             if self.prbDispatcher is not None and self.__debutBoxesController.isEnabled() and self.prbDispatcher.getEntity().getQueueType() == QUEUE_TYPE.RANDOMS and newCarouselAlias in (HANGAR_ALIASES.TANK_CAROUSEL, HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL):
                 newCarouselAlias = HANGAR_ALIASES.DEBUT_BOXES_TANK_CAROUSEL
+            newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL if newCarouselAlias is None else newCarouselAlias
+            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI if linkage is None else linkage
             (prevCarouselAlias != newCarouselAlias or force) and self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
         return
@@ -571,6 +573,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self._updateCnSubscriptionMode()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
+        self.__updateComp7ModifiersWidget()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -589,7 +592,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onSpaceRefresh(self):
         self.__isSpaceReadyForC11n = False
         self.__updateState()
-        self.__updateComp7ModifiersWidget()
 
     def __onSpaceCreate(self):
         self.__isSpaceReadyForC11n = True
@@ -621,7 +623,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             customizationTooltip = makeTooltip(_ms(backport.text(R.strings.tooltips.hangar.tuning.disabled.header())), _ms(backport.text(R.strings.tooltips.hangar.tuning.disabled.body())))
         changeNationVisibility = g_currentVehicle.isPresent() and g_currentVehicle.item.hasNationGroup
         isNationChangeAvailable = g_currentVehicle.isPresent() and g_currentVehicle.item.isNationChangeAvailable
-        changeNationTooltip = getChangeNationTooltip()
+        changeNationTooltip = getChangeNationTooltip(g_currentVehicle.item)
         changeNationIsNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
         isMaintenanceEnabled = state.isMaintenanceEnabled()
         isEquipmentEnabled = g_currentVehicle.isPresent() and not g_currentVehicle.isEquipmentLocked()
@@ -652,6 +654,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__switchCarousels()
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
+        self.__updateComp7ModifiersWidget()
 
     def __onFunRandomUpdate(self, *_):
         self.__onEntityChanged()
@@ -682,6 +685,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateDogTagsState()
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self.__updateWotPlusState()
+            self.__updateState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:

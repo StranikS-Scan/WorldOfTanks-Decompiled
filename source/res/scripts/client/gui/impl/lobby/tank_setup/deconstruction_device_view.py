@@ -106,9 +106,10 @@ class DeconstructionDeviceView(ViewImpl):
             vehicle = g_currentVehicle.item
             if not vehicle:
                 return
-            tx.currentVehicleInfo.setVehicleName(vehicle.shortUserName)
+            tx.currentVehicleInfo.setVehicleName(vehicle.descriptor.type.shortUserString)
             tx.currentVehicleInfo.setVehicleType(vehicle.type)
             tx.currentVehicleInfo.setVehicleLvl(vehicle.level)
+            tx.currentVehicleInfo.setIsPremiumIGR(vehicle.isPremiumIGR)
 
     def _updateSlots(self, ctx=None, fullUpdate=True, updateData=True):
         if self._storageProvider is None or self._onVehicleProvider is None:

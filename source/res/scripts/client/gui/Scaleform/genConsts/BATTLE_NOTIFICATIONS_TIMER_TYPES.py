@@ -6,6 +6,8 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     DROWN = 'drown'
     DEATH_ZONE = 'deathZone'
     DANGER_ZONE = 'dangerZone'
+    WARNING_ZONE = 'warningZone'
+    MAP_DEATH_ZONE = 'mapDeathZone'
     OVERTURNED = 'overturned'
     FIRE = 'fire'
     GAS_ATTACK = 'gasAtack'

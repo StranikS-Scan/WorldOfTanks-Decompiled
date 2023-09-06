@@ -58,7 +58,7 @@ class _ChannelController(LobbyLayout):
                 return
         self.proto.channels.sendMessage(self._channel.getID(), message)
 
-    def _format(self, message, doFormatting=True):
+    def _format(self, message, doFormatting=True, shouldAddTextLink=False):
         isString = isinstance(message, types.StringType)
         if not doFormatting or isString:
             if isString:
@@ -70,7 +70,7 @@ class _ChannelController(LobbyLayout):
             self._mBuilder.setGuiType(dbID)
         else:
             self._mBuilder.setGroup(CHAT_MEMBER_GROUP[group].name())
-        return self._mBuilder.setName(dbID, message.originatorNickName).setTime(message.time).setText(message.data).build()
+        return self._mBuilder.setName(dbID, message.originatorNickName).setTime(message.time).setText(message.data).setTextLink(dbID, message.originatorNickName, shouldAddTextLink).build()
 
     def _addListeners(self):
         self._channel.onConnectStateChanged += self._onConnectStateChanged
@@ -86,6 +86,7 @@ class _ChannelController(LobbyLayout):
 
     def _onMembersListChanged(self):
         self._refreshMembersDP()
+        self._updatePrivateCarouselMembers()
 
 
 class LazyChannelController(_ChannelController):

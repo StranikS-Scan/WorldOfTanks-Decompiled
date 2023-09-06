@@ -43,7 +43,7 @@ class BattleHintComponent(object):
         if hint is None or self.__currentHint == hint:
             self.__hideCurrentHint()
         else:
-            _logger.warning('Failed to hide hint name=%s', hint.name)
+            _logger.debug('Failed to hide hint name=%s', hint.name)
         return
 
     def _showHint(self, hintData):

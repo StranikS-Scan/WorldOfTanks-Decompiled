@@ -394,6 +394,7 @@ class ClanStickerPack(StickerPack):
         return
 
     def setClanId(self, clanId):
+        clanId = clanId or self._NO_CLAN_ID
         if self._clanId == clanId:
             return False
         self._clanId = clanId

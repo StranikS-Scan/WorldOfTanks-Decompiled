@@ -17,9 +17,9 @@ from fun_random.gui.impl.lobby.tooltips.fun_random_domain_tooltip_view import Fu
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID, DEFAULT_ASSETS_PACK
 from gui.impl import backport
+from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
-from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import createSimpleTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow

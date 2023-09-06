@@ -25,7 +25,11 @@ class Comp7PlayerValidator(BaseActionsValidator):
     def _validate(self):
         if self.__comp7Ctrl.isOffline:
             return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_OFFLINE)
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.BAN_IS_SET) if self.__comp7Ctrl.isBanned else super(Comp7PlayerValidator, self)._validate()
+        if self.__comp7Ctrl.isBanned:
+            return ValidationResult(False, PRE_QUEUE_RESTRICTION.BAN_IS_SET)
+        if self.__comp7Ctrl.isQualificationResultsProcessing():
+            return ValidationResult(False, PRE_QUEUE_RESTRICTION.QUALIFICATION_RESULTS_PROCESSING)
+        return ValidationResult(False, PRE_QUEUE_RESTRICTION.QUALIFICATION_CALCULATION_RATING) if self.__comp7Ctrl.isQualificationCalculationRating() else super(Comp7PlayerValidator, self)._validate()
 
 
 class Comp7VehicleValidator(BaseActionsValidator):

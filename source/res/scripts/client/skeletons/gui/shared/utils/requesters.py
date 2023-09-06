@@ -326,6 +326,18 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def battleDenunciationsLeft(self):
+        raise NotImplementedError
+
+    @property
+    def hangarDenunciationsLeft(self):
+        raise NotImplementedError
+
+    @property
+    def hangarDenunciations(self):
+        raise NotImplementedError
+
+    @property
     def freeVehiclesLeft(self):
         raise NotImplementedError
 
@@ -391,6 +403,10 @@ class IStatsRequester(IRequester):
 
     @property
     def dynamicCurrencies(self):
+        raise NotImplementedError
+
+    @property
+    def isEmergencyModeEnabled(self):
         raise NotImplementedError
 
     def getMapsBlackList(self):
@@ -963,6 +979,9 @@ class ITokensRequester(IRequester):
         raise NotImplementedError
 
     def getToken(self, tokenID):
+        raise NotImplementedError
+
+    def getTokenInfo(self, tokenID):
         raise NotImplementedError
 
     def getTokenCount(self, tokenID):

@@ -9,12 +9,12 @@ from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION
-from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from nation_change_helpers.client_nation_change_helper import getChangeNationTooltip
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
@@ -40,12 +40,15 @@ class _Highlight(object):
         return self.__highlight
 
 
-def _highlightsMap(settings):
-    config = (((AUTO_RELOAD_PROP_NAME,), _Highlight(lambda : settings.checkAutoReloadHighlights(increase=True))), ((TURBOSHAFT_ENGINE_POWER,
+def _highlightsMap(settings, vehicle=None):
+    config = (((AUTO_RELOAD_PROP_NAME,), _Highlight(lambda : settings.checkAutoReloadHighlights(increase=True))),
+     ((TURBOSHAFT_ENGINE_POWER,
        TURBOSHAFT_SPEED_MODE_SPEED,
        TURBOSHAFT_SWITCH_TIME,
        TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
-       TURBOSHAFT_INVISIBILITY_MOVING_FACTOR), _Highlight(lambda : settings.checkTurboshaftHighlights(increase=True))), ((ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION), _Highlight(lambda : settings.checkRocketAccelerationHighlights(increase=True))))
+       TURBOSHAFT_INVISIBILITY_MOVING_FACTOR), _Highlight(lambda : settings.checkTurboshaftHighlights(increase=True))),
+     ((ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION), _Highlight(lambda : settings.checkRocketAccelerationHighlights(increase=True))),
+     ((DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE), _Highlight(lambda : vehicle.descriptor.hasDualAccuracy and settings.checkDualAccuracyHighlights(increase=True))))
     mapping = [ zip(params, [highlight] * len(params)) for params, highlight in config ]
     return dict([ item for sub in mapping for item in sub ])
 
@@ -60,7 +63,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
         super(VehicleInfoWindow, self).__init__()
         self.__vehicleCompactDescr = ctx.get('vehicleCompactDescr', 0)
         serverSettings = self._settingsCore.serverSettings
-        self.__highlightsMap = _highlightsMap(serverSettings)
+        vehicle = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr)
+        self.__highlightsMap = _highlightsMap(serverSettings, vehicle)
 
     def onCancelClick(self):
         self.destroy()
@@ -159,10 +163,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
 
     def __updateChangeNationButtonState(self):
         vehicle = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr)
-        tooltip = ''
         enabled = vehicle.isNationChangeAvailable
-        if not enabled and vehicle.isBroken:
-            tooltip = makeTooltip(backport.text(R.strings.tooltips.hangar.nationChange.disabled.header()), backport.text(R.strings.tooltips.hangar.nationChange.disabled.body.destroyed()))
+        tooltip = getChangeNationTooltip(vehicle)
         self.as_setChangeNationButtonDataS({'visible': vehicle.hasNationGroup and vehicle.isInInventory,
          'enabled': enabled,
          'label': backport.text(R.strings.menu.vehicleInfo.nationChangeBtn.label()),

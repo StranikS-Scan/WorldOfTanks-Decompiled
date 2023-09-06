@@ -87,7 +87,7 @@ class IFunSubMode(ISeasonProvider, Notifiable):
     def getSuitableVehicles(self):
         raise NotImplementedError
 
-    def resolveVehicleViewState(self, viewState):
+    def resolveVehicleViewState(self, viewState, vehicle):
         raise NotImplementedError
 
     def updateSettings(self, subModeSettings):
@@ -216,7 +216,7 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
         timer = super(FunBaseSubMode, self).getTimer(now, peripheryID)
         return timer + FunTimersShifts.SUB_MODE if timer > 0 else timer
 
-    def resolveVehicleViewState(self, viewState):
+    def resolveVehicleViewState(self, viewState, vehicle):
         pass
 
     def updateSettings(self, subModeSettings):

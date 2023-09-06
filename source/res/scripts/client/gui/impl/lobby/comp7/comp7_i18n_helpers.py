@@ -8,12 +8,12 @@ RANK_MAP = {Rank.FIRST: 'first',
  Rank.THIRD: 'third',
  Rank.FOURTH: 'fourth',
  Rank.FIFTH: 'fifth',
- Rank.SIXTH: 'sixth',
- Rank.SEVENTH: 'seventh'}
+ Rank.SIXTH: 'sixth'}
 DIVISION_MAP = {Division.A: 'A',
  Division.B: 'B',
  Division.C: 'C',
- Division.D: 'D'}
+ Division.D: 'D',
+ Division.E: 'E'}
 
 def getRankLocale(rank):
     rankString = RANK_MAP[Rank(rank)]

@@ -132,6 +132,10 @@ class TestVehicleAreaTriggerComponent(object):
     health = ComponentProperty(type=CGFMetaTypes.INT, editorName='Health count', value=0)
     isDamageTrigger = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='Is Damage trigger')
 
+    def __init__(self):
+        self.reactionID = None
+        return
+
 
 @registerComponent
 class TestHealthTriggersComponent(object):

@@ -1,0 +1,55 @@
+<newOnboarding_bt_behavior_circle_roleTarget_nonstop.xml>
+  <xmlns:xsd>	http://www.w3.org/2001/XMLSchema	</xmlns:xsd>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:schemaLocation>	WoT.AI/BTree server_xml/ai/schemas/behaviortree/vehiclebot_bthost.xsd	</xsi:schemaLocation>
+  <xmlns>	WoT.AI/BTree	</xmlns>
+  <Tree>
+    <name>	Engage and attempt to circle enemy	</name>
+    <rootType>	Sequence	</rootType>
+    <host>	vehiclebot_bthost	</host>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	move	</function>
+      <param>	moveToCircleEnemy	</param>
+    </Node>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	setRandomTimer	</function>
+      <param>	MoveUpdateTime	</param>
+    </Node>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	waitForTimerExpires	</function>
+      <param>	MoveUpdateTime	</param>
+    </Node>
+  </Tree>
+  <Parameter>
+    <xsi:type>	MoveParam	</xsi:type>
+    <id>	moveToCircleEnemy	</id>
+    <positionType>
+      <value>	PositionForCirclingRoleTarget	</value>
+    </positionType>
+    <arriveDistance>
+      <value>	5	</value>
+    </arriveDistance>
+    <optionsMask>
+      <value>	Normal	</value>
+    </optionsMask>
+    <useMovementLimitsForPathfinding>
+      <value>	false	</value>
+    </useMovementLimitsForPathfinding>
+  </Parameter>
+  <Parameter>
+    <xsi:type>	SetRandomTimerParam	</xsi:type>
+    <id>	MoveUpdateTime	</id>
+    <timerName>
+      <value>	wait	</value>
+    </timerName>
+    <minTime>
+      <value>	0.5	</value>
+    </minTime>
+    <maxTime>
+      <value>	3	</value>
+    </maxTime>
+  </Parameter>
+</newOnboarding_bt_behavior_circle_roleTarget_nonstop.xml>

@@ -11,7 +11,7 @@
   <postProgressionTree>	role_ATSPG_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	40	</forward>
     <backward>	18	</backward>
   </speedLimits>
   <invisibility>
@@ -48,14 +48,14 @@
       <armor_4>	45	</armor_4>
       <armor_5>	55	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	230	</armor_7>
+      <armor_7>	210	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
       <armor_10>	80	</armor_10>
-      <armor_11>	210	</armor_11>
+      <armor_11>	180	</armor_11>
       <armor_12>	130	</armor_12>
-      <armor_13>	180	</armor_13>
+      <armor_13>	155	</armor_13>
       <armor_14>	160	</armor_14>
       <armor_15>	80	</armor_15>
       <armor_16>	180	</armor_16>
@@ -65,10 +65,13 @@
       <armor_19>	250	</armor_19>
       <armor_20>	300	</armor_20>
       <armor_21>	85	</armor_21>
+      <armor_22>	180	</armor_22>
+      <armor_23>	210	</armor_23>
+      <armor_24>	200	</armor_24>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	59046	</weight>
-    <maxHealth>	1600	</maxHealth>
+    <maxHealth>	1500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -1386,7 +1389,7 @@
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	75000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2399,8 +2402,8 @@
     <detailed>
       <engines>
         <V_12_5F>
-          <smplEnginePower>	1350	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	1200	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </V_12_5F>
       </engines>
       <chassis>

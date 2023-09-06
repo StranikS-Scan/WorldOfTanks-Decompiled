@@ -149,7 +149,10 @@ class _TankIndicatorCtrl(object):
             hullMat = BigWorld.player().getOwnVehicleMatrix()
         else:
             hullMat = vehicle.matrix
-        turretMat = vehicle.appearance.turretMatrix
+        if vehicle.isHidden:
+            turretMat = hullMat
+        else:
+            turretMat = vehicle.appearance.turretMatrix
         if yawLimits:
             self.__component.wg_turretYawConstraints = yawLimits
         else:

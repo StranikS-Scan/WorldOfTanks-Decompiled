@@ -20,13 +20,11 @@
     <BattleHintsComponent></BattleHintsComponent>
     <Fire></Fire>
     <RocketAccelerationController></RocketAccelerationController>
-    <AutoShootGunController></AutoShootGunController>
-    <TemperatureGunController></TemperatureGunController>
-    <SpinGunController></SpinGunController>
-    <MultiGunState></MultiGunState>
     <RocketAcceleration></RocketAcceleration>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
+    <VisualScriptEquipmentPublic></VisualScriptEquipmentPublic>
+    <VisualScriptPlan></VisualScriptPlan>
     <VehicleCircle></VehicleCircle>
     <VehicleRadarDetection></VehicleRadarDetection>
     <VehicleBuff></VehicleBuff>
@@ -46,7 +44,6 @@
     <ShotsReceiver></ShotsReceiver>
     <DeathComponent></DeathComponent>
     <HealthComponent></HealthComponent>
-    <ActivationController></ActivationController>
     <VehicleRespawnComponent></VehicleRespawnComponent>
     <VehicleLivesComponent></VehicleLivesComponent>
     <TeamInfoLivesComponent></TeamInfoLivesComponent>
@@ -54,5 +51,8 @@
     <EntityAreaBorderComponent></EntityAreaBorderComponent>
     <EntityPolygonalTriggerComponent></EntityPolygonalTriggerComponent>
     <StaticDeathZoneVisual></StaticDeathZoneVisual>
+    <EntityVisualScriptRunner></EntityVisualScriptRunner>
+    <SequenceNetworkSync></SequenceNetworkSync>
+    <DualAccuracy></DualAccuracy>
   </DynamicComponents>
 </components.xml>

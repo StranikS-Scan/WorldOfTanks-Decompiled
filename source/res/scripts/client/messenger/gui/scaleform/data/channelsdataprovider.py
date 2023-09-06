@@ -54,7 +54,10 @@ class ChannelsDataProvider(DAAPIDataProvider):
          'isWindowOpened': data.get('isWindowOpened', False),
          'readyData': data.get('readyData', None),
          'isWindowFocused': data.get('isWindowFocused', False),
-         'tooltipData': tooltipData}
+         'tooltipData': tooltipData,
+         'isPrivate': data.get('isPrivate', False),
+         'dbID': data.get('dbID', 0),
+         'userName': data.get('userName', None)}
         if clientID in self.__data:
             self.__data[clientID].update(item)
         else:

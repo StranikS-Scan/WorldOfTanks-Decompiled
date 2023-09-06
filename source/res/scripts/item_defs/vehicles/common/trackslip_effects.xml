@@ -72548,6 +72548,1765 @@
         </selector>
       </selector>
     </medium6WheelsMud>
+    <medium6WheelsMudSoft>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	union	</type>
+          <constantsGroup>	medium	</constantsGroup>
+          <selector>
+            <type>	range	</type>
+            <variable>	speed	</variable>
+            <selector>
+              <type>	union	</type>
+              <key>	-200	</key>
+              <selector>
+                <type>	union	</type>
+                <selector>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_R1:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.74	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	W_R0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_R0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/forcefields/Forcefield_medium_track_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_L1:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.74	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	W_L0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_L0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Front	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/forcefields/Forcefield_medium_track_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-1	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <type>	union	</type>
+              <key>	1	</key>
+              <selector>
+                <type>	union	</type>
+                <selector>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_R1:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.74	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	W_R0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_02_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_R0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindR	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_R_03_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/forcefields/Forcefield_medium_track_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_L1:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.74	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_dust_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	W_L0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_02_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	discrete	</type>
+                    <variable>	WD_L0:contact	</variable>
+                    <selector>
+                      <key>	1	</key>
+                      <type>	range	</type>
+                      <variable>	RPM	</variable>
+                      <selector>
+                        <key>	0.0	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd1.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                      <selector>
+                        <key>	0.72	</key>
+                        <type>	matkind	</type>
+                        <variable>	matkindL	</variable>
+                        <selector>
+                          <key>	sand	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/sand/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	ground	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/ground/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	snow	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/snow/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	stone	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/stone/wheeltrail_soft_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	water	</key>
+                          <type>	discrete	</type>
+                          <variable>	isUnderWater	</variable>
+                          <selector>
+                            <key>	0	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_water_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                          </selector>
+                          <selector>
+                            <key>	1	</key>
+                            <type>	effect	</type>
+                            <name>	particles/Tank/movement/water/wheeltrail_underwater_medium_spd1.eff	</name>
+                            <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                          </selector>
+                        </selector>
+                        <selector>
+                          <key>	dirt	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/dirt/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                        <selector>
+                          <key>	oil	</key>
+                          <type>	effect	</type>
+                          <name>	particles/Tank/movement/oil/wheeltrail_solid_medium_spd2.eff	</name>
+                          <effectHP>	HP_Wheel_L_03_Rear	</effectHP>
+                        </selector>
+                      </selector>
+                    </selector>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/forcefields/Forcefield_medium_track_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <type>	range	</type>
+            <variable>	commonSlip	</variable>
+            <selector>
+              <type>	union	</type>
+              <key>	-200	</key>
+              <selector>
+                <type>	discrete	</type>
+                <variable>	WD_R0:contact	</variable>
+                <selector>
+                  <key>	1	</key>
+                  <type>	matkind	</type>
+                  <variable>	matkindR	</variable>
+                  <selector>
+                    <key>	sand	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/sand/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	ground	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/ground/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	snow	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/snow/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	stone	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/stone/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	dirt	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/dirt/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	oil	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/oil/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_03_Front	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+              <selector>
+                <type>	discrete	</type>
+                <variable>	WD_L0:contact	</variable>
+                <selector>
+                  <key>	1	</key>
+                  <type>	matkind	</type>
+                  <variable>	matkindL	</variable>
+                  <selector>
+                    <key>	sand	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/sand/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	ground	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/ground/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	snow	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/snow/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	stone	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/stone/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	dirt	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/dirt/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	oil	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/oil/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_03_Front	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-1	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <type>	union	</type>
+              <key>	1	</key>
+              <selector>
+                <type>	discrete	</type>
+                <variable>	WD_R1:contact	</variable>
+                <selector>
+                  <key>	1	</key>
+                  <type>	matkind	</type>
+                  <variable>	matkindR	</variable>
+                  <selector>
+                    <key>	sand	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/sand/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	ground	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/ground/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	snow	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/snow/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	stone	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/stone/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	dirt	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/dirt/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	oil	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/oil/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_R_01_Rear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+              <selector>
+                <type>	discrete	</type>
+                <variable>	WD_L1:contact	</variable>
+                <selector>
+                  <key>	1	</key>
+                  <type>	matkind	</type>
+                  <variable>	matkindL	</variable>
+                  <selector>
+                    <key>	sand	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/sand/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	ground	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/ground/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	snow	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/snow/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	stone	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/stone/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	dirt	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/dirt/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                  <selector>
+                    <key>	oil	</key>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/oil/wheelslip_medium_spd1.eff	</name>
+                    <effectHP>	HP_Wheel_L_01_Rear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </medium6WheelsMudSoft>
     <medium6WheelsMudGendron>
       <selector>
         <type>	union	</type>

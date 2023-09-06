@@ -201,6 +201,8 @@ class SYSTEM_MESSAGES(object):
     GRAFICSOPTIONSFAIL = '#system_messages:graficsOptionsFail'
     GRAFICSPRESETFAIL = '#system_messages:graficsPresetFail'
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
+    DENUNCIATION_HANGARCHATSUCCESS_TITLE = '#system_messages:denunciation/hangarChatSuccess/title'
+    DENUNCIATION_HANGARCHATSUCCESS_BODY = '#system_messages:denunciation/hangarChatSuccess/body'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
     CUSTOMIZATION_INVALIDVEHICLE = '#system_messages:customization/invalidVehicle'
@@ -950,6 +952,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_WRONG_VEHICLE = '#system_messages:unit/errors/WRONG_VEHICLE'
     UNIT_ERRORS_ACCOUNT_BANNED = '#system_messages:unit/errors/ACCOUNT_BANNED'
     UNIT_ERRORS_NO_ARENA_VEHICLES = '#system_messages:unit/errors/NO_ARENA_VEHICLES'
+    UNIT_ERRORS_COMP7_QUALIFICATION = '#system_messages:unit/errors/COMP7_QUALIFICATION'
     IGR_CUSTOMIZATION_BEGIN = '#system_messages:igr/customization/begin'
     IGR_CUSTOMIZATION_END = '#system_messages:igr/customization/end'
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
@@ -1412,7 +1415,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_BAD_VEHICLES_SET,
      UNIT_ERRORS_WRONG_VEHICLE,
      UNIT_ERRORS_ACCOUNT_BANNED,
-     UNIT_ERRORS_NO_ARENA_VEHICLES)
+     UNIT_ERRORS_NO_ARENA_VEHICLES,
+     UNIT_ERRORS_COMP7_QUALIFICATION)
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_EXTERNAL_LEGIONARIES_MATCHING_CANCELED,
@@ -1679,6 +1683,8 @@ class SYSTEM_MESSAGES(object):
      GRAFICSOPTIONSFAIL,
      GRAFICSPRESETFAIL,
      DENUNCIATION_SUCCESS,
+     DENUNCIATION_HANGARCHATSUCCESS_TITLE,
+     DENUNCIATION_HANGARCHATSUCCESS_BODY,
      CUSTOMIZATION_UNAVAILABLE,
      CUSTOMIZATION_PROHIBITED,
      CUSTOMIZATION_INVALIDVEHICLE,
@@ -2428,6 +2434,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_WRONG_VEHICLE,
      UNIT_ERRORS_ACCOUNT_BANNED,
      UNIT_ERRORS_NO_ARENA_VEHICLES,
+     UNIT_ERRORS_COMP7_QUALIFICATION,
      IGR_CUSTOMIZATION_BEGIN,
      IGR_CUSTOMIZATION_END,
      INFO_NOAVAILABLE,

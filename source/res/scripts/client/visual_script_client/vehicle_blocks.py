@@ -55,7 +55,8 @@ class OnAnyVehicleDestroyed(TunableEventBlock, VehicleMeta):
             errorVScript(self, 'can not subscribe on event')
 
     def onFinishScript(self):
-        BigWorld.player().arena.onVehicleKilled -= self.__onVehicleKilled
+        if hasattr(BigWorld.player(), 'arena'):
+            BigWorld.player().arena.onVehicleKilled -= self.__onVehicleKilled
 
     @TunableEventBlock.eventProcessor
     def __onVehicleKilled(self, targetID, attackerID, equipmentID, reason, numVehiclesAffected):
@@ -101,7 +102,8 @@ class OnAnyVehicleDamaged(TunableEventBlock, VehicleMeta):
             errorVScript(self, 'can not subscribe on event')
 
     def onFinishScript(self):
-        BigWorld.player().arena.onVehicleHealthChanged -= self.__onDamageReceived
+        if hasattr(BigWorld.player(), 'arena'):
+            BigWorld.player().arena.onVehicleHealthChanged -= self.__onDamageReceived
 
     @TunableEventBlock.eventProcessor
     def __onDamageReceived(self, vehicleId, attackerId, damage):
@@ -151,7 +153,7 @@ class NoCrewCritical(NoCrewCriticalBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class NoInnerDeviceDamaged(NoInnerDeviceDamagedBase):
@@ -161,7 +163,7 @@ class NoInnerDeviceDamaged(NoInnerDeviceDamagedBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class OptionalDevices(OptionalDevicesBase):
@@ -171,7 +173,7 @@ class OptionalDevices(OptionalDevicesBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class GetTankOptDevicesHPMod(GetTankOptDevicesHPModBase):
@@ -181,7 +183,7 @@ class GetTankOptDevicesHPMod(GetTankOptDevicesHPModBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class VehicleClass(VehicleClassBase):
@@ -202,7 +204,7 @@ class VehicleClass(VehicleClassBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class GunTypeInfo(GunTypeInfoBase):
@@ -212,7 +214,7 @@ class GunTypeInfo(GunTypeInfoBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class VehicleForwardSpeed(VehicleForwardSpeedBase):
@@ -222,7 +224,7 @@ class VehicleForwardSpeed(VehicleForwardSpeedBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class VehicleCooldownEquipment(VehicleCooldownEquipmentBase):
@@ -244,7 +246,7 @@ class VehicleCooldownEquipment(VehicleCooldownEquipmentBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class VehicleClipFullAndReady(VehicleClipFullAndReadyBase):
@@ -254,7 +256,7 @@ class VehicleClipFullAndReady(VehicleClipFullAndReadyBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class GetNearestAliveVehicle(Block, VehicleMeta):
@@ -365,7 +367,7 @@ class IsInHangar(IsInHangarBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]
 
 
 class VehicleRadioDistance(VehicleRadioDistanceBase):
@@ -375,4 +377,4 @@ class VehicleRadioDistance(VehicleRadioDistanceBase):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT, ASPECT.SERVER]
+        return [ASPECT.CLIENT]

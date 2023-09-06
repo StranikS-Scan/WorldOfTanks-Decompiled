@@ -30,7 +30,7 @@ class BasePresetsGetter(IPresetsGetter):
     def getAmmoInjectViewAlias(self, preset=None):
         return preset.visibleComponents[HANGAR_CONSTS.AMMUNITION_INJECT].type
 
-    @ifComponentInPreset(HANGAR_CONSTS.CAROUSEL)
+    @ifComponentInPreset(HANGAR_CONSTS.CAROUSEL, defReturn=(None, None))
     def getCarouselSettings(self, preset=None):
         component = preset.visibleComponents[HANGAR_CONSTS.CAROUSEL]
         return (component.type, component.layout)

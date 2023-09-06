@@ -502,14 +502,12 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
         self.__radarSpottedVehiclesPlugin = plugin
 
     def setSettings(self):
-        super(BattleRoyaleVehiclePlugin, self).setSettings()
         isColorBlind = self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
         if isColorBlind != self.__isColorBlind:
             self.__isColorBlind = isColorBlind
             self.invalidateVehiclesInfo(self._arenaDP)
 
     def updateSettings(self, diff):
-        super(BattleRoyaleVehiclePlugin, self).updateSettings(diff)
         if settings_constants.GRAPHICS.COLOR_BLIND in diff:
             newColorBlind = diff[settings_constants.GRAPHICS.COLOR_BLIND]
             if self.__isColorBlind != newColorBlind:

@@ -64,10 +64,10 @@ class _CameraManager(object):
 
     def __locateCameraOnAllVehicles(self):
         arenaDP = self.__sessionProvider.getArenaDP()
-        yawSum = 0
         numVehs = 0
         vehiclesBBPoints = []
         targetPos = Math.Vector3()
+        rotationVector = Math.Vector3()
 
         def _makeAdditionalPoints(basePoint, extraPoint):
             yield (extraPoint[0], basePoint[1], basePoint[2])
@@ -90,7 +90,7 @@ class _CameraManager(object):
                 vehiclesBBPoints.extend([vehMatrix.applyPoint(hullBB[0]), vehMatrix.applyPoint(hullBB[1])])
                 vehiclesBBPoints.extend(_makeAdditionalPoints(vehMatrix.applyPoint(hullBB[0]), vehMatrix.applyPoint(hullBB[1])))
                 vehiclesBBPoints.extend(_makeAdditionalPoints(vehMatrix.applyPoint(hullBB[1]), vehMatrix.applyPoint(hullBB[0])))
-                yawSum += vehMatrix.yaw + 2 * math.pi if vehMatrix.yaw < 0 else vehMatrix.yaw
+                rotationVector += Math.createRotationMatrix((vehMatrix.yaw, 0, 0)).applyVector((0, 0, 1))
                 numVehs += 1
 
         if self.__pendingVehicles:
@@ -99,11 +99,8 @@ class _CameraManager(object):
         if numVehs == 0:
             return
         else:
-            averageYaw = yawSum / numVehs
-            if averageYaw > math.pi:
-                averageYaw -= 2 * math.pi
             targetPosition = targetPos.scale(1.0 / numVehs)
-            yawMatrix = math_utils.createRTMatrix((averageYaw, self.__CAMERA_PITCH, 0), targetPosition)
+            yawMatrix = math_utils.createRTMatrix((rotationVector.yaw, self.__CAMERA_PITCH, 0), targetPosition)
             yawMatrix.invert()
             rotatedPoints = [ yawMatrix.applyPoint(p) for p in vehiclesBBPoints ]
             maxX = max((p.x for p in rotatedPoints))
@@ -117,7 +114,7 @@ class _CameraManager(object):
             ratio = cameras.getScreenAspectRatio()
             halfFOVTan = math.tan(hFov / 2)
             distanceToTarget = max(width / (2 * halfFOVTan * ratio), height / (2 * halfFOVTan)) + maxY
-            initialRotations = math_utils.createRotationMatrix((averageYaw, -self.__CAMERA_PITCH, 0))
+            initialRotations = math_utils.createRotationMatrix((rotationVector.yaw, -self.__CAMERA_PITCH, 0))
             self.__initialCamSetup = (targetPosition, initialRotations, distanceToTarget)
             self.__setCamera()
             return
@@ -232,7 +229,7 @@ class VehiclesSelectionControlMode(IControlMode):
         return True
 
     def onRecreateDevice(self):
-        self.__camManager.reset()
+        pass
 
     def moveCameraToDefault(self):
         lockIsSoon = 0 < self.__lockStartTime < BigWorld.serverTime() + self.__camManager.CAMERA_TRANSITION_DURATION

@@ -311,6 +311,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
     COMP7_INTRO_SHOWN = 'isComp7IntroShown'
+    COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
 
 

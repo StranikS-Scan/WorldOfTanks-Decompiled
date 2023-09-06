@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -1111,7 +1111,7 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
@@ -2143,7 +2143,7 @@
           <reloadTime>	34	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.4	</aimingTime>
@@ -2682,8 +2682,8 @@
     <detailed>
       <engines>
         <V-12-6B>
-          <smplEnginePower>	635	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	580	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </V-12-6B>
       </engines>
       <chassis>

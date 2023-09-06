@@ -14,6 +14,7 @@ class QUESTS(object):
     MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
     MISSIONS_TAB_BATTLEMATTERS = '#quests:missions/tab/battleMatters'
+    MISSIONS_TAB_WINBACK = '#quests:missions/tab/winback'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -237,6 +238,8 @@ class QUESTS(object):
     DETAILS_REQUIREMENTS_PREMIUMACCOUNT = '#quests:details/requirements/premiumAccount'
     DETAILS_REQUIREMENTS_NOTPREMIUMACCOUNT = '#quests:details/requirements/notPremiumAccount'
     DETAILS_REQUIREMENTS_PREMIUMPLUSACCOUNT = '#quests:details/requirements/premiumPlusAccount'
+    DETAILS_REQUIREMENTS_WOTPLUS = '#quests:details/requirements/wotPlus'
+    DETAILS_REQUIREMENTS_WITHOUTWOTPLUS = '#quests:details/requirements/withoutWotPlus'
     DETAILS_REQUIREMENTS_INCLAN = '#quests:details/requirements/inClan'
     DETAILS_REQUIREMENTS_NOTINCLAN = '#quests:details/requirements/notInClan'
     DETAILS_REQUIREMENTS_INANYCLAN = '#quests:details/requirements/inAnyClan'
@@ -1050,6 +1053,8 @@ class QUESTS(object):
     MISSIONS_TAB_CATEGORIES_BODY = '#quests:missions/tab/categories/body'
     MISSIONS_TAB_DAILY_HEADER = '#quests:missions/tab/daily/header'
     MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
+    MISSIONS_TAB_WINBACK_HEADER = '#quests:missions/tab/winback/header'
+    MISSIONS_TAB_WINBACK_BODY = '#quests:missions/tab/winback/body'
     MISSIONS_TAB_BATTLE_PASS_BODY = '#quests:missions/tab/battle_pass/body'
     MISSIONS_TAB_BATTLE_PASS_HEADER = '#quests:missions/tab/battle_pass/header'
     MISSIONS_TAB_MAPBOX_HEADER = '#quests:missions/tab/mapbox/header'
@@ -1258,6 +1263,7 @@ class QUESTS(object):
     BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT = '#quests:bonusName/entitlements/ranked_2020_discount'
     BONUSNAME_ENTITLEMENTS_RANKED_202203_ACCESS = '#quests:bonusName/entitlements/ranked_202203_access'
     BONUSNAME_BATTLE_BONUS_X5 = '#quests:bonusName/battle_bonus_x5'
+    BONUSNAME_CREW_BONUS_X3 = '#quests:bonusName/crew_bonus_x3'
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
@@ -1266,6 +1272,7 @@ class QUESTS(object):
     BONUSNAME_EXCLUDED_MAP = '#quests:bonusName/excluded_map'
     BONUSNAME_FREE_EQUIPMENT_DEMOUNTING = '#quests:bonusName/free_equipment_demounting'
     BONUSNAME_EXCLUSIVE_VEHICLE = '#quests:bonusName/exclusive_vehicle'
+    BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1815,6 +1822,7 @@ class QUESTS(object):
      BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT,
      BONUSNAME_ENTITLEMENTS_RANKED_202203_ACCESS,
      BONUSNAME_BATTLE_BONUS_X5,
+     BONUSNAME_CREW_BONUS_X3,
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
      BONUSNAME_BRCOIN,
@@ -1822,7 +1830,8 @@ class QUESTS(object):
      BONUSNAME_IDLE_CREW_XP,
      BONUSNAME_EXCLUDED_MAP,
      BONUSNAME_FREE_EQUIPMENT_DEMOUNTING,
-     BONUSNAME_EXCLUSIVE_VEHICLE)
+     BONUSNAME_EXCLUSIVE_VEHICLE,
+     BONUSNAME_ATTENDANCE_REWARD)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

@@ -1,0 +1,33 @@
+<newOnboarding_holdPosition_stay_front.xml>
+  <xmlns:xsd>	http://www.w3.org/2001/XMLSchema	</xmlns:xsd>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:schemaLocation>	WoT.AI/BTree server_xml/ai/schemas/behaviortree/vehiclebot_bthost.xsd	</xsi:schemaLocation>
+  <xmlns>	WoT.AI/BTree	</xmlns>
+  <Tree>
+    <rootType>	Sequence	</rootType>
+    <host>	vehiclebot_bthost	</host>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	stopMovement	</function>
+    </Node>
+    <Node>
+      <xsi:type>	DecoratorRunning	</xsi:type>
+      <name>	facing	</name>
+      <Node>
+        <xsi:type>	DecoratorFail	</xsi:type>
+        <Node>
+          <xsi:type>	Leaf	</xsi:type>
+          <function>	face	</function>
+          <param>	faceTarget	</param>
+        </Node>
+      </Node>
+    </Node>
+  </Tree>
+  <Parameter>
+    <xsi:type>	FaceParam	</xsi:type>
+    <id>	faceTarget	</id>
+    <facingType>
+      <value>	CurrentTarget	</value>
+    </facingType>
+  </Parameter>
+</newOnboarding_holdPosition_stay_front.xml>

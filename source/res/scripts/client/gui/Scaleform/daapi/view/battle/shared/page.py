@@ -101,8 +101,7 @@ class SharedPage(BattlePageMeta):
             components = _SHARED_COMPONENTS_CONFIG
         else:
             components += _SHARED_COMPONENTS_CONFIG
-        if BATTLE_CTRL_ID.HIT_DIRECTION not in dict(components.getConfig()):
-            components += _HIT_DIRECTION_COMPONENTS_CONFIG
+        components = self._addDefaultHitDirectionController(components)
         self.__componentsConfig = components
         return
 
@@ -172,6 +171,11 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.TOGGLE_DEBUG_PIERCING_PANEL, self.__toggleDebugPiercingPanel, scope=EVENT_BUS_SCOPE.BATTLE)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
+
+    def _addDefaultHitDirectionController(self, components):
+        if BATTLE_CTRL_ID.HIT_DIRECTION not in dict(components.getConfig()):
+            components += _HIT_DIRECTION_COMPONENTS_CONFIG
+        return components
 
     def _toggleGuiVisible(self):
         self._isVisible = not self._isVisible
@@ -259,12 +263,15 @@ class SharedPage(BattlePageMeta):
     def _handleHelpEvent(self, event):
         raise NotImplementedError
 
+    def _hasBattleMessenger(self):
+        return True
+
     def _onBattleLoadingStart(self):
         self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
-        if not avatar_getter.isObserverSeesAll():
+        if self._hasBattleMessenger() and not avatar_getter.isObserverSeesAll():
             self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
@@ -285,7 +292,9 @@ class SharedPage(BattlePageMeta):
         for component in self._external:
             component.active(True)
 
-        self.sessionProvider.shared.hitDirection.setVisible(True)
+        if self.sessionProvider.shared.hitDirection is not None:
+            self.sessionProvider.shared.hitDirection.setVisible(True)
+        return
 
     def _onDestroyTimerStart(self):
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
@@ -399,13 +408,17 @@ class SharedPage(BattlePageMeta):
         for component in self._external:
             component.active(True)
 
-        self.sessionProvider.shared.hitDirection.setVisible(True)
+        if self.sessionProvider.shared.hitDirection is not None:
+            self.sessionProvider.shared.hitDirection.setVisible(True)
+        return
 
     def __handleHideExternals(self, _):
         for component in self._external:
             component.active(False)
 
-        self.sessionProvider.shared.hitDirection.setVisible(False)
+        if self.sessionProvider.shared.hitDirection is not None:
+            self.sessionProvider.shared.hitDirection.setVisible(False)
+        return
 
     def __handleShowBtnHint(self, _):
         self._processHint(True)

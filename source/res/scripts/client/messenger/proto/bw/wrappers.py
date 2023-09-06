@@ -39,6 +39,10 @@ class ChatActionWrapper(_ChatActionData):
         result.data = unicode(data, 'utf-8', errors='ignore') if isinstance(data, types.StringTypes) else data
         return result
 
+    @property
+    def accountDBID(self):
+        return self.originator
+
 
 _ServiceChannelData = namedtuple('_ServiceChannelData', ' '.join(['messageId',
  'userId',

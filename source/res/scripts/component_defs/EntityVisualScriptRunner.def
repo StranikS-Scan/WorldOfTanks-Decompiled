@@ -1,0 +1,24 @@
+<EntityVisualScriptRunner.def>
+  <Properties>
+    <serverPlan>
+      <Type>	STRING	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </serverPlan>
+    <serverPlanParams>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </serverPlanParams>
+    <clientPlan>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </clientPlan>
+    <clientPlanParams>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </clientPlanParams>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	EntityVisualScriptRunner	</DefaultKeyName>
+</EntityVisualScriptRunner.def>

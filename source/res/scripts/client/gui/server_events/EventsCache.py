@@ -11,10 +11,9 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async, adisp_process
-from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
+from constants import EVENT_CLIENT_DATA, EVENT_TYPE
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui.collection.collections_constants import COLLECTION_ITEM_TOKEN_PREFIX_NAME
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
 from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isFunRandomQuest
@@ -27,7 +26,6 @@ from gui.shared.system_factory import collectQuestBuilders
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
-from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first, findFirst
@@ -39,11 +37,10 @@ from skeletons.gui.shared.utils import IRaresCache
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest
-NOT_FOR_PERSONAL_MISSIONS_TOKENS = [LOOTBOX_TOKEN_PREFIX,
- RECRUIT_TMAN_TOKEN_PREFIX,
- TWITCH_TOKEN_PREFIX,
- OFFER_TOKEN_PREFIX,
- COLLECTION_ITEM_TOKEN_PREFIX_NAME]
+PM_TOKEN_PREFIXES = frozenset(['pm2_',
+ 'token:pt:',
+ 'free_award_list',
+ 'regular_'])
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
@@ -219,7 +216,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm2_progress' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
+                        if any((tokenID.startswith(t) for t in PM_TOKEN_PREFIXES)):
                             isQPUpdated = True
                             break
 

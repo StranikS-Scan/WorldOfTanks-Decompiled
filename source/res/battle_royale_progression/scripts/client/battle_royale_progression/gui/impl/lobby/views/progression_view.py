@@ -124,7 +124,7 @@ class ProgressionView(SubModelPresenter):
                 tooltipIdx = str(bonusIndexTotal)
                 item.setTooltipId(tooltipIdx)
                 if bonusTooltipList:
-                    self.__tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
+                    self.__tooltipData[tooltipIdx] = bonusTooltipList[str(bonusIndex)]
                 bonusIndexTotal += 1
 
             questsList.addViewModel(questModels)

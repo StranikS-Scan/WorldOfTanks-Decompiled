@@ -778,7 +778,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD secret special heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_universal HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
     <level>	9	</level>
   </R172_Object_752>
   <R165_Object_703_II_2>
@@ -2052,6 +2052,19 @@
     <tags>	AT-SPG HD mediumAT-SPG siegeMode dualgun charger improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R202_SU_2_122>
+  <R198_LTS_85>
+    <id>	117	</id>
+    <userString>	#ussr_vehicles:R198_LTS_85	</userString>
+    <description>	#ussr_vehicles:R198_LTS_85_descr	</description>
+    <shortUserString>	#ussr_vehicles:R198_LTS_85_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R198_LTS_85_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R198_LTS_85_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user secret testTank	</tags>
+    <level>	8	</level>
+  </R198_LTS_85>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>
@@ -2092,16 +2105,14 @@
     <tags>	observer private secret lightTank improvedVentilation_class1_user unrecoverable	</tags>
     <level>	1	</level>
   </Observer>
-  <R97_Object_140_FEP23>
-    <id>	142	</id>
-    <userString>	#ussr_vehicles:Object_140_FEP	</userString>
-    <description>	#ussr_vehicles:Object_140_FEP_descr	</description>
-    <shortUserString>	#ussr_vehicles:Object_140_FEP_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD fun_random mode_hidden cm_hidden secret cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
-    <level>	10	</level>
-  </R97_Object_140_FEP23>
+  <R1008_T34_85M_NewOnBoarding>
+    <id>	300	</id>
+    <userString>	#ussr_vehicles:T-34-85	</userString>
+    <description>	#ussr_vehicles:T-34-85_descr	</description>
+    <price>	0	</price>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	6	</level>
+  </R1008_T34_85M_NewOnBoarding>
   <R208_Object_156O>
     <id>	145	</id>
     <userString>	#ussr_vehicles:R208_Object_156O	</userString>
@@ -2115,4 +2126,17 @@
     <tags>	SPG role_SPG_flame flamethrower HD mediumSPG improvedVentilation_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </R208_Object_156O>
+  <R173_K_91_2_122>
+    <id>	118	</id>
+    <userString>	#ussr_vehicles:R173_K_91_2_122	</userString>
+    <description>	#ussr_vehicles:R173_K_91_2_122_descr	</description>
+    <shortUserString>	#ussr_vehicles:R173_K_91_2_122_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_122_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R173_K_91_2_122_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </R173_K_91_2_122>
 </list.xml>

@@ -21,7 +21,7 @@ class VehicleModel(ViewModel):
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(VehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -60,11 +60,17 @@ class VehicleModel(ViewModel):
     def setNation(self, value):
         self._setString(5, value)
 
+    def getRoleKey(self):
+        return self._getString(6)
+
+    def setRoleKey(self, value):
+        self._setString(6, value)
+
     def getVehicleCD(self):
-        return self._getNumber(6)
+        return self._getNumber(7)
 
     def setVehicleCD(self, value):
-        self._setNumber(6, value)
+        self._setNumber(7, value)
 
     def _initialize(self):
         super(VehicleModel, self)._initialize()
@@ -74,4 +80,5 @@ class VehicleModel(ViewModel):
         self._addStringProperty('type', '')
         self._addBoolProperty('isPremium', False)
         self._addStringProperty('nation', '')
+        self._addStringProperty('roleKey', '')
         self._addNumberProperty('vehicleCD', 0)

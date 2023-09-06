@@ -37,6 +37,10 @@
       <type>	merge	</type>
     </rule>
     <rule>
+      <pattern>	gui/avatar_input_handler\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
       <pattern>	.*/development/test_xml/.*/.*\.xml$	</pattern>
       <type>	include	</type>
     </rule>

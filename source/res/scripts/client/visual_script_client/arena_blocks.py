@@ -377,3 +377,64 @@ class GetDataFromStorage(GetDataFromStorageBase):
     def _exec(self):
         self.arena = BigWorld.player().arena
         super(GetDataFromStorage, self)._exec()
+
+
+class SetPrebattleCountdownTimerText(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetPrebattleCountdownTimerText, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._out = self._makeEventOutputSlot('out')
+        self._header = self._makeDataInputSlot('header', SLOT_TYPE.STR)
+        self._subheader = self._makeDataInputSlot('subheader', SLOT_TYPE.STR)
+        self._battleStartMessage = self._makeDataInputSlot('battleStartMessage', SLOT_TYPE.STR)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def validate(self):
+        if not self._header.hasValue():
+            return 'header value is required.'
+        return 'battleStartMessage value is required.' if not self._battleStartMessage.hasValue() else super(SetPrebattleCountdownTimerText, self).validate()
+
+    def _execute(self):
+        from gui.Scaleform.daapi.view.battle.shared.prebattle_timers.custom_text_timer import setTimerSettings
+        if helpers.isPlayerAvatar():
+            header = self._header.getValue()
+            battleStartMessage = self._battleStartMessage.getValue()
+            subheader = None
+            if self._subheader.hasValue():
+                subheader = self._subheader.getValue()
+            setTimerSettings(header, battleStartMessage, subheader)
+        else:
+            errorVScript(self, 'BigWorld.player is not player avatar.')
+        return
+
+
+class CollideSegment(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(CollideSegment, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._collide)
+        self._out = self._makeEventOutputSlot('out')
+        self._spaceID = self._makeDataInputSlot('spaceId', SLOT_TYPE.INT)
+        self._from = self._makeDataInputSlot('from', SLOT_TYPE.VECTOR3)
+        self._to = self._makeDataInputSlot('to', SLOT_TYPE.VECTOR3)
+        self._hitFlags = self._makeDataInputSlot('excludeHitFlags', SLOT_TYPE.INT)
+        self._collision = self._makeDataOutputSlot('hasCollision', SLOT_TYPE.BOOL, None)
+        self._collidePosition = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.HANGAR]
+
+    def _collide(self):
+        res = BigWorld.wg_collideSegment(self._spaceID.getValue(), self._from.getValue(), self._to.getValue(), self._hitFlags.getValue())
+        collide = res is not None
+        self._collision.setValue(collide)
+        if collide:
+            self._collidePosition.setValue(res.closestPoint)
+        self._out.call()
+        return

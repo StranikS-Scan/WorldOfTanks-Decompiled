@@ -29,6 +29,10 @@ class Array(PyObjectEntity, typing.Iterable[T]):
         for index in xrange(0, self.proxy.getSize()):
             yield self.proxy.getValue(index)
 
+    def __reversed__(self):
+        for index in xrange(self.proxy.getSize() - 1, -1, -1):
+            yield self.proxy.getValue(index)
+
     def reserve(self, capacity):
         self.proxy.reserve(capacity)
 

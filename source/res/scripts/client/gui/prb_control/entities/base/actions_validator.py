@@ -63,6 +63,8 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
                     return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
                 if g_currentVehicle.isTelecom():
                     return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER)
+                if g_currentVehicle.isWotPlus():
+                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE)
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
             if g_currentVehicle.isRotationGroupLocked():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)

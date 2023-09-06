@@ -56,6 +56,12 @@ class SessionStorage(LocalStorage):
         arenaVisitor = createByAvatar()
         self._isSelected = self._determineSelection(arenaVisitor)
 
+    def shouldBeSelectedByDefault(self):
+        return False
+
+    def getQueueTypeToReplace(self):
+        return None
+
     def _determineSelection(self, arenaVisitor):
         return arenaVisitor.gui.guiType == self._GUI_TYPE
 

@@ -46,6 +46,8 @@ HANGAR_PRESETS_READERS = 42
 HANGAR_PRESETS_PROCESSORS = 43
 AMMUNITION_PANEL_VIEW = 44
 VEHICLE_VIEW_STATE = 45
+DYN_OBJ_CACHE = 46
+SHARED_REPO = 47
 
 class _CollectEventsManager(object):
 
@@ -156,6 +158,20 @@ def registerBattleControllerRepo(guiType, repoCls):
 
 def collectBattleControllerRepo(guiType, setup):
     ctx = __collectEM.handleEvent((BATTLE_REPO, guiType), ctx={'setup': setup})
+    return (ctx.get('repo'), 'repo' in ctx)
+
+
+def registerSharedControllerRepo(guiType, repoCls):
+
+    def onCollect(ctx):
+        ctx['repo'] = repoCls.create(ctx['setup']) if repoCls else None
+        return
+
+    __collectEM.addListener((SHARED_REPO, guiType), onCollect)
+
+
+def collectSharedControllerRepo(guiType, setup):
+    ctx = __collectEM.handleEvent((SHARED_REPO, guiType), ctx={'setup': setup})
     return (ctx.get('repo'), 'repo' in ctx)
 
 
@@ -702,3 +718,15 @@ def registerVehicleViewState(viewState):
 
 def collectVehicleViewStates():
     return __collectEM.handleEvent(VEHICLE_VIEW_STATE, ctx={'viewStates': []})['viewStates']
+
+
+def registerDynObjCache(queueType, dynCache):
+
+    def onCollect(ctx):
+        ctx['dynCache'] = dynCache
+
+    __collectEM.addListener((DYN_OBJ_CACHE, queueType), onCollect)
+
+
+def collectDynObjCache(queueType):
+    return __collectEM.handleEvent((DYN_OBJ_CACHE, queueType), ctx={}).get('dynCache')

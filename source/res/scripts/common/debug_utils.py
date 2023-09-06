@@ -462,6 +462,27 @@ def traceCalls(func):
     return wrapper
 
 
+def wg_extract_stack(f=None, limit=None):
+    if f is None:
+        f = sys._getframe().f_back
+    if limit is None:
+        if hasattr(sys, 'tracebacklimit'):
+            limit = sys.tracebacklimit
+    list = []
+    n = 0
+    while f is not None and (limit is None or n < limit):
+        lineno = f.f_lineno
+        co = f.f_code
+        filename = co.co_filename
+        name = co.co_name
+        list.append((filename, lineno, name))
+        f = f.f_back
+        n = n + 1
+
+    list.reverse()
+    return list
+
+
 def traceMethodCalls(obj, *names):
     if not IS_DEVELOPMENT:
         return

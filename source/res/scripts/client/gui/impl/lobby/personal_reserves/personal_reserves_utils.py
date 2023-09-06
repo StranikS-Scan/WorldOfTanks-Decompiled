@@ -19,6 +19,7 @@ _BOOSTER_CATEGORY_TO_MODEL_ENUM = {BoosterCategory.PERSONAL: CategoryType.PERSON
  BoosterCategory.CLAN: CategoryType.CLAN,
  BoosterCategory.EVENT: CategoryType.EVENT}
 
+@replace_none_kwargs(goodiesCache=IGoodiesCache, webController=IWebController)
 def getActiveBoosters(goodiesCache, webController):
     criteria = REQ_CRITERIA.BOOSTER.ACTIVE
     activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()

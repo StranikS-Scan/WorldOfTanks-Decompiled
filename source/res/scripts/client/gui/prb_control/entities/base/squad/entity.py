@@ -79,8 +79,8 @@ class SquadEntity(UnitEntity):
     def getSquadLevelBounds(self):
         pass
 
-    def showDialog(self, meta, callback):
-        self.__showDefaultDialog(meta, callback)
+    def showDialog(self, meta, callback, parent=None):
+        self.__showDefaultDialog(meta, callback, parent=parent)
 
     def doSelectAction(self, action):
         name = action.actionName
@@ -150,13 +150,14 @@ class SquadEntity(UnitEntity):
             return current
 
     @wg_async
-    def __showDefaultDialog(self, meta, callback):
+    def __showDefaultDialog(self, meta, callback, parent=None):
         from gui.shared.event_dispatcher import showDynamicButtonInfoDialogBuilder
         key = meta.getKey()
         res = self.__resourceSplitter(key)
         if res:
             app = self.__appLoader.getApp()
-            parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
+            if parent is None:
+                parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
             result = yield wg_await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
             callback(result)
         return

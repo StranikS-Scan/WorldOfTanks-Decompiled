@@ -826,6 +826,9 @@ class VehicleEquipment(object):
         self.__battleAbilities = _BattleAbilitiesCollector(vehDescr, proxy, setupLayouts, invData)
         return
 
+    def __deepcopy__(self, memo=None):
+        raise SoftException('Deep copy of VehicleEquipment is not supported')
+
     @property
     def optDevices(self):
         return self.__optDevices

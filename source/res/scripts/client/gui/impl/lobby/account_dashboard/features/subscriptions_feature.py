@@ -7,6 +7,8 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showSubscriptionsPage
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from uilogging.wot_plus.loggers import WotPlusAccountDashboardWidgetLogger
+from uilogging.wot_plus.logging_constants import AccountDashboardFeature
 
 class SubscriptionsFeature(FeatureItem):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -36,4 +38,5 @@ class SubscriptionsFeature(FeatureItem):
 
     @staticmethod
     def __onClick():
+        WotPlusAccountDashboardWidgetLogger().logWidgetClickEvent(AccountDashboardFeature.SUBSCRIPTION_WIDGET)
         showSubscriptionsPage()

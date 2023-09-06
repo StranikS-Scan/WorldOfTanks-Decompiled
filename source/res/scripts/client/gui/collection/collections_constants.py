@@ -7,7 +7,11 @@ COLLECTION_ITEM_TOKEN_PREFIX_NAME = 'cllc:item:'
 COLLECTION_ITEM_RES_KEY_TEMPLATE = '{}_{}_{}'
 COLLECTION_RES_PREFIX = 'collection_'
 COLLECTION_START_EVENT_TYPE = 'collectionStart'
+COLLECTIONS_UPDATED_ENTRY_EVENT_TYPE = 'collectionsUpdatedEntry'
+COLLECTIONS_RENEW_EVENT_TYPE = 'collectionsRenew'
 COLLECTION_START_SEEN = 'collectionStartNotification'
+COLLECTIONS_UPDATED_ENTRY_SEEN = 'collectionsUpdatedEntryNotification'
+COLLECTION_RENEW_SEEN = 'collectionRenewNotification'
 
 def cllcTokenToEntitlement(tokenID):
     try:

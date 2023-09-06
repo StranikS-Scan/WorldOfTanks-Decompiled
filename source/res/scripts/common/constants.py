@@ -121,6 +121,7 @@ ENABLE_TKILL_BANS = True
 HAS_DEV_RESOURCES = IS_DEVELOPMENT and not IS_CLIENT_BUILD
 IS_DEVELOPMENT_BUILD = IS_DEVELOPMENT and IS_CLIENT_BUILD
 MODULE_NAME_SEPARATOR = ', '
+MAX_LOG_EXT_INFO_LEN = 255
 
 class SPT_MATKIND:
     SOLID = 71
@@ -202,6 +203,7 @@ class ARENA_GUI_TYPE:
     FUN_RANDOM = 29
     COMP7 = 30
     WINBACK = 31
+    VERSUS_AI = 31000
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -226,7 +228,8 @@ class ARENA_GUI_TYPE:
      RTS_BOOTCAMP,
      FUN_RANDOM,
      COMP7,
-     WINBACK)
+     WINBACK,
+     VERSUS_AI)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -238,7 +241,8 @@ class ARENA_GUI_TYPE:
      EPIC_BATTLE,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
 
 
 class ARENA_GUI_TYPE_LABEL:
@@ -262,7 +266,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.MAPS_TRAINING: 'maps_training',
      ARENA_GUI_TYPE.FUN_RANDOM: 'fun_random',
      ARENA_GUI_TYPE.COMP7: 'comp7',
-     ARENA_GUI_TYPE.WINBACK: 'winback'}
+     ARENA_GUI_TYPE.WINBACK: 'winback',
+     ARENA_GUI_TYPE.VERSUS_AI: 'versusAI'}
 
 
 class ARENA_BONUS_TYPE:
@@ -303,6 +308,7 @@ class ARENA_BONUS_TYPE:
     FUN_RANDOM = 42
     COMP7 = 43
     WINBACK = 44
+    VERSUS_AI = 50
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -339,7 +345,8 @@ class ARENA_BONUS_TYPE:
      RTS_BOOTCAMP,
      FUN_RANDOM,
      COMP7,
-     WINBACK)
+     WINBACK,
+     VERSUS_AI)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     TOURNAMENT_RANGE = (TOURNAMENT,
@@ -486,6 +493,7 @@ class FINISH_REASON:
     ALLY_KILLED = 8
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
+    OBJECTIVES_COMPLETED = 11
 
 
 FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -525,6 +533,7 @@ class PREBATTLE_TYPE:
     RTS_TRAINING = 22
     FUN_RANDOM = 23
     COMP7 = 24
+    VERSUS_AI = 31000
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -545,7 +554,8 @@ class PREBATTLE_TYPE:
      RTS,
      RTS_TRAINING,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -558,7 +568,8 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -571,7 +582,8 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE_TOURNAMENT,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     CREATE_FROM_CLIENT = (NONE,
      UNIT,
      SQUAD,
@@ -582,7 +594,8 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE_TOURNAMENT,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING, RTS_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
@@ -594,14 +607,16 @@ class PREBATTLE_TYPE:
      BATTLE_ROYALE_TOURNAMENT,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
     JOIN_EX = (SQUAD,
      EPIC,
      EVENT,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     RTS_PREBATTLES = (RTS, RTS_TRAINING)
     REMOVED = (COMPANY, CLUBS)
@@ -817,6 +832,7 @@ class ACCOUNT_ATTR:
     IGR_BASE = 34359738368L
     IGR_PREMIUM = 68719476736L
     SUSPENDED = 137438953472L
+    FORCE_ONBOARDING_DISABLED = 274877906944L
 
 
 class PREMIUM_TYPE:
@@ -917,7 +933,8 @@ class Configs(enum.Enum):
     COLLECTIVE_GOAL_MARATHONS_CONFIG = 'collective_goal_marathons_config'
     PERIPHERY_ROUTING_CONFIG = 'periphery_routing_config'
     COMP7_CONFIG = 'comp7_config'
-    COMP7_PRESTIGE_RANKS_CONFIG = 'comp7_prestige_ranks_config'
+    COMP7_RANKS_CONFIG = 'comp7_ranks_config'
+    COMP7_REWARDS_CONFIG = 'comp7_rewards_config'
     PERSONAL_RESERVES_CONFIG = 'personal_reserves_config'
     PLAY_LIMITS_CONFIG = 'play_limits_config'
     PRE_MODERATION_CONFIG = 'pre_moderation_config'
@@ -931,15 +948,16 @@ class Configs(enum.Enum):
     REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
     RESTORE_CONFIG = 'restore_config'
     DEBUT_BOXES_CONFIG = 'debut_boxes_config'
+    VERSUS_AI_CONFIG = 'versus_ai_config'
 
 
-INBATTLE_CONFIGS = ('spgRedesignFeatures',
+INBATTLE_CONFIGS = ['spgRedesignFeatures',
  'ranked_config',
  'battle_royale_config',
  'epic_config',
  'vehicle_post_progression_config',
  Configs.COMP7_CONFIG.value,
- Configs.FUN_RANDOM_CONFIG.value)
+ Configs.FUN_RANDOM_CONFIG.value]
 
 class RESTRICTION_TYPE:
     NONE = 0
@@ -1223,7 +1241,7 @@ class ATTACK_REASON(object):
     BRANDER_RAM = 'ram_brander'
     FORT_ARTILLERY_EQ = 'fort_artillery_eq'
     STATIC_DEATH_ZONE = 'static_deathzone'
-    AUTOSHOOT = 'autoshoot'
+    CGF_WORLD = 'cgf_world'
     NONE = 'none'
 
     @classmethod
@@ -1260,9 +1278,10 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.BRANDER_RAM,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
- ATTACK_REASON.AUTOSHOOT)
+ ATTACK_REASON.CGF_WORLD)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
+WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 DEATH_REASON_ALIVE = -1
 
 class REPAIR_TYPE:
@@ -1522,6 +1541,7 @@ class QUEUE_TYPE:
     FUN_RANDOM = 28
     COMP7 = 29
     WINBACK = 30
+    VERSUS_AI = 31000
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1547,7 +1567,8 @@ class QUEUE_TYPE:
      RTS_BOOTCAMP,
      FUN_RANDOM,
      COMP7,
-     WINBACK)
+     WINBACK,
+     VERSUS_AI)
     REMOVED = (COMPANIES,)
     BASE_ON_DEQUEUE = (RANDOMS,
      EVENT_BATTLES,
@@ -1556,7 +1577,8 @@ class QUEUE_TYPE:
      BATTLE_ROYALE,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
 
 
 QUEUE_TYPE_NAMES = {v:k for k, v in QUEUE_TYPE.__dict__.iteritems() if isinstance(v, int)}
@@ -1818,14 +1840,24 @@ class DENUNCIATION:
     FORBIDDEN_NICK = 2
     BOT = 3
     INCORRECT_BEHAVIOR = 7
+    RANGE = (NOT_FAIR_PLAY,
+     FORBIDDEN_NICK,
+     BOT,
+     INCORRECT_BEHAVIOR)
 
 
-DENUNCIATIONS_PER_DAY = 10
+BATTLE_DENUNCIATIONS_PER_DAY = 10
+HANGAR_DENUNCIATIONS_PER_DAY = 10
 
 class VIOLATOR_KIND:
     UNKNOWN = 0
     ENEMY = 1
     ALLY = 2
+    HANGAR_CHAT_MEMBER = 3
+    RANGE = (UNKNOWN,
+     ENEMY,
+     ALLY,
+     HANGAR_CHAT_MEMBER)
 
 
 GROUND_TYPE_BY_NAME = {'none': 0,
@@ -2160,7 +2192,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  113: 'Dead marker setting',
  114: 'Ally marker setting',
  115: 'Once only hints',
- 31001: 'Armory Yard progression'}
+ 31001: 'Armory Yard progression',
+ 31002: 'Versus AI carousel filter 1',
+ 31003: 'Versus AI carousel filter 2'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2387,13 +2421,15 @@ class INVITATION_TYPE:
     MAPBOX = PREBATTLE_TYPE.MAPBOX
     FUN_RANDOM = PREBATTLE_TYPE.FUN_RANDOM
     COMP7 = PREBATTLE_TYPE.COMP7
+    VERSUS_AI = PREBATTLE_TYPE.VERSUS_AI
     RANGE = (SQUAD,
      EVENT,
      EPIC,
      BATTLE_ROYALE,
      MAPBOX,
      FUN_RANDOM,
-     COMP7)
+     COMP7,
+     VERSUS_AI)
     TYPES_WITH_EXTRA_DATA = (FUN_RANDOM,)
     INVITATION_TYPE_FROM_ARENA_BONUS_TYPE_MAPPING = {ARENA_BONUS_TYPE.REGULAR: SQUAD,
      ARENA_BONUS_TYPE.EPIC_RANDOM: SQUAD,
@@ -2513,6 +2549,18 @@ class ROCKET_ACCELERATION_STATE:
          cls.EMPTY: 'empty'}.get(value)
 
 
+class DUAL_ACCURACY_STATE:
+    NONE = 0
+    ACTIVE = 1
+    NOT_ACTIVE = 2
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.ACTIVE: 'active',
+         cls.NOT_ACTIVE: 'not active',
+         cls.NONE: 'none'}.get(value)
+
+
 class CONTENT_TYPE:
     DEFAULT = 0
     SD_TEXTURES = 1
@@ -2549,6 +2597,7 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
+    SAFE = 5
 
 
 class VISIBILITY:
@@ -2601,7 +2650,6 @@ AVAILABLE_STUN_TYPES_NAMES = [ key for key, value in StunTypes.__members__.iteri
 class SHELL_MECHANICS_TYPE:
     LEGACY = 'LEGACY'
     MODERN = 'MODERN'
-    GUARANTEED_DAMAGE = 'GUARANTEED_DAMAGE'
 
 
 class BATTLE_LOG_SHELL_TYPES(enum.IntEnum):
@@ -3362,7 +3410,12 @@ class BATTLE_MODE_LOCK_MASKS(object):
 
 
 RESOURCE_WELL_FORBIDDEN_TOKEN = 'rws{}_forbidden'
-QUESTS_SUPPORTED_EXCLUDE_TAGS = {'collectorVehicle'}
+QUESTS_SUPPORTED_EXCLUDE_TAGS = {'collectorVehicle',
+ 'special',
+ 'secret',
+ 'testTank',
+ 'premium',
+ 'event_battles'}
 VEHICLE_HEALTH_DECIMALS = 1
 GUARANTEED_RANDOMIZED_DAMAGE = 1.0
 GUARANTEED_RANDOMIZED_PIERCING_POWER = 1.0
@@ -3451,6 +3504,13 @@ class WoTPlusBonusType(object):
     EXCLUDED_MAP = 'excluded_map'
     FREE_EQUIPMENT_DEMOUNTING = 'free_equipment_demounting'
     EXCLUSIVE_VEHICLE = 'exclusive_vehicle'
+    ATTENDANCE_REWARD = 'attendance_reward'
+
+
+class WoTPlusDailyAttendance(object):
+    INITIAL_CYCLE_STEP = 1
+    MAXIMUM_DISPLAYED_REWARDS = 3
+    CYCLE_STEPS = 5
 
 
 VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG = 'noCrewTransferPenalty'
@@ -3462,7 +3522,7 @@ class InitialVehsAdditionStrategy(object):
     COUNTRY = 1
 
 
-class WINBACK_CALL_BATTLE_TOKEN_DRAW_REASON(enum.IntEnum):
+class WINBACK_BATTLE_TOKEN_DRAW_REASON(enum.IntEnum):
     REGULAR = 0
     MANUAL = 1
     SQUAD = 2
@@ -3508,3 +3568,8 @@ class LootBoxTiers(enum.IntEnum):
 
 
 ALL_LOOTBOX_TIERS = tuple((t for t in LootBoxTiers))
+
+class MinimapLayerType(object):
+    BASE = 'base'
+    ALERT = 'alert'
+    ALL = (BASE, ALERT)

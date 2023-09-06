@@ -464,7 +464,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         return
 
     def __onCustomizationClearLocked(self):
-        if self.__ctx.modeId != CustomizationModes.EDITABLE_STYLE:
+        if self.__ctx.modeId not in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
             return
         filterMethod = REQ_CRITERIA.CUSTOM(lambda item: not item.isUnlockedByToken())
         modifiedOutfits = self.__ctx.mode.getModifiedOutfits()

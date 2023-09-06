@@ -636,27 +636,26 @@ def removeSameSection(sectionA, sectionB):
     for section in childSectionsToRemove:
         sectionA.deleteSection(section)
 
-    if dictChildA:
-        if isAllChildRemoved:
-            return True
-        else:
-            return False
-    try:
-        floatListsA = [ float(item) for item in sectionA.asString.split() ]
-        floatListsB = [ float(item) for item in sectionB.asString.split() ]
-        if len(floatListsA) != len(floatListsB):
-            return False
-        for a, b in zip(floatListsA, floatListsB):
-            if abs(a - b) > 1e-05:
-                return False
-
-        return True
-    except ValueError:
-        pass
-
-    if sectionA.asBinary == sectionB.asBinary:
-        return True
+    if dictChildA and not isAllChildRemoved:
+        return False
     else:
+        try:
+            floatListsA = [ float(item) for item in sectionA.asString.split() ]
+            floatListsB = [ float(item) for item in sectionB.asString.split() ]
+            if len(floatListsA) != len(floatListsB):
+                return False
+            for a, b in zip(floatListsA, floatListsB):
+                if abs(a - b) > 1e-05:
+                    return False
+
+            return True
+        except ValueError:
+            pass
+
+        if sectionA.asString == sectionB.asString:
+            return True
+        if sectionA.asBinary == sectionB.asBinary:
+            return True
         return False
         return
 

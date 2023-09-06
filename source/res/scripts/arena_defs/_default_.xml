@@ -174,9 +174,6 @@
     <BATTLE_ROYALE_TRN_SQUAD>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
-    <FUN_RANDOM>
-      <estimatedLoad>	0.8	</estimatedLoad>
-    </FUN_RANDOM>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -312,36 +309,18 @@
     </comp7>
   </gameplayTypes>
   <extraSoundRemapping>
-    <bootcamp>
+    <story_mode>
       <soundRemapping>
         <loadBanks>
           <bank>
-            <name>	bootcamp.pck	</name>
+            <name>	onboarding_music.bnk	</name>
           </bank>
           <bank>
-            <name>	bootcamp_gui.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_hangar.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_hangar_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_result_screen.bnk	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_video.pck	</name>
-          </bank>
-          <bank>
-            <name>	bootcamp_video.bnk	</name>
+            <name>	story_mode_lobby.bnk	</name>
           </bank>
         </loadBanks>
       </soundRemapping>
-    </bootcamp>
+    </story_mode>
     <maps_training>
       <soundRemapping>
         <loadBanks>
@@ -375,59 +354,5 @@
         </loadBanks>
       </soundRemapping>
     </comp7>
-    <fep_auto_shoot_guns>
-      <soundRemapping>
-        <loadBanks>
-          <bank>
-            <name>	ev_fep_fast_gun.bnk	</name>
-          </bank>
-          <bank>
-            <name>	ev_fep_fast_gun.pck	</name>
-          </bank>
-        </loadBanks>
-        <events>
-          <event>
-            <name>	imp_medium_pierce_AP_NPC_PC	</name>
-            <mod>	imp_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_medium_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_auto_pierce_AP_NPC_PC	</name>
-            <mod>	imp_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_auto_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_small_pierce_AP_NPC_PC	</name>
-            <mod>	imp_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_small_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_main_pierce_HE_NPC_PC	</name>
-            <mod>	imp_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_main_pierce_HE_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_medium_not_pierce_AP_NPC_PC	</name>
-            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_medium_not_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_auto_not_pierce_AP_NPC_PC	</name>
-            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_auto_not_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_small_not_pierce_AP_NPC_PC	</name>
-            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_small_not_pierce_AP_NPC_PC	</modAUX>
-          </event>
-          <event>
-            <name>	imp_main_not_pierce_HE_NPC_PC	</name>
-            <mod>	imp_not_pierce_NPC_PC_FG	</mod>
-            <modAUX>	imp_main_not_pierce_HE_NPC_PC	</modAUX>
-          </event>
-        </events>
-      </soundRemapping>
-    </fep_auto_shoot_guns>
   </extraSoundRemapping>
 </_default_.xml>

@@ -1,0 +1,125 @@
+<versus_ai_config.xml>
+  <realmConfig>
+    <isEnabled>	false	</isEnabled>
+    <maxPlayersInTeam>	12	</maxPlayersInTeam>
+    <minPlayersInTeam>	5	</minPlayersInTeam>
+    <levels>	10	</levels>
+    <allowedBotVehicles>
+      <vehicle>	ussr:R52_Object_261	</vehicle>
+      <vehicle>	ussr:R149_Object_268_4	</vehicle>
+      <vehicle>	ussr:R145_Object_705_A	</vehicle>
+      <vehicle>	ussr:R155_Object_277	</vehicle>
+      <vehicle>	ussr:R169_ST_II	</vehicle>
+      <vehicle>	ussr:R45_IS-7	</vehicle>
+      <vehicle>	ussr:R90_IS_4M	</vehicle>
+      <vehicle>	ussr:R132_VNII_100LT	</vehicle>
+      <vehicle>	ussr:R144_K_91	</vehicle>
+      <vehicle>	ussr:R148_Object_430_U	</vehicle>
+      <vehicle>	ussr:R97_Object_140	</vehicle>
+      <vehicle>	ussr:R52_Object_261	</vehicle>
+      <vehicle>	usa:A83_T110E4	</vehicle>
+      <vehicle>	usa:A143_M_V_Y	</vehicle>
+      <vehicle>	usa:A67_T57_58	</vehicle>
+      <vehicle>	usa:A69_T110E5	</vehicle>
+      <vehicle>	usa:A116_XM551	</vehicle>
+      <vehicle>	usa:A120_M48A5	</vehicle>
+      <vehicle>	usa:A38_T92	</vehicle>
+      <vehicle>	uk:GB83_FV4005	</vehicle>
+      <vehicle>	uk:GB92_FV217	</vehicle>
+      <vehicle>	uk:GB100_Manticore	</vehicle>
+      <vehicle>	uk:GB86_Centurion_Action_X	</vehicle>
+      <vehicle>	uk:GB31_Conqueror_Gun	</vehicle>
+      <vehicle>	uk:GB120_Concept_No_5	</vehicle>
+      <vehicle>	sweden:S16_Kranvagn	</vehicle>
+      <vehicle>	sweden:S28_UDES_15_16	</vehicle>
+      <vehicle>	poland:Pl15_60TP_Lewandowskiego	</vehicle>
+      <vehicle>	poland:Pl21_CS_63	</vehicle>
+      <vehicle>	japan:J20_Type_2605	</vehicle>
+      <vehicle>	japan:J16_ST_B1	</vehicle>
+      <vehicle>	italy:It23_CC_3	</vehicle>
+      <vehicle>	italy:It15_Rinoceronte	</vehicle>
+      <vehicle>	italy:It08_Progetto_M40_mod_65	</vehicle>
+      <vehicle>	germany:G121_Grille_15_L63	</vehicle>
+      <vehicle>	germany:G134_PzKpfw_VII	</vehicle>
+      <vehicle>	germany:G42_Maus	</vehicle>
+      <vehicle>	germany:G56_E-100	</vehicle>
+      <vehicle>	germany:G125_Spz_57_Rh	</vehicle>
+      <vehicle>	germany:G73_E50_Ausf_M	</vehicle>
+      <vehicle>	germany:G89_Leopard1	</vehicle>
+      <vehicle>	germany:G61_G_E	</vehicle>
+      <vehicle>	france:F64_AMX_50Fosh_B	</vehicle>
+      <vehicle>	france:F10_AMX_50B	</vehicle>
+      <vehicle>	france:F82_AMX_M4_Mle1949_Ter	</vehicle>
+      <vehicle>	france:F108_Panhard_EBR_105	</vehicle>
+      <vehicle>	france:F88_AMX_13_105	</vehicle>
+      <vehicle>	france:F18_Bat_Chatillon25t	</vehicle>
+      <vehicle>	france:F38_Bat_Chatillon155_58	</vehicle>
+      <vehicle>	czech:Cz17_Vz_55	</vehicle>
+      <vehicle>	czech:Cz04_T50_51	</vehicle>
+      <vehicle>	china:Ch41_WZ_111_5A	</vehicle>
+      <vehicle>	china:Ch48_BZ_75	</vehicle>
+      <vehicle>	china:Ch29_Type_62C_prot	</vehicle>
+      <vehicle>	china:Ch19_121	</vehicle>
+    </allowedBotVehicles>
+    <forbiddenVehicleTags>	premiumIGR mapbox maps_training secret	</forbiddenVehicleTags>
+    <forbiddenBotVehicleTags>	testTank premium	</forbiddenBotVehicleTags>
+    <mapsPerLevel>
+      <maps>
+        <level>	10	</level>
+        <geometryNames>	01_karelia
+                    02_malinovka
+                    04_himmelsdorf
+                    05_prohorovka
+                    07_lakeville
+                    11_murovanka
+                    14_siegfried_line
+                    18_cliff
+                    28_desert
+                    29_el_hallouf
+                    31_airfield
+                    34_redshire
+                    35_steppes
+                    36_fishing_bay
+                    37_caucasus
+                    38_mannerheim_line
+                    47_canada_a	</geometryNames>
+      </maps>
+    </mapsPerLevel>
+  </realmConfig>
+  <matchmaker>
+    <maxQueueDepth>	1500	</maxQueueDepth>
+    <softfailTimeouts>	40 60 80 100 120 140 160	</softfailTimeouts>
+    <template>
+      <scout>	1	</scout>
+      <SPG>	2	</SPG>
+      <AT-SPG>	2	</AT-SPG>
+      <heavyTank>	3	</heavyTank>
+      <mediumTank>	3	</mediumTank>
+      <role_LT_wheeled>	1	</role_LT_wheeled>
+    </template>
+    <vehicleSoftFailTimeouts>
+      <scout>	25 30	</scout>
+      <SPG>	55	</SPG>
+      <AT-SPG>	20 40	</AT-SPG>
+      <heavyTank>	0 5 12 20 25	</heavyTank>
+      <mediumTank>	0 5 15 22 30	</mediumTank>
+      <role_LT_wheeled>	40 60	</role_LT_wheeled>
+    </vehicleSoftFailTimeouts>
+    <minPlayersTemplate>
+      <scout>	0	</scout>
+      <SPG>	0	</SPG>
+      <AT-SPG>	1	</AT-SPG>
+      <heavyTank>	2	</heavyTank>
+      <mediumTank>	2	</mediumTank>
+      <role_LT_wheeled>	0	</role_LT_wheeled>
+    </minPlayersTemplate>
+    <balanceVehTypes>	scout heavyTank mediumTank AT-SPG SPG role_LT_wheeled	</balanceVehTypes>
+    <levelTypeWeights>
+      <levelWeights>
+        <level>	10	</level>
+        <levelTypes>	10	</levelTypes>
+      </levelWeights>
+    </levelTypeWeights>
+    <battleTypeTimeout>	60	</battleTypeTimeout>
+  </matchmaker>
+</versus_ai_config.xml>

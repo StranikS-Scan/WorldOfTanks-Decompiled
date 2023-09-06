@@ -20,7 +20,7 @@ class SteadyVehicleMatrixCalculator(Component):
 
     def relinkSources(self):
         vehicle = BigWorld.player().getVehicleAttached()
-        if vehicle is None:
+        if vehicle is None or vehicle.isHidden:
             self.__relinkToIdentity()
             return
         else:

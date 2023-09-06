@@ -59,7 +59,6 @@ class BattlePassStateMachine(StateMachine):
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasChoiceOption, priority=2), target=choiceState.choiceItem)
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasAnyReward, priority=0), target=rewardState.rewardAny)
-        choiceState.choiceItem.addTransition(ConditionTransition(self.__hasStyleReward, priority=2), target=videoState)
         choiceState.choiceItem.addTransition(ConditionTransition(self.__hasAnyReward, priority=1), target=rewardState.rewardAny)
         choiceState.choiceItem.addTransition(ConditionTransition(lambda _: True, priority=0), target=lobbyState.lobbyWait)
         videoState.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardStyle)
@@ -73,12 +72,12 @@ class BattlePassStateMachine(StateMachine):
     def hasActiveFlow(self):
         return not self.isStateEntered(states.BattlePassRewardStateID.LOBBY)
 
-    def saveRewards(self, rewardsToChoose, defaultRewards, chapterStyle, data, packageRewards):
-        self.__rewardsToChoose = rewardsToChoose
+    def saveRewards(self, data, defaultRewards=None, chapterStyle=None, packageRewards=None, rewardsToChoose=None):
+        self.__data = data
         self.__rewards = defaultRewards
         self.__packageRewards = packageRewards
         self.__chapterStyle = chapterStyle
-        self.__data = data
+        self.__rewardsToChoose = rewardsToChoose or []
 
     def setManualFlow(self):
         self.__manualFlow = True

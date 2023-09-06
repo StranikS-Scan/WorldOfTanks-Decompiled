@@ -3,14 +3,17 @@
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from helpers import dependency
-from script_component.ScriptComponent import ScriptComponent
+from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class ArenaInfoComp7Component(ScriptComponent):
+class ArenaInfoComp7Component(DynamicScriptComponent):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def onEnterWorld(self, *args):
-        super(ArenaInfoComp7Component, self).onEnterWorld(*args)
+    def __init__(self):
+        super(ArenaInfoComp7Component, self).__init__()
+        self.__invalidateRanks()
+
+    def _onAvatarReady(self):
         arena = avatar_getter.getArena()
         if arena is not None:
             arena.onNewVehicleListReceived += self.__onNewVehicleListReceived
@@ -51,6 +54,10 @@ class ArenaInfoComp7Component(ScriptComponent):
         arena = avatar_getter.getArena()
         if not arena:
             return
-        stats = {vehID:{Comp7Keys.RANK: rank} for vehID, rank in ranks.iteritems()}
+        stats = dict()
+        for vehID, rank in ranks.iteritems():
+            stats[vehID] = {Comp7Keys.RANK: rank['divisionRank'],
+             Comp7Keys.IS_QUAL_ACTIVE: rank['isQualActive']}
+
         if stats:
             arena.onGameModeSpecificStats(isStatic=True, stats=stats)

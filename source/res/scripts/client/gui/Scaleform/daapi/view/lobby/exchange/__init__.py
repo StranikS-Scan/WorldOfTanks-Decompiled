@@ -52,7 +52,7 @@ class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
             window.updateDialog(meta, handler)
             self.bringViewToFront(name)
         else:
-            self.loadViewWithDefName(alias, name, meta, handler)
+            self.loadViewWithDefName(alias, name, None, meta, handler)
         return
 
 

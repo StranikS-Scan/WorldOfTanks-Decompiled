@@ -8,7 +8,7 @@ from gui.impl.gen_utils import DynAccessor
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
-    from typing import Union
+    from gui.impl.pub import ViewImpl
 
 def toString(value):
     if isinstance(value, DynAccessor):
@@ -16,14 +16,23 @@ def toString(value):
     return backport.text(value) if isinstance(value, (long, int)) else value
 
 
-def checkDialogTemplateIsOpened(uniqueID):
+def findDialogTemplatesByUniqueID(uniqueID):
     from gui.impl.dialogs.dialog_template import DialogTemplateView
     guiLoader = dependency.instance(IGuiLoader)
 
     def predicate(view):
-        return isinstance(view, DialogTemplateView) and view.uniqueID == uniqueID
+        return isinstance(view, DialogTemplateView) and view.dialogUniqueID == uniqueID
 
-    return len(guiLoader.windowsManager.findViews(predicate)) != 0
+    return guiLoader.windowsManager.findViews(predicate)
+
+
+def checkDialogTemplateIsOpened(uniqueID):
+    return len(findDialogTemplatesByUniqueID(uniqueID)) != 0
+
+
+def closeDialogTemplate(uniqueID):
+    for dlg in findDialogTemplatesByUniqueID(uniqueID):
+        dlg.destroyWindow()
 
 
 def getCurrencyTooltipAlias(currency):

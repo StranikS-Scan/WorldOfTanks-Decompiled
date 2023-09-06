@@ -29,7 +29,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.battle import bootcamp_battle_timer
     from gui.Scaleform.daapi.view.bootcamp.battle.frag_correlation_bar import BootcampFragCorrelationBar
     from gui.Scaleform.daapi.view.bootcamp.BCIntroFadeOut import BCIntroFadeOut
-    from gui.Scaleform.daapi.view.bootcamp.BCBattleTopHint import BCBattleTopHint
     from gui.Scaleform.daapi.view.bootcamp.BCBattlePage import BCBattlePage
     from gui.Scaleform.daapi.view.bootcamp.BCHighlights import BCHighlights
     from gui.Scaleform.daapi.view.bootcamp.BCConsumablesPanel import BCConsumablesPanel
@@ -46,7 +45,6 @@ def getViewSettings():
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, BCIntroVideoPage, 'BCIntroVideo.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, BCBattlePage, 'BCbattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', WindowLayer.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT, BCBattleTopHint, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', WindowLayer.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BCConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, BCRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),

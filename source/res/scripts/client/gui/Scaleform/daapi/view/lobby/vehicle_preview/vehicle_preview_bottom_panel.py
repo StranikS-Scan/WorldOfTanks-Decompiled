@@ -252,7 +252,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         self._vehicleCD = intCD
         g_currentPreviewVehicle.selectVehicle(intCD)
 
-    def setOffers(self, offers, title, description):
+    def setOffers(self, offers, title, description=''):
         self.__offers = offers
         self.__title = title
         self.__description = description

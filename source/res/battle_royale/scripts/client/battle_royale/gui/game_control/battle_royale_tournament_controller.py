@@ -120,6 +120,9 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def isSelected(self):
         return self.__currentToken is not None
 
+    def resetReady(self):
+        self.__isReady = False
+
     @property
     def __tournamentComponent(self):
         return BigWorld.player().AccountBattleRoyaleTournamentComponent

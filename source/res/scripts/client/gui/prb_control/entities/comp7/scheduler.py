@@ -18,6 +18,7 @@ class Comp7Scheduler(BaseScheduler):
     def __init__(self, entity):
         super(Comp7Scheduler, self).__init__(entity)
         self.__isPrimeTime = False
+        self.__hasPrimeTimePeripheries = False
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -26,6 +27,7 @@ class Comp7Scheduler(BaseScheduler):
     def init(self):
         status, _, _ = self.comp7Controller.getPrimeTimeStatus()
         self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
+        self.__hasPrimeTimePeripheries = self.comp7Controller.hasAvailablePrimeTimeServers()
         self.comp7Controller.onStatusUpdated += self.__update
 
     def fini(self):
@@ -41,12 +43,14 @@ class Comp7Scheduler(BaseScheduler):
             return
         else:
             isPrimeTime = status == PrimeTimeStatus.AVAILABLE
+            hasPrimeTimePeripheries = self.comp7Controller.hasAvailablePrimeTimeServers()
             if isPrimeTime != self.__isPrimeTime:
                 self.__isPrimeTime = isPrimeTime
                 if self.comp7Controller.getCurrentCycleID() is not None:
-                    if self.__isPrimeTime:
+                    if self.__isPrimeTime and not self.__hasPrimeTimePeripheries:
                         SystemMessages.pushMessage(text=backport.text(R.strings.comp7.system_messages.primeTime.start.body()), type=SystemMessages.SM_TYPE.PrimeTime, messageData={'title': backport.text(R.strings.comp7.system_messages.primeTime.start.title())})
-                    else:
+                    elif not hasPrimeTimePeripheries:
                         SystemMessages.pushMessage(text=backport.text(R.strings.comp7.system_messages.primeTime.end.body()), type=SystemMessages.SM_TYPE.PrimeTime, messageData={'title': backport.text(R.strings.comp7.system_messages.primeTime.end.title())})
                 g_eventDispatcher.updateUI()
+            self.__hasPrimeTimePeripheries = hasPrimeTimePeripheries
             return

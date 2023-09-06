@@ -29,6 +29,7 @@ from helpers import int2roman, dependency
 from items import ITEM_TYPES
 from items.components.c11n_constants import ItemTags
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from post_progression_common import TankSetupGroupsId
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRestoreController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
@@ -151,6 +152,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             self.__isDemountKitEnabled = True
         if self.__wotPlus.isEnabled():
             devicesSlotsNumber = self.__vehicle.descriptor.supplySlots.getAmountForType(ITEM_TYPES.optionalDevice)
+            if self.__vehicle.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS):
+                devicesSlotsNumber *= 2
             self.__accountMoney[_WP_CURRENCY] = devicesSlotsNumber
         optionalDevicesOnVehicle = []
         shellsOnVehicle = []
@@ -381,6 +384,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         shortage = expenses.getShortage(self.__accountMoney)
         shortage[Currency.GOLD] = 0
         shortage[Currency.EQUIP_COIN] = 0
+        shortage[_WP_CURRENCY] = 0
         self.as_enableButtonS(controlNumberValid and shortage.isEmpty())
 
     def __getControlQuestion(self, usingGold=False):

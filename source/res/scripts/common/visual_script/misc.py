@@ -61,9 +61,11 @@ def readVisualScriptPlans(section, commonParams={}):
             if subsection.has_key('name'):
                 planDef['name'] = subsection['name'].asString
                 planDef['params'] = readVisualScriptPlanParams(subsection, commonParams)
+                planDef['plan_id'] = subsection['plan_id'].asString if subsection.has_key('plan_id') else ''
             else:
                 planDef['name'] = subsection.asString
                 planDef['params'] = dict(commonParams)
+                planDef['plan_id'] = ''
             plans.append(planDef)
 
     return plans

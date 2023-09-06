@@ -7,7 +7,7 @@ from gui.game_loading import loggers
 from gui.game_loading.resources.cdn.images import CdnImagesResources
 from gui.game_loading.resources.consts import LoadingTypes
 from gui.game_loading.resources.local.base import LocalResources
-from gui.game_loading.state_machine.const import GameLoadingStatesEvents
+from gui.game_loading.state_machine.const import GameLoadingStatesEvents, GameLoadingStates
 from gui.game_loading.state_machine.states.base import BaseTickingState, BaseGroupTickingStates
 from gui.game_loading.state_machine.states.client_loading import ClientLoadingState
 from gui.game_loading.state_machine.states.idl import IdlState
@@ -133,3 +133,7 @@ class GameLoadingStateMachine(StateMachine):
     @_ifNotRunning()
     def idl(self):
         self.post(StringEvent(GameLoadingStatesEvents.IDL.value))
+
+    @property
+    def isLoading(self):
+        return not self.isStateEntered(GameLoadingStates.IDL.value)

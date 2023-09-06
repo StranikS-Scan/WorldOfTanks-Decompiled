@@ -345,6 +345,20 @@
     </insignia>
   </itemGroup>
   <itemGroup>
+    <name>	New Dawn	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <insignia>
+      <id>	41	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/new_dawn.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/new_dawn.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/new_dawn_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
     <name>	Cz14_Skoda_T-56_DB_3DSt	</name>
     <userString>	#vehicle_customization:insignias/special	</userString>
     <season>	ALL	</season>
@@ -370,6 +384,21 @@
       <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_j20.dds	</atlas>
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_j20.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/gun_j20_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	rush wolf 2023	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <insignia>
+      <id>	31008	</id>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/Rush_2023_Insignia_MT_3.dds	</texture>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/Rush_2023_Insignia_MT_3.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/Rush_2023_Insignia_MT.xml	</alphabet>
+      <tags>	styleOnly hiddenInUI	</tags>
+      <priceGroup>	insignias 50g notInShop	</priceGroup>
     </insignia>
   </itemGroup>
 </custom_insignias.xml>

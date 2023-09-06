@@ -9,22 +9,20 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
-    from helpers.server_settings import Comp7PrestigeRanksConfig
+    from helpers.server_settings import Comp7RanksConfig
 _logger = logging.getLogger(__name__)
 
 def isComp7Quest(qID):
-    return qID.startswith(COMP7_QUEST_PREFIX) and getComp7QuestType(qID) in CLIENT_VISIBLE_QUESTS_TYPE
+    return qID.startswith(COMP7_QUEST_PREFIX)
+
+
+def isComp7VisibleQuest(qID):
+    return isComp7Quest(qID) and getComp7QuestType(qID) in CLIENT_VISIBLE_QUESTS_TYPE
 
 
 def getComp7QuestType(qID):
-    qType, _ = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER, 1)
-    try:
-        qType = Comp7QuestType(qType)
-    except ValueError as e:
-        _logger.error('Unknown Comp7QuestType for qID=%s: %s', qID, e)
-        qType = None
-
-    return qType
+    qType, _, __ = __cutComp7Prefix(qID).partition(COMP7_QUEST_DELIMITER)
+    return findFirst(lambda t: t.value == qType, Comp7QuestType)
 
 
 def parseComp7RanksQuestID(qID):
@@ -47,27 +45,23 @@ def parseComp7PeriodicQuestID(qID):
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
 def getComp7TokensQuests(eventsCache=None):
-    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.TOKENS)
+    quests = eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.TOKENS)
     quests = {parseComp7TokensQuestID(qID):quest for qID, quest in quests.iteritems()}
     return quests
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
 def getComp7WeeklyQuests(eventsCache=None):
-    quests = eventsCache.getAllQuests(lambda q: isComp7Quest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WEEKLY and not q.isOutOfDate() and q.isStarted())
+    quests = eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WEEKLY and not q.isOutOfDate() and q.isStarted())
     quests = {parseComp7WeeklyQuestID(qID):quest for qID, quest in quests.iteritems()}
     return quests
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
 def __getDivisionFromQuest(qID, lobbyCtx=None):
-    ranksConfig = lobbyCtx.getServerSettings().comp7PrestigeRanksConfig
-    _, rankName, divisionName = __cutComp7Prefix(qID).split(COMP7_QUEST_DELIMITER)
-    ranksOrder = ranksConfig.ranksOrder
-    rankIdx = findFirst(lambda i: ranksOrder[i].lower() == rankName.lower(), range(len(ranksOrder)))
-    divisionIdx = int(divisionName) - 1
-    division = findFirst(lambda d: d.index == divisionIdx and d.rank == rankIdx, ranksConfig.divisions)
-    return division
+    ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
+    divisionID = int(qID.split(COMP7_QUEST_DELIMITER)[-1])
+    return findFirst(lambda d: d.dvsnID == divisionID, ranksConfig.divisions)
 
 
 def __cutComp7Prefix(qID):

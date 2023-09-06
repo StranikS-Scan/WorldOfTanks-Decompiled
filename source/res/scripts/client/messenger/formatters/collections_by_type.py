@@ -15,7 +15,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
- token_quest_subformatters.WotPlusDirectivesFormatter(),
+ token_quest_subformatters.WotPlusAttendanceRewardsFormatter(),
+ token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.WinbackRewardFormatter(),
@@ -99,7 +100,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.passiveXPNoTank.index(): _sc.SimpleFormatter('PassiveXPNoTankMessage'),
  _SM_TYPE.passiveXPIncompatibleCrewNewDay.index(): _sc.SimpleFormatter('PassiveXPIncompatibleCrewNewDayMessage'),
  _SM_TYPE.passiveXPIncompatibleCrew.index(): _wotPlusFormatters.PassiveXpIncompatibleCrewFormatter(),
- _SM_TYPE.wotPlusNoRentSelected.index(): _sc.SimpleFormatter('WotPlusRentNoRentSelectedMessage'),
  _SM_TYPE.passiveXPActivated.index(): _wotPlusFormatters.PassiveXpActivatedFormatter(),
  _SM_TYPE.passiveXPDeactivated.index(): _wotPlusFormatters.PassiveXpDeactivatedFormatter(),
  _SM_TYPE.passiveXPSwitched.index(): _wotPlusFormatters.PassiveXpSwitchedFormatter(),
@@ -201,7 +201,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.passiveXPNoTank.index(), _sc.SimpleFormatter('PassiveXPNoTankMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPIncompatibleCrewNewDay.index(), _sc.SimpleFormatter('PassiveXPIncompatibleCrewNewDayMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPIncompatibleCrew.index(), _wotPlusFormatters.PassiveXpIncompatibleCrewFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.wotPlusNoRentSelected.index(), _sc.SimpleFormatter('WotPlusRentNoRentSelectedMessage'))
     registerMessengerServerFormatter(_SM_TYPE.giftSystemMessage.index(), GiftSystemMessagesProxy())
     registerMessengerServerFormatter(_SM_TYPE.telecomMergeResults.index(), _sc.TelecomMergeResultsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.epicSeasonEnd.index(), _sc.EpicSeasonEndFormatter())
@@ -226,8 +225,6 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD, _sc.MapboxRewardReceivedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED, _sc.MapboxEndedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED, _sc.MapboxStartedFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_PAUSED, _sc.BattleMattersPausedFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_STARTED, _sc.BattleMattersStartedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD, _sc.BattleMattersTokenAward())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WINBACK_SELECTABLE_REWARD, _sc.WinbackSelectableAward())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WINBACK_BATTLERESULTS_REWARD, token_quest_subformatters.WinbackClientRewardFormatter())
@@ -248,3 +245,5 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.collectionsItems.index(), _sc.CollectionsItemsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.collectionsReward.index(), _sc.CollectionsRewardFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))

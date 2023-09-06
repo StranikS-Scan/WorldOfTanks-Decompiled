@@ -1,5 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
+  <appTitle>	Мир танков	</appTitle>
   <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
@@ -431,6 +432,9 @@
           <name>	tasks.bnk	</name>
         </bank>
         <bank>
+          <name>	lesta_battle_pass.bnk	</name>
+        </bank>
+        <bank>
           <name>	cons_hangar.bnk	</name>
         </bank>
         <bank>
@@ -485,10 +489,10 @@
           <name>	armory_yard.bnk	</name>
         </bank>
         <bank>
-          <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
+          <name>	lootboxes.bnk	</name>
         </bank>
         <bank>
-          <name>	lootboxes.bnk	</name>
+          <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -586,6 +590,15 @@
         </bank>
         <bank>
           <name>	style_monster.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch29_Type_62C.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_F18_Bat_Chatillon25t.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R144_K_91.bnk	</name>
         </bank>
         <bank>
           <name>	gameplay.bnk	</name>

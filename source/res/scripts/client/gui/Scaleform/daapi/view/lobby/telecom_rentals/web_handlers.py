@@ -9,7 +9,7 @@ from web.web_client_api.ui import OpenTabWebApi
 class _OpenTabWebApi(OpenTabWebApi):
 
     def _getVehiclePreviewReturnAlias(self, cmd):
-        return VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW
+        return VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW
 
     def _getVehiclePreviewReturnCallback(self, cmd):
         return self.__getReturnCallback(cmd)

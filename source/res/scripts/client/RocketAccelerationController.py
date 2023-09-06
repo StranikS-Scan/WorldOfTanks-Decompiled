@@ -22,11 +22,12 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent):
         self.__reloadTime = 0.0
         self.__deployTme = 0.0
         self.__inited = False
+        self.init()
         return
 
     @noexcept
     def init(self):
-        if self.__inited:
+        if self.__inited or not self.entity or not self.entity.typeDescriptor:
             return
         self.__effectsPrefab = self.entity.typeDescriptor.type.rocketAccelerationParams.effectsPrefab
         self.__duration = self.entity.typeDescriptor.type.rocketAccelerationParams.duration

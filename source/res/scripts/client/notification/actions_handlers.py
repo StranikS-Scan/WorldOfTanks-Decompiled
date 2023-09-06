@@ -17,15 +17,16 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
+from gui.collection.collections_helpers import loadHangarFromCollections
 from gui.customization.constants import CustomizationModeSource, CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBattleMatters
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showPersonalReservesConversion, showWinbackSelectRewardView
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showPersonalReservesConversion, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
 from gui.shared.utils import decorators
@@ -48,6 +49,8 @@ from uilogging.epic_battle.constants import EpicBattleLogActions, EpicBattleLogB
 from uilogging.epic_battle.loggers import EpicBattleLogger
 from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
 from uilogging.seniority_awards.loggers import SeniorityAwardsLogger
+from uilogging.wot_plus.loggers import WotPlusNotificationLogger
+from uilogging.wot_plus.logging_constants import NotificationAdditionalData
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from wg_async import wg_async, wg_await
@@ -1260,8 +1263,12 @@ class _OpenCollectionHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        collectionID = model.getNotification(self.getNotType(), entityID).getSavedData()['collectionId']
-        showCollectionWindow(collectionID)
+        collectionID = (model.getNotification(self.getNotType(), entityID).getSavedData() or {}).get('collectionId')
+        if collectionID:
+            backText = backport.text(R.strings.menu.viewHeader.backBtn.descrLabel.hangar())
+            showCollectionWindow(collectionID, backCallback=loadHangarFromCollections, backBtnText=backText)
+        else:
+            showCollectionsMainPage()
 
 
 class _OpenCollectionRewardHandler(NavigationDisabledActionHandler):
@@ -1310,6 +1317,52 @@ class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
 
     def doAction(self, model, entityID, action):
         self.__ctrl.goToArmoryYardQuests()
+
+
+class _OpenWotPlusIntroView(ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.WOT_PLUS_INTRO
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenWotPlusIntroView, self).handleAction(model, entityID, action)
+        WotPlusNotificationLogger().logDetailsButtonClickEvent(NotificationAdditionalData.SPECIAL_NOTIFICATION)
+        showWotPlusIntroView()
+
+
+class _OpenWotDailyRewardView(ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenWotDailyRewardView, self).handleAction(model, entityID, action)
+        WotPlusNotificationLogger().logDetailsButtonClickEvent(NotificationAdditionalData.RELEASE_NOTIFICATION)
+        showWotPlusIntroView()
+
+
+class _BattleMattersTaskReminder(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.BATTLE_MATTERS_TASK_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showBattleMatters()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1377,7 +1430,10 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenWinbackSelectableRewardViewFromQuest,
  _OpenArmoryYardMain,
  _OpenArmoryYardQuest,
- _OpenAchievementsScreen)
+ _OpenAchievementsScreen,
+ _OpenWotPlusIntroView,
+ _OpenWotDailyRewardView,
+ _BattleMattersTaskReminder)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

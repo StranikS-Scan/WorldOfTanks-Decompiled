@@ -3,7 +3,7 @@
 import os
 from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
-from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES, MinimapLayerType
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
@@ -423,7 +423,14 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         if raiseIfMissing or __hasKey('minimap', section, defaultXml):
             cfg['minimap'] = _readString('minimap', section, defaultXml)
         if section.has_key('minimapLayers'):
-            cfg['minimapLayers'] = section['minimapLayers'].readStrings('layer')
+            result = {}
+            for item in section['minimapLayers'].values():
+                layerId = item.readString('layerId')
+                path = item.readString('path')
+                layerType = item.readString('layerType')
+                result[layerId] = (path, layerType)
+
+            cfg['minimapLayers'] = result
         if __hasKey('overviewmap', section, defaultXml):
             cfg['overviewmap'] = _readString('overviewmap', section, defaultXml)
         if raiseIfMissing or __hasKey('wwambientSound', section, defaultXml):

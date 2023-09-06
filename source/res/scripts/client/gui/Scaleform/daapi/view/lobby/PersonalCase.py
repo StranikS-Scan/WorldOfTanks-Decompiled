@@ -565,9 +565,7 @@ class PersonalCaseDataProvider(object):
                 for achievement in section:
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
-            serverSettings = self.lobbyContext.getServerSettings()
             isWotPlusEnabled = self._wotPlusCtrl.isWotPlusEnabled()
-            isNewSubscriptionsEnabled = serverSettings.isWotPlusNewSubscriptionEnabled()
             hasWotPlus = self._wotPlusCtrl.isEnabled()
             secondIcon = RES_ICONS.MAPS_ICONS_CREWHEADER_ACCELERATED_CREW_TRAINING if isWotPlusEnabled else RES_ICONS.MAPS_ICONS_LIBRARY_TMAN_ACC_TRAINING_20X20
             callbackInfo = {'achievements': packedAchieves,
@@ -575,7 +573,7 @@ class PersonalCaseDataProvider(object):
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
              'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO),
              'secondIcon': secondIcon}
-            if isWotPlusEnabled and (isNewSubscriptionsEnabled or hasWotPlus):
+            if isWotPlusEnabled and hasWotPlus:
                 callbackInfo['wotPlusIcon'] = RES_ICONS.MAPS_ICONS_CREWHEADER_INACTIVE_WOT_PLUS_CREW_IDLE
                 callbackInfo['wotPlusMsg'] = self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS)
             callback(callbackInfo)

@@ -124,6 +124,9 @@ class OfferGiftVehiclePreview(VehiclePreview):
          'giftID': self._gift.id})
         return exitEvent
 
+    def _onInventoryChanged(self, *_):
+        pass
+
     def __onServerSettingsChange(self, *args, **kwargs):
         if not self.__lobbyContext.getServerSettings().isOffersEnabled():
             event_dispatcher.showHangar()

@@ -69,7 +69,7 @@ class CrewPerksTooltip(ViewImpl):
             vm.setSkillType(self._skill.typeName)
             vm.setIsCommonExtraAvailable(self._isCommonExtraAvailable)
             vm.setIsAdvancedTooltipEnable(bool(SKILL_MOVIES.get(self._skill.name, None)))
-            if self._skillLevel > 0:
+            if self._skillLevel > 0 and self._skill.isEnable:
                 self.fillCurrentLvlInfo(vm)
             else:
                 vm.setDescription(self._skill.getMaxLvlDescription())

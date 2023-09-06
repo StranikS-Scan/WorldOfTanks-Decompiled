@@ -17,3 +17,7 @@ class SteamPlatformWebApi(IPlatformWebApi):
 
     def isConnected(self):
         return Steam.isInited()
+
+    @staticmethod
+    def isOverlayEnabled():
+        return Steam.isOverlayEnabled()

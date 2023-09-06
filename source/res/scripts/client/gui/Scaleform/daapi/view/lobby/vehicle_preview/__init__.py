@@ -27,7 +27,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_style_buying import VehiclePreviewBottomPanelStyleBuying
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_showcase_style_buying import VehiclePreviewBottomPanelShowcaseStyleBuying
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_style_progression import VehiclePreviewBottomPanelStyleProgression
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.wot_plus_vehicle_preview import VehiclePreviewBottomPanelWotPlus
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.rental_vehicle_preview import VehiclePreviewBottomPanelRental
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_resource_well import VehiclePreviewBottomPanelResourceWell
     return (ComponentSettings(VEHPREVIEW_CONSTANTS.PARAMETERS_PY_ALIAS, VehiclePreviewParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_PY_ALIAS, VehiclePreviewTopPanelTabs, ScopeTemplates.DEFAULT_SCOPE),
@@ -44,7 +44,7 @@ def getViewSettings():
      ComponentSettings(VEHPREVIEW_CONSTANTS.CREW_LINKAGE, VehiclePreviewCrewTab, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.PACK_ITEM_POPOVER, PackItemsPopover, 'packItemsPopover.swf', WindowLayer.WINDOW, VIEW_ALIAS.PACK_ITEM_POPOVER, VIEW_ALIAS.PACK_ITEM_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.TRADE_OFF_WIDGET_ALIAS, TradeOffWidget, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WOT_PLUS_LINKAGE, VehiclePreviewBottomPanelWotPlus, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WOT_PLUS_LINKAGE, VehiclePreviewBottomPanelRental, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

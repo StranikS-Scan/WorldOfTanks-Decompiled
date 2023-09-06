@@ -55,7 +55,7 @@ class TriggerExternal(Block, TriggerMeta):
         if self.isActive() == value:
             return
         self._active = value
-        if not IS_VS_EDITOR:
+        if not IS_VS_EDITOR and hasattr(BigWorld.player(), 'onTrigger'):
             if self._active:
                 BigWorld.player().onTrigger += self._onTrigger
             else:

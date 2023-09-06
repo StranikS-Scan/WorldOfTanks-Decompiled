@@ -5,6 +5,9 @@
     </preInitGroup>
   </Init>
   <Simulation>
+    <PreSimulation>
+      <before>	true	</before>
+    </PreSimulation>
     <NetworkFilter>
       <before>	true	</before>
     </NetworkFilter>
@@ -12,6 +15,7 @@
   </Simulation>
   <PostHierarchy>
     <postHierarchyUpdate></postHierarchyUpdate>
+    <postHierarchyUpdateFinish></postHierarchyUpdateFinish>
   </PostHierarchy>
   <Finalize></Finalize>
 </ticking_graph.xml>

@@ -110,7 +110,10 @@ class LootBox(GUIItem):
         return 'LootBox(lootBoxID={}, lootBoxConfig={}, invCount={})'.format(self.getID(), self.__getConfig(), self.getInventoryCount())
 
     def __cmp__(self, other):
-        return cmp(-self.getWeight(), -other.getWeight())
+        if other is None:
+            return 1
+        else:
+            return cmp((not self.isEnabled(), -self.getWeight()), (not other.isEnabled(), -other.getWeight())) if isinstance(other, LootBox) else super(LootBox, self).__cmp__(other)
 
     def updateCount(self, invCount):
         self.__invCount = invCount

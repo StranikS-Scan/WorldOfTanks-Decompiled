@@ -46,7 +46,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, ICollectiveGoalMarathonsController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, IWinbackController, ICollectiveGoalMarathonsController
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -97,6 +97,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __winbackController = dependency.descriptor(IWinbackController)
     __collectiveGoalMarathonsController = dependency.descriptor(ICollectiveGoalMarathonsController)
 
     def __init__(self, ctx):
@@ -435,6 +436,9 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 vehicle = g_currentVehicle.item
                 vehName = vehicle.shortUserName if vehicle else ''
                 tab['label'] = tabData.label % {'vehName': vehName}
+            if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS and self.__winbackController.isProgressionAvailable():
+                tab['label'] = backport.text(R.strings.winback.winbackTab())
+                headerTab['tooltip'] = QUESTS.MISSIONS_TAB_WINBACK
             if alias in (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,
              QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS,
              QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,

@@ -192,18 +192,18 @@
       <Arg>	UINT32	</Arg>
     </onKickedFromServer>
     <onEnqueued>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onEnqueued>
     <onEnqueueFailure>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
     </onEnqueueFailure>
     <onDequeued>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onDequeued>
     <onKickedFromQueue>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onKickedFromQueue>
     <onArenaCreated></onArenaCreated>
     <onIGRTypeChanged>
@@ -341,10 +341,10 @@
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onEnqueued>
     <onDequeued>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onDequeued>
     <onMapsTrainingEnqueued>
       <Arg>	UINT8	</Arg>
@@ -375,7 +375,7 @@
       <Arg>	INT32	</Arg>
     </onBootcampCreated>
     <onKickedFromQueue>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT32	</Arg>
     </onKickedFromQueue>
     <onKickedFromArena>
       <Arg>	UINT64	</Arg>
@@ -505,6 +505,7 @@
       <Arg>	DB_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT8	</Arg>
+      <Arg>	INT64	</Arg>
     </makeDenunciation>
     <banUnbanUser>
       <Exposed></Exposed>

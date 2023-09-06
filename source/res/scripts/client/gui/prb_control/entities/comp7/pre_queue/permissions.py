@@ -10,4 +10,6 @@ class Comp7Permissions(PreQueuePermissions):
     def canCreateSquad(self):
         if self.__comp7Controller.isOffline or self.__comp7Controller.isBanned:
             return False
-        return False if not self.__comp7Controller.hasPlayableVehicle() else super(Comp7Permissions, self).canCreateSquad()
+        if not self.__comp7Controller.hasPlayableVehicle():
+            return False
+        return False if not self.__comp7Controller.isQualificationSquadAllowed() else super(Comp7Permissions, self).canCreateSquad()

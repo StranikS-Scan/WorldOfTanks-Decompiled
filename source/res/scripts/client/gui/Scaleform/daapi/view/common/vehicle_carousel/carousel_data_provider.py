@@ -70,7 +70,7 @@ def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None):
 
 def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
     rentInfoText = ''
-    if not vehicle.isWotPlusRent and not vehicle.isTelecomRent:
+    if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
     if vState == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL and bootcampCtrl.isInBootcamp():
@@ -109,7 +109,6 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
     tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     current, maximum = vehicle.getCrystalsEarnedInfo()
     isCrystalsLimitReached = current == maximum
-    isWotPlusSlot = (vehicle.isWotPlus or vehicle.isTelecomRent) and not vehicle.rentExpiryState
     showIcon = vehicle.isTelecomRent and not vehicle.rentExpiryState
     extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if showIcon else ''
     return {'id': vehicle.invID,
@@ -145,7 +144,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
      'isCrystalsLimitReached': isCrystalsLimitReached,
      'isUseRightBtn': True,
      'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
-     'isWotPlusSlot': isWotPlusSlot,
+     'isWotPlusSlot': vehicle.isWotPlus,
      'extraImage': extraImage}
 
 

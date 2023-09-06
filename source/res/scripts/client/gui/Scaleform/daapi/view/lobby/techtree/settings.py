@@ -237,6 +237,11 @@ class SelectedNation(object):
     def getName(cls):
         return nations.NAMES[cls.__index]
 
+    @classmethod
+    def clear(cls):
+        cls.__index = None
+        return
+
 
 class RequestState(object):
     __slots__ = ()

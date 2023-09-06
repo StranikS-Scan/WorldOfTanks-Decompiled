@@ -1,37 +1,44 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/collection/collection.py
-from gui.impl.gen.view_models.views.lobby.collection.tab_model import TabModel
-from gui.impl.lobby.collection.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus
-from gui.collection.collections_helpers import composeBonuses, getImagePath, getItemResKey, getShownNewItemsCount, isItemNew, isRewardNew, setItemShown, setRewardShown, setShownNewItemsCount, setCollectionTutorialCompleted, isTutorialCompleted
-from gui.collection.sounds import COLLECTIONS_SOUND_SPACE, Sounds, COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE
+import logging
+import typing
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
+from gui.collection.sounds import COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE
+from gui.collection.account_settings import getShownNewItemsCount, isItemNew, isRewardNew, isTutorialCompleted, setCollectionRenewSeen, setCollectionTutorialCompleted, setItemShown, setRewardShown, setShownNewItemsCount
+from gui.collection.collections_helpers import composeBonuses, getItemResKey, setHangarState
+from gui.collection.resources.cdn.models import Group, Sub, makeImageID
 from gui.impl.auxiliary.collections_helper import getCollectionsBonusPacker
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.collection_view_model import CollectionViewModel
 from gui.impl.gen.view_models.views.lobby.collection.item_model import ItemModel, ItemState
+from gui.impl.gen.view_models.views.lobby.collection.page_backgrounds_model import PageBackgroundsModel
 from gui.impl.gen.view_models.views.lobby.collection.reward_info_model import RewardInfoModel, RewardState
+from gui.impl.gen.view_models.views.lobby.collection.tab_model import TabModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import BattlePassCoinTooltipView
+from gui.impl.lobby.collection.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showCollectionItemPreviewWindow, showHangar
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import ICollectionsSystemController
-from skeletons.gui.impl import IGuiLoader
+_logger = logging.getLogger(__name__)
 _INITIAL_PAGE = -1
 _SEPARATOR = ','
+if typing.TYPE_CHECKING:
+    from typing import Dict
 _COLLECTION_NAME_TO_SOUNDSPACE = {'mt_birthday2023': COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE}
 
 class CollectionView(ViewImpl):
-    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__rewardTooltips', '__bonusData', '_COMMON_SOUND_SPACE')
+    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__pagesCount', '__rewardTooltips', '__content', '__bonusData', '_COMMON_SOUND_SPACE')
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
-    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, collectionId, backCallback, backBtnText, page):
         settings = ViewSettings(R.views.lobby.collection.CollectionView())
@@ -43,7 +50,9 @@ class CollectionView(ViewImpl):
         self.__rewardTooltips = {}
         self.__bonusData = []
         self.__page = page
-        self._COMMON_SOUND_SPACE = _COLLECTION_NAME_TO_SOUNDSPACE.get(self.__collection.name, COLLECTIONS_SOUND_SPACE)
+        self.__pagesCount = 0
+        self.__content = {}
+        self._COMMON_SOUND_SPACE = _COLLECTION_NAME_TO_SOUNDSPACE.get(self.__collection.name, ACHIEVEMENTS_SOUND_SPACE)
         super(CollectionView, self).__init__(settings)
 
     @property
@@ -74,38 +83,20 @@ class CollectionView(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         return None if tooltipId is None else self.__rewardTooltips.get(tooltipId)
 
-    def _onLoading(self, *args, **kwargs):
-        super(CollectionView, self)._onLoading(*args, **kwargs)
-        with self.viewModel.transaction() as model:
-            model.setBackButtonText(self.__backBtnText)
-            self.__fillTabs(model=model)
-            self.__fillTabData(model=model)
-            if self.__page is not None:
-                model.setPage(self.__page)
-        return
-
     def _onLoaded(self, *args, **kwargs):
-        super(CollectionView, self)._onLoaded(*args, **kwargs)
-        if not AccountSettings.getSettings(IS_BATTLE_PASS_COLLECTION_SEEN):
-            AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, True)
-            g_eventBus.handleEvent(events.CollectionsEvent(events.CollectionsEvent.BATTLE_PASS_ENTRY_POINT_VISITED), scope=EVENT_BUS_SCOPE.LOBBY)
+        setCollectionRenewSeen(self.__collection.collectionId)
 
     def _finalize(self):
-
-        def battlePassViewsPredicate(view):
-            battlePassViews = (R.views.lobby.battle_pass.ChapterChoiceView(), R.views.lobby.battle_pass.BattlePassProgressionsView())
-            return view.layoutID in battlePassViews and view.viewStatus == ViewStatus.LOADED
-
-        if self.__guiLoader.windowsManager.findViews(battlePassViewsPredicate):
-            self.soundManager.setState(Sounds.STATE_PLACE.value, Sounds.STATE_PLACE_TASKS.value)
         self.__backCallback = None
         self.__rewardTooltips = None
+        g_eventBus.handleEvent(events.CollectionsEvent(events.CollectionsEvent.COLLECTION_VIEW_CLOSED), scope=EVENT_BUS_SCOPE.LOBBY)
         super(CollectionView, self)._finalize()
         return
 
     def _getEvents(self):
         return ((self.__collectionsSystem.onServerSettingsChanged, self.__onSettingsChanged),
          (self.__collectionsSystem.onBalanceUpdated, self.__onBalanceUpdated),
+         (self.viewModel.onViewLoaded, self.__onViewLoaded),
          (self.viewModel.onSetItemReceived, self.__onSetItemReceived),
          (self.viewModel.onSetRewardReceived, self.__onSetRewardReceived),
          (self.viewModel.onSetProgressItemsReceived, self.__onSetProgressItemsReceived),
@@ -114,12 +105,26 @@ class CollectionView(ViewImpl):
          (self.viewModel.onTabSelected, self.__onTabSelected),
          (self.viewModel.onClose, self.__onClose))
 
+    def _getListeners(self):
+        return ((events.LobbyHeaderMenuEvent.MENU_CLICK, self.__onHeaderMenuClick, EVENT_BUS_SCOPE.LOBBY),)
+
+    def __onViewLoaded(self, args):
+        self.__pagesCount = int(args.get('pagesCount'))
+        with self.viewModel.transaction() as model:
+            model.setBackButtonText(self.__backBtnText)
+            self.__fillTabs(model=model)
+            self.__fillTabData(model=model)
+            if self.__page is not None:
+                model.setPage(self.__page)
+        return
+
     @replaceNoneKwargsModel
     def __fillTabData(self, model=None):
         model.setIsCompleted(self.__collectionsSystem.isCollectionCompleted(self.__collection.collectionId))
+        self.__clearContent(model=model)
         model.setCurrentCollection(self.__collection.name)
         model.setIsTutorial(not isTutorialCompleted(self.__collection.collectionId))
-        self.__fillItems(model=model)
+        self.__updateContentData()
         self.__fillProgression(model=model)
 
     def __fillTabs(self, model=None):
@@ -138,23 +143,78 @@ class CollectionView(ViewImpl):
         itemModels.clear()
         for item in self.__collection.items.itervalues():
             itemModel = ItemModel()
-            self.__filItemModel(item, itemModel)
+            self.__fillItemModel(item, itemModel)
             itemModels.addViewModel(itemModel)
 
         itemModels.invalidate()
 
-    def __filItemModel(self, item, itemModel):
+    def __fillItemModel(self, item, itemModel):
         itemId = item.itemId
         itemModel.setItemId(itemId)
         itemModel.setState(self.__getItemState(itemId))
-        collectionId = self.__collection.collectionId
-        itemResKey = getItemResKey(collectionId, item)
-        itemModel.setReceivedImagePath(getImagePath(R.images.gui.maps.icons.collectionItems.received.dyn(itemResKey)))
-        itemModel.setUnreceivedImagePath(getImagePath(R.images.gui.maps.icons.collectionItems.unreceived.dyn(itemResKey)))
+        itemResKey = getItemResKey(self.__collection.collectionId, item)
+        receivedImg = self.__getContent(Group.ITEM, Sub.RECEIVED, itemResKey)
+        unreceivedImg = self.__getContent(Group.ITEM, Sub.UNRECEIVED, itemResKey)
+        if receivedImg:
+            itemModel.setReceivedImagePath(receivedImg)
+        if unreceivedImg:
+            itemModel.setUnreceivedImagePath(unreceivedImg)
 
     def __fillTabModel(self, collectionId, tabModel):
         tabModel.setCollectionName(self.__collectionsSystem.getCollection(collectionId).name)
         tabModel.setHasNewItems(bool(self.__collectionsSystem.getNewCollectionItemCount(collectionId)))
+
+    @replaceNoneKwargsModel
+    def __fillPagesBackgrounds(self, model=None):
+        generalBg = self.__getContent(Group.BG, self.__collection.name, 'bgMain')
+        if generalBg:
+            model.setGeneralBackground(generalBg)
+        pagesBackgroundsModels = model.getPagesBackgrounds()
+        pagesBackgroundsModels.clear()
+        for pbg in range(1, self.__pagesCount + 1):
+            pageBackgroundsModel = PageBackgroundsModel()
+            pageBg = self.__getContent(Group.BG, self.__collection.name, 'bgPage{}'.format(pbg), optionalContent=True)
+            if pageBg:
+                pageBackgroundsModel.setMain(pageBg)
+            pagesBackgroundsModels.addViewModel(pageBackgroundsModel)
+
+        pagesBackgroundsModels.invalidate()
+
+    @replaceNoneKwargsModel
+    def __clearContent(self, model=None):
+        itemModels = model.getItems()
+        itemModels.clear()
+        itemModels.invalidate()
+        pagesBackgroundsModels = model.getPagesBackgrounds()
+        pagesBackgroundsModels.clear()
+        pagesBackgroundsModels.invalidate()
+        model.setGeneralBackground('')
+
+    def __updateContentData(self):
+        Waiting.show('loadContent')
+        self.__collectionsSystem.cache.getImagesPaths(self.__generateContentData(), self.__onContentUpdated)
+
+    def __generateContentData(self):
+        contentIDs = [makeImageID(Group.BG, self.__collection.name, 'bgMain')]
+        for pbgID in range(1, self.__pagesCount + 1):
+            contentIDs.append(makeImageID(Group.BG, self.__collection.name, 'bgPage{}'.format(pbgID)))
+
+        for item in self.__collection.items.itervalues():
+            resKey = getItemResKey(self.__collection.collectionId, item)
+            contentIDs.append(makeImageID(Group.ITEM, Sub.RECEIVED, resKey))
+            contentIDs.append(makeImageID(Group.ITEM, Sub.UNRECEIVED, resKey))
+
+        return contentIDs
+
+    def __onContentUpdated(self, isOk, data):
+        if isOk:
+            self.__content = data
+            with self.viewModel.transaction() as model:
+                self.__fillPagesBackgrounds(model=model)
+                self.__fillItems(model=model)
+        else:
+            self.viewModel.setIsError(True)
+        Waiting.hide('loadContent')
 
     @replaceNoneKwargsModel
     def __updateCurrentNewItems(self, model=None):
@@ -209,7 +269,7 @@ class CollectionView(ViewImpl):
         itemId = int(args.get('itemId'))
         setItemShown(self.__collection.collectionId, itemId)
         with self.viewModel.transaction() as model:
-            self.__fillItems(model=model)
+            self.__updateContentData()
             self.__updateCurrentNewItems(model=model)
 
     def __onSetRewardReceived(self, args):
@@ -232,7 +292,7 @@ class CollectionView(ViewImpl):
         itemId = int(args.get('itemId'))
         page = int(args.get('currentPage'))
         collectionId = self.__collection.collectionId
-        showCollectionItemPreviewWindow(itemId, collectionId, page, self.__backCallback, self.__backBtnText)
+        showCollectionItemPreviewWindow(itemId, collectionId, page, self.__pagesCount, self.__backCallback, self.__backBtnText)
 
     def __onTabSelected(self, args):
         collectionName = args.get('collectionName')
@@ -247,7 +307,7 @@ class CollectionView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __onBalanceUpdated(self, model=None):
-        self.__fillItems(model=model)
+        self.__updateContentData()
         self.__fillProgression(model=model)
 
     def __onSettingsChanged(self):
@@ -261,6 +321,17 @@ class CollectionView(ViewImpl):
         self.__backCallback = None
         self.destroyWindow()
         return
+
+    def __getContent(self, group, sub, name, optionalContent=False):
+        path = self.__content.get(group, {}).get(sub, {}).get(name, '')
+        if not path and not optionalContent:
+            _logger.warning('Resource: %s not found', '/'.join((group, sub, name)))
+        return path
+
+    def __onHeaderMenuClick(self, event):
+        if event.ctx.get('alias') == VIEW_ALIAS.LOBBY_HANGAR:
+            setHangarState()
+        self.destroyWindow()
 
 
 class CollectionWindow(LobbyWindow):

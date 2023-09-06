@@ -118,20 +118,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         return self.__component
 
     def getBoundingBox(self):
-        arenaVisitor = self.sessionProvider.arenaVisitor
-        bl, tr = arenaVisitor.type.getBoundingBox()
-        if arenaVisitor.gui.isBootcampBattle():
-            topRightX, topRightY = tr
-            bottomLeftX, bottomLeftY = bl
-            vSide = topRightX - bottomLeftX
-            hSide = topRightY - bottomLeftY
-            if vSide > hSide:
-                bl = (bottomLeftX, bottomLeftX)
-                tr = (topRightX, topRightX)
-            else:
-                bl = (bottomLeftY, bottomLeftY)
-                tr = (topRightY, topRightY)
-        return (bl, tr)
+        return self.sessionProvider.arenaVisitor.type.getBoundingBox()
 
     @classmethod
     def getImagePath(cls, minimapTexture):

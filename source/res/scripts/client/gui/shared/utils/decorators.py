@@ -42,6 +42,22 @@ class adisp_process(object):
         return wrapper
 
 
+def callerWrapper(caller, onCompleted=lambda : None):
+
+    def getCbWrapper(callback):
+
+        def cbWrapper(*args, **kwargs):
+            onCompleted()
+            callback(*args, **kwargs)
+
+        return cbWrapper
+
+    def wrapper(callback):
+        return caller(callback=getCbWrapper(callback))
+
+    return wrapper
+
+
 def adisp_async(func, cbname='callback', cbwrapper=lambda x: x):
 
     def wrapper(*kargs, **kwargs):

@@ -15,8 +15,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI, kpiFormatValue, kpiFormatNoSignValue
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION
+from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, isValidEmptyValue, PARAMS_GROUPS
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_SIZE, BURST_COUNT
 from helpers.i18n import makeString
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
@@ -34,12 +34,14 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'chassisRotationSpeed': MENU.TANK_PARAMS_GPS,
  'circularVisionRadius': MENU.TANK_PARAMS_M,
  'clipFireRate': MENU.TANK_PARAMS_CLIPSEC,
- 'burstFireRate': MENU.TANK_PARAMS_BURSTSEC,
+ BURST_FIRE_RATE: MENU.TANK_PARAMS_BURSTSEC,
  'flameMaxDistance': MENU.TANK_PARAMS_M,
  'turboshaftBurstFireRate': MENU.TANK_PARAMS_BURSTSEC,
+ BURST_TIME_INTERVAL: MENU.TANK_PARAMS_S,
+ BURST_COUNT: MENU.TANK_PARAMS_CNT,
+ BURST_SIZE: MENU.TANK_PARAMS_CNT,
  'avgDamage': MENU.TANK_PARAMS_VAL,
  'avgDamagePerMinute': MENU.TANK_PARAMS_VPM,
- 'damagePerSecond': MENU.TANK_PARAMS_VPS,
  'fireStartingChance': MENU.TANK_PARAMS_PERCENT,
  'maxHealth': MENU.TANK_PARAMS_VAL,
  'flyDelayRange': MENU.TANK_PARAMS_S,
@@ -67,7 +69,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'chassisModuleRotationSpeed': MENU.TANK_PARAMS_GPS,
  'turretModuleRotationSpeed': MENU.TANK_PARAMS_GPS,
  'shellReloadingTime': MENU.TANK_PARAMS_S,
- 'shotDispersionAngle': MENU.TANK_PARAMS_M,
+ SHOT_DISPERSION_ANGLE: MENU.TANK_PARAMS_M,
  'shotsNumberRange': MENU.TANK_PARAMS_CNT,
  'shellsCount': MENU.TANK_PARAMS_CNT,
  'shellsBurstCount': MENU.TANK_PARAMS_CNT,
@@ -104,6 +106,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  TURBOSHAFT_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
  DUAL_GUN_CHARGE_TIME: MENU.TANK_PARAMS_S,
  DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S,
+ DUAL_ACCURACY_COOLING_DELAY: MENU.TANK_PARAMS_S,
  'shotSpeed': MENU.TANK_PARAMS_MPS,
  CHASSIS_REPAIR_TIME: MENU.TANK_PARAMS_S,
  CHASSIS_REPAIR_TIME_YOH: MENU.TANK_PARAMS_YOH_S_S,
@@ -150,7 +153,7 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                         artefacts.AttackArtilleryFortEquipment: ('maxDamage', 'areaRadius', 'duration', 'commonDelay'),
                         artefacts.FortConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration'),
                         artefacts.ConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration')},
- ITEM_TYPES.shell: ('caliber', 'damage', 'damagePerSecond', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration'),
+ ITEM_TYPES.shell: ('caliber', 'damage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
                          'shellsCount',
@@ -166,7 +169,8 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                          'avgPiercingPower',
                          'avgDamageList',
                          'stunMaxDurationList',
-                         'dispertionRadius',
+                         DISPERSION_RADIUS,
+                         DUAL_ACCURACY_COOLING_DELAY,
                          'aimingTime',
                          'maxShotDistance',
                          'weight')}
@@ -278,6 +282,9 @@ _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
  'separator': _SLASH}
 _niceListFormat = {'rounder': backport.getNiceNumberFormat,
  'separator': _SLASH}
+_niceListFormatWithoutNone = {'rounder': backport.getNiceNumberFormat,
+ 'separator': _SLASH,
+ 'skipNone': True}
 _integralFormat = {'rounder': backport.getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
 _plusPercentFormat = {'rounder': lambda v: '+%d%%' % v}
@@ -319,6 +326,12 @@ def _autoReloadPreprocessor(reloadTimes, rowStates):
         return (times, _SLASH, states if states else None)
 
 
+def shotDispersionAnglePreprocessor(values, states):
+    _, dualAccuracyParamDiff = states[0]
+    states = [(PARAM_STATE.WORSE, dualAccuracyParamDiff)] + [states[1]] if len(states) > 1 else states
+    return (values, _SLASH, states)
+
+
 def _getRoundReload(value):
     return backport.getNiceNumberFormat(round(value, 1))
 
@@ -333,11 +346,13 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'gunYawLimits': _niceListFormat,
  'pitchLimits': _niceListFormat,
  'clipFireRate': _niceListFormat,
- 'burstFireRate': _niceListFormat,
+ BURST_FIRE_RATE: _niceListFormat,
+ BURST_TIME_INTERVAL: _niceFormat,
+ BURST_COUNT: _integralFormat,
+ BURST_SIZE: _integralFormat,
  'flameMaxDistance': _niceFormat,
  'turboshaftBurstFireRate': _niceListFormat,
  'aimingTime': _niceListFormat,
- 'shotDispersionAngle': _niceFormat,
  'avgDamagePerMinute': _niceFormat,
  'relativeArmor': _integralFormat,
  'avgDamage': _niceFormat,
@@ -376,9 +391,9 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'shellReloadingTime': _niceRangeFormat,
  'reloadMagazineTime': _niceRangeFormat,
  'avgPiercingPower': _listFormat,
- 'damagePerSecond': _integralFormat,
  'avgDamageList': _listFormat,
- 'dispertionRadius': _niceRangeFormat,
+ SHOT_DISPERSION_ANGLE: _niceListFormatWithoutNone,
+ DISPERSION_RADIUS: _niceListFormatWithoutNone,
  'invisibilityStillFactor': _niceListFormat,
  'invisibilityMovingFactor': _niceListFormat,
  TURBOSHAFT_INVISIBILITY_STILL_FACTOR: _niceListFormat,
@@ -400,6 +415,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  WHEELED_SPEED_MODE_SPEED: _niceListFormat,
  DUAL_GUN_CHARGE_TIME: _niceListFormat,
  DUAL_GUN_RATE_TIME: _niceListFormat,
+ DUAL_ACCURACY_COOLING_DELAY: _niceFormat,
  'shotSpeed': _integralFormat,
  'extraRepairSpeed': _percentFormat,
  TURBOSHAFT_SPEED_MODE_SPEED: _niceListFormat,
@@ -446,7 +462,7 @@ _SMART_ROUND_PARAMS = ('damage',
  'shellReloadingTime',
  'reloadMagazineTime',
  'reloadTime',
- 'dispertionRadius',
+ DISPERSION_RADIUS,
  'aimingTime',
  'weight',
  DUAL_GUN_RATE_TIME,
@@ -490,7 +506,7 @@ def _applyFormat(value, state, settings, doSmartRound, colorScheme):
         value = _cutDigits(value)
     if isinstance(value, (str, unicode)):
         paramStr = value
-    elif value is None:
+    elif value is None or value == 0 and state is not None and state[0] == PARAM_STATE.NOT_APPLICABLE:
         paramStr = '--'
     else:
         paramStr = settings['rounder'](value)
@@ -530,10 +546,15 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
                 return _applyFormat(values[0], parameterState[0], settings, doSmartRound, colorScheme)
             return
         separator = separator or settings.get('separator', '')
-        paramsList = [ _applyFormat(val, state, settings, doSmartRound, colorScheme) for val, state in zip(values, parameterState) ]
+        skipNone = settings.get('skipNone', False)
+        if skipNone:
+            params = [ (val, state) for val, state in zip(values, parameterState) if val is not None ]
+        else:
+            params = zip(values, parameterState)
+        paramsList = [ _applyFormat(val, state, settings, doSmartRound, colorScheme) for val, state in params ]
         return separator.join(paramsList)
     else:
-        return None if not showZeroDiff and values == 0 else _applyFormat(values, parameterState, settings, doSmartRound, colorScheme)
+        return None if not showZeroDiff and values == 0 and not isValidEmptyValue(parameterName, paramValue) else _applyFormat(values, parameterState, settings, doSmartRound, colorScheme)
 
 
 def formatParameterDelta(pInfo, deltaScheme=None, formatSettings=None):
@@ -557,7 +578,7 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if excludeRelative and isRelativeParameter(paramName):
             continue
         paramValue = parameters.get(paramName)
-        if paramValue:
+        if paramValue or isValidEmptyValue(paramName, paramValue):
             fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
                 if paramName == 'autoReloadTime' and descriptor.gun.autoreloadHasBoost:

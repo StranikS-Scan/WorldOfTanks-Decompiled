@@ -664,11 +664,14 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
                 event_dispatcher.showEpicBattlesAfterBattleWindow(levelUpInfo, resultsWindow)
 
     def __isInValidPrebattle(self):
-        if g_prbLoader and g_prbLoader.getDispatcher() and g_prbLoader.getDispatcher().getEntity():
-            currentPrbEntity = g_prbLoader.getDispatcher().getEntity().getEntityType()
-            return currentPrbEntity in (QUEUE_TYPE.EPIC, PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING)
+        if g_prbLoader and g_prbLoader.getDispatcher() is not None:
+            entity = g_prbLoader.getDispatcher().getEntity()
+            if entity is None:
+                return
+            currentPrbEntity = entity.getEntityType()
+            return currentPrbEntity in (PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING) or entity.getQueueType() == QUEUE_TYPE.EPIC
         else:
-            return None
+            return
 
     def __invalidateBattleAbilityItems(self):
         data = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)

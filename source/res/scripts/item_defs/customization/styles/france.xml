@@ -382,7 +382,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
@@ -463,7 +463,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
@@ -1703,6 +1703,45 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F18_Bat_Chatillon25t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31028	</id>
+      <texture>	gui/maps/vehicles/styles/F18_Bat_Chatillon25t_3dst_BP_MT.png	</texture>
+      <modelsSet>	F18_Bat_Chatillon25t_3DSt_BP_MT	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_3dst_BP_MT	</userString>
+      <description>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_3dst_BP_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F18_Bat_Chatillon25t_3dst_BP_MT/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	All	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31005	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
         </outfit>
       </outfits>
     </style>

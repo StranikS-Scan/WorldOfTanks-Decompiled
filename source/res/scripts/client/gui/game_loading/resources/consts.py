@@ -51,6 +51,7 @@ class Milestones(str, EnumWithValues):
     LOAD_CONTENT = 'loadContent'
     SYNCHRONIZE = 'synchronize'
     BOOTCAMP_ENQUEUED = 'bootcampEnqueued'
+    ONBOARDING_ENQUEUED = 'onboardingEnqueued'
 
 
 @enum.unique

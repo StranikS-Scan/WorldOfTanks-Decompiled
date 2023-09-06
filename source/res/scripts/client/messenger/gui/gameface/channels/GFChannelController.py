@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/gameface/channels/GFChannelController.py
+import copy
 import logging
 import typing
 from gui import SystemMessages
@@ -95,6 +96,7 @@ class GFChannelController(IChannelController):
             if isinstance(message, (str, unicode)):
                 message = UnitMessageVO(0, -1, message, u'')
             if doFormatting:
+                message = copy.copy(message)
                 message.text = self.__formatText(message.text)
             self.__channel.addMessage(message)
             return self.__addMessageToView(message, isHistoryMessage)

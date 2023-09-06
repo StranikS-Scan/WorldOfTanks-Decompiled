@@ -5,8 +5,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 from gui.impl.pub import ViewImpl
-from gui.shared.missions.packers.debut_boxes import getDebutBoxesBonusPacker
-from gui.shared.missions.packers.events import BattleQuestUIDataPacker
+from gui.shared.missions.packers.events import getEventUIDataPacker
 from helpers import dependency
 from skeletons.gui.game_control import IDebutBoxesController
 from skeletons.gui.shared import IItemsCache
@@ -34,6 +33,6 @@ class DebutBoxesBadgeTooltipView(ViewImpl):
             quest = self.__debutBoxesCtl.getQuestForVehicle(vehicle)
             if quest is None:
                 _logger.error('There is no available quests for vehicle %s', intCD)
-            questUIPacker = BattleQuestUIDataPacker(quest, bonusPackerGetter=getDebutBoxesBonusPacker)
+            questUIPacker = getEventUIDataPacker(quest)
             questUIPacker.pack(model)
         return

@@ -101,11 +101,12 @@ class Comp7PrbAction(PrbAction):
 
 @ReprInjector.simple('isExit')
 class LeavePrbAction(object):
-    __slots__ = ('isExit', 'ignoreConfirmation')
+    __slots__ = ('isExit', 'ignoreConfirmation', 'parent')
 
-    def __init__(self, isExit=True, ignoreConfirmation=False):
+    def __init__(self, isExit=True, ignoreConfirmation=False, parent=None):
         self.isExit = isExit
         self.ignoreConfirmation = ignoreConfirmation
+        self.parent = parent
 
 
 @ReprInjector.withParent(('getDatabaseIDs', 'databaseIDs'), ('getComment', 'comment'))

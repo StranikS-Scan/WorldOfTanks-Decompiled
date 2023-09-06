@@ -200,7 +200,7 @@ SINGLE_ACHIEVEMENTS_DEPENDENCIES = {}
 
 def _set_SINGLE_ACHIEVEMENTS_DEPENDENCIES():
     global SINGLE_ACHIEVEMENTS_DEPENDENCIES
-    SINGLE_ACHIEVEMENTS_DEPENDENCIES.update({'bootcampMedal': [_updateSteamBootcamp]})
+    SINGLE_ACHIEVEMENTS_DEPENDENCIES.update({'onboardingMedal': [_updateSteamOnboarding]})
 
 
 STEAM_ACHIEVEMENT_DEPENDENCIES = {}
@@ -855,7 +855,7 @@ def _updateSteamMileageMedal(dossierDescr, dossierBlockDescr, key, value, prevVa
         dossierBlockDescr['steamMileageMedal'] = True
 
 
-def _updateSteamBootcamp(dossierDescr, dossierBlockDescr, value, added):
+def _updateSteamOnboarding(dossierDescr, dossierBlockDescr, value, added):
     if dossierDescr.isBlockInLayout('steamAchievements') and added:
         dossierDescr['steamAchievements']['steamBootcampMedal'] = True
 

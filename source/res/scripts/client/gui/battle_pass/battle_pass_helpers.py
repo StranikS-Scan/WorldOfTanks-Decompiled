@@ -61,7 +61,7 @@ def getFormattedTimeLeft(seconds):
 
 
 def getBattlePassUrl(urlPathName):
-    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePass.get(urlPathName)))
+    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePassUrls.get(urlPathName)))
 
 
 def getInfoPageURL():
@@ -81,15 +81,15 @@ def getExtraIntroVideoURL():
 
 
 def getIntroSlidesNames():
-    return GUI_SETTINGS.battlePass.get('introSlides')
+    return GUI_SETTINGS.battlePassIntroSlides
 
 
 def isIntroVideoExist():
-    return bool(GUI_SETTINGS.battlePass.get('introVideo'))
+    return bool(GUI_SETTINGS.battlePassUrls.get('introVideo'))
 
 
 def isExtraIntroVideoExist():
-    return bool(GUI_SETTINGS.battlePass.get('extraIntroVideo'))
+    return bool(GUI_SETTINGS.battlePassUrls.get('extraIntroVideo'))
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
@@ -99,7 +99,7 @@ def getChaptersOrder(battlePass=None):
     extraChapterID = battlePass.getExtraChapterID()
     if extraChapterID:
         chapterIDs.append(extraChapterID)
-    return dict(zip(chapterIDs, GUI_SETTINGS.battlePass.get('chaptersOrder')))
+    return dict(zip(chapterIDs, GUI_SETTINGS.battlePassChaptersOrder))
 
 
 def getSupportedArenaBonusTypeFor(queueType, isInUnit):
@@ -141,6 +141,18 @@ def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
     from gui.impl.lobby.video.video_view import VideoViewWindow
     window = VideoViewWindow(videoSource(), onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource()))
     window.load()
+
+
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def showBPGamefaceVideo(chapter, level, battlePass=None, onVideoClosed=None):
+    from gui.impl.lobby.battle_pass.style_video_view import StyleVideoViewWindow
+    chapterIDs = battlePass.getChapterIDs()
+    if chapter not in chapterIDs or level is None:
+        _logger.error('Both chapter and level must be specified and correct!')
+    else:
+        window = StyleVideoViewWindow(chapter, level, onVideoClosed=onVideoClosed)
+        window.load()
+    return
 
 
 @replace_none_kwargs(battlePass=IBattlePassController, c11nService=ICustomizationService)

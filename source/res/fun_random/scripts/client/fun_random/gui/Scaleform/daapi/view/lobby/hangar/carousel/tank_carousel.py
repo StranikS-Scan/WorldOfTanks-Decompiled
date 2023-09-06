@@ -50,9 +50,6 @@ class FunRandomTankCarousel(BattlePassTankCarousel, FunSubModesWatcher):
             filters = _removeFilterByName(filters, 'bonus')
         return filters + ('funRandom',)
 
-    def _getFiltersVisible(self):
-        return True
-
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == FUNRANDOM_ALIASES.FUN_RANDOM_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)

@@ -94,7 +94,7 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext, winbackController=IWinbackController)
-def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None, winbackController=None, funRandom=None):
+def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None, winbackController=None):
     isAnotherPeriphery = lobbyContext is not None and lobbyContext.isAnotherPeriphery(peripheryID)
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):

@@ -5,7 +5,7 @@ from functools import partial
 from operator import itemgetter
 from shared_utils import findFirst, first
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
+from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BattlePassConsts, CurrencyBP, FinalReward
 from frameworks.wulf import Array, ViewFlags, ViewSettings, ViewStatus
@@ -19,7 +19,7 @@ from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, 
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag, isIntroVideoExist
-from gui.collection.collections_helpers import getCollectionRes
+from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
@@ -148,8 +148,7 @@ class BattlePassProgressionsView(ViewImpl):
          (events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),
          (events.BattlePassEvent.ON_PURCHASE_LEVELS, self.__onPurchaseLevels, EVENT_BUS_SCOPE.LOBBY),
          (events.BattlePassEvent.BUYING_THINGS, self.__updateBuyButtonState, EVENT_BUS_SCOPE.LOBBY),
-         (events.CollectionsEvent.NEW_ITEM_SHOWN, self.__onCollectionsUpdated, EVENT_BUS_SCOPE.LOBBY),
-         (events.CollectionsEvent.BATTLE_PASS_ENTRY_POINT_VISITED, self.__onCollectionsUpdated, EVENT_BUS_SCOPE.LOBBY))
+         (events.CollectionsEvent.NEW_ITEM_SHOWN, self.__onCollectionsUpdated, EVENT_BUS_SCOPE.LOBBY))
 
     def _getCallbacks(self):
         return (('stats.bpcoin', self.__updateBalance),)
@@ -343,6 +342,8 @@ class BattlePassProgressionsView(ViewImpl):
         self.__setExpirations(model)
         if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
             self.__setStyleTaken(model)
+            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
+            model.setIsStyleProgressive(styleInfo.isProgressive)
         self.__updateRewardSelectButton(model=model)
 
     def __setExpirations(self, model):
@@ -490,19 +491,25 @@ class BattlePassProgressionsView(ViewImpl):
         if level is None:
             return
         else:
-            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
-            vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
-            showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), self.__getPreviewCallback(), chapterId=self.__chapterID, styleLevel=int(level))
+            style = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
+            vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
+            if style.isProgressive:
+                showBattlePassStyleProgressionPreview(vehicleCD, style, style.getDescription(), self.__getPreviewCallback(), chapterId=self.__chapterID, styleLevel=int(level))
+            else:
+                self.__showStylePreview(style, vehicleCD)
             return
 
     def __onExtraPreviewClick(self):
-        styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
-        vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
+        style = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
+        vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
+        self.__showStylePreview(style, vehicleCD)
+
+    def __showStylePreview(self, style, vehicleCD):
         itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
-        showStylePreview(vehicleCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
+        showStylePreview(vehicleCD, style=style, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': (TabID.VEHICLE, TabID.STYLE),
          'currentTabID': TabID.STYLE,
-         'style': styleInfo}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
+         'style': style}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
 
     def __getPreviewCallback(self):
         return partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
@@ -685,8 +692,11 @@ class BattlePassProgressionsView(ViewImpl):
         self.__battlePass.takeAllRewards()
 
     def __openCollection(self):
+        if not AccountSettings.getSettings(IS_BATTLE_PASS_COLLECTION_SEEN):
+            AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, True)
+            self.__onCollectionsUpdated()
         backText = backport.text(getCollectionRes(self.__battlePass.getCurrentCollectionId()).featureName())
-        backCallback = partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
+        backCallback = partial(loadBattlePassFromCollections, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
         showCollectionWindow(collectionId=self.__battlePass.getCurrentCollectionId(), backCallback=backCallback, backBtnText=backText)
 
     @staticmethod

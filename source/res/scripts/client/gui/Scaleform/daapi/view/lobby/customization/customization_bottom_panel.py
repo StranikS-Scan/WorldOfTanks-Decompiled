@@ -554,15 +554,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__scrollToNewItem()
 
     def __updatePopoverBtnIcon(self):
+        imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_STYLE_DISABLED
-        if self.__ctx.modeId == CustomizationModes.STYLED and not self._selectedItem:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DEFAULT_LIST30X16
-        else:
-            imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
+        if self.__ctx.modeId != CustomizationModes.STYLED:
             if self.__ctx.season == SeasonType.WINTER:
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_WINTER_LIST30X16
             elif self.__ctx.season == SeasonType.SUMMER:
                 imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_SUMMER_LIST30X16
+            elif self.__ctx.season == SeasonType.DESERT:
+                imgSrc = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ITEMS_POPOVER_DESERT_LIST30X16
             seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.season)
             mapName = VEHICLE_CUSTOMIZATION.getMapName(seasonName)
             tooltip = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN_DISABLED, mapType=_ms(mapName))

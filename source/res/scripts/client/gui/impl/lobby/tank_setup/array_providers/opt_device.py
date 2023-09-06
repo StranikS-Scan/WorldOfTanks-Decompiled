@@ -93,10 +93,11 @@ class ArrayOptDeviceProvider(BaseArrayProvider):
         if not vehicle:
             _logger.warning('There is invalid vehicle compact descriptor %s', vehCD)
             return
-        model.vehicleInfo.setVehicleName(vehicle.shortUserName)
+        model.vehicleInfo.setVehicleName(vehicle.descriptor.type.shortUserString)
         model.vehicleInfo.setVehicleType(vehicle.type)
         model.vehicleInfo.setVehicleLvl(vehicle.level)
         model.vehicleInfo.setVehicleID(vehCD)
+        model.vehicleInfo.setIsPremiumIGR(vehicle.isPremiumIGR)
 
 
 class DeconstructOptDeviceStorageProvider(ArrayOptDeviceProvider):

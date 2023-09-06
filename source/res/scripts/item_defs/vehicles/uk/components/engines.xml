@@ -84,6 +84,17 @@
     <Meteorite_Mk_202_Gonsalo>	107	</Meteorite_Mk_202_Gonsalo>
     <Meadows_HOP_Mod.HH>	108	</Meadows_HOP_Mod.HH>
     <GMC_6V53T>	109	</GMC_6V53T>
+    <LandRover_Meteorite_V8>	110	</LandRover_Meteorite_V8>
+    <Rolls_Royce_K60>	111	</Rolls_Royce_K60>
+    <Rolls_Royce_K60_Mk2>	112	</Rolls_Royce_K60_Mk2>
+    <Rolls_Royce_B80>	113	</Rolls_Royce_B80>
+    <Rolls_Royce_B81>	114	</Rolls_Royce_B81>
+    <AEC_195>	115	</AEC_195>
+    <AEC_197>	116	</AEC_197>
+    <GMC_270_x2>	117	</GMC_270_x2>
+    <GMC_302_x2>	118	</GMC_302_x2>
+    <Daimler_DQ450>	119	</Daimler_DQ450>
+    <Rolls_Royce_B80P>	120	</Rolls_Royce_B80P>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -164,6 +175,70 @@
       <rpm_min>	298	</rpm_min>
       <rpm_max>	2643	</rpm_max>
     </Rolls_Royse_FB_60>
+    <Rolls_Royce_B81>
+      <userString>	#gb_vehicles:Rolls_Royce_B81	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	310	</power>
+      <weight>	457	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_B81>
+    <Rolls_Royce_B80>
+      <userString>	#gb_vehicles:Rolls_Royce_B80	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	33000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	290	</power>
+      <weight>	454	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_B80>
+    <Rolls_Royce_B80P>
+      <userString>	#gb_vehicles:Rolls_Royce_B80P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	29000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	210	</power>
+      <weight>	450	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_B80P>
+    <Daimler_DQ450>
+      <userString>	#gb_vehicles:Daimler_DQ450	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	41000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	459	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Daimler_DQ450>
     <Daimler_D2458_V_8>
       <userString>	#gb_vehicles:Daimler_D2458_V_8	</userString>
       <tags>	gasoline	</tags>
@@ -495,6 +570,38 @@
       <rpm_min>	322	</rpm_min>
       <rpm_max>	2055	</rpm_max>
     </AEC>
+    <AEC_195>
+      <userString>	#gb_vehicles:AEC_195	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	9000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	270	</power>
+      <weight>	331	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
+    </AEC_195>
+    <AEC_197>
+      <userString>	#gb_vehicles:AEC_197	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	15500	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	290	</power>
+      <weight>	330	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
+    </AEC_197>
     <Leyland>
       <userString>	#gb_vehicles:Leyland	</userString>
       <tags>	diesel	</tags>
@@ -1147,6 +1254,56 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2861	</rpm_max>
     </Rolls_Royse_B81>
+    <LandRover_Meteorite_V8>
+      <userString>	#gb_vehicles:LandRover_Meteorite_V8	</userString>
+      <shortUserString>	#gb_vehicles:LandRover_Meteorite_V8_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	700	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </LandRover_Meteorite_V8>
+    <Rolls_Royce_K60>
+      <userString>	#gb_vehicles:Rolls_Royce_K60	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	525	</power>
+      <weight>	630	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_K60>
+    <Rolls_Royce_K60_Mk2>
+      <userString>	#gb_vehicles:Rolls_Royce_K60_Mk2	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	535	</power>
+      <weight>	660	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_K60_Mk2>
     <Wright_Continental_R-975EC2_A>
       <userString>	#gb_vehicles:Wright_Continental_R-975EC2_A	</userString>
       <shortUserString>	#gb_vehicles:Wright_Continental_R-975EC2_A_short	</shortUserString>
@@ -1434,6 +1591,38 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Cummins_BTA_5_9>
+    <GMC_270_x2>
+      <userString>	#gb_vehicles:GMC_270_x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	21000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	111	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </GMC_270_x2>
+    <GMC_302_x2>
+      <userString>	#gb_vehicles:GMC_302_x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26800	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	320	</power>
+      <weight>	620	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	111	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </GMC_302_x2>
     <Jaguar_4_2_XK6>
       <userString>	#gb_vehicles:Jaguar_4_2_XK6	</userString>
       <tags>	gasoline	</tags>

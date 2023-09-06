@@ -18,7 +18,7 @@ from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
 from items import vehicles
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IWotPlusController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -562,6 +562,23 @@ class PremiumPlusAccount(_Requirement):
         return self.itemsCache.items.stats.isActivePremium(constants.PREMIUM_TYPE.PLUS) == self._needValue if self._needValue is not None else True
 
 
+class WotPlus(_Requirement):
+    wotPlusController = dependency.descriptor(IWotPlusController)
+
+    def __init__(self, path, data):
+        super(WotPlus, self).__init__('wotPlus', dict(data), path)
+        self._needValue = self._data.get('value')
+
+    def isWotPlusNeeded(self):
+        return self._needValue
+
+    def negate(self):
+        self._needValue = not self._needValue
+
+    def _isAvailable(self):
+        return self.wotPlusController.isEnabled() == self._needValue
+
+
 class InClan(_Requirement):
 
     def __init__(self, path, data):
@@ -865,7 +882,7 @@ class BattleBonusType(_Condition, _Negatable):
         self._types = self._data.get('value')
 
     def __repr__(self):
-        return 'BonusType<types=%r>' % self._types
+        return 'BattleBonusType<types=%r>' % self._types
 
     def negate(self):
         newTypes = []

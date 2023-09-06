@@ -41,15 +41,15 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	100	</armor_1>
+      <armor_1>	115	</armor_1>
       <armor_2>	110	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	60	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	60	</armor_7>
+      <armor_7>	75	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	90	</armor_9>
+      <armor_9>	100	</armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28840	</weight>
@@ -1861,7 +1861,7 @@
       <terrainResistance>	1.6 1.8 2.5	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	25	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -3563,7 +3563,7 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -3837,7 +3837,7 @@
             <maxPitch>	0 8 0.416667 8 0.425 5.4 0.458333 5.4 0.466667 7 0.533333 7 0.541667 5.4 0.575 5.4 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	12.5	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>

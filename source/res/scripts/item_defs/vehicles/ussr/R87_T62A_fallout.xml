@@ -8,14 +8,14 @@
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.201	</moving>
-    <still>	0.268	</still>
+    <moving>	0.236	</moving>
+    <still>	0.315	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.402	</firePenalty>
+    <firePenalty>	0.473	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -901,7 +901,7 @@
             </armor_3>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	6.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1019,8 +1019,8 @@
     <detailed>
       <engines>
         <V-55_fallout>
-          <smplEnginePower>	613.2231	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </V-55_fallout>
       </engines>
       <chassis>

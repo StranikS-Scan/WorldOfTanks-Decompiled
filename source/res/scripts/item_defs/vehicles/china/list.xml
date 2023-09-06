@@ -345,6 +345,18 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special	</tags>
     <level>	9	</level>
   </Ch59_BZ58_2>
+  <Ch48_BZ_75_7x7>
+    <id>	227	</id>
+    <userString>	#china_vehicles:Ch48_BZ_75_7x7	</userString>
+    <description>	#china_vehicles:Ch48_BZ_75_descr	</description>
+    <shortUserString>	#china_vehicles:Ch48_BZ_75_7x7_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_assault private HD secret cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user comp7 earn_crystals special rocketAcceleration	</tags>
+    <level>	10	</level>
+  </Ch48_BZ_75_7x7>
   <Ch58_111_Vz51>
     <id>	230	</id>
     <userString>	#china_vehicles:Ch58_111_Vz51	</userString>
@@ -679,6 +691,7 @@
     <longDescriptionSpecial>	#china_vehicles:Ch43_WZ_122_2_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </Ch43_WZ_122_2>
@@ -738,4 +751,26 @@
     <tags>	lightTank event_battles secret HD spawned battle_royale unobservable	</tags>
     <level>	1	</level>
   </Ch00_ClingeBot_SH>
+  <Ch19_121_7x7>
+    <id>	101	</id>
+    <userString>	#china_vehicles:Ch19_121_7x7	</userString>
+    <description>	#china_vehicles:Ch19_121_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret special cannot_be_sold comp7 earn_crystals	</tags>
+    <level>	10	</level>
+  </Ch19_121_7x7>
+  <Ch38_WZ113G_FT_7x7>
+    <id>	102	</id>
+    <userString>	#china_vehicles:Ch38_WZ113G_FT_7x7	</userString>
+    <description>	#china_vehicles:Ch38_WZ113G_FT_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret special cannot_be_sold comp7 earn_crystals	</tags>
+    <level>	10	</level>
+  </Ch38_WZ113G_FT_7x7>
 </list.xml>

@@ -24,28 +24,24 @@ def isProgressionComplete(_, battlePass=None):
     return isCompleteState and isAllChosen and isAllChaptersBought
 
 
-@dependency.replace_none_kwargs(battlePass=IBattlePassController, offers=IOffersDataProvider)
-def separateRewards(rewards, battlePass=None, offers=None):
-    rewardsToChoose = []
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def getChapterForStyleId(style, battlePass=None):
+    config = battlePass.getStylesConfig()
+    for chapterId, styleId in config.iteritems():
+        if styleId == style:
+            return chapterId
+
+    return None
+
+
+def separateRewards(rewards):
     styleTokens = []
     chosenStyle = None
     defaultRewards = rewards[:]
     blocksToRemove = []
-    hasRareRewardToChoose = False
-    if battlePass.isOfferEnabled():
-        for reward in defaultRewards:
-            for tokenID in reward.get('tokens', {}).iterkeys():
-                if _isRewardChoiceToken(tokenID, offers=offers):
-                    splitToken = tokenID.split(':')
-                    if battlePass.isRareLevel(chapterID=int(splitToken[-2]), level=int(splitToken[-1])):
-                        hasRareRewardToChoose = True
-                        break
-
     for index, rewardBlock in enumerate(defaultRewards):
         if 'tokens' in rewardBlock:
             for tokenID in rewardBlock['tokens'].iterkeys():
-                if hasRareRewardToChoose and _isRewardChoiceToken(tokenID, offers=offers):
-                    rewardsToChoose.append(tokenID)
                 if tokenID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
                     styleTokens.append(tokenID)
                     chapter = int(tokenID.split(':')[3])
@@ -53,14 +49,18 @@ def separateRewards(rewards, battlePass=None, offers=None):
                     if intCD is not None:
                         chosenStyle = chapter
 
-        for tokenID in rewardsToChoose:
-            rewardBlock.get('tokens', {}).pop(tokenID, None)
-
         for tokenID in styleTokens:
             rewardBlock.get('tokens', {}).pop(tokenID, None)
 
         if not rewardBlock.get('tokens', {}):
             rewardBlock.pop('tokens', None)
+        if 'customizations' in rewardBlock:
+            for custItem in rewardBlock['customizations']:
+                if custItem['custType'] == 'style':
+                    chapterId = getChapterForStyleId(custItem['id'])
+                    if chapterId is not None:
+                        chosenStyle = chapterId
+
         if not rewardBlock:
             blocksToRemove.append(index)
         styleTokens = []
@@ -68,8 +68,7 @@ def separateRewards(rewards, battlePass=None, offers=None):
     for index in sorted(blocksToRemove, reverse=True):
         defaultRewards.pop(index)
 
-    rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
-    return (rewardsToChoose, defaultRewards, chosenStyle)
+    return (defaultRewards, chosenStyle)
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)

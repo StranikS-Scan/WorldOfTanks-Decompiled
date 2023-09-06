@@ -349,6 +349,7 @@ class PlayerFeedbackEvent(_FeedbackEvent):
                 role = ROLE_TYPE_TO_LABEL[additionalData.get('role') or ROLE_TYPE.NOT_DEFINED]
             return PlayerFeedbackEvent(feedbackEventType, battleEventData['eventType'], battleEventData['targetID'], battleEventData['count'], role, extra)
         else:
+            _logger.error('Battle Event Type not found %i', battleEventType)
             return
 
     def getBattleEventType(self):

@@ -33,13 +33,59 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	146.445541 -398.865997	</position1>
+          <position1>	146.445557 -398.866028	</position1>
         </team1>
         <team2>
-          <position1>	150.791229 398.076233	</position1>
+          <position1>	150.791245 398.076263	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	494.511597 9.126625	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-93.619400 12.601630	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	279.815002 -120.895485	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	223.910889 106.745628	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	164.484756 -308.034302	</position>
+        </team1>
+        <team2>
+          <position>	199.924133 325.335052	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	3.099476 8.806040	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

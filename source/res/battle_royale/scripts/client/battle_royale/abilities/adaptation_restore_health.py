@@ -79,7 +79,7 @@ class AdaptationHealthRestoreEffectArea(object):
     teamMateRestoringRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=1.0, editorName='Teammate restoring radius')
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class AdaptationHealthRestoreEffectManager(CGF.ComponentManager):
 
     @onAddedQuery(VehicleAdaptationHealthRestoreComponent, CGF.GameObject)

@@ -19,14 +19,14 @@ def ifComponentAvailable(componentType=None):
     return decorator
 
 
-def ifComponentInPreset(componentType=None):
+def ifComponentInPreset(componentType=None, defReturn=None):
 
     def decorator(method):
 
         @wraps(method)
         def wrapper(presetGetter, *args, **kwargs):
             preset = presetGetter.getPreset()
-            return method(presetGetter, preset, *args, **kwargs) if preset is not None and componentType in preset.visibleComponents else None
+            return method(presetGetter, preset, *args, **kwargs) if preset is not None and componentType in preset.visibleComponents else defReturn
 
         return wrapper
 

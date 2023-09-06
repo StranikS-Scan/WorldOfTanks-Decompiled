@@ -250,6 +250,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isTelecom(self):
         return self.isPresent() and self.item.isTelecom
 
+    def isWotPlus(self):
+        return self.isPresent() and self.item.isWotPlus
+
     def isInPrebattle(self):
         return self.isPresent() and self.item.isInPrebattle
 

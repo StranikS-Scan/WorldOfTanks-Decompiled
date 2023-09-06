@@ -59,7 +59,8 @@ TMAN_TOKENS = 'tmanToken'
 class BlueprintBonusTypes(object):
     BLUEPRINTS = 'blueprints'
     FINAL_BLUEPRINTS = 'finalBlueprints'
-    ALL = (BLUEPRINTS, FINAL_BLUEPRINTS)
+    BLUEPRINTS_ANY = 'blueprintsAny'
+    ALL = (BLUEPRINTS, FINAL_BLUEPRINTS, BLUEPRINTS_ANY)
 
 
 class CrewBonusTypes(object):

@@ -70,6 +70,10 @@ class FittingSlotVO(dict):
                             self['counter'] += 3
                         else:
                             self['counter'] = 3
+                if vehicleModule.hasDualAccuracy(vehicle.descriptor):
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
+                    if not uiStorage.get(UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN):
+                        self['counter'] = self.get('counter', 0) + 1
             if vehicleModule.itemTypeID == ITEM_TYPES.vehicleEngine:
                 if vehicleModule.hasTurboshaftEngine():
                     uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()

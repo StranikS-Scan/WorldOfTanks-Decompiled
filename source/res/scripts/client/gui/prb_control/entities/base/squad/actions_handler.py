@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/actions_handler.py
+from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from gui import DialogsInterface
 from gui import SystemMessages
 from gui.impl.gen import R
 from gui.prb_control.entities.base import checkVehicleAmmoFull
@@ -10,8 +10,9 @@ from gui.prb_control.entities.base.ctx import SendInvitesCtx
 from gui.prb_control.entities.base.unit.actions_handler import AbstractActionsHandler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
-from gui.shared.event_dispatcher import showPlatoonResourceDialog
+from gui.shared.event_dispatcher import showPlatoonInfoDialog, showPlatoonWarningDialog
 from messenger.storage import storage_getter
+from wg_async import await_callback, wg_async, wg_await
 
 class SquadActionsHandler(AbstractActionsHandler):
 
@@ -64,33 +65,52 @@ class SquadActionsHandler(AbstractActionsHandler):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)
 
+    @wg_async
     def execute(self):
-        func = self._entity
-        fullData = func.getUnitFullData(unitMgrID=func.getID())
-        if func.isCommander():
+        entity = self._entity
+        if entity is None:
+            return
+        else:
+            result = yield wg_await(self._validateUnitState(entity))
+            if not result:
+                return
+            if entity.isCommander():
+                self._setCreatorReady()
+            else:
+                entity.togglePlayerReadyAction(True)
+            return
+
+    @wg_async
+    def _validateUnitState(self, entity):
+        fullData = entity.getUnitFullData(unitMgrID=entity.getID())
+        if entity.isCommander():
             notReadyCount = 0
             for slot in fullData.slotsIterator:
                 slotPlayer = slot.player
                 if slotPlayer:
-                    if slotPlayer.isInArena() or fullData.playerInfo.isInSearch() or fullData.playerInfo.isInQueue():
-                        DialogsInterface.showI18nInfoDialog('squadHavePlayersInBattle', lambda result: None)
-                        return
+                    if self._isSquadHavePlayersInBattle(slotPlayer, fullData.playerInfo):
+                        yield wg_await(showPlatoonInfoDialog(R.strings.dialogs.squadHavePlayersInBattle))
+                        raise AsyncReturn(False)
                     if not slotPlayer.isReady:
                         notReadyCount += 1
 
             if not fullData.playerInfo.isReady:
                 notReadyCount -= 1
+            result = True
             if fullData.stats.occupiedSlotsCount == 1:
-                showPlatoonResourceDialog(R.strings.dialogs.squadHaveNoPlayers, self._confirmCallback)
-                return
-            if notReadyCount > 0:
-                showPlatoonResourceDialog(R.strings.dialogs.squadHaveNotReadyPlayer, self._confirmCallback)
-                return
-            self._setCreatorReady()
+                result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNoPlayers))
+            elif notReadyCount > 0:
+                result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNotReadyPlayer))
+            if not result:
+                raise AsyncReturn(result)
+            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            if not result:
+                raise AsyncReturn(result)
         elif not fullData.playerInfo.isReady:
-            checkVehicleAmmoFull(g_currentVehicle.item, self._checkVehicleAmmoCallback)
-        else:
-            self._entity.togglePlayerReadyAction(True)
+            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            if not result:
+                raise AsyncReturn(result)
+        raise AsyncReturn(True)
 
     def exitFromQueue(self):
         self._sendBattleQueueRequest(action=0)
@@ -107,10 +127,6 @@ class SquadActionsHandler(AbstractActionsHandler):
     def _loadWindow(self, ctx):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.loadSquad(prbType, ctx, self._getTeamReady())
-
-    def _confirmCallback(self, result):
-        if result:
-            self._setCreatorReady()
 
     def _setCreatorReady(self):
         self._sendBattleQueueRequest(g_currentVehicle.item.invID if not self._entity.getPlayerInfo().isReady else 0)
@@ -132,10 +148,9 @@ class SquadActionsHandler(AbstractActionsHandler):
 
         return
 
-    def _checkVehicleAmmoCallback(self):
-        if self._entity is not None:
-            self._entity.togglePlayerReadyAction(True)
-        return
-
     def _onKickedFromQueue(self, _):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
+
+    @staticmethod
+    def _isSquadHavePlayersInBattle(slotPlayer, playerInfo):
+        return slotPlayer.isInArena() or playerInfo.isInSearch() or playerInfo.isInQueue()

@@ -99,6 +99,8 @@ class AccountRequirements(ConditionsParser):
             return conditions.PremiumAccount(uniqueName, data)
         if name == 'premiumPlus':
             return conditions.PremiumPlusAccount(uniqueName, data)
+        if name == 'wotPlus':
+            return conditions.WotPlus(uniqueName, data)
         if name == 'inClan':
             return conditions.InClan(uniqueName, data)
         if name == 'igrType':

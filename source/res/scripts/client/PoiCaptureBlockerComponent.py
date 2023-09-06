@@ -16,7 +16,8 @@ class PoiCaptureBlockerComponent(PoiBaseComponent):
         return
 
     def onDestroy(self):
-        self._poiGameObject.removeComponent(self.__stateComponent)
+        if self._poiGameObject is not None and self._poiGameObject.isValid():
+            self._poiGameObject.removeComponent(self.__stateComponent)
         self.__stateComponent = None
         super(PoiCaptureBlockerComponent, self).onDestroy()
         return
@@ -27,13 +28,10 @@ class PoiCaptureBlockerComponent(PoiBaseComponent):
         return
 
     def _onAvatarReady(self):
-        if self._poiGameObject is None:
-            _logger.warning('PoiGameObject is not valid! Could not create PoiCaptureBlockerStateComponent')
-            return
-        else:
+        if self._poiGameObject is not None and self._poiGameObject.isValid():
             blockReasons = self.__getBlockReasons()
             self.__stateComponent = self._poiGameObject.createComponent(PoiCaptureBlockerStateComponent, self.pointID, blockReasons)
-            return
+        return
 
     def __getBlockReasons(self):
         return tuple((fixed_dict.getStatusWithTimeInterval(reason, PoiBlockReasons) for reason in self.blockReasons))

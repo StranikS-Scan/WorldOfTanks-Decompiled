@@ -39,6 +39,7 @@ class LuiRules(enum.Enum):
     BM_FLAG = 'BattleMattersFlag'
     PERSONAL_MISSIONS = 'PersonalMissions'
     SYS_MSG_COLLECTION_START_BP = 'sysMsgCollectionStartBattlePass'
+    SYS_MSG_COLLECTIONS_UPDATED_ENTRY = 'sysMsgCollectionsUpdatedEntry'
     LOBBY_HEADER_COUNTERS_STORAGE = 'storage'
     PR_HANGAR_BUTTON = 'PersonalReservesHangarButton'
     STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'

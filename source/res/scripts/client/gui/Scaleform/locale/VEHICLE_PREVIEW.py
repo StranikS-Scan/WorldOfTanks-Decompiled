@@ -165,19 +165,11 @@ class VEHICLE_PREVIEW(object):
             return outcome
 
     @classmethod
-    def getOfferName(cls, key):
+    def hasOfferName(cls, key):
         outcome = '#vehicle_preview:buyingPanel/offer/rent/name/{}'.format(key)
-        if outcome not in cls.BUYINGPANEL_OFFER_RENT_NAME_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
+        return outcome in cls.BUYINGPANEL_OFFER_RENT_NAME_ENUM
 
     @classmethod
-    def getOfferLabel(cls, key):
+    def hasOfferLabel(cls, key):
         outcome = '#vehicle_preview:buyingPanel/offer/rent/label/{}'.format(key)
-        if outcome not in cls.BUYINGPANEL_OFFER_RENT_LABEL_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
+        return outcome in cls.BUYINGPANEL_OFFER_RENT_LABEL_ENUM

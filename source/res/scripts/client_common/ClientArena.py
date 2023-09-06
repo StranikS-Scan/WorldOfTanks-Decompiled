@@ -393,6 +393,19 @@ class ClientArena(object):
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
 
+    def runVsePlan(self, planName, params, key='', context=None):
+        if self._vsePlans is not None:
+            self._vsePlans.startPlan(planName, params, key, context)
+        return
+
+    def stopVsePlan(self, planName, key=''):
+        if self._vsePlans is not None:
+            self._vsePlans.stopPlan(planName, key)
+        return
+
+    def getVseContextInstance(self, contextName):
+        pass
+
     def __preprocessVehicleInfo(self, info):
         if not info['avatarSessionID']:
             info['name'] = preprocessBotName(info['name'], self.bonusType)

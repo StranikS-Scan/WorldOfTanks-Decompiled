@@ -49,3 +49,10 @@ class ValidationError(SoftException):
             error = ValidationErrorMessage(error)
         self.error = error
         super(ValidationError, self).__init__(self.error)
+
+
+class AccessToFieldDeniedError(SoftException):
+
+    def __init__(self, message):
+        errorMsg = 'Field is not public and can`t be used. Method: %s.' % message
+        super(AccessToFieldDeniedError, self).__init__(errorMsg)

@@ -47,11 +47,11 @@ class PackageBusinessHandler(object):
         self._listeners = ()
         return
 
-    def loadViewWithDefName(self, alias, name=None, *args, **kwargs):
-        self._app.loadView(SFViewLoadParams(alias, name), *args, **kwargs)
+    def loadViewWithDefName(self, alias, name=None, parent=None, *args, **kwargs):
+        self._app.loadView(SFViewLoadParams(alias, name=name, parent=parent), *args, **kwargs)
 
-    def loadViewWithGenName(self, alias, *args, **kwargs):
-        self._app.loadView(SFViewLoadParams(alias, 'rw{0}'.format(self.__counter.next())), *args, **kwargs)
+    def loadViewWithGenName(self, alias, parent=None, *args, **kwargs):
+        self._app.loadView(SFViewLoadParams(alias, name='rw{0}'.format(self.__counter.next()), parent=parent), *args, **kwargs)
 
     def loadViewBySharedEvent(self, event):
         self._app.loadView(event.loadParams)

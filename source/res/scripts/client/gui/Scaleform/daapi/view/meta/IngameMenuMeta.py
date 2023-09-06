@@ -19,9 +19,6 @@ class IngameMenuMeta(AbstractWindowView):
     def onCounterNeedUpdate(self):
         self._printOverrideError('onCounterNeedUpdate')
 
-    def bootcampClick(self):
-        self._printOverrideError('bootcampClick')
-
     def as_setServerSettingS(self, serverName, tooltipFullData, serverState):
         return self.flashObject.as_setServerSetting(serverName, tooltipFullData, serverState) if self._isDAAPIInited() else None
 
@@ -34,17 +31,11 @@ class IngameMenuMeta(AbstractWindowView):
     def as_removeCounterS(self, counters):
         return self.flashObject.as_removeCounter(counters) if self._isDAAPIInited() else None
 
-    def as_setMenuButtonsLabelsS(self, helpLabel, settingsLabel, cancelLabel, quitLabel, bootcampLabel, bootcampIcon):
-        return self.flashObject.as_setMenuButtonsLabels(helpLabel, settingsLabel, cancelLabel, quitLabel, bootcampLabel, bootcampIcon) if self._isDAAPIInited() else None
+    def as_setMenuButtonsLabelsS(self, helpLabel, settingsLabel, cancelLabel, quitLabel):
+        return self.flashObject.as_setMenuButtonsLabels(helpLabel, settingsLabel, cancelLabel, quitLabel) if self._isDAAPIInited() else None
 
-    def as_showQuitButtonS(self, value):
-        return self.flashObject.as_showQuitButton(value) if self._isDAAPIInited() else None
-
-    def as_showBootcampButtonS(self, value):
-        return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None
-
-    def as_showHelpButtonS(self, value):
-        return self.flashObject.as_showHelpButton(value) if self._isDAAPIInited() else None
+    def as_setMenuButtonsS(self, buttons):
+        return self.flashObject.as_setMenuButtons(buttons) if self._isDAAPIInited() else None
 
     def as_setVisibilityS(self, value):
         return self.flashObject.as_setVisibility(value) if self._isDAAPIInited() else None

@@ -10,6 +10,7 @@ def fillVehicleModel(model, vehicleItem):
     model.setName(vehicleItem.shortUserName)
     model.setTechName(replaceHyphenToUnderscore(removeNationFromTechName(vehicleItem.name)))
     model.setTier(vehicleItem.level)
+    model.setRoleKey(vehicleItem.roleLabel)
     model.setType(vehicleItem.type)
     model.setNation(vehicleItem.nationName)
     model.setVehicleCD(vehicleItem.compactDescr)

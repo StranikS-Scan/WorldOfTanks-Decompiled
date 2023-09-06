@@ -51,14 +51,14 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
             self._state = state
             self.as_setMessageS(self._getMessage())
         if state == COUNTDOWN_STATE.WAIT:
-            self.__clearTimeShiftCallback()
+            self._clearTimeShiftCallback()
             self.as_setTimerS(0)
         else:
-            self.__setTimeShitCallback()
+            self.__setTimeShiftCallback()
 
     def hideCountdown(self, state, speed):
         self.as_setMessageS(backport.text(_STATE_TO_MESSAGE[state]))
-        self.__clearTimeShiftCallback()
+        self._clearTimeShiftCallback()
         self.as_hideAllS(speed != 0)
 
     def _getMessage(self):
@@ -77,10 +77,10 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
 
     def _dispose(self):
         self.sessionProvider.removeArenaCtrl(self)
-        self.__clearTimeShiftCallback()
+        self._clearTimeShiftCallback()
         super(PreBattleTimerBase, self)._dispose()
 
-    def __setTimeShitCallback(self):
+    def __setTimeShiftCallback(self):
         self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)
 
     def __updateTimer(self):
@@ -90,7 +90,7 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
             self.as_setTimerS(timeLeftWithShift)
         return
 
-    def __clearTimeShiftCallback(self):
+    def _clearTimeShiftCallback(self):
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None

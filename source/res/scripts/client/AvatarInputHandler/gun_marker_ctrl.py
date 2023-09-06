@@ -75,10 +75,12 @@ def createGunMarker(isStrategic):
     if isStrategic:
         clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider())
         serverMarker = _SPGGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerSPGProvider())
+        dualAccMarker = _EmptyGunMarkerController(_MARKER_TYPE.UNDEFINED, None)
     else:
         clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
         serverMarker = _DefaultGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerProvider())
-    return _GunMarkersDecorator(clientMarker, serverMarker)
+        dualAccMarker = _DualAccMarkerController(_MARKER_TYPE.DUAL_ACC, factory.getDualAccuracyProvider())
+    return _GunMarkersDecorator(clientMarker, serverMarker, dualAccMarker)
 
 
 def createArtyHit(artyEquipmentUDO, areaRadius):
@@ -481,6 +483,7 @@ class _GunMarkersDPFactory(object):
     __serverDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     __clientSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     __serverSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+    __dualAccDataProvider = aih_global_binding.bindRW(_BINDING_ID.DUAL_ACC_GUN_MARKER_DATA_PROVIDER)
 
     def getClientProvider(self):
         if self.__clientDataProvider is None:
@@ -501,6 +504,11 @@ class _GunMarkersDPFactory(object):
         if self.__serverSPGDataProvider is None:
             self.__serverSPGDataProvider = self._makeSPGProvider()
         return self.__serverSPGDataProvider
+
+    def getDualAccuracyProvider(self):
+        if self.__dualAccDataProvider is None:
+            self.__dualAccDataProvider = self._makeDefaultProvider()
+        return self.__dualAccDataProvider
 
     @staticmethod
     def _makeDefaultProvider():
@@ -525,43 +533,54 @@ class _GunMarkersDecorator(IGunMarkerController):
     __gunMarkersFlags = aih_global_binding.bindRW(_BINDING_ID.GUN_MARKERS_FLAGS)
     __clientState = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_STATE)
     __serverState = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_STATE)
+    __dualAccState = aih_global_binding.bindRW(_BINDING_ID.DUAL_ACC_GUN_MARKER_STATE)
 
-    def __init__(self, clientMarker, serverMarker):
+    def __init__(self, clientMarker, serverMarker, dualAccMarker):
         super(_GunMarkersDecorator, self).__init__()
         self.__clientMarker = clientMarker
         self.__serverMarker = serverMarker
+        self.__dualAccMarker = dualAccMarker
 
     def create(self):
         self.__clientMarker.create()
         self.__serverMarker.create()
+        self.__dualAccMarker.create()
 
     def destroy(self):
         self.__clientMarker.destroy()
         self.__serverMarker.destroy()
+        self.__dualAccMarker.destroy()
 
     def enable(self):
         self.__clientMarker.enable()
         self.__clientMarker.setPosition(self.__clientState[0])
         self.__serverMarker.enable()
         self.__serverMarker.setPosition(self.__serverState[0])
+        self.__dualAccMarker.enable()
+        self.__dualAccMarker.setPosition(self.__dualAccState[0])
 
     def disable(self):
         self.__clientMarker.disable()
         self.__serverMarker.disable()
+        self.__dualAccMarker.disable()
 
     def reset(self):
         self.__clientMarker.reset()
         self.__serverMarker.reset()
+        self.__dualAccMarker.reset()
 
     def onRecreateDevice(self):
         self.__clientMarker.onRecreateDevice()
         self.__serverMarker.onRecreateDevice()
+        self.__dualAccMarker.onRecreateDevice()
 
     def getPosition(self, markerType=_MARKER_TYPE.CLIENT):
         if markerType == _MARKER_TYPE.CLIENT:
             return self.__clientMarker.getPosition()
         if markerType == _MARKER_TYPE.SERVER:
             return self.__serverMarker.getPosition()
+        if markerType == _MARKER_TYPE.DUAL_ACC:
+            return self.__dualAccMarker.getPosition()
         _logger.warning('Gun maker control is not found by type: %d', markerType)
         return Math.Vector3()
 
@@ -570,6 +589,8 @@ class _GunMarkersDecorator(IGunMarkerController):
             self.__clientMarker.setPosition(position)
         elif markerType == _MARKER_TYPE.SERVER:
             self.__serverMarker.setPosition(position)
+        elif markerType == _MARKER_TYPE.DUAL_ACC:
+            self.__dualAccMarker.setPosition(position)
         else:
             _logger.warning('Gun maker control is not found by type: %d', markerType)
 
@@ -591,6 +612,10 @@ class _GunMarkersDecorator(IGunMarkerController):
             self.__serverState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
                 self.__serverMarker.update(markerType, position, direction, size, relaxTime, collData)
+        elif markerType == _MARKER_TYPE.DUAL_ACC:
+            self.__dualAccState = (position, direction, collData)
+            if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
+                self.__dualAccMarker.update(markerType, position, direction, size, relaxTime, collData)
         else:
             _logger.warning('Gun maker control is not found by type: %d', markerType)
 
@@ -671,6 +696,15 @@ class _GunMarkerController(IGunMarkerController):
         animationMatrix.time = 0.0
 
 
+class _EmptyGunMarkerController(_GunMarkerController):
+
+    def setPosition(self, position):
+        pass
+
+    def update(self, markerType, position, direction, size, relaxTime, collData):
+        pass
+
+
 class _DefaultGunMarkerController(_GunMarkerController):
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -707,14 +741,14 @@ class _DefaultGunMarkerController(_GunMarkerController):
         idealSize = sizeVector[1]
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            s = replayCtrl.getArcadeGunMarkerSize()
+            s = self._replayReader(replayCtrl)()
             if s != -1.0:
                 size = s
         elif replayCtrl.isRecording:
             if replayCtrl.isServerAim and self._gunMarkerType == _MARKER_TYPE.SERVER:
-                replayCtrl.setArcadeGunMarkerSize(size)
-            elif self._gunMarkerType == _MARKER_TYPE.CLIENT:
-                replayCtrl.setArcadeGunMarkerSize(size)
+                self._replayWriter(replayCtrl)(size)
+            elif self._gunMarkerType in (_MARKER_TYPE.CLIENT, _MARKER_TYPE.DUAL_ACC):
+                self._replayWriter(replayCtrl)(size)
         positionMatrixForScale = BigWorld.checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
         worldMatrix = _makeWorldMatrix(positionMatrixForScale)
         currentSize = BigWorld.markerHelperScale(worldMatrix, size) * self.__screenRatio
@@ -736,6 +770,12 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
     def onRecreateDevice(self):
         self.__updateScreenRatio()
+
+    def _replayReader(self, replayCtrl):
+        return replayCtrl.getArcadeGunMarkerSize
+
+    def _replayWriter(self, replayCtrl):
+        return replayCtrl.setArcadeGunMarkerSize
 
     def __updateScreenRatio(self):
         self.__screenRatio = GUI.screenResolution()[0] * 0.5
@@ -762,6 +802,15 @@ class _DefaultGunMarkerController(_GunMarkerController):
             positionMatrix = Math.Matrix()
             positionMatrix.setTranslate(newShotPosition)
         return positionMatrix
+
+
+class _DualAccMarkerController(_DefaultGunMarkerController):
+
+    def _replayReader(self, replayCtrl):
+        return replayCtrl.getDualAccMarkerSize
+
+    def _replayWriter(self, replayCtrl):
+        return replayCtrl.setDualAccMarkerSize
 
 
 class _SPGGunMarkerController(_GunMarkerController):

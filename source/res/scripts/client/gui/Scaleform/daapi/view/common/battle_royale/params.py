@@ -122,7 +122,7 @@ class _VehicleParams(base_params.VehicleParams):
 
 class _BRItemsComparator(ItemsComparator):
 
-    def getExtendedData(self, paramName):
+    def getExtendedData(self, paramName, _=False):
         isInvertedValue = paramName in _BACKWARD_QUALITY_PARAMS or None
         return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName), self._getPenaltiesAndBonuses(paramName), customQualityParams=isInvertedValue)
 

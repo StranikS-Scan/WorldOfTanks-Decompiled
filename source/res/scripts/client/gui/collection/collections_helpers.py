@@ -1,31 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/collection/collections_helpers.py
 import typing
-from gui.battle_pass.battle_pass_helpers import getSingleVehicleForCustomization
-from gui.impl.gen.view_models.views.lobby.collection.collection_item_preview_model import ItemType
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import Vehicle
-from shared_utils import findFirst, first
+import SoundGroups
 import nations
 from CurrentVehicle import g_currentVehicle
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COLLECTIONS_SECTION, COLLECTION_SHOWN_NEW_ITEMS, COLLECTION_SHOWN_NEW_ITEMS_COUNT, COLLECTION_SHOWN_NEW_REWARDS, COLLECTION_TUTORIAL_COMPLETED
-from collections_common import CollectionItem, UNUSABLE_COLLECTION_ENTITIES, USABLE_COLLECTION_ENTITIES, Collection
+from collections_common import UNUSABLE_COLLECTION_ENTITIES, USABLE_COLLECTION_ENTITIES
+from gui.battle_pass.battle_pass_helpers import getSingleVehicleForCustomization
 from gui.collection.collections_constants import COLLECTION_ITEM_RES_KEY_TEMPLATE, COLLECTION_RES_PREFIX
+from gui.collection.sounds import Sounds
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.collection.collection_item_preview_model import ItemType
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
+from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared.event_dispatcher import showHangar, showStylePreview, showStyleProgressionPreview
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.sounds.filters import switchHangarFilteredFilter
 from helpers import dependency
 from helpers.dependency import replace_none_kwargs
 from items.tankmen import getNationConfig, getNationGroups
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Dict, Optional, Tuple, Union
+    from collections_common import CollectionItem, Collection
     from gui.impl.gen_utils import DynAccessor
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 @replace_none_kwargs(itemsCache=IItemsCache)
 def showCollectionStylePreview(styleCD, backCallback=None, backBtnDescrLabel='', itemsCache=None):
@@ -54,6 +56,21 @@ def getVehicleForCollectionStyle(style, itemsCache=None):
                 isNotSecret = v
 
         return isInInventory or isNotSecret
+
+
+def setHangarState():
+    SoundGroups.g_instance.setState(Sounds.STATE_PLACE.value, Sounds.STATE_PLACE_GARAGE.value)
+    switchHangarFilteredFilter(on=False)
+
+
+def loadHangarFromCollections():
+    showHangar()
+    setHangarState()
+
+
+def loadBattlePassFromCollections(layoutID=None, chapterID=0):
+    showMissionsBattlePass(layoutID, chapterID)
+    SoundGroups.g_instance.setState(Sounds.STATE_PLACE.value, Sounds.STATE_PLACE_TASKS.value)
 
 
 @replace_none_kwargs(collections=ICollectionsSystemController)
@@ -180,56 +197,3 @@ def composeBonuses(bonuses):
 
     mergedBonuses = mergeBonuses(composedBonuses)
     return splitBonuses(mergedBonuses)
-
-
-def isRewardNew(collectionId, requiredCount):
-    return not existsInCollectionsSection(COLLECTION_SHOWN_NEW_REWARDS, collectionId, requiredCount)
-
-
-def setRewardShown(collectionId, requiredCount):
-    addIntoCollectionsSection(COLLECTION_SHOWN_NEW_REWARDS, collectionId, requiredCount)
-
-
-def isItemNew(collectionId, itemId):
-    return not existsInCollectionsSection(COLLECTION_SHOWN_NEW_ITEMS, collectionId, itemId)
-
-
-def setItemShown(collectionId, itemId):
-    addIntoCollectionsSection(COLLECTION_SHOWN_NEW_ITEMS, collectionId, itemId)
-    g_eventBus.handleEvent(events.CollectionsEvent(events.CollectionsEvent.NEW_ITEM_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def existsInCollectionsSection(settingName, collectionId, itemId):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    settings[settingName].setdefault(collectionId, set())
-    return itemId in settings[settingName][collectionId]
-
-
-def addIntoCollectionsSection(settingName, collectionId, itemId):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    settings[settingName].setdefault(collectionId, set())
-    settings[settingName][collectionId].add(itemId)
-    AccountSettings.setUIFlag(COLLECTIONS_SECTION, settings)
-
-
-def getShownNewItemsCount(collectionId):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    settings[COLLECTION_SHOWN_NEW_ITEMS_COUNT].setdefault(collectionId, 0)
-    return settings[COLLECTION_SHOWN_NEW_ITEMS_COUNT][collectionId]
-
-
-def setShownNewItemsCount(collectionId, itemCount):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    settings[COLLECTION_SHOWN_NEW_ITEMS_COUNT][collectionId] = itemCount
-    AccountSettings.setUIFlag(COLLECTIONS_SECTION, settings)
-
-
-def isTutorialCompleted(collectionId):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    return collectionId in settings[COLLECTION_TUTORIAL_COMPLETED]
-
-
-def setCollectionTutorialCompleted(collectionId):
-    settings = AccountSettings.getUIFlag(COLLECTIONS_SECTION)
-    settings[COLLECTION_TUTORIAL_COMPLETED].add(collectionId)
-    AccountSettings.setUIFlag(COLLECTIONS_SECTION, settings)

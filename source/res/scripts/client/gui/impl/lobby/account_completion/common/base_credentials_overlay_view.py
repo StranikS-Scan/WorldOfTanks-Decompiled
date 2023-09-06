@@ -37,7 +37,7 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
                 rewardTooltipID = event.getArgument('rewardTooltipID')
                 if rewardTooltipID:
                     itemIndex = rewardTooltipID.split(':').pop()
-                    tooltipData = self._tooltipItems.get(int(itemIndex))
+                    tooltipData = self._tooltipItems.get(itemIndex)
                     if tooltipData is not None:
                         return createBackportTooltipContent(tooltipData=tooltipData)
             return super(BaseCredentialsOverlayView, self).createToolTipContent(event, contentID)
@@ -96,6 +96,7 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
         self.viewModel.setIsConfirmEnabled(not haveTimedWarning and not anyFieldIsEmpty and not anyFieldIsInvalid)
 
     def _fillRewards(self, model):
+        self._tooltipItems.clear()
         fillRewards(model, getBonuses(), self._tooltipItems)
 
     def _onSyncCompleted(self, *args):

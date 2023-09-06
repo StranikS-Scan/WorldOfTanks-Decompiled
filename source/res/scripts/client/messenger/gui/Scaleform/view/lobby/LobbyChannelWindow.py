@@ -28,6 +28,7 @@ class LobbyChannelWindow(LobbyChannelWindowMeta):
         channel = self._controller.getChannel()
         if self._controller.hasUntrustedMembers() and antispam_message.isShown():
             self.as_showWarningS('{} {}\n{}'.format(icons.markerBlocked(), text_styles.error(i18n.makeString(MESSENGER.CHAT_PERSONALMESSAGE_WARNINGHEAD)), i18n.makeString(MESSENGER.CHAT_PERSONALMESSAGE_WARNINGBODY)))
+        self.as_setIsPrivateS(channel.isPrivate())
         if channel.haveMembers():
             membersDP = MembersDataProvider()
             membersDP.setFlashObject(self.as_getMembersDPS())

@@ -5,19 +5,19 @@ import logging
 from collections import namedtuple
 from functools import partial
 from operator import itemgetter
-import typing
 import BigWorld
+import typing
 from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
+from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID
 from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
-from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
-from external_strings_utils import strtobool
 from epic_constants import EPIC_OFFER_TOKEN_PREFIX, EPIC_SELECT_BONUS_NAME
+from external_strings_utils import strtobool
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -37,14 +37,14 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
-from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN
+from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.events_helpers import parseC11nProgressToken
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
-from gui.shared.gui_items.Vehicle import getIconResourceName
+from gui.shared.gui_items.Vehicle import getIconResourceName, getTypeUserName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -61,10 +61,10 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from optional_bonuses import BONUS_MERGERS
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
-from shared_utils import CONST_CONTAINER, first, makeTupleByDict
+from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import ICollectionsSystemController
+from skeletons.gui.game_control import ICollectionsSystemController, IWotPlusController
 from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -73,13 +73,14 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup, getItemPackByGroupAndName
 if typing.TYPE_CHECKING:
-    from typing import List, Tuple, Dict, Callable, Optional
+    from typing import List, Tuple, Dict, Callable, Optional, Any
     from account_helpers.offers.events_data import OfferEventData
     from account_helpers.offers.offer_bonuses import ItemsOfferBonus
     from gui.goodies.goodie_items import Booster, _PersonalDiscount, DemountKit, RecertificationForm, GoodieType
     from gui.shared.gui_items.customization import C11nStyleProgressData
     from gui.lobby_context import LobbyContext
     from items.components.crew_skins_components import CrewSkin
+    from gui.shared.gui_items.crew_book import CrewBook
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
@@ -875,13 +876,52 @@ class X5BattleTokensBonus(TokensBonus):
 
     def getIconResource(self, size):
         bonusBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('bonus_battle_task')
-        return bonusBattleTaskRes() if bonusBattleTaskRes else R.invalid()
+        return bonusBattleTaskRes() if bonusBattleTaskRes.isValid() else R.invalid()
 
     def getWrappedLootBoxesBonusList(self):
         result = []
         for _, tokenRecord in self.getTokens().iteritems():
             result.append({'id': 0,
              'type': ItemPackType.CUSTOM_X5_BATTLE_BONUS,
+             'value': tokenRecord.count,
+             'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                      AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
+             'name': self.getUserName(),
+             'description': ''})
+
+        return result
+
+
+class X3CrewTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('tokens', value, isCompensation, ctx)
+
+    def _format(self, styleSubset):
+        return makeHtmlString('html_templates:lobby/quests/bonuses', CREW_BONUS_X3_TOKEN, {'value': self.formatValue()})
+
+    def formatValue(self):
+        return self.getValue()[CREW_BONUS_X3_TOKEN]['count']
+
+    def isShowInGUI(self):
+        return True
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.bonusName.crew_bonus_x3())
+
+    def getIconBySize(self, size):
+        crewBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn(CREW_BONUS_X3_TOKEN)
+        return backport.image(crewBattleTaskRes()) if crewBattleTaskRes else None
+
+    def getIconResource(self, size):
+        crewBattleTaskRes = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn(CREW_BONUS_X3_TOKEN)
+        return crewBattleTaskRes() if crewBattleTaskRes.isValid() else R.invalid()
+
+    def getWrappedEventLootBoxesBonusList(self):
+        result = []
+        for _, tokenRecord in self.getTokens().iteritems():
+            result.append({'id': 0,
+             'type': ItemPackType.CUSTOM_X3_CREW_BONUS,
              'value': tokenRecord.count,
              'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
                       AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
@@ -1126,6 +1166,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(CREW_BONUS_X3_TOKEN):
+            result.append(X3CrewTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
             result.append(BattlePassStyleProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX):
@@ -1146,7 +1188,7 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if tID.startswith(CUSTOMIZATION_PROGRESS_PREFIX):
             result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
-        if tID.startswith(COMP7_TOKEN_WEEKLY_REWARD_NAME):
+        if tID.startswith(COMP7_TOKEN_WEEKLY_REWARD_ID):
             result.append(Comp7TokenWeeklyRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(COLLECTION_ITEM_TOKEN_PREFIX_NAME):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
@@ -2145,6 +2187,12 @@ class GoldBank(WoTPlusBonus):
         return makeTooltip(header, body)
 
 
+class AttendanceReward(WoTPlusBonus):
+
+    def __init__(self):
+        super(AttendanceReward, self).__init__(WoTPlusBonusType.ATTENDANCE_REWARD)
+
+
 class IdleCrewXP(WoTPlusBonus):
 
     def __init__(self):
@@ -2164,9 +2212,21 @@ class FreeEquipmentDemounting(WoTPlusBonus):
 
 
 class WoTPlusExclusiveVehicle(WoTPlusBonus):
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self):
         super(WoTPlusExclusiveVehicle, self).__init__(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
+
+    def getTooltip(self):
+        vehicle = self._wotPlusCtrl.getActiveExclusiveVehicle()
+        vehicleName = self._wotPlusCtrl.getActiveExclusiveVehicleName()
+        header = ''
+        body = ''
+        if vehicle is not None:
+            headerData, bodyData = getSimpleTooltipData(self._name)
+            header = i18n.makeString(headerData)
+            body = i18n.makeString(bodyData, vehicleName=vehicleName, vehicleType=getTypeUserName(vehicle.classTag, False))
+        return makeTooltip(header, body)
 
 
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
@@ -2493,13 +2553,14 @@ class CrewSkinsBonus(SimpleBonus):
         result = []
         for item, count, _, _ in self.getItems():
             if item is not None:
+                resourceID = str(item.itemTypeName + str(item.getRarity()))
                 result.append({'id': item.intCD,
                  'name': localizedFullName(item),
                  'description': item.getDescription(),
                  'type': 'item/{}'.format(item.itemTypeName),
                  'value': count,
-                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(item.getIconID())()),
-                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(item.getIconID())())}})
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.quests.bonuses.small.dyn(resourceID)()),
+                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn(resourceID)())}})
 
         return result
 
@@ -2771,7 +2832,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  WoTPlusBonusType.IDLE_CREW_XP: IdleCrewXP,
  WoTPlusBonusType.EXCLUDED_MAP: ExcludedMap,
  WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: FreeEquipmentDemounting,
- WoTPlusBonusType.EXCLUSIVE_VEHICLE: WoTPlusExclusiveVehicle}
+ WoTPlusBonusType.EXCLUSIVE_VEHICLE: WoTPlusExclusiveVehicle,
+ WoTPlusBonusType.ATTENDANCE_REWARD: AttendanceReward}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
@@ -2909,6 +2971,10 @@ def getMergeBonusFunction(lhv, rhv):
         return mergeItemsBonuses
     elif hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus):
         return mergeIntegralBonuses
+    elif hasOneBaseClass(lhv, rhv, CustomizationsBonus):
+        return mergeCustomizationBonuses
+    elif hasOneBaseClass(lhv, rhv, C11nProgressTokenBonus):
+        return None
     else:
         return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
 
@@ -2929,6 +2995,20 @@ def mergeItemsBonuses(lhv, rhv):
 def mergeIntegralBonuses(lhv, rhv):
     merged = copy.deepcopy(lhv)
     merged.setValue(merged.getValue() + rhv.getValue())
+    return (merged, True)
+
+
+def mergeCustomizationBonuses(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    mergedValue = merged.getValue()
+    for rhvItem in rhv.getValue():
+        mergedItem = findFirst(lambda i, ri=rhvItem: i['id'] == ri['id'] and i['custType'] == ri['custType'], mergedValue)
+        if mergedItem is not None:
+            mergedItem['value'] += rhvItem['value']
+        else:
+            mergedValue.append(rhvItem)
+        merged.setValue(mergedValue)
+
     return (merged, True)
 
 
@@ -3055,6 +3135,24 @@ def getVehicleCrewReward(vehiclesReward):
 @dependency.replace_none_kwargs(bmController=IBattleMattersController, winbackController=IWinbackController)
 def isDynamicOfferToken(bonusID, bmController=None, winbackController=None):
     return bonusID == bmController.getDelayedRewardToken() or winbackController.isWinbackOfferToken(bonusID)
+
+
+def formatBlueprint(bonus, count=None):
+    blueprintType = bonus.getBlueprintName()
+    if blueprintType == BlueprintsBonusSubtypes.FINAL_FRAGMENT:
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.any())
+    elif blueprintType == BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT:
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.universal())
+    elif blueprintType == BlueprintsBonusSubtypes.NATION_FRAGMENT:
+        nation = backport.text(R.strings.nations.dyn(bonus.getImageCategory(), '')())
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.nation(), nationName=nation)
+    elif blueprintType == BlueprintsBonusSubtypes.VEHICLE_FRAGMENT:
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.vehicle.any())
+    elif blueprintType == BlueprintsBonusSubtypes.RANDOM_FRAGMENT:
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.any())
+    elif blueprintType == BlueprintsBonusSubtypes.RANDOM_NATIONAL_FRAGMENT:
+        blueprintString = backport.text(R.strings.quests.bonusName.blueprints.nation.any())
+    return ' '.join([blueprintString, str(count)]) if count is not None else blueprintString
 
 
 def _isSelectableBonusID(bonusID):

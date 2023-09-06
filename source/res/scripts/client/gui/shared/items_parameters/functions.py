@@ -107,7 +107,9 @@ def kpiFromCrewSkills(vehicle):
         if tankman is None:
             continue
         for skill in tankman.skills:
-            skills[skill.name] = crewMemberRealSkillLevel(vehicle, skill.name, skill.roleType)
+            level = crewMemberRealSkillLevel(vehicle, skill.name, skill.roleType)
+            if level != tankmen.NO_SKILL:
+                skills[skill.name] = level
 
     for eq in vehicle.battleBoosters.installed.getItems():
         if 'crewSkillBattleBooster' in eq.descriptor.tags:

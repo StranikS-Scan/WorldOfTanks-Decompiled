@@ -2,7 +2,6 @@
   <name>	#arenas:217_er_alaska/name	</name>
   <description>	#arenas:217_er_alaska/description	</description>
   <geometry>	spaces/217_er_alaska	</geometry>
-  <estimatedLoad>	0.91	</estimatedLoad>
   <boundingBox>
     <bottomLeft>	-700.000000 -700.000000	</bottomLeft>
     <upperRight>	700.000000 700.000000	</upperRight>
@@ -42,31 +41,83 @@
     <freqX>	0	</freqX>
     <freqZ>	0	</freqZ>
   </water>
-  <numPlayerGroups>	3	</numPlayerGroups>
-  <playerGroupLimit>	10	</playerGroupLimit>
+  <estimatedLoad>	0.91	</estimatedLoad>
   <gameplayTypes>
     <ctf30x30>
+      <numPlayerGroups>	3	</numPlayerGroups>
+      <playerGroupLimit>	10	</playerGroupLimit>
       <teamSpawnPoints>
         <team1>
-          <position>	189.970 608.930	</position>
-          <position>	392.751 402.159	</position>
-          <position>	597.136 231.760	</position>
+          <position>	189.970001 608.929993	</position>
+          <position>	392.751007 402.158997	</position>
+          <position>	597.135986 231.759995	</position>
         </team1>
         <team2>
-          <position>	-632.101 -219.427	</position>
-          <position>	-427.287 -425.815	</position>
-          <position>	-202.354 -624.783	</position>
+          <position>	-632.101013 -219.427002	</position>
+          <position>	-427.286987 -425.815002	</position>
+          <position>	-202.354004 -624.783020	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	300.125 298.848	</position1>
+          <position1>	300.124725 298.847168	</position1>
         </team1>
         <team2>
-          <position2>	-298.991 -300.903	</position2>
+          <position2>	-298.861603 -300.861389	</position2>
         </team2>
       </teamBasePositions>
     </ctf30x30>
+    <comp7>
+      <boundingBox>
+        <bottomLeft>	-300.000000 -700.000000	</bottomLeft>
+        <upperRight>	700.000000 300.000000	</upperRight>
+      </boundingBox>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/217_er_alaska/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-79.339142 81.566216	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	381.712677 -384.384308	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	146.310837 92.518127	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-93.306007 -150.858459	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-102.268127 -489.326385	</position>
+        </team1>
+        <team2>
+          <position>	471.384460 104.292488	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	154.949326 -151.865265	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

@@ -107,6 +107,7 @@ class LobbyMessageBuilder(object):
         self.__name = ''
         self.__time = 0.0
         self.__text = ''
+        self.__linkParams = ('', '')
 
     @storage_getter('users')
     def usersStorage(self):
@@ -138,5 +139,14 @@ class LobbyMessageBuilder(object):
         self.__text = text
         return self
 
+    def setTextLink(self, dbID, nickName, shouldAddTextLink):
+        if shouldAddTextLink:
+            openLink = '<a href="event:{}:{}">'.format(dbID, nickName)
+            closeLink = '</a>'
+            self.__linkParams = (openLink, closeLink)
+        else:
+            self.__linkParams = ('', '')
+        return self
+
     def build(self):
-        return g_settings.lobby.getMessageFormat(self.__templateKey).format(self.__name, self.__time, self.__text)
+        return g_settings.lobby.getMessageFormat(self.__templateKey).format(self.__name, self.__time, self.__text, linkOpen=self.__linkParams[0], linkClose=self.__linkParams[1])

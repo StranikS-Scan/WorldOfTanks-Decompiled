@@ -38,7 +38,7 @@ class DialogTemplateView(FullScreenDialogBaseView):
             gameInputManager.addEscapeListener(self._closeClickHandler)
 
     @property
-    def uniqueID(self):
+    def dialogUniqueID(self):
         return self.__uniqueID
 
     @property

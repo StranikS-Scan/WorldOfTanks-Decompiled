@@ -59,7 +59,7 @@ from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from messenger.ext import channel_num_gen
 from adisp import adisp_process
 if typing.TYPE_CHECKING:
-    from helpers.server_settings import Comp7PrestigeRanksConfig
+    from helpers.server_settings import Comp7RanksConfig
     from comp7_ranks_common import Comp7Division
 _logger = logging.getLogger(__name__)
 _strButtons = R.strings.platoon.buttons
@@ -566,7 +566,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         self.__updateVoiceChatToggleState()
 
     def _onLeavePlatoon(self):
-        self._platoonCtrl.leavePlatoon()
+        self._platoonCtrl.leavePlatoon(parent=self)
 
     def __onServerSettingsChange(self, diff):
         if 'unit_assembler_config' in diff:
@@ -881,7 +881,7 @@ class Comp7MembersView(SquadMembersView):
 
     @classmethod
     def __getDivision(cls, rank, rating):
-        ranksConfig = cls._lobbyContext.getServerSettings().comp7PrestigeRanksConfig
+        ranksConfig = cls._lobbyContext.getServerSettings().comp7RanksConfig
         division = findFirst(lambda d: rating in d.range, ranksConfig.divisionsByRank.get(rank, ()))
         return division
 

@@ -56,7 +56,8 @@ class CommonDialogsHandler(PackageBusinessHandler):
         super(CommonDialogsHandler, self).__init__(listeners, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def __loadSimpleDialogView(self, alias, meta, handler):
-        self.loadViewWithGenName(alias, meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler), meta.getViewScopeType(), meta.getTimer())
+        self.loadViewWithGenName(alias, None, meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler), meta.getViewScopeType(), meta.getTimer())
+        return
 
     def __loadSimpleDialog(self, event):
         meta = event.meta
@@ -67,4 +68,5 @@ class CommonDialogsHandler(PackageBusinessHandler):
         self.__loadSimpleDialogView(VIEW_ALIAS.BUTTON_DIALOG, meta, event.handler)
 
     def __showBootcampExecutionChooser(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, None, event.meta, event.handler)
+        return

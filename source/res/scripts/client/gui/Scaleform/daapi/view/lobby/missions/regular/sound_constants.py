@@ -7,8 +7,8 @@ class SOUNDS(CONST_CONTAINER):
     COMMON_SOUND_SPACE = 'tasks'
     STATE_PLACE = 'STATE_hangar_place'
     STATE_PLACE_TASKS = 'STATE_hangar_place_tasks'
-    ENTER = 'tasks_enter'
-    EXIT = 'tasks_exit'
+    ENTER = 'tasks_bp_s12_enter'
+    EXIT = 'tasks_bp_s12_exit'
 
 
 TASKS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_TASKS}, exitStates={}, enterEvent=SOUNDS.ENTER, exitEvent=SOUNDS.EXIT, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)

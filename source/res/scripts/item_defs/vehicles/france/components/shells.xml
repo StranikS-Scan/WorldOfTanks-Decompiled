@@ -1,10 +1,8 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
@@ -13,8 +11,6 @@
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
-    <ahe_spg>	AUTOCANNON_HIGH_EXPLOSIVE_SPG.png 0 0	</ahe_spg>
-    <ahc_spg>	AUTOCANNON_HOLLOW_CHARGE_SPG.png 0 0	</ahc_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
   </icons>
   <_13.2mm_Balle_P.>
@@ -866,7 +862,7 @@
     <id>	170	</id>
     <userString>	#france_vehicles:_75mm_M61_APCT	</userString>
     <icon>	ap	</icon>
-    <price>	64	</price>
+    <price>	80	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	75	</caliber>
     <isTracer>	true	</isTracer>
@@ -895,7 +891,7 @@
     <id>	172	</id>
     <userString>	#france_vehicles:_75mm_M48_HE	</userString>
     <icon>	he_modern	</icon>
-    <price>	160	</price>
+    <price>	85	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
@@ -2791,116 +2787,58 @@
     </armorSpalls>
     <notInShop>	True	</notInShop>
   </_90mm_OE_mle_1924_bootcamp>
-  <_150mm_NW_Rocket_1_FEP>
-    <id>	601	</id>
-    <userString>	#france_vehicles:_150mm_NW_Rocket_1_FEP	</userString>
-    <icon>	ahe_spg	</icon>
-    <price>	0	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	150	</caliber>
-    <explosionRadius>	15	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	fepQfgRocket	</effects>
-    <damage>
-      <armor>	500	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <deviceDamagePossibility>
-      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
-      <protectFromDirectHits>	internal tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
-  </_150mm_NW_Rocket_1_FEP>
-  <_150mm_NW_Rocket_2_FEP>
-    <id>	602	</id>
-    <userString>	#france_vehicles:_150mm_NW_Rocket_2_FEP	</userString>
-    <icon>	ahc_spg	</icon>
-    <price>	0	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	150	</caliber>
-    <explosionRadius>	4	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	fepQfgRocket	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <deviceDamagePossibility>
-      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
-      <protectFromDirectHits>	internal tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
-  </_150mm_NW_Rocket_2_FEP>
-  <_40mm_OFL_40_D_233_EBR_FEP>
-    <id>	603	</id>
-    <userString>	#france_vehicles:_40mm_OFL_40_D_233_EBR_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	40	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	fepQfgSmallArmorPiercing	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	10	</armor>
-      <devices>	5	</devices>
-    </damage>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
-  </_40mm_OFL_40_D_233_EBR_FEP>
-  <_40mm_OCC_40_D_255_EBR_FEP>
-    <id>	604	</id>
-    <userString>	#france_vehicles:_40mm_OCC_40_D_255_EBR_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
+  <_105mm_OFL_105_F1V>
+    <id>	31001	</id>
+    <userString>	#france_vehicles:_105mm_OFL_105_F1V	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1310	</price>
     <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	GUARANTEED_DAMAGE	</mechanics>
-    <guaranteedDamages>
-      <damage>
-        <armor>	2	</armor>
-      </damage>
-    </guaranteedDamages>
-    <caliber>	40	</caliber>
+    <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	fepQfgSmallArmorPiercing	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	fepQfgSmallArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
+    <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	5	</armor>
-      <devices>	2	</devices>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
     </damage>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
-  </_40mm_OCC_40_D_255_EBR_FEP>
+  </_105mm_OFL_105_F1V>
+  <_105mm_OCC_105_F1V>
+    <id>	31002	</id>
+    <userString>	#france_vehicles:_105mm_OCC_105_F1V	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_OCC_105_F1V>
+  <_105mm_OE_105_Mle_60V>
+    <id>	31003	</id>
+    <userString>	#france_vehicles:_105mm_OE_105_Mle_60V	</userString>
+    <icon>	he_modern	</icon>
+    <price>	700	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	510	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	255	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_OE_105_Mle_60V>
 </shells.xml>

@@ -4,6 +4,8 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Callable, List, Optional, Union
     from gui.server_events.event_items import Quest, BattleMattersQuest, BattleMattersTokenQuest
+    from gui.game_control.battle_matters_controller import _BattleMattersProgressWatcher
+    from gui.shared.gui_items.Vehicle import Vehicle
     from Event import Event
 
 class IBattleMattersController(object):
@@ -32,6 +34,14 @@ class IBattleMattersController(object):
         raise NotImplementedError
 
     @staticmethod
+    def isCompensationBattleMattersQuestID(questID):
+        raise NotImplementedError
+
+    @staticmethod
+    def isCompensationBattleMattersQuest(quest):
+        raise NotImplementedError
+
+    @staticmethod
     def isIntermediateBattleMattersQuest(quest):
         raise NotImplementedError
 
@@ -54,6 +64,13 @@ class IBattleMattersController(object):
     def isFinished(self):
         raise NotImplementedError
 
+    def isActive(self):
+        raise NotImplementedError
+
+    @property
+    def progressWatcher(self):
+        raise NotImplementedError
+
     def hasDelayedRewards(self):
         raise NotImplementedError
 
@@ -72,6 +89,9 @@ class IBattleMattersController(object):
     def getCompletedBattleMattersQuests(self):
         raise NotImplementedError
 
+    def getCompletedBattleMattersQuestsCount(self):
+        raise NotImplementedError
+
     def getNotCompletedBattleMattersQuests(self):
         raise NotImplementedError
 
@@ -79,6 +99,9 @@ class IBattleMattersController(object):
         raise NotImplementedError
 
     def getRegularBattleMattersQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getCompensationBattleMattersQuests(self, filterFunc=None):
         raise NotImplementedError
 
     def getBattleMattersQuests(self, filterFunc=None):

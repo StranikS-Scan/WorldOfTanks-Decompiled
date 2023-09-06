@@ -25,4 +25,4 @@ class LastUpdateTooltip(ViewImpl):
     def _onLoading(self, description, updateTime=None, *args, **kwargs):
         super(LastUpdateTooltip, self)._onLoading(*args, **kwargs)
         self.viewModel.setDescription(description)
-        self.viewModel.setLeaderboardUpdateTimestamp(updateTime)
+        self.viewModel.setLeaderboardUpdateTimestamp(updateTime or 0)

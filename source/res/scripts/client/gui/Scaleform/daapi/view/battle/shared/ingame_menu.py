@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
 import BigWorld
-from functools import partial
 import constants
 import BattleReplay
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_control.event_dispatcher import showIngameMenu
+from gui.Scaleform.genConsts.INGAMEMENU_CONSTANTS import INGAMEMENU_CONSTANTS
 from wg_async import wg_async, wg_await
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
@@ -19,18 +18,14 @@ from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import event_dispatcher as battle_event_dispatcher
-from gui.impl.lobby.bootcamp.bootcamp_exit_view import BootcampExitWindow
 from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IServerStatsController, IBootcampController
+from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 
@@ -38,7 +33,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     connectionMgr = dependency.descriptor(IConnectionManager)
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def onWindowClose(self):
         self.destroy()
@@ -64,33 +58,24 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def onCounterNeedUpdate(self):
         self.__updateNewSettingsCount()
 
-    def bootcampClick(self):
-        if self.bootcampController.isInBootcamp():
-            self.__doLeaveBootcamp()
-        else:
-            self.__doLeaveArena()
-
     def _populate(self):
         super(IngameMenu, self)._populate()
         if self.app is not None:
             self.app.registerGuiKeyHandler(self)
-        self.__setServerSettings()
-        self.__setServerStats()
-        self.__setMenuButtonsLabels()
-        self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not self.bootcampController.isInBootcamp())
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        isInBootcamp = self.bootcampController.isInBootcamp()
-        self.as_showBootcampButtonS(isInBootcamp)
-        self.as_showHelpButtonS(not isInBootcamp)
+        self._setServerSettings()
+        self._setServerStats()
+        self._setMenuButtonsLabels()
+        self._setMenuButtons()
         return
 
     def __updateNewSettingsCount(self):
         newSettingsCount = getCountNewSettings()
         if newSettingsCount > 0:
-            self.as_setCounterS([{'componentId': 'settingsBtn',
+            self.as_setCounterS([{'componentId': INGAMEMENU_CONSTANTS.SETTINGS,
               'count': str(newSettingsCount)}])
         else:
-            self.as_removeCounterS(['settingsBtn'])
+            self.as_removeCounterS([INGAMEMENU_CONSTANTS.SETTINGS])
 
     def _dispose(self):
         if self.app is not None:
@@ -99,8 +84,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         super(IngameMenu, self)._dispose()
         return
 
-    def __setServerSettings(self):
-        if BattleReplay.g_replayCtrl.isPlaying or self.bootcampController.isInBootcamp():
+    def _setServerSettings(self):
+        if BattleReplay.g_replayCtrl.isPlaying:
             serverName = ''
             tooltipFullData = ''
             state = INTERFACE_STATES.HIDE_ALL_SERVER_INFO
@@ -114,26 +99,25 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
                 state = INTERFACE_STATES.HIDE_SERVER_STATS
         self.as_setServerSettingS(serverName, tooltipFullData, state)
 
-    def __setServerStats(self):
-        if constants.IS_SHOW_SERVER_STATS and not self.bootcampController.isInBootcamp():
+    def _setServerStats(self):
+        if constants.IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
-    def __setMenuButtonsLabels(self):
-        bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON
-        bootcampIconSource = icons.makeImageTag(bootcampIcon, 24, 24, -6, 0)
+    def _setMenuButtonsLabels(self):
         if self.app.varsManager.isTutorialRunning(GLOBAL_VARS_MGR_CONSTS.BATTLE):
             quitLabel = MENU.LOBBY_MENU_BUTTONS_REFUSE_TRAINING
         elif BattleReplay.isPlaying():
             quitLabel = MENU.INGAME_MENU_BUTTONS_REPLAYEXIT
         else:
             quitLabel = MENU.INGAME_MENU_BUTTONS_LOGOFF
-        if self.bootcampController.isInBootcamp():
-            bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_FINISH
-        elif self.bootcampController.runCount() > 0:
-            bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_RETURN
-        else:
-            bootcampLabel = BOOTCAMP.REQUEST_BOOTCAMP_START
-        self.as_setMenuButtonsLabelsS(MENU.INGAME_MENU_BUTTONS_HELP, MENU.INGAME_MENU_BUTTONS_SETTINGS, MENU.INGAME_MENU_BUTTONS_BACK, quitLabel, bootcampLabel, bootcampIconSource)
+        self.as_setMenuButtonsLabelsS(MENU.INGAME_MENU_BUTTONS_HELP, MENU.INGAME_MENU_BUTTONS_SETTINGS, MENU.INGAME_MENU_BUTTONS_BACK, quitLabel)
+
+    def _setMenuButtons(self):
+        buttons = [INGAMEMENU_CONSTANTS.QUIT,
+         INGAMEMENU_CONSTANTS.SETTINGS,
+         INGAMEMENU_CONSTANTS.HELP,
+         INGAMEMENU_CONSTANTS.CANCEL]
+        self.as_setMenuButtonsS(buttons)
 
     @adisp_process
     def __doLeaveTutorial(self):
@@ -166,18 +150,10 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def __showLeaverAliveWindow(isPlayerIGR):
         return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
 
-    def __doLeaveBootcamp(self):
-        self.__showBootcampExitWindow()
-        self.destroy()
-
     @staticmethod
     def __isPlayerIGR(playerInfo):
         igrType = playerInfo.igrType if playerInfo else constants.IGR_TYPE.NONE
         return True if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE else False
-
-    def __showBootcampExitWindow(self):
-        window = BootcampExitWindow(partial(self.bootcampController.stopBootcamp, True), True, showIngameMenu)
-        window.load()
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == VIEW_ALIAS.INGAME_HELP:

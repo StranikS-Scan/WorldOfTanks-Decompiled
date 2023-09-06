@@ -27,8 +27,10 @@ class BaseAmmunitionPanelView(ViewImpl):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('_ammunitionPanel', '_wasVehicleOnLoading', 'onSizeChanged', 'onPanelSectionResized', 'onVehicleChanged')
 
-    def __init__(self, layoutID=R.views.lobby.tanksetup.AmmunitionPanel(), flags=ViewFlags.VIEW, model=None):
-        settings = ViewSettings(layoutID=layoutID, flags=flags, model=model or AmmunitionPanelViewModel())
+    def __init__(self, flags=ViewFlags.VIEW):
+        settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
+        settings.flags = flags
+        settings.model = AmmunitionPanelViewModel()
         super(BaseAmmunitionPanelView, self).__init__(settings)
         self._ammunitionPanel = None
         self._wasVehicleOnLoading = False

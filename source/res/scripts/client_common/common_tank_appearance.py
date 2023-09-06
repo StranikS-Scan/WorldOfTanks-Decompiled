@@ -418,14 +418,17 @@ class CommonTankAppearance(ScriptGameObject):
         self._initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
 
     def multiGunRecoil(self, indexes):
-        gunAnimators = self.gunAnimators
-        for index in indexes:
-            typeDescr = self.typeDescriptor
-            gunNodeName = typeDescr.turret.multiGun[index].node
-            gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
-            self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator) if gunAnimators else None)
+        if self.gunAnimators is None:
+            return
+        else:
+            for index in indexes:
+                typeDescr = self.typeDescriptor
+                gunNodeName = typeDescr.turret.multiGun[index].node
+                gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+                gunAnimator = self.gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator)
+                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
 
-        return
+            return
 
     def computeFullVehicleLength(self):
         vehicleLength = 0.0
@@ -439,8 +442,7 @@ class CommonTankAppearance(ScriptGameObject):
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.typeDescriptor.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        if gunAnimator is not None:
-            gunAnimator.recoil()
+        gunAnimator.recoil()
         return impulseDir
 
     def _connectCollider(self):
@@ -528,11 +530,12 @@ class CommonTankAppearance(ScriptGameObject):
 
     def _attachStickers(self):
         _logger.debug('Attaching VehicleStickers for vehicle: %s', self._vehicle)
+        isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
         if self.vehicleStickers is None:
-            _logger.error('Failed to attach VehicleStickers. Missing VehicleStickers. Vehicle: %s', self._vehicle)
+            if not isCurrentModelDamaged:
+                _logger.error('Failed to attach VehicleStickers. Missing VehicleStickers. Vehicle: %s', self._vehicle)
             return
         else:
-            isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
             self.vehicleStickers.alpha = DEFAULT_STICKERS_ALPHA
             self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)
             return

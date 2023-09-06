@@ -73,8 +73,9 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
             self.__resetViewModel(vm)
             if season.hasActiveCycle(currTime):
                 if self.__battleRoyaleController.isEnabled():
-                    timeLeftStr = time_utils.getTillTimeString(season.getCycleEndDate() - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                    vm.setTimeLeft(timeLeftStr)
+                    if self.__battleRoyaleController.isShowTimeLeft():
+                        timeLeftStr = time_utils.getTillTimeString(season.getCycleEndDate() - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                        vm.setTimeLeft(timeLeftStr)
                     self._addReward(ModeSelectorRewardID.CREDITS)
                     self._addReward(ModeSelectorRewardID.OTHER)
             else:

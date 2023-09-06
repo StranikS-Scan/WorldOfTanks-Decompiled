@@ -26,6 +26,10 @@ class SpawnKeyPointTeamInfo(SpawnKeyPointTeamInfoBase, DynamicScriptComponent):
         spawnCtrl = self.guiSessionProvider.dynamic.spawn
         spawnCtrl.setupCloseTime(self.spawnKeyPointsCloseTime)
 
+    def onDestroy(self):
+        SpawnKeyPointTeamInfoBase.onDestroy(self)
+        DynamicScriptComponent.onDestroy(self)
+
     def __onReceiveTeamSpawnKeyPoints(self, points):
         if not self._isAvatarReady:
             return

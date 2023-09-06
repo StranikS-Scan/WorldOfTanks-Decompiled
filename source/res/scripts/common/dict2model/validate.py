@@ -163,3 +163,50 @@ class URL(Validator):
 
     def _reprArgs(self):
         return 'relative={}'.format(self.relative)
+
+
+class NoneOf(Validator):
+    _message = 'Value: {value} must not be one of: {values}.'
+    __slots__ = ('_choices', '_choicesText')
+
+    def __init__(self, choices):
+        self._choices = choices
+        self._choicesText = ', '.join((str(each) for each in self._choices))
+
+    def __call__(self, incoming):
+        try:
+            if incoming in self._choices:
+                raise ValidationError(self._message.format(value=incoming, values=self._choicesText))
+        except TypeError:
+            pass
+
+    def _reprArgs(self):
+        return 'choices={}'.format(self._choices)
+
+
+class OneOf(NoneOf):
+    _message = 'Value: {value} must be one of: {values}.'
+    __slots__ = ()
+
+    def __call__(self, incoming):
+        try:
+            if incoming not in self._choices:
+                raise ValidationError(self._message.format(value=incoming, values=self._choicesText))
+        except TypeError:
+            raise ValidationError(self._message.format(value=incoming, values=self._choicesText))
+
+
+class Regexp(Validator):
+    _message = 'String: {value} does not match pattern: {pattern}.'
+    __slots__ = ('_regex',)
+
+    def __init__(self, regex, flags=0):
+        self._regex = re.compile(regex, flags) if isinstance(regex, str) else regex
+
+    def __call__(self, incoming):
+        if self._regex.match(incoming) is None:
+            raise ValidationError(self._message.format(value=incoming, pattern=self._regex.pattern))
+        return
+
+    def _reprArgs(self):
+        return 'regex={}'.format(self._regex.pattern)

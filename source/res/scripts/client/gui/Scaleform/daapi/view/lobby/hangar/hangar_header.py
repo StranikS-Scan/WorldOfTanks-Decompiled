@@ -360,8 +360,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self.__funRandomCtrl.isFunRandomPrbActive():
             return {'isVisible': True,
              'quests': []}
+        if self._currentVehicle.isPresent():
+            return {'isVisible': True,
+             'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)}
         return {'isVisible': True,
-         'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)} if self._currentVehicle.isPresent() else emptyHeaderVO
+         'quests': []} if self.__comp7Controller.isComp7PrbActive() else emptyHeaderVO
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
@@ -387,13 +390,17 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 quests.append(marathonQuests)
             else:
                 quests.extend(marathonQuests)
-        eventQuests = self.__getElenQuestsVO(vehicle)
-        if eventQuests:
-            quests.append(eventQuests)
+        if self.isElenQuestsEnabled():
+            eventQuests = self.__getElenQuestsVO(vehicle)
+            if eventQuests:
+                quests.append(eventQuests)
         return quests
 
     def isPersonalMissionEnabled(self):
         return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS)
+
+    def isElenQuestsEnabled(self):
+        return not self.__comp7Controller.isComp7PrbActive()
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []
@@ -817,7 +824,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.as_setDataS(headerVO)
 
     def __updateResourceWellEntryPoint(self):
-        isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR and not self.__bootcampController.isInBootcamp()
+        isArenaBonusTypeFit = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.WINBACK)
+        isRandom = isArenaBonusTypeFit and not self.__bootcampController.isInBootcamp()
         isResourceWellVisible = self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted()
         self.as_setResourceWellEntryPointS(isRandom and isResourceWellVisible)
 

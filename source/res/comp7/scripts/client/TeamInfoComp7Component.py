@@ -7,12 +7,12 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from script_component.ScriptComponent import ScriptComponent
+from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from VOIP.VOIPManager import VOIPManager
 
-class TeamInfoComp7Component(ScriptComponent):
+class TeamInfoComp7Component(DynamicScriptComponent):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -42,6 +42,10 @@ class TeamInfoComp7Component(ScriptComponent):
             self.__invalidateTeamVivoxChannel()
 
     def _onAvatarReady(self):
+        voipManager = VOIP.getVOIPManager()
+        voipManager.onJoinedChannel += self.__onJoinedVoipChannel
+        voipManager.onLeftChannel += self.__onLeftVoipChannel
+        self.__updateVoipConnection()
         self.__invalidateRoleSkillLevels()
         self.__invalidateTeamVivoxChannel()
 

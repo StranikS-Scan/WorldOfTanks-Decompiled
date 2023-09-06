@@ -11,7 +11,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
 from external_strings_utils import unicode_from_utf8
 _logger = logging.getLogger(__name__)
-_CACHE_WARNING_GAP_IN_MB = 500
+_CACHE_WARNING_GAP_IN_MB = 750
 
 def _expectDir(path):
     try:

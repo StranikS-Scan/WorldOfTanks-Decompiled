@@ -79,9 +79,25 @@ class _FireCircle(_TriggerItem):
         return []
 
 
-class _CorrodingShot(_TriggerItem):
+class _CorrodingShotIndicator(object):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __EQUIPMENT_NAME = BattleRoyaleEquipments.CORRODING_SHOT
+
+    @classmethod
+    def updateIndicator(cls, stage, timeRemaining):
+        info = namedtuple('CorrodingShotInfo', ('stage', 'endTime'))
+        info.stage = stage
+        info.endTime = BigWorld.serverTime() + timeRemaining
+        cls.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(cls.__EQUIPMENT_NAME, None, info)
+        return
+
+
+class _CorrodingShot(_TriggerItem):
+    __slots__ = ('__crosshairIndicator',)
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags):
+        self.__crosshairIndicator = _CorrodingShotIndicator()
+        super(_CorrodingShot, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
     def getTags(self):
         pass
@@ -97,11 +113,7 @@ class _CorrodingShot(_TriggerItem):
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         super(_CorrodingShot, self).update(quantity, stage, timeRemaining, totalTime)
-        info = namedtuple('CorrodingShotInfo', ('stage', 'endTime'))
-        info.stage = stage
-        info.endTime = BigWorld.serverTime() + timeRemaining
-        self.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.__EQUIPMENT_NAME, None, info)
-        return
+        self.__crosshairIndicator.updateIndicator(stage, timeRemaining)
 
 
 class _BotSpawner(_ArtilleryItem, _BomberStrikeSelector):
@@ -225,6 +237,18 @@ class _RepairPointItem(_TriggerItem):
         return []
 
 
+class _BRReplayCorrodingShot(_ReplayItem):
+    __slots__ = ('__crosshairIndicator',)
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
+        self.__crosshairIndicator = _CorrodingShotIndicator()
+        super(_BRReplayCorrodingShot, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_BRReplayCorrodingShot, self).update(quantity, stage, timeRemaining, totalTime)
+        self.__crosshairIndicator.updateIndicator(stage, timeRemaining)
+
+
 def registerBREquipmentsItems():
     registerEquipmentItem('large_repairkit_battle_royale', _RepairBattleRoyaleCrewAndModules, _ReplayItem)
     registerEquipmentItem('regenerationKit', _RegenerationKitBattleRoyaleItem, _ReplayItem)
@@ -240,7 +264,7 @@ def registerBREquipmentsItems():
     registerEquipmentItem('berserker', _BuffItem, _ReplayItem)
     registerEquipmentItem('fireCircle', _FireCircle, _ReplayItem)
     registerEquipmentItem('adaptationHealthRestore', _AdaptationHealthRestore, _ReplayItem)
-    registerEquipmentItem('corrodingShot', _CorrodingShot, _ReplayItem)
+    registerEquipmentItem('corrodingShot', _CorrodingShot, _BRReplayCorrodingShot)
     registerEquipmentItem('clingBrander', _BotSpawner, _BRReplaySpawnBot)
     registerEquipmentItem('thunderStrike', _ThunderStrike, _BRReplayThunderStrike)
     registerEquipmentItem('shotPassion', _ShotPassion, _ReplayItem)

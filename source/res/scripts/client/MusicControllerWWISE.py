@@ -297,8 +297,10 @@ class MusicController(object):
                 wwSetup = self.__specialSounds.arenaMusicSetup
                 self.stopAmbient()
                 if wwSetup is not None:
-                    import SoundGroups
-                    SoundGroups.g_instance.playSound2D(wwSetup.get('wwmusicEndbattleStop', ''))
+                    endBattleSoundName = wwSetup.get('wwmusicEndbattleStop', '')
+                    if endBattleSoundName:
+                        import SoundGroups
+                        SoundGroups.g_instance.playSound2D(endBattleSoundName)
                 lastBattleEvents = {}
                 if wwSetup is not None:
                     lastBattleEvents[MUSIC_EVENT_COMBAT_VICTORY] = wwSetup.get('wwmusicResultWin', '')

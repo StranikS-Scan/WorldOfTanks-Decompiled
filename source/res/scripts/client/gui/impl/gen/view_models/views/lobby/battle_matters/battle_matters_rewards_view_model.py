@@ -14,6 +14,13 @@ class State(IntEnum):
     FINAL = 4
 
 
+class RewardViewsSequenceNumber(IntEnum):
+    SINGLE = 0
+    FIRST = 1
+    MIDDLE = 2
+    LAST = 3
+
+
 class RewardType(Enum):
     REGULAR = 'regular'
     INTERMEDIATE = 'intermediate'
@@ -25,7 +32,7 @@ class BattleMattersRewardsViewModel(ViewModel):
     ARG_REWARD_TYPE = 'type'
     ARG_REWARD_INDEX = 'tooltipId'
 
-    def __init__(self, properties=5, commands=4):
+    def __init__(self, properties=6, commands=4):
         super(BattleMattersRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -34,37 +41,43 @@ class BattleMattersRewardsViewModel(ViewModel):
     def setState(self, value):
         self._setNumber(0, value.value)
 
+    def getRewardViewsSequenceNumber(self):
+        return RewardViewsSequenceNumber(self._getNumber(1))
+
+    def setRewardViewsSequenceNumber(self, value):
+        self._setNumber(1, value.value)
+
     def getQuestNumber(self):
-        return self._getNumber(1)
+        return self._getNumber(2)
 
     def setQuestNumber(self, value):
-        self._setNumber(1, value)
+        self._setNumber(2, value)
 
     def getVehicles(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setVehicles(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getVehiclesType():
         return BattleMattersVehicleModel
 
     def getRegularRewards(self):
-        return self._getArray(3)
+        return self._getArray(4)
 
     def setRegularRewards(self, value):
-        self._setArray(3, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getRegularRewardsType():
         return ItemBonusModel
 
     def getIntermediateRewards(self):
-        return self._getArray(4)
+        return self._getArray(5)
 
     def setIntermediateRewards(self, value):
-        self._setArray(4, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getIntermediateRewardsType():
@@ -73,6 +86,7 @@ class BattleMattersRewardsViewModel(ViewModel):
     def _initialize(self):
         super(BattleMattersRewardsViewModel, self)._initialize()
         self._addNumberProperty('state')
+        self._addNumberProperty('rewardViewsSequenceNumber')
         self._addNumberProperty('questNumber', 0)
         self._addArrayProperty('vehicles', Array())
         self._addArrayProperty('regularRewards', Array())

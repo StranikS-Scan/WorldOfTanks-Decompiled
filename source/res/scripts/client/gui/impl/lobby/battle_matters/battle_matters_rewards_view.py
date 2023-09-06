@@ -4,61 +4,32 @@ import logging
 from collections import OrderedDict
 import typing
 from frameworks.wulf import ViewSettings, WindowFlags
-from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_rewards_view_model import BattleMattersRewardsViewModel, State, RewardType
+from gui.impl.lobby.battle_matters.battle_matters_constants import SequenceNumber
 from gui.impl.lobby.battle_matters.tooltips.battle_matters_token_tooltip_view import BattleMattersTokenTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses, getMergedBonusesFromDicts
 from gui.server_events.events_dispatcher import showBattleMatters
 from gui.shared.event_dispatcher import showDelayedReward, selectVehicleInHangar, showHangar
-from gui.shared.missions.packers.bonus import packBonusModelAndTooltipData
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, indexesCmp, bonusesSort, blueprintsCmp
+from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSort, blueprintsCmp, battleMattersSort
 from helpers import dependency
 from sound_gui_manager import CommonSoundSpaceSettings
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
 from gui.server_events.bonuses import VehiclesBonus, TankmenBonus
 if typing.TYPE_CHECKING:
-    from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
-    from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_model import BattleMattersVehicleModel
-    from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
     from frameworks.wulf import ViewEvent, View
     from typing import Sequence, Tuple, Callable, Optional
     from Event import Event
 _logger = logging.getLogger(__name__)
-_CUSTOMIZATIONS_ORDER = ('style', 'emblem', 'camouflage', 'modification', 'decal', 'inscription', 'paint')
-_DEVICES_TYPES_ORDER = (SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS, SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY, SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT)
-_ITEMS_NAMES_ORDER = ('optionalDevice', 'battleBooster', 'equipment')
-
-def _vehiclesCmp(firstModel, secondModel):
-    return cmp(firstModel.getLevel(), secondModel.getLevel())
-
-
-def _customizationsCmp(firstModel, secondModel):
-    return indexesCmp(_CUSTOMIZATIONS_ORDER, firstModel.getIcon(), secondModel.getIcon())
-
-
-def _itemsCmp(firstModel, secondModel):
-    result = indexesCmp(_ITEMS_NAMES_ORDER, firstModel.getName(), secondModel.getName())
-    if not result:
-        result = indexesCmp(_DEVICES_TYPES_ORDER, firstModel.getOverlayType(), secondModel.getOverlayType())
-    return result
-
-
-def _customSort(rewardType):
-    return _CUSTOM_SORT.get(rewardType, lambda _, __: 0)
-
-
-_CUSTOM_SORT = {VehiclesBonus.VEHICLES_BONUS: _vehiclesCmp,
- 'customizations': _customizationsCmp,
- 'items': _itemsCmp}
 _CLIENT_REWARD_IDX = -1
 
 class BattleMattersRewardsView(ViewImpl):
-    __slots__ = ('__cds', '__questOrder', '__isPairQuest', '__isWithDelayed', '__delayedReward', '__intermediateQuestID', '__intermediateRewards', '__regularQuestID', '__regularRewards', '__tooltipData')
+    __slots__ = ('__cds', '__questOrder', '__isPairQuest', '__isWithDelayed', '__delayedReward', '__intermediateQuestID', '__intermediateRewards', '__regularQuestID', '__regularRewards', '__tooltipData', '__sequenceNumber')
     _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name='battle_matters', entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='bm_reward', exitEvent='', parentSpace='')
     __battleMattersController = dependency.descriptor(IBattleMattersController)
 
@@ -76,6 +47,7 @@ class BattleMattersRewardsView(ViewImpl):
         questData = ctx[self.__questOrder]
         self.__isPairQuest = questData.get('isInPair', False)
         self.__isWithDelayed = questData.get('isWithDelayedBonus', False)
+        self.__sequenceNumber = questData.get('sequenceNumber', SequenceNumber.SINGLE)
         self.__delayedReward = ctx.get(_CLIENT_REWARD_IDX, {})
         questData = questData.get('quests', {})
         questIDs = questData.keys()
@@ -83,7 +55,7 @@ class BattleMattersRewardsView(ViewImpl):
             if self.__battleMattersController.isIntermediateBattleMattersQuestID(qID):
                 self.__intermediateQuestID = qID
                 self.__intermediateRewards = questData[qID]
-            if self.__battleMattersController.isRegularBattleMattersQuestID(qID):
+            if self.__battleMattersController.isRegularBattleMattersQuestID(qID) or self.__battleMattersController.isCompensationBattleMattersQuestID(qID):
                 self.__regularQuestID = qID
                 self.__regularRewards = questData[qID]
 
@@ -135,6 +107,7 @@ class BattleMattersRewardsView(ViewImpl):
         with self.viewModel.transaction() as tx:
             tx.setState(self.__getState())
             tx.setQuestNumber(self.__questOrder)
+            tx.setRewardViewsSequenceNumber(self.__sequenceNumber)
             self.__fillVehicles(tx, vehicles, packer)
             self.__fillIntermediate(tx, intermediateBonuses, packer)
             self.__fillRegular(tx, regularBonuses, packer)
@@ -158,19 +131,19 @@ class BattleMattersRewardsView(ViewImpl):
     def __fillVehicles(self, model, vehicles, packer):
         vehiclesModel = model.getVehicles()
         vehiclesModel.clear()
-        packBonusModelAndTooltipData(vehicles, packer, vehiclesModel, self.__tooltipData[RewardType.VEHICLE], sort=_customSort)
+        packMissionsBonusModelAndTooltipData(vehicles, packer, vehiclesModel, self.__tooltipData[RewardType.VEHICLE], sort=battleMattersSort)
         vehiclesModel.invalidate()
 
     def __fillIntermediate(self, model, bonuses, packer):
         intermediateModel = model.getIntermediateRewards()
         intermediateModel.clear()
-        packBonusModelAndTooltipData(bonuses, packer, intermediateModel, self.__tooltipData[RewardType.INTERMEDIATE], sort=_customSort)
+        packMissionsBonusModelAndTooltipData(bonuses, packer, intermediateModel, self.__tooltipData[RewardType.INTERMEDIATE], sort=battleMattersSort)
         intermediateModel.invalidate()
 
     def __fillRegular(self, model, bonuses, packer):
         regularModel = model.getRegularRewards()
         regularModel.clear()
-        packBonusModelAndTooltipData(bonuses, packer, regularModel, self.__tooltipData[RewardType.REGULAR], sort=_customSort)
+        packMissionsBonusModelAndTooltipData(bonuses, packer, regularModel, self.__tooltipData[RewardType.REGULAR], sort=battleMattersSort)
         regularModel.invalidate()
 
     def __processVehicles(self):
@@ -209,7 +182,7 @@ class BattleMattersRewardsView(ViewImpl):
 
     def __getBackportTooltipData(self, event):
         rewardType = RewardType(event.getArgument(BattleMattersRewardsViewModel.ARG_REWARD_TYPE))
-        index = int(event.getArgument(BattleMattersRewardsViewModel.ARG_REWARD_INDEX))
+        index = event.getArgument(BattleMattersRewardsViewModel.ARG_REWARD_INDEX)
         if rewardType is None:
             _logger.warning('No reward type for backport tooltip')
             return

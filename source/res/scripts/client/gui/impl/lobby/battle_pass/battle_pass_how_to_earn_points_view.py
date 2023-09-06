@@ -20,7 +20,10 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.EPIC_BATTLE]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR,
+ ARENA_BONUS_TYPE.COMP7,
+ ARENA_BONUS_TYPE.EPIC_BATTLE,
+ ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 

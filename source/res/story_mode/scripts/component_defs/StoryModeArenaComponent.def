@@ -1,0 +1,18 @@
+<StoryModeArenaComponent.def>
+  <BaseMethods>
+    <onAvatarKicked>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onAvatarKicked>
+  </BaseMethods>
+  <CellMethods>
+    <setupArena>
+      <Args>
+        <config>	PYTHON	</config>
+      </Args>
+    </setupArena>
+  </CellMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</StoryModeArenaComponent.def>

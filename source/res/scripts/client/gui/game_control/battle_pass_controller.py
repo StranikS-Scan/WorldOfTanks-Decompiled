@@ -21,6 +21,7 @@ from helpers import dependency, time_utils
 from helpers.events_handler import EventsHandler
 from helpers.server_settings import serverSettingsChangeListener
 from shared_utils import findFirst, first
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -34,6 +35,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         self.__oldPoints = 0
@@ -70,6 +72,8 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__rewardLogic.start()
         self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
         self.__currentMode = self.__getConfig().mode
+        storageData = self.__settingsCore.serverSettings.getBPStorage()
+        self.__settingsCore.serverSettings.updateBPStorageData(storageData)
 
     def onAvatarBecomePlayer(self):
         self.__stop()

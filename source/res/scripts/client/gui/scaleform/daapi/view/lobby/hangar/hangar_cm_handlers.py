@@ -15,7 +15,7 @@ from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showShop, showVehicleRentalPage, showTelecomRentalPage
+from gui.shared.event_dispatcher import showShop, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
@@ -66,7 +66,6 @@ class VEHICLE(object):
     BLUEPRINT = 'blueprint'
     NATION_CHANGE = 'nationChange'
     GO_TO_COLLECTION = 'goToCollection'
-    WOT_PLUS_RENT = 'wotPlusRent'
     TELECOM_RENT = 'telecomRent'
 
 
@@ -182,7 +181,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.COMPARE: 'compareVehicle',
          VEHICLE.NATION_CHANGE: 'changeVehicleNation',
          VEHICLE.GO_TO_COLLECTION: 'goToCollection',
-         VEHICLE.WOT_PLUS_RENT: 'showWotPlusRent',
          VEHICLE.TELECOM_RENT: 'showTelecomRent'})
 
     @prbDispatcherProperty
@@ -230,9 +228,6 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
         shared_events.showCollectibleVehicles(vehicle.nationID)
 
-    def showWotPlusRent(self):
-        showVehicleRentalPage()
-
     def showTelecomRent(self):
         showTelecomRentalPage()
 
@@ -252,7 +247,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = self.itemsCache.items.getAccountDossier(None)
-        if vehicle is None or vehicle.isContextMenuHidden:
+        if vehicle is None:
             return options
         else:
             isEventVehicle = vehicle.isOnlyForEventBattles
@@ -295,7 +290,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         serverSettings = self._lobbyContext.getServerSettings()
                         isRentalEnabled = serverSettings.isTelecomRentalsEnabled()
                         isActive = BigWorld.player().telecomRentals.isActive()
-                        options.append(self._makeItem(VEHICLE.TELECOM_RENT, MENU.contextmenu(VEHICLE.WOT_PLUS_RENT), {'enabled': isRentalEnabled and isActive}))
+                        options.append(self._makeItem(VEHICLE.TELECOM_RENT, MENU.contextmenu(VEHICLE.TELECOM_RENT), {'enabled': isRentalEnabled and isActive}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': canSell}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))

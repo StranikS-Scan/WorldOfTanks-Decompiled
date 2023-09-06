@@ -1,0 +1,14 @@
+<SequenceNetworkSync.def>
+  <Properties>
+    <syncTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </syncTime>
+    <state>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </state>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <DefaultKeyName>	sequenceNetworkSync	</DefaultKeyName>
+</SequenceNetworkSync.def>

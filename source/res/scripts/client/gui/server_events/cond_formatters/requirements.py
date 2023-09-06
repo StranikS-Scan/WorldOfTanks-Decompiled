@@ -180,6 +180,7 @@ class SingleGroupFormatter(ConditionsFormatter):
     def __init__(self):
         super(SingleGroupFormatter, self).__init__({'premiumAccount': PremiumAccountFormatter(),
          'premiumPlusAccount': PremiumPlusAccountFormatter(),
+         'wotPlus': WotPlusFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -235,6 +236,7 @@ class RecursiveGroupFormatter(RecursiveFormatter):
     def __init__(self, formatters=None):
         super(RecursiveGroupFormatter, self).__init__(formatters=formatters or {'premiumAccount': PremiumAccountFormatter(),
          'premiumPlusAccount': PremiumPlusAccountFormatter(),
+         'wotPlus': WotPlusFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -345,6 +347,7 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
     def __init__(self):
         super(TQRecursiveGroupFormatter, self).__init__(formatters={'premiumAccount': PremiumAccountFormatter(),
          'premiumPlusAccount': PremiumPlusAccountFormatter(),
+         'wotPlus': WotPlusFormatter(),
          'inClan': InClanRequirementFormatter(),
          'igrType': IgrTypeRequirementFormatter(),
          'GR': GlobalRatingRequirementFormatter(),
@@ -377,6 +380,16 @@ class PremiumPlusAccountFormatter(ConditionFormatter):
             labelKey = 'notPremiumAccount'
         label = backport.text(R.strings.quests.details.requirements.dyn(labelKey)())
         style = styler(condition.isAvailable())
+        return [packText(style(label))]
+
+
+class WotPlusFormatter(ConditionFormatter):
+
+    @classmethod
+    def format(cls, condition, event, styler):
+        style = styler(condition.isAvailable())
+        labelKey = 'wotPlus' if condition.isWotPlusNeeded() else 'withoutWotPlus'
+        label = backport.text(R.strings.quests.details.requirements.dyn(labelKey)())
         return [packText(style(label))]
 
 

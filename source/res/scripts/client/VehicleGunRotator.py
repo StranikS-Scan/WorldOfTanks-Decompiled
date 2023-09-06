@@ -43,7 +43,10 @@ class VehicleGunRotator(object):
         self.__turretYaw = 0.0
         self.__gunPitch = 0.0
         self.__turretRotationSpeed = 0.0
-        self.__dispersionAngles = [0.0, 0.0]
+        self.__dispersionAngles = [0.0,
+         0.0,
+         0.0,
+         0.0]
         self.__markerInfo = (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 1.0, 0.0), 1.0)
         self.__clientMode = True
         self.__showServerMarker = False
@@ -100,10 +103,10 @@ class VehicleGunRotator(object):
             if self.__clientMode:
                 self.__time = BigWorld.time()
                 if self.__showServerMarker:
-                    self._avatar.inputHandler.showGunMarker2(True)
+                    self._avatar.inputHandler.showServerGunMarker(True)
             return
 
-    def stop(self, *_, **__):
+    def stop(self):
         if self.__timerID is not None:
             BigWorld.cancelCallback(self.__timerID)
             self.__timerID = None
@@ -119,7 +122,7 @@ class VehicleGunRotator(object):
                 return
             if self.__clientMode and self.__showServerMarker:
                 self.__showServerMarker = False
-                self._avatar.inputHandler.showGunMarker2(False)
+                self._avatar.inputHandler.showServerGunMarker(False)
             if self.__transitionCallbackID is not None:
                 BigWorld.cancelCallback(self.__transitionCallbackID)
                 self.__transitionCallbackID = None
@@ -156,7 +159,10 @@ class VehicleGunRotator(object):
             return
         self.__turretYaw = turretYaw
         self.__gunPitch = gunPitch
-        self.__dispersionAngles = [dispAngle, dispAngle]
+        self.__dispersionAngles = [dispAngle,
+         dispAngle,
+         0.0,
+         0.0]
         self.__updateGunMarker(0.001)
 
     def setShotPosition(self, vehicleID, shotPos, shotVec, dispersionAngle, forceValueRefresh=False):
@@ -176,23 +182,24 @@ class VehicleGunRotator(object):
                     shotDir.normalise()
                     if shotDir.dot(dirToTarget) > 0.0:
                         return
-            markerPos, markerDir, markerSize, idealMarkerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
+            markerPosition = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
+            mPos, mDir, mSize, mIdealSize, dualAccSize, _, collData = markerPosition
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
-                replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
+                replayCtrl.setGunMarkerParams(mSize, dualAccSize, mPos, mDir)
             if self.__clientMode and self.__showServerMarker:
-                self._avatar.inputHandler.updateGunMarker2(markerPos, markerDir, (markerSize, idealMarkerSize), SERVER_TICK_LENGTH, collData)
+                self._avatar.inputHandler.updateServerGunMarker(mPos, mDir, (mSize, mIdealSize), SERVER_TICK_LENGTH, collData)
             if not self.__clientMode or forceValueRefresh:
-                self.__lastShotPoint = markerPos
-                self._avatar.inputHandler.updateGunMarker(markerPos, markerDir, (markerSize, idealMarkerSize), SERVER_TICK_LENGTH, collData)
-                self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), markerPos, adjust=True, overrideGunPosition=self.__gunPosition)
+                self.__lastShotPoint = mPos
+                self._avatar.inputHandler.updateClientGunMarker(mPos, mDir, (mSize, mIdealSize), SERVER_TICK_LENGTH, collData)
+                self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), mPos, adjust=True, overrideGunPosition=self.__gunPosition)
                 turretYawLimits = self.__getTurretYawLimits()
                 closestLimit = self.__isOutOfLimits(self.__turretYaw, turretYawLimits)
                 if closestLimit is not None:
                     self.__turretYaw = closestLimit
                 self.__updateTurretMatrix(self.__turretYaw, SERVER_TICK_LENGTH)
                 self.__updateGunMatrix(self.__gunPitch, SERVER_TICK_LENGTH)
-                self.__markerInfo = (markerPos, markerDir, markerSize)
+                self.__markerInfo = (mPos, mDir, mSize)
             return
 
     def predictLockedTargetShotPoint(self):
@@ -237,7 +244,7 @@ class VehicleGunRotator(object):
             self.__time = BigWorld.time()
             self.stopTrackingOnServer()
         if self.__showServerMarker:
-            self._avatar.inputHandler.showGunMarker2(self.__clientMode)
+            self._avatar.inputHandler.showServerGunMarker(self.__clientMode)
 
     clientMode = property(lambda self: self.__clientMode, __set_clientMode)
 
@@ -252,7 +259,7 @@ class VehicleGunRotator(object):
         if not self.__isStarted:
             return
         if self.__clientMode:
-            self._avatar.inputHandler.showGunMarker2(self.__showServerMarker)
+            self._avatar.inputHandler.showServerGunMarker(self.__showServerMarker)
 
     showServerMarker = property(lambda self: self.__showServerMarker, __set_showServerMarker)
 
@@ -420,23 +427,27 @@ class VehicleGunRotator(object):
             return
 
     def __updateGunMarker(self, forceRelaxTime=None):
-        if self._avatar.getVehicleAttached() is None:
+        vehicle = self._avatar.getVehicleAttached()
+        if vehicle is None:
             return
         else:
             shotPos, shotVec = self.getCurShotPosition()
-            markerPos, markerDir, markerSize, idealMarkerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
+            markerPosition = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
+            mPos, mDir, mSize, mIdealSize, dualAccSize, dualAccIdealSize, collData = markerPosition
+            hasDualAccuracy = vehicle and vehicle.typeDescriptor and vehicle.typeDescriptor.hasDualAccuracy
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording and not replayCtrl.isServerAim:
-                replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
+                replayCtrl.setGunMarkerParams(mSize, dualAccSize, mPos, mDir)
             if not self.__targetLastShotPoint:
-                self.__lastShotPoint = markerPos
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
-                self._avatar.inputHandler.updateGunMarker(markerPos, markerDir, (markerSize, idealMarkerSize), 0.001, collData)
-            else:
+                self.__lastShotPoint = mPos
+            relaxTime = 0.001
+            if not (BattleReplay.g_replayCtrl.isPlaying and BattleReplay.g_replayCtrl.isUpdateGunOnTimeWarp):
                 relaxTime = self.__ROTATION_TICK_LENGTH if forceRelaxTime is None else forceRelaxTime
-                self._avatar.inputHandler.updateGunMarker(markerPos, markerDir, (markerSize, idealMarkerSize), relaxTime, collData)
-            self.__markerInfo = (markerPos, markerDir, markerSize)
+            inputHandler = self._avatar.inputHandler
+            inputHandler.updateClientGunMarker(mPos, mDir, (mSize, mIdealSize), relaxTime, collData)
+            if hasDualAccuracy:
+                inputHandler.updateDualAccGunMarker(mPos, mDir, (dualAccSize, dualAccIdealSize), relaxTime, collData)
+            self.__markerInfo = (mPos, mDir, mSize)
             if self._avatar.inCharge:
                 self._updateMultiGunCollisionData()
             return
@@ -580,15 +591,19 @@ class VehicleGunRotator(object):
         usedMaxDistance = usedMaxDistance or distance > shotDescr.maxDistance
         if usedMaxDistance:
             distance = shotDescr.maxDistance
-        markerDiameter = 2.0 * distance * dispersionAngles[0]
-        idealMarkerDiameter = 2.0 * distance * dispersionAngles[1]
+        diameter = 2.0 * distance * dispersionAngles[0]
+        idealDiameter = 2.0 * distance * dispersionAngles[1]
+        dualAccDiameter = 2.0 * distance * dispersionAngles[2]
+        dualAccIdealDiameter = 2.0 * distance * dispersionAngles[3]
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            markerDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)
+            diameter, dualAccDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)
         return (endPos,
          direction,
-         markerDiameter,
-         idealMarkerDiameter,
+         diameter,
+         idealDiameter,
+         dualAccDiameter,
+         dualAccIdealDiameter,
          collData)
 
     def _updateMultiGunCollisionData(self):

@@ -3,6 +3,7 @@
 import Event
 import GUI
 import aih_constants
+import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID, STRATEGIC_CAMERA_ID
 from gui.battle_control.controllers.interfaces import IBattleController
@@ -26,7 +27,8 @@ _GUN_MARKERS_SET_IDS = (_BINDING_ID.GUN_MARKERS_FLAGS,
  _BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER,
- _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+ _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
+ _BINDING_ID.DUAL_ACC_GUN_MARKER_DATA_PROVIDER)
 _STRATEGIC_CAMERA_TO_ID = {_STRATEGIC_CAMERA.AERIAL: STRATEGIC_CAMERA_ID.AERIAL,
  _STRATEGIC_CAMERA.TRAJECTORY: STRATEGIC_CAMERA_ID.TRAJECTORY}
 
@@ -43,6 +45,7 @@ class GunMarkersSetInfo(object):
     clientSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     serverMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     serverSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+    dualAccMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.DUAL_ACC_GUN_MARKER_DATA_PROVIDER)
     __gunMarkersFlags = aih_global_binding.bindRO(_BINDING_ID.GUN_MARKERS_FLAGS)
 
     @property
@@ -111,6 +114,7 @@ class CrosshairDataProxy(IBattleController):
         for bindingID in _GUN_MARKERS_SET_IDS:
             aih_global_binding.subscribe(bindingID, self.__onGunMarkersSetChanged)
 
+        BattleReplay.g_replayCtrl.onServerAimChanged += self.__onGunMarkersSetChanged
         self.__viewID = getCrosshairViewIDByCtrlMode(self.__ctrlMode)
         self.__scale = round(self.settingsCore.interfaceScale.get(), 1)
         self.__calculateSize(notify=False)
@@ -128,6 +132,8 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.unsubscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
         for bindingID in _GUN_MARKERS_SET_IDS:
             aih_global_binding.unsubscribe(bindingID, self.__onGunMarkersSetChanged)
+
+        BattleReplay.g_replayCtrl.onServerAimChanged -= self.__onGunMarkersSetChanged
 
     def getCtrlMode(self):
         return self.__ctrlMode
@@ -230,7 +236,7 @@ class CrosshairDataProxy(IBattleController):
     def __onZoomFactorChanged(self, zoomFactor):
         self.onCrosshairZoomFactorChanged(zoomFactor)
 
-    def __onGunMarkersSetChanged(self, _):
+    def __onGunMarkersSetChanged(self, *_):
         self.onGunMarkersSetChanged(self.getGunMarkersSetInfo())
 
     def __onSPGShotsIndicatorStateChanged(self, value):

@@ -134,10 +134,6 @@ class BCBattlePage(BCBattlePageMeta):
         g_bootcamp.getUI().reload()
         super(BCBattlePage, self).reload()
 
-    @property
-    def topHint(self):
-        return self.getComponent(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT)
-
     def getExternalByAlias(self, alias):
         for external in self._external:
             if external.alias == alias:

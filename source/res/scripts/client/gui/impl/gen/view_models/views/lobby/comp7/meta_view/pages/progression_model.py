@@ -3,6 +3,7 @@
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progression_item_model import ProgressionItemModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_base_model import ProgressionBaseModel
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_qualification_model import ProgressionQualificationModel
 
 class ProgressionModel(ProgressionBaseModel):
     __slots__ = ()
@@ -10,16 +11,18 @@ class ProgressionModel(ProgressionBaseModel):
     def __init__(self, properties=9, commands=0):
         super(ProgressionModel, self).__init__(properties=properties, commands=commands)
 
+    @property
+    def qualificationModel(self):
+        return self._getViewModel(2)
+
+    @staticmethod
+    def getQualificationModelType():
+        return ProgressionQualificationModel
+
     def getCurrentScore(self):
-        return self._getNumber(2)
-
-    def setCurrentScore(self, value):
-        self._setNumber(2, value)
-
-    def getMaxScore(self):
         return self._getNumber(3)
 
-    def setMaxScore(self, value):
+    def setCurrentScore(self, value):
         self._setNumber(3, value)
 
     def getLastBestUserPointsValue(self):
@@ -58,8 +61,8 @@ class ProgressionModel(ProgressionBaseModel):
 
     def _initialize(self):
         super(ProgressionModel, self)._initialize()
+        self._addViewModelProperty('qualificationModel', ProgressionQualificationModel())
         self._addNumberProperty('currentScore', 0)
-        self._addNumberProperty('maxScore', 0)
         self._addNumberProperty('lastBestUserPointsValue', 0)
         self._addNumberProperty('leaderboardUpdateTimestamp', 0)
         self._addBoolProperty('isLastBestUserPointsValueLoading', False)

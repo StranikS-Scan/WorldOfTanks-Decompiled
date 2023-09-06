@@ -46,11 +46,11 @@ _LOBBY_TOOLTIPS_BUILDERS_PATHS = [('gui.Scaleform.daapi.view.tooltips.achievemen
  ('gui.Scaleform.daapi.view.tooltips.account_completion_builders', _TOOLTIPS.ACCOUNT_COMPLETION_SET),
  ('gui.Scaleform.daapi.view.tooltips.referral_program_builder', _TOOLTIPS.REFERRAL_PROGRAM_SET),
  ('gui.Scaleform.daapi.view.tooltips.resource_well_builders', _TOOLTIPS.RESOURCE_WELL_SET),
- ('gui.Scaleform.daapi.view.tooltips.comp7_lobby_builders', _TOOLTIPS.COMP7_LOBBY_SET)]
+ ('gui.Scaleform.daapi.view.tooltips.comp7_lobby_builders', _TOOLTIPS.COMP7_LOBBY_SET),
+ ('gui.Scaleform.daapi.view.tooltips.wot_plus_builders', _TOOLTIPS.WOT_PLUS_SET)]
 _LOBBY_DEBUG_TOOLTIPS_BUILDERS_PATHS = (('gui.development.ui.tooltips.development_builders', _TOOLTIPS.DEVELOPMENT_SET),)
 _BATTLE_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.settings_builders', _TOOLTIPS.SETTINGS_SET),
  ('gui.Scaleform.daapi.view.tooltips.battle_opt_devices_builder', _TOOLTIPS.BATTLE_BLOCK_TOOLTIPS),
- ('gui.Scaleform.daapi.view.tooltips.bootcamp_builders', _TOOLTIPS.BOOTCAMP_SET),
  ('gui.Scaleform.daapi.view.tooltips.epic_in_battle_builders', _TOOLTIPS.EPIC_IN_BATTE_SET),
  ('gui.Scaleform.daapi.view.tooltips.comp7_battle_builders', _TOOLTIPS.COMP7_BATTLE_SET))
 ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipment',

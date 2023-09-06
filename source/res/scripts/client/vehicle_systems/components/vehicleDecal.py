@@ -33,7 +33,6 @@ class VehicleDecal(object):
         self.__hullParent = None
         self.__turretDecals = []
         self.__turretParent = None
-        self.settingsCore.onSettingsChanged += self.onSettingsChanged
         return
 
     def destroy(self):
@@ -47,6 +46,7 @@ class VehicleDecal(object):
 
     def create(self):
         self.__createDecals(VehicleDecal.getDecalType())
+        self.settingsCore.onSettingsChanged += self.onSettingsChanged
 
     def attach(self):
         if self.__attached or self.__appearance is None:

@@ -30,7 +30,7 @@ class ThunderStrikeVisualizer(object):
     strikePrefab = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='strike prefab', annotations={'path': '*.prefab'})
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class ThunderStrikeManager(CGF.ComponentManager, CallbackDelayer):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 

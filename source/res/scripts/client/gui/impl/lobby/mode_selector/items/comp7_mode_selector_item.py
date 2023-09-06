@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/items/comp7_mode_selector_item.py
+import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_model import ModeSelectorComp7Model
-from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared
+from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
@@ -14,6 +15,8 @@ from gui.shared.formatters import time_formatters
 from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IComp7Controller
+if typing.TYPE_CHECKING:
+    from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_widget_model import ModeSelectorComp7WidgetModel
 
 class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -55,12 +58,13 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     def __fillViewModel(self):
         isStarted = self.__comp7Controller.isAvailable()
         nextSeason = self.__comp7Controller.getNextSeason()
+        isBeforeSeasons = self.__comp7Controller.getPreviousSeason() is None and nextSeason is not None
         with self.viewModel.transaction() as vm:
             if isStarted:
                 vm.setTimeLeft(self.__getSeasonTimeLeft())
                 self._addReward(ModeSelectorRewardID.PROGRESSION_STYLE)
                 self._addReward(ModeSelectorRewardID.BONES)
-            elif nextSeason is not None:
+            elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))
             else:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd()))
@@ -76,6 +80,6 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
             vm.setCurrentScore(self.__comp7Controller.rating)
             vm.setIsEnabled(self.__comp7Controller.isAvailable() and not self.__comp7Controller.isOffline)
             comp7_model_helpers.setDivisionInfo(model=vm.divisionInfo, division=division)
-            vm.setHasRankInactivity(comp7_shared.hasPlayerRankInactivity())
-            vm.setRankInactivityCount(self.__comp7Controller.activityPoints)
-            comp7_model_helpers.setRanksInfo(vm)
+            comp7_model_helpers.setRanksInactivityInfo(vm)
+            comp7_model_helpers.setElitePercentage(vm)
+            comp7_qualification_helpers.setQualificationInfo(vm.qualificationModel)

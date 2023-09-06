@@ -159,6 +159,16 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </overturn>
+    <lift_over>	NoneExtra : LiftOver	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </lift_over>
     <drowning>	NoneExtra : Drowning	</drowning>
     <burnout>	NoneExtra : Burnout	</burnout>
     <afterburning>	NoneExtra : Afterburning	</afterburning>
@@ -303,9 +313,9 @@
       <beamLength>	10.0	</beamLength>
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
-    <multiShoot>	ShowShootingMultiGun : MultiShoot	</multiShoot>
     <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
-    <overturn_battle_royale>	NoneExtra : OverturnBattleRoyale	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+    <lift_over_battle_royale>	NoneExtra : LiftOver	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <liftOverTimeout>	5.0	</liftOverTimeout>
       <gameplayFactors>
         <reloadTime>	2.0	</reloadTime>
         <turretRotationSpeed>	0.5	</turretRotationSpeed>
@@ -314,7 +324,7 @@
         <shotDispersion>	2.0	</shotDispersion>
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
-    </overturn_battle_royale>
+    </lift_over_battle_royale>
     <afterburning_battle_royale>	AfterburningBattleRoyale : AfterburningBattleRoyale	</afterburning_battle_royale>
     <trappoint>	NoneExtra : TrapPoint	</trappoint>
     <repairpoint>	NoneExtra : TrapPoint	</repairpoint>

@@ -45,15 +45,18 @@ class _WGNCPackageBusinessHandler(PackageBusinessHandler):
         if not item:
             LOG_WARNING('Notification item is not found', notID, target)
             return
-        if item.isModal():
-            alias = WGNC_ALIASES.MODAL_BASIC_WINDOW
         else:
-            alias = WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW
-        self.loadViewWithDefName(alias, '{0}_{1}'.format(WGNC_ALIASES.MODAL_BASIC_WINDOW, notID), {'notID': notID,
-         'target': target})
+            if item.isModal():
+                alias = WGNC_ALIASES.MODAL_BASIC_WINDOW
+            else:
+                alias = WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW
+            self.loadViewWithDefName(alias, '{0}_{1}'.format(WGNC_ALIASES.MODAL_BASIC_WINDOW, notID), None, {'notID': notID,
+             'target': target})
+            return
 
     def __showPollWindow(self, event):
         notID = event.getNotID()
         target = event.getTarget()
-        self.loadViewWithDefName(WGNC_ALIASES.POLL_WINDOW, '{0}_{1}'.format(WGNC_ALIASES.POLL_WINDOW, notID), {'notID': notID,
+        self.loadViewWithDefName(WGNC_ALIASES.POLL_WINDOW, '{0}_{1}'.format(WGNC_ALIASES.POLL_WINDOW, notID), None, {'notID': notID,
          'target': target})
+        return

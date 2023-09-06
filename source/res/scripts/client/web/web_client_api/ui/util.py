@@ -30,7 +30,7 @@ from web.web_client_api import w2c, W2CSchema, Field, WebCommandException
 from web.web_client_api.common import ItemPackType, ItemPackEntry, SPA_ID_TYPES
 from gui.wgcg.utils.contexts import SPAAccountAttributeCtx, PlatformFetchProductListCtx
 from web.web_client_api.ui.vehicle import _VehicleCustomizationPreviewSchema
-from items import makeIntCompactDescrByID
+from items import makeIntCompactDescrByID, parseIntCompactDescr
 from items.components.crew_books_constants import CrewBookCacheType
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
@@ -191,6 +191,8 @@ class UtilWebApiMixin(object):
         itemType = cmd.type
         if itemType == ItemPackType.CREW_BOOK:
             itemId = makeIntCompactDescrByID('crewBook', CrewBookCacheType.CREW_BOOK, cmd.id)
+        elif itemType == ItemPackType.ITEM_CREW_SKIN:
+            _, _, itemId = parseIntCompactDescr(cmd.id)
         else:
             itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})

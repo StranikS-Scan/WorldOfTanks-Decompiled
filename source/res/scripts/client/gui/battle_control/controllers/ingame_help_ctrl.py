@@ -45,6 +45,7 @@ class IngameHelpController(IBattleController):
             gui_event_dispatcher.toggleHelpDetailed(ctx)
         else:
             gui_event_dispatcher.toggleHelp()
+        gui_event_dispatcher.toggleFullStats(False)
         return hasDetailedHelpScreen
 
     def canShow(self):

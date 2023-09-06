@@ -4,31 +4,17 @@ import logging
 from collections import namedtuple
 from functools import partial
 import typing
-from enum import Enum
 import BigWorld
 from adisp import adisp_process
 from gui.wgcg.agate.contexts import AgateGetInventoryEntitlementsCtx
 from helpers import dependency
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, List
+    from typing import Callable, Dict
 _logger = logging.getLogger(__name__)
 Entitlement = namedtuple('Entitlement', 'code, tags, amount')
 COLLECTIONS_TAG = 'collections'
 COLLECTIONS_TAG_PREFIX = 'collections_{}'
-
-class _FilterKeys(Enum):
-    CODE = 'code'
-    TAG = 'tag'
-
-
-class _FilterOperators(Enum):
-    IN = 'in'
-    NOT_IN = 'not_in'
-    EQ = 'eq'
-    NEQ = 'neq'
-
-
 _MAX_RETRY_ATTEMPTS = 5
 _INITIAL_ATTEMPTS_COUNT = 0
 _RETRY_DELAY = 1
@@ -54,7 +40,7 @@ class EntitlementsCache(object):
 
     def updateAll(self, onResponseCallback):
         if not self.__isInited:
-            self.__request(self.__createFilterByTags([COLLECTIONS_TAG]), onResponseCallback)
+            self.__request([COLLECTIONS_TAG], onResponseCallback)
 
     def update(self, entitlementCode, onResponseCallback):
         if entitlementCode not in self.__balanceCache and entitlementCode not in self.__pendingEntitlementAttempts:
@@ -72,7 +58,7 @@ class EntitlementsCache(object):
         return
 
     @adisp_process
-    def __request(self, entitlementsFilter, onResponseCallback):
+    def __request(self, entitlementsTags, onResponseCallback):
         if self.__isSyncing:
             onResponseCallback(False, self.__isSyncing)
             return
@@ -80,7 +66,8 @@ class EntitlementsCache(object):
             if self.__web.isAvailable():
                 try:
                     self.__isSyncing = True
-                    response = yield self.__web.sendRequest(ctx=AgateGetInventoryEntitlementsCtx(entitlementsFilter))
+                    ctx = AgateGetInventoryEntitlementsCtx(AgateGetInventoryEntitlementsCtx.createFilterByTags(entitlementsTags))
+                    response = yield self.__web.sendRequest(ctx=ctx)
                 finally:
                     self.__isSyncing = False
 
@@ -117,7 +104,7 @@ class EntitlementsCache(object):
 
         self.__retryCallback = None
         if self.__pendingEntitlementAttempts:
-            self.__request(self.__createFilterByTags(self.__getPendingEntitlementTags()), onPendingProcessedCallback)
+            self.__request(self.__getPendingEntitlementTags(), onPendingProcessedCallback)
         return
 
     def __clearPendingEntitlements(self):
@@ -132,15 +119,6 @@ class EntitlementsCache(object):
 
     def __createEntitlementFromResponse(self, response):
         return Entitlement(response.get('code', ''), response.get('tags', []), response.get('amount', 0))
-
-    def __createFilterByTags(self, tags):
-        tagsFilter = {'key': _FilterKeys.TAG.value,
-         'operator': _FilterOperators.IN.value,
-         'value': tags}
-        return self.__createFilter([tagsFilter])
-
-    def __createFilter(self, filters):
-        return {'filter': filters}
 
     def __getPendingEntitlementTags(self):
         collectionIds = set()

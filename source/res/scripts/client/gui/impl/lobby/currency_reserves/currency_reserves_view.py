@@ -15,8 +15,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, WotPlusKeys, ReservesKeys
-from uilogging.wot_plus.loggers import WotPlusEventLogger
+from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, ReservesKeys
+from uilogging.wot_plus.loggers import WotPlusReservesLogger
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Dict, Any
@@ -35,7 +35,7 @@ class CurrencyReservesView(ViewImpl):
         self._creditReserveInfo = self._itemsCache.items.stats.piggyBank
         self._creditReserveConfig = self._lobbyContext.getServerSettings().getPiggyBankConfig()
         self._serverSettings = self._lobbyContext.getServerSettings()
-        self._wotPlusUILogger = WotPlusEventLogger(WotPlusKeys.RESERVE_VIEW)
+        self._wotPlusUILogger = WotPlusReservesLogger()
         super(CurrencyReservesView, self).__init__(settings)
 
     @property
@@ -52,6 +52,7 @@ class CurrencyReservesView(ViewImpl):
         self.viewModel.creditReserve.onInfoButtonClick += self._onCreditReserveInfoButtonClick
         self.viewModel.creditReserve.onActionButtonClick += self._onCreditReserveActionButtonClick
         g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK: self._onPiggyBankChanged})
+        self._wotPlusUILogger.onViewInitialize()
 
     def _finalize(self):
         self.viewModel.onClose -= self._onClose
@@ -63,6 +64,7 @@ class CurrencyReservesView(ViewImpl):
         self.viewModel.creditReserve.onInfoButtonClick -= self._onCreditReserveInfoButtonClick
         self.viewModel.creditReserve.onActionButtonClick -= self._onCreditReserveActionButtonClick
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self._wotPlusUILogger.onViewFinalize()
 
     def _onPremiumNotify(self, *args):
         self._updateCreditReserve()
@@ -109,24 +111,26 @@ class CurrencyReservesView(ViewImpl):
             self._updateGoldReserve()
 
     def _onClose(self):
+        self._wotPlusUILogger.logCloseEvent()
         self.destroyWindow()
 
     def _isPremiumPlusActive(self):
         return self._itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
     def _onGoldReserveInfoButtonClick(self):
-        showWotPlusInfoPage(WotPlusInfoPageSource.GOLD_RESERVES)
+        showWotPlusInfoPage(WotPlusInfoPageSource.GOLD_RESERVES, includeSubscriptionInfo=True)
 
     def _onGoldReserveActionButtonClick(self):
-        self._wotPlusUILogger.logClickEvent(ReservesKeys.ACTIVATE_WP)
+        self._wotPlusUILogger.logClickEvent(ReservesKeys.GOLD_ACTIVATE)
         if self._wotPlusCtrl.isWotPlusEnabled():
             showShop(getWotPlusShopUrl())
         else:
             showSteamRedirectWotPlus()
 
     def _onCreditReserveInfoButtonClick(self):
+        self._wotPlusUILogger.logClickEvent(ReservesKeys.CREDITS_INFO)
         showTankPremiumAboutPage()
 
     def _onCreditReserveActionButtonClick(self):
-        self._wotPlusUILogger.logClickEvent(ReservesKeys.ACTIVATE_PA)
+        self._wotPlusUILogger.logClickEvent(ReservesKeys.CREDITS_ACTIVATE)
         showShop(getBuyPremiumUrl())

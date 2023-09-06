@@ -8,13 +8,16 @@ class PoiVehicleComponent(PoiBaseComponent):
     def __init__(self):
         super(PoiVehicleComponent, self).__init__()
         self.__stateComponent = None
+        self.__isDead = False
         return
 
     def onDestroy(self):
         self._poiGameObject.removeComponent(self.__stateComponent)
         self.__stateComponent = None
+        self.__isDead = True
         super(PoiVehicleComponent, self).onDestroy()
         return
 
     def _onAvatarReady(self):
-        self.__stateComponent = self._poiGameObject.createComponent(PoiVehicleStateComponent, self.pointID)
+        if not self.__isDead:
+            self.__stateComponent = self._poiGameObject.createComponent(PoiVehicleStateComponent, self.pointID)

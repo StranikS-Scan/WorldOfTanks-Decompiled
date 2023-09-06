@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/tooltips/battle_matters_entry_tooltip_view.py
 from frameworks.wulf import ViewSettings
+from gui.battle_pass.battle_pass_bonuses_packers import ExtendedItemBonusUIPacker
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.tooltips.battle_matters_entry_tooltip_view_model import BattleMattersEntryTooltipViewModel
 from gui.impl.pub import ViewImpl
@@ -8,7 +9,7 @@ from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.shared import IItemsCache
-from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersEntitlementsBonusUIPacker
+from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersEntitlementsBonusUIPacker, bonusesSort, battleMattersSort
 
 class BattleMattersEntryTooltipView(ViewImpl):
     __slots__ = ()
@@ -42,20 +43,22 @@ class BattleMattersEntryTooltipView(ViewImpl):
                 currentProgress, maxProgress = self.__battleMattersController.getQuestProgress(currentQuest)
                 tx.setCurrentProgress(currentProgress)
                 tx.setMaxProgress(maxProgress)
-                rewards = currentQuest.getBonuses()
+                bonuses = sorted(currentQuest.getBonuses(), cmp=bonusesSort)
                 packer = self.__getBonusBacker()
-                rewardsVMs = tx.getRewards()
-                rewardsVMs.clear()
-                for reward in rewards:
-                    packedRewards = packer.pack(reward)
-                    for rewardVM in packedRewards:
-                        rewardsVMs.addViewModel(rewardVM)
+                rewards = tx.getRewards()
+                rewards.clear()
+                for bonus in bonuses:
+                    packedRewards = packer.pack(bonus)
+                    packedRewards = sorted(packedRewards, cmp=battleMattersSort(bonus.getName()))
+                    for reward in packedRewards:
+                        rewards.addViewModel(reward)
 
-                rewardsVMs.invalidate()
+                rewards.invalidate()
         return
 
     @staticmethod
     def __getBonusBacker():
         packer = getDefaultBonusPacker()
-        packer.getPackers().update({'entitlements': BattleMattersEntitlementsBonusUIPacker()})
+        packer.getPackers().update({'entitlements': BattleMattersEntitlementsBonusUIPacker(),
+         'items': ExtendedItemBonusUIPacker()})
         return packer

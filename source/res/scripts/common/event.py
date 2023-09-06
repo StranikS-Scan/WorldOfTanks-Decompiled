@@ -53,25 +53,6 @@ class SafeEvent(Event):
                 LOG_CURRENT_EXCEPTION()
 
 
-class SafeComponentEvent(SafeEvent):
-
-    def __init__(self, manager=None, component=None):
-        super(SafeComponentEvent, self).__init__(manager)
-        self.__component = component
-
-    def __call__(self, *args, **kwargs):
-        if self.__component is None or not self.__component.isActive:
-            return
-        else:
-            super(SafeEvent, self).__call__(*args, **kwargs)
-            return
-
-    def clear(self):
-        self.__component = None
-        super(SafeComponentEvent, self).clear()
-        return
-
-
 class Handler(object):
     __slots__ = ('__delegate',)
 

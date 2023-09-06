@@ -8,7 +8,7 @@ from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.denunciator import DENUNCIATIONS, BattleDenunciator, DENUNCIATIONS_MAP
 from helpers import dependency
 from helpers import i18n
-from constants import DENUNCIATIONS_PER_DAY, IS_CHINA
+from constants import IS_CHINA
 from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
@@ -272,7 +272,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         else:
             order = DENUNCIATIONS.ENEMY_ORDER
         sub = [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self.__isAppealsForTopicEnabled(denunciation)}) for denunciation in order ]
-        label = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self.__denunciator.getDenunciationsLeft(), DENUNCIATIONS_PER_DAY)
+        label = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self.__denunciator.getDenunciationsLeft(), self.__denunciator.getDenunciationsPerDay())
         options.append(make(DENUNCIATIONS.APPEAL, label, optInitData={'enabled': self.__denunciator.isAppealsEnabled()}, optSubMenu=sub))
         return options
 

@@ -320,7 +320,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -548,7 +548,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -2389,6 +2389,85 @@
                 <item>
                   <slotId>	18000	</slotId>
                   <id>	64	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT Progression 3D style 10 level 2000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A143_M_V_Y	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	767	</id>
+      <texture>	gui/maps/vehicles/styles/A143_M_V_Y_BPXII_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A143_M_V_Y_BPXII_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A143_M_V_Y_BPXII_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A143_M_V_Y_BPXII_3DSt	</userString>
+      <tags>	styleProgression addNationalEmblem	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_1	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_2 tank_upgrade_2_skinned	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_3 tank_upgrade_3_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	736	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_4 tank_upgrade_4_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	737	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	65	</id>
                 </item>
               </attachments>
             </outfit>

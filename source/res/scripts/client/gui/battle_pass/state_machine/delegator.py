@@ -36,9 +36,8 @@ class BattlePassRewardLogic(object):
         self.__startAfterTurningOnMachine = False
 
     def startRewardFlow(self, rewards, data, packageRewards):
-        rewardsToChoose, defaultRewards, chapterStyle = separateRewards(rewards, battlePass=self.__battlePassController)
-        rewardsToChoose = self.__getValidRewardsToChoose(rewardsToChoose)
-        self.__machine.saveRewards(rewardsToChoose, defaultRewards, chapterStyle, data, packageRewards)
+        defaultRewards, chapterStyle = separateRewards(rewards)
+        self.__machine.saveRewards(data, defaultRewards, chapterStyle, packageRewards)
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True
         else:
@@ -48,7 +47,7 @@ class BattlePassRewardLogic(object):
         data = {'chapter': self.__getChapterFromRewardsToChoose(rewardsToChoose) if chapterID is None else chapterID,
          'level': level,
          'reason': BPReason.SELECT_REWARD}
-        self.__machine.saveRewards(rewardsToChoose, None, None, data, None)
+        self.__machine.saveRewards(data, rewardsToChoose=rewardsToChoose)
         self.__machine.setManualFlow()
         if not self.__machine.isRunning():
             self.__startAfterTurningOnMachine = True

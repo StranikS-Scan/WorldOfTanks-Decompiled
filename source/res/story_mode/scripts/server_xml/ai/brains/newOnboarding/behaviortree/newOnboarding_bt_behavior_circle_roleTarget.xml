@@ -1,0 +1,157 @@
+<newOnboarding_bt_behavior_circle_roleTarget.xml>
+  <xmlns:xsd>	http://www.w3.org/2001/XMLSchema	</xmlns:xsd>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:schemaLocation>	WoT.AI/BTree server_xml/ai/schemas/behaviortree/vehiclebot_bthost.xsd	</xsi:schemaLocation>
+  <xmlns>	WoT.AI/BTree	</xmlns>
+  <Tree>
+    <name>	Engage and attempt to circle enemy	</name>
+    <rootType>	Sequence	</rootType>
+    <host>	vehiclebot_bthost	</host>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	move	</function>
+      <param>	moveToCircleEnemy	</param>
+    </Node>
+    <Node>
+      <xsi:type>	Leaf	</xsi:type>
+      <function>	setRandomTimer	</function>
+      <param>	MoveUpdateTime	</param>
+    </Node>
+    <Node>
+      <xsi:type>	DecoratorRunning	</xsi:type>
+      <name>	Move to enemy until timer is up, reached target or able to shoot.	</name>
+      <Node>
+        <xsi:type>	Selector	</xsi:type>
+        <Node>
+          <xsi:type>	Leaf	</xsi:type>
+          <function>	isTargetReached	</function>
+        </Node>
+        <Node>
+          <xsi:type>	Leaf	</xsi:type>
+          <function>	isTimerExpired	</function>
+          <param>	MoveUpdateTime	</param>
+        </Node>
+        <Node>
+          <xsi:type>	DecoratorFail	</xsi:type>
+          <name>	Stop if can shoot at enemy	</name>
+          <Node>
+            <xsi:type>	Sequence	</xsi:type>
+            <name></name>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	isCurrentTargetTargetableByGun	</function>
+              <param>	CheckAllAngles	</param>
+            </Node>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	isShootingLineFree	</function>
+            </Node>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	checkIfCanShoot	</function>
+              <param>	SelfVehicle	</param>
+            </Node>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	stopMovement	</function>
+            </Node>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	setRandomTimer	</function>
+              <param>	AimUpdateTime	</param>
+            </Node>
+            <Node>
+              <xsi:type>	DecoratorRunning	</xsi:type>
+              <name>	Wait a little until I shoot	</name>
+              <Node>
+                <xsi:type>	Selector	</xsi:type>
+                <Node>
+                  <xsi:type>	DecoratorNot	</xsi:type>
+                  <name>	Check if can't shoot	</name>
+                  <Node>
+                    <xsi:type>	Leaf	</xsi:type>
+                    <function>	checkIfCanShoot	</function>
+                    <param>	SelfVehicle	</param>
+                  </Node>
+                </Node>
+                <Node>
+                  <xsi:type>	Leaf	</xsi:type>
+                  <function>	isTimerExpired	</function>
+                  <param>	AimUpdateTime	</param>
+                </Node>
+              </Node>
+            </Node>
+            <Node>
+              <xsi:type>	Leaf	</xsi:type>
+              <function>	move	</function>
+              <param>	moveToCircleEnemy	</param>
+            </Node>
+          </Node>
+        </Node>
+      </Node>
+      <OnEnter>
+        <xsi:type>	OnEnterCallback	</xsi:type>
+        <function>	updateSpeedUp	</function>
+      </OnEnter>
+    </Node>
+  </Tree>
+  <Parameter>
+    <xsi:type>	CheckVehicleParam	</xsi:type>
+    <id>	SelfVehicle	</id>
+    <subject>
+      <value>	Self	</value>
+    </subject>
+  </Parameter>
+  <Parameter>
+    <xsi:type>	MoveParam	</xsi:type>
+    <id>	moveToCircleEnemy	</id>
+    <positionType>
+      <value>	PositionForCirclingRoleTarget	</value>
+    </positionType>
+    <arriveDistance>
+      <value>	5	</value>
+    </arriveDistance>
+    <optionsMask>
+      <value>	Normal	</value>
+    </optionsMask>
+    <useMovementLimitsForPathfinding>
+      <value>	false	</value>
+    </useMovementLimitsForPathfinding>
+  </Parameter>
+  <Parameter>
+    <xsi:type>	SetRandomTimerParam	</xsi:type>
+    <id>	MoveUpdateTime	</id>
+    <timerName>
+      <value>	wait	</value>
+    </timerName>
+    <minTime>
+      <value>	3	</value>
+    </minTime>
+    <maxTime>
+      <value>	7	</value>
+    </maxTime>
+  </Parameter>
+  <Parameter>
+    <xsi:type>	SetRandomTimerParam	</xsi:type>
+    <id>	AimUpdateTime	</id>
+    <timerName>
+      <value>	wait_2	</value>
+    </timerName>
+    <minTime>
+      <value>	5	</value>
+    </minTime>
+    <maxTime>
+      <value>	7	</value>
+    </maxTime>
+  </Parameter>
+  <Parameter>
+    <xsi:type>	CheckGunAnglesParam	</xsi:type>
+    <id>	CheckAllAngles	</id>
+    <checkYaw>
+      <value>	true	</value>
+    </checkYaw>
+    <checkPitch>
+      <value>	true	</value>
+    </checkPitch>
+  </Parameter>
+</newOnboarding_bt_behavior_circle_roleTarget.xml>

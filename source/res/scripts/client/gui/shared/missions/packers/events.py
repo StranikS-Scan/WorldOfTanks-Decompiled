@@ -14,7 +14,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.quest_card_model
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import DECORATION_SIZES
-from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packBonusModelAndTooltipData
+from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
 from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from gui.shared.missions.packers.conditions import BonusConditionPacker
 from helpers import dependency
@@ -60,7 +60,7 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
 
     def __init__(self, event, bonusPackerGetter=getDefaultBonusPacker):
         super(BattleQuestUIDataPacker, self).__init__(event)
-        self.__tooltipData = {}
+        self._tooltipData = {}
         self.__bonusPackerGetter = bonusPackerGetter
 
     def pack(self, model=None):
@@ -73,7 +73,7 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
             return model
 
     def getTooltipData(self):
-        return self.__tooltipData
+        return self._tooltipData
 
     def _packModel(self, model):
         super(BattleQuestUIDataPacker, self)._packModel(model)
@@ -84,8 +84,8 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
 
     def _packBonuses(self, model):
         packer = self.__bonusPackerGetter()
-        self.__tooltipData = {}
-        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self.__tooltipData)
+        self._tooltipData = {}
+        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
 
     def _packPostBattleConds(self, model):
         postBattleContitionPacker = PostBattleConditionPacker()
@@ -208,7 +208,7 @@ def packQuestBonusModel(quest, packer, array):
 
 def packQuestBonusModelAndTooltipData(packer, array, quest, tooltipData=None, questBonuses=None):
     bonuses = quest.getBonuses() if questBonuses is None else questBonuses
-    packBonusModelAndTooltipData(bonuses, packer, array, tooltipData)
+    packMissionsBonusModelAndTooltipData(bonuses, packer, array, tooltipData)
     return
 
 

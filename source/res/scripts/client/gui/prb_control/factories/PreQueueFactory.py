@@ -40,6 +40,7 @@ registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.COMP7, Comp7EntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.WINBACK, WinbackEntryPoint)
+DEFAULT_QUEUE_TYPE_PRIORITIES = {QUEUE_TYPE.WINBACK: 1}
 
 class PreQueueFactory(ControlFactory):
 
@@ -52,8 +53,10 @@ class PreQueueFactory(ControlFactory):
         self.eventBattlesStorage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
         self.funRandomStorage = prequeue_storage_getter(QUEUE_TYPE.FUN_RANDOM)()
         self.comp7Storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
+        self.versusAIStorage = prequeue_storage_getter(QUEUE_TYPE.VERSUS_AI)()
         self.recentPrbStorage = storage_getter(RECENT_PRB_STORAGE)()
         self.winbackStorage = prequeue_storage_getter(QUEUE_TYPE.WINBACK)()
+        self.__defaultEntityHandler = DefaultEntityHandler()
 
     def createEntry(self, ctx):
         LOG_ERROR('preQueue functional has not any entries')
@@ -71,8 +74,7 @@ class PreQueueFactory(ControlFactory):
             queueType = ctx.getEntityType()
         else:
             queueType = prb_getters.getQueueType()
-        if queueType == QUEUE_TYPE.RANDOMS and self.winbackStorage.isModeAvailable():
-            queueType = QUEUE_TYPE.WINBACK
+        queueType = self.__defaultEntityHandler.replaceQueueType(queueType)
         prbEntity = self.__createByQueueType(queueType)
         return prbEntity if prbEntity else self.__createDefaultEntity()
 
@@ -104,12 +106,46 @@ class PreQueueFactory(ControlFactory):
             return self.__createByQueueType(QUEUE_TYPE.FUN_RANDOM)
         elif self.comp7Storage.isModeSelected():
             return Comp7Entity()
+        elif self.versusAIStorage is not None and self.versusAIStorage.isModeSelected():
+            return self.__createByQueueType(QUEUE_TYPE.VERSUS_AI)
         else:
+            defaultQueueType = self.__defaultEntityHandler.getDefaultQueueType()
             lastBattleQueueType = self.recentPrbStorage.queueType
-            if lastBattleQueueType == QUEUE_TYPE.WINBACK and not self.winbackStorage.isModeAvailable():
-                lastBattleQueueType = QUEUE_TYPE.RANDOMS
+            if not self.__defaultEntityHandler.isDefaultStillAvailable(lastBattleQueueType):
+                lastBattleQueueType = defaultQueueType
             if lastBattleQueueType and self.recentPrbStorage.isModeSelected():
                 prbEntity = self.__createByQueueType(lastBattleQueueType)
                 if prbEntity:
                     return prbEntity
-            return WinbackEntity() if self.winbackStorage.isModeAvailable() else RandomEntity()
+            prbEntity = self.__createByQueueType(defaultQueueType)
+            return prbEntity if prbEntity else RandomEntity()
+
+
+class DefaultEntityHandler(object):
+
+    def getDefaultQueueType(self):
+        for queueType in self.__getDefaultQueueTypes():
+            storage = prequeue_storage_getter(queueType)()
+            if storage.shouldBeSelectedByDefault():
+                return queueType
+
+        return QUEUE_TYPE.RANDOMS
+
+    def replaceQueueType(self, desiredQueueType):
+        for queueType in self.__getDefaultQueueTypes():
+            storage = prequeue_storage_getter(queueType)()
+            if storage.getQueueTypeToReplace() == desiredQueueType and storage.shouldBeSelectedByDefault():
+                return queueType
+
+        return desiredQueueType
+
+    def isDefaultStillAvailable(self, lastBattleQueueType):
+        for queueType in self.__getDefaultQueueTypes():
+            storage = prequeue_storage_getter(queueType)()
+            if lastBattleQueueType == queueType and not storage.shouldBeSelectedByDefault():
+                return False
+
+        return True
+
+    def __getDefaultQueueTypes(self):
+        return sorted(DEFAULT_QUEUE_TYPE_PRIORITIES.keys(), key=lambda item: DEFAULT_QUEUE_TYPE_PRIORITIES[item])

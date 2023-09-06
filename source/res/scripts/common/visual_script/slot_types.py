@@ -34,6 +34,7 @@ class SLOT_TYPE(object):
     SOUND = 'Sound'
     GAME_OBJECT = 'GameObject'
     UDO = 'UDO'
+    DICTIONARY = 'Dictionary'
     E_MODULE_STATE = 'EModuleState'
     E_VEHICLE_DEVICE = 'EVehicleDevice'
     E_VEHICLE_STATUS = 'EVehicleStatus'

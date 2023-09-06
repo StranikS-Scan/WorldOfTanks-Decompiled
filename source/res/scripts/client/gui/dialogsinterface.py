@@ -33,8 +33,8 @@ class _DialogCallbackWrapper(object):
 
 
 @decorators.adisp_async
-def showDialog(meta, callback):
-    g_eventBus.handleEvent(events.ShowDialogEvent(meta, _DialogCallbackWrapper(callback)))
+def showDialog(meta, callback, parent=None):
+    g_eventBus.handleEvent(events.ShowDialogEvent(meta, _DialogCallbackWrapper(callback), parent=parent))
 
 
 @decorators.adisp_async

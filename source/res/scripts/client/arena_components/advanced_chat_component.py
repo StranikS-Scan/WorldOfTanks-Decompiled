@@ -23,6 +23,7 @@ from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES, messageArgs
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
+from shared_utils import first
 EMPTY_STATE = ''
 MARKER_ACTION_POSITIVE = 'positive'
 MARKER_ACTION_SUPPORTING_YOU = 'supportingYou'
@@ -276,15 +277,25 @@ class AdvancedChatComponent(ClientArenaComponent):
             isOneShot = False
             isPlayerSender = senderVehID == playerVehID
             if typeOfUpdate == ChatCommandChange.CHAT_CMD_WAS_REMOVED:
-                if playerVehID in commandData.owners or playerVehID == cmdTargetID:
+                if playerVehID in commandData.owners or playerVehID == cmdTargetID or self.__isLastPrebattleMarkerOwner(cmdMarkerType, cmdID, commandData) or not self.__isAliveVehicle(senderVehID):
                     chatStats = {senderVehID: (EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)}
-                    if isPlayerSender:
+                    if self.__isPrebattleWaypoint(cmdMarkerType, cmdID):
+                        if senderVehID in commandData.owners:
+                            vehID = senderVehID
+                        elif len(commandData.owners) == 1:
+                            vehID = first(commandData.owners)
+                        else:
+                            _logger.debug('Prebattle waypoint command data is incorrect')
+                            return
+                        chatStats = {vehID: (EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)}
+                    elif isPlayerSender:
                         chatStats = dict(((vehID, (EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)) for vehID in commandData.owners))
                         if cmdMarkerType == MarkerType.VEHICLE_MARKER_TYPE:
                             chatStats[cmdTargetID] = (EMPTY_STATE, TARGET_CHAT_CMD_FLAG)
                     elif cmdMarkerType == MarkerType.VEHICLE_MARKER_TYPE and self.__markerInFocus is not None and senderVehID == self.__markerInFocus.targetID:
-                        actionMarker = _ACTIONS.battleChatCommandFromActionID(self.__markerInFocus.commandID).vehMarker
-                        chatStats[senderVehID] = (actionMarker, TARGET_CHAT_CMD_FLAG)
+                        if self.__isAliveVehicle(senderVehID):
+                            actionMarker = _ACTIONS.battleChatCommandFromActionID(self.__markerInFocus.commandID).vehMarker
+                            chatStats[senderVehID] = (actionMarker, TARGET_CHAT_CMD_FLAG)
             elif typeOfUpdate in (ChatCommandChange.CHAT_CMD_WAS_REPLIED, ChatCommandChange.CHAT_CMD_TRIGGERED):
                 actionMarker = _ACTIONS.battleChatCommandFromActionID(cmdID).vehMarker
                 isOneShot = typeOfUpdate == ChatCommandChange.CHAT_CMD_TRIGGERED or playerVehID not in commandData.owners
@@ -333,27 +344,37 @@ class AdvancedChatComponent(ClientArenaComponent):
         return
 
     def __onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason, numVehiclesAffected):
-        if self.__markerInFocus is None or not self.sessionProvider.shared.chatCommands:
+        if not self.sessionProvider.shared.chatCommands:
             return
         else:
             playerVehID = avatar_getter.getPlayerVehicleID()
             commands = self.sessionProvider.shared.chatCommands
             self.__removeActualTargetIfDestroyed(commands, playerVehID, targetID, MarkerType.VEHICLE_MARKER_TYPE)
+            if self.__markerInFocus is None:
+                return
             if playerVehID == targetID:
                 commands.sendClearChatCommandsFromTarget(targetID, self.__markerInFocus.markerType.name)
             return
 
     def __removeActualTargetIfDestroyed(self, commands, playerVehID, targetID, markerType):
-        if self.__markerInFocus is None:
-            return
-        else:
-            if self.__markerInFocus.isFocused(targetID, markerType):
-                listOfCommands = self._chatCommands[markerType][self.__markerInFocus.targetID]
-                for _, commandData in listOfCommands.iteritems():
-                    if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
-                        commands.sendClearChatCommandsFromTarget(targetID, markerType.name)
+        if self.__markerInFocus and self.__markerInFocus.isFocused(targetID, markerType):
+            listOfCommands = self._chatCommands[markerType][targetID]
+            for _, commandData in listOfCommands.iteritems():
+                if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
+                    commands.sendClearChatCommandsFromTarget(targetID, markerType.name)
 
-            return
+        elif markerType == MarkerType.VEHICLE_MARKER_TYPE:
+            for cmdTargetID, listOfCommands in self._chatCommands[markerType].iteritems():
+                if not self.__isAliveVehicle(cmdTargetID):
+                    commands.sendClearChatCommandsFromTarget(cmdTargetID, markerType.name)
+
+    def __isAliveVehicle(self, vehicleID):
+        arenaDP = self.sessionProvider.getArenaDP()
+        if arenaDP and vehicleID:
+            vehicleInfo = arenaDP.getVehicleInfo(vehicleID)
+            if vehicleInfo:
+                return vehicleInfo.isAlive()
+        return False
 
     def __onAvatarBecomePlayer(self):
         feedbackCtrl = self.sessionProvider.shared.feedback
@@ -452,7 +473,8 @@ class AdvancedChatComponent(ClientArenaComponent):
                 vehicleInfo = arenaDP.getVehicleInfo(vehicleID)
                 if vehicleInfo.isAlive() and not vehicleInfo.isObserver() or allowDeadVehInfo:
                     isValidVehicle = True
-            if not isValidVehicle:
+            commandName = _ACTIONS.battleChatCommandFromActionID(cmd.getID()).name
+            if not isValidVehicle and commandName not in (BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION, BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE):
                 _logger.warning('__getCommandCreatorVehID: Vehicle state is invalid - using senderID')
             return vehicleID if isValidVehicle else 0
 
@@ -570,30 +592,40 @@ class AdvancedChatComponent(ClientArenaComponent):
         cmdTargetID = self.__getTargetIDForCommandName(cmdName, cmd)
         cmdDuration = _DEFAULT_ACTIVE_COMMAND_TIME if cmdName != BATTLE_CHAT_COMMAND_NAMES.SPG_AIM_AREA else _DEFAULT_SPG_AREA_COMMAND_TIME
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[cmdName]
+        if cmdName in (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY, BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY, BATTLE_CHAT_COMMAND_NAMES.SOS):
+            arenaDP = self.sessionProvider.getArenaDP()
+            if arenaDP is None:
+                return
+            if cmdTargetID:
+                vehicleInfo = arenaDP.getVehicleInfo(cmdTargetID)
+                if vehicleInfo and not vehicleInfo.isAlive():
+                    return
         if markerType in self._chatCommands and cmdTargetID in self._chatCommands[markerType] and cmdID in self._chatCommands[markerType][cmdTargetID]:
             if cmdName in AUTOCOMMIT_COMMAND_NAMES:
                 self.__addReplyToCommandList(cmdCreatorID, cmdTargetID, cmdID)
             return
-        if cmdName == BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY and MarkerType.VEHICLE_MARKER_TYPE in self._chatCommands and cmdTargetID in self._chatCommands[MarkerType.VEHICLE_MARKER_TYPE]:
-            activeCommandIDOnTarget = self._chatCommands[MarkerType.VEHICLE_MARKER_TYPE][cmdTargetID].keys()
-            helpCommandID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.HELPME].id
-            sosCommandID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.SOS].id
-            if helpCommandID in activeCommandIDOnTarget or sosCommandID in activeCommandIDOnTarget:
-                activeHelpID = helpCommandID if helpCommandID in activeCommandIDOnTarget else sosCommandID
-                self.__tryRemovingCommandFromMarker(activeHelpID, cmdTargetID)
+        else:
+            if cmdName == BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY and MarkerType.VEHICLE_MARKER_TYPE in self._chatCommands and cmdTargetID in self._chatCommands[MarkerType.VEHICLE_MARKER_TYPE]:
+                activeCommandIDOnTarget = self._chatCommands[MarkerType.VEHICLE_MARKER_TYPE][cmdTargetID].keys()
+                helpCommandID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.HELPME].id
+                sosCommandID = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.SOS].id
+                if helpCommandID in activeCommandIDOnTarget or sosCommandID in activeCommandIDOnTarget:
+                    activeHelpID = helpCommandID if helpCommandID in activeCommandIDOnTarget else sosCommandID
+                    self.__tryRemovingCommandFromMarker(activeHelpID, cmdTargetID)
+                    self.__addCommandToList(cmdID, cmdName, cmdCreatorID, cmdTargetID, cmd, cmdDuration)
+                elif cmdID in activeCommandIDOnTarget:
+                    self.__addReplyToCommandList(cmdCreatorID, cmdTargetID, cmdID)
+            elif cmdName not in (BATTLE_CHAT_COMMAND_NAMES.CONFIRM, BATTLE_CHAT_COMMAND_NAMES.POSITIVE):
                 self.__addCommandToList(cmdID, cmdName, cmdCreatorID, cmdTargetID, cmd, cmdDuration)
-            elif cmdID in activeCommandIDOnTarget:
-                self.__addReplyToCommandList(cmdCreatorID, cmdTargetID, cmdID)
-        elif cmdName not in (BATTLE_CHAT_COMMAND_NAMES.CONFIRM, BATTLE_CHAT_COMMAND_NAMES.POSITIVE):
-            self.__addCommandToList(cmdID, cmdName, cmdCreatorID, cmdTargetID, cmd, cmdDuration)
-        if cmd.isLocationRelatedCommand():
-            self.__handleMark3DPosition(cmdTargetID, cmdCreatorID, cmdID, cmdName, cmdDuration, cmd)
-        elif cmd.isBaseRelatedCommand():
-            self.__handleBaseCommand(cmdName, cmdCreatorID, cmdID, cmdTargetID)
-        elif cmd.isVehicleRelatedCommand():
-            self.__handleVehicleCommand(cmdTargetID, cmdCreatorID, cmdID, cmd)
-        elif cmd.isMarkedObjective():
-            self.__handleObjectiveCommand(cmdName, cmdCreatorID, cmd)
+            if cmd.isLocationRelatedCommand():
+                self.__handleMark3DPosition(cmdTargetID, cmdCreatorID, cmdID, cmdName, cmdDuration, cmd)
+            elif cmd.isBaseRelatedCommand():
+                self.__handleBaseCommand(cmdName, cmdCreatorID, cmdID, cmdTargetID)
+            elif cmd.isVehicleRelatedCommand():
+                self.__handleVehicleCommand(cmdTargetID, cmdCreatorID, cmdID, cmd)
+            elif cmd.isMarkedObjective():
+                self.__handleObjectiveCommand(cmdName, cmdCreatorID, cmd)
+            return
 
     def __addReplyToCommandList(self, replierVehicleID, targetID, repliedToCommandID):
         repliedToActionName = _ACTIONS.battleChatCommandFromActionID(repliedToCommandID).name
@@ -697,10 +729,15 @@ class AdvancedChatComponent(ClientArenaComponent):
                     currentTargetID = self.__getTargetIDForCommandName(commandName, cmd, True)
                     if currentTargetID not in self._chatCommands[markerType]:
                         continue
-                    removeList.append((commandID, currentTargetID))
-                    chatCommandData = self._chatCommands[markerType][currentTargetID][commandID]
-                    for replier in chatCommandData.owners:
-                        self.__chatCommandsUpdated(markerType, currentTargetID, commandID, replier, ChatCommandChange.CHAT_CMD_WAS_REMOVED)
+                    if commandID in self._chatCommands[markerType][currentTargetID]:
+                        removeList.append((commandID, currentTargetID))
+                        chatCommandData = self._chatCommands[markerType][currentTargetID][commandID]
+                        if chatCommandData.owners:
+                            for replier in chatCommandData.owners:
+                                self.__chatCommandsUpdated(markerType, currentTargetID, commandID, replier, ChatCommandChange.CHAT_CMD_WAS_REMOVED)
+
+                        elif commandName == BATTLE_CHAT_COMMAND_NAMES.SOS:
+                            self.__chatCommandsUpdated(markerType, currentTargetID, commandID, currentTargetID, ChatCommandChange.CHAT_CMD_WAS_REMOVED)
 
             else:
                 self.__removeReplyContributionFromPlayer(targetID, MarkerType.INVALID_MARKER_TYPE, -1)
@@ -810,17 +847,18 @@ class AdvancedChatComponent(ClientArenaComponent):
         else:
             commandName = _ACTIONS.battleChatCommandFromActionID(commandID).name
             markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[commandName]
-            commandData = self._chatCommands[markerType][targetID][commandID]
-            if forceRemove or not self.__delayer.hasDelayedCallbackID(commandData.callbackID) and not commandData.owners:
-                self.__delayer.stopCallback(commandData.callbackID)
-                self._chatCommands[markerType][targetID].pop(commandID)
-                wasLastCommandForTarget = not self._chatCommands[markerType][targetID]
-                if wasLastCommandForTarget:
-                    self._chatCommands[markerType].pop(targetID)
-                if wasLastCommandForTarget:
-                    feedbackCtrl = self.sessionProvider.shared.feedback
-                    if feedbackCtrl:
-                        feedbackCtrl.onCommandRemoved(targetID, markerType)
+            if commandID in self._chatCommands[markerType][targetID]:
+                commandData = self._chatCommands[markerType][targetID][commandID]
+                if forceRemove or not self.__delayer.hasDelayedCallbackID(commandData.callbackID) and not commandData.owners:
+                    self.__delayer.stopCallback(commandData.callbackID)
+                    self._chatCommands[markerType][targetID].pop(commandID)
+                    wasLastCommandForTarget = not self._chatCommands[markerType][targetID]
+                    if wasLastCommandForTarget:
+                        self._chatCommands[markerType].pop(targetID)
+                    if wasLastCommandForTarget:
+                        feedbackCtrl = self.sessionProvider.shared.feedback
+                        if feedbackCtrl:
+                            feedbackCtrl.onCommandRemoved(targetID, markerType)
             return
 
     def __setInFocusCB(self, commandID, commandTargetID, markerType, isOneShot, isTemporary):
@@ -855,3 +893,11 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.__addEventListeners()
         self.settingsCache.onSyncCompleted -= self.__onSettingsReady
         return
+
+    @classmethod
+    def __isLastPrebattleMarkerOwner(cls, cmdMarkerType, cmdID, commandData):
+        return cls.__isPrebattleWaypoint(cmdMarkerType, cmdID) and len(commandData.owners) == 1
+
+    @staticmethod
+    def __isPrebattleWaypoint(cmdMarkerType, cmdID):
+        return cmdMarkerType == MarkerType.LOCATION_MARKER_TYPE and cmdID == BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT].id

@@ -78,6 +78,11 @@
           <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Hull.model	</exploded>
         </R97_Object_140_3Dst_TLXXL>
+        <R97_Object_140_BPXII_3DSt>
+          <undamaged>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Hull.model	</exploded>
+        </R97_Object_140_BPXII_3DSt>
       </sets>
     </models>
     <swinging>
@@ -102,9 +107,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.412414 0.528699 2.26248	</rayStart>
-        <rayEnd>	0.412414 0.347592 2.17764	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
+        <rayStart>	0.34853 0.504534 2.314065	</rayStart>
+        <rayEnd>	0.34853 0.323427 2.229225	</rayEnd>
+        <rayUp>	0 0.424212 -0.905563	</rayUp>
         <size>	0.3	</size>
       </slot>
       <slot>
@@ -645,6 +650,13 @@
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <compatibleModels>	R97_Object_140_BPXII_3DSt	</compatibleModels>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -698,6 +710,11 @@
             <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Chassis.model	</exploded>
           </R97_Object_140_3Dst_TLXXL>
+          <R97_Object_140_BPXII_3DSt>
+            <undamaged>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Chassis.model	</exploded>
+          </R97_Object_140_BPXII_3DSt>
         </sets>
       </models>
       <traces>
@@ -718,10 +735,9 @@
             <destructionEffect></destructionEffect>
             <physicalParams>
               <renderModelOffset>	-0.01994	</renderModelOffset>
-              <interpolationsCount>	1	</interpolationsCount>
               <lengthwiseSpringLength>	0.129415	</lengthwiseSpringLength>
               <widthwiseSpringLength>	0.543754	</widthwiseSpringLength>
-              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <hingeJointStiffness>	2500	</hingeJointStiffness>
               <torsionStiffnessStep>	4	</torsionStiffnessStep>
               <wheelGroups>
                 <wheelGroup>
@@ -782,6 +798,45 @@
                   <row3>	-0.000002 1.119957 -3.127914	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R97_Object_140_BPXII_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.997846 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.031424 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.799000	</row2>
+                  <row3>	0.000000 0.978000 -0.015000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.327000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.240474	</row2>
+                  <row3>	0.000000 1.341000 0.128155	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.252090 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.221747 0.202061	</row1>
+                  <row2>	0.000000 -0.410211 0.450176	</row2>
+                  <row3>	0.000000 1.192694 3.181336	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.375000 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 -0.234669 0.186898	</row1>
+                  <row2>	0.000000 -0.342051 -0.429479	</row2>
+                  <row3>	-0.000002 1.207557 -2.955454	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.755000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.493000	</row2>
+                  <row3>	-1.760000 1.074000 0.108000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.375000 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 -0.076174 0.290169	</row1>
+                  <row2>	0.000000 -0.531052 -0.139409	</row2>
+                  <row3>	-0.000002 1.077052 -3.195057	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -789,10 +844,9 @@
             <destructionEffect></destructionEffect>
             <physicalParams>
               <renderModelOffset>	-0.01994	</renderModelOffset>
-              <interpolationsCount>	1	</interpolationsCount>
               <lengthwiseSpringLength>	0.129691	</lengthwiseSpringLength>
               <widthwiseSpringLength>	0.543754	</widthwiseSpringLength>
-              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <hingeJointStiffness>	2500	</hingeJointStiffness>
               <torsionStiffnessStep>	4	</torsionStiffnessStep>
               <wheelGroups>
                 <wheelGroup>
@@ -851,6 +905,45 @@
                   <row1>	0.000000 -0.141911 0.264313	</row1>
                   <row2>	0.000000 -0.536592 -0.288099	</row2>
                   <row3>	0.000002 1.119957 -3.127914	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R97_Object_140_BPXII_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.997846 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.031424 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.314956	</row2>
+                  <row3>	0.000000 0.992120 0.130241	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.327000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.240470	</row2>
+                  <row3>	0.000000 1.341000 0.128155	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.252090 0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.221747 0.202061	</row1>
+                  <row2>	0.000000 -0.410211 0.450176	</row2>
+                  <row3>	0.000000 1.192694 3.181336	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.375000 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 -0.234669 0.186898	</row1>
+                  <row2>	0.000000 -0.342051 -0.429479	</row2>
+                  <row3>	-0.000002 1.207560 -2.955450	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.755000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.493000	</row2>
+                  <row3>	1.760000 1.074000 0.108000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.375000 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 -0.076174 0.290169	</row1>
+                  <row2>	0.000000 -0.531052 -0.139409	</row2>
+                  <row3>	-0.000002 1.077050 -3.195060	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1547,6 +1640,11 @@
                 <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Gun_03.model	</exploded>
               </R97_Object_140_3Dst_TLXXL>
+              <R97_Object_140_BPXII_3DSt>
+                <undamaged>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </R97_Object_140_BPXII_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1645,6 +1743,11 @@
             <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_3Dst_TLXXL/crash/lod0/Turret_01.model	</exploded>
           </R97_Object_140_3Dst_TLXXL>
+          <R97_Object_140_BPXII_3DSt>
+            <undamaged>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R97_Object_140/_skins/R97_Object_140_BPXII_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </R97_Object_140_BPXII_3DSt>
         </sets>
       </models>
       <hitTester>

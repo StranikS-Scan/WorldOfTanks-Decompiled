@@ -56,7 +56,7 @@ class FunRandomNotificationsFormatter(ServiceChannelFormatter, FunAssetPacksMixi
             _logger.error('Empty sub modes. Check hasAnySubMode defence.')
             return None
         elif len(subModes) > 1:
-            separator = backport.text(R.strings.fun_random.notification.subModesSeparator())
+            separator = backport.text(R.strings.fun_random.notification.sub_modesSeparator())
             return backport.text(multipleTextRes(), subModesNames=separator.join([ backport.text(subMode.getLocalsResRoot().userName.quoted()) for subMode in subModes ]))
         else:
             singleSubModeName = backport.text(subModes[0].getLocalsResRoot().userName.quoted())
@@ -84,7 +84,7 @@ class FunRandomNotificationsFormatter(ServiceChannelFormatter, FunAssetPacksMixi
 
     @hasSpecifiedSubModes()
     def _formatNewSubModes(self, subModesIDs, isNewProgression):
-        return self._getSubModesText(subModesIDs, self.__addProgressionPath(R.strings.fun_random.notification.newSubModes, isNewProgression), self.__addProgressionPath(self.getModeLocalsResRoot().notification.newSubModes, isNewProgression))
+        return self._getSubModesText(subModesIDs, self.__addProgressionPath(R.strings.fun_random.notification.newsub_modes, isNewProgression), self.__addProgressionPath(self.getModeLocalsResRoot().notification.newsub_modes, isNewProgression))
 
     @hasSpecifiedSubModes()
     def _formatStopSubModes(self, subModesIDs, isNewProgression):

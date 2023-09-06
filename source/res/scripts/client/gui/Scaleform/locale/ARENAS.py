@@ -156,12 +156,18 @@ class ARENAS(object):
     C_252_BR_BATTLE_CITY4_DESCRIPTION = '#arenas:252_br_battle_city4/description'
     C_128_LAST_FRONTIER_V_NAME = '#arenas:128_last_frontier_v/name'
     C_128_LAST_FRONTIER_V_DESCRIPTION = '#arenas:128_last_frontier_v/description'
+    C_108_NORMANDY_NOM_NAME = '#arenas:108_normandy_nom/name'
+    C_108_NORMANDY_NOM_DESCRIPTION = '#arenas:108_normandy_nom/description'
+    C_14_SIEGFRIED_LINE_NOM_NAME = '#arenas:14_siegfried_line_nom/name'
+    C_14_SIEGFRIED_LINE_NOM_DESCRIPTION = '#arenas:14_siegfried_line_nom/description'
     C_121_LOST_PARADISE_V_NAME = '#arenas:121_lost_paradise_v/name'
     C_121_LOST_PARADISE_V_DESCRIPTION = '#arenas:121_lost_paradise_v/description'
     TYPE_WINBACK_NAME = '#arenas:type/winback/name'
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
+    C_500_STALINGRAD_NAME = '#arenas:500_stalingrad/name'
+    C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -315,12 +321,18 @@ class ARENAS(object):
      C_252_BR_BATTLE_CITY4_DESCRIPTION,
      C_128_LAST_FRONTIER_V_NAME,
      C_128_LAST_FRONTIER_V_DESCRIPTION,
+     C_108_NORMANDY_NOM_NAME,
+     C_108_NORMANDY_NOM_DESCRIPTION,
+     C_14_SIEGFRIED_LINE_NOM_NAME,
+     C_14_SIEGFRIED_LINE_NOM_DESCRIPTION,
      C_121_LOST_PARADISE_V_NAME,
      C_121_LOST_PARADISE_V_DESCRIPTION,
      TYPE_WINBACK_NAME,
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,
-     C_210_BF_EPIC_DESERT_DESCRIPTION)
+     C_210_BF_EPIC_DESERT_DESCRIPTION,
+     C_500_STALINGRAD_NAME,
+     C_500_STALINGRAD_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

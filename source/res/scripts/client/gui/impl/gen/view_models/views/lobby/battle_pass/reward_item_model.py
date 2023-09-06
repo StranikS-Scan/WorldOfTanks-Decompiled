@@ -8,7 +8,7 @@ class RewardItemModel(BonusModel):
     SIZE_SMALL = 1
     SIZE_BIG = 2
 
-    def __init__(self, properties=14, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(RewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
@@ -53,6 +53,12 @@ class RewardItemModel(BonusModel):
     def setIsCollectionEntity(self, value):
         self._setBool(13, value)
 
+    def getItemType(self):
+        return self._getNumber(14)
+
+    def setItemType(self, value):
+        self._setNumber(14, value)
+
     def _initialize(self):
         super(RewardItemModel, self)._initialize()
         self._addStringProperty('item', '')
@@ -62,3 +68,4 @@ class RewardItemModel(BonusModel):
         self._addStringProperty('bigIcon', '')
         self._addStringProperty('overlayType', '')
         self._addBoolProperty('isCollectionEntity', False)
+        self._addNumberProperty('itemType', 0)

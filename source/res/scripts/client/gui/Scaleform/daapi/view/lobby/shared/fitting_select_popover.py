@@ -244,6 +244,7 @@ class PopoverLogicProvider(object):
         self._needToResetDualGun = False
         self._needToResetTurboshaft = False
         self._needToResetRocketAcceleration = False
+        self._needToResetDualAccuracy = False
         self.__moduleExtenders = fittingSelectModuleExtenders()
         return
 
@@ -281,6 +282,8 @@ class PopoverLogicProvider(object):
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
         elif self._needToResetRocketAcceleration:
             self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
+        elif self._needToResetDualAccuracy:
+            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: True})
 
     def _checkCounters(self, vehicleModule):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
@@ -288,6 +291,8 @@ class PopoverLogicProvider(object):
                 self._needToResetAutoReload = True
             elif not self._needToResetDualGun and vehicleModule.isDualGun(self._vehicle.descriptor):
                 self._needToResetDualGun = True
+            elif not self._needToResetDualAccuracy and vehicleModule.hasDualAccuracy(self._vehicle.descriptor):
+                self._needToResetDualAccuracy = True
         elif vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             if not self._needToResetTurboshaft and vehicleModule.hasTurboshaftEngine():
                 self._needToResetTurboshaft = True

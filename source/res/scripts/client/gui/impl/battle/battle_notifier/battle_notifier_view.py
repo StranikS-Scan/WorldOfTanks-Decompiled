@@ -109,7 +109,8 @@ def _randomBattleResults(message):
 
 
 _formatters = {ARENA_BONUS_TYPE.REGULAR: _randomBattleResults,
- ARENA_BONUS_TYPE.EPIC_RANDOM: _randomBattleResults}
+ ARENA_BONUS_TYPE.EPIC_RANDOM: _randomBattleResults,
+ ARENA_BONUS_TYPE.VERSUS_AI: _randomBattleResults}
 
 def _collectResults(message):
     arenaBonusType = message.data.get('bonusType', None)

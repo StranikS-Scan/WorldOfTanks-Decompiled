@@ -17,3 +17,6 @@ class ProfileTotalPage(InjectComponentAdaptor):
 
     def onSectionActivated(self):
         pass
+
+    def onSectionDeactivated(self):
+        pass

@@ -5,14 +5,18 @@ import typing
 from PlayerEvents import g_playerEvents
 from wg_async import AsyncScope, AsyncEvent, wg_await, wg_async, BrokenPromiseError, AsyncReturn
 from frameworks.wulf import WindowLayer
+from gui.impl import backport
 from gui.impl.backport.backport_tooltip import BackportTooltipWindow, createTooltipData
 from gui.impl.dialogs.dialog_template_utils import getCurrencyTooltipAlias
+from gui.impl.dialogs.sub_views.top_right.money_balance import NO_WGM_TOOLTIP_DATA
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.format_resource_string_arg_model import FormatResourceStringArgModel
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
+from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencyType
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogFlags
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.shared.money import Currency
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
@@ -73,9 +77,7 @@ class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel])
         if event.contentID == R.views.dialogs.common.DialogTemplateGenericTooltip():
             currency = event.getArgument('currency')
             if currency is not None:
-                window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=getCurrencyTooltipAlias(currency), specialArgs=[]), self.getParentWindow())
-                window.load()
-                return window
+                return self.__createCurrencyTooltip(event, currency)
         return super(FullScreenDialogView, self).createToolTip(event)
 
     def _initialize(self):
@@ -142,6 +144,15 @@ class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel])
         model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
         model.setFreexp(self._stats.freeXP)
         model.setIsWalletAvailable(self._stats.mayConsumeWalletResources)
+
+    def __createCurrencyTooltip(self, event, currency):
+        if self._stats.mayConsumeWalletResources:
+            window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=getCurrencyTooltipAlias(currency), specialArgs=[]), self.getParentWindow())
+            window.load()
+            return window
+        else:
+            params = NO_WGM_TOOLTIP_DATA.get(CurrencyType(currency))
+            return None if params is None else createSimpleTooltip(self.getParentWindow(), event, backport.text(params['header']), backport.text(params['body']))
 
 
 class FullScreenDialogWindowWrapper(LobbyWindow):

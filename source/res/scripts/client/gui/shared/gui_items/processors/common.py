@@ -8,6 +8,7 @@ from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.notifications import NotificationPriorityLevel
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from skeletons.gui.shared import IItemsCache
@@ -270,7 +271,8 @@ class CustomizationsSeller(Processor):
         return {'itemType': styleItemType if self.item.itemTypeID == GUI_ITEM_TYPE.STYLE else self.item.userType,
          'itemName': self.item.userName,
          'count': backport.getIntegralFormat(int(self.count)),
-         'money': formatPrice(self._getTotalPrice())}
+         'money': formatPrice(self._getTotalPrice()),
+         'priority': NotificationPriorityLevel.MEDIUM}
 
     def _successHandler(self, code, ctx=None):
         messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL

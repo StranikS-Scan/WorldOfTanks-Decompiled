@@ -23,7 +23,7 @@ class AreaAbilityVisualizer(object):
         return
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class AreaAbilityVisualizationManager(CGF.ComponentManager):
 
     def __applyScale(self, transformComponent, radius):

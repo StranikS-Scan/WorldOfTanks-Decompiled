@@ -84,7 +84,9 @@ class StageSwitcherView(ViewImpl):
         with self.viewModel.transaction() as tx:
             style = self.__ctx.mode.modifiedStyle
             tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
-            tx.setCurrentLevel(style.getLatestOpenedProgressionLevel(g_currentVehicle.item))
+            if style is not None:
+                tx.setCurrentLevel(style.getLatestOpenedProgressionLevel(g_currentVehicle.item))
+        return
 
     def __onChange(self, *args):
         if args and args[0]['selectedLevel'] is not None:

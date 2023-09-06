@@ -3,10 +3,12 @@
 import typing
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 if typing.TYPE_CHECKING:
+    from typing import TypeVar
     from frameworks.wulf import Array
-    from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.missions.packers.bonus import BonusUIPacker
+    from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+    BonusModelType = TypeVar('BonusModelType', bound=BonusModel)
 
 def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, startIndex=0):
     packer = packer or getDefaultBonusPacker()

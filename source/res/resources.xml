@@ -172,10 +172,10 @@
       <module>	client.cgf_components.highlight_component	</module>
       <module>	client.cgf_components.hover_component	</module>
       <module>	client.cgf_components.on_click_components	</module>
+      <module>	client.cgf_components.arena_camera_manager	</module>
       <module>	client.cgf_components.hangar_camera_manager	</module>
       <module>	client.cgf_components.hangar_rules	</module>
       <module>	client.cgf_components.armory_yard_components	</module>
-      <module>	client.cgf_components.tooltip_component	</module>
       <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
@@ -184,18 +184,17 @@
       <module>	client.cgf_components.zone_components	</module>
       <module>	client.cgf_components.on_shot_components	</module>
       <module>	client.cgf_components.on_death_components	</module>
+      <module>	client.cgf_components.shot_color_transmission_component	</module>
       <module>	common.cgf_components_common.shots_receiver	</module>
       <module>	common.cgf_components_common.state_components	</module>
       <module>	common.cgf_components_common.vehicle_components	</module>
-      <module>	common.cgf_components_common.scenario.timed_activation	</module>
+      <module>	common.cgf_components_common.scenario.sequence_network_sync	</module>
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
       <module>	cell.cgf_cell.damage.shot_damage	</module>
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
-      <module>	client.cgf_components.auto_shoot_guns_component	</module>
-      <module>	client.cgf_components.gun_spin_animator_component	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -213,6 +212,7 @@
       <module>	common.cgf_demo.test_replicable	</module>
       <module>	cell.cgf_demo_cell.demo_rules	</module>
       <module>	cell.cgf_demo_cell.demo_managers	</module>
+      <module>	cell.cgf_demo_cell.demo_scenario_trigger	</module>
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
@@ -229,15 +229,21 @@
       <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_Obj140_shot_30.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_Xm551_shot_60.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_EBR105_shot_60.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_JagdPz100_shot_60.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_T5051_shot_60.prefab	</path>
-      <path>	particles/Tank/fep_qfg/prefabs/fep_qfg_MVY_shot_90.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/108_bridge_bombing.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/108_city_firing.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/108_facades_bombardment.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/108_large_facade_collapses.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_01a_CastleTower_crash.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_02b_BHouse_crash.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_07b_BWalls_crash_01.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_07b_BWalls_crash_02.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_07b_BWalls_crash_03.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_Artillery_out_crash.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_bunker_busting.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_plane_crash.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/14_09a_Planes_out_crash.prefab	</path>
+      <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
       <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
-      <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01.prefab	</path>
-      <path>	content/Hangars/h21_Armory_Yard_customisation/Armory_Yard_Environment_01_fwd.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

@@ -452,6 +452,10 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         else:
             self.__isFocused = False
             self.app.leaveGuiControlMode('chat')
+            ctrl = self.sessionProvider.shared.calloutCtrl
+            if ctrl is not None:
+                ctrl.resetRadialMenuData()
+        return
 
     def __restoreLastReceiverInBattle(self):
         if g_settings.userPrefs.storeReceiverInBattle:

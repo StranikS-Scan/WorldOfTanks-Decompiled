@@ -17,7 +17,8 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
-from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, GOLD_MISSION, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel
+from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, GOLD_MISSION, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel, CREW_BONUS_X3_TOKEN
+from gui.server_events.bonuses import formatBlueprint
 from gui.server_events.formatters import COMPLEX_TOKEN, TokenComplex, parseComplexToken
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -25,6 +26,7 @@ from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, i18n, time_utils
+from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.server_events import IEventsCache
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
@@ -79,6 +81,7 @@ def getDefaultBonusPackersMap():
      Currency.CRYSTAL: simpleBonusPacker,
      Currency.GOLD: simpleBonusPacker,
      Currency.BPCOIN: simpleBonusPacker,
+     Currency.EQUIP_COIN: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.BASIC: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker,
      'currencies': CurrenciesBonusUIPacker,
@@ -86,7 +89,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.IDLE_CREW_XP: wotPlusBonusPacker,
      constants.WoTPlusBonusType.EXCLUDED_MAP: wotPlusBonusPacker,
      constants.WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker}
+     constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker}
 
 
 def getLocalizedBonusName(name):
@@ -170,6 +174,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     _eventsCache = dependency.descriptor(IEventsCache)
     _RANKED_TOKEN_SOURCE = 'rankedPoint'
     _BATTLE_BONUS_X5_TOKEN_SOURCE = 'bonus_battle_task'
+    _CREW_BONUS_X3_TOKEN_SOURCE = 'crew_bonus_x3'
     _GOLD_MISSION_TOKEN_SOURCE = 'gold_mission'
 
     @classmethod
@@ -222,7 +227,8 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getTokenBonusPackers(cls):
-        return {BATTLE_BONUS_X5_TOKEN: cls.__packBattleBonusX5Token,
+        return {BATTLE_BONUS_X5_TOKEN: cls.__packBonusQuestToken(BATTLE_BONUS_X5_TOKEN),
+         CREW_BONUS_X3_TOKEN: cls.__packBonusQuestToken(CREW_BONUS_X3_TOKEN),
          COMPLEX_TOKEN: cls.__packComplexToken,
          YEAR_POINTS_TOKEN: cls.__packRankedToken,
          GOLD_MISSION: cls.__packGoldMissionToken}
@@ -239,13 +245,16 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             return COMPLEX_TOKEN
         if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
             return BATTLE_BONUS_X5_TOKEN
+        if tokenID.startswith(CREW_BONUS_X3_TOKEN):
+            return CREW_BONUS_X3_TOKEN
         if tokenID.startswith(YEAR_POINTS_TOKEN):
             return YEAR_POINTS_TOKEN
         return GOLD_MISSION if tokenID.split(':')[0].endswith(GOLD_MISSION) else ''
 
     @classmethod
     def _getTooltipsPackers(cls):
-        return {BATTLE_BONUS_X5_TOKEN: cls.__getBattleBonusX5Tooltip,
+        return {BATTLE_BONUS_X5_TOKEN: cls.__getBonusFactorTooltip(BATTLE_BONUS_X5_TOKEN),
+         CREW_BONUS_X3_TOKEN: cls.__getBonusFactorTooltip(CREW_BONUS_X3_TOKEN),
          COMPLEX_TOKEN: cls.__getComplexToolTip,
          YEAR_POINTS_TOKEN: cls.__getRankedPointToolTip,
          GOLD_MISSION: cls.__getGoldMissionTooltip}
@@ -270,14 +279,17 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         return model
 
     @classmethod
-    def __packBattleBonusX5Token(cls, model, bonus, *args):
-        name = cls._BATTLE_BONUS_X5_TOKEN_SOURCE
-        model.setName(BATTLE_BONUS_X5_TOKEN)
-        model.setLabel(bonus.getUserName())
-        model.setValue(str(bonus.getCount()))
-        model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(name)()))
-        model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
-        return model
+    def __packBonusQuestToken(cls, name):
+
+        def inner(model, bonus, *args):
+            model.setName(name)
+            model.setValue(str(bonus.getCount()))
+            model.setLabel(bonus.getUserName())
+            model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(name)()))
+            model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
+            return model
+
+        return inner
 
     @classmethod
     def __packGoldMissionToken(cls, model, bonus, *args):
@@ -287,9 +299,13 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
         return model
 
-    @classmethod
-    def __getBattleBonusX5Tooltip(cls, *_):
-        return createTooltipData(TokenBonusFormatter.getBattleBonusX5Tooltip([]))
+    @staticmethod
+    def __getBonusFactorTooltip(name):
+
+        def inner(*_):
+            return createTooltipData(TokenBonusFormatter.getBonusFactorTooltip(name))
+
+        return inner
 
     @classmethod
     def __getComplexToolTip(cls, complexToken, *_):
@@ -449,6 +465,18 @@ class BlueprintBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getBonusModel(cls):
         return BlueprintBonusModel()
+
+
+class ExtendedBlueprintBonusUIPacker(BlueprintBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        models = super(ExtendedBlueprintBonusUIPacker, cls)._pack(bonus)
+        model = first(models)
+        if model:
+            label = formatBlueprint(bonus)
+            model.setLabel(label)
+        return models
 
 
 class CrewBookBonusUIPacker(BaseBonusUIPacker):
@@ -982,23 +1010,35 @@ def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
 
-def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
     bonusIndexTotal = 0
+    if tooltipData is not None:
+        bonusIndexTotal = len(tooltipData)
     bonusTooltipList = []
+    hasSort = sort is not None and callable(sort)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
-            if sort is not None and callable(sort):
-                bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
             if bonusList and tooltipData is not None:
                 bonusTooltipList = packer.getToolTip(bonus)
+            if bonusList and hasSort:
+                if bonusTooltipList:
+                    sortMethod = sort(bonus.getName())
+                    merged = zip(bonusList, bonusTooltipList)
+                    merged = sorted(merged, key=lambda x: x[0], cmp=sortMethod)
+                    bonusList, bonusTooltipList = zip(*merged)
+                    bonusList = list(bonusList)
+                    bonusTooltipList = list(bonusTooltipList)
+                else:
+                    bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
+                tooltipIdx = str(bonusIndexTotal)
                 if hasattr(item, 'setTooltipId'):
-                    item.setTooltipId(str(bonusIndexTotal))
+                    item.setTooltipId(tooltipIdx)
                 model.addViewModel(item)
                 if tooltipData is not None:
-                    tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]
+                    tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
                 bonusIndexTotal += 1
 
     return

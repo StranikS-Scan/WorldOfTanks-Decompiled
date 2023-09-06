@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.BoosterInfoWindow import BoosterInfoWindow
 from gui.Scaleform.daapi.view.lobby.goodie_info_window import GoodieInfoWindow
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.Scaleform.daapi.view.lobby.image_view.image_view import ImageView
-from gui.Scaleform.daapi.view.lobby.wot_plus.wot_plus_browser_pages import VehicleRentalView, WotPlusInfoView
+from gui.Scaleform.daapi.view.lobby.wot_plus.wot_plus_browser_pages import WotPlusInfoView
 from gui.Scaleform.framework import ComponentSettings, ConditionalViewSettings, ContainerSettings, GroupedViewSettings, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.managers import containers
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -22,6 +22,7 @@ def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.lobby.rally.UnitUserCMHandler import UnitUserCMHandler
     return ((CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, user_cm_handlers.UserVehicleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.BASE_USER, user_cm_handlers.BaseUserCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.BASE_USER_APPEAL, user_cm_handlers.BaseUserAppealCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, UnitUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler))
@@ -90,7 +91,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_buying_preview import VehicleStyleBuyingPreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.showcase_style_buying_preview import VehicleShowcaseStyleBuyingPreview
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_progress_component import BootcampProgressComponent
-    from gui.Scaleform.daapi.view.lobby.vehicle_preview.wot_plus_vehicle_preview import WotPlusVehiclePreview
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.rental_vehicle_preview import RentalVehiclePreview
     from gui.Scaleform.daapi.view.lobby.telecom_rentals.telecom_rentals_browser_pages import VehicleTelecomRentalView
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.resource_well_preview import ResourceWellVehiclePreview
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(WindowLayer.SUB_VIEW, containers.DefaultContainer), ContainerSettings(WindowLayer.TOP_SUB_VIEW, containers.PopUpContainer))),
@@ -101,7 +102,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW, ConfigurableVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW, WotPlusVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW, RentalVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_PREVIEW, VehicleStylePreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW, VehicleStyleProgressionPreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_BUYING_PREVIEW, VehicleStyleBuyingPreview, 'vehicleBasePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.STYLE_BUYING_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -120,7 +121,6 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.BATTLE_PASS_BROWSER_VIEW, BattlePassBrowserView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BATTLE_PASS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER_VIEW, BattlePassVideoBrowserView, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.WOT_PLUS_INFO_VIEW, WotPlusInfoView, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.WOT_PLUS_INFO_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.VEHICLE_RENTAL_VIEW, VehicleRentalView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.VEHICLE_RENTAL_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.TELECOM_RENTAL_VIEW, VehicleTelecomRentalView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.TELECOM_RENTAL_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, BlueprintsExchangeView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ResourceWellBrowserView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -198,9 +198,8 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.WOT_PLUS_INFO_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.VEHICLE_RENTAL_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TELECOM_RENTAL_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
@@ -270,46 +269,58 @@ class LobbyDialogsHandler(PackageBusinessHandler):
         super(LobbyDialogsHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
 
     def __checkBoxDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.CHECK_BOX_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.CHECK_BOX_DIALOG, None, event.meta, event.handler)
+        return
 
     def __confirmModuleHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, None, event.meta, event.handler)
+        return
 
     def __pmConfirmationDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, None, event.meta, event.handler)
+        return
 
     def __dismissTankmanHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, None, event.meta, event.handler)
+        return
 
     def __restoreTankmanHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.RESTORE_TANKMAN_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.RESTORE_TANKMAN_DIALOG, None, event.meta, event.handler)
+        return
 
     def __iconDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.ICON_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.ICON_DIALOG, None, event.meta, event.handler)
+        return
 
     def __iconPriceDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.ICON_PRICE_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.ICON_PRICE_DIALOG, None, event.meta, event.handler)
+        return
 
     def __crewSkinsCompensationDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.CREW_SKINS_COMPENSATION_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.CREW_SKINS_COMPENSATION_DIALOG, None, event.meta, event.handler)
+        return
 
     def __punishmentWindowHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.PUNISHMENT_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.PUNISHMENT_DIALOG, None, event.meta, event.handler)
+        return
 
     def __useAwardSheetDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, None, event.meta, event.handler)
+        return
 
     def __showFreeXPInfoWindow(self, event):
-        self.loadViewWithDefName(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, VIEW_ALIAS.FREE_X_P_INFO_WINDOW, {'meta': event.meta,
+        self.loadViewWithDefName(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, VIEW_ALIAS.FREE_X_P_INFO_WINDOW, None, {'meta': event.meta,
          'handler': event.handler})
+        return
 
     def __showRecruitWindow(self, event):
         windowContainer = self._app.containerManager.getContainer(WindowLayer.WINDOW)
         recruitWindow = windowContainer.getView(criteria={containers.POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.RECRUIT_WINDOW})
         if recruitWindow is not None:
             recruitWindow.destroy()
-        self.loadViewWithDefName(VIEW_ALIAS.RECRUIT_WINDOW, None, event.ctx)
+        self.loadViewWithDefName(VIEW_ALIAS.RECRUIT_WINDOW, None, None, event.ctx)
         return
 
     def __systemMsgDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, None, event.meta, event.handler)
+        return

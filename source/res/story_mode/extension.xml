@@ -1,0 +1,23 @@
+<extension.xml>
+  <FeatureName>	story_mode	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	story_mode_personality	</Personality>
+  <EditorPersonality>	story_mode_personality_editor	</EditorPersonality>
+  <Components>
+    <StaticComponents>
+      <StoryModeMissions></StoryModeMissions>
+      <StoryModeAccountComponent></StoryModeAccountComponent>
+      <StoryModeArenaComponent></StoryModeArenaComponent>
+      <StoryModeAvatarComponent></StoryModeAvatarComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <StoryModeAfkController></StoryModeAfkController>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <StoryModeBattlesMgr></StoryModeBattlesMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

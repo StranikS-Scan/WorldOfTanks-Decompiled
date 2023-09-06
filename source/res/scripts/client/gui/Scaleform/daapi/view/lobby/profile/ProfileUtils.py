@@ -181,7 +181,8 @@ class _AvgPrestigePointsField(_AbstractField):
 class _AvgHealthRepairField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgHealthRepair()))
+        avgValue = targetData.getAvgHealthRepair() or ProfileUtils.UNAVAILABLE_VALUE
+        return backport.getIntegralFormat(avgValue)
 
 
 class _AvgEnemiesSpottedField(_AbstractField):
@@ -422,7 +423,8 @@ class _MaxHealthRepairField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
-        return backport.getIntegralFormat(targetData.getMaxHealthRepair())
+        maxValue = targetData.getMaxHealthRepair() or ProfileUtils.UNAVAILABLE_VALUE
+        return backport.getIntegralFormat(maxValue)
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         vehicle = self.__getVehicle(targetData)

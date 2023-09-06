@@ -32,6 +32,20 @@ class CGFMeta(Meta):
         return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
+class GetEntityGameObject(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetEntityGameObject, self).__init__(*args, **kwargs)
+        self._entity = self._makeDataInputSlot('entity', SLOT_TYPE.ENTITY)
+        self._gameObject = self._makeDataOutputSlot('gameObject', SLOT_TYPE.GAME_OBJECT, self._exec)
+
+    def _exec(self):
+        entity = self._entity.getValue()
+        gameObject = entity.entityGameObject
+        goWrapper = GameObjectWrapper(gameObject)
+        self._gameObject.setValue(weakref.proxy(goWrapper))
+
+
 class GetVehicleAppearanceGameObject(Block, CGFMeta):
 
     def __init__(self, *args, **kwargs):

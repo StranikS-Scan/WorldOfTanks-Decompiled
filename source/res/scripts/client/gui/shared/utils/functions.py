@@ -97,14 +97,13 @@ def checkAmmoLevel(vehicles, callback):
     ammoWarningMessage = 'lowAmmoAutoLoad'
     alternativeAmmoWarningMessage = 'lowAlternativeAmmoAutoLoad'
     for vehicle in vehicles:
-        if vehicle.isReadyToFight:
-            if vehicle.isAmmoCanSwitch:
-                isNotFull, _ = vehicle.isAmmoNotFullInSetups
-                isPrebattleSwitchDisabled = vehicle.postProgression.isPrebattleSwitchDisabled(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
-                isNotFull = isNotFull and (not isPrebattleSwitchDisabled or not vehicle.isAmmoFullInSetups(vehicle.shells.setupLayouts.layoutIndex))
-            else:
-                isNotFull = not vehicle.isAmmoFull
-            showAmmoWarning = showAmmoWarning or isNotFull
+        if vehicle.isAmmoCanSwitch:
+            isNotFull, _ = vehicle.isAmmoNotFullInSetups
+            isPrebattleSwitchDisabled = vehicle.postProgression.isPrebattleSwitchDisabled(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
+            isNotFull = isNotFull and (not isPrebattleSwitchDisabled or not vehicle.isAmmoFullInSetups(vehicle.shells.setupLayouts.layoutIndex))
+        else:
+            isNotFull = not vehicle.isAmmoFull
+        showAmmoWarning = showAmmoWarning or isNotFull
         if showAmmoWarning:
             from gui.impl.dialogs import dialogs
             from gui.impl.dialogs.builders import ResSimpleDialogBuilder

@@ -3,7 +3,7 @@
 import BigWorld
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from constants import ARENA_PERIOD
-_NOTIFICATION_TIME = 30.0
+_NOTIFICATION_TIME = 20.0
 
 class LobbyNotifier(IAbstractPeriodView):
 

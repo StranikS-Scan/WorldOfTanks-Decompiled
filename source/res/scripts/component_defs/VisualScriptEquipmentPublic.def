@@ -1,0 +1,26 @@
+<VisualScriptEquipmentPublic.def>
+  <Properties>
+    <compactDescr>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </compactDescr>
+    <equipmentState>
+      <Type>	VISUAL_SCRIPT_EQUIPMENT_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </equipmentState>
+    <equipmentStatePublic>
+      <Type>	VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentStatePublic>
+    <errorState>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </errorState>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	visualScriptEquipmentPublic	</DefaultKeyName>
+</VisualScriptEquipmentPublic.def>

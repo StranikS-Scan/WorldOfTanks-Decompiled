@@ -77,6 +77,7 @@ class BattleRoyaleTournamentEntity(PreQueueEntity):
         self.__battleRoyaleTournamentController.leaveCurrentAndJoinToAnotherTournament(ctx.getID())
 
     def fini(self, ctx=None, woEvents=False):
+        self.__battleRoyaleTournamentController.resetReady()
         if ctx and self.__battleRoyaleTournamentController.isSelected():
             self.__battleRoyaleTournamentController.leaveBattleRoyaleTournament()
         if self.__watcher is not None:

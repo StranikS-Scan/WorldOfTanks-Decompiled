@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/battle_royale_client_common/SpawnKeyPointTeamInfoBase.py
-import BigWorld
 import Event
 
-class SpawnKeyPointTeamInfoBase(BigWorld.DynamicScriptComponent):
+class SpawnKeyPointTeamInfoBase(object):
 
     def __init__(self):
         super(SpawnKeyPointTeamInfoBase, self).__init__()

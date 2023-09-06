@@ -74,8 +74,10 @@ class _MessengerPackageBusinessHandler(PackageBusinessHandler):
 
     def __showLazyChannelWindow(self, event):
         alias = MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW
-        self.loadViewWithDefName(alias, getViewName(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, event.ctx.get('clientID')), event.ctx)
+        self.loadViewWithDefName(alias, getViewName(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, event.ctx.get('clientID')), None, event.ctx)
+        return
 
     def __showLobbyChannelWindow(self, event):
         alias = MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW
-        self.loadViewWithDefName(alias, getViewName(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, event.ctx['clientID']), event.ctx)
+        self.loadViewWithDefName(alias, getViewName(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, event.ctx['clientID']), None, event.ctx)
+        return

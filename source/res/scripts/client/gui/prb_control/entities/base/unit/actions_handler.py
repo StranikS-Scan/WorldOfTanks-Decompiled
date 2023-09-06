@@ -11,6 +11,7 @@ from gui.prb_control.entities.base import checkVehicleAmmoFull
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearchUnitCtx
 from gui.prb_control.settings import FUNCTIONAL_FLAG
+from wg_async import await_callback, wg_async
 if typing.TYPE_CHECKING:
     from gui.prb_control.entities.base.unit.entity import BaseUnitEntity
 
@@ -68,6 +69,7 @@ class UnitActionsHandler(AbstractActionsHandler):
         g_eventDispatcher.removeUnitFromCarousel(prbType)
         g_eventDispatcher.loadHangar()
 
+    @wg_async
     def execute(self):
         pInfo = self._entity.getPlayerInfo()
         if pInfo.isCommander():
@@ -82,20 +84,21 @@ class UnitActionsHandler(AbstractActionsHandler):
                     ctx = AutoSearchUnitCtx('prebattle/auto_search')
                     LOG_DEBUG('Unit request', ctx)
                     self._entity.doAutoSearch(ctx)
-            else:
-                self._sendBattleQueueRequest()
-        elif not pInfo.isReady:
-            vehicles = self._entity.getVehiclesInfo(pInfo.dbID)
-            selectedVehicle = vehicles[0].getVehicle() if vehicles else None
-            checkVehicleAmmoFull(selectedVehicle or g_currentVehicle.item, self._checkVehicleAmmoCallback)
+                    return
+            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            if not result:
+                return
+            self._sendBattleQueueRequest()
         else:
-            self._entity.togglePlayerReadyAction()
+            if not pInfo.isReady:
+                vehicles = self._entity.getVehiclesInfo(pInfo.dbID)
+                selectedVehicle = vehicles[0].getVehicle() if vehicles else None
+                result = yield await_callback(checkVehicleAmmoFull)(selectedVehicle or g_currentVehicle.item)
+                if not result:
+                    return
+            if self._entity is not None:
+                self._entity.togglePlayerReadyAction()
         return
 
     def _canDoAutoSearch(self, unit, stats):
         return stats.freeSlotsCount > 0
-
-    def _checkVehicleAmmoCallback(self):
-        if self._entity is not None:
-            self._entity.togglePlayerReadyAction()
-        return

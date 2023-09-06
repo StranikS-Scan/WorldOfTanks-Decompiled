@@ -5,9 +5,11 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
+from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
+from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
@@ -32,6 +34,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IGuiLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -139,17 +142,16 @@ class _NotificationDecorator(object):
 
     def getPopUpVO(self, newId=None):
         vo = self.getListVO(newId)
+        lifeTime = 0
+        if self._settings is not None:
+            lifeTime = vo['message'].get('lifeTime', 0) or self._settings.lifeTime or getattr(self._settings.auxData, 'timeoutMS', 0)
         settings = g_settings.lobby.serviceChannel
         if self.getPriorityLevel() == NotificationPriorityLevel.HIGH:
-            vo['lifeTime'] = settings.highPriorityMsgLifeTime
+            vo['lifeTime'] = lifeTime or settings.highPriorityMsgLifeTime
             vo['hidingAnimationSpeed'] = settings.highPriorityMsgAlphaSpeed
         else:
-            vo['lifeTime'] = settings.mediumPriorityMsgLifeTime
+            vo['lifeTime'] = lifeTime or settings.mediumPriorityMsgLifeTime
             vo['hidingAnimationSpeed'] = settings.mediumPriorityMsgAlphaSpeed
-        if self._settings is not None:
-            overrideTimeout = getattr(self._settings.auxData, 'timeoutMS', 0)
-            if overrideTimeout > 0:
-                vo['lifeTime'] = self._settings.auxData.timeoutMS
         return vo
 
     def getButtonLayout(self):
@@ -268,13 +270,25 @@ class LockButtonMessageDecorator(MessageDecorator):
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(LockButtonMessageDecorator, self).__init__(entityID, entity, settings, model)
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_playerEvents.onEnqueued += self._onEqueued
+        g_playerEvents.onDequeued += self._onDequeued
+        g_viewOverrider.onViewOverriden += self._onViewOverriden
 
     def clear(self):
         super(LockButtonMessageDecorator, self).clear()
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_playerEvents.onEnqueued -= self._onEqueued
+        g_playerEvents.onDequeued -= self._onDequeued
+        g_viewOverrider.onViewOverriden -= self._onViewOverriden
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
+
+    def _onEqueued(self, _):
+        self._updateButtonsState(lock=True)
+
+    def _onDequeued(self, _):
+        self._updateButtonsState(lock=False)
 
     def _make(self, formatted=None, settings=None):
         super(LockButtonMessageDecorator, self)._make(formatted, settings)
@@ -282,7 +296,7 @@ class LockButtonMessageDecorator(MessageDecorator):
         return
 
     def _getLockAliases(self):
-        return (VIEW_ALIAS.BATTLE_QUEUE,)
+        pass
 
     def _updateButtons(self, _):
         self._updateButtonsState(lock=False)
@@ -292,6 +306,11 @@ class LockButtonMessageDecorator(MessageDecorator):
             self._updateButtonsState(lock=True)
         elif VIEW_ALIAS.LOBBY_HANGAR == event.alias:
             self._updateButtons(event)
+
+    def _onViewOverriden(self, alias, *_):
+        if VIEW_ALIAS.LOBBY_HANGAR == alias:
+            self._updateButtons(None)
+        return
 
     def _updateButtonsState(self, lock=False):
         if self._entity is None or not self._entity.get('buttonsLayout'):
@@ -1202,10 +1221,7 @@ class CollectionsLockButtonDecorator(MessageDecorator):
                 state = NOTIFICATION_BUTTON_STATE.DEFAULT
             else:
                 state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            buttonsStates = self._entity.get('buttonsStates')
-            if buttonsStates is None:
-                return
-            buttonsStates['submit'] = state
+            self._entity['buttonsStates'] = {'submit': state}
             return
 
     def __update(self, *_):
@@ -1234,3 +1250,105 @@ class WinbackSelectableRewardReminderDecorator(MessageDecorator):
 
     def __makeSettings(self):
         return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
+
+
+class WotPlusIntroViewMessageDecorator(MessageDecorator):
+    ENTITY_ID = 0
+
+    def __init__(self):
+        entity = g_settings.msgTemplates.format('WotPlusIntroAnnouncement')
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
+        super(WotPlusIntroViewMessageDecorator, self).__init__(self.ENTITY_ID, entity, settings)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.WOT_PLUS_INTRO
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+
+class BattleMattersReminderDecorator(MessageDecorator):
+    __battleMattersController = dependency.descriptor(IBattleMattersController)
+
+    def __init__(self, entityID, notificationType, savedData, model, template, priority, useCounterOnce=True):
+        self.__notificationType = notificationType
+        self.__useCounterOnce = useCounterOnce
+        entity = g_settings.msgTemplates.format(template, data={'linkageData': savedData})
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=priority, groupID=self.getGroup())
+        super(BattleMattersReminderDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
+        self._subscribe()
+
+    def clear(self):
+        self._unsubscribe()
+        super(BattleMattersReminderDecorator, self).clear()
+
+    def getType(self):
+        return self.__notificationType
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def isShouldCountOnlyOnce(self):
+        return self.__useCounterOnce
+
+    def getSavedData(self):
+        return self._entity.get('linkageData', {})
+
+    @staticmethod
+    def isPinned():
+        return True
+
+    def decrementCounterOnHidden(self):
+        return True
+
+    def _subscribe(self):
+        events = self._getEvents()
+        for event, handler in events:
+            event += handler
+
+    def _unsubscribe(self):
+        events = self._getEvents()
+        for event, handler in events:
+            event -= handler
+
+    def _getEvents(self):
+        return ((self.__battleMattersController.onStateChanged, self.__onStateChanged),)
+
+    def __onStateChanged(self):
+        self.__update()
+
+    def __update(self):
+        if not self.__battleMattersController.isEnabled() and self._model is not None:
+            self._model.removeNotification(self.getType(), self._entityID)
+            return
+        else:
+            self.__updateEntityButtons()
+            if self._model is not None:
+                self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+            return
+
+    def _make(self, entity=None, settings=None):
+        self.__updateEntityButtons()
+        super(BattleMattersReminderDecorator, self)._make(entity, settings)
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            buttonsStates = self._entity.get('buttonsStates', {})
+            if buttonsStates is None:
+                return
+            state, tooltip = self._getButtonState()
+            buttonsStates['submit'] = state
+            buttonsLayout[0]['tooltip'] = tooltip
+            return
+
+    def _getButtonState(self):
+        state = NOTIFICATION_BUTTON_STATE.VISIBLE
+        tooltip = ''
+        if self.__battleMattersController.isActive():
+            state |= NOTIFICATION_BUTTON_STATE.ENABLED
+        return (state, tooltip)

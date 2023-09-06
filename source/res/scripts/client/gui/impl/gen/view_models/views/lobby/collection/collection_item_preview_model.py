@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/collection/collection_item_preview_model.py
 from enum import Enum
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
+from gui.impl.gen.view_models.views.lobby.collection.pages_blurred_background_model import PagesBlurredBackgroundModel
 
 class ItemType(Enum):
     PHOTO = 'photo'
@@ -17,7 +19,7 @@ class ItemType(Enum):
 class CollectionItemPreviewModel(ViewModel):
     __slots__ = ('onClosePreview', 'onOpenPreview')
 
-    def __init__(self, properties=9, commands=2):
+    def __init__(self, properties=10, commands=2):
         super(CollectionItemPreviewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -76,6 +78,16 @@ class CollectionItemPreviewModel(ViewModel):
     def setPage(self, value):
         self._setNumber(8, value)
 
+    def getPagesBlurredBackgrounds(self):
+        return self._getArray(9)
+
+    def setPagesBlurredBackgrounds(self, value):
+        self._setArray(9, value)
+
+    @staticmethod
+    def getPagesBlurredBackgroundsType():
+        return PagesBlurredBackgroundModel
+
     def _initialize(self):
         super(CollectionItemPreviewModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -87,5 +99,6 @@ class CollectionItemPreviewModel(ViewModel):
         self._addStringProperty('largeImage', '')
         self._addStringProperty('currentCollection', 'defaultConfig')
         self._addNumberProperty('page', 0)
+        self._addArrayProperty('pagesBlurredBackgrounds', Array())
         self.onClosePreview = self._addCommand('onClosePreview')
         self.onOpenPreview = self._addCommand('onOpenPreview')

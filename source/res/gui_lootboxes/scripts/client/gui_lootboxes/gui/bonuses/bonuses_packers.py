@@ -32,14 +32,19 @@ from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 _logger = logging.getLogger(__name__)
 
-def getLootBoxesBonusPacker():
+def getLootBoxesBonusPackerMap():
     mapping = getDefaultBonusPackersMap()
     mapping.update({'crewBooks': LootBoxCrewBookBonusUIPacker(),
      'tmanToken': TmanTemplateBonusPacker(),
+     'customizations': LootBoxCustomizationBonusUIPacker(),
      'collectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      'anyCollectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      'dogTagComponents': LootBoxDogTagUIPacker()})
-    return BonusUIPacker(mapping)
+    return mapping
+
+
+def getLootBoxesBonusPacker():
+    return BonusUIPacker(getLootBoxesBonusPackerMap())
 
 
 def getRewardsScreenDefaultBonusPackerMap():
@@ -54,6 +59,12 @@ def getRewardsScreenDefaultBonusPackerMap():
      'anyCollectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      constants.PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusPacker()})
     return mapping
+
+
+def getAdditionalRewardsTooltipBonusPacker():
+    mapping = getRewardsScreenDefaultBonusPackerMap()
+    mapping.update({'customizations': AdditionalRewardsCustomizationBonusUIPacker()})
+    return BonusUIPacker(mapping)
 
 
 def getRewardsBonusPacker():
@@ -176,7 +187,7 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
                 if compBonus:
                     packer = LootBoxCompensationBonusUIPacker()
                     result.extend(packer.pack(compBonus))
-            result.append(cls._packSingleBonus(bonus, item, bonus.getC11nItem(item).userName))
+            result.append(cls._packSingleBonus(bonus, item, cls._getLabel(bonus.getC11nItem(item))))
 
         return result
 
@@ -241,6 +252,12 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
 
         return
 
+    @classmethod
+    def _getLabel(cls, c11nItem):
+        userName = c11nItem.userName
+        elementBonusR = R.strings.vehicle_customization.elementBonus.desc.dyn(c11nItem.itemFullTypeName, R.invalid)
+        return backport.text(elementBonusR(), value=userName) if elementBonusR else userName
+
 
 class LootBoxUniqueCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker):
 
@@ -251,6 +268,13 @@ class LootBoxUniqueCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker)
         if R.images.gui.maps.icons.quests.bonuses.s600x450.dyn(iconName).exists():
             return iconName
         return itemTypeName + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else itemTypeName
+
+
+class AdditionalRewardsCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker):
+
+    @classmethod
+    def _getLabel(cls, c11nItem):
+        return c11nItem.userName
 
 
 class LootBoxCrewBookBonusUIPacker(CrewBookBonusUIPacker):

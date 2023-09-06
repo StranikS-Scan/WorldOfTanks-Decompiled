@@ -240,7 +240,8 @@ class LimitedUIController(ILimitedUIController):
         return
 
     def __onSyncCompleted(self, _, diff):
-        if 'limitedUi' in diff:
+        if not diff or 'limitedUi' in diff:
+            self.__tryNotifyStateChanged()
             self.onVersionUpdated()
 
     def __onSettingsCacheSyncCompleted(self):

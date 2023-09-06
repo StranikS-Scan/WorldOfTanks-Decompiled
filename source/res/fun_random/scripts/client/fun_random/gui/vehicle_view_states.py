@@ -10,23 +10,25 @@ class FunRandomVehicleViewState(SelectedViewState, FunSubModesWatcher):
     def isSuitableVehicle(cls, vehicle):
         return vehicle.item.isOnlyForFunRandomBattles
 
+    def setCustomizationVisible(self, customizationVisible):
+        self._isCustomizationVisible = customizationVisible
+
     def setEliteShown(self, eliteShown):
         self._isEliteShown = eliteShown
 
     def setLevelShown(self, levelShown):
         self._isLevelShown = levelShown
 
+    def setMaintenanceVisible(self, maintenanceVisible):
+        self._isMaintenanceVisible = maintenanceVisible
+
     def setRoleShown(self, roleShown):
         self._isRoleShown = roleShown
 
-    def isCustomizationVisible(self):
-        return not self._isOutfitLocked
-
     def _resolveVehicleState(self, vehicle):
         super(FunRandomVehicleViewState, self)._resolveVehicleState(vehicle)
-        self._isMaintenanceVisible = vehicle.item.typeDescr.repairCost > 0
-        self.__resolveStateByCurrentSubMode()
+        self.__resolveStateByCurrentSubMode(vehicle)
 
     @hasDesiredSubMode()
-    def __resolveStateByCurrentSubMode(self):
-        self.getDesiredSubMode().resolveVehicleViewState(self)
+    def __resolveStateByCurrentSubMode(self, vehicle):
+        self.getDesiredSubMode().resolveVehicleViewState(self, vehicle)

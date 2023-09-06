@@ -120,7 +120,7 @@ class AbstractContextMenuHandler(object):
         self.onContextMenuHide = Event(self._eManager)
         super(AbstractContextMenuHandler, self).__init__()
         self.__cmProxy = weakref.proxy(cmProxy)
-        self.__handlers = handlers or {}
+        self.__handlers = handlers or self._getHandlers()
         self._initFlashValues(ctx)
 
     @property
@@ -180,3 +180,6 @@ class AbstractContextMenuHandler(object):
             if 'visible' not in optInitData or optInitData['visible'] is None:
                 optInitData['visible'] = True
             return optInitData
+
+    def _getHandlers(self):
+        return {}

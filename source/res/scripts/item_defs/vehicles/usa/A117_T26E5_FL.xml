@@ -9,8 +9,8 @@
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	40.2	</forward>
-    <backward>	15	</backward>
+    <forward>	45	</forward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.049	</moving>
@@ -787,10 +787,10 @@
       <terrainResistance>	1.2 1.4 2.7	</terrainResistance>
       <brakeForce>	46000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.20	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1814,14 +1814,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	7.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.13	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A117_T26E5/normal/lod0/Gun_01.model	</undamaged>
@@ -2437,7 +2437,7 @@
       <engines>
         <Continental_AV-1790-1A>
           <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	40.2	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Continental_AV-1790-1A>
       </engines>
       <chassis>

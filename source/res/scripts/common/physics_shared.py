@@ -1,22 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/physics_shared.py
 import BigWorld
-import ResMgr
 import Math
 import math
-import material_kinds
 import collections
-from items import vehicles, vehicle_items
+from items import vehicles
 from items.components.component_constants import KMH_TO_MS
 from items.vehicles import VEHICLE_PHYSICS_TYPE, VehicleDescriptor, VehicleDescrType
-from math import pi
-from constants import IS_CLIENT, IS_EDITOR, IS_CELLAPP, VEHICLE_PHYSICS_MODE, SERVER_TICK_LENGTH
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_DEBUG_DEV
+from constants import IS_CLIENT, IS_EDITOR, SERVER_TICK_LENGTH
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import copy
-from items.components import gun_components
-from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
-from typing import Dict, Any
+from typing import Any
 G = 9.81
 GRAVITY_FACTOR = 1.25
 WEIGHT_SCALE = 0.001
@@ -365,6 +360,13 @@ def getDefaultWheeledTechXPhysicsCfg():
      'chassis': getDefaultWheeledChassisXPhysicsCfg()})
 
 
+def getAppliedGravityMultiplier(physics, typeDesc):
+    baseCfg = typeDesc.type.xphysics['detailed']
+    baseGravityFactor = baseCfg['gravityFactor']
+    gravityMultiplier = physics.gravity / baseGravityFactor / G
+    return gravityMultiplier
+
+
 def init():
     updateCommonConf()
 
@@ -536,9 +538,9 @@ def configureModelShapePhysics(cfg, typeDesc):
     return
 
 
-def updatePhysics(physics, typeDesc, isSoftUpdate=False):
+def updatePhysics(physics, typeDesc, isSoftUpdate=False, gravityMultiplier=1.0):
     baseCfg = typeDesc.type.xphysics['detailed']
-    gravityFactor = baseCfg['gravityFactor']
+    gravityFactor = baseCfg['gravityFactor'] * gravityMultiplier
     updateSiegeModeFromCfg = False
     vehiclePhysicsType = typeDesc.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
     isTank = vehiclePhysicsType == VEHICLE_PHYSICS_TYPE.TANK

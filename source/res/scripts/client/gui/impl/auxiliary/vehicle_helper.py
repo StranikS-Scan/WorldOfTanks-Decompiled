@@ -9,7 +9,8 @@ def fillVehicleInfo(vehInfo, vehicle):
     isElite = not vehicle.getEliteStatusProgress().toUnlock or vehicle.isElite
     vehInfo.setIsElite(isElite)
     vehInfo.setVehicleLvl(vehicle.level)
-    vehInfo.setVehicleName(vehicle.userName)
+    vehInfo.setVehicleName(vehicle.descriptor.type.shortUserString)
     vehInfo.setVehicleType(vehicle.type)
     vehInfo.setVehicleNation(vehicle.nationName)
     vehInfo.setVehicleShortName(vehicle.shortUserName)
+    vehInfo.setIsPremiumIGR(vehicle.isPremiumIGR)

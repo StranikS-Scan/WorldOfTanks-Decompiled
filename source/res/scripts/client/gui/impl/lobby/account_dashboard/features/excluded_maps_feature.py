@@ -13,6 +13,8 @@ from helpers import dependency, time_utils
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from uilogging.wot_plus.loggers import WotPlusAccountDashboardWidgetLogger
+from uilogging.wot_plus.logging_constants import AccountDashboardFeature
 if typing.TYPE_CHECKING:
     from typing import Dict
     from gui.impl.gen.view_models.views.lobby.account_dashboard.excluded_maps_model import ExcludedMapsModel
@@ -114,4 +116,5 @@ class ExcludedMapsFeature(FeatureItem):
 
     @staticmethod
     def __onClick():
+        WotPlusAccountDashboardWidgetLogger().logWidgetClickEvent(AccountDashboardFeature.EXCLUDED_MAPS_WIDGET)
         showMapsBlacklistView()

@@ -11,7 +11,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
-from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, SimplifiedBarVO
+from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, isValidEmptyValue, SimplifiedBarVO
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -130,7 +130,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType] if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP else self._tooltipType
 
     def _makeAdvancedParamVO(self, param, parentID, highlight):
-        if param.value:
+        if param.value or isValidEmptyValue(param.name, param.value):
             data = super(_VehParamsGenerator, self)._makeAdvancedParamVO(param, parentID, highlight)
             data.update({'titleText': formatters.formatVehicleParamName(param.name, False),
              'valueText': formatters.colorizedFullFormatParameter(param, self._getAdvancedFormatters()),

@@ -136,8 +136,8 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def getConfirmDialogMeta(self, ctx):
         return None
 
-    def showDialog(self, meta, callback):
-        self.__showDefaultDialog(meta, callback)
+    def showDialog(self, meta, callback, parent=None):
+        self.__showDefaultDialog(meta, callback, parent=parent)
 
     def getID(self):
         pass
@@ -190,9 +190,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         return None
 
     @adisp_process
-    def __showDefaultDialog(self, meta, callback):
+    def __showDefaultDialog(self, meta, callback, parent=None):
         from gui import DialogsInterface
-        result = yield DialogsInterface.showDialog(meta)
+        result = yield DialogsInterface.showDialog(meta, parent=parent)
         if callback is not None:
             callback(result)
         return

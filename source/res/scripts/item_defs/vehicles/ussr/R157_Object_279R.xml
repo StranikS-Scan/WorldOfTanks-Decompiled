@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	35	</forward>
     <backward>	13	</backward>
   </speedLimits>
   <invisibility>
@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_16 armor_4	</primaryArmor>
     <weight>	26943	</weight>
-    <maxHealth>	1920	</maxHealth>
+    <maxHealth>	1840	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -2534,7 +2534,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
-      <maxHealth>	480	</maxHealth>
+      <maxHealth>	460	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2579,7 +2579,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10.5	</reloadTime>
+          <reloadTime>	11.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
@@ -3227,7 +3227,7 @@
       <engines>
         <V_11_NC>
           <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </V_11_NC>
       </engines>
       <chassis>

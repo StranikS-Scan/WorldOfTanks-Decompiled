@@ -76,6 +76,9 @@ class EventDispatcher(object):
         g_eventBus.removeListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
+    def dispatchSwitchResult(self, result):
+        self.__fireEvent(events.PrebattleEvent(events.PrebattleEvent.SWITCHED if result else events.PrebattleEvent.NOT_SWITCHED))
+
     def isTrainingLoaded(self):
         return self.__getLoadedEvent() in _LOCKED_SCREENS or self.__loadingEvent in _LOCKED_SCREENS
 

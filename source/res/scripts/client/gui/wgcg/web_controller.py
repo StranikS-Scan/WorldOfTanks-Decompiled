@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgcg/web_controller.py
+import logging
 from collections import defaultdict
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -26,6 +27,7 @@ from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.web import IWebController
+_logger = logging.getLogger(__name__)
 
 def _showError(result, ctx):
     i18nMsg = clan_formatters.getRequestErrorMsg(result, ctx)
@@ -465,12 +467,17 @@ class WebController(WebListeners, IWebController):
         super(WebController, self).__init__()
         self.__cache = {}
         self.__searchDataCache = {}
+        self.__started = False
         self.__state = None
         self.__profile = None
         self.__userCache = None
         self.__clanCache = None
         self.__simWGCGEnabled = True
         return
+
+    @property
+    def isStarted(self):
+        return self.__started
 
     def getRequesterConfig(self):
         return self.lobbyContext.getServerSettings().wgcg
@@ -502,7 +509,10 @@ class WebController(WebListeners, IWebController):
         self.__userCache = None
         return
 
-    def start(self):
+    def start(self, force=True):
+        if self.__started and not force:
+            _logger.debug('Wgcg already started.')
+            return
         self.__profile = MyClanAccountProfile(self)
         self.__clanCache = ClanCache(self.__profile.getDbID())
         self.__clanCache.onRead += self._onClanCacheRead
@@ -513,6 +523,7 @@ class WebController(WebListeners, IWebController):
          'serverSettings.clanProfile.isEnabled': self.__onClanEnableChanged})
         g_wgncEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShowByDefault
         g_playerEvents.onClanMembersListChanged += self._onClanMembersListChanged
+        self.__started = True
 
     def stop(self, logout=True):
         g_playerEvents.onClanMembersListChanged -= self._onClanMembersListChanged
@@ -529,6 +540,7 @@ class WebController(WebListeners, IWebController):
         if logout:
             self.__state.logout()
         self.__cleanDossiers()
+        self.__started = False
         return
 
     def invalidate(self):

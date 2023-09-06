@@ -198,6 +198,15 @@ def getWorldRayAndPoint(x, y):
     return (ray, wPoint)
 
 
+def getWorldRayAndPosition():
+    near = BigWorld.projection().nearPlane
+    point = Math.Vector3(0.0, 0.0, near)
+    inv = Math.Matrix(BigWorld.camera().invViewMatrix)
+    ray = inv.applyVector(point)
+    wPoint = inv.applyPoint(Math.Vector3(0.0, 0.0, 0.0))
+    return (ray, wPoint)
+
+
 def getAimMatrix(x, y, fov=None):
     if fov is None:
         fov = BigWorld.projection().fov

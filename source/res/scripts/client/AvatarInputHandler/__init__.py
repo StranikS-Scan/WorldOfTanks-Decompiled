@@ -32,7 +32,6 @@ from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler import steel_hunter_control_modes
 from BigWorld import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
-from AvatarInputHandler.commands.auto_shoot_gun_control import AutoShootGunControl
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetupsControl
@@ -58,13 +57,7 @@ from skeletons.gui.game_control import IBootcampController
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
-
-class _CTRL_TYPE(object):
-    USUAL = 0
-    OPTIONAL = 1
-    DEVELOPMENT = 2
-
-
+_CTRL_TYPE = aih_constants.CTRL_TYPE
 _ARTY_CTRL_TYPE = _CTRL_TYPE.USUAL if GUI_SETTINGS.spgAlternativeAimingCameraEnabled else _CTRL_TYPE.DEVELOPMENT
 _ShakeReason = aih_constants.ShakeReason
 _CTRL_MODE = aih_constants.CTRL_MODE_NAME
@@ -92,10 +85,10 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, _CTRL_MODE.VEHICLES_SELECTION, _CTRL_TYPE.USUAL),
  _CTRL_MODE.FLAMETHROWER: (control_modes.FlamethrowerControlMode, 'flamethrowerMode', _CTRL_TYPE.USUAL)}
-_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
+OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
  constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-    _OVERWRITE_CTRLS_DESC_MAP[royaleBonusCap] = {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}
+    OVERWRITE_CTRLS_DESC_MAP[royaleBonusCap] = {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}
 
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
@@ -300,8 +293,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.dualGunControl = DualGunController(typeDescr)
             elif not typeDescr.isDualgunVehicle:
                 self.dualGunControl = None
-            if typeDescr.isAutoShootGunVehicle:
-                self.__commands.append(AutoShootGunControl())
             if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
                 self.__commands.append(BootcampModeControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
@@ -312,8 +303,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
-            vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
-            vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+            if vehicle.appearance:
+                vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
+                vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             return
 
     def prerequisites(self):
@@ -407,22 +399,24 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 point = None
         return point
 
-    def showGunMarker(self, isShown):
+    def showClientGunMarkers(self, isShown):
         self.__curCtrl.setGunMarkerFlag(isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
 
-    def showGunMarker2(self, isShown):
+    def showServerGunMarker(self, isShown):
         if not BattleReplay.isPlaying():
+            BattleReplay.g_replayCtrl.setUseServerAim(isShown)
             self.__curCtrl.setGunMarkerFlag(isShown, _GUN_MARKER_FLAG.SERVER_MODE_ENABLED)
             if gun_marker_ctrl.useDefaultGunMarkers():
                 self.__curCtrl.setGunMarkerFlag(not isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
-            replayCtrl = BattleReplay.g_replayCtrl
-            replayCtrl.setUseServerAim(isShown)
 
-    def updateGunMarker(self, pos, direction, size, relaxTime, collData):
+    def updateClientGunMarker(self, pos, direction, size, relaxTime, collData):
         self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, direction, size, relaxTime, collData)
 
-    def updateGunMarker2(self, pos, direction, size, relaxTime, collData):
+    def updateServerGunMarker(self, pos, direction, size, relaxTime, collData):
         self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, direction, size, relaxTime, collData)
+
+    def updateDualAccGunMarker(self, pos, direction, size, relaxTime, collData):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.DUAL_ACC, pos, direction, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
         self.__curCtrl.setAimingMode(enable, mode)
@@ -432,8 +426,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def setAutorotation(self, bValue, triggeredByKey=False):
         if not self.__curCtrl.enableSwitchAutorotationMode(triggeredByKey):
-            return
-        elif triggeredByKey and BigWorld.player().isVehicleMoving():
             return
         elif not BigWorld.player().isOnArena:
             return
@@ -883,7 +875,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __setupCtrls(self, section):
         bonusType = BigWorld.player().arenaBonusType
-        bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
+        bonusTypeCtrlsMap = OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():
             if name in bonusTypeCtrlsMap:
                 desc = bonusTypeCtrlsMap[name]
@@ -893,7 +885,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                     if name not in self.__ctrls:
                         self.__ctrls[name] = classType(section[modeName] if modeName else None, self)
                     else:
-                        _logger.warning('Control "%s" is already added to the list! Please check _OVERWRITE_CTRLS_DESC_MAP. %s is skipped!', name, classType)
+                        _logger.warning('Control "%s" is already added to the list! Please check OVERWRITE_CTRLS_DESC_MAP. %s is skipped!', name, classType)
             except Exception:
                 _logger.error('Error while setting ctrls %s %s %s', name, desc, constants.HAS_DEV_RESOURCES)
                 LOG_CURRENT_EXCEPTION()
@@ -912,8 +904,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def __onArenaStarted(self, period, *args):
         self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
-        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
-        self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
+        self.showServerGunMarker(gun_marker_ctrl.useServerGunMarker())
+        self.showClientGunMarkers(gun_marker_ctrl.useClientGunMarker())
 
     def __onRecreateDevice(self):
         self.__curCtrl.onRecreateDevice()

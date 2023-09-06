@@ -18,7 +18,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import selectVehicleInHangar, showHangar, showWinbackSelectRewardView
-from gui.shared.missions.packers.bonus import packBonusModelAndTooltipData
+from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
 from helpers import dependency
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IWinbackController
@@ -78,7 +78,7 @@ class WinbackRewardView(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         window = None
         if tooltipId is not None:
-            tooltipData = self.__tooltipData.get(int(tooltipId))
+            tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData and isinstance(tooltipData, TooltipData):
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
@@ -89,7 +89,7 @@ class WinbackRewardView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.winback.tooltips.SelectableRewardTooltip():
             tooltipId = event.getArgument('tooltipId')
-            tooltipData = self.__tooltipData.get(int(tooltipId))
+            tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData:
                 return SelectableRewardTooltip(**tooltipData)
         return super(WinbackRewardView, self).createToolTipContent(event, contentID)
@@ -140,7 +140,7 @@ class WinbackRewardView(ViewImpl):
     def __packRewards(self, bonuses, model):
         rewardsModel = model.getRewards()
         rewardsModel.clear()
-        packBonusModelAndTooltipData(bonuses, getWinbackBonusPacker(), model.getRewards(), self.__tooltipData)
+        packMissionsBonusModelAndTooltipData(bonuses, getWinbackBonusPacker(), model.getRewards(), self.__tooltipData)
         rewardsModel.invalidate()
 
     def __getState(self):

@@ -1,0 +1,44 @@
+<500_stalingrad.xml>
+  <name>	#arenas:500_stalingrad/name	</name>
+  <description>	#arenas:500_stalingrad/description	</description>
+  <geometry>	spaces/500_stalingrad	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	450.000000 450.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/500_stalingrad/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_stalingrad_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_stalingrad_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_stalingrad_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_stalingrad_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_stalingrad_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_stalingrad_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-105.624107 309.454834	</position1>
+        </team1>
+        <team2>
+          <position1>	-105.684013 -406.502747	</position1>
+        </team2>
+      </teamBasePositions>
+      <artilleryPreparationChance>	0.7	</artilleryPreparationChance>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</500_stalingrad.xml>

@@ -6,7 +6,6 @@ import typing
 import CGF
 import GenericComponents
 import Math
-from constants import ARENA_GUI_TYPE
 from helpers import dependency, fixed_dict
 from points_of_interest.components import PoiStateComponent
 from points_of_interest_shared import PoiType, PoiStatus
@@ -28,7 +27,7 @@ class PoiComponent(DynamicScriptComponent):
 
     @property
     def _poiVisualConfig(self):
-        return self.__dynObjectsCache.getConfig(ARENA_GUI_TYPE.COMP7).getPointOfInterestConfig()
+        return self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getPointOfInterestConfig()
 
     def onDestroy(self):
         from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events

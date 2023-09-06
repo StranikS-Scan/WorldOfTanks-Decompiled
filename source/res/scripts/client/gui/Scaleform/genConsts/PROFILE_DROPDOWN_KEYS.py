@@ -20,5 +20,6 @@ class PROFILE_DROPDOWN_KEYS(object):
     EPIC_RANDOM = 'epicRandom'
     BATTLE_ROYALE_SOLO = 'battleRoyaleSolo'
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
-    COMP7 = 'comp7'
-    COMP7_SEASON2 = 'comp7_s2'
+    COMP7_ARCHIVE_GRIFFIN = 'comp7_archive_Griffin'
+    COMP7_SEASON_1 = 'comp7_season_1'
+    VERSUS_AI = 'versusAI'

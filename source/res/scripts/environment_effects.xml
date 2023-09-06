@@ -2270,6 +2270,71 @@
       <offset>	0.000000 25.000000 0.000000	</offset>
       <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
     </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_firesmoke_brown.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	amb_map_500_stalingrad_fire_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_firesmoke_small.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	amb_map_500_stalingrad_fire_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_firesmoke.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	amb_map_500_stalingrad_fire_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_firesmoke_dot.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	amb_map_500_stalingrad_fire_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/content_deferred/GFX_models/environment/500_stalingrad/FireGrass_07.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_smoke_small.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/content_deferred/GFX_models/environment/500_stalingrad/FireGrass_06.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
+      <modelName>	content/Environment/hd_env_SU_1005_OilBarge/normal/lod0/hd_env_SU_1005_OilBarge_03.model	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_water_calm_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/environment/interior/500_stalingrad_epic_pipe_flame.eff	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_burn_static_big	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_1m.srt	</modelName>
+      <offset>	0.000000 0.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_2m.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_6m_Small_Ragged.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Marigold/Marigold_var1.srt	</modelName>
+      <offset>	0.000000 0.700000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <dowe_light>
@@ -2742,62 +2807,6 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
     </chech_fire>
-    <v3_truck>
-      <channel0>
-        <modelName>	content/Hangars/hangar_v3/enviroment/normal/lod0/hd_hv3_023_Truck.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <wwsoundName></wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	99.328606 12.666849 -121.216408	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	80.641609 10.604508 -112.078377	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	67.564285 10.654123 -109.541985	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	22.022095 10.909255 -130.636948	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	10.866211 12.656046 -143.717224	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	2.023099 11.952196 -153.530273	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-21.366182 7.974307 -221.663971	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </v3_truck>
     <stepps_bomber_line_1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G_2.model	</modelName>

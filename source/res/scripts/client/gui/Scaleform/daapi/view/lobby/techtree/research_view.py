@@ -52,6 +52,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         SystemMessages.pushMessage(message, msgType)
         return
 
+    def clearSelectedNation(self):
+        pass
+
     def invalidateCredits(self):
         result = self._data.invalidateCredits()
         if result:

@@ -1,0 +1,18 @@
+<extension.xml>
+  <FeatureName>	versus_ai	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	VersusAIPersonality	</Personality>
+  <Components>
+    <StaticComponents>
+      <AccountVersusAIComponent></AccountVersusAIComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <VersusAIMgr></VersusAIMgr>
+      <VersusAIUnitMgr></VersusAIUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

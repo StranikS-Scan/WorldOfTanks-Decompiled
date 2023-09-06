@@ -29,6 +29,7 @@ class ARENA_LISTENER_SCOPE(object):
     POSITIONS = 32
     CONTACTS = 64
     VIEW_POINTS = 128
+    OVERRIDE_SETTINGS = 256
 
 
 class VEHICLE_STATUS(BitmaskHelper):

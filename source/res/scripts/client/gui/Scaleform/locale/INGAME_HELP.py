@@ -95,6 +95,8 @@ class INGAME_HELP(object):
     DETAILSHELP_ROCKETACCELERATION_PAGE1 = '#ingame_help:detailsHelp/rocketAcceleration/page1'
     DETAILSHELP_ROCKETACCELERATION_PAGE2_TITLE = '#ingame_help:detailsHelp/rocketAcceleration/page2/title'
     DETAILSHELP_ROCKETACCELERATION_PAGE2 = '#ingame_help:detailsHelp/rocketAcceleration/page2'
+    DETAILSHELP_DUALACCURACY_MECHANICS_TITLE = '#ingame_help:detailsHelp/dualAccuracy/mechanics/title'
+    DETAILSHELP_DUALACCURACY_MECHANICS = '#ingame_help:detailsHelp/dualAccuracy/mechanics'
     DETAILSHELP_NOKEYSWARNING = '#ingame_help:detailsHelp/noKeysWarning'
     DETAILSHELP_FLAMETANK_TITLE = '#ingame_help:detailsHelp/flameTank/title'
     DETAILSHELP_FLAMETANK = '#ingame_help:detailsHelp/flameTank'

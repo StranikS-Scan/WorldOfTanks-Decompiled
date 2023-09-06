@@ -37,6 +37,10 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
 
     @uniprof.regionDecorator(label='EventAppearanceCacheController.updateSpawnList', scope='wrap')
     def updateSpawnList(self, spawnListData):
+        self._updateSpawnList(spawnListData)
+        _logger.debug('SpawnList cache updated=%s', spawnListData)
+
+    def _updateSpawnList(self, spawnListData):
         toAdd = spawnListData.difference(self._spawnList)
         toRemove = self._spawnList.difference(spawnListData)
         for data in toAdd:
@@ -52,4 +56,3 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
             self._appearanceCache.unloadResources(data.vehicleCD)
 
         self._spawnList = spawnListData
-        _logger.debug('SpawnList cache updated=%s', spawnListData)

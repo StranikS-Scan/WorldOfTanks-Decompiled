@@ -36,6 +36,10 @@ class PlatformWebApi(object):
     def isConnected(self, _):
         return self.__getApi().isInited()
 
+    @w2c(W2CSchema, 'is_overlay_enabled')
+    def isOverlayEnabled(self, _):
+        return getattr(self.__getApi(), 'isOverlayEnabled', lambda : False)()
+
     def __getApi(self):
         pub = self.__loginManager.getWgcPublication()
         if pub not in self.__mapping:

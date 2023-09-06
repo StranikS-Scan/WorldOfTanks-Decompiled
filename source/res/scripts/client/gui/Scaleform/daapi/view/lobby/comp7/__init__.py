@@ -37,4 +37,5 @@ class Comp7LobbyDialogsHandler(PackageBusinessHandler):
         super(Comp7LobbyDialogsHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
 
     def __punishmentWindowHandler(self, event):
-        self.loadViewWithGenName(HANGAR_ALIASES.COMP7_PUNISHMENT_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(HANGAR_ALIASES.COMP7_PUNISHMENT_DIALOG, None, event.meta, event.handler)
+        return

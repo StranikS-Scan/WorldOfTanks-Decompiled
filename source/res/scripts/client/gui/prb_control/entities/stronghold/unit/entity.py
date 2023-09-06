@@ -41,7 +41,6 @@ from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx, StrongholdEventGetFrozenVehiclesCtx
 from helpers import time_utils, dependency
 from UnitBase import UNIT_ERROR, UNIT_ROLE
-from gui.prb_control.entities.base import vehicleAmmoCheck
 from skeletons.gui.game_control import IGameSessionController
 _CREATION_TIMEOUT = 30
 ERROR_MAX_RETRY_COUNT = 3
@@ -428,7 +427,6 @@ class StrongholdEntity(UnitEntity):
             ctx.startProcessing(callback)
             self._requestsProcessor.doRequest(ctx, 'leave', callback=callbackWrapper)
 
-    @vehicleAmmoCheck
     def doBattleQueue(self, ctx, callback=None):
         if ctx.isRequestToStart():
             self.setCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, ctx.getCooldown())

@@ -7,8 +7,8 @@ from collections import namedtuple
 from copy import deepcopy
 from itertools import izip
 from operator import itemgetter
-import typing
 import BigWorld
+import typing
 from backports.functools_lru_cache import lru_cache
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
@@ -48,10 +48,11 @@ from rent_common import parseRentID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
-from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import ITradeInController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
@@ -159,7 +160,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     EQUIPMENT_LOCKED = 'lockEquipment'
     STORAGE_HIDDEN = 'hideStorage'
     MODE_HIDDEN = 'mode_hidden'
-    CM_HIDDEN = 'cm_hidden'
     EPIC_BATTLES = 'epic_battles'
     BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
@@ -216,6 +216,7 @@ class Vehicle(FittingItem):
         DISABLED = 'disabled'
         TOO_HEAVY = 'tooHeavy'
         SUBSCRIPTION_SUSPENDED = 'subscription_suspended'
+        WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = 'wot_plus_exclusive_vehicle_disabled'
 
     CAN_SELL_STATES = (VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
@@ -250,6 +251,7 @@ class Vehicle(FittingItem):
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     itemsCache = dependency.descriptor(IItemsCache)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __customizationService = dependency.descriptor(ICustomizationService)
     __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
@@ -355,6 +357,9 @@ class Vehicle(FittingItem):
             self._descriptor.installModifications([], rebuildAttrs=False)
             self._equipment.optDevices.dynSlotType = None
         return
+
+    def __deepcopy__(self, memo=None):
+        raise SoftException('Deep copy of GUI Vehicle is not supported')
 
     def initCrew(self):
         defaultCrew = [None] * len(self._descriptor.type.crewRoles)
@@ -947,10 +952,6 @@ class Vehicle(FittingItem):
         return self.rentInfo.getExpiryState()
 
     @property
-    def isWotPlusRent(self):
-        return self._rentInfo.isWotPlus
-
-    @property
     def ignoreRoleIncompatibility(self):
         return checkForTags(self.tags, VEHICLE_TAGS.NO_CREW_TRANSFER_PENALTY_TAG)
 
@@ -1101,6 +1102,8 @@ class Vehicle(FittingItem):
                 ms = Vehicle.VEHICLE_STATE.DEAL_IS_OVER
             elif self.isWotPlus:
                 ms = Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED
+                if not self.lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled():
+                    ms = Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED
         elif self.isDisabledInPremIGR:
             ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
         elif self.isInPrebattle:
@@ -1175,7 +1178,8 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.DEAL_IS_OVER,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
-         Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED):
+         Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED,
+         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -1356,10 +1360,6 @@ class Vehicle(FittingItem):
     @property
     def isModeHidden(self):
         return checkForTags(self.tags, VEHICLE_TAGS.MODE_HIDDEN)
-
-    @property
-    def isContextMenuHidden(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.CM_HIDDEN)
 
     @property
     def isOnlyForEventBattles(self):
@@ -2101,7 +2101,8 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
  Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight()),
  Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_AMMONOTFULL,
- Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT}
+ Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
+ Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT}
 _VEHICLE_STATE_TO_ADD_ICON = {Vehicle.VEHICLE_STATE.RENTABLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENT_ICO_BIG,
  Vehicle.VEHICLE_STATE.RENTABLE_AGAIN: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTAGAIN_ICO_BIG}
 

@@ -56,7 +56,7 @@ from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
 from cgf_components.hangar_camera_manager import HangarCameraManager
 if TYPE_CHECKING:
-    from typing import Optional as TOptional, Tuple as TTuple
+    from typing import Any, Optional as TOptional, Tuple as TTuple
     from UnitBase import ProfileVehicle
 _logger = logging.getLogger(__name__)
 _MIN_PERF_PRESET_NAME = 'MIN'
@@ -250,8 +250,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.prbDispatcher.doAction(PrbAction(''))
         self.__updatePlatoonTankInfo()
 
-    def leavePlatoon(self, isExit=True, ignoreConfirmation=False):
-        action = LeavePrbAction(isExit=isExit, ignoreConfirmation=ignoreConfirmation)
+    def leavePlatoon(self, isExit=True, ignoreConfirmation=False, parent=None):
+        action = LeavePrbAction(isExit=isExit, ignoreConfirmation=ignoreConfirmation, parent=parent)
         self.__tankDisplayPosition.clear()
         event = events.PrbActionEvent(action, events.PrbActionEvent.LEAVE)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
@@ -302,7 +302,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady:
+        if changeStatePossible and notReady and not self.prbEntity.isCommander():
             changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)

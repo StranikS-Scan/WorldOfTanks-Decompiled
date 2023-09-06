@@ -21,4 +21,3 @@ class HANGAR_CONSTS(object):
     COMP7_MODIFIERS = 'comp7Modifiers'
     MINI_CLIENT = 'miniClient'
     BR_PANELS = 'battleRoyalePanels'
-    STRENGTHS_WEAKNESSES = 'StrengthsWeaknesses'

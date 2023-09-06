@@ -2,16 +2,15 @@
 # Embedded file name: scripts/client/gui/doc_loaders/prebattle_tips_loader.py
 import sys
 import resource_helper
-_PREBATTLE_TIPS_XML_PATH = 'gui/prebattle_tips.xml'
 _PRECEDING_DEFAULT_SHOW_TIMES = 1
 DEFAULT_STATUS = 'payAttention'
 DEFAULT_GROUP = 'all'
 _OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isRankedLeagueRewardEnabled', 'isPostProgressionEnabled')
 
-def _readPreBattleTips():
+def readPreBattleTips(prebattleXmlPath):
     filters = dict()
     tips = dict()
-    ctx, root = resource_helper.getRoot(_PREBATTLE_TIPS_XML_PATH)
+    ctx, root = resource_helper.getRoot(prebattleXmlPath)
     for _, filterSection in resource_helper.getIterator(ctx, root['filters']):
         filterId = filterSection.readString('id')
         filters[filterId] = {'minBattles': filterSection.readInt('minBattles', 0),
@@ -23,7 +22,8 @@ def _readPreBattleTips():
          'tags': _readPossibleValues(filterSection, 'tags'),
          'realms': _readPossibleValues(filterSection, 'realms'),
          'preceding': _readPrecedingData(filterSection),
-         'chassisType': filterSection.readInt('chassisType', -1)}
+         'chassisType': filterSection.readInt('chassisType', -1),
+         'vehProperty': filterSection.readString('vehProperty', None)}
         for key in _OPTIONAL_FILTER_FLAGS:
             if filterSection.has_key(key):
                 filters[filterId][key] = filterSection.readBool(key)
@@ -39,7 +39,7 @@ def _readPreBattleTips():
          'status': status,
          'group': group}
 
-    resource_helper.purgeResource(_PREBATTLE_TIPS_XML_PATH)
+    resource_helper.purgeResource(prebattleXmlPath)
     return tips
 
 
@@ -52,13 +52,3 @@ def _readPrecedingData(section):
     if section['preceding'] is not None:
         precedingData = {'showTimes': section['preceding'].readInt('showTimes', _PRECEDING_DEFAULT_SHOW_TIMES)}
     return precedingData
-
-
-def getPreBattleTipsConfig():
-    global _preBattleTipsConfig
-    if _preBattleTipsConfig is None:
-        _preBattleTipsConfig = _readPreBattleTips()
-    return _readPreBattleTips()
-
-
-_preBattleTipsConfig = None

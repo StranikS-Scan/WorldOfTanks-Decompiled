@@ -18,6 +18,7 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     BERSERKER_ICON = 'destroyTimerBerserkerUI'
     RECOVERY_ZONE_ICON = 'secondaryRecoveryZoneIconUI'
     OVERTURNED_ICON = 'destroyTimerOverTurnedUI'
+    WARNING_ICON = 'warningTimerUI'
     OVERTURNED_GREEN_ICON = 'destroyTimerOverTurnedGreenUI'
     HALF_OVERTURNED_ICON = 'HalfOverTurnedIconUI'
     DEATHZONE_ICON = 'destroyTimerDeathZoneUI'

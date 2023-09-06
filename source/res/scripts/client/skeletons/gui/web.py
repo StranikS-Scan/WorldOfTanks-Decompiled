@@ -18,7 +18,11 @@ class IWebController(object):
     def fini(self):
         raise NotImplementedError
 
-    def start(self):
+    @property
+    def isStarted(self):
+        raise NotImplementedError
+
+    def start(self, force=True):
         raise NotImplementedError
 
     def stop(self):

@@ -11,7 +11,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import ModeSelectorNormalCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
-from gui.impl.lobby.mode_selector.items.items_constants import CustomModeName, COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID
+from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID, DEFAULT_MODE_SETTING
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
@@ -165,7 +165,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
 
     @property
     def modeName(self):
-        return CustomModeName.DEFAULT
+        return DEFAULT_MODE_SETTING
 
     @property
     def calendarTooltipText(self):

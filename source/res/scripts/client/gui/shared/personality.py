@@ -50,6 +50,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.web import IWebController
+from skeletons.ui_logging import IUILoggingCore
 from skeletons.helpers.statistics import IStatisticsCollector
 if typing.TYPE_CHECKING:
     from gui.goodies.booster_state_provider import BoosterStateProvider
@@ -85,6 +86,7 @@ class ServicesLocator(object):
     appLoader = dependency.descriptor(IAppLoader)
     offersProvider = dependency.descriptor(IOffersDataProvider)
     bootcamp = dependency.descriptor(IBootcampController)
+    uiLoggingCore = dependency.descriptor(IUILoggingCore)
 
     @classmethod
     def clear(cls):
@@ -107,7 +109,8 @@ def onAccountShowGUI(ctx):
     Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
-    for func in [__runItemsCacheSync,
+    for func in [__runUiLogging,
+     __runItemsCacheSync,
      __validateInventoryVehicles,
      __validateInventoryOutfit,
      __validateInventoryTankmen,
@@ -481,6 +484,12 @@ def __processWebCtrl(_, callback=None):
     ServicesLocator.webCtrl.start()
     if serverSettings.wgcg.getLoginOnStart() and not ServicesLocator.bootcamp.isInBootcamp():
         yield ServicesLocator.webCtrl.login()
+    callback(True)
+
+
+def __runUiLogging(_, callback=None):
+    ServicesLocator.uiLoggingCore.start()
+    ServicesLocator.uiLoggingCore.send()
     callback(True)
 
 

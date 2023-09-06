@@ -1,0 +1,262 @@
+<108_normandy_nom.xml>
+  <name>	#arenas:108_normandy_nom/name	</name>
+  <description>	#arenas:108_normandy_nom/description	</description>
+  <geometry>	spaces/108_normandy_nom	</geometry>
+  <estimatedLoad>	0.12	</estimatedLoad>
+  <runDelay>	3	</runDelay>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-200.000000 -535.000000	</bottomLeft>
+    <upperRight>	300.000000 515.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	1200	</roundLength>
+  <minimap>	spaces/108_normandy_nom/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	1	</maxPlayersInTeam>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <wwmusicSetup></wwmusicSetup>
+  <wwmusicDroneSetup></wwmusicDroneSetup>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	onboarding_gameplay.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_gameplay.pck	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_voiceover.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_music.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_music.pck	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>
+        <name>	custom_styles.bnk	</name>
+      </bank>
+      <bank>
+        <name>	rocket_accelerator.bnk	</name>
+      </bank>
+      <bank>
+        <name>	consumables.bnk	</name>
+      </bank>
+      <bank>
+        <name>	mechanisms.bnk	</name>
+      </bank>
+      <bank>
+        <name>	plane.bnk	</name>
+      </bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	wpn_meduim_PC	</name>
+        <mod>	wpn_ob_main_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_medium_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_medium_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_main_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_main_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_large_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_large_pierce_AP_NPC_PC	</modAUX>
+      </event>
+    </events>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <gameplayTypes>
+    <ctf>
+      <visualScript>
+        <server>
+          <plan>	plans/NewOnboarding_Mission2_arena	</plan>
+        </server>
+        <client>
+          <plan>	plans/NewOnboarding_Mission2_hints	</plan>
+        </client>
+      </visualScript>
+      <notificationsRemapping>
+        <notification>
+          <name>	start_battle	</name>
+        </notification>
+        <notification>
+          <name>	respawn	</name>
+        </notification>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_piercing_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_ricochet_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_fire_started_by_player	</name>
+        </notification>
+        <notification>
+          <name>	damage_by_near_explosion_by_enemy	</name>
+        </notification>
+        <notification>
+          <name>	target_captured	</name>
+        </notification>
+        <notification>
+          <name>	target_lost	</name>
+        </notification>
+        <notification>
+          <name>	target_unlocked	</name>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+        </notification>
+        <notification>
+          <name>	engine_damaged	</name>
+        </notification>
+        <notification>
+          <name>	engine_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	engine_functional	</name>
+        </notification>
+        <notification>
+          <name>	ammo_bay_damaged	</name>
+        </notification>
+        <notification>
+          <name>	fuel_tank_damaged	</name>
+        </notification>
+        <notification>
+          <name>	radio_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	track_functional	</name>
+        </notification>
+        <notification>
+          <name>	track_functional_can_move	</name>
+        </notification>
+        <notification>
+          <name>	gun_damaged	</name>
+        </notification>
+        <notification>
+          <name>	gun_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	gun_functional	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_damaged	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_functional	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_damaged	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_functional	</name>
+        </notification>
+        <notification>
+          <name>	commander_killed	</name>
+        </notification>
+        <notification>
+          <name>	driver_killed	</name>
+        </notification>
+        <notification>
+          <name>	radioman_killed	</name>
+        </notification>
+        <notification>
+          <name>	gunner_killed	</name>
+        </notification>
+        <notification>
+          <name>	loader_killed	</name>
+        </notification>
+        <notification>
+          <name>	fire_started	</name>
+        </notification>
+        <notification>
+          <name>	fire_stopped	</name>
+        </notification>
+        <notification>
+          <name>	enemy_killed_by_player	</name>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+  </gameplayTypes>
+</108_normandy_nom.xml>

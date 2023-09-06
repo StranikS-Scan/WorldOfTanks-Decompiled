@@ -44,7 +44,6 @@ class ReservesAwardView(ViewImpl):
         self.viewModel.onClose -= self._onClose
         self.viewModel.onPremiumAccountExtend -= self._onPremiumAccountExtend
         self.viewModel.onSubscriptionExtend -= self._onSubscriptionExtend
-        self._wotPlusUILogger.logCloseEvent()
 
     def _onLoading(self, creditsEarned, goldEarned):
         showCreditWarning = self._isPiggyBankEnabled() and not self._isPremiumPlusActive() and creditsEarned
@@ -64,16 +63,17 @@ class ReservesAwardView(ViewImpl):
         return self._lobbyContext.getServerSettings().isRenewableSubGoldReserveEnabled()
 
     def _onPremiumAccountExtend(self):
-        self._wotPlusUILogger.logClickEvent(ReservesKeys.PA_INFO)
+        self._wotPlusUILogger.logClickEvent(ReservesKeys.CREDITS_INFO)
         showShop(getBuyPremiumUrl())
         self.destroyWindow()
 
     def _onSubscriptionExtend(self):
-        self._wotPlusUILogger.logClickEvent(ReservesKeys.WP_INFO)
+        self._wotPlusUILogger.logClickEvent(ReservesKeys.GOLD_INFO)
         showShop(getWotPlusShopUrl())
         self.destroyWindow()
 
     def _onClose(self):
+        self._wotPlusUILogger.logCloseEvent()
         self.destroyWindow()
 
 

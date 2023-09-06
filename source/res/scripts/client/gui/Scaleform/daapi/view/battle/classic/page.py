@@ -73,7 +73,7 @@ class ClassicPage(SharedPage):
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
-        if manager.isModalViewsIsExists():
+        if manager.isModalViewsIsExists() and isShown:
             return
         elif not self._fullStatsAlias:
             return
@@ -200,12 +200,15 @@ class ClassicPage(SharedPage):
         else:
             self._reloadPostmortem()
 
+    def _hasCalloutPanel(self):
+        return True
+
     def _switchToPostmortem(self):
         super(ClassicPage, self)._switchToPostmortem()
         ctrl = self.sessionProvider.shared.calloutCtrl
         if ctrl is not None and ctrl.isRadialMenuOpened():
             self._toggleRadialMenu(False)
-        if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.CALLOUT_PANEL):
+        if self._hasCalloutPanel() and self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.CALLOUT_PANEL):
             self._processCallout(needShow=False)
         if self._fullStatsAlias and self.as_isComponentVisibleS(self._fullStatsAlias):
             self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})

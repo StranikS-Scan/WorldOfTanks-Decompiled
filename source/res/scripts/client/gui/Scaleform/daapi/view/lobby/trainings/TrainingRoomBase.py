@@ -114,7 +114,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self.as_enabledCloseButtonS(True)
 
     def closeTrainingRoom(self):
-        self._doLeave(False)
+        self._doLeave(isExit=False, parent=self.getParentWindow())
 
     def onSettingUpdated(self, entity, settingName, settingValue):
         if settingName in (PREBATTLE_SETTING_NAME.ARENA_TYPE_ID, PREBATTLE_SETTING_NAME.LIMITS):
@@ -337,8 +337,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         return
 
     @adisp_process
-    def _doLeave(self, isExit=True):
-        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))
+    def _doLeave(self, isExit=True, parent=None):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit, parent=parent))
 
     @adisp_process
     def __changeTrainingRoomSettings(self, settings):

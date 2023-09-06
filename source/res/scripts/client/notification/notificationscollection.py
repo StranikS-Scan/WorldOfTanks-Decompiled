@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCollection.py
+import Event
 from debug_utils import LOG_ERROR, LOG_WARNING
 from notification.decorators import SearchCriteria, _NotificationDecorator
 from notification.settings import NOTIFICATION_TYPE, ITEMS_MAX_LENGTHS
@@ -9,8 +10,10 @@ class NotificationsCollection(object):
     def __init__(self):
         super(NotificationsCollection, self).__init__()
         self.__received = {}
+        self.onNotificationRemoved = Event.Event()
 
     def clear(self):
+        self.onNotificationRemoved.clear()
         for typeID in NOTIFICATION_TYPE.RANGE:
             if typeID not in self.__received:
                 continue
@@ -31,8 +34,7 @@ class NotificationsCollection(object):
             if item not in notifications:
                 notifications.append(item)
                 if len(notifications) > ITEMS_MAX_LENGTHS[typeID]:
-                    last = notifications.pop(0)
-                    last.clear()
+                    self.__removeNotification(notifications.pop(0))
             else:
                 result = False
                 LOG_WARNING('Notification already exists', typeID, itemID, item)
@@ -63,7 +65,7 @@ class NotificationsCollection(object):
         if typeID in self.__received:
             notifications = self.__received[typeID]
             while notifications:
-                notifications.pop().clear()
+                self.__removeNotification(notifications.pop())
 
         else:
             result = False
@@ -101,3 +103,9 @@ class NotificationsCollection(object):
 
         for item in sorted(notifications, key=lambda x: (x.isPinned(), x.getOrder())):
             yield item
+
+    def __removeNotification(self, notification):
+        typeID, entityID = notification.getType(), notification.getID()
+        groupID, countOnce = notification.getGroup(), notification.isShouldCountOnlyOnce()
+        notification.clear()
+        self.onNotificationRemoved(typeID, entityID, groupID, countOnce)

@@ -86,7 +86,7 @@ def secondaryHangarCFG():
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
-    defaultSpace = 'hangar_v3'
+    defaultSpace = 'h01_victory_day_2023'
     if hangarsXml.has_key('hangar_scene_spaces'):
         switchItems = hangarsXml['hangar_scene_spaces']
         for item in switchItems.values():

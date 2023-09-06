@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.dedication.dedication_reward_view_mode
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.bonuses import getNonQuestBonuses
-from gui.shared.missions.packers.bonus import packBonusModelAndTooltipData, getDefaultBonusPacker
+from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData, getDefaultBonusPacker
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 
 class DedicationRewardView(ViewImpl):
@@ -73,7 +73,7 @@ class DedicationRewardView(ViewImpl):
         rewards = self._convertNonQuestBonuses(bonuses)
         with self.viewModel.transaction() as tx:
             tx.setLevel(str(data.get('reason', '')))
-            packBonusModelAndTooltipData(rewards, getDefaultBonusPacker(), tx.getMainRewards(), tooltipData=self.__tooltipItems)
+            packMissionsBonusModelAndTooltipData(rewards, getDefaultBonusPacker(), tx.getMainRewards(), tooltipData=self.__tooltipItems)
 
 
 class DedicationRewardWindow(LobbyWindow):

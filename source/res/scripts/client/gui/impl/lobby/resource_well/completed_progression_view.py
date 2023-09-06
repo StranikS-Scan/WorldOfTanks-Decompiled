@@ -60,7 +60,7 @@ class CompletedProgressionView(ViewImpl):
         self.destroyWindow()
 
     def __showEventInfo(self):
-        showBrowserOverlayView(GUI_SETTINGS.resourceWell.get('infoPage'), VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW)
+        showBrowserOverlayView(GUI_SETTINGS.resourceWellInfoPage, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW)
 
     def __showVehicle(self):
         if self.__vehicle.isInInventory:

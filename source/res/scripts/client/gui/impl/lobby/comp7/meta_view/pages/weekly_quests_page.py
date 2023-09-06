@@ -5,7 +5,7 @@ from collections import namedtuple
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT
-from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME
+from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_ID
 from frameworks.wulf.view.array import fillViewModelsArray
 from gui.impl import backport
 from gui.impl.gen import R
@@ -112,7 +112,7 @@ class WeeklyQuestsPage(PageSubModelPresenter):
     def __updateProgression(self, model):
         settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
         lastTokensCount = settings.get(COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT, 0)
-        currentTokensCount = self.__eventsCache.questsProgress.getTokenCount(COMP7_TOKEN_WEEKLY_REWARD_NAME)
+        currentTokensCount = self.__eventsCache.questsProgress.getTokenCount(COMP7_TOKEN_WEEKLY_REWARD_ID)
         model.setPreviousTokenValue(lastTokensCount)
         model.setCurrentTokenValue(currentTokensCount)
         self.__updateProgressionPoints(model)

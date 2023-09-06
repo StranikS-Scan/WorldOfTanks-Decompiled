@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.gen import R
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.missions.packers.bonus import packBonusModelAndTooltipData, getDefaultBonusPacker
+from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData, getDefaultBonusPacker
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.account_completion.add_credentials_model import AddCredentialsModel
     from gui.impl.gen.view_models.views.lobby.account_completion.common.base_wgnp_overlay_view_model import BaseWgnpOverlayViewModel
     from gui.impl.backport import TooltipData
+    from typing import Dict
 _BONUSES_ORDER = ('vehicles',
  'premium',
  Currency.CRYSTAL,
@@ -57,7 +58,7 @@ def fillRewards(model, bonuses=None, tooltipItems=None):
     bonuses.sort(key=_keyBonusesOrder)
     bonusesListModel = model.getBonuses()
     bonusesListModel.clear()
-    packBonusModelAndTooltipData(bonuses=bonuses, packer=getDefaultBonusPacker(), model=bonusesListModel, tooltipData=tooltipItems)
+    packMissionsBonusModelAndTooltipData(bonuses=bonuses, packer=getDefaultBonusPacker(), model=bonusesListModel, tooltipData=tooltipItems)
     bonusesListModel.invalidate()
 
 

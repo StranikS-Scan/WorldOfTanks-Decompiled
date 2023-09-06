@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class VehicleInfoModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(VehicleInfoModel, self).__init__(properties=properties, commands=commands)
 
     def getIsElite(self):
@@ -44,6 +44,12 @@ class VehicleInfoModel(ViewModel):
     def setVehicleLvl(self, value):
         self._setNumber(5, value)
 
+    def getIsPremiumIGR(self):
+        return self._getBool(6)
+
+    def setIsPremiumIGR(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(VehicleInfoModel, self)._initialize()
         self._addBoolProperty('isElite', True)
@@ -52,3 +58,4 @@ class VehicleInfoModel(ViewModel):
         self._addStringProperty('vehicleNation', '')
         self._addStringProperty('vehicleType', '')
         self._addNumberProperty('vehicleLvl', 0)
+        self._addBoolProperty('isPremiumIGR', False)

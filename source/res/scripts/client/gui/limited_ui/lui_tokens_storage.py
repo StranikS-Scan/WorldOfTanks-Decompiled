@@ -124,7 +124,7 @@ class _BattleMattersCompletedQuests(LimitedUICondition):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def _getValue(self):
-        return len(self.__battleMattersController.getCompletedBattleMattersQuests())
+        return self.__battleMattersController.getCompletedBattleMattersQuestsCount()
 
     def _getEvents(self):
         return ((self.__eventsCache.onSyncCompleted, self._update),)

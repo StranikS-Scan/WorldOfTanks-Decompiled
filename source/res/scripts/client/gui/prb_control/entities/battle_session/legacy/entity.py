@@ -106,10 +106,6 @@ class BattleSessionEntity(LegacyEntity):
     def getQueueType(self):
         return QUEUE_TYPE.SPEC_BATTLE
 
-    @vehicleAmmoCheck
-    def setPlayerState(self, ctx, callback=None):
-        super(BattleSessionEntity, self).setPlayerState(ctx, callback)
-
     def showGUI(self, ctx=None):
         g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
 
@@ -164,6 +160,10 @@ class BattleSessionEntity(LegacyEntity):
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
         super(BattleSessionEntity, self).prb_onPlayerRosterChanged(pID, prevRoster, roster, actorID)
         g_eventDispatcher.updateUI()
+
+    @vehicleAmmoCheck
+    def _setPlayerReady(self, ctx, callback=None):
+        super(BattleSessionEntity, self)._setPlayerReady(ctx, callback)
 
     def __handleCarouselInited(self, _):
         g_eventDispatcher.addSpecBattleToCarousel(self.getEntityType())

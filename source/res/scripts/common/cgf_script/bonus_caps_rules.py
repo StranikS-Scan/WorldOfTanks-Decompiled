@@ -15,4 +15,4 @@ def bonusCapsManager(bonusCap, domain=CGF.DomainOption.DomainAll):
         player = BigWorld.player()
         return ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, bonusCap) if spaceID != ClientArena.DEFAULT_ARENA_WORLD_ID and isinstance(player, PlayerAvatar) else False
 
-    return autoregister(creationPredicate=predicate, domain=domain)
+    return autoregister(presentInAllWorlds=True, creationPredicate=predicate, domain=domain)

@@ -30,7 +30,10 @@ class ProfileTabNavigator(ProfileTabNavigatorMeta):
         super(ProfileTabNavigator, self).registerFlashComponent(component, alias, self.__userName, self.__userID, self.__databaseID, self.__selectedData)
 
     def onTabChange(self, tabId):
+        self.__safeCall(self.components.get(self.tabId), 'onSectionDeactivated')
         self.tabId = tabId
-        currentTab = self.components.get(tabId)
-        if currentTab:
-            currentTab.onSectionActivated()
+        self.__safeCall(self.components.get(self.tabId), 'onSectionActivated')
+
+    @staticmethod
+    def __safeCall(obj, attrName, *args, **kwargs):
+        return getattr(obj, attrName, lambda *__, **_: None)(*args, **kwargs)

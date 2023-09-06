@@ -23,5 +23,6 @@ class COMP7_CONSTS(object):
     ROLE_SKILL_AGGRESSIVE_DETECTION = 'aggressiveDetection'
     ROLE_SKILL_POINT_RECON = 'pointRecon'
     MINIMAP_ROLE_SKILL_POINT_RECON = 'Comp7PointReconMinimapEntryUI'
-    COMP7_SUB_TASK_UI = 'Comp7SubTaskUI'
+    COMP7_RANK_SUB_TASK_UI = 'Comp7RankSubTaskUI'
+    COMP7_QUALIFICATION_SUB_TASK_UI = 'Comp7QualificationSubTaskUI'
     STATUS_MARKER_CONFIRMED_STATE = 'confirmed'

@@ -33,7 +33,7 @@ class BattleRoyaleWidgetTooltip(RankedSelectorTooltip):
         header = backport.text(R.strings.tooltips.battleTypes.battleRoyale.header())
         body = backport.text(R.strings.tooltips.battleTypes.battleRoyale.widget.body2())
         currentCycleInfo = self._battleController.getCurrentCycleInfo()
-        if currentCycleInfo[1]:
+        if currentCycleInfo[1] and self._battleController.isShowTimeLeft():
             timeLeft = time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(currentCycleInfo[0]))
             scheduleStr = ' '.join((backport.text(R.strings.tooltips.battleTypes.battleRoyale.tillEnd()), backport.getTillTimeStringByRClass(timeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability)))
             body = '{}\n\n\n{}'.format(scheduleStr, backport.text(R.strings.tooltips.battleTypes.battleRoyale.widget.body2()))

@@ -62,7 +62,7 @@ class ClientFunRandomBattleMode(AbstractBattleMode):
     @property
     def _client_selectorColumn(self):
         from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
-        return (ModeSelectorColumns.COLUMN_2, 20)
+        return (ModeSelectorColumns.COLUMN_1, 20)
 
     @property
     def _client_selectorItemsCreator(self):
@@ -143,11 +143,6 @@ class ClientFunRandomBattleMode(AbstractBattleMode):
         return (FunProgressionRewardsAsyncFormatter(), FunModeItemsQuestAsyncFormatter())
 
     @property
-    def _client_ammunitionPanelViews(self):
-        from fun_random.gui.impl.lobby.tank_setup.qfg_ammunition_panel import FunRandomQuickFireGunsAmmunitionPanelView
-        return (FunRandomQuickFireGunsAmmunitionPanelView,)
-
-    @property
     def _client_vehicleViewStates(self):
         from fun_random.gui.vehicle_view_states import FunRandomVehicleViewState
         return (FunRandomVehicleViewState,)
@@ -170,7 +165,6 @@ def preInit():
     battleMode.registerClientNotificationHandlers()
     battleMode.registerMessengerClientFormatters(fun_gui_constants)
     battleMode.registerClientTokenQuestsSubFormatters()
-    battleMode.registerAmmunitionPanelViews()
     battleMode.registerVehicleViewStates()
     registerFunRandomOthersPrbParams()
     registerFunRandomAwardControllers()

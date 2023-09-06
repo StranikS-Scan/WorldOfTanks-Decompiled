@@ -86,6 +86,9 @@ class TechTree(TechTreeMeta):
         self.__playBlueprintPlusSound()
         return self._data.dump()
 
+    def clearSelectedNation(self):
+        SelectedNation.clear()
+
     def getPremiumPanelLabels(self):
         vehicleLabel = backport.text(R.strings.menu.techtree.premiumPanel.btnLabel(), count=text_styles.gold(backport.text(R.strings.menu.techtree.premiumPanel.btnLabel.count())))
         labels = {'panelTitle': backport.text(R.strings.menu.techtree.premiumPanel.title()),

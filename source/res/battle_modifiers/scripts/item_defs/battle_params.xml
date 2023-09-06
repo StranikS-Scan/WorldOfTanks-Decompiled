@@ -713,4 +713,11 @@
     <id>	65	</id>
     <dataType>	string	</dataType>
   </soundNotifications>
+  <divingDestructionDelay>
+    <id>	66	</id>
+    <dataType>	float	</dataType>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </divingDestructionDelay>
 </battle_params.xml>

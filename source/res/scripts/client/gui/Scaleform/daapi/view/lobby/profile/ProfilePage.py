@@ -8,23 +8,25 @@ from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.collection.account_settings import getCollectionsTabCounter
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IAchievements20Controller, ILimitedUIController
+from skeletons.gui.game_control import IAchievements20Controller, ILimitedUIController, ICollectionsSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofDisabledKeys, onServerSettingsChange
-from gui.shared.events import ProfilePageEvent
+from gui.shared.events import ProfilePageEvent, CollectionsEvent
 
 class ProfilePage(LobbySubView, ProfileMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     _limitedUIController = dependency.descriptor(ILimitedUIController)
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
+    __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -54,7 +56,9 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def _populate(self):
         super(ProfilePage, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__collectionsSystem.onServerSettingsChanged += self.__onCollectionsSettingsChanged
         self.__achievements20Controller.onUpdate += self.__onProfileVisited
+        g_eventBus.addListener(CollectionsEvent.TAB_COUNTER_UPDATED, self.__onCollectionTabUpdated, EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx and self.__ctx.get('hofPageUrl'):
             self.__loadHofUrl(self.__ctx.get('hofPageUrl'))
 
@@ -66,7 +70,9 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.__collectionsSystem.onServerSettingsChanged -= self.__onCollectionsSettingsChanged
         self.__achievements20Controller.onUpdate -= self.__onProfileVisited
+        g_eventBus.removeListener(CollectionsEvent.TAB_COUNTER_UPDATED, self.__onCollectionTabUpdated, EVENT_BUS_SCOPE.LOBBY)
         self.__tabNavigator = None
         super(ProfilePage, self)._dispose()
         return
@@ -114,6 +120,12 @@ class ProfilePage(LobbySubView, ProfileMeta):
              VIEW_ALIAS.PROFILE_HOF,
              True,
              'statsHof'))
+        if self.__collectionsSystem.isEnabled():
+            sectionsData.append((PROFILE.SECTION_COLLECTIONS_TITLE,
+             PROFILE.PROFILE_TABS_TOOLTIP_COLLECTIONS,
+             VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE,
+             True,
+             'statsCollections'))
         return {'sectionsData': [ {'label': makeString(label),
                           'tooltip': tooltip,
                           'alias': alias,
@@ -135,6 +147,10 @@ class ProfilePage(LobbySubView, ProfileMeta):
                 showDisabledDialog()
         return
 
+    def __onCollectionsSettingsChanged(self):
+        self.__tabNavigator.as_setInitDataS(self.__getSectionsData())
+        self.__updateTabCounters()
+
     def __updateTabCounters(self):
         counters = []
         if self.__achievements20Controller.getAchievementsTabCounter():
@@ -148,6 +164,9 @@ class ProfilePage(LobbySubView, ProfileMeta):
             if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON) and self._limitedUIController.isRuleCompleted(LuiRules.PROFILE_TECHNIQUE_PAGE):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
                  'count': '1'})
+        if self.__collectionsSystem.isEnabled() and getCollectionsTabCounter(collectionsSystem=self.__collectionsSystem):
+            counters.append({'componentId': VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE,
+             'count': ' '})
         self.__tabNavigator.as_setBtnTabCountersS(counters)
 
     def __loadHofUrl(self, url):
@@ -160,4 +179,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
          'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)
 
     def __onProfileVisited(self):
+        self.__updateTabCounters()
+
+    def __onCollectionTabUpdated(self, *_):
         self.__updateTabCounters()

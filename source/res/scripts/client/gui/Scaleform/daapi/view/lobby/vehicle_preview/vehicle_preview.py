@@ -9,7 +9,6 @@ from HeroTank import HeroTank
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import QUEUE_TYPE
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -60,7 +59,7 @@ VEHICLE_PREVIEW_ALIASES = [VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
  VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
- VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW,
+ VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW,
  VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
  VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW]
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
@@ -75,7 +74,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
  VIEW_ALIAS.VEH_POST_PROGRESSION: 'vehPostProgression',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards',
- VIEW_ALIAS.WOT_PLUS_VEHICLE_PREVIEW: None,
+ VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW: None,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW: None,
  VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW: 'resourceWell'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
@@ -108,22 +107,8 @@ def _updatePostProgressionParameters():
     if tutorialStorage is None:
         return
     else:
-        isModulesTab = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX) == _getModulesTabIdx()
-        tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_ENABLED, isModulesTab and g_currentPreviewVehicle.isPostProgressionExists())
+        tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_ENABLED, g_currentPreviewVehicle.isPostProgressionExists())
         return
-
-
-@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
-def _isCollectibleHintNotActive(settingsCore=None):
-    return not g_currentPreviewVehicle.isCollectible() or not g_currentPreviewVehicle.hasModulesToSelect() or settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT)
-
-
-def _isModuleButtonHintNotActive():
-    return _isCollectibleHintNotActive()
-
-
-def _isModuleBulletVisible():
-    return _isModuleButtonHintNotActive() and (_isCollectibleVehicleWithModules() or _isPostProgressionBulletVisible())
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
@@ -173,6 +158,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__buyParams = ctx.get('buyParams')
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__style = ctx.get('style')
+        self.__subscriptions = ctx.get('subscriptions') or ()
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
         addBuiltInEquipment(self._itemsPack, self._itemsCache, self._vehicleCD)
         notInteractive = (VIEW_ALIAS.LOBBY_STORE,
@@ -218,7 +204,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD, style=self.__style)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
+        g_currentPreviewVehicle.onVehicleInventoryChanged += self._onInventoryChanged
         self.__comparisonBasket.onChange += self.__onCompareBasketChanged
         self.__comparisonBasket.onSwitchChange += self.__updateHeaderData
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
@@ -238,6 +224,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         _updateCollectorHintParameters()
         _updatePostProgressionParameters()
+        for event, callback in self.__subscriptions:
+            event += callback
+
         return
 
     def _dispose(self):
@@ -247,7 +236,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
-        g_currentPreviewVehicle.onVehicleInventoryChanged -= self.__onInventoryChanged
+        g_currentPreviewVehicle.onVehicleInventoryChanged -= self._onInventoryChanged
         self.__comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.__comparisonBasket.onSwitchChange -= self.__updateHeaderData
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
@@ -269,6 +258,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self.__vehAppearanceChanged and not isMapsTrainingViewOpened:
             g_currentPreviewVehicle.resetAppearance()
         g_eventBus.removeListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
+        for event, callback in self.__subscriptions:
+            event -= callback
+
         return
 
     def closeView(self):
@@ -284,10 +276,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def onOpenInfoTab(self, index):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
         _updatePostProgressionParameters()
-        if index == _getModulesTabIdx():
-            self.__resetPostProgressionBullet()
 
     def onGoToPostProgressionClick(self):
+        self.__resetPostProgressionBullet()
         if self._backAlias == VIEW_ALIAS.VEH_POST_PROGRESSION and callable(self._previewBackCb):
             self._previewBackCb()
         else:
@@ -537,7 +528,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def __onInventoryChanged(self, *_):
+    def _onInventoryChanged(self, *_):
         if not BuyVehicleWindow.getInstances():
             g_currentPreviewVehicle.selectNoVehicle()
 
@@ -545,8 +536,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__currentOffer = event.ctx.get('offer')
 
     def __updateModuleBullet(self):
-        self.as_setBulletVisibilityS(_getModulesTabIdx(), _isModuleBulletVisible())
+        self.as_setBulletVisibilityS(_getModulesTabIdx(), _isPostProgressionBulletVisible())
 
     def __resetPostProgressionBullet(self):
         if _isPostProgressionBulletVisible(settingsCore=self.__settingsCore):
             self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: True})
+            self.__updateModuleBullet()

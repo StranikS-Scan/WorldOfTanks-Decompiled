@@ -3,39 +3,38 @@
 from enum import IntEnum
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import DivisionInfoModel
-from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonModel
+from gui.impl.gen.view_models.views.lobby.comp7.qualification_model import QualificationModel
 
 class Rank(IntEnum):
-    FIRST = 1
-    SECOND = 2
-    THIRD = 3
-    FOURTH = 4
-    FIFTH = 5
-    SIXTH = 6
-    SEVENTH = 7
+    FIRST = 6
+    SECOND = 5
+    THIRD = 4
+    FOURTH = 3
+    FIFTH = 2
+    SIXTH = 1
 
 
 class MainWidgetTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(MainWidgetTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def seasonInfo(self):
-        return self._getViewModel(0)
-
-    @staticmethod
-    def getSeasonInfoType():
-        return SeasonModel
-
-    @property
     def divisionInfo(self):
-        return self._getViewModel(1)
+        return self._getViewModel(0)
 
     @staticmethod
     def getDivisionInfoType():
         return DivisionInfoModel
+
+    @property
+    def qualificationModel(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getQualificationModelType():
+        return QualificationModel
 
     def getRank(self):
         return Rank(self._getNumber(2))
@@ -55,24 +54,10 @@ class MainWidgetTooltipModel(ViewModel):
     def setTopPercentage(self, value):
         self._setNumber(4, value)
 
-    def getRankInactivityCount(self):
-        return self._getNumber(5)
-
-    def setRankInactivityCount(self, value):
-        self._setNumber(5, value)
-
-    def getHasRankInactivity(self):
-        return self._getBool(6)
-
-    def setHasRankInactivity(self, value):
-        self._setBool(6, value)
-
     def _initialize(self):
         super(MainWidgetTooltipModel, self)._initialize()
-        self._addViewModelProperty('seasonInfo', SeasonModel())
         self._addViewModelProperty('divisionInfo', DivisionInfoModel())
+        self._addViewModelProperty('qualificationModel', QualificationModel())
         self._addNumberProperty('rank')
         self._addNumberProperty('currentScore', 0)
         self._addNumberProperty('topPercentage', 0)
-        self._addNumberProperty('rankInactivityCount', -1)
-        self._addBoolProperty('hasRankInactivity', False)

@@ -1,0 +1,26 @@
+<StoryModeAccountComponent.def>
+  <BaseMethods>
+    <onStoryModeArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onStoryModeArenaCreated>
+    <onStoryModeDequeued></onStoryModeDequeued>
+    <removeForceOnboarding>
+      <Exposed></Exposed>
+    </removeForceOnboarding>
+    <setDevelopmentFeature>
+      <Exposed></Exposed>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </setDevelopmentFeature>
+  </BaseMethods>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+</StoryModeAccountComponent.def>

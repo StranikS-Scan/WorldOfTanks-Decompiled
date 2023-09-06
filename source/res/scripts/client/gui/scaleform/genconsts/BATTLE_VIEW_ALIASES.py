@@ -44,7 +44,7 @@ class BATTLE_VIEW_ALIASES(object):
     BOOTCAMP_CONSUMABLES_PANEL = 'bootcampConsumablesPanel'
     BOOTCAMP_RIBBONS_PANEL = 'bootcampRibbonsPanel'
     BOOTCAMP_SECONDARY_HINT = 'bootcampSecondaryHint'
-    BOOTCAMP_BATTLE_TOP_HINT = 'bootcampBattleTopHint'
+    ANIMATED_BATTLE_HINT = 'animatedBattleHint'
     GAME_MESSAGES_PANEL = 'gameMessagesPanel'
     EPIC_RESPAWN_VIEW = 'epicRespawnView'
     EPIC_SCORE_PANEL = 'epicScorePanel'

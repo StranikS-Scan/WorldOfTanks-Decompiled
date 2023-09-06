@@ -133,7 +133,7 @@ class IControlMode(object):
         return None
 
     def enableSwitchAutorotationMode(self, triggeredByKey=False):
-        return True
+        return not (triggeredByKey and BigWorld.player().isVehicleMoving())
 
     def setForcedGuiControlMode(self, enable):
         pass
@@ -484,7 +484,7 @@ class ArcadeControlMode(_GunControlMode):
 
     def __init__(self, dataSection, avatarInputHandler):
         super(ArcadeControlMode, self).__init__(dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.ARCADE)
-        self._cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], defaultOffset=self._defaultOffset)
+        self._setupCamera(dataSection)
         self.__mouseVehicleRotator = _MouseVehicleRotator()
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
         self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.HAS_DEV_RESOURCES
@@ -623,6 +623,9 @@ class ArcadeControlMode(_GunControlMode):
 
     def alwaysReceiveKeyEvents(self, isDown=True):
         return True if self._aih.dualGunControl is not None and isDown is False else False
+
+    def _setupCamera(self, dataSection):
+        self._cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], defaultOffset=self._defaultOffset)
 
     def __activateAlternateMode(self, pos=None, bByScroll=False):
         ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
@@ -1358,20 +1361,24 @@ class PostMortemControlMode(IControlMode):
 
     def enable(self, **args):
         SoundGroups.g_instance.changePlayMode(0)
+        playerPostmortemViewPointDefined = False
         player = BigWorld.player()
         if player:
             self.__selfVehicleID = player.playerVehicleID
             self.__isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags
             self.__curVehicleID = self.__selfVehicleID
+            playerVehicle = BigWorld.entities.get(player.playerVehicleID)
+            if playerVehicle:
+                playerPostmortemViewPointDefined = playerVehicle.isPostmortemViewPointDefined
         camTransitionParams = {'cameraTransitionDuration': args.get('transitionDuration', -1),
          'camMatrix': args.get('camMatrix', None)}
         self.__cam.enable(None, False, args.get('postmortemParams'), None, None, camTransitionParams)
         newVehicle = args.get('newVehicleID', None)
-        self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix if newVehicle is None else BigWorld.entities.get(newVehicle).matrix
+        self.__cam.vehicleMProv = player.consistentMatrices.attachedVehicleMatrix if newVehicle is None else BigWorld.entities.get(newVehicle).matrix
         self.__connectToArena()
         _setCameraFluency(self.__cam.camera, self.__CAM_FLUENCY)
         self.__isEnabled = True
-        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self._onMatrixBound
+        player.consistentMatrices.onVehicleMatrixBindingChanged += self._onMatrixBound
         if not BattleReplay.g_replayCtrl.isPlaying:
             if self.__isObserverMode:
                 vehicleID = args.get('vehicleID')
@@ -1380,7 +1387,7 @@ class PostMortemControlMode(IControlMode):
                 else:
                     self.__fakeSwitchToVehicle(vehicleID)
                 return
-            if (self._isPostmortemDelayEnabled() or bool(args.get('respawn', False))) and bool(args.get('bPostmortemDelay')):
+            if (self._isPostmortemDelayEnabled() or bool(args.get('respawn', False))) and bool(args.get('bPostmortemDelay')) and not playerPostmortemViewPointDefined:
                 self.__startPostmortemDelay(self.__selfVehicleID)
             else:
                 self.__switchToVehicle(None)
@@ -1396,6 +1403,9 @@ class PostMortemControlMode(IControlMode):
                 respawnCtrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
                 if respawnCtrl.respawnInfo is not None:
                     self.__onRespawnInfoUpdated(respawnCtrl.respawnInfo)
+        if playerPostmortemViewPointDefined:
+            matrix = Math.Matrix(player.consistentMatrices.attachedVehicleMatrix)
+            self.__cam.setYawPitch(matrix.yaw, -matrix.pitch)
         return
 
     def __startPostmortemDelay(self, vehicleID):
@@ -1817,38 +1827,6 @@ class _ShellingControl(object):
 
     def __showTargetModel_directly(self, value):
         self.__targetModel.visible = value
-
-
-class _PlayerGunInformation(object):
-
-    @staticmethod
-    def getCurrentShotInfo():
-        player = BigWorld.player()
-        gunRotator = player.gunRotator
-        shotDesc = player.getVehicleDescriptor().shot
-        gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch)
-        position = gunMat.translation
-        velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc.speed))
-        return (position, velocity, Math.Vector3(0, -shotDesc.gravity, 0))
-
-    @staticmethod
-    def updateMarkerDispersion(spgMarkerComponent, isServerAim=False):
-        dispersionAngle = BigWorld.player().gunRotator.dispersionAngle
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            d, s = replayCtrl.getSPGGunMarkerParams()
-            if d != -1.0 and s != -1.0:
-                dispersionAngle = d
-        elif replayCtrl.isRecording:
-            if replayCtrl.isServerAim and isServerAim:
-                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
-            elif not isServerAim:
-                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
-        spgMarkerComponent.setupConicDispersion(dispersionAngle)
-
-    @staticmethod
-    def updateServerMarkerDispersion(spgMarkerComponent):
-        _PlayerGunInformation.updateMarkerDispersion(spgMarkerComponent, True)
 
 
 class _MouseVehicleRotator(object):

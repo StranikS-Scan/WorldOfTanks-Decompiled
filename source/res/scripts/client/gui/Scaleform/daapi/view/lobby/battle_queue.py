@@ -50,7 +50,6 @@ TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
-_RANKS = 'ranks'
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def needShowLongWaitingWarning(lobbyContext=None):
@@ -225,23 +224,22 @@ class _Comp7QueueProvider(RandomQueueProvider):
 
     def processQueueInfo(self, qInfo):
         info = dict(qInfo)
-        ranks = info.get(_RANKS, {})
-        self._createCommonPlayerString(info.get('players', sum(ranks)))
+        ranks = info.get('ranks', {})
+        qualPlayers = info.get('qualPlayers', 0)
+        allPlayersCount = info.get('players', sum(ranks.values()) + qualPlayers)
+        self._createCommonPlayerString(allPlayersCount)
         if ranks:
             ranksData = []
-            division = comp7_shared.getPlayerDivision()
-            for rankIdx, playersCount in enumerate(ranks):
-                rankName = rankIdx + 1
-                rankImg = R.images.gui.maps.icons.comp7.ranks.c_40.num(rankName)
-                if rankImg:
-                    ranksData.append({'type': comp7_i18n_helpers.getRankLocale(rankName),
-                     'icon': backport.image(rankImg()),
-                     'count': playersCount,
-                     'highlight': division.rank == rankIdx})
+            isInQualification = comp7_shared.isQualification()
+            playerRankIdx = comp7_shared.getPlayerDivision().rank if not isInQualification else None
+            for rankIdx, playersCount in ranks.items():
+                rankName = comp7_i18n_helpers.RANK_MAP[rankIdx]
+                ranksData.append(self.__getRankData(rankName, playersCount, rankIdx == playerRankIdx))
 
-            ranksData.reverse()
+            ranksData.append(self.__getRankData('qualification', qualPlayers, isInQualification))
             self._proxy.as_setDPS(ranksData)
-        self._proxy.as_showStartS(self._isStartButtonDisplayed(ranks))
+        self._proxy.as_showStartS(constants.IS_DEVELOPMENT and allPlayersCount > 1)
+        return
 
     def getLayoutStr(self):
         pass
@@ -260,6 +258,14 @@ class _Comp7QueueProvider(RandomQueueProvider):
 
     def additionalInfo(self):
         pass
+
+    def __getRankData(self, rankName, playersCount, isHighlight):
+        rankImg = R.images.gui.maps.icons.comp7.ranks.c_40.dyn(rankName)
+        rankStr = R.strings.comp7.rank.dyn(rankName)
+        return {'type': backport.text(rankStr()),
+         'icon': backport.image(rankImg()),
+         'count': playersCount,
+         'highlight': isHighlight}
 
 
 class _WinbackQueueProvider(RandomQueueProvider):
@@ -445,8 +451,11 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         clanEmblem = getTextureLinkByID(self.getMemoryTexturePath(emblem)) if emblem else None
         self.__battleQueueVO['myClanIcon'] = clanEmblem or ''
         self.as_setTypeInfoS(self.__battleQueueVO)
-        self.prbEntity.getMatchmakingInfo(callback=self.__onMatchmakingInfo)
-        return
+        if self.prbEntity is None:
+            return
+        else:
+            self.prbEntity.getMatchmakingInfo(callback=self.__onMatchmakingInfo)
+            return
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)

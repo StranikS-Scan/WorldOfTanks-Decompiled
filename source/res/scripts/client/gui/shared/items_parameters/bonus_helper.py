@@ -156,6 +156,7 @@ class BonusExtractor(object):
 
     def __init__(self, vehicle, bonuses, paramName):
         self.__vehicle = self._getCopyVehicle(vehicle)
+        self.__vehicle.setOutfits(vehicle)
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__removeCamouflage = False

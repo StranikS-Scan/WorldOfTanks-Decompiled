@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_boards/event_helpers.py
 from io import BufferedIOBase, TextIOWrapper
 from functools import wraps
+import xmltodict
 from ResMgr import DataSection
 from constants import ARENA_GUI_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.impl import backport
 from helpers.i18n import makeString as _ms
-from helpers import xmltodict, int2roman, dependency
+from helpers import int2roman, dependency
 from nations import NAMES as NationNames
 from bonus_readers import readBonusSection
 from skeletons.connection_mgr import IConnectionManager

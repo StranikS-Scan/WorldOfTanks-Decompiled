@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mode_selector/mode_selector_view.py
+import logging
 from functools import partial
 import typing
 import adisp
-from adisp import adisp_process
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowLayer, WindowStatus, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
+from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_model import ModeSelectorModel
@@ -19,14 +20,14 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_t
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
+from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
+from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
 from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
-from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView, createSimpleTooltip
-from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
-from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
+from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
 from gui.impl.lobby.winback.popovers.winback_leave_mode_popover_view import WinbackLeaveModePopoverView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
@@ -40,13 +41,15 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController, IWinbackController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
+from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from wg_async import wg_await, await_callback, wg_async, BrokenPromiseError, forwardAsFuture
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
     from gui.Scaleform.framework.application import AppEntry
     from frameworks.wulf import View, ViewEvent, Window
     from gui.Scaleform.managers import GameInputMgr
+_logger = logging.getLogger(__name__)
 _BACKGROUND_ALPHA = 0.7
 _R_SIMPLE_TOOLTIP = R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent
 _R_BACKPORT_TOOLTIP = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent
@@ -160,6 +163,9 @@ class ModeSelectorView(ViewImpl):
             return RandomBattlePopover()
         return super(ModeSelectorView, self).createPopOverContent(event)
 
+    def refresh(self):
+        self.__dataProvider.forceRefresh()
+
     def close(self):
         g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(self.layoutID))
 
@@ -260,7 +266,7 @@ class ModeSelectorView(ViewImpl):
         self.__isClickProcessing = event.ctx.get('isClickProcessing', False) if event is not None else False
         return
 
-    @adisp_process
+    @wg_async
     def __itemClickHandler(self, event):
         self.__isClickProcessing = True
         index = int(event.get('index'))
@@ -269,12 +275,16 @@ class ModeSelectorView(ViewImpl):
             self.__isClickProcessing = False
             return
         else:
-            if modeSelectorItem.checkHeaderNavigation():
-                navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-                if not navigationPossible:
-                    self.__isClickProcessing = False
-                    return
-            modeSelectorItem.handleClick()
+            try:
+                if modeSelectorItem.checkHeaderNavigation():
+                    navigationPossible = yield await_callback(isHeaderNavigationPossible)()
+                    if not navigationPossible:
+                        self.__isClickProcessing = False
+                        return
+                yield wg_await(forwardAsFuture(modeSelectorItem.handleClick()))
+            except BrokenPromiseError:
+                _logger.debug('%s got BrokenPromiseError during __itemClickHandler.')
+
             if modeSelectorItem.isSelectable:
                 specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
                 if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
@@ -315,6 +325,8 @@ class ModeSelectorView(ViewImpl):
                 parent = window.parent.content
             if window.content == self or parent is not None and parent == self:
                 return
+            if getattr(window.content, 'isModeSelectorAutoCloseDisabled', False):
+                return
             if window.layer in _CLOSE_LAYERS:
                 self.__restoreGraphics()
                 if not self.__isClickProcessing:
@@ -328,4 +340,12 @@ class ModeSelectorView(ViewImpl):
         callback(True)
 
     def __handleEscape(self):
-        self.close()
+        if not self.__isClickProcessing:
+            self.close()
+
+
+@adisp.adisp_process
+def isHeaderNavigationPossible(callback=None):
+    lobbyContext = dependency.instance(ILobbyContext)
+    result = yield lobbyContext.isHeaderNavigationPossible()
+    callback(result)

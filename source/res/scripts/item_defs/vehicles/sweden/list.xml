@@ -268,7 +268,6 @@
     <longDescriptionSpecial>	#sweden_vehicles:S23_Strv_81_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </S23_Strv_81>
@@ -294,7 +293,6 @@
     <longDescriptionSpecial>	#sweden_vehicles:S25_EMIL_51_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </S25_EMIL_51>
@@ -320,6 +318,7 @@
     <longDescriptionSpecial>	#sweden_vehicles:S26_Lansen_C_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </S26_Lansen_C>
@@ -386,6 +385,18 @@
     <tags>	AT-SPG HD siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 epic_battles improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	9	</level>
   </S10_Strv_103_0_Series_FL>
+  <S28_UDES_15_16_7x7>
+    <id>	214	</id>
+    <userString>	#sweden_vehicles:S28_UDES_15_16_7x7	</userString>
+    <shortUserString>	#sweden_vehicles:S28_UDES_15_16_7x7_short	</shortUserString>
+    <description>	#sweden_vehicles:S28_UDES_15_16_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_universal HD siegeMode autoSiege mediumTank3 improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 earn_crystals special	</tags>
+    <level>	10	</level>
+  </S28_UDES_15_16_7x7>
   <S14_Ikv_103_SH>
     <id>	22	</id>
     <userString>	#sweden_vehicles:S14_Ikv_103_SH	</userString>

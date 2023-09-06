@@ -4,7 +4,8 @@ import BigWorld
 import weakref
 import Math
 import items
-from visual_script.block import Meta, Block, InitParam, buildStrKeysValue
+from constants import IS_CLIENT
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 
@@ -146,7 +147,12 @@ class IsEntityOfType(Block, EntityMeta):
         return 'Is Entity ' + self._type
 
     def _execute(self):
-        self._res.setValue(self._entity.getValue().className == self._type)
+        entity = self._entity.getValue()
+        if IS_CLIENT:
+            className = entity.__class__.__name__
+        else:
+            className = entity.className
+        self._res.setValue(className == self._type)
 
 
 class BoardEntity(Block, EntityMeta):

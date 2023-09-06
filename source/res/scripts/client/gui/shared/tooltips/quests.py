@@ -135,7 +135,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             questHeader = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.steelhunter.header())
             img = backport.image(R.images.gui.maps.icons.quests.epic_steelhunter_quests_infotip())
-            desc = getQuestsDescriptionForHangarFlag()
+            desc = getQuestsDescriptionForHangarFlag() if self.__battleRoyaleController.isShowTimeLeft() else None
         else:
             questHeader = backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)
             img = backport.image(R.images.gui.maps.icons.quests.questTooltipHeader())

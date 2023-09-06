@@ -144,7 +144,8 @@ class WotPlusDescriptor(SubscriptionDescriptor):
 
     @property
     def description(self):
-        return backport.text(R.strings.subscription.dashboard.subscriptionCard.description())
+        vehicleName = self._wotPlusCtrl.getActiveExclusiveVehicleName()
+        return backport.text(R.strings.subscription.dashboard.subscriptionCard.description(), vehicleName=vehicleName)
 
     @property
     def largeImageURL(self):

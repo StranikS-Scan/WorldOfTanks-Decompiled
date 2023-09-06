@@ -149,7 +149,7 @@ class LobbyMarkersVisibilityManager(CGF.ComponentManager):
             component.heroTankMarkerGO.activate()
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class CombatMarkerManager(CGF.ComponentManager):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 

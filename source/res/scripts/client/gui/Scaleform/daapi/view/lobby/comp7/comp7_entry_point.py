@@ -8,7 +8,7 @@ from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.views.banner_model import BannerModel, State
+from gui.impl.gen.view_models.views.lobby.comp7.banner_model import BannerModel, State
 from gui.periodic_battles.models import PeriodType
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from helpers import dependency, time_utils
@@ -18,7 +18,7 @@ from skeletons.gui.game_control import IComp7Controller
 def isComp7EntryPointAvailable():
     comp7Ctrl = dependency.instance(IComp7Controller)
     settings = comp7Ctrl.getModeSettings()
-    return comp7Ctrl.isEnabled() and settings is not None and settings.seasons
+    return comp7Ctrl.isEnabled() and not comp7Ctrl.isFrozen() and settings is not None and settings.seasons
 
 
 class Comp7EntryPoint(ResizableEntryPointMeta):
@@ -38,7 +38,7 @@ class Comp7EntryPointView(ViewImpl, Notifiable):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.lobby.comp7.views.Banner())
+        settings = ViewSettings(R.views.lobby.comp7.Banner())
         settings.flags = flags
         settings.model = BannerModel()
         super(Comp7EntryPointView, self).__init__(settings)

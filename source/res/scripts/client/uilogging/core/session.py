@@ -110,6 +110,9 @@ class Session(object):
         if self._isInitialized:
             self._logger.debug('Return cached session data.')
             raise AsyncReturn(self._sessionData)
+        if not self.webController.isStarted:
+            self._logger.debug('Web controller not ready yet.')
+            raise AsyncReturn(None)
         self._clear()
         self._requesting = True
         retries = MAX_SESSION_GET_RETRIES

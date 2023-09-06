@@ -66,4 +66,4 @@ class _CyberSportDialogsHandler(PackageBusinessHandler):
         super(_CyberSportDialogsHandler, self).__init__(((ShowDialogEvent.SHOW_CYBER_SPORT_DIALOG, self.__showCyberSportDialog),), APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.DEFAULT)
 
     def __showCyberSportDialog(self, event):
-        self.loadViewWithGenName(CYBER_SPORT_ALIASES.CYBER_SPORT_DIALOG_PY, event.meta, event.handler)
+        self.loadViewWithGenName(CYBER_SPORT_ALIASES.CYBER_SPORT_DIALOG_PY, event.parent, event.meta, event.handler)

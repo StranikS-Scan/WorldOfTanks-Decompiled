@@ -4,13 +4,12 @@ from enum import IntEnum
 from frameworks.wulf import ViewModel
 
 class Rank(IntEnum):
-    FIRST = 1
-    SECOND = 2
-    THIRD = 3
-    FOURTH = 4
-    FIFTH = 5
-    SIXTH = 6
-    SEVENTH = 7
+    FIRST = 6
+    SECOND = 5
+    THIRD = 4
+    FOURTH = 3
+    FIFTH = 2
+    SIXTH = 1
 
 
 class GeneralRankTooltipModel(ViewModel):
@@ -46,6 +45,6 @@ class GeneralRankTooltipModel(ViewModel):
     def _initialize(self):
         super(GeneralRankTooltipModel, self)._initialize()
         self._addNumberProperty('rank')
-        self._addStringProperty('divisions', 'D, C, B, A')
+        self._addStringProperty('divisions', 'E, D, C, B, A')
         self._addNumberProperty('from', 1000)
         self._addNumberProperty('to', 2000)

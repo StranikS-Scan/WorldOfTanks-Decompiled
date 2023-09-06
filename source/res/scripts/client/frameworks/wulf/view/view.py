@@ -14,6 +14,7 @@ TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from sound_gui_manager import CommonSoundSpaceSettings
+    from gui.sounds.ViewSoundManager import _ViewSoundsManager
 
 class ViewSettings(typing.Generic[TViewModel]):
     __slots__ = ('__proxy', 'args', 'kwargs')

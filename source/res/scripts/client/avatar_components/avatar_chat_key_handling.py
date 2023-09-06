@@ -33,7 +33,8 @@ _SKIP_ON_COMMAND_RECEIVED = {BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.VEHICLE_SPOTPOINT,
  BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT,
  BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS,
- BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT}
+ BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT,
+ BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT}
 CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider, targetID')
 _logger = logging.getLogger(__name__)
 
@@ -53,7 +54,11 @@ class AvatarChatKeyHandling(object):
          MarkerType.BASE_MARKER_TYPE: self.__getBaseMatrixProvider,
          MarkerType.HEADQUARTER_MARKER_TYPE: self.__getHQMatrixProvider,
          MarkerType.LOCATION_MARKER_TYPE: self.__getLocationMarkerMatrixProvider}
+        self.__isKeyHandlingOn = True
         return
+
+    def setKeyHandling(self, value):
+        self.__isKeyHandlingOn = value
 
     def onBecomePlayer(self):
         if g_bootcamp.isRunning() or self.__isBattleRoyale():
@@ -77,6 +82,8 @@ class AvatarChatKeyHandling(object):
         self.__deactivateHandling()
 
     def handleKey(self, isDown, key, mods):
+        if not self.__isKeyHandlingOn:
+            return False
         calloutCtrl = self.guiSessionProvider.shared.calloutCtrl
         if not self.__isEnabled or calloutCtrl is None or BattleReplay.g_replayCtrl.isPlaying:
             return False

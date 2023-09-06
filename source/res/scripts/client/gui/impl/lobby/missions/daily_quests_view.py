@@ -20,7 +20,7 @@ from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.impl.lobby.reroll_tooltip import RerollTooltip
 from gui.impl.lobby.winback.tooltips.main_reward_tooltip import MainRewardTooltip
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
-from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses, packBonusModelAndTooltipData, cutWinbackTokens
+from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses, packWinBackBonusModelAndTooltipData, cutWinbackTokens
 from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes, getWinbackCompletedQuestsCount
 from gui.impl.pub import ViewImpl
 from gui.selectable_reward.common import WinbackSelectableRewardManager
@@ -95,7 +95,7 @@ class DailyQuestsView(ViewImpl):
             return RerollTooltip(self.__getCountdown(), getRerollTimeout(), True)
         if contentID == R.views.lobby.winback.tooltips.SelectableRewardTooltip():
             tooltipId = event.getArgument('tooltipId')
-            tooltipData = self.__tooltipData.get(int(tooltipId))
+            tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData:
                 return SelectableRewardTooltip(**tooltipData)
         return MainRewardTooltip(self.__winbackData.get('lastQuest', {}).get('bonuses', [])) if contentID == R.views.lobby.winback.tooltips.MainRewardTooltip() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
@@ -107,12 +107,12 @@ class DailyQuestsView(ViewImpl):
         else:
             missionParams = missionParam.rsplit(':', 1)
             if len(missionParams) != 2:
-                tooltipData = self.__tooltipData.get(int(missionParam))
+                tooltipData = self.__tooltipData.get(missionParam)
             else:
                 missionId, tooltipId = missionParams
                 _logger.debug('CreateTooltip: %s, %s', missionId, tooltipId)
                 tooltipsData = self.__tooltipData.get(missionId, {})
-                tooltipData = tooltipsData.get(int(tooltipId))
+                tooltipData = tooltipsData.get(tooltipId)
             if tooltipData and isinstance(tooltipData, TooltipData):
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
                 if window is not None:
@@ -569,7 +569,7 @@ class DailyQuestsView(ViewImpl):
         winbackQuestModel.setQuestNumber(questNumber)
         rewardsModel = winbackQuestModel.getRewards()
         rewardsModel.clear()
-        packBonusModelAndTooltipData(questData['bonuses'], packer, rewardsModel, self.__tooltipData)
+        packWinBackBonusModelAndTooltipData(questData['bonuses'], packer, rewardsModel, self.__tooltipData)
         rewardsModel.invalidate()
         return winbackQuestModel
 

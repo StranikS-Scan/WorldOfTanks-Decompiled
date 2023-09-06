@@ -48,9 +48,11 @@ class _PrbPackageBusinessHandler(PackageBusinessHandler):
 
     def __showPrebattleWindow(self, event):
         alias = name = event.alias
-        self.loadViewWithDefName(alias, name, event.ctx)
+        self.loadViewWithDefName(alias, name, None, event.ctx)
+        return
 
     def __showAutoInviteWindow(self, event):
         alias = PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY
         name = getViewName(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY, event.ctx.get('prbID'))
-        self.loadViewWithDefName(alias, name, event.ctx)
+        self.loadViewWithDefName(alias, name, None, event.ctx)
+        return

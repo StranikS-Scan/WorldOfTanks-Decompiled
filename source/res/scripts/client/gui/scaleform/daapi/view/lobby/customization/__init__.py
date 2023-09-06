@@ -76,4 +76,5 @@ class CustomizationDialogPackageBusinessHandler(PackageBusinessHandler):
         super(CustomizationDialogPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
 
     def __confirmCustomizationItemHandler(self, event):
-        self.loadViewWithGenName(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, event.meta, event.handler)
+        self.loadViewWithGenName(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, None, event.meta, event.handler)
+        return

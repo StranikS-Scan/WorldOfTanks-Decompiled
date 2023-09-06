@@ -6,22 +6,22 @@ import inspect
 import logging
 import math
 import operator
-from collections import namedtuple, defaultdict
-from itertools import izip_longest
-from math import ceil, floor
-import BigWorld
 import typing
+from collections import namedtuple, defaultdict
+from math import ceil, floor
+from itertools import izip_longest
+import BigWorld
 from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, HAS_EXPLOSION
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import Tankman, isSkillLearnt, crewMemberRealSkillLevel
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun, isDualAccuracy
 from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell, getRocketAccelerationKpiFactors
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, SHELLS_BURST_COUNT_PROP_NAME, SHELLS_FLAME_BURST_COUNT_PROP_NAME
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, SHELLS_BURST_COUNT_PROP_NAME, SHELLS_FLAME_BURST_COUNT_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
@@ -106,7 +106,8 @@ _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 
  'gun/aimingTime': ('aimingTime',),
  'vehicle/rotationSpeed': ('chassisRotationSpeed', 'relativeMobility'),
  'chassis/terrainResistance': ('chassisRotationSpeed', 'relativeMobility'),
- 'shotDispersion': ('shotDispersionAngle',)}
+ 'shotDispersion': ('shotDispersionAngle',),
+ 'dualAccuracyCoolingDelay': (DUAL_ACCURACY_COOLING_DELAY,)}
 _SHELL_KINDS = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING,
@@ -264,15 +265,15 @@ class ChassisParams(WeightedParam):
     @property
     def chassisRepairTime(self):
         chassis = self._itemDescr
-        repairTime = []
+        repairTimes = []
         if chassis.trackPairs:
             for track in chassis.trackPairs:
-                repairTime.append(track.healthParams.repairTime)
+                repairTimes.append(track.healthParams.repairTime)
 
-            repairTime.reverse()
+            repairTimes.reverse()
         else:
-            repairTime.append(chassis.repairTime)
-        return repairTime
+            repairTimes.append(chassis.repairTime)
+        return [ repairTime / 0.57 for repairTime in repairTimes ]
 
     @property
     def isHydraulic(self):
@@ -402,6 +403,14 @@ class VehicleParams(_ParameterBase):
             return None
 
     @property
+    def dualAccuracyAfterShotDispersionAngle(self):
+        return float(math.tan(self._itemDescr.gun.dualAccuracy.afterShotDispersionAngle) * 100) if self._itemDescr.hasDualAccuracy else None
+
+    @property
+    def dualAccuracyCoolingDelay(self):
+        return items_utils.getClientCoolingDelay(self._itemDescr, self.__factors) if self._itemDescr.hasDualAccuracy else None
+
+    @property
     def chassisRotationSpeed(self):
         skillName = 'driver_virtuoso'
         argName = 'vehicleAllGroundRotationSpeed'
@@ -520,12 +529,12 @@ class VehicleParams(_ParameterBase):
     def __shotDispersionAngle(self, isSituational=False):
         skillName = 'gunner_focus'
         argName = 'shotDispersionAngle'
-        shotDispersion = items_utils.getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
-        baseShotDispertion = round(shotDispersion * 100, 4)
+        shotDispersions = items_utils.getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
+        baseShotDispersions = (round(shotDispersion * 100, 4) for shotDispersion in shotDispersions)
         skillFactorValue = 1
         if isSituational:
             skillFactorValue = self.__getFactorValueFromSkill(skillName, argName, Tankman.ROLES.GUNNER, isSituational)
-        return baseShotDispertion * skillFactorValue
+        return [ baseShotDispersion * skillFactorValue for baseShotDispersion in baseShotDispersions ]
 
     @property
     def shotDispersionAngle(self):
@@ -582,7 +591,8 @@ class VehicleParams(_ParameterBase):
                 heCorrection = coeffs['alphaDamage']
         gunCorrection = self.__adjustmentCoefficient('guns').get(self._itemDescr.gun.name, {})
         gunCorrection = gunCorrection.get('caliberCorrection', 1)
-        value = round(self.avgDamagePerMinute * penetration / self.shotDispersionAngle * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
+        disp = self.shotDispersionAngle
+        value = round(self.avgDamagePerMinute * penetration / sum(disp) / len(disp) * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -721,16 +731,18 @@ class VehicleParams(_ParameterBase):
     @property
     def burstFireRate(self):
         if self.__hasBurst():
-            burstCountLeft, burstInterval = self._itemDescr.gun.burst
-            return (burstInterval, burstCountLeft)
+            gun = self._itemDescr.gun
+            burstCountLeft, burstInterval = gun.burst
+            return (burstInterval, gun.clip[0] / burstCountLeft, burstCountLeft)
         else:
             return None
 
     @property
     def turboshaftBurstFireRate(self):
         if self.__hasUnsupportedSwitchMode():
-            burstCountLeft, burstInterval = self._itemDescr.siegeVehicleDescr.gun.burst
-            return (burstInterval, burstCountLeft)
+            gun = self._itemDescr.siegeVehicleDescr.gun
+            burstCountLeft, burstInterval = gun.burst
+            return (burstInterval, gun.clip[0] / burstCountLeft, burstCountLeft)
         else:
             return None
 
@@ -837,7 +849,7 @@ class VehicleParams(_ParameterBase):
     def getParamsDict(self, preload=False):
         conditionalParams = ('aimingTime',
          'clipFireRate',
-         'burstFireRate',
+         BURST_FIRE_RATE,
          'turretYawLimits',
          'gunYawLimits',
          'turretRotationSpeed',
@@ -868,6 +880,7 @@ class VehicleParams(_ParameterBase):
          ROCKET_ACCELERATION_REUSE_AND_DURATION,
          'chassisRotationSpeed',
          'turboshaftBurstFireRate',
+         DUAL_ACCURACY_COOLING_DELAY,
          'flameMaxDistance')
         stunConditionParams = ('stunMaxDuration',)
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
@@ -1008,6 +1021,9 @@ class VehicleParams(_ParameterBase):
     def __hasUnsupportedSwitchMode(self):
         return self._itemDescr.type.compactDescr == 32321
 
+    def __hasBurst(self):
+        return self._itemDescr.hasBurst
+
     def __getRealSpeedLimit(self):
         enginePower = self._itemDescr.miscAttrs['enginePowerFactor'] * self.__getEnginePhysics()['smplEnginePower']
         rollingFriction = self.__getChassisPhysics()['grounds']['medium']['rollingFriction']
@@ -1053,14 +1069,14 @@ class VehicleParams(_ParameterBase):
     def __hasClipGun(self):
         return self._itemDescr.gun.clip[0] != 1
 
-    def __hasBurst(self):
-        return self._itemDescr.gun.burst[0] != 1
-
     def __hasAutoReload(self):
         return isAutoReloadGun(self._itemDescr.gun)
 
     def __hasDualGun(self):
         return isDualGun(self._itemDescr.gun)
+
+    def __hasDualAccuracy(self):
+        return isDualAccuracy(self._itemDescr.gun)
 
     def __calcReloadTime(self, isSituational=False):
         loaderDesperadoReloadFactor = 1
@@ -1181,7 +1197,9 @@ class GunParams(WeightedParam):
 
     @property
     def dispertionRadius(self):
-        return self._getRawParams()[DISPERSION_RADIUS_PROP_NAME]
+        disp = self._getRawParams()[DISPERSION_RADIUS_PROP_NAME][0]
+        gun = self.__getVehicleGun()
+        return (math.tan(gun.dualAccuracy.afterShotDispersionAngle) * 100, disp) if isDualAccuracy(gun) else (None, disp)
 
     @property
     def aimingTime(self):
@@ -1223,8 +1241,33 @@ class GunParams(WeightedParam):
         return res if res else None
 
     @property
+    def burstTimeInterval(self):
+        burstData = self._getRawParams()[BURST_FIRE_RATE]
+        return burstData[0] if burstData else None
+
+    @property
+    def burstCount(self):
+        burstSize = self.burstSize
+        return self.shellsCount[0] / burstSize if burstSize else None
+
+    @property
+    def burstSize(self):
+        burstData = self._getRawParams()[BURST_FIRE_RATE]
+        return burstData[1] if burstData else None
+
+    @property
     def autoReloadTime(self):
         return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME)))
+
+    @property
+    def dualAccuracyAfterShotDispersionAngle(self):
+        res = self._getRawParams().get(DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE)
+        return res if res else None
+
+    @property
+    def dualAccuracyCoolingDelay(self):
+        gun = self.__getVehicleGun()
+        return gun.dualAccuracy.coolingDelay if isDualAccuracy(gun) else None
 
     def getParamsDict(self):
         stunConditionParams = (STUN_DURATION_PROP_NAME,)
@@ -1272,6 +1315,13 @@ class GunParams(WeightedParam):
         result.append(('ammunition' if self.__isFlameGun() else 'shells', ', '.join(self.shellsCompatibles)))
         return tuple(result)
 
+    def __getVehicleGun(self):
+        if self._vehicleDescr is not None:
+            _, guns = self._vehicleDescr.getComponentsByType(self._itemDescr.itemTypeName)
+            return next((obj for obj in guns if obj.compactDescr == self._itemDescr.compactDescr), None)
+        else:
+            return
+
     def __getShellsCountProp(self):
         if self.__isBurstGun():
             if self.__isFlameGun():
@@ -1299,11 +1349,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def damage(self):
-        return None if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else self._getRawParams()[DAMAGE_PROP_NAME]
-
-    @property
-    def damagePerSecond(self):
-        return self.avgDamage / self._vehicleDescr.gun.clip[1] if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else None
+        return self._getRawParams()[DAMAGE_PROP_NAME]
 
     @property
     def avgDamage(self):

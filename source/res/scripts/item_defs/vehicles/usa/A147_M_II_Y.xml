@@ -5591,8 +5591,8 @@
     <leftTrack1Health>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
       <trackPairIdx>	1	</trackPairIdx>
       <sounds>
-        <destroyed>	track_damaged_outer	</destroyed>
-        <critical>	track_damaged_outer	</critical>
+        <destroyed></destroyed>
+        <critical></critical>
         <functional>	track_functional_outer	</functional>
         <functionalCanMove>	track_functional_outer	</functionalCanMove>
       </sounds>
@@ -5601,8 +5601,8 @@
     <rightTrack1Health>	TrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
       <trackPairIdx>	1	</trackPairIdx>
       <sounds>
-        <destroyed>	track_damaged_outer	</destroyed>
-        <critical>	track_damaged_outer	</critical>
+        <destroyed></destroyed>
+        <critical></critical>
         <functional>	track_functional_outer	</functional>
         <functionalCanMove>	track_functional_outer	</functionalCanMove>
       </sounds>

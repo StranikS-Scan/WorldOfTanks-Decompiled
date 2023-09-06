@@ -20,6 +20,7 @@ from skeletons.connection_mgr import DisconnectReason, IConnectionManager
 from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.app_loader import IGlobalSpace, GuiGlobalSpaceID as _SPACE_ID, ApplicationStateID
 from skeletons.gui.game_control import IReloginController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.shared.utils import IHangarSpace
 _REASON = DisconnectReason
@@ -336,6 +337,9 @@ class BattleLoadingSpace(CloseWaitingListenerMixin, _ArenaSpace):
             gameLoading.getLoader().idl()
 
     def _onWaitingHidden(self):
+        lobbyContext = dependency.instance(ILobbyContext)
+        if lobbyContext.getGuiCtx().get('skipShowGUI', False):
+            return
         if not BattleReplay.g_replayCtrl.getAutoStartFileName():
             gameLoading.getLoader().idl()
 

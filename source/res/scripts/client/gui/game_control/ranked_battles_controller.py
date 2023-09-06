@@ -11,7 +11,7 @@ import season_common
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_LAST_CYCLE_ID, RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE
 from adisp import adisp_process
-from constants import ARENA_BONUS_TYPE, EVENT_TYPE
+from constants import ARENA_BONUS_TYPE, EVENT_TYPE, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -1142,7 +1142,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         criteria = criteria | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)
         criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
         criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)
         return criteria
 
     def __showBetweenSeason(self):

@@ -5,7 +5,7 @@ import BigWorld
 import Avatar
 from PlayerEvents import g_playerEvents
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from shared_utils import nextTick
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class ScriptComponent(BigWorld.StaticScriptComponent):
 
     @property
     def _isAvatarReady(self):
-        return BigWorld.player() is not None and BigWorld.player().userSeesWorld()
+        return isPlayerAvatar() and BigWorld.player().userSeesWorld()
 
     def onEnterWorld(self, _):
         _logger.debug('%s.onEnterWorld. EntityID=%s', self.__class__.__name__, self.entity.id)

@@ -6,13 +6,12 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_division import ProgressionDivision
 
 class Rank(IntEnum):
-    FIRST = 1
-    SECOND = 2
-    THIRD = 3
-    FOURTH = 4
-    FIFTH = 5
-    SIXTH = 6
-    SEVENTH = 7
+    FIRST = 6
+    SECOND = 5
+    THIRD = 4
+    FOURTH = 3
+    FIFTH = 2
+    SIXTH = 1
 
 
 class ProgressionItemBaseModel(ViewModel):

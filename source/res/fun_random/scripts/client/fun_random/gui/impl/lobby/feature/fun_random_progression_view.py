@@ -6,7 +6,7 @@ from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgre
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_progression_view_model import FunRandomProgressionViewModel
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packAdditionalRewards, packProgressionCondition, packProgressionStages, packProgressionState
-from fun_random.gui.impl.lobby.common.fun_view_mixins import LobbyHeaderVisibility
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl

@@ -876,6 +876,9 @@
       <forbidInBattleInvitations>
         <Type>	BOOL	</Type>
       </forbidInBattleInvitations>
+      <arenaUniqueID>
+        <Type>	UINT64	</Type>
+      </arenaUniqueID>
       <team>
         <Type>	UINT8	</Type>
       </team>
@@ -1040,6 +1043,9 @@
       <criticalHitChanceBoost>
         <Type>	FLOAT32	</Type>
       </criticalHitChanceBoost>
+      <attackerDualAccuracyState>
+        <Type>	INT8	</Type>
+      </attackerDualAccuracyState>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -2083,10 +2089,10 @@
         <Type>	UINT16	</Type>
       </quantity>
       <quantityInClip>
-        <Type>	UINT16	</Type>
+        <Type>	UINT8	</Type>
       </quantityInClip>
       <previousStage>
-        <Type>	UINT16	</Type>
+        <Type>	UINT8	</Type>
       </previousStage>
       <endTime>
         <Type>	FLOAT32	</Type>
@@ -2169,9 +2175,6 @@
       <chassisShotDispersionFactorsRotation>
         <Type>	FLOAT32	</Type>
       </chassisShotDispersionFactorsRotation>
-      <gunShotDispersionFactorsAfterShot>
-        <Type>	FLOAT32	</Type>
-      </gunShotDispersionFactorsAfterShot>
       <aimingTime>
         <Type>	FLOAT32	</Type>
       </aimingTime>
@@ -2295,41 +2298,6 @@
       </reuseCount>
     </Properties>
   </ROCKET_ACCELERATION_STATE_STATUS>
-  <AUTO_SHOOT_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <state>
-        <Type>	UINT8	</Type>
-      </state>
-      <stateActivationTime>
-        <Type>	FLOAT32	</Type>
-      </stateActivationTime>
-      <dispersionFactor>
-        <Type>	FLOAT32	</Type>
-      </dispersionFactor>
-      <updateTime>
-        <Type>	FLOAT32	</Type>
-      </updateTime>
-      <shotDispersionPerSec>
-        <Type>	FLOAT32	</Type>
-      </shotDispersionPerSec>
-      <maxShotDispersion>
-        <Type>	FLOAT32	</Type>
-      </maxShotDispersion>
-    </Properties>
-  </AUTO_SHOOT_GUN_STATE_STATUS>
-  <SPIN_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <state>
-        <Type>	UINT8	</Type>
-      </state>
-      <stateActivationTime>
-        <Type>	FLOAT32	</Type>
-      </stateActivationTime>
-      <spinFactor>
-        <Type>	FLOAT32	</Type>
-      </spinFactor>
-    </Properties>
-  </SPIN_GUN_STATE_STATUS>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>
@@ -2437,6 +2405,12 @@
       </stage>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_STATE>
+  <VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>	FIXED_DICT	  <Properties>
+      <stage>
+        <Type>	UINT8	</Type>
+      </stage>
+    </Properties>
+  </VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>
   <SPAWN_AVAILABLE_VEHICLE>	FIXED_DICT	  <Properties>
       <compDescr>
         <Type>	STRING	</Type>

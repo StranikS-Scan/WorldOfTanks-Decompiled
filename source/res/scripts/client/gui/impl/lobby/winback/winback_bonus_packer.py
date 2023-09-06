@@ -304,11 +304,11 @@ class WinbackDiscountBonusUIPacker(WinbackVehiclesBonusUIPacker):
         model.setNewExp(newXPPrice)
 
 
-def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+def packWinBackBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
     bonusIndexTotal = 0
+    bonusTooltipList = []
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
-    bonusTooltipList = []
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
@@ -318,11 +318,12 @@ def packBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=
                 bonusTooltipList = packer.getToolTip(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
+                bonusIdx = str(bonusIndexTotal)
                 if hasattr(item, 'setTooltipId'):
-                    item.setTooltipId(str(bonusIndexTotal))
+                    item.setTooltipId(bonusIdx)
                 model.addViewModel(item)
                 if tooltipData is not None:
-                    tooltipData[bonusIndexTotal] = bonusTooltipList[bonusIndex]
+                    tooltipData[bonusIdx] = bonusTooltipList[bonusIndex]
                 bonusIndexTotal += 1
 
     return

@@ -30,7 +30,7 @@ _logger = logging.getLogger(__name__)
 _CALLOUT_MESSAGES_BLOCK_DURATION = 15
 _HINT_TIMEOUT = 10
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
-_CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS, VIEW_ALIAS.COMP7_BATTLE_PAGE)
+_CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS, VIEW_ALIAS.COMP7_BATTLE_PAGE, 'chat')
 CommandReceivedData = namedtuple('CommandReceivedData', ('name', 'targetIdToAnswer'))
 _CALLOUT_COMMANDS_TO_REPLY_COMMANDS = {BATTLE_CHAT_COMMAND_NAMES.HELPME: BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
  BATTLE_CHAT_COMMAND_NAMES.TURNBACK: BATTLE_CHAT_COMMAND_NAMES.POSITIVE,
@@ -103,8 +103,8 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
             self.__radialMenuIsOpen = False
             self.__radialKeyDown = None
-            if self.hasDelayedCallback(self.__openRadialMenu):
-                self.stopCallback(self.__openRadialMenu)
+            if self.hasDelayedCallback(self.__delayOpenRadialMenu):
+                self.stopCallback(self.__delayOpenRadialMenu)
             self.__setAimingEnabled(isEnabled=True)
         return
 
@@ -122,12 +122,12 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
             if self.__radialKeyDown is None and isDown:
                 self.__radialKeyDown = key
-                if not self.hasDelayedCallback(self.__openRadialMenu) and avatar_getter.isVehicleAlive() and not isPlayerObserver:
+                if not self.hasDelayedCallback(self.__delayOpenRadialMenu) and avatar_getter.isVehicleAlive() and not isPlayerObserver:
                     self.__setAimingEnabled(isEnabled=False)
                     if self.__commandReceivedData is None and cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
                         self.__openRadialMenu()
                     else:
-                        self.delayCallback(_DELAY_FOR_OPENING_RADIAL_MENU, self.__openRadialMenu)
+                        self.delayCallback(_DELAY_FOR_OPENING_RADIAL_MENU, self.__delayOpenRadialMenu)
                 return True
             if self.__radialKeyDown is not None and not isDown:
                 if not self.__radialMenuIsOpen:
@@ -225,6 +225,12 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 self.__ui.setHideData(wasAnswered, commandReceived)
             CalloutController.fireCalloutDisplayEvent(False)
         return
+
+    def __delayOpenRadialMenu(self):
+        containerManager = self.__appLoader.getApp().containerManager
+        if containerManager.isModalViewsIsExists() or self.__appLoader.getApp().hasGuiControlModeConsumers(*_CONSUMERS_LOCKS):
+            return
+        self.__openRadialMenu()
 
     def __openRadialMenu(self):
         self.__radialMenuIsOpen = True

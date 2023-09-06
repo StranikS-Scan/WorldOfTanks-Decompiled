@@ -251,6 +251,7 @@ class _TechTreeDataProvider(object):
         return unlockProps
 
     def getOldAndNewCost(self, vehicleCD, vehicleLevel):
+        self.load()
         unlockProps = self.getUnlockProps(vehicleCD, vehicleLevel)
         return (unlockProps.xpCost, unlockProps.discount, unlockProps.xpFullCost) if unlockProps is not None else (0, 0, 0)
 

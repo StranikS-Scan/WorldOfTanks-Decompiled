@@ -12,6 +12,7 @@ from gui.shared import event_dispatcher
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
  KEYBOARD_KEYS.BACKWARD,
  KEYBOARD_KEYS.LEFT,
@@ -46,6 +47,7 @@ def getFixedKeysInfo():
 
 class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
     settingsCore = dependency.descriptor(ISettingsCore)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def onWindowClose(self):
         self.destroy()
@@ -73,11 +75,15 @@ class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
     def _dispose(self):
         if self.app is not None:
             self.app.unregisterGuiKeyHandler(self)
+        ctrl = self.sessionProvider.shared.calloutCtrl
+        if ctrl is not None:
+            ctrl.resetRadialMenuData()
         super(IngameHelpWindow, self)._dispose()
         return
 
 
 class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, ctx=None):
         super(IngameDetailsHelpWindow, self).__init__()
@@ -118,5 +124,8 @@ class IngameDetailsHelpWindow(IngameDetailsHelpWindowMeta, BattleGUIKeyHandler):
         if self.app is not None:
             self.app.unregisterGuiKeyHandler(self)
             self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.HELP_DETAILED)
+        ctrl = self.sessionProvider.shared.calloutCtrl
+        if ctrl is not None:
+            ctrl.resetRadialMenuData()
         super(IngameDetailsHelpWindow, self)._dispose()
         return

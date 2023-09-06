@@ -36,6 +36,8 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.DANGER_ZONE, _TIMER_STATES.CRITICAL_VIEW): 3,
  (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 4,
  (_TIMER_STATES.STUN_FLAME, _TIMER_STATES.WARNING_VIEW): 4,
+ (_TIMER_STATES.MAP_DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 4,
+ (_TIMER_STATES.WARNING_ZONE, _TIMER_STATES.WARNING_VIEW): 5,
  (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 5,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 6,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 7,
@@ -429,15 +431,17 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         data = [self._getNotificationTimerData(_TIMER_STATES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link),
          self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, overturnedIcon, link, description=overturnedText, color=overturnedColor, iconOffsetY=iconOffsetY),
          self._getNotificationTimerData(_TIMER_STATES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link),
-         self._getNotificationTimerData(_TIMER_STATES.DANGER_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DANGER_ICON, link, text=INGAME_GUI.DANGER_ZONE_INDICATOR, iconOffsetY=-20)]
+         self._getNotificationTimerData(_TIMER_STATES.DANGER_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DANGER_ICON, link, text=INGAME_GUI.DANGER_ZONE_INDICATOR, iconOffsetY=-10),
+         self._getNotificationTimerData(_TIMER_STATES.MAP_DEATH_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DANGER_ICON, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.GRAY),
+         self._getNotificationTimerData(_TIMER_STATES.WARNING_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.WARNING_ICON, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.YELLOW, text=INGAME_GUI.WARNING_ZONE_INDICATOR)]
         return data
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)]
         return data
 
-    def _getNotificationTimerData(self, typeId, iconName, linkage, color='', noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
+    def _getNotificationTimerData(self, typeId, iconName, linkage, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
         return {'typeId': typeId,
          'iconName': iconName,
          'linkage': linkage,
@@ -487,6 +491,20 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._timers.addTimer(_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW, 0, None)
         else:
             self._hideTimer(_TIMER_STATES.FIRE)
+        return
+
+    def __setVehicleInWaringZone(self, value):
+        if value.needToCloseTimer():
+            self._hideTimer(_TIMER_STATES.WARNING_ZONE)
+        else:
+            self._timers.addTimer(_TIMER_STATES.WARNING_ZONE, _TIMER_STATES.WARNING_VIEW, 0, None)
+        return
+
+    def __setVehicleInMapDeathZone(self, value):
+        if value.needToCloseTimer():
+            self._hideTimer(_TIMER_STATES.MAP_DEATH_ZONE)
+        else:
+            self._timers.addTimer(_TIMER_STATES.MAP_DEATH_ZONE, _TIMER_STATES.WARNING_VIEW, 0, None)
         return
 
     def _showTimer(self, typeID, totalTime, level, finishTime, startTime=None):
@@ -658,6 +676,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
          VEHICLE_VIEW_STATE.STUN,
          VEHICLE_VIEW_STATE.CAPTURE_BLOCKED,
          VEHICLE_VIEW_STATE.DANGER_ZONE,
+         VEHICLE_VIEW_STATE.WARNING_ZONE,
+         VEHICLE_VIEW_STATE.MAP_DEATH_ZONE,
          VEHICLE_VIEW_STATE.SMOKE,
          VEHICLE_VIEW_STATE.INSPIRE,
          VEHICLE_VIEW_STATE.DOT_EFFECT)
@@ -712,6 +732,10 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__updateRepairingTimer(**value)
         elif state == VEHICLE_VIEW_STATE.DANGER_ZONE:
             self.__updateDangerZoneWarningNotification(value)
+        elif state == VEHICLE_VIEW_STATE.WARNING_ZONE:
+            self.__setVehicleInWaringZone(value)
+        elif state == VEHICLE_VIEW_STATE.MAP_DEATH_ZONE:
+            self.__setVehicleInMapDeathZone(value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.__hideAll()
 

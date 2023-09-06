@@ -46,9 +46,10 @@ class _FortsBusinessHandler(PackageBusinessHandler):
         if window is not None:
             if event.ctx.get('modeFlags') == FUNCTIONAL_FLAG.UNIT_BROWSER:
                 window.onBrowseRallies()
-        self.loadViewWithDefName(alias, name, event.ctx)
+        self.loadViewWithDefName(alias, name, None, event.ctx)
         return
 
     def __showPrebattleWindow(self, event):
         alias = name = event.alias
-        self.loadViewWithDefName(alias, name, event.ctx)
+        self.loadViewWithDefName(alias, name, None, event.ctx)
+        return

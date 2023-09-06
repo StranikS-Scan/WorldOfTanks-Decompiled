@@ -14,3 +14,14 @@ class VehicleDestroyingComponent(object):
     def __init__(self):
         self.reactionID = None
         return
+
+
+@registerComponent
+class VehicleDamageLoggerComponent(object):
+    category = 'Loggers'
+    editorTitle = 'Vehicle Damage Logger Component'
+    domain = CGF.DomainOption.DomainServer | CGF.DomainOption.DomainEditor
+
+    def __init__(self):
+        self.topMostParentName = None
+        return

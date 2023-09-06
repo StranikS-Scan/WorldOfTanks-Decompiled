@@ -8,7 +8,7 @@ from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR
 from adisp import adisp_process
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -36,6 +36,8 @@ class SettingsCore(ISettingsCore):
         self.__interfaceScale = None
         self.__storages = None
         self.__options = None
+        self.__disabledStorages = set()
+        self.__overriddenUserSettings = None
         self.__isReady = False
         return
 
@@ -329,6 +331,7 @@ class SettingsCore(ISettingsCore):
         if self.__interfaceScale is not None:
             self.__interfaceScale.fini()
             self.__interfaceScale = None
+        self.__disabledStorages.clear()
         g_playerEvents.onDisconnected -= self.revertSettings
         g_playerEvents.onAvatarBecomeNonPlayer -= self.revertSettings
         g_playerEvents.onAccountBecomeNonPlayer -= self.revertSettings
@@ -398,10 +401,11 @@ class SettingsCore(ISettingsCore):
     def isSettingChanged(self, name, value):
         return not self.__options.getSetting(name).isEqual(value)
 
-    def applyStorages(self, restartApproved):
+    def applyStorages(self, restartApproved, force=False):
         confirmators = []
         for storage in self.__storages.values():
-            confirmators.append(storage.apply(restartApproved))
+            if storage not in self.__disabledStorages or force:
+                confirmators.append(storage.apply(restartApproved))
 
         return confirmators
 
@@ -419,7 +423,28 @@ class SettingsCore(ISettingsCore):
 
     def clearStorages(self):
         for storage in self.__storages.values():
-            storage.clear()
+            if storage not in self.__disabledStorages:
+                storage.clear()
+
+    def setOverrideSettings(self, overrideDict, disableStorages):
+        if self.__overriddenUserSettings is not None:
+            LOG_ERROR('SettingsCore.setOverrideSettings: settings are already overridden!')
+            return
+        else:
+            self.__overriddenUserSettings = {setting:self.getSetting(setting) for setting in overrideDict}
+            self.__disabledStorages = set((self.__storages[name] for name in disableStorages))
+            self.applySettings(overrideDict)
+            return
+
+    def unsetOverrideSettings(self):
+        if self.__overriddenUserSettings is None:
+            LOG_ERROR('SettingsCore.unsetOverrideSettings: settings were not overridden!')
+            return
+        else:
+            self.__disabledStorages.clear()
+            self.applySettings(self.__overriddenUserSettings)
+            self.__overriddenUserSettings = None
+            return
 
     def isReady(self):
         return self.__isReady

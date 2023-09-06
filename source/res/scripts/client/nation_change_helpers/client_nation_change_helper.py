@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/nation_change_helpers/client_nation_change_helper.py
-from CurrentVehicle import g_currentVehicle
+import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup, isMainInNationGroup
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 def getValidVehicleCDForNationChange(vehCompDescr):
     tempVehCD = vehCompDescr
@@ -20,20 +22,20 @@ def getValidVehicleCDForNationChange(vehCompDescr):
     return tempVehCD
 
 
-def getChangeNationTooltip():
-    isChangeNationVisible = g_currentVehicle.isPresent() and g_currentVehicle.item.hasNationGroup
-    isNationChangeAvailable = g_currentVehicle.isPresent() and g_currentVehicle.item.isNationChangeAvailable
+def getChangeNationTooltip(vehicle):
+    isChangeNationVisible = vehicle is not None and vehicle.hasNationGroup
+    isNationChangeAvailable = vehicle is not None and vehicle.isNationChangeAvailable
     if isChangeNationVisible:
         if isNationChangeAvailable:
             changeNationTooltipHeader = R.strings.tooltips.hangar.nationChange.header()
             changeNationTooltipBody = R.strings.tooltips.hangar.nationChange.body()
         else:
             changeNationTooltipHeader = R.strings.tooltips.hangar.nationChange.disabled.header()
-            if g_currentVehicle.item.isBroken:
+            if vehicle.isBroken:
                 changeNationTooltipBody = R.strings.tooltips.hangar.nationChange.disabled.body.destroyed()
-            elif g_currentVehicle.item.isInBattle:
+            elif vehicle.isInBattle:
                 changeNationTooltipBody = R.strings.tooltips.hangar.nationChange.disabled.body.inBattle()
-            elif g_currentVehicle.item.isInUnit:
+            elif vehicle.isInUnit:
                 changeNationTooltipBody = R.strings.tooltips.hangar.nationChange.disabled.body.inSquad()
             else:
                 changeNationTooltipBody = ''

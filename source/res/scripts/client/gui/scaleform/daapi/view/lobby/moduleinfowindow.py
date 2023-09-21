@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MENU import MENU
@@ -15,7 +13,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from constants import SHELL_TYPES
 
 class ModuleInfoWindow(ModuleInfoMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -51,10 +48,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
             dataProvider = ModuleBlockTooltipData(context=contexts.ModuleInfoContext())
         data = dataProvider.buildToolTip(*tooltipArgs)
         if itemTypeID == GUI_ITEM_TYPE.SHELL:
-            if module.type == SHELL_TYPES.FLAME:
-                titleArr = [module.userType, backport.text(R.strings.item_types.shell.kinds.FLAME()), module.userName]
-            else:
-                titleArr = [module.userType, module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
+            titleArr = [module.userType, module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
         else:
             titleArr = [module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
         data['windowTitle'] = ' '.join(titleArr)

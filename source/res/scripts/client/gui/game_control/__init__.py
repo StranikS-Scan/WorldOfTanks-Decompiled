@@ -75,18 +75,20 @@ def getGameControllersConfig(manager):
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
-    from gui.game_control.collective_goal_entry_point_controller import CollectiveGoalEntryPointController
-    from gui.game_control.collective_goal_marathons_controller import CollectiveGoalMarathonsController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
+    from gui.game_control.event_lootboxes_controller import EventLootBoxesController
     from gui.entitlements.entitlements_controller import EntitlementsController
     from gui.game_control.winback_controller import WinbackController
     from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
     from gui.game_control.achievements20_controller import Achievements20Controller as _Ach20Ctrl
     from gui.limited_ui.lui_controller import LimitedUIController
-    from gui.game_control.debut_boxes_controller import DebutBoxesController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
+    from gui.game_control.loot_boxes_controller import LootBoxesController
+    from event_settings.event_settings_controller import EventSettingsController
+    from gui.wt_event.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -143,6 +145,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
+    _config(_interface.ILootBoxesController, LootBoxesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -160,14 +163,14 @@ def getGameControllersConfig(manager):
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
+    _config(_interface.IEventLootBoxesController, EventLootBoxesController())
     _config(_interface.IEntitlementsController, EntitlementsController())
     _config(_interface.ICollectionsSystemController, CollectionsSystemController())
     _config(_interface.IWinbackController, WinbackController())
     _config(_interface.IDailyQuestIntroPresenter, DailyQuestsIntroPresenter())
-    _config(_interface.ICollectiveGoalEntryPointController, CollectiveGoalEntryPointController())
-    _config(_interface.ICollectiveGoalMarathonsController, CollectiveGoalMarathonsController())
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
-    _config(_interface.IDebutBoxesController, DebutBoxesController())
+    _config(_interface.IEventSettingsController, EventSettingsController())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

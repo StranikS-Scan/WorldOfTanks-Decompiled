@@ -152,6 +152,10 @@ class CommanderUniversalistSkill(ExtendedSkill):
     def efficiency(self):
         return self._setOfParameters[0]
 
+    @property
+    def chanceToHitPerLevel(self):
+        return self._setOfParameters[1]
+
 
 class CommanderSkillWithDelay(ExtendedSkill):
     __slots__ = ()
@@ -215,6 +219,10 @@ class RadiomanLastEffortSkill(ExtendedSkill):
     @property
     def durationPerLevel(self):
         return self._setOfParameters[0]
+
+    @property
+    def chanceToHitPerLevel(self):
+        return self._setOfParameters[1]
 
 
 class CrewMasterySkill(ExtendedSkill):

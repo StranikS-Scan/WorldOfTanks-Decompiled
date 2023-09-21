@@ -18,6 +18,7 @@ class LuiRules(enum.Enum):
     LOBBY_HEADER_COUNTERS_MISSIONS = 'missions'
     MISSIONS_MARATHON_VIEW = 'MissionsMarathonView'
     LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
+    REFERRAL_BTN_COUNTER = 'referralButtonCounter'
     AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
     AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
     C7N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'
@@ -46,7 +47,6 @@ class LuiRules(enum.Enum):
     BR_ENTRY_POINT = 'BREntryPoint'
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
-    GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

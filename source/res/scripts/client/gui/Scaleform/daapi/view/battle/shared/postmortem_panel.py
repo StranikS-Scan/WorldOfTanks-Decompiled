@@ -303,6 +303,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
+        if respawnAvailable:
+            self.as_hideComponentsS()
         self._updateVehicleInfo()
 
     def __onRespawnBaseMoving(self):

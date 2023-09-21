@@ -146,7 +146,8 @@ _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom
  ARENA_BONUS_TYPE.WINBACK: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='WINBACK'),
  ARENA_BONUS_TYPE.EPIC_BATTLE: BattlePassIntegrationEpicBattle(teamSize=30, bonusTypeName='EPIC_BATTLE'),
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: BattlePassIntegrationBattleRoyale(teamSize=20, bonusTypeName='BATTLE_ROYALE_SOLO'),
- ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: BattlePassIntegrationBattleRoyale(teamSize=10, bonusTypeName='BATTLE_ROYALE_SQUAD')}
+ ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: BattlePassIntegrationBattleRoyale(teamSize=10, bonusTypeName='BATTLE_ROYALE_SQUAD'),
+ ARENA_BONUS_TYPE.EVENT_BATTLES: BattlePassIntegrationRandom(teamSize=6, bonusTypeName='EVENT_BATTLES')}
 
 def getBattlePassByGameMode(arenaBonusType):
     return _BATTLEPASS_BY_GAMEMODE.get(arenaBonusType)

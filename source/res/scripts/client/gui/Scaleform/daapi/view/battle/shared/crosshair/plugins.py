@@ -10,7 +10,8 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
@@ -54,7 +55,6 @@ _DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STAT
  CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
  CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
  CHARGE_MARKER_STATE.DIMMED: DUAL_GUN_MARKER_STATE.DIMMED}
-_STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.FLAMETHROWER)
 
 def createPlugins():
     resultPlugins = {'core': CorePlugin,
@@ -168,7 +168,10 @@ class CrosshairPlugin(IPlugin):
 
     def _isHideAmmo(self):
         arenaGuiTypeVisitor = self.sessionProvider.arenaVisitor.gui
-        return arenaGuiTypeVisitor.isBootcampBattle() or arenaGuiTypeVisitor.isMapsTraining()
+        isAmmoInfinite = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.INFINITE_AMMO)
+        isBootcamp = arenaGuiTypeVisitor.isBootcampBattle()
+        isMapsTraining = arenaGuiTypeVisitor.isMapsTraining()
+        return isAmmoInfinite or isBootcamp or isMapsTraining
 
 
 class CorePlugin(CrosshairPlugin):
@@ -746,23 +749,18 @@ class _DistancePlugin(CrosshairPlugin):
 
 
 class TargetDistancePlugin(_DistancePlugin):
-    __slots__ = ('__trackID', '__trackEnemy', '__trackAlly', '__currentEntityInFocus')
+    __slots__ = ('__trackID',)
 
     def __init__(self, parentObj):
         super(TargetDistancePlugin, self).__init__(parentObj)
         self.__trackID = 0
-        self.__currentEntityInFocus = 0
-        self.__trackEnemy = False
-        self.__trackAlly = False
 
     def start(self):
         super(TargetDistancePlugin, self).start()
-        self.__setEnabled()
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is None:
             raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def stop(self):
@@ -770,7 +768,6 @@ class TargetDistancePlugin(_DistancePlugin):
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         return
 
     def _update(self):
@@ -786,9 +783,9 @@ class TargetDistancePlugin(_DistancePlugin):
             self.__stopTrack(immediate=True)
 
     def __startTrack(self, vehicleID):
-        self.__stopTrack(immediate=True)
+        self._interval.stop()
         target = BigWorld.entity(vehicleID)
-        if target is not None and self.__shouldTrackVehicle(target):
+        if target is not None:
             self.__trackID = vehicleID
             self.__updateDistance(target)
             self._interval.start()
@@ -800,26 +797,7 @@ class TargetDistancePlugin(_DistancePlugin):
         self.__trackID = 0
 
     def __updateDistance(self, target):
-        self._parentObj.setDistance(int(round(avatar_getter.getDistanceToTarget(target))))
-
-    def __onSettingsChanged(self, diff):
-        settingsToUpdateTracking = {MARKERS.ENEMY, MARKERS.ALLY}
-        if settingsToUpdateTracking & set(diff):
-            self.__setEnabled()
-
-    def __setEnabled(self):
-        getter = self.settingsCore.getSetting
-        markerSettings = getter(MARKERS.ENEMY)
-        self.__trackEnemy = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
-        markerSettings = getter(MARKERS.ALLY)
-        self.__trackAlly = not (markerSettings['markerBaseVehicleDist'] or markerSettings['markerAltVehicleDist'])
-        if self.__currentEntityInFocus:
-            self.__startTrack(self.__currentEntityInFocus)
-
-    def __shouldTrackVehicle(self, target):
-        if not target.isAlive():
-            return True
-        return self.__trackAlly if BigWorld.player().team == target.publicInfo['team'] else self.__trackEnemy
+        self._parentObj.setDistance(int(avatar_getter.getDistanceToTarget(target)))
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.ENTITY_IN_FOCUS:
@@ -829,10 +807,8 @@ class TargetDistancePlugin(_DistancePlugin):
             if entityType == ENTITY_IN_FOCUS_TYPE.VEHICLE:
                 if isInFocus:
                     self.__startTrack(vehicleID)
-                    self.__currentEntityInFocus = vehicleID
                 else:
-                    self.__stopTrack(not self._interval.isStarted())
-                    self.__currentEntityInFocus = 0
+                    self.__stopTrack()
 
 
 class GunMarkerDistancePlugin(_DistancePlugin):
@@ -850,7 +826,7 @@ class GunMarkerDistancePlugin(_DistancePlugin):
             self._parentObj.clearDistance(immediate=True)
 
     def __updateDistance(self):
-        self._parentObj.setDistance(int(round(avatar_getter.getDistanceToGunMarker())))
+        self._parentObj.setDistance(int(avatar_getter.getDistanceToGunMarker()))
 
 
 class GunMarkersInvalidatePlugin(CrosshairPlugin):
@@ -1401,7 +1377,7 @@ class ArtyCameraDistancePlugin(_DistancePlugin):
 
     def __updateCameraDistance(self):
         inputHandler = avatar_getter.getInputHandler()
-        if inputHandler is None or inputHandler.ctrlModeName not in _STRATEGIC_VIEW or not inputHandler.ctrl.isEnabled:
+        if inputHandler is None or inputHandler.ctrlModeName not in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY) or not inputHandler.ctrl.isEnabled:
             return
         else:
             if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and self.settingsCore.getSetting(SPGAim.AUTO_CHANGE_AIM_MODE):

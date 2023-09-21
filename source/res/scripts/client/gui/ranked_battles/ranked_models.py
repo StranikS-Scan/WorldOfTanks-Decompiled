@@ -63,12 +63,8 @@ class RankedSeason(GameSeason):
         super(RankedSeason, self).__init__(cycleInfo, seasonData)
         self.__isSpecial = isSpecial
 
-    def _buildCycle(self, idx, status, number, rawData):
-        return RankedCycle(idx, status, rawData['start'], rawData['end'], number, bool(rawData.get('announce', False)))
-
-    @property
-    def isSpecial(self):
-        return self.__isSpecial
+    def _buildCycle(self, idx, status, start, end, number, announceOnly):
+        return RankedCycle(idx, status, start, end, number, announceOnly)
 
     def getUserName(self):
         if self.__isSpecial:

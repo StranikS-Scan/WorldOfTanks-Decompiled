@@ -20,11 +20,6 @@ def notifyCarousel(clientID, notify=True):
      'value': notify}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def updatePrivateCarouselMembers(clientID, memberDBID, memberUsername):
-    g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_MULTI_CHANGE, {'dbID': memberDBID,
-     'userName': memberUsername}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def showConnectToSecureChannelWindow(channel):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, getViewName(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, channel.getClientID())), ctx={'channel': channel}), scope=EVENT_BUS_SCOPE.LOBBY)
 

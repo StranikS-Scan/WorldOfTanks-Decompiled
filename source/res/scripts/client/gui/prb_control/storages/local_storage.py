@@ -56,12 +56,6 @@ class SessionStorage(LocalStorage):
         arenaVisitor = createByAvatar()
         self._isSelected = self._determineSelection(arenaVisitor)
 
-    def shouldBeSelectedByDefault(self):
-        return False
-
-    def getQueueTypeToReplace(self):
-        return None
-
     def _determineSelection(self, arenaVisitor):
         return arenaVisitor.gui.guiType == self._GUI_TYPE
 
@@ -83,6 +77,9 @@ class RecentPrbStorage(LocalStorage):
 
     def isModeSelected(self):
         return collectCanSelectPrbEntity(self._queueType)()
+
+    def clear(self):
+        self._queueType = QUEUE_TYPE.UNKNOWN
 
     def onAvatarBecomePlayer(self):
         arenaVisitor = createByAvatar()

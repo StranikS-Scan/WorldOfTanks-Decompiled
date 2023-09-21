@@ -6,6 +6,8 @@ import SoundGroups
 import WWISE
 from Event import Event
 from PlayerEvents import g_playerEvents
+from account_helpers import AccountSettings
+from account_helpers.settings_core.settings_constants import SOUND
 from helpers import i18n
 from story_mode.skeletons.voiceover_controller import IVoiceoverManager
 _UPDATE_PERIOD = 0.1
@@ -98,6 +100,8 @@ class VoiceoverManager(IVoiceoverManager):
             return
 
     def _soundMarkerHandler(self, marker):
+        if not AccountSettings.getSettings(SOUND.SUBTITLES):
+            return
         if marker == '#end' and self._currentSubtitle:
             self._currentSubtitle = ''
             self.onSubtitleHide()

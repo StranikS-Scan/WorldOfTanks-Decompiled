@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag, isIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
@@ -342,8 +342,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__setExpirations(model)
         if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
             self.__setStyleTaken(model)
-            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
-            model.setIsStyleProgressive(styleInfo.isProgressive)
         self.__updateRewardSelectButton(model=model)
 
     def __setExpirations(self, model):
@@ -491,25 +489,19 @@ class BattlePassProgressionsView(ViewImpl):
         if level is None:
             return
         else:
-            style = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
-            vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
-            if style.isProgressive:
-                showBattlePassStyleProgressionPreview(vehicleCD, style, style.getDescription(), self.__getPreviewCallback(), chapterId=self.__chapterID, styleLevel=int(level))
-            else:
-                self.__showStylePreview(style, vehicleCD)
+            styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
+            vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
+            showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), self.__getPreviewCallback(), chapterId=self.__chapterID, styleLevel=int(level))
             return
 
     def __onExtraPreviewClick(self):
-        style = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
-        vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
-        self.__showStylePreview(style, vehicleCD)
-
-    def __showStylePreview(self, style, vehicleCD):
+        styleInfo = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
+        vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=self.__itemsCache)
         itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
-        showStylePreview(vehicleCD, style=style, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
+        showStylePreview(vehicleCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
          'tabIDs': (TabID.VEHICLE, TabID.STYLE),
          'currentTabID': TabID.STYLE,
-         'style': style}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
+         'style': styleInfo}, itemsPack=itemsPack, backCallback=self.__getPreviewCallback())
 
     def __getPreviewCallback(self):
         return partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
@@ -605,8 +597,6 @@ class BattlePassProgressionsView(ViewImpl):
         return self.__battlePass.getCurrentChapterID() or first(sorted(self.__battlePass.getChapterIDs(), cmp=chaptersIDsComparator))
 
     def __showIntroVideo(self, onStart=False):
-        if not isIntroVideoExist():
-            return False
         settings = self.__settingsCore.serverSettings
         if onStart:
             if settings.getBPStorage().get(BattlePassStorageKeys.INTRO_VIDEO_SHOWN):

@@ -3,7 +3,7 @@
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getIntroVideoURL, isIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getIntroVideoURL
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
@@ -65,7 +65,6 @@ class IntroView(ViewImpl):
             tx.setAbout(_TEXTS.aboutButton())
             tx.setButtonLabel(_TEXTS.button())
             tx.setBackground(_BG.common())
-            tx.setIsVideoExist(isIntroVideoExist())
 
     @staticmethod
     def __createSlideModel(slideName, **kwargs):
@@ -81,8 +80,7 @@ class IntroView(ViewImpl):
 
     @staticmethod
     def __showVideo():
-        if isIntroVideoExist():
-            showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
+        showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
 
     def __genResCommPlaceholders(self):
         commonResArgs = {}

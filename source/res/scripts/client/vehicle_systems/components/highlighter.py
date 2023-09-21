@@ -4,9 +4,6 @@ import BigWorld
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from EdgeDrawer import HighlightComponent
-import CGF
-from GenericComponents import DynamicModelComponent
-from cgf_script.managers_registrator import autoregister, onProcessQuery
 import cgf_obsolete_script.py_component
 
 class Highlighter(cgf_obsolete_script.py_component.Component):
@@ -142,40 +139,3 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
             if status & self.HIGHLIGHT_ON:
                 root.createComponent(HighlightComponent, args[0], args[1], args[2], args[3], False)
         return
-
-    def observeGameObjectForDynamicModels(self, appearance, gameObject):
-        hm = CGF.HierarchyManager(appearance.spaceID)
-        childComponents = hm.findComponentsInHierarchy(gameObject, DynamicModelComponent)
-        for childGO, _ in childComponents:
-            childGO.createComponent(EdgeDrawInitializerComponent, self)
-
-
-class EdgeDrawInitializerComponent(object):
-    INITIALIZATION_TIMEOUT_TICKS = 10
-
-    def __init__(self, highlighter):
-        self.highlighter = highlighter
-        self.ticksProcessed = 0
-
-    def tryInit(self, dynamicModelComponent):
-        self.ticksProcessed += 1
-        if not dynamicModelComponent.isValid():
-            return False
-        if self.highlighter.isOn:
-            forceSimple = self.highlighter.isSimpleEdge
-            self.highlighter.highlight(False)
-            self.highlighter.highlight(True, forceSimple)
-        return True
-
-    def timeoutOccurred(self):
-        return self.ticksProcessed > self.INITIALIZATION_TIMEOUT_TICKS
-
-
-@autoregister(presentInAllWorlds=True)
-class EdgeDrawInitializer(CGF.ComponentManager):
-
-    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerComponent, DynamicModelComponent, period=0.5)
-    def processEdgeDrawerInitialization(self, gameObject, edgeDrawInitializerComponent, dynamicModelComponent):
-        inited = edgeDrawInitializerComponent.tryInit(dynamicModelComponent)
-        if inited or edgeDrawInitializerComponent.timeoutOccurred():
-            gameObject.removeComponent(edgeDrawInitializerComponent)

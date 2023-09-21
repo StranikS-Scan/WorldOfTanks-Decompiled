@@ -6,6 +6,7 @@ from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 BattleReplay, SoundGroups, MusicControllerWWISE, helpers = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers')
 
 class SoundMeta(Meta):
@@ -277,5 +278,47 @@ class SetGlobalSoundSwitch(Block, SoundMeta):
         self._switchValue = self._makeDataInputSlot('switchValue', SLOT_TYPE.STR)
 
     def _setValue(self):
-        SoundGroups.g_instance.setState(self._switchName.getValue(), self._switchValue.getValue())
+        SoundGroups.g_instance.setSwitch(self._switchName.getValue(), self._switchValue.getValue())
+        self._out.call()
+
+
+class PlaySoundOnVehicleSoundObject(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(PlaySoundOnVehicleSoundObject, self).__init__(*args, **kwargs)
+        self._soundObjNameToObjIndex = {'chassis': TankSoundObjectsIndexes.CHASSIS,
+         'engine': TankSoundObjectsIndexes.ENGINE,
+         'gun': TankSoundObjectsIndexes.GUN,
+         'hit': TankSoundObjectsIndexes.HIT,
+         'count': TankSoundObjectsIndexes.COUNT}
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._sndObjName = self._makeDataInputSlot('vehicleSoundObjName', SLOT_TYPE.STR)
+        self._sndName = self._makeDataInputSlot('soundName', SLOT_TYPE.STR)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        vehicle = self._vehicle.getValue()
+        if vehicle and vehicle.appearance:
+            soundObjectIndex = self._soundObjNameToObjIndex.get(self._sndObjName.getValue(), None)
+            if soundObjectIndex is None:
+                soundObjectIndex = TankSoundObjectsIndexes.CHASSIS
+            soundObject = vehicle.appearance.engineAudition.getSoundObject(soundObjectIndex)
+            if soundObject:
+                soundObject.play(self._sndName.getValue())
+        self._out.call()
+        return
+
+
+class SetGlobalSoundState(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetGlobalSoundState, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._stateGroupName = self._makeDataInputSlot('stateGroupName', SLOT_TYPE.STR)
+        self._stateName = self._makeDataInputSlot('stateName', SLOT_TYPE.STR)
+
+    def _setValue(self):
+        SoundGroups.g_instance.setState(self._stateGroupName.getValue(), self._stateName.getValue())
         self._out.call()

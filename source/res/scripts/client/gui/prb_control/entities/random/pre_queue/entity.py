@@ -9,7 +9,7 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
-from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
+from gui.prb_control.entities.base.pre_queue.vehicles_watcher import RandomRestrictedVehiclesWatcher
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
@@ -29,7 +29,7 @@ class RandomEntity(PreQueueEntity):
         return
 
     def init(self, ctx=None):
-        self.__watcher = BaseVehiclesWatcher()
+        self.__watcher = RandomRestrictedVehiclesWatcher()
         self.__watcher.start()
         return super(RandomEntity, self).init(ctx)
 

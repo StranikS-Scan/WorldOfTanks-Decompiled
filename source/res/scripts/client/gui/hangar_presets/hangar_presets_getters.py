@@ -56,3 +56,8 @@ class Comp7PresetsGetter(DefaultPresetsGetter):
 class MapboxPresetsGetter(DefaultPresetsGetter):
     __slots__ = ()
     _QUEUE_TYPE = QUEUE_TYPE.MAPBOX
+
+
+class WtEventPresetsGetter(DefaultPresetsGetter):
+    __slots__ = ()
+    _QUEUE_TYPE = QUEUE_TYPE.EVENT_BATTLES

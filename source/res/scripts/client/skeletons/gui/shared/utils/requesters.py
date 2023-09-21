@@ -326,18 +326,6 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def battleDenunciationsLeft(self):
-        raise NotImplementedError
-
-    @property
-    def hangarDenunciationsLeft(self):
-        raise NotImplementedError
-
-    @property
-    def hangarDenunciations(self):
-        raise NotImplementedError
-
-    @property
     def freeVehiclesLeft(self):
         raise NotImplementedError
 
@@ -355,10 +343,6 @@ class IStatsRequester(IRequester):
 
     @property
     def SPA(self):
-        raise NotImplementedError
-
-    @property
-    def refSystem20(self):
         raise NotImplementedError
 
     @property
@@ -1230,26 +1214,4 @@ class IAchievements20Requester(IRequester):
         raise NotImplementedError
 
     def getLayoutLength(self):
-        raise NotImplementedError
-
-
-class IArmoryYardRequester(IRequester):
-
-    @property
-    def data(self):
-        raise NotImplementedError
-
-
-class IReferralProgramRequester(IRequester):
-
-    def getRPPgbPoints(self):
-        raise NotImplementedError
-
-    def getRPExpirationTime(self):
-        raise NotImplementedError
-
-    def getRecruitDelta(self):
-        raise NotImplementedError
-
-    def getRPPassiveIncome(self):
         raise NotImplementedError

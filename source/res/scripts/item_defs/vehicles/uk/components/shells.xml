@@ -3346,7 +3346,9 @@
     <caliber>	139.7	</caliber>
     <explosionRadius>	6.8	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	15.4	</stunDuration>
+    <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3395,7 +3397,9 @@
     <caliber>	152.4	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	16.2	</stunDuration>
+    <stunDuration>	25	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeSH	</effects>
     <damage>
@@ -3444,7 +3448,9 @@
     <caliber>	182.9	</caliber>
     <explosionRadius>	9.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	18.2	</stunDuration>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3556,7 +3562,9 @@
     <caliber>	233.7	</caliber>
     <explosionRadius>	11.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	19.2	</stunDuration>
+    <stunDuration>	33	</stunDuration>
+    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.60	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -3824,57 +3832,34 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_17pdr_AP_Mk3T_MapsTraining_Dummy_MT_2>
-  <_120mm_AP-T_L1A1V>
-    <id>	31001	</id>
-    <userString>	#gb_vehicles:_120mm_AP-T_L1A1V	</userString>
+  <_2pdr_AP_Mk.IXBT_NewOnBoarding>
+    <id>	0	</id>
+    <userString>	#gb_vehicles:_2pdr_AP_Mk.IXBT	</userString>
     <icon>	ap	</icon>
-    <price>	1160	</price>
+    <price>	30	</price>
     <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	120	</caliber>
+    <caliber>	40	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing	</effects>
+    <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	440	</armor>
-      <devices>	165	</devices>
+      <armor>	50	</armor>
+      <devices>	54	</devices>
     </damage>
-  </_120mm_AP-T_L1A1V>
-  <_120mm_APDS_L1A1V>
-    <id>	31002	</id>
-    <userString>	#gb_vehicles:_120mm_APDS_L1A1V	</userString>
-    <icon>	ap_cr_premium	</icon>
-    <price>	4800	</price>
-    <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	120	</caliber>
+    <notInShop>	True	</notInShop>
+  </_2pdr_AP_Mk.IXBT_NewOnBoarding>
+  <_17pdr_AP_Mk3T_NewOnBoarding>
+    <id>	10	</id>
+    <userString>	#gb_vehicles:_17pdr_AP_Mk3T	</userString>
+    <icon>	ap	</icon>
+    <price>	175	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76.2	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	440	</armor>
-      <devices>	165	</devices>
+      <armor>	45	</armor>
+      <devices>	105	</devices>
     </damage>
-  </_120mm_APDS_L1A1V>
-  <_120mm_HE_L1A1V>
-    <id>	31003	</id>
-    <userString>	#gb_vehicles:_120mm_HE_L1A1V	</userString>
-    <icon>	he_modern	</icon>
-    <price>	1200	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	120	</caliber>
-    <explosionRadius>	2.42	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
-    <damage>
-      <armor>	530	</armor>
-      <devices>	165	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	2.42	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	265	</armor>
-        <devices>	85	</devices>
-      </damage>
-    </armorSpalls>
-  </_120mm_HE_L1A1V>
+    <notInShop>	True	</notInShop>
+  </_17pdr_AP_Mk3T_NewOnBoarding>
 </shells.xml>

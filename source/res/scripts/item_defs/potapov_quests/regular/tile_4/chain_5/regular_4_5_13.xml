@@ -14,8 +14,8 @@
                 <greaterOrEqual>	8	</greaterOrEqual>
               </vehicleDamage>
               <results>
-                <key>	stunDuration	</key>
-                <greaterOrEqual>	100	</greaterOrEqual>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	10	</greaterOrEqual>
               </results>
             </or>
           </and>
@@ -73,8 +73,8 @@
                 <greaterOrEqual>	8	</greaterOrEqual>
               </vehicleDamage>
               <results>
-                <key>	stunDuration	</key>
-                <greaterOrEqual>	100	</greaterOrEqual>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	10	</greaterOrEqual>
               </results>
             </or>
             <win></win>
@@ -115,8 +115,8 @@
                 <greaterOrEqual>	8	</greaterOrEqual>
               </vehicleDamage>
               <results>
-                <key>	stunDuration	</key>
-                <greaterOrEqual>	100	</greaterOrEqual>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	10	</greaterOrEqual>
               </results>
             </or>
             <win></win>

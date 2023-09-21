@@ -29,6 +29,9 @@ from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBa
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
 from gui.impl.lobby.winback.popovers.winback_leave_mode_popover_view import WinbackLeaveModePopoverView
+from gui.impl.lobby.wt_event.tooltips.wt_event_header_widget_tooltip_view import WtEventHeaderWidgetTooltipView
+from gui.impl.lobby.wt_event.tooltips.wt_event_stamp_tooltip_view import WtEventStampTooltipView
+from gui.impl.lobby.wt_event.tooltips.wt_event_ticket_tooltip_view import WtEventTicketTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -64,14 +67,18 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
+ ModeSelectorTooltipsConstants.EVENT_BATTLES_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
      R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
+     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip,
+     R.views.lobby.wt_event.tooltips.WtEventHeaderWidgetTooltipView(): WtEventHeaderWidgetTooltipView,
+     R.views.lobby.wt_event.tooltips.WtEventTicketTooltipView(): WtEventTicketTooltipView,
+     R.views.lobby.wt_event.tooltips.WtEventStampTooltipView(): WtEventStampTooltipView}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())

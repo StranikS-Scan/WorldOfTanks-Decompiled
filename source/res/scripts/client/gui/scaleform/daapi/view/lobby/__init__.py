@@ -22,7 +22,6 @@ def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.lobby.rally.UnitUserCMHandler import UnitUserCMHandler
     return ((CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, user_cm_handlers.UserVehicleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.BASE_USER, user_cm_handlers.BaseUserCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.BASE_USER_APPEAL, user_cm_handlers.BaseUserAppealCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, UnitUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler))
@@ -48,6 +47,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import MissionAwardWindow
     from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue
+    from gui.Scaleform.daapi.view.lobby.event_battle_queue import EventBattleQueue
     from gui.Scaleform.daapi.view.lobby.BrowserWindow import BrowserWindow
     from gui.Scaleform.daapi.view.lobby.Browser import Browser
     from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
@@ -98,6 +98,7 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, BootcampComponentOverride(LobbyVehicleMarkerView, BCLobbyVehicleMarkerView), 'lobbyVehicleMarkerView.swf', WindowLayer.MARKER, None, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.EVENT_BATTLE_QUEUE, EventBattleQueue, 'eventBattleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -184,6 +185,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.AWARD_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.EVENT_BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),

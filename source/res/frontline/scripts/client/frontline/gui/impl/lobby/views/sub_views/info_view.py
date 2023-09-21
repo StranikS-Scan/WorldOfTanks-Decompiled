@@ -52,12 +52,13 @@ class InfoView(ViewImpl):
             ranksInfo = self.__epicController.getPlayerRanksWithBonusInfo()
             ranks = vm.getRanksWithPoints()
             ranks.clear()
-            for rankLvl, (points, xpBonus, _) in sorted(ranksInfo.iteritems()):
+            for rankLvl, (points, xpBonus, effectivenessBonus) in sorted(ranksInfo.iteritems()):
                 rankItem = RankItemModel()
                 rankItem.setRankName(PLAYER_RANK.NAMES[rankLvl])
                 rankItemPoints = rankItem.getRankPoints()
                 rankItemPoints.addNumber(points)
                 rankItemPoints.addNumber(xpBonus)
+                rankItemPoints.addReal(effectivenessBonus)
                 ranks.addViewModel(rankItem)
 
     def __onViewClose(self):

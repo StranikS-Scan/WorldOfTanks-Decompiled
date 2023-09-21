@@ -17,6 +17,6 @@ class MissionTooltip(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(MissionTooltip, self)._onLoading(*args, **kwargs)
-        self.viewModel.setVehicleName(R.strings.ussr_vehicles.T_34_85())
+        self.viewModel.setVehicleName(R.strings.usa_vehicles.M4A3E8_Sherman())
         self.viewModel.setVehicleIcon(R.images.story_mode.gui.maps.icons.missionSelection.tooltip.vehicle())
-        self.viewModel.setVehicleDescription(R.strings.ussr_vehicles.T_34_85_descr())
+        self.viewModel.setVehicleDescription(R.strings.usa_vehicles.M4A3E8_Sherman_descr())

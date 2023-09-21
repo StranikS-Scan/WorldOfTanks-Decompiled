@@ -27,7 +27,7 @@ class ButtonStates(Enum):
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onChapterChoice', 'onViewLoaded')
 
-    def __init__(self, properties=45, commands=15):
+    def __init__(self, properties=44, commands=15):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -258,35 +258,29 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setIsStyleTaken(self, value):
         self._setBool(39, value)
 
-    def getIsStyleProgressive(self):
+    def getIsSeasonEndingSoon(self):
         return self._getBool(40)
 
-    def setIsStyleProgressive(self, value):
+    def setIsSeasonEndingSoon(self, value):
         self._setBool(40, value)
 
-    def getIsSeasonEndingSoon(self):
+    def getIsExtra(self):
         return self._getBool(41)
 
-    def setIsSeasonEndingSoon(self, value):
+    def setIsExtra(self, value):
         self._setBool(41, value)
 
-    def getIsExtra(self):
+    def getHasExtra(self):
         return self._getBool(42)
 
-    def setIsExtra(self, value):
+    def setHasExtra(self, value):
         self._setBool(42, value)
 
-    def getHasExtra(self):
-        return self._getBool(43)
-
-    def setHasExtra(self, value):
-        self._setBool(43, value)
-
     def getExpireTime(self):
-        return self._getNumber(44)
+        return self._getNumber(43)
 
     def setExpireTime(self, value):
-        self._setNumber(44, value)
+        self._setNumber(43, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -326,7 +320,6 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('showReplaceRewardsAnimations', False)
         self._addStringProperty('buttonState')
         self._addBoolProperty('isStyleTaken', False)
-        self._addBoolProperty('isStyleProgressive', False)
         self._addBoolProperty('isSeasonEndingSoon', False)
         self._addBoolProperty('isExtra', False)
         self._addBoolProperty('hasExtra', False)

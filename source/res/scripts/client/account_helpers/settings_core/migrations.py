@@ -927,16 +927,13 @@ def _migrateTo100(core, data, initialized):
 def _migrateTo101(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_INTRO_SHOWN] = False
-    data['markersData'].setdefault('ally', {})['markerAltVehicleDist'] = True
-    data['markersData'].setdefault('enemy', {})['markerAltVehicleDist'] = True
 
 
 def _migrateTo102(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_22_WELCOME_SHOWN] = False
-    onceOnlyHintsData = data['onceOnlyHints3']
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_ENTRY_POINT_HINT] = False
-    onceOnlyHintsData[OnceOnlyHints.REFERRAL_RECRUIT_ENTRY_POINT_HINT] = False
+    feedbackBattleEvents = data.get('feedbackBattleEvents', {})
+    feedbackBattleEvents[BATTLE_EVENTS.CREW_PERKS] = True
 
 
 def _migrateTo103(core, data, initialized):
@@ -966,27 +963,11 @@ def _migrateTo104(_, data, __):
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_2)
 
 
-def _migrateTo105(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    clear = data['clear']
-    settingOffset = 67108864
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0) | settingOffset
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, 0) | settingOffset
-    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0)
-    if storedValue & settingOffset:
-        clear[SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2] = clear.get(SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, 0) | settingOffset
+def _migrateTo105(_, __, ___):
+    pass
 
 
-def _migrateTo106(_, data, __):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
-    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT] = False
-
-
-def _migrateTo107(core, data, initialized):
+def _migrateTo106(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.settings_core.ServerSettingsManager import BATTLE_MATTERS_KEYS
     resetQuests = (5, 6, 7, 8, 9, 11, 12, 16, 18, 21, 23)
@@ -995,12 +976,12 @@ def _migrateTo107(core, data, initialized):
         data[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS][BATTLE_MATTERS_KEYS.QUEST_PROGRESS] = 0
 
 
-def _migrateTo108(core, data, initialized):
+def _migrateTo107(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
     data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER] = 0
 
 
-def _migrateTo109(core, data, initialized):
+def _migrateTo108(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
 
@@ -1431,10 +1412,6 @@ _versions = ((1,
   False),
  (108,
   _migrateTo108,
-  False,
-  False),
- (109,
-  _migrateTo109,
   False,
   False))
 

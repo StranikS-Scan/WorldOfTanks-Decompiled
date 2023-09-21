@@ -1,4 +1,8 @@
 <VehicleRespawnComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <ClientMethods>
+    <updateSelector></updateSelector>
+  </ClientMethods>
   <CellMethods>
     <chooseSpawnGroup>
       <Exposed></Exposed>
@@ -10,12 +14,10 @@
       <Type>	ARRAY	  <of>	SPAWNGROUP_INFO	</of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </spawnGroups>
     <groupName>
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </groupName>
     <delay>
       <Type>	FLOAT32	</Type>

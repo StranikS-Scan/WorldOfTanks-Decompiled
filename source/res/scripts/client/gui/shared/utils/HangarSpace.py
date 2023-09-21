@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
-from Queue import Queue
-from functools import wraps, partial
+from functools import partial
 import BigWorld
 import Math
 import CGF
@@ -9,14 +8,16 @@ import Event
 import Keys
 import ResMgr
 import constants
+from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
 from gui.game_loading.resources.consts import Milestones
+from gui.shared.utils.decorators import ExecuteAfterCondition
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
+from MemoryCriticalController import g_critMemHandler
 from shared_utils import BoundMethodWeakref
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IGameSessionController, IIGRController, IHangarSpaceSwitchController
@@ -32,41 +33,19 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from uilogging.performance.hangar.loggers import HangarMetricsLogger
+from uilogging.performance.battle.loggers import BattleMetricsLogger
 from cgf_components.hangar_camera_manager import HangarCameraManager
 _Q_CHECK_DELAY = 0.0
 
-class _execute_after_hangar_space_inited(object):
-    hangarSpace = dependency.descriptor(IHangarSpace)
-    __slots__ = ('__queue',)
+class _ExecuteAfterHangarSpaceInited(ExecuteAfterCondition):
+    __hangarsSpace = dependency.descriptor(IHangarSpace)
 
-    def __init__(self):
-        self.__queue = Queue()
-
-    def __call__(self, func):
-
-        @wraps(func)
-        def wrapped(*args, **kwargs):
-            self.storeData(func, *args, **kwargs)
-            self.checkConditionForExit()
-
-        return wrapped
-
-    def checkConditionForExit(self):
-        if not self.hangarSpace.spaceInited or not self.hangarSpace.space.getVehicleEntity():
-            BigWorld.callback(_Q_CHECK_DELAY, self.checkConditionForExit)
-            return
-        self.delayCall()
-
-    def storeData(self, func, *args, **kwargs):
-        self.__queue.put((func, args, kwargs))
-
-    def delayCall(self):
-        while not self.__queue.empty():
-            f, f_args, f_kwargs = self.__queue.get()
-            f(*f_args, **f_kwargs)
+    @property
+    def condition(self):
+        return self.__hangarsSpace.spaceInited and self.__hangarsSpace.space.getVehicleEntity()
 
 
-g_execute_after_hangar_space_inited = _execute_after_hangar_space_inited()
+g_execute_after_hangar_space_inited = _ExecuteAfterHangarSpaceInited()
 
 class HangarVideoCameraController(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
@@ -191,6 +170,7 @@ class HangarSpace(IHangarSpace):
         self.__isCursorOver3DScene = False
         self.__isSelectionEnabledCounter = 0
         self._performanceMetricsLogger = HangarMetricsLogger()
+        self._statisticsLogger = BattleMetricsLogger()
         return
 
     @property
@@ -270,6 +250,8 @@ class HangarSpace(IHangarSpace):
             g_keyEventHandlers.add(self.__handleKeyEvent)
             g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
             self._performanceMetricsLogger.initialize()
+            self._statisticsLogger.initialize()
+            g_critMemHandler.initializeLogger()
         return
 
     def refreshSpace(self, isPremium, forceRefresh=False):
@@ -435,15 +417,7 @@ class HangarSpace(IHangarSpace):
         uniprof.exitFromRegion('client.loading')
 
     def __logStatistics(self):
-        stats = self.statsCollector.getStatistics()
-        player = BigWorld.player()
-        if player is not None:
-            LOG_DEBUG_DEV(stats)
-            if stats['system'] and hasattr(player, 'logClientSystem'):
-                player.logClientSystem(stats['system'])
-            if stats['session'] and hasattr(player, 'logClientSessionStats'):
-                player.logClientSessionStats(stats['session'])
-        return
+        self._statisticsLogger.log()
 
     def __delayedRefresh(self):
         self.__delayedRefreshCallback = None

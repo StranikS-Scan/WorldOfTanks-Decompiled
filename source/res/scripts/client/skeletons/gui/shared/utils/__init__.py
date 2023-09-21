@@ -91,10 +91,6 @@ class IItemsRequester(requesters.IRequester):
     def achievements20(self):
         raise NotImplementedError
 
-    @property
-    def refProgram(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -224,6 +220,10 @@ class IHangarSpace(object):
 
     @property
     def space(self):
+        raise NotImplementedError
+
+    @property
+    def spaceID(self):
         raise NotImplementedError
 
     @property

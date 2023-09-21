@@ -10,7 +10,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LuiRules
-from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
 from wg_async import wg_async, wg_await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
@@ -33,7 +32,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import getMarathons
 from gui.server_events import caches, settings
-from gui.server_events.events_dispatcher import hideMissionDetails, showMissionDetails, showMissionsMarathon
+from gui.server_events.events_dispatcher import hideMissionDetails, showMissionDetails
 from gui.server_events.events_helpers import isBattleMattersQuestID
 from gui.shared import event_bus_handlers, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -46,7 +45,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, IWinbackController, ICollectiveGoalMarathonsController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, IWinbackController
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -98,7 +97,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __winbackController = dependency.descriptor(IWinbackController)
-    __collectiveGoalMarathonsController = dependency.descriptor(ICollectiveGoalMarathonsController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -204,7 +202,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         g_currentVehicle.onChanged += self.__updateHeader
         self.battlePass.onSeasonStateChanged += self.__updateHeader
         self.battlePass.onBattlePassSettingsChange += self.__updateBattlePassTab
-        self.__collectiveGoalMarathonsController.onMarathonUpdated += self.__onCollectiveGoalMarathonUpdated
         self.marathonsCtrl.onVehicleReceived += self.__onMarathonVehicleReceived
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         if self.marathonsCtrl.isAnyActive():
@@ -237,7 +234,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         g_currentVehicle.onChanged -= self.__updateHeader
         self.battlePass.onSeasonStateChanged -= self.__updateHeader
         self.battlePass.onBattlePassSettingsChange -= self.__updateBattlePassTab
-        self.__collectiveGoalMarathonsController.onMarathonUpdated -= self.__onCollectiveGoalMarathonUpdated
         self.removeListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__onPageUpdate, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
@@ -291,13 +287,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
         self.__fireTabChangedEvent()
-        return
-
-    def __onCollectiveGoalMarathonUpdated(self):
-        self.__eventStatusUpdated(self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and self.__marathonPrefix == COLLECTIVE_GOAL_MARATHON_PREFIX)
-        collectiveGoalMarathon = self.marathonsCtrl.getMarathon(COLLECTIVE_GOAL_MARATHON_PREFIX)
-        if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and collectiveGoalMarathon is not None and collectiveGoalMarathon.isEnabled():
-            showMissionsMarathon(COLLECTIVE_GOAL_MARATHON_PREFIX)
         return
 
     def __onPrimeTimeStatusUpdated(self, *_):

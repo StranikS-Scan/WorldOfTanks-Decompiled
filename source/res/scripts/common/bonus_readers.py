@@ -60,6 +60,14 @@ def readUTC(section, field, default=None):
         raise SoftException('Invalid field %s: %s' % (field, e))
 
 
+def isFloat(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+
 def __readBonus_bool(bonus, name, section, eventType, checkLimit):
     bonus[name] = section.asBool
 
@@ -587,7 +595,11 @@ def __readBonus_seasonRent(outRent, section):
 def __readBonus_rent(bonus, _name, section):
     rent = {}
     if section.has_key('time'):
-        rent['time'] = section['time'].asFloat
+        timeValue = section.readFloat('time', 0.0)
+        if timeValue is None:
+            rent['time'] = readUTC(section, 'time')
+        else:
+            rent['time'] = timeValue
     if section.has_key('battles'):
         rent['battles'] = section['battles'].asInt
     if section.has_key('wins'):
@@ -596,8 +608,11 @@ def __readBonus_rent(bonus, _name, section):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)
         rent['compensation'] = (credits, gold)
+    if section.has_key('hasMultipleConditions'):
+        rent['hasMultipleConditions'] = section['hasMultipleConditions'].asBool
     __readBonus_seasonRent(rent, section)
     bonus['rent'] = rent
+    return
 
 
 def __readBonus_outfits(bonus, _name, section):

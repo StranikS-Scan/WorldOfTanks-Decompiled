@@ -22,8 +22,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setItemQuantityInSlotS(self, idx, quantity):
         return self.flashObject.as_setItemQuantityInSlot(idx, quantity) if self._isDAAPIInited() else None
 
-    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime, animation):
-        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime, animation) if self._isDAAPIInited() else None
+    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime, animation, stage):
+        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime, animation, stage) if self._isDAAPIInited() else None
 
     def as_setCoolDownTimeS(self, idx, duration, baseTime, startTime):
         return self.flashObject.as_setCoolDownTime(idx, duration, baseTime, startTime) if self._isDAAPIInited() else None
@@ -43,8 +43,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setCurrentShellS(self, idx):
         return self.flashObject.as_setCurrentShell(idx) if self._isDAAPIInited() else None
 
-    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
-        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
+    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, tag, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, stage):
+        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, tag, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, stage) if self._isDAAPIInited() else None
 
     def as_showEquipmentSlotsS(self, show):
         return self.flashObject.as_showEquipmentSlots(show) if self._isDAAPIInited() else None
@@ -60,6 +60,12 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_updateLevelInformationS(self, idx, level):
         return self.flashObject.as_updateLevelInformation(idx, level) if self._isDAAPIInited() else None
+
+    def as_showPossibleStacksS(self, idx, stack):
+        return self.flashObject.as_showPossibleStacks(idx, stack) if self._isDAAPIInited() else None
+
+    def as_updateStacksS(self, idx, stack):
+        return self.flashObject.as_updateStacks(idx, stack) if self._isDAAPIInited() else None
 
     def as_updateTooltipS(self, idx, tooltipStr):
         return self.flashObject.as_updateTooltip(idx, tooltipStr) if self._isDAAPIInited() else None

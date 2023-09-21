@@ -10,7 +10,7 @@ from gui.collection.resources.cdn.models import Group, makeImageID
 from gui.collection.sounds import Sounds
 from gui.impl.auxiliary.collections_helper import getCollectionsBonusPacker
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.collection.awards_view_model import AwardsViewModel, CollectionAwardState
+from gui.impl.gen.view_models.views.lobby.collection.awards_view_model import AwardsViewModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import BattlePassCoinTooltipView
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
@@ -26,15 +26,14 @@ if typing.TYPE_CHECKING:
     from typing import Dict
 
 class AwardsView(ViewImpl):
-    __slots__ = ('__collectionId', '__bonuses', '__isFinal', '__tooltips', '__content')
+    __slots__ = ('__collectionId', '__bonuses', '__tooltips', '__content')
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
-    def __init__(self, collectionId, bonuses, isFinal):
+    def __init__(self, collectionId, bonuses):
         settings = ViewSettings(R.views.lobby.collection.AwardsView())
         settings.model = AwardsViewModel()
         self.__collectionId = collectionId
         self.__bonuses = bonuses
-        self.__isFinal = isFinal
         self.__tooltips = {}
         self.__content = {}
         super(AwardsView, self).__init__(settings)
@@ -65,10 +64,8 @@ class AwardsView(ViewImpl):
         super(AwardsView, self)._onLoading(*args, **kwargs)
         self.__updateContentData()
         SoundGroups.g_instance.playSound2D(Sounds.REWARD_SCREEN.value)
-        state = CollectionAwardState.COMPLETED if self.__isFinal else CollectionAwardState.ACTIVE
         with self.viewModel.transaction() as model:
             model.setCollectionName(self.__collectionsSystem.getCollection(self.__collectionId).name)
-            model.setState(state)
             self.__setAvailability(model=model)
             packBonusModelAndTooltipData(composeBonuses(self.__bonuses), model.getRewards(), self.__tooltips, getCollectionsBonusPacker())
 
@@ -78,7 +75,7 @@ class AwardsView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.onOpenCollection, self.__openCollection), (self.viewModel.onCloseCollection, self.__closeCollection), (self.__collectionsSystem.onServerSettingsChanged, self.__onSettingsChanged))
+        return ((self.viewModel.onOpenCollection, self.__openCollection), (self.__collectionsSystem.onServerSettingsChanged, self.__onSettingsChanged))
 
     def __updateContentData(self):
         Waiting.show('loadContent')
@@ -102,10 +99,6 @@ class AwardsView(ViewImpl):
         showCollectionWindow(self.__collectionId)
         self.destroyWindow()
 
-    def __closeCollection(self):
-        showHangar()
-        self.destroyWindow()
-
     def __onSettingsChanged(self):
         if not self.__collectionsSystem.isEnabled():
             showHangar()
@@ -125,5 +118,5 @@ class AwardsView(ViewImpl):
 class AwardsWindow(LobbyNotificationWindow):
     __slots__ = ()
 
-    def __init__(self, collectionId, bonuses, isFinal):
-        super(AwardsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=AwardsView(collectionId, bonuses, isFinal))
+    def __init__(self, collectionId, bonuses):
+        super(AwardsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=AwardsView(collectionId, bonuses))

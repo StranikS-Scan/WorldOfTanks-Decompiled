@@ -587,10 +587,7 @@ class VehicleGunRotator(object):
         collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
         minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
         endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
-        distance = (endPos - shotPos).length
-        usedMaxDistance = usedMaxDistance or distance > shotDescr.maxDistance
-        if usedMaxDistance:
-            distance = shotDescr.maxDistance
+        distance = shotDescr.maxDistance if usedMaxDistance else (endPos - shotPos).length
         diameter = 2.0 * distance * dispersionAngles[0]
         idealDiameter = 2.0 * distance * dispersionAngles[1]
         dualAccDiameter = 2.0 * distance * dispersionAngles[2]

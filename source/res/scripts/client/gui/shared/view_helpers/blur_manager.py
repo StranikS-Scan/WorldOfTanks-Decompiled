@@ -219,7 +219,7 @@ class _BlurManager(object):
         for itemRef in self._cache:
             if itemRef is not None:
                 item = itemRef()
-                if item.isLayerBlur and item.enabled:
+                if item and item.isLayerBlur and item.enabled:
                     return True
 
         return False

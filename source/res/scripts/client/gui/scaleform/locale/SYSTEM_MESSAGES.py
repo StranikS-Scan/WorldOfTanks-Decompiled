@@ -201,8 +201,6 @@ class SYSTEM_MESSAGES(object):
     GRAFICSOPTIONSFAIL = '#system_messages:graficsOptionsFail'
     GRAFICSPRESETFAIL = '#system_messages:graficsPresetFail'
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
-    DENUNCIATION_HANGARCHATSUCCESS_TITLE = '#system_messages:denunciation/hangarChatSuccess/title'
-    DENUNCIATION_HANGARCHATSUCCESS_BODY = '#system_messages:denunciation/hangarChatSuccess/body'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
     CUSTOMIZATION_INVALIDVEHICLE = '#system_messages:customization/invalidVehicle'
@@ -396,6 +394,7 @@ class SYSTEM_MESSAGES(object):
     ADD_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:add_tankman_skill/invalid_vehicle'
     ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:add_tankman_skill/vehicle_need_repair'
     ADD_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:add_tankman_skill/vehicle_locked'
+    ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED = '#system_messages:add_tankman_skill/crew_skills_locked'
     LEARN_TANKMAN_FREE_SKILL_SUCCESS = '#system_messages:learn_tankman_free_skill/success'
     LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR = '#system_messages:learn_tankman_free_skill/server_error'
     LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE = '#system_messages:learn_tankman_free_skill/invalid_vehicle'
@@ -1174,9 +1173,9 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/noSubscriptions'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/wotPlus'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM = '#system_messages:maps_black_list/select/success/wotPlusEnabled/premium'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/noSubscriptions'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlus'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM = '#system_messages:maps_black_list/select/success/premium'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
     MAPS_BLACK_LIST_SWITCH_OFF_TITLE = '#system_messages:maps_black_list/switch_off/title'
@@ -1354,11 +1353,6 @@ class SYSTEM_MESSAGES(object):
     ACHIEVEMENTS_SERVER_ERROR = '#system_messages:achievements/server_error'
     LIMITEDUI_SWITCHON = '#system_messages:limitedUI/switchOn'
     LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
-    REFERRAL_PROGRAM_DISABLED = '#system_messages:referral_program/disabled'
-    DEBUTBOXES_ENABLED_HEADER = '#system_messages:debutBoxes/enabled/header'
-    DEBUTBOXES_ENABLED_BODY = '#system_messages:debutBoxes/enabled/body'
-    DEBUTBOXES_DISABLED_HEADER = '#system_messages:debutBoxes/disabled/header'
-    DEBUTBOXES_DISABLED_BODY = '#system_messages:debutBoxes/disabled/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1683,8 +1677,6 @@ class SYSTEM_MESSAGES(object):
      GRAFICSOPTIONSFAIL,
      GRAFICSPRESETFAIL,
      DENUNCIATION_SUCCESS,
-     DENUNCIATION_HANGARCHATSUCCESS_TITLE,
-     DENUNCIATION_HANGARCHATSUCCESS_BODY,
      CUSTOMIZATION_UNAVAILABLE,
      CUSTOMIZATION_PROHIBITED,
      CUSTOMIZATION_INVALIDVEHICLE,
@@ -1878,6 +1870,7 @@ class SYSTEM_MESSAGES(object):
      ADD_TANKMAN_SKILL_INVALID_VEHICLE,
      ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      ADD_TANKMAN_SKILL_VEHICLE_LOCKED,
+     ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED,
      LEARN_TANKMAN_FREE_SKILL_SUCCESS,
      LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR,
      LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE,
@@ -2656,9 +2649,9 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,
      MAPS_BLACK_LIST_SWITCH_OFF_TITLE,
@@ -2835,12 +2828,7 @@ class SYSTEM_MESSAGES(object):
      WINBACK_TURNOFFBATTLESERROR,
      ACHIEVEMENTS_SERVER_ERROR,
      LIMITEDUI_SWITCHON,
-     LIMITEDUI_SWITCHOFF,
-     REFERRAL_PROGRAM_DISABLED,
-     DEBUTBOXES_ENABLED_HEADER,
-     DEBUTBOXES_ENABLED_BODY,
-     DEBUTBOXES_DISABLED_HEADER,
-     DEBUTBOXES_DISABLED_BODY)
+     LIMITEDUI_SWITCHOFF)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

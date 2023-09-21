@@ -4,6 +4,7 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -2308,7 +2309,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	7.3	</stunDuration>
+    <stunDuration>	10.5	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2373,7 +2376,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	17	</stunDuration>
+    <stunDuration>	27	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2422,7 +2427,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.6	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	15.4	</stunDuration>
+    <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2517,6 +2524,24 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_105mm_APCR_OFL_E1_WT>
+    <id>	1001	</id>
+    <userString>	#france_vehicles:_105mm_APCR_OFL_E1_WT	</userString>
+    <description>	#france_vehicles:_105mm_APCR_OFL_E1_WT_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:_105mm_APCR_OFL_E1_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:_105mm_APCR_OFL_E1_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1200	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APCR_OFL_E1_WT>
   <_105mm_OCO_mle._1936_SH>
     <id>	265	</id>
     <userString>	#france_vehicles:_105mm_OCO_mle._1936_SH	</userString>
@@ -2787,58 +2812,4 @@
     </armorSpalls>
     <notInShop>	True	</notInShop>
   </_90mm_OE_mle_1924_bootcamp>
-  <_105mm_OFL_105_F1V>
-    <id>	31001	</id>
-    <userString>	#france_vehicles:_105mm_OFL_105_F1V	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	1310	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	105	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	420	</armor>
-      <devices>	150	</devices>
-    </damage>
-  </_105mm_OFL_105_F1V>
-  <_105mm_OCC_105_F1V>
-    <id>	31002	</id>
-    <userString>	#france_vehicles:_105mm_OCC_105_F1V	</userString>
-    <icon>	hc_premium	</icon>
-    <price>	4800	</price>
-    <improved>	true	</improved>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	105	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHollowCharge	</effects>
-    <damage>
-      <armor>	420	</armor>
-      <devices>	150	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_105mm_OCC_105_F1V>
-  <_105mm_OE_105_Mle_60V>
-    <id>	31003	</id>
-    <userString>	#france_vehicles:_105mm_OE_105_Mle_60V	</userString>
-    <icon>	he_modern	</icon>
-    <price>	700	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	105	</caliber>
-    <explosionRadius>	1.91	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	510	</armor>
-      <devices>	150	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	255	</armor>
-        <devices>	75	</devices>
-      </damage>
-    </armorSpalls>
-  </_105mm_OE_105_Mle_60V>
 </shells.xml>

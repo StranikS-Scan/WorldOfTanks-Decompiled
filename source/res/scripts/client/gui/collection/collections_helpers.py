@@ -25,7 +25,7 @@ from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Dict, Optional, Tuple, Union
-    from collections_common import CollectionItem, Collection
+    from collections_common import CollectionItem
     from gui.impl.gen_utils import DynAccessor
     from gui.shared.gui_items.Vehicle import Vehicle
 
@@ -115,13 +115,6 @@ def getItemName(collectionId, item, collectionsSystem=None):
     return getUnusableItemName(collectionId, item, collectionsSystem=collectionsSystem) if item.type in UNUSABLE_COLLECTION_ENTITIES else getUsableItemName(item)
 
 
-def getCollectionFullFeatureName(collection):
-    notifications = R.strings.collections.notifications
-    feature = notifications.feature.dyn(collection.name)
-    season = notifications.season.dyn(collection.name)
-    return backport.text(notifications.templates.featureSeason(), feature=backport.text(feature()), season=backport.text(season())) if season.isValid() else backport.text(feature())
-
-
 def getUsableItemName(item):
     if item.type == 'customizationItem':
         return getCustomizationName(item.relatedId)
@@ -132,9 +125,8 @@ def getUsableItemName(item):
 
 @replace_none_kwargs(collectionsSystem=ICollectionsSystemController)
 def getUnusableItemName(collectionId, item, collectionsSystem=None):
-    collRes = getCollectionRes(collectionId, collectionsSystem=collectionsSystem)
-    itemTextRes = collRes.dyn('item') if collRes else None
-    return backport.text(itemTextRes.name.dyn(getItemResKey(collectionId, item))()) if itemTextRes else ''
+    itemTextRes = getCollectionRes(collectionId, collectionsSystem=collectionsSystem).item
+    return backport.text(itemTextRes.name.dyn(getItemResKey(collectionId, item))())
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

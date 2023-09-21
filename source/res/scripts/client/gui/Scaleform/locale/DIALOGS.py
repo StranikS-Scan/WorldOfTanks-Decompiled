@@ -130,6 +130,10 @@ class DIALOGS(object):
     BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
+    XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
+    XPTOTMENCHECKBOX_MESSAGE = '#dialogs:xpToTmenCheckbox/message'
+    XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
+    XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
     IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
     IDLECREWBONUS_MESSAGE_REMOVETYPE = '#dialogs:idleCrewBonus/message/removeType'
     IDLECREWBONUS_MESSAGE_REMOVENAME = '#dialogs:idleCrewBonus/message/removeName'
@@ -1136,6 +1140,14 @@ class DIALOGS(object):
     EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON = '#dialogs:equipmentDeconstruction/confirmButton'
     EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON = '#dialogs:equipmentDeconstruction/confirmAndUpgradeButton'
     EQUIPMENTDECONSTRUCTION_CANCELBUTTON = '#dialogs:equipmentDeconstruction/cancelButton'
+    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
+    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
+    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
+    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
+    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
+    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
+    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
+    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1261,6 +1273,10 @@ class DIALOGS(object):
      BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
+     XPTOTMENCHECKBOX_TITLE,
+     XPTOTMENCHECKBOX_MESSAGE,
+     XPTOTMENCHECKBOX_SUBMIT,
+     XPTOTMENCHECKBOX_CANCEL,
      IDLECREWBONUS_TITLE,
      IDLECREWBONUS_MESSAGE_REMOVETYPE,
      IDLECREWBONUS_MESSAGE_REMOVENAME,
@@ -2266,7 +2282,15 @@ class DIALOGS(object):
      EQUIPMENTUPGRADE_CANCELBUTTON,
      EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON,
      EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON,
-     EQUIPMENTDECONSTRUCTION_CANCELBUTTON)
+     EQUIPMENTDECONSTRUCTION_CANCELBUTTON,
+     CONFIRMREWARD_TITLE,
+     CONFIRMREWARD_MESSAGE,
+     CONFIRMREWARD_SUBMIT,
+     CONFIRMREWARD_CANCEL,
+     REROLLREWARD_TITLE,
+     REROLLREWARD_MESSAGE,
+     REROLLREWARD_CONFIRM,
+     REROLLREWARD_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

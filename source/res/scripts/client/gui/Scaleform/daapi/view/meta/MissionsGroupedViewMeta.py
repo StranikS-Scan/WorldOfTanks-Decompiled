@@ -12,6 +12,3 @@ class MissionsGroupedViewMeta(MissionView):
 
     def onClickButtonDetails(self):
         self._printOverrideError('onClickButtonDetails')
-
-    def onClickInfoBtn(self):
-        self._printOverrideError('onClickInfoBtn')

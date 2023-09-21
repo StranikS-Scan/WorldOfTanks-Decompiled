@@ -31,7 +31,6 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_VEHICLE_DESTROYED = '#ingame_gui:player_errors/cant_shoot/vehicle_destroyed'
     PLAYER_ERRORS_CANT_SHOOT_CREW_INACTIVE = '#ingame_gui:player_errors/cant_shoot/crew_inactive'
     PLAYER_ERRORS_CANT_SHOOT_NO_AMMO = '#ingame_gui:player_errors/cant_shoot/no_ammo'
-    PLAYER_ERRORS_CANT_SHOOT_NO_FLAME_AMMO = '#ingame_gui:player_errors/cant_shoot/no_flame_ammo'
     PLAYER_ERRORS_CANT_SHOOT_GUN_DAMAGED = '#ingame_gui:player_errors/cant_shoot/gun_damaged'
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
@@ -46,9 +45,11 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_ERRORS_EQUIPMENT_POI_UNAVAILABLE = '#ingame_gui:player_errors/equipment/poi/unavailable'
+    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HEALTHATFULLHP = '#ingame_gui:player_messages/equipment/wtEvent/healthAtFullHP'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
+    PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_CIRCUIT_OVERLOAD = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_CIRCUIT_OVERLOAD'
     PLAYER_MESSAGES_TANKMAN_HIT_AT_SHOT = '#ingame_gui:player_messages/TANKMAN_HIT_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_FIRE = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_FIRE'
     PLAYER_MESSAGES_ENGINE_CRITICAL_AT_UNLIMITED_RPM = '#ingame_gui:player_messages/ENGINE_CRITICAL_AT_UNLIMITED_RPM'
@@ -230,7 +231,6 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING = '#ingame_gui:shells_kinds/ARMOR_PIERCING'
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
-    SHELLS_KINDS_FLAME = '#ingame_gui:shells_kinds/FLAME'
     SHELLS_KINDS_PARAMS_DAMAGE = '#ingame_gui:shells_kinds/params/damage'
     SHELLS_KINDS_PARAMS_PIERCINGPOWER = '#ingame_gui:shells_kinds/params/piercingPower'
     SHELLS_KINDS_PARAMS_SHOTSPEED = '#ingame_gui:shells_kinds/params/shotSpeed'
@@ -285,7 +285,6 @@ class INGAME_GUI(object):
     CRUISE_CTRL_SPEEDMETRIC = '#ingame_gui:cruise_ctrl/speedMetric'
     CONSUMABLES_PANEL_EQUIPMENT_TOOLTIP_EMPTY = '#ingame_gui:consumables_panel/equipment/tooltip/empty'
     CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS = '#ingame_gui:consumables_panel/equipment/cooldownSeconds'
-    CONSUMABLES_PANEL_EQUIPMENT_ACTIVESECONDS = '#ingame_gui:consumables_panel/equipment/activeSeconds'
     TIMER_WAITING = '#ingame_gui:timer/waiting'
     TIMER_STARTING = '#ingame_gui:timer/starting'
     TIMER_STARTED = '#ingame_gui:timer/started'
@@ -623,9 +622,10 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
+    EFFICIENCYRIBBONS_HEALTHADDED = '#ingame_gui:efficiencyRibbons/healthAdded'
+    EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD = '#ingame_gui:efficiencyRibbons/wtReceivedCircuitOverload'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
-    DAMAGELOG_SHELLTYPE_FLAME = '#ingame_gui:damageLog/shellType/FLAME'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_CR'
     DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE = '#ingame_gui:damageLog/shellType/HOLLOW_CHARGE'
@@ -711,7 +711,6 @@ class INGAME_GUI(object):
     TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT = '#ingame_gui:trajectoryView/hint/alternateModeLeft'
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
     STUN_INDICATOR = '#ingame_gui:stun/indicator'
-    STUNFLAME_INDICATOR = '#ingame_gui:stunFlame/indicator'
     STUN_SECONDS = '#ingame_gui:stun/seconds'
     BATTLEPROGRESS_HINT_PRESS = '#ingame_gui:battleProgress/hint/press'
     BATTLEPROGRESS_HINT_DESCRIPTION = '#ingame_gui:battleProgress/hint/description'
@@ -1122,6 +1121,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,
+     EFFICIENCYRIBBONS_HEALTHADDED,
+     EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

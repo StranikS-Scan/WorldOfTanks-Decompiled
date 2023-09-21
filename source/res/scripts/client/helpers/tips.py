@@ -9,7 +9,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import WATCHED_PRE_BATTLE_TIPS_SECTION
 from constants import ARENA_GUI_TYPE
 from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
-from gui.doc_loaders.prebattle_tips_loader import readPreBattleTips
+from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.system_factory import registerBattleTipCriteria, registerBattleTipsCriteria, collectBattleTipsCriteria
@@ -17,7 +17,6 @@ from helpers import dependency
 from realm import CURRENT_REALM
 from skeletons.gui.game_control import IRankedBattlesController, IVehiclePostProgressionController
 _logger = logging.getLogger(__name__)
-_PREBATTLE_TIPS_XML_PATH = 'gui/prebattle_tips.xml'
 _RANDOM_TIPS_PATTERN = '^(tip\\d+)'
 _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
@@ -192,24 +191,23 @@ def getTipsCriteria(arenaVisitor):
     return _RandomTipsCriteria() if criteriaCls is None else criteriaCls(arenaVisitor)
 
 
-def _readTips(tips, tipsConfig, logger):
+def readTips(pattern):
     result = []
-    for tipID, descriptionResId in tips:
-        if tipID not in tipsConfig:
-            logger.warning('Tips by tipID(%s) not in prebattle_tips.xml', tipID)
-        result.append(_buildBattleLoadingTip(tipID, descriptionResId(), tipsConfig))
+    tipsPattern = re.compile(pattern)
+    for tipID, descriptionResId in R.strings.tips.items():
+        if tipID:
+            reMatch = tipsPattern.match(tipID)
+            if reMatch is not None:
+                if tipID not in _tipsConfig:
+                    _logger.warning('Tips by tipID(%s) not in prebattle_tips.xml', tipID)
+                else:
+                    result.append(_buildBattleLoadingTip(tipID, descriptionResId()))
 
     return result
 
 
-def readTips(pattern, tipsConfig):
-    tipsPattern = re.compile(pattern)
-    tips = [ (tipID, descriptionResId) for tipID, descriptionResId in R.strings.tips.items() if tipID and tipsPattern.match(tipID) is not None ]
-    return _readTips(tips, tipsConfig, _logger)
-
-
-def _buildBattleLoadingTip(tipID, descriptionResID, tipsConfig):
-    tipConfig = tipsConfig.get(tipID)
+def _buildBattleLoadingTip(tipID, descriptionResID):
+    tipConfig = _tipsConfig.get(tipID)
     tipFilter = tipConfig.get('filter')
     if tipFilter is not None and tipFilter['preceding'] is not None:
         tip = _PrecedingBattleLoadingTip()
@@ -347,7 +345,7 @@ class _ArenaGuiTypeValidator(object):
     def validate(tipFilter, ctx):
         expected = tipFilter['arenaTypes']
         actual = ctx['arenaType']
-        return not expected or str(actual) in expected
+        return not expected or actual in expected
 
 
 class _TagsValidator(object):
@@ -406,7 +404,7 @@ class _BattlePassValidator(object):
 
 
 class _RankedBattlesValidator(object):
-    __slots__ = ('_isYearRewardEnabled', '_isLeaderboardEnabled', '_isShopEnabled', '_isLeagueRewardEnabled')
+    __slots__ = ('_isYearRewardEnabled', '_isLeaderboardEnabled', '_isShopEnabled')
     _rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
@@ -414,7 +412,6 @@ class _RankedBattlesValidator(object):
         self._isYearRewardEnabled = self._rankedController.isYearRewardEnabled()
         self._isLeaderboardEnabled = self._rankedController.isYearLBEnabled()
         self._isShopEnabled = self._rankedController.isRankedShopEnabled()
-        self._isLeagueRewardEnabled = self._rankedController.isLeagueRewardEnabled()
 
     def validate(self, tipFilter, _):
         if 'isRankedYearRewardEnabled' in tipFilter:
@@ -425,9 +422,6 @@ class _RankedBattlesValidator(object):
                 return False
         if 'isRankedShopEnabled' in tipFilter:
             if tipFilter['isRankedShopEnabled'] != self._isShopEnabled:
-                return False
-        if 'isRankedLeagueRewardEnabled' in tipFilter:
-            if tipFilter['isRankedLeagueRewardEnabled'] != self._isLeagueRewardEnabled:
                 return False
         return True
 
@@ -464,12 +458,12 @@ def _getWatchedCache():
 
 
 _watchedTipsCache = None
-_tipsConfig = readPreBattleTips(_PREBATTLE_TIPS_XML_PATH)
-_randomTips = readTips(_RANDOM_TIPS_PATTERN, _tipsConfig)
-_rankedTips = readTips(_RANKED_BATTLES_TIPS_PATTERN, _tipsConfig)
-_epicBattleTips = readTips(_EPIC_BATTLE_TIPS_PATTERN, _tipsConfig)
-_epicRandomTips = readTips(_EPIC_RANDOM_TIPS_PATTERN, _tipsConfig)
-_battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN, _tipsConfig)
-_comp7Tips = readTips(_COMP7_TIPS_PATTERN, _tipsConfig)
-_winbackTips = readTips(_WINBACK_TIPS_PATTERN, _tipsConfig)
-_mapboxTips = readTips(_MAPBOX_TIPS_PATTERN, _tipsConfig)
+_tipsConfig = getPreBattleTipsConfig()
+_randomTips = readTips(_RANDOM_TIPS_PATTERN)
+_rankedTips = readTips(_RANKED_BATTLES_TIPS_PATTERN)
+_epicBattleTips = readTips(_EPIC_BATTLE_TIPS_PATTERN)
+_epicRandomTips = readTips(_EPIC_RANDOM_TIPS_PATTERN)
+_battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN)
+_comp7Tips = readTips(_COMP7_TIPS_PATTERN)
+_winbackTips = readTips(_WINBACK_TIPS_PATTERN)
+_mapboxTips = readTips(_MAPBOX_TIPS_PATTERN)

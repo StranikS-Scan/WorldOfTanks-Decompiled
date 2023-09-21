@@ -313,7 +313,20 @@ class IRadarController(object):
 
 class ISpawnController(object):
 
-    def showSpawnPoints(self, points):
+    @property
+    def isSpawnPointsVisible(self):
+        raise NotImplementedError
+
+    def showSpawnPoints(self, points, pointGuid=None):
+        raise NotImplementedError
+
+    def updateSpawnPoints(self, points, pointGuid=None):
+        raise NotImplementedError
+
+    def closeSpawnPoints(self):
+        raise NotImplementedError
+
+    def chooseSpawnKeyPoint(self, pointId):
         raise NotImplementedError
 
 
@@ -541,4 +554,16 @@ class IAimingSoundsCtrl(IBattleController):
         pass
 
     def updateDispersion(self, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
+        raise NotImplementedError
+
+
+class IPlayersPanelController(IArenaVehiclesController, ViewComponentsController):
+
+    def show(self, params):
+        raise NotImplementedError
+
+    def hide(self, params):
+        raise NotImplementedError
+
+    def processReplay(self, params):
         raise NotImplementedError

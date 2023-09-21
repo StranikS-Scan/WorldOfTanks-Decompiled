@@ -27,12 +27,14 @@ class VisualScriptEquipment(DynamicScriptComponent):
         self._context = AbilityContextClient(self.entity, equipmentName=descriptor.name)
         self._vsPlan.setContext(self._context)
         self._vsPlan.start()
-        self.set_errorState()
         self.set_equipmentState()
 
     def canActivate(self):
-        self._context.canActive()
-        return (self._context.canActivate, self._context.errorKey)
+        if self._context is not None:
+            self._context.canActive()
+            return (self._context.canActivate, self._context.errorKey)
+        else:
+            return (False, '')
 
     def onDestroy(self):
         if self._context is not None:
@@ -68,5 +70,11 @@ class VisualScriptEquipment(DynamicScriptComponent):
         self.__update(state)
 
     def __update(self, state):
-        timeRemaining = max(state.endTime - BigWorld.serverTime(), 0.0) if state.endTime > 0 else state.endTime
-        BigWorld.player().updateVehicleAmmo(self.entity.id, self.compactDescr, state.quantity, state.stage, state.prevStage, timeRemaining, state.totalTime)
+        eqCtrl = self.entity.guiSessionProvider.shared.equipments
+        if not eqCtrl.hasEquipment(self.compactDescr):
+            return
+        eq = eqCtrl.getEquipment(self.compactDescr)
+        wasLocked = eq.isLocked()
+        if wasLocked != state.locked:
+            eq.setLocked(state.locked)
+            eqCtrl.onEquipmentUpdated(self.compactDescr, eq)

@@ -45,8 +45,7 @@ class ProfileSection(ProfileSectionMeta):
          PROFILE_DROPDOWN_KEYS.RANKED_10X10: _DropdownData(False, 'getRanked10x10Stats', {}),
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: _DropdownData(False, 'getEpicRandomStats', {}),
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: _DropdownData(False, 'getBattleRoyaleSoloStats', {}),
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _DropdownData(False, 'getBattleRoyaleSquadStats', {}),
-         PROFILE_DROPDOWN_KEYS.VERSUS_AI: _DropdownData(False, 'getVersusAIStats', {})}
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _DropdownData(False, 'getBattleRoyaleSquadStats', {})}
         for archiveName in COMP7_ARCHIVE_NAMES:
             dropdownKey = getDropdownKeyByArchiveName(archiveName)
             self.__battleTypeHandlers[dropdownKey] = _DropdownData(False, 'getComp7Stats', {'archive': archiveName})

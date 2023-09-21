@@ -34,6 +34,7 @@
     <Interface>	AccountVersion	</Interface>
     <Interface>	PlayLimits	</Interface>
     <Interface>	ServerSideReplays	</Interface>
+    <Interface>	EventTokensController	</Interface>
   </Implements>
   <Properties>
     <name>
@@ -192,18 +193,18 @@
       <Arg>	UINT32	</Arg>
     </onKickedFromServer>
     <onEnqueued>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onEnqueued>
     <onEnqueueFailure>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
     </onEnqueueFailure>
     <onDequeued>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onDequeued>
     <onKickedFromQueue>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
     <onArenaCreated></onArenaCreated>
     <onIGRTypeChanged>
@@ -341,10 +342,10 @@
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onEnqueued>
     <onDequeued>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onDequeued>
     <onMapsTrainingEnqueued>
       <Arg>	UINT8	</Arg>
@@ -375,28 +376,12 @@
       <Arg>	INT32	</Arg>
     </onBootcampCreated>
     <onKickedFromQueue>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
     <onKickedFromArena>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
-    <logClientSystem>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_SYSTEM	</Arg>
-    </logClientSystem>
-    <logClientSessionStats>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_SESSION_STATS	</Arg>
-    </logClientSessionStats>
-    <logMemoryCriticalEvent>
-      <Exposed></Exposed>
-      <Arg>	MEM_CRIT_EVENT	</Arg>
-    </logMemoryCriticalEvent>
-    <logClientPB20UXStats>
-      <Exposed></Exposed>
-      <Arg>	CLIENT_PB_20_UX_STATS	</Arg>
-    </logClientPB20UXStats>
     <releaseClientForLogin>
       <Arg>	MAILBOX	</Arg>
       <Arg>	PYTHON	</Arg>
@@ -505,7 +490,6 @@
       <Arg>	DB_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT8	</Arg>
-      <Arg>	INT64	</Arg>
     </makeDenunciation>
     <banUnbanUser>
       <Exposed></Exposed>

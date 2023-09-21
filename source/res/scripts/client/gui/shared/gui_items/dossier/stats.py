@@ -954,43 +954,6 @@ class BattleRoyaleSquadBlock(BattleRoyaleAccountStatsBase):
     _IS_SOLO = False
 
 
-class VersusAIStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock):
-
-    def __init__(self, dossier):
-        _BattleStatsBlock.__init__(self, dossier)
-        _Battle2StatsBlock.__init__(self, dossier)
-        _MaxStatsBlock.__init__(self, dossier)
-
-    def getBattlesCountVer3(self):
-        return self.getBattlesCount()
-
-    def getBattlesCountVer2(self):
-        return self.getBattlesCount()
-
-    def _getStatsBlock(self, dossier):
-        return dossier.getDossierDescr()['mt_versusAI']
-
-    def _getStats2Block(self, dossier):
-        return dossier.getDossierDescr()['mt_versusAI']
-
-    def _getStatsMaxBlock(self, dossier):
-        return dossier.getDossierDescr()['mt_maxVersusAI']
-
-
-class AccountVersusAIStatsBlock(VersusAIStatsBlock, _VehiclesStatsBlock, _MaxVehicleStatsBlock):
-
-    def __init__(self, dossier):
-        VersusAIStatsBlock.__init__(self, dossier)
-        _VehiclesStatsBlock.__init__(self, dossier)
-        _MaxVehicleStatsBlock.__init__(self, dossier)
-
-    def _getVehDossiersCut(self, dossier):
-        return dossier.getDossierDescr()['mt_versusAICut']
-
-    def _packVehicle(self, battlesCount=0, wins=0, xp=0):
-        return self.VehiclesDossiersCut(battlesCount, wins, xp)
-
-
 class TotalStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
 
     def __init__(self, dossier, statsBlocks=None):
@@ -1665,8 +1628,7 @@ class AccountDossierStats(_DossierStats):
          self.getFalloutStats(),
          self.getRankedStats(),
          self.getRanked10x10Stats(),
-         self.getEpicRandomStats(),
-         self.getVersusAIStats()))
+         self.getEpicRandomStats()))
 
     def getRandomStats(self):
         return AccountRandomStatsBlock(self._getDossierItem())
@@ -1751,9 +1713,6 @@ class AccountDossierStats(_DossierStats):
             return AccountComp7StatsBlock(self._getDossierItem(), 'Season{}'.format(season))
         _logger.warning('comp7 season or archive number must be specified!')
 
-    def getVersusAIStats(self):
-        return AccountVersusAIStatsBlock(self._getDossierItem())
-
 
 class VehicleDossierStats(_DossierStats):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -1772,8 +1731,7 @@ class VehicleDossierStats(_DossierStats):
          self.getFalloutStats(),
          self.getRankedStats(),
          self.getEpicRandomStats(),
-         self.getComp7Stats(season=1),
-         self.getVersusAIStats()))
+         self.getComp7Stats(season=1)))
 
     def getRandomStats(self):
         return RandomStatsBlock(self._getDossierItem())
@@ -1833,9 +1791,6 @@ class VehicleDossierStats(_DossierStats):
         if season:
             return Comp7StatsBlock(self._getDossierItem(), 'Season{}'.format(season))
         _logger.warning('comp7 season or archive number must be specified!')
-
-    def getVersusAIStats(self):
-        return VersusAIStatsBlock(self._getDossierItem())
 
 
 class TankmanDossierStats(_DossierStats):

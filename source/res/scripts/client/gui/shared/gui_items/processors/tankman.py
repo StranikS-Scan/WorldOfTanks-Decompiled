@@ -409,6 +409,8 @@ class TankmanAddSkill(ItemProcessor):
         self.skillName = skillName
 
     def _errorHandler(self, code, errStr='', ctx=None):
+        if 'lockCrewSkills' in self.item.vehicleDescr.type.tags:
+            errStr = 'crew_skills_locked'
         return makeI18nError(sysMsgKey='add_tankman_skill/{}'.format(errStr), defaultSysMsgKey='add_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):

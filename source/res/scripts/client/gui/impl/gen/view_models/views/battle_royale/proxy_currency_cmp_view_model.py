@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class ProxyCurrencyCmpViewModel(ViewModel):
-    __slots__ = ('onGotoShopBtnClicked',)
+    __slots__ = ()
 
-    def __init__(self, properties=1, commands=1):
+    def __init__(self, properties=1, commands=0):
         super(ProxyCurrencyCmpViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBalance(self):
@@ -17,4 +17,3 @@ class ProxyCurrencyCmpViewModel(ViewModel):
     def _initialize(self):
         super(ProxyCurrencyCmpViewModel, self)._initialize()
         self._addNumberProperty('balance', 0)
-        self.onGotoShopBtnClicked = self._addCommand('onGotoShopBtnClicked')

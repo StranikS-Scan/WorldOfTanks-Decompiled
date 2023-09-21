@@ -139,10 +139,10 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
          'insertion_close': _INSERTION_CLOSE_TAG})
         styleInfoBig = text_styles.mainBig(styleInfoText % {'insertion_open': _INSERTION_OPEN_TAG_BIG,
          'insertion_close': _INSERTION_CLOSE_TAG})
-        suitableText = getSuitableText(style, g_currentVehicle.item, formatVehicle=False)
+        suitableText = getSuitableText(style, g_currentVehicle.item)
         if suitableText:
             suitableBlock = text_styles.mainBig(backport.text(R.strings.vehicle_customization.styleInfo.suitable()))
-            suitableBlock += text_styles.mainBig(suitableText)
+            suitableBlock += suitableText
         else:
             suitableBlock = text_styles.mainBig(backport.text(R.strings.vehicle_customization.styleInfo.suitableAll()))
         return StyleInfoVO(styleName=styleName, styleInfo=styleInfo, styleInfoBig=styleInfoBig, suitableBlock=suitableBlock, styleParams=styleParams)._asdict()

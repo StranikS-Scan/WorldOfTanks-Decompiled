@@ -38,6 +38,8 @@ try:
 except locale.Error:
     LOG_CURRENT_EXCEPTION()
 
+sys.setrecursionlimit(sys.getrecursionlimit() + 1000)
+
 class ServiceLocator(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
     gameplay = dependency.descriptor(IGameplayLogic)
@@ -234,6 +236,8 @@ def fini():
     ServiceLocator.connectionMgr.onConnected -= onConnected
     ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
     MessengerEntry.g_instance.fini()
+    from helpers import ValueTracker
+    ValueTracker.ValueTracker.fini()
     from helpers import EdgeDetectColorController
     if EdgeDetectColorController.g_instance is not None:
         EdgeDetectColorController.g_instance.destroy()

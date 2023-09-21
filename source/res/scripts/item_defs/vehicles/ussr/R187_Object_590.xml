@@ -41,8 +41,8 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	100	</armor_1>
-      <armor_2>	100	</armor_2>
+      <armor_1>	110	</armor_1>
+      <armor_2>	110	</armor_2>
       <armor_3>	85	</armor_3>
       <armor_4>	45	</armor_4>
       <armor_5>	20	</armor_5>
@@ -950,8 +950,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.20	</vehicleMovement>
-        <vehicleRotation>	0.20	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1881,22 +1881,22 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	9	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	13.95	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	18 14 8	</reloadTime>
+            <reloadTime>	19 15 8.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.23	</turretRotation>
+            <afterShot>	4.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.8	</aimingTime>
+          <aimingTime>	3.1	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R187_Object_590/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R187_Object_590/crash/lod0/Gun_01.model	</destroyed>

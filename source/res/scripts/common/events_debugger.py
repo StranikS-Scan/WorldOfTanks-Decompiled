@@ -10,9 +10,12 @@ class EventsDebugger(object):
 
     def __init__(self, events):
         for eventName in _iterEventNames(events):
-            event = getattr(events, eventName)
-            processor = getattr(self, eventName)
-            event += processor
+            self.attachTo(events, eventName)
+
+    def attachTo(self, events, eventName):
+        event = getattr(events, eventName)
+        processor = getattr(self, eventName)
+        event += processor
 
     def _shouldHandle(self, eventName):
         return True

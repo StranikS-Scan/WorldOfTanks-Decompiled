@@ -54,7 +54,6 @@ class QUESTS(object):
     BONUSES_ITEM_PREMIUM = '#quests:bonuses/item/premium'
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
-    BONUSES_ITEM_LOOTBOXES = '#quests:bonuses/item/lootBoxes'
     BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSES_CREWBOOK_TEXT = '#quests:bonuses/crewBook/text'
     BONUSES_CREWSKIN_TEXT = '#quests:bonuses/crewSkin/text'
@@ -740,6 +739,11 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
     DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
+    DETAILS_CONDITIONS_CUMULATIVE_WTBOSSVULNERABLEDAMAGE = '#quests:details/conditions/cumulative/wtBossVulnerableDamage'
+    DETAILS_CONDITIONS_CUMULATIVE_MAXWTPLASMABONUS = '#quests:details/conditions/cumulative/maxWtPlasmaBonus'
+    DETAILS_CONDITIONS_CUMULATIVE_WTGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtGeneratorsCaptured'
+    DETAILS_CONDITIONS_CUMULATIVE_WTTOTALGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtTotalGeneratorsCaptured'
+    DETAILS_CONDITIONS_CUMULATIVE_WTDEATHCOUNT = '#quests:details/conditions/cumulative/wtDeathCount'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1555,7 +1559,6 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK = '#quests:personalMission/status/addBottom/vehicleType/heavyTank'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG = '#quests:personalMission/status/addBottom/vehicleType/AT-SPG'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG = '#quests:personalMission/status/addBottom/vehicleType/SPG'
-    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY = '#quests:personalMission/status/addBottom/vehicleType/any'
     PERSONALMISSION_STATUS_MISSIONDISABLED = '#quests:personalMission/status/missionDisabled'
     PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS = '#quests:personalMission/status/lockedByPrevMissions'
     PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION = '#quests:personalMission/status/lockedByPrevOperation'
@@ -1712,11 +1715,6 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
     DETAILS_CONDITIONS_CUMULATIVE_COMP7PRESTIGEPOINTS = '#quests:details/conditions/cumulative/comp7PrestigePoints'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION1 = '#quests:debutBoxes/missions/header/caption1'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION2 = '#quests:debutBoxes/missions/header/caption2'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION3 = '#quests:debutBoxes/missions/header/caption3'
-    DEBUTBOXES_MISSIONS_HEADER_DISABLED = '#quests:debutBoxes/missions/header/disabled'
-    DEBUTBOXES_MISSIONS_HEADER_INFO = '#quests:debutBoxes/missions/header/info'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -2231,8 +2229,7 @@ class QUESTS(object):
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_MEDIUMTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY)
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG)
 
     @classmethod
     def getTokenTitle(cls, style):

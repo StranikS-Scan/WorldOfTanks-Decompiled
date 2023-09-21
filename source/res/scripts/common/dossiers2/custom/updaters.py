@@ -16,9 +16,9 @@ from VersionUpdater import VersionUpdaterBase
 from serialization import ComponentBinSerializer
 from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
-ACCOUNT_DOSSIER_VERSION = 151
+ACCOUNT_DOSSIER_VERSION = 150
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 112
+VEHICLE_DOSSIER_VERSION = 111
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -5932,7 +5932,11 @@ def __updateFromAccountDossier146(compDescr):
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
-    addBlock(updateCtx, 'mtAchievements')
+    achievements7x7Packing = {'maxTacticalBreakthroughSeries': (12, 'H')}
+    achievements7x7Values = getStaticSizeBlockRecordValues(updateCtx, 'achievements7x7', achievements7x7Packing)
+    isSingleAchievementClaimed = getBinarySetValue(updateCtx, 'singleAchievements', 0, 7)
+    if not isSingleAchievementClaimed and achievements7x7Values.get('maxTacticalBreakthroughSeries', 0) >= 3:
+        updateBinaryBlockRecords(updateCtx, 'singleAchievements', [(0, 7, True)])
     setVersion(updateCtx, 147)
     return (147, updateCtx['dossierCompDescr'])
 
@@ -6023,18 +6027,18 @@ def __updateFromAccountDossier147(compDescr):
      'comp7CutSeason1',
      'comp7Season2',
      'maxComp7Season2',
-     'comp7CutSeason2',
-     'mtAchievements']
+     'comp7CutSeason2']
     updateCtx = {'dossierCompDescr': compDescr,
      'blockSizeFormat': 'H',
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
-    achievements7x7Packing = {'maxTacticalBreakthroughSeries': (12, 'H')}
-    achievements7x7Values = getStaticSizeBlockRecordValues(updateCtx, 'achievements7x7', achievements7x7Packing)
-    isSingleAchievementClaimed = getBinarySetValue(updateCtx, 'singleAchievements', 0, 7)
-    if not isSingleAchievementClaimed and achievements7x7Values.get('maxTacticalBreakthroughSeries', 0) >= 3:
-        updateBinaryBlockRecords(updateCtx, 'singleAchievements', [(0, 7, True)])
+    addBlock(updateCtx, 'comp7Season3')
+    addBlock(updateCtx, 'maxComp7Season3')
+    addBlock(updateCtx, 'comp7CutSeason3')
+    addBlock(updateCtx, 'comp7ArchiveGriffin')
+    addBlock(updateCtx, 'maxComp7ArchiveGriffin')
+    addBlock(updateCtx, 'comp7CutArchiveGriffin')
     setVersion(updateCtx, 148)
     return (148, updateCtx['dossierCompDescr'])
 
@@ -6126,216 +6130,6 @@ def __updateFromAccountDossier148(compDescr):
      'comp7Season2',
      'maxComp7Season2',
      'comp7CutSeason2',
-     'mtAchievements']
-    updateCtx = {'dossierCompDescr': compDescr,
-     'blockSizeFormat': 'H',
-     'versionFormat': 'H',
-     'blocksLayout': blocksLayout}
-    getHeader(updateCtx)
-    addBlock(updateCtx, 'mt_versusAI')
-    addBlock(updateCtx, 'mt_maxVersusAI')
-    addBlock(updateCtx, 'mt_versusAICut')
-    setVersion(updateCtx, 149)
-    return (149, updateCtx['dossierCompDescr'])
-
-
-def __updateFromAccountDossier149(compDescr):
-    blocksLayout = ['a15x15',
-     'a15x15_2',
-     'clan',
-     'clan2',
-     'company',
-     'company2',
-     'a7x7',
-     'achievements',
-     'vehTypeFrags',
-     'a15x15Cut',
-     'rareAchievements',
-     'total',
-     'a7x7Cut',
-     'max15x15',
-     'max7x7',
-     'achievements7x7',
-     'historical',
-     'maxHistorical',
-     'historicalAchievements',
-     'historicalCut',
-     'uniqueAchievements',
-     'fortBattles',
-     'maxFortBattles',
-     'fortBattlesCut',
-     'fortSorties',
-     'maxFortSorties',
-     'fortSortiesCut',
-     'fortBattlesInClan',
-     'maxFortBattlesInClan',
-     'fortSortiesInClan',
-     'maxFortSortiesInClan',
-     'fortAchievements',
-     'singleAchievements',
-     'clanAchievements',
-     'rated7x7',
-     'maxRated7x7',
-     'achievementsRated7x7',
-     'rated7x7Cut',
-     'globalMapMiddle',
-     'globalMapChampion',
-     'globalMapAbsolute',
-     'maxGlobalMapMiddle',
-     'maxGlobalMapChampion',
-     'maxGlobalMapAbsolute',
-     'globalMapCommonCut',
-     'fallout',
-     'falloutCut',
-     'maxFallout',
-     'falloutAchievements',
-     'ranked',
-     'maxRanked',
-     'rankedCut',
-     'rankedSeasons',
-     'a30x30',
-     'a30x30Cut',
-     'max30x30',
-     'markOfMasteryCut',
-     'playerBadges',
-     'epicBattle',
-     'epicBattleCut',
-     'maxEpicBattle',
-     'epicBattleAchievements',
-     'rankedSeason1',
-     'rankedSeason2',
-     'rankedSeason3',
-     'maxRankedSeason1',
-     'maxRankedSeason2',
-     'maxRankedSeason3',
-     'rankedCutSeason1',
-     'rankedCutSeason2',
-     'rankedCutSeason3',
-     'rankedArchive',
-     'maxRankedArchive',
-     'rankedCutArchive',
-     'epicSeasons',
-     'battleRoyaleSeasons',
-     'ranked_10x10',
-     'maxRanked_10x10',
-     'rankedCut_10x10',
-     'steamAchievements',
-     'comp7Season1',
-     'maxComp7Season1',
-     'comp7CutSeason1',
-     'comp7Season2',
-     'maxComp7Season2',
-     'comp7CutSeason2',
-     'mtAchievements',
-     'mt_versusAI',
-     'mt_maxVersusAI',
-     'mt_versusAICut']
-    updateCtx = {'dossierCompDescr': compDescr,
-     'blockSizeFormat': 'H',
-     'versionFormat': 'H',
-     'blocksLayout': blocksLayout}
-    getHeader(updateCtx)
-    addBlock(updateCtx, 'comp7Season3')
-    addBlock(updateCtx, 'maxComp7Season3')
-    addBlock(updateCtx, 'comp7CutSeason3')
-    addBlock(updateCtx, 'comp7ArchiveGriffin')
-    addBlock(updateCtx, 'maxComp7ArchiveGriffin')
-    addBlock(updateCtx, 'comp7CutArchiveGriffin')
-    setVersion(updateCtx, 150)
-    return (150, updateCtx['dossierCompDescr'])
-
-
-def __updateFromAccountDossier150(compDescr):
-    blocksLayout = ['a15x15',
-     'a15x15_2',
-     'clan',
-     'clan2',
-     'company',
-     'company2',
-     'a7x7',
-     'achievements',
-     'vehTypeFrags',
-     'a15x15Cut',
-     'rareAchievements',
-     'total',
-     'a7x7Cut',
-     'max15x15',
-     'max7x7',
-     'achievements7x7',
-     'historical',
-     'maxHistorical',
-     'historicalAchievements',
-     'historicalCut',
-     'uniqueAchievements',
-     'fortBattles',
-     'maxFortBattles',
-     'fortBattlesCut',
-     'fortSorties',
-     'maxFortSorties',
-     'fortSortiesCut',
-     'fortBattlesInClan',
-     'maxFortBattlesInClan',
-     'fortSortiesInClan',
-     'maxFortSortiesInClan',
-     'fortAchievements',
-     'singleAchievements',
-     'clanAchievements',
-     'rated7x7',
-     'maxRated7x7',
-     'achievementsRated7x7',
-     'rated7x7Cut',
-     'globalMapMiddle',
-     'globalMapChampion',
-     'globalMapAbsolute',
-     'maxGlobalMapMiddle',
-     'maxGlobalMapChampion',
-     'maxGlobalMapAbsolute',
-     'globalMapCommonCut',
-     'fallout',
-     'falloutCut',
-     'maxFallout',
-     'falloutAchievements',
-     'ranked',
-     'maxRanked',
-     'rankedCut',
-     'rankedSeasons',
-     'a30x30',
-     'a30x30Cut',
-     'max30x30',
-     'markOfMasteryCut',
-     'playerBadges',
-     'epicBattle',
-     'epicBattleCut',
-     'maxEpicBattle',
-     'epicBattleAchievements',
-     'rankedSeason1',
-     'rankedSeason2',
-     'rankedSeason3',
-     'maxRankedSeason1',
-     'maxRankedSeason2',
-     'maxRankedSeason3',
-     'rankedCutSeason1',
-     'rankedCutSeason2',
-     'rankedCutSeason3',
-     'rankedArchive',
-     'maxRankedArchive',
-     'rankedCutArchive',
-     'epicSeasons',
-     'battleRoyaleSeasons',
-     'ranked_10x10',
-     'maxRanked_10x10',
-     'rankedCut_10x10',
-     'steamAchievements',
-     'comp7Season1',
-     'maxComp7Season1',
-     'comp7CutSeason1',
-     'comp7Season2',
-     'maxComp7Season2',
-     'comp7CutSeason2',
-     'mtAchievements',
-     'mt_versusAI',
-     'mt_maxVersusAI',
-     'mt_versusAICut',
      'comp7Season3',
      'maxComp7Season3',
      'comp7CutSeason3',
@@ -6437,8 +6231,112 @@ def __updateFromAccountDossier150(compDescr):
      'maxHealthRepairVehicle': (31, 'I')}
     archiveMaxSeasonsGriffin(seasonsNumber, updateCtx, maxComp7SeasonsPacking)
     archiveCutSeasonsGriffin(seasonsNumber, updateCtx)
-    setVersion(updateCtx, 151)
-    return (151, updateCtx['dossierCompDescr'])
+    setVersion(updateCtx, 149)
+    return (149, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier149(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'falloutCut',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedCut',
+     'rankedSeasons',
+     'a30x30',
+     'a30x30Cut',
+     'max30x30',
+     'markOfMasteryCut',
+     'playerBadges',
+     'epicBattle',
+     'epicBattleCut',
+     'maxEpicBattle',
+     'epicBattleAchievements',
+     'rankedSeason1',
+     'rankedSeason2',
+     'rankedSeason3',
+     'maxRankedSeason1',
+     'maxRankedSeason2',
+     'maxRankedSeason3',
+     'rankedCutSeason1',
+     'rankedCutSeason2',
+     'rankedCutSeason3',
+     'rankedArchive',
+     'maxRankedArchive',
+     'rankedCutArchive',
+     'epicSeasons',
+     'battleRoyaleSeasons',
+     'ranked_10x10',
+     'maxRanked_10x10',
+     'rankedCut_10x10',
+     'steamAchievements',
+     'comp7Season1',
+     'maxComp7Season1',
+     'comp7CutSeason1',
+     'comp7Season2',
+     'maxComp7Season2',
+     'comp7CutSeason2',
+     'comp7Season3',
+     'maxComp7Season3',
+     'comp7CutSeason3',
+     'comp7ArchiveGriffin',
+     'maxComp7ArchiveGriffin',
+     'comp7CutArchiveGriffin']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    formats = [('wt2023HunterWins', 'I'), ('wt2023BossWins', 'I'), ('wt2023MaxPlasma', 'I')]
+    addRecords(updateCtx, 'achievements', formats, {})
+    setVersion(updateCtx, 150)
+    return (150, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):
@@ -8808,73 +8706,6 @@ def __updateFromVehicleDossier110(compDescr):
     archiveMaxSeasonsGriffin(seasonsNumber, updateCtx, maxComp7SeasonsPacking)
     setVersion(updateCtx, 111)
     return (111, updateCtx['dossierCompDescr'])
-
-
-def __updateFromVehicleDossier111(compDescr):
-    blocksLayout = ['a15x15',
-     'a15x15_2',
-     'clan',
-     'clan2',
-     'company',
-     'company2',
-     'a7x7',
-     'achievements',
-     'vehTypeFrags',
-     'total',
-     'max15x15',
-     'max7x7',
-     'inscriptions',
-     'emblems',
-     'camouflages',
-     'compensation',
-     'achievements7x7',
-     'historical',
-     'maxHistorical',
-     'uniqueAchievements',
-     'fortBattles',
-     'maxFortBattles',
-     'fortSorties',
-     'maxFortSorties',
-     'fortAchievements',
-     'singleAchievements',
-     'clanAchievements',
-     'rated7x7',
-     'maxRated7x7',
-     'globalMapCommon',
-     'maxGlobalMapCommon',
-     'fallout',
-     'maxFallout',
-     'falloutAchievements',
-     'ranked',
-     'maxRanked',
-     'rankedSeasons',
-     'a30x30',
-     'max30x30',
-     'epicBattle',
-     'maxEpicBattle',
-     'epicBattleAchievements',
-     'maxRankedSeason1',
-     'maxRankedSeason2',
-     'maxRankedSeason3',
-     'ranked_10x10',
-     'maxRanked_10x10',
-     'comp7Season1',
-     'maxComp7Season1',
-     'comp7Season2',
-     'maxComp7Season2',
-     'comp7Season3',
-     'maxComp7Season3',
-     'comp7ArchiveGriffin',
-     'maxComp7ArchiveGriffin']
-    updateCtx = {'dossierCompDescr': compDescr,
-     'blockSizeFormat': 'H',
-     'versionFormat': 'H',
-     'blocksLayout': blocksLayout}
-    getHeader(updateCtx)
-    addBlock(updateCtx, 'mt_versusAI')
-    addBlock(updateCtx, 'mt_maxVersusAI')
-    setVersion(updateCtx, 112)
-    return (112, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

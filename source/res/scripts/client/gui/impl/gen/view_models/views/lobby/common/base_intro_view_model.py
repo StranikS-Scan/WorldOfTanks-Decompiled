@@ -8,38 +8,32 @@ from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroS
 class BaseIntroViewModel(ViewModel):
     __slots__ = ('onClose', 'onVideo', 'onViewLoaded')
 
-    def __init__(self, properties=5, commands=3):
+    def __init__(self, properties=4, commands=3):
         super(BaseIntroViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getIsVideoExist(self):
-        return self._getBool(0)
-
-    def setIsVideoExist(self, value):
-        self._setBool(0, value)
-
     def getTitle(self):
-        return self._getResource(1)
+        return self._getResource(0)
 
     def setTitle(self, value):
-        self._setResource(1, value)
+        self._setResource(0, value)
 
     def getAbout(self):
-        return self._getResource(2)
+        return self._getResource(1)
 
     def setAbout(self, value):
-        self._setResource(2, value)
+        self._setResource(1, value)
 
     def getButtonLabel(self):
-        return self._getResource(3)
+        return self._getResource(2)
 
     def setButtonLabel(self, value):
-        self._setResource(3, value)
+        self._setResource(2, value)
 
     def getSlides(self):
-        return self._getArray(4)
+        return self._getArray(3)
 
     def setSlides(self, value):
-        self._setArray(4, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getSlidesType():
@@ -47,7 +41,6 @@ class BaseIntroViewModel(ViewModel):
 
     def _initialize(self):
         super(BaseIntroViewModel, self)._initialize()
-        self._addBoolProperty('isVideoExist', True)
         self._addResourceProperty('title', R.invalid())
         self._addResourceProperty('about', R.invalid())
         self._addResourceProperty('buttonLabel', R.invalid())

@@ -35,10 +35,11 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IGuiLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from skeletons.gui.game_control import IEventBattlesController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -325,6 +326,7 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
@@ -349,7 +351,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
     def _getIsLocked(self):
         isLocked = True
         vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and not self.__gameEventCtrl.isEventPrbActive() and vehicle is not None and vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
         return isLocked
 
@@ -1155,16 +1157,16 @@ class SeniorityAwardsDecorator(MessageDecorator):
 
 
 class EventLootBoxesDecorator(MessageDecorator):
-    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
+    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
 
     def __init__(self, entityID, message, model):
         super(EventLootBoxesDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
-        self.__guiLootBoxes.onStatusChange += self.__update
-        self.__guiLootBoxes.onAvailabilityChange += self.__update
+        self.__eventLootBoxes.onStatusChange += self.__update
+        self.__eventLootBoxes.onAvailabilityChange += self.__update
 
     def clear(self):
-        self.__guiLootBoxes.onStatusChange -= self.__update
-        self.__guiLootBoxes.onAvailabilityChange -= self.__update
+        self.__eventLootBoxes.onStatusChange -= self.__update
+        self.__eventLootBoxes.onAvailabilityChange -= self.__update
 
     def _make(self, formatted=None, settings=None):
         self.__updateEntityButtons()
@@ -1181,10 +1183,10 @@ class EventLootBoxesDecorator(MessageDecorator):
             return
         else:
             labelText = backport.text(R.strings.lootboxes.notification.eventStart.button())
-            if self.__guiLootBoxes.useExternalShop():
+            if self.__eventLootBoxes.useExternalShop():
                 labelText = text_styles.concatStylesWithSpace(labelText, icons.webLink())
             self._entity['buttonsLayout'][0]['label'] = labelText
-            if self.__guiLootBoxes.isEnabled() and self.__guiLootBoxes.isLootBoxesAvailable():
+            if self.__eventLootBoxes.isActive() and self.__eventLootBoxes.isLootBoxesAvailable():
                 state = NOTIFICATION_BUTTON_STATE.DEFAULT
             else:
                 state = NOTIFICATION_BUTTON_STATE.VISIBLE

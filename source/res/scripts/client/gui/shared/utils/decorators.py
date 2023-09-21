@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/decorators.py
 import time
+from Queue import Queue
+from functools import wraps
 from string import join
 import adisp
 import BigWorld
@@ -40,22 +42,6 @@ class adisp_process(object):
             return adisp.adisp_process(func, self.__stepCallback)(*kargs, **kwargs)
 
         return wrapper
-
-
-def callerWrapper(caller, onCompleted=lambda : None):
-
-    def getCbWrapper(callback):
-
-        def cbWrapper(*args, **kwargs):
-            onCompleted()
-            callback(*args, **kwargs)
-
-        return cbWrapper
-
-    def wrapper(callback):
-        return caller(callback=getCbWrapper(callback))
-
-    return wrapper
 
 
 def adisp_async(func, cbname='callback', cbwrapper=lambda x: x):
@@ -174,3 +160,44 @@ class InternalRepresenter(object):
 
         clazz.__repr__ = __repr__
         return clazz
+
+
+class ExecuteAfterCondition(object):
+    __slots__ = ('__queue', '__callbackID')
+
+    def __init__(self):
+        self.__queue = Queue()
+        self.__callbackID = None
+        return
+
+    def __call__(self, func):
+
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            self._enqueueCall(func, *args, **kwargs)
+            if self.__callbackID is None:
+                self._checkCondition()
+            return
+
+        return wrapped
+
+    @property
+    def condition(self):
+        raise NotImplementedError
+
+    def _checkCondition(self):
+        if not self.condition:
+            self.__callbackID = BigWorld.callback(0.0, self._checkCondition)
+            return
+        else:
+            self.__callbackID = None
+            self._executeEnqueuedCalls()
+            return
+
+    def _enqueueCall(self, func, *args, **kwargs):
+        self.__queue.put((func, args, kwargs))
+
+    def _executeEnqueuedCalls(self):
+        while not self.__queue.empty():
+            f, args, kwargs = self.__queue.get()
+            f(*args, **kwargs)

@@ -512,7 +512,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'code')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'code', 'consumeSeconds', 'deploySeconds', 'rechargeSeconds', 'soundPressedReady', 'soundPressedNotReady', 'soundPressedCancel')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -522,11 +522,17 @@ class Equipment(Artefact):
         self.repeatedStunDurationFactor = 1.0
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
+        self.consumeSeconds = component_constants.ZERO_INT
+        self.rechargeSeconds = component_constants.ZERO_INT
+        self.deploySeconds = component_constants.ZERO_INT
         self.soundNotification = None
         self.clientSelector = None
         self.playerMessagesKey = None
         self.clientSelector = None
         self.code = None
+        self.soundPressedReady = None
+        self.soundPressedNotReady = None
+        self.soundPressedCancel = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -534,9 +540,13 @@ class Equipment(Artefact):
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
         self.playerMessagesKey = _xml.readStringOrNone(xmlCtx, section, 'playerMessagesKey')
+        self.soundPressedReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedReady')
+        self.soundPressedNotReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedNotReady')
+        self.soundPressedCancel = _xml.readStringOrNone(xmlCtx, section, 'soundPressedCancel')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
-        self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
+        params = _readReuseParams(xmlCtx, scriptSection)
+        self.reuseCount, self.cooldownSeconds, self.consumeSeconds, self.deploySeconds, self.rechargeSeconds = params
         self.clientSelector = _xml.readStringOrNone(xmlCtx, scriptSection, 'clientSelector')
         self.ownerPrefab = _xml.readStringOrNone(xmlCtx, section, 'ownerPrefab')
         self.usagePrefab = _xml.readStringOrNone(xmlCtx, section, 'usagePrefab')
@@ -561,11 +571,12 @@ class Equipment(Artefact):
         if 'builtin' not in self.tags:
             inventoryCallback(self.compactDescr)
 
-    def isActivatable(self):
-        return False
-
     def doesDependOnOptionalDevice(self):
         return False
+
+
+class EpicEmptySlot(Equipment):
+    pass
 
 
 class ExtraHealthReserve(StaticOptionalDevice):
@@ -638,24 +649,7 @@ class RotationMechanisms(StaticOptionalDevice):
         self.wheelCenterRotationFwdSpeed = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'wheelCenterRotationFwdSpeed')
 
 
-class ActivatableEquipment(Equipment):
-    __slots__ = ('activeSeconds', 'activeDamageFactor')
-
-    def __init__(self):
-        super(ActivatableEquipment, self).__init__()
-        self.activeSeconds = None
-        self.activeDamageFactor = component_constants.ZERO_FLOAT
-        return
-
-    def _readConfig(self, xmlCtx, section):
-        self.activeSeconds = _xml.readIntOrNone(xmlCtx, section, 'activeSeconds')
-        self.activeDamageFactor = _xml.readFloat(xmlCtx, section, 'activeDamageFactor', 0.0)
-
-    def isActivatable(self):
-        return self.activeSeconds is not None
-
-
-class Extinguisher(ActivatableEquipment):
+class Extinguisher(Equipment):
     __slots__ = ('fireStartingChanceFactor', 'autoactivate')
 
     def __init__(self):
@@ -664,7 +658,6 @@ class Extinguisher(ActivatableEquipment):
         self.autoactivate = False
 
     def _readConfig(self, xmlCtx, section):
-        super(Extinguisher, self)._readConfig(xmlCtx, section)
         if not section.has_key('fireStartingChanceFactor'):
             self.fireStartingChanceFactor = 1.0
         else:
@@ -709,7 +702,7 @@ class Stimulator(Equipment):
         self.crewLevelIncrease = _xml.readFloat(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_FLOAT)
 
 
-class Repairkit(ActivatableEquipment):
+class Repairkit(Equipment):
     __slots__ = ('repairAll', 'bonusValue')
 
     def __init__(self):
@@ -718,7 +711,6 @@ class Repairkit(ActivatableEquipment):
         self.bonusValue = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
-        super(Repairkit, self)._readConfig(xmlCtx, section)
         self.repairAll = section.readBool('repairAll', False)
         self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
 
@@ -1527,15 +1519,17 @@ class PedantBattleBooster(SkillEquipment):
 
 
 class LastEffortBattleBooster(SkillEquipment):
-    __slots__ = ('durationPerLevel',)
+    __slots__ = ('durationPerLevel', 'chanceToHitPerLevel')
 
     def __init__(self):
         super(LastEffortBattleBooster, self).__init__()
         self.durationPerLevel = component_constants.ZERO_FLOAT
+        self.chanceToHitPerLevel = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
         super(LastEffortBattleBooster, self)._readConfig(xmlCtx, section)
         self.durationPerLevel = _xml.readNonNegativeFloat(xmlCtx, section, 'durationPerLevel')
+        self.chanceToHitPerLevel = _xml.readFloat(xmlCtx, section, 'chanceToHitPerLevel')
 
     def updateCrewSkill(self, a):
         if not a.isBoosterApplicable():
@@ -1544,7 +1538,7 @@ class LastEffortBattleBooster(SkillEquipment):
             a.level = MAX_SKILL_LEVEL
             a.isActive = True
         else:
-            a.skillConfig = a.skillConfig.recreate(self.durationPerLevel)
+            a.skillConfig = a.skillConfig.recreate(self.durationPerLevel, self.chanceToHitPerLevel)
 
 
 class _OptionalDeviceFilter(object):
@@ -2716,7 +2710,11 @@ def _readStun(xmlCtx, scriptSection):
 
 
 def _readReuseParams(xmlCtx, scriptSection):
-    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0, _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0)
+    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'consumeSeconds', minVal=0) if scriptSection.has_key('consumeSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'deploySeconds', minVal=0) if scriptSection.has_key('deploySeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'rechargeSeconds', minVal=0) if scriptSection.has_key('rechargeSeconds') else 0)
 
 
 class OPT_DEV_TYPE_TAG(object):

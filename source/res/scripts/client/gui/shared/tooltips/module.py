@@ -46,7 +46,6 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     AUTOLOADER_GUN = 'autoreloadGun'
     AUTOLOADER_WITH_BOOST_GUN = 'autoReloadWithBoostGun'
     CLIP_GUN = 'clipGun'
-    FLAME_GUN = 'flameGun'
     DUAL_GUN = 'dualGun'
     DUAL_ACCURACY_GUN = 'dualAccuracyGun'
     TURBOSHAFT_ENGINE = 'turboshaftEngine'
@@ -60,7 +59,6 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
 _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
  _ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel.boost, _IMG_EXTRA_PATH.autoLoaderGunBoost),
  _ModuleExtraStatuses.CLIP_GUN: (_STR_EXTRA_PATH.clipGunLabel, _IMG_EXTRA_PATH.magazineGunIcon),
- _ModuleExtraStatuses.FLAME_GUN: (_STR_EXTRA_PATH.flameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
  _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
  _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
  _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
@@ -175,7 +173,6 @@ class ModuleTooltipBlockConstructor(object):
     TURBOSHAFT_ENGINE_MODULE_PARAM = 'turboshaftEngine'
     ROCKET_ACCELERATION_ENGINE_MODULE_PARAM = 'rocketAcceleration'
     COOLDOWN_SECONDS = 'cooldownSeconds'
-    ACTIVE_SECONDS = 'activeSeconds'
     RELOAD_COOLDOWN_SECONDS = 'reloadCooldownSeconds'
     CALIBER = 'caliber'
     DUAL_ACCURACY_MODULE_PARAM = 'dualAccuracy'
@@ -187,6 +184,7 @@ class ModuleTooltipBlockConstructor(object):
                          RELOAD_TIME_SECS_PROP_NAME,
                          RELOAD_TIME_PROP_NAME,
                          'avgDamagePerMinute',
+                         'stunMinDurationList',
                          'stunMaxDurationList',
                          DISPERSION_RADIUS,
                          DUAL_ACCURACY_COOLING_DELAY,
@@ -198,14 +196,13 @@ class ModuleTooltipBlockConstructor(object):
      CLIP_GUN_MODULE_PARAM: ('avgDamageList',
                              'avgPiercingPower',
                              SHELLS_COUNT_PROP_NAME,
-                             'shellsBurstCount',
-                             'shellsFlameBurstCount',
                              SHELL_RELOADING_TIME_PROP_NAME,
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
                              BURST_TIME_INTERVAL,
                              BURST_COUNT,
                              BURST_SIZE,
                              'avgDamagePerMinute',
+                             'stunMinDurationList',
                              'stunMaxDurationList',
                              DISPERSION_RADIUS,
                              DUAL_ACCURACY_COOLING_DELAY,
@@ -219,6 +216,7 @@ class ModuleTooltipBlockConstructor(object):
                                     BURST_TIME_INTERVAL,
                                     BURST_COUNT,
                                     BURST_SIZE,
+                                    'stunMinDurationList',
                                     'stunMaxDurationList',
                                     DISPERSION_RADIUS,
                                     DUAL_ACCURACY_COOLING_DELAY,
@@ -287,16 +285,12 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 descList.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
             elif module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 descParts = []
-                if module.descriptor.isActivatable():
-                    paramName = ModuleTooltipBlockConstructor.ACTIVE_SECONDS
-                    paramValue = params_formatters.formatParameter(paramName, module.descriptor.activeSeconds)
-                    descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 cooldownSeconds = module.descriptor.cooldownSeconds
                 if cooldownSeconds:
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
                     paramValue = params_formatters.formatParameter(paramName, cooldownSeconds)
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
-                if module.isBuiltIn:
+                if module.isBuiltIn and not module.isBuiltInInfoHidden:
                     descParts.append(text_styles.main(backport.text(R.strings.tooltips.equipment.builtIn())))
                 descList.append(text_styles.concatStylesToMultiLine(*descParts))
         block.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc='\n'.join(descList), gap=-3, padding=formatters.packPadding(top=-6)))
@@ -325,7 +319,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         bottomOffset = -60
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe:
             overlayPath = backport.image(R.images.gui.maps.shop.artefacts.c_180x135.equipmentPlus_overlay())
-        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
+        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn and not self.module.isBuiltInInfoHidden:
             padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_LEFT)
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.builtInEquipment_overlay())
             bottomOffset = 0
@@ -669,8 +663,6 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         result = []
         if module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
-        elif module.isFlameGun():
-            result.append(_ModuleExtraStatuses.FLAME_GUN)
         elif module.isAutoReloadable(vDescr):
             hasBoost = False
             for gun in vDescr.type.getGuns():

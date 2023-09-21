@@ -32,6 +32,24 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
     def isVisible(self):
         return self.__epicController.getCurrentSeasonID()
 
+    @property
+    def isSelectable(self):
+        from frontline.gui.frontline_helpers import isHangarAvailable
+        return isHangarAvailable() and not self.__epicController.isEpicPrbActive()
+
+    def setBattleTypeAsKnown(self):
+        if self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._battleType)
+
+    def handleClick(self):
+        self.__epicController.showWelcomeScreenIfNeed()
+        self.__epicController.showProgressionDuringSomeStates(True)
+        self.setBattleTypeAsKnown()
+
+    def handleInfoPageClick(self):
+        showFrontlineInfoWindow()
+        self.setBattleTypeAsKnown()
+
     def _getIsDisabled(self):
         return not self.__epicController.isEnabled()
 
@@ -58,20 +76,6 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
 
     def _isInfoIconVisible(self):
         return True
-
-    def handleClick(self):
-        self.__epicController.showWelcomeScreenIfNeed()
-        self.__epicController.showProgressionDuringSomeStates(True)
-
-    @property
-    def isSelectable(self):
-        from frontline.gui.frontline_helpers import isHangarAvailable
-        return isHangarAvailable() and not self.__epicController.isEpicPrbActive()
-
-    def handleInfoPageClick(self):
-        showFrontlineInfoWindow()
-        if self._isNew:
-            selectorUtils.setBattleTypeAsKnown(self._battleType)
 
     def __fillViewModel(self):
         with self.viewModel.transaction() as vm:

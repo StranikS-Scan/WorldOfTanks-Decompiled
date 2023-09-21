@@ -18,16 +18,15 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
-_DEFAULT_VEHICLE_PRICE = 3000
+_DEFAULT_VEHICLE_PRICE = 1500
 _DEFAULT_EQUIPMENT_PRICE = 3000
 _DEFAULT_INSTRUCTION_PRICE = 6
 _DEFAULT_LEVEL = 10
 _STR_PATH = R.strings.menu.crystals.info.tab.get
 _IMG_PATH = R.images.gui.maps.icons.crystalsInfo.get
-_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.RANKED)
+_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM)
 _BONUS_TYPE_INFO = {ARENA_BONUS_TYPE.REGULAR: 'random',
- ARENA_BONUS_TYPE.EPIC_RANDOM: 'general',
- ARENA_BONUS_TYPE.RANKED: 'ranked'}
+ ARENA_BONUS_TYPE.EPIC_RANDOM: 'general'}
 _shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.EQUIPMENT_TAB: getBonsDevicesUrl(),
  CrystalsPromoViewModel.INSTRUCTIONS_TAB: getBonsInstructionsUrl()}

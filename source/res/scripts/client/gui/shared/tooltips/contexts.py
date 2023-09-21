@@ -51,7 +51,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals', 'showDebutBoxes')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals')
 
     def __init__(self):
         self.vehicle = None
@@ -75,12 +75,11 @@ class StatsConfiguration(object):
         self.withSlots = False
         self.isStaticInfoOnly = False
         self.showEarnCrystals = True
-        self.showDebutBoxes = True
         return
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isSpecialWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
 
     def __init__(self):
         self.vehicle = None
@@ -97,6 +96,7 @@ class StatusConfiguration(object):
         self.isCompare = False
         self.eqSetupIDx = None
         self.battleRoyale = None
+        self.isSpecialWindow = False
         return
 
 
@@ -196,7 +196,6 @@ class DefaultContext(ToolTipContext):
         value = super(DefaultContext, self).getStatsConfiguration(item)
         value.xp = False
         value.dailyXP = False
-        value.showDebutBoxes = False
         return value
 
     def getParamsConfiguration(self, item):
@@ -231,7 +230,7 @@ class ReferralProgramBadgeContext(BadgeContext):
 class AwardContext(DefaultContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, fieldsToExclude=None, simplifiedOnly=True):
+    def __init__(self, fieldsToExclude=None):
         super(AwardContext, self).__init__(fieldsToExclude)
         self._tmanRoleLevel = None
         self._rentExpiryTime = None
@@ -239,7 +238,6 @@ class AwardContext(DefaultContext):
         self._rentWinsLeft = None
         self._seasonRent = None
         self._isSeniority = False
-        self._simplifiedOnly = simplifiedOnly
         return
 
     def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False):
@@ -270,7 +268,7 @@ class AwardContext(DefaultContext):
 
     def getParamsConfiguration(self, item):
         value = super(AwardContext, self).getParamsConfiguration(item)
-        value.simplifiedOnly = self._simplifiedOnly
+        value.simplifiedOnly = True
         value.externalCrewParam = True
         return value
 
@@ -365,6 +363,24 @@ class ShopContext(AwardContext):
         value = super(ShopContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
+        return value
+
+
+class WtEventPortalContext(DefaultContext):
+
+    def buildItem(self, *args, **kwargs):
+        return super(WtEventPortalContext, self).buildItem(args[0])
+
+    def getStatsConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatsConfiguration(item)
+        value.sellPrice = False
+        value.buyPrice = False
+        value.unlockPrice = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatusConfiguration(item)
+        value.isSpecialWindow = True
         return value
 
 

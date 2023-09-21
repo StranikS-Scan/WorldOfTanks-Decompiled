@@ -504,8 +504,7 @@ def getVOMapping():
      PROFILE_DROPDOWN_KEYS.RANKED_10X10: _VOData(ProfileRanked10x10StatisticsVO, {}),
      PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: _VOData(ProfileEpicRandomStatisticsVO, {}),
      PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: _VOData(ProfileStatisticsBattleRoyaleVO, {}),
-     PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _VOData(ProfileStatisticsBattleRoyaleVO, {}),
-     PROFILE_DROPDOWN_KEYS.VERSUS_AI: _VOData(ProfileVersusAIStatisticsVO, {})}
+     PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _VOData(ProfileStatisticsBattleRoyaleVO, {})}
     for archive in COMP7_ARCHIVE_NAMES:
         mapping[getDropdownKeyByArchiveName(archive)] = _VOData(ProfileComp7StatisticsVO, {'archive': archive})
 
@@ -513,24 +512,6 @@ def getVOMapping():
         mapping[getDropdownKeyBySeason(season)] = _VOData(ProfileComp7StatisticsVO, {'season': season})
 
     return mapping
-
-
-class ProfileVersusAIStatisticsVO(ProfileDictStatisticsVO):
-
-    def _getHeaderText(self, data):
-        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_VERSUSAI)
-
-    def _getHeaderData(self, data):
-        targetData = data[0]
-        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
-         PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
-         _packAvgDmgLditItemData(self._avgDmg),
-         _packAvgXPLditItemData(self._avgXP),
-         PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)))
-
-    def _getDetailedData(self, data):
-        targetData = data[0]
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsFullData(targetData))
 
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):

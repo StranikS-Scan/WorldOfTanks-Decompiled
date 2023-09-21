@@ -5,8 +5,13 @@ from gui.gift_system.proxy import GiftSystemMessagesProxy
 from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
-from messenger.formatters import token_quest_subformatters
+from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+_AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
+ auto_boxes_subformatters.EventLootBoxesFormatter(),
+ auto_boxes_subformatters.NYPostEventBoxesFormatter(),
+ auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
+ auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter())
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -20,7 +25,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.WinbackRewardFormatter(),
- token_quest_subformatters.CrewPerksFormatter()))
+ token_quest_subformatters.CrewPerksFormatter(),
+ token_quest_subformatters.WtEventProgressionQuestFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
@@ -71,6 +77,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
  _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
  _SM_TYPE.customizationChanged.index(): _sc.CustomizationChangedFormatter(),
+ _SM_TYPE.lootBoxesAutoOpenReward.index(): _sc.LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS),
  _SM_TYPE.progressiveReward.index(): _sc.ProgressiveRewardFormatter(),
  _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
  _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
@@ -118,7 +125,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
  _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
  _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
- _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter()}
+ _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
+ _SM_TYPE.wtEventTicketTokenWithdrawn.index(): _sc.WTEventTicketTokenWithdrawnFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -169,6 +177,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.currencyUpdate.index(), _sc.CurrencyUpdateFormatter())
     registerMessengerServerFormatter(_SM_TYPE.personalMissionFailed.index(), _sc.PersonalMissionFailedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customizationChanged.index(), _sc.CustomizationChangedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.lootBoxesAutoOpenReward.index(), _sc.LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS))
     registerMessengerServerFormatter(_SM_TYPE.progressiveReward.index(), _sc.ProgressiveRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.piggyBankSmashed.index(), _sc.PiggyBankSmashedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.blackMapRemoved.index(), _sc.BlackMapRemovedFormatter())
@@ -247,3 +256,4 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))
+    registerMessengerServerFormatter(_SM_TYPE.wtEventTicketTokenWithdrawn.index(), _sc.WTEventTicketTokenWithdrawnFormatter())

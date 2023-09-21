@@ -220,19 +220,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def denunciationsLeft(self):
-        return self.getCacheValue('denunciations', {}).get('left', (0, 0))
-
-    @property
-    def battleDenunciationsLeft(self):
-        return self.denunciationsLeft[1]
-
-    @property
-    def hangarDenunciationsLeft(self):
-        return self.denunciationsLeft[0]
-
-    @property
-    def hangarDenunciations(self):
-        return self.getCacheValue('denunciations', {}).get('hangarDenunciations', {})
+        return self.getCacheValue('denunciationsLeft', 0)
 
     @property
     def freeVehiclesLeft(self):
@@ -253,10 +241,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def SPA(self):
         return self.getCacheValue('SPA', {})
-
-    @property
-    def refSystem20(self):
-        return self.getCacheValue('refSystem20', {})
 
     @property
     def piggyBank(self):

@@ -10,8 +10,8 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	48	</forward>
-    <backward>	14	</backward>
+    <forward>	50	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.061	</moving>
@@ -935,8 +935,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1828,7 +1828,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch46_113_140/normal/lod0/Gun_01.model	</undamaged>
@@ -2353,8 +2353,8 @@
     <detailed>
       <engines>
         <_12150LZ_A>
-          <smplEnginePower>	630	</smplEnginePower>
-          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
+          <smplEnginePower>	660	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_12150LZ_A>
       </engines>
       <chassis>

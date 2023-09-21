@@ -20,7 +20,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -71,6 +71,7 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_42: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_43: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_44: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_45: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_MARINA: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_PATRICK: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
@@ -254,9 +255,7 @@ def showMission(eventID, eventType=None):
             if prefix is not None:
                 return showMissionsMarathon(marathonPrefix=prefix)
             if events_helpers.isBattleMattersQuestID(eventID):
-                return showBattleMatters()
-            if events_helpers.isArmoryYardQuest(eventID):
-                return goToArmoryYardQuests()
+                showBattleMatters()
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
         elif quest is not None and quest.showMissionAction() is not None:
@@ -275,12 +274,6 @@ def showMission(eventID, eventType=None):
                 showDailyQuests(subTab=DailyTabs.QUESTS)
             elif events_helpers.isPremium(quest.getID()):
                 showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
-            elif events_helpers.isDebutBoxesQuest(quest.getID()):
-                debutBoxesController = dependency.instance(IDebutBoxesController)
-                if debutBoxesController.isEnabled():
-                    showMissionsGrouped(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
-                else:
-                    showMissionsGrouped(groupID=quest.getGroupID(), anchor=quest.getGroupID())
             else:
                 showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
         return
@@ -405,11 +398,6 @@ def showPersonalMissionFirstEntryAwardView(ctx):
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
-def goToArmoryYardQuests(armoryYardCtrl=None):
-    armoryYardCtrl.goToArmoryYardQuests()
 
 
 def _showMissions(**kwargs):

@@ -14,22 +14,15 @@ from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN
 from gui.shared.money import Currency
 import nations
 from items import vehicles as veh_core
-_MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
-_MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(_MODULE_TYPES_ORDER)))
-_SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
+MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
+MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
+SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
- SHELL_TYPES.SMOKE,
- SHELL_TYPES.ARMOR_PIERCING_HE,
- SHELL_TYPES.FLAME)
-_SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(_SHELL_TYPES_ORDER)))
-_MAX_SHELL_TYPES_ORDER_INDEX = len(_SHELL_TYPES_ORDER_INDICES)
+ SHELL_TYPES.SMOKE)
+SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
 _logger = logging.getLogger(__name__)
-
-def getShellTypesOrder(shellType):
-    return _SHELL_TYPES_ORDER_INDICES.get(shellType, _MAX_SHELL_TYPES_ORDER_INDEX)
-
 
 class VehicleModule(FittingItem):
     __slots__ = ('_vehicleModuleDescriptor',)
@@ -47,7 +40,7 @@ class VehicleModule(FittingItem):
         return self._vehicleModuleDescriptor if self._vehicleModuleDescriptor is not None else super(VehicleModule, self).descriptor
 
     def _sortByType(self, other):
-        return _MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - _MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
+        return MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
 
     def getGUIEmblemID(self):
         return self.itemTypeName
@@ -194,9 +187,6 @@ class VehicleGun(VehicleModule):
     def hasDualAccuracy(self, vehicleDescr=None):
         return vehicleDescr is not None and g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr)
 
-    def isFlameGun(self):
-        return self._defaultAmmo[0].type == SHELL_TYPES.FLAME
-
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
@@ -223,14 +213,10 @@ class VehicleGun(VehicleModule):
     @property
     def userType(self):
         userType = super(VehicleGun, self).userType
-        if self.isFlameGun():
-            return backport.text(R.strings.item_types.flameGun.name())
         return backport.text(R.strings.item_types.dualGun.name()) if self.isDualGun() else userType
 
     def getExtraIconInfo(self, vehDescr=None):
-        if self.isFlameGun():
-            return backport.image(R.images.gui.maps.icons.modules.flameGunIcon())
-        elif self.isClipGun(vehDescr):
+        if self.isClipGun(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.magazineGunIcon())
         elif self.isAutoReloadable(vehDescr):
             if vehDescr:
@@ -422,10 +408,6 @@ class Shell(FittingItem):
     def defaultLayoutValue(self):
         return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.count)
 
-    @property
-    def userType(self):
-        return super(Shell, self).userType if self.type != SHELL_TYPES.FLAME else backport.text(R.strings.item_types.altShot.name())
-
     def isInstalled(self, vehicle, slotIdx=None):
         for shell in vehicle.shells.installed.getItems():
             if self.intCD == shell.intCD:
@@ -440,4 +422,4 @@ class Shell(FittingItem):
         return vehicle.shells.setupLayouts.isInOtherLayout(self)
 
     def _sortByType(self, other):
-        return getShellTypesOrder(self.type) - getShellTypesOrder(other.type)
+        return SHELL_TYPES_ORDER_INDICES[self.type] - SHELL_TYPES_ORDER_INDICES[other.type]

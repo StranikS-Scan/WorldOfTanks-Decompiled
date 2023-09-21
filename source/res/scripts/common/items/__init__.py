@@ -5,7 +5,6 @@ import nations
 from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
 from soft_exception import SoftException
-from intervals import Interval
 if IS_CLIENT:
     import ResMgr
     from helpers import i18n
@@ -13,12 +12,6 @@ else:
     from realm_utils import ResMgr
 _g_itemTypes = None
 UNDEFINED_ITEM_CD = 0
-
-class ITEM_ID_RANGES:
-    WOT = Interval(0, 31000)
-    MT = Interval(31001, 65535)
-
-
 ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment', 'customizationItem', 'crewSkin', 'crewBook')
 
 class ITEM_TYPES(dict):
@@ -37,7 +30,7 @@ SIMPLE_ITEM_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehi
 SIMPLE_ITEM_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
 VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio')
 VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
-EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters', 'battleAbilities')
+EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters', 'battleAbilities', 'abilities', 'aux', 'passives')
 
 class EQUIPMENT_TYPES(dict):
 

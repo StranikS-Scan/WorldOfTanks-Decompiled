@@ -192,7 +192,7 @@ class RewardStyleState(State):
             style = getStyleForChapter(chapterID)
             additionalRewards, _, _ = machine.getRewardsData()
             needNotifyClosing = not additionalRewards
-            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel() or level < 0:
+            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel():
                 machine.post(StateEvent())
                 return
             prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
@@ -232,10 +232,9 @@ class RewardAnyState(State):
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
                 _, level = getStyleInfoForChapter(chapter)
-                if level > -1:
-                    styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
-                    rewards.append(packToken(styleToken))
-                    machine.clearChapterStyle()
+                styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
+                rewards.append(packToken(styleToken))
+                machine.clearChapterStyle()
             if not rewards and not packageRewards:
                 machine.clearSelf()
                 machine.post(StateEvent())

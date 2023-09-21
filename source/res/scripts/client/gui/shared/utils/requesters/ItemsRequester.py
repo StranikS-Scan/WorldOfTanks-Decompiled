@@ -3,7 +3,6 @@
 import operator
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
-from functools import partial
 import typing
 import BigWorld
 import constants
@@ -20,7 +19,6 @@ from goodies.goodie_constants import GOODIE_STATE
 from gui.game_loading.resources.consts import Milestones
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.utils.decorators import callerWrapper
 from gui.shared.utils.requesters import vehicle_items_getter
 from helpers import dependency, isPlayerAvatar
 from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
@@ -282,6 +280,7 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        RANDOM_ONLY = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForRandomBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
@@ -302,6 +301,7 @@ class REQ_CRITERIA(object):
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
+        HAS_NO_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
     class TANKMAN(object):
@@ -401,7 +401,7 @@ class ItemsRequester(IItemsRequester):
      'layout',
      'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None, refProgramRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -415,7 +415,6 @@ class ItemsRequester(IItemsRequester):
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
         self.__festivity = festivityRequester
-        self.__armoryYard = armoryYard
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
@@ -424,7 +423,6 @@ class ItemsRequester(IItemsRequester):
         self.__gameRestrictions = gameRestrictionsRequester
         self.__resourceWell = resourceWellRequester
         self.__achievements20 = achievements20Requester
-        self.__refProgram = refProgramRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -432,6 +430,7 @@ class ItemsRequester(IItemsRequester):
          self.__shop,
          self.__vehicleRotation,
          self.__recycleBin}
+        self.__ignoreFittingItemsSync = False
         self.__vehCustomStateCache = defaultdict(dict)
 
     @property
@@ -487,10 +486,6 @@ class ItemsRequester(IItemsRequester):
         return self.__festivity
 
     @property
-    def armoryYard(self):
-        return self.__armoryYard
-
-    @property
     def tokens(self):
         return self.__tokens
 
@@ -522,68 +517,75 @@ class ItemsRequester(IItemsRequester):
     def achievements20(self):
         return self.__achievements20
 
-    @property
-    def refProgram(self):
-        return self.__refProgram
-
-    def __onCompletedCallback(self, waitingToClose=None, milestone=None):
-        from gui.Scaleform.Waiting import Waiting
-        if waitingToClose:
-            Waiting.hide(waitingToClose)
-        if milestone:
-            g_playerEvents.onLoadingMilestoneReached(milestone)
-
     @adisp_async
     @adisp_process
     def request(self, callback=None):
         from gui.Scaleform.Waiting import Waiting
+        g_playerEvents.onLoadingMilestoneReached(Milestones.INVENTORY)
+        Waiting.show('download/inventory')
+        yield self.__stats.request()
+        yield self.__inventory.request()
+        yield self.__vehicleRotation.request()
+        Waiting.hide('download/inventory')
         g_playerEvents.onLoadingMilestoneReached(Milestones.SHOP)
         Waiting.show('download/shop')
         yield self.__shop.request()
         Waiting.hide('download/shop')
-        g_playerEvents.onLoadingMilestoneReached(Milestones.INVENTORY)
-        Waiting.show('download/refProgram')
-        Waiting.show('download/achievements20')
-        Waiting.show('download/resourceWell')
-        Waiting.show('download/gameRestrictions')
-        Waiting.show('download/giftSystem')
-        Waiting.show('download/festivity')
-        Waiting.show('download/battlePass')
-        Waiting.show('download/tokens')
-        Waiting.show('download/blueprints')
-        Waiting.show('download/epicMetaGame')
-        Waiting.show('download/badges')
-        Waiting.show('download/ranked')
-        Waiting.show('download/anonymizer')
-        Waiting.show('download/recycleBin')
-        Waiting.show('download/discounts')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.DOSSIER)
         Waiting.show('download/dossier')
-        Waiting.show('download/inventory')
-        yield (self.__stats.request(),
-         self.__inventory.request(),
-         callerWrapper(self.__vehicleRotation.request(), onCompleted=partial(self.__onCompletedCallback, 'download/inventory', Milestones.DOSSIER)),
-         self.__dossiers.request(),
-         callerWrapper(self.__sessionStats.request(), onCompleted=partial(self.__onCompletedCallback, 'download/dossier', Milestones.DISCOUNTS)),
-         callerWrapper(self.__goodies.request(), onCompleted=partial(self.__onCompletedCallback, 'download/discounts', Milestones.RECYCLE_BIN)),
-         callerWrapper(self.__recycleBin.request(), onCompleted=partial(self.__onCompletedCallback, 'download/recycleBin', Milestones.PLAYER_DATA)),
-         callerWrapper(self.__anonymizer.request(), onCompleted=partial(self.__onCompletedCallback, 'download/anonymizer', None)),
-         self.__ranked.request(),
-         callerWrapper(self.__battleRoyale.request(), onCompleted=partial(self.__onCompletedCallback, 'download/ranked', None)),
-         callerWrapper(self.__badges.request(), onCompleted=partial(self.__onCompletedCallback, 'download/badges', None)),
-         callerWrapper(self.epicMetaGame.request(), onCompleted=partial(self.__onCompletedCallback, 'download/epicMetaGame', None)),
-         callerWrapper(self.__blueprints.request(), onCompleted=partial(self.__onCompletedCallback, 'download/blueprints', None)),
-         callerWrapper(self.__tokens.request(), onCompleted=partial(self.__onCompletedCallback, 'download/tokens', None)),
-         callerWrapper(self.__battlePass.request(), onCompleted=partial(self.__onCompletedCallback, 'download/battlePass', None)),
-         self.__festivity.request(),
-         callerWrapper(self.__armoryYard.request(), onCompleted=partial(self.__onCompletedCallback, 'download/festivity', None)),
-         callerWrapper(self.__giftSystem.request(), onCompleted=partial(self.__onCompletedCallback, 'download/giftSystem', None)),
-         callerWrapper(self.__gameRestrictions.request(), onCompleted=partial(self.__onCompletedCallback, 'download/gameRestrictions', None)),
-         callerWrapper(self.__resourceWell.request(), onCompleted=partial(self.__onCompletedCallback, 'download/resourceWell', None)),
-         callerWrapper(self.__achievements20.request(), onCompleted=partial(self.__onCompletedCallback, 'download/achievements20', None)),
-         callerWrapper(self.__refProgram.request(), onCompleted=partial(self.__onCompletedCallback, 'download/refProgram', None)))
+        yield self.__dossiers.request()
+        yield self.__sessionStats.request()
+        Waiting.hide('download/dossier')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.DISCOUNTS)
+        Waiting.show('download/discounts')
+        yield self.__goodies.request()
+        Waiting.hide('download/discounts')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.RECYCLE_BIN)
+        Waiting.show('download/recycleBin')
+        yield self.__recycleBin.request()
+        Waiting.hide('download/recycleBin')
+        g_playerEvents.onLoadingMilestoneReached(Milestones.PLAYER_DATA)
+        Waiting.show('download/anonymizer')
+        yield self.__anonymizer.request()
+        Waiting.hide('download/anonymizer')
+        Waiting.show('download/ranked')
+        yield self.__ranked.request()
+        Waiting.hide('download/ranked')
+        Waiting.show('download/ranked')
+        yield self.__battleRoyale.request()
+        Waiting.hide('download/ranked')
+        Waiting.show('download/badges')
+        yield self.__badges.request()
+        Waiting.hide('download/badges')
+        Waiting.show('download/epicMetaGame')
+        yield self.epicMetaGame.request()
+        Waiting.hide('download/epicMetaGame')
+        Waiting.show('download/blueprints')
+        yield self.__blueprints.request()
+        Waiting.hide('download/blueprints')
+        Waiting.show('download/tokens')
+        yield self.__tokens.request()
+        Waiting.hide('download/tokens')
+        Waiting.show('download/battlePass')
+        yield self.__battlePass.request()
+        Waiting.hide('download/battlePass')
+        Waiting.show('download/festivity')
+        yield self.__festivity.request()
+        Waiting.hide('download/festivity')
+        Waiting.show('download/giftSystem')
+        yield self.__giftSystem.request()
+        Waiting.hide('download/giftSystem')
+        Waiting.show('download/gameRestrictions')
+        yield self.__gameRestrictions.request()
+        Waiting.hide('download/gameRestrictions')
+        Waiting.show('download/resourceWell')
+        yield self.__resourceWell.request()
+        Waiting.hide('download/resourceWell')
+        Waiting.show('download/achievements20')
+        yield self.__achievements20.request()
+        Waiting.hide('download/achievements20')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
-        return
 
     def isSynced(self):
         return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__gameRestrictions.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
@@ -640,10 +642,10 @@ class ItemsRequester(IItemsRequester):
         self.epicMetaGame.clear()
         self.__blueprints.clear()
         self.__festivity.clear()
-        self.__armoryYard.clear()
         self.__anonymizer.clear()
         self.__giftSystem.clear()
         self.__gameRestrictions.clear()
+        self.__ignoreFittingItemsSync = True
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -653,6 +655,7 @@ class ItemsRequester(IItemsRequester):
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
+        self.__ignoreFittingItemsSync = False
         if diff is None:
             LOG_DEBUG('Gui items cache full invalidation')
             for itemTypeID, cache in self.__itemsCache.iteritems():
@@ -795,9 +798,6 @@ class ItemsRequester(IItemsRequester):
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehicleSelectedAbilities)
         existingIDs = self.__itemsCache[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].keys()
         invalidIDs = self.__vehPostProgressionCtrl.getInvalidProgressions(diff, existingIDs)
-        if constants.Configs.RESTORE_CONFIG.value in diff:
-            vehsToUpdate = self.__recycleBin.vehiclesBuffer
-            invalidate[GUI_ITEM_TYPE.VEHICLE].update(vehsToUpdate.keys())
         if invalidIDs:
             invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)
@@ -1180,6 +1180,8 @@ class ItemsRequester(IItemsRequester):
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
     def __checkFittingItemsSync(self, itemTypeID):
+        if self.__ignoreFittingItemsSync:
+            return
         unsyncedList = [ r.__class__.__name__ for r in self.__fittingItemRequesters if not r.isSynced() ]
         if not unsyncedList or itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
             return

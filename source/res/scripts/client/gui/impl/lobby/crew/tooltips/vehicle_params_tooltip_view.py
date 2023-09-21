@@ -19,7 +19,7 @@ from helpers import i18n
 from post_progression_common import ACTION_TYPES
 from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
 from items import perks, vehicles, tankmen, parseIntCompactDescr
-from gui.shared.items_parameters.bonus_helper import isSituationalBonus
+from gui.shared.items_parameters.bonus_helper import isSituationalBonus, CREW_MASTERY_BONUSES
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from shared_utils import first
@@ -327,7 +327,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
             isSituational = isSituationalBonus(formattedBnsID, bnsType, pInfo.name)
             scheme = situationalScheme if isSituational else extractedBonusScheme
             valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
-            if isSituational:
+            if isSituational and bnsId in CREW_MASTERY_BONUSES:
                 if diff == 0.0 or isinstance(diff, (list, tuple)) and not filter(None, diff):
                     valueStr = ''
             if valueStr is not None:

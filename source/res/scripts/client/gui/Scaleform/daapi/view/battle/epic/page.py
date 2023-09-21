@@ -31,6 +31,7 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL,
            DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,
            ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER)),
+         (BATTLE_CTRL_ID.PROGRESSION_CTRL, (BATTLE_VIEW_ALIASES.UPGRADE_PANEL,)),
          (BATTLE_CTRL_ID.PERKS, (BATTLE_VIEW_ALIASES.PERKS_PANEL,)),
          (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
@@ -111,7 +112,7 @@ _PAGE_STATE_TO_CONTROL_PARAMS = {(PageStates.TABSCREEN, False): (BATTLE_VIEW_ALI
  (PageStates.RADIAL, False): (BATTLE_VIEW_ALIASES.RADIAL_MENU, False, False),
  (PageStates.LOADING, False): (BATTLE_VIEW_ALIASES.BATTLE_LOADING, True, True),
  (PageStates.RESPAWN, True): (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW, True, False)}
-_STATE_TO_UI = {PageStates.GAME: _GAME_UI,
+_STATE_TO_UI = {PageStates.GAME: _GAME_UI.union({BATTLE_VIEW_ALIASES.UPGRADE_PANEL}),
  PageStates.LOADING: {BATTLE_VIEW_ALIASES.BATTLE_LOADING, BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL},
  PageStates.TABSCREEN: {BATTLE_VIEW_ALIASES.FULL_STATS, BATTLE_VIEW_ALIASES.DEBUG_PANEL, BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL},
  PageStates.OVERVIEWMAP: {BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP,
@@ -393,7 +394,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
     def _onAvatarCtrlModeChanged(self, ctrlMode):
         pass
 
-    def __onRoundFinished(self, winningTeam, reason):
+    def __onRoundFinished(self, winningTeam, reason, extraData):
         self.__pageState = PageStates.GAME_OVER
         self._invalidateState()
 
@@ -406,6 +407,17 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
     def __checkRadialMenu(self):
         if self.__topState == PageStates.RADIAL:
             self._toggleRadialMenu(False)
+
+    def reload(self):
+        if self.sessionProvider.isReplayPlaying:
+            self._onPostMortemReload()
+            self.reloadComponents()
+            for component in self._external:
+                component.startPlugins()
+                component.invokeRegisterComponentForReplay()
+
+        else:
+            super(EpicBattlePage, self).reload()
 
     def _startBattleSession(self):
         super(EpicBattlePage, self)._startBattleSession()

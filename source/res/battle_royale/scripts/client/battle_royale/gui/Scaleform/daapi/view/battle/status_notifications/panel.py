@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/status_notifications/panel.py
 import logging
-import BigWorld
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import sn_items
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import components
@@ -29,7 +27,6 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
     def _generateItems(self):
         items = [_BattleRoyaleHighPriorityGroup,
          sn_items.StunSN,
-         sn_items.StunFlameSN,
          br_sn_items.BRDeathZoneWarningSN,
          br_sn_items.BerserkerSN,
          br_sn_items.ShotPassionSN,
@@ -59,21 +56,11 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
             damaginDeathZoneIcon = _LINKS.DAMAGING_DEATHZONE_ICON
         self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_ZONE, damaginDeathZoneIcon, _LINKS.BATTLE_ROYALE_TIMER_UI, _COLORS.RED, countdownVisible=False)
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        if liftOverEnabled:
-            overturnedIcon = _LINKS.OVERTURNED_GREEN_ICON
-            overturnedColor = _COLORS.GREEN
-            iconOffsetY = 1
-        else:
-            overturnedIcon = _LINKS.OVERTURNED_ICON
-            overturnedColor = _COLORS.ORANGE
-            iconOffsetY = 0
-        self._addNotificationTimerSetting(data, _TYPES.OVERTURNED, overturnedIcon, link, color=overturnedColor, iconOffsetY=iconOffsetY)
-        self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, overturnedIcon, link, noiseVisible=False, iconOffsetY=iconOffsetY, color=overturnedColor)
+        self._addNotificationTimerSetting(data, _TYPES.OVERTURNED, _LINKS.OVERTURNED_GREEN_ICON, link, color=_COLORS.GREEN, iconOffsetY=1)
+        self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, _LINKS.OVERTURNED_GREEN_ICON, link, noiseVisible=False, iconOffsetY=1, color=_COLORS.GREEN)
         self._addNotificationTimerSetting(data, _TYPES.FIRE, _LINKS.FIRE_ICON, link)
         link = _LINKS.SECONDARY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True)
-        self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True)
         self._addNotificationTimerSetting(data, _TYPES.CAPTURE_BLOCK, _LINKS.BLOCKED_ICON, link, _COLORS.ORANGE, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.SMOKE, _LINKS.SMOKE_ICON, link, _COLORS.GREEN, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_SMOKE, _LINKS.DAMAGING_SMOKE_ICON, link, _COLORS.RED, noiseVisible=False)

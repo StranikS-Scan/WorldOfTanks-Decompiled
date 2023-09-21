@@ -100,7 +100,11 @@ class SharedPage(BattlePageMeta):
         if components is None:
             components = _SHARED_COMPONENTS_CONFIG
         else:
-            components += _SHARED_COMPONENTS_CONFIG
+            config = _SHARED_COMPONENTS_CONFIG.getConfig()
+            overridedViewAliases = tuple((alias for alias, _ in components.getViewsConfig()))
+            viewConfig = tuple(((alias, obj) for alias, obj in _SHARED_COMPONENTS_CONFIG.getViewsConfig() if alias not in overridedViewAliases))
+            sharedComponents = ComponentsConfig(config, viewConfig)
+            components += sharedComponents
         components = self._addDefaultHitDirectionController(components)
         self.__componentsConfig = components
         return
@@ -113,7 +117,7 @@ class SharedPage(BattlePageMeta):
 
     def reload(self):
         self._stopBattleSession()
-        self.__onPostMortemReload()
+        self._onPostMortemReload()
         self._startBattleSession()
         self.reloadComponents()
         for component in self._external:
@@ -389,7 +393,7 @@ class SharedPage(BattlePageMeta):
             self.as_setPostmortemTipsVisibleS(False)
             self._isInPostmortem = False
 
-    def __onPostMortemReload(self):
+    def _onPostMortemReload(self):
         self._isInPostmortem = False
         self._reloadPostmortem()
 

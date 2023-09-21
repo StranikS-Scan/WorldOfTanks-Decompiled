@@ -16,13 +16,13 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPrem
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.PERSONALCASECONST import PERSONALCASECONST
-from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
-from gui.battle_results.settings import PROGRESS_ACTION
+from gui.battle_results import RequestEmblemContext, EmblemType, ProgressAction
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
-from gui.shared import event_dispatcher
+from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus, event_dispatcher
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop
 from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
@@ -39,7 +39,7 @@ def _wrapEmblemUrl(emblemUrl):
     return makeHtmlString('html_templates:lobby/battleResult', 'emblemUrl', {'url': emblemUrl})
 
 
-class BattleResultsWindow(BattleResultsMeta):
+class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
@@ -103,12 +103,12 @@ class BattleResultsWindow(BattleResultsMeta):
     def showUnlockWindow(self, itemID, unlockType):
         if not self.__canNavigate():
             return
-        if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
+        if unlockType in (ProgressAction.RESEARCH_UNLOCK_TYPE, ProgressAction.PURCHASE_UNLOCK_TYPE):
             event_dispatcher.showResearchView(itemID)
             self.onWindowClose()
-        elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
+        elif unlockType == ProgressAction.NEW_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, PERSONALCASECONST.SKILLS_TAB_ID, EVENT_BUS_SCOPE.LOBBY)
-        elif unlockType == PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE:
+        elif unlockType == ProgressAction.NEW_FREE_SKILL_UNLOCK_TYPE:
             event_dispatcher.showPersonalCase(itemID, PERSONALCASECONST.FREE_SKILLS_TAB_ID, EVENT_BUS_SCOPE.LOBBY)
 
     def showDogTagWindow(self, itemID):
@@ -128,27 +128,31 @@ class BattleResultsWindow(BattleResultsMeta):
             BigWorld.callback(0.0, partial(showShop, url))
             self.destroy()
 
+    def onPrbEntitySwitched(self):
+        self.__updateVO()
+
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
-         'inventory.1': self.__updateVO,
-         'inventory.8': self.__updateVO,
+        g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__onUpdatePremiumBonus,
+         'inventory': self.__onInventoryUpdated,
          'cache.vehsLock': self.__updateVO})
         self.__gameSession.onPremiumTypeChanged += self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.startGlobalListening()
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
     def _dispose(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.stopGlobalListening()
 
     def __loadViewHandler(self, event):
         if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
@@ -158,7 +162,7 @@ class BattleResultsWindow(BattleResultsMeta):
 
     @adisp_process
     def __requestClanEmblem(self, textureID, clanDBID):
-        emblemID = yield self.__battleResults.requestEmblem(RequestEmblemContext(EMBLEM_TYPE.CLAN, clanDBID, textureID))
+        emblemID = yield self.__battleResults.requestEmblem(RequestEmblemContext(EmblemType.CLAN, clanDBID, textureID))
         if not self.isDisposed():
             self.as_setClanEmblemS(textureID, _wrapEmblemUrl(emblemID))
 
@@ -192,7 +196,11 @@ class BattleResultsWindow(BattleResultsMeta):
             return True
 
     def __onPremiumStateChanged(self, *_):
-        self.__updateVO()
+        self.__onUpdatePremiumBonus()
+
+    def __onInventoryUpdated(self, diff):
+        if GUI_ITEM_TYPE.TANKMAN in diff or GUI_ITEM_TYPE.VEHICLE in diff:
+            self.__onUpdatePremiumBonus()
 
     def __onBattleResultWindowShowQuest(self, event):
         ctx = event.ctx if event is not None else None
@@ -203,10 +211,14 @@ class BattleResultsWindow(BattleResultsMeta):
                 self.showEventsWindow(ctx['questId'], ctx['eventType'])
             return
 
+    def __onUpdatePremiumBonus(self, _=None):
+        battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)
+        self.as_setDataS(battleResultsVO)
+
     def __updateVO(self, _=None):
         battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)
         self.as_setDataS(battleResultsVO)
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.DAILY_BONUS in diff:
-            self.__updateVO()
+            self.__onUpdatePremiumBonus()

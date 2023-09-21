@@ -21,6 +21,7 @@ class ModeSelectorTooltipsConstants(ViewModel):
     FUN_RANDOM_REWARDS = 'funRandomRewards'
     NOT_SUITABLE_VEHICLES_TOOLTIP = 'notSuitableVehiclesTooltip'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
+    EVENT_BATTLES_CALENDAR_TOOLTIP = 'eventBattlesCalendar'
 
     def __init__(self, properties=0, commands=0):
         super(ModeSelectorTooltipsConstants, self).__init__(properties=properties, commands=commands)

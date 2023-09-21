@@ -1,0 +1,1134 @@
+<F18_Bat_Chatillon25t_hound_TLXXL.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader
+			driver	</commander>
+  </crew>
+  <supplySlots>	1 1 6 6 6 6 8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	70	</forward>
+    <backward>	40	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.222	</moving>
+    <still>	0.296	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <firePenalty>	0.444	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.1 0.125	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	13.072	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	50	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10674	</weight>
+    <maxHealth>	720	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	10000	</maxHealth>
+      <maxRegenHealth>	9935	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <prefab>	content/WtPrefabs/Bat_Chatillon25t_Idle.prefab	</prefab>
+    <models>
+      <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.004414 0.514814 -0.545761	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <turretPitches>
+      <turret>	0.000000	</turret>
+    </turretPitches>
+    <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	0.000000 0.000000	</density>
+      <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_F18_Bat_Chatillon25t_hound_TLXXL>
+      <userString>	#france_vehicles:Chassis_F18_Bat_Chatillon25t_hound_TLXXL	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	68200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	4100	</weight>
+      <maxLoad>	28000	</maxLoad>
+      <terrainResistance>	0.9 1 1.6	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.06	</vehicleMovement>
+        <vehicleRotation>	0.06	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	2.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.48 0.7	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-2.8	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.020058	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.128653	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.542757	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	4	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L4	</wheelName>
+                  <groupRadius>	0.290639	</groupRadius>
+                  <groupInnerOffset>	0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	-0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L5	</wheelName>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.2755	</groupRadius>
+                  <groupInnerOffset>	0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	-0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L3	</wheelName>
+                  <wheelName>	WD_L2	</wheelName>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.150778	</groupRadius>
+                  <groupInnerOffset>	0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	-0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.296952	</groupRadius>
+                  <groupInnerOffset>	0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	-0.302722	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.848996 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.127993 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.200039	</row2>
+                  <row3>	0.000000 0.964554 0.070547	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.197760 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.806738	</row2>
+                  <row3>	0.000000 1.233748 -0.003239	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.678974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.287054 -0.087177	</row1>
+                  <row2>	0.000000 0.118765 0.391066	</row2>
+                  <row3>	-1.259012 1.169872 -2.701184	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.678974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.271535 0.127548	</row1>
+                  <row2>	0.000000 -0.173765 0.369924	</row2>
+                  <row3>	-1.259010 1.164883 2.759726	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.019883	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.128647	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.542738	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	4	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R4	</wheelName>
+                  <groupRadius>	0.289549	</groupRadius>
+                  <groupInnerOffset>	-0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R5	</wheelName>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.2755	</groupRadius>
+                  <groupInnerOffset>	-0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R3	</wheelName>
+                  <wheelName>	WD_R2	</wheelName>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.150776	</groupRadius>
+                  <groupInnerOffset>	-0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	0.302722	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.297206	</groupRadius>
+                  <groupInnerOffset>	-0.402722	</groupInnerOffset>
+                  <groupOuterOffset>	0.302722	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.848996 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.127993 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.200039	</row2>
+                  <row3>	0.000000 0.964554 0.070547	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.197760 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.806738	</row2>
+                  <row3>	0.000000 1.233748 -0.003239	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.678974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.287054 -0.087177	</row1>
+                  <row2>	0.000000 0.118765 0.391066	</row2>
+                  <row3>	1.259012 1.169872 -2.701184	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.678974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.271535 0.127548	</row1>
+                  <row2>	0.000000 -0.173765 0.369924	</row2>
+                  <row3>	1.259010 1.164883 2.759726	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+        </trackPair>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.354692	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.148619	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.299655	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.2755	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.354692	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.148619	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.299655	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.2755	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.894876 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.27722 1.85249	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.513820 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.144800 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.561500	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F18_Bat_Chatillon25t/track/left.track	</left>
+        <right>	vehicles/french/F18_Bat_Chatillon25t/track/right.track	</right>
+        <segmentLength>	0.132	</segmentLength>
+        <segmentOffset>	0.149	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0018	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+      </trackNodes>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.0514019	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0112851	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.27746	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.131137	</back>
+              <top>	0.128557	</top>
+              <front>	0.126006	</front>
+              <bottom>	0.105457	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.12468	</back>
+              <top>	0.123203	</top>
+              <front>	0.131695	</front>
+              <bottom>	0.105457	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</model>
+            <length>	0.131828	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-2.6709	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.388382 0.384681 0.381352 0.378384 0.375764 0.373486 0.371542	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.6109	</xStart>
+                <xStep>	0.065914	</xStep>
+                <ySamples>	0.371542 0.366738 0.375673	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.47907	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.375673 0.378279 0.381235 0.38455 0.388237 0.392309 0.396783	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.40448	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.399365 0.394954 0.390934 0.38729 0.38401 0.381082 0.378495	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.46448	</xStart>
+                <xStep>	0.0659142	</xStep>
+                <ySamples>	0.378495 0.369529 0.374037 0.392618	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.66222	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.392618 0.396805 0.401391 0.406394 0.411838 0.417747 0.424153	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.87456	</xStart>
+                <xStep>	0.0659141	</xStep>
+                <ySamples>	1.02277 0.935254 0.980015 1.00738 1.02344 1.02926 1.03307 1.03688 1.04071 1.04275 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.03759 1.03759 1.03759 1.03759 1.03759 1.03759 1.03759 1.03759 1.03759 1.03759 1.03791 1.02994 1.00112 0.949133	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	2.5412 0.695733	</basePos>
+              <shiftVec>	0.260546 0.164699	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-2.5548 0.686723	</basePos>
+              <shiftVec>	-0.239626 0.183679	</shiftVec>
+              <jointIdx>	55	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-1.84235 0.317794	</basePos>
+              <shiftVec>	-0.0340244 -0.28476	</shiftVec>
+              <jointIdx>	66	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	1.77765 0.317792	</basePos>
+              <shiftVec>	0.0685591 -0.27847	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.300771	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.307107	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	-1.277	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	-181.509	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	-184.671	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	-1.24994 1.09663 -2.87453	</point>
+                <point>	-1.40993 1.0091 -2.80862	</point>
+                <point>	-1.22994 1.05387 -2.7427	</point>
+                <point>	-1.45994 1.08123 -2.67679	</point>
+                <point>	-1.22994 1.0973 -2.61087	</point>
+                <point>	-1.40994 1.10311 -2.54496	</point>
+                <point>	-1.24994 1.10693 -2.47905	</point>
+                <point>	-1.38994 1.11073 -2.41313	</point>
+                <point>	-1.45994 1.11456 -2.34722	</point>
+                <point>	-1.45994 1.1166 -2.2813	</point>
+                <point>	-1.45994 1.11657 -2.21539	</point>
+                <point>	-1.35994 1.11657 -2.14947	</point>
+                <point>	-1.26994 1.11657 -2.08356	</point>
+                <point>	-1.22994 1.11657 -2.01765	</point>
+                <point>	-1.22994 1.11657 -1.95173	</point>
+                <point>	-1.22994 1.11657 -1.88582	</point>
+                <point>	-1.22994 1.11657 -1.8199	</point>
+                <point>	-1.22994 1.11657 -1.75399	</point>
+                <point>	-1.22994 1.11657 -1.68808	</point>
+                <point>	-1.22994 1.11657 -1.62216	</point>
+                <point>	-1.22994 1.11657 -1.55625	</point>
+                <point>	-1.22994 1.11657 -1.49033	</point>
+                <point>	-1.22994 1.11657 -1.42442	</point>
+                <point>	-1.22994 1.11657 -1.35851	</point>
+                <point>	-1.22994 1.11657 -1.29259	</point>
+                <point>	-1.22994 1.11657 -1.22668	</point>
+                <point>	-1.22994 1.11657 -1.16076	</point>
+                <point>	-1.22994 1.11657 -1.09485	</point>
+                <point>	-1.22994 1.11657 -1.02893	</point>
+                <point>	-1.22994 1.11657 -0.963021	</point>
+                <point>	-1.22994 1.11657 -0.897107	</point>
+                <point>	-1.22994 1.11657 -0.831193	</point>
+                <point>	-1.22994 1.11657 -0.765279	</point>
+                <point>	-1.22994 1.11657 -0.699365	</point>
+                <point>	-1.22994 1.11657 -0.633451	</point>
+                <point>	-1.22994 1.11657 -0.567536	</point>
+                <point>	-1.22994 1.11657 -0.501622	</point>
+                <point>	-1.22994 1.11657 -0.435708	</point>
+                <point>	-1.22994 1.11657 -0.369794	</point>
+                <point>	-1.22994 1.11657 -0.30388	</point>
+                <point>	-1.22994 1.11657 -0.237966	</point>
+                <point>	-1.22994 1.11657 -0.172052	</point>
+                <point>	-1.24993 1.11657 -0.106138	</point>
+                <point>	-1.22993 1.11657 -0.0402236	</point>
+                <point>	-1.26993 1.11657 0.0256906	</point>
+                <point>	-1.22993 1.11657 0.0916047	</point>
+                <point>	-1.22993 1.11657 0.157518	</point>
+                <point>	-1.22993 1.11657 0.223433	</point>
+                <point>	-1.22993 1.11657 0.289347	</point>
+                <point>	-1.22993 1.11657 0.355261	</point>
+                <point>	-1.22993 1.11657 0.421175	</point>
+                <point>	-1.22993 1.11657 0.487089	</point>
+                <point>	-1.22993 1.11657 0.553003	</point>
+                <point>	-1.22993 1.11657 0.618917	</point>
+                <point>	-1.22993 1.11657 0.684832	</point>
+                <point>	-1.22993 1.11657 0.750745	</point>
+                <point>	-1.40993 1.11657 0.81666	</point>
+                <point>	-1.22993 1.11657 0.882574	</point>
+                <point>	-1.22993 1.11657 0.948488	</point>
+                <point>	-1.22993 1.11657 1.0144	</point>
+                <point>	-1.45993 1.11657 1.08032	</point>
+                <point>	-1.22993 1.11657 1.14623	</point>
+                <point>	-1.22993 1.11657 1.21214	</point>
+                <point>	-1.22993 1.11657 1.27806	</point>
+                <point>	-1.22993 1.11657 1.34397	</point>
+                <point>	-1.22993 1.11657 1.40989	</point>
+                <point>	-1.22993 1.11657 1.4758	</point>
+                <point>	-1.22993 1.11657 1.54171	</point>
+                <point>	-1.22993 1.11657 1.60763	</point>
+                <point>	-1.22993 1.11657 1.67354	</point>
+                <point>	-1.22993 1.11657 1.73946	</point>
+                <point>	-1.22993 1.11657 1.80537	</point>
+                <point>	-1.22993 1.11657 1.87128	</point>
+                <point>	-1.38993 1.11145 1.9372	</point>
+                <point>	-1.29993 1.11145 2.00311	</point>
+                <point>	-1.22993 1.11145 2.06903	</point>
+                <point>	-1.22993 1.11145 2.13494	</point>
+                <point>	-1.22993 1.11145 2.20086	</point>
+                <point>	-1.22993 1.11145 2.26677	</point>
+                <point>	-1.22993 1.11145 2.33268	</point>
+                <point>	-1.22993 1.11145 2.3986	</point>
+                <point>	-1.22993 1.11145 2.46451	</point>
+                <point>	-1.22993 1.11145 2.53043	</point>
+                <point>	-1.22993 1.11177 2.59634	</point>
+                <point>	-1.22993 1.1038 2.66225	</point>
+                <point>	-1.45993 1.07497 2.72817	</point>
+                <point>	-1.45993 1.02299 2.79408	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	-1.22993 0.76084 -2.61087	</point>
+                <point>	-1.22993 0.783789 -2.54496	</point>
+                <point>	-1.27993 0.717122 -2.47904	</point>
+              </range>
+              <range>
+                <point>	-1.22993 0.805954 2.46451	</point>
+                <point>	-1.22993 0.841184 2.53043	</point>
+                <point>	-1.22993 0.836349 2.59634	</point>
+                <point>	-1.22993 0.782793 2.66225	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </left>
+        <right>
+          <segmentsCount>	95	</segmentsCount>
+          <segmentsOuterThickness>	0.0512363	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.0114696	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.27722	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.131137	</back>
+              <top>	0.128557	</top>
+              <front>	0.126006	</front>
+              <bottom>	0.105457	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.12468	</back>
+              <top>	0.123203	</top>
+              <front>	0.131695	</front>
+              <bottom>	0.105457	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</model>
+            <length>	0.131835	</length>
+          </mainSegment>
+          <collisionHull>
+            <bottom>
+              <part>
+                <xStart>	-2.67074	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.389282 0.385575 0.382242 0.37927 0.376648 0.374369 0.372424	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.61074	</xStart>
+                <xStep>	0.0659174	</xStep>
+                <ySamples>	0.372424 0.36764 0.376637	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.47891	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.376637 0.379256 0.382227 0.385559 0.389264 0.393356 0.397852	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.40489	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.398699 0.394311 0.390312 0.38669 0.383429 0.380518 0.377949	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.46489	</xStart>
+                <xStep>	0.0659173	</xStep>
+                <ySamples>	0.377949 0.369081 0.373668 0.392318	</ySamples>
+              </part>
+              <part>
+                <xStart>	2.66264	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.392318 0.396514 0.401109 0.406123 0.411576 0.417495 0.42391	</ySamples>
+              </part>
+            </bottom>
+            <top>
+              <part>
+                <xStart>	-2.87441	</xStart>
+                <xStep>	0.0659173	</xStep>
+                <ySamples>	1.02256 0.935221 0.978694 1.00741 1.02348 1.02927 1.03308 1.03689 1.04071 1.04274 1.0427 1.04257 1.04244 1.0423 1.04217 1.04203 1.0419 1.04176 1.04163 1.04149 1.04136 1.04123 1.04109 1.04096 1.04082 1.04069 1.04055 1.04042 1.04028 1.04015 1.04001 1.03988 1.03974 1.03961 1.03947 1.03934 1.0392 1.03907 1.03893 1.03901 1.03918 1.03936 1.03953 1.0397 1.03988 1.04005 1.04022 1.0404 1.04057 1.04075 1.04092 1.04109 1.04127 1.04144 1.04162 1.04179 1.04196 1.04214 1.04231 1.04249 1.04266 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.04272 1.03896 1.03895 1.03965 1.04141 1.04317 1.04493 1.0449 1.04459 1.04427 1.04275 1.04099 1.02109 0.987423 0.945553	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	2.5412 0.695733	</basePos>
+              <shiftVec>	0.259624 0.166961	</shiftVec>
+              <jointIdx>	11	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-2.5548 0.686723	</basePos>
+              <shiftVec>	-0.240271 0.181334	</shiftVec>
+              <jointIdx>	55	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-1.7688 0.317762	</basePos>
+              <shiftVec>	0.0330782 -0.28697	</shiftVec>
+              <jointIdx>	67	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	1.8512 0.31776	</basePos>
+              <shiftVec>	0.00791264 -0.28686	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.299862	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.307548	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	1.277	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	-181.508	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	-184.671	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.22995 1.09646 -2.87438	</point>
+                <point>	1.22995 1.00912 -2.80847	</point>
+                <point>	1.45995 1.0526 -2.74255	</point>
+                <point>	1.22995 1.08132 -2.67663	</point>
+                <point>	1.22995 1.09738 -2.61071	</point>
+                <point>	1.22995 1.10318 -2.5448	</point>
+                <point>	1.23995 1.10698 -2.47888	</point>
+                <point>	1.37995 1.11079 -2.41296	</point>
+                <point>	1.45995 1.11462 -2.34704	</point>
+                <point>	1.45995 1.11665 -2.28113	</point>
+                <point>	1.45995 1.11661 -2.21521	</point>
+                <point>	1.45995 1.11648 -2.14929	</point>
+                <point>	1.45995 1.11634 -2.08338	</point>
+                <point>	1.45995 1.11621 -2.01746	</point>
+                <point>	1.45995 1.11608 -1.95154	</point>
+                <point>	1.45995 1.11594 -1.88562	</point>
+                <point>	1.45995 1.11581 -1.81971	</point>
+                <point>	1.45995 1.11567 -1.75379	</point>
+                <point>	1.45995 1.11554 -1.68787	</point>
+                <point>	1.45995 1.1154 -1.62195	</point>
+                <point>	1.45995 1.11527 -1.55604	</point>
+                <point>	1.45995 1.11513 -1.49012	</point>
+                <point>	1.45995 1.115 -1.4242	</point>
+                <point>	1.45995 1.11486 -1.35829	</point>
+                <point>	1.45995 1.11473 -1.29237	</point>
+                <point>	1.45995 1.11459 -1.22645	</point>
+                <point>	1.45995 1.11446 -1.16053	</point>
+                <point>	1.45995 1.11433 -1.09462	</point>
+                <point>	1.45995 1.11419 -1.0287	</point>
+                <point>	1.45995 1.11406 -0.962781	</point>
+                <point>	1.45995 1.11392 -0.896864	</point>
+                <point>	1.45995 1.11379 -0.830947	</point>
+                <point>	1.45995 1.11365 -0.765029	</point>
+                <point>	1.45995 1.11352 -0.699112	</point>
+                <point>	1.45995 1.11338 -0.633195	</point>
+                <point>	1.45995 1.11325 -0.567277	</point>
+                <point>	1.45995 1.11311 -0.50136	</point>
+                <point>	1.45995 1.11298 -0.435443	</point>
+                <point>	1.45995 1.11284 -0.369526	</point>
+                <point>	1.45995 1.11292 -0.303608	</point>
+                <point>	1.45995 1.11309 -0.237691	</point>
+                <point>	1.45995 1.11326 -0.171774	</point>
+                <point>	1.45995 1.11344 -0.105856	</point>
+                <point>	1.45995 1.11361 -0.0399386	</point>
+                <point>	1.45995 1.11379 0.0259784	</point>
+                <point>	1.45995 1.11396 0.0918959	</point>
+                <point>	1.45995 1.11413 0.157813	</point>
+                <point>	1.45995 1.11431 0.22373	</point>
+                <point>	1.45995 1.11448 0.289648	</point>
+                <point>	1.45995 1.11466 0.355565	</point>
+                <point>	1.45995 1.11483 0.421482	</point>
+                <point>	1.45995 1.115 0.4874	</point>
+                <point>	1.45995 1.11518 0.553317	</point>
+                <point>	1.45995 1.11535 0.619234	</point>
+                <point>	1.45995 1.11553 0.685151	</point>
+                <point>	1.45995 1.1157 0.751069	</point>
+                <point>	1.45995 1.11587 0.816986	</point>
+                <point>	1.45995 1.11605 0.882903	</point>
+                <point>	1.45995 1.11622 0.948821	</point>
+                <point>	1.45995 1.11639 1.01474	</point>
+                <point>	1.45995 1.11657 1.08066	</point>
+                <point>	1.22995 1.11662 1.14657	</point>
+                <point>	1.22995 1.11662 1.21249	</point>
+                <point>	1.22995 1.11662 1.27841	</point>
+                <point>	1.22995 1.11662 1.34433	</point>
+                <point>	1.22995 1.11662 1.41024	</point>
+                <point>	1.22995 1.11662 1.47616	</point>
+                <point>	1.22995 1.11662 1.54208	</point>
+                <point>	1.22995 1.11662 1.60799	</point>
+                <point>	1.22995 1.11662 1.67391	</point>
+                <point>	1.22995 1.11662 1.73983	</point>
+                <point>	1.22995 1.11662 1.80575	</point>
+                <point>	1.22995 1.11662 1.87166	</point>
+                <point>	1.38995 1.11286 1.93758	</point>
+                <point>	1.28995 1.11286 2.0035	</point>
+                <point>	1.22995 1.11356 2.06942	</point>
+                <point>	1.22995 1.11532 2.13533	</point>
+                <point>	1.22995 1.11708 2.20125	</point>
+                <point>	1.22995 1.11884 2.26717	</point>
+                <point>	1.22995 1.11881 2.33308	</point>
+                <point>	1.22995 1.11849 2.399	</point>
+                <point>	1.22995 1.11818 2.46492	</point>
+                <point>	1.22995 1.11665 2.53084	</point>
+                <point>	1.22995 1.1149 2.59675	</point>
+                <point>	1.24995 1.09499 2.66267	</point>
+                <point>	1.22995 1.06133 2.72859	</point>
+                <point>	1.25995 1.01946 2.79451	</point>
+              </range>
+            </top>
+            <bottom>
+              <range>
+                <point>	1.25996 0.76105 -2.61071	</point>
+                <point>	1.22995 0.783794 -2.5448	</point>
+                <point>	1.22996 0.716547 -2.47888	</point>
+              </range>
+              <range>
+                <point>	1.22996 0.806615 2.46492	</point>
+                <point>	1.22996 0.841315 2.53084	</point>
+                <point>	1.22996 0.838072 2.59675	</point>
+                <point>	1.22996 0.782215 2.66267	</point>
+              </range>
+            </bottom>
+          </sourceCollisionHullPoints>
+        </right>
+      </physicalTracks>
+      <repairTime>	3.63636374	</repairTime>
+    </Chassis_F18_Bat_Chatillon25t_hound_TLXXL>
+  </chassis>
+  <turrets0>
+    <Turret_1_F18_Bat_Chatillon25t_hound_TLXXL>
+      <userString>	#france_vehicles:Turret_1_F18_Bat_Chatillon25t_hound_TLXXL	</userString>
+      <shortUserString>	#france_vehicles:Turret_1_F18_Bat_Chatillon25t_hound_TLXXL_short	</shortUserString>
+      <tags>	cannotDetach	</tags>
+      <level>	10	</level>
+      <price>	37000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	70	</armor_1>
+        <armor_3>	50	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	100	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	15	</armor_9>
+        <armor_10>	50	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	15	</armor_12>
+      </armor>
+      <primaryArmor>	armor_10 armor_11 armor_12	</primaryArmor>
+      <weight>	5700	</weight>
+      <maxHealth>	180	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_CN_105_57_WT>	shared	  <maxAmmo>	700	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -11 0.269671 -11 0.333333 -8 0.666667 -8 0.730329 -11 1 -11	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50	</armor_1>
+            <armor_2>	70	</armor_2>
+            <armor_3>	30	</armor_3>
+            <armor_4>	15	</armor_4>
+            <armor_5>	15	</armor_5>
+            <armor_6>	15	</armor_6>
+            <armor_7>	45	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <armor_10>	70	</armor_10>
+            <armor_11>	30	</armor_11>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <clip>
+            <count>	5	</count>
+            <rate>	22	</rate>
+          </clip>
+          <aimingTime>	2.2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-11.0	</row>
+                <row>	0.0	</row>
+                <row>	6.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	1.342	</row>
+                    <row>	0.0	</row>
+                    <row>	-10.434	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_03	</node>
+                  <table>
+                    <row>	12.132	</row>
+                    <row>	0.0	</row>
+                    <row>	-3.174	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <customizationSlots>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+              <attachNode>	HP_FX_1	</attachNode>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <density>	0.000000 0.000000	</density>
+            <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+          </camouflage>
+        </_105mm_CN_105_57_WT>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_TLXXL/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t_hound_TLXXL/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.002258 0.494202 0.029392	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.318 -0.105 1.190 0.000 1.353 0.100 0.249 0.000 0.500 0.500 0.094 0.500 0.424 0.000 0.014	</physicsShape>
+      <camouflage>
+        <density>	0.000000 0.000000	</density>
+        <aoTextureSize>	0.000000 0.000000	</aoTextureSize>
+      </camouflage>
+    </Turret_1_F18_Bat_Chatillon25t_hound_TLXXL>
+  </turrets0>
+  <engines>
+    <Hispano-Suiza_HS110_WT>	shared	</Hispano-Suiza_HS110_WT>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <SCR_528_WT>	shared	</SCR_528_WT>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hispano-Suiza_HS110_WT>
+          <smplEnginePower>	1140	</smplEnginePower>
+          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
+        </Hispano-Suiza_HS110_WT>
+      </engines>
+      <chassis>
+        <Chassis_F18_Bat_Chatillon25t_hound_TLXXL>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1288	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_F18_Bat_Chatillon25t_hound_TLXXL>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	1.321930894	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15504	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.956863	</alpha>
+  </emblems>
+</F18_Bat_Chatillon25t_hound_TLXXL.xml>

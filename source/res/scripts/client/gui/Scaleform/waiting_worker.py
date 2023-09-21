@@ -12,15 +12,14 @@ from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker
 _logger = logging.getLogger(__name__)
 
 class _WaitingTask(object):
-    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart', '__showSparks')
+    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart')
 
-    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showSparks=True):
+    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
         super(_WaitingTask, self).__init__()
         self.__messageID = messageID
         self.__isBlocking = isBlocking
         self.__isAlwaysOnTop = isAlwaysOnTop
         self.__backgroundImage = backgroundImage
-        self.__showSparks = showSparks
         self.__softStart = softStart
         if interruptCallback is not None:
             self.__interruptCallbacks = [interruptCallback]
@@ -54,10 +53,6 @@ class _WaitingTask(object):
     @property
     def backgroundImage(self):
         return self.__backgroundImage
-
-    @property
-    def showSparks(self):
-        return self.__showSparks
 
     def clear(self):
         del self.__interruptCallbacks[:]
@@ -140,7 +135,7 @@ class WaitingWorker(IWaitingWorker):
     def getSuspendedWaitingTask(self, messageID):
         return findFirst(lambda task: task.messageID == messageID, self.__suspendStack)
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showSparks=True):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
         BigWorld.Screener.setEnabled(False)
         hasAlwaysOnTopWaiting = self._hasAlwaysOnTopWaiting()
         if hasAlwaysOnTopWaiting and isAlwaysOnTop:
@@ -151,7 +146,7 @@ class WaitingWorker(IWaitingWorker):
             if task is not None and isSingle:
                 task.addInterruptCallback(interruptCallback)
             else:
-                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart, showSparks)
+                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart)
             if not hasAlwaysOnTopWaiting:
                 self._showWaiting(task)
             return
@@ -238,9 +233,9 @@ class WaitingWorker(IWaitingWorker):
         found = findFirst(lambda task: task.isAlwaysOnTop, reversed(self.__waitingStack))
         return found is not None
 
-    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False, showSparks=True):
+    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False):
         isBlocking = isBlocking or self._hasBlockingWaiting()
-        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart, showSparks)
+        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart)
         if insertBeforeTop:
             self.__waitingStack.insert(-1, newTask)
         else:
@@ -255,7 +250,7 @@ class WaitingWorker(IWaitingWorker):
                 task.isBlocking = True
         if view is not None:
             if task.backgroundImage:
-                view.setBackgroundImage(task.backgroundImage, task.showSparks)
+                view.setBackgroundImage(task.backgroundImage)
             view.showWaiting(task.messageID, task.isSoftStart)
             self.__isShown = True
             if task.isBlocking:

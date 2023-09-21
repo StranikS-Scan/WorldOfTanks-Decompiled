@@ -9,11 +9,21 @@ import constants
 from gui.battle_control.view_components import ViewComponentsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import battle_hints
+from gui.shared.utils.MethodsRules import MethodsRules
 from shared_utils import findFirst
 _logger = logging.getLogger(__name__)
 HintRequest = namedtuple('HintRequest', ('hint', 'data', 'requestTime'))
 
-class BattleHintComponent(object):
+class IBattleHintView(object):
+
+    def showHint(self, hint, data):
+        pass
+
+    def hideHint(self, hint=None):
+        pass
+
+
+class BattleHintComponent(IBattleHintView):
     _HINT_MIN_SHOW_TIME = 2.0
 
     def __init__(self):
@@ -53,6 +63,9 @@ class BattleHintComponent(object):
         raise NotImplementedError
 
     def _getSoundNotification(self, hint, data):
+        if hint.soundNotification and data:
+            if 'isSilent' in data.values():
+                return None
         return hint.soundNotification
 
     def __showHint(self, hint, data):
@@ -100,7 +113,7 @@ class BattleHintComponent(object):
         self.__showHint(hint, data)
 
 
-class BattleHintsController(ViewComponentsController):
+class BattleHintsController(ViewComponentsController, MethodsRules):
     _DEFAULT_HINT_NAME = 'default'
 
     def __init__(self, hintsData):
@@ -116,35 +129,39 @@ class BattleHintsController(ViewComponentsController):
     def stopControl(self):
         pass
 
+    @MethodsRules.delayable()
+    def setViewComponents(self, *components):
+        super(BattleHintsController, self).setViewComponents(*components)
+
+    @MethodsRules.delayable('setViewComponents')
     def showHint(self, hintName, data=None):
-        component, hint = self.__getComponentAndHint(hintName)
-        if hint and component:
-            _logger.debug('Request battle hint hintName=%s, priority=%d', hint.name, hint.priority)
-            component.showHint(hint, data)
-        else:
-            _logger.error('Failed to show hint name=%s', hintName)
+        hint = self.__getHint(hintName)
+        if hint:
+            for view in self.__iterComponentsByAlias(hint.componentAlias):
+                view.showHint(hint, data)
 
+    @MethodsRules.delayable('setViewComponents')
     def hideHint(self, hintName):
-        component, hint = self.__getComponentAndHint(hintName)
-        if hint and component:
-            component.hideHint(hint)
-        else:
-            _logger.error('Failed to hide hint name=%s', hintName)
+        hint = self.__getHint(hintName)
+        if hint:
+            for view in self.__iterComponentsByAlias(hint.componentAlias):
+                view.hideHint(hint)
 
-    def __getComponentAndHint(self, hintName):
-        component = None
+    def __getHint(self, hintName):
         hint = self.__hintsData.get(hintName)
         if hint is None and constants.IS_DEVELOPMENT:
             hint = self.__hintsData.get(self._DEFAULT_HINT_NAME)
             hint = hint._replace(rawMessage=hintName)
-        if hint:
-            alias = hint.componentAlias
-            component = findFirst(lambda comp: comp.getAlias() == alias, self._viewComponents)
-            if not component:
-                _logger.error('Unknown component alias=%s', alias)
-        else:
-            _logger.error('Unknown hint name=%s', hintName)
-        return (component, hint)
+        if not hint:
+            _logger.warning('Unknown hint name=%s', hintName)
+        return hint
+
+    def __iterComponentsByAlias(self, componentAliases):
+        for alias in componentAliases:
+            component = findFirst(lambda comp, cAlias=alias: comp.getAlias() == cAlias, self._viewComponents)
+            if component:
+                yield component
+            _logger.error('Unknown component alias=%s', alias)
 
 
 def createBattleHintsController():

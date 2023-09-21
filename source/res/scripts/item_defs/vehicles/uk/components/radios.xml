@@ -37,6 +37,8 @@
     <C45A_SH>	10001	</C45A_SH>
     <C42_B47_SH>	10002	</C42_B47_SH>
     <N19Mk3_MapsTraining_Dummy_MT_2>	3	</N19Mk3_MapsTraining_Dummy_MT_2>
+    <N9_NewOnBoarding>	64001	</N9_NewOnBoarding>
+    <N19Mk3_NewOnBoarding>	64002	</N19Mk3_NewOnBoarding>
   </ids>
   <shared>
     <N14>
@@ -477,5 +479,31 @@
       <repairCost>	3.5	</repairCost>
       <notInShop>	True	</notInShop>
     </N19Mk3_MapsTraining_Dummy_MT_2>
+    <N9_NewOnBoarding>
+      <userString>	#gb_vehicles:N9	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3600	</price>
+      <weight>	40	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	48	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </N9_NewOnBoarding>
+    <N19Mk3_NewOnBoarding>
+      <userString>	#gb_vehicles:N19Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </N19Mk3_NewOnBoarding>
   </shared>
 </radios.xml>

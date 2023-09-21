@@ -383,6 +383,12 @@ class UILoggingAccessor(BaseAccessor):
         return self._data_source.get_uilogging_session(callback)
 
 
+class ShopAccessor(BaseAccessor):
+
+    def get_inventory_entitlements(self, callback, entitlement_codes):
+        return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,

@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/frontline.py
-from wg_async import wg_await, wg_async, await_callback
+from wg_async import wg_await, wg_async
 from BWUtil import AsyncReturn
 from adisp import adisp_process
+from helpers import dependency
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.interactors.base_equipment import BaseEquipmentInteractor
-from gui.shared.event_dispatcher import showBattleAbilitiesConfirmDialog, showFrontlineConfirmDialog
+from gui.shared.event_dispatcher import showFrontlineConfirmDialog
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 
 class FrontlineInteractor(BaseEquipmentInteractor):
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __slots__ = ('_checkboxState',)
 
     def __init__(self, vehItem):
@@ -46,11 +49,9 @@ class FrontlineInteractor(BaseEquipmentInteractor):
     @adisp_process
     def confirm(self, callback, skipDialog=False):
         vehicle = self.getItem()
-        if not self._checkboxState:
-            setupItems = self.getChangedList()
-        else:
-            setupItems = vehicle.battleAbilities.layout.getStorage
-        action = ActionsFactory.getAction(ActionsFactory.INSTALL_BATTLE_ABILITIES, vehicle, self._checkboxState, setupItems=setupItems, skipConfirm=skipDialog)
+        setupItems = self.getChangedList()
+        epicSkills = self.__epicController.getEpicSkills()
+        action = ActionsFactory.getAction(ActionsFactory.FRONTLINE_INSTALL_RESERVES, vehicle=vehicle, applyForAllOfType=self._checkboxState, skillIds=[ epicSkills[item.innationID].skillID for item in setupItems ], skipConfirm=skipDialog)
         if action is not None:
             result = yield action.doAction()
             callback(result)
@@ -73,15 +74,14 @@ class FrontlineInteractor(BaseEquipmentInteractor):
 
     @wg_async
     def showBuyConfirmDialog(self, skillIds):
-        result = yield await_callback(showFrontlineConfirmDialog)(skillIds)
-        raise AsyncReturn(result)
+        result = yield wg_await(showFrontlineConfirmDialog(skillIds=skillIds))
+        isOk, _ = result.result
+        raise AsyncReturn(isOk)
 
     @wg_async
     def showExitConfirmDialog(self):
         vehicle = self.getItem()
-        if not self._checkboxState:
-            setupItems = self.getChangedList()
-        else:
-            setupItems = vehicle.battleAbilities.layout.getStorage
-        result = yield wg_await(showBattleAbilitiesConfirmDialog(items=setupItems, withInstall=bool(setupItems), vehicleType=vehicle.type, applyForAllVehiclesByType=self._checkboxState))
+        setupItems = self.getChangedList()
+        epicSkills = self.__epicController.getEpicSkills()
+        result = yield wg_await(showFrontlineConfirmDialog(isBuy=False, vehicleType=vehicle.type, applyForAllOfType=self._checkboxState, skillIds=[ epicSkills[item.innationID].skillID for item in setupItems ]))
         raise AsyncReturn(result)

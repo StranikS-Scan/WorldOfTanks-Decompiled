@@ -481,7 +481,12 @@ class Source(object):
              'unregularAmmo': self.__readCondition_true,
              'isNotLeaver': self.__readCondition_true,
              'isFirstBlood': self.__readConditionComplex_true,
-             'winAloneAgainstVehicleCount': self.__readCondition_int})
+             'winAloneAgainstVehicleCount': self.__readCondition_int,
+             'maxWtPlasmaBonus': self.__readCondition_int,
+             'wtBossVulnerableDamage': self.__readCondition_int,
+             'wtGeneratorsCaptured': self.__readCondition_int,
+             'wtTotalGeneratorsCaptured': self.__readCondition_int,
+             'wtDeathCount': self.__readCondition_int})
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,

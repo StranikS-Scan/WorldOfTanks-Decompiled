@@ -12,6 +12,9 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.game_control import IEventBattlesController, IBootcampController
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 
 class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
 
@@ -35,6 +38,15 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
         self.updateVehicles()
         self._carouselDP.applyFilter(forceApply=True)
 
+    def setCurrentVehicle(self, currentVehicle):
+        self._resetCurrentVehicle(currentVehicle)
+        self._carouselDP.setCurrentVehicle(currentVehicle)
+
+    def _resetCurrentVehicle(self, currentVehicle):
+        self._currentVehicle.onChanged -= self._onCurrentVehicleChanged
+        self._currentVehicle = currentVehicle
+        self._currentVehicle.onChanged += self._onCurrentVehicleChanged
+
     def _populate(self):
         super(MissionVehicleSelectorCarousel, self)._populate()
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
@@ -53,27 +65,43 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
 
 
 class MissionVehicleSelector(MissionsVehicleSelectorMeta):
+    __gameEventController = dependency.descriptor(IEventBattlesController)
+    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
+    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(MissionVehicleSelector, self).__init__()
         self._carousel = None
-        self.__isQuestForBattleRoyale = False
+        self._isQuestForBattleRoyale = False
+        self._isEventBattleQuest = False
+        self._currentVehicle = g_currentVehicle
         return
 
-    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False):
-        self.__isQuestForBattleRoyale = isQuestForBattleRoyale
+    def setCriteria(self, quest, criteria, extraConditions):
+        if not self.__bootcampController.isInBootcamp() and quest is not None:
+            self._isQuestForBattleRoyale = quest.isQuestForBattleRoyale()
+            self._isEventBattleQuest = quest.isEventBattlesQuest()
+        currentVehicle = self.__prebattleVehicle if self._isEventBattleQuest else g_currentVehicle
+        self._resetCurrentVehicle(currentVehicle)
+        self._carousel.setCurrentVehicle(currentVehicle)
         self._carousel.setCriteria(criteria, extraConditions)
         self.__updateSelectedVehicle()
+        return
+
+    def _resetCurrentVehicle(self, currentVehicle):
+        self._currentVehicle.onChanged -= self.__selectVehicle
+        self._currentVehicle = currentVehicle
+        self._currentVehicle.onChanged += self.__selectVehicle
 
     def _populate(self):
         super(MissionVehicleSelector, self)._populate()
-        g_currentVehicle.onChanged += self.__selectVehicle
+        self._currentVehicle.onChanged += self.__selectVehicle
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self._carousel = self.components.get(self._getCarouselAlias())
         self.__updateSelectedVehicle()
 
     def _dispose(self):
-        g_currentVehicle.onChanged -= self.__selectVehicle
+        self._currentVehicle.onChanged -= self.__selectVehicle
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self._carousel = None
         super(MissionVehicleSelector, self)._dispose()
@@ -91,9 +119,10 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
         self.__selectVehicle()
 
     def __updateSelectedVehicle(self):
-        vehicle = g_currentVehicle.item
+        isEventPrbActive = self.__gameEventController.isEventPrbActive()
+        vehicle = self._currentVehicle.item
         suitableVehicles = self._carousel.getSuitableVehicles()
-        if self.__isQuestForBattleRoyale:
+        if self._isQuestForBattleRoyale or not isEventPrbActive and self._isEventBattleQuest:
             selectedVeh = None
             status = ''
             title = ''
@@ -143,6 +172,9 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria = criteria
         self.__extraConditions = extraConditions
         self._filter.reset(exceptions=('inventory',))
+
+    def setCurrentVehicle(self, currentVehicle):
+        self._currentVehicle = currentVehicle
 
     def getSuitableVehicles(self):
         return self.__suitableVehiclesIDs

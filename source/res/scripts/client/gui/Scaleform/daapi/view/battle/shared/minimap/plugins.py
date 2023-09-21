@@ -262,8 +262,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
-        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes or _CTRL_MODE.FLAMETHROWER in modes:
-            if self._isInStrategicMode() or self._isInArtyMode() or self._isInFlamethrowerMode():
+        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes:
+            if self._isInStrategicMode() or self._isInArtyMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
             else:
@@ -288,7 +288,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __updateCameraEntries(self):
         activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInStrategicMode() or self._isInArtyMode() or self._isInFlamethrowerMode():
+        if self._isInStrategicMode() or self._isInArtyMode():
             activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
             matrix = matrix_factory.makeStrategicCameraMatrix()
         elif self._isInArcadeMode():
@@ -1033,6 +1033,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def __onTeamChanged(self, teamID):
         self.invalidateArenaInfo()
 
+    def hideMinimapHP(self):
+        self.__showMinimapHP(False)
+
     def __handleShowExtendedInfo(self, event):
         if self._parentObj.isModalViewShown():
             return
@@ -1257,6 +1260,10 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self._boundingBox = (Math.Vector2(0, 0), Math.Vector2(0, 0))
         AccountSettings.setSettings(MINIMAP_IBC_HINT_SECTION, self.__minimapSettings)
 
+    def hideHintPanel(self, instantHide=False):
+        self.__isHintPanelEnabled = False
+        self.parentObj.as_disableHintPanelS(instantHide)
+
     def __handleKeyDownEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
@@ -1271,10 +1278,9 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def __handleKeyUpEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
-        if not self.__isHintPanelEnabled:
+        if not self.__isHintPanelEnabled or self._parentObj.isModalViewShown():
             return
-        self.__isHintPanelEnabled = False
-        self.parentObj.as_disableHintPanelS()
+        self.hideHintPanel()
 
     def updateControlMode(self, crtlMode, vehicleID):
         super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)

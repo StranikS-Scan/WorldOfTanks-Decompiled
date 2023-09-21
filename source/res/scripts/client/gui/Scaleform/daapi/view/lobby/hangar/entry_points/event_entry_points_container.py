@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEnt
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
 from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
-from gui.Scaleform.daapi.view.lobby.collection.collection_entry_point import isCollectionEntryPointAvailable
+from gui.impl.lobby.wt_event.wt_event_entry_point import isWTEventEntryPointAvailable
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.limited_ui.lui_rules_storage import LuiRules
@@ -37,13 +37,12 @@ registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMaratho
 registerBannerEntryPointValidator(HANGAR_ALIASES.COMP7_ENTRY_POINT, isComp7EntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, isStrongholdEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.BR_ENTRY_POINT, isBattleRoyaleEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.COLLECTION_ENTRY_POINT, isCollectionEntryPointAvailable)
+registerBannerEntryPointValidator(HANGAR_ALIASES.WT_EVENT_ENTRY_POINT, isWTEventEntryPointAvailable)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.COMP7_ENTRY_POINT, LuiRules.COMP7_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, LuiRules.CRAFT_MACHINE_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, LuiRules.MAPBOX_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, LuiRules.STRONGHOLD_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.BR_ENTRY_POINT, LuiRules.BR_ENTRY_POINT)
-ENTRY_POINTS_REQUIRING_DATA = [HANGAR_ALIASES.COLLECTION_ENTRY_POINT]
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -97,12 +96,7 @@ class _EntryPointData(object):
 
     def getIsEnabledByValidator(self):
         configValidator = collectBannerEntryPointValidator(self.id)
-        if configValidator is not None:
-            if self.id in ENTRY_POINTS_REQUIRING_DATA:
-                return configValidator(self.data)
-            return configValidator()
-        else:
-            return True
+        return configValidator() if configValidator is not None else True
 
     def getLUIRule(self):
         return collectBannerEntryPointLUIRule(self.id)
@@ -145,14 +139,6 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onCacheResync
         self.startGlobalListening()
-
-    def _onRegisterFlashComponent(self, viewPy, alias):
-        super(EventEntryPointsContainer, self)._onRegisterFlashComponent(viewPy, alias)
-        if alias in ENTRY_POINTS_REQUIRING_DATA:
-            entry = self.__entries.get(alias, None)
-            if entry is not None:
-                viewPy.setData(entry.data)
-        return
 
     def _isQueueEnabled(self):
         enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)

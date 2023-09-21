@@ -99,7 +99,7 @@ class RankedRewardsSeasonOffView(RankedBattlesRewardsView):
 
     def setActiveTab(self, linkage=None):
         self._updateYearRewardCounters()
-        tabs = rewards_vos.getSeasonOffTabs(self.__rankedController.isYearRewardEnabled(), self.__rankedController.isLeagueRewardEnabled())
+        tabs = rewards_vos.getSeasonOffTabs(self.__rankedController.isYearRewardEnabled())
         self.as_setTabsDataS(tabs)
 
     def _update(self):
@@ -128,11 +128,11 @@ class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
         if linkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI and not isYearRewardEnabled:
             linkage = None
         if linkage not in _REWARDS_COMPONENTS:
-            if self.__rankedController.isAccountMastered() and self.__rankedController.isLeagueRewardEnabled():
+            if self.__rankedController.isAccountMastered():
                 linkage = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI
             else:
                 linkage = RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI
-        tabs = rewards_vos.getSeasonOnTabs(linkage, isYearRewardEnabled, self.__rankedController.isLeagueRewardEnabled())
+        tabs = rewards_vos.getSeasonOnTabs(linkage, isYearRewardEnabled)
         self.as_setTabsDataS(tabs)
         return
 

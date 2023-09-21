@@ -93,7 +93,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
         for archive in COMP7_ARCHIVE_NAMES:
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(getDropdownKeyByArchiveName(archive)))
 
-        dropDownProvider += [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.VERSUS_AI)]
         for season in COMP7_SEASON_NUMBERS:
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(getDropdownKeyBySeason(season)))
 
@@ -177,8 +176,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES,
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM,
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESOLO,
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD,
-         PROFILE_DROPDOWN_KEYS.VERSUS_AI: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_VERSUSAI}
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD}
         return backport.text(R.strings.profile.section.technique.emptyScreenLabel.battleType.comp7()) if isComp7Archive(self._battlesType) or isComp7Season(self._battlesType) else i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
 
     def _sendAccountData(self, targetData, accountDossier):
@@ -349,8 +347,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 stats = vehDossier.getComp7Stats(archive=getArchiveName(self._battlesType))
             elif isComp7Season(self._battlesType):
                 stats = vehDossier.getComp7Stats(season=getSeasonName(self._battlesType))
-            elif self._battlesType == PROFILE_DROPDOWN_KEYS.VERSUS_AI:
-                stats = vehDossier.getVersusAIStats()
             else:
                 raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
             if achievementsList is not None:

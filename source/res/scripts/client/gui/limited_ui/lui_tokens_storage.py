@@ -6,7 +6,6 @@ import typing
 from future.utils import itervalues
 import Event
 from PlayerEvents import g_playerEvents
-from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -21,7 +20,6 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from typing import Optional, Union, Tuple, Callable
 LimitedUITokenInfo = namedtuple('LimitedUITokenInfo', ('tokenID', 'clazz', 'args'))
@@ -40,6 +38,7 @@ class LimitedUICondition(object):
     def initialize(self, *args):
         pass
 
+    @property
     def tokenID(self):
         return self.__tokenID
 
@@ -59,6 +58,7 @@ class LimitedUICondition(object):
 
     def finalize(self):
         self.__unsubscribe()
+        self._clear()
         self.onConditionValueUpdated.clear()
 
     def _getValue(self):
@@ -81,6 +81,9 @@ class LimitedUICondition(object):
             event -= handler
 
         g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def _clear(self):
+        pass
 
     def _update(self, *_, **__):
         newValue = self._getValue()
@@ -130,6 +133,74 @@ class _BattleMattersCompletedQuests(LimitedUICondition):
         return ((self.__eventsCache.onSyncCompleted, self._update),)
 
 
+class _VehicleInventoryUpdater(object):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    _instance = None
+
+    @classmethod
+    def getInstance(cls):
+        if not cls._instance:
+            cls._instance = cls()
+        return cls._instance
+
+    def __init__(self):
+        super(_VehicleInventoryUpdater, self).__init__()
+        self.__subscribers = set()
+        self.__isActive = False
+        self.__inventoryVehicles = None
+        self.__criteria = REQ_CRITERIA.INVENTORY
+        self.__criteria |= ~REQ_CRITERIA.VEHICLE.RENT
+        self.__criteria |= ~REQ_CRITERIA.SECRET
+        self.__criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)
+        self.onValueUpdated = Event.Event()
+        return
+
+    def subscribe(self, ruleID):
+        self.__subscribers.add(ruleID)
+        self.__updateActivity()
+
+    def unsubscribe(self, ruleID):
+        if ruleID in self.__subscribers:
+            self.__subscribers.remove(ruleID)
+            self.__updateActivity()
+
+    def getValue(self, criteria):
+        if self.__inventoryVehicles is None:
+            self.__updateCache()
+        count = 0
+        for item in self.__inventoryVehicles.itervalues():
+            if criteria(item):
+                count += 1
+
+        return count
+
+    def __updateActivity(self):
+        if self.__isActive is False and self.__subscribers:
+            self.__activate()
+        elif self.__isActive and not self.__subscribers:
+            self.__deactivate()
+
+    def __activate(self):
+        g_clientUpdateManager.addCallbacks({'inventory.1': self.__update})
+        self.__isActive = True
+
+    def __deactivate(self):
+        self.__isActive = False
+        self.__inventoryVehicles.clear()
+        self.__inventoryVehicles = None
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        return
+
+    def __update(self, *_):
+        if not self.__itemsCache.isSynced():
+            return 0
+        self.__updateCache()
+        self.onValueUpdated()
+
+    def __updateCache(self):
+        self.__inventoryVehicles = self.__itemsCache.items.getVehicles(self.__criteria)
+
+
 class _VehicleCondition(LimitedUICondition):
     __slots__ = ('__criteria',)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -140,9 +211,13 @@ class _VehicleCondition(LimitedUICondition):
         return
 
     def initialize(self, level, *args):
-        self.__criteria = self._getCriteria(level)
+        self.__criteria = self._makeCriteria(level)
 
-    def _getCriteria(self, level):
+    @property
+    def criteria(self):
+        return self.__criteria
+
+    def _makeCriteria(self, level):
         criteria = REQ_CRITERIA.VEHICLE.LEVELS(range(level, MAX_VEHICLE_LEVEL + 1))
         criteria |= ~REQ_CRITERIA.VEHICLE.RENT
         criteria |= ~REQ_CRITERIA.SECRET
@@ -153,23 +228,56 @@ class _VehicleCondition(LimitedUICondition):
         return 0 if not self.__itemsCache.isSynced() else len(self.__itemsCache.items.getVehicles(self.__criteria))
 
 
-class _MinVehicleLevel(_VehicleCondition):
+class _VehicleInventoryCondition(_VehicleCondition):
+    __slots__ = ('__vehicleUpdater',)
+
+    def __init__(self, tokenID):
+        super(_VehicleInventoryCondition, self).__init__(tokenID)
+        self.__vehicleUpdater = None
+        return
+
+    def initialize(self, level, *args):
+        super(_VehicleInventoryCondition, self).initialize(level, *args)
+        self.__vehicleUpdater = _VehicleInventoryUpdater.getInstance()
+
+    def activate(self):
+        self.__vehicleUpdater.subscribe(self.tokenID)
+        super(_VehicleInventoryCondition, self).activate()
+
+    def deactivate(self):
+        self.__vehicleUpdater.unsubscribe(self.tokenID)
+        super(_VehicleInventoryCondition, self).deactivate()
+
+    def finalize(self):
+        self.__vehicleUpdater.unsubscribe(self.tokenID)
+        super(_VehicleInventoryCondition, self).finalize()
+
+    def _clear(self):
+        self.__vehicleUpdater = None
+        super(_VehicleInventoryCondition, self)._clear()
+        return
+
+    def _getValue(self):
+        return self.__vehicleUpdater.getValue(self.criteria)
+
+    def _getEvents(self):
+        return ((self.__vehicleUpdater.onValueUpdated, self._update),)
+
+
+class _MinVehicleLevel(_VehicleInventoryCondition):
     __slots__ = ()
 
-    def _getCriteria(self, level):
-        criteria = super(_MinVehicleLevel, self)._getCriteria(level)
+    def _makeCriteria(self, level):
+        criteria = super(_MinVehicleLevel, self)._makeCriteria(level)
         criteria |= REQ_CRITERIA.INVENTORY
         return criteria
-
-    def _getCallbacks(self):
-        return (('inventory.1', self._update),)
 
 
 class _MinNonPremiumVehicleLevel(_MinVehicleLevel):
     __slots__ = ()
 
-    def _getCriteria(self, level):
-        criteria = super(_MinNonPremiumVehicleLevel, self)._getCriteria(level)
+    def _makeCriteria(self, level):
+        criteria = super(_MinNonPremiumVehicleLevel, self)._makeCriteria(level)
         criteria |= ~REQ_CRITERIA.VEHICLE.PREMIUM
         return criteria
 
@@ -177,8 +285,8 @@ class _MinNonPremiumVehicleLevel(_MinVehicleLevel):
 class _MinUnlockedVehicleLevel(_VehicleCondition):
     __slots__ = ()
 
-    def _getCriteria(self, level):
-        criteria = super(_MinUnlockedVehicleLevel, self)._getCriteria(level)
+    def _makeCriteria(self, level):
+        criteria = super(_MinUnlockedVehicleLevel, self)._makeCriteria(level)
         criteria |= ~REQ_CRITERIA.VEHICLE.PREMIUM
         criteria |= ~REQ_CRITERIA.CUSTOM(lambda item: item.isSpecial)
         criteria |= REQ_CRITERIA.UNLOCKED
@@ -273,23 +381,6 @@ class _WereRealMoneyExpenses(LimitedUICondition):
             self._update()
 
 
-class _LootboxesAvailability(LimitedUICondition):
-    __slots__ = ()
-    __settingsCore = dependency.descriptor(ISettingsCore)
-
-    def _getValue(self):
-        uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
-        isEntryPointEnabled = uiStorage.get(UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT)
-        return isEntryPointEnabled
-
-    def _getEvents(self):
-        return ((self.__settingsCore.onSettingsChanged, self._updateLootBoxes),)
-
-    def _updateLootBoxes(self, diff):
-        if SETTINGS_SECTIONS.UI_STORAGE_2 in diff:
-            self._update()
-
-
 _VEHICLE_LEVEL_TOKENS = tuple((tokenInfo for tokenInfo in chain.from_iterable(((LimitedUITokenInfo('minVehicleLevel_{}'.format(vehLevel), _MinVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minNonPremiumVehicleLevel_{}'.format(vehLevel), _MinNonPremiumVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minUnlockedVehicleLevel_{}'.format(vehLevel), _MinUnlockedVehicleLevel, (vehLevel,))) for vehLevel in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)))))
 _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('permanentFalse', _PermanentFalse, None),
@@ -300,8 +391,7 @@ _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('pmHasActiveMission', _PersonalMissionsActive, None),
  LimitedUITokenInfo('hasBlueprint', _BluePrintsAvailability, None),
  LimitedUITokenInfo('hasPersonalReserve', _PersonalReservesAvailability, None),
- LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None),
- LimitedUITokenInfo('hadLootboxes', _LootboxesAvailability, None)) + _VEHICLE_LEVEL_TOKENS
+ LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None)) + _VEHICLE_LEVEL_TOKENS
 registerLimitedUITokens(_REGISTER_TOKENS)
 
 def getTokensInfo():

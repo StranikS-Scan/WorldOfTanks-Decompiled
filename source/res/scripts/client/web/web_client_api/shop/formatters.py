@@ -86,8 +86,7 @@ def _formatVehicleRestore(item):
         restorePrice = item.restorePrice
         currency = restorePrice.getCurrency()
         if item.hasLimitedRestore():
-            restoreTimestamp = restoreInfo.changedAt + restoreInfo.getRestoreTimeLeft()
-            restoreEndDate = time_utils.timestampToISO(restoreTimestamp) if restoreTimestamp < float('inf') else None
+            restoreEndDate = time_utils.timestampToISO(restoreInfo.changedAt + restoreInfo.getRestoreTimeLeft())
         else:
             restoreEndDate = None
         return {'price': {currency: restorePrice.getSignValue(currency)},

@@ -69,8 +69,6 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_INVENTORY_BODY = '#tank_carousel_filter:tooltip/inventory/body'
     TOOLTIP_COMP7_HEADER = '#tank_carousel_filter:tooltip/comp7/header'
     TOOLTIP_COMP7_BODY = '#tank_carousel_filter:tooltip/comp7/body'
-    TOOLTIP_DEBUT_BOXES_HEADER = '#tank_carousel_filter:tooltip/debut_boxes/header'
-    TOOLTIP_DEBUT_BOXES_BODY = '#tank_carousel_filter:tooltip/debut_boxes/body'
     INFOTIP_HEADER_TITLE = '#tank_carousel_filter:infotip/header/title'
     INFOTIP_HEADER_DESCRIPTION = '#tank_carousel_filter:infotip/header/description'
     INFOTIP_NATIONS = '#tank_carousel_filter:infotip/nations'

@@ -27,5 +27,5 @@ class MarkerTimer(PythonTimer):
 
     def _setViewSnapshot(self, leftTime):
         if self.__showCountdown:
-            leftTime = self.finishTime - BigWorld.serverTime()
+            leftTime = int(round(self.finishTime - BigWorld.serverTime()))
             self._viewObject.updateMarkerTimer(self._typeID, leftTime, False, self.__statusID)

@@ -46,8 +46,8 @@
     <_10RK-26M>	216	</_10RK-26M>
     <R113M_DR>	217	</R113M_DR>
     <_71-TK-3_M>	218	</_71-TK-3_M>
-    <R113M_122>	31002	</R113M_122>
     <_10RT-26M>	220	</_10RT-26M>
+    <R113M_WT>	1001	</R113M_WT>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -64,7 +64,6 @@
     <_9RM_MapsTraining_Player_MT_1>	37	</_9RM_MapsTraining_Player_MT_1>
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
-    <_9RM_O_NewOnBoarding>	10012	</_9RM_O_NewOnBoarding>
   </ids>
   <shared>
     <_71-TK-1>
@@ -394,18 +393,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M>
-    <R113M_122>
-      <userString>	#ussr_vehicles:R113M_122	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113M_122>
     <R113M_DR>
       <userString>	#ussr_vehicles:R113M_DR	</userString>
       <tags></tags>
@@ -728,6 +715,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <R113M_WT>
+      <userString>	#ussr_vehicles:R113M_WT	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	930	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113M_WT>
     <_10RK_SH>
       <userString>	#ussr_vehicles:_10RK_SH	</userString>
       <tags></tags>
@@ -832,19 +831,5 @@
       <repairCost>	1.5	</repairCost>
       <notInShop>	True	</notInShop>
     </_10RK_MapsTraining_Dummy_HT_2>
-    <_9RM_O_NewOnBoarding>
-      <userString>	#ussr_vehicles:_9RM	</userString>
-      <tags></tags>
-      <invulnerable>	True	</invulnerable>
-      <notInShop>	true	</notInShop>
-      <level>	8	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	30	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM_O_NewOnBoarding>
   </shared>
 </radios.xml>

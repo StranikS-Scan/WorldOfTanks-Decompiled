@@ -49,7 +49,6 @@ _comp7Season1BlockBuilder = StaticSizeBlockBuilder('comp7Season1', COMP7_BLOCK_L
 _comp7Season2BlockBuilder = StaticSizeBlockBuilder('comp7Season2', COMP7_BLOCK_LAYOUT, {}, [])
 _comp7Season3BlockBuilder = StaticSizeBlockBuilder('comp7Season3', COMP7_BLOCK_LAYOUT, {}, [])
 _comp7ArchiveGriffinBlockBuilder = StaticSizeBlockBuilder('comp7ArchiveGriffin', COMP7_BLOCK_LAYOUT, {}, [])
-_versusAIBlockBuilder = StaticSizeBlockBuilder('mt_versusAI', VERSUS_AI_BLOCK_LAYOUT, {}, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_15x15_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -74,7 +73,6 @@ _maxComp7Season1BlockBuilder = StaticSizeBlockBuilder('maxComp7Season1', MAX_COM
 _maxComp7Season2BlockBuilder = StaticSizeBlockBuilder('maxComp7Season2', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 _maxComp7Season3BlockBuilder = StaticSizeBlockBuilder('maxComp7Season3', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 _maxComp7ArchiveGriffinBlockBuilder = StaticSizeBlockBuilder('maxComp7ArchiveGriffin', MAX_COMP7_BLOCK_LAYOUT, {}, [])
-_maxVersusAIBlockBuilder = StaticSizeBlockBuilder('mt_maxVersusAI', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 
 class VEHICLE_STATS:
     FRAGS = 'vehTypeFrags'
@@ -99,7 +97,6 @@ class VEHICLE_STATS:
     COMP7_CUT_SEASON_2 = 'comp7CutSeason2'
     COMP7_CUT_SEASON_3 = 'comp7CutSeason3'
     COMP7_CUT_ARCHIVE_GRIFFIN = 'comp7CutArchiveGriffin'
-    MT_VERSUS_AI_CUT = 'mt_versusAICut'
     ALL = (FRAGS,
      A15x15_CUT,
      A30x30_CUT,
@@ -121,8 +118,7 @@ class VEHICLE_STATS:
      COMP7_CUT_SEASON_1,
      COMP7_CUT_SEASON_2,
      COMP7_CUT_SEASON_3,
-     COMP7_CUT_ARCHIVE_GRIFFIN,
-     MT_VERSUS_AI_CUT)
+     COMP7_CUT_ARCHIVE_GRIFFIN)
 
 
 _vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
@@ -147,7 +143,6 @@ _comp7CutSeason1BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_1
 _comp7CutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_2, 'I', 'IIII', {})
 _comp7CutSeason3BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_3, 'I', 'IIII', {})
 _comp7CutArchiveGriffinBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_ARCHIVE_GRIFFIN, 'I', 'IIII', {})
-_versusAICutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.MT_VERSUS_AI_CUT, 'I', 'III', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -291,7 +286,10 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wclParticipant',
  'wt2022HunterWins',
  'wt2022BossWins',
- 'wt2022SpecBossDefeat']
+ 'wt2022SpecBossDefeat',
+ 'wt2023HunterWins',
+ 'wt2023BossWins',
+ 'wt2023MaxPlasma']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -450,7 +448,10 @@ _achievements15x15PopUps = ['warrior',
  'wclParticipant',
  'wt2022HunterWins',
  'wt2022BossWins',
- 'wt2022SpecBossDefeat']
+ 'wt2022SpecBossDefeat',
+ 'wt2023HunterWins',
+ 'wt2023BossWins',
+ 'wt2023MaxPlasma']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',
@@ -858,7 +859,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'Cosmic_MartianStalker',
  'Cosmic_SpaceTrace',
  'BattlePassCommonPr_11',
- 'prime_gaming_reserved_13',
+ 'september23',
  'prime_gaming_reserved_14',
  'prime_gaming_reserved_15',
  'prime_gaming_reserved_16',
@@ -872,8 +873,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'prime_gaming_reserved_24',
  'onboardingMedal',
  'BattlePassCommonPr_12',
- 'comp7_3_1',
- 'mt_comp_3_1']
+ 'comp7_3_1']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1070,7 +1070,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'Cosmic_MartianStalker',
  'Cosmic_SpaceTrace',
  'BattlePassCommonPr_11',
- 'prime_gaming_reserved_13',
+ 'september23',
  'prime_gaming_reserved_14',
  'prime_gaming_reserved_15',
  'prime_gaming_reserved_16',
@@ -1084,8 +1084,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'prime_gaming_reserved_24',
  'onboardingMedal',
  'BattlePassCommonPr_12',
- 'comp7_3_1',
- 'mt_comp_3_1']
+ 'comp7_3_1']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1169,9 +1168,6 @@ _epicBattleAchievementsPopUps = ['frontlineMedal']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 _epicBattleSeasonsBlockBuilder = DictBlockBuilder('epicSeasons', 'II', 'HHBHH', {})
 _battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II', 'HHH', {})
-MT_BLOCK_LAYOUT = ['rpBronzeMedal', 'rpSilverMedal', 'rpGoldMedal']
-_mtPopUps = ['rpBronzeMedal', 'rpSilverMedal', 'rpGoldMedal']
-_mtAchievementsBlockBuilder = StaticSizeBlockBuilder('mtAchievements', MT_BLOCK_LAYOUT, {}, _mtPopUps)
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -1258,10 +1254,6 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _comp7Season2BlockBuilder,
  _maxComp7Season2BlockBuilder,
  _comp7CutSeason2BlockBuilder,
- _mtAchievementsBlockBuilder,
- _versusAIBlockBuilder,
- _maxVersusAIBlockBuilder,
- _versusAICutBlockBuilder,
  _comp7Season3BlockBuilder,
  _maxComp7Season3BlockBuilder,
  _comp7CutSeason3BlockBuilder,

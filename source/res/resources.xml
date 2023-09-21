@@ -175,7 +175,11 @@
       <module>	client.cgf_components.arena_camera_manager	</module>
       <module>	client.cgf_components.hangar_camera_manager	</module>
       <module>	client.cgf_components.hangar_rules	</module>
-      <module>	client.cgf_components.armory_yard_components	</module>
+      <module>	client.cgf_components.registrars	</module>
+      <module>	client.cgf_components.sequence_components	</module>
+      <module>	client.cgf_components.sound_components	</module>
+      <module>	client.cgf_components.afterburning_ability	</module>
+      <module>	client.cgf_components.entity_model	</module>
       <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
@@ -195,6 +199,7 @@
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
+      <module>	client.cgf_components.wt_collision_component	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -216,6 +221,67 @@
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
+      <path>	content/WtPrefabs/BossShield.prefab	</path>
+      <path>	content/WtPrefabs/BotAppear.prefab	</path>
+      <path>	content/WtPrefabs/Escape.prefab	</path>
+      <path>	content/WtPrefabs/EventManagers.prefab	</path>
+      <path>	content/WtPrefabs/Generator.prefab	</path>
+      <path>	content/WtPrefabs/GeneratorDisappearing.prefab	</path>
+      <path>	content/WtPrefabs/GeneratorModel.prefab	</path>
+      <path>	content/WtPrefabs/Impulse.prefab	</path>
+      <path>	content/WtPrefabs/PlasmaHit.prefab	</path>
+      <path>	content/WtPrefabs/TeleportSource.prefab	</path>
+      <path>	content/WtPrefabs/TeleportDestination.prefab	</path>
+      <path>	content/WtPrefabs/Afterburning.prefab	</path>
+      <path>	content/WtPrefabs/BossIdle.prefab	</path>
+      <path>	content/WtPrefabs/BossGeneratorCapture.prefab	</path>
+      <path>	content/WtPrefabs/Bat_Chatillon25t_Idle.prefab	</path>
+      <path>	content/WtPrefabs/M48A5_Idle.prefab	</path>
+      <path>	content/WtPrefabs/Object_140_Idle.prefab	</path>
+      <path>	content/WtPrefabs/Cz04_T50_51_Waf_Idle.prefab	</path>
+      <path>	content/WtPrefabs/AntennaTeleportSpawner.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ExplosiveShot.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ChargedShot.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Shield.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Stronghold.prefab	</path>
+      <path>	content/WtPrefabs/abilities/StrongholdEnd.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ShieldHitSmall.prefab	</path>
+      <path>	content/WtPrefabs/ShieldHit.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionActive.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionAftermath.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionCanceled.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionCharging.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionReady.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionShot.prefab	</path>
+      <path>	content/WtPrefabs/heal/A120_M48A5_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/heal/Cz04_T50_51_Waf_Hound_3DSt.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairComplete.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairInterrupted.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairActive.prefab	</path>
+      <path>	content/WtPrefabs/A120_M48A5_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/F18_Bat_Chatillon25t_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/R97_Object_140_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/Cz04_T50_51_Waf_Hound_3DSt.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL4.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>

@@ -21,88 +21,6 @@
       </shotSound>
     </effects>
   </shot_auto>
-  <shot_flame_small>
-    <timeline>
-      <lighting2>	0.075	</lighting2>
-      <end>	0.3	</end>
-      <endpixie>	0.25	</endpixie>
-      <soundplaystop>	8	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/shot_flame_small.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-    </effects>
-  </shot_flame_small>
-  <shot_flame_firstBurstShot>
-    <timeline>
-      <lighting2>	0.075	</lighting2>
-      <end>	0.3	</end>
-      <endpixie>	2	</endpixie>
-      <soundplaystop>	20	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/shot_flame_exhaust_small.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-      <continuousShotSound>
-        <startKey>	start	</startKey>
-        <soundStart>
-          <wwsoundPC>	flamer_powder_shot_start_PC	</wwsoundPC>
-          <wwsoundNPC>	flamer_powder_shot_start_NPC	</wwsoundNPC>
-        </soundStart>
-        <soundStop>
-          <wwsoundPC>	flamer_powder_shot_stop_PC	</wwsoundPC>
-          <wwsoundNPC>	flamer_powder_shot_stop_NPC	</wwsoundNPC>
-        </soundStop>
-      </continuousShotSound>
-    </effects>
-  </shot_flame_firstBurstShot>
-  <shot_flamePneumatic_small>
-    <timeline>
-      <lighting2>	0.075	</lighting2>
-      <end>	0.3	</end>
-      <endpixie>	0.25	</endpixie>
-      <soundplaystop>	8	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/shotpneumatic_flame_small.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-    </effects>
-  </shot_flamePneumatic_small>
-  <shot_flamePneumatic_firstBurstShot>
-    <timeline>
-      <lighting2>	0.075	</lighting2>
-      <end>	0.3	</end>
-      <soundplaystop>	20	</soundplaystop>
-    </timeline>
-    <effects>
-      <continuousShotSound>
-        <startKey>	start	</startKey>
-        <soundStart>
-          <wwsoundPC>	flamer_pneumo_shot_start_PC	</wwsoundPC>
-          <wwsoundNPC>	flamer_pneumo_shot_start_NPC	</wwsoundNPC>
-        </soundStart>
-        <soundStop>
-          <wwsoundPC>	flamer_pneumo_shot_stop_PC	</wwsoundPC>
-          <wwsoundNPC>	flamer_pneumo_shot_stop_NPC	</wwsoundNPC>
-        </soundStop>
-      </continuousShotSound>
-    </effects>
-  </shot_flamePneumatic_firstBurstShot>
   <shot_Breda_auto>
     <timeline>
       <lighting2>	0.075	</lighting2>
@@ -4134,6 +4052,86 @@
       </groundWave>
     </relatedEffects>
   </shot_largeext>
+  <shot_largeext_empty>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_extra_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_large_extra_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_largeext_empty>
   <shot_largeext_mb>
     <timeline>
       <lighting2>	0.09	</lighting2>

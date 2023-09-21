@@ -23,7 +23,7 @@ from battle_results import g_config as battleResultsConfig
 from gui.battle_results.reusable import records
 if typing.TYPE_CHECKING:
     from typing import Dict
-    from gui.battle_results.reusable import _ReusableInfo
+    from gui.battle_results.reusable import ReusableInfo
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1
@@ -112,7 +112,7 @@ class BattleRoyaleIsPremiumBlock(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, value, reusable):
-        return reusable.isPostBattlePremium or reusable.isPostBattlePremiumPlus
+        return reusable.economics.isPostBattlePremium or reusable.economics.isPostBattlePremiumPlus
 
 
 class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
@@ -191,16 +191,16 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
 
     def setRecord(self, result, reusable):
         avatarInfo = result['personal']['avatar']
-        for rec in reusable.personal.getMoneyRecords():
+        for rec in reusable.economics.getMoneyRecords():
             _, premiumCredits = rec[:2]
             names = ('originalCredits', 'originalPremSquadCredits', 'appliedPremiumCreditsFactor100', 'boosterCreditsFactor100')
             self.credits = premiumCredits.getRecord(*names)
 
-        for rec in reusable.personal.getCrystalRecords():
+        for rec in reusable.economics.getCrystalRecords():
             _, premiumCrystal = rec[:2]
             self.crystal = premiumCrystal.getRecord('crystal')
 
-        for rec in reusable.personal.getXPRecords():
+        for rec in reusable.economics.getXPRecords():
             _, premiumXP = rec[:2]
             self.xp = premiumXP.getRecord('xpToShow')
 
@@ -331,7 +331,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
         self.completedQuests = {}
 
     def setRecord(self, result, reusable):
-        questProgress = reusable.personal.getQuestsProgress()
+        questProgress = reusable.progress.getQuestsProgress()
         allQuests = self.__eventsCache.getAllQuests()
         self.achievements = self.__getAchievements(questProgress, allQuests)
         self.completedQuests = self.__getCompletedQuests(questProgress, self.__getDailyQuestsCondition, allQuests)

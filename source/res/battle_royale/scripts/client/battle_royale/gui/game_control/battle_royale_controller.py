@@ -200,9 +200,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def isEnabled(self):
         return self.getModeSettings().isEnabled
 
-    def isShowTimeLeft(self):
-        return self.getModeSettings().isShowTimeLeft
-
     def getEndTime(self):
         return self.getCurrentSeason().getCycleEndDate()
 

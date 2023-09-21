@@ -104,7 +104,6 @@ class BATTLE_ROYALE(object):
     BATTLEROYALECAROUSEL_LOCKEDTOOLTIP_BODY = '#battle_royale:battleRoyaleCarousel/lockedToolTip/body'
     BATTLEROYALECAROUSEL_HINT = '#battle_royale:battleRoyaleCarousel/hint'
     PROXYPANEL_LABEL = '#battle_royale:proxyPanel/label'
-    PROXYPANEL_BUTTON = '#battle_royale:proxyPanel/button'
     BATTLERESULT_TITLE_VICTORY = '#battle_royale:battleResult/title/victory'
     BATTLERESULT_TITLE_VEHICLEDESTROYED = '#battle_royale:battleResult/title/vehicleDestroyed'
     BATTLERESULT_TITLE_SQUADDESTROYED = '#battle_royale:battleResult/title/squadDestroyed'

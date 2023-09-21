@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
     BonusModelType = TypeVar('BonusModelType', bound=BonusModel)
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, startIndex=0):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None):
     packer = packer or getDefaultBonusPacker()
     tooltipIndex = 0 if tooltipData is None else len(tooltipData)
     for bonus in (b for b in bonuses if b.isShowInGUI()):
@@ -19,7 +19,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
         bTooltipList = packer.getToolTip(bonus) if withTooltips else []
         bContentIdList = packer.getContentId(bonus) if withTooltips else []
         for bIndex, bModel in enumerate(bonusList):
-            bModel.setIndex(bIndex + startIndex)
+            bModel.setIndex(bIndex)
             tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
             bonusModelsList.addViewModel(bModel)
 

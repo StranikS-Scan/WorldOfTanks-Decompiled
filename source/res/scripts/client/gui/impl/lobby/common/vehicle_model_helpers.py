@@ -6,7 +6,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 
 def fillVehicleModel(model, vehicleItem):
-    model.setIsPremium(vehicleItem.isPremium or vehicleItem.isElite)
+    model.setIsPremium((vehicleItem.isPremium or vehicleItem.isElite) and not vehicleItem.isEvent)
     model.setName(vehicleItem.shortUserName)
     model.setTechName(replaceHyphenToUnderscore(removeNationFromTechName(vehicleItem.name)))
     model.setTier(vehicleItem.level)

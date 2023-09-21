@@ -43,7 +43,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onArenaTimer', 'onPublicCounter', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager', 'onGeneratorCapture', 'onGeneratorStopCapture', 'onPublicHealthChange')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -79,6 +79,11 @@ class BattleFeedbackAdaptor(IBattleController):
         self.setGoals = Event.Event(self.__eManager)
         self.destroyGoal = Event.Event(self.__eManager)
         self.onLocalKillGoalsUpdated = Event.Event(self.__eManager)
+        self.onArenaTimer = Event.Event(self.__eManager)
+        self.onPublicCounter = Event.Event(self.__eManager)
+        self.onGeneratorCapture = Event.Event(self.__eManager)
+        self.onGeneratorStopCapture = Event.Event(self.__eManager)
+        self.onPublicHealthChange = Event.Event(self.__eManager)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK

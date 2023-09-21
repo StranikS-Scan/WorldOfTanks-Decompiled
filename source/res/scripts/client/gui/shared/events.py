@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'HangarSimpleEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -85,6 +85,8 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
+    SHOW_SPAWN_POINTS = 'game/showSpawnPoints'
+    HIDE_SPAWN_POINTS = 'game/hideSpawnPoints'
 
 
 class GUICommonEvent(SharedEvent):
@@ -306,8 +308,6 @@ class LobbySimpleEvent(HasCtxEvent):
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
-    ENTITY_TOOLTIP_SHOW = 'entityTooltipShow'
-    ENTITY_TOOLTIP_HIDE = 'entityTooltipHide'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -457,7 +457,6 @@ class ChannelManagementEvent(HasCtxEvent):
     REQUEST_TO_ADD = 'requestToAdd'
     REQUEST_TO_REMOVE = 'requestToRemove'
     REQUEST_TO_CHANGE = 'requestToChange'
-    REQUEST_TO_MULTI_CHANGE = 'requestMultiChange'
     REQUEST_TO_SHOW = 'requestToShow'
     REQUEST_TO_ACTIVATE = 'rqActivateChannel'
     REQUEST_TO_DEACTIVATE = 'rqDeactivateChannel'
@@ -656,6 +655,14 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
+class WtEventPortalsEvent(HasCtxEvent):
+    ON_PORTAL_VIEW_CLOSED = 'wtEvent/onPortalViewClosed'
+    ON_PORTAL_AWARD_VIEW_CLOSED = 'wtEvent/onPortalAwardViewClosed'
+    ON_VEHICLE_AWARD_VIEW_CLOSED = 'wtEvent/onVehicleAwardViewClosed'
+    ON_ALL_PORTAL_VIEWS_CLOSED = 'wtEvent/onAllPortalViewClosed'
+    ON_BACK_TO_PORTAL = 'wtEvent/onBackToPortal'
+
+
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -819,12 +826,6 @@ class CollectionsEvent(HasCtxEvent):
     COLLECTION_INTRO_CLOSED = 'collectionIntroClosed'
 
 
-class ArmoryYardEvent(HasCtxEvent):
-    STAGE_FINISHED = 'ayStageFinished'
-    DESTROY_ARMORY_YARD_MAIN_VIEW = 'armoryYardEvents/destroyMainView'
-    SHOW_ARMORY_YARD_BUY_VIEW = 'armoryYardEvents/showBuyView'
-
-
 class Achievements20Event(HasCtxEvent):
     LAYOUT_CHANGED = 'layoutChanged'
     CLOSE_SUMMARY_VIEW = 'closeSummaryView'
@@ -834,3 +835,17 @@ class Achievements20Event(HasCtxEvent):
 class PrebattleEvent(HasCtxEvent):
     SWITCHED = 'PrebattleEvent/SWITCHED'
     NOT_SWITCHED = 'PrebattleEvent/NOT_SWITCHED'
+
+
+class HangarSimpleEvent(HasCtxEvent):
+    HANGAR_LOADED = 'HangarSimpleEvent/hangarLoaded'
+    HANGAR_UNLOADED = 'HangarSimpleEvent/hangarUnLoaded'
+    VEHICLE_PREVIEW_LOADED = 'HangarSimpleEvent/vehiclePreviewLoaded'
+    VEHICLE_PREVIEW_UNLOADED = 'HangarSimpleEvent/vehiclePreviewUnLoaded'
+    EVENT_PORTAL_SELECTED = 'HangarSimpleEvent/eventPortalSelected'
+    EVENT_VEHICLE_SELECTED = 'HangarSimpleEvent/eventVehicleSelected'
+    SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
+    CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
+    DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
+    PORTAL_MANAGER_ACTIVATED = 'HangarSimpleEvent/PortalManagerActivated'
+    UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'

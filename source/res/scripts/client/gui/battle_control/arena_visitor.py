@@ -309,9 +309,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isWinback(self):
         return self._guiType == _GUI_TYPE.WINBACK
 
-    def isVersusAI(self):
-        return self._guiType == _GUI_TYPE.VERSUS_AI
-
     def isMapsTraining(self):
         return self._guiType == _GUI_TYPE.MAPS_TRAINING
 
@@ -382,6 +379,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasInBattleUpgrade(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
+
+    def hasRoleExpSystem(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
 
     def hasDogTag(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)

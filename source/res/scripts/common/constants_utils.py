@@ -217,7 +217,6 @@ class AbstractBattleMode(object):
     _ROSTER_TYPE = None
     _ROSTER_CLASS = None
     _GAME_PARAMS_KEY = None
-    _DEFAULT_QUEUE_TYPE_PRIORITY = None
     _REQUIRED_VEHICLE_TAGS = tuple()
     _FORBIDDEN_VEHICLE_TAGS = BATTLE_MODE_VEHICLE_TAGS
     _NEW_VEHICLES_TAGS = set()
@@ -290,10 +289,6 @@ class AbstractBattleMode(object):
 
     @property
     def _client_selectorSquadItemsCreator(self):
-        return None
-
-    @property
-    def _client_tipsCriteriaClass(self):
         return None
 
     @property
@@ -596,12 +591,3 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerVehicleViewState
         for viewState in self._client_vehicleViewStates:
             registerVehicleViewState(viewState)
-
-    def registerDefaultQueueTypePriority(self):
-        from gui.prb_control import prb_utils
-        prb_utils.addDefaultQueueTypePriority(self._QUEUE_TYPE, self._DEFAULT_QUEUE_TYPE_PRIORITY, self._personality)
-
-    def registerBattleTipCriteria(self):
-        tipsCriteria = self._client_tipsCriteriaClass
-        from gui.shared.system_factory import registerBattleTipCriteria
-        registerBattleTipCriteria(self._ARENA_GUI_TYPE, tipsCriteria)

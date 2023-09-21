@@ -4,6 +4,7 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -2676,7 +2677,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	13.3	</stunDuration>
+    <stunDuration>	19	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2720,7 +2723,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	6.7	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	7.3	</stunDuration>
+    <stunDuration>	10.4	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2799,7 +2804,9 @@
     <caliber>	155	</caliber>
     <explosionRadius>	7.2	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	16.1	</stunDuration>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2848,7 +2855,9 @@
     <caliber>	203	</caliber>
     <explosionRadius>	10.5	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	17.6	</stunDuration>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2897,7 +2906,9 @@
     <caliber>	240	</caliber>
     <explosionRadius>	12.4	</explosionRadius>
     <hasStun>	true	</hasStun>
-    <stunDuration>	20.5	</stunDuration>
+    <stunDuration>	35	</stunDuration>
+    <guaranteedStunDuration>	0.40	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.60	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH	</effects>
     <damage>
@@ -2952,6 +2963,24 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_105mm_APCR_M68M2_WT>
+    <id>	1001	</id>
+    <userString>	#usa_vehicles:_105mm_APCR_M68M2_WT	</userString>
+    <description>	#usa_vehicles:_105mm_APCR_M68M2_WT_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:_105mm_APCR_M68M2_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:_105mm_APCR_M68M2_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1000	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_105mm_APCR_M68M2_WT>
   <_105mm_HEAT_M67_SH>
     <id>	327	</id>
     <userString>	#usa_vehicles:_105mm_HEAT_M67_SH	</userString>
@@ -3205,4 +3234,50 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_76mm_AP_M79_MapsTraining_Dummy_LT_2>
+  <_90mm_AP_M77_NewOnBoarding>
+    <id>	88	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M77	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_90mm_AP_M77_NewOnBoarding>
+  <_76mm_HVAP_M93_NewOnBoarding>
+    <id>	89	</id>
+    <userString>	#usa_vehicles:_76mm_HVAP_M93	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_76mm_HVAP_M93_NewOnBoarding>
+  <_76mm_AP_M79_NewOnBoarding>
+    <id>	90	</id>
+    <userString>	#usa_vehicles:_76mm_AP_M79	</userString>
+    <icon>	ap	</icon>
+    <price>	96	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <notInShop>	True	</notInShop>
+  </_76mm_AP_M79_NewOnBoarding>
 </shells.xml>

@@ -12,8 +12,8 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 
 def getContextMenuHandlers():
-    from gui.Scaleform.daapi.view.lobby.messengerBar.ChannelListContextMenuHandler import ChannelListContextMenuHandler, AppealChannelListContextMenuHandler
-    return ((CONTEXT_MENU_HANDLER_TYPE.CHANNEL_LIST, ChannelListContextMenuHandler), (CONTEXT_MENU_HANDLER_TYPE.APPEAL_CHANNEL_LIST, AppealChannelListContextMenuHandler))
+    from gui.Scaleform.daapi.view.lobby.messengerBar.ChannelListContextMenuHandler import ChannelListContextMenuHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.CHANNEL_LIST, ChannelListContextMenuHandler),)
 
 
 def getViewSettings():

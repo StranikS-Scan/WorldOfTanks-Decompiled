@@ -192,7 +192,7 @@ class ChapterChoiceView(ViewImpl):
             hideVehiclePreview(back=False)
             style = getStyleForChapter(chapterID, battlePass=self.__battlePass)
             vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
-            if self.__battlePass.isExtraChapter(chapterID) or not style.isProgressive:
+            if self.__battlePass.isExtraChapter(chapterID):
                 self.__showStylePreview(style, vehicleCD)
             else:
                 self.__showProgressionStylePreview(style, vehicleCD)

@@ -21,8 +21,7 @@ _CTRL_MODE_TO_VIEW_ID = {_CTRL_MODE.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  _CTRL_MODE.POSTMORTEM: CROSSHAIR_VIEW_ID.POSTMORTEM,
  _CTRL_MODE.RESPAWN_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM,
  _CTRL_MODE.DEATH_FREE_CAM: CROSSHAIR_VIEW_ID.POSTMORTEM,
- _CTRL_MODE.DUAL_GUN: CROSSHAIR_VIEW_ID.SNIPER,
- _CTRL_MODE.FLAMETHROWER: CROSSHAIR_VIEW_ID.STRATEGIC}
+ _CTRL_MODE.DUAL_GUN: CROSSHAIR_VIEW_ID.SNIPER}
 _GUN_MARKERS_SET_IDS = (_BINDING_ID.GUN_MARKERS_FLAGS,
  _BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER,
@@ -134,9 +133,6 @@ class CrosshairDataProxy(IBattleController):
             aih_global_binding.unsubscribe(bindingID, self.__onGunMarkersSetChanged)
 
         BattleReplay.g_replayCtrl.onServerAimChanged -= self.__onGunMarkersSetChanged
-
-    def getCtrlMode(self):
-        return self.__ctrlMode
 
     def getViewID(self):
         return self.__viewID

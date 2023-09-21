@@ -109,6 +109,8 @@
     <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>	10001	</Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
     <Leyland_L60_No_4_SH>	10002	</Leyland_L60_No_4_SH>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Nuffield_liberty_MKIV_NewOnBoarding>	64001	</Nuffield_liberty_MKIV_NewOnBoarding>
+    <Wright_Continental_R-975C4_NewOnBoarding>	64002	</Wright_Continental_R-975C4_NewOnBoarding>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -1912,5 +1914,41 @@
       <rpm_max>	2721	</rpm_max>
       <notInShop>	True	</notInShop>
     </Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Nuffield_liberty_MKIV_NewOnBoarding>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	395	</power>
+      <weight>	383	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	377	</rpm_min>
+      <rpm_max>	2590	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKIV_NewOnBoarding>
+    <Wright_Continental_R-975C4_NewOnBoarding>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_NewOnBoarding>
   </shared>
 </engines.xml>

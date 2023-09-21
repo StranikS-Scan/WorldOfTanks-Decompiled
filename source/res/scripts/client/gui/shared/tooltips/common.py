@@ -4,7 +4,6 @@ import cPickle
 import logging
 import math
 from collections import namedtuple, defaultdict
-from gui.impl.lobby.debut_boxes.tooltips.debut_boxes_badge_tooltip_view import DebutBoxesBadgeTooltipView
 from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
 from gui.impl.pub import ToolTipWindow
 from helpers.i18n import makeString
@@ -15,7 +14,6 @@ import nations
 from gui import g_htmlTemplates, makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
-from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -53,7 +51,6 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByR
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
-from gui.shared.tooltips import efficiency
 from gui.shared.tooltips import formatters
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
@@ -236,25 +233,6 @@ class DynamicBlocksTooltipData(BlocksTooltipData):
         if self.isVisible() and self.app is not None:
             self.app.updateTooltip(self.buildToolTip(), self.getType())
         return
-
-
-class EfficiencyTooltipData(BlocksTooltipData):
-    _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.ArmorItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.DamageItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.KillItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DETECTION: efficiency.DetectionItemPacker,
-     BATTLE_EFFICIENCY_TYPES.ASSIST: efficiency.AssistItemPacker,
-     BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.CritsItemPacker,
-     BATTLE_EFFICIENCY_TYPES.CAPTURE: efficiency.CaptureItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DEFENCE: efficiency.DefenceItemPacker,
-     BATTLE_EFFICIENCY_TYPES.ASSIST_STUN: efficiency.StunItemPacker}
-
-    def __init__(self, context):
-        super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
-        self._setWidth(300)
-
-    def _packBlocks(self, data):
-        return self._packers[data.type]().pack(data.toDict()) if data is not None and data.type in self._packers else []
 
 
 _ENV_TOOLTIPS_PATH = '#environment_tooltips:%s'
@@ -1109,12 +1087,9 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         return
     icon = settings.icon
     countFormatted = text_styles.concatStylesWithSpace(settings.textStyle(_int(price)), icon)
-    if wotPlusStatus:
-        wotPlusLabel = text_styles.wotPlusText('free')
-        wotPlusIcon = icons.wotPlus()
-        wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
-    else:
-        wotPlusText = ''
+    wotPlusLabel = text_styles.wotPlusText(backport.text(R.strings.demount_kit.equipmentDemount.optionFree()))
+    wotPlusIcon = icons.wotPlus()
+    wotPlusText = text_styles.concatStylesWithSpace(wotPlusIcon, wotPlusLabel)
     dkCount = text_styles.demountKitText('1')
     dkIcon = icons.demountKit()
     dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
@@ -1122,8 +1097,17 @@ def makeRemovalPriceBlock(price, currencySetting, neededValue=None, oldPrice=Non
         if isFreeToDemount:
             countFormatted = wotPlusText
     descr = R.strings.demount_kit.equipmentInstall
-    if wotPlusStatus or not canUseDemountKit or isDeluxe:
+    if wotPlusStatus and isFreeToDemount:
         dynAccId = descr.demount()
+    elif not canUseDemountKit and not isDeluxe:
+        dynAccId = descr.demount()
+    elif isDeluxe:
+        if isFreeDeluxeEnabled:
+            dynAccId = descr.demountNoKitOr()
+        else:
+            dynAccId = descr.demount()
+    elif isFreeDemountEnabled:
+        dynAccId = descr.demountWithKitOr()
     else:
         dynAccId = descr.demountWithKit()
     valueFormatted = backport.text(dynAccId, count=countFormatted, countDK=text_styles.main(dkText), wotPlus=text_styles.main(wotPlusText))
@@ -1436,15 +1420,6 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
 
 
-class DebutBoxesBadgeTooltipContentWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(DebutBoxesBadgeTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.DEBUT_BOXES_BADGE)
-
-    def getDisplayableData(self, intCD, *args, **kwargs):
-        return DecoratedTooltipWindow(DebutBoxesBadgeTooltipView(intCD), useDecorator=False)
-
-
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1594,7 +1569,7 @@ class PersonalReservesWidgetTooltipContent(BlocksTooltipData):
     def __init__(self, ctx):
         super(PersonalReservesWidgetTooltipContent, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
 
-    def getDisplayableData(self, *args):
+    def getDisplayableData(self, *args, **kwargs):
         content = PersonalReservesTooltipView()
         window = ToolTipWindow(None, content, content.getParentWindow())
         return window

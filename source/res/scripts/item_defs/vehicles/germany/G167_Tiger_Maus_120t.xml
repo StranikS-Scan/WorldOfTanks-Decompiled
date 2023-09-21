@@ -12,8 +12,8 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	24	</forward>
-    <backward>	14	</backward>
+    <forward>	32	</forward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.025	</moving>
@@ -53,7 +53,7 @@
     </ammoBayHealth>
     <armor>
       <armor_1>	200	</armor_1>
-      <armor_2>	135	</armor_2>
+      <armor_2>	145	</armor_2>
       <armor_3>	120	</armor_3>
       <armor_4>	130	</armor_4>
       <armor_5>	40	</armor_5>
@@ -1773,7 +1773,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	240	</armor_1>
+        <armor_1>	300	</armor_1>
         <armor_2>	265	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	140	</armor_4>
@@ -1782,7 +1782,7 @@
         <armor_7>	70	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	90	</armor_9>
-        <armor_10>	160	</armor_10>
+        <armor_10>	205	</armor_10>
         <armor_11>	80	</armor_11>
         <armor_12>	70	</armor_12>
       </armor>
@@ -1794,7 +1794,7 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-          <reloadTime>	15.7	</reloadTime>
+          <reloadTime>	15.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -2388,8 +2388,8 @@
     <detailed>
       <engines>
         <Mercedes_Benz_MB_507>
-          <smplEnginePower>	1250	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
+          <smplEnginePower>	1200	</smplEnginePower>
+          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
         </Mercedes_Benz_MB_507>
       </engines>
       <chassis>
@@ -2410,18 +2410,6 @@
       </chassis>
     </detailed>
   </physics>
-  <siege_mode>
-    <switchOnTime>	3	</switchOnTime>
-    <switchOffTime>	3	</switchOffTime>
-    <engineDamageCoeff>	1	</engineDamageCoeff>
-    <soundStateChange>
-      <on>	turbine_polish_start_PC	</on>
-      <off>	turbine_polish_stop_PC	</off>
-      <npcOn>	turbine_polish_start_NPC	</npcOn>
-      <npcOff>	turbine_polish_stop_NPC	</npcOff>
-      <isEngine>	true	</isEngine>
-    </soundStateChange>
-  </siege_mode>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

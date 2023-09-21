@@ -15,7 +15,7 @@ from items import tankmen, vehicles
 from items.components import skills_constants
 from items.components.component_constants import EMPTY_STRING
 from items.components.tankmen_components import SPECIAL_CREW_TAG
-from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL, getNationGroups
+from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL
 from nations import NONE_INDEX, INDICES, NAMES as NationNames
 from shared_utils import first, findFirst
 from skeletons.gui.server_events import IEventsCache
@@ -75,6 +75,7 @@ class RecruitSourceID(object):
     TWITCH_42 = 'twitch42'
     TWITCH_43 = 'twitch43'
     TWITCH_44 = 'twitch44'
+    TWITCH_45 = 'twitch45'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -125,7 +126,8 @@ class RecruitSourceID(object):
      TWITCH_41,
      TWITCH_42,
      TWITCH_43,
-     TWITCH_44)
+     TWITCH_44,
+     TWITCH_45)
 
 
 _NEW_SKILL = 'new_skill'
@@ -311,12 +313,11 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
 
 
 class _TokenRecruitInfo(_BaseRecruitInfo):
-    __slots__ = ('__freeSkills', '_isUnique')
+    __slots__ = ('__freeSkills',)
 
     def __init__(self, tokenName, expiryTime, nations, isPremium, group, freeSkills, skills, freeXP, lastSkillLevel, roleLevel, sourceID, roles):
         self._isPremium = isPremium
         self._group = group
-        self._isUnique = None
         self.__freeSkills = freeSkills
         nationNames = [ NationNames[i] for i in nations ]
         needXP = sum((TankmanDescr.levelUpXpCost(level, len(skills) + 1) for level in xrange(0, tankmen.MAX_SKILL_LEVEL)))
@@ -330,7 +331,6 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
             allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
         super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, skills, freeSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, group, sourceID, isPremium, isFemale, hasNewSkill)
-        return
 
     def getEventName(self):
         dynAccessor = R.strings.tooltips.notrecruitedtankman.dyn(self._sourceID)
@@ -357,13 +357,6 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
     def getIconByNation(self, nationID):
         _, _, _, icon, _ = self.__parseTankmanData(nationID)
         return icon
-
-    def isUnique(self):
-        if self._isUnique is None:
-            groups = getNationGroups(self._getDefaultNation(), self._isPremium)
-            group = first((group for group in groups.values() if group.name == self._group))
-            self._isUnique = group is not None and group.isUnique
-        return self._isUnique
 
     def _getDefaultNation(self):
         return INDICES.get(first(self._nations), NONE_INDEX)

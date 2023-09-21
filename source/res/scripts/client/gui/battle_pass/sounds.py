@@ -31,9 +31,9 @@ class BattlePassSounds(CONST_CONTAINER):
     VIDEO_STYLE_A67_T57_58_2 = 'bp_s11_video_t57_level_2_start'
     VIDEO_STYLE_A67_T57_58_3 = 'bp_s11_video_t57_level_3_start'
     VIDEO_STYLE_A67_T57_58_4 = 'bp_s11_video_t57_level_4_start'
-    VIDEO_PAUSE = 'lesta_bp_video_pause'
-    VIDEO_RESUME = 'lesta_bp_video_resume'
-    VIDEO_STOP = 'lesta_bp_video_stop'
+    VIDEO_PAUSE = 'bp_video_pause'
+    VIDEO_RESUME = 'bp_video_resume'
+    VIDEO_STOP = 'bp_video_stop'
 
     @classmethod
     def getOverlay(cls, count):

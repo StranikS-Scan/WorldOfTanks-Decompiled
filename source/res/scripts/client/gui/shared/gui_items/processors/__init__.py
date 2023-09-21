@@ -91,15 +91,11 @@ class Processor(object):
             else:
                 pres = plugin.validate()
             if not pres.success:
+                _logger.warning('Request validation failed, processor: %s, validator: %s (%s)', self.__class__.__name__, plugin.__class__.__name__, str(plugin.__dict__))
                 callback(self._errorHandler(self.PLUGIN_RES_CODE, pres.errorMsg, pres.ctx))
-                if pres.errorMsg not in self._skippedWarnings():
-                    _logger.warning('Request validation failed, processor: %s, validator: %s (%s)', self.__class__.__name__, plugin.__class__.__name__, str(plugin.__dict__))
                 return
 
         callback(makeSuccess())
-
-    def _skippedWarnings(self):
-        return []
 
     @adisp_async
     @adisp_process

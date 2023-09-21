@@ -273,13 +273,6 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
          'gloss': section.readVector4('gloss', Math.Vector4(DEFAULT_GLOSS)),
          'metallic': section.readVector4('metallic', Math.Vector4(DEFAULT_METALLIC))}
         if IS_EDITOR:
-            if target.camoTypeIndex == -1 and callable(getattr(target, 'setCamoType', None)):
-                try:
-                    itemIndex = target.getCamoTypesTranslationKeys().index(target.i18n.userKey)
-                    target.setCamoType(target.getCamoTypesNames()[itemIndex])
-                except ValueError as e:
-                    print e
-
             target.editorData.glossMetallicSettingsType = 0
             if target.glossMetallicSettings['glossMetallicMap'] != '':
                 target.editorData.glossMetallicSettingsType = 1

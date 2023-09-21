@@ -10,8 +10,8 @@
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <speedLimits>
-    <forward>	20	</forward>
-    <backward>	12	</backward>
+    <forward>	25	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.065	</moving>
@@ -1301,8 +1301,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.20	</vehicleMovement>
-        <vehicleRotation>	0.20	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -2260,8 +2260,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -4349,10 +4349,10 @@
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4837,11 +4837,11 @@
       <engines>
         <Meadows_DAV>
           <smplEnginePower>	317.1843	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Meadows_DAV>
         <Vauxhall_Bedford_Twin_Six>
           <smplEnginePower>	370.0484	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Vauxhall_Bedford_Twin_Six>
       </engines>
       <chassis>

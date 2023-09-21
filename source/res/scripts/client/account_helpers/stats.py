@@ -23,8 +23,8 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
-_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals', 'refSystem20', 'denunciations')
+_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
+_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
 _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isSsrPlayEnabled', 'isEmergencyModeEnabled')
@@ -285,12 +285,12 @@ class Stats(object):
         self.__account._doCmdIntStr(AccountCommands.CMD_SET_DOSSIER_FIELD, value, path, proxy)
         return
 
-    def addTokens(self, token, tokenCount=1, callback=None):
+    def addTokens(self, token, tokenCount=1, limit=0, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
         else:
             proxy = None
-        self.__account._doCmdIntStr(AccountCommands.CMD_ADD_TOKENS, tokenCount, token, proxy)
+        self.__account._doCmdInt2Str(AccountCommands.CMD_ADD_TOKENS, tokenCount, limit, token, proxy)
         return
 
     def drawTokens(self, token, callback=None):

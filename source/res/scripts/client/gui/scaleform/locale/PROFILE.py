@@ -194,7 +194,6 @@ class PROFILE(object):
     SECTION_STATISTICS_HEADERTEXT_RANKED_10X10 = '#profile:section/statistics/headerText/ranked_10x10'
     SECTION_STATISTICS_HEADERTEXT_BATTLEROYALESOLO = '#profile:section/statistics/headerText/battleRoyaleSolo'
     SECTION_STATISTICS_HEADERTEXT_BATTLEROYALESQUAD = '#profile:section/statistics/headerText/battleRoyaleSquad'
-    SECTION_STATISTICS_HEADERTEXT_VERSUSAI = '#profile:section/statistics/headerText/versusAI'
     SECTION_STATISTICS_CHARTS_BYTYPELABEL = '#profile:section/statistics/charts/byTypeLabel'
     SECTION_STATISTICS_CHARTS_BYNATIONLABEL = '#profile:section/statistics/charts/byNationLabel'
     SECTION_STATISTICS_CHARTS_BYLEVELLABEL = '#profile:section/statistics/charts/byLevelLabel'
@@ -297,7 +296,6 @@ class PROFILE(object):
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM = '#profile:section/technique/emptyScreenLabel/battleType/epicRandom'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESOLO = '#profile:section/technique/emptyScreenLabel/battleType/battleRoyaleSolo'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD = '#profile:section/technique/emptyScreenLabel/battleType/battleRoyaleSquad'
-    SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_VERSUSAI = '#profile:section/technique/emptyScreenLabel/battleType/versusAI'
     SECTION_TECHNIQUE_TITLE = '#profile:section/technique/title'
     SECTION_HOF_TITLE = '#profile:section/hof/title'
     SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME = '#profile:section/technique/buttonBar/vehicleName'
@@ -444,7 +442,6 @@ class PROFILE(object):
     PROFILE_DROPDOWN_LABELS_RANKED_10X10 = '#profile:profile/dropdown/labels/ranked_10x10'
     PROFILE_DROPDOWN_LABELS_BATTLEROYALESOLO = '#profile:profile/dropdown/labels/battleRoyaleSolo'
     PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD = '#profile:profile/dropdown/labels/battleRoyaleSquad'
-    PROFILE_DROPDOWN_LABELS_VERSUSAI = '#profile:profile/dropdown/labels/versusAI'
     PROFILE_SEASONSDROPDOWN_ALL = '#profile:profile/seasonsdropdown/all'
     PROFILE_SEASONSDROPDOWN_CURRENT = '#profile:profile/seasonsdropdown/current'
     PROFILE_SEASONSDROPDOWN_SPECIFIC = '#profile:profile/seasonsdropdown/specific'
@@ -698,7 +695,6 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_RANKED_10X10,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESOLO,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD,
-     PROFILE_DROPDOWN_LABELS_VERSUSAI,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,

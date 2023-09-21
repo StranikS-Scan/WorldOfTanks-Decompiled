@@ -1,0 +1,20 @@
+<PlasmaBonusComponentController.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <plasmaBonusPerVehicle>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </plasmaBonusPerVehicle>
+    <plasmaBonusLevelMultipliers>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </plasmaBonusLevelMultipliers>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	PlasmaBonusComponentController	</DefaultKeyName>
+</PlasmaBonusComponentController.def>

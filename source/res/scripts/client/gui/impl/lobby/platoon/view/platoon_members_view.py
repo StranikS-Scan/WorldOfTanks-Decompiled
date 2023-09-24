@@ -28,6 +28,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel, E
 from gui.impl.gen.view_models.views.lobby.platoon.comp7_member_count_dropdown import Comp7DropdownItem
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7 import comp7_shared
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
 from gui.impl.lobby.platoon.tooltip.platoon_wtr_tooltip import WTRTooltip
@@ -37,6 +38,7 @@ from gui.impl.lobby.platoon.view.subview.platoon_tiers_filter_subview import Set
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent, Comp7SquadBonusTooltipContent
+from gui.prestige.prestige_helpers import hasVehiclePrestige, fillPrestigeEmblemModel
 from gui.impl.pub import ViewImpl
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, SELECTOR_BATTLE_TYPES
@@ -53,7 +55,6 @@ from skeletons.gui.game_control import IPlatoonController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 from messenger.m_constants import USER_TAG
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
@@ -336,7 +337,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         if playerStatus == PLAYER_GUI_STATUS.BATTLE:
             slotModel.setInfoText(backport.text(R.strings.platoon.members.card.inBattle()))
         elif playerStatus != PLAYER_GUI_STATUS.READY:
-            slotModel.setInfoText(backport.text(self._getNotReadyStatus()))
+            slotModel.setInfoText(backport.text(R.strings.platoon.members.card.notReady()))
         isAdditionalMsgVisible = slotData.get('isVisibleAdtMsg', False)
         if isAdditionalMsgVisible:
             additionalMsg = slotData.get('additionalMsg', '')
@@ -350,6 +351,13 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         tags = playerData.get('tags', [])
         slotModel.player.voice.setIsMutedByUser(USER_TAG.MUTED in tags)
         slotModel.player.setIsIgnored(USER_TAG.IGNORED in tags)
+        prestigeLevel = slotData.get('prestigeLevel', 0)
+        vehicleData = slotData.get('selectedVehicle')
+        vehicleCD = vehicleData.get('intCD', 0) if vehicleData else 0
+        isPrestigeAvailable = hasVehiclePrestige(vehicleCD) and prestigeLevel != 0
+        slotModel.player.setIsPrestigeAvailable(isPrestigeAvailable)
+        if isPrestigeAvailable:
+            fillPrestigeEmblemModel(slotModel.player.prestigeEmblem, prestigeLevel, vehicleCD)
         return
 
     def _setVehicleData(self, slotData, slotModel):
@@ -368,9 +376,6 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.standard.header())
         tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.standard.body())
         return (tooltipHeader, tooltipBody)
-
-    def _getNotReadyStatus(self):
-        return R.strings.platoon.members.card.notReady()
 
     def _getBonusState(self):
         if self.__isPremiumBonusEnabled():
@@ -652,15 +657,6 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
 class EventMembersView(SquadMembersView):
     _prebattleType = PrebattleTypes.EVENT
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
-
-    def _addListeners(self):
-        super(EventMembersView, self)._addListeners()
-        self.__prebattleVehicle.onChanged += self._updateReadyButton
-
-    def _removeListeners(self):
-        super(EventMembersView, self)._removeListeners()
-        self.__prebattleVehicle.onChanged -= self._updateReadyButton
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())
@@ -668,24 +664,28 @@ class EventMembersView(SquadMembersView):
     def _onFindPlayers(self):
         pass
 
-    def _getTitle(self):
-        title = ''.join((i18n.makeString(backport.text(R.strings.platoon.event_squad())), i18n.makeString(backport.text(R.strings.platoon.members.header.dyn(self.getPrebattleType())()))))
-        return title
-
     def _getWindowInfoTooltipHeaderAndBody(self):
         tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.event.header())
         tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.event.body())
         return (tooltipHeader, tooltipBody)
 
-    def _getNotReadyStatus(self):
-        return R.strings.event.window.unit.message.vehicleNotSelected()
-
     def _setBonusInformation(self, bonusState):
-        pass
+        with self.viewModel.header.transaction() as model:
+            model.setShowInfoIcon(True)
+            model.setShowNoBonusPlaceholder(True)
+            infoText = R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()
+            model.noBonusPlaceholder.setText(infoText)
+            model.noBonusPlaceholder.setIcon(R.images.gui.maps.icons.battleTypes.c_64x64.event())
+            self._currentBonusState = bonusState
 
-    def _updateFindPlayersButton(self, *args):
-        with self.viewModel.transaction() as model:
-            model.setShouldShowFindPlayersButton(value=False)
+    def _getBonusState(self):
+        return BonusState.NO_BONUS
+
+    def _createHeaderInfoTooltip(self):
+        tooltip = R.strings.platoon.members.header.noBonusPlaceholder.tooltip
+        header = backport.text(tooltip.header())
+        body = backport.text(tooltip.body())
+        return self._createSimpleTooltipContent(header=header, body=body)
 
 
 class EpicMembersView(SquadMembersView):
@@ -819,6 +819,7 @@ class Comp7MembersView(SquadMembersView):
 
     def _initWindowModeSpecificData(self, model):
         options = self._comp7Controller.getModeSettings().squadSizes
+        model.setSeasonName(getSeasonNameEnum())
         model.header.memberCountDropdown.setMultiple(False)
         items = model.header.memberCountDropdown.getItems()
         for option in options:

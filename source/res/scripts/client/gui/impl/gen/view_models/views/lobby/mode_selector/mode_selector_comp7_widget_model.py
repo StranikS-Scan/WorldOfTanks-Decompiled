@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/mode_selector/mode_selector_comp7_widget_model.py
-from enum import IntEnum
+from enum import Enum, IntEnum
 from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import DivisionInfoModel
 from gui.impl.gen.view_models.views.lobby.comp7.qualification_model import QualificationModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_base_widget_model import ModeSelectorBaseWidgetModel
@@ -14,10 +14,16 @@ class Rank(IntEnum):
     SIXTH = 1
 
 
+class SeasonName(Enum):
+    FIRST = 'first'
+    SECOND = 'second'
+    THIRD = 'third'
+
+
 class ModeSelectorComp7WidgetModel(ModeSelectorBaseWidgetModel):
     __slots__ = ('onOpenMeta',)
 
-    def __init__(self, properties=9, commands=1):
+    def __init__(self, properties=10, commands=1):
         super(ModeSelectorComp7WidgetModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -36,46 +42,53 @@ class ModeSelectorComp7WidgetModel(ModeSelectorBaseWidgetModel):
     def getQualificationModelType():
         return QualificationModel
 
+    def getSeasonName(self):
+        return SeasonName(self._getString(3))
+
+    def setSeasonName(self, value):
+        self._setString(3, value.value)
+
     def getRank(self):
-        return Rank(self._getNumber(3))
+        return Rank(self._getNumber(4))
 
     def setRank(self, value):
-        self._setNumber(3, value.value)
+        self._setNumber(4, value.value)
 
     def getCurrentScore(self):
-        return self._getNumber(4)
-
-    def setCurrentScore(self, value):
-        self._setNumber(4, value)
-
-    def getPrevScore(self):
         return self._getNumber(5)
 
-    def setPrevScore(self, value):
+    def setCurrentScore(self, value):
         self._setNumber(5, value)
 
-    def getTopPercentage(self):
+    def getPrevScore(self):
         return self._getNumber(6)
 
-    def setTopPercentage(self, value):
+    def setPrevScore(self, value):
         self._setNumber(6, value)
 
-    def getRankInactivityCount(self):
+    def getTopPercentage(self):
         return self._getNumber(7)
 
-    def setRankInactivityCount(self, value):
+    def setTopPercentage(self, value):
         self._setNumber(7, value)
 
+    def getRankInactivityCount(self):
+        return self._getNumber(8)
+
+    def setRankInactivityCount(self, value):
+        self._setNumber(8, value)
+
     def getHasRankInactivityWarning(self):
-        return self._getBool(8)
+        return self._getBool(9)
 
     def setHasRankInactivityWarning(self, value):
-        self._setBool(8, value)
+        self._setBool(9, value)
 
     def _initialize(self):
         super(ModeSelectorComp7WidgetModel, self)._initialize()
         self._addViewModelProperty('divisionInfo', DivisionInfoModel())
         self._addViewModelProperty('qualificationModel', QualificationModel())
+        self._addStringProperty('seasonName')
         self._addNumberProperty('rank')
         self._addNumberProperty('currentScore', 0)
         self._addNumberProperty('prevScore', 0)

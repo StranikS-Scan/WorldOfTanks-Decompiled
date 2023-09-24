@@ -102,7 +102,7 @@ class WeeklyQuestsPage(PageSubModelPresenter):
         sortedQuestsIds = sorted(self.__quests.keys())
         for qID in sortedQuestsIds:
             quest = self.__quests[qID]
-            questCardModel = Comp7WeeklyQuestPacker(quest).pack()
+            questCardModel = Comp7WeeklyQuestPacker(quest, self.__getPeriodState()).pack()
             packedBonuses, tooltipsData = packQuestBonuses(quest.getBonuses(), getComp7BonusPacker())
             self.__updateRewards(qID, questCardModel, packedBonuses, tooltipsData)
             questCards.append(questCardModel)

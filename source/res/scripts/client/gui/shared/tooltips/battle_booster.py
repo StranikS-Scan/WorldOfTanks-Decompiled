@@ -103,6 +103,9 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
         inventoryBlock = BattleBoosterInventoryBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
         if inventoryBlock:
             items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=12, right=rightPadding, top=topPadding, bottom=-8), gap=textGap))
+        boosterIsUseless = BoosterHasNoEffectBlockConstructor(module, statusConfig).construct()
+        if boosterIsUseless:
+            items.append(formatters.packBuildUpBlockData(boosterIsUseless, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding, bottom=bottomPadding), stretchBg=False))
         return items
 
 
@@ -168,3 +171,15 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
                 return (text_styles.main(replaceText), text_styles.bonusAppliedText(boostText))
             return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
         return (text_styles.main(replaceText), text_styles.main(boostText))
+
+
+class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
+
+    def construct(self):
+        block = list()
+        module = self.module
+        vehicle = self.configuration.vehicle
+        if vehicle is not None and not module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):
+            block.append(formatters.packTextBlockData(text_styles.statusAlert(backport.text(R.strings.tooltips.battleBooster.useless.header()))))
+            block.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.battleBooster.useless.body())), padding=formatters.packPadding(top=8)))
+        return block

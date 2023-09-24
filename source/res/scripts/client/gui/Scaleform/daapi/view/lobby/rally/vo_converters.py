@@ -13,6 +13,7 @@ from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -354,6 +355,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
          'isLocked': isLocked,
          'role': role,
          'roleIcon': _ROLE_ICONS.get(role & equipmentCommanderRoles, '')}
+        if slotInfo.profileVehicle is not None and slotInfo.profileVehicle.prestigeLevel > 0:
+            slot['prestigeLevel'] = slotInfo.profileVehicle.prestigeLevel
         if withPrem:
             slot['hasPremiumAccount'] = player and player.hasPremium
         if unit.isSquad() or unit.getPrebattleType() == PREBATTLE_TYPE.FUN_RANDOM:
@@ -363,10 +366,10 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
             elif eventsCache.isSquadXpFactorsEnabled():
                 slot.update(_getXPFactorSlotInfo(unit, eventsCache, slotInfo))
         if unit.isEvent():
-            isVisibleAdtMsg = player and player.isCurrentPlayer() and vehicle is not None
+            isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
             if isVisibleAdtMsg:
-                additionMsg = backport.text(R.strings.event.simpleSquad.selectRestriction())
+                additionMsg = i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName='')
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:

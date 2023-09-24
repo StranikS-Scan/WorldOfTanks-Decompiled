@@ -34,7 +34,7 @@ class BattleRoyaleEntryPointModel(ViewModel):
 
     def _initialize(self):
         super(BattleRoyaleEntryPointModel, self)._initialize()
-        self._addStringProperty('state')
+        self._addStringProperty('state', State.ACTIVE.value)
         self._addNumberProperty('timestamp', 0)
         self._addBoolProperty('isSingle', True)
         self.onClick = self._addCommand('onClick')

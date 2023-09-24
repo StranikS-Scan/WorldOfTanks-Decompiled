@@ -3,7 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers import ResearchVehicleContextMenuHandler
 from gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers import ResearchItemContextMenuHandler
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import VehicleContextMenuHandler
-from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import CrewContextMenuHandler, CREW
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import TechnicalMaintenanceCMHandler
 
 def _disableContextMenuItem(item):
@@ -40,14 +39,6 @@ class BCVehicleContextMenuHandler(VehicleContextMenuHandler):
     def _generateOptions(self, ctx=None):
         options = super(BCVehicleContextMenuHandler, self)._generateOptions(ctx)
         _disableAllContextMenuItems(options)
-        return options
-
-
-class BCCrewContextMenuHandler(CrewContextMenuHandler):
-
-    def _generateOptions(self, ctx=None):
-        options = super(BCCrewContextMenuHandler, self)._generateOptions(ctx)
-        _disableAllContextMenuItems(options, exceptions=(CREW.PERSONAL_CASE,))
         return options
 
 

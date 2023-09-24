@@ -11,6 +11,8 @@ from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQues
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.quest_card_model import QuestCardModel, CardState
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import SeasonState
+from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7WeeklyQuestID
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import DECORATION_SIZES
@@ -125,6 +127,11 @@ class PrivateMissionUIDataPacker(_EventUIDataPacker):
 class Comp7WeeklyQuestPacker(_EventUIDataPacker):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
+    def __init__(self, quest, seasonState):
+        super(Comp7WeeklyQuestPacker, self).__init__(quest)
+        self.__seasonState = seasonState
+        self.__unavailableSeasonStates = (SeasonState.NOTSTARTED, SeasonState.FINISHED)
+
     def pack(self, model=None):
         if model is None:
             model = QuestCardModel()
@@ -135,7 +142,13 @@ class Comp7WeeklyQuestPacker(_EventUIDataPacker):
     def __getQuestState(self):
         if self._event.isCompleted():
             return CardState.COMPLETED
-        return CardState.ACTIVE if self._event.isAvailable()[0] and self.__comp7Controller.isAvailable() else CardState.LOCKED
+        return CardState.ACTIVE if self._event.isAvailable()[0] and self.__comp7Controller.isAvailable() else self.__getLockedState()
+
+    def __getLockedState(self):
+        isFirstQuest = parseComp7WeeklyQuestID(self._event.getID()) == '1_1'
+        if isFirstQuest and not self.__comp7Controller.hasSuitableVehicles():
+            return CardState.LOCKEDBYNOXVEHICLES
+        return CardState.LOCKEDBYINACTIVESEASON if self.__seasonState in self.__unavailableSeasonStates else CardState.LOCKEDBYPREVIOUSQUEST
 
     def __updateQuestAttributes(self, cardModel):
         description = self._event.getDescription()
@@ -178,11 +191,8 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
         else:
             model = model if model is not None else DailyQuestModel()
             self._packModel(model)
+            self.__resolveQuestIcon(model)
             return model
-
-    def _packModel(self, model):
-        super(DailyQuestUIDataPacker, self)._packModel(model)
-        self.__resolveQuestIcon(model)
 
     def __resolveQuestIcon(self, model):
         iconId = self._event.getIconID()

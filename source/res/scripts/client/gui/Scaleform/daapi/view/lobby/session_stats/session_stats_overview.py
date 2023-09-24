@@ -237,7 +237,7 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         clearBtnTooltip = makeTooltip(header=clearBtnTooltipHeader, body=clearBtnTooltipBody)
         return [{'btnLabel': label,
           'btnTooltip': moreBtnTooltip,
-          'btnEnabled': isHofBtnUnlocked}, {'btnLabel': backport.text(R.strings.menu.tankmanPersonalCase.dropSkillsButtonLabel()),
+          'btnEnabled': isHofBtnUnlocked}, {'btnLabel': backport.text(R.strings.session_stats.resetBtn.label()),
           'btnTooltip': clearBtnTooltip,
           'btnEnabled': clearBtnEnabled}, {'btnIcon': RES_ICONS.MAPS_ICONS_MESSENGER_ICONSETTINGS,
           'btnTooltip': makeTooltip(header=backport.text(R.strings.session_stats.tooltip.settingsBtn.header()), body=backport.text(R.strings.session_stats.tooltip.settingsBtn.body())),

@@ -581,11 +581,6 @@
       <Arg>	UINT16	</Arg>
       <Arg>	INT16	</Arg>
     </activateEquipment>
-    <activateVehicleEquipment>
-      <Exposed>	OWN_CLIENT	</Exposed>
-      <Arg>	UINT16	</Arg>
-      <Arg>	STRING	</Arg>
-    </activateVehicleEquipment>
     <setEquipmentApplicationPoint>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>
@@ -653,9 +648,17 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </vehicle_changeSetting>
+    <setServerMarker>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	BOOL	</Arg>
+    </setServerMarker>
+    <logLag></logLag>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
+    <logLag>
+      <Exposed></Exposed>
+    </logLag>
     <kickSelf>
       <Arg>	STRING	</Arg>
       <Arg>	UINT8	</Arg>

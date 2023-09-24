@@ -26,7 +26,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from gui.impl import backport
 from gui.impl.gen import R
-from items.battle_royale import isSpawnedBot
+from items.battle_royale import isSpawnedBot, isHunterBot
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -147,7 +147,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                     continue
             else:
                 marker = self._markers[vehicleID]
-            self._setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
             self._setMarkerInitialState(marker, vInfo=vInfo)
 
         return
@@ -164,7 +164,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
             if marker is None:
                 return
-            self._setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
             self._setMarkerInitialState(marker, vInfo=vInfo)
             return
 
@@ -176,7 +176,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             if vehicleID not in self._markers:
                 continue
             marker = self._markers[vehicleID]
-            self._setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
 
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
@@ -237,27 +237,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def _getMarker2dType(self):
         return settings.CommonMarkerType.VEHICLE
-
-    def _setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
-        markerID = marker.getMarkerID()
-        vType = vInfo.vehicleType
-        if avatar_getter.isVehiclesColorized():
-            guiPropsName = 'team{}'.format(vInfo.team)
-        else:
-            if avatar_getter.isObserver():
-                arenaDP = self.sessionProvider.getArenaDP()
-                obsVehId = BigWorld.player().observedVehicleID
-                vehId = vInfo.vehicleID
-                if vehId == obsVehId or arenaDP.isSquadMan(vehId, arenaDP.getVehicleInfo(obsVehId).prebattleID):
-                    guiProps = PLAYER_GUI_PROPS.squadman
-            guiPropsName = guiProps.name()
-        if self._isSquadIndicatorEnabled and vInfo.squadIndex:
-            squadIndex = vInfo.squadIndex
-        else:
-            squadIndex = 0
-        hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, backport.text(R.strings.ingame_gui.stun.seconds()))
-        self._invokeMarker(markerID, 'update')
 
     def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == _EVENT_ID.ENTITY_IN_FOCUS:
@@ -388,6 +367,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
 
+    def _getVehicleLevel(self, vInfo):
+        return vInfo.vehicleType.level
+
     @staticmethod
     def __isStatusActive(statusID, activeStatuses):
         for activeStatusID, _ in activeStatuses:
@@ -408,7 +390,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, backport.text(R.strings.ingame_gui.stun.seconds()))
+        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, self._getVehicleLevel(vInfo), nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, backport.text(R.strings.ingame_gui.stun.seconds()))
         self._invokeMarker(markerID, 'update')
 
     def __onEquipmentComponentUpdated(self, _, vehicleID, equipmentInfo):
@@ -531,7 +513,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     @staticmethod
     def __needsMarker(vInfo):
-        return vInfo.isAlive() or not isSpawnedBot(vInfo.vehicleType.tags)
+        return vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))
 
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID
@@ -560,7 +542,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
                 if marker is None:
                     return
-                self._setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
+                self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
                 self._setMarkerInitialState(marker, vInfo=vInfo)
             return
 

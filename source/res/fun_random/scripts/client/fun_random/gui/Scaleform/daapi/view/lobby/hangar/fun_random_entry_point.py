@@ -7,4 +7,4 @@ from gui.Scaleform.daapi.view.meta.FunRandomEntryPointMeta import FunRandomEntry
 class FunRandomEntryPoint(FunRandomEntryPointMeta):
 
     def _makeInjectView(self):
-        return FunRandomEntryPointView(ViewFlags.COMPONENT)
+        return FunRandomEntryPointView(ViewFlags.VIEW)

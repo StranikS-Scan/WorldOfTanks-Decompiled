@@ -21,7 +21,7 @@ class PreloadableWindow(WindowImpl):
         self.__preload = True
         super(PreloadableWindow, self).load()
 
-    def isPreloading(self):
+    def _isPreloading(self):
         return self.__preload
 
     def _onContentReady(self):
@@ -29,10 +29,6 @@ class PreloadableWindow(WindowImpl):
         if self.__preload:
             self.__preload = False
             self.hide()
-
-    def show(self):
-        super(PreloadableWindow, self).show()
-        self.bringToFront()
 
 
 def removeNationFromTechName(string):

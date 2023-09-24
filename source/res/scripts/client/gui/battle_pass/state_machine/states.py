@@ -4,7 +4,7 @@ from functools import partial
 import typing
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, showBPGamefaceVideo, getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import asBPVideoName, getStyleForChapter, getStyleInfoForChapter, makeChapterMediaName, makeProgressionStyleMediaName, showBPFullscreenVideo
 from gui.battle_pass.state_machine import lockNotificationManager
 from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose
 from gui.impl.gen import R
@@ -139,6 +139,7 @@ class PreviewState(State):
 
 
 class VideoState(State):
+    __battlePass = dependency.descriptor(IBattlePassController)
     __slots__ = ()
 
     def __init__(self):
@@ -148,8 +149,16 @@ class VideoState(State):
         machine = self.getMachine()
         if machine is not None:
             chapter = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapter)
-            showBPGamefaceVideo(chapter, level, onVideoClosed=partial(machine.post, StateEvent()))
+            if chapter is not None:
+                _, level = getStyleInfoForChapter(chapter)
+                mediaName = makeProgressionStyleMediaName(chapter, level)
+                showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
+            else:
+                _, data, _ = machine.getRewardsData()
+                chapterID = data.get('chapter')
+                if self.__battlePass.isExtraChapter(chapterID):
+                    mediaName = makeChapterMediaName(chapterID)
+                    showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
         return
 
 

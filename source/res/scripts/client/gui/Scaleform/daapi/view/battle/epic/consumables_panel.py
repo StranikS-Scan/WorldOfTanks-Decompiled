@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/consumables_panel.py
-from constants import EQUIPMENT_STAGES
 from ReservesEvents import randomReservesEvents
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
@@ -79,7 +78,7 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
         self._handleEquipmentPressed(intCD, idx=serverIdx)
 
     def _getToolTipEquipmentSlot(self, item, idx=None):
-        return super(EpicBattleConsumablesPanel, self)._getToolTipEquipmentSlot(item) if item and self._isEquipmentSlot(self.__currentSlotIdx if idx is None else idx) else TOOLTIPS_CONSTANTS.FRONTLINE_RANDOM_RESERVE
+        return TOOLTIPS_CONSTANTS.FRONTLINE_RANDOM_RESERVE if self.__epicController.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES) and not self._isEquipmentSlot(self.__currentSlotIdx if idx is None else idx) else super(EpicBattleConsumablesPanel, self)._getToolTipEquipmentSlot(item)
 
     def _getSlotIndex(self, index):
         return self._ORDERS_START_IDX + index
@@ -93,8 +92,7 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
             super(EpicBattleConsumablesPanel, self)._onEquipmentAdded(intCD, item)
 
     def __addEquipmentSlotS(self, index, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
-        self.as_addEquipmentSlotS(idx=index, keyCode=bwKey, sfKeyCode=sfKey, tag=None, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=tooltipText, animation=animation, stage=EQUIPMENT_STAGES.READY)
-        return
+        self.as_addEquipmentSlotS(idx=index, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=tooltipText, animation=animation)
 
     def _onSlotBlocked(self, slotId):
         index = self._getSlotIndex(slotId)
@@ -130,8 +128,8 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
             if idx not in self.__battleReserveSlots:
                 self.__battleReserveSlots[idx] = (intCD, item.getQuantity())
                 self.__addEquipmentLevelToSlot(idx, item)
-                if not self.__epicController.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
-                    self.__addLockedInformationToEpicEquipment(idx)
+            if not self.__epicController.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
+                self.__addLockedInformationToEpicEquipment(idx)
             return
 
     def _getEquipmentIcon(self, idx, item, icon):
@@ -201,14 +199,12 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
     def __addLockedInformationToEpicEquipment(self, idx):
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
-        if playerDataComp is None:
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+        if not all((playerDataComp, vehicle, arena)):
             return
         else:
-            arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
-            vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
             vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
-            if arena is None:
-                return
             if self.__epicController.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
                 slotEventsConfig = [[0],
                  [1],
@@ -218,14 +214,12 @@ class EpicBattleConsumablesPanel(ConsumablesPanel):
                  []]
             else:
                 slotEventsConfig = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank').get('slotActions', {}).get(vehClass, {})
-            if not slotEventsConfig:
-                return
+                if not slotEventsConfig:
+                    return
             unlockedSlotIdx = idx - self._ORDERS_START_IDX
             rank = searchRankForSlot(unlockedSlotIdx, slotEventsConfig)
-            if rank is None:
-                return
             currentRank = playerDataComp.playerRank if playerDataComp.playerRank is not None else 0
-            if rank <= currentRank - 1:
+            if rank is None or rank <= currentRank - 1:
                 return
             rank += 1
             tooltipId = TOOLTIPS_CONSTANTS.EPIC_RANK_UNLOCK_INFO if rank > 1 or self.__epicController.hasBonusCap(BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES) else ''

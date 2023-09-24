@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/gui_constants.py
+from enum import Enum
 from shared_utils import CONST_CONTAINER
 
 class ViewStatus(CONST_CONTAINER):
@@ -11,11 +12,18 @@ class ViewStatus(CONST_CONTAINER):
     DESTROYED = 5
 
 
+class ShowingStatus(Enum):
+    SHOWING = 0
+    SHOWN = 1
+    HIDING = 2
+    HIDDEN = 3
+
+
 class ViewFlags(CONST_CONTAINER):
     VIEW = 1
     WINDOW_DECORATOR = 2
     POP_OVER_DECORATOR = 4 | WINDOW_DECORATOR
-    COMPONENT = 16
+    MAIN_VIEW = 8
     OLD_STYLE_VIEW = 32
     LOBBY_SUB_VIEW = 4096 | OLD_STYLE_VIEW
     LOBBY_TOP_SUB_VIEW = 4352 | OLD_STYLE_VIEW
@@ -24,8 +32,6 @@ class ViewFlags(CONST_CONTAINER):
     @classmethod
     def getViewType(cls, flags):
         flags = flags & ViewFlags.VIEW_TYPE_MASK
-        if flags == ViewFlags.COMPONENT:
-            return WindowLayer.UNDEFINED
         if flags == ViewFlags.OLD_STYLE_VIEW:
             return WindowLayer.VIEW
         if flags == ViewFlags.LOBBY_SUB_VIEW:

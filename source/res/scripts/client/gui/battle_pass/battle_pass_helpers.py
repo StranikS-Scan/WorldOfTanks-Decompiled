@@ -3,9 +3,10 @@
 import logging
 from collections import namedtuple
 import typing
-from shared_utils import first
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
+from enum import Enum
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+from battle_pass_common import BattlePassConsts, FinalReward
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
@@ -14,6 +15,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.event_dispatcher import showBattlePassDailyQuestsIntroWindow
 from gui.shared.formatters import time_formatters
@@ -21,6 +23,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
 from nations import INDICES
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
@@ -33,6 +36,14 @@ _logger = logging.getLogger(__name__)
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
 TANKMAN_BONUS_NAME = 'tmanToken'
 TokenPositions = namedtuple('TokenPositions', ['free', 'paid'])
+
+class BattlePassMediaPatterns(str, Enum):
+    STYLE = 'style'
+    MEDIA = 'media'
+    CHAPTER = 'ch'
+    LEVEL = 'lvl'
+    PART = 'pt'
+
 
 def chaptersIDsComparator(firstID, secondID):
     order = getChaptersOrder()
@@ -135,16 +146,44 @@ def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
     window.load()
 
 
-@dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def showBPGamefaceVideo(chapter, level, battlePass=None, onVideoClosed=None):
-    from gui.impl.lobby.battle_pass.style_video_view import StyleVideoViewWindow
-    chapterIDs = battlePass.getChapterIDs()
-    if chapter not in chapterIDs or level is None:
-        _logger.error('Both chapter and level must be specified and correct!')
+def makeProgressionStyleMediaName(chapterID, styleLevel):
+    return '{}_{}{}_{}{}'.format(BattlePassMediaPatterns.STYLE, BattlePassMediaPatterns.CHAPTER, getChaptersOrder()[chapterID], BattlePassMediaPatterns.LEVEL, styleLevel)
+
+
+def makeChapterMediaName(chapterID, part=''):
+    mediaName = '{}_{}{}'.format(BattlePassMediaPatterns.MEDIA, BattlePassMediaPatterns.CHAPTER, getChaptersOrder()[chapterID])
+    return '{}_{}{}'.format(mediaName, BattlePassMediaPatterns.PART, part) if part else mediaName
+
+
+def asBPVideoName(filename):
+    return '.'.join(('battle_pass', filename))
+
+
+def showBPFullscreenVideo(videoName, audioName, onVideoClosed=None):
+    from gui.impl.lobby.battle_pass.fullscreen_video_view import FullscreenVideoWindow
+    window = FullscreenVideoWindow(videoName, audioName, onVideoClosed=onVideoClosed)
+    window.load()
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def isCommonBattlePassChapter(chapterID, battlePass=None):
+    isProgressiveStyle = FinalReward.PROGRESSIVE_STYLE in battlePass.getFreeFinalRewardTypes(chapterID)
+    return isProgressiveStyle and not battlePass.getPaidFinalRewardTypes(chapterID)
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getAllFinalRewards(chapterID, battlePass=None):
+    return battlePass.getFreeFinalRewardTypes(chapterID).union(battlePass.getPaidFinalRewardTypes(chapterID))
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getRewardTypeBySource(reward, chapter, battlePass=None):
+    freeRewards = battlePass.getRewardTypes(chapter).get(BattlePassConsts.REWARD_FREE)
+    paidRewards = battlePass.getRewardTypes(chapter).get(BattlePassConsts.REWARD_PAID)
+    if reward in freeRewards:
+        return BattlePassConsts.REWARD_FREE
     else:
-        window = StyleVideoViewWindow(chapter, level, onVideoClosed=onVideoClosed)
-        window.load()
-    return
+        return BattlePassConsts.REWARD_PAID if reward in paidRewards else None
 
 
 @replace_none_kwargs(battlePass=IBattlePassController, c11nService=ICustomizationService)
@@ -161,6 +200,20 @@ def getStyleForChapter(chapter, battlePass=None, c11nService=None):
 def getStyleInfoForChapter(chapter, battlePass=None):
     style = getStyleForChapter(chapter, battlePass=battlePass)
     return (style.intCD, style.getProgressionLevel()) if style is not None else (None, None)
+
+
+@replace_none_kwargs(battlePass=IBattlePassController, c11nService=ICustomizationService)
+def getVehicleInfoForChapter(chapter, battlePass=None, c11nService=None, awardSource=BattlePassConsts.REWARD_PAID):
+    rewards = battlePass.getSingleAward(chapter, battlePass.getMaxLevelInChapter(chapter), awardType=awardSource)
+    for bonus in rewards:
+        if bonus.getName() == VehiclesBonus.VEHICLES_BONUS:
+            vehicle, vehInfo = bonus.getVehicles()[0]
+            styleId = vehInfo.get('customization', {}).get('styleId')
+            style = c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId) if styleId is not None else None
+            return (vehicle, style)
+
+    _logger.error("In chapterID: %s in final level doesn't have vehicle", chapter)
+    return (None, None)
 
 
 def getSingleVehicleForCustomization(customization):

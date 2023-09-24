@@ -5,7 +5,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.crew_header_tooltip_view_model import CrewHeaderTooltipViewModel
 from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBonusEnum
-from gui.impl.pub import ViewImpl
+from gui.impl.lobby.crew.base_crew_view import BaseCrewSoundView
 from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -14,7 +14,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 _MINUTES_MULTIPLICATOR = 5
 
-class CrewHeaderTooltipView(ViewImpl):
+class CrewHeaderTooltipView(BaseCrewSoundView):
     __slots__ = ('_serverSettings',)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)

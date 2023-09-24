@@ -4,6 +4,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.tooltips.main_widget_tooltip_model import MainWidgetTooltipModel
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
@@ -27,6 +28,7 @@ class MainWidgetTooltip(ViewImpl):
 
     def __updateData(self):
         with self.viewModel.transaction() as vm:
+            vm.setSeasonName(getSeasonNameEnum())
             isQualification = self.__comp7Controller.isQualificationActive()
             if isQualification:
                 self.__updateQualificationdata(vm)

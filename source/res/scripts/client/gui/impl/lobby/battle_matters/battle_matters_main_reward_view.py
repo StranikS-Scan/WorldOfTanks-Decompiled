@@ -40,7 +40,7 @@ class BattleMattersMainRewardView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersMainRewardView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattleMattersMainRewardViewModel()
         super(BattleMattersMainRewardView, self).__init__(settings)
 

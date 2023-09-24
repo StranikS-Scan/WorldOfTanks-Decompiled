@@ -14,3 +14,7 @@ class UserSubscriptionDescriptor(object):
     @property
     def status(self):
         return self._params.get('status')
+
+    @property
+    def platform(self):
+        return self._params.get('platform')

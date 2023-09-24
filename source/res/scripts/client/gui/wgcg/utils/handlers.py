@@ -18,4 +18,4 @@ class UtilsRequestHandlers(RequestHandlers):
         return self._requester.doRequestEx(ctx, callback, ('agate', 'agate_v4_fetch_product_list_state'), ctx.getParams())
 
     def __getUserSubscriptions(self, ctx, callback):
-        return self._requester.doRequestEx(ctx, callback, ('agate', 'agate_v5_get_user_subscriptions'), ctx.getParams())
+        return self._requester.doRequestEx(ctx, callback, ('agate', 'agate_v6_get_user_subscriptions2'), ctx.getParams())

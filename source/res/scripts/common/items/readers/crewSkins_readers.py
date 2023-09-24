@@ -79,7 +79,6 @@ def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
     description = _xml.readNonEmptyString(xmlCtx, section, 'description')
     iconID = _xml.readNonEmptyString(xmlCtx, section, 'icon')
     rarity = _xml.readInt(xmlCtx, section, 'rarity', 1)
-    maxCount = _xml.readInt(xmlCtx, section, 'maxCount')
     soundSetID = section.readString('soundSet', crew_skins_constants.NO_CREW_SKIN_SOUND_SET)
     historical = _xml.readInt(xmlCtx, section, 'historical') == 0
     realmsStr = section.readString('realms', '')
@@ -87,14 +86,9 @@ def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
     unexpectedRealms = set(realms) - REGIONAL_REALMS
     if unexpectedRealms:
         _xml.raiseWrongXml(xmlCtx, 'realms', "unknown realms '%s'" % unexpectedRealms)
-    crewSkinItem = cc.CrewSkin(skinID, priceGroup, firstNameID, lastNameID, iconID, description, rarity, maxCount, tags, historical, soundSetID, realms)
+    crewSkinItem = cc.CrewSkin(skinID, priceGroup, firstNameID, lastNameID, iconID, description, rarity, tags, historical, soundSetID, realms)
     if section.has_key('filters'):
         filterSection = _xml.getSubsection(xmlCtx, section, 'filters')
-        if filterSection.has_key('role'):
-            roleName = filterSection.readString('role')
-            if roleName not in skills_constants.ROLES:
-                _xml.raiseWrongXml(xmlCtx, 'role', "unknown tankmanRole '%s'" % roleName)
-            crewSkinItem.roleID = roleName if roleName else None
         if filterSection.has_key('nation'):
             nation = filterSection.readString('nation', '')
             if nation and nation not in nations.NAMES:

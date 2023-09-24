@@ -9,7 +9,7 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
-from gui.prb_control.entities.base.pre_queue.vehicles_watcher import RandomRestrictedVehiclesWatcher
+from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
@@ -29,7 +29,7 @@ class RandomEntity(PreQueueEntity):
         return
 
     def init(self, ctx=None):
-        self.__watcher = RandomRestrictedVehiclesWatcher()
+        self.__watcher = BaseVehiclesWatcher()
         self.__watcher.start()
         return super(RandomEntity, self).init(ctx)
 
@@ -37,7 +37,7 @@ class RandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents:
+        if not woEvents and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), []):
             g_eventDispatcher.loadHangar()
         return super(RandomEntity, self).fini(ctx, woEvents)
 
@@ -59,7 +59,7 @@ class RandomEntity(PreQueueEntity):
             LOG_DEBUG('Demonstrator map selected: ', ArenaType.g_cache[arenaTypeID].geometryName)
             LOG_DEBUG('Demonstrator level selected: ', levelType)
             LOG_DEBUG('Demonstrator spawn selected: ', team)
-        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled(), arenaTypeID=mmData)
+        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), randomFlags=ctx.getRandomFlags(), arenaTypeID=mmData)
         LOG_DEBUG('Sends request on queuing to the random battle', ctx)
 
     def _doDequeue(self, ctx):
@@ -74,7 +74,7 @@ class RandomEntity(PreQueueEntity):
             arenaTypeID = action.mmData
         else:
             arenaTypeID = 0
-        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), isOnly10ModeEnabled=gameplay_ctx.isOnly10ModeEnabled(), waitingID='prebattle/join')
+        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), randomFlags=gameplay_ctx.getRandomFlags(), waitingID='prebattle/join')
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

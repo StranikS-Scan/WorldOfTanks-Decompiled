@@ -97,6 +97,7 @@ class VEHICLE_STATS:
     COMP7_CUT_SEASON_2 = 'comp7CutSeason2'
     COMP7_CUT_SEASON_3 = 'comp7CutSeason3'
     COMP7_CUT_ARCHIVE_GRIFFIN = 'comp7CutArchiveGriffin'
+    PRESTIGE_SYSTEM = 'prestigeSystem'
     ALL = (FRAGS,
      A15x15_CUT,
      A30x30_CUT,
@@ -118,7 +119,8 @@ class VEHICLE_STATS:
      COMP7_CUT_SEASON_1,
      COMP7_CUT_SEASON_2,
      COMP7_CUT_SEASON_3,
-     COMP7_CUT_ARCHIVE_GRIFFIN)
+     COMP7_CUT_ARCHIVE_GRIFFIN,
+     PRESTIGE_SYSTEM)
 
 
 _vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
@@ -1168,6 +1170,7 @@ _epicBattleAchievementsPopUps = ['frontlineMedal']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 _epicBattleSeasonsBlockBuilder = DictBlockBuilder('epicSeasons', 'II', 'HHBHH', {})
 _battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II', 'HHH', {})
+_prestigeSystemBlockBuilder = DictBlockBuilder(VEHICLE_STATS.PRESTIGE_SYSTEM, 'I', 'II', {})
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -1259,7 +1262,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _comp7CutSeason3BlockBuilder,
  _comp7ArchiveGriffinBlockBuilder,
  _maxComp7ArchiveGriffinBlockBuilder,
- _comp7CutArchiveGriffinBlockBuilder)
+ _comp7CutArchiveGriffinBlockBuilder,
+ _prestigeSystemBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

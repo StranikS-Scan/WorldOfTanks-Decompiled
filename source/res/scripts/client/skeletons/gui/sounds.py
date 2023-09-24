@@ -31,9 +31,3 @@ class ISoundsController(object):
 
     def setEnvForSpace(self, spaceID, newEnv):
         raise NotImplementedError
-
-
-class IVehicleHitSound(object):
-
-    def getSoundStringFromHitFlags(self, enemyVehID, hitFlags, enemiesHitCount):
-        raise NotImplementedError

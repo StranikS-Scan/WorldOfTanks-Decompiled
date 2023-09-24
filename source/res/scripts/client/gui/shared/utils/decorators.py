@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/decorators.py
 import time
-from Queue import Queue
-from functools import wraps
 from string import join
 import adisp
 import BigWorld
@@ -11,9 +9,10 @@ from gui.Scaleform.Waiting import Waiting
 
 class adisp_process(object):
 
-    def __init__(self, *kargs):
+    def __init__(self, *kargs, **kwargs):
         self.__currentMessage = None
         self.__messages = kargs
+        self.__kwargs = kwargs
         self.__messages2Show = list(self.__messages)
         return
 
@@ -27,13 +26,14 @@ class adisp_process(object):
         if self.__messages2Show:
             self.__hideWaiting()
             self.__currentMessage = self.__messages2Show.pop(0)
-            Waiting.show(self.__currentMessage)
+            Waiting.show(self.__currentMessage, **self.__kwargs)
 
     def __stepCallback(self, isStop):
         if not isStop:
             return self.__nextWaiting()
         self.__hideWaiting()
         self.__messages2Show = list(self.__messages)
+        self.__kwargs = {}
 
     def __call__(self, func):
 
@@ -160,44 +160,3 @@ class InternalRepresenter(object):
 
         clazz.__repr__ = __repr__
         return clazz
-
-
-class ExecuteAfterCondition(object):
-    __slots__ = ('__queue', '__callbackID')
-
-    def __init__(self):
-        self.__queue = Queue()
-        self.__callbackID = None
-        return
-
-    def __call__(self, func):
-
-        @wraps(func)
-        def wrapped(*args, **kwargs):
-            self._enqueueCall(func, *args, **kwargs)
-            if self.__callbackID is None:
-                self._checkCondition()
-            return
-
-        return wrapped
-
-    @property
-    def condition(self):
-        raise NotImplementedError
-
-    def _checkCondition(self):
-        if not self.condition:
-            self.__callbackID = BigWorld.callback(0.0, self._checkCondition)
-            return
-        else:
-            self.__callbackID = None
-            self._executeEnqueuedCalls()
-            return
-
-    def _enqueueCall(self, func, *args, **kwargs):
-        self.__queue.put((func, args, kwargs))
-
-    def _executeEnqueuedCalls(self):
-        while not self.__queue.empty():
-            f, args, kwargs = self.__queue.get()
-            f(*args, **kwargs)

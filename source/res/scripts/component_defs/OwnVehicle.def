@@ -100,6 +100,15 @@
     <onSectorShooting>
       <Arg>	UINT8	</Arg>
     </onSectorShooting>
+    <beforeRespawn>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT16	</Arg>
+    </beforeRespawn>
+    <redrawVehicleOnRespawn>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </redrawVehicleOnRespawn>
     <showOwnVehicleHitDirection>
       <Arg>	VEHICLE_HIT_DIRECTION	</Arg>
     </showOwnVehicleHitDirection>
@@ -112,6 +121,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT16	</Arg>
     </beforeRespawn>
+    <stopSetupSelection></stopSetupSelection>
     <beforeSetupUpdate></beforeSetupUpdate>
   </ClientMethods>
   <DefaultKeyName>	ownVehicle	</DefaultKeyName>

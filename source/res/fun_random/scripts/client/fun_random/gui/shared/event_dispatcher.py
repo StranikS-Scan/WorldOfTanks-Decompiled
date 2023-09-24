@@ -22,9 +22,8 @@ def showFunRandomInfoPage(infoPageUrl):
 
 
 def showFunRandomSubSelector():
-    from fun_random.gui.impl.lobby.mode_selector.fun_sub_selector_view import FunModeSubSelectorWindow
-    window = FunModeSubSelectorWindow()
-    window.load()
+    from fun_random.gui.impl.lobby.mode_selector.fun_sub_selector_view import FunModeSubSelectorView
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.fun_random.lobby.feature.FunRandomModeSubSelector(), FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)

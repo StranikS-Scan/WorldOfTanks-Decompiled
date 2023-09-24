@@ -424,7 +424,7 @@ class ClanStickerPack(StickerPack):
                 return
             fileCache = accountRep.customFilesCache
             fileServerSettings = accountRep.fileServerSettings
-            clanEmblems = fileServerSettings.get('clan_emblems')
+            clanEmblems = fileServerSettings.get('clan_emblems_128') or fileServerSettings.get('clan_emblems')
             if clanEmblems is None:
                 return
             try:

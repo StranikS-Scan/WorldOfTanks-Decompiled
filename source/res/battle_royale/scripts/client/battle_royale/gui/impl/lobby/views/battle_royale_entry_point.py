@@ -66,6 +66,7 @@ class BattleRoyaleEntryPoint(ViewImpl):
     def __getPeriodStateAndActualTime(self):
         periodInfo = self.__battleRoyaleController.getPeriodInfo()
         status = State.DISABLED
+        actualTime = None
         if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
             actualTime = periodInfo.cycleBorderRight.timestamp
         elif periodInfo.periodType in (PeriodType.AFTER_SEASON,

@@ -183,7 +183,6 @@ def onAvatarBecomePlayer():
 
 def onAvatarBecomeNonPlayer():
     ServicesLocator.boosterStateProvider.onAvatarBecomeNonPlayer()
-    ServicesLocator.gameState.onAvatarBecomeNonPlayer()
 
 
 def onAccountBecomePlayer():

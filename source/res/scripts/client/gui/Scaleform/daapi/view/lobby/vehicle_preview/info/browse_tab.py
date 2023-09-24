@@ -13,8 +13,8 @@ from gui.impl.gen import R
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
-_MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 410
-_MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 290
+_MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 400
+_MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 280
 
 class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
     itemsCache = dependency.descriptor(IItemsCache)

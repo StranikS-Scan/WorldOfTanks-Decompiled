@@ -380,9 +380,6 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasInBattleUpgrade(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
 
-    def hasRoleExpSystem(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
-
     def hasDogTag(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)
 
@@ -416,6 +413,9 @@ class _ArenaExtraDataVisitor(IArenaVisitor):
 
     def isLowLevelBattle(self):
         return 0 < self._extra.get('battleLevel', 0) < 4
+
+    def isMapsInDevelopmentEnabled(self):
+        return self._extra.get('isRandomEventsAllowed', False)
 
     def getValue(self, key, default=None):
         return self._extra.get(key, default)

@@ -77,9 +77,9 @@ class DemoRenamingOverlayView(BaseWGNPOverlayView):
         haveTimedWarning = self.viewModel.getWarningCountdown() and self.viewModel.getWarningText()
         self.viewModel.setIsConfirmEnabled(self._name.isValid and bool(self._name.value) and not haveTimedWarning)
 
-    def _finalize(self):
+    def _doFinalize(self):
         self._name.dispose()
-        super(DemoRenamingOverlayView, self)._finalize()
+        super(DemoRenamingOverlayView, self)._doFinalize()
 
     def _validateInput(self):
         self._name.validate()

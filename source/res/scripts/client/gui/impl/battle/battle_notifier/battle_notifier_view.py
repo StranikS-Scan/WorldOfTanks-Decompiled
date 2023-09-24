@@ -16,7 +16,7 @@ class BattleNotifierView(ViewImpl):
     __slots__ = ('__resultsQueue', '__uiReadyForData', '__arenaLoaded')
 
     def __init__(self):
-        settings = ViewSettings(R.views.battle.battle_notifier.BattleNotifierView(), ViewFlags.COMPONENT, BattleNotifierViewModel())
+        settings = ViewSettings(R.views.battle.battle_notifier.BattleNotifierView(), ViewFlags.VIEW, BattleNotifierViewModel())
         super(BattleNotifierView, self).__init__(settings)
         self.__resultsQueue = deque()
         self.__uiReadyForData = True
@@ -109,7 +109,8 @@ def _randomBattleResults(message):
 
 
 _formatters = {ARENA_BONUS_TYPE.REGULAR: _randomBattleResults,
- ARENA_BONUS_TYPE.EPIC_RANDOM: _randomBattleResults}
+ ARENA_BONUS_TYPE.EPIC_RANDOM: _randomBattleResults,
+ ARENA_BONUS_TYPE.RANDOM_NP2: _randomBattleResults}
 
 def _collectResults(message):
     arenaBonusType = message.data.get('bonusType', None)

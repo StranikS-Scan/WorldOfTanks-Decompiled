@@ -19,7 +19,7 @@ from items import vehicles, getTypeInfoByName
 from rent_common import SeasonRentDuration
 from telecom_rentals_common import TELECOM_RENTALS_RENT_KEY
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
-_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'hasMultipleConditions', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented', 'isTelecomRent'))
+_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented', 'isTelecomRent'))
 SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
 _BIG_HIGHLIGHT_TYPES_MAP = {SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE_BIG,
  SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG,
@@ -56,8 +56,7 @@ class RentalInfoProvider(_RentalInfoProvider):
         else:
             compensations = MONEY_UNDEFINED
         isTelecomRent = TELECOM_RENTALS_RENT_KEY in additionalData
-        isSpecialRental = 'hasMultipleConditions' in additionalData
-        result = _RentalInfoProvider.__new__(cls, time, compensations, isSpecialRental, battles, wins, seasonRent, isRented, isTelecomRent)
+        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent, isRented, isTelecomRent)
         return result
 
     def canRentRenewForSeason(self, seasonType):
@@ -107,14 +106,8 @@ class RentalInfoProvider(_RentalInfoProvider):
             return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(expiryTime)))
         return float('inf')
 
-    def getExpiryDate(self):
-        if self.rentExpiryTime != float('inf'):
-            expiryTime = max(self.rentExpiryTime, self._getSeasonExpiryTime())
-            return float(time_utils.makeLocalServerTime(expiryTime))
-        return float('inf')
-
     def getExpiryState(self):
-        return self.rentExpiryTime != float('inf') and (self.battlesLeft <= 0 or self.getTimeLeft() <= 0) if self.hasMultipleConditions else self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and not self.getActiveSeasonRent()
+        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and not self.getActiveSeasonRent()
 
     def getRentalPeriodInCycles(self):
         activeSeasonRentInfo = self.getActiveSeasonRent()

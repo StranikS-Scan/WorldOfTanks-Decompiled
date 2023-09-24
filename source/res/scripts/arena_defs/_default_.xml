@@ -20,8 +20,6 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
-  <soundNotificationsPlan>	soundNotifications	</soundNotificationsPlan>
-  <soundNotificationsContext>	visual_script_client.contexts.sound_notifications_context.SoundNotificationsContext	</soundNotificationsContext>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultReverbPreset></defaultReverbPreset>
@@ -176,6 +174,11 @@
     <BATTLE_ROYALE_TRN_SQUAD>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
+    <TOURNAMENT_COMP7>
+      <runDelay>	45	</runDelay>
+      <runDelayDev>	45	</runDelayDev>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+    </TOURNAMENT_COMP7>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -263,7 +266,7 @@
         <frontLineInit>	400.	</frontLineInit>
         <transitionFrontLineBoundBackward>	300.	</transitionFrontLineBoundBackward>
         <transitionFrontLineBoundForward>	250.	</transitionFrontLineBoundForward>
-        <defenderMotivationFactors>	0.875 0.5625 0.425	</defenderMotivationFactors>
+        <defenderMotivationFactors>	0.875 0.5625 0.375	</defenderMotivationFactors>
         <overtimeMaxFrontlineOffset>	-600.	</overtimeMaxFrontlineOffset>
       </epicSectorSettings>
       <winnerIfTimeout>	2	</winnerIfTimeout>

@@ -15,7 +15,7 @@ from helpers import dependency
 from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.lobby_context import ILobbyContext
 from constants import SwitchState
-from gui.shared.event_dispatcher import showConfirmInStorageDialog
+from gui.shared.event_dispatcher import showSellDialog
 VERSION = 1
 _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
   'label': R.strings.storage.storage.tabs.all,
@@ -68,10 +68,10 @@ def _defaultInGroupComparator(a, b):
     return cmp(storage_helpers.getStorageItemName(a), storage_helpers.getStorageItemName(b))
 
 
-_OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED,
+_OPT_DEVICE_TYPE_ORDER = (REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE,
  REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY,
  REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE,
- REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE)
+ REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED)
 
 def _getDeviceCategoriesOrder(optDevice):
     categories = optDevice.descriptor.categories
@@ -165,16 +165,11 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
         self.__storageNovelty.onUpdated -= self._updateTabCounters
 
     def _getTabsData(self):
-        lobbyContext = dependency.instance(ILobbyContext)
-
-        def validateTab(tab):
-            return lobbyContext.getServerSettings().isCrewBooksEnabled() if tab['id'] == STORAGE_CONSTANTS.INVENTORY_TAB_CREW_BOOKS else True
-
         tabsData = copy.deepcopy(_TABS_DATA)
         for item in tabsData:
             item['label'] = backport.text(item['label']())
 
-        return tuple(filter(validateTab, tabsData))
+        return tuple(tabsData)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(InventoryCategoryStorageView, self)._onRegisterFlashComponent(viewPy, alias)
@@ -209,7 +204,7 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
 
     def _sellItems(self, itemId):
-        showConfirmInStorageDialog(int(itemId))
+        showSellDialog(int(itemId))
 
     def setTabId(self, tabId):
         self._currentTabId = tabId
@@ -229,10 +224,6 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
         return items
 
     def _getItemTypeID(self):
-        if self._currentTabId == STORAGE_CONSTANTS.INVENTORY_TAB_ALL:
-            if not self.__lobbyContext.getServerSettings().isCrewBooksEnabled():
-                allItemTypes = set(_TABS_ITEM_TYPES[self._currentTabId]).difference({GUI_ITEM_TYPE.CREW_BOOKS})
-                return tuple(allItemTypes)
         return _TABS_ITEM_TYPES[self._currentTabId]
 
     def _getRequestCriteria(self, invVehicles):

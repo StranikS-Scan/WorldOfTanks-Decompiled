@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 class StageSwitcher(StageSwitcherMeta):
 
     def _makeInjectView(self):
-        self.__view = StageSwitcherView(flags=ViewFlags.COMPONENT)
+        self.__view = StageSwitcherView(flags=ViewFlags.VIEW)
         return self.__view
 
 

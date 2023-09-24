@@ -24,6 +24,7 @@ from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, BattlePassRandomQuestTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
@@ -115,6 +116,7 @@ class _BattlePassFinalBonusPacker(BaseBonusUIPacker):
 
 
 class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     @classmethod
     def _pack(cls, bonus):
@@ -135,29 +137,17 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
         if recruitInfo is None:
             return
         else:
-            if recruitInfo.isFemale():
-                bonusImageName = 'tankwoman'
-            else:
-                bonusImageName = 'tankman'
+            bonusImageName = cls.__getBonusImageName(recruitInfo)
             model = RewardItemModel()
             cls._packCommon(bonus, model)
-            model.setIcon(cls._getIcon(recruitInfo, bonusImageName))
+            model.setIcon(bonusImageName)
             tankManFullName = recruitInfo.getFullUserName()
             model.setUserName(tankManFullName)
             model.setLabel(tankManFullName)
             model.setBigIcon('_'.join([bonusImageName, recruitInfo.getGroupName()]))
             model.setIsCollectionEntity(cls._isCollectionItem(recruitInfo.getGroupName()))
-            model.setLabel(cls._getLabel(bonus, recruitInfo))
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
-
-    @classmethod
-    def _getLabel(cls, bonus, recruitInfo):
-        pass
-
-    @classmethod
-    def _getIcon(cls, recruitInfo, bonusImageName):
-        return bonusImageName
 
     @classmethod
     def _getToolTip(cls, bonus):
@@ -176,6 +166,11 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
                 result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
+
+    @classmethod
+    def __getBonusImageName(cls, recruitInfo):
+        baseName = 'tank{}man'.format('wo' if recruitInfo.isFemale() else '')
+        return '{}SpecialVoice'.format(baseName) if recruitInfo.getGroupName() in cls.__battlePass.getSpecialVoiceTankmen() else baseName
 
 
 class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):

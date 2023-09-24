@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'HangarSimpleEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -85,8 +85,6 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
-    SHOW_SPAWN_POINTS = 'game/showSpawnPoints'
-    HIDE_SPAWN_POINTS = 'game/hideSpawnPoints'
 
 
 class GUICommonEvent(SharedEvent):
@@ -198,13 +196,10 @@ class ShowDialogEvent(SharedEvent):
     SHOW_BUTTON_DLG = 'showButtonDialog'
     SHOW_ICON_DIALOG = 'showIconDialog'
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
-    SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
     SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
     SHOW_CONFIRM_BOOSTER = 'showConfirmBooster'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
-    SHOW_DISMISS_TANKMAN_DIALOG = 'showDismissTankmanDialog'
-    SHOW_RESTORE_TANKMAN_DIALOG = 'showRestoreTankmanDialog'
     SHOW_CYBER_SPORT_DIALOG = 'showCyberSportDialog'
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
@@ -360,10 +355,6 @@ class FightButtonEvent(LobbySimpleEvent):
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
-
-
-class SkillDropEvent(SharedEvent):
-    SKILL_DROPPED_SUCCESSFULLY = 'skillDroppedSuccess'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -557,6 +548,7 @@ class OpenLinkEvent(SharedEvent):
     FRONTLINE_CHANGES = 'frontlineChangesURL'
     WOT_PLUS_STEAM_SHOP = 'wotPlusSteamURL'
     WOT_PLUS_SHOP = 'wotPlusShopURL'
+    STEAM_SUBSCRIPTION_MANAGEMENT = 'steamSubscriptionManagementURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -655,14 +647,6 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
-class WtEventPortalsEvent(HasCtxEvent):
-    ON_PORTAL_VIEW_CLOSED = 'wtEvent/onPortalViewClosed'
-    ON_PORTAL_AWARD_VIEW_CLOSED = 'wtEvent/onPortalAwardViewClosed'
-    ON_VEHICLE_AWARD_VIEW_CLOSED = 'wtEvent/onVehicleAwardViewClosed'
-    ON_ALL_PORTAL_VIEWS_CLOSED = 'wtEvent/onAllPortalViewClosed'
-    ON_BACK_TO_PORTAL = 'wtEvent/onBackToPortal'
-
-
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -688,6 +672,7 @@ class AirDropEvent(HasCtxEvent):
     AIR_DROP_LANDED = 'onAirDropLanded'
     AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
     AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
+    AIR_DROP_NXT_SPAWNED = 'onAirDropNxtSpawned'
 
 
 class ProfilePageEvent(HasCtxEvent):
@@ -837,15 +822,5 @@ class PrebattleEvent(HasCtxEvent):
     NOT_SWITCHED = 'PrebattleEvent/NOT_SWITCHED'
 
 
-class HangarSimpleEvent(HasCtxEvent):
-    HANGAR_LOADED = 'HangarSimpleEvent/hangarLoaded'
-    HANGAR_UNLOADED = 'HangarSimpleEvent/hangarUnLoaded'
-    VEHICLE_PREVIEW_LOADED = 'HangarSimpleEvent/vehiclePreviewLoaded'
-    VEHICLE_PREVIEW_UNLOADED = 'HangarSimpleEvent/vehiclePreviewUnLoaded'
-    EVENT_PORTAL_SELECTED = 'HangarSimpleEvent/eventPortalSelected'
-    EVENT_VEHICLE_SELECTED = 'HangarSimpleEvent/eventVehicleSelected'
-    SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
-    CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
-    DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
-    PORTAL_MANAGER_ACTIVATED = 'HangarSimpleEvent/PortalManagerActivated'
-    UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'
+class HangarCrewWidgetViewEvent(HasCtxEvent):
+    GF_RESIZED = 'hangarCrewWidgetViewEvent/gfResized'

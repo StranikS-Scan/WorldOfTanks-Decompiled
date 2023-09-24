@@ -25,6 +25,7 @@ _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
 _COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 _WINBACK_TIPS_PATTERN = '^(winback\\d+$)'
 _MAPBOX_TIPS_PATTERN = '^(mapbox\\d+)'
+_DEV_MAPS_PATTERN = '^(devMaps\\d+)'
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1
@@ -112,6 +113,12 @@ class _EventTipsCriteria(TipsCriteria):
         return TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
 
 
+class _DevMapsTipsCriteria(TipsCriteria):
+
+    def _getTargetList(self):
+        return _devMapsTips
+
+
 class _RankedTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
@@ -181,6 +188,7 @@ registerBattleTipCriteria(ARENA_GUI_TYPE.EVENT_BATTLES, _EventTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.RANKED, _RankedTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.COMP7, _Comp7TipsCriteria)
+registerBattleTipCriteria(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7TipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.WINBACK, _WinbackTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.MAPBOX, _MapboxTipsCriteria)
 registerBattleTipsCriteria(ARENA_GUI_TYPE.EPIC_RANGE, _EpicBattleTipsCriteria)
@@ -188,7 +196,7 @@ registerBattleTipsCriteria((ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RAND
 
 def getTipsCriteria(arenaVisitor):
     criteriaCls = collectBattleTipsCriteria(arenaVisitor.gui.guiType)
-    return _RandomTipsCriteria() if criteriaCls is None else criteriaCls(arenaVisitor)
+    return _getRandomTipsCriteria(arenaVisitor) if criteriaCls is None else criteriaCls(arenaVisitor)
 
 
 def readTips(pattern):
@@ -216,6 +224,10 @@ def _buildBattleLoadingTip(tipID, descriptionResID):
         tip = _BattleLoadingTip()
     tip.build(tipID, descriptionResID, tipConfig)
     return tip
+
+
+def _getRandomTipsCriteria(arenaVisitor):
+    return _DevMapsTipsCriteria() if arenaVisitor.extra.isMapsInDevelopmentEnabled() else _RandomTipsCriteria()
 
 
 def _getTipIconRes(tipID, group):
@@ -467,3 +479,4 @@ _battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN)
 _comp7Tips = readTips(_COMP7_TIPS_PATTERN)
 _winbackTips = readTips(_WINBACK_TIPS_PATTERN)
 _mapboxTips = readTips(_MAPBOX_TIPS_PATTERN)
+_devMapsTips = readTips(_DEV_MAPS_PATTERN)

@@ -20,7 +20,7 @@ class HonoredRankAchievement(RegularAchievement):
         super(HonoredRankAchievement, self).__init__('honoredRank', _AB.CLIENT, dossier, value)
 
     def getIcons(self):
-        iconName = self.getIconName()
+        iconName = self._getIconName()
         return {self.ICON_TYPE.IT_180X180: '%s/%s.png' % (self.ICON_PATH_180X180, iconName),
          self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName)}
 

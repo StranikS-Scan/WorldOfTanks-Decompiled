@@ -572,9 +572,6 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_CrewBooksEnabled	</global-active>
-      </condition>
     </hint>
     <hint>	SoundButtonExHint	  <item-id>	SoundButtonEx	</item-id>
       <text>	_(#crew_operations:crewBooks/tutorial/readBook)	</text>
@@ -616,6 +613,11 @@
         <direction>	T	</direction>
         <loop>	True	</loop>
       </arrow>
+      <condition>
+        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
+          <arguments>	AmmunitionPanelHintZoneHint	</arguments>
+        </class-condition>
+      </condition>
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>

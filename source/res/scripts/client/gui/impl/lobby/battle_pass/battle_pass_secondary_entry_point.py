@@ -73,12 +73,15 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
             shieldTemplate = 'shield_blue{}{}'
             color = '_gold' if self.isBought else '_silver'
             postfix = ''
-            if self.isCompleted and self.freePoints == 0 or not self.__battlePass.hasActiveChapter():
+            if self.isCompleted and self.freePoints == 0 or not self.isCompleted and not self.__battlePass.hasActiveChapter():
                 postfix = '_closed'
-            icon = _R_IMAGES.dyn(shieldTemplate.format(color, postfix))()
+            iconName = shieldTemplate.format(color, postfix)
         else:
-            icon = _R_IMAGES.shield_silver() if self.chapterID != 0 else _R_IMAGES.shield_silver_empty()
-        return backport.image(icon)
+            iconName = 'shield_silver' if self.chapterID != 0 else 'shield_silver_empty'
+        iconRes = _R_IMAGES.emblem.dyn('chapter_{}'.format(self.chapterID)).dyn(iconName)
+        if not iconRes.exists():
+            iconRes = _R_IMAGES.emblem.default.dyn(iconName)
+        return backport.image(iconRes())
 
     def __getAltIcon(self, isEnabled):
         if self.chapterID > 0:

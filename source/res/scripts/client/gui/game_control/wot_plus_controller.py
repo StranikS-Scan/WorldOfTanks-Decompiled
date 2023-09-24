@@ -12,6 +12,7 @@ from constants import RENEWABLE_SUBSCRIPTION_CONFIG, IS_CHINA
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.platform.products_fetcher.user_subscriptions.controller import SubscriptionRequestPlatform, SubscriptionStatus
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.gui_items.artefacts import OptionalDevice
@@ -88,6 +89,7 @@ class WotPlusController(IWotPlusController):
         self._cache = {}
         self._account = None
         self._state = WotPlusState.INACTIVE
+        self._hasSteamSubscription = False
         self.onDataChanged = Event()
         self.onAttendanceUpdated = Event()
         self.onIntroShown = Event()
@@ -105,6 +107,7 @@ class WotPlusController(IWotPlusController):
         self.processSwitchNotifications()
         self._validSessionStarted = False if g_bootcamp.isRunning() else True
         self._resolveState()
+        self._resolveHasSteamSubscription()
 
     def onAccountBecomePlayer(self):
         self._account = BigWorld.player()
@@ -153,6 +156,9 @@ class WotPlusController(IWotPlusController):
 
     def getState(self):
         return self._state
+
+    def hasSteamSubscription(self):
+        return self._hasSteamSubscription
 
     def getExpiryTime(self):
         return self._cache.get(RS_EXPIRATION_TIME, 0)
@@ -296,6 +302,17 @@ class WotPlusController(IWotPlusController):
             self._state = WotPlusState.CANCELLED
 
     @wg_async
+    def _resolveHasSteamSubscription(self):
+        if not self.isEnabled():
+            self._hasSteamSubscription = False
+            return
+        subscriptions = yield wg_await(self._userSubscriptionFetchCtrl.getProducts(False))
+        if not (subscriptions.isProcessed and subscriptions.products):
+            self._hasSteamSubscription = False
+            return
+        self._hasSteamSubscription = any((product.status == SubscriptionStatus.ACTIVE.value and product.platform == SubscriptionRequestPlatform.STEAM.value for product in subscriptions.products))
+
+    @wg_async
     def _onClientUpdate(self, diff, _):
         itemDiff = diff.get(RS_PDATA_KEY, {})
         if IDLE_CREW_XP_PDATA_KEY in diff:
@@ -305,6 +322,7 @@ class WotPlusController(IWotPlusController):
         if itemDiff:
             synchronizeDicts(itemDiff, self._cache)
             yield wg_await(self._resolveState())
+            yield wg_await(self._resolveHasSteamSubscription())
             self.onDataChanged(itemDiff)
 
     def _getStrategy(self):

@@ -34,8 +34,8 @@ class EquipmentsTooltipData(BlocksTooltipData):
             if cooldownBlock is not None:
                 headerBlockItem.append(cooldownBlock)
             items.append(formatters.packBuildUpBlockData(headerBlockItem))
-            items.append(formatters.packBuildUpBlockData(self.__constructDescriptionBlock(module, leftPadding), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=verticalPadding, bottom=verticalPadding)))
-            items.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.battle_royale.artefact.source())), padding=formatters.packPadding(left=innerBlockLeftPadding, top=verticalPadding)))
+            items.append(formatters.packBuildUpBlockData(self.__constructDescriptionBlock(module, leftPadding), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=0, right=rightPadding, top=verticalPadding, bottom=verticalPadding)))
+            items.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.battle_royale.artefact.source())), padding=formatters.packPadding(left=leftPadding, top=verticalPadding)))
             if hasattr(module, 'tooltipMovie') and module.tooltipMovie:
                 block = formatters.packImageBlockData(module.tooltipMovie, BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE)
                 items.append(block)
@@ -62,7 +62,7 @@ class EquipmentsTooltipData(BlocksTooltipData):
     @staticmethod
     def __constructDescriptionBlock(item, leftPadding):
         block = []
-        block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(EquipmentsTooltipData.__getDescription(item)), padding=formatters.packPadding(top=2, left=101 - leftPadding), descPadding=formatters.packPadding(bottom=-10)))
+        block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(EquipmentsTooltipData.__getDescription(item)), padding=formatters.packPadding(top=2, left=leftPadding), descPadding=formatters.packPadding(bottom=-10)))
         return block
 
     @staticmethod

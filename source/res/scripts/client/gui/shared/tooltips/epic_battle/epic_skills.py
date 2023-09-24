@@ -39,9 +39,9 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
                 items.append(formatters.packBuildUpBlockData(statBlocks[i], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
 
             realLevel = self._epicMetaGameCtrl.getSkillLevels().get(skillID)
-            items.append(self.__constructModesInfoBlock(realLevel))
             if not realLevel:
                 items.append(formatters.packBuildUpBlockData(self.__constructInactiveStateBlock(skillInfo), padding=formatters.packPadding(top=-6, bottom=-21)))
+            items.append(self.__constructModesInfoBlock(realLevel))
             return items
 
     @staticmethod

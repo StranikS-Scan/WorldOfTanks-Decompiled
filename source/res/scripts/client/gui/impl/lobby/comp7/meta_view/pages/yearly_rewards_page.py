@@ -10,6 +10,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_c
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.comp7_bonus_packer import packQuestBonuses, getComp7BonusPacker
+from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
 from gui.server_events.bonuses import getNonQuestBonuses
@@ -98,8 +99,16 @@ class YearlyRewardsPage(PageSubModelPresenter):
         if not cacheIsSynced:
             self.__comp7Controller.entitlementsCache.reloadSeasonPoints(self.__onSeasonPointsReloaded)
         model.setSeasonPointsReceived(self.__areLastSeasonPointsReceived())
-        if not self.__comp7Controller.isQualificationActive():
+        if self.__comp7Controller.isAvailable() and not self.__comp7Controller.isQualificationActive():
             model.setCurrentRank(comp7_shared.getRankEnumValue(comp7_shared.getPlayerDivision()))
+        else:
+            prevSeason = self.__comp7Controller.getPreviousSeason()
+            if not prevSeason:
+                return
+            seasonNumber = prevSeason.getNumber()
+            if self.__comp7Controller.isRankAchievedInSeason(seasonNumber):
+                prevDivision = getPlayerDivisionByRating(self.__comp7Controller.getRatingForSeason(seasonNumber))
+                model.setCurrentRank(comp7_shared.getRankEnumValue(prevDivision))
 
     def __areLastSeasonPointsReceived(self):
         prevSeason = self.__comp7Controller.getPreviousSeason()

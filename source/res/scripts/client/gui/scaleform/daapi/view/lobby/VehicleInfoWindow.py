@@ -86,7 +86,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                 tankmanLabel = ''
                 if tankman is not None:
                     lastUserName = tankman.lastUserName if tankman.lastUserName else tankman.firstUserName
-                    if tankman.skinID != NO_CREW_SKIN_ID and self._lobbyContext.getServerSettings().isCrewSkinsEnabled():
+                    if tankman.skinID != NO_CREW_SKIN_ID:
                         skinItem = self._itemsCache.items.getCrewSkin(tankman.skinID)
                         lastUserName = i18n.makeString(skinItem.getLastName())
                     tankmanLabel = '%s %s (%d%%)' % (tankman.rankUserName, lastUserName, tankman.roleLevel)
@@ -157,7 +157,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 
-    def __onVehCompareBasketChanged(self, changedData, _=None):
+    def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.__updateCompareButtonState()
 

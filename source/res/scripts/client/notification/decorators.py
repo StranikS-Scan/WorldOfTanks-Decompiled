@@ -35,11 +35,11 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IWinBackCallController
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.gui.game_control import IEventBattlesController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -326,7 +326,6 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
-    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
@@ -351,7 +350,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
     def _getIsLocked(self):
         isLocked = True
         vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and not self.__gameEventCtrl.isEventPrbActive() and vehicle is not None and vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
         return isLocked
 
@@ -364,6 +363,26 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
                 if vehicleIntCD is not None:
                     vehicle = self.itemsCache.items.getItemByCD(vehicleIntCD)
         return vehicle
+
+
+class C11nProgressiveItemDecorator(C11nMessageDecorator):
+    lockedButtonTooltip = makeTooltip(body=backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip()))
+
+    def _updateButtonsState(self, lock=False):
+        super(C11nProgressiveItemDecorator, self)._updateButtonsState(lock)
+        self.__setTooltip(lock)
+
+    def __setTooltip(self, isLocked):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if isLocked and not buttonsLayout[0].get('tooltip'):
+                tooltip = self.lockedButtonTooltip
+                buttonsLayout[0]['tooltip'] = tooltip
+            if not isLocked and buttonsLayout[0].get('tooltip'):
+                buttonsLayout[0]['tooltip'] = ''
+            return
 
 
 class C2DProgressionStyleDecorator(C11nMessageDecorator):
@@ -1353,4 +1372,134 @@ class BattleMattersReminderDecorator(MessageDecorator):
         tooltip = ''
         if self.__battleMattersController.isActive():
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
+        return (state, tooltip)
+
+
+class PrestigeFirstEntryDecorator(LockButtonMessageDecorator):
+
+    def __init__(self, entityID, message, linkageData, model):
+        super(PrestigeFirstEntryDecorator, self).__init__(entityID, self.__makeEntity(message, linkageData), self.__makeSettings(), model)
+
+    def isShouldCountOnlyOnce(self):
+        return True
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PRESTIGE_FIRST_ENTRY
+
+    def __makeEntity(self, message, linkageData):
+        return g_settings.msgTemplates.format('PrestigeFirstEntryMessage', ctx=message, data={'linkageData': linkageData})
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+
+
+class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(PrestigeLvlUpDecorator, self).__init__(entityID, entity, settings, model)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+
+    def clear(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(PrestigeLvlUpDecorator, self).clear()
+
+    def _updateButtonsState(self, lock=False):
+        config = self.__lobbyContext.getServerSettings().prestigeConfig
+        lock |= not config.isEnabled
+        super(PrestigeLvlUpDecorator, self)._updateButtonsState(lock)
+
+    def __onServerSettingsChange(self, diff):
+        prestigeChanged = diff.get('prestige_config')
+        if not prestigeChanged:
+            return
+        config = self.__lobbyContext.getServerSettings().prestigeConfig
+        if not config.isEnabled and self._model:
+            self._updateButtonsState(lock=True)
+
+
+class WinBackCallEntryDecorator(MessageDecorator):
+    __winBackCallCtrl = dependency.descriptor(IWinBackCallController)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(WinBackCallEntryDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
+        self._subscribe()
+
+    def clear(self):
+        self._unsubscribe()
+
+    def getType(self):
+        return NOTIFICATION_TYPE.WIN_BACK_CALL_ENTRY
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    @staticmethod
+    def isPinned():
+        return True
+
+    def decrementCounterOnHidden(self):
+        return False
+
+    def _subscribe(self):
+        g_clientUpdateManager.addCallbacks(dict(self._getCallbacks()))
+        events = self._getEvents()
+        for event, handler in events:
+            event += handler
+
+    def _unsubscribe(self):
+        events = self._getEvents()
+        for event, handler in events:
+            event -= handler
+
+        g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def _getEvents(self):
+        return ((self.__winBackCallCtrl.onStateChanged, self.__onStateChanged),)
+
+    def _getCallbacks(self):
+        return (('tokens', self.__onTokensUpdate),)
+
+    def __onStateChanged(self):
+        self.__update()
+
+    def __onTokensUpdate(self, _):
+        self.__update()
+
+    def __update(self):
+        if not self.__winBackCallCtrl.isEnabled and self._model is not None:
+            self._model.removeNotification(self.getType(), self._entityID)
+            return
+        else:
+            self.__updateEntityButtons()
+            if self._model is not None:
+                self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+            return
+
+    def _make(self, entity=None, settings=None):
+        self.__updateEntityButtons()
+        super(WinBackCallEntryDecorator, self)._make(entity, settings)
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            buttonsStates = self._entity.get('buttonsStates', {})
+            if buttonsStates is None:
+                return
+            state, tooltip = self._getButtonState()
+            buttonsStates['submit'] = state
+            buttonsLayout[0]['tooltip'] = tooltip
+            return
+
+    def _getButtonState(self):
+        state = NOTIFICATION_BUTTON_STATE.VISIBLE
+        tooltip = ''
+        if self.__winBackCallCtrl.isEnabled:
+            state |= NOTIFICATION_BUTTON_STATE.ENABLED
+            rClass = R.strings.winback_call.serviceChannelMessages.entryPoint.button.tooltip
+            tooltip = makeTooltip(body=backport.text(rClass()))
         return (state, tooltip)

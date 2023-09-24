@@ -703,7 +703,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         isYearGap = self.isYearGap()
         isYearLBEnabled = self.isYearLBEnabled()
         hasCurSeason = self.getCurrentSeason() is not None
-        passedSeasons = self.getSeasonPassed()
+        passedSeasons = self.getSeasonsPassed()
         if isEnabled:
             if self.isFrozen() or not passedSeasons and not hasCurSeason:
                 self.__showPreSeason()
@@ -763,7 +763,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             self.updateClientValues()
             rankInfo = reusableInfo.personal.getRankInfo()
-            questsProgress = reusableInfo.progress.getQuestsProgress()
+            questsProgress = reusableInfo.personal.getQuestsProgress()
             rankedResultsVO = composer.getResultsTeamsVO()
             event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, resultsWindow)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)

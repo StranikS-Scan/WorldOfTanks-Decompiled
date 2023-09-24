@@ -173,7 +173,6 @@ class CommonTankAppearance(ScriptGameObject):
         self.__isObserver = False
         self.__attachments = []
         self.__modelAnimators = []
-        self.__customAnimators = []
         self.turretMatrix = None
         self.gunMatrix = None
         self.__allLodCalculators = []
@@ -332,7 +331,6 @@ class CommonTankAppearance(ScriptGameObject):
     def destroy(self):
         self._vehicleInfo = {}
         self.flagComponent = None
-        self.clearCustomAnimators()
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self._setFashions(fashions, self._isTurretDetached)
@@ -393,7 +391,6 @@ class CommonTankAppearance(ScriptGameObject):
             modelAnimator.animator.setEnabled(False)
 
         super(CommonTankAppearance, self).deactivate()
-        self.__customAnimators = []
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
         self._stopSystems()
         self.wheelsGameObject.deactivate()
@@ -607,19 +604,15 @@ class CommonTankAppearance(ScriptGameObject):
             self.__periodicTimerID = None
         self.__modelAnimators = []
         self.filter.enableLagDetection(False)
-        self.clearUndamagedStateChildren()
-        return
-
-    def clearUndamagedStateChildren(self):
         for go in self.undamagedStateChildren:
             CGF.removeGameObject(go)
 
         self.undamagedStateChildren = []
+        return
 
     def _onRequestModelsRefresh(self):
         self.flagComponent = None
         self.__updateModelStatus()
-        self.clearCustomAnimators()
         return
 
     def __updateModelStatus(self):
@@ -755,8 +748,7 @@ class CommonTankAppearance(ScriptGameObject):
             vehicle = self._vehicle
             effects = random.choice(effects)
             args = dict(isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0))
-            vehicleTags = self.typeDescriptor.type.tags
-            if isSpawnedBot(vehicleTags) and 'event_bot' not in vehicleTags and kind in ('explosion', 'destruction'):
+            if isSpawnedBot(self.typeDescriptor.type.tags) and kind in ('explosion', 'destruction'):
                 if isPlayerAvatar():
                     if self.isFlying:
                         instantExplosionEff = self.typeDescriptor.type.effects['instantExplosion']
@@ -832,21 +824,6 @@ class CommonTankAppearance(ScriptGameObject):
          go,
          vector,
          callback))
-
-    def addCustomAnimator(self, modelAnimator):
-        self.__customAnimators.append(modelAnimator)
-        self.registerComponent(modelAnimator)
-
-    def removeCustomAnimator(self, modelAnimator):
-        if modelAnimator in self.__customAnimators:
-            self.__customAnimators.remove(modelAnimator)
-            self.removeComponent(modelAnimator)
-
-    def clearCustomAnimators(self):
-        for animator in self.__customAnimators:
-            self.removeComponent(animator)
-
-        self.__customAnimators = []
 
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.id != BigWorld.player().playerVehicleID:

@@ -18,7 +18,7 @@ from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster,
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
-ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun'))
+ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'prestigeLevel'))
 
 class UNIT_MGR_STATE:
     IDLE = 0
@@ -230,7 +230,7 @@ class UNIT_OP:
     SET_PLAYER_PROFILE = 24
     DEL_PLAYER_PROFILE = 25
     ESTIMATED_TIME_IN_QUEUE = 26
-    ONLY_10_MODE = 27
+    RANDOM_FLAGS = 27
     CLEAR_SEARCH_FLAGS = 28
     REMOVE_SEARCH_FLAGS = 29
     SET_SEARCH_FLAGS = 30
@@ -339,9 +339,9 @@ class CLIENT_UNIT_CMD:
     SET_VEHICLE_LIST = 23
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
-    SET_ONLY_10_MODE = 27
     SET_SQUAD_SIZE = 28
     CHANGE_FUN_EVENT_ID = 29
+    SET_RANDOM_FLAGS = 30
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -499,22 +499,6 @@ def _unitAssemblerTypeFromFlags(flags):
     return PREBATTLE_TYPE_TO_UNIT_ASSEMBLER.get(_prebattleTypeFromFlags(flags), None)
 
 
-UNIT_MGR_FLAGS_TO_QUEUE_TYPE = {UNIT_MGR_FLAGS.EVENT: QUEUE_TYPE.EVENT_BATTLES,
- UNIT_MGR_FLAGS.EPIC: QUEUE_TYPE.EPIC,
- UNIT_MGR_FLAGS.BATTLE_ROYALE: QUEUE_TYPE.BATTLE_ROYALE,
- UNIT_MGR_FLAGS.MAPBOX: QUEUE_TYPE.MAPBOX,
- UNIT_MGR_FLAGS.SQUAD: QUEUE_TYPE.RANDOMS,
- UNIT_MGR_FLAGS.COMP7: QUEUE_TYPE.COMP7}
-
-def _queueTypeFromFlags(flags):
-    flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
-    for unitMgrFlag, queueType in UNIT_MGR_FLAGS_TO_QUEUE_TYPE.iteritems():
-        if flag & unitMgrFlag:
-            return queueType
-
-    return None
-
-
 def extendTiersFilter(filterFlags):
     return (filterFlags << 1 | filterFlags | filterFlags >> 1) & UnitAssemblerSearchFlags.ALL_VEH_TIERS
 
@@ -632,7 +616,7 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.SET_PLAYER_PROFILE: ('', '_setProfileVehicleByData'),
      UNIT_OP.DEL_PLAYER_PROFILE: ('q', '_delProfileVehicle'),
      UNIT_OP.ESTIMATED_TIME_IN_QUEUE: ('i', '_setEstimatedTimeInQueue'),
-     UNIT_OP.ONLY_10_MODE: ('?', '_setOnly10Mode'),
+     UNIT_OP.RANDOM_FLAGS: ('?', '_setRandomFlags'),
      UNIT_OP.SQUAD_SIZE: ('i', '_setSquadSize'),
      UNIT_OP.SET_SEARCH_FLAGS: ('qH', 'setAutoSearchFlags'),
      UNIT_OP.CLEAR_SEARCH_FLAGS: (None, 'clearAutoSearchFlags'),
@@ -675,7 +659,7 @@ class UnitBase(OpsUnpacker):
         self._reservedSlots = set()
         self._modalTimestamp = 0
         self._estimatedTimeInQueue = 0
-        self._isOnly10ModeEnabled = False
+        self._randomFlags = 0
         self._squadSize = 0
         self._unitAssemblerSearchFlags = {}
 
@@ -766,9 +750,9 @@ class UnitBase(OpsUnpacker):
     def _autoSelectProfileVehicle(self, accountDBID, vehicles):
         pass
 
-    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun):
+    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel):
         LOG_DEBUG('_setProfileVehicle: accountDBID={}'.format(accountDBID))
-        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun)
+        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel)
         if newProfileVehicle != self._playerProfileVehicles.get(accountDBID, None):
             self._playerProfileVehicles[accountDBID] = newProfileVehicle
             self._dirty = 1
@@ -845,7 +829,7 @@ class UnitBase(OpsUnpacker):
 
         return True
 
-    _HEADER = '<HHHHHHHHBiiii?i'
+    _HEADER = '<HHHHHHHHBiiiiii'
     _PLAYER_DATA = '<qiIHBHHHq?'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iI'
@@ -853,7 +837,7 @@ class UnitBase(OpsUnpacker):
     _IDS = '<IBB'
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Ii'
-    _VEHICLE_PROFILE_HEADER = '<qBB'
+    _VEHICLE_PROFILE_HEADER = '<qBBI'
     _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)
     _SLOT_PLAYERS_SIZE = struct.calcsize(_SLOT_PLAYERS)
@@ -889,8 +873,8 @@ class UnitBase(OpsUnpacker):
          self._estimatedTimeInQueue,
          self._gameplaysMask,
          self._arenaType,
-         self._isOnly10ModeEnabled,
-         self._squadSize)
+         self._squadSize,
+         self._randomFlags)
         packed += struct.pack(self._HEADER, *args)
         for accountDBID, vehList in vehs.iteritems():
             packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
@@ -925,7 +909,7 @@ class UnitBase(OpsUnpacker):
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._isOnly10ModeEnabled, self._squadSize = struct.unpack_from(self._HEADER, unpacking)
+        memberCount, vehCount, playerCount, profilesCount, searchFlagsCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._estimatedTimeInQueue, self._gameplaysMask, self._arenaType, self._squadSize, self._randomFlags = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
@@ -1203,11 +1187,11 @@ class UnitBase(OpsUnpacker):
             self.storeOp(UNIT_OP.GAMEPLAYS_MASK, newGameplaysMask)
         return OK
 
-    def _setOnly10Mode(self, newIsOnly10Mode):
-        isOnly10ModeEnabled = self._isOnly10ModeEnabled
-        if isOnly10ModeEnabled != newIsOnly10Mode:
-            self._isOnly10ModeEnabled = newIsOnly10Mode
-            self.storeOp(UNIT_OP.ONLY_10_MODE, newIsOnly10Mode)
+    def _setRandomFlags(self, newRandomFlags):
+        randomFlags = self._randomFlags
+        if randomFlags != newRandomFlags:
+            self._randomFlags = newRandomFlags
+            self.storeOp(UNIT_OP.RANDOM_FLAGS, newRandomFlags)
         return OK
 
     def _setSquadSize(self, newSquadSize):
@@ -1542,17 +1526,17 @@ class UnitBase(OpsUnpacker):
         return (cPickle.loads(strDict), offset - initialOffset)
 
     def __packProfileVehicle(self, accountDBID, profileVehicle):
-        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun)
+        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun, profileVehicle.prestigeLevel)
         packed += packPascalString(profileVehicle.vehCompDescr)
         packed += packPascalString(profileVehicle.vehOutfitCD)
         return packed
 
     def __unpackProfileVehicle(self, packedData):
-        accountDBID, seasonType, marksOnGun = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
+        accountDBID, seasonType, marksOnGun, prestigeLevel = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
         offset = self._VEHICLE_PROFILE_HEADER_SIZE
         profileVehCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
         profileOutfitCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
-        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun)
+        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun, prestigeLevel)
         return offset

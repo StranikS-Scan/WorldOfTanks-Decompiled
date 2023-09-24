@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -198,7 +198,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
@@ -430,6 +430,9 @@
           <name>	tasks.bnk	</name>
         </bank>
         <bank>
+          <name>	task_special.bnk	</name>
+        </bank>
+        <bank>
           <name>	cons_hangar.bnk	</name>
         </bank>
         <bank>
@@ -479,6 +482,9 @@
         </bank>
         <bank>
           <name>	achievements.bnk	</name>
+        </bank>
+        <bank>
+          <name>	crew.bnk	</name>
         </bank>
         <bank>
           <name>	custom_styles.bnk	</name>
@@ -575,16 +581,6 @@
           <name>	rocket_accelerator.pck	</name>
         </bank>
       </SFX_soundbanks_arena>
-      <SFX_soundbanks_custom>
-        <white_tiger_2022>
-          <bank>
-            <name>	ev_white_tiger_2021_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	ev_white_tiger_2021_voiceover.pck	</name>
-          </bank>
-        </white_tiger_2022>
-      </SFX_soundbanks_custom>
       <SFX_soundbanks_editor>
         <bank>
           <name>	fort_area.bnk	</name>

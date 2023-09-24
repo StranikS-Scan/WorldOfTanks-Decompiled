@@ -15,6 +15,14 @@
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </timeToDamage>
+    <warningStartTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </warningStartTime>
+    <warningFinishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </warningFinishTime>
   </Properties>
   <DetailLevel>	MY_VEHICLE	</DetailLevel>
   <DefaultKeyName>	deathZoneEffect	</DefaultKeyName>

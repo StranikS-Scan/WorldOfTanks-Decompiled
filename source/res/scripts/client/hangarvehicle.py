@@ -1,16 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraDistanceModes
-from ClientSelectableCameraObject import ClientSelectableCameraObject
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
-from skeletons.gui.game_control import IEventBattlesController
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 
 class HangarVehicle(ClientSelectableCameraVehicle):
     hangarSpace = dependency.descriptor(IHangarSpace)
-    eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
         self.selectionId = ''
@@ -36,16 +33,7 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
 
-    def onMouseClick(self):
-        if self.eventBattlesCtrl.isAvailable() and self.eventBattlesCtrl.isEventPrbActive():
-            self.eventBattlesCtrl.doLeaveEventPrb()
-        return super(HangarVehicle, self).onMouseClick()
-
     def __onSpaceCreated(self):
-        for cameraObject in ClientSelectableCameraObject.allCameraObjects:
-            if cameraObject.state != CameraMovementStates.FROM_OBJECT:
-                return
-
         self.setEnable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
 

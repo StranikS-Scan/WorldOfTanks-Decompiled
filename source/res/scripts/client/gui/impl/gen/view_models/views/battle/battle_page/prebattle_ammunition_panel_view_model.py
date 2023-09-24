@@ -13,7 +13,7 @@ class State(IntEnum):
 class PrebattleAmmunitionPanelViewModel(AmmunitionPanelViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=2):
+    def __init__(self, properties=10, commands=1):
         super(PrebattleAmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property

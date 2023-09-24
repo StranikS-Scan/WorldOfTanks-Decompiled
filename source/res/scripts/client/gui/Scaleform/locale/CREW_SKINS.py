@@ -3,18 +3,8 @@
 
 
 class CREW_SKINS(object):
-    FEATURE_HEADER = '#crew_skins:feature/Header'
     FEATURE_INUSE = '#crew_skins:feature/inUse'
     FEATURE_INSTORAGE = '#crew_skins:feature/inStorage'
-    FEATURE_SKINSTABHEADER = '#crew_skins:feature/skinsTabHeader'
-    FEATURE_SOUND_HEADER = '#crew_skins:feature/sound/header'
-    FEATURE_TAB_RESTRICTIONS = '#crew_skins:feature/tab/restrictions'
-    FEATURE_TAB_ALLUSED = '#crew_skins:feature/tab/allUsed'
-    FEATURE_SOUND_NOSOUND = '#crew_skins:feature/sound/noSound'
-    FEATURE_NOCONTENT_HEADER = '#crew_skins:feature/noContent/header'
-    FEATURE_NOCONTENT_DESC1 = '#crew_skins:feature/noContent/desc1'
-    FEATURE_NOCONTENT_DESC2 = '#crew_skins:feature/noContent/desc2'
-    FEATURE_SKINUSEDWARNING = '#crew_skins:feature/skinUsedWarning'
     RYBALKO_NAME = '#crew_skins:Rybalko/Name'
     RYBALKO_LASTNAME = '#crew_skins:Rybalko/LastName'
     RYBALKO_DESCR = '#crew_skins:Rybalko/Descr'

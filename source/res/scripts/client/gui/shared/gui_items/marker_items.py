@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/marker_items.py
-import copy
 import Math
+import copy
 from constants import MarkerItem
-from gui.Scaleform.daapi.view.battle.event import markers as EventMarkers
-from gui.Scaleform.daapi.view.battle.shared.component_marker import markers_components
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import ComponentBitMask as FLAG
-from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NAME, ENTRY_SYMBOL_NAME
-from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.component_marker import markers_components
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 
 class MarkerParamsFactory(object):
     ZONE_MARKER_DEFAULT_COLOR_SETTINGS = {'default': {'fillColor': 16729670,
@@ -74,25 +73,7 @@ class MarkerParamsFactory(object):
                                     FLAG.MINIMAP_MARKER: [{'symbol': 'CustomDeathZoneMinimapEntryUI',
                                                            'container': CONTAINER_NAME.FLAGS,
                                                            'clazz': markers_components.StaticDeathZoneMinimapMarkerComponent,
-                                                           'color': ZONE_MARKER_DEFAULT_COLOR_SETTINGS}]},
-     MarkerItem.GEN_ON: {FLAG.MARKER_2D: [{'symbol': settings.MARKER_SYMBOL_NAME.EVENT_GENERATOR_MARKER,
-                                           'clazz': EventMarkers.World2DGeneratorMarkerComponentOn,
-                                           'alpha': 1,
-                                           'isSticky': True}],
-                         FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapGeneratorMarkerComponentOn,
-                                                'symbol': 'EventGeneratorMinimapEntryUI',
-                                                'container': CONTAINER_NAME.ICONS,
-                                                'onlyTranslation': True,
-                                                'alpha': 1}]},
-     MarkerItem.GEN_OFF: {FLAG.MARKER_2D: [{'symbol': settings.MARKER_SYMBOL_NAME.EVENT_GENERATOR_MARKER,
-                                            'clazz': EventMarkers.World2DGeneratorMarkerComponentOff,
-                                            'alpha': 0.5,
-                                            'isSticky': True}],
-                          FLAG.MINIMAP_MARKER: [{'clazz': EventMarkers.MinimapGeneratorMarkerComponentOff,
-                                                 'symbol': 'EventGeneratorMinimapEntryUI',
-                                                 'container': CONTAINER_NAME.ICONS,
-                                                 'onlyTranslation': True,
-                                                 'alpha': 0.5}]}}
+                                                           'color': ZONE_MARKER_DEFAULT_COLOR_SETTINGS}]}}
 
     @classmethod
     def getMarkerParams(cls, matrix, markerStyle=MarkerItem.DEFAULT, bitMask=FLAG.NONE):

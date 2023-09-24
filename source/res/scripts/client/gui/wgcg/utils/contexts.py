@@ -76,7 +76,8 @@ class PlatformGetUserSubscriptionsCtx(CommonWebRequestCtx):
 
     def __init__(self, ctx, waitingID=''):
         self.__params = {'status': ctx.status,
-         'product_code': ctx.productCode}
+         'product_code': ctx.productCode,
+         'platform': ctx.platform}
         super(PlatformGetUserSubscriptionsCtx, self).__init__(waitingID=waitingID)
 
     def getRequestType(self):

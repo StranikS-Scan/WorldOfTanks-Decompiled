@@ -1,0 +1,31 @@
+<h04_remday_2015.xml>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <wwmusic>	hangar_h04_remday_silence	</wwmusic>
+  <soundRemapping>
+    <events>
+      <event>
+        <name>	ambient_nature_birds_crows	</name>
+        <mod>	hangar_h04_remday_silence	</mod>
+      </event>
+    </events>
+    <loadBanks>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h04_remday_2015.bnk	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+</h04_remday_2015.xml>

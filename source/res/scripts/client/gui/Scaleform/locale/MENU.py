@@ -77,10 +77,6 @@ class MENU(object):
     HANGAR_CREW_RODY_DOG_USSR_NAME = '#menu:hangar/crew/rody/dog/ussr/name'
     HANGAR_CREW_RODY_DOG_POLAND_NAME = '#menu:hangar/crew/rody/dog/poland/name'
     HANGAR_CREW_RODY_DOG_MOREINFOLABEL = '#menu:hangar/crew/rody/dog/moreInfoLabel'
-    HANGAR_CREW_RODY_DOG_WINDOW_TITLE = '#menu:hangar/crew/rody/dog/window/title'
-    HANGAR_CREW_RODY_DOG_WINDOW_HEADER = '#menu:hangar/crew/rody/dog/window/header'
-    HANGAR_CREW_RODY_DOG_WINDOW_DESCRIPTION = '#menu:hangar/crew/rody/dog/window/description'
-    HANGAR_CREW_RODY_DOG_WINDOW_CLOSEBTNLABEL = '#menu:hangar/crew/rody/dog/window/closeBtnLabel'
     HANGAR_CREW_TOOLTIP_NEW_SKILL = '#menu:hangar/crew/tooltip/new_skill'
     HANGAR_CREW_TOOLTIP_DROP_SKILL = '#menu:hangar/crew/tooltip/drop_skill'
     HANGAR_XPTOTMENCHECKBOX_TOOLTIP = '#menu:hangar/xpToTmenCheckbox/tooltip'
@@ -172,6 +168,8 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_30 = '#menu:loading/battleTypes/desc/30'
     LOADING_BATTLETYPES_31 = '#menu:loading/battleTypes/31'
     LOADING_BATTLETYPES_DESC_31 = '#menu:loading/battleTypes/desc/31'
+    LOADING_BATTLETYPES_33 = '#menu:loading/battleTypes/33'
+    LOADING_BATTLETYPES_DESC_33 = '#menu:loading/battleTypes/desc/33'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -201,52 +199,6 @@ class MENU(object):
     TANKMEN_HEAVYTANK = '#menu:tankmen/heavyTank'
     TANKMEN_AT_SPG = '#menu:tankmen/AT-SPG'
     TANKMEN_SPG = '#menu:tankmen/SPG'
-    TANKMANPERSONALCASE_TITLE = '#menu:tankmanPersonalCase/title'
-    TANKMANPERSONALCASE_RANK = '#menu:tankmanPersonalCase/rank'
-    TANKMANPERSONALCASE_NAME = '#menu:tankmanPersonalCase/name'
-    TANKMANPERSONALCASE_CREW = '#menu:tankmanPersonalCase/crew'
-    TANKMANPERSONALCASE_MAINSPECIALIZATION = '#menu:tankmanPersonalCase/mainSpecialization'
-    TANKMANPERSONALCASE_DOCS_INFO = '#menu:tankmanPersonalCase/docs/info'
-    TANKMANPERSONALCASE_PERSONALDOCS = '#menu:tankmanPersonalCase/personalDocs'
-    TANKMANPERSONALCASE_CHANGEDOCSBTN = '#menu:tankmanPersonalCase/changeDocsBtn'
-    TANKMANPERSONALCASE_USINGLEVEL = '#menu:tankmanPersonalCase/usingLevel'
-    TANKMANPERSONALCASE_COMMANDERFEATURE = '#menu:tankmanPersonalCase/commanderFeature'
-    TANKMANPERSONALCASE_MODIFIERS_FROMCOMMANDER = '#menu:tankmanPersonalCase/modifiers/fromCommander'
-    TANKMANPERSONALCASE_MODIFIERS_FROMEQUIPMENT = '#menu:tankmanPersonalCase/modifiers/fromEquipment'
-    TANKMANPERSONALCASE_MODIFIERS_CUSTOMIZATION = '#menu:tankmanPersonalCase/modifiers/customization'
-    TANKMANPERSONALCASE_MODIFIERS_FROMSKILLS = '#menu:tankmanPersonalCase/modifiers/fromSkills'
-    TANKMANPERSONALCASE_MODIFIERS_PENALTY = '#menu:tankmanPersonalCase/modifiers/penalty'
-    TANKMANPERSONALCASE_MODIFIERSHEADER = '#menu:tankmanPersonalCase/modifiersHeader'
-    TANKMANPERSONALCASE_MODIFIERSRESULT = '#menu:tankmanPersonalCase/modifiersResult'
-    TANKMANPERSONALCASE_SPECIALIZATION = '#menu:tankmanPersonalCase/specialization'
-    TANKMANPERSONALCASE_TRAININGBTN = '#menu:tankmanPersonalCase/trainingBtn'
-    TANKMANPERSONALCASE_BTNRESET = '#menu:tankmanPersonalCase/btnReset'
-    TANKMANPERSONALCASE_RETRAININGBTN = '#menu:tankmanPersonalCase/retrainingBtn'
-    TANKMANPERSONALCASE_VEHICLETYPE = '#menu:tankmanPersonalCase/vehicleType'
-    TANKMANPERSONALCASE_VEHICLE = '#menu:tankmanPersonalCase/vehicle'
-    TANKMANPERSONALCASE_CLOSEBTN = '#menu:tankmanPersonalCase/closeBtn'
-    TANKMANPERSONALCASE_CHANGEROLEBTN = '#menu:tankmanPersonalCase/changeRoleBtn'
-    TANKMANPERSONALCASE_TABBATTLEINFO = '#menu:tankmanPersonalCase/tabBattleInfo'
-    TANKMANPERSONALCASE_TABTRAINING = '#menu:tankmanPersonalCase/tabTraining'
-    TANKMANPERSONALCASE_BTNTRAINING = '#menu:tankmanPersonalCase/btnTraining'
-    TANKMANPERSONALCASE_BTNRETRAINING = '#menu:tankmanPersonalCase/btnRetraining'
-    TANKMANPERSONALCASE_VEHICLETYPEID = '#menu:tankmanPersonalCase/vehicleTypeID'
-    TANKMANPERSONALCASE_SKILLSBUTTON_MAINTEXT = '#menu:tankmanPersonalCase/skillsButton/mainText'
-    TANKMANPERSONALCASE_SKILLSBUTTON_ADDITIONTEXT = '#menu:tankmanPersonalCase/skillsButton/additionText'
-    TANKMANPERSONALCASE_RETRAININGWARNING = '#menu:tankmanPersonalCase/retrainingWarning'
-    TANKMANPERSONALCASE_RETRAININGWARNING2 = '#menu:tankmanPersonalCase/retrainingWarning2'
-    TANKMANPERSONALCASE_NOMODIFIERS = '#menu:tankmanPersonalCase/noModifiers'
-    TANKMSNPERSONALCASE_LACKOFSKILLSFORLEARN = '#menu:tankmsnPersonalCase/lackOfSkillsForLearn'
-    TANKMSNPERSONALCASE_LOADINGINFO = '#menu:tankmsnPersonalCase/loadingInfo'
-    TANKMANPERSONALCASE_NOACHIVS = '#menu:tankmanPersonalCase/noAchivs'
-    TANKMANPERSONALCASE_ACHIVS = '#menu:tankmanPersonalCase/achivs'
-    TANKMANPERSONALCASE_TABDOCS = '#menu:tankmanPersonalCase/tabDocs'
-    TANKMANPERSONALCASE_TABFREESKILLS = '#menu:tankmanPersonalCase/tabFreeSkills'
-    TANKMANPERSONALCASE_TABSKILLS = '#menu:tankmanPersonalCase/tabSkills'
-    TANKMANPERSONALCASE_SITUATIONALDESC = '#menu:tankmanPersonalCase/situationalDesc'
-    TANKMANPERSONALCASE_SKILLSDESC = '#menu:tankmanPersonalCase/skillsDesc'
-    TANKMANPERSONALCASE_DROPSKILLSBUTTONLABEL = '#menu:tankmanPersonalCase/dropSkillsButtonLabel'
-    TANKMANPERSONALCASE_ACCELERATETEACHINGOFSKILL = '#menu:tankmanPersonalCase/accelerateTeachingOfSkill'
     TANKMANTRAININGWINDOW_TITLE = '#menu:tankmanTrainingWindow/title'
     TANKMANTRAININGWINDOW_ACADEMY = '#menu:tankmanTrainingWindow/academy'
     TANKMANTRAININGWINDOW_SCOOL = '#menu:tankmanTrainingWindow/scool'
@@ -292,7 +244,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
-    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -320,7 +271,6 @@ class MENU(object):
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
-    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -363,7 +313,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
-    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -398,7 +347,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
     CURRENTVEHICLESTATUS_SUBSCRIPTION_SUSPENDED = '#menu:currentVehicleStatus/subscription_suspended'
     CURRENTVEHICLESTATUS_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = '#menu:currentVehicleStatus/wot_plus_exclusive_vehicle_disabled'
-    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -739,7 +687,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
@@ -928,6 +875,15 @@ class MENU(object):
     HEADER_VEHICLETYPE_ALLIANCE_GERMANY = '#menu:header/vehicleType/Alliance-Germany'
     HEADER_VEHICLETYPE_ALLIANCE_USA = '#menu:header/vehicleType/Alliance-USA'
     HEADER_VEHICLETYPE_ALLIANCE_FRANCE = '#menu:header/vehicleType/Alliance-France'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_LIGHTTANK = '#menu:header/wotPlusExclusiveVehicleType/lightTank'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_MEDIUMTANK = '#menu:header/wotPlusExclusiveVehicleType/mediumTank'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_HEAVYTANK = '#menu:header/wotPlusExclusiveVehicleType/heavyTank'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_AT_SPG = '#menu:header/wotPlusExclusiveVehicleType/AT-SPG'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_SPG = '#menu:header/wotPlusExclusiveVehicleType/SPG'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_ALLIANCE_USSR = '#menu:header/wotPlusExclusiveVehicleType/Alliance-USSR'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_ALLIANCE_GERMANY = '#menu:header/wotPlusExclusiveVehicleType/Alliance-Germany'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_ALLIANCE_USA = '#menu:header/wotPlusExclusiveVehicleType/Alliance-USA'
+    HEADER_WOTPLUSEXCLUSIVEVEHICLETYPE_ALLIANCE_FRANCE = '#menu:header/wotPlusExclusiveVehicleType/Alliance-France'
     HEADER_DEMONSTRATION_INFO = '#menu:header/demonstration/info'
     HEADER_DEMONSTRATION_BTNLABEL = '#menu:header/demonstration/btnLabel'
     HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE = '#menu:header/account/popover/boosters/blockTitle'
@@ -1015,15 +971,6 @@ class MENU(object):
     EXCHANGEXP_CANCEL = '#menu:exchangeXP/cancel'
     EXCHANGEXP_AVAILABLE_FORFREE_LABEL = '#menu:exchangeXP/available/forFree/label'
     EXCHANGEXP_AVAILABLE_FORFREE_VALUE = '#menu:exchangeXP/available/forFree/value'
-    TEACHINGSKILL_TITLE = '#menu:teachingSkill/title'
-    TEACHINGSKILL_BEFORE = '#menu:teachingSkill/before'
-    TEACHINGSKILL_COST = '#menu:teachingSkill/cost'
-    TEACHINGSKILL_AFTER = '#menu:teachingSkill/after'
-    TEACHINGSKILL_SUBMIT = '#menu:teachingSkill/submit'
-    TEACHINGSKILL_CANCEL = '#menu:teachingSkill/cancel'
-    TEACHINGSKILL_TEACHTOLEVEL = '#menu:teachingSkill/teachToLevel'
-    TEACHINGSKILL_TOTALPAY = '#menu:teachingSkill/totalPay'
-    TEACHINGSKILL_FREEXPISTIGHT = '#menu:teachingSkill/freeXpIsTight'
     PROFILE_HEADER_REGISTRATIONDATETITLE = '#menu:profile/header/registrationDateTitle'
     PROFILE_HEADER_LASTBATTLEDATETITLE = '#menu:profile/header/lastBattleDateTitle'
     PROFILE_CLAN_LABEL = '#menu:profile/clan/label'
@@ -1682,13 +1629,7 @@ class MENU(object):
     CONTEXTMENU_BOT = '#menu:contextMenu/bot'
     CONTEXTMENU_ASSIGNPRIVATE = '#menu:contextMenu/assignPrivate'
     CONTEXTMENU_ASSIGNOFFICER = '#menu:contextMenu/assignOfficer'
-    CONTEXTMENU_PERSONALCASE = '#menu:contextMenu/personalCase'
     CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE = '#menu:contextMenu/personalCase/statsBlockTitle'
-    CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO = '#menu:contextMenu/personalCase/stats/firstInfo'
-    CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO = '#menu:contextMenu/personalCase/stats/secondInfo'
-    CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS = '#menu:contextMenu/personalCase/stats/wotPlus'
-    CONTEXTMENU_TANKMANUNLOAD = '#menu:contextMenu/tankmanUnload'
-    CONTEXTMENU_TANKMANUNLOADALL = '#menu:contextMenu/tankmanUnloadAll'
     CONTEXTMENU_DISMISS = '#menu:contextMenu/dismiss'
     CONTEXTMENU_LOCKSLOT = '#menu:contextMenu/lockSlot'
     CONTEXTMENU_UNLOCKSLOT = '#menu:contextMenu/unlockSlot'
@@ -1713,6 +1654,7 @@ class MENU(object):
     CONTEXTMENU_ACCEPTINVITATIONTOSQUAD = '#menu:contextMenu/acceptInvitationToSquad'
     CONTEXTMENU_REJECTINVITATIONTOSQUAD = '#menu:contextMenu/rejectInvitationToSquad'
     CONTEXTMENU_GOTOBLUEPRINT = '#menu:contextMenu/goToBlueprint'
+    CONTEXTMENU_WINBACKCALLSENDINVITE = '#menu:contextMenu/winBackCallSendInvite'
     DENUNCIATION_1 = '#menu:denunciation/1'
     DENUNCIATION_2 = '#menu:denunciation/2'
     DENUNCIATION_3 = '#menu:denunciation/3'
@@ -1722,22 +1664,6 @@ class MENU(object):
     STEAM_OTHERMETHODS = '#menu:steam/otherMethods'
     STEAM_SUBMIT = '#menu:steam/submit'
     STEAM_CANCEL = '#menu:steam/cancel'
-    SKILLDROPWINDOW_TITLE = '#menu:skillDropWindow/title'
-    SKILLDROPWINDOW_BEFORE = '#menu:skillDropWindow/before'
-    SKILLDROPWINDOW_MULTIPLIER = '#menu:skillDropWindow/multiplier'
-    SKILLDROPWINDOW_INSTORAGE = '#menu:skillDropWindow/inStorage'
-    SKILLDROPWINDOW_NOTAVAILABLE = '#menu:skillDropWindow/notAvailable'
-    SKILLDROPWINDOW_DIRECTION = '#menu:skillDropWindow/direction'
-    SKILLDROPWINDOW_TRAINING = '#menu:skillDropWindow/training'
-    SKILLDROPWINDOW_AFTER = '#menu:skillDropWindow/after'
-    SKILLDROPWINDOW_STUDY_ACADEMY = '#menu:skillDropWindow/study/academy'
-    SKILLDROPWINDOW_STUDY_SCOOL = '#menu:skillDropWindow/study/scool'
-    SKILLDROPWINDOW_STUDY_FREE = '#menu:skillDropWindow/study/free'
-    SKILLDROPWINDOW_APPLYBTN = '#menu:skillDropWindow/applyBtn'
-    SKILLDROPWINDOW_CANCELBTN = '#menu:skillDropWindow/cancelBtn'
-    SKILLDROPWINDOW_FREEDROPLABEL = '#menu:skillDropWindow/freeDropLabel'
-    SKILLDROPWINDOW_FREEDROPPERCENT = '#menu:skillDropWindow/freeDropPercent'
-    SKILLDROPWINDOW_TOOLTIP_VISIBLEDISABLED = '#menu:skillDropWindow/tooltip/visibleDisabled'
     SKILLDROPFORFREEWINDOW_ACTIONTIME_TITLE = '#menu:skillDropForFreeWindow/actionTime/title'
     SKILLDROPFORFREEWINDOW_ACTIONTIME_DESCRIPTION = '#menu:skillDropForFreeWindow/actionTime/description'
     SKILLDROPFORFREEWINDOW_DAYS = '#menu:skillDropForFreeWindow/days'
@@ -2322,6 +2248,13 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     BADGE_NEW = '#menu:badge/new'
     BADGE_CONFIRM = '#menu:badge/confirm'
+    CONTEXTMENU_CREWWIDGETPERSONALFILE = '#menu:contextMenu/crewWidgetPersonalFile'
+    CONTEXTMENU_CREWWIDGETRETRAIN = '#menu:contextMenu/crewWidgetRetrain'
+    CONTEXTMENU_CREWWIDGETCHANGECREWMEMBER = '#menu:contextMenu/crewWidgetChangeCrewMember'
+    CONTEXTMENU_CREWWIDGETSENDTOTOBARRACKS = '#menu:contextMenu/crewWidgetSendToToBarracks'
+    CONTEXTMENU_CREWWIDGETDISMISS = '#menu:contextMenu/crewWidgetDismiss'
+    CONTEXTMENU_CREWWIDGETQUICKTRAINING = '#menu:contextMenu/crewWidgetQuickTraining'
+    CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION = '#menu:contextMenu/crewWidgetChangeSpecialization'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2389,13 +2322,7 @@ class MENU(object):
      CONTEXTMENU_BOT,
      CONTEXTMENU_ASSIGNPRIVATE,
      CONTEXTMENU_ASSIGNOFFICER,
-     CONTEXTMENU_PERSONALCASE,
      CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE,
-     CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO,
-     CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO,
-     CONTEXTMENU_PERSONALCASE_STATS_WOTPLUS,
-     CONTEXTMENU_TANKMANUNLOAD,
-     CONTEXTMENU_TANKMANUNLOADALL,
      CONTEXTMENU_DISMISS,
      CONTEXTMENU_LOCKSLOT,
      CONTEXTMENU_UNLOCKSLOT,
@@ -2418,9 +2345,17 @@ class MENU(object):
      CONTEXTMENU_ACCEPTINVITATIONTOSQUAD,
      CONTEXTMENU_REJECTINVITATIONTOSQUAD,
      CONTEXTMENU_GOTOBLUEPRINT,
+     CONTEXTMENU_WINBACKCALLSENDINVITE,
      CONTEXTMENU_VIEWCLANPROFILE,
      CONTEXTMENU_COPYCLANNAME,
-     CONTEXTMENU_TELECOMRENT)
+     CONTEXTMENU_TELECOMRENT,
+     CONTEXTMENU_CREWWIDGETPERSONALFILE,
+     CONTEXTMENU_CREWWIDGETRETRAIN,
+     CONTEXTMENU_CREWWIDGETCHANGECREWMEMBER,
+     CONTEXTMENU_CREWWIDGETSENDTOTOBARRACKS,
+     CONTEXTMENU_CREWWIDGETDISMISS,
+     CONTEXTMENU_CREWWIDGETQUICKTRAINING,
+     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
      NATIONS_GERMANY,
@@ -2463,7 +2398,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
-     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2488,7 +2422,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_TOOHEAVY,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
-     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,
@@ -2791,7 +2724,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_28,
      LOADING_BATTLETYPES_DESC_29,
      LOADING_BATTLETYPES_DESC_30,
-     LOADING_BATTLETYPES_DESC_31)
+     LOADING_BATTLETYPES_DESC_31,
+     LOADING_BATTLETYPES_DESC_33)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2849,7 +2783,9 @@ class MENU(object):
      LOADING_BATTLETYPES_30,
      LOADING_BATTLETYPES_DESC_30,
      LOADING_BATTLETYPES_31,
-     LOADING_BATTLETYPES_DESC_31)
+     LOADING_BATTLETYPES_DESC_31,
+     LOADING_BATTLETYPES_33,
+     LOADING_BATTLETYPES_DESC_33)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,

@@ -142,7 +142,7 @@ class MultItemsDeconstructionProcessorMessage(ItemDeconstructionProcessorMessage
             itemStr = backport.text(templateKey, name=item.userName, count=count)
             names.append(itemStr)
 
-        return ','.join(names)
+        return ', '.join(names)
 
     def _getOperation(self):
         pass

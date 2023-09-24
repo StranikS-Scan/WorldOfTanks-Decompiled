@@ -28,6 +28,7 @@ VIDEO_BUFFERING_TIME = 'videoBufferingTime'
 KEY_BOOTCAMP_PREFERENCES = 'bootcampPrefs'
 POPUPS_WINDOWS_DISABLED = 'popupsWindowsDisabled'
 KEY_MAPS_TRAINING_PREFERENCES = 'mapsTraining'
+QUICK_TRANING_TIPS = 'quickTrainingTips'
 
 class Settings(object):
 

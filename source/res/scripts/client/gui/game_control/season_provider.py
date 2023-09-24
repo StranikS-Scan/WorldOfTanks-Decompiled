@@ -194,7 +194,7 @@ class SeasonProvider(ISeasonProvider):
             return self._PERIOD_INFO_CLASS(now, periodType, PeriodInfo.leftSeasonBorder(currSeason), PeriodInfo.rightSeasonBorder(currSeason), PeriodInfo.leftCycleBorder(currCycle), PeriodInfo.rightCycleBorder(currCycle), primeDelta)
 
     def getPreviousSeason(self, now=None):
-        seasonsPassed = self.getSeasonPassed(now)
+        seasonsPassed = self.getSeasonsPassed(now)
         if seasonsPassed:
             seasonID, _ = max(seasonsPassed, key=itemgetter(1))
             return self.getSeason(seasonID)
@@ -278,7 +278,7 @@ class SeasonProvider(ISeasonProvider):
         else:
             return
 
-    def getSeasonPassed(self, now=None):
+    def getSeasonsPassed(self, now=None):
         now = now or self.__getNow()
         settings = self.__getSeasonSettings()
         seasonsPassed = []
@@ -288,6 +288,9 @@ class SeasonProvider(ISeasonProvider):
                 seasonsPassed.append((seasonID, endSeason))
 
         return seasonsPassed
+
+    def getAllSeasons(self):
+        return sorted(list((self.getSeason(sID) for sID in self.__getSeasonSettings().seasons.keys())), key=lambda s: s.getNumber())
 
     def getTimer(self, now=None, peripheryID=None):
         now = now or self.__getNow()
@@ -317,25 +320,6 @@ class SeasonProvider(ISeasonProvider):
                 times.append(peripheryTime)
 
         return min(times) if times else 0
-
-    def isLastSeasonDay(self):
-        season = self.getCurrentSeason()
-        if season is None:
-            return False
-        else:
-            currentCycleEnd = season.getCycleEndDate()
-            timeLeft = time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(currentCycleEnd))
-            return 0 < timeLeft < time_utils.ONE_DAY
-
-    def hasPrimeTimesPassedForCurrentCycle(self):
-        season = self.getCurrentSeason()
-        if season is not None:
-            if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                startDate = season.getStartDate()
-                primeTimes = self.getPrimeTimes()
-                currentTime = time_utils.getCurrentLocalServerTimestamp()
-                return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
-        return False
 
     def _hasPrimeStatusServer(self, states, now=None):
         for peripheryID in self._getAllPeripheryIDs():

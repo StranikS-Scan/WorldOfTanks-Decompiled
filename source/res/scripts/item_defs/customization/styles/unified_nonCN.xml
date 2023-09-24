@@ -3372,6 +3372,76 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	808	</id>
+      <texture>	gui/maps/vehicles/styles/day_of_the_dead_2023_1.png	</texture>
+      <userString>	#vehicle_customization:special_style/day_of_the_dead_2023	</userString>
+      <description>	#vehicle_customization:special_style/day_of_the_dead_2023_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/day_of_the_dead_2023_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15951	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	413	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	15951 15952 15953 15954	</id>
+        </camouflage>
+        <paint>
+          <id>	413 414 415 416	</id>
+        </paint>
+      </alternateItems>
+      <dependencies>
+        <camouflage>
+          <id>	15951	</id>
+          <paint>	413	</paint>
+        </camouflage>
+        <camouflage>
+          <id>	15952	</id>
+          <paint>	414	</paint>
+        </camouflage>
+        <camouflage>
+          <id>	15953	</id>
+          <paint>	415	</paint>
+        </camouflage>
+        <camouflage>
+          <id>	15954	</id>
+          <paint>	416	</paint>
+        </camouflage>
+      </dependencies>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>

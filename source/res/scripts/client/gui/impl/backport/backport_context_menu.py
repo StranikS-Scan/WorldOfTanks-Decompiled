@@ -2,8 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/backport/backport_context_menu.py
 import logging
 from collections import namedtuple
-from frameworks.wulf import View, ViewModel, Window, ViewSettings, WindowSettings, WindowFlags
-from gui.impl.gen import R
+from frameworks.wulf import Window, WindowSettings, WindowFlags
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 _logger = logging.getLogger(__name__)
@@ -13,22 +12,23 @@ def createContextMenuData(contextMenuType, args=None):
     return _ContextMenuData(contextMenuType, args)
 
 
-class _BackportContextMenuContent(View):
+class BackportContextMenuWindow(Window):
     __appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ()
+    __slots__ = ('__contextMenuData',)
 
-    def __init__(self, contextMenuData):
-        settings = ViewSettings(R.views.common.BackportContextMenu())
-        settings.model = ViewModel()
-        settings.args = (contextMenuData,)
-        super(_BackportContextMenuContent, self).__init__(settings)
+    def __init__(self, contextMenuData, parent):
+        self.__contextMenuData = contextMenuData
+        settings = WindowSettings()
+        settings.flags = WindowFlags.CONTEXT_MENU
+        settings.parent = parent
+        super(BackportContextMenuWindow, self).__init__(settings)
 
-    def _initialize(self, contextMenuData):
-        super(_BackportContextMenuContent, self)._initialize()
+    def _initialize(self):
+        super(BackportContextMenuWindow, self)._initialize()
         contextMenuMgr = self.__appLoader.getApp().contextMenuManager
         if contextMenuMgr is not None:
             contextMenuMgr.onContextMenuHide += self.__contextMenuHideHandler
-            contextMenuMgr.show(contextMenuData.type, contextMenuData.args)
+            contextMenuMgr.show(self.__contextMenuData.type, self.__contextMenuData.args)
         else:
             _logger.error("contextMenuMgr doesn't exist.")
         return
@@ -38,19 +38,8 @@ class _BackportContextMenuContent(View):
         if contextMenuMgr is not None:
             contextMenuMgr.onContextMenuHide -= self.__contextMenuHideHandler
             contextMenuMgr.pyHide()
-        super(_BackportContextMenuContent, self)._finalize()
+        super(BackportContextMenuWindow, self)._finalize()
         return
 
     def __contextMenuHideHandler(self):
-        self.destroyWindow()
-
-
-class BackportContextMenuWindow(Window):
-    __slots__ = ()
-
-    def __init__(self, contextMenuData, parent):
-        settings = WindowSettings()
-        settings.flags = WindowFlags.CONTEXT_MENU
-        settings.content = _BackportContextMenuContent(contextMenuData)
-        settings.parent = parent
-        super(BackportContextMenuWindow, self).__init__(settings)
+        self.destroy()

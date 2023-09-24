@@ -127,6 +127,7 @@ class BattlePassBuyView(ViewImpl):
         with self.viewModel.transaction() as tx:
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
             tx.setIsShopOfferAvailable(self.__isShopOfferAvailable())
+            tx.setIsCustomSeason(self.__battlePass.isCustomSeason())
 
     def __clearTooltips(self):
         self.__tooltipItems.clear()
@@ -250,6 +251,7 @@ class BattlePassBuyView(ViewImpl):
             item.setIsLocked(package.isLocked())
             item.setChapterID(package.getChapterID())
             item.setIsExtra(package.isExtra())
+            item.setIsCustom(package.isCustom())
             item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
             item.setCurrentLevel(package.getCurrentLevel() + 1)
             item.setExpireTime(self.__battlePass.getChapterRemainingTime(package.getChapterID()))

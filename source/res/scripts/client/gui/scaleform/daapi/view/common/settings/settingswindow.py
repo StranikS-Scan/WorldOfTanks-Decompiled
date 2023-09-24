@@ -31,7 +31,7 @@ from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController, IEventBattlesController
+from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
 from uilogging.limited_ui.loggers import LimitedUILogger
@@ -68,7 +68,6 @@ class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     limitedUIController = dependency.descriptor(ILimitedUIController)
-    eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -164,7 +163,6 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_openTabS(_getLastTabIndex())
         self.__setColorGradingTechnique()
         self.__setLimitedUISettingVisibility()
-        self.__setEventSettingVisibility()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -389,9 +387,6 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __setLimitedUISettingVisibility(self):
         self.as_showLimitedUISettingS(self.limitedUIController.isUserSettingsMayShow)
-
-    def __setEventSettingVisibility(self):
-        self.as_setIsEventS(self.eventBattlesCtrl.isEventBattleActive())
 
     def __applyLimitedUISetting(self):
         self.limitedUIController.completeAllRules()

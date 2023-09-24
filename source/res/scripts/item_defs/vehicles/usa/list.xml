@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -1063,7 +1062,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1191,7 +1189,7 @@
     <level>	7	</level>
   </A102_T28_concept>
   <A106_M48A2_120>
-    <id>	222	</id>
+    <id>	197	</id>
     <userString>	#usa_vehicles:A106_M48A2_120	</userString>
     <description>	#usa_vehicles:A106_M48A2_120_descr	</description>
     <shortUserString>	#usa_vehicles:A106_M48A2_120_short	</shortUserString>
@@ -1200,9 +1198,22 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD special secret testTank patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </A106_M48A2_120>
+  <A106_M48A2_120_CN>
+    <id>	222	</id>
+    <userString>	#usa_vehicles:A106_M48A2_120_CN	</userString>
+    <description>	#usa_vehicles:A106_M48A2_120_CN_descr	</description>
+    <shortUserString>	#usa_vehicles:A106_M48A2_120_CN_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A106_M48A2_120_CN_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A106_M48A2_120_CN_long_special	</longDescriptionSpecial>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_sniper private HD secret special patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
-  </A106_M48A2_120>
+  </A106_M48A2_120_CN>
   <A63_M46_Patton_KR>
     <id>	223	</id>
     <userString>	#usa_vehicles:A63_M46_Patton_KR	</userString>
@@ -1580,15 +1591,4 @@
     <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	6	</level>
   </A1118_M4_Thunderbolt_NewOnBoarding>
-  <A120_M48A5_hound_TLXXL>
-    <id>	254	</id>
-    <userString>	#usa_vehicles:A120_M48A5_hound_TLXXL	</userString>
-    <description>	#usa_vehicles:A120_M48A5_hound_TLXXL_descr	</description>
-    <shortUserString>	#usa_vehicles:A120_M48A5_hound_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#usa_vehicles:A120_M48A5_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal event_hunter event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals builtinRepairkit_wt_user builtinLargeMedkit_wt_user builtinSelfRepair_wt_user builtinStronghold_wt_user mode_hidden hideStorage hideCrew	</tags>
-    <level>	10	</level>
-  </A120_M48A5_hound_TLXXL>
 </list.xml>

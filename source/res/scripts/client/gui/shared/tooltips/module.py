@@ -290,7 +290,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
                     paramValue = params_formatters.formatParameter(paramName, cooldownSeconds)
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
-                if module.isBuiltIn and not module.isBuiltInInfoHidden:
+                if module.isBuiltIn:
                     descParts.append(text_styles.main(backport.text(R.strings.tooltips.equipment.builtIn())))
                 descList.append(text_styles.concatStylesToMultiLine(*descParts))
         block.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc='\n'.join(descList), gap=-3, padding=formatters.packPadding(top=-6)))
@@ -319,7 +319,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         bottomOffset = -60
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe:
             overlayPath = backport.image(R.images.gui.maps.shop.artefacts.c_180x135.equipmentPlus_overlay())
-        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn and not self.module.isBuiltInInfoHidden:
+        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
             padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_LEFT)
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.builtInEquipment_overlay())
             bottomOffset = 0
@@ -464,7 +464,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     nextLevel = module.level + 1
                     levelText = backport.text(R.strings.tooltips.level.num(nextLevel)())
                     forcedText = backport.text(R.strings.tooltips.moduleFits.upgradable.modernized.price(), level=levelText)
-                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, percent=itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
             isComplexDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable
             if isComplexDevice and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)

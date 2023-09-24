@@ -44,7 +44,7 @@ class BCQuestsView(LobbySubView, MissionDetailsContainerViewMeta):
         vehicleSelector = self.getComponent(QUESTS_ALIASES.MISSIONS_VEHICLE_SELECTOR_ALIAS)
         if vehicleSelector is not None:
             criteria = REQ_CRITERIA.VEHICLE.LEVELS([self._TANK_LEVEL]) | REQ_CRITERIA.IN_OWNERSHIP
-            vehicleSelector.setCriteria(None, criteria, [])
+            vehicleSelector.setCriteria(criteria, [])
         bTypesData = formatters.packMissionBonusTypeElements([ARENA_BONUS_TYPE.REGULAR])
         bTypes = self._COMMA.join([ iconData.iconLabel for iconData in bTypesData ])
         tooltipBody = makeString(QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE_BODY, battleBonusTypes=bTypes)

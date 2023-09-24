@@ -115,8 +115,8 @@ class AgateAccessor(BaseAccessor):
     def agate_v4_fetch_product_list_state(self, callback, params, fields=None):
         return self._data_source.agate_v4_fetch_product_list_state(callback, params, fields=fields)
 
-    def agate_v5_get_user_subscriptions(self, callback, params, fields=None):
-        return self._data_source.agate_v5_get_user_subscriptions(callback, params, fields=fields)
+    def agate_v6_get_user_subscriptions2(self, callback, params, fields=None):
+        return self._data_source.agate_v6_get_user_subscriptions2(callback, params, fields=fields)
 
     def get_inventory_entitlements(self, callback, entitlement_codes):
         return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
@@ -383,10 +383,13 @@ class UILoggingAccessor(BaseAccessor):
         return self._data_source.get_uilogging_session(callback)
 
 
-class ShopAccessor(BaseAccessor):
+class WinBackCallAccessor(BaseAccessor):
 
-    def get_inventory_entitlements(self, callback, entitlement_codes):
-        return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
+    def get_win_back_call_friend_list(self, callback):
+        return self._data_source.get_win_back_call_friend_list(callback)
+
+    def win_back_call_send_invite_code(self, callback, spaId):
+        return self._data_source.win_back_call_send_invite_code(callback, spaId)
 
 
 class Requester(object):
@@ -410,6 +413,7 @@ class Requester(object):
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)
     uilogging = RequestDescriptor(UILoggingAccessor)
+    win_back_call = RequestDescriptor(WinBackCallAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

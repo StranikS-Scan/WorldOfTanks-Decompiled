@@ -15,7 +15,7 @@ class PerkType(Enum):
 class CrewPerksTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(CrewPerksTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -54,17 +54,29 @@ class CrewPerksTooltipModel(ViewModel):
     def setIsAdvancedTooltipEnable(self, value):
         self._setBool(5, value)
 
+    def getIsZeroPerk(self):
+        return self._getBool(6)
+
+    def setIsZeroPerk(self, value):
+        self._setBool(6, value)
+
+    def getIsIrrelevant(self):
+        return self._getBool(7)
+
+    def setIsIrrelevant(self, value):
+        self._setBool(7, value)
+
     def getDescription(self):
-        return self._getString(6)
+        return self._getString(8)
 
     def setDescription(self, value):
-        self._setString(6, value)
+        self._setString(8, value)
 
     def getBoosters(self):
-        return self._getArray(7)
+        return self._getArray(9)
 
     def setBoosters(self, value):
-        self._setArray(7, value)
+        self._setArray(9, value)
 
     @staticmethod
     def getBoostersType():
@@ -78,5 +90,7 @@ class CrewPerksTooltipModel(ViewModel):
         self._addRealProperty('level', 0.0)
         self._addBoolProperty('isCommonExtraAvailable', False)
         self._addBoolProperty('isAdvancedTooltipEnable', False)
+        self._addBoolProperty('isZeroPerk', False)
+        self._addBoolProperty('isIrrelevant', False)
         self._addStringProperty('description', '')
         self._addArrayProperty('boosters', Array())

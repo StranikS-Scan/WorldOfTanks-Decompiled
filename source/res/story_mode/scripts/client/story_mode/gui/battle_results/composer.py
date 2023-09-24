@@ -2,7 +2,7 @@
 # Embedded file name: story_mode/scripts/client/story_mode/gui/battle_results/composer.py
 from logging import getLogger
 from gui.battle_results.composer import IStatsComposer
-from gui.battle_results.br_constants import PlayerTeamResult
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from helpers import dependency
 from story_mode.gui.battle_results.templates import STORY_MODE_RESULTS_BLOCK
 from story_mode.gui.shared.event_dispatcher import showEpilogueWindow, showOnboardingBattleResultWindow, showPrebattleAndGoToQueue, showBattleResultWindow
@@ -30,7 +30,7 @@ class StoryModeStatsComposer(IStatsComposer):
         return None
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         pass
 
     def onResultsPosted(self, arenaUniqueID):
@@ -40,7 +40,7 @@ class StoryModeStatsComposer(IStatsComposer):
                 self._storyModeCtrl.skipOnboarding()
                 return
             missionId = resultVO['missionId']
-            if resultVO['finishResult'] == PlayerTeamResult.WIN:
+            if resultVO['finishResult'] == PLAYER_TEAM_RESULT.WIN:
                 nextMission = self._storyModeCtrl.getNextMission(missionId)
                 if missionId == self._storyModeCtrl.missions.onboardingLastMissionId or nextMission is None:
                     showEpilogueWindow()

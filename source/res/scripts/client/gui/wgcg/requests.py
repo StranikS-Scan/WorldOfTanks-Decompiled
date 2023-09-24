@@ -24,6 +24,7 @@ from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandl
 from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
 from gui.wgcg.gift_system.handlers import GiftSystemRequestHandlers
 from gui.wgcg.uilogging.handlers import UILoggingRequestHandlers
+from gui.wgcg.winback_call.handlers import WinBackCallRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -108,6 +109,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(GiftSystemRequestHandlers(requester).get())
         self.__handlers.update(UILoggingRequestHandlers(requester).get())
         self.__handlers.update(AgateRequestHandlers(requester).get())
+        self.__handlers.update(WinBackCallRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

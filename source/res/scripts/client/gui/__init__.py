@@ -22,7 +22,6 @@ DEPTH_OF_PlayerBonusesPanel = 0.2
 DEPTH_OF_Aim = 0.6
 DEPTH_OF_GunMarker = 0.56
 DEPTH_OF_VehicleMarker = 0.9
-CLIENT_ENCODING = '1251'
 TANKMEN_ROLES_ORDER_DICT = {'plain': ('commander', 'gunner', 'driver', 'radioman', 'loader'),
  'enum': ('commander', 'gunner1', 'gunner2', 'driver', 'radioman1', 'radioman2', 'loader1', 'loader2')}
 

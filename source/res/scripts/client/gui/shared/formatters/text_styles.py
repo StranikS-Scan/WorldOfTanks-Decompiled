@@ -61,7 +61,8 @@ __all__ = ('standard',
  'yellowText',
  'greenText',
  'poiCapturedBoldText',
- 'poiCapturedRegularText')
+ 'poiCapturedRegularText',
+ 'prestige')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -303,6 +304,10 @@ def brcoin(text):
     return _formatText('creditsText', text)
 
 
+def brProgressionToken(text):
+    return _formatText('brProgressionToken', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 
@@ -475,6 +480,10 @@ def poiCapturedBoldText(text):
 
 def poiCapturedRegularText(text):
     return _formatText('poiCapturedRegularText', text)
+
+
+def prestige(text):
+    return _formatText('prestigeText', text)
 
 
 def getRawStyles(names):

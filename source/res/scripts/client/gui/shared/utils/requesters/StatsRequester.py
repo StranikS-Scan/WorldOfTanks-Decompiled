@@ -334,6 +334,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def luiVersion(self):
         return self.getCacheValue('limitedUi', {}).get('ver', 1)
 
+    @property
+    def steamShadeGroup(self):
+        return self.getCacheValue('abFeatureTest', {}).get('steamShade')
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))

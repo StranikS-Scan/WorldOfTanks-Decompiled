@@ -8,6 +8,7 @@ COMP7_QUEST_DELIMITER = '_'
 COMP7_TOKEN_WEEKLY_REWARD_ID = 'comp7_3_1_weekly_rewards_token'
 COMP7_TOKEN_WEEKLY_REWARD_NAME = 'comp7TokenWeeklyReward'
 COMP7_QUALIFICATION_QUEST_ID = 'comp7_3_1_ranks_65'
+COMP7_QAULIFICATION_TOKEN_TEMPLATE = 'comp7_3_{season}:qualification'
 COMP7_CURRENT_SEASON = 1
 COMP7_MASKOT_ID = '3'
 SEASONS_IN_YEAR = 3
@@ -15,6 +16,10 @@ COMP7_SEASON_POINTS_ENTITLEMENT_TMPL = 'comp7_season_points'
 
 def seasonPointsCodeBySeasonNumber(seasonNumber):
     return ':'.join((COMP7_SEASON_POINTS_ENTITLEMENT_TMPL, COMP7_MASKOT_ID, str(seasonNumber)))
+
+
+def makeQualificationTokenForSeason(seasonNumber):
+    return COMP7_QAULIFICATION_TOKEN_TEMPLATE.format(season=seasonNumber)
 
 
 SEASON_POINTS_ENTITLEMENTS = [ seasonPointsCodeBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]

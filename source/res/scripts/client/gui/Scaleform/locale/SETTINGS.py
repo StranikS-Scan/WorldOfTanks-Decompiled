@@ -194,7 +194,6 @@ class SETTINGS(object):
     GAME_HANGARCAMPERIOD_NEVER = '#settings:game/hangarCamPeriod/never'
     GAME_HANGARCAMCHECKBOX = '#settings:game/hangarCamCheckbox'
     GAME_DYNAMICCAMERA = '#settings:game/dynamicCamera'
-    GAME_C11NHISTORICALLYACCURATE = '#settings:game/c11nHistoricallyAccurate'
     GAME_DISPLAYPLATOONMEMBERS = '#settings:game/displayPlatoonMembers'
     GAME_LOGINSERVERSELECTION = '#settings:game/loginServerSelection'
     GAME_CUSTOMIZATIONDISPLAYTYPE = '#settings:game/customizationDisplayType'
@@ -385,6 +384,7 @@ class SETTINGS(object):
     GAMEPLAY_DOMINATION = '#settings:gameplay/domination'
     GAMEPLAY_ASSAULT = '#settings:gameplay/assault'
     GAMEPLAY_EPIC_STANDARD = '#settings:gameplay/epic_standard'
+    GAMEPLAY_DEVMAPS = '#settings:gameplay/devMaps'
     GAMEPLAY_ONLY10MODE = '#settings:gameplay/only10Mode'
     GAMEPLAY_EPIC_ENCOUNTER = '#settings:gameplay/epic_encounter'
     GAMEPLAY_NATIONS = '#settings:gameplay/nations'
@@ -512,6 +512,8 @@ class SETTINGS(object):
     MARKER_NAME_TYPE2 = '#settings:marker/name/type2'
     MARKER_ICON = '#settings:marker/icon'
     MARKER_LEVEL = '#settings:marker/level'
+    MARKER_LEVEL_TOOLTIP_HEADER = '#settings:marker/level/tooltip/header'
+    MARKER_LEVEL_TOOLTIP_BODY = '#settings:marker/level/tooltip/body'
     MARKER_HPINDICATOR = '#settings:marker/hpIndicator'
     MARKER_AIMMARKER2D = '#settings:marker/aimMarker2D'
     MARKER_DAMAGE = '#settings:marker/damage'
@@ -747,7 +749,6 @@ class SETTINGS(object):
     COLORSETTINGS_TAB_CUSTOMSETTINGS_SATURATION = '#settings:colorSettings/tab/customSettings/saturation'
     COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
     COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
-    UNEQUIP_BUTTON = '#settings:unequip_button'
     GAME_SHOWVEHICLEHPINPLAYERSPANEL = '#settings:game/showVehicleHPinPlayersPanel'
     GAME_SHOWVEHICLEHPINPLAYERSPANEL_NEVER = '#settings:game/showVehicleHPinPlayersPanel/never'
     GAME_SHOWVEHICLEHPINPLAYERSPANEL_ALT = '#settings:game/showVehicleHPinPlayersPanel/alt'
@@ -756,7 +757,6 @@ class SETTINGS(object):
     GAME_SHOWVEHICLEHPINMINIMAP_NEVER = '#settings:game/showVehicleHPinMinimap/never'
     GAME_SHOWVEHICLEHPINMINIMAP_ALT = '#settings:game/showVehicleHPinMinimap/alt'
     GAME_SHOWVEHICLEHPINMINIMAP_ALWAYS = '#settings:game/showVehicleHPinMinimap/always'
-    EVENTSETTINGDISABLED = '#settings:eventSettingDisabled'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,

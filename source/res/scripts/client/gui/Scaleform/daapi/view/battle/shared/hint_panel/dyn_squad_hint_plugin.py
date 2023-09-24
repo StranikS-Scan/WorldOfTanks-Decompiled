@@ -44,7 +44,7 @@ class DynSquadHintPlugin(HintPanelPlugin):
 
     @classmethod
     def isSuitable(cls):
-        return cls.sessionProvider.arenaVisitor.getArenaGuiType() in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_BATTLE, ARENA_GUI_TYPE.EPIC_RANDOM)
+        return cls.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE + (ARENA_GUI_TYPE.EPIC_BATTLE,)
 
     def start(self):
         arenaDP = self.sessionProvider.getArenaDP()

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_configurator_view.py
 from collections import defaultdict
 import typing
+from helpers.i18n import makeString as _ms
 from adisp import adisp_process
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
@@ -21,7 +22,6 @@ from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CO
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.SystemMessages import pushMessagesFromResult
 from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
-from skeletons.gui.impl import IGuiLoader
 from gui.impl.gen import R
 from gui.impl.lobby.vehicle_compare.interactors import CompareInteractingItem
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -30,13 +30,15 @@ from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import ModuleProcessor
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from items import tankmen, vehicles
+from items.components.skills_constants import ROLES_BY_SKILLS, ORDERED_ROLES, COMMON_ROLE
 from post_progression_common import VehicleState
 from shared_utils import findFirst
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 VEHICLE_FITTING_SLOTS = FITTING_MODULES
+SKILLS_ORDER = (COMMON_ROLE,) + ORDERED_ROLES
 _EMPTY_ID = -1
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -190,7 +192,7 @@ class _CrewSkillsManager(object):
             self.__selectedSkills.add(skillName)
         else:
             self.__selectedSkills.remove(skillName)
-        return self._applyTankmanSkill(self.__vehicle, self.__getAffectedTankmens((skillName,)), self.__skillsByRoles, self.__selectedSkills)
+        return self._applyTankmanSkill(self.__vehicle, self.__getAffectedTankmen((skillName,)), self.__skillsByRoles, self.__selectedSkills)
 
     def applySkillForTheSameVehicle(self, vehicle, skillName):
         if vehicle.intCD != self.__vehicle.intCD:
@@ -201,7 +203,7 @@ class _CrewSkillsManager(object):
             return False
         selectedSkills = self.__selectedSkills.copy()
         selectedSkills.add(skillName)
-        return self._applyTankmanSkill(vehicle, self.__getAffectedTankmens((skillName,)), self.__skillsByRoles, selectedSkills)
+        return self._applyTankmanSkill(vehicle, self.__getAffectedTankmen((skillName,)), self.__skillsByRoles, selectedSkills)
 
     def changeCrewSkillLevel(self, newSkillsLevel):
         success = False
@@ -209,7 +211,7 @@ class _CrewSkillsManager(object):
             self.__crewSkillLevel = newSkillsLevel
             skillsByRoles = {}
             if self.__crewSkillLevel == CrewTypes.SKILL_100 or self.__crewSkillLevel == CrewTypes.CURRENT:
-                affectedTankmens = self.__getAffectedTankmens(self.__selectedSkills)
+                affectedTankmens = self.__getAffectedTankmen(self.__selectedSkills)
                 for idx, role in affectedTankmens:
                     skillsByRoles[idx] = self.__skillsByRoles[role].intersection(self.__selectedSkills)
 
@@ -264,12 +266,12 @@ class _CrewSkillsManager(object):
 
         return success
 
-    def __getAffectedTankmens(self, skills):
-        tankmens = set()
+    def __getAffectedTankmen(self, skills):
+        affectedTankmen = set()
         for skill in skills:
-            tankmens |= self.__rolesBySkills[skill]
+            affectedTankmen |= self.__rolesBySkills[skill]
 
-        return tankmens
+        return affectedTankmen
 
 
 class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
@@ -476,20 +478,19 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
 
     def __updateSkillsData(self):
         vehicle = self._container.getCurrentVehicle()
-        skillLevels = {}
+        skills = []
         for skillType in PARAMS_AFFECTED_TANKMEN_SKILLS:
-            role = skillType.split('_')[0] if skillType.find('_') >= 0 else None
+            roles = list(ROLES_BY_SKILLS[skillType])
+            role = roles[0] if len(roles) == 1 else COMMON_ROLE
             skillLevel = Tankman.crewMemberRealSkillLevel(vehicle, skillType, role)
-            skillLevels[skillType] = max(skillLevel, 0)
+            skills.append({'icon': Tankman.getSkillBigIconPath(skillType),
+             'skillType': skillType,
+             'skillRole': role,
+             'selected': skillType in self._container.getCurrentCrewSkills(),
+             'skillLevel': max(skillLevel, 0)})
 
-        skills = [ {'icon': Tankman.getSkillBigIconPath(skillType),
-         'label': Tankman.getSkillUserName(skillType),
-         'skillType': skillType,
-         'isCommon': skillType in tankmen.COMMON_SKILLS,
-         'selected': skillType in self._container.getCurrentCrewSkills(),
-         'skillLevel': skillLevels[skillType]} for skillType in PARAMS_AFFECTED_TANKMEN_SKILLS ]
+        skills.sort(key=lambda item: SKILLS_ORDER.index(item['skillRole']))
         self.as_setSkillsS(skills)
-        return
 
     @staticmethod
     def __getCrewLevels(isInHangar):

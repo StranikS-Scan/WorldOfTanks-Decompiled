@@ -25,7 +25,7 @@ class PrebattleAmmunitionPanelView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, vehicle, *args):
-        settings = ViewSettings(layoutID=R.views.battle.battle_page.PrebattleAmmunitionPanelView(), flags=ViewFlags.COMPONENT, model=PrebattleAmmunitionPanelViewModel(), args=args)
+        settings = ViewSettings(layoutID=R.views.battle.battle_page.PrebattleAmmunitionPanelView(), flags=ViewFlags.VIEW, model=PrebattleAmmunitionPanelViewModel(), args=args)
         super(PrebattleAmmunitionPanelView, self).__init__(settings)
         self.__ammunitionPanel = None
         self.__vehicle = vehicle

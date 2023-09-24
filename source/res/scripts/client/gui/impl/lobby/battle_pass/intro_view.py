@@ -25,7 +25,7 @@ class IntroView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassIntroView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattlePassIntroViewModel()
         super(IntroView, self).__init__(settings)
 
@@ -33,15 +33,13 @@ class IntroView(ViewImpl):
     def viewModel(self):
         return super(IntroView, self).getViewModel()
 
-    def startListeners(self):
+    def activate(self):
         self._subscribe()
-
-    def stopListeners(self):
-        self._unsubscribe()
-
-    def updateData(self):
         self.__updateBattlePassState()
         self.__updateViewModel()
+
+    def deactivate(self):
+        self._unsubscribe()
 
     def _onLoading(self, *args, **kwargs):
         super(IntroView, self)._onLoading(*args, **kwargs)

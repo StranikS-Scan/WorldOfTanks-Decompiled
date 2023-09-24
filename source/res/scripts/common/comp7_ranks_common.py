@@ -108,11 +108,16 @@ def parseRatingEnt(entCode):
         return (int(mascotID), int(index))
 
 
-class Comp7EntitlementCodes(enum.Enum):
+def makeRatingEntForSeason(seasonNumber):
+    return ':'.join([COMP7_RATING_ENTITLEMENT_TMPL, str(COMP7_MASCOT_ID), seasonNumber])
+
+
+class Comp7EntitlementCodes(object):
     LEGEND_RANK = 'legendRank'
     RATING_POINTS = 'ratingPoints'
     ACTIVITY_POINTS = 'activityPoints'
-
-    @classmethod
-    def all(cls):
-        return [ element.value for element in cls ]
+    SEASON_POINTS = 'seasonPoints'
+    ALL = (LEGEND_RANK,
+     RATING_POINTS,
+     ACTIVITY_POINTS,
+     SEASON_POINTS)

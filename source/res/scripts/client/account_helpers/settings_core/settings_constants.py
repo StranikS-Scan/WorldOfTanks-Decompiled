@@ -115,6 +115,7 @@ class GAME(CONST_CONTAINER):
     GAMEPLAY_EPIC_STANDARD = 'gameplay_epicStandard'
     GAMEPLAY_ONLY_10_MODE = 'gameplay_only10Mode'
     GAMEPLAY_EPIC_DOMINATION = 'gameplay_epicDomination'
+    GAMEPLAY_DEV_MAPS = 'gameplay_devMaps'
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
@@ -269,7 +270,6 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
     ENEMIES_STUN = 'battleEventsEnemyStun'
     CREW_PERKS = 'battleEventsCrewPerks'
-    HEALTH_ADDED = 'battleEventsHealthAdded'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
@@ -309,7 +309,10 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
     COMP7_INTRO_SHOWN = 'isComp7IntroShown'
     COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
+    COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
+    IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
+    PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -488,6 +491,3 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
-
-class WTEventStorageKeys(CONST_CONTAINER):
-    WT_INTRO_SHOWN = 'wtIntroShown'

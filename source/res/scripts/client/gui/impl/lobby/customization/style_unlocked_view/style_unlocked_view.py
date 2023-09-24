@@ -24,13 +24,11 @@ from helpers import dependency, int2roman
 from items.components.c11n_constants import UNBOUND_VEH_KEY
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IEventBattlesController
 from soft_exception import SoftException
 
 class StyleUnlockedView(ViewImpl):
     c11nService = dependency.descriptor(ICustomizationService)
     itemsCache = dependency.descriptor(IItemsCache)
-    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.customization.style_unlocked_view.StyleUnlockedView())
@@ -95,9 +93,7 @@ class StyleUnlockedView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __updateC11nButton(self, lock=False, model=None):
-        isBRHangar = currentHangarIsBattleRoyale()
-        isEventHangar = self.__gameEventCtrl.isEventPrbActive()
-        isEnabled = not lock and not isBRHangar and not isEventHangar and self.__isCustEnabledForActiveVehicle()
+        isEnabled = not lock and not currentHangarIsBattleRoyale() and self.__isCustEnabledForActiveVehicle()
         if isEnabled:
             tooltipText = ''
         else:

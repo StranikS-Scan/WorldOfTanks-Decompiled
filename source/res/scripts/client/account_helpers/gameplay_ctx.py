@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/gameplay_ctx.py
 import ArenaType
 import constants
+from constants import RANDOM_FLAGS
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -60,3 +61,18 @@ def isOnly10ModeEnabled():
     from account_helpers.settings_core.settings_constants import GAME
     settingsCore = dependency.instance(ISettingsCore)
     return settingsCore.getSetting(GAME.GAMEPLAY_ONLY_10_MODE)
+
+
+def isMapsInDevelopmentEnabled():
+    from account_helpers.settings_core.settings_constants import GAME
+    settingsCore = dependency.instance(ISettingsCore)
+    return settingsCore.getSetting(GAME.GAMEPLAY_DEV_MAPS)
+
+
+def getRandomFlags():
+    flags = 0
+    if isOnly10ModeEnabled():
+        flags |= RANDOM_FLAGS.IS_ONLY_10_MODE_ENABLED
+    if isMapsInDevelopmentEnabled():
+        flags |= RANDOM_FLAGS.IS_MAPS_IN_DEVELOPMENT_ENABLED
+    return flags

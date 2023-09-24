@@ -64,7 +64,7 @@ class RankedBattlesWebApi(OpenRankedPagesMixin):
     def getSeasonsStats(self, _):
         result = {}
         tokens = self.__itemsCache.items.tokens.getTokens()
-        for seasonID, _ in self.__rankedController.getSeasonPassed():
+        for seasonID, _ in self.__rankedController.getSeasonsPassed():
             season = self.__rankedController.getSeason(seasonID)
             if season is not None:
                 dossier = self.__getRankedSeasonDossier(RankedDossierKeys.SEASON % season.getNumber(), seasonID)

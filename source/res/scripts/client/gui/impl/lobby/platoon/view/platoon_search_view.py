@@ -142,14 +142,14 @@ class SearchWindow(PreloadableWindow):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': False}))
 
     def _onContentReady(self):
-        if not self.isPreloading():
+        if not self._isPreloading():
             g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': True}))
         super(SearchWindow, self)._onContentReady()
 
-    def show(self):
+    def show(self, focus=True):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': True}))
-        super(SearchWindow, self).show()
+        super(SearchWindow, self).show(focus)
 
-    def hide(self):
+    def hide(self, destroy=False):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': False}))
-        super(SearchWindow, self).hide()
+        super(SearchWindow, self).hide(destroy)

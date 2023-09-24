@@ -287,25 +287,32 @@ def showMotiveAward(quest):
     shared_events.showAwardWindow(awards.MotiveQuestAward(quest, showMission))
 
 
-def showTankwomanAward(questID, tankmanData):
+def showTankwomanAward(questID, tankmanData, vehicleSlotToUnpack=-1, vehicle=None, parentViewKey=None):
     ctx = {'isFemale': tankmanData.isFemale,
-     'questID': questID}
-    shared_events.showTankwomanRecruitAwardDialog(ctx)
+     'questID': questID,
+     'slot': vehicleSlotToUnpack,
+     'vehicle': vehicle}
+    shared_events.showTankwomanRecruitAwardDialog(ctx, parentViewKey=parentViewKey)
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def showRecruitWindow(recruitID, eventsCache=None):
+def showRecruitWindow(recruitID, vehicleSlotToUnpack=-1, vehicle=None, eventsCache=None, parentViewKey=None):
     recruitData = recruit_helper.getRecruitInfo(recruitID)
-    if recruitData.getSourceID() == recruit_helper.RecruitSourceID.TANKWOMAN:
-        quest = eventsCache.getPersonalMissions().getAllQuests()[int(recruitID)]
-        bonus = quest.getTankmanBonus()
-        needToGetTankman = quest.needToGetAddReward() and not bonus.isMain or quest.needToGetMainReward() and bonus.isMain
-        if needToGetTankman and bonus.tankman is not None:
-            showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()))
+    if vehicleSlotToUnpack != -1 and recruitData.getRoles() and vehicle.descriptor.type.crewRoles[vehicleSlotToUnpack][0] not in recruitData.getRoles():
+        return
     else:
-        shared_events.showTokenRecruitDialog({'tokenName': recruitID,
-         'tokenData': recruitData})
-    return
+        if recruitData.getSourceID() == recruit_helper.RecruitSourceID.TANKWOMAN:
+            quest = eventsCache.getPersonalMissions().getAllQuests()[int(recruitID)]
+            bonus = quest.getTankmanBonus()
+            needToGetTankman = quest.needToGetAddReward() and not bonus.isMain or quest.needToGetMainReward() and bonus.isMain
+            if needToGetTankman and bonus.tankman is not None:
+                showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()), vehicleSlotToUnpack, vehicle, parentViewKey=parentViewKey)
+        else:
+            shared_events.showTokenRecruitDialog({'tokenName': recruitID,
+             'tokenData': recruitData,
+             'slot': vehicleSlotToUnpack,
+             'vehicle': vehicle}, parentViewKey=parentViewKey)
+        return
 
 
 def showMissionAward(quest, ctx):

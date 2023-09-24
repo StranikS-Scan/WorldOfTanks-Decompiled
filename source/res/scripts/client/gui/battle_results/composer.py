@@ -23,7 +23,7 @@ class IStatsComposer(object):
         raise NotImplementedError
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         raise NotImplementedError
 
     @staticmethod
@@ -43,6 +43,7 @@ class StatsComposer(IStatsComposer):
         self._block.addNextComponent(self._getBattlePassBlock().clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PRESTIGE_PROGRESS_VO.clone())
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)
@@ -73,8 +74,8 @@ class StatsComposer(IStatsComposer):
         return animation
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
-        return event_dispatcher.showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled)
+    def onShowResults(arenaUniqueID):
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -171,7 +172,7 @@ class BattleRoyaleStatsComposer(IStatsComposer):
         pass
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         return None
 
     @staticmethod
@@ -199,7 +200,7 @@ class BootcampStatsComposer(IStatsComposer):
         return None
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
 
     @staticmethod
@@ -228,7 +229,7 @@ class MapsTrainingStatsComposer(IStatsComposer):
         pass
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         MapsTrainingStatsComposer._fromNotifications.add(arenaUniqueID)
 
     @staticmethod
@@ -243,6 +244,18 @@ class Comp7StatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(Comp7StatsComposer, self).__init__(reusable, templates.COMP7_COMMON_STATS_BLOCK.clone(), templates.COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
+        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
+
+    @staticmethod
+    def _getBattlePassBlock():
+        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
+
+
+class TournamentComp7StatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(TournamentComp7StatsComposer, self).__init__(reusable, templates.TOURNAMENT_COMP7_COMMON_STATS_BLOCK.clone(), templates.TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
         self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
 
@@ -270,3 +283,4 @@ for bt in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
 registerBattleResultsComposer(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)

@@ -94,6 +94,9 @@ class BattlePassPackage(object):
     def isExtra(self):
         return self.__battlePass.isExtraChapter(chapterID=self.__chapterID)
 
+    def isCustom(self):
+        return self.__battlePass.isCustomChapter(chapterID=self.__chapterID)
+
     def getExpireTime(self):
         return self.__battlePass.getChapterExpiration(self.__chapterID)
 

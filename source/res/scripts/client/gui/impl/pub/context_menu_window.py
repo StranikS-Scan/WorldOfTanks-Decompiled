@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class ContextMenuContent(View):
 
     def __init__(self, layoutID=R.views.common.context_menu_window.context_menu_content.ContextMenuContent(), *args, **kwargs):
-        settings = ViewSettings(layoutID, ViewFlags.COMPONENT, ContextMenuContentModel())
+        settings = ViewSettings(layoutID, ViewFlags.VIEW, ContextMenuContentModel())
         settings.args = args
         settings.kwargs = kwargs
         super(ContextMenuContent, self).__init__(settings)

@@ -17,7 +17,7 @@ class BattlePassProgress(ViewModel):
     PROGRESSION_IN_PROGRESS = 'progressionInProgress'
     PROGRESSION_COMPLETED = 'progressionCompleted'
 
-    def __init__(self, properties=11, commands=1):
+    def __init__(self, properties=12, commands=1):
         super(BattlePassProgress, self).__init__(properties=properties, commands=commands)
 
     def getCurrentLevel(self):
@@ -86,6 +86,12 @@ class BattlePassProgress(ViewModel):
     def setFreePoints(self, value):
         self._setNumber(10, value)
 
+    def getSeasonNum(self):
+        return self._getNumber(11)
+
+    def setSeasonNum(self, value):
+        self._setNumber(11, value)
+
     def _initialize(self):
         super(BattlePassProgress, self)._initialize()
         self._addNumberProperty('currentLevel', 0)
@@ -99,4 +105,5 @@ class BattlePassProgress(ViewModel):
         self._addStringProperty('chapterState')
         self._addBoolProperty('isBattlePassPurchased', False)
         self._addNumberProperty('freePoints', 0)
+        self._addNumberProperty('seasonNum', 0)
         self.onSubmitClick = self._addCommand('onSubmitClick')

@@ -48,6 +48,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
 from helpers import dependency, int2roman
 from shared_utils import first
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 STYLES_TAGS = []
 VIDEO_TAGS = []
@@ -512,6 +513,22 @@ DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
 RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
 
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def setRewards(model, chapterID, battlePass=None):
+    freeArray = model.getFreeFinalRewards()
+    freeArray.clear()
+    for freeReward in battlePass.getFreeFinalRewardTypes(chapterID):
+        freeArray.addString(freeReward)
+
+    freeArray.invalidate()
+    paidArray = model.getPaidFinalRewards()
+    paidArray.clear()
+    for paidReward in battlePass.getPaidFinalRewardTypes(chapterID):
+        paidArray.addString(paidReward)
+
+    paidArray.invalidate()
+
+
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
     bonuses = []
@@ -710,14 +727,6 @@ def getLastCongratsIndex(bonuses, rewardType):
     return lastIndex
 
 
-def getCurrentStepState(probability, hasCompleted):
-    if hasCompleted:
-        return prConst.STATE_RECEIVED
-    if probability < _MIN_PROBABILITY:
-        return prConst.STATE_PROB_MIN
-    return prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED
-
-
 def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False):
     steps = []
     for step in xrange(maxSteps):
@@ -728,7 +737,7 @@ def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False)
         if currentStep > step:
             steps.append((prConst.STATE_OPENED, rewardType))
         if currentStep == step:
-            pState = getCurrentStepState(probability, hasCompleted)
+            pState = prConst.STATE_RECEIVED if hasCompleted else (prConst.STATE_PROB_MIN if probability < _MIN_PROBABILITY else (prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED))
             steps.append((pState, rewardType))
         steps.append((prConst.STATE_NOT_RECEIVED, rewardType))
 

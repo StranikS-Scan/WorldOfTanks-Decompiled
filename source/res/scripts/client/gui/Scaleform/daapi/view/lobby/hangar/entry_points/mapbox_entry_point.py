@@ -7,5 +7,5 @@ from gui.impl.lobby.mapbox.mapbox_entry_point_view import MapBoxEntryPointView
 class MapBoxEntryPoint(MapBoxEntryPointMeta):
 
     def _makeInjectView(self):
-        self.__view = MapBoxEntryPointView(ViewFlags.COMPONENT)
+        self.__view = MapBoxEntryPointView(ViewFlags.VIEW)
         return self.__view

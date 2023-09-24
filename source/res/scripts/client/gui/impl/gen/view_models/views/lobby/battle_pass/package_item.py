@@ -20,7 +20,7 @@ class PackageType(IntEnum):
 class PackageItem(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(PackageItem, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -85,11 +85,17 @@ class PackageItem(ViewModel):
     def setIsExtra(self, value):
         self._setBool(9, value)
 
+    def getIsCustom(self):
+        return self._getBool(10)
+
+    def setIsCustom(self, value):
+        self._setBool(10, value)
+
     def getExpireTime(self):
-        return self._getNumber(10)
+        return self._getNumber(11)
 
     def setExpireTime(self, value):
-        self._setNumber(10, value)
+        self._setNumber(11, value)
 
     def _initialize(self):
         super(PackageItem, self)._initialize()
@@ -103,4 +109,5 @@ class PackageItem(ViewModel):
         self._addNumberProperty('chapterState')
         self._addNumberProperty('currentLevel', 0)
         self._addBoolProperty('isExtra', False)
+        self._addBoolProperty('isCustom', False)
         self._addNumberProperty('expireTime', 0)

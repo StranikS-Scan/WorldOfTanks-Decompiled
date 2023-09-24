@@ -70,6 +70,7 @@ class QUESTS(object):
     BONUSES_EVENTCOIN_DESCRIPTION = '#quests:bonuses/eventCoin/description'
     BONUSES_BPCOIN_DESCRIPTION = '#quests:bonuses/bpcoin/description'
     BONUSES_FREEXP_DESCRIPTION = '#quests:bonuses/freeXP/description'
+    BONUSES_EQUIPCOIN_DESCRIPTION = '#quests:bonuses/equipCoin/description'
     BONUSES_PREMIUM_PLUS_DESCRIPTION = '#quests:bonuses/premium_plus/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
@@ -693,6 +694,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEBLOCKEDBYARMOR = '#quests:details/conditions/cumulative/damageBlockedByArmor'
     DETAILS_CONDITIONS_CUMULATIVE_FREEXP = '#quests:details/conditions/cumulative/freeXP'
     DETAILS_CONDITIONS_CUMULATIVE_SUBTOTALXP = '#quests:details/conditions/cumulative/subtotalXP'
+    DETAILS_CONDITIONS_CUMULATIVE_FACTUALXP = '#quests:details/conditions/cumulative/factualXP'
     DETAILS_CONDITIONS_CUMULATIVE_POTENTIALDAMAGEDEALT = '#quests:details/conditions/cumulative/potentialDamageDealt'
     DETAILS_CONDITIONS_CUMULATIVE_SOLOHITSASSISTED = '#quests:details/conditions/cumulative/soloHitsAssisted'
     DETAILS_CONDITIONS_CUMULATIVE_ORIGINALXP = '#quests:details/conditions/cumulative/originalXP'
@@ -739,11 +741,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
     DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
-    DETAILS_CONDITIONS_CUMULATIVE_WTBOSSVULNERABLEDAMAGE = '#quests:details/conditions/cumulative/wtBossVulnerableDamage'
-    DETAILS_CONDITIONS_CUMULATIVE_MAXWTPLASMABONUS = '#quests:details/conditions/cumulative/maxWtPlasmaBonus'
-    DETAILS_CONDITIONS_CUMULATIVE_WTGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTTOTALGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtTotalGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTDEATHCOUNT = '#quests:details/conditions/cumulative/wtDeathCount'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1504,12 +1501,14 @@ class QUESTS(object):
     ACTION_CHAIN_HINT_REMOVALCOST = '#quests:action/chain/hint/removalCost'
     ACTION_CHAIN_HINT_SHELLSPRICE = '#quests:action/chain/hint/shellsPrice'
     ACTION_CHAIN_HINT_OPENPERSONALCASE = '#quests:action/chain/hint/openPersonalCase'
-    ACTION_CHAIN_HINT_CHANGEROLE = '#quests:action/chain/hint/changeRole'
+    ACTION_CHAIN_HINT_CHANGEROLEDISCOUNTAVAILABLE = '#quests:action/chain/hint/changeRoleDiscountAvailable'
+    ACTION_CHAIN_HINT_RETRAININGDISCOUNTAVAILABLE = '#quests:action/chain/hint/retrainingDiscountAvailable'
+    ACTION_CHAIN_HINT_OPENCREWBOOKS = '#quests:action/chain/hint/openCrewBooks'
+    ACTION_CHAIN_HINT_CREWRETAININGDISCOUNTAVAILABLE = '#quests:action/chain/hint/crewRetainingDiscountAvailable'
     ACTION_CHAIN_HINT_DROPSKILLS = '#quests:action/chain/hint/dropSkills'
     ACTION_CHAIN_HINT_CHANGEDOCUMENTS = '#quests:action/chain/hint/changeDocuments'
     ACTION_CHAIN_HINT_CREWRETRAINING = '#quests:action/chain/hint/crewRetraining'
     ACTION_CHAIN_HINT_WINXPFACTORMODE = '#quests:action/chain/hint/winXPFactorMode'
-    ACTION_CHAIN_HINT_FREEXPTOTMAN = '#quests:action/chain/hint/freeXPToTMan'
     ACTION_CHAIN_HINT_PREMDAYS = '#quests:action/chain/hint/premDays'
     ACTION_CHAIN_HINT_CUSTOMIZATION = '#quests:action/chain/hint/customization'
     ACTION_CHAIN_HINT_CAMOUFLAGES = '#quests:action/chain/hint/camouflages'
@@ -2057,12 +2056,14 @@ class QUESTS(object):
      ACTION_CHAIN_HINT_REMOVALCOST,
      ACTION_CHAIN_HINT_SHELLSPRICE,
      ACTION_CHAIN_HINT_OPENPERSONALCASE,
-     ACTION_CHAIN_HINT_CHANGEROLE,
+     ACTION_CHAIN_HINT_CHANGEROLEDISCOUNTAVAILABLE,
+     ACTION_CHAIN_HINT_RETRAININGDISCOUNTAVAILABLE,
+     ACTION_CHAIN_HINT_OPENCREWBOOKS,
+     ACTION_CHAIN_HINT_CREWRETAININGDISCOUNTAVAILABLE,
      ACTION_CHAIN_HINT_DROPSKILLS,
      ACTION_CHAIN_HINT_CHANGEDOCUMENTS,
      ACTION_CHAIN_HINT_CREWRETRAINING,
      ACTION_CHAIN_HINT_WINXPFACTORMODE,
-     ACTION_CHAIN_HINT_FREEXPTOTMAN,
      ACTION_CHAIN_HINT_PREMDAYS,
      ACTION_CHAIN_HINT_CUSTOMIZATION,
      ACTION_CHAIN_HINT_CAMOUFLAGES,

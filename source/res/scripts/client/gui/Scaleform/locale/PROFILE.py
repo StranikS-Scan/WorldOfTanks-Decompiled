@@ -114,6 +114,7 @@ class PROFILE(object):
     SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY = '#profile:section/technique/sort/tooltip/marksofmastery'
     SECTION_TECHNIQUE_SORT_TOOLTIP_CLASS = '#profile:section/technique/sort/tooltip/class'
     SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS = '#profile:section/technique/sort/tooltip/prestigePoints'
+    SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGELEVEL = '#profile:section/technique/sort/tooltip/prestigeLevel'
     PROFILE_PARAMS_TOOLTIP_FORT_BATTLES = '#profile:profile/params/tooltip/fort/battles'
     PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY = '#profile:profile/params/tooltip/fort/battlesWinsEfficiency'
     PROFILE_PARAMS_TOOLTIP_FORT_SORTIE = '#profile:profile/params/tooltip/fort/sortie'
@@ -378,6 +379,8 @@ class PROFILE(object):
     SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY_BODY = '#profile:section/technique/sort/tooltip/marksofmastery/body'
     SECTION_TECHNIQUE_SORT_TOOLTIP_CLASS_HEADER = '#profile:section/technique/sort/tooltip/class/header'
     SECTION_TECHNIQUE_SORT_TOOLTIP_CLASS_BODY = '#profile:section/technique/sort/tooltip/class/body'
+    SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGELEVEL_HEADER = '#profile:section/technique/sort/tooltip/prestigeLevel/header'
+    SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGELEVEL_BODY = '#profile:section/technique/sort/tooltip/prestigeLevel/body'
     SECTION_FORMATIONS_TITLE = '#profile:section/formations/title'
     SECTION_FORMATIONS_CLAN_TYPE = '#profile:section/formations/clan/type'
     SECTION_FORMATIONS_CLAN_NONE = '#profile:section/formations/clan/none'
@@ -625,10 +628,12 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_BRMAXFRAGS_BODY = '#profile:profile/params/tooltip/brMaxFrags/body'
     PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE_HEADER = '#profile:profile/params/tooltip/brAvgDamage/header'
     PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE_BODY = '#profile:profile/params/tooltip/brAvgDamage/body'
+    PROFILE_DROPDOWN_LABELS_COMP7 = '#profile:profile/dropdown/labels/comp7'
     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN = '#profile:profile/dropdown/labels/comp7_archive_Griffin'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1 = '#profile:profile/dropdown/labels/comp7_season_1'
-    SECTION_STATISTICS_HEADERTEXT_COMP7_ARCHIVE_GRIFFIN = '#profile:section/statistics/headerText/comp7_archive_Griffin'
-    SECTION_STATISTICS_HEADERTEXT_COMP7_SEASON_1 = '#profile:section/statistics/headerText/comp7_season_1'
+    PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2 = '#profile:profile/dropdown/labels/comp7_season_2'
+    PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3 = '#profile:profile/dropdown/labels/comp7_season_3'
+    SECTION_STATISTICS_HEADERTEXT_COMP7 = '#profile:section/statistics/headerText/comp7'
     SECTION_STATISTICS_SCORES_AVGPRESTIGEPOINTS = '#profile:section/statistics/scores/avgPrestigePoints'
     SECTION_STATISTICS_DETAILED_AVGPRESTIGEPOINTS = '#profile:section/statistics/detailed/avgPrestigePoints'
     PROFILE_PARAMS_TOOLTIP_AVGPRESTIGEPOINTS_HEADER = '#profile:profile/params/tooltip/avgPrestigePoints/header'
@@ -669,7 +674,6 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_VEHICLE_HEADER = '#profile:profile/params/tooltip/maxHealthRepair/vehicle/header'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_VEHICLE_BODY = '#profile:profile/params/tooltip/maxHealthRepair/vehicle/body'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_COMP7 = '#profile:section/technique/emptyScreenLabel/battleType/comp7'
-    SECTION_TECHNIQUE_BUTTONBAR_PRESTIGEPOINTS = '#profile:section/technique/buttonBar/prestigePoints'
     SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS_HEADER = '#profile:section/technique/sort/tooltip/prestigePoints/header'
     SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS_BODY = '#profile:section/technique/sort/tooltip/prestigePoints/body'
     SECTION_STATISTICS_SCORES_MAXEQUIPMENTDAMAGEDEALT = '#profile:section/statistics/scores/maxEquipmentDamageDealt'
@@ -679,6 +683,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MAXEQUIPMENTDAMAGEDEALT_BODY = '#profile:profile/params/tooltip/maxEquipmentDamageDealt/body'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_HEADER = '#profile:profile/params/tooltip/maxHealthRepair/header'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_BODY = '#profile:profile/params/tooltip/maxHealthRepair/body'
+    SEASONS_DROPDOWN_LABEL = '#profile:seasons/dropdown_label'
     PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
      PROFILE_DROPDOWN_LABELS_RANDOM,
      PROFILE_DROPDOWN_LABELS_EPICRANDOM,
@@ -695,8 +700,11 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_RANKED_10X10,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESOLO,
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD,
+     PROFILE_DROPDOWN_LABELS_COMP7,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN,
-     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1)
+     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1,
+     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2,
+     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
      PROFILE_RANKED_SEASONSDROPDOWN_1,
      PROFILE_RANKED_SEASONSDROPDOWN_2,

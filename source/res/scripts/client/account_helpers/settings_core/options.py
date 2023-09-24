@@ -776,14 +776,23 @@ class GameplaySetting(StorageAccountSetting):
 
 
 class RandomOnly10ModeSetting(StorageAccountSetting):
-    _RandomOnly10ModeSettingStruct = namedtuple('_RandomOnly10ModeSettingStruct', 'current options extraData')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def pack(self):
-        return self._RandomOnly10ModeSettingStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        return SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
 
     def getExtraData(self):
         return {'enabled': self.lobbyContext.getServerSettings().isOnly10ModeEnabled()}
+
+
+class DevMapsSetting(StorageAccountSetting):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def pack(self):
+        return SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
+
+    def getExtraData(self):
+        return {'enabled': self.lobbyContext.getServerSettings().isMapsInDevelopmentEnabled()}
 
 
 class TripleBufferedSetting(SettingAbstract):

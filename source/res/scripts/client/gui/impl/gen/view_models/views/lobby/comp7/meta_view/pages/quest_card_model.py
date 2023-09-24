@@ -6,7 +6,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7BonusModel
 
 class CardState(Enum):
-    LOCKED = 'locked'
+    LOCKEDBYNOXVEHICLES = 'lockedByNoXVehicles'
+    LOCKEDBYINACTIVESEASON = 'lockedByInactiveSeason'
+    LOCKEDBYPREVIOUSQUEST = 'lockedByPreviousQuest'
     ACTIVE = 'active'
     COMPLETED = 'completed'
 

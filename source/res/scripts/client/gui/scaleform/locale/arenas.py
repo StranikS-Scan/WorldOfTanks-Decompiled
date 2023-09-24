@@ -166,10 +166,6 @@ class ARENAS(object):
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
-    C_11_MUROVANKA_WT_NAME = '#arenas:11_murovanka_wt/name'
-    C_14_SIEGFRIED_LINE_WT_NAME = '#arenas:14_siegfried_line_wt/name'
-    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
-    C_35_STEPPES_WT_NAME = '#arenas:35_steppes_wt/name'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -332,11 +328,7 @@ class ARENAS(object):
      TYPE_WINBACK_NAME,
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,
-     C_210_BF_EPIC_DESERT_DESCRIPTION,
-     C_11_MUROVANKA_WT_NAME,
-     C_14_SIEGFRIED_LINE_WT_NAME,
-     C_34_REDSHIRE_WT_NAME,
-     C_35_STEPPES_WT_NAME)
+     C_210_BF_EPIC_DESERT_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

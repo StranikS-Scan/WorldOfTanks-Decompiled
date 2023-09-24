@@ -20,7 +20,6 @@ class WindowImpl(Window):
         settings.flags = wndFlags
         settings.layer = kwargs.pop('layer', WindowLayer.UNDEFINED)
         settings.areaID = kwargs.pop('areaID', R.areas.default())
-        settings.entryID = kwargs.pop('entryID', R.invalid())
         settings.decorator = kwargs.pop('decorator', None)
         settings.content = kwargs.pop('content', None)
         settings.parent = kwargs.pop('parent', None)

@@ -20,5 +20,5 @@ def isEpicBattlesEntryPointAvailable(epicController=None):
 class EpicBattlesEntryPoint(EpicBattlesEntryPointMeta):
 
     def _makeInjectView(self):
-        self.__view = EpicBattlesEntryPointView(flags=ViewFlags.COMPONENT)
+        self.__view = EpicBattlesEntryPointView(flags=ViewFlags.VIEW)
         return self.__view

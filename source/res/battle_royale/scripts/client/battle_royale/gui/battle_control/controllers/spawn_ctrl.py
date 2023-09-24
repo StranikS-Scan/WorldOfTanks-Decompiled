@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/spawn_ctrl.py
 import logging
+import weakref
 import BigWorld
+from battle_royale.gui.battle_control.controllers.notification_manager import INotificationManagerListener
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_battle
@@ -31,6 +33,15 @@ class ISpawnListener(object):
     def updateCloseTime(self, timeLeft, state):
         pass
 
+    def updateRespawnTime(self, timeLeft):
+        pass
+
+    def updateBlockToRessurecTime(self, blockTime):
+        pass
+
+    def updateLives(self, livesLeft, prev):
+        pass
+
     def onSelectPoint(self, pointId):
         pass
 
@@ -38,7 +49,7 @@ class ISpawnListener(object):
 class SpawnController(ViewComponentsController, ISpawnController):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self):
+    def __init__(self, notificationManager):
         super(SpawnController, self).__init__()
         self.__ingameMenu = None
         self.__isSpawnPointsVisible = False
@@ -46,11 +57,8 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__closeTime = 0
         self.__cdState = COUNTDOWN_STATE.WAIT
         self.__notifier = self.__createNotifier()
+        self.notificationManager = weakref.ref(notificationManager)
         return
-
-    @property
-    def isSpawnPointsVisible(self):
-        return self.__isSpawnPointsVisible
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.SPAWN_CTRL
@@ -64,9 +72,14 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__notifier.stopNotification()
         self.__notifier.clear()
         self.__notifier = None
+        self.notificationManager = None
         return
 
     def setViewComponents(self, *components):
+        for component in components:
+            if isinstance(component, INotificationManagerListener):
+                component.addNotificationManager(self.notificationManager())
+
         self._viewComponents.extend(components)
         self.__updateCloseTime()
 
@@ -80,9 +93,12 @@ class SpawnController(ViewComponentsController, ISpawnController):
             viewComponent.setSpawnPoints(points)
             viewComponent.showSpawnPoints()
 
-    def updateSpawnPoints(self, points):
+    def showRespawnPoints(self):
+        if self.__isSpawnPointsVisible:
+            return
+        self.__isSpawnPointsVisible = True
         for viewComponent in self._viewComponents:
-            viewComponent.setSpawnPoints(points)
+            viewComponent.showSpawnPoints()
 
     def setupCloseTime(self, closeTime):
         self.__closeTime = closeTime
@@ -108,14 +124,27 @@ class SpawnController(ViewComponentsController, ISpawnController):
 
             return
 
+    def updateRespawnTimer(self, respawnTime):
+        for viewComponent in self._viewComponents:
+            viewComponent.updateRespawnTime(respawnTime)
+
+    def updateBlockToRessurecTimer(self, blockTime):
+        for viewComponent in self._viewComponents:
+            viewComponent.updateBlockToRessurecTime(blockTime)
+
+    def updateLives(self, lives, prev):
+        for viewComponent in self._viewComponents:
+            viewComponent.updateLives(lives, prev)
+
     def closeSpawnPoints(self):
         self.__closeSpawnPoints()
 
-    def chooseSpawnKeyPoint(self, pointId):
+    def chooseSpawnKeyPoint(self, pointId, isRespawn=False):
         for viewComponent in self._viewComponents:
             viewComponent.onSelectPoint(pointId)
 
-        avatar_getter.getArena().teamInfo.spawnKeyPointTeamInfo.cell.chooseSpawnKeyPoint(pointId)
+        if not isRespawn:
+            avatar_getter.getArena().teamInfo.spawnKeyPointTeamInfo.cell.chooseSpawnKeyPoint(pointId)
 
     def placeVehicle(self):
         avatar_getter.getArena().teamInfo.spawnKeyPointTeamInfo.cell.placeVehicle()

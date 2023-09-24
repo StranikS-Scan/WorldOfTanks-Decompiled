@@ -66,7 +66,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
         isInSelfVehicleType = True
     data = {'fullName': tankman.fullUserName,
      'rank': tankman.rankUserName,
-     'specializationLevel': tankman.realRoleLevel[0],
+     'specializationLevel': tankman.realRoleLevel.lvl,
      'role': tankman.roleUserName,
      'vehicleType': tankmanVehicle.shortUserName,
      'iconFile': tankman.smallIconPath,
@@ -91,7 +91,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
      'notRecruited': False,
      'hasCommanderFeature': tankman.role == Tankman.ROLES.COMMANDER,
      'roles': tankman.roles()}
-    if tankman.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+    if tankman.skinID != NO_CREW_SKIN_ID:
         skinItem = itemsCache.items.getCrewSkin(tankman.skinID)
         iconFile = getCrewSkinIconSmall(skinItem.getIconID())
         data['iconFile'] = iconFile

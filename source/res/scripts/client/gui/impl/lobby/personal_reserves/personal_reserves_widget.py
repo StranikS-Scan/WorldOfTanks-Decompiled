@@ -33,7 +33,7 @@ class PersonalReservesWidget(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.lobby.personal_reserves.PersonalReservesWidget())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ReservesEntryPointModel()
         super(PersonalReservesWidget, self).__init__(settings)
         self._hasActiveBoosters = False

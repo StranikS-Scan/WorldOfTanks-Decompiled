@@ -172,6 +172,14 @@ class _BerserkerTurretEffect(_SimpleEffect):
     _SECTION_NAME = 'berserkerTurretEffect'
 
 
+class _VehicleRespawnEffect(object):
+    _SECTION_NAME = 'VehicleRespawn'
+
+    def __init__(self, dataSection):
+        super(_VehicleRespawnEffect, self).__init__()
+        self.effectPrefabPath = dataSection[self._SECTION_NAME].readString('prefab')
+
+
 class DynObjectsBase(object):
 
     def __init__(self):
@@ -267,6 +275,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__repairPoint = None
         self.__botDeliveryEffect = None
         self.__botClingDeliveryEffect = None
+        self.__vehicleRespawnEffect = None
         self.__botDeliveryMarker = None
         self.__dropPlane = None
         self.__airDrop = None
@@ -287,6 +296,8 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__botDeliveryMarker = _BattleRoyaleBotDeliveryMarkerArea(dataSection)
             self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), placeMinesEffect='minesDecalEffect', blowUpEffectName='minesBlowUpEffect', activationEffect=None)
             self.__berserkerEffects = _BerserkerEffects(turretEffect=_BerserkerTurretEffect(dataSection), hullEffect=_BerserkerHullEffect(dataSection), transformPath=dataSection.readString('berserkerTransformPath'))
+            self.__vehicleRespawnEffect = _VehicleRespawnEffect(dataSection)
+            CGF.cacheGameObjects([self.__vehicleRespawnEffect.effectPrefabPath], False)
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
@@ -330,6 +341,9 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def getBerserkerEffects(self):
         return self.__berserkerEffects
+
+    def getVehicleRespawnEffect(self):
+        return self.__vehicleRespawnEffect
 
     def clear(self):
         pass
@@ -475,40 +489,14 @@ class _PointsOfInterestConfig(object):
         return cls(points)
 
 
-class _EventBattleDynObjects(DynObjectsBase):
-
-    def __init__(self):
-        super(_EventBattleDynObjects, self).__init__()
-        self.__cachedIDs = []
-
-    def init(self, dataSection):
-        if self._initialized:
-            return
-        self.__cachedIDs = [ value.asString for key, value in dataSection['prefabs'].items() if key == 'path' and value.asString ]
-        if self.__cachedIDs:
-            CGF.cacheGameObjects(self.__cachedIDs, False)
-        super(_EventBattleDynObjects, self).init(dataSection)
-
-    def clear(self):
-        if self.__cachedIDs:
-            CGF.clearGameObjectsCache(self.__cachedIDs)
-        self.__cachedIDs = []
-        super(_EventBattleDynObjects, self).clear()
-
-    def getInspiringEffect(self):
-        return {}
-
-    def getHealPointEffect(self):
-        return {}
-
-
 registerDynObjCache(ARENA_GUI_TYPE.SORTIE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.FORT_BATTLE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.BATTLE_ROYALE, _BattleRoyaleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_BATTLE, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_TRAINING, _EpicBattleDynObjects)
+registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.COMP7, _Comp7DynObjects)
-registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EventBattleDynObjects)
+registerDynObjCache(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7DynObjects)
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
-from stats_params import BATTLE_ROYALE_STATS_ENABLED
+from constants import Configs
+from shared_utils import findFirst
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
@@ -10,6 +11,8 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofRatingUrlForVehicle, getHofDisabledKeys, onServerSettingsChange, isHofButtonNew, setHofButtonOld
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT, BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT, COMP7_VEHICLE_STATISTICS_LAYOUT
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import makeBattleTypesDropDown
+from gui.Scaleform.daapi.view.lobby.profile.seasons_manager import makeTechniqueSeasonManagers
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
@@ -19,6 +22,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.prestige.prestige_helpers import hasVehiclePrestige, getVehiclePrestige, DEFAULT_PRESTIGE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, getIconResourceName
 from gui.shared.gui_items.dossier import dumpDossier
@@ -31,7 +35,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
 from gui.shared.events import ProfileTechniqueEvent
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import isComp7Archive, isComp7Season, getArchiveName, getSeasonName, COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
 _MARK_ON_GUN_MIN_LVL = 5
 
 class ProfileTechnique(ProfileTechniqueMeta):
@@ -44,7 +47,17 @@ class ProfileTechnique(ProfileTechniqueMeta):
         selectedData = self._selectedData
         self.__dumpedVehDossiers = {}
         self._selectedVehicleIntCD = selectedData.get('itemCD') if selectedData else None
+        self.__prestigeView = None
+        self.__seasonsManagers = makeTechniqueSeasonManagers()
         return
+
+    def setSeason(self, seasonId):
+        if self.__seasonsManagers.setSeason(seasonId):
+            self.invokeUpdate()
+
+    def requestDossier(self, bType):
+        self.__seasonsManagers.onBattleTypeSwitched(bType)
+        super(ProfileTechnique, self).requestDossier(bType)
 
     def showVehiclesRating(self):
         setHofButtonOld(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON)
@@ -72,35 +85,27 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def _dispose(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__dumpedVehDossiers = None
+        self.__prestigeView = None
         super(ProfileTechnique, self)._dispose()
         g_eventBus.handleEvent(ProfileTechniqueEvent(ProfileTechniqueEvent.DISPOSE), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__seasonsManagers.clear()
         return
 
     def _getInitData(self, accountDossier=None, isFallout=False):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)]
-        if BATTLE_ROYALE_STATS_ENABLED:
-            dropDownProvider += [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD)]
-        dropDownProvider += [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED_10X10)]
-        self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)
-        if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
-        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM))
-        if accountDossier is not None and accountDossier.getRated7x7Stats().getVehicles():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM))
-        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
-        if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
-            dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
-        for archive in COMP7_ARCHIVE_NAMES:
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(getDropdownKeyByArchiveName(archive)))
-
-        for season in COMP7_SEASON_NUMBERS:
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(getDropdownKeyBySeason(season)))
-
         storedData = self._getStorageData()
-        return {'dropDownProvider': dropDownProvider,
-         'tableHeader': self.__getTableHeader(isFallout),
+        tabHeaderData = self.__getTableHeader(isFallout)
+        initVehicleSorting = self._selectedData.get('initVehicleSorting') if self._selectedData else None
+        if initVehicleSorting is not None:
+            tabData = findFirst(lambda d: d.get('id') == initVehicleSorting.get('selectedColumnStr'), tabHeaderData)
+            if tabData is not None:
+                storedData['selectedColumn'] = tabHeaderData.index(tabData)
+                storedData['selectedColumnSorting'] = initVehicleSorting.get('selectedColumnSorting', 'descending')
+        initData = {'dropDownProvider': makeBattleTypesDropDown(accountDossier, forVehiclesPage=True),
+         'tableHeader': tabHeaderData,
          'selectedColumn': storedData['selectedColumn'],
          'selectedColumnSorting': storedData['selectedColumnSorting']}
+        self.__seasonsManagers.addSeasonsDropdown(initData)
+        return initData
 
     def _setRatingButton(self):
         if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL and self.lobbyContext.getServerSettings().isHofEnabled():
@@ -133,18 +138,21 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return AccountSettings.getFilter(self._getStorageId())
 
     def _getDefaultTableHeader(self, isFallout=False):
+        isPrestigeVisible = self.__isPrestigeVisible()
         result = [self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
          self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, inverted=True, sortType='string'),
-         self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
-         self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
-         self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE)]
-        if isComp7Archive(self._battlesType) or isComp7Season(self._battlesType):
-            result.append(self._createTableBtnInfo('prestigePoints', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_PRESTIGEPOINTS))
+         self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_BATTLES),
+         self._createTableBtnInfo('winsEfficiency', 44 if isPrestigeVisible else 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_WINS),
+         self._createTableBtnInfo('avgExperience', 74 if isPrestigeVisible else 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_AVGEXP)]
+        if isPrestigeVisible:
+            result.append(self._createTableBtnInfo('prestigeLevel', 54, 8, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGELEVEL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_PRESTIGELEVEL))
+        if self.__isComp7BattleType():
+            result.append(self._createTableBtnInfo('prestigePoints', 62 if isPrestigeVisible else 70, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_PRESTIGEPOINTS))
         else:
             markOfMasteryEnabled = self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
-            result.append(self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, enabled=markOfMasteryEnabled))
+            result.append(self._createTableBtnInfo('markOfMastery', 62 if isPrestigeVisible else 70, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_MARKOFMASTERY, enabled=markOfMasteryEnabled))
         return result
 
     def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True, enabled=True):
@@ -177,7 +185,13 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM,
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESOLO,
          PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_BATTLEROYALESQUAD}
-        return backport.text(R.strings.profile.section.technique.emptyScreenLabel.battleType.comp7()) if isComp7Archive(self._battlesType) or isComp7Season(self._battlesType) else i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
+        return backport.text(R.strings.profile.section.technique.emptyScreenLabel.battleType.comp7()) if self.__isComp7BattleType() else i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
+
+    def _getNecessaryStats(self, accountDossier=None):
+        if accountDossier is None:
+            accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
+        seasonStats = self.__seasonsManagers.getStats(accountDossier)
+        return seasonStats if seasonStats else super(ProfileTechnique, self)._getNecessaryStats(accountDossier)
 
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileTechnique, self)._sendAccountData(targetData, accountDossier)
@@ -225,7 +239,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          self._createTableBtnInfo('winsCount', 64, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS, 'descending', iconSource=backport.image(R.images.gui.maps.icons.battleRoyale.achievements.wins())),
          self._createTableBtnInfo('avgExperience', 64, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', iconSource=backport.image(R.images.gui.maps.icons.battleRoyale.achievements.avgExp())),
          self._createTableBtnInfo('avgDamage', 64, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGDAMAGE, 'descending', iconSource=backport.image(R.images.gui.maps.icons.battleRoyale.achievements.avgDamage())),
-         self._createTableBtnInfo('avgFrags', 80, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGFRAGS, 'descending', iconSource=backport.image(R.images.gui.maps.icons.battleRoyale.achievements.avgFrags())))
+         self._createTableBtnInfo('avgFrags', 67, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGFRAGS, 'descending', iconSource=backport.image(R.images.gui.maps.icons.battleRoyale.achievements.avgFrags())))
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
         return self.__getBattleRoyaleTechniqueListVehicles(targetData) if self._battlesType in (PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO, PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD) else self.__getDefaultVehicleList(targetData, addVehiclesThatInHangarOnly)
@@ -237,9 +251,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
         else:
             __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL,)
         showMarkOfMastery = self._battlesType in __markOfMasteryBattles and targetData.getMarksOfMastery() != UNAVAILABLE_MARKS_OF_MASTERY
-        showPrestigePoints = isComp7Archive(self._battlesType) or isComp7Season(self._battlesType)
+        isPrestigeVisible = self.__isPrestigeVisible()
+        prestigeVehicles = self._dossier.getPrestigeStats().getVehicles()
         for intCD, vehParams in targetData.getVehicles().iteritems():
-            if showPrestigePoints:
+            if self.__isComp7BattleType():
                 battlesCount, wins, xp, prestigePoints = vehParams
                 avgPrestigePoints = round(float(prestigePoints) / float(battlesCount))
             else:
@@ -263,9 +278,15 @@ class ProfileTechnique(ProfileTechniqueMeta):
                         markOfMastery = ProfileUtils.UNAVAILABLE_VALUE
                 else:
                     markOfMastery = ProfileUtils.UNAVAILABLE_VALUE
+                if isPrestigeVisible:
+                    prestigeLevel, _ = prestigeVehicles.get(intCD, (ProfileUtils.UNAVAILABLE_VALUE, 0))
+                    if prestigeLevel == 0:
+                        prestigeLevel = ProfileUtils.UNAVAILABLE_VALUE
+                else:
+                    prestigeLevel = ProfileUtils.UNAVAILABLE_VALUE
                 result.append({'id': intCD,
                  'inventoryID': vehicle.invID,
-                 'isOtherPlayer': self._userID is None,
+                 'isOtherPlayer': self._userID is not None,
                  'shortUserName': vehicle.shortUserName,
                  'battlesCount': battlesCount,
                  'winsEfficiency': winsEfficiency,
@@ -282,7 +303,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
                  'typeIconPath': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
                  'isInHangar': isInHangar,
                  'compareModeAvailable': self.comparisonBasket.isEnabled(),
-                 'prestigePoints': avgPrestigePoints})
+                 'prestigePoints': avgPrestigePoints,
+                 'prestigeLevel': prestigeLevel})
 
         return result
 
@@ -300,7 +322,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
             achievementsList = None
             specialMarksStats = []
             specialRankedStats = []
-            if self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM):
+            statsFromSeason = self.__seasonsManagers.getStats(vehDossier)
+            if statsFromSeason:
+                stats = statsFromSeason
+            elif self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM):
                 achievementsEnabled = True
                 if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
                     stats = vehDossier.getRandomStats()
@@ -343,10 +368,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 stats = vehDossier.getBattleRoyaleSquadStats(vehicleIntCD)
                 if not stats:
                     return
-            elif isComp7Archive(self._battlesType):
-                stats = vehDossier.getComp7Stats(archive=getArchiveName(self._battlesType))
-            elif isComp7Season(self._battlesType):
-                stats = vehDossier.getComp7Stats(season=getSeasonName(self._battlesType))
             else:
                 raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
             if achievementsList is not None:
@@ -354,9 +375,32 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 achievementsList.insert(1, specialMarksStats)
             preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None, self.__getLayout())
             self._selectedVehicleIntCD = vehicleIntCD
+            if self.__prestigeView is not None:
+                self.__prestigeView.setSelectedVehicleIntCD(self._selectedVehicleIntCD)
+            if self._userID is None:
+                isPrestigeVisible = self.__isPrestigeVisible() and hasVehiclePrestige(self._selectedVehicleIntCD, checkElite=True, lobbyContext=self.lobbyContext, itemsCache=self.itemsCache)
+            else:
+                isPrestigeVisible = self.__isPrestigeVisible() and hasVehiclePrestige(self._selectedVehicleIntCD, checkElite=False, lobbyContext=self.lobbyContext, itemsCache=self.itemsCache) and getVehiclePrestige(self._selectedVehicleIntCD, databaseID=self._userID) != DEFAULT_PRESTIGE
+            self.as_setPrestigeVisibleS(isPrestigeVisible)
             self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
              'achievements': achievementsList})
             return
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias in (VIEW_ALIAS.PROFILE_PRESTIGE_EMBLEM_WIDGET, VIEW_ALIAS.PROFILE_PRESTIGE_WIDGET):
+            self.__prestigeView = viewPy
+            self.__prestigeView.setDatabaseID(self._databaseID)
+            self.__prestigeView.setSelectedVehicleIntCD(self._selectedVehicleIntCD)
+        super(ProfileTechnique, self)._onRegisterFlashComponent(viewPy, alias)
+
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        if alias in (VIEW_ALIAS.PROFILE_PRESTIGE_EMBLEM_WIDGET, VIEW_ALIAS.PROFILE_PRESTIGE_WIDGET):
+            self.__prestigeView = None
+        super(ProfileTechnique, self)._onUnregisterFlashComponent(viewPy, alias)
+        return
+
+    def __isComp7BattleType(self):
+        return self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7
 
     def __getLayout(self):
         if self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
@@ -365,7 +409,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
             return BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT
         if self._battlesType == PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD:
             return BATTLE_ROYALE_VEHICLE_STATISTICS_LAYOUT
-        return COMP7_VEHICLE_STATISTICS_LAYOUT if isComp7Archive(self._battlesType) or isComp7Season(self._battlesType) else STATISTICS_LAYOUT
+        return COMP7_VEHICLE_STATISTICS_LAYOUT if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7 else STATISTICS_LAYOUT
 
     def __getAchievementsList(self, targetData, vehDossier, vehDossierDumped):
         packedList = []
@@ -378,9 +422,14 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def __onServerSettingChanged(self, diff):
         if 'hallOfFame' in diff:
             self._setRatingButton()
+        if Configs.PRESTIGE_CONFIG.value in diff:
+            self.invokeUpdate()
 
     def __packAchievement(self, stats, vehDossier, record, vehDossierDumped):
         return AchievementsUtils.packAchievement(stats.getAchievement(record), vehDossier.getDossierType(), vehDossierDumped, self._userID is None)
 
     def __showMarksOnGun(self, vehicleIntCD):
         return self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level >= _MARK_ON_GUN_MIN_LVL
+
+    def __isPrestigeVisible(self):
+        return self.lobbyContext.getServerSettings().prestigeConfig.isEnabled and self._battlesType not in (PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO, PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD)

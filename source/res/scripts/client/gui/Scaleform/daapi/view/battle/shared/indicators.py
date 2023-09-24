@@ -160,7 +160,7 @@ class _MarkerVOBuilder(object):
          'bgStr': self._getBackground(markerData)}
 
     def _getIndicatorFrameRate(self):
-        return DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
+        return _DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
 
     def _getBackground(self, markerData):
         pass
@@ -287,7 +287,6 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = root.as_hide
         self._as_setScreenSettings = root.as_setScreenSettings
         self._as_setPosition = root.as_setPosition
-        self._as_setAlpha = root.as_setAlpha
 
     def destroy(self):
         self._as_updateSettings = None
@@ -297,7 +296,6 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = None
         self._as_setScreenSettings = None
         self._as_setPosition = None
-        self._as_setAlpha = None
         self.movie.root.dmgIndicator.dispose()
         return
 
@@ -322,11 +320,8 @@ class DamageIndicatorMeta(Flash):
     def as_setPosition(self, posX, posY):
         self._as_setPosition(posX, posY)
 
-    def as_setAlphaS(self, itemIdx, alpha):
-        self._as_setAlpha(itemIdx, alpha)
 
-
-class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
     _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
     _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
@@ -341,7 +336,7 @@ class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def __init__(self, hitsCount):
         names = tuple((self._DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
+        super(_DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
         self.__voBuilderFactory = None
         self.__updateMethod = None
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
@@ -374,7 +369,7 @@ class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         return HitType.HIT_DAMAGE
 
     def destroy(self):
-        super(DamageIndicator, self).destroy()
+        super(_DamageIndicator, self).destroy()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -849,7 +844,7 @@ def createDirectIndicator(swf=_DIRECT_INDICATOR_SWF, mcName=_DIRECT_INDICATOR_MC
 
 
 def createDamageIndicator():
-    return DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
+    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
 def createPredictionIndicator():

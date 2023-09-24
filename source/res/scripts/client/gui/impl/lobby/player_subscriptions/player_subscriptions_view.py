@@ -15,7 +15,7 @@ from gui.impl.gen.view_models.views.lobby.player_subscriptions.wot_subscription_
 from gui.impl.pub import ViewImpl
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.products_fetcher.fetch_result import FetchResult
-from gui.shared.event_dispatcher import showOfferGiftsWindow, showBrowserOverlayView, showShop, showWotPlusInfoPage, showSteamRedirectWotPlus, showWotPlusProductPage
+from gui.shared.event_dispatcher import showOfferGiftsWindow, showBrowserOverlayView, showShop, showWotPlusInfoPage, showWotPlusProductPage, showWotPlusSteamSubscriptionManagementPage
 from helpers import dependency
 from skeletons.gui.game_control import IExternalLinksController, ISteamCompletionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -159,11 +159,7 @@ class PlayerSubscriptionsView(ViewImpl):
     def __onCardClick(self, args):
         id_ = args['subscriptionId']
         if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
-            if self._steamCompletionCtrl.isSteamAccount:
-                self._wotPlusUILogger.logClickEvent(SubscriptionPageKeys.INFO_BUTTON)
-                showSteamRedirectWotPlus()
-            else:
-                showWotPlusInfoPage(WotPlusInfoPageSource.SUBSCRIPTION_PAGE, includeSubscriptionInfo=True)
+            showWotPlusInfoPage(WotPlusInfoPageSource.SUBSCRIPTION_PAGE, includeSubscriptionInfo=True)
             return
         if self.__subscriptions[id_] == SubscriptionTypeEnum.EXTERNALSUBSCRIPTION:
             url = GUI_SETTINGS.playerSubscriptionsURL
@@ -173,10 +169,11 @@ class PlayerSubscriptionsView(ViewImpl):
         id_ = args['subscriptionId']
         if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
             self._wotPlusUILogger.logClickEvent(SubscriptionPageKeys.CTA_BUTTON)
-            if self._steamCompletionCtrl.isSteamAccount:
-                showSteamRedirectWotPlus()
-            elif self._wotPlusCtrl.isEnabled():
-                showWotPlusProductPage()
+            if self._wotPlusCtrl.isEnabled():
+                if self._wotPlusCtrl.hasSteamSubscription():
+                    showWotPlusSteamSubscriptionManagementPage()
+                else:
+                    showWotPlusProductPage()
             else:
                 showShop(getWotPlusShopUrl())
             return

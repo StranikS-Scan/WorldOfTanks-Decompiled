@@ -27,7 +27,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
-from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME
+from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME, NO_TANKMAN
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
@@ -170,11 +170,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     COMP7_BATTLES = 'comp7'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
-    EVENT_BOSS = 'event_boss'
-    EVENT_HUNTER = 'event_hunter'
-    EVENT_BOT = 'event_bot'
-    EVENT_SPECIAL_BOSS = 'special_event_boss'
-    EVENT_VEHS = frozenset((EVENT_BOSS, EVENT_HUNTER))
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -184,6 +179,7 @@ _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typing.Set[int]), ('toUnlock', typing.Set[int]), ('total', typing.Set[int])))
+NO_VEHICLE_ID = -1
 
 class Vehicle(FittingItem):
     __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
@@ -201,7 +197,6 @@ class Vehicle(FittingItem):
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
         RENTAL_IS_OVER = 'rentalIsOver'
-        RENTAL_IS_OVER_BATTLE = 'rentalBattleIsOver'
         IGR_RENTAL_IS_OVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         GROUP_IS_NOT_READY = 'group_is_not_ready'
@@ -210,12 +205,8 @@ class Vehicle(FittingItem):
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         WILL_BE_UNLOCKED_IN_BATTLE = 'willBeUnlockedInBattle'
-        TICKETS_SHORTAGE = 'ticketsShortage'
-        CUSTOM = (UNSUITABLE_TO_QUEUE,
-         UNSUITABLE_TO_UNIT,
-         WILL_BE_UNLOCKED_IN_BATTLE,
-         TICKETS_SHORTAGE)
-        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, TICKETS_SHORTAGE)
+        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, WILL_BE_UNLOCKED_IN_BATTLE)
+        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -510,6 +501,15 @@ class Vehicle(FittingItem):
         commanderEffRoleLevel += bonuses['brotherhood'] + bonuses['equipment'] + bonuses['optDevices']
         bonuses['commander'] += round(commanderEffRoleLevel / tankmen.COMMANDER_ADDITION_RATIO)
         return
+
+    def getTankmanIDBySlotIdx(self, slotIdx):
+        for slot, tman in self.crew:
+            if slot == slotIdx:
+                if tman:
+                    return tman.invID
+                return NO_TANKMAN
+
+        return NO_TANKMAN
 
     def _calcSellPrice(self, proxy):
         return self.__calcSellPrice(proxy, self.sellPrices.itemPrice.price)
@@ -972,10 +972,6 @@ class Vehicle(FittingItem):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
 
     @property
-    def eventType(self):
-        return set(VEHICLE_TAGS.EVENT_VEHS & self.tags).pop()
-
-    @property
     def typeUserName(self):
         return getTypeUserName(self.type, self.isElite)
 
@@ -1048,14 +1044,6 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, 'scout')
 
     @property
-    def isSquadRestricted(self):
-        return checkForTags(self.tags, 'squad_restricted')
-
-    @property
-    def isOnlyForRandomBattles(self):
-        return checkForTags(self.tags, 'random_only')
-
-    @property
     def isTrackWithinTrack(self):
         return self._descriptor.isTrackWithinTrack
 
@@ -1114,8 +1102,6 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.NOT_PRESENT
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
-        elif self.rentInfo.hasMultipleConditions and self.rentalIsOver and self.rentInfo.getTimeLeft() > 0:
-            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE
         elif self.rentalIsOver:
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER
             if self.isPremiumIGR:
@@ -1192,7 +1178,6 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
-         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.TOO_HEAVY,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
@@ -1202,8 +1187,7 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
          Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED,
-         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
-         Vehicle.VEHICLE_STATE.TICKETS_SHORTAGE):
+         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -1246,18 +1230,6 @@ class Vehicle(FittingItem):
     @property
     def isEvent(self):
         return self.isOnlyForEventBattles
-
-    @property
-    def isBoss(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_BOSS)
-
-    @property
-    def isSpecialBoss(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_SPECIAL_BOSS)
-
-    @property
-    def isHunterOrBoss(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_VEHS)
 
     @property
     def isDisabledInRoaming(self):
@@ -1488,11 +1460,6 @@ class Vehicle(FittingItem):
         return result
 
     @property
-    def isUnsuitableToQueue(self):
-        state, _ = self.getState()
-        return state == self.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
-
-    @property
     def isReadyToFight(self):
         if self.rentalIsOver:
             return False
@@ -1695,7 +1662,7 @@ class Vehicle(FittingItem):
 
         return (data[0], data[1], set(data[2:]))
 
-    def getPerfectCrew(self):
+    def __getCrewSkills(self):
         skillLevels = {}
         skills = {}
         usedTankmans = []
@@ -1709,7 +1676,50 @@ class Vehicle(FittingItem):
                     usedTankmans.append(tankmanIdx)
                     break
 
+        return (skills, skillLevels)
+
+    def makeCrewMaxRolesLevel(self):
+        skills, skillLevels = self.__getCrewSkills()
+        levelsByIndexes = {}
+        for tankmanIdx, vehTankman in self.crew:
+            levelsByIndexes[tankmanIdx] = 100 if vehTankman else None
+
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes)
+
+    def getPerfectCrew(self):
+        skills, skillLevels = self.__getCrewSkills()
         return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True)
+
+    def getCrewWithSkill(self, skillName):
+        if skillName is None:
+            return self.crew
+        else:
+            crewItems = list()
+            crewRoles = self.descriptor.type.crewRoles
+            for slotIdx, tman in self.crew:
+                if tman is None:
+                    crewItems.append((slotIdx, tman))
+                    continue
+                skillAlreadyLearned = tman.skillAlreadyLearned(skillName)
+                skillIsInProgress = tman.skillIsInProgress(skillName)
+                cannotLearnSkill = skillName not in tman.getPossibleSkills()
+                if cannotLearnSkill or skillAlreadyLearned:
+                    crewItems.append((slotIdx, tman))
+                    continue
+                tmanDescr = tman.descriptor
+                skills = tmanDescr.skills[:]
+                if skillIsInProgress:
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                elif not skills:
+                    skills.append(skillName)
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                else:
+                    skills.insert(0, skillName)
+                    lastSkillLevel = tmanDescr.lastSkillLevel
+                skilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
+                crewItems.append((slotIdx, skilledTman))
+
+            return sortCrew(crewItems, crewRoles)
 
     def getCrewWithoutSkill(self, skillName):
         crewItems = list()
@@ -1967,6 +1977,10 @@ def getTypeUserName(vehType, isElite):
     return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType) if isElite else i18n.makeString('#menu:header/vehicleType/%s' % vehType)
 
 
+def getWotPlusExclusiveVehicleTypeUserName(vehType):
+    return i18n.makeString('#menu:header/wotPlusExclusiveVehicleType/%s' % vehType)
+
+
 def getTypeShortUserName(vehType):
     return i18n.makeString('#menu:classes/short/%s' % vehType)
 
@@ -2063,16 +2077,16 @@ def getTypeBigIconResource(vehicleType, isElite=False):
     return R.images.gui.maps.icons.vehicleTypes.big.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
 
 
+def getType44x44IconResource(vehicleType, isElite=False):
+    return R.images.gui.maps.icons.vehicleTypes.c_44x44.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
+
+
 def getUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.userString, vehicleType.tags, textPrefix)
 
 
 def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
-
-
-def getSimpleShortUserName(vehicleType):
-    return vehicleType.descriptor.type.shortUserString
 
 
 def _getActualName(name, tags, textPrefix=False):
@@ -2141,7 +2155,6 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
- Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
@@ -2172,9 +2185,5 @@ def getBattlesLeft(vehicle):
     return i18n.makeString('#menu:infinitySymbol') if vehicle.isInfiniteRotationGroup else str(vehicle.rotationBattlesLeft)
 
 
-def getCommander(vehicle):
-    for _, tman in vehicle.crew:
-        if tman.role == Tankman.ROLES.COMMANDER:
-            return tman
-
-    return None
+def getRetrainTankmenIds(vehicle):
+    return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and (not tankman.isMaxRoleEfficiency or not tankman.isInNativeTank) ]

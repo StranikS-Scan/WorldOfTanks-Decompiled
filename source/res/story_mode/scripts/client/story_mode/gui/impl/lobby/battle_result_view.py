@@ -6,7 +6,7 @@ import BigWorld
 import SoundGroups
 from constants import DEATH_REASON_ALIVE
 from frameworks.wulf import ViewSettings, WindowFlags
-from gui.battle_results.br_constants import PlayerTeamResult
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.clans.clan_cache import g_clanCache
 from gui.impl import backport
 from gui.impl.gen import R
@@ -71,8 +71,8 @@ class BattleResultView(ViewImpl):
             missionId = battleResults['missionId']
             finishResult = battleResults['finishResult']
             model.setMissionId(missionId)
-            model.setIsVictory(finishResult == PlayerTeamResult.WIN)
-            model.setTitle(rBattleResult.dyn(PlayerTeamResult.DEFEAT if finishResult == PlayerTeamResult.DRAW else finishResult).title())
+            model.setIsVictory(finishResult == PLAYER_TEAM_RESULT.WIN)
+            model.setTitle(rBattleResult.dyn(PLAYER_TEAM_RESULT.DEFEAT if finishResult == PLAYER_TEAM_RESULT.DRAW else finishResult).title())
             model.setSubTitle(battleResults['finishReason'])
             model.setInfoName(backport.text(rBattleResult.missionName.num(missionId)()))
             model.setInfoDescription(backport.text(rBattleResult.battleDuration(), date=battleResults['arenaDateTime'], duration=battleResults['arenaDuration']))
@@ -82,7 +82,7 @@ class BattleResultView(ViewImpl):
 
     def __fillProgressLevels(self, missionProgressModel, progressLevelsModels, battleResults):
         text = R.strings.sm_lobby.battleResult
-        missionProgressModel.setValue(self._MAX_OBJECTIVES_COUNT if battleResults['finishResult'] == PlayerTeamResult.WIN else 0)
+        missionProgressModel.setValue(self._MAX_OBJECTIVES_COUNT if battleResults['finishResult'] == PLAYER_TEAM_RESULT.WIN else 0)
         missionProgressModel.setIcon(self._ICON_OBJECTIVES)
         missionProgressModel.setName(text.operationsCompleted())
         missionProgressModel.setTotal(self._MAX_OBJECTIVES_COUNT)

@@ -21,7 +21,7 @@ class EventLootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
     __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
 
     def __init__(self):
-        super(EventLootBoxesEntryPointWidget, self).__init__(ViewSettings(R.views.event_lootboxes.lobby.event_lootboxes.EntryPointView(), ViewFlags.COMPONENT, EntryPointViewModel()))
+        super(EventLootBoxesEntryPointWidget, self).__init__(ViewSettings(R.views.event_lootboxes.lobby.event_lootboxes.EntryPointView(), ViewFlags.VIEW, EntryPointViewModel()))
 
     @property
     def viewModel(self):

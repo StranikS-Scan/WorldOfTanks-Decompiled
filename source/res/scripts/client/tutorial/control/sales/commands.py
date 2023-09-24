@@ -3,6 +3,8 @@
 from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.game_control.calendar_controller import CalendarInvokeOrigin
+from gui.impl.dialogs.dialogs import showEnlargeBarracksDialog
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import g_eventBus
 from gui.shared.event_dispatcher import showShop
@@ -10,14 +12,15 @@ from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import ICalendarController
-from gui.game_control.calendar_controller import CalendarInvokeOrigin
+from wg_async import wg_await, wg_async
 
 def buySlots():
     ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
 
+@wg_async
 def buyBerths():
-    ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
+    yield wg_await(showEnlargeBarracksDialog())
 
 
 def createClan():

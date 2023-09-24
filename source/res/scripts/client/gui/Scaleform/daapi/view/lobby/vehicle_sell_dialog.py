@@ -16,6 +16,8 @@ from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, getRoleTextWithLabel
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import getCrewCount
+from gui.shared.gui_items.processors import plugins
 from gui.shared.gui_items.processors.vehicle import VehicleSeller, getCustomizationItemSellCountForVehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Currency, MONEY_UNDEFINED
@@ -23,6 +25,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils import decorators
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shop import showBuyGoldForEquipment
 from helpers import int2roman, dependency
@@ -30,7 +33,6 @@ from items import ITEM_TYPES
 from items.components.c11n_constants import ItemTags
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
-from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRestoreController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -279,12 +281,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             if removeCurrency is not None:
                 currentBalance -= data.itemRemovalPrice.extract(removeCurrency)
             data.removeCurrency = removeCurrency
-            if data.removeCurrency == _WP_CURRENCY:
-                data.toInventory = True
-            elif optDevice.isModernized and data.removeCurrency != _DK_CURRENCY:
-                data.toInventory = False
-            elif data.isRemovableForMoney:
-                data.toInventory = data.removeCurrency is not None
             self.__addVSDItem(data)
             onVehicleOptionalDevices.append(data.toFlashVO())
 
@@ -348,16 +344,17 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return onVehicleShells
 
     def __subscribe(self):
-        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__onSetGoldHandler)
-        g_clientUpdateManager.addCurrencyCallback(Currency.CRYSTAL, self.__onSetCrystalHandler)
-        g_clientUpdateManager.addCallback('goodies', self.__onSetGoodiesHandler)
+        g_clientUpdateManager.addCallbacks({'stats.gold': self.__onSetGoldHandler,
+         'stats.crystal': self.__onSetCrystalHandler,
+         'stats.equipCoin': self.__onSetEquipCoinHandler,
+         'stats.vehicleSellsLeft': self.__onSellLimitUpdate,
+         'stats.tankmenBerthsCount': self.__onBerthsCountUpdate,
+         'goodies': self.__onSetGoodiesHandler})
         self.__itemsCache.onSyncCompleted += self.__shopResyncHandler
 
     def __unsubscribe(self):
         self.__itemsCache.onSyncCompleted -= self.__shopResyncHandler
-        g_clientUpdateManager.removeCurrencyCallback(Currency.GOLD, self.__onSetGoldHandler)
-        g_clientUpdateManager.removeCurrencyCallback(Currency.CRYSTAL, self.__onSetCrystalHandler)
-        g_clientUpdateManager.removeCallback('goodies', self.__onSetGoodiesHandler)
+        g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __onSetGoldHandler(self, gold):
         self.__updateMoney(Currency.GOLD, gold)
@@ -365,6 +362,16 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __onSetCrystalHandler(self, crystals):
         self.__updateMoney(Currency.CRYSTAL, crystals)
+        self.__updateSubmitButton()
+
+    def __onSetEquipCoinHandler(self, equipCoin):
+        self.__updateMoney(Currency.EQUIP_COIN, equipCoin)
+        self.__updateSubmitButton()
+
+    def __onSellLimitUpdate(self, *_):
+        self.__updateSubmitButton()
+
+    def __onBerthsCountUpdate(self, *_):
         self.__updateSubmitButton()
 
     def __onSetGoodiesHandler(self, goodies):
@@ -383,9 +390,34 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         expenses = -self.__income
         shortage = expenses.getShortage(self.__accountMoney)
         shortage[Currency.GOLD] = 0
-        shortage[Currency.EQUIP_COIN] = 0
         shortage[_WP_CURRENCY] = 0
-        self.as_enableButtonS(controlNumberValid and shortage.isEmpty())
+        nationGroupVehs = self.__vehicle.getAllNationGroupVehs(self.__itemsCache.items)
+        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
+        crewValid = True
+        if not self.__isCrewDismissal:
+            crewValid = plugins.BarracksSlotsValidator(barracksBerthsNeeded).validate().success
+        isInLimit = True
+        if not (self.__vehicle.isRented and self.__vehicle.rentalIsOver):
+            isInLimit = plugins.VehicleSellsLeftValidator(self.__vehicle).validate().success
+        tooltip = ''
+        acceptButtonTooltip = R.strings.tooltips.vehicleSellDialog.acceptButtonTooltip
+        formattedItems = []
+        if not shortage.isEmpty():
+            formattedItems.append(backport.text(acceptButtonTooltip.notEnoughCurrency.body()))
+        if not crewValid:
+            formattedItems.append(backport.text(acceptButtonTooltip.notEnoughTankmenBerths.body()))
+        if not isInLimit:
+            formattedItems.append(backport.text(acceptButtonTooltip.vehicleSellLimit.body()))
+        warningMessage = '.\n'.join(formattedItems) + '.'
+        if formattedItems:
+            header = backport.text(acceptButtonTooltip.notEnable.header())
+            tooltip = makeTooltip(header, warningMessage)
+        elif not controlNumberValid:
+            header = backport.text(acceptButtonTooltip.controlNumberValid.header())
+            body = backport.text(acceptButtonTooltip.controlNumberValid.body())
+            tooltip = makeTooltip(header, body)
+        self.as_enableButtonS(controlNumberValid and shortage.isEmpty() and crewValid and isInLimit, tooltip)
+        self.as_setSellEnabledS(shortage.isEmpty() and crewValid and isInLimit, str(warningMessage))
 
     def __getControlQuestion(self, usingGold=False):
         if usingGold:
@@ -496,12 +528,15 @@ def _getCurrencyIterator():
 
 
 def _findCurrency(have, price):
+    firstCurrency = None
     for c in _getCurrencyIterator():
         value = price[c]
-        if value and have[c] >= value:
-            return c
+        if value:
+            firstCurrency = firstCurrency or c
+            if have[c] >= value:
+                return c
 
-    return None
+    return firstCurrency
 
 
 class _VSDMoney(dict):
@@ -671,47 +706,6 @@ class _OptionalDeviceData(_VSDItemData):
     __wotPlus = dependency.descriptor(IWotPlusController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    class _AlertIconStateData(CONST_CONTAINER):
-        _DELUXE = 1
-        _MODERNIZED_HIGH = 2
-        _STANDARD = 3
-        _SUBSCRIBED_USER = True
-        _NON_SUBSCRIBED_USER = False
-        _DELUXE_DEMOUNT_ENABLED = True
-        _DELUXE_DEMOUNT_NOT_ENABLED = False
-        _SUBSCRIPTION_STATES = {_DELUXE: {_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '',
-                                      _DELUXE_DEMOUNT_NOT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Deluxe/sub/demountNotEnabled'},
-                   _NON_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Deluxe/nonsub/demountEnabled',
-                                          _DELUXE_DEMOUNT_NOT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Deluxe/nonsub/demountNotEnabled'}},
-         _STANDARD: {_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '',
-                                        _DELUXE_DEMOUNT_NOT_ENABLED: ''},
-                     _NON_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Standard/nonsub',
-                                            _DELUXE_DEMOUNT_NOT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Standard/nonsub'}},
-         _MODERNIZED_HIGH: {_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Modernized',
-                                               _DELUXE_DEMOUNT_NOT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Modernized'},
-                            _NON_SUBSCRIBED_USER: {_DELUXE_DEMOUNT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Modernized',
-                                                   _DELUXE_DEMOUNT_NOT_ENABLED: '#tooltips:vehicleSellDialog/renderer/sbscr/Modernized'}}}
-
-        @classmethod
-        def getData(cls, servSettings, optDevice, removePrice, wotPlusCtrl):
-            alertIconTooltipID = ''
-            if servSettings.isRenewableSubEnabled():
-                alertGuiType = cls._getType(optDevice)
-                return cls._SUBSCRIPTION_STATES[alertGuiType][wotPlusCtrl.isEnabled()][servSettings.isFreeDeluxeEquipmentDemountingEnabled()]
-            if not optDevice.isRemovable:
-                if not optDevice.isModernized:
-                    if Currency.GOLD in removePrice:
-                        alertIconTooltipID = '#tooltips:vehicleSellDialog/renderer/alertIconGold'
-                    else:
-                        alertIconTooltipID = '#tooltips:vehicleSellDialog/renderer/alertIconCrystal'
-            return alertIconTooltipID
-
-        @classmethod
-        def _getType(cls, optDevice):
-            if optDevice.isDeluxe:
-                return cls._DELUXE
-            return cls._MODERNIZED_HIGH if optDevice.isModernized and (optDevice.level == 2 or optDevice.level == 3) else cls._STANDARD
-
     def __init__(self, optDevice):
         super(_OptionalDeviceData, self).__init__(optDevice, FITTING_TYPES.OPTIONAL_DEVICE)
         self._flashData['isRemovable'] = optDevice.isRemovable
@@ -728,4 +722,8 @@ class _OptionalDeviceData(_VSDItemData):
             if isDemountKitApplicableTo(optDevice):
                 self._itemRemovalPrice += _DEMOUNT_KIT_ONE
         self._flashData['removePrice'] = self._itemRemovalPrice.toDict()
-        self._flashData['alertIconDataID'] = self._AlertIconStateData.getData(serverSettings, optDevice, self._flashData['removePrice'], self.__wotPlus)
+        self._flashData['alertIconDataID'] = self.__getAlertIconTooltip(optDevice)
+
+    @classmethod
+    def __getAlertIconTooltip(cls, optDevice):
+        return '#tooltips:vehicleSellDialog/renderer/alertIconSell' if not optDevice.isModernized else '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct'

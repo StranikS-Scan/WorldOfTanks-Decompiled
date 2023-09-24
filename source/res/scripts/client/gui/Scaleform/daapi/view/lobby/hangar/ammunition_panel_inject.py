@@ -7,16 +7,18 @@ from gui.Scaleform.daapi.view.meta.AmmunitionPanelInjectMeta import AmmunitionPa
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar_view import HangarAmmunitionPanelView
 from gui.impl.lobby.tank_setup.bootcamp.ammunition_panel import BootcampAmmunitionPanelView
 from gui.impl.lobby.tank_setup.frontline.ammunition_panel import FrontlineAmmunitionPanelView
+from battle_royale.gui.impl.lobby.tank_setup.ammunition_panel import BattleRoyaleAmmunitionPanelView
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.system_factory import collectAmmunitionPanelView
 from helpers import dependency
-from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController, IFunRandomController, IHangarGuiController
+from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController, IFunRandomController, IHangarGuiController, IBattleRoyaleController
 
 class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
     __bootcampController = dependency.descriptor(IBootcampController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def onPrbEntitySwitching(self):
         self.getInjectView().setPrbSwitching(True)
@@ -43,23 +45,18 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
 
     def _makeInjectView(self):
         viewClass = self.__getInjectViewClass()
-        return viewClass(flags=ViewFlags.COMPONENT)
+        return viewClass(flags=ViewFlags.VIEW)
 
     def _addInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._addInjectContentListeners()
         self.startGlobalListening()
-        self.getInjectView().onSizeChanged += self.__onSizeChanged
         self.getInjectView().onPanelSectionResized += self.__onPanelSectionResized
         self.getInjectView().onVehicleChanged += self.__onVehicleChanged
 
     def _removeInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._removeInjectContentListeners()
         self.stopGlobalListening()
-        self.getInjectView().onSizeChanged -= self.__onSizeChanged
         self.getInjectView().onVehicleChanged -= self.__onVehicleChanged
-
-    def __onSizeChanged(self, width, height, offsetY):
-        self.as_setPanelSizeS(width, height, offsetY)
 
     def __onPanelSectionResized(self, sectionType, offsetX, offsetY, width, height):
         self.as_setHelpLayoutS({'sectionType': sectionType,
@@ -76,6 +73,8 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
             return BootcampAmmunitionPanelView
         elif self.__epicController.isEpicPrbActive():
             return FrontlineAmmunitionPanelView
+        elif self.__battleRoyaleController.isBattleRoyaleMode():
+            return BattleRoyaleAmmunitionPanelView
         else:
             ammunitionPanelViewCls = collectAmmunitionPanelView(self.__hangarComponentsCtrl.getAmmoInjectViewAlias())
             return ammunitionPanelViewCls if ammunitionPanelViewCls is not None else HangarAmmunitionPanelView

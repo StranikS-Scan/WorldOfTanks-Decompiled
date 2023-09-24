@@ -49,7 +49,6 @@ from vehicle_systems.model_assembler import collisionIdxToTrackPairIdx
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
 from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from shared_utils.vehicle_utils import createWheelFilters
-from cgf_script.component_meta_class import registerComponent
 import GenericComponents
 import Projectiles
 import CGF
@@ -60,11 +59,6 @@ _logger = logging.getLogger(__name__)
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_respawnQueue = dict()
-
-@registerComponent
-class SpawnComponent(object):
-    pass
-
 
 class _Vector4Provider(object):
     __slots__ = ('_v',)
@@ -253,8 +247,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             outfitDescr = result
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
-            if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
-                forceReloading = True
+            forceReloading = onBattleRoyalePrerequisites(self, oldTypeDescriptor, forceReloading)
         strCD = self.typeDescriptor.makeCompactDescr()
         newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr)
         ctrl = self.guiSessionProvider.dynamic.appearanceCache
@@ -280,10 +273,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if respawnCompactDescr is not None:
             self.isCrewActive = True
             descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
+            self.__turretDetachmentConfirmed = False
             if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
                 self.__prevHealth = self.publicInfo.maxHealth
-                self.__turretDetachmentConfirmed = False
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
@@ -298,8 +291,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             _g_respawnQueue.pop(vID, None)
             vehicle.onLeaveWorld()
             vehicle.onEnterWorld()
-            if vehicle.appearance.findComponentByType(SpawnComponent) is None:
-                vehicle.appearance.createComponent(SpawnComponent)
         else:
             _logger.debug('Delayed respawn %d', vID)
             _g_respawnQueue[vID] = [compactDescr, outfitCompactDescr]
@@ -334,9 +325,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.onAppearanceReady()
         if hasattr(self, 'rocketAccelerationController'):
             self.rocketAccelerationController.init()
-        for component in self.dynamicComponents.values():
-            if hasattr(component, 'onAppearanceReady'):
-                component.onAppearanceReady()
 
     def __onVehicleInfoAdded(self, vehID):
         if self.id != vehID:
@@ -381,7 +369,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
         return maxComponentIdx
 
-    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield, damageCausedByDiscreteFactor):
+    def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield):
         if not self.isStarted:
             return
         else:
@@ -436,20 +424,17 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             controllingVehicleID = vehicleCtrl.getControllingVehicleID() if vehicleCtrl is not None else -1
             isAttacker = attackerID == controllingVehicleID and maxHitEffectCode is not None and self.id != controllingVehicleID
             isObserverFPV = avatar_getter.isObserverSeesAll() and BigWorld.player().isObserverFPV
-            feedbackCtrl = sessionProvider.shared.feedback
             if isAttacker or isObserverFPV:
-                if feedbackCtrl is not None:
-                    feedbackCtrl.updateMarkerHitState(self.id, maxPriorityHitPoint.componentName, maxHitEffectCode, damageFactor, lastMaterialIsShield, hasPiercedHit)
+                ctrl = sessionProvider.shared.feedback
+                if ctrl is not None:
+                    ctrl.updateMarkerHitState(self.id, maxPriorityHitPoint.componentName, maxHitEffectCode, damageFactor, lastMaterialIsShield, hasPiercedHit)
                 if needArmorScreenNotDamageSound:
                     soundNotifications.play('ui_armor_screen_not_damage_PC_NPC')
             elif self.id == controllingVehicleID and attackerID != self.id and needArmorScreenNotDamageSound:
                 soundNotifications.play('ui_armor_screen_not_damage_NPC_PC')
-            if damageCausedByDiscreteFactor:
-                if feedbackCtrl:
-                    feedbackCtrl.onVehicleFeedbackReceived(_GUI_EVENT_ID.VEHICLE_DISCRETE_DAMAGE_RECEIVED, self.id, (attackerID, damageCausedByDiscreteFactor))
             return
 
-    def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor, damageCausedByDiscreteFactor):
+    def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor):
         if not self.isStarted:
             return
         else:
@@ -464,12 +449,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 return
             player = BigWorld.player()
             player.inputHandler.onVehicleShaken(self, center, direction, vehicles.g_cache.shotEffects[effectsIndex]['caliber'], ShakeReason.SPLASH)
-            ctrl = self.guiSessionProvider.shared.feedback
-            if ctrl is not None:
-                if attackerID == BigWorld.player().playerVehicleID:
+            if attackerID == BigWorld.player().playerVehicleID:
+                ctrl = self.guiSessionProvider.shared.feedback
+                if ctrl is not None:
                     ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED)
-                if damageCausedByDiscreteFactor:
-                    ctrl.onVehicleFeedbackReceived(_GUI_EVENT_ID.VEHICLE_DISCRETE_DAMAGE_RECEIVED, self.id, (attackerID, damageCausedByDiscreteFactor))
             return
 
     def showVehicleCollisionEffect(self, pos, delta_spd, energy=0):
@@ -1262,10 +1245,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         LOG_DEBUG_DEV('Component created', component)
         super(Vehicle, self).onDynamicComponentCreated(component)
 
-    def onDynamicComponentDestroyed(self, component):
-        LOG_DEBUG_DEV('Component destroyed', component)
-        super(Vehicle, self).onDynamicComponentDestroyed(component)
-
     @property
     def label(self):
         return self.labelComponent.label if hasattr(self, 'labelComponent') else None
@@ -1314,7 +1293,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.ownVehicle.update_remoteCamera(self.remoteCamera)
 
     def getVseContextInstance(self, contextName):
-        from visual_script_client.contexts.cgf_context import CGFGameObjectContext
+        from visual_script.contexts.cgf_context import CGFGameObjectContext
         if contextName == CGFGameObjectContext.__name__:
             if self.entityGameObject:
                 return CGFGameObjectContext(self.entityGameObject, ASPECT.CLIENT)

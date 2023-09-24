@@ -7,14 +7,12 @@ import Event
 from Account import PlayerAccount
 from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results import composer, context, emblems, reusable, stored_sorting
 from gui.battle_results.composer import StatsComposer
-from gui.battle_results.presenter.presenter import DataPresenter
-from gui.battle_results.br_constants import PremiumState, POSTBATTLE20_ARENAS
+from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
 from gui.shared.utils import decorators
@@ -34,21 +32,17 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__composers', '__buy', '__eventsManager', '__appliedAddXPBonus', '__presenter', '__arenaBonusTypes', 'onResultPosted')
+    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
         self.__composers = {}
-        self.__presenter = None
-        self.__arenaBonusTypes = {}
         self.__buy = set()
         self.__appliedAddXPBonus = set()
         self.__eventsManager = Event.EventManager()
         self.onResultPosted = Event.Event(self.__eventsManager)
-        return
 
     def init(self):
-        self.__presenter = DataPresenter()
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyViewLoaded)
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
 
@@ -56,10 +50,6 @@ class BattleResultsService(IBattleResultsService):
         g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyViewLoaded)
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
         self.clear()
-        self.__presenter.fini()
-        self.__presenter = None
-        self.__arenaBonusTypes = None
-        return
 
     def clear(self):
         while self.__composers:
@@ -67,15 +57,15 @@ class BattleResultsService(IBattleResultsService):
             item.clear()
 
         self.__eventsManager.clear()
-        self.__presenter.clear()
 
     @adisp_async
     @adisp_process
     def requestResults(self, ctx, callback=None):
         arenaUniqueID = ctx.getArenaUniqueID()
+        if ctx.needToShowImmediately():
+            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
         if not ctx.resetCache() and arenaUniqueID in self.__composers:
             isSuccess = True
-            self.__showBattleResultsImmediatelyIfNeeded(ctx)
 
             def dummy(callback=None):
                 if callback is not None:
@@ -91,8 +81,7 @@ class BattleResultsService(IBattleResultsService):
             isSuccess = results.success
             if not isSuccess or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
                 self.__composers.pop(arenaUniqueID, None)
-            else:
-                self.__showBattleResultsImmediatelyIfNeeded(ctx)
+                event_dispatcher.hideBattleResults()
         if callback is not None:
             callback(isSuccess)
         return
@@ -116,11 +105,8 @@ class BattleResultsService(IBattleResultsService):
         else:
             self.__updateReusableInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
-            arenaBonusType = reusableInfo.common.arenaBonusType
-            self.__arenaBonusTypes[arenaUniqueID] = arenaBonusType
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
-            self.__presenter.addBattleResult(reusableInfo, result)
             self.__composers[arenaUniqueID] = composerObj
             resultsWindow = self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
             self.onResultPosted(reusableInfo, composerObj, resultsWindow)
@@ -137,10 +123,6 @@ class BattleResultsService(IBattleResultsService):
         else:
             vo = None
         return vo
-
-    @property
-    def presenter(self):
-        return self.__presenter
 
     def popResultsAnimation(self, arenaUniqueID):
         if arenaUniqueID in self.__composers:
@@ -177,13 +159,6 @@ class BattleResultsService(IBattleResultsService):
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         return 0 if arenaInfo is None else arenaInfo.extraXP
-
-    def canApplyAdditionalXPBonus(self, arenaBonusType):
-        isBonusEnabled = self.lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
-        bonusLeft = self.itemsCache.items.stats.applyAdditionalXPCount
-        hasPremium = self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        isProperArena = ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE)
-        return hasPremium and isBonusEnabled and isProperArena and bonusLeft > 0
 
     def isCrewSameForArena(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
@@ -225,8 +200,7 @@ class BattleResultsService(IBattleResultsService):
         composerObj = self.__composers[arenaUniqueID]
         window = None
         if needToShowUI:
-            isPostbattle20Enabled = self.__isPostbattle20Enabled(arenaUniqueID)
-            window = composerObj.onShowResults(arenaUniqueID, isPostbattle20Enabled)
+            window = composerObj.onShowResults(arenaUniqueID)
         composerObj.onResultsPosted(arenaUniqueID)
         return window
 
@@ -259,16 +233,15 @@ class BattleResultsService(IBattleResultsService):
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
             self.__composers[arenaUniqueID] = composerObj
-            self.__presenter.updateBattleResult(reusableInfo, result)
         callback(True)
         return
 
     def __updateReusableInfo(self, reusableInfo, xpBonusData=None):
         arenaUniqueID = reusableInfo.arenaUniqueID
-        reusableInfo.economics.premiumState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.BASIC)
-        reusableInfo.economics.premiumPlusState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.PLUS)
+        reusableInfo.premiumState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.BASIC)
+        reusableInfo.premiumPlusState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.PLUS)
         isXPBonusApplied = self.isAddXPBonusApplied(arenaUniqueID)
-        reusableInfo.economics.isAddXPBonusApplied = isXPBonusApplied
+        reusableInfo.isAddXPBonusApplied = isXPBonusApplied
         if xpBonusData:
             reusableInfo.updateXPEarnings(xpBonusData)
         reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
@@ -283,29 +256,18 @@ class BattleResultsService(IBattleResultsService):
             self.__showResults(context.RequestResultsContext(arenaUniqueID, resetCache=True))
 
     def __makePremiumState(self, arenaUniqueID, premType=PREMIUM_TYPE.BASIC):
-        state = PremiumState.NONE
+        state = PREMIUM_STATE.NONE
         settings = self.lobbyContext.getServerSettings()
         if settings is not None and settings.isPremiumInPostBattleEnabled():
-            state |= PremiumState.BUY_ENABLED
+            state |= PREMIUM_STATE.BUY_ENABLED
         if self.itemsCache.items.stats.isActivePremium(premType):
-            state |= PremiumState.HAS_ALREADY
+            state |= PREMIUM_STATE.HAS_ALREADY
         if arenaUniqueID in self.__buy:
-            state |= PremiumState.BOUGHT
+            state |= PREMIUM_STATE.BOUGHT
         return state
 
     def __onAddXPBonusChanged(self):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED))
-
-    def __showBattleResultsImmediatelyIfNeeded(self, ctx):
-        if ctx.needToShowImmediately():
-            arenaUniqueID = ctx.getArenaUniqueID()
-            isPostbattle20Enabled = self.__isPostbattle20Enabled(arenaUniqueID)
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled)
-
-    def __isPostbattle20Enabled(self, arenaUniqueID):
-        postbattle20Enabled = self.lobbyContext.getServerSettings().isPostbattle20Enabled()
-        arenaBonusType = self.__arenaBonusTypes.get(arenaUniqueID)
-        return postbattle20Enabled and arenaBonusType in POSTBATTLE20_ARENAS
 
     @adisp_async
     @adisp_process

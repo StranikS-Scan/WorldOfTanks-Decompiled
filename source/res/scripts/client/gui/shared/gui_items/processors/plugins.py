@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
 import logging
+import typing
 from collections import namedtuple
 from functools import partial
-import typing
 import wg_async as future_async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
@@ -12,10 +12,9 @@ from constants import IS_EDITOR
 from gui import DialogsInterface, makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view import dialogs
-from gui.Scaleform.daapi.view.dialogs import CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta, DIALOG_BUTTON_ID, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, I18nConfirmDialogMeta, I18nInfoDialogMeta, IconDialogMeta, IconPriceDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta
+from gui.Scaleform.daapi.view.dialogs import CheckBoxDialogMeta, DIALOG_BUTTON_ID, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, I18nConfirmDialogMeta, I18nInfoDialogMeta, IconDialogMeta, IconPriceDialogMeta, PMConfirmationDialogMeta
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.game_control import restore_contoller
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
@@ -41,6 +40,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if not IS_EDITOR:
     from gui.impl.pub.dialog_window import DialogResult, DialogButtons, SingleDialogResult
+    from gui.impl.dialogs.gf_builders import ResDialogBuilder
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from post_progression_common import ACTION_TYPES
@@ -367,9 +367,7 @@ class BarracksSlotsValidator(SyncValidator):
         self.berthsNeeded = berthsNeeded
 
     def _validate(self):
-        barracksTmen = self.itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
-        tmenBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
-        return makeError('not_enough_space') if self.berthsNeeded > 0 and self.berthsNeeded > tmenBerthsCount - len(barracksTmen) else makeSuccess()
+        return makeError('not_enough_space') if 0 < self.berthsNeeded > self.itemsCache.items.freeTankmenBerthsCount() else makeSuccess()
 
 
 class FreeTankmanValidator(SyncValidator):
@@ -520,33 +518,6 @@ class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
         return I18nConfirmDialogMeta(self.localeKey, self.ctx, self.ctx, meta=HtmlMessageDialogMeta(self.metaPath, self.metaKey, self.ctx, sourceKey=self.sourceKey), focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
-class TankmanOperationConfirmator(I18nMessageAbstractConfirmator):
-
-    def __init__(self, localeKey, tankman):
-        super(TankmanOperationConfirmator, self).__init__(localeKey, tankman, None, True)
-        self.__previousPrice, _ = restore_contoller.getTankmenRestoreInfo(tankman)
-        return
-
-    @adisp_async
-    @adisp_process
-    def _confirm(self, callback):
-        if self._activeHandler():
-            isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
-            if isOk and self.__priceChanged():
-                isOk = yield DialogsInterface.showDialog(meta=self._makeMeta(True))
-            if not isOk:
-                callback(makeError())
-                return
-        callback(makeSuccess())
-
-    def _makeMeta(self, priceChanged=False):
-        return TankmanOperationDialogMeta(self.localeKey, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT, showPeriodEndWarning=priceChanged)
-
-    def __priceChanged(self):
-        price, _ = restore_contoller.getTankmenRestoreInfo(self.ctx)
-        return price != self.__previousPrice
-
-
 class BufferOverflowConfirmator(I18nMessageAbstractConfirmator):
 
     def __init__(self, ctx, isEnabled=True):
@@ -562,22 +533,6 @@ class BufferOverflowConfirmator(I18nMessageAbstractConfirmator):
         if self.ctx.get('multiple'):
             msgContext['extraCount'] = self.ctx['extraCount']
         return I18nConfirmDialogMeta(self.localeKey, messageCtx=msgContext, focusedID=DIALOG_BUTTON_ID.SUBMIT)
-
-
-class CrewSkinsCompensationDialogConfirmator(I18nMessageAbstractConfirmator):
-
-    def __init__(self, localeKey, reasonSuffix, ctx=None, activeHandler=None, isEnabled=True):
-        super(CrewSkinsCompensationDialogConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
-        self.reasonSuffix = reasonSuffix
-
-    def _makeMeta(self):
-        return CrewSkinsRemovalCompensationDialogMeta(self.localeKey, self.reasonSuffix, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
-
-
-class CrewSkinsRoleChangeRemovalConfirmator(I18nMessageAbstractConfirmator):
-
-    def _makeMeta(self):
-        return CrewSkinsRemovalDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
@@ -765,6 +720,20 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
         AccountSettings.setSettings(CheckBoxConfirmator.__ACC_SETT_MAIN_KEY, settings)
 
 
+class TmenXPAcceleratorConfirmator(AwaitConfirmator):
+
+    @future_async.wg_async
+    def _confirm(self, callback):
+        from gui.impl.dialogs import dialogs as dlg
+        builder = ResDialogBuilder()
+        builder.setMessagesAndButtons(R.strings.dialogs.xpToTmenCheckbox, buttons=R.strings.dialogs.xpToTmenCheckbox)
+        builder.setIcon(R.images.gui.maps.icons.tankmen.windows.crew_exp_speed_up())
+        result = yield future_async.wg_await(dlg.show(builder.build()))
+        if result.result != DialogButtons.SUBMIT:
+            callback(makeError())
+        callback(makeSuccess())
+
+
 class PMSelectConfirmator(CheckBoxConfirmator):
 
     def __init__(self, quest, oldQuest, settingFieldName, activeHandler=None, isEnabled=True):
@@ -897,7 +866,7 @@ class TankmanLockedValidator(SyncValidator):
         self._tankman = tankman
 
     def _validate(self):
-        return makeError('FORBIDDEN') if tankmen.ownVehicleHasTags(self._tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
+        return makeError('FORBIDDEN') if self._tankman and tankmen.ownVehicleHasTags(self._tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
 
 
 class TankmanChangePassportValidator(TankmanLockedValidator):

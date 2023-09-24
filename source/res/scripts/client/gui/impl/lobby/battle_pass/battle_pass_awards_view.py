@@ -75,8 +75,8 @@ class BattlePassAwardsView(ViewImpl):
         isPurchase = reason in BattlePassRewardReason.PURCHASE_REASONS
         rewardReason = MAP_REWARD_REASON.get(reason, RewardReason.DEFAULT)
         isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID) or isPurchase
-        if chapterID and self.__battlePass.getRewardType(chapterID) == FinalReward.STYLE:
-            _, styleLevel = getStyleInfoForChapter(chapterID) if chapterID else (None, None)
+        if chapterID and FinalReward.PROGRESSIVE_STYLE in self.__battlePass.getFreeFinalRewardTypes(chapterID):
+            _, styleLevel = getStyleInfoForChapter(chapterID)
         else:
             styleLevel = None
         with self.viewModel.transaction() as tx:

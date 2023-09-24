@@ -39,10 +39,12 @@ from gui import DialogsInterface
 from adisp import adisp_async, adisp_process
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from player_ranks import getSettings as getRankSettings
+from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.offers import IOffersDataProvider
+from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
 from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
 if typing.TYPE_CHECKING:
     from helpers.server_settings import EpicGameConfig
@@ -219,6 +221,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def isEnabled(self):
         return self.getModeSettings().isEnabled
 
+    @property
+    def enableWelcomeScreen(self):
+        return self.getModeSettings().enableWelcomeScreen
+
     def isEpicPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
 
@@ -325,8 +331,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return bool(self.__metaSettings.randomReservesMode)
 
     def getRandomReservesBonusProbability(self):
-        bonusProbability = 0 if not self.__metaSettings.randomReservesMode else self.__metaSettings.randomReservesOpt['boardingVehAmmo']['extraWeight']
-        return bonusProbability
+        return self.__metaSettings.randomReservesOpt['boardingVehAmmo']['extraWeight']
 
     def getSeasonData(self):
         return self.__itemsCache.items.epicMetaGame.seasonData
@@ -417,11 +422,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def showWelcomeScreenIfNeed(self):
         currentSeason = self.getActiveSeason()
-        if currentSeason is not None:
+        if self.enableWelcomeScreen and currentSeason is not None:
             seasonId = currentSeason.getSeasonID()
-            from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
             if not isWelcomeScreenViewed(seasonId):
-                from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
                 showFrontlineWelcomeWindow()
                 setWelcomeScreenViewed(seasonId)
                 return True
@@ -606,8 +609,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return None
 
     def __onSyncCompleted(self, _, invalidItems):
-        if not self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC:
-            return
         if not invalidItems or GUI_ITEM_TYPE.BATTLE_ABILITY in invalidItems:
             self.__invalidateBattleAbilityItems()
         self.__invalidateBattleAbilitiesForVehicle()

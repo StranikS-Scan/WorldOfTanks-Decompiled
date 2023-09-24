@@ -85,10 +85,7 @@ def getGameControllersConfig(manager):
     from gui.limited_ui.lui_controller import LimitedUIController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
-    from gui.game_control.loot_boxes_controller import LootBoxesController
-    from event_settings.event_settings_controller import EventSettingsController
-    from gui.wt_event.wt_event_notifications import WTEventNotifications
-    from skeletons.gui.wt_event import IWTEventNotifications
+    from gui.game_control.winback_call_controller import WinBackCallController as _WinBackCall
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -124,6 +121,7 @@ def getGameControllersConfig(manager):
     _config(_interface.ITradeInController, _TradeIn())
     _config(_interface.IQuestsController, _Quests())
     _config(_interface.IHangarSpaceSwitchController, HangarSpaceSwitchController())
+    _config(_interface.IWinBackCallController, _WinBackCall())
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
@@ -145,7 +143,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
-    _config(_interface.ILootBoxesController, LootBoxesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -171,6 +168,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
-    _config(_interface.IEventSettingsController, EventSettingsController())
-    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

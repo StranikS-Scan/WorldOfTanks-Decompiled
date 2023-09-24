@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model
 class RespawnAmmunitionPanelViewModel(AmmunitionPanelViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=8, commands=1):
         super(RespawnAmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property

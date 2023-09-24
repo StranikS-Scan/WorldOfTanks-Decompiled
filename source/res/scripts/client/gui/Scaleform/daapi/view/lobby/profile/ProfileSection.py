@@ -9,6 +9,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
+from stats_params import BATTLE_ROYALE_STATS_ENABLED
 _DropdownData = namedtuple('_DropdownData', ('useSelf', 'funcName', 'params'))
 
 class ProfileSection(ProfileSectionMeta):
@@ -80,14 +81,6 @@ class ProfileSection(ProfileSectionMeta):
     def onSectionDeactivated(self):
         pass
 
-    def _dataProviderEntryAutoTranslate(self, key):
-        return self._dataProviderEntry(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
-
-    @classmethod
-    def _dataProviderEntry(cls, key, label):
-        return {'key': key,
-         'label': label}
-
     @classmethod
     def _getTotalStatsBlock(cls, dossier):
         return dossier.getRandomStats()
@@ -129,3 +122,42 @@ class ProfileSection(ProfileSectionMeta):
     def _formIconLabelInitObject(self, i18key, icon):
         return {'description': i18n.makeString(i18key),
          'icon': icon}
+
+
+class BattleTypesDropDownItems(list):
+
+    def addByKey(self, key):
+        self.addWithKeyAndLabel(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
+
+    def addWithKeyAndLabel(self, key, label):
+        self.__addEntry(key, label)
+
+    def __addEntry(self, key, label):
+        self.append({'key': key,
+         'label': label})
+
+
+def makeBattleTypesDropDown(accountDossier, forVehiclesPage=False):
+    dropDownProvider = BattleTypesDropDownItems()
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.ALL)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
+    if BATTLE_ROYALE_STATS_ENABLED:
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED_10X10)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FALLOUT)
+    if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.HISTORICAL)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.TEAM)
+    if accountDossier is not None and accountDossier.getRated7x7Stats().getVehicles():
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.STATICTEAM)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.CLAN)
+    if dependency.instance(ILobbyContext).getServerSettings().isStrongholdsEnabled():
+        if forVehiclesPage:
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES)
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)
+        else:
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS)
+    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.COMP7)
+    return dropDownProvider

@@ -375,4 +375,4 @@ def _showBrowserView(url, returnClb, soundSpaceID=None, guiLoader=None):
             returnClb(*args, **kwargs)
         return
 
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, BrowserView, ScopeTemplates.LOBBY_SUB_SCOPE), settings=makeSettings(url=url, webHandlers=webHandlers, returnClb=_returnCallback, soundSpaceID=soundSpaceID)))
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, BrowserView, ScopeTemplates.LOBBY_SUB_SCOPE), settings=makeSettings(url=url, webHandlers=webHandlers, returnClb=_returnCallback, soundSpaceID=soundSpaceID)), scope=EVENT_BUS_SCOPE.LOBBY)

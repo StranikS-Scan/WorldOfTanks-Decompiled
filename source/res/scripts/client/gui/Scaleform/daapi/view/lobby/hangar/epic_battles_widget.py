@@ -30,25 +30,26 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     def onSoundTrigger(self, triggerName):
         SoundGroups.g_instance.playSound2D(triggerName)
 
-    def update(self):
-        if not self.__epicController.isEnabled():
-            return
-        else:
-            if self.__periodicNotifier is not None:
-                self.__periodicNotifier.startNotification()
-            self.as_setDataS(self.__buildVO()._asdict())
-            return
-
     def _populate(self):
         super(EpicBattlesWidget, self)._populate()
         if not self.__epicController.isEnabled():
             return
         else:
             if self.__periodicNotifier is None:
-                self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.update)
+                self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.__update)
             self.__periodicNotifier.startNotification()
             g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
             self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.HANGAR.value, (TOOLTIPS_CONSTANTS.EPIC_BATTLE_WIDGET_INFO,))
+            self.__update()
+            return
+
+    def __update(self):
+        if not self.__epicController.isEnabled():
+            return
+        else:
+            if self.__periodicNotifier is not None:
+                self.__periodicNotifier.startNotification()
+            self.as_setDataS(self.__buildVO()._asdict())
             return
 
     def _dispose(self):
@@ -91,4 +92,4 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
 
     def __onTokensUpdate(self, diff):
         if any((key.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS) for key in diff.keys())):
-            self.update()
+            self.__update()

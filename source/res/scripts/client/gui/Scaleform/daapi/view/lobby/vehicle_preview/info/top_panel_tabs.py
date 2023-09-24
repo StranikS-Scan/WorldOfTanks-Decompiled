@@ -42,7 +42,7 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.vehicle_preview.top_panel.TopPanelTabs())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = TopPanelTabsModel()
         super(VehiclePreviewTopPanelTabsView, self).__init__(settings)
         self.__parentCtx = {}

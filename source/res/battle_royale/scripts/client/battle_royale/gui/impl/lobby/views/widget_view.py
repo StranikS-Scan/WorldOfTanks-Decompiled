@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/widget_view.py
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget_view_model import WidgetViewModel, BattleStatus
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.gui.impl.lobby.tooltips.widget_tooltip_view import WidgetTooltipView
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -11,14 +12,16 @@ from skeletons.gui.game_control import IBattleRoyaleController
 class WidgetView(ViewImpl):
     brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __slots__ = ('onWrapperInitialized',)
+    __slots__ = ()
 
-    def __init__(self, onWrapperInitialized):
-        self.onWrapperInitialized = onWrapperInitialized
+    def __init__(self):
         settings = ViewSettings(R.views.battle_royale.lobby.views.WidgetView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = WidgetViewModel()
         super(WidgetView, self).__init__(settings)
+
+    def createToolTipContent(self, event, contentID):
+        return WidgetTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.WidgetTooltipView() else super(WidgetView, self).createToolTipContent(event, contentID)
 
     @property
     def viewModel(self):
@@ -32,30 +35,24 @@ class WidgetView(ViewImpl):
             currentStage = self.brProgression.getCurrentStageData().get('currentStage')
         with self.viewModel.transaction() as model:
             model.setCurrentProgression(currentStage)
-            model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress or not isPrimeTime else BattleStatus.COMPLETED)
+            model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress else BattleStatus.COMPLETED)
+            model.setIsAlertMode(not isPrimeTime)
 
     def _onLoading(self, *args, **kwargs):
         super(WidgetView, self)._onLoading(args, kwargs)
-        self.viewModel.onWrapperInitialized += self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated += self.__onProgressionUpdated
         self.brProgression.onSettingsChanged += self.__onProgressionUpdated
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
         self.updateModel()
 
     def _finalize(self):
-        self.viewModel.onWrapperInitialized -= self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated -= self.__onProgressionUpdated
         self.brProgression.onSettingsChanged -= self.__onProgressionUpdated
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
-        self.onWrapperInitialized = None
         super(WidgetView, self)._finalize()
-        return
 
     def __onPrimeTimeStatusUpdated(self, *args):
         self.updateModel()
-
-    def __onWrapperInitialized(self):
-        self.onWrapperInitialized()
 
     def __onProgressionUpdated(self):
         self.updateModel()

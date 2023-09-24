@@ -31,6 +31,9 @@ class BattleResultsMeta(AbstractWindowView):
     def showDogTagWindow(self, componentId):
         self._printOverrideError('showDogTagWindow')
 
+    def showVehicleStats(self, vehCD):
+        self._printOverrideError('showVehicleStats')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 

@@ -48,7 +48,7 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
             prereqs = set(vDesc.prerequisites())
             outfit = Outfit(component=getOutfitComponent(data.outfitCD), vehicleCD=data.vehicleCD)
             modelsSetParams = ModelsSetParams(outfit.modelsSet, ModelStates.UNDAMAGED, [])
-            compoundAssembler = model_assembler.prepareCompoundAssembler(vDesc, modelsSetParams, BigWorld.player().spaceID)
+            compoundAssembler = model_assembler.prepareCompoundAssembler(vDesc, modelsSetParams, BigWorld.camera().spaceID)
             prereqs.add(compoundAssembler)
             self._appearanceCache.loadResources(data.vehicleCD, list(prereqs))
 

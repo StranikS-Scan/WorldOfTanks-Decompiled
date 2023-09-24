@@ -24,7 +24,8 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.BASE_USER, user_cm_handlers.BaseUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, UnitUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler))
+     (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.WIN_BACK_CALL_FRIEND_CONTEXT_MENU, user_cm_handlers.WinBackCallFriendCMHandler))
 
 
 def getViewSettings():
@@ -36,18 +37,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle_results_window import BattleResultsWindow
     from gui.Scaleform.daapi.view.dialogs.CheckBoxDialog import CheckBoxDialog
     from gui.Scaleform.daapi.view.dialogs.ConfirmModuleDialog import ConfirmModuleDialog
-    from gui.Scaleform.daapi.view.dialogs.TankmanOperationDialog import DismissTankmanDialog
     from gui.Scaleform.daapi.view.dialogs.FreeXPInfoWindow import FreeXPInfoWindow
     from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
     from gui.Scaleform.daapi.view.dialogs.IconPriceDialog import IconPriceDialog
-    from gui.Scaleform.daapi.view.dialogs.CrewSkinsCompensationDialog import CrewSkinsCompensationDialog
     from gui.Scaleform.daapi.view.dialogs.PunishmentDialog import PunishmentDialog
-    from gui.Scaleform.daapi.view.dialogs.TankmanOperationDialog import RestoreTankmanDialog
     from gui.Scaleform.daapi.view.dialogs.SystemMessageDialog import SystemMessageDialog
     from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import MissionAwardWindow
     from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue
-    from gui.Scaleform.daapi.view.lobby.event_battle_queue import EventBattleQueue
     from gui.Scaleform.daapi.view.lobby.BrowserWindow import BrowserWindow
     from gui.Scaleform.daapi.view.lobby.Browser import Browser
     from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
@@ -60,13 +57,9 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
     from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
     from gui.Scaleform.daapi.view.lobby.ModuleInfoWindow import ModuleInfoWindow
-    from gui.Scaleform.daapi.view.lobby.PersonalCase import PersonalCase
     from gui.Scaleform.daapi.view.lobby.PromoPremiumIgrWindow import PromoPremiumIgrWindow
-    from gui.Scaleform.daapi.view.lobby.recruitWindow.RecruitWindow import RecruitWindow
-    from gui.Scaleform.daapi.view.lobby.RoleChangeWindow import RoleChangeWindow
     from gui.Scaleform.daapi.view.lobby.ServerStats import ServerStats
     from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
-    from gui.Scaleform.daapi.view.lobby.SkillDropWindow import SkillDropWindow
     from gui.Scaleform.daapi.view.lobby.SkillDropForFreeWindow import SkillDropForFreeWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleBuyWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleRestoreWindow
@@ -83,7 +76,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.BadgesPage import BadgesPage
     from gui.Scaleform.daapi.view.lobby.trade_in.trade_in_popup import TradeInPopup
     from gui.Scaleform.daapi.view.bootcamp.BCVehicleBuyWindow import BCVehicleBuyWindow
-    from gui.Scaleform.daapi.view.bootcamp.BCPersonalCase import BCPersonalCase
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCLobbyVehicleMarkerView import BCLobbyVehicleMarkerView
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_preview import VehicleStylePreview
@@ -98,7 +90,6 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, BootcampComponentOverride(LobbyVehicleMarkerView, BCLobbyVehicleMarkerView), 'lobbyVehicleMarkerView.swf', WindowLayer.MARKER, None, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.EVENT_BATTLE_QUEUE, EventBattleQueue, 'eventBattleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.EVENT_BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -129,15 +120,11 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', WindowLayer.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, UseAwardSheetWindow, 'useAwardSheetWindow.swf', WindowLayer.TOP_WINDOW, 'useAwardSheetWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, IconDialog, 'pmConfirmationDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, DismissTankmanDialog, 'tankmanOperationDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.RESTORE_TANKMAN_DIALOG, RestoreTankmanDialog, 'tankmanOperationDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.ICON_DIALOG, IconDialog, 'iconDialog.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.ICON_PRICE_DIALOG, IconPriceDialog, 'iconPriceDialog.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.CREW_SKINS_COMPENSATION_DIALOG, CrewSkinsCompensationDialog, 'crewSkinsCompensationDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.PUNISHMENT_DIALOG, PunishmentDialog, 'punishmentDialog.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, SystemMessageDialog, 'systemMessageDialog.swf', WindowLayer.WINDOW, 'systemMessageDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, FreeXPInfoWindow, 'freeXPInfoWindow.swf', WindowLayer.TOP_WINDOW, 'freeXPInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.RECRUIT_WINDOW, RecruitWindow, 'recruitWindow.swf', WindowLayer.WINDOW, 'recruitWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.ADVENT_CALENDAR, BrowserWindow, 'browserWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, canDrag=True, isModal=False),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', WindowLayer.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW_MODAL, AwardWindow, 'awardWindow.swf', WindowLayer.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True),
@@ -150,10 +137,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.MODULE_INFO_WINDOW, ModuleInfoWindow, 'moduleInfo.swf', WindowLayer.WINDOW, VIEW_ALIAS.MODULE_INFO_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_INFO_WINDOW, BoosterInfoWindow, 'boosterInfo.swf', WindowLayer.WINDOW, VIEW_ALIAS.BOOSTER_INFO_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.GOODIE_INFO_WINDOW, GoodieInfoWindow, 'goodieInfo.swf', WindowLayer.WINDOW, VIEW_ALIAS.GOODIE_INFO_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ConditionalViewSettings(VIEW_ALIAS.PERSONAL_CASE, BootcampComponentOverride(PersonalCase, BCPersonalCase), 'personalCase.swf', WindowLayer.WINDOW, 'personalCaseWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.ROLE_CHANGE, RoleChangeWindow, 'roleChangeWindow.swf', WindowLayer.WINDOW, 'roleChangeWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, SkillDropWindow, 'skillDropWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, SkillDropForFreeWindow, 'skillDropForFreeWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_BUY_WINDOW, BootcampComponentOverride(VehicleBuyWindow, BCVehicleBuyWindow), BootcampComponentOverride('vehicleBuyWindow.swf', 'BCVehicleBuyWindow.swf'), WindowLayer.TOP_WINDOW, 'vehicleBuyWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, VehicleRestoreWindow, 'vehicleBuyWindow.swf', WindowLayer.TOP_WINDOW, 'vehicleRestoreWindow', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -185,7 +169,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.AWARD_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
@@ -222,10 +205,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.MODULE_INFO_WINDOW, self.__moduleWindowHandler),
          (VIEW_ALIAS.BOOSTER_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.GOODIE_INFO_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.ROLE_CHANGE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
@@ -258,16 +238,12 @@ class LobbyDialogsHandler(PackageBusinessHandler):
         listeners = ((ShowDialogEvent.SHOW_CHECK_BOX_DIALOG, self.__checkBoxDialogHandler),
          (ShowDialogEvent.SHOW_CONFIRM_MODULE, self.__confirmModuleHandler),
          (ShowDialogEvent.SHOW_PM_CONFIRMATION_DIALOG, self.__pmConfirmationDialogHandler),
-         (ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG, self.__dismissTankmanHandler),
-         (ShowDialogEvent.SHOW_RESTORE_TANKMAN_DIALOG, self.__restoreTankmanHandler),
          (ShowDialogEvent.SHOW_ICON_DIALOG, self.__iconDialogHandler),
          (ShowDialogEvent.SHOW_ICON_PRICE_DIALOG, self.__iconPriceDialogHandler),
-         (ShowDialogEvent.SHOW_CREW_SKINS_COMPENSATION_DIALOG, self.__crewSkinsCompensationDialogHandler),
          (ShowDialogEvent.SHOW_PUNISHMENT_DIALOG, self.__punishmentWindowHandler),
          (ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG, self.__systemMsgDialogHandler),
          (ShowDialogEvent.SHOW_USE_AWARD_SHEET_DIALOG, self.__useAwardSheetDialogHandler),
-         (VIEW_ALIAS.FREE_X_P_INFO_WINDOW, self.__showFreeXPInfoWindow),
-         (VIEW_ALIAS.RECRUIT_WINDOW, self.__showRecruitWindow))
+         (VIEW_ALIAS.FREE_X_P_INFO_WINDOW, self.__showFreeXPInfoWindow))
         super(LobbyDialogsHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.GLOBAL)
 
     def __checkBoxDialogHandler(self, event):
@@ -282,24 +258,12 @@ class LobbyDialogsHandler(PackageBusinessHandler):
         self.loadViewWithGenName(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, None, event.meta, event.handler)
         return
 
-    def __dismissTankmanHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, None, event.meta, event.handler)
-        return
-
-    def __restoreTankmanHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.RESTORE_TANKMAN_DIALOG, None, event.meta, event.handler)
-        return
-
     def __iconDialogHandler(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.ICON_DIALOG, None, event.meta, event.handler)
         return
 
     def __iconPriceDialogHandler(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.ICON_PRICE_DIALOG, None, event.meta, event.handler)
-        return
-
-    def __crewSkinsCompensationDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.CREW_SKINS_COMPENSATION_DIALOG, None, event.meta, event.handler)
         return
 
     def __punishmentWindowHandler(self, event):
@@ -313,14 +277,6 @@ class LobbyDialogsHandler(PackageBusinessHandler):
     def __showFreeXPInfoWindow(self, event):
         self.loadViewWithDefName(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, VIEW_ALIAS.FREE_X_P_INFO_WINDOW, None, {'meta': event.meta,
          'handler': event.handler})
-        return
-
-    def __showRecruitWindow(self, event):
-        windowContainer = self._app.containerManager.getContainer(WindowLayer.WINDOW)
-        recruitWindow = windowContainer.getView(criteria={containers.POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.RECRUIT_WINDOW})
-        if recruitWindow is not None:
-            recruitWindow.destroy()
-        self.loadViewWithDefName(VIEW_ALIAS.RECRUIT_WINDOW, None, None, event.ctx)
         return
 
     def __systemMsgDialogHandler(self, event):

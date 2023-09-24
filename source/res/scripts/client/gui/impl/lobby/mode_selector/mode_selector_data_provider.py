@@ -9,7 +9,6 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns im
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.epic_mode_selector_item import EpicModeSelectorItem
 from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxModeSelectorItem
-from gui.impl.lobby.mode_selector.items.event_mode_selector_item import EventModeSelectorItem
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
 from gui.impl.lobby.mode_selector.items.ranked_mode_selector_item import RankedModeSelectorItem
 from gui.impl.lobby.mode_selector.items.spec_mode_selector_item import SpecModeSelectorItem
@@ -36,7 +35,6 @@ registerModeSelectorItem(PREBATTLE_ACTION_NAME.EPIC, EpicModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.BATTLE_ROYALE, BattleRoyaleModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.COMP7, Comp7ModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.WINBACK, WinbackModeSelectorItem)
-registerModeSelectorItem(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventModeSelectorItem)
 
 class ModeSelectorDataProvider(IGlobalListener):
     __slots__ = ('onListChanged', '_items')

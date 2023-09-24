@@ -3,9 +3,9 @@
 import logging
 from string import lower
 import BigWorld
-from wg_async import wg_async, wg_await, await_callback
 from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel
@@ -13,36 +13,37 @@ from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui import SystemMessages
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
-from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins, GroupedRequestProcessor
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
 from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController
+from wg_async import wg_async, wg_await, await_callback
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
 
-    def __init__(self, berthsPrice, berthsCount):
-        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': text_styles.concatStylesWithSpace(text_styles.gold(str(berthsPrice.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2)),
-          'count': text_styles.stats(berthsCount)}), plugins.MoneyValidator(berthsPrice)))
+    def __init__(self, berthsPrice, countPacksBerths):
+        super(TankmanBerthsBuyer, self).__init__()
+        self.addPlugins([plugins.MoneyValidator(berthsPrice)])
         self.berthsPrice = berthsPrice
+        self.countPacksBerths = countPacksBerths
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format(errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice, useStyle=True), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice, useStyle=True, justValue=True), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy tankman berths')
-        BigWorld.player().stats.buyBerths(lambda code: self._response(code, callback))
+        BigWorld.player().stats.buyBerths(self.countPacksBerths, lambda code: self._response(code, callback))
 
 
 class PremiumAccountBuyer(Processor):
@@ -415,20 +416,32 @@ class PremiumBonusApplier(Processor):
         BigWorld.player().shop.applyPremiumXPBonus(self.__arenaUniqueID, self.__vehTypeCompDescr, lambda resID, code, errStr: self._response(code, callback, errStr))
 
 
-class UseCrewBookProcessor(Processor):
+class UseCrewBookProcessor(GroupedRequestProcessor):
 
-    def __init__(self, crewBookCD, vehInvID, tmanInvID):
-        super(UseCrewBookProcessor, self).__init__()
+    def __init__(self, crewBookCD, crewBookCount, vehInvID, tmanInvID, groupID=0, groupSize=1):
         self.__crewBookCD = crewBookCD
+        self.__crewBookCount = crewBookCount
         self.__vehInvID = vehInvID
         self.__tmanInvID = tmanInvID
+        super(UseCrewBookProcessor, self).__init__(BigWorld.player().inventory.useCrewBook, crewBookCD, crewBookCount, vehInvID, tmanInvID, groupID=groupID, groupSize=groupSize)
+
+    @staticmethod
+    def _makeSuccessData(*args, **kwargs):
+        itemsCache = dependency.instance(IItemsCache)
+        auxData = []
+        for item in iter(kwargs.get('ctx', [])):
+            if item.itemCount == 1:
+                auxData.append(makeI18nSuccess(sysMsgKey='crewBooksNotification/bookUsed', name=itemsCache.items.getItemByCD(item.itemID).userName))
+                continue
+            auxData.append(makeI18nSuccess(sysMsgKey='crewBooksNotification/booksUsed', name=itemsCache.items.getItemByCD(item.itemID).userName, count=item.itemCount))
+
+        return auxData
 
     def _successHandler(self, code, ctx=None):
-        itemsCache = dependency.instance(IItemsCache)
-        return makeI18nSuccess(sysMsgKey='crewBooksNotification/bookUsed', name=itemsCache.items.getItemByCD(self.__crewBookCD).userName)
+        return makeI18nSuccess(sysMsgKey='crewBooksNotification/success', auxData=self._makeSuccessData(ctx=ctx))
 
-    def _request(self, callback):
-        BigWorld.player().inventory.useCrewBook(self.__crewBookCD, self.__vehInvID, self.__tmanInvID, lambda code: self._response(code, callback))
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='crewBooks/{}'.format(errStr), auxData=self._makeErrorData(errStr), defaultSysMsgKey='crewBooks/failed')
 
 
 class VehicleChangeNation(Processor):

@@ -39,7 +39,7 @@ class MapboxProgressionsComponent(InjectComponentAdaptor, MissionsMapboxViewMeta
         pass
 
     def _makeInjectView(self):
-        return MapboxProgressionView(self.as_showViewS, flags=ViewFlags.COMPONENT)
+        return MapboxProgressionView(self.as_showViewS, flags=ViewFlags.VIEW)
 
 
 class MapboxProgressionView(ViewImpl):

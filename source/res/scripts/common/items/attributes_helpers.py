@@ -59,8 +59,7 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'surveyingDeviceHealthFactor',
  'turretRotationSpeed',
  'turretRotatorHealthFactor',
- 'vehicleByChassisDamageFactor',
- 'discreteDamageFactor'}
+ 'vehicleByChassisDamageFactor'}
 ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'chassis/shotDispersionFactors/movement',
  'chassis/shotDispersionFactors/rotation',

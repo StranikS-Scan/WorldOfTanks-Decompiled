@@ -74,7 +74,7 @@ def hasPlayerRankInactivityWarning(lobbyCtx=None, comp7Controller=None):
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def getProgressionSeasonState(comp7Controller=None):
+def getCurrentSeasonState(comp7Controller=None):
     currentTime = time_utils.getCurrentLocalServerTimestamp()
     periodInfo = comp7Controller.getPeriodInfo()
     if periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE, PeriodType.UNDEFINED):

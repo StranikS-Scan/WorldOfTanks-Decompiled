@@ -7,8 +7,8 @@ import typing
 import Event
 import adisp
 from Event import EventManager
-from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS
-from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT
+from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS, makeQualificationTokenForSeason
+from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT, makeRatingEntForSeason
 from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
@@ -28,6 +28,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from helpers.time_utils import ONE_SECOND, getTimeDeltaFromNow, getServerUTCTime
 from items import vehicles
 from season_provider import SeasonProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -46,6 +47,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(Comp7Controller, self).__init__()
@@ -302,7 +304,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
 
     def isBattleModifiersAvailable(self):
-        return self.isComp7PrbActive() and len(self.battleModifiers) > 0
+        return len(self.battleModifiers) > 0
 
     def getPlatoonRatingRestriction(self):
         unitMgr = prb_getters.getClientUnitMgr()
@@ -318,11 +320,22 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
         return result
 
+    def getMaxAvailableSeasonPoints(self):
+        return len(self.__comp7RanksConfig.ranks)
+
     def isYearlyRewardReceived(self):
         return False
 
+    def getRatingForSeason(self, seasonNumber):
+        entitlements = self.__itemsCache.items.stats.entitlements
+        return entitlements.get(makeRatingEntForSeason(str(seasonNumber)), 0)
+
     def getYearlyRewards(self):
         return self.__lobbyContext.getServerSettings().comp7RewardsConfig
+
+    def isRankAchievedInSeason(self, seasonNumber):
+        qualificationToken = makeQualificationTokenForSeason(seasonNumber)
+        return self.__itemsCache.items.tokens.getTokens().get(qualificationToken, 0) > 0
 
     def _getAlertBlockData(self):
         if self.isOffline:
@@ -421,10 +434,13 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__updateOfflineStatus()
         self.__updateQualificationBattles()
         self.__updateQualificationState()
+        self.__updateSeasonPoints()
 
     def __onEntitlementsChanged(self, entitlements):
         if self.__ENTITLEMENTS & set(entitlements.keys()):
             self.__updateRank()
+        elif set(SEASON_POINTS_ENTITLEMENTS) & set(entitlements.keys()):
+            self.__updateSeasonPoints()
 
     def __updateRank(self):
         entitlements = self.__itemsCache.items.stats.entitlements
@@ -456,6 +472,13 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def __updateQualificationState(self):
         self.__qualificationState = self.__itemsCache.items.stats.comp7.get('qualification', {}).get('state', Comp7QualificationState.NOT_STARTED)
         self.onQualificationStateUpdated()
+
+    def __updateSeasonPoints(self):
+        self.__entitlementsCache.reloadSeasonPoints(self.__onSeasonPointsReloaded)
+
+    def __onSeasonPointsReloaded(self, isSuccess):
+        if isSuccess and any(self.getReceivedSeasonPoints().values()):
+            self.onSeasonPointsUpdated()
 
 
 class _LeaderboardDataProvider(object):

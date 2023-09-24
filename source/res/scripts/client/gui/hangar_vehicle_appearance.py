@@ -126,7 +126,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
-    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')

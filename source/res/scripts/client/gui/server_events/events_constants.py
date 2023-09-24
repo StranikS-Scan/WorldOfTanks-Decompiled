@@ -16,7 +16,3 @@ FUN_RANDOM_GROUP_ID = 'fun_random'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
 TECH_TREE_ACTION_POSTFIX = '_techtree'
-WT_QUEST_PREFIX = 'wtevent'
-WT_BOSS_GROUP_ID = 'wt_group_boss'
-WT_HUNTER_GROUP_ID = 'wt_group_hunter'
-WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON = 'notEnoughTickets'

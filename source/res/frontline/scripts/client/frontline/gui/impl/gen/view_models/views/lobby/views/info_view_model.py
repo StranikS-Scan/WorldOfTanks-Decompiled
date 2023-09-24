@@ -8,7 +8,7 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.skill_category_base_mo
 class InfoViewModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(InfoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsNinthLevelEnabled(self):
@@ -29,33 +29,39 @@ class InfoViewModel(ViewModel):
     def setIsFullScreen(self, value):
         self._setBool(2, value)
 
+    def getIsRandomReservesModeEnabled(self):
+        return self._getBool(3)
+
+    def setIsRandomReservesModeEnabled(self, value):
+        self._setBool(3, value)
+
     def getStartTimestamp(self):
-        return self._getNumber(3)
-
-    def setStartTimestamp(self, value):
-        self._setNumber(3, value)
-
-    def getEndTimestamp(self):
         return self._getNumber(4)
 
-    def setEndTimestamp(self, value):
+    def setStartTimestamp(self, value):
         self._setNumber(4, value)
 
+    def getEndTimestamp(self):
+        return self._getNumber(5)
+
+    def setEndTimestamp(self, value):
+        self._setNumber(5, value)
+
     def getSkillsCategories(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setSkillsCategories(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getSkillsCategoriesType():
         return SkillCategoryBaseModel
 
     def getRanksWithPoints(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setRanksWithPoints(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getRanksWithPointsType():
@@ -66,6 +72,7 @@ class InfoViewModel(ViewModel):
         self._addBoolProperty('isNinthLevelEnabled', False)
         self._addBoolProperty('isBattlePassAvailable', False)
         self._addBoolProperty('isFullScreen', False)
+        self._addBoolProperty('isRandomReservesModeEnabled', False)
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)
         self._addArrayProperty('skillsCategories', Array())

@@ -21,7 +21,7 @@ class ExtraIntroView(ViewImpl):
 
     def __init__(self, chapterID=0):
         settings = ViewSettings(R.views.lobby.battle_pass.ExtraIntroView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ExtraIntroViewModel()
         self.__chapterID = chapterID
         super(ExtraIntroView, self).__init__(settings)
@@ -30,14 +30,12 @@ class ExtraIntroView(ViewImpl):
     def viewModel(self):
         return super(ExtraIntroView, self).getViewModel()
 
-    def startListeners(self):
+    def activate(self):
         self._subscribe()
-
-    def stopListeners(self):
-        self._unsubscribe()
-
-    def updateData(self):
         self.__fillModel()
+
+    def deactivate(self):
+        self._unsubscribe()
 
     def _onLoading(self, *args, **kwargs):
         super(ExtraIntroView, self)._onLoading(*args, **kwargs)

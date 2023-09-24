@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/templates/comp7.py
 from gui.battle_results.components import base, comp7, vehicles, shared, style, progress
-from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.battle_results.templates.regular import _PERSONAL_VO_META, _COMMON_VO_META, REGULAR_PERSONAL_STATS_BLOCK, REGULAR_COMMON_STATS_BLOCK, TEAMS_VO_META
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from helpers import i18n
@@ -10,6 +10,11 @@ _PRESTIGE_POINTS_VO_META = base.PropertyMeta((('isVisible', False, 'isVisible'),
  ('label', '', 'label'),
  ('tooltip', '', 'tooltip')))
 _PRESTIGE_POINTS_VO_META.bind(comp7.PrestigePointsBlock)
+_TOURNAMENT_PRESTIGE_POINTS_VO_META = base.PropertyMeta((('isVisible', False, 'isVisible'),
+ ('value', '', 'value'),
+ ('label', '', 'label'),
+ ('tooltip', '', 'tooltip')))
+_TOURNAMENT_PRESTIGE_POINTS_VO_META.bind(comp7.TournamentPrestigePointsBlock)
 _RANK_COMMON_VO_META = base.PropertyMeta((('linkage', '', 'linkage'),
  ('title', '', 'title'),
  ('descr', '', 'descr'),
@@ -30,9 +35,14 @@ COMP7_PERSONAL_STATS_BLOCK = REGULAR_PERSONAL_STATS_BLOCK.clone(*COMPONENTS_TO_E
 COMP7_PERSONAL_STATS_BLOCK.addComponent(STATS_COMPONENT_NUMBER, comp7.PersonalVehiclesComp7StatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
 COMP7_PERSONAL_STATS_BLOCK.addNextComponent(comp7.PrestigePointsBlock(_PRESTIGE_POINTS_VO_META, 'prestigePoints', _RECORD.PERSONAL))
 COMP7_PERSONAL_STATS_BLOCK.addNextComponent(comp7.IsDeserterFlag('deserterStr', _RECORD.PERSONAL))
+TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK = REGULAR_PERSONAL_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
+TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.addComponent(STATS_COMPONENT_NUMBER, comp7.PersonalVehiclesComp7StatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.addNextComponent(comp7.TournamentPrestigePointsBlock(_TOURNAMENT_PRESTIGE_POINTS_VO_META, 'prestigePoints', _RECORD.PERSONAL))
+TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.addNextComponent(comp7.IsDeserterFlag('deserterStr', _RECORD.PERSONAL))
 SORTING_COMPONENT_NUMBER = 0
 COMPONENTS_TO_EXCLUDE = (SORTING_COMPONENT_NUMBER,)
 COMP7_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
+TOURNAMENT_COMP7_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
 COMP7_COMMON_STATS_BLOCK.addComponent(SORTING_COMPONENT_NUMBER, shared.Comp7SortingBlock())
 COMP7_COMMON_STATS_BLOCK.addNextComponent(comp7.Comp7RankBlock(_RANK_COMMON_VO_META, 'comp7Rating', _RECORD.PERSONAL))
 COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK = progress.Comp7BattlePassProgressBlock(base.ListMeta(), 'battlePass', _RECORD.PERSONAL)

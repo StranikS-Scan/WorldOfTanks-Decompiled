@@ -39,6 +39,7 @@ class RewardsSelectionView(SelectableRewardBase):
         with self.viewModel.transaction() as tx:
             tx.setChapterID(self.__chapterID)
             tx.setLevel(self.__level)
+            tx.setIsExtra(self.__battlePassController.isExtraChapter(self.__chapterID))
 
     def _initialize(self, *args, **kwargs):
         super(RewardsSelectionView, self)._initialize(*args, **kwargs)

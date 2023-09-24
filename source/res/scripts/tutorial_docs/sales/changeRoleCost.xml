@@ -3,7 +3,7 @@
   <initial-scene>	Hangar	</initial-scene>
   <scenes>
     <scene>	Hangar	  <post-effects>
-        <inactivate>	PersonalCaseChangeRoleBtnOnScene	</inactivate>
+        <inactivate>	CrewChangeFilterBtnOnScene	</inactivate>
       </post-effects>
       <runtime-effects>
         <show-hint>	CrewHint	  <condition>
@@ -11,8 +11,13 @@
             <active>	CrewPanelOnScene	</active>
           </condition>
         </show-hint>
-        <show-hint>	PersonalCaseChangeRoleBtnHint	  <condition>
-            <active>	PersonalCaseChangeRoleBtnOnScene	</active>
+        <show-hint>	PersonalFileCrewHint	  <condition>
+            <effect-not-triggered>	PersonalFileCrewHint	</effect-not-triggered>
+            <active>	PersonalFileCrewPanelOnScene	</active>
+          </condition>
+        </show-hint>
+        <show-hint>	CrewChangeFilterBtnHint	  <condition>
+            <active>	CrewChangeFilterBtnOnScene	</active>
           </condition>
         </show-hint>
       </runtime-effects>
@@ -28,11 +33,22 @@
             <inactivate>	CrewPanelOnScene	</inactivate>
           </not-on-scene-effects>
         </gui-item>
-        <gui-item>	PersonalCaseChangeRoleBtn	  <on-scene-effects>
-            <activate>	PersonalCaseChangeRoleBtnOnScene	</activate>
+        <gui-item>	PersonalFileCrewPanel	  <on-scene-effects>
+            <activate>	PersonalFileCrewPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>	&gt;	  <refuse-training>
+              <condition>
+                <effect-triggered>	PersonalFileCrewPanelOnScene	</effect-triggered>
+              </condition>
+            </refuse-training>
+            <inactivate>	PersonalFileCrewPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	CrewChangeFilterBtn	  <on-scene-effects>
+            <activate>	CrewChangeFilterBtnOnScene	</activate>
           </on-scene-effects>
           <not-on-scene-effects>
-            <inactivate>	PersonalCaseChangeRoleBtnOnScene	</inactivate>
+            <inactivate>	CrewChangeFilterBtnOnScene	</inactivate>
           </not-on-scene-effects>
         </gui-item>
       </gui-items>
@@ -59,7 +75,7 @@
       </padding>
       <actions>
         <click>	CrewPanel	  <effects>
-            <run-trigger>	PersonalCaseWaitTimer	</run-trigger>
+            <run-trigger>	PersonalFileWaitTimer	</run-trigger>
             <close-hint>	CrewHint	</close-hint>
           </effects>
         </click>
@@ -73,28 +89,56 @@
         </esc>
       </actions>
     </hint>
-    <hint>	PersonalCaseChangeRoleBtnHint	  <item-id>	PersonalCaseChangeRoleBtn	</item-id>
-      <text>	#quests:action/chain/hint/changeRole	</text>
+    <hint>	PersonalFileCrewHint	  <item-id>	PersonalFileCrewPanel	</item-id>
+      <text>	#quests:action/chain/hint/changeRoleDiscountAvailable	</text>
       <arrow>
         <direction>	R	</direction>
         <loop>	True	</loop>
       </arrow>
       <padding>
-        <left>	-5	</left>
-        <top>	-5	</top>
-        <right>	-5	</right>
-        <bottom>	-5	</bottom>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
       </padding>
       <actions>
-        <click>	PersonalCaseChangeRoleBtn	  <effects>
-            <refuse-training></refuse-training>
+        <click>	PersonalFileCrewPanel	  <effects>
+            <run-trigger>	CrewChangeWaitTimer	</run-trigger>
+            <close-hint>	PersonalFileCrewHint	</close-hint>
           </effects>
         </click>
-        <click-outside>	PersonalCaseChangeRoleBtn	  <effects>
+        <click-outside>	PersonalFileCrewPanel	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click-outside>
-        <esc>	PersonalCaseChangeRoleBtn	  <effects>
+        <esc>	PersonalFileCrewPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	CrewChangeFilterBtnHint	  <item-id>	CrewChangeFilterBtn	</item-id>
+      <text>	#quests:action/chain/hint/changeRoleDiscountAvailable	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
+      </padding>
+      <actions>
+        <click>	CrewChangeFilterBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	CrewChangeFilterBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	CrewChangeFilterBtn	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </esc>
@@ -102,12 +146,22 @@
     </hint>
   </has-id>
   <triggers>
-    <trigger>	PersonalCaseWaitTimer	  <type>	timer	</type>
+    <trigger>	PersonalFileWaitTimer	  <type>	timer	</type>
       <validate-var>	WaitTimer	</validate-var>
       <on-effects>
         <refuse-training>
           <condition>
-            <inactive>	PersonalCaseChangeRoleBtnOnScene	</inactive>
+            <inactive>	PersonalFileCrewPanelOnScene	</inactive>
+          </condition>
+        </refuse-training>
+      </on-effects>
+    </trigger>
+    <trigger>	CrewChangeWaitTimer	  <type>	timer	</type>
+      <validate-var>	WaitTimer	</validate-var>
+      <on-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	CrewChangeFilterBtnOnScene	</inactive>
           </condition>
         </refuse-training>
       </on-effects>

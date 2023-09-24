@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_intro_view.py
+from base_crew_view import BaseCrewSubView
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui import GUI_SETTINGS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.crew_intro_view_model import CrewIntroViewModel
-from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from shared_utils import first
 
-class CrewIntroView(ViewImpl):
+class CrewIntroView(BaseCrewSubView):
     __slots__ = ('__screenName', '__onCloseCallback')
 
     def __init__(self, screenName, onCloseCallback=None):

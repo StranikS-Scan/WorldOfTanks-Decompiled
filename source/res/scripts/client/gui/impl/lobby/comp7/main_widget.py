@@ -6,6 +6,7 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import MainWidgetModel
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.pub import ViewImpl
@@ -27,7 +28,7 @@ class Comp7MainWidgetComponent(InjectComponentAdaptor):
         return
 
     def _makeInjectView(self):
-        self.__view = Comp7MainWidget(flags=ViewFlags.COMPONENT)
+        self.__view = Comp7MainWidget(flags=ViewFlags.VIEW)
         return self.__view
 
 
@@ -35,7 +36,7 @@ class Comp7MainWidget(ViewImpl):
     __slots__ = ()
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, flags=ViewFlags.COMPONENT):
+    def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.comp7.MainWidget())
         settings.flags = flags
         settings.model = MainWidgetModel()
@@ -73,6 +74,7 @@ class Comp7MainWidget(ViewImpl):
             return
         with self.viewModel.transaction() as vm:
             vm.setIsEnabled(not self.__comp7Controller.isOffline)
+            vm.setSeasonName(getSeasonNameEnum())
             self.__updateQualificationData(vm)
             self.__updateProgressionData(vm)
 

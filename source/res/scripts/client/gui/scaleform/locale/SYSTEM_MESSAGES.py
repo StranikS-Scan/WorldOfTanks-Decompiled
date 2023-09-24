@@ -304,6 +304,8 @@ class SYSTEM_MESSAGES(object):
     RECRUIT_WINDOW_SERVER_ERROR = '#system_messages:recruit_window/server_error'
     RECRUIT_WINDOW_SUCCESS = '#system_messages:recruit_window/success'
     RECRUIT_WINDOW_FINANCIAL_SUCCESS = '#system_messages:recruit_window/financial_success'
+    RECRUIT_WINDOW_FINANCIAL_SUCCESS_CREDITS = '#system_messages:recruit_window/financial_success_credits'
+    RECRUIT_WINDOW_FINANCIAL_SUCCESS_GOLD = '#system_messages:recruit_window/financial_success_gold'
     RECRUIT_WINDOW_NOT_ENOUGH_CREDITS = '#system_messages:recruit_window/not_enough_credits'
     RECRUIT_WINDOW_NOT_ENOUGH_GOLD = '#system_messages:recruit_window/not_enough_gold'
     RECRUIT_WINDOW_WALLET_NOT_AVAILABLE = '#system_messages:recruit_window/wallet_not_available'
@@ -317,15 +319,15 @@ class SYSTEM_MESSAGES(object):
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
     EQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:equip_tankman/vehicle_need_repair'
     EQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:equip_tankman/vehicle_locked'
+    EQUIP_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:equip_tankman/not_enough_space'
     EQUIP_TANKMAN_FORBIDDEN = '#system_messages:equip_tankman/FORBIDDEN'
     REEQUIP_TANKMAN_SUCCESS = '#system_messages:reequip_tankman/success'
     REEQUIP_TANKMAN_SERVER_ERROR = '#system_messages:reequip_tankman/server_error'
     REEQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:reequip_tankman/invalid_vehicle'
     REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:reequip_tankman/vehicle_need_repair'
     REEQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:reequip_tankman/vehicle_locked'
+    REEQUIP_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:reequip_tankman/not_enough_space'
     REEQUIP_TANKMAN_FORBIDDEN = '#system_messages:reequip_tankman/FORBIDDEN'
-    BUY_AND_EQUIP_TANKMAN_SUCCESS = '#system_messages:buy_and_equip_tankman/success'
-    BUY_AND_EQUIP_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:buy_and_equip_tankman/financial_success'
     BUY_AND_EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:buy_and_equip_tankman/server_error'
     BUY_AND_EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:buy_and_equip_tankman/invalid_vehicle'
     BUY_AND_EQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:buy_and_equip_tankman/vehicle_locked'
@@ -334,8 +336,6 @@ class SYSTEM_MESSAGES(object):
     BUY_AND_EQUIP_TANKMAN_WALLET_NOT_AVAILABLE = '#system_messages:buy_and_equip_tankman/wallet_not_available'
     BUY_AND_EQUIP_TANKMAN_FREE_TANKMEN_LIMIT = '#system_messages:buy_and_equip_tankman/free_tankmen_limit'
     BUY_AND_EQUIP_TANKMAN_FORBIDDEN = '#system_messages:buy_and_equip_tankman/FORBIDDEN'
-    BUY_AND_REEQUIP_TANKMAN_SUCCESS = '#system_messages:buy_and_reequip_tankman/success'
-    BUY_AND_REEQUIP_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:buy_and_reequip_tankman/financial_success'
     BUY_AND_REEQUIP_TANKMAN_SERVER_ERROR = '#system_messages:buy_and_reequip_tankman/server_error'
     BUY_AND_REEQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:buy_and_reequip_tankman/invalid_vehicle'
     BUY_AND_REEQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:buy_and_reequip_tankman/vehicle_locked'
@@ -358,6 +358,7 @@ class SYSTEM_MESSAGES(object):
     UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:unload_tankman/vehicle_need_repair'
     UNLOAD_TANKMAN_VEHICLE_LOCKED = '#system_messages:unload_tankman/vehicle_locked'
     UNLOAD_TANKMAN_FORBIDDEN = '#system_messages:unload_tankman/FORBIDDEN'
+    UNLOAD_TANKMAN_BUTTON = '#system_messages:unload_tankman/button'
     UNLOAD_CREW_SUCCESS = '#system_messages:unload_crew/success'
     UNLOAD_CREW_SERVER_ERROR = '#system_messages:unload_crew/server_error'
     UNLOAD_CREW_NOT_ENOUGH_SPACE = '#system_messages:unload_crew/not_enough_space'
@@ -365,6 +366,7 @@ class SYSTEM_MESSAGES(object):
     UNLOAD_CREW_VEHICLE_NEED_REPAIR = '#system_messages:unload_crew/vehicle_need_repair'
     UNLOAD_CREW_VEHICLE_LOCKED = '#system_messages:unload_crew/vehicle_locked'
     UNLOAD_CREW_FORBIDDEN = '#system_messages:unload_crew/FORBIDDEN'
+    UNLOAD_BUTTON = '#system_messages:unload/button'
     RETURN_CREW_SUCCESS = '#system_messages:return_crew/success'
     RETURN_CREW_SERVER_ERROR = '#system_messages:return_crew/server_error'
     RETURN_CREW_NOT_ENOUGH_SPACE = '#system_messages:return_crew/not_enough_space'
@@ -373,7 +375,9 @@ class SYSTEM_MESSAGES(object):
     RETURN_CREW_VEHICLE_LOCKED = '#system_messages:return_crew/vehicle_locked'
     RETURN_CREW_FORBIDDEN = '#system_messages:return_crew/FORBIDDEN'
     RETRAINING_TANKMAN_SUCCESS = '#system_messages:retraining_tankman/success'
-    RETRAINING_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:retraining_tankman/financial_success'
+    RETRAINING_TANKMAN_FINANCIAL_SUCCESS_CREDITS = '#system_messages:retraining_tankman/financial_success_credits'
+    RETRAINING_TANKMAN_FINANCIAL_SUCCESS_GOLD = '#system_messages:retraining_tankman/financial_success_gold'
+    RETRAINING_TANKMAN_FINANCIAL_SUCCESS_FREE = '#system_messages:retraining_tankman/financial_success_free'
     RETRAINING_TANKMAN_SERVER_ERROR = '#system_messages:retraining_tankman/server_error'
     RETRAINING_TANKMAN_INVALID_VEHICLE = '#system_messages:retraining_tankman/invalid_vehicle'
     RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:retraining_tankman/vehicle_need_repair'
@@ -381,7 +385,9 @@ class SYSTEM_MESSAGES(object):
     RETRAINING_TANKMAN_INVALID_OPERATION = '#system_messages:retraining_tankman/invalid_operation'
     RETRAINING_TANKMAN_FORBIDDEN = '#system_messages:retraining_tankman/FORBIDDEN'
     RETRAINING_CREW_SUCCESS = '#system_messages:retraining_crew/success'
-    RETRAINING_CREW_FINANCIAL_SUCCESS = '#system_messages:retraining_crew/financial_success'
+    RETRAINING_CREW_FINANCIAL_SUCCESS_FREE = '#system_messages:retraining_crew/financial_success_free'
+    RETRAINING_CREW_FINANCIAL_SUCCESS_CREDITS = '#system_messages:retraining_crew/financial_success_credits'
+    RETRAINING_CREW_FINANCIAL_SUCCESS_GOLD = '#system_messages:retraining_crew/financial_success_gold'
     RETRAINING_CREW_SERVER_ERROR = '#system_messages:retraining_crew/server_error'
     RETRAINING_CREW_INVALID_VEHICLE = '#system_messages:retraining_crew/invalid_vehicle'
     RETRAINING_CREW_VEHICLE_NEED_REPAIR = '#system_messages:retraining_crew/vehicle_need_repair'
@@ -389,24 +395,27 @@ class SYSTEM_MESSAGES(object):
     RETRAINING_CREW_EMPTY_LIST = '#system_messages:retraining_crew/empty_list'
     RETRAINING_CREW_INVALID_OPERATION = '#system_messages:retraining_crew/invalid_operation'
     RETRAINING_CREW_FORBIDDEN = '#system_messages:retraining_crew/FORBIDDEN'
+    RESTORE_TANKMAN_ERROR = '#system_messages:restore_tankman/error'
     ADD_TANKMAN_SKILL_SUCCESS = '#system_messages:add_tankman_skill/success'
     ADD_TANKMAN_SKILL_SERVER_ERROR = '#system_messages:add_tankman_skill/server_error'
     ADD_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:add_tankman_skill/invalid_vehicle'
     ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:add_tankman_skill/vehicle_need_repair'
     ADD_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:add_tankman_skill/vehicle_locked'
-    ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED = '#system_messages:add_tankman_skill/crew_skills_locked'
     LEARN_TANKMAN_FREE_SKILL_SUCCESS = '#system_messages:learn_tankman_free_skill/success'
     LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR = '#system_messages:learn_tankman_free_skill/server_error'
     LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE = '#system_messages:learn_tankman_free_skill/invalid_vehicle'
     LEARN_TANKMAN_FREE_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:learn_tankman_free_skill/vehicle_need_repair'
     LEARN_TANKMAN_FREE_SKILL_VEHICLE_LOCKED = '#system_messages:learn_tankman_free_skill/vehicle_locked'
     DROP_TANKMAN_SKILL_SUCCESS = '#system_messages:drop_tankman_skill/success'
+    DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS = '#system_messages:drop_tankman_skill/finance_success_credits'
+    DROP_TANKMAN_SKILL_FINANCE_SUCCESS_GOLD = '#system_messages:drop_tankman_skill/finance_success_gold'
     DROP_TANKMAN_SKILL_SERVER_ERROR = '#system_messages:drop_tankman_skill/server_error'
     DROP_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:drop_tankman_skill/invalid_vehicle'
     DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:drop_tankman_skill/vehicle_need_repair'
     DROP_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:drop_tankman_skill/vehicle_locked'
     CHANGE_TANKMAN_ROLE_SUCCESS = '#system_messages:change_tankman_role/success'
-    CHANGE_TANKMAN_ROLE_INSTALLED = '#system_messages:change_tankman_role/installed'
+    CHANGE_TANKMAN_ROLE_SUCCESS_AND_VEHICLE_RETRAINED = '#system_messages:change_tankman_role/success_and_vehicle_retrained'
+    CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS = '#system_messages:change_tankman_role/financial_success'
     CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN = '#system_messages:change_tankman_role/slot_is_taken'
     CHANGE_TANKMAN_ROLE_NO_VEHICLE = '#system_messages:change_tankman_role/no_vehicle'
     CHANGE_TANKMAN_ROLE_SERVER_ERROR = '#system_messages:change_tankman_role/server_error'
@@ -418,7 +427,7 @@ class SYSTEM_MESSAGES(object):
     CHANGE_TANKMAN_ROLE_FORBIDDEN = '#system_messages:change_tankman_role/FORBIDDEN'
     FREE_XP_TO_TMAN_SKILL_SUCCESS = '#system_messages:free_xp_to_tman_skill/success'
     FREE_XP_TO_TMAN_SKILL_SERVER_ERROR = '#system_messages:free_xp_to_tman_skill/server_error'
-    FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_TYPE'
+    FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_VALUE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_VALUE'
     FREE_XP_TO_TMAN_SKILL_ERROR_NO_TANKMAN_WITH_GIVEN_ID = '#system_messages:free_xp_to_tman_skill/error/No tankman with given id'
     FREE_XP_TO_TMAN_SKILL_ERROR_SHOP_DESYNC = '#system_messages:free_xp_to_tman_skill/error/SHOP_DESYNC'
     FREE_XP_TO_TMAN_SKILL_ERROR_NO_FREE_XP = '#system_messages:free_xp_to_tman_skill/error/NO_FREE_XP'
@@ -475,9 +484,8 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
     VEHICLE_SELL_EQUIPCOIN_ERROR = '#system_messages:vehicle_sell/equipCoin_error'
-    VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/with_demount_kit'
-    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success_dismantling/with_demount_kit'
     VEHICLE_SELL_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_sell/demount_kit_disabled'
+    VEHICLE_SELL_CURRENCYUPDATE_DEBITED_DEMOUNT_KIT = '#system_messages:vehicle_sell/currencyUpdate/debited/demount_kit'
     VEHICLE_TRADE_IN_OFFER_AVAILABLE = '#system_messages:vehicle_trade_in/offer_available'
     VEHICLE_TRADE_IN_OFFER_UNAVAILABLE = '#system_messages:vehicle_trade_in/offer_unavailable'
     VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
@@ -510,8 +518,6 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
-    VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success/with_demount_kit'
-    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success_dismantling/with_demount_kit'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -534,7 +540,6 @@ class SYSTEM_MESSAGES(object):
     RESTORE_TANKMAN_SERVER_ERROR = '#system_messages:restore_tankman/server_error'
     RESTORE_TANKMAN_DISABLED = '#system_messages:restore_tankman/DISABLED'
     RESTORE_TANKMAN_INVALID_TMAN_ID = '#system_messages:restore_tankman/INVALID_TMAN_ID'
-    RESTORE_TANKMAN_NO_BERTH = '#system_messages:restore_tankman/NO_BERTH'
     RESTORE_TANKMAN_WRONG_ARGS_TYPE = '#system_messages:restore_tankman/WRONG_ARGS_TYPE'
     RESTORE_TANKMAN_NO_GOLD = '#system_messages:restore_tankman/NO_GOLD'
     RESTORE_TANKMAN_RESTORE_TIME_EXPIRED = '#system_messages:restore_tankman/RESTORE_TIME_EXPIRED'
@@ -1162,7 +1167,6 @@ class SYSTEM_MESSAGES(object):
     LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN = '#system_messages:lootboxes/open/server_error/COOLDOWN'
     BADGES_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:badges/select/server_error/COOLDOWN'
     BADGES_SELECT_SERVER_ERROR = '#system_messages:badges/select/server_error'
-    CREWSKINSCOMPENSATION_SUCCESS = '#system_messages:crewSkinsCompensation/success'
     CREWSKINSNOTIFICATION_SKINGAIN = '#system_messages:crewSkinsNotification/SkinGain'
     CREWSKINSNOTIFICATION_SKINCHANGED = '#system_messages:crewSkinsNotification/SkinChanged'
     BLUEPRINTS_SWITCH_OFF = '#system_messages:blueprints/switch_off'
@@ -1205,8 +1209,11 @@ class SYSTEM_MESSAGES(object):
     PREMIUMXPBONUS_APPLY_SERVER_ERROR_COOLDOWN = '#system_messages:premiumXPBonus/apply/server_error/COOLDOWN'
     PREMIUMXPBONUS_APPLY_SERVER_ERROR = '#system_messages:premiumXPBonus/apply/server_error'
     CREWBOOKS_SELL_SUCCESS = '#system_messages:crewBooks_sell/success'
+    CREWBOOKSNOTIFICATION_SUCCESS = '#system_messages:crewBooksNotification/success'
     CREWBOOKSNOTIFICATION_BOOKUSED = '#system_messages:crewBooksNotification/bookUsed'
+    CREWBOOKSNOTIFICATION_BOOKSUSED = '#system_messages:crewBooksNotification/booksUsed'
     CREWBOOKS_FAILED = '#system_messages:crewBooks/failed'
+    CREWBOOKS_SERVER_ERROR = '#system_messages:crewBooks/server_error'
     CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
     CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
     CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
@@ -1227,10 +1234,8 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
-    BATTLEPASS_SWITCH_STARTED_STYLE_TITLE = '#system_messages:battlePass/switch_started/style/title'
-    BATTLEPASS_SWITCH_STARTED_STYLE_BODY = '#system_messages:battlePass/switch_started/style/body'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE = '#system_messages:battlePass/switch_started/tankman/title'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY = '#system_messages:battlePass/switch_started/tankman/body'
+    BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
+    BATTLEPASS_SWITCH_STARTED_BODY = '#system_messages:battlePass/switch_started/body'
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
@@ -1780,6 +1785,8 @@ class SYSTEM_MESSAGES(object):
      RECRUIT_WINDOW_SERVER_ERROR,
      RECRUIT_WINDOW_SUCCESS,
      RECRUIT_WINDOW_FINANCIAL_SUCCESS,
+     RECRUIT_WINDOW_FINANCIAL_SUCCESS_CREDITS,
+     RECRUIT_WINDOW_FINANCIAL_SUCCESS_GOLD,
      RECRUIT_WINDOW_NOT_ENOUGH_CREDITS,
      RECRUIT_WINDOW_NOT_ENOUGH_GOLD,
      RECRUIT_WINDOW_WALLET_NOT_AVAILABLE,
@@ -1793,15 +1800,15 @@ class SYSTEM_MESSAGES(object):
      EQUIP_TANKMAN_INVALID_VEHICLE,
      EQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      EQUIP_TANKMAN_VEHICLE_LOCKED,
+     EQUIP_TANKMAN_NOT_ENOUGH_SPACE,
      EQUIP_TANKMAN_FORBIDDEN,
      REEQUIP_TANKMAN_SUCCESS,
      REEQUIP_TANKMAN_SERVER_ERROR,
      REEQUIP_TANKMAN_INVALID_VEHICLE,
      REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      REEQUIP_TANKMAN_VEHICLE_LOCKED,
+     REEQUIP_TANKMAN_NOT_ENOUGH_SPACE,
      REEQUIP_TANKMAN_FORBIDDEN,
-     BUY_AND_EQUIP_TANKMAN_SUCCESS,
-     BUY_AND_EQUIP_TANKMAN_FINANCIAL_SUCCESS,
      BUY_AND_EQUIP_TANKMAN_SERVER_ERROR,
      BUY_AND_EQUIP_TANKMAN_INVALID_VEHICLE,
      BUY_AND_EQUIP_TANKMAN_VEHICLE_LOCKED,
@@ -1810,8 +1817,6 @@ class SYSTEM_MESSAGES(object):
      BUY_AND_EQUIP_TANKMAN_WALLET_NOT_AVAILABLE,
      BUY_AND_EQUIP_TANKMAN_FREE_TANKMEN_LIMIT,
      BUY_AND_EQUIP_TANKMAN_FORBIDDEN,
-     BUY_AND_REEQUIP_TANKMAN_SUCCESS,
-     BUY_AND_REEQUIP_TANKMAN_FINANCIAL_SUCCESS,
      BUY_AND_REEQUIP_TANKMAN_SERVER_ERROR,
      BUY_AND_REEQUIP_TANKMAN_INVALID_VEHICLE,
      BUY_AND_REEQUIP_TANKMAN_VEHICLE_LOCKED,
@@ -1834,6 +1839,7 @@ class SYSTEM_MESSAGES(object):
      UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR,
      UNLOAD_TANKMAN_VEHICLE_LOCKED,
      UNLOAD_TANKMAN_FORBIDDEN,
+     UNLOAD_TANKMAN_BUTTON,
      UNLOAD_CREW_SUCCESS,
      UNLOAD_CREW_SERVER_ERROR,
      UNLOAD_CREW_NOT_ENOUGH_SPACE,
@@ -1841,6 +1847,7 @@ class SYSTEM_MESSAGES(object):
      UNLOAD_CREW_VEHICLE_NEED_REPAIR,
      UNLOAD_CREW_VEHICLE_LOCKED,
      UNLOAD_CREW_FORBIDDEN,
+     UNLOAD_BUTTON,
      RETURN_CREW_SUCCESS,
      RETURN_CREW_SERVER_ERROR,
      RETURN_CREW_NOT_ENOUGH_SPACE,
@@ -1849,7 +1856,9 @@ class SYSTEM_MESSAGES(object):
      RETURN_CREW_VEHICLE_LOCKED,
      RETURN_CREW_FORBIDDEN,
      RETRAINING_TANKMAN_SUCCESS,
-     RETRAINING_TANKMAN_FINANCIAL_SUCCESS,
+     RETRAINING_TANKMAN_FINANCIAL_SUCCESS_CREDITS,
+     RETRAINING_TANKMAN_FINANCIAL_SUCCESS_GOLD,
+     RETRAINING_TANKMAN_FINANCIAL_SUCCESS_FREE,
      RETRAINING_TANKMAN_SERVER_ERROR,
      RETRAINING_TANKMAN_INVALID_VEHICLE,
      RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR,
@@ -1857,7 +1866,9 @@ class SYSTEM_MESSAGES(object):
      RETRAINING_TANKMAN_INVALID_OPERATION,
      RETRAINING_TANKMAN_FORBIDDEN,
      RETRAINING_CREW_SUCCESS,
-     RETRAINING_CREW_FINANCIAL_SUCCESS,
+     RETRAINING_CREW_FINANCIAL_SUCCESS_FREE,
+     RETRAINING_CREW_FINANCIAL_SUCCESS_CREDITS,
+     RETRAINING_CREW_FINANCIAL_SUCCESS_GOLD,
      RETRAINING_CREW_SERVER_ERROR,
      RETRAINING_CREW_INVALID_VEHICLE,
      RETRAINING_CREW_VEHICLE_NEED_REPAIR,
@@ -1865,24 +1876,27 @@ class SYSTEM_MESSAGES(object):
      RETRAINING_CREW_EMPTY_LIST,
      RETRAINING_CREW_INVALID_OPERATION,
      RETRAINING_CREW_FORBIDDEN,
+     RESTORE_TANKMAN_ERROR,
      ADD_TANKMAN_SKILL_SUCCESS,
      ADD_TANKMAN_SKILL_SERVER_ERROR,
      ADD_TANKMAN_SKILL_INVALID_VEHICLE,
      ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      ADD_TANKMAN_SKILL_VEHICLE_LOCKED,
-     ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED,
      LEARN_TANKMAN_FREE_SKILL_SUCCESS,
      LEARN_TANKMAN_FREE_SKILL_SERVER_ERROR,
      LEARN_TANKMAN_FREE_SKILL_INVALID_VEHICLE,
      LEARN_TANKMAN_FREE_SKILL_VEHICLE_NEED_REPAIR,
      LEARN_TANKMAN_FREE_SKILL_VEHICLE_LOCKED,
      DROP_TANKMAN_SKILL_SUCCESS,
+     DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS,
+     DROP_TANKMAN_SKILL_FINANCE_SUCCESS_GOLD,
      DROP_TANKMAN_SKILL_SERVER_ERROR,
      DROP_TANKMAN_SKILL_INVALID_VEHICLE,
      DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      DROP_TANKMAN_SKILL_VEHICLE_LOCKED,
      CHANGE_TANKMAN_ROLE_SUCCESS,
-     CHANGE_TANKMAN_ROLE_INSTALLED,
+     CHANGE_TANKMAN_ROLE_SUCCESS_AND_VEHICLE_RETRAINED,
+     CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS,
      CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN,
      CHANGE_TANKMAN_ROLE_NO_VEHICLE,
      CHANGE_TANKMAN_ROLE_SERVER_ERROR,
@@ -1894,7 +1908,7 @@ class SYSTEM_MESSAGES(object):
      CHANGE_TANKMAN_ROLE_FORBIDDEN,
      FREE_XP_TO_TMAN_SKILL_SUCCESS,
      FREE_XP_TO_TMAN_SKILL_SERVER_ERROR,
-     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE,
+     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_VALUE,
      FREE_XP_TO_TMAN_SKILL_ERROR_NO_TANKMAN_WITH_GIVEN_ID,
      FREE_XP_TO_TMAN_SKILL_ERROR_SHOP_DESYNC,
      FREE_XP_TO_TMAN_SKILL_ERROR_NO_FREE_XP,
@@ -1951,9 +1965,8 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
      VEHICLE_SELL_EQUIPCOIN_ERROR,
-     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT,
-     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
      VEHICLE_SELL_DEMOUNT_KIT_DISABLED,
+     VEHICLE_SELL_CURRENCYUPDATE_DEBITED_DEMOUNT_KIT,
      VEHICLE_TRADE_IN_OFFER_AVAILABLE,
      VEHICLE_TRADE_IN_OFFER_UNAVAILABLE,
      VEHICLE_TRADE_IN_SERVER_ERROR,
@@ -1986,8 +1999,6 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_RESTORE_FINISHED,
-     VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT,
-     VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -2010,7 +2021,6 @@ class SYSTEM_MESSAGES(object):
      RESTORE_TANKMAN_SERVER_ERROR,
      RESTORE_TANKMAN_DISABLED,
      RESTORE_TANKMAN_INVALID_TMAN_ID,
-     RESTORE_TANKMAN_NO_BERTH,
      RESTORE_TANKMAN_WRONG_ARGS_TYPE,
      RESTORE_TANKMAN_NO_GOLD,
      RESTORE_TANKMAN_RESTORE_TIME_EXPIRED,
@@ -2638,7 +2648,6 @@ class SYSTEM_MESSAGES(object):
      LOOTBOXES_OPEN_SERVER_ERROR_COOLDOWN,
      BADGES_SELECT_SERVER_ERROR_COOLDOWN,
      BADGES_SELECT_SERVER_ERROR,
-     CREWSKINSCOMPENSATION_SUCCESS,
      CREWSKINSNOTIFICATION_SKINGAIN,
      CREWSKINSNOTIFICATION_SKINCHANGED,
      BLUEPRINTS_SWITCH_OFF,
@@ -2681,8 +2690,11 @@ class SYSTEM_MESSAGES(object):
      PREMIUMXPBONUS_APPLY_SERVER_ERROR_COOLDOWN,
      PREMIUMXPBONUS_APPLY_SERVER_ERROR,
      CREWBOOKS_SELL_SUCCESS,
+     CREWBOOKSNOTIFICATION_SUCCESS,
      CREWBOOKSNOTIFICATION_BOOKUSED,
+     CREWBOOKSNOTIFICATION_BOOKSUSED,
      CREWBOOKS_FAILED,
+     CREWBOOKS_SERVER_ERROR,
      CREWBOOKS_BUY_SUCCESS,
      CREWBOOKS_BUY_SERVER_ERROR,
      CREWBOOKS_SELL_SERVER_ERROR,
@@ -2703,10 +2715,8 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
-     BATTLEPASS_SWITCH_STARTED_STYLE_TITLE,
-     BATTLEPASS_SWITCH_STARTED_STYLE_BODY,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY,
+     BATTLEPASS_SWITCH_STARTED_TITLE,
+     BATTLEPASS_SWITCH_STARTED_BODY,
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,

@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_model import ModeSelectorComp7Model
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
@@ -76,6 +77,7 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     def __fillWidgetData(self):
         division = comp7_shared.getPlayerDivision()
         with self.viewModel.widget.transaction() as vm:
+            vm.setSeasonName(getSeasonNameEnum())
             vm.setRank(comp7_shared.getRankEnumValue(division))
             vm.setCurrentScore(self.__comp7Controller.rating)
             vm.setIsEnabled(self.__comp7Controller.isAvailable() and not self.__comp7Controller.isOffline)

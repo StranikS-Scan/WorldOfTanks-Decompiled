@@ -36,6 +36,7 @@ class InfoView(ViewImpl):
             vm.setIsFullScreen(self._isFullScreen)
             vm.setIsBattlePassAvailable(self.__epicController.isBattlePassDataEnabled())
             vm.setIsNinthLevelEnabled(self.__epicController.isUnlockVehiclesInBattleEnabled())
+            vm.setIsRandomReservesModeEnabled(self.__epicController.isRandomReservesModeEnabled())
             if hasattr(vm, 'setStartTimestamp') and hasattr(vm, 'setEndTimestamp'):
                 startTimestamp, endTimestamp = self.__epicController.getSeasonTimeRange()
                 vm.setStartTimestamp(startTimestamp)

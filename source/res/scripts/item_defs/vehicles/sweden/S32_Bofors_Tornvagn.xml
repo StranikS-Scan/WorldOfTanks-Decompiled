@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	32	</forward>
+    <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -869,7 +869,7 @@
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -1719,13 +1719,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
       <maxHealth>	320	</maxHealth>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1743,11 +1743,11 @@
             <maxPitch>	0 10 0.30856 10 0.422222 2 0.557778 2 0.67144 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	15	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.25	</turretRotation>
+            <turretRotation>	0.2	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2301,7 +2301,7 @@
       <engines>
         <_2_st_Scania_DS14>
           <smplEnginePower>	500	</smplEnginePower>
-          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_2_st_Scania_DS14>
       </engines>
       <chassis>

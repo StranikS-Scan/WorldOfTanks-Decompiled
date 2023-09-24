@@ -299,7 +299,7 @@ class ChatCommandsController(IBattleController):
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange() or self.sessionProvider.arenaVisitor.gui.isEventBattle():
+        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
         if command:

@@ -6,12 +6,10 @@ from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.server_events.conditions import WtTicketRequired
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, FUN_RANDOM_GROUP_ID
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
-from gui.shared.events import MissionsEvent
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -25,7 +23,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def __init__(self, ctx=None):
         super(MissionDetailsContainerView, self).__init__(ctx)
         self.__ctx = ctx
-        self.__currentMissionDataIndex = None
         self.__groupPacker = None
         self.__quests = {}
         return
@@ -34,7 +31,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.destroy()
 
     def requestMissionData(self, index):
-        self.__currentMissionDataIndex = index
         missionData = self.__datailedList[index]
         self.as_setMissionDataS(missionData)
         self.onChangePage(missionData['eventID'])
@@ -49,12 +45,10 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         else:
             quest = self.__quests.get(eventID)
             detailedData = missions_helper.getDetailedMissionData(quest)
-            criteria, extraConditions = detailedData.getVehicleRequirementsCriteria()
-            if quest.isEventBattlesQuest():
-                extraConditions.append(WtTicketRequired(None, {}))
+            criteria, extraConditions, isForBattleRoyale = detailedData.getVehicleRequirementsCriteria()
             vehicleSelector.as_closeS()
             if criteria and not quest.isCompleted():
-                vehicleSelector.setCriteria(quest, criteria, extraConditions)
+                vehicleSelector.setCriteria(criteria, extraConditions, isForBattleRoyale)
             else:
                 vehicleSelector.as_hideSelectedVehicleS()
             return
@@ -66,7 +60,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def _populate(self):
         super(MissionDetailsContainerView, self)._populate()
         self.eventsCache.onSyncCompleted += self.__setData
-        self.addListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__updateDetailView, EVENT_BUS_SCOPE.LOBBY)
         self.__setData(needDemand=True)
 
     def _invalidate(self, ctx=None):
@@ -75,9 +68,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     def _dispose(self):
         self.eventsCache.onSyncCompleted -= self.__setData
-        self.removeListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__updateDetailView, EVENT_BUS_SCOPE.LOBBY)
         self.__quests = None
-        self.__currentMissionDataIndex = None
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
             self.__groupPacker = None
@@ -132,10 +123,3 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     def __isQuestInvalid(self, eventID):
         return eventID not in self.__quests
-
-    def __updateDetailView(self, *args):
-        if self.__currentMissionDataIndex is not None:
-            missionData = self.__datailedList[self.__currentMissionDataIndex]
-            self.as_setMissionDataS(missionData)
-            self.onChangePage(missionData['eventID'])
-        return

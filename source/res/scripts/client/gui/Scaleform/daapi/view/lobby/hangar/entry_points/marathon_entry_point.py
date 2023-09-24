@@ -7,5 +7,5 @@ from gui.impl.lobby.marathon.marathon_entry_point import MarathonEntryPoint as M
 class MarathonEntryPoint(MarathonEntryPointMeta):
 
     def _makeInjectView(self):
-        self.__view = MarathonEntryPointView(ViewFlags.COMPONENT)
+        self.__view = MarathonEntryPointView(ViewFlags.VIEW)
         return self.__view

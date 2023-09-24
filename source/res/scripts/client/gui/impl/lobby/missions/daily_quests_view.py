@@ -76,7 +76,7 @@ class DailyQuestsView(ViewImpl):
     __slots__ = ('__tooltipData', '__proxyMissionsPage', '__winbackData')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
-        viewSettings = ViewSettings(layoutID, ViewFlags.COMPONENT, DailyQuestsViewModel())
+        viewSettings = ViewSettings(layoutID, ViewFlags.VIEW, DailyQuestsViewModel())
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None

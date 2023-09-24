@@ -26,7 +26,7 @@ from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID, IS_DEVELOPMENT
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
 from helpers import dependency
 from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -46,6 +46,7 @@ REPLAY_TIME_MARK_CLIENT_READY = 2147483648L
 REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
+MIN_REPLAY_TIME = 1
 _POSTMORTEM_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.DEATH_FREE_CAM, CTRL_MODE_NAME.RESPAWN_DEATH)
 _FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM,
  CTRL_MODE_NAME.VIDEO,
@@ -62,10 +63,6 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
-if not IS_DEVELOPMENT:
-    _BONUS_TYPES_WITHOUT_REPlAY = constants.ARENA_BONUS_TYPE.EVENT_BATTLES_RANGE
-else:
-    _BONUS_TYPES_WITHOUT_REPlAY = ()
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -282,7 +279,6 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged += self.__onAvatarObserverVehicleChanged
@@ -291,7 +287,6 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged -= self.__onAvatarObserverVehicleChanged
@@ -398,6 +393,13 @@ class BattleReplay(object):
         if self.__replayCtrl.startPlayback(fileName):
             self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
             self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
+            replayEndTime = self.__replayCtrl.getReplayEndTime()
+            totalReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
+            replayStartTime = self.__replayCtrl.getReplayStartTime()
+            replayStartTime = min(replayStartTime, replayEndTime - MIN_REPLAY_TIME, totalReplayTime - MIN_REPLAY_TIME)
+            replayStartTime = max(replayStartTime, 0)
+            self.__replayStartTime = replayStartTime
+            self.__replayEndTime = replayEndTime
             g_replayEvents.onPlaying()
             return True
         else:
@@ -905,6 +907,12 @@ class BattleReplay(object):
             self.__replayCtrl.onBattleLoadingFinished()
 
     def onReplayFinished(self):
+        replayTimes = self.__replayCtrl.getReplayTimes() - 1
+        if replayTimes > 0:
+            self.__replayCtrl.setReplayTimes(replayTimes)
+            self.timeWarp(self.__replayStartTime - self.currentTime)
+            return
+        self.__replayCtrl.processFinish()
         if not self.scriptModalWindowsEnabled:
             self.stop()
             return
@@ -965,8 +973,13 @@ class BattleReplay(object):
         vehTeam = arenaVehicles[vehID]['team']
         return currTeam == vehTeam
 
-    def onPostTickCallback(self, currentTick, totalTicks):
+    def onPostTickCallback(self):
         self.__aoi.flush(self.getControlMode())
+        currentTime = self.currentTime
+        if currentTime < self.__replayStartTime:
+            self.timeWarp(self.__replayStartTime - currentTime)
+        elif currentTime > self.__replayEndTime:
+            self.onReplayFinished()
 
     def setAmmoSetting(self, idx):
         if not isPlayerAvatar():
@@ -1110,10 +1123,6 @@ class BattleReplay(object):
             else:
                 self.__playerDatabaseID = player.databaseID
             return
-
-    def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in _BONUS_TYPES_WITHOUT_REPlAY:
-            self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):
         if not self.isPlaying:

@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/elite_window/elite_view.py
 import SoundGroups
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.elite_window.elite_view_model import EliteViewModel
+from gui.prestige.prestige_helpers import hasVehiclePrestige, fillPrestigeEmblemModel, getVehiclePrestige
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -15,10 +18,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.veh_post_progression.sounds import Sounds
 from helpers import dependency
 from shared_utils import first
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
-from skeletons.account_helpers.settings_core import ISettingsCore
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
 
 class EliteView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -38,32 +40,22 @@ class EliteView(ViewImpl):
         return super(EliteView, self).getViewModel()
 
     def _onLoading(self, vehicleCD, *args, **kwargs):
+        currentLevel, _ = getVehiclePrestige(vehicleCD, itemsCache=self.__itemsCache)
         with self.viewModel.transaction() as model:
             self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
             fillVehicleInfo(model.vehicleInfo, self.__vehicle)
             self.__updateVehPostProgression(model=model)
+            model.setIsPrestigeAvailable(hasVehiclePrestige(vehicleCD))
+            fillPrestigeEmblemModel(model.prestigeEmblem, currentLevel, vehicleCD)
+        super(EliteView, self)._onLoading(*args, **kwargs)
 
     def _onLoaded(self, *args, **kwargs):
         super(EliteView, self)._onLoaded(*args, **kwargs)
+        SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.gui_reward_screen_general()))
         SoundGroups.g_instance.playSound2D(Sounds.ENTER_ELITE_VIEW)
 
-    def _initialize(self, *args, **kwargs):
-        super(EliteView, self)._initialize(*args, **kwargs)
-        self.__addListeners()
-
-    def _finalize(self):
-        self.__removeListeners()
-        super(EliteView, self)._finalize()
-
-    def __addListeners(self):
-        self.__itemsCache.onSyncCompleted += self.__onSyncCompleted
-        self.viewModel.onClose += self.__onClose
-        self.viewModel.onGoToPostProgression += self.__onGoToPostProgression
-
-    def __removeListeners(self):
-        self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
-        self.viewModel.onClose -= self.__onClose
-        self.viewModel.onGoToPostProgression -= self.__onGoToPostProgression
+    def _getEvents(self):
+        return super(EliteView, self)._getEvents() + ((self.__itemsCache.onSyncCompleted, self.__onSyncCompleted), (self.viewModel.onClose, self.__onClose), (self.viewModel.onGoToPostProgression, self.__onGoToPostProgression))
 
     def __onClose(self):
         g_eventBus.handleEvent(events.CloseWindowEvent(events.CloseWindowEvent.ELITE_WINDOW_CLOSED))

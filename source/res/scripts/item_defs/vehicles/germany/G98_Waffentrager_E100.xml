@@ -1478,7 +1478,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_K44_2_L61_WT>	shared	  <maxAmmo>	60	</maxAmmo>
+        <Gun_VK4502P>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -1554,7 +1554,7 @@
             <density>	91.9939 93.2722	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_128mm_K44_2_L61_WT>
+        </Gun_VK4502P>
       </guns>
       <models>
         <undamaged>	vehicles/german/G98_Waffentrager_E100/normal/lod0/Turret_01.model	</undamaged>
@@ -2138,21 +2138,21 @@
     </Turret_1_Waffentrager_E100>
   </turrets0>
   <engines>
-    <Maybach_HL_234P60>	shared	</Maybach_HL_234P60>
+    <Engine_VK4502P>	shared	</Engine_VK4502P>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_10WSc>	shared	</_10WSc>
+    <Radio_VK4502P>	shared	</Radio_VK4502P>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_234P60>
+        <Engine_VK4502P>
           <smplEnginePower>	1268.737	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_234P60>
+        </Engine_VK4502P>
       </engines>
       <chassis>
         <Chassis_Waffentrager_E100>

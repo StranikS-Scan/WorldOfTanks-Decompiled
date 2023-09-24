@@ -469,6 +469,15 @@
       <isElite>
         <Type>	BOOL	</Type>
       </isElite>
+      <prestigeLevel>
+        <Type>	INT32	</Type>
+      </prestigeLevel>
+      <anonymizedPrestigeLevel>
+        <Type>	INT32	</Type>
+      </anonymizedPrestigeLevel>
+      <prestigeGradeMarkID>
+        <Type>	INT32	</Type>
+      </prestigeGradeMarkID>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -511,6 +520,9 @@
       <crewPerks>
         <Type>	BOOL	</Type>
       </crewPerks>
+      <mapsInDevelopment>
+        <Type>	BOOL	</Type>
+      </mapsInDevelopment>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -776,9 +788,6 @@
       <gunPiercing>
         <Type>	FLOAT	</Type>
       </gunPiercing>
-      <gunCanShoot>
-        <Type>	BOOL	</Type>
-      </gunCanShoot>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <IS_OBSERVED_BY_ENEMY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1463,6 +1472,15 @@
       <botDisplayStatus>
         <Type>	UINT8	</Type>
       </botDisplayStatus>
+      <prestigeLevel>
+        <Type>	INT32	</Type>
+      </prestigeLevel>
+      <anonymizedPrestigeLevel>
+        <Type>	INT32	</Type>
+      </anonymizedPrestigeLevel>
+      <prestigeGradeMarkID>
+        <Type>	INT32	</Type>
+      </prestigeGradeMarkID>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1958,38 +1976,6 @@
   </DEBUFF_INFO>
   <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
   </DEBUFF_INFO_LIST>
-  <TIMER_INFO>	FIXED_DICT	  <Properties>
-      <factor>
-        <Type>	FLOAT32	</Type>
-      </factor>
-      <left>
-        <Type>	FLOAT32	</Type>
-      </left>
-      <endTime>
-        <Type>	FLOAT32	</Type>
-      </endTime>
-    </Properties>
-  </TIMER_INFO>
-  <HEALTH_INFO>	FIXED_DICT	  <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <health>
-        <Type>	UINT16	</Type>
-      </health>
-    </Properties>
-  </HEALTH_INFO>
-  <HEALTH_INFO_LIST>	ARRAY	  <of>	HEALTH_INFO	</of>
-  </HEALTH_INFO_LIST>
-  <UDO_INFO>	FIXED_DICT	  <Properties>
-      <guid>
-        <Type>	STRING	</Type>
-      </guid>
-      <position>
-        <Type>	VECTOR2	</Type>
-      </position>
-    </Properties>
-  </UDO_INFO>
   <ROCKET_ACCELERATION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -2111,9 +2097,6 @@
       <stage>
         <Type>	UINT8	</Type>
       </stage>
-      <locked>
-        <Type>	BOOL	</Type>
-      </locked>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_STATE>
   <VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>	FIXED_DICT	  <Properties>
@@ -2234,36 +2217,4 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
-  <RESPAWN_TIME_INFO>	FIXED_DICT	  <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <spawnTime>
-        <Type>	FLOAT32	</Type>
-      </spawnTime>
-      <delay>
-        <Type>	FLOAT32	</Type>
-      </delay>
-    </Properties>
-  </RESPAWN_TIME_INFO>
-  <CIRCUIT_OVERLOAD_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <notificationIndex>
-        <Type>	UINT8	</Type>
-      </notificationIndex>
-      <prefabPath>
-        <Type>	STRING	</Type>
-      </prefabPath>
-    </Properties>
-  </CIRCUIT_OVERLOAD_INFO>
-  <IMPACT_AREA_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <timeBeforeDamage>
-        <Type>	FLOAT	</Type>
-      </timeBeforeDamage>
-      <isVisible>
-        <Type>	BOOL	</Type>
-      </isVisible>
-    </Properties>
-  </IMPACT_AREA_INFO>
 </alias.xml>

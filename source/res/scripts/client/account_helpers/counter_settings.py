@@ -9,6 +9,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER: lambda : dependency.instance(IAnonymizerController).isEnabled,
  'showQuestProgress': lambda : dependency.instance(ILobbyContext).getServerSettings().isPersonalMissionsEnabled(),
  settings_constants.GAME.GAMEPLAY_ONLY_10_MODE: lambda : dependency.instance(ILobbyContext).getServerSettings().isOnly10ModeEnabled(),
+ settings_constants.GAME.GAMEPLAY_DEV_MAPS: lambda : dependency.instance(ILobbyContext).getServerSettings().isMapsInDevelopmentEnabled(),
  settings_constants.GAME.SWITCH_SETUPS_IN_LOADING: lambda : dependency.instance(IVehiclePostProgressionController).isSwitchSetupFeatureEnabled(),
  settings_constants.GAME.LIMITED_UI_ACTIVE: lambda : dependency.instance(ILimitedUIController).isUserSettingsMayShow}
 

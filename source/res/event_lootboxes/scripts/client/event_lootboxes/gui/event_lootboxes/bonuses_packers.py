@@ -41,6 +41,7 @@ def getEventLootBoxesBonusPacker():
      Currency.CREDITS: simplePacker,
      Currency.GOLD: simplePacker,
      Currency.FREE_XP: simplePacker,
+     Currency.EQUIP_COIN: simplePacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: EventLootBoxPremiumBonusUIPacker})
     return BonusUIPacker(mapping)
 
@@ -198,9 +199,8 @@ class EventLootBoxTokenBonusUIPacker(TokenBonusUIPacker):
         bonusTokens = bonus.getTokens()
         result = []
         for tokenID, _ in bonusTokens.iteritems():
-            complexToken = parseComplexToken(tokenID)
             if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
-                tooltip = TokenBonusFormatter.getBattleBonusX5Tooltip(complexToken)
+                tooltip = TokenBonusFormatter.getBonusFactorTooltip(BATTLE_BONUS_X5_TOKEN)
                 result.append(createTooltipData(tooltip))
 
         return result

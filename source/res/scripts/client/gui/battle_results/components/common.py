@@ -5,7 +5,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_results.components import base
 from gui.battle_results.components import style
-from gui.battle_results.br_constants import PlayerTeamResult as _TEAM_RESULT, UIVisibility
+from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
 from gui.shared.utils import toUpper
 from helpers import i18n, dependency
 from helpers.time_utils import ONE_MINUTE
@@ -60,7 +60,7 @@ class RegularArenaFullNameItem(base.StatsItem):
     def _convert(self, record, reusable):
         arenaGuiType = reusable.common.arenaGuiType
         arenaType = reusable.common.arenaType
-        if arenaGuiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM):
+        if arenaGuiType in ARENA_GUI_TYPE.RANDOM_RANGE:
             i18nKey = _ARENA_TYPE_FORMAT.format(arenaType.getGamePlayName())
         else:
             i18nKey = _ARENA_TYPE_EXT_FORMAT.format(arenaGuiType)
@@ -281,7 +281,7 @@ class TeamsUiVisibility(base.StatsItem):
     def _convert(self, value, reusable):
         ui_visibility = 0
         if reusable.isSquadSupported:
-            ui_visibility |= UIVisibility.SHOW_SQUAD
+            ui_visibility |= UI_VISIBILITY.SHOW_SQUAD
         return ui_visibility
 
 
@@ -295,5 +295,5 @@ class SortieTeamsUiVisibility(TeamsUiVisibility):
 
     def _convert(self, value, reusable):
         ui_visibility = super(SortieTeamsUiVisibility, self)._convert(value, reusable)
-        ui_visibility |= UIVisibility.SHOW_RESOURCES
+        ui_visibility |= UI_VISIBILITY.SHOW_RESOURCES
         return ui_visibility

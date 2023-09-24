@@ -28,7 +28,7 @@ class MissionsTabBarView(ViewImpl):
     __slots__ = ('__tabsData', '__onTabSelectionChangedCallback')
 
     def __init__(self, *args, **kwargs):
-        super(MissionsTabBarView, self).__init__(R.views.lobby.missions.missions_tab_bar_view.MissionsTabBarView(), ViewFlags.COMPONENT, MissionsTabBarViewModel, *args, **kwargs)
+        super(MissionsTabBarView, self).__init__(R.views.lobby.missions.missions_tab_bar_view.MissionsTabBarView(), ViewFlags.VIEW, MissionsTabBarViewModel, *args, **kwargs)
         self.__tabsData = []
         self.__onTabSelectionChangedCallback = None
         return

@@ -123,7 +123,6 @@ class GLOBAL_FLAG(object):
     LOBBY_MENU_ITEM_BOOTCAMP = '_LobbyMenuItemBootcamp'
     HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
-    CREW_BOOKS_ENABLED = '_CrewBooksEnabled'
     COLLECTIBLE_VEHICLE_PREVIEW_ENABLED = '_CollectibleVehiclePreviewEnabled'
     DOGTAGS_ENABLED = '_DogTagsEnabled'
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
@@ -135,7 +134,6 @@ class GLOBAL_FLAG(object):
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
      BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
-     CREW_BOOKS_ENABLED,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
      PERSONAL_RESERVES_AVAILABLE)

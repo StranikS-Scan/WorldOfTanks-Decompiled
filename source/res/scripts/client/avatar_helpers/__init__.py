@@ -28,8 +28,7 @@ def getBestShotResultSound(currBest, newSoundName, otherData):
         return (newSoundName, otherData, newSoundPriority) if newSoundPriority > currBest[2] else currBest
 
 
-_shotResultSoundPriorities = {'wt23_hunters_vo_shooting_at_wt_shield': 13,
- 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
+_shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player': 12,
  'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player': 11,
  'enemy_hp_damaged_by_projectile_by_player': 10,
  'enemy_hp_damaged_by_explosion_at_direct_hit_by_player': 9,

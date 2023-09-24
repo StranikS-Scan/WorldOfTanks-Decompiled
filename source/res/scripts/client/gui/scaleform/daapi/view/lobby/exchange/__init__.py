@@ -16,13 +16,12 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ConfirmExchangeDialog import ConfirmExchangeDialog
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeWindow import ExchangeWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeXPWindow import ExchangeXPWindow
-    from gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow import ExchangeFreeToTankmanXpWindow
     from gui.Scaleform.daapi.view.lobby.exchange.detailed_exchange_xp_dialog import ExchangeXPWindowDialog
     return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW_MODAL, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', WindowLayer.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', WindowLayer.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL, ExchangeXPWindowDialog, 'exchangeXPWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeXPWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True))
 
 
@@ -65,7 +64,7 @@ class _ExchangeDialogModalBusinessHandler(_ExchangeDialogBusinessHandler):
 class _ExchangeViewsBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.EXCHANGE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_XP_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.EXCHANGE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_WINDOW_MODAL, self.loadViewByCtxEvent), (VIEW_ALIAS.EXCHANGE_XP_WINDOW, self.loadViewByCtxEvent))
         super(_ExchangeViewsBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

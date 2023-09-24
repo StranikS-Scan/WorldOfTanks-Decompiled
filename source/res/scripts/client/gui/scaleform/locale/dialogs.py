@@ -163,8 +163,6 @@ class DIALOGS(object):
     LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAlternativeAmmoAutoLoad/message'
     LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
     LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
-    CREWRETRAINING_TITLE = '#dialogs:crewRetraining/title'
-    RETRAININGWINDOW_SUBMIT = '#dialogs:retrainingWindow/submit'
     BUYSLOTCONFIRMATION_TITLE = '#dialogs:buySlotConfirmation/title'
     BUYSLOTCONFIRMATION_MESSAGE = '#dialogs:buySlotConfirmation/message'
     BUYSLOTCONFIRMATION_SUBMIT = '#dialogs:buySlotConfirmation/submit'
@@ -190,20 +188,6 @@ class DIALOGS(object):
     UPGRADETANKMANSCOOLCONFIRMATION_MESSAGECOMBINE = '#dialogs:upgradeTankmanScoolConfirmation/messageCombine'
     UPGRADETANKMANSCOOLCONFIRMATION_SUBMIT = '#dialogs:upgradeTankmanScoolConfirmation/submit'
     UPGRADETANKMANSCOOLCONFIRMATION_CANCEL = '#dialogs:upgradeTankmanScoolConfirmation/cancel'
-    ADDSKILLWINDOW_TITLE = '#dialogs:addSkillWindow/title'
-    ADDFREESKILLWINDOW_LABEL = '#dialogs:addFreeSkillWindow/label'
-    ADDSKILLWINDOW_LABEL = '#dialogs:addSkillWindow/label'
-    ADDSKILLWINDOW_LABEL_COMMON = '#dialogs:addSkillWindow/label/common'
-    ADDSKILLWINDOW_LABEL_COMMANDER = '#dialogs:addSkillWindow/label/commander'
-    ADDSKILLWINDOW_LABEL_GUNNER = '#dialogs:addSkillWindow/label/gunner'
-    ADDSKILLWINDOW_LABEL_DRIVER = '#dialogs:addSkillWindow/label/driver'
-    ADDSKILLWINDOW_LABEL_RADIOMAN = '#dialogs:addSkillWindow/label/radioman'
-    ADDSKILLWINDOW_LABEL_LOADER = '#dialogs:addSkillWindow/label/loader'
-    ADDFREESKILLWINDOW_SUBMIT = '#dialogs:addFreeSkillWindow/submit'
-    ADDSKILLWINDOW_SUBMIT = '#dialogs:addSkillWindow/submit'
-    ADDSKILLWINDOW_CANCEL = '#dialogs:addSkillWindow/cancel'
-    ADDSKILLWINDOW_DESC1 = '#dialogs:addSkillWindow/desc1'
-    ADDSKILLWINDOW_DESC2 = '#dialogs:addSkillWindow/desc2'
     UPGRADETANKMANACADEMYCONFIRMATION_TITLE = '#dialogs:upgradeTankmanAcademyConfirmation/title'
     UPGRADETANKMANACADEMYCONFIRMATION_MESSAGECOMBINE = '#dialogs:upgradeTankmanAcademyConfirmation/messageCombine'
     UPGRADETANKMANACADEMYCONFIRMATION_SUBMIT = '#dialogs:upgradeTankmanAcademyConfirmation/submit'
@@ -218,28 +202,13 @@ class DIALOGS(object):
     UPGRADETANKMANACADEMYNOTENOUGHMONEY_CANCEL = '#dialogs:upgradeTankmanAcademyNotEnoughMoney/cancel'
     RECRUITDIALOG_TITLE = '#dialogs:recruitDialog/title'
     RECRUITDIALOG_NAME_TITLE = '#dialogs:recruitDialog/name/title'
-    RECRUITWINDOW_TITLE = '#dialogs:recruitWindow/title'
     RECRUITWINDOW_NATION = '#dialogs:recruitWindow/nation'
-    RECRUITWINDOW_NATIONDROPDOWN_USSR = '#dialogs:recruitWindow/nationDropdown/ussr'
-    RECRUITWINDOW_NATIONDROPDOWN_GERMANY = '#dialogs:recruitWindow/nationDropdown/germany'
-    RECRUITWINDOW_NATIONDROPDOWN_USA = '#dialogs:recruitWindow/nationDropdown/usa'
-    RECRUITWINDOW_NATIONDROPDOWN_CZECH = '#dialogs:recruitWindow/nationDropdown/czech'
-    RECRUITWINDOW_NATIONDROPDOWN_SWEDEN = '#dialogs:recruitWindow/nationDropdown/sweden'
-    RECRUITWINDOW_NATIONDROPDOWN_POLAND = '#dialogs:recruitWindow/nationDropdown/poland'
-    RECRUITWINDOW_NATIONDROPDOWN_ITALY = '#dialogs:recruitWindow/nationDropdown/italy'
     RECRUITWINDOW_SPECIALIZATION = '#dialogs:recruitWindow/specialization'
     RECRUITWINDOW_VEHICLECLASS = '#dialogs:recruitWindow/vehicleClass'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL = '#dialogs:recruitWindow/vehicleClassDropdown/all'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK = '#dialogs:recruitWindow/vehicleClassDropdown/lightTank'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK = '#dialogs:recruitWindow/vehicleClassDropdown/mediumTank'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_HEAVYTANK = '#dialogs:recruitWindow/vehicleClassDropdown/heavyTank'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_AT_SPG = '#dialogs:recruitWindow/vehicleClassDropdown/AT-SPG'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_SPG = '#dialogs:recruitWindow/vehicleClassDropdown/SPG'
     RECRUITWINDOW_VEHICLETYPE = '#dialogs:recruitWindow/vehicleType'
     RECRUITWINDOW_MENUEMPTYROW = '#dialogs:recruitWindow/menuEmptyRow'
     RECRUITWINDOW_SUBMIT = '#dialogs:recruitWindow/submit'
     RECRUITWINDOW_CANCEL = '#dialogs:recruitWindow/cancel'
-    RECRUITWINDOW_NATIONS_NO_VEHICLE = '#dialogs:recruitWindow/nations/no_vehicle'
     BUYSLOTNOTENOUGH_CREDITS_TITLE = '#dialogs:buySlotNotEnough/credits/title'
     BUYSLOTNOTENOUGH_CREDITS_MESSAGE = '#dialogs:buySlotNotEnough/credits/message'
     BUYSLOTNOTENOUGH_CREDITS_SUBMIT = '#dialogs:buySlotNotEnough/credits/submit'
@@ -330,28 +299,6 @@ class DIALOGS(object):
     POSTMORTEM_MESSAGE = '#dialogs:postmortem/message'
     POSTMORTEM_SUBMIT = '#dialogs:postmortem/submit'
     POSTMORTEM_CANCEL = '#dialogs:postmortem/cancel'
-    DISMISSTANKMAN_TITLE = '#dialogs:dismissTankman/title'
-    DISMISSTANKMAN_MESSAGE = '#dialogs:dismissTankman/message'
-    DISMISSTANKMAN_SUBMIT = '#dialogs:dismissTankman/submit'
-    DISMISSTANKMAN_CANCEL = '#dialogs:dismissTankman/cancel'
-    PROTECTEDDISMISSTANKMAN_TITLE = '#dialogs:protectedDismissTankman/title'
-    PROTECTEDDISMISSTANKMAN_MESSAGE = '#dialogs:protectedDismissTankman/message'
-    PROTECTEDDISMISSTANKMAN_MAINMESSAGE = '#dialogs:protectedDismissTankman/mainMessage'
-    PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK = '#dialogs:protectedDismissTankman/additionalMessage/isPerk'
-    PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE = '#dialogs:protectedDismissTankman/additionalMessage'
-    PROTECTEDDISMISSTANKMAN_ERRORMESSAGE = '#dialogs:protectedDismissTankman/errorMessage'
-    PROTECTEDDISMISSTANKMAN_SUBMIT = '#dialogs:protectedDismissTankman/submit'
-    PROTECTEDDISMISSTANKMAN_CANCEL = '#dialogs:protectedDismissTankman/cancel'
-    PROTECTEDDISMISSTANKMAN_ALERT = '#dialogs:protectedDismissTankman/alert'
-    RESTORETANKMAN_TITLE = '#dialogs:restoreTankman/title'
-    RESTORETANKMAN_MESSAGE = '#dialogs:restoreTankman/message'
-    RESTORETANKMAN_FORFREE = '#dialogs:restoreTankman/forFree'
-    RESTORETANKMAN_WARNING = '#dialogs:restoreTankman/warning'
-    RESTORETANKMAN_SUBMIT = '#dialogs:restoreTankman/submit'
-    RESTORETANKMAN_CANCEL = '#dialogs:restoreTankman/cancel'
-    RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
-    RESTORETANKMAN_NEWPERIODWARNING = '#dialogs:restoreTankman/newPeriodWarning'
-    RESTORETANKMAN_DISCONNECTEDFROMCENTER = '#dialogs:restoreTankman/disconnectedFromCenter'
     DISMISSEDBUFFEROVERFLAW_TITLE = '#dialogs:dismissedBufferOverFlaw/title'
     DISMISSEDBUFFEROVERFLAW_MESSAGE = '#dialogs:dismissedBufferOverFlaw/message'
     DISMISSEDBUFFEROVERFLAW_SUBMIT = '#dialogs:dismissedBufferOverFlaw/submit'
@@ -606,10 +553,6 @@ class DIALOGS(object):
     PUNISHMENTWINDOW_REASON_EPIC_DESERTER = '#dialogs:punishmentWindow/reason/epic_deserter'
     PUNISHMENTWINDOW_REASON_SUICIDE = '#dialogs:punishmentWindow/reason/suicide'
     PUNISHMENTWINDOW_REASON_AFK = '#dialogs:punishmentWindow/reason/afk'
-    SKILLDROPWINDOW_TITLE = '#dialogs:skillDropWindow/title'
-    SKILLDROPWINDOW_MESSAGE = '#dialogs:skillDropWindow/message'
-    SKILLDROPWINDOW_SUBMIT = '#dialogs:skillDropWindow/submit'
-    SKILLDROPWINDOW_CANCEL = '#dialogs:skillDropWindow/cancel'
     REMOVEINCOMPATIBLEEQS_TITLE = '#dialogs:removeIncompatibleEqs/title'
     REMOVEINCOMPATIBLEEQS_MESSAGE = '#dialogs:removeIncompatibleEqs/message'
     REMOVEINCOMPATIBLEEQS_MESSAGE_REASON = '#dialogs:removeIncompatibleEqs/message/reason'
@@ -643,30 +586,6 @@ class DIALOGS(object):
     KOREAPLAYTIMENOTIFICATION_MESSAGE = '#dialogs:koreaPlayTimeNotification/message'
     KOREAPLAYTIMENOTIFICATION_SUBMIT = '#dialogs:koreaPlayTimeNotification/submit'
     KOREAPLAYTIMENOTIFICATION_CANCEL = '#dialogs:koreaPlayTimeNotification/cancel'
-    TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_TITLE = '#dialogs:tankmanRetraining/unknownVehicleByGold/title'
-    TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_MESSAGE = '#dialogs:tankmanRetraining/unknownVehicleByGold/message'
-    TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_SUBMIT = '#dialogs:tankmanRetraining/unknownVehicleByGold/submit'
-    TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_CANCEL = '#dialogs:tankmanRetraining/unknownVehicleByGold/cancel'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_TITLE = '#dialogs:tankmanRetraining/knownVehicleByGold/title'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_MESSAGE = '#dialogs:tankmanRetraining/knownVehicleByGold/message'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_SUBMIT = '#dialogs:tankmanRetraining/knownVehicleByGold/submit'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_CANCEL = '#dialogs:tankmanRetraining/knownVehicleByGold/cancel'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_TITLE = '#dialogs:tankmanRetraining/knownVehicleByGold/pack/title'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_MESSAGE = '#dialogs:tankmanRetraining/knownVehicleByGold/pack/message'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_SUBMIT = '#dialogs:tankmanRetraining/knownVehicleByGold/pack/submit'
-    TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_CANCEL = '#dialogs:tankmanRetraining/knownVehicleByGold/pack/cancel'
-    TANKMANRETRAINING_UNKNOWNVEHICLE_TITLE = '#dialogs:tankmanRetraining/unknownVehicle/title'
-    TANKMANRETRAINING_UNKNOWNVEHICLE_MESSAGE = '#dialogs:tankmanRetraining/unknownVehicle/message'
-    TANKMANRETRAINING_UNKNOWNVEHICLE_SUBMIT = '#dialogs:tankmanRetraining/unknownVehicle/submit'
-    TANKMANRETRAINING_UNKNOWNVEHICLE_CANCEL = '#dialogs:tankmanRetraining/unknownVehicle/cancel'
-    TANKMANRETRAINING_UNDISTRIBUTEDEXP_TITLE = '#dialogs:tankmanRetraining/undistributedExp/title'
-    TANKMANRETRAINING_UNDISTRIBUTEDEXP_MESSAGE = '#dialogs:tankmanRetraining/undistributedExp/message'
-    TANKMANRETRAINING_UNDISTRIBUTEDEXP_SUBMIT = '#dialogs:tankmanRetraining/undistributedExp/submit'
-    TANKMANRETRAINING_UNDISTRIBUTEDEXP_CANCEL = '#dialogs:tankmanRetraining/undistributedExp/cancel'
-    TANKMANCHAGEROLE_UNKNOWNVEHICLE_TITLE = '#dialogs:tankmanChageRole/unknownVehicle/title'
-    TANKMANCHAGEROLE_UNKNOWNVEHICLE_MESSAGE = '#dialogs:tankmanChageRole/unknownVehicle/message'
-    TANKMANCHAGEROLE_UNKNOWNVEHICLE_SUBMIT = '#dialogs:tankmanChageRole/unknownVehicle/submit'
-    TANKMANCHAGEROLE_UNKNOWNVEHICLE_CANCEL = '#dialogs:tankmanChageRole/unknownVehicle/cancel'
     SENDINVITES_COMMON_TITLE = '#dialogs:sendInvites/common/title'
     RALLY_AUTOSEARCH_TITLE = '#dialogs:rally/autoSearch/title'
     RALLY_AUTOSEARCH_MESSAGE = '#dialogs:rally/autoSearch/message'
@@ -958,16 +877,6 @@ class DIALOGS(object):
     REFERRALREWARD_MESSAGE = '#dialogs:referralReward/message'
     REFERRALREWARD_SUBMIT = '#dialogs:referralReward/submit'
     REFERRALREWARD_CANCEL = '#dialogs:referralReward/cancel'
-    CREWSKINS_SKINWILLBEREMOVED_TITLE = '#dialogs:crewSkins/skinWillBeRemoved/title'
-    CREWSKINS_SKINWILLBEREMOVED_MESSAGE = '#dialogs:crewSkins/skinWillBeRemoved/message'
-    CREWSKINS_SKINWILLBEDELETED_TITLE = '#dialogs:crewSkins/skinWillBeDeleted/title'
-    CREWSKINS_SKINWILLBEDELETED_MESSAGE1 = '#dialogs:crewSkins/skinWillBeDeleted/message1'
-    CREWSKINS_SKINWILLBEDELETED_MESSAGEPRICE = '#dialogs:crewSkins/skinWillBeDeleted/messagePrice'
-    CREWSKINS_SKINWILLBEDELETED_MESSAGE2 = '#dialogs:crewSkins/skinWillBeDeleted/message2'
-    CREWSKINS_SKINWILLBEDELETED_SUBMIT = '#dialogs:crewSkins/skinWillBeDeleted/submit'
-    CREWSKINS_SKINWILLBEREMOVED_SUBMIT = '#dialogs:crewSkins/skinWillBeRemoved/submit'
-    CREWSKINS_SKINWILLBEDELETED_CANCEL = '#dialogs:crewSkins/skinWillBeDeleted/cancel'
-    CREWSKINS_SKINWILLBEREMOVED_CANCEL = '#dialogs:crewSkins/skinWillBeRemoved/cancel'
     SESSIONSTATS_CONFIRMRESET_TITLE = '#dialogs:sessionStats/confirmReset/title'
     SESSIONSTATS_CONFIRMRESET_MESSAGE = '#dialogs:sessionStats/confirmReset/message'
     SESSIONSTATS_CONFIRMRESET_TIME = '#dialogs:sessionStats/confirmReset/time'
@@ -979,14 +888,6 @@ class DIALOGS(object):
     EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL = '#dialogs:editableStyles/confirmReset/checkboxLabel'
     EDITABLESTYLES_CONFIRMRESET_SUBMIT = '#dialogs:editableStyles/confirmReset/submit'
     EDITABLESTYLES_CONFIRMRESET_CANCEL = '#dialogs:editableStyles/confirmReset/cancel'
-    CREWBOOKS_CONFIRMATION_TITLE = '#dialogs:crewBooks/confirmation/title'
-    CREWBOOKS_CONFIRMATION_DESC_CREWBOOK = '#dialogs:crewBooks/confirmation/desc/crewBook'
-    CREWBOOKS_CONFIRMATION_DESC_PERSONALBOOK = '#dialogs:crewBooks/confirmation/desc/personalBook'
-    CREWBOOKS_CONFIRMATION_BUTTON_SUBMIT = '#dialogs:crewBooks/confirmation/button/submit'
-    CREWBOOKS_CONFIRMATION_BUTTON_CANCEL = '#dialogs:crewBooks/confirmation/button/cancel'
-    CREWBOOKS_SUCCESS_DESC_CREWBOOK = '#dialogs:crewBooks/success/desc/crewBook'
-    CREWBOOKS_SUCCESS_DESC_PERSONALBOOK = '#dialogs:crewBooks/success/desc/personalBook'
-    CREWBOOKS_SUCCESS_TITLE = '#dialogs:crewBooks/success/title'
     CONFIRMEQUIPMENTBUYINSTALL_SUBMIT = '#dialogs:confirmEquipmentBuyInstall/submit'
     EQUIPMENTPURCASE_CONFORMATION_ALL = '#dialogs:equipmentPurcase/conformation/all'
     EQUIPMENTBUYINSTALL_PRICE = '#dialogs:equipmentBuyInstall/price'
@@ -1025,6 +926,8 @@ class DIALOGS(object):
     BATTLEROYALE_PREBATTLE_SUBMIT = '#dialogs:battleRoyale/preBattle/submit'
     BATTLEROYALE_PREBATTLE_CANCEL = '#dialogs:battleRoyale/preBattle/cancel'
     ACCOUNTCOMPLETION_SUBMIT = '#dialogs:accountCompletion/submit'
+    ACCOUNTCOMPLETION_ADD = '#dialogs:accountCompletion/add'
+    ACCOUNTCOMPLETION_LATER = '#dialogs:accountCompletion/later'
     ACCOUNTCOMPLETION_CANCEL = '#dialogs:accountCompletion/cancel'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED = '#dialogs:accountCompletion/warningServerUnavailableTimed'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE = '#dialogs:accountCompletion/warningServerUnavailable'
@@ -1057,7 +960,7 @@ class DIALOGS(object):
     ACCOUNTCOMPLETION_ACTIVATE_KEYDIED = '#dialogs:accountCompletion/activate/keyDied'
     ACCOUNTCOMPLETION_ACTIVATE_ENTERCREDENTIALSAGAIN = '#dialogs:accountCompletion/activate/enterCredentialsAgain'
     ACCOUNTCOMPLETION_ACTIVATE_BUTTON = '#dialogs:accountCompletion/activate/button'
-    ACCOUNTCOMPLETION_ACTIVATE_COUNDOWNTEXT = '#dialogs:accountCompletion/activate/coundownText'
+    ACCOUNTCOMPLETION_ACTIVATE_COUNTDOWNTEXT = '#dialogs:accountCompletion/activate/countdownText'
     ACCOUNTCOMPLETION_ALREADYLINKED_TITLE = '#dialogs:accountCompletion/alreadyLinked/title'
     ACCOUNTCOMPLETION_ALREADYLINKED_SUBTITLE = '#dialogs:accountCompletion/alreadyLinked/subTitle'
     ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT = '#dialogs:accountCompletion/emailOverlay/error/codeAlreadySent'
@@ -1115,16 +1018,12 @@ class DIALOGS(object):
     BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION = '#dialogs:battleRoyale/confirmRent/rent/Description'
     BATTLEROYALE_CONFIRMRENT_RENTPRICE = '#dialogs:battleRoyale/confirmRent/rentPrice'
     BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON = '#dialogs:battleRoyale/confirmRent/eventEndsSoon'
-    DROPSKILL_FULLSCREEN_TITLE = '#dialogs:dropSkill/fullscreen/title'
-    DROPSKILL_FULLSCREEN_DESCRIPTION = '#dialogs:dropSkill/fullscreen/description'
-    DROPSKILL_FULLSCREEN_OK = '#dialogs:dropSkill/fullscreen/ok'
-    DROPSKILL_FULLSCREEN_COSTFREE = '#dialogs:dropSkill/fullscreen/costFree'
-    FREESKILLSINFO_TITLE = '#dialogs:freeSkillsInfo/title'
-    FREESKILLSINFO_MESSAGE = '#dialogs:freeSkillsInfo/message'
-    FREESKILLSINFO_SUBMIT = '#dialogs:freeSkillsInfo/submit'
     FREESKILLSLEARNING_TITLE_LEARNING = '#dialogs:freeSkillsLearning/title/learning'
     FREESKILLSLEARNING_TITLE_RELEARNING = '#dialogs:freeSkillsLearning/title/relearning'
     FREESKILLSLEARNING_MESSAGE = '#dialogs:freeSkillsLearning/message'
+    PERKLEARNCONFIRM_TITLE = '#dialogs:perkLearnConfirm/title'
+    PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
+    PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
     COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
     COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
@@ -1136,24 +1035,80 @@ class DIALOGS(object):
     COMP7_PUNISHMENTWINDOW_CANCEL = '#dialogs:comp7/punishmentWindow/cancel'
     EQUIPMENTUPGRADE_CONFIRMBUTTON = '#dialogs:equipmentUpgrade/confirmButton'
     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON = '#dialogs:equipmentUpgrade/getMoreCurrencyButton'
+    EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY = '#dialogs:equipmentUpgrade/getMoreCurrencyButtonTooltip/body'
     EQUIPMENTUPGRADE_CANCELBUTTON = '#dialogs:equipmentUpgrade/cancelButton'
     EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON = '#dialogs:equipmentDeconstruction/confirmButton'
     EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON = '#dialogs:equipmentDeconstruction/confirmAndUpgradeButton'
     EQUIPMENTDECONSTRUCTION_CANCELBUTTON = '#dialogs:equipmentDeconstruction/cancelButton'
-    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
-    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
-    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
-    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
-    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
-    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
-    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
-    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
-    RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_HEAVYTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_AT_SPG,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_SPG)
+    PRICECARD_FREE_TITLE = '#dialogs:priceCard/free/title'
+    PRICECARD_CREDITS_TITLE = '#dialogs:priceCard/credits/title'
+    PRICECARD_GOLD_TITLE = '#dialogs:priceCard/gold/title'
+    PRICECARD_RECERTIFICATION_TITLE = '#dialogs:priceCard/recertification/title'
+    PRICECARD_PRICE_FREE = '#dialogs:priceCard/price/free'
+    PERKSREST_TITLE = '#dialogs:perksRest/title'
+    PERKSREST_FREE_DESCRIPTION = '#dialogs:perksRest/free/description'
+    PERKSREST_BEFORE = '#dialogs:perksRest/before'
+    PERKSREST_AFTER = '#dialogs:perksRest/after'
+    PERKSREST_NONEWPERKS = '#dialogs:perksRest/noNewPerks'
+    PERKSREST_SUBMIT = '#dialogs:perksRest/submit'
+    PERKSREST_CANCEL = '#dialogs:perksRest/cancel'
+    PERKSREST_PRICECARD_FREE_DESCRIPTION = '#dialogs:perksRest/priceCard/free/description'
+    PERKSREST_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksRest/priceCard/credits/description'
+    PERKSREST_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksRest/priceCard/gold/description'
+    RETRAIN_TITLE_SINGE = '#dialogs:retrain/title/singe'
+    RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
+    RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
+    RETRAIN_PRICECARD_FREE_DESCRIPTION = '#dialogs:retrain/priceCard/free/description'
+    RETRAIN_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:retrain/priceCard/credits/description'
+    RETRAIN_PRICECARD_GOLD_DESCRIPTION = '#dialogs:retrain/priceCard/gold/description'
+    RETRAIN_MASSIVE_TANKMENCOUNT = '#dialogs:retrain/massive/tankmenCount'
+    RETRAIN_SINGLE_CHECKBOXLABEL = '#dialogs:retrain/single/checkBoxLabel'
+    RETRAIN_PRICE = '#dialogs:retrain/price'
+    RETRAIN_SUBMIT = '#dialogs:retrain/submit'
+    RETRAIN_CANCEL = '#dialogs:retrain/cancel'
+    RECRUIT_TITLE = '#dialogs:recruit/title'
+    RECRUIT_WARNING_PREMIUMVEHICLE = '#dialogs:recruit/warning/premiumVehicle'
+    RECRUIT_PRICECARD_FREE_DESCRIPTION = '#dialogs:recruit/priceCard/free/description'
+    RECRUIT_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:recruit/priceCard/credits/description'
+    RECRUIT_PRICECARD_GOLD_DESCRIPTION = '#dialogs:recruit/priceCard/gold/description'
+    RECRUIT_SUBMIT = '#dialogs:recruit/submit'
+    RECRUIT_CANCEL = '#dialogs:recruit/cancel'
+    CREWMEMBERTANKCHANGE_TITLE = '#dialogs:crewMemberTankChange/title'
+    CREWMEMBERTANKCHANGE_DESC = '#dialogs:crewMemberTankChange/desc'
+    CREWMEMBERTANKCHANGE_TRANSFER = '#dialogs:crewMemberTankChange/transfer'
+    CREWMEMBERROLECHANGE_TITLE_SIMPLE = '#dialogs:crewMemberRoleChange/title/simple'
+    CREWMEMBERROLECHANGE_TITLE_EXTENDED = '#dialogs:crewMemberRoleChange/title/extended'
+    CREWMEMBERROLECHANGE_BULLET = '#dialogs:crewMemberRoleChange/bullet'
+    CREWMEMBERROLECHANGE_DESC_SIMPLE = '#dialogs:crewMemberRoleChange/desc/simple'
+    CREWMEMBERROLECHANGE_DESC_WRONGSPECIALIZATION = '#dialogs:crewMemberRoleChange/desc/wrongSpecialization'
+    CREWMEMBERROLECHANGE_DESC_PREMIUM = '#dialogs:crewMemberRoleChange/desc/premium'
+    CREWMEMBERROLECHANGE_PRICE = '#dialogs:crewMemberRoleChange/price'
+    CREWMEMBERROLECHANGE_CHANGE = '#dialogs:crewMemberRoleChange/change'
+    RUDYINFO_TITLE = '#dialogs:rudyInfo/title'
+    RUDYINFO_MESSAGE = '#dialogs:rudyInfo/message'
+    RUDYINFO_SUBMIT = '#dialogs:rudyInfo/submit'
+    CREWBOOKPURCHASE_PURCHASE = '#dialogs:crewBookPurchase/purchase'
+    CREWBOOKPURCHASE_PURCHASE_TITLE = '#dialogs:crewBookPurchase/purchase/title'
+    CREWBOOKPURCHASE_DESCRIPTION_PERSONAL = '#dialogs:crewBookPurchase/description/personal'
+    CREWBOOKPURCHASE_DESCRIPTION_CREW = '#dialogs:crewBookPurchase/description/crew'
+    CREWBOOKPURCHASE_BTNDISABLEDTOOLTIP = '#dialogs:crewBookPurchase/btnDisabledTooltip'
+    DOCUMENTCHANGEDIALOG_TITLE = '#dialogs:documentChangeDialog/title'
+    DOCUMENTCHANGEDIALOG_BUTTON_SUBMIT = '#dialogs:documentChangeDialog/button/submit'
+    DOCUMENTCHANGEDIALOG_DROPDOWN_FIRSTNAME = '#dialogs:documentChangeDialog/dropdown/firstName'
+    DOCUMENTCHANGEDIALOG_DROPDOWN_LASTNAME = '#dialogs:documentChangeDialog/dropdown/lastName'
+    SKINAPPLYDIALOG_BUTTON_SUBMIT = '#dialogs:skinApplyDialog/button/submit'
+    DISMISSTANKMAN_HEADER = '#dialogs:dismissTankman/header'
+    DISMISSTANKMAN_DESCRIPTION_TIME = '#dialogs:dismissTankman/description/time'
+    DISMISSTANKMAN_DESCRIPTION_PERK = '#dialogs:dismissTankman/description/perk'
+    DISMISSTANKMAN_DESCRIPTION_QUALIFICATION = '#dialogs:dismissTankman/description/qualification'
+    DISMISSTANKMAN_LIMITED = '#dialogs:dismissTankman/limited'
+    DISMISSTANKMAN_NORECOVERY = '#dialogs:dismissTankman/noRecovery'
+    DISMISSTANKMAN_BUTTONS_DISMISS = '#dialogs:dismissTankman/buttons/dismiss'
+    RESTORETANKMAN_HEADER = '#dialogs:restoreTankman/header'
+    RESTORETANKMAN_DESCRIPTION = '#dialogs:restoreTankman/description'
+    RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
+    RESTORETANKMAN_FREE = '#dialogs:restoreTankman/free'
+    RESTORETANKMAN_BUTTONS_RECOVER = '#dialogs:restoreTankman/buttons/recover'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -1306,8 +1261,6 @@ class DIALOGS(object):
      LOWALTERNATIVEAMMOAUTOLOAD_MESSAGE,
      LOWAMMOAUTOLOAD_SUBMIT,
      LOWAMMOAUTOLOAD_CANCEL,
-     CREWRETRAINING_TITLE,
-     RETRAININGWINDOW_SUBMIT,
      BUYSLOTCONFIRMATION_TITLE,
      BUYSLOTCONFIRMATION_MESSAGE,
      BUYSLOTCONFIRMATION_SUBMIT,
@@ -1333,20 +1286,6 @@ class DIALOGS(object):
      UPGRADETANKMANSCOOLCONFIRMATION_MESSAGECOMBINE,
      UPGRADETANKMANSCOOLCONFIRMATION_SUBMIT,
      UPGRADETANKMANSCOOLCONFIRMATION_CANCEL,
-     ADDSKILLWINDOW_TITLE,
-     ADDFREESKILLWINDOW_LABEL,
-     ADDSKILLWINDOW_LABEL,
-     ADDSKILLWINDOW_LABEL_COMMON,
-     ADDSKILLWINDOW_LABEL_COMMANDER,
-     ADDSKILLWINDOW_LABEL_GUNNER,
-     ADDSKILLWINDOW_LABEL_DRIVER,
-     ADDSKILLWINDOW_LABEL_RADIOMAN,
-     ADDSKILLWINDOW_LABEL_LOADER,
-     ADDFREESKILLWINDOW_SUBMIT,
-     ADDSKILLWINDOW_SUBMIT,
-     ADDSKILLWINDOW_CANCEL,
-     ADDSKILLWINDOW_DESC1,
-     ADDSKILLWINDOW_DESC2,
      UPGRADETANKMANACADEMYCONFIRMATION_TITLE,
      UPGRADETANKMANACADEMYCONFIRMATION_MESSAGECOMBINE,
      UPGRADETANKMANACADEMYCONFIRMATION_SUBMIT,
@@ -1361,28 +1300,13 @@ class DIALOGS(object):
      UPGRADETANKMANACADEMYNOTENOUGHMONEY_CANCEL,
      RECRUITDIALOG_TITLE,
      RECRUITDIALOG_NAME_TITLE,
-     RECRUITWINDOW_TITLE,
      RECRUITWINDOW_NATION,
-     RECRUITWINDOW_NATIONDROPDOWN_USSR,
-     RECRUITWINDOW_NATIONDROPDOWN_GERMANY,
-     RECRUITWINDOW_NATIONDROPDOWN_USA,
-     RECRUITWINDOW_NATIONDROPDOWN_CZECH,
-     RECRUITWINDOW_NATIONDROPDOWN_SWEDEN,
-     RECRUITWINDOW_NATIONDROPDOWN_POLAND,
-     RECRUITWINDOW_NATIONDROPDOWN_ITALY,
      RECRUITWINDOW_SPECIALIZATION,
      RECRUITWINDOW_VEHICLECLASS,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_HEAVYTANK,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_AT_SPG,
-     RECRUITWINDOW_VEHICLECLASSDROPDOWN_SPG,
      RECRUITWINDOW_VEHICLETYPE,
      RECRUITWINDOW_MENUEMPTYROW,
      RECRUITWINDOW_SUBMIT,
      RECRUITWINDOW_CANCEL,
-     RECRUITWINDOW_NATIONS_NO_VEHICLE,
      BUYSLOTNOTENOUGH_CREDITS_TITLE,
      BUYSLOTNOTENOUGH_CREDITS_MESSAGE,
      BUYSLOTNOTENOUGH_CREDITS_SUBMIT,
@@ -1473,28 +1397,6 @@ class DIALOGS(object):
      POSTMORTEM_MESSAGE,
      POSTMORTEM_SUBMIT,
      POSTMORTEM_CANCEL,
-     DISMISSTANKMAN_TITLE,
-     DISMISSTANKMAN_MESSAGE,
-     DISMISSTANKMAN_SUBMIT,
-     DISMISSTANKMAN_CANCEL,
-     PROTECTEDDISMISSTANKMAN_TITLE,
-     PROTECTEDDISMISSTANKMAN_MESSAGE,
-     PROTECTEDDISMISSTANKMAN_MAINMESSAGE,
-     PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE_ISPERK,
-     PROTECTEDDISMISSTANKMAN_ADDITIONALMESSAGE,
-     PROTECTEDDISMISSTANKMAN_ERRORMESSAGE,
-     PROTECTEDDISMISSTANKMAN_SUBMIT,
-     PROTECTEDDISMISSTANKMAN_CANCEL,
-     PROTECTEDDISMISSTANKMAN_ALERT,
-     RESTORETANKMAN_TITLE,
-     RESTORETANKMAN_MESSAGE,
-     RESTORETANKMAN_FORFREE,
-     RESTORETANKMAN_WARNING,
-     RESTORETANKMAN_SUBMIT,
-     RESTORETANKMAN_CANCEL,
-     RESTORETANKMAN_PRICE,
-     RESTORETANKMAN_NEWPERIODWARNING,
-     RESTORETANKMAN_DISCONNECTEDFROMCENTER,
      DISMISSEDBUFFEROVERFLAW_TITLE,
      DISMISSEDBUFFEROVERFLAW_MESSAGE,
      DISMISSEDBUFFEROVERFLAW_SUBMIT,
@@ -1749,10 +1651,6 @@ class DIALOGS(object):
      PUNISHMENTWINDOW_REASON_EPIC_DESERTER,
      PUNISHMENTWINDOW_REASON_SUICIDE,
      PUNISHMENTWINDOW_REASON_AFK,
-     SKILLDROPWINDOW_TITLE,
-     SKILLDROPWINDOW_MESSAGE,
-     SKILLDROPWINDOW_SUBMIT,
-     SKILLDROPWINDOW_CANCEL,
      REMOVEINCOMPATIBLEEQS_TITLE,
      REMOVEINCOMPATIBLEEQS_MESSAGE,
      REMOVEINCOMPATIBLEEQS_MESSAGE_REASON,
@@ -1786,30 +1684,6 @@ class DIALOGS(object):
      KOREAPLAYTIMENOTIFICATION_MESSAGE,
      KOREAPLAYTIMENOTIFICATION_SUBMIT,
      KOREAPLAYTIMENOTIFICATION_CANCEL,
-     TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_TITLE,
-     TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_MESSAGE,
-     TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_SUBMIT,
-     TANKMANRETRAINING_UNKNOWNVEHICLEBYGOLD_CANCEL,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_TITLE,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_MESSAGE,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_SUBMIT,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_CANCEL,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_TITLE,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_MESSAGE,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_SUBMIT,
-     TANKMANRETRAINING_KNOWNVEHICLEBYGOLD_PACK_CANCEL,
-     TANKMANRETRAINING_UNKNOWNVEHICLE_TITLE,
-     TANKMANRETRAINING_UNKNOWNVEHICLE_MESSAGE,
-     TANKMANRETRAINING_UNKNOWNVEHICLE_SUBMIT,
-     TANKMANRETRAINING_UNKNOWNVEHICLE_CANCEL,
-     TANKMANRETRAINING_UNDISTRIBUTEDEXP_TITLE,
-     TANKMANRETRAINING_UNDISTRIBUTEDEXP_MESSAGE,
-     TANKMANRETRAINING_UNDISTRIBUTEDEXP_SUBMIT,
-     TANKMANRETRAINING_UNDISTRIBUTEDEXP_CANCEL,
-     TANKMANCHAGEROLE_UNKNOWNVEHICLE_TITLE,
-     TANKMANCHAGEROLE_UNKNOWNVEHICLE_MESSAGE,
-     TANKMANCHAGEROLE_UNKNOWNVEHICLE_SUBMIT,
-     TANKMANCHAGEROLE_UNKNOWNVEHICLE_CANCEL,
      SENDINVITES_COMMON_TITLE,
      RALLY_AUTOSEARCH_TITLE,
      RALLY_AUTOSEARCH_MESSAGE,
@@ -2101,16 +1975,6 @@ class DIALOGS(object):
      REFERRALREWARD_MESSAGE,
      REFERRALREWARD_SUBMIT,
      REFERRALREWARD_CANCEL,
-     CREWSKINS_SKINWILLBEREMOVED_TITLE,
-     CREWSKINS_SKINWILLBEREMOVED_MESSAGE,
-     CREWSKINS_SKINWILLBEDELETED_TITLE,
-     CREWSKINS_SKINWILLBEDELETED_MESSAGE1,
-     CREWSKINS_SKINWILLBEDELETED_MESSAGEPRICE,
-     CREWSKINS_SKINWILLBEDELETED_MESSAGE2,
-     CREWSKINS_SKINWILLBEDELETED_SUBMIT,
-     CREWSKINS_SKINWILLBEREMOVED_SUBMIT,
-     CREWSKINS_SKINWILLBEDELETED_CANCEL,
-     CREWSKINS_SKINWILLBEREMOVED_CANCEL,
      SESSIONSTATS_CONFIRMRESET_TITLE,
      SESSIONSTATS_CONFIRMRESET_MESSAGE,
      SESSIONSTATS_CONFIRMRESET_TIME,
@@ -2122,14 +1986,6 @@ class DIALOGS(object):
      EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL,
      EDITABLESTYLES_CONFIRMRESET_SUBMIT,
      EDITABLESTYLES_CONFIRMRESET_CANCEL,
-     CREWBOOKS_CONFIRMATION_TITLE,
-     CREWBOOKS_CONFIRMATION_DESC_CREWBOOK,
-     CREWBOOKS_CONFIRMATION_DESC_PERSONALBOOK,
-     CREWBOOKS_CONFIRMATION_BUTTON_SUBMIT,
-     CREWBOOKS_CONFIRMATION_BUTTON_CANCEL,
-     CREWBOOKS_SUCCESS_DESC_CREWBOOK,
-     CREWBOOKS_SUCCESS_DESC_PERSONALBOOK,
-     CREWBOOKS_SUCCESS_TITLE,
      CONFIRMEQUIPMENTBUYINSTALL_SUBMIT,
      EQUIPMENTPURCASE_CONFORMATION_ALL,
      EQUIPMENTBUYINSTALL_PRICE,
@@ -2168,6 +2024,8 @@ class DIALOGS(object):
      BATTLEROYALE_PREBATTLE_SUBMIT,
      BATTLEROYALE_PREBATTLE_CANCEL,
      ACCOUNTCOMPLETION_SUBMIT,
+     ACCOUNTCOMPLETION_ADD,
+     ACCOUNTCOMPLETION_LATER,
      ACCOUNTCOMPLETION_CANCEL,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE,
@@ -2200,7 +2058,7 @@ class DIALOGS(object):
      ACCOUNTCOMPLETION_ACTIVATE_KEYDIED,
      ACCOUNTCOMPLETION_ACTIVATE_ENTERCREDENTIALSAGAIN,
      ACCOUNTCOMPLETION_ACTIVATE_BUTTON,
-     ACCOUNTCOMPLETION_ACTIVATE_COUNDOWNTEXT,
+     ACCOUNTCOMPLETION_ACTIVATE_COUNTDOWNTEXT,
      ACCOUNTCOMPLETION_ALREADYLINKED_TITLE,
      ACCOUNTCOMPLETION_ALREADYLINKED_SUBTITLE,
      ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT,
@@ -2258,16 +2116,12 @@ class DIALOGS(object):
      BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION,
      BATTLEROYALE_CONFIRMRENT_RENTPRICE,
      BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON,
-     DROPSKILL_FULLSCREEN_TITLE,
-     DROPSKILL_FULLSCREEN_DESCRIPTION,
-     DROPSKILL_FULLSCREEN_OK,
-     DROPSKILL_FULLSCREEN_COSTFREE,
-     FREESKILLSINFO_TITLE,
-     FREESKILLSINFO_MESSAGE,
-     FREESKILLSINFO_SUBMIT,
      FREESKILLSLEARNING_TITLE_LEARNING,
      FREESKILLSLEARNING_TITLE_RELEARNING,
      FREESKILLSLEARNING_MESSAGE,
+     PERKLEARNCONFIRM_TITLE,
+     PERKLEARNCONFIRM_DESC,
+     PERKLEARNCONFIRM_LEARN,
      COMP7_DESERTER_TITLE,
      COMP7_DESERTER_MSGTITLE,
      COMP7_DESERTER_MESSAGE,
@@ -2279,27 +2133,80 @@ class DIALOGS(object):
      COMP7_PUNISHMENTWINDOW_CANCEL,
      EQUIPMENTUPGRADE_CONFIRMBUTTON,
      EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON,
+     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY,
      EQUIPMENTUPGRADE_CANCELBUTTON,
      EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON,
      EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON,
      EQUIPMENTDECONSTRUCTION_CANCELBUTTON,
-     CONFIRMREWARD_TITLE,
-     CONFIRMREWARD_MESSAGE,
-     CONFIRMREWARD_SUBMIT,
-     CONFIRMREWARD_CANCEL,
-     REROLLREWARD_TITLE,
-     REROLLREWARD_MESSAGE,
-     REROLLREWARD_CONFIRM,
-     REROLLREWARD_CANCEL)
-
-    @classmethod
-    def recruitwindow_vehicleclassdropdown(cls, key0):
-        outcome = '#dialogs:recruitWindow/vehicleClassDropdown/{}'.format(key0)
-        if outcome not in cls.RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
+     PRICECARD_FREE_TITLE,
+     PRICECARD_CREDITS_TITLE,
+     PRICECARD_GOLD_TITLE,
+     PRICECARD_RECERTIFICATION_TITLE,
+     PRICECARD_PRICE_FREE,
+     PERKSREST_TITLE,
+     PERKSREST_FREE_DESCRIPTION,
+     PERKSREST_BEFORE,
+     PERKSREST_AFTER,
+     PERKSREST_NONEWPERKS,
+     PERKSREST_SUBMIT,
+     PERKSREST_CANCEL,
+     PERKSREST_PRICECARD_FREE_DESCRIPTION,
+     PERKSREST_PRICECARD_CREDITS_DESCRIPTION,
+     PERKSREST_PRICECARD_GOLD_DESCRIPTION,
+     RETRAIN_TITLE_SINGE,
+     RETRAIN_TITLE_MASSIVE,
+     RETRAIN_WARNING_PREMIUMVEHICLE,
+     RETRAIN_PRICECARD_FREE_DESCRIPTION,
+     RETRAIN_PRICECARD_CREDITS_DESCRIPTION,
+     RETRAIN_PRICECARD_GOLD_DESCRIPTION,
+     RETRAIN_MASSIVE_TANKMENCOUNT,
+     RETRAIN_SINGLE_CHECKBOXLABEL,
+     RETRAIN_PRICE,
+     RETRAIN_SUBMIT,
+     RETRAIN_CANCEL,
+     RECRUIT_TITLE,
+     RECRUIT_WARNING_PREMIUMVEHICLE,
+     RECRUIT_PRICECARD_FREE_DESCRIPTION,
+     RECRUIT_PRICECARD_CREDITS_DESCRIPTION,
+     RECRUIT_PRICECARD_GOLD_DESCRIPTION,
+     RECRUIT_SUBMIT,
+     RECRUIT_CANCEL,
+     CREWMEMBERTANKCHANGE_TITLE,
+     CREWMEMBERTANKCHANGE_DESC,
+     CREWMEMBERTANKCHANGE_TRANSFER,
+     CREWMEMBERROLECHANGE_TITLE_SIMPLE,
+     CREWMEMBERROLECHANGE_TITLE_EXTENDED,
+     CREWMEMBERROLECHANGE_BULLET,
+     CREWMEMBERROLECHANGE_DESC_SIMPLE,
+     CREWMEMBERROLECHANGE_DESC_WRONGSPECIALIZATION,
+     CREWMEMBERROLECHANGE_DESC_PREMIUM,
+     CREWMEMBERROLECHANGE_PRICE,
+     CREWMEMBERROLECHANGE_CHANGE,
+     RUDYINFO_TITLE,
+     RUDYINFO_MESSAGE,
+     RUDYINFO_SUBMIT,
+     CREWBOOKPURCHASE_PURCHASE,
+     CREWBOOKPURCHASE_PURCHASE_TITLE,
+     CREWBOOKPURCHASE_DESCRIPTION_PERSONAL,
+     CREWBOOKPURCHASE_DESCRIPTION_CREW,
+     CREWBOOKPURCHASE_BTNDISABLEDTOOLTIP,
+     DOCUMENTCHANGEDIALOG_TITLE,
+     DOCUMENTCHANGEDIALOG_BUTTON_SUBMIT,
+     DOCUMENTCHANGEDIALOG_DROPDOWN_FIRSTNAME,
+     DOCUMENTCHANGEDIALOG_DROPDOWN_LASTNAME,
+     SKINAPPLYDIALOG_BUTTON_SUBMIT,
+     DISMISSTANKMAN_HEADER,
+     DISMISSTANKMAN_DESCRIPTION_TIME,
+     DISMISSTANKMAN_DESCRIPTION_PERK,
+     DISMISSTANKMAN_DESCRIPTION_QUALIFICATION,
+     DISMISSTANKMAN_LIMITED,
+     DISMISSTANKMAN_NORECOVERY,
+     DISMISSTANKMAN_BUTTONS_DISMISS,
+     RESTORETANKMAN_HEADER,
+     RESTORETANKMAN_DESCRIPTION,
+     RESTORETANKMAN_PRICE,
+     RESTORETANKMAN_FREE,
+     RESTORETANKMAN_BUTTONS_RECOVER)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

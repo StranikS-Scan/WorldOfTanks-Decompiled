@@ -50,7 +50,10 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
         self._soundCallerType = self._soundMgr.CALLER.POST_BATTLE
         return
 
-    def update(self, lastRankID=None, clientMaxRankID=None, currentRankID=None, ranksChain=None):
+    def update(self, lastRank=None, clientMaxRank=None, currentRank=None, ranksChain=None):
+        self._update(lastRank, clientMaxRank, currentRank, ranksChain)
+
+    def _update(self, lastRankID=None, clientMaxRankID=None, currentRankID=None, ranksChain=None):
         lastRankID = self.rankedController.getClientRank()[0] if lastRankID is None else lastRankID
         clientMaxRankID = self.rankedController.getClientMaxRank()[0] if clientMaxRankID is None else clientMaxRankID
         currentRankID = self.rankedController.getCurrentRank()[0] if currentRankID is None else currentRankID
@@ -211,13 +214,6 @@ class RankedBattlesHangarWidget(RankedBattleResultsWidget):
         super(RankedBattlesHangarWidget, self).__init__()
         self._soundCallerType = self._soundMgr.CALLER.HANGAR
 
-    def update(self, lastRank=None, clientMaxRank=None, currentRank=None, ranksChain=None):
-        if self.rankedController.getClientBonusBattlesCount() > 0:
-            self.as_setBonusBattlesLabelS(str(self.rankedController.getClientBonusBattlesCount()))
-        else:
-            self.as_setBonusBattlesLabelS('')
-        super(RankedBattlesHangarWidget, self).update(lastRank, currentRank, ranksChain)
-
     def onWidgetClick(self):
         self.rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID})
 
@@ -230,10 +226,18 @@ class RankedBattlesHangarWidget(RankedBattleResultsWidget):
     def _populate(self):
         super(RankedBattlesHangarWidget, self)._populate()
         g_clientUpdateManager.addCallbacks({'stats.dossier': self.__dossierUpdateCallBack})
-        self.rankedController.getWebSeasonProvider().onInfoUpdated += self.update
+        self.rankedController.getWebSeasonProvider().onInfoUpdated += self._update
+        self._update()
+
+    def _update(self, lastRank=None, clientMaxRank=None, currentRank=None, ranksChain=None):
+        if self.rankedController.getClientBonusBattlesCount() > 0:
+            self.as_setBonusBattlesLabelS(str(self.rankedController.getClientBonusBattlesCount()))
+        else:
+            self.as_setBonusBattlesLabelS('')
+        super(RankedBattlesHangarWidget, self)._update(lastRank, currentRank, ranksChain)
 
     def _dispose(self):
-        self.rankedController.getWebSeasonProvider().onInfoUpdated -= self.update
+        self.rankedController.getWebSeasonProvider().onInfoUpdated -= self._update
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(RankedBattlesHangarWidget, self)._dispose()
 
@@ -250,4 +254,4 @@ class RankedBattlesHangarWidget(RankedBattleResultsWidget):
         return True
 
     def __dossierUpdateCallBack(self, *args):
-        self.update()
+        self._update()

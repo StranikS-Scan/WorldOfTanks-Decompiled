@@ -49,7 +49,7 @@ class EntryPoint(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.resource_well.EntryPoint())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = EntryPointModel()
         super(EntryPoint, self).__init__(settings)
 

@@ -11,5 +11,5 @@ class BattleRoyaleEntryPointInject(ResizableEntryPointMeta):
             self.__view.setIsSingle(value)
 
     def _makeInjectView(self):
-        self.__view = BattleRoyaleEntryPoint(flags=ViewFlags.COMPONENT)
+        self.__view = BattleRoyaleEntryPoint(flags=ViewFlags.VIEW)
         return self.__view

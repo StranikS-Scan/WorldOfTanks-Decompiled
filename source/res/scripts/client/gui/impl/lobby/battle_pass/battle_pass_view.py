@@ -115,13 +115,12 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
 
     def start(self):
         if self._injectView is not None:
-            self._injectView.updateData()
-            self._injectView.startListeners()
+            self.__safeCall(self._injectView, 'activate')
         return
 
     def stop(self):
         if self._injectView is not None:
-            self._injectView.stopListeners()
+            self.__safeCall(self._injectView, 'deactivate')
         return
 
     def _onPopulate(self):
@@ -193,6 +192,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         else:
             self.as_setBackgroundS('')
             self.as_hideDummyS()
+
+    @staticmethod
+    def __safeCall(obj, attrName, *args, **kwargs):
+        return getattr(obj, attrName, lambda *__, **_: None)(*args, **kwargs)
 
 
 def _showOverlayVideo(url):

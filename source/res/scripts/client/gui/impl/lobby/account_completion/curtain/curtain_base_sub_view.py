@@ -55,7 +55,11 @@ class CurtainBaseSubView(ViewImpl):
     def _finalize(self):
         if self._isActive:
             self.deactivate()
+        self._doFinalize()
         super(CurtainBaseSubView, self)._finalize()
+
+    def _doFinalize(self):
+        pass
 
     def _setWaiting(self, isVisible, msgResID=R.invalid()):
         self._isWaitingVisible = isVisible

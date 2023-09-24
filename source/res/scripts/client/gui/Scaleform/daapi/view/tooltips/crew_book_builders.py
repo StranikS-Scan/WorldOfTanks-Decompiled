@@ -16,15 +16,5 @@ class CrewBookTooltipBuilder(DataBuilder):
         return super(CrewBookTooltipBuilder, self)._buildData(_advanced, crewBookCD)
 
 
-class CrewBookRestrictedTooltipBuilder(DataBuilder):
-    __slots__ = ()
-
-    def __init__(self, tooltipType, linkage):
-        super(CrewBookRestrictedTooltipBuilder, self).__init__(tooltipType, linkage, crew_book.CrewBookRestrictedTooltipDataBlock(contexts.CrewBookVehicleContext()))
-
-    def _buildData(self, _advanced, vehicleID, *args, **kwargs):
-        return super(CrewBookRestrictedTooltipBuilder, self)._buildData(_advanced, vehicleID)
-
-
 def getTooltipBuilders():
-    return (CrewBookTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI), CrewBookRestrictedTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK_RESTRICTED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))
+    return (CrewBookTooltipBuilder(TOOLTIPS_CONSTANTS.CREW_BOOK, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),)

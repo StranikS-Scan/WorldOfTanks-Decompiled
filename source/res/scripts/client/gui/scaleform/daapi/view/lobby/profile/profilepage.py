@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfilePage.py
+import logging
 import BigWorld
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -21,6 +22,7 @@ from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofDisabledKeys, onServerSettingsChange
 from gui.shared.events import ProfilePageEvent, CollectionsEvent
+_logger = logging.getLogger(__name__)
 
 class ProfilePage(LobbySubView, ProfileMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -53,6 +55,20 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def onCloseProfile(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def updateSubView(self, ctx):
+        selectedAlias = ctx.get('selectedAlias')
+        if selectedAlias is None:
+            _logger.error('Should be specified "selectedAlias"')
+            return
+        else:
+            self.__ctx.update(ctx)
+            self.__tabNavigator.as_setInitDataS(self.__getSectionsData(resetSelectedAlias=True))
+            if selectedAlias == VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE:
+                techniquePage = self.__tabNavigator.components.get(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE)
+                if techniquePage:
+                    techniquePage.updateView(ctx)
+            return
+
     def _populate(self):
         super(ProfilePage, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
@@ -80,9 +96,9 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def __dossierUpdateCallBack(self, _):
         self.__tabNavigator.invokeUpdate()
 
-    def __getSectionsData(self):
+    def __getSectionsData(self, resetSelectedAlias=False):
         isHofEnabled = self.__isHofEnabled
-        if self.__tabNavigator:
+        if self.__tabNavigator and not resetSelectedAlias:
             selectedAlias = self.__tabNavigator.tabId
         else:
             selectedAlias = self.__ctx.get('selectedAlias')
@@ -90,7 +106,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
         if selectedAlias is None or selectedAlias == VIEW_ALIAS.PROFILE_HOF and not isHofEnabled:
             itemCD = self.__ctx.get('itemCD')
             selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE if itemCD else VIEW_ALIAS.PROFILE_SUMMARY_PAGE
-        if itemCD is None:
+        if itemCD is None and not (self.__ctx and self.__ctx.get('selectedAlias')):
             event = ProfilePageEvent(ProfilePageEvent.SELECT_PROFILE_ALIAS)
             g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
             selectedAlias = event.ctx.get('selectedAlias', selectedAlias)

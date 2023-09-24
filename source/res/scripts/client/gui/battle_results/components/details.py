@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
-from constants import IGR_TYPE
+from constants import IGR_TYPE, PREMIUM_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.reusable.records import convertFactorToPercent
-from gui.battle_results.br_constants import PremiumXpBonusRestrictions
-from gui.battle_results.br_helper import isPremiumExpBonusAvailable
 from gui.impl import backport
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.gen.resources import R
@@ -21,6 +19,7 @@ from helpers import i18n, dependency
 from shared_utils import first
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class _GainResourceInBattleItem(base.StatsItem):
     __slots__ = ('__records', '__method', '__styler')
@@ -33,11 +32,10 @@ class _GainResourceInBattleItem(base.StatsItem):
 
     def _convert(self, value, reusable):
         personal = reusable.personal
-        economics = reusable.economics
-        baseRecords, premiumRecords = first(operator.methodcaller(self.__method)(economics), default=(None, None))[:2]
+        baseRecords, premiumRecords = first(operator.methodcaller(self.__method)(personal), default=(None, None))[:2]
         resource = 0
         if baseRecords is not None and not personal.avatar.hasPenalties():
-            if reusable.economics.hasAnyPremium:
+            if reusable.hasAnyPremiumInPostBattle:
                 records = premiumRecords
             else:
                 records = baseRecords
@@ -128,8 +126,8 @@ class BaseCreditsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        canBeFaded = not reusable.economics.isPostBattlePremium and reusable.canResourceBeFaded
-        for records in reusable.economics.getBaseCreditsRecords():
+        canBeFaded = not reusable.isPostBattlePremium and reusable.canResourceBeFaded
+        for records in reusable.personal.getBaseCreditsRecords():
             value = style.makeCreditsLabel(records.getRecord('credits', 'originalCreditsToDraw'), canBeFaded=canBeFaded)
             self.addNextComponent(base.DirectStatsItem('', value))
 
@@ -138,9 +136,13 @@ class PremiumCreditsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        canBeFaded = reusable.economics.hasAnyPremium and reusable.canResourceBeFaded
-        isDiffShow = reusable.economics.canUpgradeToPremiumPlus(reusable.common.arenaBonusType)
-        for value in reusable.economics.getCreditsToShow(isDiffShow):
+        canBeFaded = reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
+        isDiffShow = reusable.canUpgradeToPremiumPlus
+        for records in reusable.personal.getMoneyRecords():
+            baseCredits, premiumCredits = records[:2]
+            value = premiumCredits.getRecord('credits', 'originalCreditsToDraw')
+            if isDiffShow and value > 0:
+                value -= baseCredits.getRecord('credits', 'originalCreditsToDraw')
             value = style.makeCreditsLabel(value, canBeFaded=canBeFaded, isDiff=isDiffShow)
             self.addNextComponent(base.DirectStatsItem('', value))
 
@@ -150,7 +152,7 @@ class XPTitleBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         showSquadLabels, squadHasBonus = reusable.getPersonalSquadFlags()
-        for records in reusable.economics.getBaseXPRecords():
+        for records in reusable.personal.getBaseXPRecords():
             factor = int(records.getFactor('dailyXPFactor10'))
             if factor == 1 and showSquadLabels and squadHasBonus:
                 value = i18n.makeString(backport.text(R.strings.battle_results.common.details.xpTitleSquad()), img=icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.prebattleInviteIcon_1())))
@@ -166,7 +168,7 @@ class XPTitleTooltipBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         showSquadLabels, squadHasBonus = reusable.getPersonalSquadFlags()
-        for records in reusable.economics.getBaseXPRecords():
+        for records in reusable.personal.getBaseXPRecords():
             factor = int(records.getFactor('dailyXPFactor10'))
             value = None
             if factor == 1 and showSquadLabels and squadHasBonus:
@@ -180,8 +182,8 @@ class BaseXPBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        isPremium = not reusable.economics.hasAnyPremium and reusable.canResourceBeFaded
-        for records in reusable.economics.getBaseXPRecords():
+        isPremium = not reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
+        for records in reusable.personal.getBaseXPRecords():
             value = style.makeXpLabel(records.getRecord('xpToShow'), canBeFaded=isPremium)
             self.addNextComponent(base.DirectStatsItem('', value))
 
@@ -190,9 +192,15 @@ class PremiumXPBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        canBeFaded = reusable.economics.hasAnyPremium and reusable.canResourceBeFaded
-        isDiffShow = reusable.economics.canUpgradeToPremiumPlus(reusable.common.arenaBonusType)
-        for value in reusable.economics.getXPToShow(isDiffShow):
+        canBeFaded = reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
+        isDiffShow = reusable.canUpgradeToPremiumPlus
+        for records in reusable.personal.getXPRecords():
+            baseXP, premiumXP = records[:2]
+            xp = premiumXP.getRecord('xpToShow')
+            if isDiffShow:
+                value = xp - baseXP.getRecord('xpToShow')
+            else:
+                value = xp
             value = style.makeXpLabel(value, canBeFaded=canBeFaded, isDiff=isDiffShow)
             self.addNextComponent(base.DirectStatsItem('', value))
 
@@ -257,7 +265,6 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self.__addStatsItem('autoRepair', additionalRecords, additionalRecords, 'autoRepairCost')
         self.__addAutoCompletion('autoLoad', additionalRecords, 'autoLoadCredits', 'autoLoadGold')
         self.__addAutoCompletion('autoEquip', additionalRecords, 'autoEquipCredits', 'autoEquipGold')
-        self.__addAutoCompletion('autoBoosters', additionalRecords, 'autoBoostersCredits', 'autoBoostersGold')
         self._addEmptyRow()
         self.__addTotalResults(baseCredits, premiumCredits, goldRecords, additionalRecords)
         self._addEmptyRow()
@@ -388,8 +395,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
     def __addTotalResults(self, baseCredits, premiumCredits, goldRecords, additionalRecords):
         baseCanBeFaded = not self.hasAnyPremium and self.canResourceBeFaded
         premiumCanBeFaded = self.hasAnyPremium and self.canResourceBeFaded
-        autoCredits = additionalRecords.getRecord('autoRepairCost', 'autoLoadCredits', 'autoEquipCredits', 'autoBoostersCredits')
-        autoGold = additionalRecords.getRecord('autoLoadGold', 'autoEquipGold', 'autoBoostersGold')
+        autoCredits = additionalRecords.getRecord('autoRepairCost', 'autoLoadCredits', 'autoEquipCredits')
+        autoGold = additionalRecords.getRecord('autoLoadGold', 'autoEquipGold')
         columns = {'column1': style.makeCreditsLabel(baseCredits.getRecord(*self.__intermediateTotalRecords) + autoCredits, canBeFaded=baseCanBeFaded),
          'column3': style.makeCreditsLabel(premiumCredits.getRecord(*self.__intermediateTotalRecords) + autoCredits, canBeFaded=premiumCanBeFaded),
          'column2': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=not self.hasAnyPremium),
@@ -634,10 +641,9 @@ class _TotalEconomicsDetailsBlock(base.StatsBlock):
         igrType = reusable.getPlayerInfo().igrType
         personal = reusable.personal
         penaltyDetails = personal.avatar.getPenaltyDetails()
-        economics = reusable.economics
-        hasAnyPremium = economics.hasAnyPremium
+        hasAnyPremium = reusable.hasAnyPremiumInPostBattle
         canResourceBeFaded = reusable.canResourceBeFaded
-        for records in operator.methodcaller(self.__iteratorName)(economics):
+        for records in operator.methodcaller(self.__iteratorName)(personal):
             block = self.__blockClass(base.ListMeta(registered=True))
             block.hasAnyPremium = hasAnyPremium
             block.canResourceBeFaded = canResourceBeFaded
@@ -665,15 +671,16 @@ class TotalCrystalDetailsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
-        economics = reusable.economics
-        for record in economics.getCrystalDetailsRecords():
+        personal = reusable.personal
+        for record in personal.getCrystalDetailsRecords():
             block = CrystalDetailsBlock(base.ListMeta(registered=True))
             block.setRecord(record, reusable)
             self.addNextComponent(block)
 
 
 class PremiumBonusDetailsBlock(base.StatsBlock):
-    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'statusBonusTooltip', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor', '__vehicleCD', '__isActivePremiumPlus', '__applyAdditionalXPCount')
+    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'statusBonusTooltip', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor', '__vehicleCD')
+    __itemsCache = dependency.descriptor(IItemsCache)
     __battleResults = dependency.descriptor(IBattleResultsService)
 
     def __init__(self, meta=None, field='', *path):
@@ -682,8 +689,6 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__isPersonalTeamWin = False
         self.__arenaBonusType = None
         self.__xpFactor = 1
-        self.__isActivePremiumPlus = False
-        self.__applyAdditionalXPCount = 0
         self.__vehicleCD = None
         self.bonusIcon = ''
         self.description = ''
@@ -702,8 +707,6 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
         self.__arenaBonusType = reusable.common.arenaBonusType
         self.__xpFactor = self.__getAdditionalXPFactor10FromResult(result, reusable)
-        self.__isActivePremiumPlus = reusable.economics.isActivePremiumPlus()
-        self.__applyAdditionalXPCount = reusable.economics.getAppliedAdditionalCount()
         _, vehicle = first(reusable.personal.getVehicleItemsIterator())
         self.__vehicleCD = vehicle.intCD
 
@@ -721,35 +724,44 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         if self.__arenaUniqueID == 0:
             return
         self.__setBaseState()
-        restriction = isPremiumExpBonusAvailable(self.__arenaUniqueID, self.__isPersonalTeamWin, self.__vehicleCD)
-        if restriction == PremiumXpBonusRestrictions.IS_APPLIED:
+        if self.__getIsApplied():
             self.__setAppliedState()
-        elif restriction == PremiumXpBonusRestrictions.IS_LOST_BATTLE:
+        elif not self.__isPersonalTeamWin:
             self.__setLostBattleState()
-        elif restriction == PremiumXpBonusRestrictions.IS_BONUS_DISABLED:
+        elif not self.__battleResults.isAddXPBonusEnabled(self.__arenaUniqueID):
             self.__setExcludedState()
-        elif restriction == PremiumXpBonusRestrictions.IS_BLOCKED_BY_VEHICLE:
+        elif self.__isBlockedByVehicle():
             self.__setBlockedByVehicle()
-        elif restriction in (PremiumXpBonusRestrictions.IS_XP_TO_TMEN_DISABLED, PremiumXpBonusRestrictions.IS_XP_TO_TMEN_ENABLED):
-            self.__setBlockedByXPToTmen(restriction)
-        elif restriction == PremiumXpBonusRestrictions.IS_BLOCKED_BY_CREW:
+        elif self.__isBlockedByXPToTman():
+            self.__setBlockedByXPToTman()
+        elif self.__isBlockedByCrew():
             self.__setBlockedByCrew()
         else:
             self.__setShowButtonState()
+
+    def __isBlockedByVehicle(self):
+        item = self.__itemsCache.items.getItemByCD(self.__vehicleCD)
+        return not item.isInInventory or not item.activeInNationGroup
 
     def __setBlockedByVehicle(self):
         self.xpValue = ''
         self.statusBonusLabel = text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.tankStateChanged()))
         self.statusBonusTooltip = TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_TANKSTATECHANGED
 
-    def __setBlockedByXPToTmen(self, restriction):
+    def __isBlockedByXPToTman(self):
+        return not self.__battleResults.isXPToTManSameForArena(self.__arenaUniqueID)
+
+    def __setBlockedByXPToTman(self):
         self.xpValue = ''
-        if restriction == PremiumXpBonusRestrictions.IS_XP_TO_TMEN_ENABLED:
+        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
         else:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()
         self.statusBonusLabel = text_styles.neutral(backport.text(textKey))
         self.statusBonusTooltip = makeTooltip(body=TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY)
+
+    def __isBlockedByCrew(self):
+        return not self.__battleResults.isCrewSameForArena(self.__arenaUniqueID)
 
     def __setBlockedByCrew(self):
         self.xpValue = ''
@@ -761,8 +773,8 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.description = text_styles.highlightText(backport.text(R.strings.battle_results.common.premiumBonus.description()))
 
     def __setBonusLeft(self):
-        if self.__isActivePremiumPlus:
-            applyAdditionalXPCount = self.__applyAdditionalXPCount
+        if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
+            applyAdditionalXPCount = self.__itemsCache.items.stats.applyAdditionalXPCount
         else:
             applyAdditionalXPCount = '-'
         self.bonusLeft = self.__getBonusLeftStr(applyAdditionalXPCount)

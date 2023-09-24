@@ -80,6 +80,7 @@ class EventLootBoxesWelcomeScreen(ViewImpl):
 
     def __onBuyClick(self):
         self.__eventLootBoxes.openShop()
+        self.__eventLootBoxes.setIntroWasShown(True)
 
     def __onLootBoxesStatusChange(self, *_):
         if self.__eventLootBoxes.isActive() and self.__eventLootBoxes.isLootBoxesAvailable():

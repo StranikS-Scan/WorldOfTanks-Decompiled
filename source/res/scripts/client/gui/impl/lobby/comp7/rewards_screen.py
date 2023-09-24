@@ -11,6 +11,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.rewards_screen_model import Type
 from gui.impl.lobby.comp7 import comp7_shared, comp7_qualification_helpers
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses
 from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7TokensQuestID, parseComp7PeriodicQuestID
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
@@ -124,6 +125,7 @@ class RanksRewardsView(_BaseRewardsView):
         with self.viewModel.transaction() as vm:
             rankValue = comp7_shared.getRankEnumValue(self.__division)
             divisionValue = comp7_shared.getDivisionEnumValue(self.__division)
+            vm.setSeasonName(getSeasonNameEnum())
             vm.setType(self._getType())
             vm.setRank(rankValue)
             vm.setDivision(divisionValue)
@@ -154,6 +156,7 @@ class TokensRewardsView(_BaseRewardsView):
 
     def _setModelData(self):
         with self.viewModel.transaction() as vm:
+            vm.setSeasonName(getSeasonNameEnum())
             vm.setType(Type.TOKENSREWARDS)
             vm.setTokensCount(self.__tokensCount)
             self._setRewards(vm)
@@ -181,6 +184,7 @@ class QualificationRewardsView(_BaseRewardsView):
             maxDivision = first(self.__divisions)
             rankEnumValues = self.__getRanks(self.__divisions)
             maxRankEnumValue = first(rankEnumValues)
+            vm.setSeasonName(getSeasonNameEnum())
             vm.setType(Type.QUALIFICATIONRANK)
             vm.setRank(maxRankEnumValue)
             vm.setDivision(comp7_shared.getDivisionEnumValue(maxDivision))

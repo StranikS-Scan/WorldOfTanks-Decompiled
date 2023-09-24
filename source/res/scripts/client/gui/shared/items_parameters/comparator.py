@@ -26,7 +26,6 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'switchOffTime',
  CHASSIS_REPAIR_TIME,
  DUAL_GUN_CHARGE_TIME,
- KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  KPI.Name.CREW_REPEATED_STUN_DURATION,
  KPI.Name.CREW_STUN_DURATION,
  KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND,
@@ -53,10 +52,11 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  WHEELED_SWITCH_ON_TIME,
  TURBOSHAFT_SWITCH_TIME,
  KPI.Name.VEHICLE_RAM_CHASSIS_DAMAGE_RESISTANCE,
- KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
  KPI.Name.WOUNDED_CREW_EFFICIENCY,
  DUAL_GUN_RATE_TIME,
- DUAL_ACCURACY_COOLING_DELAY])
+ DUAL_ACCURACY_COOLING_DELAY,
+ KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
+ KPI.Name.DAMAGED_MODULES_DETECTION_TIME])
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 PARAMS_WITH_IGNORED_EMPTY_VALUES = {SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS}
 
@@ -128,7 +128,7 @@ class VehiclesComparator(ItemsComparator):
 
     def __init__(self, currentVehicleParams, otherVehicleParams, suitableArtefacts=None, bonuses=None, penalties=None):
         super(VehiclesComparator, self).__init__(currentVehicleParams, otherVehicleParams)
-        self.__suitableArtefacts = suitableArtefacts or set()
+        self.__suitableArtefacts = set(suitableArtefacts or set())
         self.__bonuses = bonuses or set()
         self.__penalties = penalties or dict()
 

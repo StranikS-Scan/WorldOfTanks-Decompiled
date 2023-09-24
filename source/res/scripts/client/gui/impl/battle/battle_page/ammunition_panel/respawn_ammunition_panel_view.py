@@ -14,7 +14,7 @@ class RespawnAmmunitionPanelView(ViewImpl):
     __slots__ = ('onSwitchLayout', '__ammunitionPanel', '__vehicle', '__eventManager')
 
     def __init__(self, vehicle):
-        settings = ViewSettings(layoutID=R.views.battle.battle_page.EpicRespawnAmmunitionPanelView(), flags=ViewFlags.COMPONENT, model=RespawnAmmunitionPanelViewModel())
+        settings = ViewSettings(layoutID=R.views.battle.battle_page.EpicRespawnAmmunitionPanelView(), flags=ViewFlags.VIEW, model=RespawnAmmunitionPanelViewModel())
         super(RespawnAmmunitionPanelView, self).__init__(settings)
         self.__ammunitionPanel = None
         self.__vehicle = vehicle

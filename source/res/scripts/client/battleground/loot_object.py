@@ -97,6 +97,7 @@ class LootObject(TerrainAreaGameObject, ILootObject, CompositeLoaderMixin):
             child.activate()
 
         if not self.__collected:
+            self.model.activate()
             self.markingSmoke.bindAndStart(self.model.compoundModel)
         self.pickupEffect.enable(False)
 
@@ -106,6 +107,10 @@ class LootObject(TerrainAreaGameObject, ILootObject, CompositeLoaderMixin):
         self.markingSmoke.unbind()
         for child in self.__children:
             child.deactivate()
+
+        if self.model is not None:
+            self.model.deactivate()
+        return
 
     def processPickup(self, entityID):
         self.__collected = True

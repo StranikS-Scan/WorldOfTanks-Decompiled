@@ -11,7 +11,7 @@ class ClanShortInfoTooltipContent(View, ClanEmblemsHelper):
     __webCtrl = dependency.descriptor(IWebController)
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.tooltips.clans.ClanShortInfoTooltipContent(), ViewFlags.COMPONENT, ClanShortInfoContentModel())
+        settings = ViewSettings(R.views.lobby.tooltips.clans.ClanShortInfoTooltipContent(), ViewFlags.VIEW, ClanShortInfoContentModel())
         super(ClanShortInfoTooltipContent, self).__init__(settings)
         clanProfile = self.__webCtrl.getAccountProfile()
         self.requestClanEmblem32x32(clanProfile.getClanDbID())

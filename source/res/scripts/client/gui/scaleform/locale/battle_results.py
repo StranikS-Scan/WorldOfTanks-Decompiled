@@ -357,6 +357,9 @@ class BATTLE_RESULTS(object):
     CUSTOMIZATIONPROGRESS_DESCR = '#battle_results:customizationProgress/descr'
     CUSTOMIZATIONPROGRESS_AWARD_RECEIVED = '#battle_results:customizationProgress/award/received'
     CUSTOMIZATIONPROGRESS_AWARD_NEWLEVEL = '#battle_results:customizationProgress/award/newLevel'
+    PRESTIGE_TITLE = '#battle_results:prestige/title'
+    PRESTIGE_COMMON_DESCRIPTION = '#battle_results:prestige/common/description'
+    PRESTIGE_MAX_DESCRIPTION = '#battle_results:prestige/max/description'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

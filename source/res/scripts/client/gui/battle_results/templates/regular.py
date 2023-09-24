@@ -14,7 +14,7 @@ from gui.battle_results.components import progress
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
 from gui.battle_results.components import vehicles
-from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from helpers import i18n
@@ -373,3 +373,4 @@ BATTLE_PASS_PROGRESS_STATS_BLOCK = progress.BattlePassProgressBlock(base.ListMet
 QUESTS_PROGRESS_STATS_BLOCK = progress.QuestsProgressBlock(base.ListMeta(), 'quests', _RECORD.PERSONAL)
 DOG_TAGS_PROGRESS_STATS_BLOCK = progress.DogTagsProgressBlock(base.ListMeta(), 'dog_tags', _RECORD.PERSONAL)
 PROGRESSIVE_REWARD_VO = progress.ProgressiveRewardVO('progressiveReward')
+PRESTIGE_PROGRESS_VO = progress.PrestigeProgressVO('prestige')

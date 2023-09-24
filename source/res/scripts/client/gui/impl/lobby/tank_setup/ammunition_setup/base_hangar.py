@@ -14,6 +14,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_setup_view_model import AmmunitionSetupViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
+from gui.impl.gen.view_models.views.lobby.tank_setup.tooltips.warning_tooltip_view_model import WarningDescription
 from gui.impl.lobby.tank_setup.ammunition_setup.base import BaseAmmunitionSetupView
 from gui.impl.lobby.tank_setup.backports.context_menu import getContextMenuData
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotTooltipData, getShellsPriceDiscountTooltipData, getSlotSpecTooltipData
@@ -53,7 +54,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     def __init__(self, layoutID=R.views.lobby.tanksetup.HangarAmmunitionSetup(), **kwargs):
         settings = ViewSettings(layoutID)
         settings.model = AmmunitionSetupViewModel()
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.kwargs = kwargs
         super(BaseHangarAmmunitionSetupView, self).__init__(settings)
         self.__blur = CachedBlur()
@@ -81,7 +82,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
             if tooltipId == TankSetupConstants.EQUIP_COIN_INFO_TOOLTIP:
                 return createBackportTooltipContent(specialAlias=tooltipId, specialArgs=[])
         if contentID == R.views.lobby.tanksetup.tooltips.WarningTooltipView():
-            reason = event.getArgument('reason')
+            reason = WarningDescription(event.getArgument('reason'))
             isCritical = event.getArgument('isCritical')
             return WarningTooltipView(reason, isCritical)
         else:

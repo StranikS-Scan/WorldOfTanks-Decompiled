@@ -23,7 +23,7 @@ class CollectionsMainView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.collection.CollectionsMainView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = CollectionsMainViewModel()
         self.__wasFirstActivation = False
         super(CollectionsMainView, self).__init__(settings)

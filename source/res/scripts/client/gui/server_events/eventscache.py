@@ -24,7 +24,6 @@ from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import ACTION_ENTITY_ITEM as aei, GUI_ITEM_TYPE
 from gui.shared.system_factory import collectQuestBuilders
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
-from gui.wt_event.wt_event_helpers import WT_TOKEN_PREFIX
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -42,8 +41,7 @@ if typing.TYPE_CHECKING:
 NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
  RECRUIT_TMAN_TOKEN_PREFIX,
  TWITCH_TOKEN_PREFIX,
- OFFER_TOKEN_PREFIX,
- WT_TOKEN_PREFIX)
+ OFFER_TOKEN_PREFIX)
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):

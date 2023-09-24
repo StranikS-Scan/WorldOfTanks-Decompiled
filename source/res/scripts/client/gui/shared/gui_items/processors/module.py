@@ -117,6 +117,15 @@ class ModuleBuyer(ModuleTradeProcessor):
         return
 
 
+class BookBuyer(ModuleBuyer):
+
+    def _getMsgCtx(self):
+        return {'name': self.item.userName,
+         'kind': self.item.userType,
+         'count': backport.getIntegralFormat(int(self.count)),
+         'money': formatPrice(self._getOpPrice().price, justValue=True)}
+
+
 class ModuleSeller(ModuleTradeProcessor):
 
     def __init__(self, item, count):

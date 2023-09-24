@@ -9,4 +9,4 @@ from gui.Scaleform.daapi.view.meta.BootcampProgressMeta import BootcampProgressM
 class BootcampProgressComponent(InjectComponentAdaptor, BootcampProgressMeta, IGlobalListener):
 
     def _makeInjectView(self):
-        return BootcampProgressWidgetView(flags=ViewFlags.COMPONENT)
+        return BootcampProgressWidgetView(flags=ViewFlags.VIEW)

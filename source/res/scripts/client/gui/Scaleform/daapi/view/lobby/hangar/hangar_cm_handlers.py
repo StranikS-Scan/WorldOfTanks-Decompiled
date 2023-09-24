@@ -5,11 +5,9 @@ from typing import TYPE_CHECKING
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
-from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
-from gui.Scaleform.genConsts.PERSONALCASECONST import PERSONALCASECONST
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
@@ -17,9 +15,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showShop, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
-from gui.shared.utils import decorators
 from helpers import dependency
 from items import UNDEFINED_ITEM_CD
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
@@ -31,11 +27,6 @@ _logger = getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Optional
     from gui.shared.gui_items import Vehicle
-
-class CREW(object):
-    PERSONAL_CASE = 'personalCase'
-    UNLOAD = 'tankmanUnload'
-
 
 class MODULE(object):
     INFO = 'moduleInfo'
@@ -67,34 +58,6 @@ class VEHICLE(object):
     NATION_CHANGE = 'nationChange'
     GO_TO_COLLECTION = 'goToCollection'
     TELECOM_RENT = 'telecomRent'
-
-
-class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, cmProxy, ctx=None):
-        super(CrewContextMenuHandler, self).__init__(cmProxy, ctx, {CREW.PERSONAL_CASE: 'showPersonalCase',
-         CREW.UNLOAD: 'unloadTankman'})
-
-    def showPersonalCase(self):
-        shared_events.showPersonalCase(self._tankmanID, PERSONALCASECONST.STATS_TAB_ID, EVENT_BUS_SCOPE.LOBBY)
-
-    @decorators.adisp_process('unloading')
-    def unloadTankman(self):
-        tankman = self.itemsCache.items.getTankman(self._tankmanID)
-        result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
-    def _generateOptions(self, ctx=None):
-        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': not g_currentVehicle.isInBattle()})]
-
-    def _initFlashValues(self, ctx):
-        self._tankmanID = int(ctx.tankmanID)
-
-    def _clearFlashValues(self):
-        self._tankmanID = None
-        return
 
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):

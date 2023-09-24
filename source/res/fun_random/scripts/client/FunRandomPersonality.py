@@ -152,6 +152,7 @@ def preInit():
     initGuiTypes(fun_gui_constants, __name__)
     initRequestType(fun_gui_constants, __name__)
     battleMode = ClientFunRandomBattleMode(__name__)
+    battleMode.registerCommon()
     battleMode.registerClient()
     battleMode.registerClientSelector()
     battleMode.registerBannerEntryPointValidatorMethod()

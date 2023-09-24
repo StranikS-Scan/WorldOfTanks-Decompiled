@@ -164,8 +164,6 @@ class WalletController(IWalletController):
         self.__weaver = Weaver()
         if self.__weaver.findPointcut(UnlockItemPointcut) == -1:
             self.__weaver.weave(pointcut=UnlockItemPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
-        if self.__weaver.findPointcut(ExchangeFreeXPToTankmanPointcut) == -1:
-            self.__weaver.weave(pointcut=ExchangeFreeXPToTankmanPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
 
     def __sendNotification(self, status):
         msgType = SM_TYPE.Information if status == 'available' else SM_TYPE.Warning
@@ -193,7 +191,7 @@ class ShowXPInfoDialogAspect(Aspect):
         cd.avoid()
         yield DialogsInterface.showDialog(FreeXPInfoMeta())
         cd.function(*cd._packArgs(), **cd._kwargs)
-        self.callback((ExchangeFreeXPToTankmanPointcut, UnlockItemPointcut))
+        self.callback((UnlockItemPointcut,))
 
     def clear(self):
         self.callback = None
@@ -204,9 +202,3 @@ class UnlockItemPointcut(Pointcut):
 
     def __init__(self):
         super(UnlockItemPointcut, self).__init__('gui.shared.gui_items.items_actions.actions', 'UnlockItemAction', '^_unlockItem$')
-
-
-class ExchangeFreeXPToTankmanPointcut(Pointcut):
-
-    def __init__(self):
-        super(ExchangeFreeXPToTankmanPointcut, self).__init__('gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow', 'ExchangeFreeToTankmanXpWindow', '^apply$')

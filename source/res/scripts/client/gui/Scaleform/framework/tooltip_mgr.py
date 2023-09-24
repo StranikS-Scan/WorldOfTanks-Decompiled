@@ -3,10 +3,12 @@
 import inspect
 import itertools
 import logging
+from collections import namedtuple
 import BigWorld
 import Keys
-from collections import namedtuple
 from Event import SafeEvent, EventManager
+from PlayerEvents import g_playerEvents
+from frameworks.wulf import ViewStatus
 from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -57,7 +59,6 @@ class ToolTip(ToolTipMgrMeta):
 
     def hide(self):
         self.as_hideS()
-        self.__destroyTooltipWindow()
 
     def handleKeyEvent(self, event):
         if not self.isReadyToHandleKey(event):
@@ -130,7 +131,7 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
-    def onCreateWulfTooltip(self, tooltipType, args, x, y, parent=None):
+    def onCreateWulfTooltip(self, tooltipType, args, x, y):
         if not self._isAllowedTypedTooltip:
             return
         else:
@@ -140,10 +141,10 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            self.__destroyTooltipWindow()
-            window = data.getDisplayableData(parent=parent, *args)
+            window = data.getDisplayableData(*args)
             window.load()
-            window.move(int(x), int(y))
+            window.move(x, y)
+            window.onStatusChanged += self._onWulfWindowStatusChanged
             self.__tooltipWindowId = window.uniqueID
             self.__cacheTooltipData(_TOOLTIP_VARIANT_WULF, tooltipType, args, (x, y))
             self.onShow(tooltipType, args, self.__isAdvancedKeyPressed)
@@ -180,15 +181,21 @@ class ToolTip(ToolTipMgrMeta):
         self.onHide(hideTooltipId)
         return
 
+    def _onWulfWindowStatusChanged(self, state):
+        if state == ViewStatus.DESTROYED:
+            self.onHideTooltip(self.__tooltipID)
+
     def _populate(self):
         super(ToolTip, self)._populate()
         self.appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         self.addListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
+        g_playerEvents.onAccountBecomeNonPlayer += self.__onAccountBecomeNonPlayer
         InputHandler.g_instance.onKeyDown += self.handleKeyEvent
         InputHandler.g_instance.onKeyUp += self.handleKeyEvent
 
     def _dispose(self):
         self._builders.clear()
+        g_playerEvents.onAccountBecomeNonPlayer -= self.__onAccountBecomeNonPlayer
         self.appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.removeListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
         while self._dynamic:
@@ -200,6 +207,10 @@ class ToolTip(ToolTipMgrMeta):
         self.__destroyTooltipWindow()
         self.__em.clear()
         super(ToolTip, self)._dispose()
+
+    def __onAccountBecomeNonPlayer(self):
+        _logger.debug('Cancel tooltips on account become non player')
+        self.hide()
 
     def __onGUISpaceEntered(self, spaceID):
         self._isAllowedTypedTooltip = spaceID not in self._noTooltipSpaceIDs

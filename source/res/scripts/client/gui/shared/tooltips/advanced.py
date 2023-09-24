@@ -169,13 +169,7 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
 class TankmanPreviewTooltipAdvanced(BaseAdvancedTooltip):
 
     def _packBlocks(self, role, *args, **kwargs):
-        return self._packAdvancedBlocks(_TANKMAN_MOVIES[role], ITEM_TYPES.tankman_roles(role), role)
-
-
-class TankmanTooltipAdvanced(BaseAdvancedTooltip):
-
-    def _getBlocksList(self, *args, **kwargs):
-        return self._packAdvancedBlocks(_TANKMAN_MOVIES[self._item.role], self._item.roleUserName, self._item.role)
+        return self._packAdvancedBlocks(TANKMAN_MOVIES[role], ITEM_TYPES.tankman_roles(role), role)
 
 
 class VehicleParametersAdvanced(ToolTipBaseData):
@@ -315,10 +309,8 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'improvedRotationMechanism': 'equipmentImprovedRotationMechanism',
  'additionalInvisibilityDevice': 'equipmentLowNoiseExhaustSystem',
  'improvedConfiguration': 'equipmentModifiedConfiguration',
- 'turbocharger': 'equipmentTurbocharger',
- 'wt_largeMedkit': 'consumablesFirstAidWt',
- 'wt_largeRepairkit': 'consumablesRepairKitBig'}
-_TANKMAN_MOVIES = {'commander': 'crewCommander',
+ 'turbocharger': 'equipmentTurbocharger'}
+TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',
  'loader': 'crewLoader',

@@ -10,8 +10,8 @@ class BattleHintPanelMeta(BaseDAAPIComponent):
     def onHideComplete(self):
         self._printOverrideError('onHideComplete')
 
-    def as_setDataS(self, vKey, key, messageLeft, messageRight, offsetX, offsetY, reducedPanning):
-        return self.flashObject.as_setData(vKey, key, messageLeft, messageRight, offsetX, offsetY, reducedPanning) if self._isDAAPIInited() else None
+    def as_setDataS(self, vKey, key, messageLeft, messageRight, offsetX, offsetY, reducedPanning, centeredMessage=False):
+        return self.flashObject.as_setData(vKey, key, messageLeft, messageRight, offsetX, offsetY, reducedPanning, centeredMessage) if self._isDAAPIInited() else None
 
     def as_toggleS(self, isShow):
         return self.flashObject.as_toggle(isShow) if self._isDAAPIInited() else None

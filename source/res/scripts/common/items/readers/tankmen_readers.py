@@ -157,3 +157,18 @@ def readNationConfig(xmlPath):
     config = _readNationConfigSection((None, xmlPath), section)
     ResMgr.purge(xmlPath, True)
     return config
+
+
+def readLoreConfig(xmlPath):
+    xmlCtx = (None, xmlPath)
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    config = tankmen_components.LoreComponent()
+    for partName, part in _xml.getChildren(xmlCtx, section, tankmen_components.LoreComponent.SECTION):
+        config.addDescrForGroup(partName, part.asString)
+        if part.has_key(tankmen_components.LoreComponent.NATION_SECTION):
+            for itemName, item in _xml.getChildren(xmlCtx, part, tankmen_components.LoreComponent.NATION_SECTION):
+                config.addNationDescrForGroup(partName, itemName, item.asString)
+
+    return config

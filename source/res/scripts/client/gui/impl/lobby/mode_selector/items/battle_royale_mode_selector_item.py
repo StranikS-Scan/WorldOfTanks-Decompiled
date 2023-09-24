@@ -38,7 +38,9 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
         return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
 
     def _onInitializing(self):
-        super(BattleRoyaleModeSelectorItem, self)._onInitializing()
+        ModeSelectorLegacyItem._onInitializing(self)
+        self.viewModel.setName(backport.text(R.strings.mode_selector.mode.battleRoyaleQueue.title()))
+        self.viewModel.setPriority(self._legacySelectorItem.getOrder())
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
         self.__battleRoyaleController.onUpdated += self.__onUpdate
         self.brProgression.onProgressPointsUpdated += self.__fillWidgetData

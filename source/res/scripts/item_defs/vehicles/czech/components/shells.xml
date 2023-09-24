@@ -6,7 +6,6 @@
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
-    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
     <he_modern_premium>	HIGH_EXPLOSIVE_MODERN_PREMIUM.png 0 0	</he_modern_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
@@ -726,24 +725,6 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_Prurazny_vz_50>
-  <_100mm_Prurazny_vz_50_WT>
-    <id>	401	</id>
-    <userString>	#czech_vehicles:_100mm_Prurazny_vz_50_WT	</userString>
-    <description>	#czech_vehicles:_100mm_Prurazny_vz_50_WT_descr	</description>
-    <shortDescriptionSpecial>	#czech_vehicles:_100mm_Prurazny_vz_50_WT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#czech_vehicles:_100mm_Prurazny_vz_50_WT_long_special	</longDescriptionSpecial>
-    <icon>	ap_wt	</icon>
-    <price>	1110	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	100	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	150	</devices>
-    </damage>
-  </_100mm_Prurazny_vz_50_WT>
   <_100mm_Prupalny_vz_50>
     <id>	40	</id>
     <userString>	#czech_vehicles:_100mm_Prupalny_vz_50	</userString>
@@ -1064,36 +1045,4 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
-  <_100mm_Narazovy_vz_50_explosiveShot_WT>
-    <id>	1001	</id>
-    <userString>	#czech_vehicles:_100mm_Prurazny_vz_50_WT	</userString>
-    <description>	#czech_vehicles:_100mm_Prurazny_vz_50_WT_descr	</description>
-    <shortDescriptionSpecial>	#czech_vehicles:_100mm_Prurazny_vz_50_WT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:_100mm_Prurazny_vz_50_WT_long_special	</longDescriptionSpecial>
-    <icon>	he_modern	</icon>
-    <price>	620	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	100	</caliber>
-    <explosionRadius>	32.0	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <skipSelfDamage>	true	</skipSelfDamage>
-    <effects>	largeSH	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	1	</devices>
-    </damage>
-    <blastWave>
-      <impactRadius>	32.0	</impactRadius>
-      <damageAbsorption>	NONE	</damageAbsorption>
-      <damage>
-        <armor>	300	</armor>
-        <devices>	1	</devices>
-      </damage>
-    </blastWave>
-    <notInShop>	True	</notInShop>
-    <damageRandomization>	0.0	</damageRandomization>
-    <piercingPowerRandomization>	0.0	</piercingPowerRandomization>
-    <explosionDisableDamageFalloff>	1.0	</explosionDisableDamageFalloff>
-  </_100mm_Narazovy_vz_50_explosiveShot_WT>
 </shells.xml>

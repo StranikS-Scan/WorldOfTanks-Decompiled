@@ -266,6 +266,12 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onSectorShooting {}'.format(sectorID))
         avatar.onSectorShooting(sectorID)
 
+    def stopSetupSelection(self):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.stopSetupSelection()
+
     def beforeSetupUpdate(self):
         avatar = self._avatar()
         if not avatar:
@@ -439,3 +445,6 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     def _avatar(self):
         raise NotImplementedError('_avatar must be overrided in ownVehicle')
+
+    def _entities(self):
+        raise NotImplementedError('_entities must be overrided in ownVehicle')

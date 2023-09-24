@@ -14,7 +14,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from points_of_interest_shared import PoiStatus, ENEMY_VEHICLE_ID
+from points_of_interest_shared import PoiStatus, ENEMY_VEHICLE_ID, PoiBlockReasons
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersBattleController, VehicleStateSoundPlayer, SoundPlayer
@@ -321,14 +321,21 @@ class _PrebattleSoundPlayer(SoundPlayer):
 class _PoiSNSoundPlayer(VehicleStateSoundPlayer):
     __POI_CAPTURE_TIMER_SHOWN = 'comp_7_poi_timer_capture'
     __POI_COOLDOWN_TIMER_SHOWN = 'comp_7_poi_timer_cooldown'
+    __POI_CAPTURE_BLOCKED = 'comp_7_poi_capture_blocked'
 
     def _onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.POINT_OF_INTEREST_STATE and value is not None:
-            if value.status.statusID is PoiStatus.CAPTURING:
-                _play2d(self.__POI_CAPTURE_TIMER_SHOWN)
-            elif value.status.statusID is PoiStatus.COOLDOWN:
-                _play2d(self.__POI_COOLDOWN_TIMER_SHOWN)
-        return
+        if value is None:
+            return
+        else:
+            if state == VEHICLE_VIEW_STATE.POINT_OF_INTEREST_STATE:
+                if value.status.statusID is PoiStatus.CAPTURING:
+                    _play2d(self.__POI_CAPTURE_TIMER_SHOWN)
+                elif value.status.statusID is PoiStatus.COOLDOWN:
+                    _play2d(self.__POI_COOLDOWN_TIMER_SHOWN)
+            elif state == VEHICLE_VIEW_STATE.POINT_OF_INTEREST_VEHICLE_STATE:
+                if PoiBlockReasons.EQUIPMENT in (r.statusID for r in value.blockReasons):
+                    _play2d(self.__POI_CAPTURE_BLOCKED)
+            return
 
 
 class _BuffSNSoundPlayer(VehicleStateSoundPlayer):

@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/observer_players_panel.py
 import BigWorld
+from battle_royale.gui.Scaleform.daapi.view.battle.shared.utils import getVehicleLevel
+from Event import EventsSubscriber
 from aih_constants import CTRL_MODE_NAME
-from gui.shared.gui_items.Vehicle import getTypeVPanelIconPath
-from helpers import dependency, int2roman
+from gui.Scaleform.daapi.view.meta.BattleRoyalePlayersPanelMeta import BattleRoyalePlayersPanelMeta
 from gui.battle_control import avatar_getter
-from items.vehicles import VehicleDescr
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.controllers.battle_field_ctrl import IBattleFieldListener
-from gui.Scaleform.daapi.view.meta.BattleRoyalePlayersPanelMeta import BattleRoyalePlayersPanelMeta
+from gui.shared.gui_items.Vehicle import getTypeVPanelIconPath
+from helpers import dependency, int2roman
 from skeletons.gui.battle_session import IBattleSessionProvider
-from Event import EventsSubscriber
 
 def _comapareAndSet(data, key, value):
     if value != data[key]:
@@ -104,7 +104,7 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
 
     def __init(self):
         self.__playerList = self.__getInitialPlayersList()
-        self.__updateRanks(BigWorld.player().avatarBattleRoyaleComponent.defeatedTeams)
+        self.__updateRanks(BigWorld.player().arena.arenaInfo.abilityNotifierComponent.defeatedTeams)
         if len(self.__playerList) != len({player['teamIndex'] for player in self.__playerList.itervalues()}):
             self.as_setSeparatorVisibilityS(True)
         self.__panelUpdate()
@@ -127,7 +127,7 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
     def __updateLevel(self, vInfo):
         data = self.__getPlayerData(vInfo)
         if data is not None:
-            data['vehicleLevel'] = int2roman(self._getVehicleLevel(vInfo))
+            data['vehicleLevel'] = int2roman(getVehicleLevel(vInfo.vehicleType))
         self.__panelUpdate()
         return
 
@@ -141,7 +141,7 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
             return False
         updated = _comapareAndSet(data, 'isAlive', vInfo.isAlive())
         if _comapareAndSet(data, 'strCompactDescr', vInfo.vehicleType.strCompactDescr):
-            data['vehicleLevel'] = int2roman(self._getVehicleLevel(vInfo))
+            data['vehicleLevel'] = int2roman(getVehicleLevel(vInfo.vehicleType))
             updated = True
         return updated
 
@@ -180,7 +180,7 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
          'playerName': vInfo.player.name,
          'vehicleID': vInfo.vehicleID,
          'teamIndex': vInfo.team,
-         'vehicleLevel': int2roman(self._getVehicleLevel(vInfo)),
+         'vehicleLevel': int2roman(getVehicleLevel(vInfo.vehicleType)),
          'vehicleTypeIcon': getTypeVPanelIconPath(vInfo.vehicleType.classTag),
          'vehicleName': vInfo.vehicleType.name,
          'fragsCount': self.__getFrags(vStats),
@@ -188,7 +188,3 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
          'isCommander': isCommander,
          'isObserved ': False,
          'strCompactDescr': vInfo.vehicleType.strCompactDescr}
-
-    def _getVehicleLevel(self, vInfoVO):
-        descriptor = VehicleDescr(compactDescr=vInfoVO.vehicleType.strCompactDescr)
-        return max(descriptor.chassis.level, descriptor.turret.level, descriptor.gun.level, descriptor.radio.level, descriptor.engine.level)

@@ -31,18 +31,18 @@ class ViewMonitor(object):
         return
 
     def __viewStatusChanged(self, viewUniqueID, viewNewStatus):
-        if viewNewStatus == ViewStatus.LOADED:
-            newView = self.__gui.windowsManager.getView(viewUniqueID)
-            if not newView:
-                return
-            if newView.layoutID in self._ignoreViewLayoutIds:
-                _logger.info('View %r remains alive, new view is being opened over it %r', self._view, newView)
-                return
-            try:
-                newView.layer
-            except AssertionError:
-                return
-
-            if newView.layer == self._view.layer and newView.uniqueID != self._view.uniqueID:
-                self._view.destroyWindow()
-                _logger.info('View %r has been destroyed by opening new view %r', self._view, newView)
+        if viewNewStatus != ViewStatus.LOADED:
+            return
+        newView = self.__gui.windowsManager.getView(viewUniqueID)
+        if newView.uniqueID == self._view.uniqueID:
+            return
+        newWindow = newView.getWindow()
+        if not newWindow:
+            return
+        if newView.layoutID in self._ignoreViewLayoutIds:
+            _logger.info('View %r remains alive, new view is being opened over it %r', self._view.__repr__(), newView)
+            return
+        window = self._view.getWindow()
+        if newWindow.layer == window.layer:
+            window.destroy()
+            _logger.info('View %r has been destroyed by opening new view %r', self._view.__repr__(), newView)

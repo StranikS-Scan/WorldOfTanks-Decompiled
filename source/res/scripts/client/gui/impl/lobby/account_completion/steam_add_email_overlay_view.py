@@ -11,6 +11,7 @@ from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.shared.event_dispatcher import showSteamConfirmEmailOverlay
 from helpers import dependency
 from helpers.time_utils import getTimeDeltaFromNow
+from skeletons.gui.game_control import ISteamCompletionController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 if typing.TYPE_CHECKING:
     from wg_async import _Future
@@ -23,7 +24,8 @@ class SteamAddEmailOverlayView(BaseCredentialsOverlayView):
     _TITLE = rAccCompletion.email.title()
     _SUBTITLE = rAccCompletion.email.subTitle()
     _REWARDS_TITLE = rAccCompletion.rewardsTitle()
-    _wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
+    __wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
+    __accountCompletionCtrl = dependency.descriptor(ISteamCompletionController)
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -35,14 +37,16 @@ class SteamAddEmailOverlayView(BaseCredentialsOverlayView):
     def _onLoading(self, *args, **kwargs):
         super(SteamAddEmailOverlayView, self)._onLoading(*args, **kwargs)
         self.viewModel.setIsPasswordInputVisible(False)
+        self.__accountCompletionCtrl.setAddEmailOverlayShown()
 
     def _validateInput(self):
         return self._email.validate()
 
     def _doRequest(self):
-        return self._wgnpSteamAccCtrl.addEmail(self._email.value)
+        return self.__wgnpSteamAccCtrl.addEmail(self._email.value)
 
     def _handleSuccess(self, *_):
+        self.__accountCompletionCtrl.setConfirmEmailOverlayAllowed(isAllowed=True)
         showSteamConfirmEmailOverlay(email=self._email.value)
 
     def _handleError(self, response):

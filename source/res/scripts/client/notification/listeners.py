@@ -12,7 +12,6 @@ from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters
 from adisp import adisp_process
-from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
@@ -21,7 +20,7 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.SystemMessages import SM_TYPE
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
+from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, isCommonBattlePassChapter
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
@@ -30,6 +29,7 @@ from gui.collection.collections_constants import COLLECTIONS_RENEW_EVENT_TYPE, C
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
+from gui.prestige.prestige_helpers import mapGradeIDToUI, MAX_GRADE_ID, isFirstEntryNotificationShown, setFirstEntryNotificationShown
 from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
@@ -57,7 +57,7 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, WinBackCallEntryDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -245,9 +245,11 @@ class ServiceChannelListener(_NotificationListener):
                 if messageType == SYS_MESSAGE_TYPE.customizationChanged.index():
                     return C11nMessageDecorator
                 if messageType == SYS_MESSAGE_TYPE.customizationProgress.index():
-                    return C11nMessageDecorator
+                    return C11nProgressiveItemDecorator
                 if messageType == SYS_MESSAGE_TYPE.personalMissionFailed.index():
                     return LockButtonMessageDecorator
+                if messageType == SYS_MESSAGE_TYPE.prestigeLevelChanged.index():
+                    return PrestigeLvlUpDecorator
                 if messageType == SYS_MESSAGE_TYPE.battlePassReward.index():
                     return BattlePassLockButtonDecorator
                 if messageSubtype in (SCH_CLIENT_MSG_TYPE.MAPBOX_PROGRESSION_REWARD, SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE):
@@ -258,6 +260,8 @@ class ServiceChannelListener(_NotificationListener):
                     return C2DProgressionStyleDecorator
                 if self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
                     return CollectionsLockButtonDecorator
+                if messageType == SCH_CLIENT_MSG_TYPE.WIN_BACK_CALL_NOTIFY_TYPE:
+                    return WinBackCallEntryDecorator
             return MessageDecorator
 
 
@@ -1144,7 +1148,7 @@ class BattlePassListener(_NotificationListener):
     def __pushFinished(self):
         styles = []
         for chapterID in self.__battlePassController.getChapterIDs():
-            if self.__battlePassController.getRewardType(chapterID) == FinalReward.STYLE:
+            if isCommonBattlePassChapter(chapterID):
                 styleCD, styleLevel = getStyleInfoForChapter(chapterID)
                 style = self.__itemsCache.items.getItemByCD(styleCD)
                 if style.fullInventoryCount() and styleLevel != style.getMaxProgressionLevel():
@@ -1154,10 +1158,8 @@ class BattlePassListener(_NotificationListener):
          'additionalText': '\n'.join(styles)})
 
     def __pushStarted(self):
-        rewardTypes = set((self.__battlePassController.getRewardType(chapterID) for chapterID in self.__battlePassController.getChapterIDs()))
-        for rewardType in rewardTypes:
-            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).title(), seasonNum=self.__battlePassController.getSeasonNum()),
-             'additionalText': ''})
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.title(), seasonNum=self.__battlePassController.getSeasonNum()),
+         'additionalText': ''})
 
     def __pushEnabled(self):
         expiryTime = self.__battlePassController.getSeasonFinishTime()
@@ -2082,6 +2084,59 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         return todayStart <= timestamp <= todayEnd
 
 
+class PrestigeListener(_NotificationListener):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __PRESTIGE_MESSAGES = R.strings.messenger.serviceChannelMessages.prestige
+    __START_ENTITY_ID = 0
+
+    def start(self, model):
+        result = super(PrestigeListener, self).start(model)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        if result:
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(PrestigeListener, self).stop()
+
+    def __onServerSettingsChange(self, diff):
+        prestigeChanged = diff.get('prestige_config')
+        if not prestigeChanged:
+            return
+        model = self._model()
+        config = self.__lobbyContext.getServerSettings().prestigeConfig
+        if not config.isEnabled and model:
+            model.removeNotification(NOTIFICATION_TYPE.PRESTIGE_FIRST_ENTRY, self.__START_ENTITY_ID)
+
+    def __tryNotify(self):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            config = self.__lobbyContext.getServerSettings().prestigeConfig
+            if not config.isEnabled:
+                return
+            prestigeVehicle = self.__itemsCache.items.getAccountDossier().getPrestigeStats().getVehicles()
+            if not prestigeVehicle:
+                setFirstEntryNotificationShown()
+                return
+            if isFirstEntryNotificationShown():
+                return
+            text = backport.text(self.__PRESTIGE_MESSAGES.firstEntry.text())
+            title = backport.text(self.__PRESTIGE_MESSAGES.firstEntry.title())
+            gradeType, grade = mapGradeIDToUI(MAX_GRADE_ID)
+            messageData = {'title': title,
+             'text': text}
+            linkageData = {'type': gradeType.value,
+             'grade': grade,
+             'lvl': None}
+            model.addNotification(PrestigeFirstEntryDecorator(message=messageData, linkageData=linkageData, entityID=self.__START_ENTITY_ID, model=model))
+            setFirstEntryNotificationShown()
+            return
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2105,7 +2160,8 @@ registerNotificationsListeners((ServiceChannelListener,
  CollectionsListener,
  WinbackSelectableRewardReminder,
  WotPlusIntroViewListener,
- BattleMattersTaskReminderListener))
+ BattleMattersTaskReminderListener,
+ PrestigeListener))
 
 class NotificationsListeners(_NotificationListener):
 

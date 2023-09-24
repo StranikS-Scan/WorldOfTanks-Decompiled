@@ -4,6 +4,7 @@ from collections import namedtuple, Counter, defaultdict
 import logging
 import typing
 import Math
+import math
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -285,11 +286,24 @@ def containsVehicleBound(purchaseItems):
     return any((count > item.boundInventoryCount(vehCD) for item, count in fromInventoryCounter.items()))
 
 
-def getPurchaseMoneyState(price):
+def getPurchaseGoldForCredits(price):
+    _, exchangeRate, shortage = getPurchaseMoneyStateShortage(price)
+    purchaseGold = 0
+    if shortage:
+        purchaseGold = math.ceil(float(shortage.credits) / exchangeRate)
+    return purchaseGold
+
+
+def getPurchaseMoneyStateShortage(price):
     itemsCache = dependency.instance(IItemsCache)
     money = itemsCache.items.stats.money
     exchangeRate = itemsCache.items.shop.exchangeRate
     shortage = money.getShortage(price)
+    return (money, exchangeRate, shortage)
+
+
+def getPurchaseMoneyState(price):
+    money, exchangeRate, shortage = getPurchaseMoneyStateShortage(price)
     if not shortage:
         moneyState = MoneyForPurchase.ENOUGH
     else:

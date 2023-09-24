@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
-from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7IntroPresenter
+from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
 from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
 from gui.prb_control.entities.comp7.scheduler import Comp7Scheduler
 from gui.prb_control.entities.comp7.pre_queue.actions_validator import Comp7ActionsValidator
@@ -57,7 +57,7 @@ class Comp7Entity(PreQueueEntity):
     def __init__(self):
         super(Comp7Entity, self).__init__(FUNCTIONAL_FLAG.COMP7, QUEUE_TYPE.COMP7, PreQueueSubscriber())
         self.__watcher = None
-        self.__introPresenter = Comp7IntroPresenter()
+        self.__introPresenter = Comp7ViewPresenter()
         self.storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
         return
 

@@ -13,9 +13,15 @@ class SOUNDS(CONST_CONTAINER):
     ACTIVATE_CHAPTER_STATE = 'STATE_overlay_hangar_general'
     ACTIVATE_CHAPTER_STATE_ON = 'STATE_overlay_hangar_general_on'
     ACTIVATE_CHAPTER_STATE_OFF = 'STATE_overlay_hangar_general_off'
+    CUSTOM_TASKS_COMMON_SOUND_SPACE = 'tasks_special'
+    CUSTOM_TASKS_STATE_PLACE = 'STATE_hangar_place'
+    CUSTOM_TASKS_STATE_PLACE_TASKS = 'STATE_hangar_place_tasks'
+    CUSTOM_TASKS_ENTER = 'tasks_special_enter'
+    CUSTOM_TASKS_EXIT = 'tasks_special_exit'
 
 
 ACTIVATE_CHAPTER_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+CUSTOM_TASKS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.CUSTOM_TASKS_COMMON_SOUND_SPACE, entranceStates={SOUNDS.CUSTOM_TASKS_STATE_PLACE: SOUNDS.CUSTOM_TASKS_STATE_PLACE_TASKS}, exitStates={}, enterEvent=SOUNDS.CUSTOM_TASKS_ENTER, exitEvent=SOUNDS.CUSTOM_TASKS_EXIT, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
 
 class BattlePassSounds(CONST_CONTAINER):
     _OVERLAY = 'bp_overlay'
@@ -34,6 +40,7 @@ class BattlePassSounds(CONST_CONTAINER):
     VIDEO_PAUSE = 'bp_video_pause'
     VIDEO_RESUME = 'bp_video_resume'
     VIDEO_STOP = 'bp_video_stop'
+    VOICEOVER_STOP = 'bp_voiceovers_stop'
 
     @classmethod
     def getOverlay(cls, count):

@@ -66,7 +66,8 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
-_INITIAL_MODE_BY_BONUS_TYPE = {constants.ARENA_BONUS_TYPE.COMP7: _CTRL_MODE.VEHICLES_SELECTION}
+_INITIAL_MODE_BY_BONUS_TYPE = {constants.ARENA_BONUS_TYPE.COMP7: _CTRL_MODE.VEHICLES_SELECTION,
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_COMP7: _CTRL_MODE.VEHICLES_SELECTION}
 _CONTROL_MODE_SWITCH_COOLDOWN = 1.0
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
@@ -80,7 +81,6 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_EPIC: (MapCaseMode.EpicMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_ARCADE_EPIC_MINEFIELD: (MapCaseMode.AracdeMinefieldControleMode, 'arcadeEpicMinefieldMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.MAP_CASE_HYPERION: (MapCaseMode.HyperionMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),

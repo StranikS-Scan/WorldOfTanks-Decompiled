@@ -5,7 +5,7 @@ from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, arena_info_ctrl, players_panel_ctrl, boss_info_ctrl, teleport_spawn_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
 from gui.battle_control.controllers import aiming_sounds_ctrl
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
@@ -19,7 +19,6 @@ from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
-from gui.battle_control.controllers.sound_ctrls.vehicle_hit_sound_ctrl import EventVehicleHitSound, VehicleHitSound
 from gui.shared.system_factory import registerBattleControllerRepo
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 if TYPE_CHECKING:
@@ -232,10 +231,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
 
     @property
-    def arenaInfo(self):
-        return self._repository.getController(BATTLE_CTRL_ID.ARENA_INFO_CTRL)
-
-    @property
     def repair(self):
         return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
 
@@ -262,10 +257,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def spawn(self):
         return self._repository.getController(BATTLE_CTRL_ID.SPAWN_CTRL)
-
-    @property
-    def teleport(self):
-        return self._repository.getController(BATTLE_CTRL_ID.TELEPORT_CTRL)
 
     @property
     def deathScreen(self):
@@ -314,18 +305,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def overrideSettingsController(self):
         return self._repository.getController(BATTLE_CTRL_ID.OVERRIDE_SETTINGS)
-
-    @property
-    def playersPanel(self):
-        return self._repository.getController(BATTLE_CTRL_ID.PLAYERS_PANEL_CTRL)
-
-    @property
-    def bossPanel(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BOSS_INFO_CTRL)
-
-    @property
-    def vehicleHitSound(self):
-        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_HIT_SOUND)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -472,7 +451,6 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
-        repository.addController(VehicleHitSound())
         return repository
 
     @staticmethod
@@ -498,7 +476,6 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
         repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
-        repository.addController(VehicleHitSound())
         repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         return repository
 
@@ -508,22 +485,14 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
 
     @classmethod
     def create(cls, setup):
-        from gui.Scaleform.daapi.view.battle.event import battle_hints_event
         repository = super(EventControllerRepository, cls).create(setup)
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addViewController(perk_ctrl.PerksController(), setup)
-        repository.addArenaViewController(boss_info_ctrl.BossInfoController(), setup)
-        repository.addArenaController(arena_info_ctrl.ArenaInfoController(), setup)
-        repository.addViewController(teleport_spawn_ctrl.TeleportSpawnController(), setup)
-        repository.addViewController(battle_hints_event.createBattleHintsController(), setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
-        repository.addController(EventVehicleHitSound())
-        from gui.battle_control.controllers import area_marker_ctrl
-        repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
-        repository.addArenaViewController(players_panel_ctrl.PlayersPanelController(), setup)
         return repository
 
 
@@ -540,7 +509,6 @@ class MapsTrainingControllerRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addController(VehicleHitSound())
         repository.addViewController(battle_hints_mt.createBattleHintsController(), setup)
         repository.addArenaController(MapsTrainingAppearanceCacheController(setup), setup)
         return repository
@@ -562,7 +530,7 @@ class Comp7ControllerRepository(ClassicControllersRepository):
     @classmethod
     def create(cls, setup):
         repository = super(Comp7ControllerRepository, cls).create(setup)
-        repository.addArenaViewController(Comp7PrebattleSetupController(), setup)
+        repository.addArenaViewController(Comp7PrebattleSetupController(setup), setup)
         repository.addArenaController(Comp7VOIPController(), setup)
         repository.addController(Comp7BattleSoundController())
         return repository
@@ -581,3 +549,4 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
+registerBattleControllerRepo(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7ControllerRepository)

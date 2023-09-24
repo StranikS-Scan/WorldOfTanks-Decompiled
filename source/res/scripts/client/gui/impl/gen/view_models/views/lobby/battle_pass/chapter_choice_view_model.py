@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import Chapt
 from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_view_model import CollectionEntryPointViewModel
 
 class ChapterChoiceViewModel(ViewModel):
-    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onViewLoaded', 'onClose')
+    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onViewLoaded', 'onClose', 'showTankmen')
 
-    def __init__(self, properties=8, commands=10):
+    def __init__(self, properties=11, commands=11):
         super(ChapterChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -65,6 +65,24 @@ class ChapterChoiceViewModel(ViewModel):
     def setFreePoints(self, value):
         self._setNumber(7, value)
 
+    def getIsCustomSeason(self):
+        return self._getBool(8)
+
+    def setIsCustomSeason(self, value):
+        self._setBool(8, value)
+
+    def getSpecialVoiceTankmenCount(self):
+        return self._getNumber(9)
+
+    def setSpecialVoiceTankmenCount(self, value):
+        self._setNumber(9, value)
+
+    def getSeasonNum(self):
+        return self._getNumber(10)
+
+    def setSeasonNum(self, value):
+        self._setNumber(10, value)
+
     def _initialize(self):
         super(ChapterChoiceViewModel, self)._initialize()
         self._addViewModelProperty('collectionEntryPoint', CollectionEntryPointViewModel())
@@ -75,6 +93,9 @@ class ChapterChoiceViewModel(ViewModel):
         self._addBoolProperty('isBattlePassCompleted', False)
         self._addBoolProperty('isChooseRewardsEnabled', True)
         self._addNumberProperty('freePoints', 0)
+        self._addBoolProperty('isCustomSeason', False)
+        self._addNumberProperty('specialVoiceTankmenCount', 0)
+        self._addNumberProperty('seasonNum', 0)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onChapterSelect = self._addCommand('onChapterSelect')
         self.onAboutClick = self._addCommand('onAboutClick')
@@ -85,3 +106,4 @@ class ChapterChoiceViewModel(ViewModel):
         self.onTakeRewardsClick = self._addCommand('onTakeRewardsClick')
         self.onViewLoaded = self._addCommand('onViewLoaded')
         self.onClose = self._addCommand('onClose')
+        self.showTankmen = self._addCommand('showTankmen')

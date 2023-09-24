@@ -280,17 +280,6 @@ def activateAvatarEquipment(equipmentID, avatar=None, index=0):
     return
 
 
-def activateVehicleEquipment(equipmentID, param, avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    try:
-        avatar.cell.activateVehicleEquipment(equipmentID, param)
-    except AttributeError:
-        _logger.exception('Attribute "cell.activateVehicleEquipment" not found')
-
-    return
-
-
 def leaveArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
@@ -458,6 +447,18 @@ def isBecomeObserverAfterDeath(avatar=None):
         result = avatar.isBecomeObserverAfterDeath()
     except AttributeError as error:
         _logger.exception('Attribute "isBecomeObserverAfterDeath" not found, exception %s', error.message)
+        result = False
+
+    return result
+
+
+def isObserverBothTeams(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = BigWorld.player().isObserverBothTeams
+    except AttributeError as error:
+        _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error.message)
         result = False
 
     return result

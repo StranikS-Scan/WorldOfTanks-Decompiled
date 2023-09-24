@@ -48,6 +48,10 @@ class SelectRespawnComponent(InjectComponentAdaptor, ISpawnListener):
         if self.__view:
             self.__view.updatePoint(vehicleId, pointId, prevPointId)
 
+    def onSelectPoint(self, pointId):
+        if self.__view:
+            self.__view.updateSelectedPoint(pointId)
+
     def showSpawnPoints(self):
         if self.__view:
             self.__view.setKeyHandlerState(isActive=True)
@@ -88,7 +92,7 @@ class SelectRespawnView(ViewImpl):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, *args, **kwargs):
-        super(SelectRespawnView, self).__init__(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.COMPONENT, SelectRespawnViewModel, *args, **kwargs)
+        super(SelectRespawnView, self).__init__(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.VIEW, SelectRespawnViewModel, *args, **kwargs)
         arenaVisitor = self.__sessionProvider.arenaVisitor
         self.__mapTexture = 'url:../../{}'.format(arenaVisitor.type.getMinimapTexture())
         self.__background = self.__getBgByGeometryName(arenaVisitor.type.getGeometryName())
@@ -125,6 +129,10 @@ class SelectRespawnView(ViewImpl):
                 vmPoints.addViewModel(pointVM)
 
             vmPoints.invalidate()
+
+    def updateSelectedPoint(self, pointId):
+        with self.viewModel.transaction() as vm:
+            vm.setSelectedPointID(pointId)
 
     def updatePoint(self, vehicleId, pointId, prevPointId):
         arenaDP = self.__sessionProvider.getArenaDP()

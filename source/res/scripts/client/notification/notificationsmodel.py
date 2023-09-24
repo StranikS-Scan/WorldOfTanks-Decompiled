@@ -42,6 +42,11 @@ class NotificationsModel(object):
 
     def addNotification(self, notification):
         if self.__collection.addItem(notification):
+            overloaded = self.__collection.getOverloaded(notification)
+            if overloaded:
+                for item in overloaded:
+                    self.__removeNotification(item)
+
             self.onNotificationReceived(notification)
 
     def updateNotification(self, typeID, entityID, entity, isStateChanged):
@@ -53,10 +58,7 @@ class NotificationsModel(object):
         if notification is None:
             return
         else:
-            groupID = notification.getGroup()
-            countOnce = notification.isShouldCountOnlyOnce()
-            if self.__collection.removeItem(typeID, entityID):
-                self.onNotificationRemoved(typeID, entityID, groupID, countOnce)
+            self.__removeNotification(notification)
             return
 
     def removeNotificationsByType(self, typeID):
@@ -67,6 +69,13 @@ class NotificationsModel(object):
 
     def getNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID)
+
+    def __removeNotification(self, notification):
+        typeID, entityID = notification.getType(), notification.getID()
+        groupID = notification.getGroup()
+        countOnce = notification.isShouldCountOnlyOnce()
+        if self.__collection.removeItem(typeID, entityID):
+            self.onNotificationRemoved(typeID, entityID, groupID, countOnce)
 
     def incrementNotifiedMessagesCount(self, group, typeID, entityID, countOnlyOnce):
         self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID, countOnlyOnce))

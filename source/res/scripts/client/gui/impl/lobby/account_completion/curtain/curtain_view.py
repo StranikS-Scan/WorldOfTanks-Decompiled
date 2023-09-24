@@ -58,7 +58,7 @@ class CurtainView(ViewImpl, IGlobalListener):
         self.stopGlobalListening()
         self._subViews.clear()
         if self._activeSubView:
-            self._deactivateSubView(self._activeSubView)
+            self._activeSubView.onWaitingChanged -= self._waitingChangedHandler
             self._activeSubView = None
         self._overlay.setOverlayState(False)
         super(CurtainView, self)._finalize()
@@ -99,29 +99,29 @@ class CurtainView(ViewImpl, IGlobalListener):
     def _activateSubView(self, subView, *args, **kwargs):
         if self._activeSubView == subView:
             return
-        if self._activeSubView:
-            self._deactivateSubView(self._activeSubView)
-        if not subView:
+        else:
+            if self._activeSubView:
+                self._deactivateSubView(self._activeSubView)
+            self._activeSubView = None
+            if not subView:
+                return
+            subView.activate(*args, **kwargs)
+            subView.onWaitingChanged += self._waitingChangedHandler
+            self._waitingChangedHandler(subView.isWaitingVisible, subView.waitingMsgResID)
+            if self.viewModel.getState() in (CurtainStateEnum.HIDING, CurtainStateEnum.HIDDEN):
+                subView.reveal()
+            self._activeSubView = subView
+            self.viewModel.setCurrentSubViewID(subView.layoutID)
+            currentState = self.viewModel.getState()
+            if currentState == CurtainStateEnum.CLOSED:
+                self.viewModel.setState(CurtainStateEnum.OPENING)
+            if currentState == CurtainStateEnum.HIDDEN:
+                self.viewModel.setState(CurtainStateEnum.REVEALING)
             return
-        subView.activate(*args, **kwargs)
-        subView.onWaitingChanged += self._waitingChangedHandler
-        self._waitingChangedHandler(subView.isWaitingVisible, subView.waitingMsgResID)
-        if self.viewModel.getState() in (CurtainStateEnum.HIDING, CurtainStateEnum.HIDDEN):
-            subView.reveal()
-        self._activeSubView = subView
-        self.viewModel.setCurrentSubViewID(subView.layoutID)
-        currentState = self.viewModel.getState()
-        if currentState == CurtainStateEnum.CLOSED:
-            self.viewModel.setState(CurtainStateEnum.OPENING)
-        if currentState == CurtainStateEnum.HIDDEN:
-            self.viewModel.setState(CurtainStateEnum.REVEALING)
 
     def _deactivateSubView(self, subView):
         subView.deactivate()
-        if self._activeSubView == subView:
-            subView.onWaitingChanged -= self._waitingChangedHandler
-            self._activeSubView = None
-        return
+        subView.onWaitingChanged -= self._waitingChangedHandler
 
     def _stateTransitionCompleteHandler(self):
         currentState = self.viewModel.getState()
@@ -182,7 +182,7 @@ class CurtainWindow(LobbyWindow):
     def close(self):
         self.content.close()
 
-    def hide(self):
+    def hide(self, destroy=False):
         self.content.hide()
 
     def reveal(self):

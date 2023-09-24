@@ -1,0 +1,179 @@
+<retrainingCost.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <inactivate>	RetrainingBtnOnScene	</inactivate>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	CrewHint	  <condition>
+            <effect-not-triggered>	CrewHint	</effect-not-triggered>
+            <active>	CrewPanelOnScene	</active>
+          </condition>
+        </show-hint>
+        <show-hint>	RetrainingBtnHint	  <condition>
+            <effect-not-triggered>	RetrainingBtnHint	</effect-not-triggered>
+            <active>	RetrainingBtnOnScene	</active>
+          </condition>
+        </show-hint>
+        <show-hint>	VehiclesListHint	  <condition>
+            <effect-not-triggered>	VehiclesListHint	</effect-not-triggered>
+            <active>	VehiclesListOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	CrewPanel	  <on-scene-effects>
+            <activate>	CrewPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>	&gt;	  <refuse-training>
+              <condition>
+                <effect-triggered>	CrewPanelOnScene	</effect-triggered>
+              </condition>
+            </refuse-training>
+            <inactivate>	CrewPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	RetrainingBtn	  <on-scene-effects>
+            <activate>	RetrainingBtnOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>	&gt;	  <refuse-training>
+              <condition>
+                <effect-triggered>	RetrainingBtnOnScene	</effect-triggered>
+              </condition>
+            </refuse-training>
+            <inactivate>	RetrainingBtnOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	VehiclesList	  <on-scene-effects>
+            <activate>	VehiclesListOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>	&gt;	  <refuse-training>
+              <condition>
+                <effect-triggered>	VehiclesListOnScene	</effect-triggered>
+              </condition>
+            </refuse-training>
+            <inactivate>	VehiclesListOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	CrewHint	  <item-id>	CrewPanel	</item-id>
+      <text>	#quests:action/chain/hint/openPersonalCase	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
+      </padding>
+      <actions>
+        <click>	CrewPanel	  <effects>
+            <run-trigger>	PersonalFileWaitTimer	</run-trigger>
+            <close-hint>	CrewHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	CrewPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	CrewPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	RetrainingBtnHint	  <item-id>	RetrainingBtn	</item-id>
+      <text>	#quests:action/chain/hint/retrainingDiscountAvailable	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
+      </padding>
+      <actions>
+        <click>	RetrainingBtn	  <effects>
+            <run-trigger>	VehiclesListWaitTimer	</run-trigger>
+            <close-hint>	RetrainingBtnHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	RetrainingBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	RetrainingBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	VehiclesListHint	  <item-id>	VehiclesList	</item-id>
+      <text>	#quests:action/chain/hint/retrainingDiscountAvailable	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
+      </padding>
+      <actions>
+        <click>	VehiclesList	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	VehiclesList	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	VehiclesList	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers>
+    <trigger>	PersonalFileWaitTimer	  <type>	timer	</type>
+      <validate-var>	WaitTimer	</validate-var>
+      <on-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	RetrainingBtnOnScene	</inactive>
+          </condition>
+        </refuse-training>
+      </on-effects>
+    </trigger>
+    <trigger>	VehiclesListWaitTimer	  <type>	timer	</type>
+      <validate-var>	WaitTimer	</validate-var>
+      <on-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	VehiclesListOnScene	</inactive>
+          </condition>
+        </refuse-training>
+      </on-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	WaitTimer	  <asInt>	5	</asInt>
+    </var-set>
+  </vars>
+</retrainingCost.xml>

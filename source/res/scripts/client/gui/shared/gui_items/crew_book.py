@@ -39,6 +39,10 @@ class CrewBook(FittingItem):
         return
 
     @property
+    def isForPurchase(self):
+        return self.__lobbyContext.getServerSettings().isCrewBooksPurchaseEnabled()
+
+    @property
     def isForSale(self):
         return self.__lobbyContext.getServerSettings().isCrewBooksSaleEnabled()
 

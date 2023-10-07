@@ -13,16 +13,19 @@ from gui.shared import g_eventBus
 from gui.shared.events import ModeSelectorPopoverEvent
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 _GAMEPLAY_STANDARD = 'gameplay_standard'
 _subLocaleBySettingID = OrderedDict()
 _subLocaleBySettingID[_GAMEPLAY_STANDARD] = 'default'
 _subLocaleBySettingID[GAME.GAMEPLAY_DOMINATION] = 'domination'
 _subLocaleBySettingID[GAME.GAMEPLAY_ASSAULT] = 'assault'
 _subLocaleBySettingID[GAME.GAMEPLAY_EPIC_STANDARD] = 'epicStandard'
+_subLocaleBySettingID[GAME.GAMEPLAY_DEV_MAPS] = 'devMaps'
 
 class RandomBattlePopover(PopOverViewImpl):
     __slots__ = ('__initialItems', '__currentItems')
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.lobby.mode_selector.popovers.RandomBattlePopover(), model=RandomBattlePopoverModel())
@@ -39,7 +42,11 @@ class RandomBattlePopover(PopOverViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         self.viewModel.onItemChanged += self._itemChangeHandler
-        for setting in [GAME.GAMEPLAY_DOMINATION, GAME.GAMEPLAY_ASSAULT, GAME.GAMEPLAY_EPIC_STANDARD]:
+        settings = [GAME.GAMEPLAY_DOMINATION,
+         GAME.GAMEPLAY_ASSAULT,
+         GAME.GAMEPLAY_EPIC_STANDARD,
+         GAME.GAMEPLAY_DEV_MAPS]
+        for setting in settings:
             self.__initialItems[setting] = self.__currentItems[setting] = self.settingsCore.getSetting(setting)
 
         self._update()
@@ -65,7 +72,8 @@ class RandomBattlePopover(PopOverViewImpl):
             settingsList = model.getSettingsList()
             settingsList.clear()
             for itemType, itemLocale in _subLocaleBySettingID.iteritems():
-                settingsList.addViewModel(self._createItem(itemType, titlesR.dyn(itemLocale)(), tooltipsR.dyn(itemLocale), enabled=itemType != _GAMEPLAY_STANDARD))
+                if itemType != GAME.GAMEPLAY_DEV_MAPS or self.lobbyContext.getServerSettings().isMapsInDevelopmentEnabled():
+                    settingsList.addViewModel(self._createItem(itemType, titlesR.dyn(itemLocale)(), tooltipsR.dyn(itemLocale), enabled=itemType != _GAMEPLAY_STANDARD))
 
             settingsList.invalidate()
 

@@ -14,6 +14,7 @@ class COMMON(object):
     COMMON_NBSP = '#common:common/nbsp'
     CLANTAG = '#common:clanTag'
     MULTIPLIER = '#common:multiplier'
+    PERCENTVALUE = '#common:percentValue'
     INPUT_PLACEHOLDER_EMAIL = '#common:input/placeholder/email'
     INPUT_PLACEHOLDER_SEARCH = '#common:input/placeholder/search'
     INPUT_PLACEHOLDER_PASSWORD = '#common:input/placeholder/password'

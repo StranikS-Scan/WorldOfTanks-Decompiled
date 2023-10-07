@@ -251,6 +251,7 @@ def init():
     global onServerReplayExiting
     global onKickedFromServer
     global onServerReplayEntering
+    global onAvatarBecomeNonPlayer
     global onShopResync
     miniclient.configure_state()
     ServicesLocator.connectionMgr.onKickedFromServer += onKickedFromServer
@@ -299,6 +300,7 @@ def fini():
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
     g_playerEvents.onAvatarBecomePlayer -= onAvatarBecomePlayer
+    g_playerEvents.onAvatarBecomeNonPlayer -= onAvatarBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer -= onAccountBecomePlayer
     g_playerEvents.onAvatarBecomeNonPlayer -= onAvatarBecomeNonPlayer
     g_playerEvents.onClientUpdated -= onClientUpdate

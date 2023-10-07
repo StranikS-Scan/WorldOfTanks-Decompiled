@@ -562,7 +562,7 @@ class EpicMissionsController(IViewComponentsController):
             self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.BASE_CAPTURED_POSITIVE if self.__isAttacker() else GAME_MESSAGES_CONSTS.BASE_CAPTURED, {'baseID': baseId,
              'title': EPIC_BATTLE.ZONE_CAPTURED_TEXT if self.__isAttacker() else EPIC_BATTLE.ZONE_LOST_TEXT,
              'timerText': backport.text(R.strings.epic_battle.zone.time_added(), minutes=':'.join(('{:02d}'.format(int(minutes)), '{:02d}'.format(int(seconds))))),
-             'descriptionText': backport.text(R.strings.epic_battle.missions.unlockTankLevel()) if vehiclesUnlocked else ''}))
+             'descriptionText': self.__getUnlockedVehDescription() if vehiclesUnlocked else ''}))
             if onPlayerLane:
                 if self.__isAttacker():
                     self.__nextObjectiveMessage(self.__isAttacker())
@@ -573,6 +573,10 @@ class EpicMissionsController(IViewComponentsController):
             self.__contestedEndTime[baseLane - 1] = 0
             self.__isLaneContested[baseLane - 1] = False
             return
+
+    def __getUnlockedVehDescription(self):
+        level = self.__epicController.getUnlockableInBattleVehLevelStr()
+        return backport.text(R.strings.epic_battle.missions.unlockTankLevel(), level=self.__epicController.getUnlockableInBattleVehLevelStr()) if level else ''
 
     def __nextObjectiveMessage(self, isAttacker):
         componentSystem = self.__sessionProvider.arenaVisitor.getComponentSystem()

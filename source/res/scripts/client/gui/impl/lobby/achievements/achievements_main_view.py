@@ -4,7 +4,7 @@ import weakref
 from functools import partial
 import typing
 from collections import namedtuple
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -26,7 +26,6 @@ class AchievementMainView(ViewImpl):
         settings = ViewSettings(R.views.lobby.achievements.AchievementsMainView())
         settings.args = args
         settings.kwargs = kwargs
-        settings.flags = ViewFlags.COMPONENT
         settings.model = AchievementsMainViewModel()
         self.__ctx = ctx
         self.__contentPresentersMap = {}

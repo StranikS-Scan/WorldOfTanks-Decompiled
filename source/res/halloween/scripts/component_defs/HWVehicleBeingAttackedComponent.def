@@ -1,0 +1,13 @@
+<HWVehicleBeingAttackedComponent.def>
+  <ClientMethods>
+    <onBeingAttacked>
+      <Arg>	INT16	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </onBeingAttacked>
+  </ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	hwBeingAttackedComponent	</DefaultKeyName>
+</HWVehicleBeingAttackedComponent.def>

@@ -88,7 +88,7 @@ class SelectRespawnView(ViewImpl):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, *args, **kwargs):
-        super(SelectRespawnView, self).__init__(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.COMPONENT, SelectRespawnViewModel, *args, **kwargs)
+        super(SelectRespawnView, self).__init__(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.VIEW, SelectRespawnViewModel, *args, **kwargs)
         arenaVisitor = self.__sessionProvider.arenaVisitor
         self.__mapTexture = 'url:../../{}'.format(arenaVisitor.type.getMinimapTexture())
         self.__background = self.__getBgByGeometryName(arenaVisitor.type.getGeometryName())

@@ -390,6 +390,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
 
+    def _removeState(self, vehicleID, state):
+        self._markersStates[vehicleID].remove(state)
+
     @staticmethod
     def __isStatusActive(statusID, activeStatuses):
         for activeStatusID, _ in activeStatuses:
@@ -526,7 +529,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if vehicleID in self._markersStates:
             currentStates = self._markersStates[vehicleID]
             for state in currentStates:
-                self._markersStates[vehicleID].remove(state)
+                self._removeState(vehicleID, state)
                 self._invokeMarker(handle, 'hideStatusMarker', state, -1, False, False)
 
     def __setupDynamic(self, marker, accountDBID=0):
@@ -547,6 +550,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
         handle = self._markers[vehicleID].getMarkerID()
         self._invokeMarker(handle, 'setEntityName', arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name())
+
+    def _createMarker(self, vProxy, vInfo, guiProps):
+        self.__onVehicleMarkerAdded(vProxy, vInfo, guiProps)
 
     def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
         if not self.__needsMarker(vInfo):
@@ -790,4 +796,5 @@ class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
         self._isSquadIndicatorEnabled = False
 
     def _hideVehicleMarker(self, vehicleID):
+        super(RespawnableVehicleMarkerPlugin, self)._hideVehicleMarker(vehicleID)
         self._destroyVehicleMarker(vehicleID)

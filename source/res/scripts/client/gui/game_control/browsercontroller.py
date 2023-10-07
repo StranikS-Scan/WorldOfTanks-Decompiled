@@ -64,7 +64,7 @@ class BrowserController(IBrowserController):
         self.__stop()
         BigWorld.destroyBrowser()
 
-    def onLobbyStarted(self, ctx):
+    def onLobbyInited(self, ctx):
         BigWorld.createBrowser()
 
     def addFilterHandler(self, handler):

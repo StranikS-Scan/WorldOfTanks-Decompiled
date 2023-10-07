@@ -133,6 +133,9 @@ class ServerEventAbstract(object):
     def getFinishTime(self):
         return time_utils.makeLocalServerTime(self._data['finishTime']) if 'finishTime' in self._data else time.time()
 
+    def noSkip(self):
+        return self._data.get('noSkip', False)
+
     def getUserName(self):
         return getLocalizedData(self._data, 'name')
 

@@ -347,7 +347,7 @@ class MapsBlacklistInfoTooltipContent(View):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent(), ViewFlags.COMPONENT, MapsBlacklistInfoTooltipModel())
+        settings = ViewSettings(R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent(), ViewFlags.VIEW, MapsBlacklistInfoTooltipModel())
         super(MapsBlacklistInfoTooltipContent, self).__init__(settings)
         mapsConfig = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()
         self.viewModel.setMaxCooldownTime(mapsConfig['slotCooldown'])

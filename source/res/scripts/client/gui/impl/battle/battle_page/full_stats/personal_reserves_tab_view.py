@@ -28,7 +28,7 @@ class PersonalReservesTabView(ViewImpl):
     boostersStateProvider = dependency.descriptor(IBoostersStateProvider)
 
     def __init__(self):
-        settings = ViewSettings(R.views.battle.battle_page.PersonalReservesTabView(), ViewFlags.COMPONENT, PersonalReservesTabViewModel())
+        settings = ViewSettings(R.views.battle.battle_page.PersonalReservesTabView(), ViewFlags.VIEW, PersonalReservesTabViewModel())
         super(PersonalReservesTabView, self).__init__(settings)
 
     @property

@@ -2,12 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropForFreeWindow.py
 import time
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import SwitchState, DROP_SKILL_OPTIONS, FREE_DROP_SKILL_TOKEN
+from constants import DROP_SKILL_OPTIONS, FREE_DROP_SKILL_TOKEN
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.SkillDropForFreeMeta import SkillDropForFreeMeta
-from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
-from gui.shared import events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
 from gui.shared.gui_items.serializers import packTankman, repackTankmanWithSkinData
@@ -20,9 +18,6 @@ from items import tankmen
 from messenger import MessengerEntry
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-_switchToWindowState = {SwitchState.ENABLED.value: SKILLS_CONSTANTS.RECERTIFICATION_USABLE,
- SwitchState.DISABLED.value: SKILLS_CONSTANTS.RECERTIFICATION_HIDDEN,
- SwitchState.INACTIVE.value: SKILLS_CONSTANTS.RECERTIFICATION_VISIBLE_DISABLED}
 
 class SkillDropForFreeWindow(SkillDropForFreeMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -32,7 +27,7 @@ class SkillDropForFreeWindow(SkillDropForFreeMeta):
         super(SkillDropForFreeWindow, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
 
-    def __setData(self, *args):
+    def __setData(self, *_):
         items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         if tankman is None:
@@ -112,4 +107,3 @@ class SkillDropForFreeWindow(SkillDropForFreeMeta):
                       'data': data}}
             MessengerEntry.g_instance.protos.BW.serviceChannel.onReceivePersonalSysMessage(action)
             self.onWindowClose()
-            self.fireEvent(events.SkillDropEvent(events.SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY))

@@ -97,7 +97,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonLabel=None, active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=()):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonLabel=None, actionButtonIcon=None, actionButtonTooltip=None, active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=()):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -111,6 +111,8 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'available': available,
      'additionalInfo': additionalInfo,
      'actionButtonLabel': actionButtonLabel,
+     'actionButtonIcon': actionButtonIcon,
+     'actionButtonTooltip': actionButtonTooltip,
      'active': active == GOODIE_STATE.ACTIVE,
      'upgradable': upgradable,
      'upgradeButtonIcon': upgradeButtonIcon,
@@ -266,6 +268,15 @@ def getVehicleRestoreInfo(vehicle):
      icon)
 
 
+def _getActionBtnTooltipForOptDevice(item):
+    header = backport.text(R.strings.storage.buttonSell.tooltip.header())
+    body = backport.text(R.strings.storage.buttonSell.tooltip.body())
+    if item.isModernized:
+        header = backport.text(R.strings.storage.buttonDeconstruct.tooltip.header())
+        body = backport.text(R.strings.storage.buttonDeconstruct.tooltip.body())
+    return makeTooltip(header, body)
+
+
 def getItemVo(item):
 
     def getItemNationID(item):
@@ -277,25 +288,25 @@ def getItemVo(item):
     priceVO = getItemPricesVO(item.getSellPrice())[0]
     itemNationID = getItemNationID(item)
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
+    isOptDevice = item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
     serverSettings = dependency.instance(ILobbyContext).getServerSettings()
-    upgradable = item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isUpgradable and serverSettings.isTrophyDevicesEnabled()
-    if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized:
-        upgradeIconResId = None
-        if item.level == 1:
-            upgradeIconResId = R.images.gui.maps.icons.tanksetup.actions.upgrade_modernized()
-        elif item.level == 2:
-            upgradeIconResId = R.images.gui.maps.icons.tanksetup.actions.upgrade_last_modernized()
-        upgradeButtonIcon = backport.image(upgradeIconResId) if upgradeIconResId is not None else ''
-        actionButtonLabel = backport.text(R.strings.storage.buttonLabel.deconstruct())
+    upgradable = isOptDevice and item.isUpgradable and serverSettings.isTrophyDevicesEnabled()
+    upgradeButtonIcon = backport.image(R.images.gui.maps.icons.tanksetup.actions.upgrade())
+    itemType = item.getOverlayType()
+    actionButtonIcon = None
+    actionButtonTooltip = None
+    if isOptDevice:
+        actionButtonTooltip = _getActionBtnTooltipForOptDevice(item)
         if item.isModernized:
             itemType = item.getOverlayType()
-        else:
-            itemType = '_'.join((item.getOverlayType(), str(item.level)))
-    else:
-        upgradeButtonIcon = backport.image(R.images.gui.maps.icons.tanksetup.actions.upgrade())
-        itemType = item.getOverlayType()
-        actionButtonLabel = None
-    vo = createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=itemType, nationFlagIcon=nationFlagIcon, enabled=item.isForSale, actionButtonLabel=actionButtonLabel, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonIcon=upgradeButtonIcon, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())), extraParams=getItemExtraParams(item), specializations=getCategoriesIcons(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ())
+            upgradeIconResId = None
+            if item.level == 1:
+                upgradeIconResId = R.images.gui.maps.icons.tanksetup.actions.upgrade_modernized()
+            elif item.level == 2:
+                upgradeIconResId = R.images.gui.maps.icons.tanksetup.actions.upgrade_last_modernized()
+            upgradeButtonIcon = backport.image(upgradeIconResId) if upgradeIconResId is not None else ''
+            actionButtonIcon = backport.image(R.images.gui.maps.icons.library.icon_disassemble())
+    vo = createStorageDefVO(item.intCD, getStorageItemName(item), getStorageItemDescr(item), item.inventoryCount, priceVO, getStorageItemIcon(item, STORE_CONSTANTS.ICON_SIZE_SMALL), 'altimage', itemType=itemType, nationFlagIcon=nationFlagIcon, enabled=item.isForSale, actionButtonIcon=actionButtonIcon, actionButtonTooltip=actionButtonTooltip, contextMenuId=_getContextMenuHandlerID(item), upgradable=upgradable, upgradeButtonIcon=upgradeButtonIcon, upgradeButtonTooltip=makeTooltip(body=backport.text(R.strings.storage.buttonUpgrade.tooltip.body())), extraParams=getItemExtraParams(item), specializations=getCategoriesIcons(item) if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else ())
     return vo
 
 

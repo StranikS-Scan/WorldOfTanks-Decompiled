@@ -223,6 +223,12 @@ def LOG_DEBUG_DEV(msg, *kargs, **kwargs):
     _doLog('DEBUG', msg, kargs, kwargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_DEBUG_DEV_NICE(msg, *kargs, **kwargs):
+    kwargs['nice'] = True
+    _doLog('DEBUG', msg, kargs, kwargs)
+
+
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_UNEXPECTED(msg, *kargs):
     _doLog('LOG_UNEXPECTED', msg, kargs)
@@ -242,7 +248,12 @@ def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
     if not logFunc:
         logFunc = BigWorld.logDebug
     if args:
-        output = u' '.join(map(unicode, [header, msg, args]))
+        if kwargs.get('nice'):
+            parts = [header, u' ', msg]
+            parts.extend(args)
+            output = u''.join(map(unicode, parts))
+        else:
+            output = u' '.join(map(unicode, [header, msg, args]))
     else:
         output = u' '.join(map(unicode, [header, msg]))
     tags = kwargs.pop('tags', None)

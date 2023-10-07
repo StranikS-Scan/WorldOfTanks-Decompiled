@@ -311,6 +311,7 @@ class BATTLE_ROYALE(object):
     BANNER_TITLE = '#battle_royale:banner/title'
     BANNER_INFO_SEASONACTIVE = '#battle_royale:banner/info/seasonActive'
     BANNER_INFO_DISABLED = '#battle_royale:banner/info/disabled'
+    BANNER_INFO_ANNOUNCE = '#battle_royale:banner/info/announce'
     BANNER_SEASONDATE_SEASONLASTS = '#battle_royale:banner/seasonDate/seasonLasts'
     BANNER_TIMELEFT_HOURS = '#battle_royale:banner/timeLeft/hours'
     BANNER_TIMELEFT_MIN = '#battle_royale:banner/timeLeft/min'

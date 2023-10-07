@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_constants.py
 from constants import DailyQuestsTokensPrefixes
+from halloween_common.halloween_constants import HALLOWEEN_EVENT_PREFIX
 BATTLE_MATTERS_QUEST_ID = 'battle_matters'
 BATTLE_MATTERS_INTERMEDIATE_QUEST_ID = 'intermediate_battle_matters'
 MARATHON_GROUP_PREFIX = 'marathon:'
@@ -16,3 +17,4 @@ FUN_RANDOM_GROUP_ID = 'fun_random'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
 TECH_TREE_ACTION_POSTFIX = '_techtree'
+HALLOWEEN_GROUP_ID = HALLOWEEN_EVENT_PREFIX + '_phases_halloween'

@@ -66,7 +66,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
         isInSelfVehicleType = True
     data = {'fullName': tankman.fullUserName,
      'rank': tankman.rankUserName,
-     'specializationLevel': tankman.realRoleLevel[0],
+     'specializationLevel': tankman.realRoleLevel.lvl,
      'role': tankman.roleUserName,
      'vehicleType': tankmanVehicle.shortUserName,
      'iconFile': tankman.smallIconPath,
@@ -91,7 +91,7 @@ def _packTankmanData(tankman, itemsCache=None, lobbyContext=None):
      'notRecruited': False,
      'hasCommanderFeature': tankman.role == Tankman.ROLES.COMMANDER,
      'roles': tankman.roles()}
-    if tankman.skinID != NO_CREW_SKIN_ID and lobbyContext.getServerSettings().isCrewSkinsEnabled():
+    if tankman.skinID != NO_CREW_SKIN_ID:
         skinItem = itemsCache.items.getCrewSkin(tankman.skinID)
         iconFile = getCrewSkinIconSmall(skinItem.getIconID())
         data['iconFile'] = iconFile
@@ -256,7 +256,10 @@ class BarracksDataProvider(DAAPIDataProvider):
         self.buildList(notRecruitedList)
 
     def showActiveTankmen(self, criteria):
-        allTankmen = self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE)
+        unsuitableCriteria = ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        unsuitableCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        unsuitableCriteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN
+        allTankmen = self.itemsCache.items.removeUnsuitableTankmen(self.itemsCache.items.getTankmen().values(), unsuitableCriteria)
         self.__totalCount = len(allTankmen)
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]

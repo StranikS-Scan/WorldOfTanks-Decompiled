@@ -82,13 +82,13 @@ class IEventsCache(object):
     def getGroups(self, filterFunc=None):
         raise NotImplementedError
 
-    def getHiddenQuests(self, filterFunc=None):
+    def getHiddenQuests(self, filterFunc=None, noSkip=False):
         raise NotImplementedError
 
     def getRankedQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
         raise NotImplementedError
 
     def getActions(self, filterFunc=None):

@@ -163,7 +163,7 @@ class PostProgressionBaseComponentView(ViewImpl):
     __slots__ = ('onCustomProgressionState', 'onViewRendered', '_selectionProvider', '_vehicle', '_eventManager')
 
     def __init__(self, layoutID, model, **kwargs):
-        settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.COMPONENT, model=model)
+        settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.VIEW, model=model)
         settings.kwargs = kwargs
         super(PostProgressionBaseComponentView, self).__init__(settings)
         self._vehicle = None

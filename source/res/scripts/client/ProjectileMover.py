@@ -37,6 +37,9 @@ class ProjectileMover(object):
         self.__debugDrawer = None
         return
 
+    def getProjectile(self, shotID):
+        return self.__projectiles.get(shotID)
+
     def destroy(self):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:

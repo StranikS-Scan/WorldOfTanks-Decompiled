@@ -3,6 +3,7 @@
 from visual_script.misc import ASPECT
 from visual_script.registrar import VSBlockRegistrar
 from visual_script.contexts.perks_context import PerkContext, CrewContext, PerkNotifyState, CrewPerkLevelCollector
+from visual_script.contexts.cgf_context import CGFGameObjectContext
 import ability_common
 import example
 import general
@@ -37,5 +38,6 @@ g_blockRegistrar.regContext(PerkContext)
 g_blockRegistrar.regContext(CrewContext)
 g_blockRegistrar.regType(PerkNotifyState)
 g_blockRegistrar.regType(CrewPerkLevelCollector)
+g_blockRegistrar.regContext(CGFGameObjectContext)
 g_blockRegistrar.regBlocksFromModule(dictionary_blocks)
 g_blockRegistrar.regTypesFromModule(dictionary_blocks)

@@ -58,13 +58,18 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
 
     def __init__(self):
         super(BattlePassEntryPointComponent, self).__init__()
+        self.__view = None
         self.__isSmall = False
+        return
 
     def setIsSmall(self, value):
-        self.__isSmall = value
-        if self.__view is not None:
-            self.__view.setIsSmall(self.__isSmall)
-        return
+        if self.__isSmall == value:
+            return
+        else:
+            self.__isSmall = value
+            if self.__view is not None:
+                self.__view.setIsSmall(self.__isSmall)
+            return
 
     def _dispose(self):
         self.__view = None
@@ -72,7 +77,7 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
         return
 
     def _makeInjectView(self):
-        self.__view = BattlePassEntryPointView(flags=ViewFlags.COMPONENT)
+        self.__view = BattlePassEntryPointView(flags=ViewFlags.VIEW)
         self.__view.setIsSmall(self.__isSmall)
         return self.__view
 
@@ -144,13 +149,13 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     def _stop(self):
         self._removeListeners()
-        self._saveLastState()
+        self._saveLastState(self.notChosenRewardCount)
 
     def _updateData(self, *_):
         pass
 
-    def _saveLastState(self):
-        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.chapterID, self.level, self.progress, self.battlePassState, self.notChosenRewardCount)
+    def _saveLastState(self, isNotChosenRewardCount):
+        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount)
 
     @staticmethod
     def _onClick():
@@ -267,7 +272,8 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         self.__isAttentionTimerStarted = False
 
     def __updateViewModel(self):
-        uiState = self.__getUIState()
+        isNotChosenRewardCount = self.notChosenRewardCount
+        uiState = self.__getUIState(isNotChosenRewardCount)
         if uiState == BPState.ATTENTION:
             self.__startAttentionTimer()
         else:
@@ -284,7 +290,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setPrevProgression(_g_entryLastState.progress)
             tx.setProgression(self.progress)
             tx.setBattlePassState(uiState)
-            tx.setNotChosenRewardCount(self.notChosenRewardCount)
+            tx.setNotChosenRewardCount(isNotChosenRewardCount)
             tx.setIsProgressionCompleted(self.isCompleted)
             tx.setIsChapterChosen(self.isChapterChosen)
             tx.setFreePoints(self.freePoints)
@@ -293,7 +299,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
             if not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType()):
                 tx.setBattleType(getPreQueueName(self._getQueueType(), True))
-        self._saveLastState()
+        self._saveLastState(isNotChosenRewardCount)
 
     def __getAnimationState(self):
         animState = AnimationState.NORMAL
@@ -310,11 +316,13 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             animState = AnimationState.BUY_BATTLE_PASS
         elif self.progress != lastState.progress:
             animState = AnimationState.CHANGE_PROGRESS
-        elif self.notChosenRewardCount and self.notChosenRewardCount != lastState.rewardsCount:
-            animState = AnimationState.NOT_TAKEN_REWARDS
+        else:
+            isNotChosenRewardCount = self.notChosenRewardCount
+            if isNotChosenRewardCount and isNotChosenRewardCount != lastState.rewardsCount:
+                animState = AnimationState.NOT_TAKEN_REWARDS
         return animState
 
-    def __getUIState(self):
+    def __getUIState(self, isNotChosenRewardCount):
         if self.isPaused:
             return BPState.DISABLED
-        return BPState.ATTENTION if self.notChosenRewardCount and self.battlePassState != BattlePassState.BASE else BPState.NORMAL
+        return BPState.ATTENTION if isNotChosenRewardCount and self.battlePassState != BattlePassState.BASE else BPState.NORMAL

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/sub_views/info_view.py
+import typing
 from constants import PLAYER_RANK
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from frontline.gui.frontline_skill_packer import packBaseSkills
@@ -10,6 +11,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from frontline.gui.impl.gen.view_models.views.lobby.views.info_view_model import InfoViewModel
 from frontline.gui.impl.gen.view_models.views.lobby.views.rank_item_model import RankItemModel
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import Array
 
 class InfoView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -33,9 +36,15 @@ class InfoView(ViewImpl):
 
     def _fillModel(self, _=None):
         with self.viewModel.transaction() as vm:
+            self.__updateVehLevels(vm.getValidVehicleLevels())
+            vm.setUnlockableInBattleVehicleLevel(self.__epicController.getUnlockableInBattleVehLevels()[0] if self.__epicController.isUnlockVehiclesInBattleEnabled() else 0)
             vm.setIsFullScreen(self._isFullScreen)
             vm.setIsBattlePassAvailable(self.__epicController.isBattlePassDataEnabled())
-            vm.setIsNinthLevelEnabled(self.__epicController.isUnlockVehiclesInBattleEnabled())
+            armors = self.__epicController.getDestructiblesArmor()
+            vm.setSideDestructiblesArmor(armors[2])
+            vm.setBackDestructiblesArmor(armors[3])
+            vm.setVentilationDestructiblesArmor(armors[4])
+            vm.setDoorDestructiblesArmor(armors[5])
             if hasattr(vm, 'setStartTimestamp') and hasattr(vm, 'setEndTimestamp'):
                 startTimestamp, endTimestamp = self.__epicController.getSeasonTimeRange()
                 vm.setStartTimestamp(startTimestamp)
@@ -59,6 +68,15 @@ class InfoView(ViewImpl):
                 rankItemPoints.addNumber(points)
                 rankItemPoints.addNumber(xpBonus)
                 ranks.addViewModel(rankItem)
+
+    def __updateVehLevels(self, vehilceLevels):
+        vehilceLevels.clear()
+        validVehicleLevels = self.__epicController.getValidVehicleLevels()
+        validVehicleLevels.sort()
+        for level in validVehicleLevels:
+            vehilceLevels.addNumber(level)
+
+        vehilceLevels.invalidate()
 
     def __onViewClose(self):
         self.destroyWindow()

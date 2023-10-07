@@ -14,5 +14,6 @@ def getLootBoxViewModel(lootBox):
     lbModel.setIconName(lootBox.getIconName())
     lbModel.setDescriptionKey(lootBox.getDesrciption())
     lbModel.setVideoRes(lootBox.getVideoRes())
+    lbModel.setCategory(lootBox.getCategory())
     fillStringsArray(lootBox.getBonusGroups(), lbModel.getBonusGroups())
     return lbModel

@@ -5,6 +5,8 @@ import typing
 import Event
 from ..py_object_binder import PyObjectEntity
 from .windows_area import WindowsArea
+if typing.TYPE_CHECKING:
+    from .. import Window
 _logger = logging.getLogger(__name__)
 
 class WindowsManager(PyObjectEntity):
@@ -49,6 +51,9 @@ class WindowsManager(PyObjectEntity):
 
     def findViews(self, predicate):
         return self.proxy.findPyViews(predicate)
+
+    def getMainWindow(self):
+        return self.proxy.getMainWindow()
 
     def addWindowsArea(self, areaID):
         area = WindowsArea()

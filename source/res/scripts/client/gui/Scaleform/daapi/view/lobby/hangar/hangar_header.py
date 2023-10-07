@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
 import logging
+import typing
 import BigWorld
+import inspect
 import constants
 import nations
 from CurrentVehicle import g_currentVehicle
@@ -9,6 +11,7 @@ from gui import g_guiResetters
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.missions.regular import missions_page
 from gui.Scaleform.daapi.view.meta.HangarHeaderMeta import HangarHeaderMeta
+from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -45,6 +48,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
+from PlayerEvents import g_extPlayerEvents
+from skeletons.gui.game_control import IHalloweenController
+if typing.TYPE_CHECKING:
+    from typing import Optional
 _logger = logging.getLogger(__name__)
 
 class WIDGET_PM_STATE(object):
@@ -73,10 +80,23 @@ class LABEL_STATE(object):
     ALL_DONE = 'all_done'
 
 
-class HANGAR_FLAGS_ORDER(object):
-    FIRST = 1
-    SECOND = 2
-    THIRD = 3
+class ActiveWidgets(object):
+    LEFT = 1
+    CENTER = 2
+    RIGHT = 3
+
+    def __init__(self):
+        self.__widgets = {self.LEFT: '',
+         self.CENTER: '',
+         self.RIGHT: ''}
+        super(ActiveWidgets, self).__init__()
+
+    def update(self, position, alias):
+        if position in self.__widgets:
+            if self.__widgets[position] != alias:
+                self.__widgets[position] = alias
+                return True
+        return False
 
 
 QUEST_TYPE_BY_PM_BRANCH = {PM_BRANCH.REGULAR: HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR,
@@ -201,6 +221,19 @@ def _getActiveQuestLabel(total, completed):
     return backport.text(R.strings.menu.hangar_header.battle_quests_label.dyn(LABEL_STATE.ACTIVE)(), total=total - completed)
 
 
+def widgetFunc(alias):
+
+    def decorator(fn):
+
+        def wrapper(self, *args, **kwargs):
+            return fn(self, *args, **kwargs)
+
+        wrapper.alias = alias
+        return wrapper
+
+    return decorator
+
+
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __slots__ = ('_currentVehicle', '__screenWidth', '__isShowPersonalMission')
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -218,6 +251,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    _hwController = dependency.descriptor(IHalloweenController)
     __resourceWell = dependency.descriptor(IResourceWellController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __collectiveGoalEntryPointController = dependency.descriptor(ICollectiveGoalEntryPointController)
@@ -231,6 +265,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._currentVehicle = None
         self.__screenWidth = None
         self.__isShowPersonalMission = True
+        self.__activeWidgets = None
+        self.__widgets = {wrapper.alias:wrapper for _, wrapper in inspect.getmembers(self.__class__, inspect.ismethod) if getattr(wrapper, 'alias', None)}
         return
 
     def onQuestBtnClick(self, questType, questID):
@@ -268,25 +304,22 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def update(self, *_):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
-        self.__updateBPWidget()
-        self.__updateBattleRoyaleWidget()
-        self.__updateEpicWidget()
+        self.__updateWidget()
         self.__updateResourceWellEntryPoint()
         self.__updateCollectiveGoalEntryPoint()
-        self.__updateFunRandomWidget()
-        self.__updateComp7Widget()
         self.__updateArmoryYardEntryPoint()
 
     def updateRankedHeader(self, *_):
-        self.__updateRBWidget()
+        self.__updateWidget()
 
     def updateBattleRoyaleHeader(self):
-        self.__updateBattleRoyaleWidget()
+        self.__updateWidget()
 
     def _populate(self):
         super(HangarHeader, self)._populate()
         self._currentVehicle = g_currentVehicle
         self.__screenWidth = BigWorld.screenSize()[0]
+        self.__activeWidgets = ActiveWidgets()
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
         self._festivityController.onStateChanged += self.update
@@ -337,6 +370,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__armoryYardCtrl.onUpdated -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
+        self.__activeWidgets = None
+        self.__widgets.clear()
+        self.__widgets = None
         if self._eventsController:
             self._eventsController.removeListener(self)
         self.removeListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -349,22 +385,28 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _makeHeaderVO(self):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
-        if not self.__tutorialLoader.gui.hangarHeaderEnabled:
+        ctx = {'headerVO': None,
+         'emptyHeaderVO': emptyHeaderVO}
+        g_extPlayerEvents.onExtGetHangarHeaderVO(ctx)
+        if ctx['headerVO'] is not None:
+            return ctx['headerVO']
+        elif not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        if self.__rankedController.isRankedPrbActive():
+        elif self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
-        if self.__epicController.isEpicPrbActive():
+        elif self.__epicController.isEpicPrbActive():
             return {'isVisible': True,
              'quests': self.__getEpicQuestsToHeaderVO()}
-        if self.__funRandomCtrl.isFunRandomPrbActive():
+        elif self.__funRandomCtrl.isFunRandomPrbActive():
             return {'isVisible': True,
              'quests': []}
-        if self._currentVehicle.isPresent():
+        elif self._currentVehicle.isPresent():
             return {'isVisible': True,
              'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)}
-        return {'isVisible': True,
-         'quests': []} if self.__comp7Controller.isComp7PrbActive() else emptyHeaderVO
+        else:
+            return {'isVisible': True,
+             'quests': []} if self.__comp7Controller.isComp7PrbActive() else emptyHeaderVO
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
@@ -397,7 +439,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def isPersonalMissionEnabled(self):
-        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS)
+        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS) and not self._hwController.isEventPrbActive()
 
     def isElenQuestsEnabled(self):
         return not self.__comp7Controller.isComp7PrbActive()
@@ -416,63 +458,56 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             quests.append(epicBattleQuests)
         return quests
 
-    def __updateComp7Widget(self):
-        if self.__comp7Controller.isComp7PrbActive():
-            self.as_createComp7S()
-            self.__updateBattlePassSmallWidget()
-        else:
-            self.as_removeComp7S()
+    @widgetFunc(HANGAR_ALIASES.COMP7_WIDGET)
+    def __getComp7Widget(self):
+        return self.__comp7Controller.isComp7PrbActive()
 
-    def __updateBPWidget(self):
+    @widgetFunc(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT)
+    def __getBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
         isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
         isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp() and isRuleCompleted
-        if isVisible:
-            self.as_createBattlePassS()
-        else:
-            self.as_removeBattlePassS()
+        return isVisible
 
-    def __updateBattlePassWidgetVisibility(self, *_):
-        self.__updateBPWidget()
+    @widgetFunc(HANGAR_ALIASES.RANKED_WIDGET)
+    def __getRBWidget(self):
+        return self.__rankedController.isRankedPrbActive()
+
+    @widgetFunc(FUNRANDOM_ALIASES.FUN_RANDOM_HANGAR_WIDGET)
+    def __getFunRandomWidget(self):
+        return self.__funRandomCtrl.isFunRandomPrbActive()
+
+    @widgetFunc(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT)
+    def __getBattleRoyaleWidgetAlias(self):
+        return self.__battleRoyaleController.isGeneralHangarEntryPoint() and self.__battleRoyaleController.isBattleRoyaleMode() and self.__battleRoyaleController.isEnabled()
+
+    @widgetFunc(HANGAR_ALIASES.BATTLE_ROYALE_TOURNAMENT)
+    def __getBattleRoyaleTournamentWidgetAlias(self):
+        return not self.__battleRoyaleController.isGeneralHangarEntryPoint()
+
+    @widgetFunc(HANGAR_ALIASES.EPIC_WIDGET)
+    def __getEpicWidget(self):
+        return self.__epicController.isEnabled() and self.__epicController.isEpicPrbActive()
+
+    def __updateWidget(self):
+        alias = self.__getWidgetAlias()
+        if not self.__activeWidgets.update(ActiveWidgets.CENTER, alias):
+            return
+        self.as_addEntryPointS(alias)
+        if alias == HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT:
+            self.__updateVisibilityPersonalMission(True)
+        elif alias == HANGAR_ALIASES.BATTLE_ROYALE_TOURNAMENT:
+            self.__updateVisibilityPersonalMission(False)
         self.__updateBattlePassSmallWidget()
 
-    def __updateRBWidget(self):
-        if self.__rankedController.isRankedPrbActive():
-            self.as_createRankedBattlesS()
-            self.getComponent(HANGAR_ALIASES.RANKED_WIDGET).update()
-        else:
-            self.as_removeRankedBattlesS()
+    def __getWidgetAlias(self):
+        for alias, widgetGetter in self.__widgets.iteritems():
+            if widgetGetter(self):
+                return alias
 
-    def __updateFunRandomWidget(self):
-        if self.__funRandomCtrl.isFunRandomPrbActive():
-            self.as_createFunRandomWidgetS()
-        else:
-            self.as_removeFunRandomWidgetS()
-
-    def __updateBattleRoyaleWidget(self):
-        if self.__battleRoyaleController.isGeneralHangarEntryPoint():
-            if self.__battleRoyaleController.isBattleRoyaleMode() and self.__battleRoyaleController.isEnabled():
-                self.__updateVisibilityPersonalMission(True)
-                self.as_createBattleRoyaleS()
-                self.getComponent(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT).update()
-            else:
-                self.as_removeBattleRoyaleS()
-            self.as_removeBattleRoyaleTournamentS()
-            self.__updateBattlePassSmallWidget()
-            return
-        if not self.__battleRoyaleController.isGeneralHangarEntryPoint():
-            self.__updateVisibilityPersonalMission(False)
-            self.as_setSecondaryEntryPointVisibleS(False)
-            self.as_removeBattleRoyaleS()
-            self.as_createBattleRoyaleTournamentS()
-
-    def __updateEpicWidget(self):
-        if self.__epicController.isEnabled() and self.__epicController.isEpicPrbActive():
-            self.as_createEpicWidgetS()
-            self.getComponent(HANGAR_ALIASES.EPIC_WIDGET).update()
-        else:
-            self.as_removeEpicWidgetS()
+    def __updateBattlePassWidgetVisibility(self, *_):
+        self.__updateWidget()
 
     def __showAvailablePMOperation(self, branch):
         for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:
@@ -827,7 +862,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         isArenaBonusTypeFit = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.WINBACK)
         isRandom = isArenaBonusTypeFit and not self.__bootcampController.isInBootcamp()
         isResourceWellVisible = self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted()
-        self.as_setResourceWellEntryPointS(isRandom and isResourceWellVisible)
+        alias = HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT if isRandom and isResourceWellVisible else ''
+        if self.__activeWidgets.update(ActiveWidgets.RIGHT, alias):
+            self.as_addSecondaryEntryPointS(alias, True)
 
     def __updateCollectiveGoalEntryPoint(self):
         isCollecitveGoalVisible = self.__collectiveGoalEntryPointController.isEnabled()
@@ -841,7 +878,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR
         controller = self.__battleMattersController
         isLuiRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BM_FLAG)
-        self.as_setBattleMattersEntryPointS(controller.isEnabled() and (not controller.isFinished() or controller.hasDelayedRewards()) and isRandom and isLuiRuleCompleted)
+        isBattleMattersMShow = controller.isEnabled() and (not controller.isFinished() or controller.hasDelayedRewards()) and isRandom and isLuiRuleCompleted
+        alias = HANGAR_ALIASES.BATTLE_MATTERS_ENTRY_POINT if isBattleMattersMShow else ''
+        if self.__activeWidgets.update(ActiveWidgets.LEFT, alias):
+            self.as_addSecondaryEntryPointS(alias, False)
 
     def __updateVisibilityBattleMatter(self, *_):
         self.__updateBattleMattersEntryPoint()

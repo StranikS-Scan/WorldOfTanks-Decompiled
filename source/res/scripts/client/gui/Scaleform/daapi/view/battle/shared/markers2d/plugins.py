@@ -43,16 +43,16 @@ _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUB
  LocationMarkerSubType.SHOOTING_POINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.SHOOTING_MARKER,
  LocationMarkerSubType.NAVIGATION_POINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.NAVIGATION_MARKER,
  LocationMarkerSubType.FLAG_POINT_SUBTYPE: settings.MARKER_SYMBOL_NAME.FLAG_MARKER}
-_STATIC_MARKER_CULL_DISTANCE = 1800
+STATIC_MARKER_CULL_DISTANCE = 1800
 _STATIC_MARKER_MIN_SCALE = 60.0
-_BASE_MARKER_MIN_SCALE = 100.0
+BASE_MARKER_MIN_SCALE = 100.0
 RANDOM_BATTLE_BASE_ID = 7
 _STATIC_MARKER_BOUNDS = Math.Vector4(30, 30, 90, -15)
 _INNER_STATIC_MARKER_BOUNDS = Math.Vector4(15, 15, 70, -35)
 _STATIC_MARKER_BOUNDS_MIN_SCALE = Math.Vector2(1.0, 0.8)
-_BASE_MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
-_INNER_BASE_MARKER_BOUNDS = Math.Vector4(17, 17, 18, 18)
-_BASE_MARKER_BOUND_MIN_SCALE = Math.Vector2(1.0, 1.0)
+BASE_MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
+INNER_BASE_MARKER_BOUNDS = Math.Vector4(17, 17, 18, 18)
+BASE_MARKER_BOUND_MIN_SCALE = Math.Vector2(1.0, 1.0)
 MAX_DISTANCE_TEMP_STICKY = 350
 
 class IMarkersManager(object):
@@ -510,9 +510,17 @@ class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):
     def __init__(self, parentObj):
         super(VehicleMarkerTargetPluginReplayPlaying, self).__init__(parentObj)
         if BattleReplay.g_replayCtrl.isPlaying:
-            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.SHOW_AUTO_AIM_MARKER, self._addMarker)
-            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.HIDE_AUTO_AIM_MARKER, self._hideVehicleMarker)
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.ON_TARGET_VEHICLE_CHANGED, self._handleAutoAimMarker)
+
+    def start(self):
+        super(VehicleMarkerTargetPluginReplayPlaying, self).start()
+        if self._vehicleID is not None:
+            self._addMarker(self._vehicleID)
+        return
+
+    def stop(self):
+        self._hideAllMarkers(clearVehicleID=False)
+        super(VehicleMarkerTargetPluginReplayPlaying, self).stop()
 
 
 class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):
@@ -683,7 +691,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
             return
         markerID = self._createMarkerWithPosition(_LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], position)
         marker = self.__clazz(markerID, position, True, locationMarkerSubtype)
-        self._setMarkerRenderInfo(markerID, _STATIC_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
+        self._setMarkerRenderInfo(markerID, _STATIC_MARKER_MIN_SCALE, _STATIC_MARKER_BOUNDS, _INNER_STATIC_MARKER_BOUNDS, STATIC_MARKER_CULL_DISTANCE, _STATIC_MARKER_BOUNDS_MIN_SCALE)
         self._setMarkerLocationOffset(markerID, self._MIN_Y_OFFSET, self._MAX_Y_OFFSET, self._DISTANCE_FOR_MIN_Y_OFFSET, self._MAX_Y_BOOST, self._BOOST_START)
         self._markers[areaID] = marker
         marker.setState(ReplyStateForMarker.CREATE_STATE)
@@ -834,7 +842,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._invokeMarker(markerID, 'setOwningTeam', owner)
         self._invokeMarker(markerID, 'setIdentifier', RANDOM_BATTLE_BASE_ID)
         self._invokeMarker(markerID, 'setActive', True)
-        self._setMarkerRenderInfo(markerID, _BASE_MARKER_MIN_SCALE, _BASE_MARKER_BOUNDS, _INNER_BASE_MARKER_BOUNDS, _STATIC_MARKER_CULL_DISTANCE, _BASE_MARKER_BOUND_MIN_SCALE)
+        self._setMarkerRenderInfo(markerID, BASE_MARKER_MIN_SCALE, BASE_MARKER_BOUNDS, INNER_BASE_MARKER_BOUNDS, STATIC_MARKER_CULL_DISTANCE, BASE_MARKER_BOUND_MIN_SCALE)
         marker = self.__clazz(markerID, True, owner)
         self._markers[baseOrControlPointID] = marker
         marker.setState(ReplyStateForMarker.NO_ACTION)
@@ -972,12 +980,28 @@ class BaseAreaMarkerPlugin(MarkerPlugin):
         self._invokeMarker(self.__markers[uniqueID], 'setDistance', distance)
 
     def setMarkerMatrix(self, uniqueID, matrix):
-        markerID = self.__markers.pop(uniqueID, None)
+        markerID = self.__markers.get(uniqueID, None)
         if markerID is None:
             return
         else:
             self._parentObj.setMarkerMatrix(markerID, matrix)
             return
+
+    def invokeMarker(self, uniqueID, name, *args):
+        if uniqueID in self.__markers:
+            self._invokeMarker(self.__markers[uniqueID], name, *args)
+
+    def setMarkerRenderInfo(self, uniqueID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
+        if uniqueID in self.__markers:
+            self._setMarkerRenderInfo(self.__markers[uniqueID], minScale, offset, innerOffset, cullDistance, boundsMinScale)
+
+    def setMarkerSticky(self, uniqueID, isSticky):
+        if uniqueID in self.__markers:
+            self._setMarkerSticky(self.__markers[uniqueID], isSticky)
+
+    def setMarkerLocationOffset(self, uniqueID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        if uniqueID in self.__markers:
+            self._setMarkerLocationOffset(self.__markers[uniqueID], minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
 
 
 class AreaMarkerPlugin(BaseAreaMarkerPlugin):

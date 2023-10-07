@@ -69,14 +69,14 @@ class FlashComponentWrapper(object):
         self.__component = None
         return
 
-    def createComponent(self, swf='', className=_DEFAULT_FLASH_COMPONENT_CLASS, args=None, path=SCALEFORM_SWF_PATH_V3, descriptor=0):
+    def createComponent(self, swf='', className=_DEFAULT_FLASH_COMPONENT_CLASS, args=None, path=SCALEFORM_SWF_PATH_V3, **kwargs):
         if swf:
             fileName = '{}/{}'.format(path, swf)
         else:
             fileName = ''
         if self.__component is None:
             args = args or []
-            self.__component = getattr(GUI, className)(fileName, descriptor, *args)
+            self.__component = getattr(GUI, className)(fileName, *args, **kwargs)
             self.__component.focus = True
             self.__component.moveFocus = True
             self.__component.position.z = 0.5
@@ -159,9 +159,9 @@ class FlashComponentWrapper(object):
 
 class Flash(FlashComponentWrapper):
 
-    def __init__(self, swf='', className='Flash', args=None, path=SCALEFORM_SWF_PATH_V3, descriptor=0):
+    def __init__(self, swf='', className='Flash', args=None, path=SCALEFORM_SWF_PATH_V3):
         super(Flash, self).__init__()
-        self.createComponent(swf=swf, className=className, args=args, path=path, descriptor=descriptor)
+        self.createComponent(swf=swf, className=className, args=args, path=path)
 
 
 class _ExternalInterfaceObj(object):

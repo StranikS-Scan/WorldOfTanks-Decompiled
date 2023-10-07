@@ -212,6 +212,10 @@ class IDynamicControllersLocator(object):
     def overrideSettingsController(self):
         raise NotImplementedError
 
+    @property
+    def teamBaseRecapturable(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()

@@ -27,6 +27,7 @@ from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.game_control.links import URLMacros
 from gui.game_control.season_provider import SeasonProvider
 from gui.impl.gen import R
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
@@ -115,6 +116,20 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
         self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
         self.__spaceSwitchController.onCheckSceneChange += self.__onCheckSceneChange
+
+    def getTimer(self, now=None, peripheryID=None):
+        now = now or self._getNow()
+        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus(now, peripheryID)
+        if primeTimeStatus != PrimeTimeStatus.AVAILABLE:
+            for pID in self._getAllPeripheryIDs():
+                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(now, pID)
+                if peripheryStatus in (PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE):
+                    timeLeft = peripheryTime
+
+        seasonsChangeTime = self.getClosestStateChangeTime(now)
+        if seasonsChangeTime and (now + timeLeft > seasonsChangeTime or timeLeft == 0):
+            timeLeft = seasonsChangeTime - now
+        return timeLeft + 1 if timeLeft > 0 else 0
 
     def fini(self):
         self.__voControl.fini()
@@ -512,8 +527,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__eventAvailabilityUpdate()
 
     def __timerTick(self):
-        if self.isBattleRoyaleMode():
-            self.onWidgetUpdate()
+        self.onWidgetUpdate()
 
     def __resetTimer(self):
         self.startNotification()

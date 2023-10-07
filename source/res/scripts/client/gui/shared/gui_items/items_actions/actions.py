@@ -36,7 +36,7 @@ from gui.impl.lobby.personal_reserves import personal_reserves_dialogs
 from gui.impl.lobby.personal_reserves.personal_reserves_utils import canBuyBooster as utilsCanBuyBooster
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
-from gui.shared.event_dispatcher import showDeconstructionDeviceDialog, showConfirmOnSlotDialog
+from gui.shared.event_dispatcher import showDeconstructionMultDeviceDialog, showDeconstructionDeviceDialog
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
@@ -44,6 +44,7 @@ from gui.shared.gui_items.processors import makeSuccess
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor, BuyBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
+from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole
 from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemDeconstructionProcessorMessage, MultItemsDeconstructionProcessorMessage
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller, ModuleDeconstruct
@@ -147,6 +148,23 @@ class IGUIItemAction(object):
 
 class CachedItemAction(IGUIItemAction):
     _itemsCache = dependency.descriptor(IItemsCache)
+
+
+class GroupedItemAction(CachedItemAction):
+    __slots__ = ('_groupID', '_groupSize')
+
+    def __init__(self, groupID, groupSize):
+        super(GroupedItemAction, self).__init__()
+        self._groupID = groupID
+        self._groupSize = groupSize
+
+    @staticmethod
+    def _pushGroupedMessages(result):
+        if result and result.auxData:
+            if result.success:
+                SystemMessages.pushMessage(result.userMsg + ' ' + ', '.join((m.userMsg for m in result.auxData if m)), type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+            else:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
 class BuyAction(CachedItemAction):
@@ -715,13 +733,30 @@ class BuyVehicleSlotAction(CachedItemAction):
 
 class BuyBerthsAction(CachedItemAction):
 
+    def __init__(self, berthPrice, countPacksBerths, groupID=0, groupSize=1):
+        super(BuyBerthsAction, self).__init__()
+        self.__berthPrice = berthPrice
+        self.__countPacksBerths = countPacksBerths
+
     @decorators.adisp_process('buyBerths')
     def doAction(self):
-        items = self._itemsCache.items
-        berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
-        result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
+        result = yield TankmanBerthsBuyer(self.__berthPrice, self.__countPacksBerths).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class TankmanRestoreAction(GroupedItemAction):
+
+    def __init__(self, tankmanInvID, useBerthCount=1, groupID=0, groupSize=1):
+        super(TankmanRestoreAction, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__useBerth = useBerthCount
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        tankman = self._itemsCache.items.getTankman(self.__tankmanInvID)
+        result = yield TankmanRestore(tankman, self.__useBerth, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
 
 
 class BuyBoosterAction(CachedItemAction):
@@ -882,21 +917,129 @@ class ConvertBlueprintFragmentAction(IGUIItemAction):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_CONVERSION_ERROR, type=result.sysMsgType)
 
 
-class UseCrewBookAction(IGUIItemAction):
+class UseCrewBookAction(GroupedItemAction):
 
-    def __init__(self, bookCD, vehicleCD, tankmanId=None):
-        super(UseCrewBookAction, self).__init__()
+    def __init__(self, bookCD, vehicleInvID, bookCount, tankmanInvID, groupID=0, groupSize=1):
+        super(UseCrewBookAction, self).__init__(groupID, groupSize)
         self.__bookCD = bookCD
-        self.__vehicleCD = vehicleCD
-        self.__tankmanId = tankmanId
+        self.__bookCount = bookCount
+        self.__vehicleInvID = vehicleInvID
+        self.__tankmanInvID = tankmanInvID
 
     @decorators.adisp_process('crewBooks/useCrewBook')
     def doAction(self):
-        result = yield UseCrewBookProcessor(self.__bookCD, self.__vehicleCD, self.__tankmanId).request()
-        if result.success:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        else:
-            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_FAILED, type=result.sysMsgType)
+        result = yield UseCrewBookProcessor(self.__bookCD, self.__bookCount, self.__vehicleInvID, self.__tankmanInvID, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class UseFreeXpToTankman(GroupedItemAction):
+
+    def __init__(self, selectedXpForConvert, tankmanInvID, groupID=0, groupSize=1):
+        super(UseFreeXpToTankman, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__selectedXpForConvert = selectedXpForConvert
+
+    @decorators.adisp_process('updatingSkillWindow')
+    def doAction(self):
+        result = yield TankmanFreeToOwnXpConvertor(self.__tankmanInvID, self.__selectedXpForConvert, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+    @staticmethod
+    def _pushGroupedMessages(result):
+        if result:
+            if result.success:
+                msg = result.userMsg
+                if result.auxData:
+                    msg += ' ' + ', '.join((m.userMsg for m in result.auxData if m))
+                SystemMessages.pushMessage(msg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+            else:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class TankmanRetrainingAction(GroupedItemAction):
+
+    def __init__(self, tankmanInvID, vehicleIntCD, tmanCostTypeIdx, groupID=0, groupSize=1):
+        super(TankmanRetrainingAction, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__vehicleIntCD = vehicleIntCD
+        self.__tmanCostTypeIdx = tmanCostTypeIdx
+
+    @decorators.adisp_process('retraining')
+    def doAction(self):
+        result = yield TankmanRetraining(self.__tankmanInvID, self.__vehicleIntCD, self.__tmanCostTypeIdx, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class TankmanChangeRoleAction(GroupedItemAction):
+
+    def __init__(self, tankmanInvID, role, vehicleIntCD, vehSlotIdx=-1, groupID=0, groupSize=1):
+        super(TankmanChangeRoleAction, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__vehicleIntCD = vehicleIntCD
+        self.__role = role
+        self.__vehSlotIdx = vehSlotIdx
+
+    @decorators.adisp_process('changingRole')
+    def doAction(self):
+        result = yield TankmanChangeRole(self.__tankmanInvID, self.__role, self.__vehicleIntCD, self.__vehSlotIdx, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class TankmanChangePassportAction(IGUIItemAction):
+
+    def __init__(self, tankmanInvID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
+        super(TankmanChangePassportAction, self).__init__()
+        self.__tankmanInvID = tankmanInvID
+        self.__firstNameID = firstNameID
+        self.__firstNameGroup = firstNameGroup
+        self.__lastNameID = lastNameID
+        self.__lastNameGroup = lastNameGroup
+        self.__iconID = iconID
+        self.__iconGroup = iconGroup
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        yield TankmanChangePassport(self.__tankmanInvID, self.__firstNameID, self.__firstNameGroup, self.__lastNameID, self.__lastNameGroup, self.__iconID, self.__iconGroup).request()
+
+
+class TankmanUnloadAction(GroupedItemAction):
+
+    def __init__(self, vehicleInvID, vehicleSlotIdx, groupID=0, groupSize=1):
+        super(TankmanUnloadAction, self).__init__(groupID, groupSize)
+        self.__vehicleInvID = vehicleInvID
+        self.__vehicleSlotIdx = vehicleSlotIdx
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TankmanUnload(self.__vehicleInvID, self.__vehicleSlotIdx, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class TankmanEquipAction(GroupedItemAction):
+
+    def __init__(self, tankmanInvID, vehicleInvID, vehicleSlotIdx, groupID=0, groupSize=1):
+        super(TankmanEquipAction, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__vehicleInvID = vehicleInvID
+        self.__vehicleSlotIdx = vehicleSlotIdx
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TankmanEquip(self.__tankmanInvID, self.__vehicleInvID, self.__vehicleSlotIdx, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class TankmanDismissAction(CachedItemAction):
+
+    def __init__(self, tankmanInvID):
+        super(TankmanDismissAction, self).__init__()
+        self.__tankmanInvID = tankmanInvID
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        tankman = self._itemsCache.items.getTankman(self.__tankmanInvID)
+        result = yield TankmanDismiss(tankman).request()
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
 class UpgradeOptDeviceAction(AsyncGUIItemAction):
@@ -958,7 +1101,7 @@ class DeconstructOptDevice(AsyncGUIItemAction):
     @adisp_async
     @future_async.wg_async
     def _confirm(self, callback):
-        isOk, count = yield showConfirmOnSlotDialog(self.__module.intCD, fromVehicle=self.__vehicle is not None)
+        isOk, count = yield showDeconstructionDeviceDialog(self.__module.intCD, fromVehicle=self.__vehicle is not None)
         self.__deconstructStorageProcessor.count = count
         callback(isOk)
         return
@@ -1048,7 +1191,7 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
     @adisp_async
     @future_async.wg_async
     def _confirm(self, callback):
-        isOk, _ = yield future_async.wg_await(showDeconstructionDeviceDialog)(self.ctx)
+        isOk, _ = yield future_async.wg_await(showDeconstructionMultDeviceDialog)(self.ctx)
         callback(isOk)
 
     def __sortItemsKey(self, item):

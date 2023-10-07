@@ -125,7 +125,7 @@ class BattleMattersMainView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersMainView(), flags=ViewFlags.COMPONENT, model=BattleMattersMainViewModel())
+        settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersMainView(), flags=ViewFlags.VIEW, model=BattleMattersMainViewModel())
         self.__tooltips = {}
         self.__questCardsDescriptions = {}
         self.__currentQuestIdx = 0

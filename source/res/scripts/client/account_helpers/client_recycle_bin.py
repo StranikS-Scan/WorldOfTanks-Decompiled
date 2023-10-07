@@ -53,17 +53,21 @@ class ClientRecycleBin(object):
             self.__syncData.waitForSync(partial(self.__onGetItemsResponse, itemsType, callback))
             return
 
-    def restoreTankman(self, tmanInvID, callback):
+    def restoreTankman(self, tmanInvID, useBerth, groupID, groupSize, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr)
+                proxy = lambda requestID, resultID, errStr='', ext=None: callback(resultID, errStr, ext)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_RESTORE, tmanInvID, 0, 0, proxy)
+            arr = [tmanInvID,
+             useBerth,
+             groupID,
+             groupSize]
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_RESTORE, arr, proxy)
             return
 
     def __onGetCacheResponse(self, callback, resultID):

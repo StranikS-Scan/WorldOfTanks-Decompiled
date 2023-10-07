@@ -30,6 +30,7 @@ from skeletons.gui.shared import IItemsCache
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 from tutorial.control.context import GLOBAL_FLAG
+from skeletons.gui.game_control import IHalloweenController
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
@@ -39,6 +40,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    _hwController = dependency.descriptor(IHalloweenController)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
@@ -98,6 +100,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.__hangarMessage = hangarMessage
             statusId, msg, msgLvl = hangarMessage
             rentAvailable = False
+            if statusId == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL and self._hwController.isEventHangar():
+                statusId = Vehicle.VEHICLE_STATE.UNDAMAGED
             if statusId in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.RENTABLE_AGAIN):
                 canBuyOrRent, _ = vehicle.mayObtainForMoney(self.__itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent

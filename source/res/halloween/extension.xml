@@ -1,0 +1,54 @@
+<extension.xml>
+  <FeatureName>	halloween	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <HalloweenComponent></HalloweenComponent>
+      <HWAccountComponent></HWAccountComponent>
+      <HWAccountEquipmentController></HWAccountEquipmentController>
+    </StaticComponents>
+    <DynamicComponents>
+      <HWArenaBuffController></HWArenaBuffController>
+      <HWVehicleBuffContainer></HWVehicleBuffContainer>
+      <HWVehicleMaxHealthModifier></HWVehicleMaxHealthModifier>
+      <HWArenaInfoComponent></HWArenaInfoComponent>
+      <HWArenaInfoVehicleBuffsBroadcaster></HWArenaInfoVehicleBuffsBroadcaster>
+      <HWVehicleBeingAttackedComponent></HWVehicleBeingAttackedComponent>
+      <HWVehicleAbilitiesManager></HWVehicleAbilitiesManager>
+      <HWVehicleEffect></HWVehicleEffect>
+      <HWVehicleCurseArrow></HWVehicleCurseArrow>
+      <HWVehicleFireArrow></HWVehicleFireArrow>
+      <HWVehicleFrozenArrow></HWVehicleFrozenArrow>
+      <HWVehicleFrozenArrowDebuff></HWVehicleFrozenArrowDebuff>
+      <HWVehicleHealingArrow></HWVehicleHealingArrow>
+      <HWVehicleHealingArrowDebuff></HWVehicleHealingArrowDebuff>
+      <HWVehicleLaughArrow></HWVehicleLaughArrow>
+      <HWVehicleLaughArrowDebuff></HWVehicleLaughArrowDebuff>
+      <HWVehicleLifeStealArrow></HWVehicleLifeStealArrow>
+      <HWVehicleNitro></HWVehicleNitro>
+      <HWGettingFatApple></HWGettingFatApple>
+      <HWVehiclePassiveHealing></HWVehiclePassiveHealing>
+      <HWVehicleFrozenMantle></HWVehicleFrozenMantle>
+      <HWVehicleFrozenMantleDebuff></HWVehicleFrozenMantleDebuff>
+      <HWVehicleDamageShield></HWVehicleDamageShield>
+      <HWVehicleDamageShieldEffect></HWVehicleDamageShieldEffect>
+    </DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	halloween_personality	</Personality>
+  <EditorPersonality>	editor_halloween_personality	</EditorPersonality>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities>
+      <HalloweenMgr></HalloweenMgr>
+      <HalloweenWheeledScoutMgr></HalloweenWheeledScoutMgr>
+      <HWUnitMgr></HWUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.halloween.cgf_components.show_view	</module>
+      <module>	client.halloween.cgf_components.hangar_rules	</module>
+    </script>
+  </cgf>
+</extension.xml>

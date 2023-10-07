@@ -50,7 +50,7 @@ class ConsumableDeviceProvider(VehicleBaseArrayProvider):
         return (GUI_ITEM_TYPE.EQUIPMENT,)
 
     def _getItemCriteria(self):
-        return ~REQ_CRITERIA.HIDDEN
+        return ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.HAS_TAGS(['halloween_equipment'])
 
     def _getEquipment(self):
         return self._getVehicle().consumables

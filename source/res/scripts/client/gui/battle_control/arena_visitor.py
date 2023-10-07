@@ -279,6 +279,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
+    def isHalloweenBattle(self):
+        return self._guiType == _GUI_TYPE.HALLOWEEN_BATTLES
+
     def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
 
@@ -416,6 +419,9 @@ class _ArenaExtraDataVisitor(IArenaVisitor):
 
     def isLowLevelBattle(self):
         return 0 < self._extra.get('battleLevel', 0) < 4
+
+    def isMapsInDevelopmentEnabled(self):
+        return self._extra.get('isRandomEventsAllowed', False)
 
     def getValue(self, key, default=None):
         return self._extra.get(key, default)

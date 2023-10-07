@@ -24,6 +24,7 @@ from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from helpers.time_utils import getTimestampByStrDate
 from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import IHalloweenController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
@@ -114,6 +115,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
     __bootcamp = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __luiController = dependency.descriptor(ILimitedUIController)
+    __hwController = dependency.descriptor(IHalloweenController)
     __slots__ = ['__entries', '__serverSettings']
 
     def __init__(self):
@@ -129,6 +131,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.__unsubscribeLUI()
         self.as_updateEntriesS([])
         self.stopGlobalListening()
+        self.__hwController.onCompleteActivePhase -= self.__updateEntries
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification
         self.clearNotification()
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
@@ -144,6 +147,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onCacheResync
+        self.__hwController.onCompleteActivePhase += self.__updateEntries
         self.startGlobalListening()
 
     def _onRegisterFlashComponent(self, viewPy, alias):

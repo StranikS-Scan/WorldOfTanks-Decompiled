@@ -25,7 +25,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             messages = yield super(StoryModeResultsFormatter, self).format(message)
             callback(messages)
 
-    def _prepareFormatData(self, message):
+    def _prepareFormatData(self, message, guiType=0):
         templateName, ctx = super(StoryModeResultsFormatter, self)._prepareFormatData(message)
         missionId = message.data.get('missionId', FIRST_MISSION_ID)
         ctx['scenarioName'] = backport.text(R.strings.sm_battle.prebattle.mission.title.num(missionId)())

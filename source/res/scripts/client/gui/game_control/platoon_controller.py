@@ -157,7 +157,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__filterExpander = _FilterExpander()
         self.__isActiveSearchView = False
         self.__startAutoSearchOnUnitJoin = False
-        self.__currentlyDisplayedTanks = 0
+        self.__currentlyDisplayedTanks = set()
         self.__isPlatoonVisualizationEnabled = False
         self.__availablePlatoonTanks = {}
         self.__tankDisplayPosition = {}
@@ -174,6 +174,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.onPlatoonTankUpdated = Event.Event()
         self.onAutoSearchCooldownChanged = Event.Event()
         self.onPlatoonTankRemove = Event.Event()
+        self.onLeavePlatoon = Event.Event()
         self.__prevPrbEntityInfo = PrbEntityInfo(QUEUE_TYPE.UNKNOWN, PREBATTLE_TYPE.NONE)
         self.__waitingReadyAccept = False
         return
@@ -293,7 +294,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     @adisp_async
     @adisp_process
-    def togglePlayerReadyAction(self, callback):
+    def togglePlayerReadyAction(self, checkAmmo, callback):
         if self.__waitingReadyAccept:
             callback(False)
             return
@@ -302,7 +303,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady and not self.prbEntity.isCommander():
+        if changeStatePossible and notReady and checkAmmo and not self.prbEntity.isCommander():
             changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
@@ -799,7 +800,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
 
     def __onHangarSpaceCreate(self):
-        self.__currentlyDisplayedTanks = 0
+        self.__currentlyDisplayedTanks.clear()
         if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
             self.__updatePlatoonTankInfo()
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
@@ -854,6 +855,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         else:
             self.destroyUI()
         self.__tankDisplayPosition.clear()
+        self.onLeavePlatoon()
 
     def __calculateDropdownMove(self, xOffset):
         if xOffset is not None:
@@ -887,15 +889,17 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.__updatePlatoonTankInfo()
 
     def __platoonTankLoaded(self, event):
-        self.__currentlyDisplayedTanks += 1
-        if self.__currentlyDisplayedTanks == 1:
+        entity = event.ctx.get('entity')
+        if entity in self.__availablePlatoonTanks.values():
+            self.__currentlyDisplayedTanks.add(entity)
+        if len(self.__currentlyDisplayedTanks) == 1:
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
                 cameraManager.enablePlatoonMode(True)
 
     def __platoonTankDestroyed(self, event):
-        self.__currentlyDisplayedTanks = max(0, self.__currentlyDisplayedTanks - 1)
-        if self.__currentlyDisplayedTanks <= 0:
+        self.__currentlyDisplayedTanks.discard(event.ctx.get('entity'))
+        if len(self.__currentlyDisplayedTanks) <= 0:
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
                 cameraManager.enablePlatoonMode(False)
@@ -1068,9 +1072,23 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__tankDisplayPosition[currentPlayer.accID] = currentPlayerIdx
 
     def __removeAccFromPositions(self, accID):
+        maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()
         removedIdx = self.__tankDisplayPosition.pop(accID, None)
+        currPlayerIdx = self.__tankDisplayPosition[BigWorld.player().id]
         if removedIdx is not None:
-            self.__tankDisplayPosition = {k:(v if v < removedIdx else v - 1) for k, v in self.__tankDisplayPosition.items()}
+            if maxSlotCount == _MAX_SLOT_COUNT_FOR_PLAYER_RESORTING:
+                for playerID, slotIdx in self.__tankDisplayPosition.iteritems():
+                    if slotIdx > removedIdx:
+                        if slotIdx == currPlayerIdx + 1:
+                            self.__tankDisplayPosition[playerID] = slotIdx - 2
+                        elif slotIdx != currPlayerIdx:
+                            self.__tankDisplayPosition[playerID] = slotIdx - 1
+
+            else:
+                for playerID, slotIdx in self.__tankDisplayPosition.iteritems():
+                    if slotIdx > removedIdx:
+                        self.__tankDisplayPosition[playerID] = slotIdx - 1
+
         return
 
     def __onVehicleStateChanged(self, updateReason, _):

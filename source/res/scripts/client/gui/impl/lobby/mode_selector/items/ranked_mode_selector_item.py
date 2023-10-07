@@ -32,7 +32,8 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
         self.__onGameModeUpdated()
         self.__rankedBattleController.onGameModeStatusUpdated += self.__onGameModeUpdated
         self.__rankedBattleController.onUpdated += self.__onGameModeUpdated
-        self._addReward(ModeSelectorRewardID.BONES)
+        self._addReward(ModeSelectorRewardID.CREDITS)
+        self._addReward(ModeSelectorRewardID.OTHER)
 
     def _onDisposing(self):
         self.__rankedBattleController.onGameModeStatusUpdated -= self.__onGameModeUpdated

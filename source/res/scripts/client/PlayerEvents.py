@@ -13,6 +13,7 @@ class _PlayerEvents(object):
         self.onAccountBecomeNonPlayer = Event.Event()
         self.onAccountShowGUI = Event.Event()
         self.onAccountShowGUISkipped = Event.Event()
+        self.onClientSynchronize = Event.Event()
         self.onClientUpdated = Event.Event()
         self.onEnqueued = Event.Event()
         self.onDequeued = Event.Event()
@@ -79,7 +80,19 @@ class _PlayerEvents(object):
         self.onCollectPrebattleInvites = Event.Event()
         self.onUpdateSpecBattlesWindow = Event.Event()
         self.onLoadingMilestoneReached = Event.Event()
+        self.onHangarHeaderVOUpdate = Event.Event()
+        self.onHangarUpdate = Event.Event()
         self.onConfigModelUpdated = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()
+
+class _ExtensionEvents(object):
+
+    def __init__(self):
+        self.onExtGetHangarHeaderVO = Event.Event()
+        self.onExtHangarUpdateEventMode = Event.Event()
+        self.onExtEntitySwitched = Event.Event()
+
+
+g_extPlayerEvents = _ExtensionEvents()

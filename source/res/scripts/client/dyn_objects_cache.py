@@ -258,6 +258,7 @@ class _EpicBattleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
 
 class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
+    _LOOT_TYPES = 'lootTypes'
 
     def __init__(self):
         super(_BattleRoyaleDynObjects, self).__init__()
@@ -290,7 +291,7 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
-            self.__loots = _createLoots(dataSection, dataSection['lootTypes'], prerequisites)
+            self.__loots = _createLoots(dataSection, dataSection[self._LOOT_TYPES], prerequisites)
             BigWorld.loadResourceListBG(list(prerequisites), makeCallbackWeak(self.__onResourcesLoaded))
             super(_BattleRoyaleDynObjects, self).init(dataSection)
         return

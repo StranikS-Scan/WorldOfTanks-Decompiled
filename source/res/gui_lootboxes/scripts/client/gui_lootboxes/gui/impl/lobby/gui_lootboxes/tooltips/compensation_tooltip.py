@@ -27,6 +27,7 @@ class LootBoxesCompensationTooltip(ViewImpl):
             self.__fillItem(model.getItemBefore(), self.__bonusBefore, packer)
             self.__fillItem(model.getItemAfter(), self.__bonusAfter, packer)
 
-    def __fillItem(self, bonusModel, item, packer):
-        packBonusModelAndTooltipData(item, packer, bonusModel)
-        bonusModel.invalidate()
+    def __fillItem(self, bonusModelsList, bonuses, packer):
+        packBonusModelAndTooltipData(bonuses, bonusModelsList, None, packer)
+        bonusModelsList.invalidate()
+        return

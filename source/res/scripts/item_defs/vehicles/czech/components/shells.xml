@@ -1045,4 +1045,57 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_130mm_Prurazny_vz_55_GW>
+    <id>	31007	</id>
+    <userString>	#czech_vehicles:_130mm_Prurazny_vz_55_GW	</userString>
+    <icon>	ap	</icon>
+    <price>	1150	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Prurazny_vz_55_GW>
+  <_130mm_Prurazny_vz_55_s_oc_jadrem_GW>
+    <id>	31008	</id>
+    <userString>	#czech_vehicles:_130mm_Prurazny_vz_55_s_oc_jadrem_GW	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Prurazny_vz_55_s_oc_jadrem_GW>
+  <_130mm_Narazovy_vz_55_GW>
+    <id>	31009	</id>
+    <userString>	#czech_vehicles:_130mm_Narazovy_vz_55_GW	</userString>
+    <icon>	he_modern	</icon>
+    <price>	950	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_130mm_Narazovy_vz_55_GW>
 </shells.xml>

@@ -103,6 +103,7 @@
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
     <Saurer_1000_7x7>	504	</Saurer_1000_7x7>
+    <Detroit_Diesel_6V53T_FL>	31001	</Detroit_Diesel_6V53T_FL>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -115,6 +116,7 @@
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
     <Maybach_HL_230_bootcamp>	1002	</Maybach_HL_230_bootcamp>
+    <Panhard_12H_6000_54_HW>	0	</Panhard_12H_6000_54_HW>
   </ids>
   <shared>
     <Somua_S-40>
@@ -395,6 +397,24 @@
       <rpm_min>	221	</rpm_min>
       <rpm_max>	2256	</rpm_max>
     </Detroit_Diesel_6V53T>
+    <Detroit_Diesel_6V53T_FL>
+      <userString>	#france_vehicles:Detroit_Diesel_6V53T	</userString>
+      <shortUserString>	#france_vehicles:Detroit_Diesel_6V53T_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	770	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	221	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
+    </Detroit_Diesel_6V53T_FL>
     <Detroit_Diesel_6V53T-S>
       <userString>	#france_vehicles:Detroit_Diesel_6V53T-S	</userString>
       <shortUserString>	#france_vehicles:Detroit_Diesel_6V53T-S_short	</shortUserString>
@@ -2020,5 +2040,22 @@
       <rpm_max>	2951	</rpm_max>
       <notInShop>	True	</notInShop>
     </Maybach_HL_230_bootcamp>
+    <Panhard_12H_6000_54_HW>
+      <userString>	#france_vehicles:Panhard_12H_6000_54	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	525	</power>
+      <weight>	279	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Panhard_12H_6000_54_HW>
   </shared>
 </engines.xml>

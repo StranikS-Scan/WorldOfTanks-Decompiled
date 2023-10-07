@@ -19,9 +19,6 @@ class HangarMeta(View):
     def onTeaserClick(self):
         self._printOverrideError('onTeaserClick')
 
-    def as_setCrewEnabledS(self, value):
-        return self.flashObject.as_setCrewEnabled(value) if self._isDAAPIInited() else None
-
     def as_setCarouselEnabledS(self, value):
         return self.flashObject.as_setCarouselEnabled(value) if self._isDAAPIInited() else None
 
@@ -64,9 +61,6 @@ class HangarMeta(View):
     def as_hideTeaserTimerS(self):
         return self.flashObject.as_hideTeaserTimer() if self._isDAAPIInited() else None
 
-    def as_setNotificationEnabledS(self, value):
-        return self.flashObject.as_setNotificationEnabled(value) if self._isDAAPIInited() else None
-
     def as_createDQWidgetS(self):
         return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
 
@@ -76,9 +70,6 @@ class HangarMeta(View):
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
-    def as_toggleCnSubscriptionS(self, isCnSubscription):
-        return self.flashObject.as_toggleCnSubscription(isCnSubscription) if self._isDAAPIInited() else None
-
     def as_setDQWidgetLayoutS(self, layout):
         return self.flashObject.as_setDQWidgetLayout(layout) if self._isDAAPIInited() else None
 
@@ -87,3 +78,6 @@ class HangarMeta(View):
 
     def as_updateHangarComponentsS(self, showComponents=None, hideComponents=None):
         return self.flashObject.as_updateHangarComponents(showComponents, hideComponents) if self._isDAAPIInited() else None
+
+    def as_toggleEventModeS(self, isEventMode):
+        return self.flashObject.as_toggleEventMode(isEventMode) if self._isDAAPIInited() else None

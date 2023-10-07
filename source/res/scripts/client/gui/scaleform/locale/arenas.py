@@ -168,6 +168,10 @@ class ARENAS(object):
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
     C_500_STALINGRAD_NAME = '#arenas:500_stalingrad/name'
     C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
+    C_08_RUINBERG_HW22_NAME = '#arenas:08_ruinberg_hw22/name'
+    C_11_MUROVANKA_HW22_NAME = '#arenas:11_murovanka_hw22/name'
+    C_99_POLAND_HW22_NAME = '#arenas:99_poland_hw22/name'
+    C_114_CZECH_HW22_NAME = '#arenas:114_czech_hw22/name'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -332,7 +336,11 @@ class ARENAS(object):
      C_210_BF_EPIC_DESERT_NAME,
      C_210_BF_EPIC_DESERT_DESCRIPTION,
      C_500_STALINGRAD_NAME,
-     C_500_STALINGRAD_DESCRIPTION)
+     C_500_STALINGRAD_DESCRIPTION,
+     C_08_RUINBERG_HW22_NAME,
+     C_11_MUROVANKA_HW22_NAME,
+     C_99_POLAND_HW22_NAME,
+     C_114_CZECH_HW22_NAME)
 
     @classmethod
     def all(cls, key0):

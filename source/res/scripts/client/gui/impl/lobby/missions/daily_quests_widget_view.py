@@ -43,7 +43,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.COMPONENT, DailyQuestsWidgetViewModel())
+        settings = ViewSettings(R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.VIEW, DailyQuestsWidgetViewModel())
         super(DailyQuestsWidgetView, self).__init__(settings)
         self.__parentId = None
         self.__tooltipEnabled = True

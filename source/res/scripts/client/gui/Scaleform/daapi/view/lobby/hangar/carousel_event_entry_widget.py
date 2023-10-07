@@ -7,6 +7,7 @@ from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.listener import IPrbListener
 from gui.shared.system_factory import collectCarouselEventEntryPoints
+from PlayerEvents import g_extPlayerEvents
 if typing.TYPE_CHECKING:
     from typing import Dict, Type
     from skeletons.gui.hangar import ICarouselEventEntry
@@ -27,6 +28,14 @@ class CarouselEventEntryHolder(CarouselEventEntryMeta, IPrbListener):
                 self._createInjectView(self.__activeViewID)
 
     def _onPopulate(self):
+        g_extPlayerEvents.onExtEntitySwitched += self.__onExtEntitySwitched
+        self.updateState()
+
+    def _dispose(self):
+        g_extPlayerEvents.onExtEntitySwitched -= self.__onExtEntitySwitched
+        super(CarouselEventEntryHolder, self)._dispose()
+
+    def __onExtEntitySwitched(self):
         self.updateState()
 
     def _makeInjectView(self, viewID=None):

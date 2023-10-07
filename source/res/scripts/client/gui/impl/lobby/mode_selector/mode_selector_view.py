@@ -123,7 +123,7 @@ class ModeSelectorView(ViewImpl):
                 body = modeSelectorItem.disabledTooltipText
                 if tooltipId == ModeSelectorTooltipsConstants.CALENDAR_TOOLTIP:
                     if modeSelectorItem.hasExtendedCalendarTooltip:
-                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow())
+                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow(), event)
                     body = modeSelectorItem.calendarTooltipText
                 return createSimpleTooltip(self.getParentWindow(), event, body=body)
             if tooltipId == ModeSelectorTooltipsConstants.RANDOM_BP_PAUSED_TOOLTIP:

@@ -52,6 +52,9 @@ STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 STORAGE_BLUEPRINTS_CAROUSEL_FILTER = 'STORAGE_BLUEPRINTS_CAROUSEL_FILTER'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
+HW22_CAROUSEL_FILTER_1 = 'HW22_CAROUSEL_FILTER_1'
+HW22_CAROUSEL_FILTER_2 = 'HW22_CAROUSEL_FILTER_2'
+HW22_CAROUSEL_FILTER_CLIENT_1 = 'HW22_CAROUSEL_FILTER_CLIENT_1'
 ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
 ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
 ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
@@ -125,6 +128,7 @@ STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
 STATS_COMP7_SORTING = 'statsSortingComp7'
+STATS_EVENT_SORTING = 'statsEventSorting'
 MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
@@ -171,6 +175,7 @@ IBC_HINT_SECTION = 'battleCommunicationHint'
 RESERVES_HINT_SECTION = 'reservesHintSection'
 COMMANDER_CAM_HINT_SECTION = 'commanderCamHintSection'
 MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
+DEV_MAPS_HINT_SECTION = 'devMapsHintSection'
 WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
@@ -234,6 +239,8 @@ GUI_LOOT_BOXES = 'guiLootBoxes'
 LOOT_BOXES_INTRO_SHOWN = 'lootBoxesIntroShown'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
 LOOT_BOXES_VIEWED_COUNT = 'lootBoxesViewedCount'
+LOOT_BOXES_COUNT = 'lootBoxesCount'
+LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
 BIRTHDAY_2023_INTRO_SHOWN = 'birthday2023IntroShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
@@ -299,6 +306,7 @@ MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
 EPIC_LAST_CYCLE_ID = 'epicLastCycleID'
 FUN_RANDOM_LAST_PRESET = 'funRandomLastPreset'
+HALLOWEEN_PROGRESSION = 'halloweenProgression'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
                'scroll_to_item': None,
@@ -518,9 +526,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'level_4': False,
                                               'level_5': False,
                                               'level_6': False,
-                                              'level_7': False,
-                                              'level_8': True,
-                                              'level_9': True,
+                                              'level_7': True,
+                                              'level_8': False,
+                                              'level_9': False,
                                               'level_10': False},
                EPICBATTLE_CAROUSEL_FILTER_2: {'premium': False,
                                               'elite': False,
@@ -547,13 +555,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_LT_wheeled': False,
                                               'role_SPG': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'epicBattleSeason': 0,
-                                                     'level_8': True,
-                                                     'level_9': True,
+                                                     'level_7': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_2: {'epicBattleSeason': 0,
-                                                     'level_8': True,
-                                                     'level_9': False,
+                                                     'level_7': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
@@ -768,6 +774,57 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                              'role_SPG': False},
                VERSUS_AI_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
                                                     'clanRented': False},
+               HW22_CAROUSEL_FILTER_1: {'ussr': False,
+                                        'germany': False,
+                                        'usa': False,
+                                        'china': False,
+                                        'france': False,
+                                        'uk': False,
+                                        'japan': False,
+                                        'czech': False,
+                                        'sweden': False,
+                                        'poland': False,
+                                        'italy': False,
+                                        'lightTank': False,
+                                        'mediumTank': False,
+                                        'heavyTank': False,
+                                        'SPG': False,
+                                        'AT-SPG': False,
+                                        'level_1': False,
+                                        'level_2': False,
+                                        'level_3': False,
+                                        'level_4': False,
+                                        'level_5': False,
+                                        'level_6': False,
+                                        'level_7': False,
+                                        'level_8': False,
+                                        'level_9': False,
+                                        'level_10': False},
+               HW22_CAROUSEL_FILTER_2: {'premium': False,
+                                        'elite': False,
+                                        'igr': False,
+                                        'rented': True,
+                                        'event': True,
+                                        'favorite': False,
+                                        'bonus': False,
+                                        'crystals': False,
+                                        'role_HT_assault': False,
+                                        'role_HT_break': False,
+                                        'role_HT_support': False,
+                                        'role_HT_universal': False,
+                                        'role_MT_universal': False,
+                                        'role_MT_sniper': False,
+                                        'role_MT_assault': False,
+                                        'role_MT_support': False,
+                                        'role_ATSPG_assault': False,
+                                        'role_ATSPG_universal': False,
+                                        'role_ATSPG_sniper': False,
+                                        'role_ATSPG_support': False,
+                                        'role_LT_universal': False,
+                                        'role_LT_wheeled': False,
+                                        'role_SPG': False},
+               HW22_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
+                                               'clanRented': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -981,6 +1038,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                        'sortDirection': 'descending'},
                 'statsSortingComp7': {'iconType': 'prestigePoints',
                                       'sortDirection': 'descending'},
+                'statsEventSorting': {'iconType': 'hwXP',
+                                      'sortDirection': 'descending'},
                 'backDraftInvert': False,
                 QUESTS: {'lastVisitTime': -1,
                          'visited': [],
@@ -1059,7 +1118,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         GAME.SHOW_ARTY_HIT_ON_MAP: True,
                                                         GAME.SWITCH_SETUPS_IN_LOADING: True,
                                                         GAME.SCROLL_SMOOTHING: True,
-                                                        GAME.LIMITED_UI_ACTIVE: True},
+                                                        GAME.LIMITED_UI_ACTIVE: True,
+                                                        GAME.GAMEPLAY_DEV_MAPS: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -1122,6 +1182,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 PRE_BATTLE_ROLE_HINT_SECTION: {},
                 FUN_RANDOM_HINT_SECTION: {},
                 MAPBOX_HINT_SECTION: {},
+                DEV_MAPS_HINT_SECTION: {},
                 COMMANDER_CAM_HINT_SECTION: {HINTS_LEFT: 5},
                 MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
@@ -1140,7 +1201,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RADAR_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
-                CREW_SKINS_VIEWED: set(),
+                CREW_SKINS_VIEWED: {},
                 CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
                                     CREW_BOOK_RARITY.CREW_EPIC: {},
                                     CREW_BOOK_RARITY.CREW_RARE: {},
@@ -1165,6 +1226,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
+                GAME.GAMEPLAY_DEV_MAPS: True,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
                                      'visited_maps': [],
                                      'stored_rewards': {},
@@ -1187,6 +1249,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.LAST_QUEST_PROGRESS: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
+                HALLOWEEN_PROGRESSION: {'previous_phase': 0},
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
@@ -1208,7 +1271,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                   ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}},
                 GUI_LOOT_BOXES: {LOOT_BOXES_INTRO_SHOWN: False,
                                  LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
-                                 LOOT_BOXES_VIEWED_COUNT: 0},
+                                 LOOT_BOXES_VIEWED_COUNT: 0,
+                                 LOOT_BOXES_COUNT: {},
+                                 LOOT_BOXES_LAST_ADDED_ID: 0},
                 BIRTHDAY_2023_INTRO_SHOWN: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
@@ -1468,6 +1533,7 @@ class AccountSettings(object):
     @staticmethod
     def overrideDefaultSettings(name, value):
         if name not in DEFAULT_VALUES:
+            _logger.warning('account setting %s not in DEFAULT_VALUES', name)
             return
         DEFAULT_VALUES[name].update(value)
 
@@ -1898,7 +1964,8 @@ class AccountSettings(object):
                      EPICBATTLE_CAROUSEL_FILTER_CLIENT_1,
                      ROYALE_CAROUSEL_FILTER_CLIENT_1,
                      STORAGE_BLUEPRINTS_CAROUSEL_FILTER,
-                     STORAGE_VEHICLES_CAROUSEL_FILTER_1))
+                     STORAGE_VEHICLES_CAROUSEL_FILTER_1,
+                     HW22_CAROUSEL_FILTER_CLIENT_1))
                     for filterSection in existingSections:
                         savedFilters = _unpack(filtersSection[filterSection].asString)
                         defaults = AccountSettings.getFilterDefault(filterSection)
@@ -1917,7 +1984,8 @@ class AccountSettings(object):
                      EPICBATTLE_CAROUSEL_FILTER_CLIENT_2,
                      MAPBOX_CAROUSEL_FILTER_CLIENT_1,
                      STORAGE_VEHICLES_CAROUSEL_FILTER_1,
-                     STORAGE_BLUEPRINTS_CAROUSEL_FILTER))
+                     STORAGE_BLUEPRINTS_CAROUSEL_FILTER,
+                     HW22_CAROUSEL_FILTER_CLIENT_1))
                     for filterSection in existingSections:
                         savedFilters = _unpack(filtersSection[filterSection].asString)
                         if 'clanRented' in savedFilters:

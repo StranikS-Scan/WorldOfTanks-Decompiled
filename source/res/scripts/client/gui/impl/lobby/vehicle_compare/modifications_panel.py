@@ -27,7 +27,7 @@ class CompareModificationsPanelView(ViewImpl):
     __slots__ = ('__vehItem',)
 
     def __init__(self, layoutID=R.views.lobby.vehicle_compare.CompareModificationsPanelView()):
-        settings = ViewSettings(layoutID, flags=ViewFlags.COMPONENT, model=CompareModificationsPanelViewModel())
+        settings = ViewSettings(layoutID, flags=ViewFlags.VIEW, model=CompareModificationsPanelViewModel())
         super(CompareModificationsPanelView, self).__init__(settings)
         self.__vehItem = None
         return

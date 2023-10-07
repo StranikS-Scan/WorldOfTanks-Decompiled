@@ -1,7 +1,7 @@
 <engine_config.xml>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -211,6 +211,8 @@
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
+    <statisticsLog>	false	</statisticsLog>
+    <battleLogOnly>	false	</battleLogOnly>
     <enableLoggingAssetMsg>	false	</enableLoggingAssetMsg>
     <assetLogPath>	asset.log	</assetLogPath>
     <enableColorFill>	false	</enableColorFill>
@@ -493,6 +495,9 @@
         </bank>
         <bank>
           <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
+        </bank>
+        <bank>
+          <name>	crew.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

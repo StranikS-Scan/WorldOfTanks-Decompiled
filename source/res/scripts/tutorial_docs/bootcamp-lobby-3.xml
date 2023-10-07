@@ -19,10 +19,7 @@
             <inactive>	PersonalCaseOpen	</inactive>
             <inactive>	WrongVehicle	</inactive>
           </condition>
-          <effects>
-            <request-exclusive-hint>	FirstTankman	</request-exclusive-hint>
-            <request-exclusive-hint>	PersonalCaseOption	</request-exclusive-hint>
-          </effects>
+          <effects></effects>
         </effects-group>
         <request-exclusive-hint>	SecondTank	  <sound></sound>
           <condition>
@@ -34,37 +31,10 @@
             <checkpoint-reached>	VehicleBoughtCheckpoint	</checkpoint-reached>
             <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
           </condition>
-          <effects>
-            <request-exclusive-hint>	PersonalCaseSkill	</request-exclusive-hint>
-            <request-exclusive-hint>	PersonalCaseSkillSelect	  <condition>
-                <active>	PersonalCaseSkillClicked	</active>
-              </condition>
-            </request-exclusive-hint>
-          </effects>
+          <effects></effects>
         </effects-group>
-        <request-exclusive-hint>	PersonalCaseClose	  <condition>
-            <checkpoint-reached>	SkillLearnedCheckpoint	</checkpoint-reached>
-            <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
-          </condition>
-        </request-exclusive-hint>
       </runtime-effects>
-      <gui-items>
-        <gui-item>	PersonalCaseClose	  <on-scene-effects>
-            <activate>	PersonalCaseOpen	</activate>
-          </on-scene-effects>
-          <not-on-scene-effects>
-            <inactivate>	PersonalCaseOpen	</inactivate>
-          </not-on-scene-effects>
-        </gui-item>
-        <gui-item>	PersonalCaseSkill	  <on-scene-effects>
-            <set-action>	PersonalCaseSkillClick	</set-action>
-            <inactivate>	PersonalCaseSkillClicked	</inactivate>
-          </on-scene-effects>
-          <not-on-scene-effects>
-            <remove-action>	PersonalCaseSkillClick	</remove-action>
-          </not-on-scene-effects>
-        </gui-item>
-      </gui-items>
+      <gui-items></gui-items>
     </scene>
     <scene>	Techtree	  <post-effects>
         <set-gui-item-criteria>	TechTreeItemNodeCriteria	</set-gui-item-criteria>
@@ -317,11 +287,6 @@
         <play-animation>	TankCarouselContainer	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
-        <set-visible>	CrewPanel	  <val>	True	</val>
-        </set-visible>
-        <play-animation>	CrewPanel	  <type>	tween	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-        </play-animation>
         <show-window>	HangarTeamDialog	  <condition>
             <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
           </condition>
@@ -363,11 +328,7 @@
     <gui-item-criteria>	ResearchRootNodeCriteria	  <item-id>	ResearchRootNodeID	</item-id>
       <value>	id=$SecondVehicleCD$	</value>
     </gui-item-criteria>
-    <gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	  <components>
-        <component-id>	PersonalCaseSkill	</component-id>
-        <component-id>	PersonalCaseSkillSelect	</component-id>
-        <component-id>	PersonalCaseClose	</component-id>
-      </components>
+    <gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	  <components></components>
       <value>	personalCase_$SecondVehicleCommanderID$	</value>
     </gui-item-view-criteria>
     <click-action>	VehicleBuyAcademyClick	  <item-id>	VehicleBuyAcademy	</item-id>
@@ -387,11 +348,6 @@
             <active>	VehicleBuyAcademyClicked	</active>
           </condition>
         </activate>
-      </effects>
-    </click-action>
-    <click-action>	PersonalCaseSkillClick	  <item-id>	PersonalCaseSkill	</item-id>
-      <effects>
-        <activate>	PersonalCaseSkillClicked	</activate>
       </effects>
     </click-action>
     <window>	NewVehicleIntroDialog	  <type>	bootcampSubtitle	</type>

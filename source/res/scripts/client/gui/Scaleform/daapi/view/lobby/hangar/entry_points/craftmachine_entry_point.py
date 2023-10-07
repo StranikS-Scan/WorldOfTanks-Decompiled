@@ -7,5 +7,5 @@ from gui.impl.lobby.craft_machine.craftmachine_entry_point_view import Craftmach
 class CraftMachineEntryPoint(CraftMachineEntryPointMeta):
 
     def _makeInjectView(self):
-        self.__view = CraftmachineEntryPointView(ViewFlags.COMPONENT)
+        self.__view = CraftmachineEntryPointView(ViewFlags.VIEW)
         return self.__view

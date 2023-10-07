@@ -32,7 +32,7 @@ class TechParametersView(ViewImpl):
     def __init__(self, viewKey, updateHeight, viewModelClazz=TechParametersCmpViewModel):
         self.updateHeight = updateHeight
         settings = ViewSettings(viewKey)
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = viewModelClazz()
         super(TechParametersView, self).__init__(settings)
 

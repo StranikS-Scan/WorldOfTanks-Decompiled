@@ -112,7 +112,7 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
             hintCanBeDisplayed = isHintActive and self.__isBattleLoaded
             if hintCanBeDisplayed:
                 btnID, hint = hintData
-                self.as_setDataS(hint.vKey, hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY, hint.reducedPanning)
+                self.as_setDataS(hint.vKey, hint.key, hint.messageLeft, hint.messageRight, hint.offsetX, hint.offsetY, hint.reducedPanning, hint.centeredMessage)
                 self.fireEvent(GameEvent(GameEvent.SHOW_BTN_HINT, ctx={'btnID': btnID,
                  'hintCtx': hint.hintCtx}), scope=EVENT_BUS_SCOPE.GLOBAL)
             self.as_toggleS(hintCanBeDisplayed)

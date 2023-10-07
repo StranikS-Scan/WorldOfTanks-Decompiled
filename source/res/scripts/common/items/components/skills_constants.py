@@ -6,15 +6,21 @@ ORDERED_ROLES = ('commander', 'gunner', 'driver', 'radioman', 'loader')
 ROLES = frozenset(('commander', 'radioman', 'driver', 'gunner', 'loader'))
 ROLE_LIMITS = {'commander': 1,
  'driver': 1}
-COMMON_SKILLS = frozenset(('repair', 'camouflage', 'brotherhood', 'fireFighting'))
+COMMON_SKILLS_ORDERED = ('brotherhood', 'repair', 'camouflage', 'fireFighting')
+COMMON_SKILLS = frozenset(COMMON_SKILLS_ORDERED)
 SEPARATE_SKILLS = frozenset(('radioman_lastEffort',))
 ROLES_AND_COMMON_SKILLS = ROLES | COMMON_SKILLS
-COMMANDER_SKILLS = frozenset(('commander_tutor', 'commander_expert', 'commander_universalist', 'commander_sixthSense', 'commander_eagleEye', 'commander_enemyShotPredictor'))
-SKILLS_BY_ROLES = {'commander': COMMON_SKILLS.union(COMMANDER_SKILLS),
- 'driver': COMMON_SKILLS.union(('driver_tidyPerson', 'driver_smoothDriving', 'driver_virtuoso', 'driver_badRoadsKing', 'driver_rammingMaster')),
- 'gunner': COMMON_SKILLS.union(('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_gunsmith')),
- 'loader': COMMON_SKILLS.union(('loader_pedant', 'loader_desperado', 'loader_intuition')),
- 'radioman': COMMON_SKILLS.union(('radioman_finder', 'radioman_inventor', 'radioman_lastEffort', 'radioman_retransmitter'))}
+COMMANDER_SKILLS = ('commander_eagleEye', 'commander_universalist', 'commander_tutor', 'commander_expert', 'commander_sixthSense', 'commander_enemyShotPredictor')
+COMMON_ROLE = 'common'
+SKILLS_BY_ROLES_ORDERED = {'commander': COMMON_SKILLS_ORDERED + COMMANDER_SKILLS,
+ 'driver': COMMON_SKILLS_ORDERED + ('driver_virtuoso', 'driver_smoothDriving', 'driver_badRoadsKing', 'driver_tidyPerson', 'driver_rammingMaster'),
+ 'gunner': COMMON_SKILLS_ORDERED + ('gunner_smoothTurret', 'gunner_sniper', 'gunner_rancorous', 'gunner_gunsmith'),
+ 'loader': COMMON_SKILLS_ORDERED + ('loader_desperado', 'loader_pedant', 'loader_intuition'),
+ 'radioman': COMMON_SKILLS_ORDERED + ('radioman_finder', 'radioman_retransmitter', 'radioman_lastEffort', 'radioman_inventor')}
+SKILLS_BY_ROLES = {}
+for role, skills in SKILLS_BY_ROLES_ORDERED.iteritems():
+    SKILLS_BY_ROLES.setdefault(role, frozenset(skills))
+
 ROLES_BY_SKILLS = {}
 for role, skills in SKILLS_BY_ROLES.iteritems():
     for skill in skills:

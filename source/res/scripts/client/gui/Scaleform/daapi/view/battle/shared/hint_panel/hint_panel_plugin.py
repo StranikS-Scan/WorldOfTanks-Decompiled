@@ -8,15 +8,16 @@ from gui.shared.utils.plugins import IPlugin
 _HINT_DISPLAY_COUNT_AFTER_RESET = 1
 
 class HintPriority(object):
-    DYN_SQUAD = 0
-    TRAJECTORY = 1
-    HELP = 2
-    MAPBOX = 3
-    BATTLE_COMMUNICATION = 4
-    QUESTS = 5
-    RESERVES = 6
-    RADAR = 7
-    SIEGE = 8
+    DYN_SQUAD = 1
+    TRAJECTORY = 2
+    HELP = 3
+    MAPBOX = 4
+    DEV_MAPS = 4
+    BATTLE_COMMUNICATION = 5
+    QUESTS = 6
+    RESERVES = 7
+    RADAR = 8
+    SIEGE = 9
 
 
 class HelpHintContext(object):
@@ -24,11 +25,13 @@ class HelpHintContext(object):
     ROLE_HELP = 'roleHelp'
     MAPS_TRAINING = 'mapsTraining'
     MAPBOX = 'mapbox'
+    DEV_MAPS = 'devMaps'
     BATTLE_ROYALE = 'battleRoyale'
     COMMANDER_CAMERA = 'commanderCamera'
+    EVENT_BATTLE = 'eventBattle'
 
 
-HintData = namedtuple('HintData', ('vKey', 'key', 'messageLeft', 'messageRight', 'offsetX', 'offsetY', 'priority', 'reducedPanning', 'hintCtx'))
+HintData = namedtuple('HintData', ('vKey', 'key', 'messageLeft', 'messageRight', 'offsetX', 'offsetY', 'priority', 'reducedPanning', 'hintCtx', 'centeredMessage'))
 HintData.__new__.__defaults__ = ('',
  '',
  '',
@@ -37,7 +40,8 @@ HintData.__new__.__defaults__ = ('',
  0,
  HintPriority.HELP,
  False,
- None)
+ None,
+ False)
 
 class HintPanelPlugin(IPlugin):
     __slots__ = ()

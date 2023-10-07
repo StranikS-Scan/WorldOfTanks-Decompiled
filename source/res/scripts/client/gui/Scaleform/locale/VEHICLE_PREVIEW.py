@@ -154,11 +154,31 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_COLLECTIONS)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
+    BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
+    BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
 
     @classmethod
     def getBackBtnLabel(cls, key):
         outcome = '#vehicle_preview:header/backBtn/descrLabel/{}'.format(key)
         if outcome not in cls.HEADER_BACKBTN_DESCRLABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getOfferName(cls, key):
+        outcome = '#vehicle_preview:buyingPanel/offer/rent/name/{}'.format(key)
+        if outcome not in cls.BUYINGPANEL_OFFER_RENT_NAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getOfferLabel(cls, key):
+        outcome = '#vehicle_preview:buyingPanel/offer/rent/label/{}'.format(key)
+        if outcome not in cls.BUYINGPANEL_OFFER_RENT_LABEL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

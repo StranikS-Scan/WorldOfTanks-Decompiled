@@ -3,7 +3,7 @@
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.common.price_item_model import PriceItemModel
 from gui.impl.gen.view_models.views.dialogs.dialog_template_view_model import DialogTemplateViewModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.current_balance_model import CurrentBalanceModel
+from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.sub_views.current_balance_model import CurrentBalanceModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.kpi_equip_level_model import KpiEquipLevelModel
 
 class DeviceUpgradeDialogModel(DialogTemplateViewModel):

@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 class BootcampQuestComponent(InjectComponentAdaptor, DailyQuestMeta):
 
     def _makeInjectView(self):
-        return BootcampQuestWidgetView(flags=ViewFlags.COMPONENT)
+        return BootcampQuestWidgetView(flags=ViewFlags.VIEW)
 
     def updateWidgetLayout(self, value):
         pass

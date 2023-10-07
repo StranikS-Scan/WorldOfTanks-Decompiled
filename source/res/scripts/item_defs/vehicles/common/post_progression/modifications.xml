@@ -3719,4 +3719,140 @@
       </mul>
     </kpi>
   </role_SPG_flame_pair_5_2>
+  <role_SPG_assault_base_4>
+    <id>	15340	</id>
+    <locName>	rifled_barrels_cleaning_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunAimingTimeFactor	</name>
+        <value>	0.99	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	0.99	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_base_4>
+  <role_SPG_assault_base_5>
+    <id>	15350	</id>
+    <locName>	rifled_barrels_cleaning_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunAimingTimeFactor	</name>
+        <value>	0.99	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	0.99	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_base_5>
+  <role_SPG_assault_pair_4_1>
+    <id>	15341	</id>
+    <imgName>	improvedGunBreech	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/healthFactor	</name>
+        <value>	0.95	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.97	</value>
+      </mul>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_pair_4_1>
+  <role_SPG_assault_pair_4_2>
+    <id>	15342	</id>
+    <imgName>	increasedThickness	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/healthFactor	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	1.03	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	1.03	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_pair_4_2>
+  <role_SPG_assault_pair_5_1>
+    <id>	15351	</id>
+    <imgName>	improvedChassisStability	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/rotation	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	0.95	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_pair_5_1>
+  <role_SPG_assault_pair_5_2>
+    <id>	15352	</id>
+    <imgName>	improvedChassisBalance	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/chassis/shotDispersionFactors/rotation	</name>
+        <value>	1.05	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </role_SPG_assault_pair_5_2>
 </modifications.xml>

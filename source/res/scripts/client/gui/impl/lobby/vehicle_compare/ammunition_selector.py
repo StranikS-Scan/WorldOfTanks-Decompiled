@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.tank_setup.tooltips.warning_tooltip_view_model import WarningDescription
 from gui.impl.gen.view_models.views.lobby.tank_setup.vehicle_compare_ammunition_setup_model import VehicleCompareAmmunitionSetupModel
 from gui.impl.lobby.tank_setup.main_tank_setup.base import MainTankSetupView
 from gui.impl.lobby.tank_setup.tooltips.warning_tooltip_view import WarningTooltipView
@@ -40,7 +41,7 @@ class CompareAmmunitionSelectorView(ViewImpl):
         if contentID == R.views.lobby.tanksetup.tooltips.SetupTabTooltipView():
             return SetupTabTooltipView(event.getArgument('name', ''))
         elif event.contentID == R.views.lobby.tanksetup.tooltips.WarningTooltipView():
-            reason = event.getArgument('reason')
+            reason = WarningDescription(event.getArgument('reason'))
             isCritical = event.getArgument('isCritical')
             return WarningTooltipView(reason, isCritical)
         else:

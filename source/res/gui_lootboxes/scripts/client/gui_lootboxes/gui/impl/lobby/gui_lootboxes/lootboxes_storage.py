@@ -4,7 +4,7 @@ import logging
 from collections import defaultdict
 import typing
 from functools import partial
-from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED, LOOT_BOXES_INTRO_SHOWN
+from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED, LOOT_BOXES_INTRO_SHOWN, LOOT_BOXES_LAST_ADDED_ID
 from gui.impl.gen import R
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import getUniqueRewardHandler
@@ -21,6 +21,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from helpers import dependency
 from helpers.func_utils import waitEventAndCall
+from shared_utils import findFirst
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -141,7 +142,13 @@ class LootBoxesStorageView(ViewImpl):
     def __fillLootBoxesModel(self, model=None):
         lbArray = model.getLootboxes()
         lbArray.clear()
-        for lootbox in sorted(self.__itemsCache.items.tokens.getLootBoxes().values()):
+        lootBoxes = sorted(self.__itemsCache.items.tokens.getLootBoxes().values())
+        if not self.__currentLootBoxId:
+            lastAddedLootBoxID = self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_LAST_ADDED_ID)
+            lastAddedLootBox = findFirst(lambda lootBox: lootBox.getID() == lastAddedLootBoxID, lootBoxes)
+            if lastAddedLootBox is not None and lastAddedLootBox.getInventoryCount() > 0:
+                self.__selectLootBox(lastAddedLootBoxID, model=model)
+        for lootbox in lootBoxes:
             if lootbox is not None and lootbox.getInventoryCount() > 0:
                 lbArray.addViewModel(getLootBoxViewModel(lootbox))
                 if not self.__currentLootBoxId:
@@ -251,4 +258,4 @@ class LootBoxesStorageWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self):
-        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView()), layer=WindowLayer.OVERLAY)
+        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView()), layer=WindowLayer.TOP_WINDOW)

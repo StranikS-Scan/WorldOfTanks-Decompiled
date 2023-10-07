@@ -20,6 +20,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController
+from skeletons.gui.game_control import IHalloweenController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -64,11 +65,11 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 
 @dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController)
-def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None):
-    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl)
+def getVehicleDataVO(vehicle, canShowDailyXPFactor=True, vehicleStateRemap=None, bootcampCtrl=None, debutBoxCtrl=None):
+    return _getVehicleDataVO(vehicle, canShowDailyXPFactor, vehicleStateRemap, bootcampCtrl, debutBoxCtrl)
 
 
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
+def _getVehicleDataVO(vehicle, canShowDailyXPFactor=True, vehicleStateRemap=None, bootcampCtrl=None, debutBoxCtrl=None):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -76,6 +77,10 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
     if vState == Vehicle.VEHICLE_STATE.AMMO_NOT_FULL and bootcampCtrl.isInBootcamp():
         vState = Vehicle.VEHICLE_STATE.UNDAMAGED
         vStateLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
+    elif vehicleStateRemap and vState in vehicleStateRemap:
+        vState, vStateLvl = vehicleStateRemap[vState]
+    if vehicle.isEvent:
+        rentInfoText = backport.text(R.strings.hw_lobby.common.rent())
     if vehicle.isRotationApplied():
         if vState in (Vehicle.VEHICLE_STATE.AMMO_NOT_FULL, Vehicle.VEHICLE_STATE.LOCKED):
             vState = Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
@@ -92,7 +97,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
     if vState == Vehicle.VEHICLE_STATE.RENTABLE:
         smallHoverStatus, largeHoverStatus = getStatusStrings(vState + '/hover', vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
          'battlesLeft': getBattlesLeft(vehicle)})
-    if vehicle.dailyXPFactor > 1:
+    if vehicle.dailyXPFactor > 1 and canShowDailyXPFactor:
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
@@ -150,6 +155,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
     _battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    _hwController = dependency.descriptor(IHalloweenController)
 
     def __init__(self, carouselFilter, itemsCache):
         super(CarouselDataProvider, self).__init__()
@@ -338,7 +344,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.TELECOM_RENT)
 
     def _buildVehicle(self, vehicle):
-        vo = getVehicleDataVO(vehicle)
+        vehicleStateRemap = {Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE_LEVEL.INFO)} if self._hwController.isEventPrbActive() else {}
+        vo = getVehicleDataVO(vehicle, canShowDailyXPFactor=not self._hwController.isEventPrbActive(), vehicleStateRemap=vehicleStateRemap)
         return vo
 
     def _getVehicleStats(self, vehicle):

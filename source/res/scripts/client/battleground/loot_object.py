@@ -125,7 +125,7 @@ class LootObject(TerrainAreaGameObject, ILootObject, CompositeLoaderMixin):
         return len(self.__children) + 1
 
 
-@bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
+@bonusCapsManager((ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, ARENA_BONUS_TYPE_CAPS.HALLOWEEN), CGF.DomainOption.DomainClient)
 class SteelHunterDynamicObjectsCachingManager(CGF.ComponentManager):
     __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 

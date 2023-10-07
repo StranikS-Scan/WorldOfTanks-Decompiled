@@ -7,7 +7,7 @@ from gui.impl.lobby.stronghold.stronghold_entry_point_view import StrongholdEntr
 class StrongholdEntryPoint(StrongholdEntryPointMeta):
 
     def _makeInjectView(self):
-        self.__view = StrongholdEntryPointView(ViewFlags.COMPONENT)
+        self.__view = StrongholdEntryPointView(ViewFlags.VIEW)
         return self.__view
 
     def isSingle(self, value):

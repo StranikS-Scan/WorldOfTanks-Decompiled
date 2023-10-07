@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'MarkersManagerEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -196,13 +196,10 @@ class ShowDialogEvent(SharedEvent):
     SHOW_BUTTON_DLG = 'showButtonDialog'
     SHOW_ICON_DIALOG = 'showIconDialog'
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
-    SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
     SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
     SHOW_CONFIRM_BOOSTER = 'showConfirmBooster'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
-    SHOW_DISMISS_TANKMAN_DIALOG = 'showDismissTankmanDialog'
-    SHOW_RESTORE_TANKMAN_DIALOG = 'showRestoreTankmanDialog'
     SHOW_CYBER_SPORT_DIALOG = 'showCyberSportDialog'
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
@@ -360,10 +357,6 @@ class FightButtonEvent(LobbySimpleEvent):
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
-
-
-class SkillDropEvent(SharedEvent):
-    SKILL_DROPPED_SUCCESSFULLY = 'skillDroppedSuccess'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -683,6 +676,11 @@ class AirDropEvent(HasCtxEvent):
     AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
 
 
+class LootEvent(HasCtxEvent):
+    LOOT_SPAWNED = 'onLootSpawned'
+    LOOT_PICKED_UP = 'onLootPickedUp'
+
+
 class ProfilePageEvent(HasCtxEvent):
     SELECT_PROFILE_ALIAS = 'onProfileSelectAlias'
 
@@ -834,3 +832,7 @@ class Achievements20Event(HasCtxEvent):
 class PrebattleEvent(HasCtxEvent):
     SWITCHED = 'PrebattleEvent/SWITCHED'
     NOT_SWITCHED = 'PrebattleEvent/NOT_SWITCHED'
+
+
+class HangarCrewWidgetViewEvent(HasCtxEvent):
+    GF_RESIZED = 'hangarCrewWidgetViewEvent/gfResized'

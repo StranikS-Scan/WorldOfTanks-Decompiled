@@ -199,7 +199,7 @@ class FadeManager(object):
 
     def _bringToFront(self, framesLeft):
         if self._currentWindow:
-            self._currentWindow.bringToFront()
+            self._currentWindow.tryFocus()
             framesLeft -= 1
             if framesLeft > 0:
                 BigWorld.callback(0.0, lambda : self._bringToFront(framesLeft))

@@ -21,7 +21,7 @@ class ChapterConfirm(ViewImpl):
 
     def __init__(self, prevChapterID, nextChapterID):
         settings = ViewSettings(R.views.lobby.battle_pass.dialogs.ChapterConfirm())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ChapterConfirmViewModel()
         super(ChapterConfirm, self).__init__(settings)
         self.__prevChapterID = prevChapterID

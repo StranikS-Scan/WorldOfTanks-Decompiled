@@ -425,7 +425,8 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
  'defaultSlots',
  'slots',
  'inBattleReservesByRank',
- 'skipParamsValidation'])):
+ 'skipParamsValidation',
+ 'destructibleTypeId'])):
 
     def asDict(self):
         return self._asdict()
@@ -443,6 +444,7 @@ _EpicMetaGameConfig.__new__.__defaults__ = (0,
  {},
  {},
  {},
+ 0,
  0)
 
 class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
@@ -838,6 +840,34 @@ class _EventBattlesConfig(namedtuple('_EventBattlesConfig', ('isEnabled',
         defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={})
         defaults.update(kwargs)
         return super(_EventBattlesConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _HalloweenConfig(namedtuple('_HalloweenConfig', ('isEnabled',
+ 'peripheryIDs',
+ 'primeTimes',
+ 'seasons',
+ 'cycleTimes',
+ 'levels',
+ 'queueSettings',
+ 'hangarSettings'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=[], queueSettings={}, hangarSettings={})
+        defaults.update(kwargs)
+        return super(_HalloweenConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
@@ -1471,6 +1501,7 @@ class ServerSettings(object):
         self.__bwProductCatalog = _BwProductCatalog()
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
+        self.__halloweenConfig = _HalloweenConfig()
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
@@ -1592,6 +1623,10 @@ class ServerSettings(object):
             self.__eventBattlesConfig = makeTupleByDict(_EventBattlesConfig, self.__serverSettings['event_battles_config'])
         else:
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
+        if 'halloween_config' in self.__serverSettings:
+            self.__halloweenConfig = makeTupleByDict(_HalloweenConfig, self.__serverSettings['halloween_config'])
+        else:
+            self.__halloweenConfig = _HalloweenConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
         if Configs.RESOURCE_WELL.value in self.__serverSettings:
@@ -1716,6 +1751,8 @@ class ServerSettings(object):
             self.__updateSeniorityAwards(serverSettingsDiff)
         if 'event_battles_config' in serverSettingsDiff:
             self.__updateEventBattles(serverSettingsDiff)
+        if 'halloween_config' in serverSettingsDiff:
+            self.__updateHalloween(serverSettingsDiff)
         if BonusCapsConst.CONFIG_NAME in serverSettingsDiff:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = serverSettingsDiff[BonusCapsConst.CONFIG_NAME]
         if PremiumConfigs.PIGGYBANK in serverSettingsDiff:
@@ -1910,6 +1947,10 @@ class ServerSettings(object):
     @property
     def eventBattlesConfig(self):
         return self.__eventBattlesConfig
+
+    @property
+    def halloweenConfig(self):
+        return self.__halloweenConfig
 
     @property
     def giftSystemConfig(self):
@@ -2196,6 +2237,10 @@ class ServerSettings(object):
     def isOnly10ModeEnabled(self):
         return self.__getGlobalSetting('isOnly10ModeEnabled', False)
 
+    def isMapsInDevelopmentEnabled(self):
+        mapsInDevCongig = self.__getGlobalSetting(Configs.MAPS_IN_DEVELOPMENT_CONFIG.value, None)
+        return bool(mapsInDevCongig['isEnabled']) if mapsInDevCongig else False
+
     def getMaxSPGinSquads(self):
         return self.__getGlobalSetting('maxSPGinSquads', 0)
 
@@ -2241,9 +2286,6 @@ class ServerSettings(object):
     def isReferralProgramEnabled(self):
         return self.__getGlobalSetting('isReferralProgramEnabled', False)
 
-    def isCrewSkinsEnabled(self):
-        return self.__getGlobalSetting('isCrewSkinsEnabled', False)
-
     def getPremiumXPBonus(self):
         return self.__getGlobalSetting('tankPremiumBonus', {}).get('xp', 0.5)
 
@@ -2258,9 +2300,6 @@ class ServerSettings(object):
 
     def isBattleBoostersEnabled(self):
         return self.__getGlobalSetting('isBattleBoostersEnabled', False)
-
-    def isCrewBooksEnabled(self):
-        return self.__getGlobalSetting('isCrewBooksEnabled', False)
 
     def isCrewBooksPurchaseEnabled(self):
         return self.__getGlobalSetting('isCrewBooksPurchaseEnabled', False)
@@ -2415,6 +2454,9 @@ class ServerSettings(object):
 
     def __updateEventBattles(self, targetSettings):
         self.__eventBattlesConfig = self.__eventBattlesConfig.replace(targetSettings['event_battles_config'])
+
+    def __updateHalloween(self, targetSettings):
+        self.__halloweenConfig = self.__halloweenConfig.replace(targetSettings['halloween_config'])
 
     def __updateGiftSystemConfig(self, serverSettingsDiff):
         self.__giftSystemConfig = self.__giftSystemConfig.replace({'events': serverSettingsDiff[Configs.GIFTS_CONFIG.value]})

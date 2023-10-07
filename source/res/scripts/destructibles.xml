@@ -249,8 +249,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_acacia_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_acacia_african_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_Acacia_01_fall	</fractureEffect>
+      <touchdownEffect>	tree_Acacia_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Acacia/Acacia_03.srt	</filename>
@@ -4156,6 +4156,36 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	inf_deadtree_fall	</fractureEffect>
       <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Misc/Hogweed/Hogweed.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Misc/Hogweed/HogweedBig.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Misc/Hogweed/HogweedMini.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	none	</fractureEffect>
+      <touchdownEffect>	none	</touchdownEffect>
     </entry>
   </trees>
   <fallingAtoms>
@@ -17787,6 +17817,226 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_01.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
+      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_02.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
+      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_03.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
+      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_04.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_668_PumpkinHalloween_big	</effect>
+      <hitEffect>	hd_env_UNI_668_PumpkinHalloween_big	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_05.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
+      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_01.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_01	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_01	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_02	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_02	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_2.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_02_2	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_02_2	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_3.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_02_3	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_02_3	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_03.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_03	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_03	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_04.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_04	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_04	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_05.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_05	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_05	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_01.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_01	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_01	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02_2.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_02_2	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02_2	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02_3.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_02_3	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02_3	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_03.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_3	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_3	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_04.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_04	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_04	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_05.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_05	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_05	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_AM_036_Scarecrow/normal/lod0/hd_env_AM_036_Scarecrow_101.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_AM_036_Scarecrow	</effect>
+      <hitEffect>	hd_env_AM_036_Scarecrow	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_wood0_1_2_3	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_HW_036_Scarecrow_1/normal/lod0/hd_env_HW_036_Scarecrow_1.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_036_Scarecrow_1	</effect>
+      <hitEffect>	hd_env_HW_036_Scarecrow_1	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_env_AS_039_OysterFarm/normal/lod0/hd_env_AS_039_OysterFarm_08.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
@@ -18738,6 +18988,28 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_4.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Mushroom_02	</effect>
+      <hitEffect>	hd_env_HW_02_Mushroom_02	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_HW_02_Glowing_Mushroom_02	</effect>
+      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0_1_2	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
   </fragiles>

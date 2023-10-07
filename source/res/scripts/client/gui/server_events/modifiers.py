@@ -515,6 +515,23 @@ class _EquipmentPrice(_ItemsPrice):
         return
 
 
+class _BattleBoosterPrice(_ItemsPrice):
+
+    def __init__(self, name, params):
+        super(_BattleBoosterPrice, self).__init__(name, params, itemType=GUI_ITEM_TYPE.BATTLE_BOOSTER)
+
+    def _makeResultItem(self, eqName):
+        try:
+            vehCache = vehicles.g_cache
+            idx = vehCache.equipmentIDs().get(eqName)
+            if idx is not None:
+                return self.itemsCache.items.getItemByCD(vehCache.equipments()[idx].compactDescr)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        return
+
+
 class _OptDevicePrice(_ItemsPrice):
 
     def __init__(self, name, params):
@@ -802,6 +819,25 @@ class EquipmentPriceAll(_SplitByCurrency, _ItemsPriceAll):
 
     def __init__(self, name, params):
         super(EquipmentPriceAll, self).__init__(name, params, itemType=GUI_ITEM_TYPE.EQUIPMENT)
+
+    def _getRequestCriteria(self):
+        return _COMMON_CRITERIA
+
+
+class BattleBoosterPriceSet(_BattleBoosterPrice, _BuyPriceSet):
+    pass
+
+
+class BattleBoosterPriceMul(_BattleBoosterPrice, _BuyPriceMul):
+
+    def _getMultName(self, idx):
+        return 'priceMultiplier%d' % idx
+
+
+class BattleBoosterPriceAll(_SplitByCurrency, _ItemsPriceAll):
+
+    def __init__(self, name, params):
+        super(BattleBoosterPriceAll, self).__init__(name, params, itemType=GUI_ITEM_TYPE.BATTLE_BOOSTER)
 
     def _getRequestCriteria(self):
         return _COMMON_CRITERIA
@@ -1278,6 +1314,9 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_EquipmentPriceAll', EquipmentPriceAll),
  ('mul_EquipmentPrice', EquipmentPriceMul),
  ('set_EquipmentPrice', EquipmentPriceSet),
+ ('mul_PrebattleInstructionsPriceAll', BattleBoosterPriceAll),
+ ('mul_PrebattleInstructionsPrice', BattleBoosterPriceMul),
+ ('set_PrebattleInstructionsPrice', BattleBoosterPriceSet),
  ('mul_OptionalDevicePriceAll', OptDevicePriceAll),
  ('mul_OptionalDevicePrice', OptDevicePriceMul),
  ('set_OptionalDevicePrice', OptDevicePriceSet),

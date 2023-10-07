@@ -9,7 +9,7 @@ from ..py_object_wrappers import PyObjectWindowSettings
 from ..py_object_wrappers import PyObjectWindow
 from ..view.view import View
 from ..view.view_model import ViewModel
-from ..gui_constants import WindowStatus, WindowFlags, ViewStatus
+from ..gui_constants import WindowStatus, WindowFlags, ViewStatus, ShowingStatus
 _logger = logging.getLogger(__name__)
 
 class WindowSettings(object):
@@ -42,14 +42,6 @@ class WindowSettings(object):
     @layer.setter
     def layer(self, layer):
         self.__proxy.layer = layer
-
-    @property
-    def entryID(self):
-        return self.__proxy.entryID
-
-    @entryID.setter
-    def entryID(self, entryID):
-        self.__proxy.entryID = entryID
 
     @property
     def name(self):
@@ -102,13 +94,19 @@ class WindowSettings(object):
 
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', '__weakref__')
+    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__')
 
     def __init__(self, settings):
         settings.name = self.getName()
         super(Window, self).__init__(PyObjectWindow(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus
+        self.onShowingStatusChanged = Event.Event()
+        self.__showingStatus = ShowingStatus.HIDDEN
+        self.__isShown = False
+        self.__isReady = False
+        self.__isFocused = False
+        self.onFocusChanged = Event.Event()
         _logger.debug('Creating %r with %r', self, settings)
         return
 
@@ -142,16 +140,20 @@ class Window(PyObjectEntity):
         return self.proxy.uniqueID if self.proxy is not None else 0
 
     @property
-    def descriptor(self):
-        return self.proxy.wndDescriptor if self.proxy is not None else 0
-
-    @property
     def windowFlags(self):
         return self.proxy.windowFlags if self.proxy is not None else WindowFlags.UNDEFINED
 
     @property
     def windowStatus(self):
         return self.__windowStatus
+
+    @property
+    def showingStatus(self):
+        return self.__showingStatus
+
+    @property
+    def isFocused(self):
+        return self.__isFocused
 
     @property
     def position(self):
@@ -161,7 +163,7 @@ class Window(PyObjectEntity):
     @property
     def globalPosition(self):
         proxy = self.proxy
-        return self.proxy.windowGlobalPosition if proxy is not None else (0.0, 0.0)
+        return self.proxy.calculateGlobalPosition if proxy is not None else (0.0, 0.0)
 
     @property
     def size(self):
@@ -219,17 +221,14 @@ class Window(PyObjectEntity):
     def resetLayer(self):
         self.proxy.resetLayer()
 
-    def bringToFront(self):
-        self.proxy.bringToFront()
+    def tryFocus(self):
+        self.proxy.tryFocus()
 
-    def sendToBack(self):
-        self.proxy.sendToBack()
+    def show(self, focus=True):
+        self.proxy.show(focus)
 
-    def show(self):
-        self.proxy.show()
-
-    def hide(self):
-        self.proxy.hide()
+    def hide(self, destroy=False):
+        self.proxy.hide(destroy)
 
     def isHidden(self):
         return self.proxy.isHidden()
@@ -246,6 +245,18 @@ class Window(PyObjectEntity):
         self.__detachFromDecorator()
         self.__detachFromContent()
 
+    def _onReady(self):
+        self.show()
+
+    def _onShown(self):
+        _logger.debug('_onShown %r', self)
+
+    def _onHidden(self):
+        _logger.debug('_onHidden %r', self)
+
+    def _onFocus(self, focused):
+        _logger.debug('_onFocus %r %r', focused, self)
+
     def _onDecoratorReady(self):
         pass
 
@@ -258,6 +269,20 @@ class Window(PyObjectEntity):
     def _onContentReleased(self):
         pass
 
+    def _swapShowingStates(self, oldStatus, newStatus):
+        if newStatus == ShowingStatus.SHOWN:
+            if not self.__isShown:
+                self.__isShown = True
+                self._onShown()
+        elif newStatus == ShowingStatus.HIDDEN:
+            if self.__isShown:
+                self.__isShown = False
+                self._onHidden()
+        elif newStatus == ShowingStatus.SHOWING:
+            pass
+        elif newStatus == ShowingStatus.HIDING:
+            pass
+
     def _cInit(self):
         self._initialize()
 
@@ -268,6 +293,22 @@ class Window(PyObjectEntity):
         self.__windowStatus = newStatus
         _logger.debug('Status changed to %r for %r', newStatus, self)
         self.onStatusChanged(newStatus)
+
+    def _cShowingStatusChanged(self, oldStatus, newStatus):
+        oldStatus = ShowingStatus(oldStatus)
+        newStatus = ShowingStatus(newStatus)
+        self.__showingStatus = newStatus
+        self._swapShowingStates(oldStatus, newStatus)
+        self.onShowingStatusChanged(newStatus)
+
+    def _cReady(self):
+        self.__isReady = True
+        self._onReady()
+
+    def _cFocusChanged(self, focused):
+        self.__isFocused = focused
+        self._onFocus(focused)
+        self.onFocusChanged(focused)
 
     def __attachToDecorator(self):
         decorator = self.decorator

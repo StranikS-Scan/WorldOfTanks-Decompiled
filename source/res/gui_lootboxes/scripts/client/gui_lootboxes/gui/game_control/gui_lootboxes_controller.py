@@ -4,7 +4,7 @@ import logging
 import typing
 import Event
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_LOOT_BOXES
+from account_helpers.AccountSettings import GUI_LOOT_BOXES, LOOT_BOXES_COUNT, LOOT_BOXES_LAST_ADDED_ID
 from adisp import adisp_process
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from constants import LOOTBOX_TOKEN_PREFIX
@@ -22,7 +22,7 @@ from gui_lootboxes.gui.storage_context.hangar_optimizer import HangarOptimizer
 from helpers import dependency
 from helpers.server_settings import GUI_LOOT_BOXES_CONFIG
 from helpers.time_utils import getServerUTCTime
-from shared_utils import nextTick
+from shared_utils import nextTick, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController, IEntitlementsController, ISteamCompletionController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -94,6 +94,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.__hadLootBoxesTokens()
         self.__isActive = self.isEnabled()
         self.__isFirstStorageEnter = True
+        self.__updateLastAddedLootBox()
         self.onAvailabilityChange(self.__isLootBoxesAvailable, self.isLootBoxesAvailable())
         return
 
@@ -219,6 +220,9 @@ class GuiLootBoxesController(IGuiLootBoxesController):
             self.__isActive = self.isEnabled()
         if 'lootBoxes_config' in settings:
             self.__updateBoxInfo()
+            boxesCount = self.__getBoxesCount()
+            self.onBoxesCountChange(boxesCount, self.__boxesCount)
+            self.__boxesCount = boxesCount
 
     def __getBoxesCount(self):
         return sum((lb.getInventoryCount() for lb in self.__itemsCache.items.tokens.getLootBoxes().values()))
@@ -230,6 +234,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
             if self.isLootBoxesAvailable() and self.isEnabled() and boxesCount > self.__boxesCount:
                 self.__entitlements.updateCache([LOOT_BOX_COUNTER_ENTITLEMENT])
             self.__boxesCount = boxesCount
+            self.__updateLastAddedLootBox()
             self.__hadLootBoxesTokens(hasTokens=True)
 
     def __onBoxesUpdate(self, diff):
@@ -241,6 +246,16 @@ class GuiLootBoxesController(IGuiLootBoxesController):
             _, opened, _ = bonusData.get('guaranteedBonusLimit', (0, 0, 0))
             self.__boxCountToGuaranteedBonus = guaranteedBonusLimit - opened
             self.onBoxesUpdate()
+
+    def __updateLastAddedLootBox(self):
+        lootBoxIdToCount = self.getSetting(LOOT_BOXES_COUNT) or {}
+        lootBoxes = self.__itemsCache.items.tokens.getLootBoxes().values()
+        boxToStore = findFirst(lambda lootBox: lootBoxIdToCount.get(lootBox.getID(), 0) < lootBox.getInventoryCount(), sorted(lootBoxes))
+        if boxToStore is not None:
+            self.setSetting(LOOT_BOXES_LAST_ADDED_ID, boxToStore.getID())
+        lootBoxIdToCountStore = {lootBox.getID():lootBox.getInventoryCount() for lootBox in lootBoxes if lootBox.getInventoryCount() > 0}
+        self.setSetting(LOOT_BOXES_COUNT, lootBoxIdToCountStore)
+        return
 
     def __updateBoxCountToGuaranteedBonus(self):
         opened = 0

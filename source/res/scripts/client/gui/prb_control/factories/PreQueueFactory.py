@@ -57,6 +57,7 @@ class PreQueueFactory(ControlFactory):
         self.recentPrbStorage = storage_getter(RECENT_PRB_STORAGE)()
         self.winbackStorage = prequeue_storage_getter(QUEUE_TYPE.WINBACK)()
         self.__defaultEntityHandler = DefaultEntityHandler()
+        self.halloweenStorage = prequeue_storage_getter(QUEUE_TYPE.HALLOWEEN_BATTLES)()
 
     def createEntry(self, ctx):
         LOG_ERROR('preQueue functional has not any entries')
@@ -110,6 +111,8 @@ class PreQueueFactory(ControlFactory):
             return self.__createByQueueType(QUEUE_TYPE.VERSUS_AI)
         else:
             defaultQueueType = self.__defaultEntityHandler.getDefaultQueueType()
+            if self.halloweenStorage is not None and self.halloweenStorage.isModeSelected():
+                return self.__createByQueueType(QUEUE_TYPE.HALLOWEEN_BATTLES)
             lastBattleQueueType = self.recentPrbStorage.queueType
             if not self.__defaultEntityHandler.isDefaultStillAvailable(lastBattleQueueType):
                 lastBattleQueueType = defaultQueueType

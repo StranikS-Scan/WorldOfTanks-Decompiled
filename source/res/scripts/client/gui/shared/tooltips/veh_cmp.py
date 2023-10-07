@@ -2,15 +2,13 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/veh_cmp.py
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items.Tankman import getSkillSmallIconPath, getRoleWhiteIconPath, Tankman
-from gui.shared.tooltips import TOOLTIP_TYPE, formatters
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
+from gui.impl.lobby.crew.tooltips.veh_cmp_skills_tooltip import VehCmpSkillsTooltip
+from gui.shared.formatters import text_styles
+from gui.shared.tooltips import TOOLTIP_TYPE, formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
 from gui.impl import backport
 from gui.impl.gen import R
@@ -55,39 +53,10 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
         return formatters.packTextBlockData(text=text_styles.standard(backport.text(title())), padding=formatters.packPadding(top=-6, left=-2, bottom=-6))
 
 
-class VehCmpSkillsTooltip(BlocksTooltipData):
+class VehCmpSkillsTooltipBuilder(ToolTipBaseData):
 
     def __init__(self, context):
-        super(VehCmpSkillsTooltip, self).__init__(context, TOOLTIP_TYPE.VEH_CMP_CUSTOMIZATION)
-        self._setContentMargin(top=0, left=30, bottom=25, right=30)
-        self._setMargins(afterBlock=20, afterSeparator=20)
-        self._setWidth(420)
+        super(VehCmpSkillsTooltipBuilder, self).__init__(context, TOOLTIPS_CONSTANTS.VEH_CMP_SKILLS)
 
-    def _packBlocks(self, *args):
-        items = [self._packTitleBlock(), self.__packDescBlock(), self.__packSkillsBlock()]
-        return items
-
-    @staticmethod
-    def _packTitleBlock():
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_HEADER), padding={'top': 20})
-
-    @staticmethod
-    def __packDescBlock():
-        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_DESCHEADER)), formatters.packImageTextBlockData(title=text_styles.main(_ms(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_DESC1, influence=text_styles.alert(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_DESC1_INFLUENCE))), img=RES_ICONS.MAPS_ICONS_LIBRARY_COUNTER_1, imgPadding={'top': 3}, txtOffset=35), formatters.packImageTextBlockData(title=text_styles.main(_ms(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_DESC2, perc=text_styles.alert(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_DESC2_PERC))), img=RES_ICONS.MAPS_ICONS_LIBRARY_COUNTER_2, imgPadding={'top': 3}, txtOffset=35)]
-        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=15)
-
-    @staticmethod
-    def __packSkillsBlock():
-
-        def __packSkill(crewRole, skills):
-            skills = cmp_helpers.sortSkills(skills)
-            skillsStr = ' '.join((icons.makeImageTag(getSkillSmallIconPath(skillType), 14, 14, 0, 0) for skillType in skills))
-            return formatters.packCrewSkillsBlockData(text_styles.main(ITEM_TYPES.tankman_roles(crewRole)), skillsStr, getRoleWhiteIconPath(crewRole), padding={'left': -10})
-
-        blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(VEH_COMPARE.VEHCONF_TOOLTIPS_SKILLS_SKILLSLIST), padding={'bottom': 10})]
-        configurator_view = cmp_helpers.getCmpConfiguratorMainView()
-        configured_vehicle = configurator_view.getCurrentVehicle()
-        skills_by_roles = cmp_helpers.getVehicleCrewSkills(configured_vehicle)
-        skills_by_roles.sort(key=lambda (role, skillsSet): Tankman.TANKMEN_ROLES_ORDER[role])
-        blocks.extend((__packSkill(*data) for data in skills_by_roles))
-        return formatters.packBuildUpBlockData(blocks, gap=0, padding={'bottom': -10})
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(VehCmpSkillsTooltip(), None, False)

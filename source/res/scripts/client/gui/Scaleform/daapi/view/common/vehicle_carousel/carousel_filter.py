@@ -6,7 +6,8 @@ import constants
 import nations
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2
 from account_helpers.AccountSettings import CAROUSEL_FILTER_CLIENT_1
-from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.settings import VEHICLE_LEVELS, FUNCTIONAL_FLAG
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME
@@ -350,4 +351,6 @@ class EventCriteriesGroup(CriteriesGroup):
 
     @staticmethod
     def isApplicableFor(vehicle):
-        return vehicle.isEvent
+        dispatcher = g_prbLoader.getDispatcher()
+        isHWMode = dispatcher is not None and bool(dispatcher.getEntity().getModeFlags() & FUNCTIONAL_FLAG.HALLOWEEN_BATTLE)
+        return isHWMode and vehicle.isEvent

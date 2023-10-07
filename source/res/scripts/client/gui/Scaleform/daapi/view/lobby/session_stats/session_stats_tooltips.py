@@ -83,7 +83,6 @@ class SessionStatsTankInfo(BlocksTooltipData):
         return formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SESSION_STATS_TANK_INFO_STATUS_BLOCK, data=data, padding=formatters.packPadding(top=-2, bottom=16))
 
     def _getStatusData(self):
-        message = ''
         if self.vehicleStats.battleCnt:
             message = text_styles.statInfo(backport.text(R.strings.session_stats.tankInfo.status.total(), total=self.vehicleStats.battleCnt))
         else:

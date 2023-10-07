@@ -3,9 +3,9 @@
 from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBonus
 
 class CrewHeaderModel(IdleCrewBonus):
-    __slots__ = ('onCrewOperationsClick', 'onAccelerateCrewTrainingToggle', 'onIdleCrewBonusToggle')
+    __slots__ = ('onCrewOperationsClick', 'onIdleCrewBonusToggle')
 
-    def __init__(self, properties=3, commands=3):
+    def __init__(self, properties=3, commands=2):
         super(CrewHeaderModel, self).__init__(properties=properties, commands=commands)
 
     def getIsAccelerateCrewTrainingActive(self):
@@ -25,5 +25,4 @@ class CrewHeaderModel(IdleCrewBonus):
         self._addBoolProperty('isAccelerateCrewTrainingActive', False)
         self._addBoolProperty('isAccelerateCrewTrainingAvailable', False)
         self.onCrewOperationsClick = self._addCommand('onCrewOperationsClick')
-        self.onAccelerateCrewTrainingToggle = self._addCommand('onAccelerateCrewTrainingToggle')
         self.onIdleCrewBonusToggle = self._addCommand('onIdleCrewBonusToggle')

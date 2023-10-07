@@ -687,9 +687,6 @@ class IShopRequester(IShopCommonStats, IRequester):
     def isActionOnPremium(self):
         raise NotImplementedError
 
-    def getTankmanCostWithDefaults(self):
-        raise NotImplementedError
-
     def getTankmanCostWithGoodyDiscount(self, vehLevel):
         raise NotImplementedError
 

@@ -20,7 +20,7 @@ class ArmoryYardCarouselWidgetView(ViewImpl, ICarouselEventEntry):
         return ArmoryYardCarouselWidgetView.__armoryYardCtrl.isEnabled() and not ArmoryYardCarouselWidgetView.__bootcampCtrl.isInBootcamp()
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.armory_yard.lobby.feature.ArmoryYardWidgetView(), flags=ViewFlags.COMPONENT, model=ArmoryYardCarouselWidgetViewModel())
+        settings = ViewSettings(layoutID=R.views.armory_yard.lobby.feature.ArmoryYardWidgetView(), flags=ViewFlags.VIEW, model=ArmoryYardCarouselWidgetViewModel())
         super(ArmoryYardCarouselWidgetView, self).__init__(settings)
 
     @property

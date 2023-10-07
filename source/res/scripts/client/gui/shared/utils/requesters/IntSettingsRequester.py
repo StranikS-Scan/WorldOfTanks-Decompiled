@@ -92,7 +92,9 @@ class IntSettingsRequester(object):
      'ONCE_ONLY_HINTS_3': 115,
      'ARMORY_YARD': 31001,
      VERSUS_AI_CAROUSEL_FILTER_1: 31002,
-     VERSUS_AI_CAROUSEL_FILTER_2: 31003}
+     VERSUS_AI_CAROUSEL_FILTER_2: 31003,
+     'HW22_CAROUSEL_FILTER_1': 115,
+     'HW22_CAROUSEL_FILTER_2': 116}
 
     def __init__(self):
         self.__isSynced = False

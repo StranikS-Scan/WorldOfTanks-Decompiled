@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: versus_ai/scripts/client/versus_ai/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 from __future__ import absolute_import
+from adisp import adisp_process
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.prb_control.entities.base.ctx import PrbAction
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorItem
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SpecialSquadItem
+from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
 from versus_ai.gui.versus_ai_gui_constants import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
 from versus_ai.skeletons.versus_ai_controller import IVersusAIController
@@ -36,6 +39,12 @@ class _VersusAIItem(SelectorItem):
         self._isVisible = self.__versusAIController.isEnabled()
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.VERSUS_AI)
+
+    @adisp_process
+    def _doSelect(self, dispatcher):
+        isSuccess = yield dispatcher.doSelectAction(PrbAction(self.getData()))
+        if isSuccess and self._isNew:
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
 
 class _VersusAISquadItem(SpecialSquadItem):

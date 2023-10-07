@@ -4,13 +4,14 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_boosters_setup_model import BattleBoostersSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.consumables_setup_model import ConsumablesSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.frontline_setup_model import FrontlineSetupModel
+from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.hw_consumables_setup_model import HwConsumablesSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.opt_devices_setup_model import OptDevicesSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shells_setup_model import ShellsSetupModel
 
 class MainTankSetupModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(MainTankSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,11 +54,19 @@ class MainTankSetupModel(ViewModel):
     def getFrontlineSetupType():
         return FrontlineSetupModel
 
+    @property
+    def hwConsumablesSetup(self):
+        return self._getViewModel(5)
+
+    @staticmethod
+    def getHwConsumablesSetupType():
+        return HwConsumablesSetupModel
+
     def getSelectedSetup(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setSelectedSetup(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def _initialize(self):
         super(MainTankSetupModel, self)._initialize()
@@ -66,4 +75,5 @@ class MainTankSetupModel(ViewModel):
         self._addViewModelProperty('battleBoostersSetup', BattleBoostersSetupModel())
         self._addViewModelProperty('optDevicesSetup', OptDevicesSetupModel())
         self._addViewModelProperty('frontlineSetup', FrontlineSetupModel())
+        self._addViewModelProperty('hwConsumablesSetup', HwConsumablesSetupModel())
         self._addStringProperty('selectedSetup', '')

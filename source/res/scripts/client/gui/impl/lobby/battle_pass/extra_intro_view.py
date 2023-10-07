@@ -21,7 +21,7 @@ class ExtraIntroView(ViewImpl):
 
     def __init__(self, chapterID=0):
         settings = ViewSettings(R.views.lobby.battle_pass.ExtraIntroView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ExtraIntroViewModel()
         self.__chapterID = chapterID
         super(ExtraIntroView, self).__init__(settings)

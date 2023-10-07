@@ -62,6 +62,12 @@ class FunctionalState(object):
             return False
         if self.isInPreQueue(QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT) and prbType == PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT:
             return False
+        isHalloween = self.entityTypeID in (QUEUE_TYPE.HALLOWEEN_BATTLES, QUEUE_TYPE.HALLOWEEN_BATTLES_WHEEL)
+        isHalloween = isHalloween and prbType == PREBATTLE_TYPE.HALLOWEEN_BATTLES
+        if isHalloween:
+            return False
+        if self.isInPreQueue(QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT) and prbType == PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT:
+            return False
         if prbType and self.isIntroMode:
             return prbType != self.entityTypeID
         if not prbType:

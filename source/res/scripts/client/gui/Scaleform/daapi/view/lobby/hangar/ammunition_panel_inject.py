@@ -43,23 +43,18 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
 
     def _makeInjectView(self):
         viewClass = self.__getInjectViewClass()
-        return viewClass(flags=ViewFlags.COMPONENT)
+        return viewClass(flags=ViewFlags.VIEW)
 
     def _addInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._addInjectContentListeners()
         self.startGlobalListening()
-        self.getInjectView().onSizeChanged += self.__onSizeChanged
         self.getInjectView().onPanelSectionResized += self.__onPanelSectionResized
         self.getInjectView().onVehicleChanged += self.__onVehicleChanged
 
     def _removeInjectContentListeners(self):
         super(AmmunitionPanelInject, self)._removeInjectContentListeners()
         self.stopGlobalListening()
-        self.getInjectView().onSizeChanged -= self.__onSizeChanged
         self.getInjectView().onVehicleChanged -= self.__onVehicleChanged
-
-    def __onSizeChanged(self, width, height, offsetY):
-        self.as_setPanelSizeS(width, height, offsetY)
 
     def __onPanelSectionResized(self, sectionType, offsetX, offsetY, width, height):
         self.as_setHelpLayoutS({'sectionType': sectionType,

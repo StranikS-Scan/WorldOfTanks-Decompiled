@@ -494,7 +494,7 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerSharedControllerRepo
         registerSharedControllerRepo(self._ARENA_GUI_TYPE, self._client_sharedControllersRepository)
 
-    def registerBattleResultsConfig(self):
+    def registerBattleResultsConfig(self, multipleKeys=()):
         config = self._BATTLE_RESULTS_CONFIG
         if config is None:
             LOG_DEBUG('initBattleResultsConfigFromExtension: config is None')
@@ -502,7 +502,11 @@ class AbstractBattleMode(object):
         else:
             from battle_results import battle_results_constants
             module = config.__name__
-            battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
+            if not multipleKeys:
+                battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
+            else:
+                values = (module,) * len(multipleKeys)
+                battle_results_constants.PATH_TO_CONFIG.update(zip(multipleKeys, values))
             return
 
     def registerClientBattleResultsComposer(self):

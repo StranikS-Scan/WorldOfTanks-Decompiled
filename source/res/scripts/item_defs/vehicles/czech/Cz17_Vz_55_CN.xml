@@ -34,7 +34,7 @@
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	11.0	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
   </camouflage>
@@ -1716,15 +1716,18 @@
           </pitchLimits>
           <clip>
             <count>	2	</count>
-            <rate>	30	</rate>
+            <rate>	24	</rate>
           </clip>
-          <reloadTime>	22	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <autoreload>
+            <reloadTime>	11.9 19.1	</reloadTime>
+          </autoreload>
+          <reloadTime>	11.9	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>

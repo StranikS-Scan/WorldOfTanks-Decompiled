@@ -1,0 +1,98 @@
+<TeamBaseRecapturable.def>
+  <Implements></Implements>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </team>
+    <baseID>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+      <Editable>	true	</Editable>
+    </baseID>
+    <pointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1.0	</Default>
+      <Editable>	true	</Editable>
+    </pointsPerSecond>
+    <maxPointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	3.0	</Default>
+      <Editable>	true	</Editable>
+    </maxPointsPerSecond>
+    <defaultPointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1.0	</Default>
+      <Editable>	false	</Editable>
+    </defaultPointsPerSecond>
+    <defaultMaxPointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	3.0	</Default>
+      <Editable>	false	</Editable>
+    </defaultMaxPointsPerSecond>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	50.0	</Default>
+      <Editable>	false	</Editable>
+    </radius>
+    <points>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <Editable>	false	</Editable>
+    </points>
+    <invadersCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </invadersCount>
+    <invadersTeam>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </invadersTeam>
+    <captureTimeLeft>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </captureTimeLeft>
+    <arenaBase>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaBase>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </arena>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </isActive>
+    <cp>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </cp>
+  </Properties>
+  <TempProperties>
+    <_TeamBaseRecapturable__aiProxy></_TeamBaseRecapturable__aiProxy>
+  </TempProperties>
+  <CellMethods>
+    <start></start>
+    <stop></stop>
+  </CellMethods>
+  <ClientMethods>
+    <onCaptureStart>
+      <Arg>	INT32	</Arg>
+    </onCaptureStart>
+    <onCaptureStop></onCaptureStop>
+    <onCaptured></onCaptured>
+  </ClientMethods>
+</TeamBaseRecapturable.def>

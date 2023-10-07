@@ -55,7 +55,7 @@ class _StyleBuyingPanelView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.vehicle_preview.buying_panel.StyleBuyingPanel())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = StyleBuyingPanelModel()
         self.__style = None
         self.__ordPrice = {}

@@ -136,7 +136,10 @@ class WelcomeView(ViewImpl):
         battleTypeStr = battleType.standart()
         bgImage = backgrounds.squad()
         with self.viewModel.transaction() as model:
-            if queueType == QUEUE_TYPE.EVENT_BATTLES:
+            if queueType == QUEUE_TYPE.HALLOWEEN_BATTLES:
+                battleTypeStr = battleType.eventSquad()
+                bgImage = backgrounds.event()
+            elif queueType == QUEUE_TYPE.EVENT_BATTLES:
                 battleTypeStr = battleType.eventSquad()
                 bgImage = backgrounds.event()
             elif queueType == QUEUE_TYPE.EPIC:

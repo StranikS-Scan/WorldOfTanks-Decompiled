@@ -370,7 +370,7 @@ class _LogViewComponent(object):
         self.__addToListProxy = None
         self.__efficiencyCtrl = None
         self.__arenaDP = None
-        self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
+        self._logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__isVisible = True
         self.__contentMask = 0
         self.__recordStyle = _RECORD_STYLE.FULL
@@ -393,10 +393,10 @@ class _LogViewComponent(object):
         self.__setListProxy(self.__isVisible, bool(self.__recordStyle == _RECORD_STYLE.SHORT), [])
 
     def invalidate(self):
-        if self.__logViewMode == _VIEW_MODE.SHOW_ALWAYS:
+        if self._logViewMode == _VIEW_MODE.SHOW_ALWAYS:
             self.__isVisible = True
             messages = self._getLogMessages(self.__contentMask)
-        elif self.__logViewMode == _VIEW_MODE.SHOW_BY_ALT_PRESS:
+        elif self._logViewMode == _VIEW_MODE.SHOW_BY_ALT_PRESS:
             self.__isVisible = False
             messages = self._getLogMessages(self.__contentMask)
         else:
@@ -406,8 +406,8 @@ class _LogViewComponent(object):
 
     def updateLog(self, contentMask=None, viewMode=None, recordStyle=_RECORD_STYLE.FULL):
         needUpdate = False
-        if viewMode != self.__logViewMode:
-            self.__logViewMode = viewMode
+        if viewMode != self._logViewMode:
+            self._logViewMode = viewMode
             needUpdate = True
         if contentMask != self.__contentMask:
             self.__contentMask = contentMask
@@ -419,7 +419,7 @@ class _LogViewComponent(object):
             self.invalidate()
 
     def addToLog(self, events):
-        if self.__logViewMode == _VIEW_MODE.HIDE:
+        if self._logViewMode == _VIEW_MODE.HIDE:
             return
         else:
             for e in events:
@@ -433,13 +433,13 @@ class _LogViewComponent(object):
     def _getLogMessages(self, contentMask):
         if self.__efficiencyCtrl is not None:
             records = self.__efficiencyCtrl.getLoogedEfficiency(contentMask)
-            return [ self._buildLogMessageVO(r) for r in records ]
+            return [ res for res in map(self._buildLogMessageVO, records) if res is not None ]
         else:
             return []
 
     def _buildLogMessageVO(self, info):
-        builder = _ETYPE_TO_RECORD_VO_BUILDER[info.getType()]
-        return builder.buildVO(info, self.__arenaDP)
+        builder = _ETYPE_TO_RECORD_VO_BUILDER.get(info.getType(), None)
+        return None if builder is None else builder.buildVO(info, self.__arenaDP)
 
 
 class DamageLogPanel(BattleDamageLogPanelMeta):
@@ -454,12 +454,12 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
         self.__isFullStatsShown = False
-        self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
+        self._logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
         self._totalEvents = None
-        self.__topLog = _LogViewComponent()
-        self.__bottomLog = _LogViewComponent()
+        self._topLog = _LogViewComponent()
+        self._bottomLog = _LogViewComponent()
         return
 
     def isSwitchToVehicle(self):
@@ -470,8 +470,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
     def _populate(self):
         super(DamageLogPanel, self)._populate()
         self.__efficiencyCtrl = self.sessionProvider.shared.personalEfficiencyCtrl
-        self.__topLog.initialize(setListProxyMethod=self._updateTopLog, addToListProxyMethod=self._addToTopLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
-        self.__bottomLog.initialize(setListProxyMethod=self._updateBottomLog, addToListProxyMethod=self._addToBottomLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
+        self._topLog.initialize(setListProxyMethod=self._updateTopLog, addToListProxyMethod=self._addToTopLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
+        self._bottomLog.initialize(setListProxyMethod=self._updateBottomLog, addToListProxyMethod=self._addToBottomLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
         self._totalEvents = ((_ETYPE.DAMAGE, self._updateTotalDamageValue),
          (_ETYPE.BLOCKED_DAMAGE, self._updateTotalBlockedDamageValue),
          (_ETYPE.ASSIST_DAMAGE, self._updateTotalAssistValue),
@@ -508,8 +508,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             self.__efficiencyCtrl = None
         self.__vehStateCtrl = None
         self.__arenaDP = None
-        self.__topLog.dispose()
-        self.__bottomLog.dispose()
+        self._topLog.dispose()
+        self._bottomLog.dispose()
         self._totalEvents = None
         super(DamageLogPanel, self)._dispose()
         return
@@ -520,7 +520,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _invalidateLogs(self):
         settingGetter = self.settingsCore.getSetting
-        self.__logViewMode = settingGetter(DAMAGE_LOG.SHOW_DETAILS)
+        self._logViewMode = settingGetter(DAMAGE_LOG.SHOW_DETAILS)
         epos = settingGetter(DAMAGE_LOG.EVENT_POSITIONS)
         etype = settingGetter(DAMAGE_LOG.SHOW_EVENT_TYPES)
         topLogContentMask, bottomLogContentMask = _EVENT_POSITIONS_TO_CONTENT_MASK[epos]
@@ -528,8 +528,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         displayedEventsContentMask = _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK[etype]
         topLogContentMask &= displayedEventsContentMask
         bottomLogContentMask &= displayedEventsContentMask
-        self.__topLog.updateLog(topLogContentMask, self.__logViewMode, topLogRecStyle)
-        self.__bottomLog.updateLog(bottomLogContentMask, self.__logViewMode, bottomLogRecStyle)
+        self._topLog.updateLog(topLogContentMask, self._logViewMode, topLogRecStyle)
+        self._bottomLog.updateLog(bottomLogContentMask, self._logViewMode, bottomLogRecStyle)
 
     def _invalidateTotalDamages(self):
         contentMask = 0
@@ -554,13 +554,13 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _onPersonalEfficiencyLogSynced(self):
         if self.isSwitchToVehicle():
-            self.__topLog.invalidate()
-            self.__bottomLog.invalidate()
+            self._topLog.invalidate()
+            self._bottomLog.invalidate()
 
     def _onEfficiencyReceived(self, events):
         if self.isSwitchToVehicle():
-            self.__topLog.addToLog(events)
-            self.__bottomLog.addToLog(events)
+            self._topLog.addToLog(events)
+            self._bottomLog.addToLog(events)
 
     def _invalidatePanelVisibility(self):
         if self.__isFullStatsShown:
@@ -601,7 +601,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self._invalidateTotalDamages()
 
     def _handleShowExtendedInfo(self, event):
-        if self.__logViewMode == _VIEW_MODE.SHOW_BY_ALT_PRESS:
+        if self._logViewMode == _VIEW_MODE.SHOW_BY_ALT_PRESS:
             self.as_isDownAltButtonS(event.ctx['isDown'])
 
     def _handleShowCursor(self, _):

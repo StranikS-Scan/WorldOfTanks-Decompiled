@@ -17,17 +17,17 @@ class VehicleRestoreInfo(_VehicleRestoreInfo):
     def getRestoreCooldownTimeLeft(self):
         return max(self.restoreCooldown - self.__getTimeGone(), 0) if self.changedAt else 0
 
-    def isLimited(self):
-        return self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM and self.changedAt != 0 and self.restoreDuration < float('inf')
+    def isFinite(self):
+        return self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM and 0 < self.getRestoreTimeLeft() < float('inf')
 
     def isInCooldown(self):
         return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION and self.getRestoreCooldownTimeLeft() > 0 if self.changedAt else False
 
     def isUnlimited(self):
-        return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION and self.changedAt == 0 or self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM and self.changedAt != 0 and not self.restoreDuration < float('inf')
+        return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION and self.getRestoreCooldownTimeLeft() == 0 or self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM and self.getRestoreTimeLeft() == float('inf')
 
     def isRestorePossible(self):
-        return self.isUnlimited() or self.isLimited() and self.getRestoreTimeLeft() > 0 if self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else True
+        return self.isUnlimited() or self.isFinite() and self.getRestoreTimeLeft() > 0 if self.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else True
 
     def __getTimeGone(self):
         return float(time_utils.getTimeDeltaTillNow(time_utils.makeLocalServerTime(self.changedAt))) if self.changedAt else 0

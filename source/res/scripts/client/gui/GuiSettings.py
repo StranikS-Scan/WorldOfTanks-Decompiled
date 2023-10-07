@@ -52,16 +52,20 @@ def _readItemMacros(xmlCtx, section, keys=None):
     return resource_helper.readItemAttr(xmlCtx, section, 'macros', default='', keys=keys)
 
 
-def _convertVector4ToTuple(_, item):
-    return item.value.tuple()
+def _convertVector4ToTuple(_, item_value):
+    return item_value.tuple()
 
 
-def _convertToNamedTuple(settings, item):
-    return settings._replace(**item.value)
+def _convertToNamedTuple(settings, item_value):
+    return settings._replace(**item_value)
 
 
-def _convertEULASetting(_, item):
-    return EULAProps(**item.value)
+def _convertEULASetting(_, item_value):
+    return EULAProps(**item_value)
+
+
+def _dummyConverter(_, item_value):
+    return item_value
 
 
 _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
@@ -69,7 +73,8 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'markerScaleSettings': _convertVector4ToTuple,
  'browser': _convertToNamedTuple,
  'postBattleExchange': _convertToNamedTuple,
- 'easterEgg': _convertToNamedTuple}
+ 'easterEgg': _convertToNamedTuple,
+ 'baseUrls': _dummyConverter}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'registrationProxyURL': '',
  'recoveryPswdURL': '',
@@ -137,7 +142,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'checkPromoFrequencyInBattles': 5,
  'vivoxLicense': '',
  'spgHitDirectionDelta': 10.0,
- 'vehicleDisclaimerURLs': {}}
+ 'vehicleDisclaimerURLs': {},
+ 'baseUrls': {}}
 
 class GuiSettings(object):
 
@@ -148,7 +154,7 @@ class GuiSettings(object):
             if item.name in _SETTING_CONVERTERS:
                 setting = _DEFAULT_SETTINGS[item.name]
                 converter = _SETTING_CONVERTERS[item.name]
-                value = converter(setting, item)
+                value = converter(setting, self.__applyMacros(item.value))
             else:
                 value = item.value
             settings[item.name] = value

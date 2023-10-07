@@ -20,7 +20,7 @@ if typing.TYPE_CHECKING:
 class FunRandomHangarWidgetView(ViewImpl, FunSubModesWatcher, FunProgressionWatcher):
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.fun_random.lobby.feature.FunRandomHangarWidgetView(), flags=ViewFlags.COMPONENT, model=FunRandomHangarWidgetViewModel())
+        settings = ViewSettings(layoutID=R.views.fun_random.lobby.feature.FunRandomHangarWidgetView(), flags=ViewFlags.VIEW, model=FunRandomHangarWidgetViewModel())
         super(FunRandomHangarWidgetView, self).__init__(settings)
 
     @property

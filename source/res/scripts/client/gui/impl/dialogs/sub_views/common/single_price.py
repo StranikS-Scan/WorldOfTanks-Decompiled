@@ -25,11 +25,11 @@ def _convertMoneyToTuple(money):
 
 class SinglePrice(ViewImpl):
     __slots__ = ('__text', '__price', '__size', '__currencyTypeClass')
-    _LAYOUT_DYN_ACCESSOR = R.views.dialogs.sub_views.common.SinglePrice
+    LAYOUT_DYN_ACCESSOR = R.views.dialogs.sub_views.common.SinglePrice
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, text, price, size=CurrencySize.SMALL, layoutID=None, currencyTypeClass=CurrencyType):
-        settings = ViewSettings(layoutID or self._LAYOUT_DYN_ACCESSOR())
+        settings = ViewSettings(layoutID or self.LAYOUT_DYN_ACCESSOR())
         settings.model = SinglePriceViewModel()
         super(SinglePrice, self).__init__(settings)
         self.__text = text

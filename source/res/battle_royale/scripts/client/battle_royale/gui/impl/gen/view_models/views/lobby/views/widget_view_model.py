@@ -9,9 +9,9 @@ class BattleStatus(Enum):
 
 
 class WidgetViewModel(ViewModel):
-    __slots__ = ('onWrapperInitialized',)
+    __slots__ = ()
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=2, commands=0):
         super(WidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBattleStatus(self):
@@ -30,4 +30,3 @@ class WidgetViewModel(ViewModel):
         super(WidgetViewModel, self)._initialize()
         self._addStringProperty('battleStatus')
         self._addNumberProperty('currentProgression', 0)
-        self.onWrapperInitialized = self._addCommand('onWrapperInitialized')

@@ -19,19 +19,20 @@ if typing.TYPE_CHECKING:
 
 class CrewPerksTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_descrArgs', '_skillLevel', '_skillBooster', '_isCommonExtraAvailable')
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_descrArgs', '_skillLevel', '_skillBooster', '_isCommonExtraAvailable', '_showAdditionalInfo')
 
-    def __init__(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False):
-        settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksTooltip())
+    def __init__(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, *args, **kwargs):
+        settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksTooltip(), args=args, kwargs=kwargs)
         settings.model = CrewPerksTooltipModel()
         self._skillName = skillName
         self._isCommonExtraAvailable = isCommonExtraAvailable
+        self._showAdditionalInfo = showAdditionalInfo
         self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
         self._tankmanVehicle = self._getVehicle()
         self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
         self._skill = getTankmanSkill(skillName, tankman=self._tankman)
         self._descrArgs = getSkillsConfig().getSkill(skillName).uiSettings.descrArgs
-        self._skillLevel = self._getSkillLevel(skillLevel)
+        self._skillLevel = self._getSkillLevel(skillLevel, self._IsIrrelevant())
         super(CrewPerksTooltip, self).__init__(settings)
         return
 
@@ -49,17 +50,20 @@ class CrewPerksTooltip(ViewImpl):
         else:
             return self._itemsCache.items.getVehicle(self._tankman.vehicleInvID) if self._tankman.isInTank else None
 
-    def _getSkillLevel(self, skillLevel=None):
+    def _getSkillLevel(self, skillLevel=None, onlyPersonal=False):
         if skillLevel is not None:
             return skillLevel
         elif not self._skill.isAlreadyEarned:
             return 0
         elif self._tankman:
-            if not self._tankman.isInTank or self._skillName in SEPARATE_SKILLS:
+            if onlyPersonal or not self._tankman.isInTank or self._skillName in SEPARATE_SKILLS:
                 return tankmanPersonalSkillLevel(self._tankman, self._skillName, self._skillBooster)
             return crewMemberRealSkillLevel(self._tankmanVehicle, self._skill.name, self._tankman.role, True)
         else:
             return 0
+
+    def _IsIrrelevant(self):
+        return self._tankman and not self._skill.isEnable
 
     def _fillModel(self):
         with self.viewModel.transaction() as vm:
@@ -69,6 +73,9 @@ class CrewPerksTooltip(ViewImpl):
             vm.setSkillType(self._skill.typeName)
             vm.setIsCommonExtraAvailable(self._isCommonExtraAvailable)
             vm.setIsAdvancedTooltipEnable(bool(SKILL_MOVIES.get(self._skill.name, None)))
+            isZeroPerk, isIrrelevant = (self._tankman and self._skill.name in self._tankman.freeSkillsNames, self._IsIrrelevant()) if self._showAdditionalInfo else (False, False)
+            vm.setIsZeroPerk(isZeroPerk)
+            vm.setIsIrrelevant(isIrrelevant)
             if self._skillLevel > 0 and self._skill.isEnable:
                 self.fillCurrentLvlInfo(vm)
             else:

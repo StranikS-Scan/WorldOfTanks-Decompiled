@@ -30,6 +30,9 @@ class GameStateTracker(IGameStateTracker):
     def onAvatarBecomePlayer(self):
         self._invoke('onAvatarBecomePlayer')
 
+    def onAvatarBecomeNonPlayer(self):
+        self._invoke('onAvatarBecomeNonPlayer')
+
     def onAccountBecomePlayer(self):
         self._invoke('onAccountBecomePlayer')
 

@@ -392,26 +392,6 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
         return False
 
-    def getTankmanCostWithDefaults(self):
-        from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-        from gui.shared.tooltips.formatters import packActionTooltipData
-        shopPrices = self.tankmanCost
-        defaultPrices = self.defaults.tankmanCost
-        action = []
-        tmanCost = []
-        for idx, price in enumerate(shopPrices):
-            data = price.copy()
-            shopPrice = Money(**price)
-            defaultPrice = Money(**defaultPrices[idx])
-            actionData = None
-            if shopPrice != defaultPrice:
-                key = '{}TankmanCost'.format(shopPrice.getCurrency(byWeight=True))
-                actionData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, key, True, shopPrice, defaultPrice)
-            tmanCost.append(data)
-            action.append(actionData)
-
-        return (tmanCost, action)
-
     def getVehicleSlotsPrice(self, currentSlotsCount):
         price = super(ShopRequester, self).getVehicleSlotsPrice(currentSlotsCount)
         slotGoodies = self.personalSlotDiscounts

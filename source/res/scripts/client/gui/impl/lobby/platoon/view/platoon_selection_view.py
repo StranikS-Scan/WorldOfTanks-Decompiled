@@ -29,15 +29,15 @@ class SelectionWindow(PreloadableWindow):
         if SelectionWindow.previousPosition:
             self.move(SelectionWindow.previousPosition.x, SelectionWindow.previousPosition.y)
 
-    def show(self):
+    def show(self, focus=True):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': True}))
         if self.content:
             self.content.update(updateTiersLimitSubview=True)
-        super(SelectionWindow, self).show()
+        super(SelectionWindow, self).show(focus)
 
-    def hide(self):
+    def hide(self, destroy=False):
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': False}))
-        super(SelectionWindow, self).hide()
+        super(SelectionWindow, self).hide(destroy)
 
     def _onContentReady(self):
         if not self._isPreloading():

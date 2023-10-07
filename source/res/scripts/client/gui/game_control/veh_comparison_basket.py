@@ -22,14 +22,31 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampContro
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage',
- 'brotherhood',
+PARAMS_AFFECTED_TANKMEN_SKILLS = ('brotherhood',
  'repair',
+ 'camouflage',
  'commander_eagleEye',
+ 'commander_universalist',
+ 'commander_tutor',
+ 'commander_expert',
+ 'commander_enemyShotPredictor',
+ 'gunner_smoothTurret',
+ 'gunner_sniper',
+ 'gunner_rancorous',
+ 'gunner_gunsmith',
  'driver_virtuoso',
+ 'driver_smoothDriving',
  'driver_badRoadsKing',
+ 'driver_tidyPerson',
+ 'driver_rammingMaster',
+ 'loader_desperado',
+ 'loader_pedant',
+ 'loader_intuition',
+ 'radioman_finder',
+ 'radioman_retransmitter',
+ 'radioman_lastEffort',
  'radioman_inventor',
- 'radioman_finder')
+ 'fireFighting')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0

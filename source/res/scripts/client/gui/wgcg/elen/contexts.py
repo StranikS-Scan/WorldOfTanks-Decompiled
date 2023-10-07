@@ -29,6 +29,9 @@ class EventBoardsGetEventDataCtx(EventBoardsRequestCtx):
     def getRequestType(self):
         return WebRequestDataType.EVENT_BOARDS_GET_EVENTS_DATA
 
+    def getSingulizerKey(self):
+        return self.getRequestType()
+
 
 class EventBoardsGetPlayerDataCtx(EventBoardsRequestCtx):
 

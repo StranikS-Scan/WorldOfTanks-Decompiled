@@ -11,12 +11,11 @@ from skeletons.gui.game_control import IBattleRoyaleController
 class WidgetView(ViewImpl):
     brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __slots__ = ('onWrapperInitialized',)
+    __slots__ = ()
 
-    def __init__(self, onWrapperInitialized):
-        self.onWrapperInitialized = onWrapperInitialized
+    def __init__(self):
         settings = ViewSettings(R.views.battle_royale.lobby.views.WidgetView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = WidgetViewModel()
         super(WidgetView, self).__init__(settings)
 
@@ -36,26 +35,19 @@ class WidgetView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(WidgetView, self)._onLoading(args, kwargs)
-        self.viewModel.onWrapperInitialized += self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated += self.__onProgressionUpdated
         self.brProgression.onSettingsChanged += self.__onProgressionUpdated
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
         self.updateModel()
 
     def _finalize(self):
-        self.viewModel.onWrapperInitialized -= self.__onWrapperInitialized
         self.brProgression.onProgressPointsUpdated -= self.__onProgressionUpdated
         self.brProgression.onSettingsChanged -= self.__onProgressionUpdated
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
-        self.onWrapperInitialized = None
         super(WidgetView, self)._finalize()
-        return
 
     def __onPrimeTimeStatusUpdated(self, *args):
         self.updateModel()
-
-    def __onWrapperInitialized(self):
-        self.onWrapperInitialized()
 
     def __onProgressionUpdated(self):
         self.updateModel()

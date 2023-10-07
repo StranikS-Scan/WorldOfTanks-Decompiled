@@ -64,10 +64,13 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def setViewID(self, viewID):
         if viewID != self.__viewID:
             self.__viewID = viewID
-            if self.__gunMarkers is not None:
-                self.__gunMarkers.switch(viewID)
+            self.switchMarkers(viewID)
             chosenSettingID = plugins.chooseSetting(self.__viewID)
             self.as_setViewS(self.__viewID, chosenSettingID)
+
+    def switchMarkers(self, viewID):
+        if self.__gunMarkers is not None:
+            self.__gunMarkers.switch(viewID)
         return
 
     def setPosition(self, x, y):
@@ -226,7 +229,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
             LOG_ERROR('Gun marker can not be created', item)
 
         self.__gunMarkers.setScale(self.getScale())
-        self.__gunMarkers.switch(self.getViewID())
+        self.switchMarkers(self.getViewID())
 
     def __clearGunMarkers(self):
         if self.__gunMarkers is None:

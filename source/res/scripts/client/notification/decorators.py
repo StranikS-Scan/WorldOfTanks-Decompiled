@@ -364,6 +364,26 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
         return vehicle
 
 
+class C11nProgressiveItemDecorator(C11nMessageDecorator):
+    lockedButtonTooltip = makeTooltip(body=backport.text(R.strings.vehicle_customization.progressiveItemReward.gotoCustomizationButton.disabled.tooltip()))
+
+    def _updateButtonsState(self, lock=False):
+        super(C11nProgressiveItemDecorator, self)._updateButtonsState(lock)
+        self.__setTooltip(lock)
+
+    def __setTooltip(self, isLocked):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if isLocked and not buttonsLayout[0].get('tooltip'):
+                tooltip = self.lockedButtonTooltip
+                buttonsLayout[0]['tooltip'] = tooltip
+            if not isLocked and buttonsLayout[0].get('tooltip'):
+                buttonsLayout[0]['tooltip'] = ''
+            return
+
+
 class C2DProgressionStyleDecorator(C11nMessageDecorator):
 
     def __init__(self, entityID, entity=None, settings=None, model=None):

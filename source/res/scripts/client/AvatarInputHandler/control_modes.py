@@ -24,7 +24,7 @@ from AvatarInputHandler import AimingSystems, aih_global_binding, gun_marker_ctr
 from AvatarInputHandler.DynamicCameras.camera_switcher import SwitchToPlaces
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import getSPGShotResult, getSPGShotFlyTime
-from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera, FlameArtyCamera
+from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera, OnlyArtyCamera
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
 from TriggersManager import TRIGGER_TYPE
@@ -631,7 +631,7 @@ class ArcadeControlMode(_GunControlMode):
         ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
         if ownVehicle is not None and ownVehicle.isStarted and avatar_getter.isVehicleBarrelUnderWater() or BigWorld.player().isGunLocked or BigWorld.player().isObserver():
             return
-        elif self._aih.isSPG and not bByScroll or self._aih.isFlamethrower:
+        elif self._aih.isSPG and not bByScroll or self._aih.isOnlyArty:
             self._cam.update(0, 0, 0, False, False)
             equipmentID = None
             if BattleReplay.isPlaying():
@@ -639,7 +639,7 @@ class ArcadeControlMode(_GunControlMode):
                 pos = BattleReplay.g_replayCtrl.getGunMarkerPos()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
             else:
-                mode = CTRL_MODE_NAME.FLAMETHROWER if self._aih.isFlamethrower else self.__getSpgAlternativeMode()
+                mode = CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE if self._aih.isOnlyArty else self.__getSpgAlternativeMode()
                 if pos is None:
                     pos = self.camera.aimingSystem.getDesiredShotPoint()
                     if pos is None:
@@ -986,27 +986,28 @@ class ArtyControlMode(_TrajectoryControlMode):
         self.strategicCamera = STRATEGIC_CAMERA.AERIAL
 
 
-class FlamethrowerControlMode(_TrajectoryControlMode):
+class OnlyArtyControlMode(_TrajectoryControlMode):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _TRAJECTORY_UPDATE_INTERVAL = 0.05
 
     def __init__(self, dataSection, avatarInputHandler):
-        super(FlamethrowerControlMode, self).__init__(dataSection, avatarInputHandler, CTRL_MODE_NAME.FLAMETHROWER, FlamethrowerControlMode._TRAJECTORY_UPDATE_INTERVAL)
+        super(OnlyArtyControlMode, self).__init__(dataSection, avatarInputHandler, CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE, OnlyArtyControlMode._TRAJECTORY_UPDATE_INTERVAL)
         self._nextControlMode = None
-        self._cam = FlameArtyCamera.FlameArtyCamera(dataSection['camera'])
+        self._cam = OnlyArtyCamera.OnlyArtyCamera(dataSection['camera'])
         return
 
     def enable(self, **args):
-        super(FlamethrowerControlMode, self).enable(**args)
+        super(OnlyArtyControlMode, self).enable(**args)
         self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
-        self._cam.setMaxDistance(BigWorld.player().getVehicleDescriptor().shot.maxDistance)
+        if self._aih.isFlamethrower:
+            self._cam.setMaxDistance(BigWorld.player().getVehicleDescriptor().shot.maxDistance)
         ammoCtrl = self.__sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
         return
 
     def disable(self):
-        super(FlamethrowerControlMode, self).disable()
+        super(OnlyArtyControlMode, self).disable()
         self.strategicCamera = STRATEGIC_CAMERA.AERIAL
         ammoCtrl = self.__sessionProvider.shared.ammo
         if ammoCtrl is not None:
@@ -1939,4 +1940,4 @@ def _swap(data, index1, index2):
 
 def _isEnabledChangeModeByScroll(camera, aih):
     sniperModeByShift = camera.getUserConfigValue(GAME.SNIPER_MODE_BY_SHIFT)
-    return not sniperModeByShift and not aih.isFlamethrower or aih.isObserverFPV
+    return not sniperModeByShift and not aih.isOnlyArty or aih.isObserverFPV

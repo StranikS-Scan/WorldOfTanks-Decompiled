@@ -13,11 +13,13 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
-from gui.shared import event_dispatcher as shared_events, events
+from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showPersonalCase
 from gui.shared.formatters import icons, moneyWithIcon, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
@@ -53,7 +55,8 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def __init__(self, ctx=None):
         super(Barracks, self).__init__()
         self.filter = dict(AccountSettings.getFilter(BARRACKS_FILTER))
-        self.__updateLocationFilter(ctx)
+        self.__ctx = ctx
+        self.__updateLocationFilter()
         self.__sortedCachedTankmen = None
         self.__notRecruitedTankmen = []
         self.__dataProvider = BarracksDataProvider()
@@ -69,7 +72,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         tmanInvID = int(tankmanInvID)
         tankman = self.itemsCache.items.getTankman(tmanInvID)
         if tankman and not tankman.isDismissed:
-            shared_events.showPersonalCase(tmanInvID, tabID, EVENT_BUS_SCOPE.LOBBY)
+            showPersonalCase(tmanInvID, previousViewID=R.views.lobby.crew.BarracksView())
 
     def closeBarracks(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -80,9 +83,6 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
         if rendererData is not None and rendererData.notRecruited:
             showRecruitWindow(rendererData.recruitID)
-        else:
-            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RECRUIT_WINDOW), ctx={'data': rendererData,
-             'menuEnabled': menuEnabled}))
         return
 
     def buyBerths(self):
@@ -119,7 +119,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
                 if tmanVehile is None:
                     _logger.error("Target tankman's vehicle is not found in inventory %r %r", tankman, tankman.vehicleInvID)
                     return
-                result = yield TankmanUnload(tmanVehile, tankman.vehicleSlotIdx).request()
+                result = yield TankmanUnload(tmanVehile.invID, tankman.vehicleSlotIdx).request()
             else:
                 result = yield TankmanDismiss(tankman).request()
             SystemMessages.pushMessagesFromResult(result)
@@ -163,7 +163,8 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def _invalidate(self, ctx=None):
         super(Barracks, self)._invalidate(ctx)
-        self.__updateLocationFilter(ctx)
+        self.__ctx = ctx
+        self.__updateLocationFilter()
         self.setTankmenFilter()
 
     def _dispose(self):
@@ -180,8 +181,8 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         super(LobbySubView, self)._dispose()
         return
 
-    def __updateLocationFilter(self, ctx):
-        data = ctx or {}
+    def __updateLocationFilter(self):
+        data = self.__ctx or {}
         location = data.get('location')
         if location is not None:
             self.filter['location'] = location
@@ -198,7 +199,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN
+        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         modulesAll = self.itemsCache.items.getVehicles(criteria).values()
         modulesAll.sort()

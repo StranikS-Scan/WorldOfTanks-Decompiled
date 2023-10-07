@@ -27,7 +27,7 @@ class Comp7MainWidgetComponent(InjectComponentAdaptor):
         return
 
     def _makeInjectView(self):
-        self.__view = Comp7MainWidget(flags=ViewFlags.COMPONENT)
+        self.__view = Comp7MainWidget(flags=ViewFlags.VIEW)
         return self.__view
 
 
@@ -35,7 +35,7 @@ class Comp7MainWidget(ViewImpl):
     __slots__ = ()
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, flags=ViewFlags.COMPONENT):
+    def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.comp7.MainWidget())
         settings.flags = flags
         settings.model = MainWidgetModel()

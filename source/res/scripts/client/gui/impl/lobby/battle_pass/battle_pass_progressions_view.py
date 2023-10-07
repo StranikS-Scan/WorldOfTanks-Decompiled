@@ -63,7 +63,7 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassProgressionsView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattlePassProgressionsViewModel()
         self.__tooltipItems = {}
         self.__specialTooltipItems = {}

@@ -54,7 +54,7 @@ _DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STAT
  CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
  CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
  CHARGE_MARKER_STATE.DIMMED: DUAL_GUN_MARKER_STATE.DIMMED}
-_STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.FLAMETHROWER)
+_STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE)
 
 def createPlugins():
     resultPlugins = {'core': CorePlugin,
@@ -484,6 +484,9 @@ class AmmoPlugin(CrosshairPlugin):
         if self.__autoReloadCallbackID:
             BigWorld.cancelCallback(self.__autoReloadCallbackID)
         super(AmmoPlugin, self).fini()
+
+    def _setAmmoStock(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
+        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, clipState, clipReloaded)
 
     def __setup(self, ctrl, isReplayPlaying=False):
         self.__shellsInClip = ctrl.getCurrentShells()[1]

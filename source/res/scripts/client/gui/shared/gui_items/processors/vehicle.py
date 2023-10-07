@@ -13,20 +13,19 @@ from gui.shared.gui_items.processors.messages.items_processor_messages import It
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMsg, makeAllPairsDiscardMsg
 from items import EQUIPMENT_TYPES
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.components.c11n_constants import SeasonType
 from adisp import adisp_process, adisp_async
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.shared.formatters import formatPrice, text_styles, getStyle
+from gui.shared.formatters import formatPrice, text_styles, getStyle, getBWFormatter
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getCrewCount
-from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess, makeCrewSkinCompensationMessage
+from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.utils.requesters.recycle_bin_requester import VehicleRestoreInfo
 from helpers import time_utils, dependency
@@ -337,7 +336,6 @@ class VehicleSeller(ItemProcessor):
         barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
-        crewSkinsNeedDeletion = []
         self.__compensationAmount = ItemPrice(Money(), Money())
         if isCrewDismiss:
             tankmenGoingToBuffer, deletedTankmen = self.__restore.getTankmenDeletedBySelling(*nationGroupVehs)
@@ -349,19 +347,6 @@ class VehicleSeller(ItemProcessor):
                 if countOfDeleted > 1:
                     bufferOverflowCtx['multiple'] = True
                     bufferOverflowCtx['extraCount'] = countOfDeleted - 1
-            if self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
-                freeCountByItem = {}
-                for veh in nationGroupVehs:
-                    for _, tankman in veh.crew:
-                        if tankman is not None and tankman.skinID != NO_CREW_SKIN_ID:
-                            crewSkinItem = self.itemsCache.items.getCrewSkin(tankman.skinID)
-                            if freeCountByItem.setdefault(crewSkinItem.getID(), crewSkinItem.getFreeCount()) < crewSkinItem.getMaxCount():
-                                freeCountByItem[crewSkinItem.getID()] += 1
-                            else:
-                                crewSkinsNeedDeletion.append(crewSkinItem)
-                                self.__compensationAmount += crewSkinItem.getBuyPrice()
-
-        self.__compensationRequired = bool(crewSkinsNeedDeletion)
         plugins = [proc_plugs.VehicleValidator(vehicle, False, prop={'isBroken': True,
           'isLocked': True}),
          proc_plugs.VehicleSellValidator(vehicle),
@@ -373,19 +358,12 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.DismountForDemountKitValidator(vehicle, itemsForDemountKit),
          proc_plugs.FreeToDemountValidator(itemsForFreeDemount),
          _getUniqueVehicleSellConfirmator(vehicle)]
-        if self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
-            ctx = {'price': self.__compensationAmount,
-             'action': None,
-             'items': crewSkinsNeedDeletion}
-            skinsPlugin = proc_plugs.CrewSkinsCompensationDialogConfirmator('crewSkins/skinWillBeDeleted', proc_plugs.CrewSkinsRemovalCompensationDialogMeta.OUT_OF_STORAGE_SUFFIX, ctx=ctx, isEnabled=bool(crewSkinsNeedDeletion))
-            plugins.append(skinsPlugin)
         super(VehicleSeller, self).__init__(vehicle, plugins)
         self.isCrewDismiss = isCrewDismiss
-        self.isDismantlingForMoney = bool(self.spendMoney)
-        self.isRemovedAfterRent = vehicle.isRented
         self.usedDemountKitsCount = len(itemsForDemountKit)
+        self.isDismantlingForMoney = bool(self.spendMoney) or self.usedDemountKitsCount
+        self.isRemovedAfterRent = vehicle.isRented
         self.__hasPairModification = any((step.action.getPurchasedID() is not None for step in vehicle.postProgression.iterUnorderedSteps() if step.action.isMultiAction()))
-        return
 
     def _errorHandler(self, code, errStr='', ctx=None):
         localKey = 'vehicle_sell/{}'
@@ -402,8 +380,6 @@ class VehicleSeller(ItemProcessor):
             timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
             restoreInfo = backport.text(R.strings.system_messages.vehicle.restoreDuration.dyn(timeKey, R.invalid)(), time=formattedTime)
         additionalMsgs = []
-        if self.__compensationRequired:
-            additionalMsgs.append(makeCrewSkinCompensationMessage(self.__compensationAmount))
         if self.__hasPairModification:
             additionalMsgs.append(makeAllPairsDiscardMsg(self.vehicle.userName))
         g_tankActiveCamouflage[self.vehicle.intCD] = SeasonType.UNDEFINED
@@ -411,17 +387,15 @@ class VehicleSeller(ItemProcessor):
         if self.usedDemountKitsCount:
             msgCtx['countDK'] = self.usedDemountKitsCount
         if self.isDismantlingForMoney:
-            msgCtx['gainMoney'] = formatPrice(self.gainMoney)
-            msgCtx['spendMoney'] = formatPrice(self.spendMoney)
+            msgCtx['gainMoney'] = self.__formatPrice(self.gainMoney)
+            msgCtx['spendMoney'] = self.__formatPrice(self.spendMoney, isReceived=False)
         else:
-            msgCtx['money'] = formatPrice(self.gainMoney)
+            msgCtx['money'] = self.__formatPrice(self.gainMoney)
         if not self.isRemovedAfterRent:
             msgCtx['restoreInfo'] = restoreInfo
         sysMsgR = R.strings.system_messages.dyn('vehicle_remove' if self.isRemovedAfterRent else 'vehicle_sell', R.invalid)
         if sysMsgR:
             sysMsgR = sysMsgR.dyn('success_dismantling' if self.isDismantlingForMoney else 'success', R.invalid)
-        if sysMsgR and self.usedDemountKitsCount:
-            sysMsgR = sysMsgR.dyn('with_demount_kit', R.invalid)
         if self.isRemovedAfterRent:
             smType = SM_TYPE.Remove
         elif sellForGold:
@@ -529,6 +503,35 @@ class VehicleSeller(ItemProcessor):
              list(itemsFreeToDemount)))
 
         return result
+
+    @staticmethod
+    def getCurrencyString(currencyCode, isReceived=True):
+        return backport.text(R.strings.messenger.platformCurrencyMsg.dyn('received' if isReceived else 'debited').dyn(currencyCode)()) if currencyCode not in Currency.ALL else backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('received' if isReceived else 'debited').dyn(currencyCode)())
+
+    def __formatPrice(self, price, isReceived=True):
+        separator = ',\n'
+        bullet = u'\u2022 '
+        cSpace = ': '
+        items = []
+        if self.usedDemountKitsCount and not isReceived:
+            items.append(backport.text(R.strings.system_messages.vehicle_sell.currencyUpdate.debited.demount_kit(), countDK=self.usedDemountKitsCount))
+        currencies = [ c for c in Currency.ALL if price.get(c) is not None ]
+        for c in currencies:
+            value = price.get(c, 0)
+            if value == 0:
+                continue
+            formatter = getBWFormatter(c)
+            cFormatted = formatter(value)
+            styler = getStyle(c)
+            cFormatted = styler(cFormatted)
+            cIdentifier = self.getCurrencyString(c, isReceived)
+            items.append(''.join((cIdentifier, cSpace, cFormatted)))
+
+        if not items:
+            return ''
+        else:
+            result = separator.join(('{} {}'.format(bullet, item) for item in items)) if items else ''
+            return result
 
 
 def getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles):

@@ -49,7 +49,7 @@ class EntryPoint(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.resource_well.EntryPoint())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = EntryPointModel()
         super(EntryPoint, self).__init__(settings)
 
@@ -86,13 +86,13 @@ class EntryPoint(ViewImpl):
         self.__setLastState()
 
     def __getEventState(self):
+        if self.__resourceWell.isNotStarted():
+            return EventState.NOTSTARTED
         if isForbiddenAccount(resourceWell=self.__resourceWell):
             return EventState.FORBIDDEN
         if self.__resourceWell.isPaused():
             return EventState.PAUSED
-        if self.__resourceWell.isCompleted():
-            return EventState.COMPLETED
-        return EventState.NOTSTARTED if self.__resourceWell.isNotStarted() else EventState.ACTIVE
+        return EventState.COMPLETED if self.__resourceWell.isCompleted() else EventState.ACTIVE
 
     def __getProgress(self):
         maxPoints = self.__resourceWell.getMaxPoints()

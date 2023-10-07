@@ -1486,7 +1486,7 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
 
     def _doStartBattleRequest(self, ctx, flags, callback):
-        self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled())
+        self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), randomFlags=ctx.getRandomFlags())
 
     def _doStopBattleRequest(self, ctx, callback):
         self._requestsProcessor.doRequest(ctx, 'stopBattle', callback=callback)

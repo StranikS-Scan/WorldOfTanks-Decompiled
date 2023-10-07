@@ -39,11 +39,7 @@ class TOOLTIPS_CONSTANTS(object):
     OPT_DEVICE_EMPTY_SLOT = 'optDeviceEmptySlot'
     AMMUNITION_EMPTY_SLOT = 'ammunitionEmptySlot'
     CREW_SKIN = 'crewSkin'
-    CREW_SKIN_NO_AVAILABLE_SKINS = 'crewSkinNoAvailableSkins'
-    CREW_SKIN_RESTRICTED = 'crewSkinRestricted'
-    CREW_SKIN_SOUND = 'crewSkinSound'
     CREW_BOOK = 'crewBook'
-    CREW_BOOK_RESTRICTED = 'crewBookRestricted'
     VEHICLE_COLLECTOR_INFO = 'vehicleCollectorInfo'
     VEHICLE_COLLECTOR_DISABLED = 'vehicleCollectorDisabled'
     NATION_CHANGE_HANGAR_MODULE = 'nationChangeHangarModule'
@@ -83,7 +79,7 @@ class TOOLTIPS_CONSTANTS(object):
     AWARD_DEMOUNT_KIT = 'awardDemountKit'
     NOT_ENOUGH_MONEY = 'notEnoughMoney'
     CREW_PERK_GF = 'crewPerkGf'
-    TANKMAN_NEW_SKILL = 'tankmanNewSkill'
+    COMMANDER_BONUS = 'commanderBonus'
     EFFICIENCY_PARAM = 'efficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
@@ -130,7 +126,6 @@ class TOOLTIPS_CONSTANTS(object):
     FRONTLINE_PRICE_DISCOUNT = 'frontlinePriceDiscount'
     FRONTLINE_COUPON = 'frontlineCoupon'
     FRONTLINE_RANK = 'frontlineRank'
-    ACTION_XP = 'actionXP'
     SPECIAL = 'special'
     SIMPLE = 'simple'
     COMPLEX = 'complex'
@@ -283,8 +278,6 @@ class TOOLTIPS_CONSTANTS(object):
     COMP7_BATTLE_RESULTS_PRESTIGE_POINTS = 'comp7BattleResultsPrestigePoints'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
-    TANKMEN_SKILL_UI = 'ToolTipSkillUI'
-    TANKMEN_BUY_SKILL_UI = 'ToolTipBuySkillUI'
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'
     MARKS_ON_GUN_UI = 'ToolTipMarksOnGunUI'
     MARK_OF_MASTERY_UI = 'ToolTipMarkOfMasteryUI'
@@ -349,7 +342,6 @@ class TOOLTIPS_CONSTANTS(object):
     SETTINGS_KEY_CHARGE_FIRE = 'SettingsKeyChargeFire'
     SETTINGS_KEY_CHARGE_FIRE_UI = 'ToolTipInblocksDefaultUI'
     VEH_CMP_SKILLS = 'vehCmpSkills'
-    VEH_CMP_SKILLS_UI = 'ToolTipInblocksDefaultUI'
     MISSIONS_TOKEN = 'missionsToken'
     MISSIONS_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     BOOTCAMP_AWARD_MEDAL = 'BSTooltipMedalContainer'
@@ -430,7 +422,6 @@ class TOOLTIPS_CONSTANTS(object):
      ACTION_SLOT_PRICE,
      PRICE_DISCOUNT,
      FRONTLINE_PRICE_DISCOUNT,
-     ACTION_XP,
      QUESTS_VEHICLE_BONUSES,
      ENVIRONMENT,
      MISSIONS_TOKEN,
@@ -518,10 +509,10 @@ class TOOLTIPS_CONSTANTS(object):
      UNAVAILABLE_QUEST]
     MARATHON_SET = [MARATHON_QUESTS_PREVIEW]
     TANKMAN_SET = [TANKMAN,
-     TANKMAN_NEW_SKILL,
      TANKMAN_NOT_RECRUITED,
      BATTLE_ROYALE_TANKMAN,
-     CREW_PERK_GF]
+     CREW_PERK_GF,
+     COMMANDER_BONUS]
     RANKED_SET = [RANKED_BATTLES_POSITION,
      RANKED_BATTLES_EFFICIENCY,
      RANKED_BATTLES_LEAGUE,
@@ -613,11 +604,8 @@ class TOOLTIPS_CONSTANTS(object):
      CREDITS_STATS,
      CREDITS_STATS_FULL_SCREEN,
      GOLD_STATS_FULL_SCREEN]
-    CREW_SKIN_SET = [CREW_SKIN,
-     CREW_SKIN_RESTRICTED,
-     CREW_SKIN_NO_AVAILABLE_SKINS,
-     CREW_SKIN_SOUND]
-    CREW_BOOK_SET = [CREW_BOOK, CREW_BOOK_RESTRICTED, RANDOM_CREWBOOK]
+    CREW_SKIN_SET = [CREW_SKIN]
+    CREW_BOOK_SET = [CREW_BOOK]
     CREW_BUNDLE_SET = [SHOP_CREW_BUNDLE]
     FRONTLINE_SET = [FRONTLINE_COUPON, FRONTLINE_RANK]
     SESSION_STATS_SET = [SESSION_STATS_TANK_INFO, SESSION_STATS_EFFICIENCY_PARAM]

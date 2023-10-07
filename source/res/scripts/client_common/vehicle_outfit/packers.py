@@ -7,6 +7,7 @@ from items.components.c11n_constants import CustomizationType
 from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from soft_exception import SoftException
+from constants import IS_EDITOR
 
 def pickPacker(itemTypeID):
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
@@ -173,7 +174,10 @@ class ModificationPacker(CustomizationPacker):
         if not slot.isEmpty():
             intCD = slot.getItemCD()
             item = getItemByCompactDescr(intCD)
-            component.modifications.append(item.id)
+            modifications = component.modifications
+            modifications.append(item.id)
+            if IS_EDITOR:
+                component.modifications = modifications
 
     @classmethod
     def unpack(cls, slot, component):

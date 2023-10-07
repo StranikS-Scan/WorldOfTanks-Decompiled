@@ -2895,6 +2895,23 @@
         <_31016>	commander_mf_Byvaly.png	</_31016>
       </icons>
     </commander_mf_Byvaly>
+    <commander_Nikolay_Kuznetsov>
+      <groupID>	31017	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31017>	#china_tankmen:names/commander_Nikolay_Kuznetsov_n	</_31017>
+      </firstNames>
+      <lastNames>
+        <_31017>	#china_tankmen:names/commander_Nikolay_Kuznetsov	</_31017>
+      </lastNames>
+      <icons>
+        <_31017>	commander_Nikolay_Kuznetsov.png	</_31017>
+      </icons>
+    </commander_Nikolay_Kuznetsov>
     <tankmen_bp12MT_1>
       <groupID>	31010	</groupID>
       <weight>	0.0	</weight>
@@ -2963,22 +2980,90 @@
         <_31013>	tankmen_bp12MT_4.png	</_31013>
       </icons>
     </tankmen_bp12MT_4>
-    <commander_Nikolay_Kuznetsov>
-      <groupID>	31017	</groupID>
+    <tankmen_hw_IvanCarevich>
+      <groupID>	31005	</groupID>
       <weight>	0.0	</weight>
       <sex>	male	</sex>
       <notInShop>	true	</notInShop>
-      <tags>	passportReplacementForbidden commander	</tags>
-      <roles>	commander	</roles>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew IvanCarevichHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
       <firstNames>
-        <_31017>	#china_tankmen:names/commander_Nikolay_Kuznetsov_n	</_31017>
+        <_31005>	#china_tankmen:names/tankmen_hw_IvanCarevich_n	</_31005>
       </firstNames>
       <lastNames>
-        <_31017>	#china_tankmen:names/commander_Nikolay_Kuznetsov	</_31017>
+        <_31005>	#china_tankmen:names/tankmen_hw_IvanCarevich	</_31005>
       </lastNames>
       <icons>
-        <_31017>	commander_Nikolay_Kuznetsov.png	</_31017>
+        <_31005>	tankmen_hw_IvanCarevich.png	</_31005>
       </icons>
-    </commander_Nikolay_Kuznetsov>
+    </tankmen_hw_IvanCarevich>
+    <tankmen_hw_Vasilisa>
+      <groupID>	31006	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew VasilisaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31006>	#china_tankmen:names/tankmen_hw_Vasilisa_n	</_31006>
+      </firstNames>
+      <lastNames>
+        <_31006>	#china_tankmen:names/tankmen_hw_Vasilisa	</_31006>
+      </lastNames>
+      <icons>
+        <_31006>	tankmen_hw_Vasilisa.png	</_31006>
+      </icons>
+    </tankmen_hw_Vasilisa>
+    <tankmen_hw_Kashchei>
+      <groupID>	31007	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew KashcheiHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31007>	#china_tankmen:names/tankmen_hw_Kashchei_n	</_31007>
+      </firstNames>
+      <lastNames>
+        <_31007>	#china_tankmen:names/tankmen_hw_Kashchei	</_31007>
+      </lastNames>
+      <icons>
+        <_31007>	tankmen_hw_Kashchei.png	</_31007>
+      </icons>
+    </tankmen_hw_Kashchei>
+    <tankmen_hw_BabaYaga>
+      <groupID>	31008	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew BabaYagaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31008>	#china_tankmen:names/tankmen_hw_BabaYaga_n	</_31008>
+      </firstNames>
+      <lastNames>
+        <_31008>	#china_tankmen:names/tankmen_hw_BabaYaga	</_31008>
+      </lastNames>
+      <icons>
+        <_31008>	tankmen_hw_BabaYaga.png	</_31008>
+      </icons>
+    </tankmen_hw_BabaYaga>
+    <tankmen_hw_Katrina>
+      <groupID>	31009	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew KatrinaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31009>	#china_tankmen:names/tankmen_hw_Katrina_n	</_31009>
+      </firstNames>
+      <lastNames>
+        <_31009>	#china_tankmen:names/tankmen_hw_Katrina	</_31009>
+      </lastNames>
+      <icons>
+        <_31009>	tankmen_hw_Katrina.png	</_31009>
+      </icons>
+    </tankmen_hw_Katrina>
   </premiumGroups>
 </china.xml>

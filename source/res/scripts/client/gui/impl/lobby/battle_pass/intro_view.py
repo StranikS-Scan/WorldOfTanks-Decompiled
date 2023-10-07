@@ -25,7 +25,7 @@ class IntroView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassIntroView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattlePassIntroViewModel()
         super(IntroView, self).__init__(settings)
 

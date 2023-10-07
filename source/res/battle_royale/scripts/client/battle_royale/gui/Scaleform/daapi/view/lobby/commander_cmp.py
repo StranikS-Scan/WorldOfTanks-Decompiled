@@ -29,7 +29,7 @@ class CommanderView(ViewImpl):
 
     def __init__(self, viewKey, viewModelClazz=CommanderCmpViewModel):
         settings = ViewSettings(viewKey)
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = viewModelClazz()
         self.__toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
         super(CommanderView, self).__init__(settings)
@@ -53,7 +53,11 @@ class CommanderView(ViewImpl):
                     if window is not None:
                         window.load()
                     return window
-                args = (tooltipId, commanderID)
+                args = (tooltipId,
+                 commanderID,
+                 None,
+                 None,
+                 False)
                 self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(CommanderView, self).createToolTip(event)

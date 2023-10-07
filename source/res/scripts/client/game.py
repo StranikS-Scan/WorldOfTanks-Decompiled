@@ -21,7 +21,7 @@ import services_config
 from MemoryCriticalController import g_critMemHandler
 from bootcamp.Bootcamp import g_bootcamp
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
-from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
+from gui import onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
 from gui.shared import personality as gui_personality
 from gui.game_loading import loading as gameLoading
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
@@ -133,7 +133,7 @@ def init(scriptConfig, engineConfig, userPreferences):
         BigWorld.pauseDRRAutoscaling(True)
         if constants.HAS_DEV_RESOURCES:
             import development
-            development.init()
+            development.init(isReplay=g_replayCtrl.isLoading)
         gameLoading.step()
     except Exception:
         LOG_CURRENT_EXCEPTION()
@@ -333,19 +333,20 @@ def onCameraChange(oldCamera):
     pass
 
 
-def handleCharEvent(char, key, mods):
-    char = unicode(char.encode('iso8859'), CLIENT_ENCODING)
-    return True if GUI.handleCharEvent(char, key, mods) else False
-
-
 def handleAxisEvent(event):
     return False
 
 
 def handleKeyEvent(event):
+    guiHandled = False
+    if event.isMouseButton():
+        guiHandled = True
+        if GUI.handleKeyEvent(event):
+            return True
     if constants.HAS_DEV_RESOURCES:
         from development.dev_input_handler import g_devInputHandlerInstance
-        g_devInputHandlerInstance.handleKeyEvent(event)
+        if g_devInputHandlerInstance.handleKeyEvent(event):
+            return True
     if OfflineMode.handleKeyEvent(event):
         return True
     elif LightingGenerationMode.handleKeyEvent(event):
@@ -368,7 +369,7 @@ def handleKeyEvent(event):
                 return True
         if not isRepeat:
             InputHandler.g_instance.handleKeyEvent(event)
-            if GUI.handleKeyEvent(event):
+            if not guiHandled and GUI.handleKeyEvent(event):
                 return True
         if constants.IS_CAT_LOADED:
             import Cat
@@ -392,7 +393,9 @@ def handleKeyEvent(event):
 
 
 def handleMouseEvent(event):
-    if OfflineMode.handleMouseEvent(event):
+    if GUI.handleMouseEvent(event):
+        return True
+    elif OfflineMode.handleMouseEvent(event):
         return True
     elif LightingGenerationMode.handleMouseEvent(event):
         return True
@@ -405,8 +408,6 @@ def handleMouseEvent(event):
         if g_replayCtrl.isPlaying:
             if g_replayCtrl.handleMouseEvent(dx, dy, dz):
                 return True
-        if GUI.handleMouseEvent(event):
-            return True
         inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
         if inputHandler is not None:
             if inputHandler.handleMouseEvent(dx, dy, dz):

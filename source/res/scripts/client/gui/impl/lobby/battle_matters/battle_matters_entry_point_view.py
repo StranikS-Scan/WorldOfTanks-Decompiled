@@ -22,7 +22,7 @@ class BattleMattersEntryPointView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersEntryPointView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattleMattersEntryPointViewModel()
         super(BattleMattersEntryPointView, self).__init__(settings)
 
@@ -42,8 +42,8 @@ class BattleMattersEntryPointView(ViewImpl):
 
     def __update(self, *_):
         with self.viewModel.transaction() as tx:
-            tx.setIsCompleted(self.__battleMattersController.isFinished())
             currentQuest = self.__battleMattersController.getCurrentQuest()
+            tx.setIsCompleted(currentQuest is None)
             state = State.NORMAL
             if self.__battleMattersController.isPaused():
                 state = State.ERROR

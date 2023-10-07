@@ -17,8 +17,8 @@ class OptDeviceTabs(object):
     TROPHY = 'trophy'
     MODERNIZED = 'modernized'
     ALL = (SIMPLE,
-     DELUXE,
      TROPHY,
+     DELUXE,
      MODERNIZED)
 
 

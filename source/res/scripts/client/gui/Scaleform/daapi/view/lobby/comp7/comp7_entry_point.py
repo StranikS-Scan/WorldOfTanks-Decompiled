@@ -28,7 +28,7 @@ class Comp7EntryPoint(ResizableEntryPointMeta):
             self.__view.setIsSingle(value)
 
     def _makeInjectView(self):
-        self.__view = Comp7EntryPointView(flags=ViewFlags.COMPONENT)
+        self.__view = Comp7EntryPointView(flags=ViewFlags.VIEW)
         return self.__view
 
 

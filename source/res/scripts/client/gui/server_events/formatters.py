@@ -363,6 +363,8 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         if bonusType == ARENA_BONUS_TYPE.WINBACK:
             bonusType = getQuestsFormatterBonusType()
+        if bonusType in (ARENA_BONUS_TYPE.HALLOWEEN_BATTLES_WHEEL,):
+            bonusType = ARENA_BONUS_TYPE.HALLOWEEN_BATTLES
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

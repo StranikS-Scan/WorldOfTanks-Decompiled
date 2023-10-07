@@ -189,7 +189,7 @@ def _parseItemsPack(items):
 
 
 def _parseOffers(offers):
-    return [ _VehicleOfferEntry(id=_getOfferID(offer) or str(ndx), eventType=offer.get('event_type'), rent=offer.get('rent'), crew=_getOfferCrew(offer), name=_getOfferStr(offer, VEHICLE_PREVIEW.hasOfferName, VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_NAME_ENUM), label=_getOfferStr(offer, VEHICLE_PREVIEW.hasOfferLabel, VEHICLE_PREVIEW.BUYINGPANEL_OFFER_RENT_LABEL_ENUM), left=_getRentLeft(offer), buyPrice=Money(**offer.get('buy_price', MONEY_UNDEFINED)), bestOffer=offer.get('best_offer'), buyParams=offer.get('buy_params'), preferred=bool(offer.get('preferred', False))) for ndx, offer in enumerate(offers) ]
+    return [ _VehicleOfferEntry(id=_getOfferID(offer) or str(ndx), eventType=offer.get('event_type'), rent=offer.get('rent'), crew=_getOfferCrew(offer), name=_getOfferStr(offer, VEHICLE_PREVIEW.getOfferName, VEHICLE_PREVIEW.hasOfferName), label=_getOfferStr(offer, VEHICLE_PREVIEW.getOfferLabel, VEHICLE_PREVIEW.hasOfferLabel), left=_getRentLeft(offer), buyPrice=Money(**offer.get('buy_price', MONEY_UNDEFINED)), bestOffer=offer.get('best_offer'), buyParams=offer.get('buy_params'), preferred=bool(offer.get('preferred', False))) for ndx, offer in enumerate(offers) ]
 
 
 def _getOfferID(offer):
@@ -198,7 +198,7 @@ def _getOfferID(offer):
 
 
 @dependency.replace_none_kwargs(epicCtrl=IEpicBattleMetaGameController)
-def _getOfferStr(offer, hasKey, constantEnum, epicCtrl=None):
+def _getOfferStr(offer, getKey, hasKey, epicCtrl=None):
     key, values = _parseRent(offer)
     if key == 'cycle':
         indexes = str(epicCtrl.getCycleOrdinalNumber(first(values)))
@@ -208,7 +208,7 @@ def _getOfferStr(offer, hasKey, constantEnum, epicCtrl=None):
     else:
         _, endTimestamp = epicCtrl.getSeasonTimeRange()
         indexes = str(getTimeStructInLocal(endTimestamp).tm_year)
-    key = constantEnum[key] if hasKey(key) else ''
+    key = getKey(key) if hasKey(key) else ''
     return _ms(key=key, value=indexes)
 
 

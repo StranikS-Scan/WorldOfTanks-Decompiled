@@ -661,6 +661,12 @@ class EquipmentActionInfo(ActionInfo):
         return res[:3]
 
 
+class BattleBoosterActionInfo(EquipmentActionInfo):
+
+    def getTriggerChainID(self):
+        pass
+
+
 class OptDeviceActionInfo(ActionInfo):
 
     def getTriggerChainID(self):
@@ -1017,6 +1023,9 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_EquipmentPriceAll': EquipmentActionInfo,
  'mul_EquipmentPrice': EquipmentActionInfo,
  'set_EquipmentPrice': EquipmentActionInfo,
+ 'mul_PrebattleInstructionsPriceAll': BattleBoosterActionInfo,
+ 'mul_PrebattleInstructionsPrice': BattleBoosterActionInfo,
+ 'set_PrebattleInstructionsPrice': BattleBoosterActionInfo,
  'mul_OptionalDevicePriceAll': OptDeviceActionInfo,
  'mul_OptionalDevicePrice': OptDeviceActionInfo,
  'set_OptionalDevicePrice': OptDeviceActionInfo,

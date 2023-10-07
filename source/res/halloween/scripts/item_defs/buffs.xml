@@ -1,0 +1,149 @@
+<buffs.xml>
+  <multiplyGunReloadTime>
+    <server>
+      <addFactor>
+        <key>	gun/reloadTime	</key>
+        <value>	-0.2	</value>
+      </addFactor>
+    </server>
+    <client>
+      <ttcModifier>
+        <addFactor>
+          <relativePower>	0.125	</relativePower>
+          <reloadTime>	0.2	</reloadTime>
+          <reloadTimeSecs>	-0.2	</reloadTimeSecs>
+          <clipFireRate>	-0.2 0.0 0.0	</clipFireRate>
+          <autoReloadTime>	-0.2	</autoReloadTime>
+          <avgDamagePerMinute>	0.2	</avgDamagePerMinute>
+        </addFactor>
+      </ttcModifier>
+    </client>
+  </multiplyGunReloadTime>
+  <damageModules>
+    <server></server>
+    <client></client>
+  </damageModules>
+  <enlargeMaxHealth>
+    <server>
+      <healthModifier>
+        <addFactor>
+          <maxHealth>	0.25	</maxHealth>
+        </addFactor>
+      </healthModifier>
+    </server>
+    <client>
+      <ttcModifier>
+        <addFactor>
+          <relativeArmor>	0.125	</relativeArmor>
+          <maxHealth>	0.25	</maxHealth>
+        </addFactor>
+      </ttcModifier>
+    </client>
+  </enlargeMaxHealth>
+  <boostRamming>
+    <server>
+      <damageEnemyOnRamming>
+        <damage>	0	</damage>
+        <ownerBuffs>	boostRammingEffect	</ownerBuffs>
+        <ownerDuration>	2.0	</ownerDuration>
+      </damageEnemyOnRamming>
+      <addFactor>
+        <key>	ramming	</key>
+        <value>	1.4	</value>
+      </addFactor>
+      <setFactor>
+        <key>	vehicle/canBeRammed	</key>
+        <value>	false	</value>
+      </setFactor>
+    </server>
+    <client>
+      <ttcModifier>
+        <setValue>
+          <vehicleRamDamageResistance>	-100.0	</vehicleRamDamageResistance>
+        </setValue>
+        <addValue>
+          <relativeArmor>	10.0	</relativeArmor>
+        </addValue>
+      </ttcModifier>
+    </client>
+  </boostRamming>
+  <boostRammingEffect>
+    <client>
+      <sequence>
+        <sequence>	particles/eff_sequence/event_halloween_2022/ability_battering_ram.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+        <hideInSniperModeFor>	self	</hideInSniperModeFor>
+        <soundStart>	ev_shadowPlay_ability_ram	</soundStart>
+      </sequence>
+    </client>
+  </boostRammingEffect>
+  <bullseye>
+    <server>
+      <addFactor>
+        <key>	chassis/shotDispersionFactors/rotation	</key>
+        <value>	-0.33	</value>
+      </addFactor>
+      <addFactor>
+        <key>	chassis/shotDispersionFactors/movement	</key>
+        <value>	-0.33	</value>
+      </addFactor>
+      <addFactor>
+        <key>	gun/shotDispersionFactors/turretRotation	</key>
+        <value>	-0.33	</value>
+      </addFactor>
+      <setMaxFactor>
+        <key>	gun/aimingTime	</key>
+        <value>	-0.2	</value>
+      </setMaxFactor>
+    </server>
+    <client>
+      <ttcModifier>
+        <addValue>
+          <vehicleGunShotDispersionChassisMovement>	-33.0	</vehicleGunShotDispersionChassisMovement>
+          <vehicleGunShotDispersionChassisRotation>	-33.0	</vehicleGunShotDispersionChassisRotation>
+          <vehicleGunShotDispersionTurretRotation>	-33.0	</vehicleGunShotDispersionTurretRotation>
+        </addValue>
+        <addFactor>
+          <relativePower>	0.1	</relativePower>
+          <aimingTime>	-0.2	</aimingTime>
+        </addFactor>
+      </ttcModifier>
+    </client>
+  </bullseye>
+  <special_HWGettingFatApple>
+    <id>	1	</id>
+    <name>	hwGettingFatApple	</name>
+    <componentName>	HWGettingFatApple	</componentName>
+    <increaseMaxHealth>	0.5	</increaseMaxHealth>
+    <maxHealth>	100000	</maxHealth>
+    <factors>
+      <vehicle-maxSpeed>	-0.03	</vehicle-maxSpeed>
+      <vehicle-maxSpeed-forward>	-0.03	</vehicle-maxSpeed-forward>
+      <vehicle-maxSpeed-backward>	-0.03	</vehicle-maxSpeed-backward>
+      <engine-power>	-0.05	</engine-power>
+      <gun-reloadTime>	-0.02	</gun-reloadTime>
+      <gun-clipTimeBetweenShots>	-0.02	</gun-clipTimeBetweenShots>
+    </factors>
+    <minValueFactors>
+      <vehicle-maxSpeed>	0.001	</vehicle-maxSpeed>
+      <vehicle-maxSpeed-forward>	0.001	</vehicle-maxSpeed-forward>
+      <vehicle-maxSpeed-backward>	0.001	</vehicle-maxSpeed-backward>
+      <engine-power>	0.001	</engine-power>
+      <gun-reloadTime>	0.001	</gun-reloadTime>
+      <gun-clipTimeBetweenShots>	0.001	</gun-clipTimeBetweenShots>
+    </minValueFactors>
+    <visualEffects>
+      <sequences>
+        <owner>
+          <sequence>
+            <path>	particles/eff_sequence/event_halloween_2023/hw23_ability_apple.seq	</path>
+            <path_fwd>	particles/eff_sequence/event_halloween_2023/hw23_ability_apple_fwd.seq	</path_fwd>
+            <bindNode>	hull	</bindNode>
+            <soundStart>	ev_shadowPlay_ability_apple_buff_noarrow_start	</soundStart>
+            <bindOnGameObject>	True	</bindOnGameObject>
+          </sequence>
+        </owner>
+      </sequences>
+    </visualEffects>
+  </special_HWGettingFatApple>
+</buffs.xml>

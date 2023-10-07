@@ -66,7 +66,8 @@ class BattleHintComponent(object):
                 if soundNotifications is not None:
                     soundNotifications.play(sound)
         _logger.debug('Show battle hint hintName=%s, priority=%d', hint.name, hint.priority)
-        self._showHint(hint.makeVO(data))
+        vo = self._makeVO(hint, data)
+        self._showHint(vo)
         self.__currentHint = hint
         self.__hintStartTime = time.time()
         duration = hint.duration
@@ -74,6 +75,9 @@ class BattleHintComponent(object):
             self.__hideHintCallback()
             self.__hideCallback = BigWorld.callback(duration, self.__hideCurrentHint)
         return
+
+    def _makeVO(self, hint, data):
+        return hint.makeVO(data)
 
     def __hideCurrentHint(self):
         self.__hideHintCallback()

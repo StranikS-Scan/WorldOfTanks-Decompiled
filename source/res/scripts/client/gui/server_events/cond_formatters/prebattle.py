@@ -56,7 +56,11 @@ class _BattleBonusTypeFormatter(ConditionFormatter):
             labelKey = QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
             data = formatters.packMissionBonusTypeElements(bonusTypes)
             iconsList = ''.join([ iconData.icon for iconData in data ])
-            if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED, ARENA_BONUS_TYPE.COMP7):
+            if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR,
+             ARENA_BONUS_TYPE.RANKED,
+             ARENA_BONUS_TYPE.COMP7,
+             ARENA_BONUS_TYPE.HALLOWEEN_BATTLES,
+             ARENA_BONUS_TYPE.HALLOWEEN_BATTLES_WHEEL):
                 label = text_styles.main(data[0].iconLabel)
             else:
                 label = text_styles.main(labelKey)

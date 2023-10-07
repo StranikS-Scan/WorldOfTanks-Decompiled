@@ -249,14 +249,12 @@ class RankedChangesInfoHelper(RankedInfoHelper):
             description = backport.text(R.strings.ranked_battles.battleresult.notInTop.stageSaved())
         if rankInfo.isBonusBattle:
             description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesUsed()))
-        if rankState in (_RCS.DIVISION_EARNED,
-         _RCS.LEAGUE_EARNED,
-         _RCS.QUAL_EARNED,
-         _RCS.QUAL_UNBURN_EARNED):
+        if rankState in (_RCS.DIVISION_EARNED, _RCS.QUAL_EARNED, _RCS.QUAL_UNBURN_EARNED):
             if rankState == _RCS.LEAGUE_EARNED:
                 description = backport.text(R.strings.ranked_battles.battleresult.leagueUnavailable())
-            bonusBattlesIncome = getBonusBattlesIncome(R.strings.ranked_battles.battleresult.bonusBattlesEarned, rankInfo.stepsBonusBattles, rankInfo.efficiencyBonusBattles, rankState == _RCS.LEAGUE_EARNED)
-            description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned()), bonusBattlesIncome)
+            if rankInfo.stepsBonusBattles:
+                bonusBattlesIncome = getBonusBattlesIncome(R.strings.ranked_battles.battleresult.bonusBattlesEarned, rankInfo.stepsBonusBattles, rankInfo.efficiencyBonusBattles, rankState == _RCS.LEAGUE_EARNED)
+                description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned()), bonusBattlesIncome)
         return TitleAndDescription(title, description, descriptionIcon)
 
     def makeIcons(self):

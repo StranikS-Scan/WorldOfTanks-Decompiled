@@ -46,7 +46,7 @@ class ChapterChoiceView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.ChapterChoiceView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ChapterChoiceViewModel()
         super(ChapterChoiceView, self).__init__(settings)
 

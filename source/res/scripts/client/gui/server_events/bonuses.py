@@ -44,7 +44,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
-from gui.shared.gui_items.Vehicle import getIconResourceName, getTypeUserName
+from gui.shared.gui_items.Vehicle import getIconResourceName, getWotPlusExclusiveVehicleTypeUserName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -2225,7 +2225,7 @@ class WoTPlusExclusiveVehicle(WoTPlusBonus):
         if vehicle is not None:
             headerData, bodyData = getSimpleTooltipData(self._name)
             header = i18n.makeString(headerData)
-            body = i18n.makeString(bodyData, vehicleName=vehicleName, vehicleType=getTypeUserName(vehicle.classTag, False))
+            body = i18n.makeString(bodyData, vehicleName=vehicleName, vehicleType=getWotPlusExclusiveVehicleTypeUserName(vehicle.classTag))
         return makeTooltip(header, body)
 
 

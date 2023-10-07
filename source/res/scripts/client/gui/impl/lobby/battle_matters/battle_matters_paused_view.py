@@ -15,7 +15,7 @@ class BattleMattersPausedView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersPausedView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattleMattersPausedViewModel()
         super(BattleMattersPausedView, self).__init__(settings)
 

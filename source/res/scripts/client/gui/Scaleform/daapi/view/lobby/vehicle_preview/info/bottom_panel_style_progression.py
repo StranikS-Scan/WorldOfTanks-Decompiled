@@ -39,7 +39,7 @@ class VehiclePreviewBottomPanelStyleProgression(VehiclePreviewBottomPanelStylePr
         self.__view.setCtx(ctx)
 
     def _makeInjectView(self):
-        self.__view = ProgressionStylesBuyingPanelView(flags=ViewFlags.COMPONENT)
+        self.__view = ProgressionStylesBuyingPanelView(flags=ViewFlags.VIEW)
         return self.__view
 
 

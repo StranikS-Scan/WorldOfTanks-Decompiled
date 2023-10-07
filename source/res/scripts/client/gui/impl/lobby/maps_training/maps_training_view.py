@@ -76,7 +76,6 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         if self.__isDataLoaded and self.__selectedMap:
             with self.viewModel.transaction() as model:
                 self.__updateAllSelections(model)
-        self.show()
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.maps_training.ScenarioTooltip():

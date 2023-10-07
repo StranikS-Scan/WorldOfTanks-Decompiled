@@ -8,13 +8,14 @@ import logging
 import BigWorld
 import WWISE
 import Event
-from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
+from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs, DESTRUCTIBLE_MATKIND
+import destructible_entities
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showFrontlineContainerWindow
 from gui.shared.utils import SelectorBattleTypesUtils
-from helpers import dependency, i18n, time_utils
+from helpers import dependency, i18n, time_utils, int2roman
 from items import vehicles
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IBootcampController
@@ -271,8 +272,15 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getUnlockableInBattleVehLevels(self):
         return self.getModeSettings().unlockableInBattleVehLevels
 
+    def getUnlockableInBattleVehLevelStr(self):
+        vehLevels = self.getUnlockableInBattleVehLevels()
+        return int2roman(vehLevels[0]) if vehLevels else ''
+
     def getSuitableForQueueVehicleLevels(self):
         return set(self.getValidVehicleLevels()) - set(self.getUnlockableInBattleVehLevels())
+
+    def getSuitableForQueueVehicleLevelStr(self):
+        return int2roman(min(self.getSuitableForQueueVehicleLevels()))
 
     def getPointsProgressForLevel(self, level):
         return self.__levelProgress[level]
@@ -468,6 +476,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             result.append([level, level, endBonus])
 
         return result
+
+    def getDestructiblesArmor(self):
+        typeId = self.__metaSettings.destructibleTypeId
+        entityType = destructible_entities.g_destructibleEntitiesCache.getDestructibleEntityType(typeId)
+        return [ entityType.materials[i].armor for i in xrange(DESTRUCTIBLE_MATKIND.NORMAL_MIN, DESTRUCTIBLE_MATKIND.NORMAL_MAX) if i in entityType.materials ]
 
     def isNeedToTakeReward(self):
         currentLevel, _ = self.getPlayerLevelInfo()

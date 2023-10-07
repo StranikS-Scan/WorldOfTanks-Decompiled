@@ -19,6 +19,7 @@ from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IHalloweenController
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
 _AUTOCANNON_SHOT_DISTANCE = 400
@@ -129,6 +130,7 @@ _PARAMS_FORMATTERS_BY_KIND = {SHELL_TYPES.FLAME: HeaderBlockConstructor.emptyFor
  HeaderBlockConstructor.DEFAULT_FORMATTER: HeaderBlockConstructor.formatParam}
 
 class PriceBlockConstructor(ShellTooltipBlockConstructor):
+    _hwController = dependency.descriptor(IHalloweenController)
 
     def __init__(self, shell, configuration, valueWidth):
         super(PriceBlockConstructor, self).__init__(shell, configuration)
@@ -140,7 +142,9 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
         configuration = self.configuration
         buyPrice = configuration.buyPrice
         sellPrice = configuration.sellPrice
-        if buyPrice and sellPrice:
+        if self._hwController.isEventHangar():
+            return (None, False)
+        elif buyPrice and sellPrice:
             LOG_ERROR('You are not allowed to use buyPrice and sellPrice at the same time')
             return
         else:

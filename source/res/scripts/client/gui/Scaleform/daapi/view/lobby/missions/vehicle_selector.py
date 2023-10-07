@@ -58,10 +58,12 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
         super(MissionVehicleSelector, self).__init__()
         self._carousel = None
         self.__isQuestForBattleRoyale = False
+        self.__isQuestForEventBattle = False
         return
 
-    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False):
+    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale=False, isForEventBattle=False):
         self.__isQuestForBattleRoyale = isQuestForBattleRoyale
+        self.__isQuestForEventBattle = isForEventBattle
         self._carousel.setCriteria(criteria, extraConditions)
         self.__updateSelectedVehicle()
 
@@ -99,7 +101,7 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
             title = ''
         else:
             if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
-                selectedVeh = getVehicleDataVO(vehicle)
+                selectedVeh = getVehicleDataVO(vehicle, canShowDailyXPFactor=not self.__isQuestForEventBattle)
                 status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
             elif suitableVehicles:
                 label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT

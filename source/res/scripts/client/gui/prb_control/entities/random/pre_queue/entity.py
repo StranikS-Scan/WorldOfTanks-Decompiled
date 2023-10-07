@@ -37,7 +37,7 @@ class RandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents:
+        if not woEvents and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), []):
             g_eventDispatcher.loadHangar()
         return super(RandomEntity, self).fini(ctx, woEvents)
 
@@ -59,7 +59,7 @@ class RandomEntity(PreQueueEntity):
             LOG_DEBUG('Demonstrator map selected: ', ArenaType.g_cache[arenaTypeID].geometryName)
             LOG_DEBUG('Demonstrator level selected: ', levelType)
             LOG_DEBUG('Demonstrator spawn selected: ', team)
-        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), isOnly10ModeEnabled=ctx.isOnly10ModeEnabled(), arenaTypeID=mmData)
+        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), randomFlags=ctx.getRandomFlags(), arenaTypeID=mmData)
         LOG_DEBUG('Sends request on queuing to the random battle', ctx)
 
     def _doDequeue(self, ctx):
@@ -74,7 +74,7 @@ class RandomEntity(PreQueueEntity):
             arenaTypeID = action.mmData
         else:
             arenaTypeID = 0
-        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), isOnly10ModeEnabled=gameplay_ctx.isOnly10ModeEnabled(), waitingID='prebattle/join')
+        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), randomFlags=gameplay_ctx.getRandomFlags(), waitingID='prebattle/join')
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

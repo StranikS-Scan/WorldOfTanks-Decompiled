@@ -82,5 +82,5 @@ class RankedQualificationRewardsView(ViewImpl):
 class RankedQualificationRewards(InjectComponentAdaptor):
 
     def _makeInjectView(self):
-        self.__view = RankedQualificationRewardsView(flags=ViewFlags.COMPONENT)
+        self.__view = RankedQualificationRewardsView(flags=ViewFlags.VIEW)
         return self.__view

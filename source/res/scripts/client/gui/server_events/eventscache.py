@@ -334,13 +334,13 @@ class EventsCache(IEventsCache):
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
-    def getHiddenQuests(self, filterFunc=None):
+    def getHiddenQuests(self, filterFunc=None, noSkip=False):
         filterFunc = filterFunc or (lambda a: True)
 
         def hiddenFilterFunc(q):
             return q.isHidden() and filterFunc(q)
 
-        return self._getQuests(hiddenFilterFunc)
+        return self._getQuests(hiddenFilterFunc, noSkip=noSkip)
 
     def getRankedQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -350,8 +350,8 @@ class EventsCache(IEventsCache):
 
         return self._getQuests(rankedFilterFunc)
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
-        return self._getQuests(filterFunc, includePersonalMissions)
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
+        return self._getQuests(filterFunc, includePersonalMissions, noSkip)
 
     def getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -541,7 +541,7 @@ class EventsCache(IEventsCache):
             alias = first((m.getAlias() for m in action.getModifiers()))
         return (alias, counterValue)
 
-    def _getQuests(self, filterFunc=None, includePersonalMissions=False):
+    def _getQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -551,7 +551,8 @@ class EventsCache(IEventsCache):
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
-            if q.getFinishTimeLeft() <= 0:
+            noSkipResult = noSkip and q.noSkip()
+            if q.getFinishTimeLeft() <= 0 and not noSkipResult:
                 continue
             if not filterFunc(q):
                 continue

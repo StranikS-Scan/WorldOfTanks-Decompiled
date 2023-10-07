@@ -22,7 +22,7 @@ class ProxyCurrencyView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.battle_royale.lobby.views.ProxyCurrencyView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = ProxyCurrencyCmpViewModel()
         super(ProxyCurrencyView, self).__init__(settings)
 

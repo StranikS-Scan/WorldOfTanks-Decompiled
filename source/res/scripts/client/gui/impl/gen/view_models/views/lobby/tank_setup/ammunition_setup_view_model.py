@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_action_model imp
 class AmmunitionSetupViewModel(ViewModel):
     __slots__ = ('onClose', 'onResized', 'onViewRendered', 'onAnimationEnd')
 
-    def __init__(self, properties=8, commands=4):
+    def __init__(self, properties=9, commands=4):
         super(AmmunitionSetupViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -71,6 +71,12 @@ class AmmunitionSetupViewModel(ViewModel):
     def setIsBootcamp(self, value):
         self._setBool(7, value)
 
+    def getIsHalloween(self):
+        return self._getBool(8)
+
+    def setIsHalloween(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(AmmunitionSetupViewModel, self)._initialize()
         self._addViewModelProperty('tankSetup', MainTankSetupModel())
@@ -81,6 +87,7 @@ class AmmunitionSetupViewModel(ViewModel):
         self._addBoolProperty('show', False)
         self._addBoolProperty('isReady', False)
         self._addBoolProperty('isBootcamp', False)
+        self._addBoolProperty('isHalloween', False)
         self.onClose = self._addCommand('onClose')
         self.onResized = self._addCommand('onResized')
         self.onViewRendered = self._addCommand('onViewRendered')

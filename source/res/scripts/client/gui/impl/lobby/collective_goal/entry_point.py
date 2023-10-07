@@ -51,7 +51,7 @@ class EntryPoint(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.collective_goal.CollectiveGoalEntryPointView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = CollectiveGoalEntryPointModel()
         super(EntryPoint, self).__init__(settings)
 

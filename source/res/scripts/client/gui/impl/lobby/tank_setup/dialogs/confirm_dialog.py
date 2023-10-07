@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/confirm_dialog.py
+from __future__ import absolute_import
 import logging
+from helpers import dependency
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.fitting_types import FittingTypes
@@ -15,9 +17,13 @@ from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import Ammunit
 from gui.shared.money import ZERO_MONEY
 from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import AmmunitionBuyBottomContent
 from gui.shared.utils.requesters import REQ_CRITERIA
+from skeletons.gui.game_control import IHalloweenController
+from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
+from gui.shared.money import MONEY_UNDEFINED
 _logger = logging.getLogger(__name__)
 _SECTION_TO_FITTING_TYPE = {TankSetupConstants.BATTLE_BOOSTERS: FittingTypes.BOOSTER,
  TankSetupConstants.CONSUMABLES: FittingTypes.EQUIPMENT,
+ TankSetupConstants.HWCONSUMABLES: FittingTypes.HWCONSUMABLES,
  TankSetupConstants.OPT_DEVICES: FittingTypes.OPTIONAL_DEVICE,
  TankSetupConstants.BATTLE_ABILITIES: FittingTypes.BATTLE_ABILITY}
 
@@ -48,10 +54,13 @@ class TankSetupConfirmDialog(BuyAndExchange):
     def items(self):
         return self.__items
 
+    @property
+    def vehicleInvID(self):
+        return self.__vehicleInvID
+
     def _onLoading(self, *args, **kwargs):
         super(TankSetupConfirmDialog, self)._onLoading(*args, **kwargs)
-        vehicle = self._itemsCache.items.getVehicle(self.__vehicleInvID)
-        self._buyContent = AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, vehicle=vehicle, items=self.__items)
+        self._buyContent = self._getBottomContent()
         self._buyContent.onLoading()
         if self.__startState == BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             filterItems = REQ_CRITERIA.INVENTORY
@@ -101,6 +110,10 @@ class TankSetupConfirmDialog(BuyAndExchange):
     def _buyNotRequiredAccept(self):
         self._onAccept()
 
+    def _getBottomContent(self):
+        vehicle = self._itemsCache.items.getVehicle(self.__vehicleInvID)
+        return AmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, vehicle=vehicle, items=self.__items)
+
 
 class TankSetupExitConfirmDialog(TankSetupConfirmDialog):
     __slots__ = ('__rollBack',)
@@ -133,3 +146,53 @@ class TankSetupExitConfirmDialog(TankSetupConfirmDialog):
 
     def __isChangedInInventory(self):
         return any((cachedItem.isInInventory != self._itemsCache.items.getItemByCD(cachedItem.intCD).isInInventory for cachedItem in self.items))
+
+
+class HWAmmunitionBuyBottomContent(AmmunitionBuyBottomContent):
+
+    def __init__(self, viewModel, vehicle, items):
+        super(HWAmmunitionBuyBottomContent, self).__init__(viewModel, vehicle, items)
+        self.__items = items
+        self.__vehicle = vehicle
+
+    def update(self):
+        HWDealPanel.updateDealPanelPrice(self.__vehicle, self.__items, self._viewModel)
+
+
+class HWDealPanel(BaseDealPanel):
+
+    @classmethod
+    def updateDealPanelPrice(cls, vehicle, items, dealPanelModel):
+        prices = {cls._IN_STORAGE: 0,
+         cls._ON_VEHICLE_IN_SETUP: False,
+         cls._MONEY: MONEY_UNDEFINED}
+        for item in items:
+            cls.addItem(vehicle, item, prices)
+
+        dealPanelModel.setTotalItemsInStorage(prices[cls._IN_STORAGE])
+        cls._updateDisabled(prices, dealPanelModel)
+
+
+class HWTankSetupExitConfirmDialog(TankSetupExitConfirmDialog):
+    _halloweenController = dependency.descriptor(IHalloweenController)
+
+    def _onLoading(self, *args, **kwargs):
+        super(HWTankSetupExitConfirmDialog, self)._onLoading(*args, **kwargs)
+        self._halloweenController.onEventDisabled += self._onEventDisabled
+        self._halloweenController.onCompleteActivePhase += self._onCompleteActivePhase
+
+    def _finalize(self):
+        self._halloweenController.onEventDisabled -= self._onEventDisabled
+        self._halloweenController.onCompleteActivePhase -= self._onCompleteActivePhase
+        super(HWTankSetupExitConfirmDialog, self)._finalize()
+
+    def _getBottomContent(self):
+        vehicle = self._itemsCache.items.getVehicle(self.vehicleInvID)
+        return HWAmmunitionBuyBottomContent(viewModel=self.viewModel.dealPanel, vehicle=vehicle, items=self.items)
+
+    def _onCompleteActivePhase(self):
+        if self._halloweenController.isPostPhase():
+            self._onCancelClicked()
+
+    def _onEventDisabled(self):
+        self._closeClickHandler()

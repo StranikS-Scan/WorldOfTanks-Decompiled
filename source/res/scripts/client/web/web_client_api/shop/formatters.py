@@ -454,7 +454,7 @@ def makeShellFormatter(includeCount=False):
 
 
 def makeCrewFormatter():
-    fields = [Field('fullName', lambda i: i.fullUserName), Field('role', lambda i: i.role), Field('roleLevel', lambda i: i.realRoleLevel[0])]
+    fields = [Field('fullName', lambda i: i.fullUserName), Field('role', lambda i: i.role), Field('roleLevel', lambda i: i.realRoleLevel.lvl)]
     return Formatter(fields)
 
 

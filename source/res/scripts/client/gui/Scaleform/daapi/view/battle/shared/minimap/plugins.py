@@ -262,8 +262,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
-        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes or _CTRL_MODE.FLAMETHROWER in modes:
-            if self._isInStrategicMode() or self._isInArtyMode() or self._isInFlamethrowerMode():
+        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes or _CTRL_MODE.SPG_ONLY_ARTY_MODE in modes:
+            if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
             else:
@@ -288,16 +288,13 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __updateCameraEntries(self):
         activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInStrategicMode() or self._isInArtyMode() or self._isInFlamethrowerMode():
+        if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode():
             activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
             matrix = matrix_factory.makeStrategicCameraMatrix()
         elif self._isInArcadeMode():
             matrix = matrix_factory.makeArcadeCameraMatrix()
         elif self._isInPostmortemMode():
-            if self.__killerVehicleID:
-                matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
-            else:
-                matrix = matrix_factory.makePostmortemCameraMatrix()
+            matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID) or matrix_factory.makePostmortemCameraMatrix()
         elif self._isInVideoMode():
             activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
             matrix = matrix_factory.makeDefaultCameraMatrix()
@@ -315,10 +312,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __updateViewPointEntry(self, vehicleID=0):
         isActive = self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
-        if self.__killerVehicleID:
-            ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
-        else:
-            ownMatrix = matrix_factory.makeAttachedVehicleMatrix()
+        ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID) or matrix_factory.makeAttachedVehicleMatrix()
         if self.__viewPointID:
             self._setActive(self.__viewPointID, active=isActive)
             self._setMatrix(self.__viewPointID, ownMatrix)
@@ -758,6 +752,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__clearAoIToFarCallback(vehicleID)
             if location == VEHICLE_LOCATION.FAR:
                 entry.updatePosition(position)
+                self._setInAoI(entry, True)
                 self.__setActive(entry, True)
             if location in (VEHICLE_LOCATION.UNDEFINED, VEHICLE_LOCATION.AOI_TO_FAR):
                 self._setInAoI(entry, True)

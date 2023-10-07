@@ -28,7 +28,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
-from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME
+from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME, NO_TANKMAN
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
@@ -172,6 +172,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     DEBUT_BOXES = 'debutBoxes'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
+    HALLOWEEN = 'halloween'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -181,6 +182,7 @@ _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typing.Set[int]), ('toUnlock', typing.Set[int]), ('total', typing.Set[int])))
+NO_VEHICLE_ID = -1
 
 class Vehicle(FittingItem):
     __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
@@ -502,6 +504,15 @@ class Vehicle(FittingItem):
         commanderEffRoleLevel += bonuses['brotherhood'] + bonuses['equipment'] + bonuses['optDevices']
         bonuses['commander'] += round(commanderEffRoleLevel / tankmen.COMMANDER_ADDITION_RATIO)
         return
+
+    def getTankmanIDBySlotIdx(self, slotIdx):
+        for slot, tman in self.crew:
+            if slot == slotIdx:
+                if tman:
+                    return tman.invID
+                return NO_TANKMAN
+
+        return NO_TANKMAN
 
     def _calcSellPrice(self, proxy):
         return self.__calcSellPrice(proxy, self.sellPrices.itemPrice.price)
@@ -1033,7 +1044,7 @@ class Vehicle(FittingItem):
 
     @property
     def isScout(self):
-        return checkForTags(self.tags, 'scout')
+        return self._descriptor.type.isScout
 
     @property
     def isTrackWithinTrack(self):
@@ -1654,7 +1665,7 @@ class Vehicle(FittingItem):
 
         return (data[0], data[1], set(data[2:]))
 
-    def getPerfectCrew(self):
+    def __getCrewSkills(self):
         skillLevels = {}
         skills = {}
         usedTankmans = []
@@ -1668,7 +1679,50 @@ class Vehicle(FittingItem):
                     usedTankmans.append(tankmanIdx)
                     break
 
+        return (skills, skillLevels)
+
+    def makeCrewMaxRolesLevel(self):
+        skills, skillLevels = self.__getCrewSkills()
+        levelsByIndexes = {}
+        for tankmanIdx, vehTankman in self.crew:
+            levelsByIndexes[tankmanIdx] = 100 if vehTankman else None
+
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes)
+
+    def getPerfectCrew(self):
+        skills, skillLevels = self.__getCrewSkills()
         return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True)
+
+    def getCrewWithSkill(self, skillName):
+        if skillName is None:
+            return self.crew
+        else:
+            crewItems = list()
+            crewRoles = self.descriptor.type.crewRoles
+            for slotIdx, tman in self.crew:
+                if tman is None:
+                    crewItems.append((slotIdx, tman))
+                    continue
+                skillAlreadyLearned = tman.skillAlreadyLearned(skillName)
+                skillIsInProgress = tman.skillIsInProgress(skillName)
+                cannotLearnSkill = skillName not in tman.getPossibleSkills()
+                if cannotLearnSkill or skillAlreadyLearned:
+                    crewItems.append((slotIdx, tman))
+                    continue
+                tmanDescr = tman.descriptor
+                skills = tmanDescr.skills[:]
+                if skillIsInProgress:
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                elif not skills:
+                    skills.append(skillName)
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                else:
+                    skills.insert(0, skillName)
+                    lastSkillLevel = tmanDescr.lastSkillLevel
+                skilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
+                crewItems.append((slotIdx, skilledTman))
+
+            return sortCrew(crewItems, crewRoles)
 
     def getCrewWithoutSkill(self, skillName):
         crewItems = list()
@@ -1786,7 +1840,7 @@ class Vehicle(FittingItem):
         return vehicleDisclaimerURLs.get(self.getDisclaimerTag(), None) is not None
 
     def hasLimitedRestore(self):
-        return self.restoreInfo.isUnlimited() or self.restoreInfo.isLimited() and self.restoreInfo.getRestoreTimeLeft() > 0 if self.isRestorePossible() and self.restoreInfo.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else False
+        return self.restoreInfo.isUnlimited() or self.restoreInfo.isFinite() and self.restoreInfo.getRestoreTimeLeft() > 0 if self.isRestorePossible() and self.restoreInfo.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else False
 
     def hasRestoreCooldown(self):
         return self.isRestorePossible() and self.restoreInfo.isInCooldown()
@@ -1926,6 +1980,10 @@ def getTypeUserName(vehType, isElite):
     return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType) if isElite else i18n.makeString('#menu:header/vehicleType/%s' % vehType)
 
 
+def getWotPlusExclusiveVehicleTypeUserName(vehType):
+    return i18n.makeString('#menu:header/wotPlusExclusiveVehicleType/%s' % vehType)
+
+
 def getTypeShortUserName(vehType):
     return i18n.makeString('#menu:classes/short/%s' % vehType)
 
@@ -2020,6 +2078,10 @@ def getShopVehicleIconPath(size, name):
 
 def getTypeBigIconResource(vehicleType, isElite=False):
     return R.images.gui.maps.icons.vehicleTypes.big.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
+
+
+def getType44x44IconResource(vehicleType, isElite=False):
+    return R.images.gui.maps.icons.vehicleTypes.c_44x44.dyn(replaceHyphenToUnderscore(vehicleType + '_elite' if isElite else vehicleType))
 
 
 def getUserName(vehicleType, textPrefix=False):
@@ -2124,3 +2186,7 @@ def getVehicleStateAddIcon(vState):
 
 def getBattlesLeft(vehicle):
     return i18n.makeString('#menu:infinitySymbol') if vehicle.isInfiniteRotationGroup else str(vehicle.rotationBattlesLeft)
+
+
+def getRetrainTankmenIds(vehicle):
+    return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and (not tankman.isMaxRoleEfficiency or not tankman.isInNativeTank) ]

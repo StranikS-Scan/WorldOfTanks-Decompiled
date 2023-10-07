@@ -16,7 +16,7 @@ class BattleNotifierView(ViewImpl):
     __slots__ = ('__resultsQueue', '__uiReadyForData', '__arenaLoaded')
 
     def __init__(self):
-        settings = ViewSettings(R.views.battle.battle_notifier.BattleNotifierView(), ViewFlags.COMPONENT, BattleNotifierViewModel())
+        settings = ViewSettings(R.views.battle.battle_notifier.BattleNotifierView(), ViewFlags.VIEW, BattleNotifierViewModel())
         super(BattleNotifierView, self).__init__(settings)
         self.__resultsQueue = deque()
         self.__uiReadyForData = True

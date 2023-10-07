@@ -1003,6 +1003,10 @@ class INGAME_GUI(object):
     DANGER_ZONE_INDICATOR = '#ingame_gui:danger_zone/indicator'
     WARNING_ZONE_INDICATOR = '#ingame_gui:warning_zone/indicator'
     STATUSNOTIFICATIONTIMERS_STATICDEATHZONE = '#ingame_gui:statusNotificationTimers/staticDeathZone'
+    DEVMAPS_HINT_PRESS = '#ingame_gui:devMaps/hint/press'
+    DEVMAPS_HINT_DESCRIPTION = '#ingame_gui:devMaps/hint/description'
+    DEVMAPS_MAPINFO_TEXT = '#ingame_gui:devMaps/mapInfo/text'
+    DEVMAPS_MAPINFO_INFO = '#ingame_gui:devMaps/mapInfo/info'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

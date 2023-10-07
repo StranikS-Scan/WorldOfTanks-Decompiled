@@ -4,8 +4,7 @@ import logging
 import weakref
 import BigWorld
 import Event
-from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2
-from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_CLIENT_1
+from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2, EPICBATTLE_CAROUSEL_FILTER_CLIENT_1, EPICBATTLE_CAROUSEL_FILTER_CLIENT_2
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts
@@ -30,26 +29,18 @@ _CAROUSEL_FILTERS = (FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM)
 
 class BattleCarouselFilter(CarouselFilter):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    FILTER_KEY_SEASON = 'epicBattleSeason'
 
     def __init__(self):
         super(BattleCarouselFilter, self).__init__()
+        clientFilter = EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 if self.__epicController.isUnlockVehiclesInBattleEnabled() else EPICBATTLE_CAROUSEL_FILTER_CLIENT_2
         self._serverSections = (EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2)
-        self._clientSections = (EPICBATTLE_CAROUSEL_FILTER_CLIENT_1,)
-        self.__currentSeasonID = 0
+        self._clientSections = (clientFilter,)
 
     def save(self):
-        self.__currentSeasonID = self.__epicController.getCurrentSeasonID()
-        self._filters[self.FILTER_KEY_SEASON] = self.__currentSeasonID
-        super(BattleCarouselFilter, self).save()
+        pass
 
     def load(self):
-        super(BattleCarouselFilter, self).load()
-        currentSeason = self.__epicController.getCurrentSeasonID()
-        lastSeason = self._filters.get(self.FILTER_KEY_SEASON, currentSeason)
-        if lastSeason != currentSeason:
-            self.reset(save=False)
-        self.__currentSeasonID = currentSeason
+        self.reset(save=False)
 
     def _setCriteriaGroups(self):
         self._criteriesGroups = (FLRentedCriteriesGroup(),)

@@ -27,8 +27,6 @@ def getVOsSequence(awardBlocks, ranks, rankedInfo):
         result.append(_getRankCongVO(awardBlock, rank))
         if rank.isInitialForNextDivision():
             result.append(_getDivisionCongVO(awardBlock, ranks, rankedInfo))
-        if rank.isFinal():
-            result.append(_getLeagueCongVO(rankedInfo))
 
     return result
 
@@ -71,8 +69,8 @@ def _getDivisionVO(division, newDivision):
 
 
 def _getBonusBattleFields(stepsBonus, efficiencyBonus, isDaily):
-    return {'bonusBattleText': _getBonusBattlesDiffLabel(stepsBonus + efficiencyBonus),
-     'bonusBattleTooltip': _getBonusBattlesTooltip(stepsBonus, efficiencyBonus, isDaily)}
+    return {'bonusBattleText': _getBonusBattlesDiffLabel(stepsBonus + efficiencyBonus) if stepsBonus else '',
+     'bonusBattleTooltip': _getBonusBattlesTooltip(stepsBonus, efficiencyBonus, isDaily) if stepsBonus else ''}
 
 
 def _getBonusBattlesDiffLabel(bonusBattlesDiff):

@@ -344,7 +344,18 @@ class _IntegratedAuctionLostRateParser(SectionParser):
 
     def parse(self, section):
         messageData = json.loads(section['data'].asString)
-        return proxy_data.ShowAuctionLostRateMessage(messageData=messageData)
+        messageData.setdefault('result', 'lost')
+        return proxy_data.ShowAuctionResultMessage(messageData=messageData)
+
+
+class _IntegratedAuctionResultParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        messageData = json.loads(section['data'].asString)
+        return proxy_data.ShowAuctionResultMessage(messageData=messageData)
 
 
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):
@@ -374,4 +385,5 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _MapboxRewardReceivedParser(),
          _IntegratedAuctionRateErrorParser(),
          _IntegratedAuctionBelowCompetitiveRateParser(),
+         _IntegratedAuctionResultParser(),
          _IntegratedAuctionLostRateParser()))

@@ -14,6 +14,10 @@ class ExchangeWindow(ExchangeWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
 
+    def __init__(self, ctx):
+        super(ExchangeWindow, self).__init__()
+        self.currencyValue = ctx.get('currencyValue', 0)
+
     def _populate(self):
         super(ExchangeWindow, self)._populate()
         stats = self.itemsCache.items.stats
@@ -23,6 +27,7 @@ class ExchangeWindow(ExchangeWindowMeta):
          'actionValue': self.itemsCache.items.shop.exchangeRate,
          'actionMode': True})
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
+        self.as_setDefaultPrimaryCurrencyValueS(self.currencyValue)
 
     @decorators.adisp_process('transferMoney')
     def exchange(self, gold):

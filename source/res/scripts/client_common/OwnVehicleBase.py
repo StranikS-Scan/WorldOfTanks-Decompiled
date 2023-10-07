@@ -267,6 +267,12 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onSectorShooting {}'.format(sectorID))
         avatar.onSectorShooting(sectorID)
 
+    def stopSetupSelection(self):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        avatar.stopSetupSelection()
+
     def beforeSetupUpdate(self):
         avatar = self._avatar()
         if not avatar:

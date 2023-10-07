@@ -41,6 +41,10 @@ _PITCH_SWINGING_MODIFIERS = (0.9, 1.88, 0.3, 4.0, 1.0, 1.0)
 _MIN_DEPTH_FOR_HEAVY_SPLASH = 0.5
 _logger = logging.getLogger(__name__)
 
+def createHighlighter(isAlive):
+    return Highlighter(isAlive, None)
+
+
 class CompoundHolder(object):
 
     def __init__(self, compound):
@@ -204,14 +208,14 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self._vehicle.isPlayerVehicle:
             self.delayCallback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
             self.highlighter.highlight(True)
-        self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self.__onPeriodicTimerDirt)
+        self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self._onPeriodicTimerDirt)
 
     def _stopSystems(self):
         super(CompoundAppearance, self)._stopSystems()
         if self._vehicle.isPlayerVehicle:
             self.highlighter.highlight(False)
             self.stopCallback(self.__onPeriodicTimerEngine)
-        self.stopCallback(self.__onPeriodicTimerDirt)
+        self.stopCallback(self._onPeriodicTimerDirt)
 
     def _onEngineStart(self):
         super(CompoundAppearance, self)._onEngineStart()
@@ -605,7 +609,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.__updateTransmissionScroll()
             return
 
-    def __onPeriodicTimerDirt(self):
+    def _onPeriodicTimerDirt(self):
         if self.fashion is None or self._vehicle is None:
             return
         else:

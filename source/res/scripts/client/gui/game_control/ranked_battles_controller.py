@@ -832,7 +832,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __hasMatchMakerGroups(self, division, divisionLayout):
         matchMakerUnits = len(divisionLayout)
         amountRanks = len(division.getRanksIDs())
-        return matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
+        return matchMakerUnits != 0 and matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
 
     def __hasPrimeTimesLeft(self, currTime):
         season = self.getCurrentSeason()

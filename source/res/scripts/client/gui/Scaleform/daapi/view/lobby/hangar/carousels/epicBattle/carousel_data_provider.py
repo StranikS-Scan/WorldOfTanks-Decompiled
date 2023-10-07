@@ -119,12 +119,12 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
         state, _ = vehicle.getState()
         resShortCut = R.strings.epic_battle.epicBattlesCarousel
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
-            header = resShortCut.lockedTooltip.header()
+            header = backport.text(resShortCut.lockedTooltip.header())
             if vehicle.level in self.__epicController.getValidVehicleLevels():
-                body = resShortCut.wrongMode.body()
+                body = backport.text(resShortCut.wrongMode.body())
             else:
-                body = resShortCut.lockedTooltip.body()
-            result['lockedTooltip'] = makeTooltip(backport.text(header), backport.text(body))
+                body = backport.text(resShortCut.lockedTooltip.body(), level=self.__epicController.getSuitableForQueueVehicleLevelStr())
+            result['lockedTooltip'] = makeTooltip(header, body)
         if state == Vehicle.VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE:
             result['unlockedInBattle'] = True
         result['xpImgSource'] = ''

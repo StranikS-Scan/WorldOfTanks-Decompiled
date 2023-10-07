@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -1541,4 +1540,31 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret special cannot_be_sold comp7 earn_crystals	</tags>
     <level>	10	</level>
   </A69_T110E5_7x7>
+  <A64_T25_AT_FL>
+    <id>	98	</id>
+    <userString>	#usa_vehicles:T25_AT_FL	</userString>
+    <description>	#usa_vehicles:T25_AT_FL_descr	</description>
+    <shortUserString>	#usa_vehicles:T25_AT_FL_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:T25_AT_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T25_AT_FL_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_universal epic_battles HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
+    <level>	7	</level>
+  </A64_T25_AT_FL>
+  <A141_M_IV_Y_MT_BF>
+    <id>	171	</id>
+    <userString>	#usa_vehicles:A141_M_IV_Y_MT_BF	</userString>
+    <description>	#usa_vehicles:A141_M_IV_Y_MT_BF_descr	</description>
+    <shortUserString>	#usa_vehicles:A141_M_IV_Y_MT_BF_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A141_M_IV_Y_MT_BF_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A141_M_IV_Y_MT_BF_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user lockOutfit	</tags>
+    <level>	8	</level>
+  </A141_M_IV_Y_MT_BF>
 </list.xml>

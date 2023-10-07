@@ -29,25 +29,28 @@ def createBackportTooltipContent(specialAlias=None, specialArgs=None, isSpecial=
 
 class _BackportTooltipContent(ViewImpl):
     appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ()
+    __slots__ = ('__tooltipData',)
 
     def __init__(self, tooltipData):
+        self.__tooltipData = tooltipData
         settings = ViewSettings(R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent())
         settings.model = ViewModel()
         settings.args = (tooltipData,)
         super(_BackportTooltipContent, self).__init__(settings)
 
-    def _initialize(self, tooltipData):
-        super(_BackportTooltipContent, self)._initialize()
+    def _onShown(self):
+        super(_BackportTooltipContent, self)._onShown()
+        data = self.__tooltipData
         toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
-            if tooltipData.isSpecial:
-                toolTipMgr.onCreateTypedTooltip(tooltipData.specialAlias, tooltipData.specialArgs, _STATE_TYPE_INFO)
+            if data.isSpecial:
+                toolTipMgr.onCreateTypedTooltip(data.specialAlias, data.specialArgs, _STATE_TYPE_INFO)
             else:
-                toolTipMgr.onCreateComplexTooltip(tooltipData.tooltip, _STATE_TYPE_INFO)
+                toolTipMgr.onCreateComplexTooltip(data.tooltip, _STATE_TYPE_INFO)
         return
 
-    def _finalize(self):
+    def _onHidden(self):
+        super(_BackportTooltipContent, self)._onHidden()
         toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
             toolTipMgr.hide()

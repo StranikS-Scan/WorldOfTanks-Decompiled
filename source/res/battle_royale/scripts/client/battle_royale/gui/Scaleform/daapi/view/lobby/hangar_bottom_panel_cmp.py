@@ -52,7 +52,7 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
 
     def __init__(self, viewKey, viewModelClazz=HangarBottomPanelViewModel):
         settings = ViewSettings(viewKey)
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = viewModelClazz()
         super(HangarBottomPanelView, self).__init__(settings)
         self.__isModuleViewed = False

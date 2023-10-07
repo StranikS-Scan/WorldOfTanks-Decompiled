@@ -549,11 +549,11 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):
-        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__vehicleStickers is not None and self._getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
+        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__vehicleStickers is not None and self.getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
             self.refresh()
         return
 
-    def _getThisVehicleDossierInsigniaRank(self):
+    def getThisVehicleDossierInsigniaRank(self):
         if self.__vDesc and self.__showMarksOnGun:
             vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
             return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
@@ -806,7 +806,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateDecals(self, outfit):
         if self.__vehicleStickers is not None:
             self.__vehicleStickers.detach()
-        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.__vDesc, self._getThisVehicleDossierInsigniaRank(), outfit)
+        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.__vDesc, self.getThisVehicleDossierInsigniaRank(), outfit)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
         self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
         self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)

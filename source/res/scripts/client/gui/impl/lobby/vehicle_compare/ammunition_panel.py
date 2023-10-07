@@ -23,7 +23,7 @@ class CompareAmmunitionPanelView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.tanksetup.VehicleCompareAmmunitionPanel())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = VehicleCompareAmmunitionPanelModel()
         super(CompareAmmunitionPanelView, self).__init__(settings)
 

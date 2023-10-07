@@ -4,10 +4,14 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STATS_REGULAR_SORTING
 from account_helpers.AccountSettings import STATS_SORTIE_SORTING
 from account_helpers.AccountSettings import STATS_COMP7_SORTING
+from account_helpers.AccountSettings import STATS_EVENT_SORTING
 from soft_exception import SoftException
 from constants import ARENA_BONUS_TYPE
-__all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'STATS_COMP7_SORTING', 'writeStatsSorting', 'readStatsSorting')
-AVAILABLE_STATS_SORTINGS = [STATS_REGULAR_SORTING, STATS_SORTIE_SORTING, STATS_COMP7_SORTING]
+__all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'STATS_COMP7_SORTING', 'STATS_EVENT_SORTING', 'writeStatsSorting', 'readStatsSorting')
+AVAILABLE_STATS_SORTINGS = [STATS_REGULAR_SORTING,
+ STATS_SORTIE_SORTING,
+ STATS_COMP7_SORTING,
+ STATS_EVENT_SORTING]
 
 def writeStatsSorting(bonusType, iconType, sortDirection):
     key = STATS_REGULAR_SORTING

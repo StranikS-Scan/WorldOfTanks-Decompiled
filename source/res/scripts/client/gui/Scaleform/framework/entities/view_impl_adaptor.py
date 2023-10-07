@@ -3,7 +3,7 @@
 import logging
 import typing
 import BigWorld
-from frameworks.wulf import WindowStatus, WindowSettings, Window
+from frameworks.wulf import WindowStatus, WindowSettings, Window, ViewFlags
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity, EntityState
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -93,7 +93,7 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
     def setView(self, view, parent=None):
         if self.__window is not None:
             _logger.exception('View has been already set! %r new value: %r', self, view)
-        self.__layer = view.layer
+        self.__layer = ViewFlags.getViewType(view.viewFlags)
         self.__key = ViewKey(view.layoutID, view.uniqueID)
         settings = WindowSettings()
         settings.content = view

@@ -15,7 +15,7 @@ class ArmoryYardEntryPointView(ViewImpl):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.armory_yard.lobby.feature.ArmoryYardEntryPointView(), flags=ViewFlags.COMPONENT, model=ArmoryYardEntryPointViewModel())
+        settings = ViewSettings(layoutID=R.views.armory_yard.lobby.feature.ArmoryYardEntryPointView(), flags=ViewFlags.VIEW, model=ArmoryYardEntryPointViewModel())
         super(ArmoryYardEntryPointView, self).__init__(settings)
 
     @property

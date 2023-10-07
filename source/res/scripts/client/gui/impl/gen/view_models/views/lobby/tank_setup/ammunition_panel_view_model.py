@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.role_skill_slot_mode
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_action_model import TankSetupActionModel
 
 class AmmunitionPanelViewModel(ViewModel):
-    __slots__ = ('onViewSizeInitialized', 'onEscKeyDown')
+    __slots__ = ('onEscKeyDown',)
 
-    def __init__(self, properties=7, commands=2):
+    def __init__(self, properties=8, commands=1):
         super(AmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -59,6 +59,12 @@ class AmmunitionPanelViewModel(ViewModel):
     def setIsBootcamp(self, value):
         self._setBool(6, value)
 
+    def getIsHalloween(self):
+        return self._getBool(7)
+
+    def setIsHalloween(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(AmmunitionPanelViewModel, self)._initialize()
         self._addViewModelProperty('ammunitionPanel', AmmunitionPanelModel())
@@ -68,5 +74,5 @@ class AmmunitionPanelViewModel(ViewModel):
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isReady', False)
         self._addBoolProperty('isBootcamp', False)
-        self.onViewSizeInitialized = self._addCommand('onViewSizeInitialized')
+        self._addBoolProperty('isHalloween', False)
         self.onEscKeyDown = self._addCommand('onEscKeyDown')

@@ -12,7 +12,7 @@ from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
-from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted
+from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted, isHWCrewCompleted
 from items.vehicles import VehicleDescr
 from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -30,7 +30,8 @@ _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
  'female': CREW_GENDER_SWITCHES.FEMALE}
 _isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted,
  SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted,
- SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted}
+ SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted,
+ SPECIAL_VOICE_TAG.HW_CREW: isHWCrewCompleted}
 
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -75,6 +76,9 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
     def setPlayerVehicle(self, vehiclePublicInfo, isPlayerVehicle):
         self.__setVoiceoverByVehicleOrTankman(vehiclePublicInfo, isPlayerVehicle)
         self.__setArenaMusicByStyle(vehiclePublicInfo, isPlayerVehicle)
+
+    def getVoiceoverByTankmanTag(self, tag):
+        return self.__voiceoverByTankman.get(tag)
 
     def __setVoiceoverByVehicleOrTankman(self, vehiclePublicInfo, isPlayerVehicle):
         vehicleType = VehicleDescr(vehiclePublicInfo.compDescr).type
@@ -189,6 +193,12 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         else:
             for tag, params in self.__voiceoverByTankman.iteritems():
                 if tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
+                    voiceoverSpecialModes = self.__voiceoverSpecialModes.get(tag)
+                    if voiceoverSpecialModes is not None:
+                        voiceoverSpecialModesParams = voiceoverSpecialModes.get(_FULL_CREW_CONDITION)
+                        if voiceoverSpecialModesParams is not None:
+                            if voiceoverSpecialModesParams.languageMode == params.languageMode:
+                                continue
                     specialVoiceParams = params
                     break
 
@@ -198,7 +208,7 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
             return False
 
     def __setSpecialVoiceByCommanderSkinID(self, isFemale, commanderSkinID):
-        if commanderSkinID != NO_CREW_SKIN_ID and self.__lobbyContext.getServerSettings().isCrewSkinsEnabled():
+        if commanderSkinID != NO_CREW_SKIN_ID:
             skin = tankmen.g_cache.crewSkins().skins.get(commanderSkinID)
             if skin is not None and skin.soundSetID != NO_CREW_SKIN_SOUND_SET:
                 params = _VoiceoverParams(languageMode=skin.soundSetID, genderSwitch=CREW_GENDER_SWITCHES.GENDER_ALL[isFemale], onlyInNational=False)

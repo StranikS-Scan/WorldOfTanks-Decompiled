@@ -26,6 +26,7 @@ _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
 _COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 _WINBACK_TIPS_PATTERN = '^(winback\\d+$)'
 _MAPBOX_TIPS_PATTERN = '^(mapbox\\d+)'
+_DEV_MAPS_PATTERN = '^(devMaps\\d+)'
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1
@@ -113,6 +114,12 @@ class _EventTipsCriteria(TipsCriteria):
         return TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
 
 
+class _DevMapsTipsCriteria(TipsCriteria):
+
+    def _getTargetList(self):
+        return _devMapsTips
+
+
 class _RankedTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
@@ -189,7 +196,7 @@ registerBattleTipsCriteria((ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RAND
 
 def getTipsCriteria(arenaVisitor):
     criteriaCls = collectBattleTipsCriteria(arenaVisitor.gui.guiType)
-    return _RandomTipsCriteria() if criteriaCls is None else criteriaCls(arenaVisitor)
+    return _getRandomTipsCriteria(arenaVisitor) if criteriaCls is None else criteriaCls(arenaVisitor)
 
 
 def _readTips(tips, tipsConfig, logger):
@@ -218,6 +225,10 @@ def _buildBattleLoadingTip(tipID, descriptionResID, tipsConfig):
         tip = _BattleLoadingTip()
     tip.build(tipID, descriptionResID, tipConfig)
     return tip
+
+
+def _getRandomTipsCriteria(arenaVisitor):
+    return _DevMapsTipsCriteria() if arenaVisitor.extra.isMapsInDevelopmentEnabled() else _RandomTipsCriteria()
 
 
 def _getTipIconRes(tipID, group):
@@ -473,3 +484,4 @@ _battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN, _tipsConfig)
 _comp7Tips = readTips(_COMP7_TIPS_PATTERN, _tipsConfig)
 _winbackTips = readTips(_WINBACK_TIPS_PATTERN, _tipsConfig)
 _mapboxTips = readTips(_MAPBOX_TIPS_PATTERN, _tipsConfig)
+_devMapsTips = readTips(_DEV_MAPS_PATTERN, _tipsConfig)

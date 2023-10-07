@@ -2121,4 +2121,60 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_105mm_AP_Experimental_Type2_TKK_hw>
+    <id>	40000	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2_TKK_hw	</userString>
+    <icon>	ap	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_Experimental_Type2_TKK_hw>
+  <_105mm_AP_Experimental_Type2_TS_hw>
+    <id>	40001	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2_TS_hw	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_Experimental_Type2_TS_hw>
+  <_105mm_HE_Type91_hw>
+    <id>	40002	</id>
+    <userString>	#japan_vehicles:_105mm_HE_Type91_hw	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	430	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	215	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_Type91_hw>
 </shells.xml>

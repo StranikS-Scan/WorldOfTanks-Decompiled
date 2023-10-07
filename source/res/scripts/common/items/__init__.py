@@ -6,11 +6,9 @@ from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
 from soft_exception import SoftException
 from intervals import Interval
+from extension_utils import ResMgr
 if IS_CLIENT:
-    import ResMgr
     from helpers import i18n
-else:
-    from realm_utils import ResMgr
 _g_itemTypes = None
 UNDEFINED_ITEM_CD = 0
 

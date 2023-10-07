@@ -39,11 +39,11 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _CrewBooksFilterBit.RARE_1,
   'selected': False,
   'tooltip': makeTooltip(body=TOOLTIPS.CREWBOOKS_STORAGE_FILTERS_UNIVERSALBOOK_TITLE),
   'icon': RES_ICONS.MAPS_ICONS_STORAGE_FILTERS_ICON_BUTTON_UNIVERSAL}]
-_TYPE_ID_BIT_TO_TYPE_ID_MAP = {_CrewBooksFilterBit.RARE_1: CREW_BOOK_RARITY.CREW_COMMON,
- _CrewBooksFilterBit.RARE_2: CREW_BOOK_RARITY.CREW_RARE,
- _CrewBooksFilterBit.RARE_3: CREW_BOOK_RARITY.CREW_EPIC,
- _CrewBooksFilterBit.PERSONAL: CREW_BOOK_RARITY.PERSONAL,
- _CrewBooksFilterBit.UNIVERSAL: CREW_BOOK_RARITY.UNIVERSAL}
+_TYPE_ID_BIT_TO_TYPE_ID_MAP = {_CrewBooksFilterBit.RARE_1: (CREW_BOOK_RARITY.CREW_COMMON,),
+ _CrewBooksFilterBit.RARE_2: (CREW_BOOK_RARITY.CREW_RARE,),
+ _CrewBooksFilterBit.RARE_3: (CREW_BOOK_RARITY.CREW_EPIC,),
+ _CrewBooksFilterBit.PERSONAL: (CREW_BOOK_RARITY.PERSONAL,),
+ _CrewBooksFilterBit.UNIVERSAL: (CREW_BOOK_RARITY.UNIVERSAL, CREW_BOOK_RARITY.UNIVERSAL_GUIDE, CREW_BOOK_RARITY.UNIVERSAL_BROCHURE)}
 
 class CrewBooksTabView(FiltrableInventoryCategoryByNationTabView):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -57,7 +57,11 @@ class CrewBooksTabView(FiltrableInventoryCategoryByNationTabView):
 
     def _getFilteredCriteria(self):
         criteria = super(CrewBooksTabView, self)._getFilteredCriteria() | REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT
-        kindsList = [ _TYPE_ID_BIT_TO_TYPE_ID_MAP[bit] for bit in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iterkeys() if self._filterMask & bit ]
+        kindsList = []
+        for bit, kinds in _TYPE_ID_BIT_TO_TYPE_ID_MAP.iteritems():
+            if self._filterMask & bit:
+                kindsList.extend(kinds)
+
         if kindsList:
             criteria |= REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES(kindsList)
         return criteria

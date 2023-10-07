@@ -18,7 +18,7 @@ class SquadBonusTooltipContent(View):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = SquadBonusTooltipContentModel()
         super(SquadBonusTooltipContent, self).__init__(settings)
 

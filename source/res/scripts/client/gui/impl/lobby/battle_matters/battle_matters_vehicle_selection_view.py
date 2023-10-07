@@ -68,7 +68,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersVehicleSelectionView())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = BattleMattersVehicleSelectionViewModel()
         self.__selectableBonus = first(self._selectableBonusManager.getAvailableSelectableBonuses())
         bonuses = self._selectableBonusManager.getBonusOptions(self.__selectableBonus)

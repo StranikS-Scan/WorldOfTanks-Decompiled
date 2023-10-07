@@ -12,7 +12,9 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
+from helpers import i18n, dependency
+import constants
+from skeletons.gui.game_control import IHalloweenController
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 _STR_PATH = R.strings.menu.headerButtons.fightBtn.tooltip
@@ -121,7 +123,8 @@ def getEpicBattlesOnlyVehicleTooltipData(result):
      UNIT_RESTRICTION.VEHICLE_WRONG_MODE,
      PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER,
      PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER,
-     PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE):
+     PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE,
+     PREBATTLE_RESTRICTION.LIMIT_LEVEL):
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.body())
         return makeTooltip(header, body)
@@ -145,12 +148,44 @@ def getEventTooltipData():
     return makeTooltip(header, body)
 
 
+@dependency.replace_none_kwargs(halloweenController=IHalloweenController)
+def getHalloweenTooltipData(state, restriction, halloweenController=None):
+    if not halloweenController.isCurrentQueueEnabled():
+        queueName = constants.QUEUE_TYPE_NAMES[halloweenController.getCurrentQueueType()]
+        header = backport.text(R.strings.hw_tooltips.fightBtn.disable.header())
+        body = backport.text(R.strings.hw_tooltips.fightBtn.disable.body.dyn(queueName)())
+        return makeTooltip(header, body)
+    if state.isInUnit(constants.PREBATTLE_TYPE.HALLOWEEN_BATTLES):
+        if restriction in [UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL, UNIT_RESTRICTION.VEHICLE_WRONG_MODE, UNIT_RESTRICTION.UNSUITABLE_VEHICLE]:
+            if restriction == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
+                header = backport.text(R.strings.hw_tooltips.halloween.squad.disable.header())
+                body = backport.text(R.strings.hw_tooltips.halloween.squad.disable.body())
+            elif restriction == UNIT_RESTRICTION.UNSUITABLE_VEHICLE:
+                queueName = constants.QUEUE_TYPE_NAMES[halloweenController.getCurrentQueueType()]
+                header = backport.text(R.strings.hw_tooltips.fightBtn.disable.unsuitable.header.dyn(queueName)())
+                body = backport.text(R.strings.hw_tooltips.fightBtn.disable.unsuitable.body.dyn(queueName)())
+            else:
+                header = backport.text(R.strings.hw_tooltips.fightBtn.disable.invalidLevel.header())
+                body = backport.text(R.strings.hw_tooltips.fightBtn.disable.invalidLevel.body())
+            return makeTooltip(header, body)
+        toolTipData = getSquadFightBtnTooltipData(restriction)
+        if not toolTipData and restriction == UNIT_RESTRICTION.IS_IN_ARENA:
+            header = backport.text(R.strings.hw_tooltips.fightBtn.disable.in_arena.header())
+            body = backport.text(R.strings.hw_tooltips.fightBtn.disable.in_arena.body())
+            return makeTooltip(header, body)
+        return toolTipData
+    if restriction == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
+        header = backport.text(R.strings.hw_tooltips.halloween.fightBtn.disable.header())
+        body = backport.text(R.strings.hw_tooltips.halloween.fightBtn.disable.body())
+        return makeTooltip(header, body)
+
+
 def getPreviewTooltipData():
     body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
     return makeTooltip(None, body)
 
 
-def getRandomTooltipData(result):
+def getRandomTooltipData(result, isEventVehicle=False):
     state = result.restriction
     if state == PREBATTLE_RESTRICTION.VEHICLE_BROKEN:
         header = backport.text(_STR_PATH.vehicleIsBroken.header())
@@ -159,8 +194,8 @@ def getRandomTooltipData(result):
         header = backport.text(_STR_PATH.crewNotFull.header())
         body = backport.text(_STR_PATH.crewNotFull.body(), crewList=getAbsenceCrewList())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
-        header = backport.text(_STR_PATH.notSupported.header())
-        body = backport.text(_STR_PATH.notSupported.body())
+        header = backport.text(_STR_PATH.notSupported.header()) if not isEventVehicle else backport.text(R.strings.hw_tooltips.fightBtn.disable.random.header())
+        body = backport.text(_STR_PATH.notSupported.body()) if not isEventVehicle else backport.text(R.strings.hw_tooltips.fightBtn.disable.random.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY:
         header = backport.text(_STR_PATH.inPremiumIgrOnly.header(), icon=icons.premiumIgrSmall())
         body = backport.text(_STR_PATH.inPremiumIgrOnly.body())

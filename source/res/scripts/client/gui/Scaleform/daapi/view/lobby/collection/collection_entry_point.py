@@ -41,7 +41,7 @@ class CollectionEntryPoint(CollectionEntryPointMeta):
         return
 
     def _makeInjectView(self):
-        self.__view = CollectionEntryPointView(flags=ViewFlags.COMPONENT)
+        self.__view = CollectionEntryPointView(flags=ViewFlags.VIEW)
         if self.__collectionData is not None:
             self.__view.setCollectionData(self.__collectionData)
         return self.__view

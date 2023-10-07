@@ -1764,6 +1764,53 @@
       </exclude>
     </vehicleFilter>
     <projection_decal>
+      <id>	917	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_565.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_565	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	918	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_566.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_566	</userString>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	919	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_567.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_567	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	920	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_568.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_568	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	921	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_569.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_569	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	day of the dead 2023	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
       <id>	922	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_570.dds	</texture>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_516/description	</description>
@@ -1799,5 +1846,40 @@
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	Mexican Independence 2023	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	961	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_627.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_627	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_627_628_629/description	</description>
+      <tags>	styleOnly hiddenInUI formfactor_square disableVerticalMirror	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	962	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_628.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_628	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_627_628_629/description	</description>
+      <tags>	formfactor_square direction_right_to_left disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	963	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_629.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_629	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_627_628_629/description	</description>
+      <tags>	formfactor_square direction_left_to_right disableVerticalMirror	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	hound	</name>
   </itemGroup>
 </projection_decals_nonCN.xml>

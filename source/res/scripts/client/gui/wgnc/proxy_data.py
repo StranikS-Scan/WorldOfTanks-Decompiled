@@ -379,18 +379,18 @@ class ShowAuctionBelowCompetitiveRateMessage(_ProxyDataItem):
         pushBelowCompetitiveRateMessage(systemMessages=self.__systemMessages)
 
 
-class ShowAuctionLostRateMessage(_ProxyDataItem):
+class ShowAuctionResultMessage(_ProxyDataItem):
     __systemMessages = dependency.descriptor(ISystemMessages)
 
     def __init__(self, messageData):
         self.__messageData = messageData
 
     def getType(self):
-        return WGNC_DATA_PROXY_TYPE.INTEGRATED_AUCTION_RATE_LOST
+        return WGNC_DATA_PROXY_TYPE.INTEGRATED_AUCTION_RESULT
 
     def show(self, _):
         self.__systemMessages.proto.serviceChannel.pushClientMessage({'data': self.__messageData,
-         'msgType': SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE}, SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE)
+         'msgType': SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_RESULT}, SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_RESULT)
 
 
 class ProxyDataHolder(object):

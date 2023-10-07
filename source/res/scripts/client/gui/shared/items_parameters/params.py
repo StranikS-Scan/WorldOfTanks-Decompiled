@@ -43,9 +43,7 @@ PIERCING_DISTANCES = (50, 500)
 ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
 EXTRAS_CAMOUFLAGE = 'camouflageExtras'
-DAMAGED_MODULES_DETECTION_FULL_TIME = 4.5
 MAX_DAMAGED_MODULES_DETECTION_PERK_VAL = -4
-ART_NOTIFICATION_DELAY = 2.1
 MAX_ART_NOTIFICATION_DELAY_PERK_VAL = -2
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
@@ -55,6 +53,8 @@ MODULES = {ITEM_TYPES.vehicleRadio: lambda vehicleDescr: vehicleDescr.radio,
  ITEM_TYPES.vehicleChassis: lambda vehicleDescr: vehicleDescr.chassis,
  ITEM_TYPES.vehicleTurret: lambda vehicleDescr: vehicleDescr.turret,
  ITEM_TYPES.vehicleGun: lambda vehicleDescr: vehicleDescr.gun}
+HIDDEN_PARAM_DEFAULTS = {KPI.Name.ART_NOTIFICATION_DELAY_FACTOR: 2.1,
+ KPI.Name.DAMAGED_MODULES_DETECTION_TIME: 4.5}
 METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR = 3.6
 _GUN_EXCLUDED_PARAMS = {GUN_NORMAL: (SHELLS_COUNT_PROP_NAME,
               RELOAD_MAGAZINE_TIME_PROP_NAME,
@@ -631,9 +631,8 @@ class VehicleParams(_ParameterBase):
 
     @property
     def damagedModulesDetectionTime(self):
-        if abs(self.__kpi.getFactor(KPI.Name.DAMAGED_MODULES_DETECTION_TIME)) > 0:
-            realDetectTime = max(MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, self.__kpi.getFactor(KPI.Name.DAMAGED_MODULES_DETECTION_TIME))
-            return DAMAGED_MODULES_DETECTION_FULL_TIME + realDetectTime
+        realDetectTime = max(MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, self.__kpi.getFactor(KPI.Name.DAMAGED_MODULES_DETECTION_TIME))
+        return HIDDEN_PARAM_DEFAULTS[KPI.Name.DAMAGED_MODULES_DETECTION_TIME] + realDetectTime
 
     @property
     def vehicleGunShotDispersionTurretRotation(self):
@@ -838,9 +837,8 @@ class VehicleParams(_ParameterBase):
     @property
     def artNotificationDelayFactor(self):
         artNotificationDelayFactor = self.__kpi.getFactor(KPI.Name.ART_NOTIFICATION_DELAY_FACTOR)
-        if artNotificationDelayFactor:
-            realNotificationDelayTime = max(MAX_ART_NOTIFICATION_DELAY_PERK_VAL, artNotificationDelayFactor)
-            return ART_NOTIFICATION_DELAY + realNotificationDelayTime
+        realNotificationDelayTime = max(MAX_ART_NOTIFICATION_DELAY_PERK_VAL, artNotificationDelayFactor)
+        return HIDDEN_PARAM_DEFAULTS[KPI.Name.ART_NOTIFICATION_DELAY_FACTOR] + realNotificationDelayTime
 
     @property
     def radiomanActivityTimeAfterVehicleDestroySituational(self):

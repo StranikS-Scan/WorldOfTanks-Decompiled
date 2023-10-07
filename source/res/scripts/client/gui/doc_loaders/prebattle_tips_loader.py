@@ -27,7 +27,6 @@ def readPreBattleTips(prebattleXmlPath):
         for key in _OPTIONAL_FILTER_FLAGS:
             if filterSection.has_key(key):
                 filters[filterId][key] = filterSection.readBool(key)
-                print 'filters', filterId, key, filterSection.readBool(key), _OPTIONAL_FILTER_FLAGS
 
     for _, tipsSection in resource_helper.getIterator(ctx, root['tips']):
         filterId = tipsSection.readString('filter')

@@ -3,10 +3,10 @@
 import cPickle
 from typing import Optional as TOptional
 import constants
-from constants import PREBATTLE_TYPE
 from UnitBase import UNIT_SLOT, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE
-from unit_roster_config import UnitRosterSlot
+from constants import PREBATTLE_TYPE
 from debug_utils import *
+from unit_roster_config import UnitRosterSlot
 
 class UNIT_API:
     NONE = 0
@@ -87,6 +87,9 @@ class UnitClientAPI(object):
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
 
+    def createHalloweenSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.HALLOWEEN_BATTLES)
+
     def createMapboxSquad(self):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 
@@ -166,13 +169,13 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if constants.IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, isOnly10ModeEnabled=None, stopAutoSearch=False, startBattleUnitCmd=CLIENT_UNIT_CMD.START_UNIT_BATTLE, extraModeData=''):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, randomFlags=None, stopAutoSearch=False, startBattleUnitCmd=CLIENT_UNIT_CMD.START_UNIT_BATTLE, extraModeData=''):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
-        if isOnly10ModeEnabled is not None:
-            self.setOnly10Mode(isOnly10ModeEnabled)
+        if randomFlags is not None:
+            self.setRandomFlags(randomFlags)
         return self._doUnitCmd(startBattleUnitCmd, vehInvID, int(stopAutoSearch), extraModeData)
 
     def stopBattle(self, stopBattleUnitCmd=CLIENT_UNIT_CMD.STOP_UNIT_BATTLE):
@@ -193,8 +196,8 @@ class UnitClientAPI(object):
     def setGameplaysMask(self, gameplaysMask):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, gameplaysMask)
 
-    def setOnly10Mode(self, isOnly10ModeEnabled):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ONLY_10_MODE, isOnly10ModeEnabled)
+    def setRandomFlags(self, randomFlags):
+        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_RANDOM_FLAGS, randomFlags)
 
     def setSquadSize(self, squadSize):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_SQUAD_SIZE, squadSize)

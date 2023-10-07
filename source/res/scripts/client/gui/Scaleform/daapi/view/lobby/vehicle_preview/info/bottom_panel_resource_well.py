@@ -23,7 +23,7 @@ class _ResourceWellPanelView(ViewImpl):
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.vehicle_preview.buying_panel.WellPanel())
-        settings.flags = ViewFlags.COMPONENT
+        settings.flags = ViewFlags.VIEW
         settings.model = WellPanelModel()
         super(_ResourceWellPanelView, self).__init__(settings)
 

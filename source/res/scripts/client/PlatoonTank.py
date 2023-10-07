@@ -64,7 +64,7 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
     def _requestClanDBIDForStickers(self, callback):
         callback(AccountCommands.RES_SUCCESS, self.__tankInfo.clanDBID)
 
-    def _getThisVehicleDossierInsigniaRank(self):
+    def getThisVehicleDossierInsigniaRank(self):
         return self.__tankInfo.marksOnGun if self.__tankInfo is not None else 0
 
     def _getTurretYaw(self):

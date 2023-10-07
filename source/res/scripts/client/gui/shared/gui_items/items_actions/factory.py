@@ -22,6 +22,14 @@ BUY_BOOSTER = 'buyBooster'
 BUY_AND_ACTIVATE_BOOSTER = 'buyAndActivateBooster'
 CONVERT_BLUEPRINT_FRAGMENT = 'convertFragment'
 USE_CREW_BOOK = 'useCrewBook'
+USE_FREE_XP_TO_TANKMAN = 'useFreeXpToTankman'
+RETRAIN_TANKMAN = 'retrainTankman'
+CHANGE_ROLE_TANKMAN = 'changeRoleTankman'
+UNLOAD_TANKMAN = 'unloadTankman'
+EQUIP_TANKMAN = 'equipTankman'
+CHANGE_TANKMAN_PASSPORT = 'changeTankmanPassport'
+DISMISS_TANKMAN = 'dismissTankman'
+RESTORE_TANKMAN = 'restoreTankman'
 CHANGE_NATION = 'changeNation'
 INSTALL_BATTLE_ABILITIES = 'installBattleAbilities'
 BUY_BATTLE_ABILITIES = 'buyBattleAbilities'
@@ -56,6 +64,14 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  BUY_AND_ACTIVATE_BOOSTER: actions.BuyAndActivateBooster,
  CONVERT_BLUEPRINT_FRAGMENT: actions.ConvertBlueprintFragmentAction,
  USE_CREW_BOOK: actions.UseCrewBookAction,
+ USE_FREE_XP_TO_TANKMAN: actions.UseFreeXpToTankman,
+ RETRAIN_TANKMAN: actions.TankmanRetrainingAction,
+ CHANGE_ROLE_TANKMAN: actions.TankmanChangeRoleAction,
+ UNLOAD_TANKMAN: actions.TankmanUnloadAction,
+ EQUIP_TANKMAN: actions.TankmanEquipAction,
+ CHANGE_TANKMAN_PASSPORT: actions.TankmanChangePassportAction,
+ DISMISS_TANKMAN: actions.TankmanDismissAction,
+ RESTORE_TANKMAN: actions.TankmanRestoreAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
  INSTALL_BATTLE_ABILITIES: actions.InstallBattleAbilities,
  BUY_BATTLE_ABILITIES: actions.BuyBattleAbilities,

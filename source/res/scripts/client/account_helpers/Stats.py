@@ -213,13 +213,13 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__slot_onShopSynced, callback))
             return
 
-    def buyBerths(self, callback=None):
+    def buyBerths(self, countPacksBerths, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, callback))
+            self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, countPacksBerths, callback))
             return
 
     def setMapsBlackList(self, selectedMaps, callback=None):
@@ -569,7 +569,7 @@ class Stats(object):
             self.__account._doCmdInt3(AccountCommands.CMD_BUY_SLOT, shopRev, 0, 0, proxy)
             return
 
-    def __berths_onShopSynced(self, callback, resultID, shopRev):
+    def __berths_onShopSynced(self, countPacksBerths, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
@@ -579,5 +579,5 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BERTHS, shopRev, 0, 0, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BERTHS, shopRev, countPacksBerths, 0, proxy)
             return

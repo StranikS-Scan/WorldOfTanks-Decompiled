@@ -8,6 +8,7 @@ from gui import g_guiResetters, g_repeatKeyHandlers, GUI_CTRL_MODE_FLAG
 from gui.Scaleform.flash_wrapper import FlashComponentWrapper
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
+from gui.impl.pub.main_view import MainView
 from gui.impl.pub.main_window import MainWindow
 from gui.shared.events import AppLifeCycleEvent, GameEvent, LoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
@@ -16,6 +17,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
+_WULF_COMPONENT_CLASS = 'WulfFlashComponent'
 
 class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
@@ -90,7 +92,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
-        self.__mainWnd = MainWindow(entryID)
+        self.__mainWnd = MainWindow(MainView(entryID))
         self.__mainWnd.onStatusChanged += self.__onMainWindowStatusChanged
         self.__mainWnd.load()
         return
@@ -531,7 +533,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
 
     def __onMainWindowStatusChanged(self, newState):
         if newState == WindowStatus.LOADED:
-            self.createComponent(descriptor=self.__mainWnd.descriptor)
+            self.createComponent(className=_WULF_COMPONENT_CLASS, view=self.__mainWnd.content.proxy)
             if self.isActive:
                 self._setup()
 

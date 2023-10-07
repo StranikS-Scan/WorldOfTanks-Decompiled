@@ -137,7 +137,7 @@ class SelectedViewState(IVehicleViewState):
         return True
 
     def isCrewOpsEnabled(self):
-        return not self._locked
+        return not self._locked and not self._isOnlyForEventBattles
 
     def isMaintenanceEnabled(self):
         return not self._locked and self._isInHangar

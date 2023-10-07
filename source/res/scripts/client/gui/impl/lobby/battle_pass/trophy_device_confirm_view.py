@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/trophy_device_confirm_view.py
 import logging
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.trophy_device_confirm_bonus_model import TrophyDeviceConfirmBonusModel
@@ -90,7 +91,7 @@ class TrophyDeviceUpgradeConfirmDialogContent(DialogContent):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, trophyBasicModule):
-        super(TrophyDeviceUpgradeConfirmDialogContent, self).__init__(R.views.lobby.battle_pass.trophy_device_confirm_dialog.TrophyDeviceConfirmDialogContent(), viewModelClazz=TrophyDeviceConfirmDialogModel)
+        super(TrophyDeviceUpgradeConfirmDialogContent, self).__init__(ViewSettings(R.views.lobby.battle_pass.trophy_device_confirm_dialog.TrophyDeviceConfirmDialogContent(), model=TrophyDeviceConfirmDialogModel()))
         self.__trophyBasicModule = trophyBasicModule
         self.__trophyUpgadedModule = self.__itemsCache.items.getItemByCD(trophyBasicModule.descriptor.upgradeInfo.upgradedCompDescr)
 

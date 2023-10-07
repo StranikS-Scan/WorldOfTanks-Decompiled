@@ -38,7 +38,6 @@ class LAYER_NAMES(object):
      CURSOR,
      WAITING]
     FOCUS_ORDER = [WAITING,
-     SERVICE_LAYOUT,
      OVERLAY,
      DIALOGS,
      FULLSCREEN_WINDOWS,

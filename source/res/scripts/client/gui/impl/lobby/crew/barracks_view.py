@@ -148,7 +148,8 @@ class BarracksView(BaseTankmanListView):
 
     def _fillTankmanCard(self, cardsList, tankman):
         tm = TankmanModel()
-        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID))
+        tmanVehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=tmanVehicle, compVeh=tmanVehicle)
         setTmanSkillsModel(tm.getSkills(), tankman)
         tm.setNation(nations.NAMES[tankman.nationID])
         tm.setHasVoiceover(False)

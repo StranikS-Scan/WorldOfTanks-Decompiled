@@ -832,6 +832,20 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_vz_39N_VM>
+  <_105mm_vz_39N_VM_TST>
+    <id>	31001	</id>
+    <userString>	#czech_vehicles:_105mm_vz_39N_VM_TST	</userString>
+    <icon>	ap	</icon>
+    <price>	610	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_vz_39N_VM_TST>
   <_105mm_vz_42N_VM>
     <id>	56	</id>
     <userString>	#czech_vehicles:_105mm_vz_42N_VM	</userString>
@@ -847,6 +861,21 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_vz_42N_VM>
+  <_105mm_vz_42N_VM_TST>
+    <id>	31002	</id>
+    <userString>	#czech_vehicles:_105mm_vz_42N_VM_TST	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_vz_42N_VM_TST>
   <_105mm_Narazovy_14_48>
     <id>	57	</id>
     <userString>	#czech_vehicles:_105mm_Narazovy_14_48	</userString>
@@ -871,6 +900,30 @@
       </damage>
     </armorSpalls>
   </_105mm_Narazovy_14_48>
+  <_105mm_Narazovy_14_48_TST>
+    <id>	31003	</id>
+    <userString>	#czech_vehicles:_105mm_Narazovy_14_48_TST	</userString>
+    <icon>	he_modern	</icon>
+    <price>	460	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	200	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Narazovy_14_48_TST>
   <_122mm_Prurazny_vz_48>
     <id>	52	</id>
     <userString>	#czech_vehicles:_122mm_Prurazny_vz_48	</userString>

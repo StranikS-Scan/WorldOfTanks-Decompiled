@@ -40560,6 +40560,85 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R123_Kirovets_1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31043	</id>
+      <texture>	gui/maps/vehicles/styles/R123_Kirovets_1_3dst_HW_MT.png	</texture>
+      <modelsSet>	R123_Kirovets_1_3dst_HW_MT	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT	</userString>
+      <description>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	All	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31006	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R123_Kirovets_1_HW	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31055	</id>
+      <texture>	gui/maps/vehicles/styles/R123_Kirovets_1_3dst_HW_MT.png	</texture>
+      <modelsSet>	R123_Kirovets_1_3dst_HW_MT	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT	</userString>
+      <tags>	lockedOnVehicle	</tags>
+      <description>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R123_Kirovets_1_3dst_HW_MT/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	All	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31006	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	0	</historical>
     <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
     <vehicleFilter>

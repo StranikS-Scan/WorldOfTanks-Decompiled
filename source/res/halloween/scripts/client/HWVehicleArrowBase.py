@@ -6,6 +6,7 @@ from items import vehicles
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from halloween.gui.shared import events as hw_events
 from HWVehicleEffect import SequenceEffect
+from gui.battle_control import avatar_getter
 
 class HWVehicleArrowBase(BigWorld.DynamicScriptComponent):
 
@@ -41,6 +42,8 @@ class HWVehicleArrowBase(BigWorld.DynamicScriptComponent):
         event = hw_events.BuffGUIEvent.ON_APPLY if self.isBoosted else hw_events.BuffGUIEvent.ON_UNAPPLY
         g_eventBus.handleEvent(hw_events.BuffGUIEvent(event, ctx=self.__boostContext), scope=EVENT_BUS_SCOPE.BATTLE)
         if self.isBoosted and not self.__boostIsWorking:
+            if self.entity.id == BigWorld.player().playerVehicleID:
+                avatar_getter.getSoundNotifications().play('vo_shadowPlay_gp_buff')
             self.__playBoostSequences()
             self.__boostIsWorking = True
 

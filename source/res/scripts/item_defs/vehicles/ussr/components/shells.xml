@@ -1661,6 +1661,59 @@
       </damage>
     </armorSpalls>
   </_100mm_UOF-412A>
+  <_107mm_UBR-420_Turchaninov>
+    <id>	316	</id>
+    <userString>	#ussr_vehicles:_107mm_UBR-420_Turchaninov	</userString>
+    <icon>	ap	</icon>
+    <price>	1010	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_UBR-420_Turchaninov>
+  <_107mm_UBR-420PM_Turchaninov>
+    <id>	317	</id>
+    <userString>	#ussr_vehicles:_107mm_UBR-420PM_Turchaninov	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_UBR-420PM_Turchaninov>
+  <_107mm_UOF-420_Turchaninov>
+    <id>	318	</id>
+    <userString>	#ussr_vehicles:_107mm_UOF-420_Turchaninov	</userString>
+    <icon>	he_modern	</icon>
+    <price>	650	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	107	</caliber>
+    <explosionRadius>	1.98	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.98	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	180	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_107mm_UOF-420_Turchaninov>
   <_100mm_3UOF10>
     <id>	100	</id>
     <userString>	#ussr_vehicles:_100mm_3UOF10	</userString>

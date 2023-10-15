@@ -13,12 +13,11 @@ class HW22CarouselFilterPopover(TankCarouselFilterPopover):
 
     def _getInitialVO(self, filters, xpRateMultiplier):
         dataVO = super(HW22CarouselFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
-        filterCtx = FilterSetupContext(asset='hw23_event_toggle', ctx={'level1': 'VIII',
-         'level2': 'VIII'})
+        filterCtx = FilterSetupContext(asset='hw23_event_toggle')
         tooltipRes = R.strings.tank_carousel_filter.tooltip.dyn(_EVENT_FILTER_ENTRY)
         dataVO['progressionsSectionVisible'] = False
         dataVO['specials'][_EVENT_FILTER_INDEX] = {'value': getButtonsAssetPath(filterCtx.asset or _EVENT_FILTER_ENTRY),
-         'tooltip': makeTooltip(backport.text(tooltipRes.header()) if tooltipRes else '', backport.text(tooltipRes.body(), **filterCtx.ctx)) if tooltipRes else '',
+         'tooltip': makeTooltip(backport.text(tooltipRes.header()) if tooltipRes else '', backport.text(tooltipRes.body())) if tooltipRes else '',
          'selected': filters.get(_EVENT_FILTER_ENTRY, False),
          'enabled': True}
         return dataVO

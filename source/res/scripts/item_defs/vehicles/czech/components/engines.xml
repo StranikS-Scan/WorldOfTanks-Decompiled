@@ -33,6 +33,7 @@
     <Skoda_V16_diesel_600_a>	32	</Skoda_V16_diesel_600_a>
     <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
     <CKD_AXL_CN>	34	</CKD_AXL_CN>
+    <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -457,6 +458,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </CKD_AXK2>
+    <Skoda_AHK_TST>
+      <userString>	#czech_vehicles:Skoda_AHK_TST	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	51700	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Skoda_AHK_TST>
     <Skoda_16_AH_145>
       <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
       <tags>	diesel	</tags>

@@ -196,6 +196,7 @@
     <_130mm_M_65S_DR>	248	</_130mm_M_65S_DR>
     <_130mm_M_65K>	249	</_130mm_M_65K>
     <_122mm_cannon_M-30_1938_dualgun>	250	</_122mm_cannon_M-30_1938_dualgun>
+    <_107mm_ZiS-24_KV_4_Turchaninov>	252	</_107mm_ZiS-24_KV_4_Turchaninov>
     <_100mm_D33>	253	</_100mm_D33>
     <_85mm_H_3_457>	255	</_85mm_H_3_457>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
@@ -6955,6 +6956,64 @@
         </_107mm_UOF-420M1>
       </shots>
     </_107mm_ZiS-24_KTT>
+    <_107mm_ZiS-24_KV_4_Turchaninov>
+      <userString>	#ussr_vehicles:_107mm_ZiS-24_KV_4_Turchaninov	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	180000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	8.8	</reloadTime>
+      <maxAmmo>	32	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	2820	</weight>
+      <maxHealth>	194	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_107mm_UBR-420_Turchaninov>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1043	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	227 204	</piercingPower>
+        </_107mm_UBR-420_Turchaninov>
+        <_107mm_UBR-420PM_Turchaninov>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1304	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	262 238	</piercingPower>
+        </_107mm_UBR-420PM_Turchaninov>
+        <_107mm_UOF-420_Turchaninov>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1043	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	62 62	</piercingPower>
+        </_107mm_UOF-420_Turchaninov>
+      </shots>
+    </_107mm_ZiS-24_KV_4_Turchaninov>
     <_107mm_ZiS-6M>
       <userString>	#ussr_vehicles:_107mm_ZiS-6M	</userString>
       <tags></tags>

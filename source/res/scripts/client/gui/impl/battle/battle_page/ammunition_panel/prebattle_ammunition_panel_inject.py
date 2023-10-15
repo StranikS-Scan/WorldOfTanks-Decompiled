@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/ammunition_panel/prebattle_ammunition_panel_inject.py
+import BigWorld
+import constants
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
@@ -57,6 +59,8 @@ class PrebattleAmmunitionPanelInject(MethodsRules, PrebattleAmmunitionPanelViewM
 
     @MethodsRules.delayable()
     def showSetupsView(self, vehicle, isArenaLoaded=False):
+        if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.HALLOWEEN_BATTLES:
+            return
         if self.__isViewActive:
             self._injectView.updateViewVehicle(vehicle, fullUpdate=False)
             return

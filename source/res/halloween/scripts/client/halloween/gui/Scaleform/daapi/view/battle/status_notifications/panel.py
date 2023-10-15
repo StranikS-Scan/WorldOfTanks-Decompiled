@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.battle.shared.status_notifications.panel import St
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_COLORS import BATTLE_NOTIFICATIONS_TIMER_COLORS as _COLORS
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_LINKAGES import BATTLE_NOTIFICATIONS_TIMER_LINKAGES as _LINKS
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES as _TYPES
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from halloween.gui.Scaleform.daapi.view.battle.status_notifications import sn_items as hw_sn_items
 _logger = logging.getLogger(__name__)
 
@@ -52,6 +53,8 @@ class HWStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, overturnedIcon, link, overturnedColor, iconOffsetY=iconOffsetY)
         self._addNotificationTimerSetting(data, _TYPES.UNDER_FIRE, _LINKS.UNDER_FIRE_ICON, link)
         link = _LINKS.SECONDARY_TIMER_UI
+        self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)
+        self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)
         self._addNotificationTimerSetting(data, _TYPES.HW_VEHICLE_FROZEN_ARROW, _LINKS.HW_VEHICLE_FROZEN_ARROW_ICON, link, _COLORS.ORANGE)
         self._addNotificationTimerSetting(data, _TYPES.HW_VEHICLE_HEALING_ARROW, _LINKS.HW_VEHICLE_HEALING_ARROW_ICON, link, _COLORS.ORANGE)
         self._addNotificationTimerSetting(data, _TYPES.HW_VEHICLE_LAUGH_ARROW, _LINKS.HW_VEHICLE_LAUGH_ARROW_ICON, link, _COLORS.ORANGE)

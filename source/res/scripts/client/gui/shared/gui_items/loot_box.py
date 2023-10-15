@@ -98,7 +98,7 @@ def addBonusesToGroup(bonusGroup, bonuses):
 
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -154,6 +154,9 @@ class LootBox(GUIItem):
     def getType(self):
         return self.__type
 
+    def getAutoOpenTime(self):
+        return self.__autoOpenTime if self.__autoOpenTime else 0
+
     def getCategory(self):
         return self.__category
 
@@ -196,6 +199,7 @@ class LootBox(GUIItem):
          'history': historyData.get(self.getHistoryName(), (0, None, 0)) if historyData is not None else (0, None, 0)}
 
     def __updateByConfig(self, lootBoxConfig):
+        self.__autoOpenTime = lootBoxConfig.get('autoOpenTime', None)
         self.__type = lootBoxConfig.get('type', '')
         self.__category = lootBoxConfig.get('category', '')
         self.__tier = LootBoxTiers(lootBoxConfig.get('tier', 1))
@@ -214,7 +218,7 @@ class LootBox(GUIItem):
         return
 
     def __getConfig(self):
-        return {'type': self.__type,
+        config = {'type': self.__type,
          'category': self.__category,
          'tier': self.__tier,
          'enabled': self.__isEnabled,
@@ -223,6 +227,9 @@ class LootBox(GUIItem):
                     'iconName': self.__iconName,
                     'description': self.__description,
                     'video': self.__videoKey}}
+        if self.__autoOpenTime:
+            config['autoOpenTime'] = self.__autoOpenTime
+        return config
 
     @staticmethod
     def __readLimits(limitsCfg):

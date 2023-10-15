@@ -26,10 +26,9 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, require
         tm.setFullUserName(tman.getFullUserNameWithSkin())
         tm.setTankmanKind(TankmanKind.TANKMAN)
         tm.setSpecializationLevel(tdescr.roleLevel)
-        if tdescr.roleLevel < MAX_SKILL_LEVEL:
-            tm.setHasSpecializationLevelPenalty(True)
-        elif compVeh:
-            if compVeh.isWotPlus or requiredRole != tdescr.role:
+        tm.setHasSpecializationLevelPenalty(False)
+        if compVeh:
+            if compVeh.isWotPlus or requiredRole != tdescr.role and requiredRole is not None:
                 tm.setHasSpecializationLevelPenalty(False)
             else:
                 tm.setHasSpecializationLevelPenalty(compVeh.compactDescr != tmanNativeVeh.compactDescr and not (compVeh.isPremium and tmanNativeVeh.type == compVeh.type))

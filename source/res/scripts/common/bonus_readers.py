@@ -474,6 +474,8 @@ def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
         extra['unlock'] = True
     if section.has_key('unlockModules'):
         extra['unlockModules'] = True
+    if section.has_key('withSlot'):
+        extra['withSlot'] = True
     vehicleBonuses = bonus.setdefault('vehicles', {})
     vehKey = vehCompDescr if vehCompDescr else vehTypeCompDescr
     if vehKey in vehicleBonuses:

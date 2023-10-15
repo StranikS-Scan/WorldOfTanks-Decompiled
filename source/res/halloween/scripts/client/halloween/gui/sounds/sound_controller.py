@@ -23,18 +23,12 @@ from skeletons.gui.game_control import IHalloweenController
 from constants import CURRENT_REALM, IS_CHINA
 from skeletons.gui.battle_session import IBattleSessionProvider
 from PlayerEvents import g_playerEvents
-from halloween.gui.halloween_gui_constants import HW_EQUIPMENT
 _POINTS_EQUIL_EPSILON = 0.05
 
 class HWSoundController(IHWSoundController, IGlobalListener, ITeamBasesRecapturableListener):
     _hwController = dependency.descriptor(IHalloweenController)
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     HW_ITEM_TAG = 'halloween_equipment'
-    HW_EQUIPMENT_SOUNDS = {HW_EQUIPMENT.LAUGH_ARROW: BattleEvents.EQUIPMENT_LAUGH_ARROW,
-     HW_EQUIPMENT.FIRE_ARROW: BattleEvents.EQUIPMENT_FIRE_ARROW,
-     HW_EQUIPMENT.FROZEN_ARROW: BattleEvents.EQUIPMENT_FROZEN_ARROW,
-     HW_EQUIPMENT.CURSE_ARROW: BattleEvents.EQUIPMENT_CURSE_ARROW,
-     HW_EQUIPMENT.HEALING_ARROW: BattleEvents.EQUIPMENT_HEALING_ARROW}
 
     def __init__(self, *args, **kwargs):
         super(HWSoundController, self).__init__(*args, **kwargs)

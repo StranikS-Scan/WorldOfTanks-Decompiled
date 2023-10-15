@@ -11,8 +11,7 @@ class HW22TankCarousel(TankCarousel):
     def __init__(self):
         super(HW22TankCarousel, self).__init__()
         self._carouselFilterCls = HW22CarouselFilter
-        self._eventFilterSetupContext = {'event': FilterSetupContext(asset='hw23_event_toggle', ctx={'level1': 'VIII',
-                   'level2': 'VIII'})}
+        self._eventFilterSetupContext = {'event': FilterSetupContext(asset='hw23_event_toggle')}
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         super(HW22TankCarousel, self).updateVehicles(vehicles, filterCriteria)

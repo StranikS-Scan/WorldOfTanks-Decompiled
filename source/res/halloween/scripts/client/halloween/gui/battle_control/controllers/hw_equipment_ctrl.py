@@ -16,7 +16,8 @@ class EventEquipmentSound(EquipmentSound):
     def playActive(item):
         equipment = vehicles.g_cache.equipments()[item.getEquipmentID()]
         if equipment is not None:
-            if equipment.soundNotificationActive is not None:
+            isBoosted = item.getTimeRemaining() == -1.0 and item.getTotalTime() == -1.0
+            if equipment.soundNotificationActive is not None and not isBoosted:
                 avatar_getter.getSoundNotifications().play(equipment.soundNotificationActive)
         return
 

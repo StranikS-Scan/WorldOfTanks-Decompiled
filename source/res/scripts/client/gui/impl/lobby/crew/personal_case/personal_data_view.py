@@ -99,6 +99,7 @@ class PersonalDataView(IPersonalTab, BasePersonalCaseView):
     def _finalize(self):
         self._clear()
         self.__dataProviders.unsubscribe()
+        self.__dataProviders.clear()
         super(PersonalDataView, self)._finalize()
 
     def __onMembersUpdate(self):

@@ -6,7 +6,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from EdgeDrawer import HighlightComponent
 import CGF
 from GenericComponents import DynamicModelComponent
-from GenericComponents import AnimatorComponent
 from cgf_script.managers_registrator import autoregister, onProcessQuery
 import cgf_obsolete_script.py_component
 
@@ -157,26 +156,21 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
 
     def observeGameObjectForDynamicModels(self, appearance, gameObject):
         hm = CGF.HierarchyManager(appearance.spaceID)
-        childDynamicModelComponents = hm.findComponentsInHierarchy(gameObject, DynamicModelComponent)
-        for childGO, component in childDynamicModelComponents:
-            childGO.createComponent(EdgeDrawInitializerComponent, self, component)
-
-        childAnimatorComponents = hm.findComponentsInHierarchy(gameObject, AnimatorComponent)
-        for childGO, component in childAnimatorComponents:
-            childGO.createComponent(EdgeDrawInitializerAnimatorComponent, self, component)
+        childComponents = hm.findComponentsInHierarchy(gameObject, DynamicModelComponent)
+        for childGO, _ in childComponents:
+            childGO.createComponent(EdgeDrawInitializerComponent, self)
 
 
 class EdgeDrawInitializerComponent(object):
     INITIALIZATION_TIMEOUT_TICKS = 10
 
-    def __init__(self, highlighter, componentToWatch):
+    def __init__(self, highlighter):
         self.highlighter = highlighter
-        self.component = componentToWatch
         self.ticksProcessed = 0
 
-    def tryInit(self):
+    def tryInit(self, dynamicModelComponent):
         self.ticksProcessed += 1
-        if not self.component.isValid():
+        if not dynamicModelComponent.isValid():
             return False
         if self.highlighter.isOn:
             forceSimple = self.highlighter.isSimpleEdge
@@ -188,21 +182,11 @@ class EdgeDrawInitializerComponent(object):
         return self.ticksProcessed > self.INITIALIZATION_TIMEOUT_TICKS
 
 
-class EdgeDrawInitializerAnimatorComponent(EdgeDrawInitializerComponent):
-    pass
-
-
 @autoregister(presentInAllWorlds=True)
 class EdgeDrawInitializer(CGF.ComponentManager):
 
-    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerComponent, period=0.5)
-    def processEdgeDrawerInitialization(self, gameObject, edgeDrawInitializerComponent):
-        inited = edgeDrawInitializerComponent.tryInit()
+    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerComponent, DynamicModelComponent, period=0.5)
+    def processEdgeDrawerInitialization(self, gameObject, edgeDrawInitializerComponent, dynamicModelComponent):
+        inited = edgeDrawInitializerComponent.tryInit(dynamicModelComponent)
         if inited or edgeDrawInitializerComponent.timeoutOccurred():
             gameObject.removeComponent(edgeDrawInitializerComponent)
-
-    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerAnimatorComponent, period=0.5)
-    def processEdgeDrawerAnimatorInitialization(self, gameObject, edgeDrawInitializerAnimatorComponent):
-        inited = edgeDrawInitializerAnimatorComponent.tryInit()
-        if inited or edgeDrawInitializerAnimatorComponent.timeoutOccurred():
-            gameObject.removeComponent(edgeDrawInitializerAnimatorComponent)

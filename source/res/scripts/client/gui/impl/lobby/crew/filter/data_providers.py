@@ -37,6 +37,14 @@ class FilterableItemsDataProvider(object):
     def __getitem__(self, item):
         return self.items()[item]
 
+    def clear(self):
+        self.__initialItemsCount = None
+        self.__itemsCount = None
+        self.__vehSortHeap = None
+        self.__items = None
+        self.onDataChanged.clear()
+        return
+
     def items(self):
         if self.__items is None:
             self.__items = self.__vehSortHeap.getSortedList() if self.__vehSortHeap else []
@@ -124,6 +132,14 @@ class CompoundDataProvider(object):
     def __len__(self):
         return len(self.__dataProviders)
 
+    def clear(self):
+        for dataProvider in self.__dataProviders.itervalues():
+            dataProvider.clear()
+
+        self.__dataProviders = None
+        self.onDataChanged.clear()
+        return
+
     def reinit(self, *args, **kwargs):
         for dataProvider in self.__dataProviders.itervalues():
             dataProvider.reinit(*args, **kwargs)
@@ -161,6 +177,12 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         self.__tankman = tankman
         self.__vehicle = vehicle
         super(VehiclesDataProvider, self).__init__(state)
+
+    def clear(self):
+        self.__tankman = None
+        self.__vehicle = None
+        super(VehiclesDataProvider, self).clear()
+        return
 
     def items(self):
         items = super(VehiclesDataProvider, self).items()
@@ -253,6 +275,12 @@ class TankmenDataProvider(FilterableItemsDataProvider):
     def dissmissed(self):
         items = self._getDismissedTankmen()
         return self.__applyFilters(items)
+
+    def clear(self):
+        self.__inventoryTankmen = None
+        self.__dismissedTankmen = None
+        super(TankmenDataProvider, self).clear()
+        return
 
     def regular(self):
         items = self._getInventoryTankmen()
@@ -441,6 +469,13 @@ class TankmenChangeDataProvider(TankmenDataProvider):
         items = super(TankmenChangeDataProvider, self).items()
         return [self.__tankman] + items if items and self.__tankman else items
 
+    def clear(self):
+        self.__tankman = None
+        self.__vehicle = None
+        self.role = None
+        super(TankmenChangeDataProvider, self).clear()
+        return
+
     @property
     def role(self):
         return self.__role
@@ -540,6 +575,13 @@ class RecruitsChangeDataProvider(RecruitsDataProvider):
     def role(self):
         return self.__role
 
+    def clear(self):
+        self.__tankman = None
+        self.__vehicle = None
+        self.__role = None
+        super(RecruitsChangeDataProvider, self).clear()
+        return
+
     def reinit(self, tankman=None, role=None):
         self.__tankman = tankman
         self.__role = role
@@ -576,6 +618,11 @@ class CrewSkinsDataProvider(FilterableItemsDataProvider):
     def __init__(self, state, tankman):
         self.__tankman = tankman
         super(CrewSkinsDataProvider, self).__init__(state)
+
+    def clear(self):
+        self.__tankman = None
+        super(CrewSkinsDataProvider, self).clear()
+        return
 
     def reinit(self, tankman=None):
         self.__tankman = tankman
@@ -633,6 +680,12 @@ class DocumentsDataProvider(FilterableItemsDataProvider):
     @property
     def tankman(self):
         return self.__tankman
+
+    def clear(self):
+        self.__tankman = None
+        self.__seed = None
+        super(DocumentsDataProvider, self).clear()
+        return
 
     def reinit(self, tankman=None):
         self.__tankman = tankman

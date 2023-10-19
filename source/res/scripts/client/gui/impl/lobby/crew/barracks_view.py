@@ -98,6 +98,7 @@ class BarracksView(BaseTankmanListView):
     def _finalize(self):
         self.restore.onTankmenBufferUpdated -= self.__onTankmenBufferUpdated
         self.__dataProviders.unsubscribe()
+        self.__dataProviders.clear()
         super(BarracksView, self)._finalize()
         self.__uiLogger.finalize()
         self.__filterState = None

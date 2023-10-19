@@ -8,6 +8,7 @@ from cgf_script.component_meta_class import registerComponent, CGFMetaTypes, Com
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from cgf_components.hover_component import IsHoveredComponent, SelectionComponent
 from halloween.skeletons.gui.visibility_layer_controller import IHalloweenVisibilityLayerController
+from skeletons.gui.game_control import IHalloweenController
 if IS_CLIENT:
     from halloween.gui.shared.event_dispatcher import showMetaView
 
@@ -27,6 +28,7 @@ class ShowViewComponent(object):
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
 class ClickToOpenViewManager(CGF.ComponentManager):
     _visibilityLayerController = dependency.descriptor(IHalloweenVisibilityLayerController)
+    _hwController = dependency.descriptor(IHalloweenController)
 
     @onAddedQuery(SelectionComponent, ShowViewComponent, CGF.GameObject)
     def handleComponentAdded(self, selectionComponent, showViewComponent, go):
@@ -38,4 +40,6 @@ class ClickToOpenViewManager(CGF.ComponentManager):
 
     def __showView(self, go, showViewComponent):
         go.removeComponentByType(IsHoveredComponent)
-        showViewComponent.showView()
+        isEventHangar = self._hwController.isEventHangar()
+        if isEventHangar and self._hwController.isEnabled():
+            showViewComponent.showView()

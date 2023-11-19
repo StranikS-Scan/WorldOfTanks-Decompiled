@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	45	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -1682,9 +1682,9 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.400556 8 0.424444 4 0.575556 4 0.599444 8 1 8	</maxPitch>
+            <maxPitch>	0 5 0.400556 5 0.424444 4 0.575556 4 0.599444 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	6.5	</reloadTime>
+          <reloadTime>	7.3	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
@@ -2174,8 +2174,8 @@
     <detailed>
       <engines>
         <Skoda_AHK_TST>
-          <smplEnginePower>	900	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Skoda_AHK_TST>
       </engines>
       <chassis>

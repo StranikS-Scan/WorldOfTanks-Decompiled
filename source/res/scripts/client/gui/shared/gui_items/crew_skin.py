@@ -98,7 +98,10 @@ class CrewSkin(FittingItem):
 
     def getNewCount(self):
         totalCount = self.getTotalCount()
-        viewedCount = AccountSettings.getSettings(CREW_SKINS_VIEWED).get(self.__id, 0)
+        crewSkinViewed = AccountSettings.getSettings(CREW_SKINS_VIEWED)
+        viewedCount = 0
+        if isinstance(crewSkinViewed, dict):
+            viewedCount = AccountSettings.getSettings(CREW_SKINS_VIEWED).get(self.__id, 0)
         return totalCount - viewedCount if viewedCount < totalCount else 0
 
     def _getDescriptor(self):

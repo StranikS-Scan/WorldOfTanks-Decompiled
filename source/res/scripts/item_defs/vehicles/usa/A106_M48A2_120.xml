@@ -1608,6 +1608,14 @@
           </pitchLimits>
           <reloadTime>	9	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/american/A106_M48A2_120/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A106_M48A2_120/crash/lod0/Gun_01.model	</destroyed>
@@ -2303,7 +2311,7 @@
     <detailed>
       <engines>
         <Continental_AVI-1790-8>
-          <smplEnginePower>	872.257	</smplEnginePower>
+          <smplEnginePower>	825	</smplEnginePower>
           <smplFwMaxSpeed>	48.3	</smplFwMaxSpeed>
         </Continental_AVI-1790-8>
       </engines>

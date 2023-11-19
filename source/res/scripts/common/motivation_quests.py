@@ -33,7 +33,7 @@ class MotivationQuest(object):
 
 def motivationQuestsFromFile(pathToFile):
     quests = {}
-    for quest in readQuestsFromFile(pathToFile, (EVENT_TYPE.MOTIVE_QUEST,)):
+    for quest in readQuestsFromFile(pathToFile, EVENT_TYPE.MOTIVE_QUEST):
         questID, questName, questDescr, questClientData, node = quest
         questData = __parseMotivationsQuest(node)
         if questData is None:
@@ -49,9 +49,6 @@ class _QuestsCache(object):
 
     def __init__(self, quests):
         self.__quests = quests
-
-    def __contains__(self, questID):
-        return questID in self.__quests
 
     def getAllQuests(self):
         return self.__quests.values()

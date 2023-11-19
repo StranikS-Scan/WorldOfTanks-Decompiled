@@ -6,8 +6,10 @@ from frameworks.wulf import ViewModel
 class MetaRootViews(IntEnum):
     PROGRESSION = 0
     RANKREWARDS = 1
-    WEEKLYQUESTS = 2
-    LEADERBOARD = 3
+    YEARLYREWARDS = 2
+    WEEKLYQUESTS = 3
+    LEADERBOARD = 4
+    YEARLYSTATISTICS = 5
 
 
 class TabModel(ViewModel):

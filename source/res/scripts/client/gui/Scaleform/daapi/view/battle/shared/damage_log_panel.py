@@ -55,8 +55,7 @@ _SHELL_TYPES_TO_STR = {BATTLE_LOG_SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGEL
  BATTLE_LOG_SHELL_TYPES.HOLLOW_CHARGE: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
  BATTLE_LOG_SHELL_TYPES.HE_MODERN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  BATTLE_LOG_SHELL_TYPES.HE_LEGACY_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
- BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
- BATTLE_LOG_SHELL_TYPES.FLAME: INGAME_GUI.DAMAGELOG_SHELLTYPE_FLAME}
+ BATTLE_LOG_SHELL_TYPES.HE_LEGACY_NO_STUN: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE}
 HIDDEN_SHELL = ''
 
 def _formatTotalValue(value):
@@ -454,6 +453,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
         self.__isFullStatsShown = False
+        self.__isWinnerScreenShown = False
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
@@ -486,6 +486,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling += self._onVehicleControlling
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onWinnerScreen += self.__onWinnerScreen
         self.addListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -500,6 +503,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling -= self._onVehicleControlling
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onWinnerScreen -= self.__onWinnerScreen
         self.settingsCore.onSettingsChanged -= self._onSettingsChanged
         if self.__efficiencyCtrl is not None:
             self.__efficiencyCtrl.onTotalEfficiencyUpdated -= self._onTotalEfficiencyUpdated
@@ -563,7 +569,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             self.__bottomLog.addToLog(events)
 
     def _invalidatePanelVisibility(self):
-        if self.__isFullStatsShown:
+        if self.__isFullStatsShown or self.__isWinnerScreenShown:
             return
         else:
             isVisible = True
@@ -614,6 +620,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__isFullStatsShown = event.ctx['isDown']
         if not self.__isFullStatsShown:
             self._invalidatePanelVisibility()
+
+    def __onWinnerScreen(self):
+        self.__isWinnerScreenShown = True
 
     def _setTotalValue(self, etype, value):
         if BitmaskHelper.hasAnyBitSet(self.__totalDamageContentMask, etype):

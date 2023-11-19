@@ -153,7 +153,8 @@ class BATTLE_RESULTS(object):
     COMMON_PREMIUMBONUS_EXPIREDBATTLERESULT = '#battle_results:common/premiumBonus/expiredBattleResult'
     COMMON_PREMIUMBONUS_TANKSTATECHANGED = '#battle_results:common/premiumBonus/tankStateChanged'
     COMMON_PREMIUMBONUS_TANKMENSTATECHANGED = '#battle_results:common/premiumBonus/tankmenStateChanged'
-    COMMON_PREMIUMBONUS_ISXPTOTMENCHANGED = '#battle_results:common/premiumBonus/isXPToTmenChanged'
+    COMMON_PREMIUMBONUS_ISXPTOTMENENABLED = '#battle_results:common/premiumBonus/isXPToTmenEnabled'
+    COMMON_PREMIUMBONUS_ISXPTOTMENDISABLED = '#battle_results:common/premiumBonus/isXPToTmenDisabled'
     COMMON_PREMIUMBONUS_BONUSLEFT = '#battle_results:common/premiumBonus/bonusLeft'
     COMMON_PREMIUMBONUS_APPLIEDBONUS = '#battle_results:common/premiumBonus/appliedBonus'
     COMMON_PREMIUMBONUS_APPLYBONUSBTN = '#battle_results:common/premiumBonus/applyBonusBtn'
@@ -220,7 +221,6 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
-    TEAM_STATS_LABELS_FLAMEEXPLOSIONHITS = '#battle_results:team/stats/labels_flameExplosionHits'
     TEAM_STATS_LABELS_DAMAGEDEALT = '#battle_results:team/stats/labels_damageDealt'
     TEAM_STATS_LABELS_SNIPERDAMAGEDEALT = '#battle_results:team/stats/labels_sniperDamageDealt'
     TEAM_STATS_LABELS_DESTRUCTIBLESDAMAGEDEALT = '#battle_results:team/stats/labels_destructiblesDamageDealt'
@@ -357,6 +357,9 @@ class BATTLE_RESULTS(object):
     CUSTOMIZATIONPROGRESS_DESCR = '#battle_results:customizationProgress/descr'
     CUSTOMIZATIONPROGRESS_AWARD_RECEIVED = '#battle_results:customizationProgress/award/received'
     CUSTOMIZATIONPROGRESS_AWARD_NEWLEVEL = '#battle_results:customizationProgress/award/newLevel'
+    PRESTIGE_TITLE = '#battle_results:prestige/title'
+    PRESTIGE_COMMON_DESCRIPTION = '#battle_results:prestige/common/description'
+    PRESTIGE_MAX_DESCRIPTION = '#battle_results:prestige/max/description'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,
@@ -413,7 +416,6 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_SHOTS,
      TEAM_STATS_LABELS_HITS,
      TEAM_STATS_LABELS_EXPLOSIONHITS,
-     TEAM_STATS_LABELS_FLAMEEXPLOSIONHITS,
      TEAM_STATS_LABELS_DAMAGEDEALT,
      TEAM_STATS_LABELS_SNIPERDAMAGEDEALT,
      TEAM_STATS_LABELS_DESTRUCTIBLESDAMAGEDEALT,

@@ -269,6 +269,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__isVehicleMoving = False
         self.__deadOnLoading = False
         self.arena = None
+        self.__randomEvents = []
         return
 
     @property
@@ -528,6 +529,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.prebattleInvitations.setProxy(None)
         self.__initProgress = 0
         self.__vehicles = set()
+        self.__randomEvents = []
         self.__gunDamagedShootSound = None
         if self.__vehiclesWaitedInfo:
             self.__vehiclesWaitedInfo.clear()
@@ -570,20 +572,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.vehicle is not None:
             self.__consistentMatrices.notifyVehicleChanged(self)
             ctrl = self.guiSessionProvider.shared.vehicleState
-            if self.vehicle.stunInfo.stunFinishTime > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
+            if self.vehicle.stunInfo > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
             if self.__dualGunHelper is not None:
                 self.__dualGunHelper.reset()
             if self.vehicle.typeDescriptor.hasSiegeMode:
-                siegeState = self.vehicle.siegeState
-                siegeModeParams = self.vehicle.typeDescriptor.type.siegeModeParams
-                if siegeState == VEHICLE_SIEGE_STATE.ENABLED:
-                    switchingTime = siegeModeParams.get('switchOffTime', 0.0)
-                elif siegeState == VEHICLE_SIEGE_STATE.DISABLED:
-                    switchingTime = siegeModeParams.get('switchOnTime', 0.0)
-                else:
-                    switchingTime = self.vehicle.getSiegeSwitchTimeLeft()
-                self.updateSiegeStateStatus(self.vehicle.id, siegeState, switchingTime)
+                self.updateSiegeStateStatus(self.vehicle.id, self.vehicle.siegeState, self.vehicle.getSiegeSwitchTimeLeft())
             self.guiSessionProvider.shared.viewPoints.updateAttachedVehicle(self.vehicle.id)
             ctrl = self.guiSessionProvider.dynamic.vehicleCount
             if ctrl is not None:
@@ -780,7 +774,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         else:
                             Cat.Tasks.ScreenInfo.ScreenInfoObject.setVisible(True)
                         return True
-                if cmdMap.isFired(CommandMapping.CMD_INCREMENT_CRUISE_MODE, key) and isDown and self.__isVehicleAlive:
+                if cmdMap.isFired(CommandMapping.CMD_INCREMENT_CRUISE_MODE, key) and isDown and self.__isVehicleAlive and not self.__isGuiCtrlModeMovingDisabled():
                     if self.__stopUntilFire:
                         self.__stopUntilFire = False
                         self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
@@ -795,7 +789,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                             self.moveVehicle(self.makeVehicleMovementCommandByKeys(), isDown)
                     self.__updateCruiseControlPanel()
                     return True
-                if cmdMap.isFired(CommandMapping.CMD_DECREMENT_CRUISE_MODE, key) and isDown and self.__isVehicleAlive:
+                if cmdMap.isFired(CommandMapping.CMD_DECREMENT_CRUISE_MODE, key) and isDown and self.__isVehicleAlive and not self.__isGuiCtrlModeMovingDisabled():
                     if self.__stopUntilFire:
                         self.__stopUntilFire = False
                         self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
@@ -903,7 +897,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if app is None:
             return False
         else:
-            return not app.hasGuiControlModeConsumers(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER) if self.arenaGuiType == constants.ARENA_GUI_TYPE.COMP7 and self.arena.period <= ARENA_PERIOD.PREBATTLE else not self.isForcedGuiControlMode()
+            return not app.hasGuiControlModeConsumers(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER) if self.arenaGuiType in ARENA_GUI_TYPE.COMP7_RANGE and self.arena.period <= ARENA_PERIOD.PREBATTLE else not self.isForcedGuiControlMode()
 
     def set_playerVehicleID(self, *args):
         LOG_DEBUG('[INIT_STEPS] Avatar.set_playerVehicleID')
@@ -1138,6 +1132,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.goodiesSnapshot = updatedSnapshot
         self.onGoodiesSnapshotUpdated()
 
+    def onRandomEvent(self, eventName):
+        _logger.info('onRandomEvent happened, event name: %s', eventName)
+        self.__randomEvents.append(eventName)
+
     def onSwitchViewpoint(self, vehicleID, position):
         LOG_DEBUG('onSwitchViewpoint', vehicleID, position)
         self.onSwitchingViewPoint()
@@ -1176,6 +1174,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.HEALTH, health, vehicleID)
             if not wasAlive and isAlive:
                 self.__disableRespawnMode = True
+                self.__isObserver = None
                 self.guiSessionProvider.movingToRespawnBase(BigWorld.entities.get(self.playerVehicleID))
                 self.inputHandler.movingToRespawnBase()
                 if self.vehicle:
@@ -1267,7 +1266,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__aimingBooster = None
         return
 
-    def updateVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClipOrNextStage, previousStage, timeRemaining, totalTime, index=None):
+    def updateVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClipOrNextStage, previousStage, timeRemaining, totalTime, index=0):
         LOG_DEBUG_DEV('updateVehicleAmmo vehicleID={}, compactDescr={}'.format(vehicleID, compactDescr))
         if not compactDescr:
             itemTypeIdx = ITEM_TYPE_INDICES['equipment']
@@ -1277,16 +1276,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if processor:
             if itemTypeIdx == ITEM_TYPE_INDICES['equipment'] and self.arena.period == ARENA_PERIOD.BATTLE:
                 self.guiSessionProvider.shared.equipments.setServerPrevStage(previousStage, compactDescr)
-            getattr(self, processor)(vehicleID, compactDescr, quantity, quantityInClipOrNextStage, timeRemaining, totalTime)
+            getattr(self, processor)(vehicleID, compactDescr, quantity, quantityInClipOrNextStage, timeRemaining, totalTime, index)
         else:
             LOG_WARNING('Not supported item type index', itemTypeIdx)
 
     __updateConsumablesProcessors = {ITEM_TYPE_INDICES['shell']: '_PlayerAvatar__processVehicleAmmo',
      ITEM_TYPE_INDICES['equipment']: '_PlayerAvatar__processVehicleEquipments'}
 
-    def resetVehicleAmmo(self, oldCompactDescr, newCompactDescr, quantity, stage, timeRemaining, totalTime):
+    def resetVehicleAmmo(self, oldCompactDescr, newCompactDescr, quantity, stage, timeRemaining, totalTime, index):
         LOG_DEBUG_DEV('resetVehicleAmmo oldCompactDescr={}, newCompactDescr={}'.format(oldCompactDescr, newCompactDescr))
-        self.guiSessionProvider.shared.equipments.resetEquipment(oldCompactDescr, newCompactDescr, quantity, stage, timeRemaining, totalTime)
+        self.guiSessionProvider.shared.equipments.resetEquipment(oldCompactDescr, newCompactDescr, quantity, stage, timeRemaining, totalTime, index=index)
         CommandMapping.g_instance.onMappingChanged()
 
     def updateVehicleOptionalDeviceStatus(self, vehicleID, deviceID, isOn):
@@ -1406,6 +1405,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if ctrl is not None:
                 ctrl.onVehicleStatusChanged()
             return
+
+    def setVehicleOverturned(self, isOverturned):
+        self.__isVehicleOverturned = isOverturned
 
     def updateVehicleSettings(self, vehicleSettings):
         for vehicleSetting in vehicleSettings:
@@ -1787,7 +1789,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             vehicle.showVehicleCollisionEffect(point, 10, energy / 1000.0)
         return
 
-    def makeDenunciation(self, violatorID, topicID, violatorKind, _):
+    def makeDenunciation(self, violatorID, topicID, violatorKind):
         if self.denunciationsLeft <= 0:
             return
         self.denunciationsLeft -= 1
@@ -2014,7 +2016,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             canShoot, error = self.guiSessionProvider.shared.ammo.canShoot(isRepeat)
             if not canShoot:
                 if not isRepeat and error in self.__cantShootCriticals:
-                    self.showVehicleError(self.__cantShootCriticals[error], args={'typeDescriptor': self.getVehicleDescriptor()})
+                    self.showVehicleError(self.__cantShootCriticals[error])
                 return
             if self.__gunReloadCommandWaitEndTime > BigWorld.time():
                 return
@@ -2074,7 +2076,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             canShoot, error = self.guiSessionProvider.shared.ammo.canShoot(False)
             if not canShoot:
                 if error in self.__cantShootCriticals:
-                    self.showVehicleError(self.__cantShootCriticals[error], args={'typeDescriptor': self.getVehicleDescriptor()})
+                    self.showVehicleError(self.__cantShootCriticals[error])
                 return
             self.cell.setDualGunCharger(chargeActionType)
             return
@@ -2111,7 +2113,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def leaveArena(self):
         _logger.info('Avatar.leaveArena')
         from helpers import statistics
-        self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team)
+        self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team, self.__randomEvents)
         self.statsCollector.needCollectSessionData(True)
         self.statsCollector.noteHangarLoadingState(statistics.HANGAR_LOADING_STATE.CONNECTED, True)
         try:
@@ -2126,7 +2128,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         g_playerEvents.onPlayerEntityChanging()
         self.__cancelWaitingForCharge()
         self.__setIsOnArena(False)
-        self.base.leaveArena(None)
+        self.base.leaveArena()
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             BigWorld.callback(0.0, replayCtrl.stop)
@@ -2136,9 +2138,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def __reportClientStats(self):
-        sessionData = self.statsCollector.getSessionData()
-        if sessionData and self.lobbyContext.collectUiStats:
-            report = {key:sessionData[key] for key in sessionData if key in ('ping_lt_50', 'ping_51_100', 'ping_101_150', 'ping_151_400', 'ping_gt_400', 'lag')}
+        stats = BigWorld.wg_getClientStatistics()
+        if stats and self.lobbyContext.collectUiStats:
+            report = {key:stats[key] for key in ('ping_lt_50', 'ping_51_100', 'ping_101_150', 'ping_151_400', 'ping_gt_400', 'lag')}
             self.cell.reportClientStats(report)
 
     def addBotToArena(self, vehicleTypeName, team, pos=DEFAULT_VECTOR_3, group=0):
@@ -2221,10 +2223,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         observedMatrix = self.getObservedVehicleStabilisedMatrix()
         return observedMatrix if observedMatrix is not None else self.__ownVehicleStabMProv
 
-    def getOwnVehicleSpeeds(self, getInstantaneous=False):
+    def getOwnVehicleSpeeds(self, getInstantaneous=False, isAttached=False):
         vehicle = BigWorld.entity(self.playerVehicleID)
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or isAttached:
             vehicle = player.getVehicleAttached()
         if vehicle is None or not vehicle.isStarted:
             return (0.0, 0.0)
@@ -2386,9 +2388,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def logXMPPEvents(self, intArr, strArr):
         self._doCmdIntArrStrArr(AccountCommands.CMD_LOG_CLIENT_XMPP_EVENTS, intArr, strArr, None)
         return
-
-    def logMemoryCriticalEvent(self, memCritEvent):
-        self.base.logMemoryCriticalEvent(memCritEvent)
 
     def activateGoodie(self, goodieID, callback=None):
         if callback is None:
@@ -2905,7 +2904,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
             return
 
-    def __processVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClip, _, __):
+    def __processVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClip, _, __, ___):
         isObserver = BigWorld.player().isObserver()
         if not isObserver:
             vehicle = BigWorld.entities.get(vehicleID)
@@ -2920,14 +2919,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.guiSessionProvider.shared.ammo.setShells(compactDescr, quantity, quantityInClip)
             return
 
-    def __processVehicleEquipments(self, vehicleID, compactDescr, quantity, stage, timeRemaining, totalTime):
+    def __processVehicleEquipments(self, vehicleID, compactDescr, quantity, stage, timeRemaining, totalTime, index=None):
         if compactDescr:
             descriptor = vehicles.getItemByCompactDescr(compactDescr)
             if descriptor.name == 'aimingStabilizerBattleBooster':
                 self.__aimingBooster = descriptor
         currentVehicle = self.getVehicleAttached()
         if currentVehicle is not None and vehicleID == currentVehicle.id:
-            self.guiSessionProvider.shared.equipments.setEquipment(compactDescr, quantity, stage, timeRemaining, totalTime)
+            self.guiSessionProvider.shared.equipments.setEquipment(compactDescr, quantity, stage, timeRemaining, totalTime, index)
         return
 
     def __isOwnBarrelUnderWater(self):
@@ -3026,6 +3025,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def change_rank_xp(self, value):
         self.base.setDevelopmentFeature(0, 'change_rank_xp', value, '')
 
+    def flRandomReservesOffer(self, *value):
+        strArgs = ','.join(map(str, value))
+        self.base.setDevelopmentFeature(0, 'flRandomReservesOffer', 0, strArgs)
+
+    def flGetAbilitysProperties(self):
+        self.base.setDevelopmentFeature(0, 'flGetAbilitysProperties', 0, '')
+
     def receivePhysicsDebugInfo(self, info):
         modifD = dict()
         self.telemetry.receivePhysicsDebugInfo(info, modifD)
@@ -3057,6 +3063,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return desc
             return vehicleAttached.typeDescriptor
             return
+
+    def __isGuiCtrlModeMovingDisabled(self):
+        return self.isForcedGuiControlMode() and self.getForcedGuiControlModeFlags() & GUI_CTRL_MODE_FLAG.MOVING_DISABLED > 0
 
     def muteSounds(self, newMuteSounds):
         self._muteSounds = newMuteSounds

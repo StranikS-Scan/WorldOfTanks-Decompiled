@@ -123,8 +123,8 @@ class BaseTankmanListView(BaseCrewSoundView):
 
     def _onPlayVoiceover(self, recruitID):
         recruitInfo = recruit_helper.getRecruitInfo(recruitID)
-        specialVoiceTag = recruitInfo.getSpecialVoiceTag()
-        voiceoverParams = self.specialSounds.getVoiceoverByTankmanTag(specialVoiceTag)
+        specialVoiceTag = recruitInfo.getSpecialVoiceTag(self.specialSounds)
+        voiceoverParams = self.specialSounds.getVoiceoverByTankmanTagOrVehicle(specialVoiceTag)
         if voiceoverParams is None:
             return
         else:

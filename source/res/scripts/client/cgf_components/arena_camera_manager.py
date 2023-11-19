@@ -15,10 +15,10 @@ class ArenaCameraManager(CGF.ComponentManager):
     def getCameraTransform(self, name):
         return self.__cameras.get(name)
 
-    @onAddedQuery(CameraComponent, TransformComponent, tickGroup='preInitGroup')
+    @onAddedQuery(CameraComponent, TransformComponent, tickGroup='PostHierarchy')
     def onCameraAdded(self, cameraComponent, transformComponent):
         self.__cameras[cameraComponent.name] = transformComponent.worldTransform
 
-    @onRemovedQuery(CameraComponent, tickGroup='preInitGroup')
+    @onRemovedQuery(CameraComponent)
     def onCameraRemoved(self, cameraComponent):
         self.__cameras.pop(cameraComponent.name)

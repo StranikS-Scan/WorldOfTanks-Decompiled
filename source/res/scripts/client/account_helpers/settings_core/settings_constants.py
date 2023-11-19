@@ -221,11 +221,6 @@ class MARKERS(CONST_CONTAINER):
     DEAD = 'dead'
 
 
-class MARKER_SETTINGS(CONST_CONTAINER):
-    MARKER_BASE_VEHICLE_DIST = 'markerBaseVehicleDist'
-    MARKER_ALT_VEHICLE_DIST = 'markerAltVehicleDist'
-
-
 class FEEDBACK(CONST_CONTAINER):
     DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     DAMAGE_LOG = 'feedbackDamageLog'
@@ -274,6 +269,7 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
     ENEMIES_STUN = 'battleEventsEnemyStun'
+    CREW_PERKS = 'battleEventsCrewPerks'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
@@ -313,7 +309,10 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
     COMP7_INTRO_SHOWN = 'isComp7IntroShown'
     COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
+    COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
+    IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
+    PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -379,8 +378,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_MATTERS_FIGHT_BUTTON_HINT = 'BattleMattersFightButtonHint'
     BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT = 'BattleMattersEntryPointHint'
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'
-    REFERRAL_RECRUIT_ENTRY_POINT_HINT = 'ReferralRecruitEntryPointHint'
-    REFERRAL_ENTRY_POINT_HINT = 'ReferralEntryPointHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

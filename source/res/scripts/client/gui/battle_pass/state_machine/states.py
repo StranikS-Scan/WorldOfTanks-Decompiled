@@ -4,7 +4,7 @@ from functools import partial
 import typing
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, showBPGamefaceVideo, getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import asBPVideoName, getStyleForChapter, getStyleInfoForChapter, makeChapterMediaName, makeProgressionStyleMediaName, showBPFullscreenVideo
 from gui.battle_pass.state_machine import lockNotificationManager
 from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose
 from gui.impl.gen import R
@@ -139,6 +139,7 @@ class PreviewState(State):
 
 
 class VideoState(State):
+    __battlePass = dependency.descriptor(IBattlePassController)
     __slots__ = ()
 
     def __init__(self):
@@ -148,8 +149,16 @@ class VideoState(State):
         machine = self.getMachine()
         if machine is not None:
             chapter = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapter)
-            showBPGamefaceVideo(chapter, level, onVideoClosed=partial(machine.post, StateEvent()))
+            if chapter is not None:
+                _, level = getStyleInfoForChapter(chapter)
+                mediaName = makeProgressionStyleMediaName(chapter, level)
+                showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
+            else:
+                _, data, _ = machine.getRewardsData()
+                chapterID = data.get('chapter')
+                if self.__battlePass.isExtraChapter(chapterID):
+                    mediaName = makeChapterMediaName(chapterID)
+                    showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
         return
 
 
@@ -192,7 +201,7 @@ class RewardStyleState(State):
             style = getStyleForChapter(chapterID)
             additionalRewards, _, _ = machine.getRewardsData()
             needNotifyClosing = not additionalRewards
-            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel() or level < 0:
+            if style is not None and style.getProgressionLevel() == style.getMaxProgressionLevel():
                 machine.post(StateEvent())
                 return
             prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
@@ -232,10 +241,9 @@ class RewardAnyState(State):
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
                 _, level = getStyleInfoForChapter(chapter)
-                if level > -1:
-                    styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
-                    rewards.append(packToken(styleToken))
-                    machine.clearChapterStyle()
+                styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapter, level)
+                rewards.append(packToken(styleToken))
+                machine.clearChapterStyle()
             if not rewards and not packageRewards:
                 machine.clearSelf()
                 machine.post(StateEvent())
@@ -271,5 +279,8 @@ class RewardAnyState(State):
         if machine is not None:
             machine.clearSelf()
             machine.post(StateEvent())
-        showBattlePassBuyWindow()
+        callBack = None
+        if not self.__battlePass.getCurrentChapterID():
+            callBack = partial(showMissionsBattlePass, R.views.lobby.battle_pass.ChapterChoiceView())
+        showBattlePassBuyWindow({'backCallback': callBack})
         return

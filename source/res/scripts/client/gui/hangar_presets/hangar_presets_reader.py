@@ -123,3 +123,30 @@ class DefaultPresetReader(IPresetReader):
             baseHiddenComponents[compName] = compSettings
 
         return HangarGuiPreset(baseVisibleComponents, baseHiddenComponents)
+
+
+class DefaultSubPresetReader(DefaultPresetReader):
+    _SUB_TYPES_KEY = 'subTypes'
+
+    @staticmethod
+    def isDefault():
+        return False
+
+    @classmethod
+    def _getPreset(cls, presetName, config):
+        if not config.has_key(cls._SUB_TYPES_KEY):
+            raise SoftException('Missing {} section for {}'.format(cls._SUB_TYPES_KEY, cls._CONFIG_PATH))
+        return {subType:presetName for subType in map(int, config[cls._SUB_TYPES_KEY].asString.split())}
+
+    @classmethod
+    def _updateItems(cls, items, queueType, preset):
+        presets = items.get(queueType, {})
+        if not presets:
+            items[queueType] = preset
+        else:
+            items[queueType].update(preset)
+
+
+class SpecBattlePresetReader(DefaultSubPresetReader):
+    _CONFIG_PATH = 'gui/hangar_gui_spec_presets.xml'
+    _SUB_TYPES_KEY = 'guiTypes'

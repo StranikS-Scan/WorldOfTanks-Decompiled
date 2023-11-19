@@ -155,15 +155,15 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         super(MapsTrainingController, self).fini()
 
     def onEnter(self):
+        self.__preferences.load()
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        g_playerEvents.onDisconnected += self.__onDisconnected
+        self.c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
         if self.__isAfterBattle():
             battleCtx = self.sessionProvider.getCtx()
             event_dispatcher.showMapsTrainingResultsWindow(battleCtx.lastArenaUniqueID, False)
         else:
-            self.__preferences.load()
-            g_playerEvents.onDisconnected += self.__onDisconnected
             g_eventBus.addListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-            self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-            self.c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
             self.showMapsTrainingPage()
 
     def onExit(self):

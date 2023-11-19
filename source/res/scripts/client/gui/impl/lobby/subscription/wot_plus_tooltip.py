@@ -31,7 +31,9 @@ class WotPlusTooltip(ViewImpl):
     def _onLoading(self):
         super(WotPlusTooltip, self)._onLoading()
         with self.viewModel.transaction() as model:
-            model.setNextCharge(backport.getShortDateFormat(self._wotPlusCtrl.getExpiryTime()))
+            model.setExpirationDate(backport.getShortDateFormat(self._wotPlusCtrl.getExpiryTime()))
+            if self._wotPlusCtrl.getNextBillingTime():
+                model.setNextCharge(backport.getShortDateFormat(self._wotPlusCtrl.getNextBillingTime()))
             model.setState(self._wotPlusCtrl.getState())
             bonuses = self._wotPlusCtrl.getEnabledBonuses()
             bonusList = model.getBonuses()

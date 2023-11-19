@@ -13,7 +13,7 @@ from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
@@ -27,6 +27,7 @@ from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getLastSkillSequenceNum
+from gui.prestige.prestige_helpers import mapGradeIDToUI, getCurrentGrade, getCurrentProgress, prestigePointsToXP, hasVehiclePrestige, MAX_GRADE_ID
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
@@ -41,7 +42,8 @@ from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from skeletons.gui.game_control import IBattlePassController, IDebutBoxesController
+from shared_utils import first
+from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -450,7 +452,6 @@ class Comp7BattlePassProgressBlock(BattlePassProgressBlock):
 
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
-    __debutBoxesController = dependency.descriptor(IDebutBoxesController)
     __slots__ = ()
 
     def getVO(self):
@@ -461,13 +462,10 @@ class QuestsProgressBlock(base.StatsBlock):
         commonQuests = []
         c11nQuests = []
         personalMissions = {}
-        debutBoxesQuests = []
         allCommonQuests = self.eventsCache.getQuests()
         allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
         battleMattersProgressData = []
         questsProgress = reusable.personal.getQuestsProgress()
-        debutBoxesQuestsIDs = self.__debutBoxesController.getQuestsIDs()
-        vehicleCDs = list((vehCD for vehCD, _ in reusable.personal.getVehicleCDsIterator(result)))
         if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
@@ -483,10 +481,6 @@ class QuestsProgressBlock(base.StatsBlock):
                     data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
                         battleMattersProgressData.append(data)
-                if qID in debutBoxesQuestsIDs:
-                    data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
-                    if data:
-                        debutBoxesQuests.append(data)
                 if qID in allCommonQuests:
                     data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
@@ -500,11 +494,6 @@ class QuestsProgressBlock(base.StatsBlock):
 
         for e, pCur, pPrev, reset, complete in battleMattersProgressData:
             info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
-            if info is not None:
-                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
-
-        for e, pCur, pPrev, reset, complete in debutBoxesQuests:
-            info = DebutBoxesQuestPostBattleInfo(e).getPostBattleInfo(allCommonQuests, pCur, pPrev, reset, complete, {'vehicleCDs': vehicleCDs})
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
@@ -695,3 +684,39 @@ class QuestProgressiveCustomizationVO(base.DirectStatsItem):
             self._value['linkBtnEnabled'] = linkBtnEnabled
             self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)
         return self._value
+
+
+class PrestigeProgressVO(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, result, reusable):
+        prestigeResults = reusable.personal.getPrestigeResults()
+        data = first(prestigeResults.items())
+        if not data:
+            return None
+        else:
+            vehCD, prestigeData = data
+            if not hasVehiclePrestige(vehCD, checkElite=True):
+                return None
+            return None if not prestigeData or prestigeData['oldLevel'] <= 0 or prestigeData['newLevel'] <= 0 else self.createPrestigeInfo(vehCD, prestigeData)
+
+    @classmethod
+    def createPrestigeInfo(cls, vehCD, prestigeData):
+        oldLvl = prestigeData['oldLevel']
+        gainedPoints = prestigeData['gainedPoints']
+        if getCurrentGrade(oldLvl, vehCD) == MAX_GRADE_ID or gainedPoints == 0:
+            return None
+        else:
+            newLvl = prestigeData['newLevel']
+            newPoints = prestigeData['newPoints']
+            gradeType, grade = mapGradeIDToUI(getCurrentGrade(newLvl, vehCD))
+            currentXP, nextLvlXP = getCurrentProgress(vehCD, newLvl, newPoints)
+            gainedXP = prestigePointsToXP(gainedPoints)
+            return {'vehCD': vehCD,
+             'gradeType': gradeType.value,
+             'grade': str(grade),
+             'lvl': str(newLvl),
+             'currentXP': currentXP,
+             'nextLvlXP': nextLvlXP,
+             'gainedXP': '+ {}'.format(backport.getIntegralFormat(gainedXP)),
+             'isLvlUp': oldLvl < newLvl}

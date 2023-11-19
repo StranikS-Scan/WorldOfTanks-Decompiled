@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/widget_view.py
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget_view_model import WidgetViewModel, BattleStatus
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.gui.impl.lobby.tooltips.widget_tooltip_view import WidgetTooltipView
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
@@ -19,6 +20,9 @@ class WidgetView(ViewImpl):
         settings.model = WidgetViewModel()
         super(WidgetView, self).__init__(settings)
 
+    def createToolTipContent(self, event, contentID):
+        return WidgetTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.WidgetTooltipView() else super(WidgetView, self).createToolTipContent(event, contentID)
+
     @property
     def viewModel(self):
         return super(WidgetView, self).getViewModel()
@@ -31,7 +35,8 @@ class WidgetView(ViewImpl):
             currentStage = self.brProgression.getCurrentStageData().get('currentStage')
         with self.viewModel.transaction() as model:
             model.setCurrentProgression(currentStage)
-            model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress or not isPrimeTime else BattleStatus.COMPLETED)
+            model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress else BattleStatus.COMPLETED)
+            model.setIsAlertMode(not isPrimeTime)
 
     def _onLoading(self, *args, **kwargs):
         super(WidgetView, self)._onLoading(args, kwargs)

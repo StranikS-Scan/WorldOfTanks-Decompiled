@@ -130,6 +130,10 @@ class DIALOGS(object):
     BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
+    XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
+    XPTOTMENCHECKBOX_MESSAGE = '#dialogs:xpToTmenCheckbox/message'
+    XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
+    XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
     IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
     IDLECREWBONUS_MESSAGE_REMOVETYPE = '#dialogs:idleCrewBonus/message/removeType'
     IDLECREWBONUS_MESSAGE_REMOVENAME = '#dialogs:idleCrewBonus/message/removeName'
@@ -922,6 +926,8 @@ class DIALOGS(object):
     BATTLEROYALE_PREBATTLE_SUBMIT = '#dialogs:battleRoyale/preBattle/submit'
     BATTLEROYALE_PREBATTLE_CANCEL = '#dialogs:battleRoyale/preBattle/cancel'
     ACCOUNTCOMPLETION_SUBMIT = '#dialogs:accountCompletion/submit'
+    ACCOUNTCOMPLETION_ADD = '#dialogs:accountCompletion/add'
+    ACCOUNTCOMPLETION_LATER = '#dialogs:accountCompletion/later'
     ACCOUNTCOMPLETION_CANCEL = '#dialogs:accountCompletion/cancel'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED = '#dialogs:accountCompletion/warningServerUnavailableTimed'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE = '#dialogs:accountCompletion/warningServerUnavailable'
@@ -954,7 +960,7 @@ class DIALOGS(object):
     ACCOUNTCOMPLETION_ACTIVATE_KEYDIED = '#dialogs:accountCompletion/activate/keyDied'
     ACCOUNTCOMPLETION_ACTIVATE_ENTERCREDENTIALSAGAIN = '#dialogs:accountCompletion/activate/enterCredentialsAgain'
     ACCOUNTCOMPLETION_ACTIVATE_BUTTON = '#dialogs:accountCompletion/activate/button'
-    ACCOUNTCOMPLETION_ACTIVATE_COUNDOWNTEXT = '#dialogs:accountCompletion/activate/coundownText'
+    ACCOUNTCOMPLETION_ACTIVATE_COUNTDOWNTEXT = '#dialogs:accountCompletion/activate/countdownText'
     ACCOUNTCOMPLETION_ALREADYLINKED_TITLE = '#dialogs:accountCompletion/alreadyLinked/title'
     ACCOUNTCOMPLETION_ALREADYLINKED_SUBTITLE = '#dialogs:accountCompletion/alreadyLinked/subTitle'
     ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT = '#dialogs:accountCompletion/emailOverlay/error/codeAlreadySent'
@@ -1222,6 +1228,10 @@ class DIALOGS(object):
      BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
+     XPTOTMENCHECKBOX_TITLE,
+     XPTOTMENCHECKBOX_MESSAGE,
+     XPTOTMENCHECKBOX_SUBMIT,
+     XPTOTMENCHECKBOX_CANCEL,
      IDLECREWBONUS_TITLE,
      IDLECREWBONUS_MESSAGE_REMOVETYPE,
      IDLECREWBONUS_MESSAGE_REMOVENAME,
@@ -2014,6 +2024,8 @@ class DIALOGS(object):
      BATTLEROYALE_PREBATTLE_SUBMIT,
      BATTLEROYALE_PREBATTLE_CANCEL,
      ACCOUNTCOMPLETION_SUBMIT,
+     ACCOUNTCOMPLETION_ADD,
+     ACCOUNTCOMPLETION_LATER,
      ACCOUNTCOMPLETION_CANCEL,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE,
@@ -2046,7 +2058,7 @@ class DIALOGS(object):
      ACCOUNTCOMPLETION_ACTIVATE_KEYDIED,
      ACCOUNTCOMPLETION_ACTIVATE_ENTERCREDENTIALSAGAIN,
      ACCOUNTCOMPLETION_ACTIVATE_BUTTON,
-     ACCOUNTCOMPLETION_ACTIVATE_COUNDOWNTEXT,
+     ACCOUNTCOMPLETION_ACTIVATE_COUNTDOWNTEXT,
      ACCOUNTCOMPLETION_ALREADYLINKED_TITLE,
      ACCOUNTCOMPLETION_ALREADYLINKED_SUBTITLE,
      ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT,

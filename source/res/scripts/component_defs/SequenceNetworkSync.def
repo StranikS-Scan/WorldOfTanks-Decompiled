@@ -9,6 +9,17 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </state>
   </Properties>
-  <ClientMethods></ClientMethods>
+  <CellMethods>
+    <setState>
+      <Exposed></Exposed>
+      <Args>
+        <state>	UINT8	</state>
+        <time>	FLOAT	</time>
+      </Args>
+      <ReturnValues>
+        <result>	BOOL	</result>
+      </ReturnValues>
+    </setState>
+  </CellMethods>
   <DefaultKeyName>	sequenceNetworkSync	</DefaultKeyName>
 </SequenceNetworkSync.def>

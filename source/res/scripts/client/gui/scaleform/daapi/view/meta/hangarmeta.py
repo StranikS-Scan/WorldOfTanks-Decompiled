@@ -61,11 +61,8 @@ class HangarMeta(View):
     def as_hideTeaserTimerS(self):
         return self.flashObject.as_hideTeaserTimer() if self._isDAAPIInited() else None
 
-    def as_createDQWidgetS(self):
-        return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
-
-    def as_destroyDQWidgetS(self):
-        return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
+    def as_setPrestigeWidgetVisibleS(self, value):
+        return self.flashObject.as_setPrestigeWidgetVisible(value) if self._isDAAPIInited() else None
 
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
@@ -78,9 +75,3 @@ class HangarMeta(View):
 
     def as_updateHangarComponentsS(self, showComponents=None, hideComponents=None):
         return self.flashObject.as_updateHangarComponents(showComponents, hideComponents) if self._isDAAPIInited() else None
-
-    def as_createFunRandomNYWidgetS(self):
-        return self.flashObject.as_createFunRandomNYWidget() if self._isDAAPIInited() else None
-
-    def as_removeFunRandomNYWidgetS(self):
-        return self.flashObject.as_removeFunRandomNYWidget() if self._isDAAPIInited() else None

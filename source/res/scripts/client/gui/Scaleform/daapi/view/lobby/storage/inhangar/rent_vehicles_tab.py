@@ -5,8 +5,6 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataP
 from gui.Scaleform.daapi.view.meta.RentVehiclesTabViewMeta import RentVehiclesTabViewMeta
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -45,13 +43,11 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
     def _buildVehicle(self, item):
         vo = super(_RentVehiclesDataProvider, self)._buildVehicle(item)
         rentText = RentLeftFormatter(item.rentInfo, item.isPremiumIGR).getRentLeftStr() or _ms(MENU.STORE_VEHICLESTATES_RENTALISOVER)
-        actionButtonLabel = backport.text(R.strings.storage.buttonLabel.remove())
         vo.update({'isMoneyEnough': True,
          'enabled': item.canSell and item.rentalIsOver and not item.isTelecomRent,
          'rentText': rentText,
          'rentIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1,
-         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM,
-         'actionButtonLabel': actionButtonLabel})
+         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM})
         return vo
 
 

@@ -43,6 +43,7 @@ class StatsComposer(IStatsComposer):
         self._block.addNextComponent(self._getBattlePassBlock().clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PRESTIGE_PROGRESS_VO.clone())
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)
@@ -251,6 +252,18 @@ class Comp7StatsComposer(StatsComposer):
         return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
+class TournamentComp7StatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(TournamentComp7StatsComposer, self).__init__(reusable, templates.TOURNAMENT_COMP7_COMMON_STATS_BLOCK.clone(), templates.TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
+        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
+
+    @staticmethod
+    def _getBattlePassBlock():
+        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     composer = collectBattleResultsComposer(bonusType)
@@ -270,3 +283,4 @@ for bt in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
 registerBattleResultsComposer(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)

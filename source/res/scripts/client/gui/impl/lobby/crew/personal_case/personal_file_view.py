@@ -101,6 +101,7 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
 
     def __update(self, reason, diff):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
+            self.__fillModel()
             return
         if self.tankmanID in diff.get(GUI_ITEM_TYPE.TANKMAN, {}):
             if self.itemsCache.items.getTankman(self.tankmanID):

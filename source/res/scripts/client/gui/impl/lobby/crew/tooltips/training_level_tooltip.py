@@ -39,17 +39,11 @@ class TrainingLevelTooltip(ViewImpl):
             modifiersVL = vm.getModifiers()
             self._addModifier(modifiersVL, self._tankman.roleLevel, backport.text(MODIFIERS_LOC.baseLevel()))
             nativeVehicle = self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr)
-            fillVehicleInfo(vm.nativeVehicle, nativeVehicle, True)
+            fillVehicleInfo(vm.nativeVehicle, nativeVehicle, True, nativeVehicle.tags)
             vm.setNation(nativeVehicle.nationName)
-            for tag in nativeVehicle.tags:
-                vm.nativeVehicle.getTags().addString(tag)
-
             if self._tankman.isInTank:
                 vehicle = self._itemsCache.items.getVehicle(self._tankman.vehicleInvID)
-                fillVehicleInfo(vm.currentVehicle, vehicle, True)
-                for tag in vehicle.tags:
-                    vm.currentVehicle.getTags().addString(tag)
-
+                fillVehicleInfo(vm.currentVehicle, vehicle, True, vehicle.tags)
             b = self._tankman.realRoleLevel.bonuses
             if b.commBonus:
                 self._addModifier(modifiersVL, b.commBonus, backport.text(MODIFIERS_LOC.commanderBonus()))

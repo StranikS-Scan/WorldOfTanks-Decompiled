@@ -45,7 +45,7 @@ class PersonalDataView(IPersonalTab, BasePersonalCaseView):
         self.tankmanID = kwargs.get('tankmanID')
         settings = ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, PersonalDataViewModel())
         self.__tankman = None
-        self.__filterState = FilterState({FilterState.GROUPS.PERSONALDATATYPE.value: ['suitableSkin', 'document']})
+        self.__filterState = FilterState()
         self.filterPanelWidget = FilterPanelWidget(getPersonalDataCardTypeSettings(), None, R.strings.crew.filter.popup.skinChange.title(), self.__filterState, panelType=FilterPanelType.PERSONALDATA, popoverTooltipHeader=R.strings.crew.personalData.filter.tooltip.popoverButton.title(), popoverTooltipBody=R.strings.crew.personalData.filter.tooltip.popoverButton.body())
         self.__dataProviders = CompoundDataProvider(skins=CrewSkinsDataProvider(self.__filterState, self.tankman), documents=DocumentsDataProvider(self.__filterState, self.tankman))
         super(PersonalDataView, self).__init__(settings, **kwargs)
@@ -99,7 +99,6 @@ class PersonalDataView(IPersonalTab, BasePersonalCaseView):
     def _finalize(self):
         self._clear()
         self.__dataProviders.unsubscribe()
-        self.__dataProviders.clear()
         super(PersonalDataView, self)._finalize()
 
     def __onMembersUpdate(self):

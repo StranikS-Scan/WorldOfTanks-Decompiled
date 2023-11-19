@@ -6,7 +6,7 @@
     <shortDescriptionSpecial>	#artefacts:improvedConfigurationBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:improvedConfigurationBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	improvedConfiguration	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	6	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <vehicleFilter>
@@ -151,7 +151,7 @@
     <shortDescriptionSpecial>	#artefacts:coatedOpticsBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:coatedOpticsBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	coatedOptics	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	8	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <tags>	notForSale equipmentBattleBooster reconnaissance	</tags>
@@ -172,7 +172,7 @@
           </tags>
         </deviceFilter>
         <attribute>	circularVisionRadius	</attribute>
-        <factor>	1.022	</factor>
+        <factor>	1.023	</factor>
       </level>
     </script>
     <kpi>
@@ -189,7 +189,7 @@
     <shortDescriptionSpecial>	#artefacts:aimingStabilizerBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:aimingStabilizerBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	aimingStabilizer	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	10	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <vehicleFilter>
@@ -234,7 +234,7 @@
     <shortDescriptionSpecial>	#artefacts:enhancedAimDrivesBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:enhancedAimDrivesBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	enhancedAimDrives	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	10	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <tags>	notForSale equipmentBattleBooster firepower	</tags>
@@ -281,7 +281,7 @@
     <shortDescriptionSpecial>	#artefacts:camouflageBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:camouflageBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	naturalCover	</icon>
-    <price>	10000	</price>
+    <price>	20000	</price>
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster camouflage	</tags>
     <script>	FactorSkillBattleBooster	  <skillName>	camouflage	</skillName>
@@ -389,7 +389,7 @@
     <shortDescriptionSpecial>	#artefacts:fireFightingBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:fireFightingBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	fireFighting	</icon>
-    <price>	10000	</price>
+    <price>	20000	</price>
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor	</tags>
     <script>	FactorSkillBattleBooster	  <skillName>	fireFighting	</skillName>
@@ -417,7 +417,7 @@
     <shortDescriptionSpecial>	#artefacts:sixthSenseBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:sixthSenseBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	commander_sixthSense	</icon>
-    <price>	10000	</price>
+    <price>	20000	</price>
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor notBuyWhenAutoEquip hideIfNotInShop builtinPerkBooster	</tags>
     <notInShop>	true	</notInShop>
@@ -444,7 +444,7 @@
     <shortDescriptionSpecial>	#artefacts:rancorousBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:rancorousBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	gunner_rancorous	</icon>
-    <price>	10000	</price>
+    <price>	20000	</price>
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster reconnaissance	</tags>
     <script>	SkillEquipment	  <skillName>	gunner_rancorous	</skillName>
@@ -475,7 +475,7 @@
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor	</tags>
     <script>	SkillEquipment	  <skillName>	loader_pedant	</skillName>
-      <perkLevelMultiplier>	3.0	</perkLevelMultiplier>
+      <perkLevelMultiplier>	4.0	</perkLevelMultiplier>
     </script>
     <kpi>
       <oneOf>
@@ -485,7 +485,7 @@
         </boostSkill>
         <mul>
           <name>	vehicleAmmoBayStrength	</name>
-          <value>	1.375	</value>
+          <value>	4.0	</value>
         </mul>
       </oneOf>
     </kpi>
@@ -502,7 +502,8 @@
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster reconnaissance	</tags>
     <script>	LastEffortBattleBooster	  <skillName>	radioman_lastEffort	</skillName>
-      <durationPerLevel>	0.06	</durationPerLevel>
+      <durationPerLevel>	0.03	</durationPerLevel>
+      <chanceToHitPerLevel>	0.0	</chanceToHitPerLevel>
       <perkLevelMultiplier>	1.5	</perkLevelMultiplier>
     </script>
     <kpi>
@@ -513,7 +514,7 @@
         </boostSkill>
         <add>
           <name>	crewSkillLastEffortDuration	</name>
-          <value>	3	</value>
+          <value>	1	</value>
         </add>
       </oneOf>
     </kpi>
@@ -581,7 +582,7 @@
     <shortDescriptionSpecial>	#artefacts:improvedSightsBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:improvedSightsBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	improvedSights	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	10	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <tags>	notForSale equipmentBattleBooster improvedSights notBuyWhenAutoEquip	</tags>
@@ -627,7 +628,7 @@
     <shortDescriptionSpecial>	#artefacts:additInvisibilityDeviceBattleBooster/short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#artefacts:additInvisibilityDeviceBattleBooster/long_special	</longDescriptionSpecial>
     <icon>	additionalInvisibilityDevice	</icon>
-    <price>	12	  <crystal></crystal>
+    <price>	10	  <crystal></crystal>
     </price>
     <type>	battleBoosters	</type>
     <tags>	notForSale equipmentBattleBooster additInvisibilityDevice notBuyWhenAutoEquip	</tags>

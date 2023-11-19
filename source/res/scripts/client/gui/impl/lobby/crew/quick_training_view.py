@@ -87,7 +87,7 @@ class QuickTrainingView(BaseCrewView):
             self.destroyWindow()
 
     def widgetAutoSelectSlot(self, **kwargs):
-        if self.__isSlectionRequired():
+        if self.__isSelectionRequired():
             super(QuickTrainingView, self).widgetAutoSelectSlot(**kwargs)
         else:
             self._onEmptySlotAutoSelect(NO_SLOT)
@@ -154,7 +154,7 @@ class QuickTrainingView(BaseCrewView):
         super(QuickTrainingView, self)._fillViewModel(vm)
         self._stepper = FreeXpStepperCalculator()
         self._uiData = UiData()
-        self.__setTankmanData(vm, self.__selectedTankmanID)
+        self.__setTankmanData(vm, selectedTankmanID=self.__selectedTankmanID)
         vm.setNationName(self.nationName)
         vm.setVehicleName(self.shortUserName)
         self.__setBooksViewModelData(vm)
@@ -194,8 +194,9 @@ class QuickTrainingView(BaseCrewView):
                 super(QuickTrainingView, self)._onEmptySlotAutoSelect(NO_SLOT)
                 return
         if GUI_ITEM_TYPE.TANKMAN in invDiff:
-            compDescr = invDiff.get(GUI_ITEM_TYPE.TANKMAN, {}).get('compDescr', {})
-            if any((value for value in compDescr.itervalues())):
+            compDescr = invDiff[GUI_ITEM_TYPE.TANKMAN].get('compDescr', {})
+            vehicleCrew = invDiff[GUI_ITEM_TYPE.TANKMAN].get('vehicle', {})
+            if any((value for value in compDescr.itervalues())) or vehicleCrew:
                 self.__resetCardsStates(isFreeXP=True)
         elif GUI_ITEM_TYPE.CREW_BOOKS in invDiff:
             self.__resetCardsStates(isFreeXP=False)
@@ -270,9 +271,9 @@ class QuickTrainingView(BaseCrewView):
         elif not self._uiData.freeXp and not self.__isPersonalBookSelected():
             self._crewWidget.viewModel.setSelectedSlotIdx(NO_SLOT)
         if self.IS_MUTUAL_CALCULATIONS_SUPPORTED:
-            self._updateTmanSkillsLevels('reset', int(bool(self._uiData.freeXp)))
+            self._updateTmanSkillsLevels('reset', int(bool(self._uiData.freeXp)), updateLabels=False)
         else:
-            self._updateTmanSkillsLevels('update')
+            self._updateTmanSkillsLevels('update', updateLabels=False)
 
     @jsonArgsConverter(('intCD', 'count'))
     def __onBookSelected(self, intCD, count):
@@ -312,13 +313,14 @@ class QuickTrainingView(BaseCrewView):
         if isBooks:
             crewBooksViewedCache().addViewedItems(self.nationID)
         with self.viewModel.transaction() as vm:
-            self.__setTankmanData(vm, self.__selectedTankmanID, isForXp=isFreeXP)
+            self.__setTankmanData(vm, selectedTankmanID=self.__selectedTankmanID, isForXp=isFreeXP)
             if isBooks:
                 self.__updateBooksViewModelData(vm)
             if isFreeXP:
                 self.__setFreeXPModelData(vm)
                 self.__updateCurentFreeXpCardState(vm)
             self.__updateTips(vm, shouldInvalidate=True)
+        self.__updateUiDataForNationBooks()
         self._updateTmanSkillsLevels('update')
 
     @jsonArgsConverter(('value',))
@@ -335,7 +337,7 @@ class QuickTrainingView(BaseCrewView):
 
     def __onFreeXpMouseEnter(self):
         self.__clearPreSelectedCard()
-        self.__onSelectFreeXp(True, isUpdate=False)
+        self.__onSelectFreeXp(True, isUpdate=False, updateLabels=False)
 
     def __onCardMouseLeave(self):
         self.__clearPreSelectedCard()
@@ -360,11 +362,11 @@ class QuickTrainingView(BaseCrewView):
         with self.viewModel.transaction() as vm:
             self.__updateTips(vm, shouldInvalidate=True)
 
-    def __onSelectFreeXp(self, isSelected, isUpdate=True):
+    def __onSelectFreeXp(self, isSelected, isUpdate=True, updateLabels=True):
         if isSelected:
             if self.__canTmanUseFreeXP(self.tankman):
                 self.__updateSlotIndex()
-                self._updateTmanSkillsLevels('perk', int(isUpdate))
+                self._updateTmanSkillsLevels('perk', int(isUpdate), updateLabels=updateLabels)
             else:
                 self._updateFullTankmenData(isForXp=False)
                 self._updateTmanSkillsLevels('reset')
@@ -522,7 +524,18 @@ class QuickTrainingView(BaseCrewView):
     def __canTmanUseFreeXP(tankman):
         return tankman is not None and tankman.isMaxRoleLevel
 
-    def __isSlectionRequired(self):
+    def __allExistTankmanHasValidSpec(self):
+        for _, tankman in self.crew:
+            if tankman:
+                if not tankman.isInTank:
+                    if tankman.realRoleLevel.lvl < MAX_ROLE_LEVEL:
+                        return False
+                elif not tankman.isInNativeTank or not tankman.isMaxRoleLevel:
+                    return False
+
+        return True
+
+    def __isSelectionRequired(self):
         return self._uiData.freeXp or self.__isPersonalBookSelected()
 
     def _onWidgetSlotClick(self, tankmanInvID, slotIdx):
@@ -531,11 +544,11 @@ class QuickTrainingView(BaseCrewView):
             self._crewWidget.updateTankmanId(tankmanInvID)
         self.__updateUiDataForNationBooks()
         with self.viewModel.transaction() as vm:
-            self.__setTankmanData(vm, tankmanInvID, slotIdx, isForXp)
+            self.__setTankmanData(vm, selectedTankmanID=tankmanInvID, slotIdx=slotIdx, isForXp=isForXp)
             self.__updateCurentFreeXpCardState(vm)
             self.__updateTips(vm, shouldInvalidate=True)
         if self.__selectedTankmanID != NO_TANKMAN:
-            if self.__isSlectionRequired():
+            if self.__isSelectionRequired():
                 self._crewWidget.updateSlotIdx(slotIdx)
             self._updateTmanSkillsLevels('reset', isForXp and self.__canTmanUseFreeXP(self.tankman))
         self._updateTmanSkillsLevels('reset', isForXp and self.__canTmanUseFreeXP(self.tankman))
@@ -547,7 +560,7 @@ class QuickTrainingView(BaseCrewView):
         if self.__selectedTankmanID != tankmanInvID:
             self.__selectedTankmanID = tankmanInvID
             self._onWidgetSlotClick(tankmanInvID, slotIdx)
-        if self.__selectedTankmanID == NO_TANKMAN or not self.__isSlectionRequired():
+        if self.__selectedTankmanID == NO_TANKMAN or not self.__isSelectionRequired():
             self.__clearSelected()
         else:
             self._updateTmanSkillsLevels('update')
@@ -557,7 +570,6 @@ class QuickTrainingView(BaseCrewView):
             super(QuickTrainingView, self)._onEmptySlotAutoSelect(NO_SLOT)
         else:
             self.__resetCardsStates(isBooks=True, isFreeXP=True)
-            self.__updateUiDataForNationBooks()
 
     def __updateUiDataForNationBooks(self):
         for bookCD, count in self._uiData.getBooksData().iteritems():
@@ -568,7 +580,7 @@ class QuickTrainingView(BaseCrewView):
 
     def _updateFullTankmenData(self, selectedTankmanID=None, slotIdx=None, isForXp=True):
         with self.viewModel.transaction() as vm:
-            self.__setTankmanData(vm, selectedTankmanID, slotIdx, isForXp)
+            self.__setTankmanData(vm, selectedTankmanID=selectedTankmanID, slotIdx=slotIdx, isForXp=isForXp)
             self.__updateFreeXpBaseModel(vm)
             self.__updateCurentFreeXpCardState(vm)
             self.__updateTips(vm, shouldInvalidate=True)
@@ -579,7 +591,7 @@ class QuickTrainingView(BaseCrewView):
         elif self.__selectedTankmanID != NO_TANKMAN:
             self.__updateSlotIndex()
 
-    def _updateTmanSkillsLevels(self, actionType='reset', action=0):
+    def _updateTmanSkillsLevels(self, actionType='reset', action=0, updateLabels=True):
         maxValue = self.itemsCache.items.stats.freeXP
         tmanSlotIdx = next((slotIdx for slotIdx, tankman in self.crew if tankman and tankman.invID == self.__selectedTankmanID), NO_SLOT)
         if actionType == 'reset':
@@ -611,21 +623,24 @@ class QuickTrainingView(BaseCrewView):
                 freeXP = self.__calculateFreeXpValueXp()
                 skillsLevels[tmanSlotIdx] = quickEarnTmanSkills(self.tankman, personalXP + freeXP + commonXP)
             self.__setWidgetSkillsModel(skillsLevels)
-        with self.viewModel.transaction() as vm:
-            vm.freeXpData.setCurrentXpValue(self._uiData.freeXp)
-            vm.learningData.setPersonalXpAmount(personalXP + freeXP if self.__isSlectionRequired() else 0)
-            vm.learningData.setCrewXpAmount(commonXP)
+        if updateLabels:
+            with self.viewModel.transaction() as vm:
+                vm.freeXpData.setCurrentXpValue(self._uiData.freeXp)
+                vm.learningData.setPersonalXpAmount(personalXP + freeXP if self.__isSelectionRequired() else 0)
+                vm.learningData.setCrewXpAmount(commonXP)
 
     def __setWidgetSkillsModel(self, skillsLevels):
         self._crewWidget.updateInteractiveTankmen()
         self._crewWidget.updatePossibleSkillsLevel(skillsLevels)
 
     def __playErrorTips(self, tips, playSound):
-        if self.isCrewIncomplete and self.hasCrewInvalidSpec:
+        isCrewIncomplete = self.isCrewIncomplete
+        allExistTakmanHasValidSpec = self.__allExistTankmanHasValidSpec()
+        if isCrewIncomplete and not allExistTakmanHasValidSpec:
             tips.addViewModel(getTip(TRAINING_TIPS.NOT_FULL_AND_NOT_TRAINED_CREW, TipType.ERROR))
-        elif self.isCrewIncomplete:
+        elif isCrewIncomplete:
             tips.addViewModel(getTip(TRAINING_TIPS.NOT_FULL_CREW, TipType.ERROR))
-        elif self.hasCrewInvalidSpec:
+        elif not allExistTakmanHasValidSpec:
             tips.addViewModel(getTip(TRAINING_TIPS.NOT_TRAINED_THIS_VEHICLE, TipType.ERROR))
         if playSound:
             SoundGroups.g_instance.playSound2D(SOUNDS.CREW_TIPS_ERROR)

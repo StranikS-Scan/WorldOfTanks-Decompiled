@@ -43,7 +43,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -251,10 +251,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __resourceWell = dependency.descriptor(IResourceWellController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
-    __collectiveGoalEntryPointController = dependency.descriptor(ICollectiveGoalEntryPointController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
@@ -303,8 +301,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.as_setDataS(headerVO)
         self.__updateWidget()
         self.__updateResourceWellEntryPoint()
-        self.__updateCollectiveGoalEntryPoint()
-        self.__updateArmoryYardEntryPoint()
 
     def updateRankedHeader(self, *_):
         self.__updateWidget()
@@ -326,7 +322,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
         self.__resourceWell.onEventUpdated += self.update
-        self.__collectiveGoalEntryPointController.onEventUpdated += self.__updateCollectiveGoalEntryPoint
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish += self.__onBattleMattersStateChanged
         self.__limitedUIController.startObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
@@ -334,7 +329,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__limitedUIController.startObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
         self.__limitedUIController.startObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
         self.__updateBattleMattersEntryPoint()
-        self.__armoryYardCtrl.onUpdated += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
@@ -357,14 +351,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__resourceWell.onEventUpdated -= self.update
-        self.__collectiveGoalEntryPointController.onEventUpdated -= self.__updateCollectiveGoalEntryPoint
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish -= self.__onBattleMattersStateChanged
         self.__limitedUIController.stopObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
         self.__limitedUIController.stopObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
         self.__limitedUIController.stopObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
         self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
-        self.__armoryYardCtrl.onUpdated -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
         self.__activeWidgets = None
@@ -467,7 +459,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     @widgetFunc(FUNRANDOM_ALIASES.FUN_RANDOM_HANGAR_WIDGET)
     def __getFunRandomWidget(self):
-        return self.__funRandomCtrl.isFunRandomPrbActive() and self.__funRandomCtrl.hasHangarHeaderEntry()
+        return self.__funRandomCtrl.isFunRandomPrbActive()
 
     @widgetFunc(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT)
     def __getBattleRoyaleWidgetAlias(self):
@@ -856,14 +848,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         alias = HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT if isRandom and isResourceWellVisible else ''
         if self.__activeWidgets.update(ActiveWidgets.RIGHT, alias):
             self.as_addSecondaryEntryPointS(alias, True)
-
-    def __updateCollectiveGoalEntryPoint(self):
-        isCollecitveGoalVisible = self.__collectiveGoalEntryPointController.isEnabled()
-        isVisibleInBonusType = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM)
-        self.as_setCollectiveGoalEntryPointS(isCollecitveGoalVisible and isVisibleInBonusType)
-
-    def __updateArmoryYardEntryPoint(self):
-        self.as_setArmoryYardEntryPointS(self.__armoryYardCtrl.isEnabled())
 
     def __updateBattleMattersEntryPoint(self):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR

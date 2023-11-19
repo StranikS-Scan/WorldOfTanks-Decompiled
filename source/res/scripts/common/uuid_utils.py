@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/uuid_utils.py
 import os
 import random
-from uuid import uuid1, UUID
+from uuid import uuid1
 _node = None
 
 def _getNode():
@@ -18,8 +18,3 @@ def _getNode():
 
 def genUUID():
     return uuid1(_getNode())
-
-
-def utcTimeFromUUID1(u):
-    u = UUID(u)
-    return (u.time - 122192928000000000L) * 100 / 1000000000.0

@@ -46,7 +46,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals', 'showDebutBoxes')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow', 'showBonus', 'showRankedBonusBattle', 'showCompatibles', 'withSlots', 'isStaticInfoOnly', 'showEarnCrystals')
 
     def __init__(self):
         self.vehicle = None
@@ -70,7 +70,6 @@ class StatsConfiguration(object):
         self.withSlots = False
         self.isStaticInfoOnly = False
         self.showEarnCrystals = True
-        self.showDebutBoxes = True
         return
 
 
@@ -191,7 +190,6 @@ class DefaultContext(ToolTipContext):
         value = super(DefaultContext, self).getStatsConfiguration(item)
         value.xp = False
         value.dailyXP = False
-        value.showDebutBoxes = False
         return value
 
     def getParamsConfiguration(self, item):
@@ -226,7 +224,7 @@ class ReferralProgramBadgeContext(BadgeContext):
 class AwardContext(DefaultContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, fieldsToExclude=None, simplifiedOnly=True):
+    def __init__(self, fieldsToExclude=None):
         super(AwardContext, self).__init__(fieldsToExclude)
         self._tmanRoleLevel = None
         self._rentExpiryTime = None
@@ -234,7 +232,6 @@ class AwardContext(DefaultContext):
         self._rentWinsLeft = None
         self._seasonRent = None
         self._isSeniority = False
-        self._simplifiedOnly = simplifiedOnly
         return
 
     def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False):
@@ -265,7 +262,7 @@ class AwardContext(DefaultContext):
 
     def getParamsConfiguration(self, item):
         value = super(AwardContext, self).getParamsConfiguration(item)
-        value.simplifiedOnly = self._simplifiedOnly
+        value.simplifiedOnly = True
         value.externalCrewParam = True
         return value
 

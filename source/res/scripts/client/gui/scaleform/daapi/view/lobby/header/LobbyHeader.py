@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division
 import math
 from itertools import chain
+from enum import Enum
 import BigWorld
 import WWISE
 import typing
@@ -25,7 +26,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getComp7BattlesOnlyVehicleTooltipData, getComp7FightBtnTooltipData, getEpicBattlesOnlyVehicleTooltipData, getEpicFightBtnTooltipData, getEventTooltipData, getFunRandomFightBtnTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getPreviewTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData, getSquadFightBtnTooltipData, getVersusAIFightBtnTooltipData
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getComp7BattlesOnlyVehicleTooltipData, getComp7FightBtnTooltipData, getEpicBattlesOnlyVehicleTooltipData, getEpicFightBtnTooltipData, getEventTooltipData, getFunRandomFightBtnTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getPreviewTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData, getSquadFightBtnTooltipData
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getTabCounter
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyGoldUrl, getBuyPremiumUrl, isSubscriptionEnabled, getShopRootUrl
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl
@@ -99,6 +100,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
     from gui.platform.wgnp.demo_account.statuses import DemoAccNicknameStatus
+    from gui.impl.lobby.common.view_mixins import LobbyHeaderState
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 _SHORT_VALUE_PRECISION = 1
@@ -153,6 +155,11 @@ class HeaderMenuVisibilityState(BitmaskHelper):
     ALL = BG_OVERLAY | BUTTON_BAR | ONLINE_COUNTER
 
 
+class LobbyHeaderVisibilityAction(Enum):
+    ENTER = 0
+    EXIT = 1
+
+
 class _DisabledLobbyHeaderViewLifecycleHandler(IViewLifecycleHandler):
 
     def __init__(self, lobbyHeader, controlledViews):
@@ -188,22 +195,27 @@ class _LobbyHeaderVisibilityHelper(object):
         self.__headerStatesStack = []
 
     def getActiveState(self):
-        return self.__headerStatesStack[-1] if self.__headerStatesStack else HeaderMenuVisibilityState.ALL
+        return self.__headerStatesStack[-1].state if self.__headerStatesStack else HeaderMenuVisibilityState.ALL
 
     def updateStates(self, state):
-        previousState = self.getActiveState()
-        if previousState == HeaderMenuVisibilityState.NOTHING and state != previousState:
-            self.__removePreviousState()
-            if state != HeaderMenuVisibilityState.ALL:
-                self.__addState(state)
+        action = state.action
+        previousState = self.__headerStatesStack[-1] if self.__headerStatesStack else None
+        if action == LobbyHeaderVisibilityAction.ENTER:
+            self.__headerStatesStack.append(state)
+            return
+        elif previousState is None:
+            return
         else:
-            self.__addState(state)
+            view = state.view
+            if previousState.view == view:
+                self.__removePreviousState()
+            else:
+                updatedStack = [ s for s in self.__headerStatesStack if s.view != view ]
+                self.__headerStatesStack = updatedStack
+            return
 
     def clear(self):
         self.__headerStatesStack = []
-
-    def __addState(self, state):
-        self.__headerStatesStack.append(state)
 
     def __removePreviousState(self):
         return self.__headerStatesStack.pop() if self.__headerStatesStack else None
@@ -311,7 +323,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__isFightBtnDisabled = self.bootcampController.isInBootcamp()
         self.__isSubscriptionEnabled = isSubscriptionEnabled()
         self.__clanIconID = None
-        self.__visibility = HeaderMenuVisibilityState.ALL
         self.__menuVisibilityHelper = _LobbyHeaderVisibilityHelper()
         self._pr20UILogger = PersonalReservesActivationScreenFlowLogger()
         self._wotPlusUILogger = WotPlusHeaderLogger()
@@ -378,7 +389,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.showPersonalReservesPage()
 
     def onCrystalClick(self):
-        shared_events.showCrystalWindow(self.__visibility)
+        shared_events.showCrystalWindow()
 
     @adisp_process
     def onPayment(self):
@@ -411,9 +422,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return
         showShop(getWotPlusShopUrl())
 
+    @adisp_process
     def showPremiumView(self):
-        self.__closeWindowsWithTopSubViewLayer()
-        showShop(getBuyPremiumUrl())
+        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if navigationPossible:
+            self.__closeWindowsWithTopSubViewLayer()
+            showShop(getBuyPremiumUrl())
 
     def onPremShopClick(self):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
@@ -1159,7 +1173,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isRandom = state.isInPreQueue(constants.QUEUE_TYPE.RANDOMS)
             isLegacyTraining = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
             isComp7 = state.isInPreQueue(constants.QUEUE_TYPE.COMP7) or state.isInUnit(constants.PREBATTLE_TYPE.COMP7)
-            isVersusAI = state.isInPreQueue(constants.QUEUE_TYPE.VERSUS_AI) or state.isInUnit(constants.PREBATTLE_TYPE.VERSUS_AI)
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
                 extendedSquadInfoVo = self.platoonCtrl.buildExtendedSquadInfoVo()
                 if isSquadEnabled:
@@ -1182,8 +1195,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD if isRoyale else ''
                     elif isComp7:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7SQUAD
-                    elif isVersusAI:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_VERSUSAISQUAD
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 else:
@@ -1226,8 +1237,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltipData = getRandomTooltipData(result)
                 elif isComp7:
                     tooltipData = getComp7FightBtnTooltipData(result)
-                elif isVersusAI:
-                    tooltipData = getVersusAIFightBtnTooltipData(result)
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
                 tooltipData = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED
                 isSpecial = True
@@ -1266,9 +1275,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']
+        prevState = self.__menuVisibilityHelper.getActiveState()
         self.__menuVisibilityHelper.updateStates(state)
-        activeState = self.__menuVisibilityHelper.getActiveState()
-        self.as_toggleVisibilityMenuS(activeState)
+        newState = self.__menuVisibilityHelper.getActiveState()
+        if prevState != newState:
+            self.as_toggleVisibilityMenuS(newState)
 
     def _checkFightButtonDisabled(self, canDo, isLocked):
         return not canDo or isLocked
@@ -1804,7 +1815,3 @@ class _BoosterInfoPresenter(object):
 
     def __hasActiveClanReserves(self):
         return len(self.__getActiveClanReserves()) > 0
-
-
-def toggleMenuVisibility(state):
-    g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': state}), scope=EVENT_BUS_SCOPE.LOBBY)

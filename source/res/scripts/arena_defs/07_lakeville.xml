@@ -45,7 +45,7 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-169.513458 319.351257	</position1>
+          <position1>	-169.513458 319.351288	</position1>
         </team1>
         <team2>
           <position1>	-169.513443 -319.048615	</position1>
@@ -55,29 +55,33 @@
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-3.000000 355.000000	</position>
+          <position>	-3 355	</position>
         </team1>
         <team2>
-          <position>	-3.000000 -355.000000	</position>
+          <position>	-3 -355	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	258.893433 -4.200226	</controlPoint>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	258.899963 -4.200012	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	304.153015 -279.053986	</position>
+          <position>	304.153 -279.054	</position>
         </team1>
         <team2>
-          <position>	322.875000 247.673004	</position>
+          <position>	322.875 247.673	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-265.002136 -289.331116	</position1>
-          <position2>	224.681900 -204.980438	</position2>
+          <position1>	-265.002106 -289.331085	</position1>
+          <position2>	224.681885 -204.980423	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
@@ -85,59 +89,13 @@
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	-169.513458 319.351257	</position1>
+          <position1>	-169.513458 319.351288	</position1>
         </team1>
         <team2>
           <position1>	-169.513443 -319.048615	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>
-    <comp7>
-      <visualScript>
-        <server>
-          <plan>	PointsOfInterest/pointsOfInterest	</plan>
-        </server>
-      </visualScript>
-      <recon>
-        <flyDirections>
-          <flyDirection>
-            <team>	1	</team>
-            <direction>	0 0 1	</direction>
-          </flyDirection>
-          <flyDirection>
-            <team>	2	</team>
-            <direction>	0 0 1	</direction>
-          </flyDirection>
-        </flyDirections>
-      </recon>
-      <teamSpawnPoints>
-        <team1>
-          <position>	-110.655762 378.447968	</position>
-        </team1>
-        <team2>
-          <position>	-118.174072 -379.324585	</position>
-        </team2>
-      </teamSpawnPoints>
-      <pointsOfInterestUDO>
-        <point>
-          <position>	-113.861610 46.227512	</position>
-          <type>	1	</type>
-        </point>
-        <point>
-          <position>	145.127228 -0.038859	</position>
-          <type>	1	</type>
-        </point>
-        <point>
-          <position>	40.159782 215.957062	</position>
-          <type>	2	</type>
-        </point>
-        <point>
-          <position>	36.817371 -229.928391	</position>
-          <type>	2	</type>
-        </point>
-      </pointsOfInterestUDO>
-      <controlPoint>	269.724182 6.693123	</controlPoint>
-    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities>

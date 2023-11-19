@@ -155,8 +155,10 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
         else:
             kpi = first(module.getKpi(self.configuration.vehicle))
             if kpi:
-                descriptor = text_styles.main(module.shortDescription.replace('%s ', '', 1))
-                value = text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value, True))
+                ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+                endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+                descriptor = ' '.join((text_styles.main(module.shortDescription.replace('%s ', '', 1)), text_styles.standard(endingText)))
+                value = text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value, False))
                 block.append(formatters.packTextParameterBlockData(descriptor, value, valueWidth=110, gap=15))
             else:
                 _logger.warn('BattleBooster kpi missed %s', module.descriptor.iconName)

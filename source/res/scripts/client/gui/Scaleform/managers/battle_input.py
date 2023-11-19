@@ -5,7 +5,7 @@ from AvatarInputHandler import aih_global_binding
 from aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 import CommandMapping
@@ -33,16 +33,16 @@ class BattleGameInputMgr(object):
         del self.__consumers[:]
         del self.__keyHandlers[:]
 
-    def enterGuiControlMode(self, consumerID, cursorVisible=True, enableAiming=True):
+    def enterGuiControlMode(self, consumerID, cursorVisible=True, enableAiming=True, stopVehicle=False):
         if consumerID not in self.__consumers:
             if not self.__consumers:
-                avatar_getter.setForcedGuiControlMode(True, cursorVisible=cursorVisible, enableAiming=enableAiming)
+                avatar_getter.setForcedGuiControlMode(True, stopVehicle=stopVehicle, cursorVisible=cursorVisible, enableAiming=enableAiming)
             self.__consumers.append(consumerID)
 
     def leaveGuiControlMode(self, consumerID):
         if consumerID in self.__consumers:
             self.__consumers.remove(consumerID)
-            if not self.__consumers:
+            if not self.__consumers and isPlayerAvatar():
                 avatar_getter.setForcedGuiControlMode(False)
 
     def hasGuiControlModeConsumers(self, *consumersIDs):

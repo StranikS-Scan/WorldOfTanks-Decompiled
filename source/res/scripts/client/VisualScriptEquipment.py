@@ -31,8 +31,11 @@ class VisualScriptEquipment(DynamicScriptComponent):
         self.set_equipmentState()
 
     def canActivate(self):
-        self._context.canActive()
-        return (self._context.canActivate, self._context.errorKey)
+        if self._context is None:
+            return (False, None)
+        else:
+            self._context.canActive()
+            return (self._context.canActivate, self._context.errorKey)
 
     def onDestroy(self):
         if self._context is not None:

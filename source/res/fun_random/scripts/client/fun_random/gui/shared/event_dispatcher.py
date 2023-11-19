@@ -8,7 +8,6 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplVi
 from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBrowserOverlayView, showModeSelectorWindow
-from gui.shared.events import ModeSubSelectorEvent
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 
@@ -22,13 +21,18 @@ def showFunRandomInfoPage(infoPageUrl):
     showBrowserOverlayView(infoPageUrl, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
 
-@dependency.replace_none_kwargs(uiLoader=IGuiLoader)
-def showFunRandomSubSelector(uiLoader=IGuiLoader):
+def showFunRandomSubSelector(parent=None):
     from fun_random.gui.impl.lobby.mode_selector.fun_sub_selector_view import FunModeSubSelectorView
-    g_eventBus.handleEvent(ModeSubSelectorEvent(ModeSubSelectorEvent.CHANGE_VISIBILITY, ctx={'visible': True}))
-    contentResId = R.views.lobby.mode_selector.ModeSelectorView()
-    mainSelectorWindow = uiLoader.windowsManager.getViewByLayoutID(contentResId).getParentWindow()
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.fun_random.lobby.feature.FunRandomModeSubSelector(), FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=mainSelectorWindow)), scope=EVENT_BUS_SCOPE.LOBBY)
+    guiLoader = dependency.instance(IGuiLoader)
+    layoutID = R.views.fun_random.lobby.feature.FunRandomModeSubSelector()
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is not None:
+        return
+    else:
+        if parent is None:
+            modeSelectorView = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.mode_selector.ModeSelectorView())
+            parent = modeSelectorView.getParentWindow()
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=parent)), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)

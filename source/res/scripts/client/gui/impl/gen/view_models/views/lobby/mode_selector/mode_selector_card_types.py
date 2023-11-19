@@ -12,7 +12,6 @@ class ModeSelectorCardTypes(ViewModel):
     BATTLE_ROYALE = 5
     FUN_RANDOM = 6
     COMP7 = 7
-    VERSUS_AI = 8
 
     def __init__(self, properties=0, commands=0):
         super(ModeSelectorCardTypes, self).__init__(properties=properties, commands=commands)

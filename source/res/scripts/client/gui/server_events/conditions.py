@@ -27,7 +27,8 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
  constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,
- constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING,
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_COMP7: constants.ARENA_GUI_TYPE.COMP7}
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
@@ -620,6 +621,11 @@ class Token(_Requirement):
     def isConsumable(self):
         return self._consumable
 
+    def getConsumeCount(self):
+        if self.isConsumable():
+            consumeData, _ = self._data['consume']
+            return dict(consumeData).get('value', 0)
+
     def getID(self):
         return self._id
 
@@ -823,9 +829,6 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
 
     def _isAvailable(self, vehicle):
         return vehicle.intCD in self._getVehiclesCache(self._data)
-
-    def parseFilters(self):
-        return self._parseFilters(self._data)
 
 
 class _DossierValue(_Requirement):

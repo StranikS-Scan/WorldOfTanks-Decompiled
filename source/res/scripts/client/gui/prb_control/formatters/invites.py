@@ -101,7 +101,7 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
             kwargs = getModeNameKwargs(funcState.entityTypeID, isQueue=False)
-        elif funcState.isInPreQueue():
+        elif funcState.isInPreQueue() and funcState.entityTypeID:
             entityName = QUEUE_LEAVE_PREFIX + getPreQueueName(funcState.entityTypeID)
             kwargs = getModeNameKwargs(funcState.entityTypeID)
         else:

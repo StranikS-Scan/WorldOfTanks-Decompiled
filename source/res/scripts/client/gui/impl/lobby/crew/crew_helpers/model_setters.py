@@ -11,9 +11,11 @@ from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getI
 from helpers import dependency, time_utils
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import ISpecialSoundCtrl
 from skill_formatters import SkillLvlFormatter
 if TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import Tankman
+BARRACK_RECRUIT_BG_DYN = R.images.gui.maps.icons.tankmen.windows.recruits.barracks
 
 def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, requiredRole=None):
     if tman is None:
@@ -26,9 +28,10 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, require
         tm.setFullUserName(tman.getFullUserNameWithSkin())
         tm.setTankmanKind(TankmanKind.TANKMAN)
         tm.setSpecializationLevel(tdescr.roleLevel)
-        tm.setHasSpecializationLevelPenalty(False)
-        if compVeh:
-            if compVeh.isWotPlus or requiredRole != tdescr.role and requiredRole is not None:
+        if tdescr.roleLevel < MAX_SKILL_LEVEL:
+            tm.setHasSpecializationLevelPenalty(True)
+        elif compVeh:
+            if compVeh.isWotPlus or requiredRole != tdescr.role:
                 tm.setHasSpecializationLevelPenalty(False)
             else:
                 tm.setHasSpecializationLevelPenalty(compVeh.compactDescr != tmanNativeVeh.compactDescr and not (compVeh.isPremium and tmanNativeVeh.type == compVeh.type))
@@ -116,7 +119,8 @@ def setReplacedTankmanModel(tm, tman, tmanNativeVeh):
         return
 
 
-def setRecruitTankmanModel(tm, recruitInfo):
+@dependency.replace_none_kwargs(specialSoundCtrl=ISpecialSoundCtrl)
+def setRecruitTankmanModel(tm, recruitInfo, specialSoundCtrl=None):
     tm.setRecruitID(str(recruitInfo.getRecruitID()))
     if len(recruitInfo.getRoles()) > 1:
         tm.setRole(TankmanRole.ANY)
@@ -125,9 +129,9 @@ def setRecruitTankmanModel(tm, recruitInfo):
     tm.setFullUserName(recruitInfo.getFullUserName())
     iconName = recruitInfo.getDynIconName()
     tm.setIconName(iconName)
-    tm.setRecruitGlowImage(getIconBackground(recruitInfo.getSourceID(), iconName))
+    tm.setRecruitGlowImage(getIconBackground(recruitInfo.getSourceID(), iconName, BARRACK_RECRUIT_BG_DYN))
     tm.setTankmanKind(TankmanKind.RECRUIT)
-    tm.setHasVoiceover(bool(recruitInfo.getSpecialVoiceTag()))
+    tm.setHasVoiceover(bool(recruitInfo.getSpecialVoiceTag(specialSoundCtrl)))
     tman = recruitInfo.getFakeTankman()
     tm.setSpecializationLevel(tman.roleLevel)
     tankmanSkill = recruitInfo.getTankmanSkill()

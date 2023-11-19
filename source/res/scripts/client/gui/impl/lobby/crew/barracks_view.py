@@ -98,7 +98,6 @@ class BarracksView(BaseTankmanListView):
     def _finalize(self):
         self.restore.onTankmenBufferUpdated -= self.__onTankmenBufferUpdated
         self.__dataProviders.unsubscribe()
-        self.__dataProviders.clear()
         super(BarracksView, self)._finalize()
         self.__uiLogger.finalize()
         self.__filterState = None
@@ -149,8 +148,7 @@ class BarracksView(BaseTankmanListView):
 
     def _fillTankmanCard(self, cardsList, tankman):
         tm = TankmanModel()
-        tmanVehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=tmanVehicle, compVeh=tmanVehicle)
+        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID))
         setTmanSkillsModel(tm.getSkills(), tankman)
         tm.setNation(nations.NAMES[tankman.nationID])
         tm.setHasVoiceover(False)

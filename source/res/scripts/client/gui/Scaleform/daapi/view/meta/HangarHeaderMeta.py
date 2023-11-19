@@ -18,9 +18,3 @@ class HangarHeaderMeta(BaseDAAPIComponent):
 
     def as_addSecondaryEntryPointS(self, alias, isRight):
         return self.flashObject.as_addSecondaryEntryPoint(alias, isRight) if self._isDAAPIInited() else None
-
-    def as_setCollectiveGoalEntryPointS(self, value):
-        return self.flashObject.as_setCollectiveGoalEntryPoint(value) if self._isDAAPIInited() else None
-
-    def as_setArmoryYardEntryPointS(self, value):
-        return self.flashObject.as_setArmoryYardEntryPoint(value) if self._isDAAPIInited() else None

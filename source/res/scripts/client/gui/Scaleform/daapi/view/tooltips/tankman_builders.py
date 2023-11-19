@@ -51,8 +51,8 @@ class CrewPerkTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(CrewPerkTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.CREW_PERK_GF)
 
-    def getDisplayableData(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, parent=None, *args, **kwargs):
-        return DecoratedTooltipWindow(CrewPerksTooltip(skillName, tankmanId, skillLevel, isCommonExtraAvailable, showAdditionalInfo), parent, False)
+    def getDisplayableData(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, parent=None, skillCustomisation=None, *args, **kwargs):
+        return DecoratedTooltipWindow(CrewPerksTooltip(skillName, tankmanId, skillLevel, isCommonExtraAvailable, showAdditionalInfo, skillCustomisation=skillCustomisation), parent, False)
 
     def buildToolTip(self, *args, **kwargs):
         return {'type': self.getType(),

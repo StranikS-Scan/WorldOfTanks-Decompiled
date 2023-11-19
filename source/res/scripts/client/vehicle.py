@@ -23,7 +23,6 @@ from aih_constants import ShakeReason
 from cgf_components.arena_camera_manager import ArenaCameraManager
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND
-from constants import StunTypes
 from debug_utils import LOG_DEBUG_DEV
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from visual_script.misc import ASPECT
@@ -96,8 +95,7 @@ SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist',
 StunInfo = namedtuple('StunInfo', ('startTime',
  'endTime',
  'duration',
- 'totalTime',
- 'stunType'))
+ 'totalTime'))
 DebuffInfo = namedtuple('DebuffInfo', ('duration', 'animated'))
 VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
@@ -201,7 +199,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.respawnCompactDescr = None
         self.respawnOutfitCompactDescr = None
         self.__waitingForAppearanceReload = False
-        self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0, '')
+        self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0)
         self.__burnoutStarted = False
         self.__handbrakeFired = False
         self.__wheelsScrollFilter = None
@@ -249,8 +247,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             outfitDescr = result
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
-            if onBattleRoyalePrerequisites(self, oldTypeDescriptor):
-                forceReloading = True
+            forceReloading = onBattleRoyalePrerequisites(self, oldTypeDescriptor, forceReloading)
         strCD = self.typeDescriptor.makeCompactDescr()
         newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr)
         ctrl = self.guiSessionProvider.dynamic.appearanceCache
@@ -276,10 +273,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if respawnCompactDescr is not None:
             self.isCrewActive = True
             descr = vehicles.VehicleDescr(respawnCompactDescr, extData=self)
+            self.__turretDetachmentConfirmed = False
             if 'battle_royale' not in descr.type.tags:
                 self.health = self.publicInfo.maxHealth
                 self.__prevHealth = self.publicInfo.maxHealth
-                self.__turretDetachmentConfirmed = False
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
@@ -397,7 +394,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             firstHitDir = compMatrix.applyVector(firstHitDirLocal)
             self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
             player = BigWorld.player()
-            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['shellType'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
+            player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
             showFriendlyFlashBang = False
             sessionProvider = self.guiSessionProvider
             isAlly = sessionProvider.getArenaDP().isAlly(attackerID)
@@ -451,8 +448,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if self.id == attackerID:
                 return
             player = BigWorld.player()
-            effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
-            player.inputHandler.onVehicleShaken(self, center, direction, effectsDescr['caliber'], effectsDescr['shellType'], ShakeReason.SPLASH)
+            player.inputHandler.onVehicleShaken(self, center, direction, vehicles.g_cache.shotEffects[effectsIndex]['caliber'], ShakeReason.SPLASH)
             if attackerID == BigWorld.player().playerVehicleID:
                 ctrl = self.guiSessionProvider.shared.feedback
                 if ctrl is not None:
@@ -720,7 +716,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         else:
             soundObject = self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.CHASSIS)
             if soundObject is not None:
-                soundObject.play('lift_over')
+                soundObject.play('lift_overs')
             return
 
     def onExtraHitted(self, extraIndex, hitPoint):
@@ -775,23 +771,22 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
     def set_stunInfo(self, prev=None):
         _logger.debug('Set stun info(curr,~ prev): %s, %s', self.stunInfo, prev)
-        if self.stunInfo.stunFinishTime > 0.0 and self.appearance.findComponentByType(Health.StunComponent) is None:
+        if self.stunInfo > 0.0 and self.appearance.findComponentByType(Health.StunComponent) is None:
             self.appearance.createComponent(Health.StunComponent)
-        if self.stunInfo.stunFinishTime < 0.01:
+        if self.stunInfo < 0.01:
             self.appearance.removeComponentByType(Health.StunComponent)
         self.updateStunInfo()
         return
 
-    def __updateCachedStunInfo(self, stunInfo):
-        endTime = stunInfo.stunFinishTime
+    def __updateCachedStunInfo(self, endTime):
         if endTime:
             cachedStartTime = self.__cachedStunInfo.startTime
             startTime = cachedStartTime if cachedStartTime > 0.0 else BigWorld.serverTime()
             totalTime = max(self.__cachedStunInfo.duration, endTime - startTime)
             duration = endTime - BigWorld.serverTime() if endTime > 0.0 else 0.0
-            self.__cachedStunInfo = StunInfo(startTime, endTime, duration, totalTime, stunInfo['stunType'])
+            self.__cachedStunInfo = StunInfo(startTime, endTime, duration, totalTime)
         else:
-            self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0, StunTypes.NONE.value)
+            self.__cachedStunInfo = StunInfo(0.0, 0.0, 0.0, 0.0)
 
     def getStunInfo(self):
         self.__updateCachedStunInfo(self.stunInfo)
@@ -1017,7 +1012,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
         if not self.isAlive():
             self.__onVehicleDeath(True)
-        if self.stunInfo.stunFinishTime > 0.0:
+        if self.stunInfo > 0.0:
             self.updateStunInfo()
 
     def refreshNationalVoice(self):
@@ -1056,12 +1051,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             va = self.appearance
             if va.tracks is not None:
                 va.tracks.setPhysicalDestroyedTracksVisible(show)
-            hm = CGF.HierarchyManager(self.spaceID)
-            components = hm.findComponentsInHierarchy(va.gameObject, GenericComponents.DynamicModelComponent)
-            for _, modelComponent in components:
-                if modelComponent.isValid():
-                    modelComponent.setIsVisible(show)
-
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
         return

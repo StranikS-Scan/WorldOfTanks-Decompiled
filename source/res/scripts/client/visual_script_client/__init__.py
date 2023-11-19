@@ -29,8 +29,6 @@ def registerForGeneral():
     import battle_hud_block
     import bitmask_blocks
     import cgf_blocks
-    import web_blocks
-    import armory_yard_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
@@ -42,8 +40,6 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(battle_hud_block)
     g_blockRegistrar.regBlocksFromModule(bitmask_blocks)
     g_blockRegistrar.regBlocksFromModule(cgf_blocks)
-    g_blockRegistrar.regBlocksFromModule(web_blocks)
-    g_blockRegistrar.regBlocksFromModule(armory_yard_blocks)
     g_blockRegistrar.regBlocksFromModule(camera_blocks)
     animated_hints_blocks.regBlocks(g_blockRegistrar)
     g_blockRegistrar.regContext(EntityContextClient)

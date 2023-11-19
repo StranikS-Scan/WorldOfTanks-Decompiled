@@ -16,7 +16,6 @@ __all__ = ('standard',
  'statusAttention',
  'middleTitle',
  'highTitle',
- 'highTitleRegular',
  'highTitleAccented',
  'highTitleDisabled',
  'disabled',
@@ -62,7 +61,8 @@ __all__ = ('standard',
  'yellowText',
  'greenText',
  'poiCapturedBoldText',
- 'poiCapturedRegularText')
+ 'poiCapturedRegularText',
+ 'prestige')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -150,10 +150,6 @@ def middleBonusTitle(text):
 
 def highTitle(text):
     return _formatText('highTitle', text)
-
-
-def highTitleRegular(text):
-    return _formatText('highTitleRegular', text)
 
 
 def highTitleAccented(text):
@@ -306,6 +302,10 @@ def bpcoin(text):
 
 def brcoin(text):
     return _formatText('creditsText', text)
+
+
+def brProgressionToken(text):
+    return _formatText('brProgressionToken', text)
 
 
 def defRes(text):
@@ -480,6 +480,10 @@ def poiCapturedBoldText(text):
 
 def poiCapturedRegularText(text):
     return _formatText('poiCapturedRegularText', text)
+
+
+def prestige(text):
+    return _formatText('prestigeText', text)
 
 
 def getRawStyles(names):

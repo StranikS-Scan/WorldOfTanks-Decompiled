@@ -124,8 +124,8 @@ class TankmanInfo(BaseCrewSoundView):
         return
 
     def _getUniqueVoiceoverParams(self):
-        specialVoiceTag = tankmen.getSpecialVoiceTag(self._tankman)
-        return self._specialSounds.getVoiceoverByTankmanTag(specialVoiceTag)
+        specialVoiceTag = tankmen.getSpecialVoiceTag(self._tankman, self._specialSounds)
+        return self._specialSounds.getVoiceoverByTankmanTagOrVehicle(specialVoiceTag)
 
     def _onLoading(self, *args, **kwargs):
         super(TankmanInfo, self)._onLoading(*args, **kwargs)

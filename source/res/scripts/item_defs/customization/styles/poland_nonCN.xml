@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
@@ -77,6 +77,56 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl08_50TP_Prototyp_Resilient	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	849	</id>
+      <texture>	gui/maps/vehicles/styles/ua_charity_1.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/ua_charity_1	</userString>
+      <description>	#vehicle_customization:special_style/ua_charity_1_desc	</description>
+      <tags>	lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	751	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	433	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	1007	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <projection_decals>
+            <item>
+              <id>	964	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
         </outfit>
       </outfits>
     </style>

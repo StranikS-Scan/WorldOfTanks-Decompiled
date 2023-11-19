@@ -2,13 +2,25 @@
   <name>	#arenas:05_prohorovka/name	</name>
   <description>	#arenas:05_prohorovka/description	</description>
   <geometry>	spaces/05_prohorovka	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <boundingBox>
     <bottomLeft>	-500.0 -500.0	</bottomLeft>
     <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/05_prohorovka/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/05_prohorovka/mmap_crash01_plane_alley_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/05_prohorovka/mmap_crash01_plane_alley_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -24,6 +36,16 @@
     <wwmusicResultDefeat>	music_prokhorovka_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -78,41 +100,6 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
-    <bootcamp>
-      <wwmusicSetup>
-        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
-        <wwmusicIntensive>	bc_music_mission_03	</wwmusicIntensive>
-        <wwmusicRelaxed>	bc_music_mission_03	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_prokhorovka_result_win	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_prokhorovka_result_drawn	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_prokhorovka_result_defeat	</wwmusicResultDefeat>
-      </wwmusicSetup>
-      <boundingBox>
-        <bottomLeft>	-350.000000 -500.000000	</bottomLeft>
-        <upperRight>	100.000000 500.000000	</upperRight>
-      </boundingBox>
-      <teamBasePositions>
-        <team1>
-          <position1>	-127.46 -332.09	</position1>
-        </team1>
-        <team2>
-          <position1>	-150.20 345.33	</position1>
-        </team2>
-      </teamBasePositions>
-      <maxPlayersInTeam>	1	</maxPlayersInTeam>
-      <runDelay>	7	</runDelay>
-      <minimap>	spaces/05_prohorovka/mmap_bootcamp.dds	</minimap>
-      <visualScript>
-        <server>
-          <plan>	BootCamp/Lesson_3_arena_05_prohorovka	</plan>
-        </server>
-        <client>
-          <plan>	BootCamp/Lesson_3_hints_05_prohorovka	</plan>
-        </client>
-      </visualScript>
-    </bootcamp>
     <maps_training>
       <teamBasePositions>
         <team1>

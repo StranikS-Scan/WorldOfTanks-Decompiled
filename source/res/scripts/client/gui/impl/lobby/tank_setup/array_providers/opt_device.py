@@ -5,6 +5,7 @@ from functools import partial
 from itertools import izip, chain
 import typing
 from gui.impl import backport
+from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.bonus_model import BonusModel
 from gui.impl.gen.view_models.common.bonus_value_model import BonusValueModel
@@ -93,11 +94,8 @@ class ArrayOptDeviceProvider(BaseArrayProvider):
         if not vehicle:
             _logger.warning('There is invalid vehicle compact descriptor %s', vehCD)
             return
-        model.vehicleInfo.setVehicleName(vehicle.descriptor.type.shortUserString)
-        model.vehicleInfo.setVehicleType(vehicle.type)
-        model.vehicleInfo.setVehicleLvl(vehicle.level)
         model.vehicleInfo.setVehicleID(vehCD)
-        model.vehicleInfo.setIsPremiumIGR(vehicle.isPremiumIGR)
+        fillVehicleInfo(model.vehicleInfo, vehicle)
 
 
 class DeconstructOptDeviceStorageProvider(ArrayOptDeviceProvider):

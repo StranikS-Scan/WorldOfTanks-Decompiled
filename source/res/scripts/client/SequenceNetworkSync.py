@@ -9,6 +9,7 @@ from cgf_components_common.scenario.sequence_network_sync import SequenceNetwork
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from cgf_script.managers_registrator import onAddedQuery, autoregister, onProcessQuery, onRemovedQuery
 from GenericComponents import Sequence
+from constants import HAS_DEV_RESOURCES
 _logger = logging.getLogger(__name__)
 
 class SequenceNetworkSync(DynamicScriptComponent, Sync):
@@ -25,13 +26,35 @@ class SequenceNetworkSync(DynamicScriptComponent, Sync):
 
     @property
     def actualTime(self):
-        return self.syncTime if self.state == int(Sequence.State.Paused) else BigWorld.serverTime() - self.syncTime
+        return self.syncTime if self.state == int(Sequence.State.Paused) else BigWorld.serverTime() - self.syncTime - 0.5
 
     def set_state(self, prev):
         old = str(Sequence.State(prev))
         new = str(Sequence.State(self.state))
         _logger.debug('SequenceNetworkSync [%s] changing state [%s]->[%s]', self.name, old, new)
         self.onStateChange(self)
+
+    if HAS_DEV_RESOURCES:
+
+        def start(self):
+            return self.cell.setState(Sequence.State.Running, 0.0)
+
+        def stop(self):
+            return self.cell.setState(Sequence.State.Stopped, 0.0)
+
+        def pause(self, time=0.0):
+            return self.cell.setState(Sequence.State.Paused, time)
+
+    else:
+
+        def start(self):
+            pass
+
+        def stop(self):
+            pass
+
+        def pause(self, time=0.0):
+            pass
 
 
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
@@ -41,6 +64,7 @@ class SequenceNetworkSyncManager(CGF.ComponentManager):
     def onControllerAdded(self, sync, seq):
         sync.onStateChange += partial(self.onStateChange, seq)
         self.onStateChange(seq, sync)
+        seq.syncSubSequences()
 
     @onRemovedQuery(SequenceNetworkSync)
     def onControllerRemoved(self, sync):

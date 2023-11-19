@@ -24,7 +24,8 @@ class MapZonesPlugin(plugins.MarkerPlugin, MapZonesListener):
         mapZones = self.sessionProvider.shared.mapZones
         if mapZones:
             for zoneMarker, matrix in mapZones.getZoneMarkers().itervalues():
-                self.__addMarkerToZone(zoneMarker, matrix)
+                if zoneMarker.isVisibleOn3DScene:
+                    self.__addMarkerToZone(zoneMarker, matrix)
 
         self.startListen()
 
@@ -34,13 +35,16 @@ class MapZonesPlugin(plugins.MarkerPlugin, MapZonesListener):
         super(MapZonesPlugin, self).stop()
 
     def _onMarkerToZoneAdded(self, zoneMarker, matrix):
-        self.__addMarkerToZone(zoneMarker, matrix)
+        if zoneMarker.isVisibleOn3DScene:
+            self.__addMarkerToZone(zoneMarker, matrix)
 
     def _onMarkerFromZoneRemoved(self, zoneMarker):
-        self.__removeMarkerFromZone(zoneMarker)
+        if zoneMarker.isVisibleOn3DScene:
+            self.__removeMarkerFromZone(zoneMarker)
 
     def _onMarkerProgressUpdated(self, zoneMarker):
-        self.__updateProgress(zoneMarker)
+        if zoneMarker.isVisibleOn3DScene:
+            self.__updateProgress(zoneMarker)
 
     def __addMarkerToZone(self, zoneMarker, matrix):
         self.__markers[zoneMarker.id] = markerID = self._createMarkerWithMatrix(symbol=self.MINIMAP_ENTRY_SYMBOL, matrixProvider=matrix)

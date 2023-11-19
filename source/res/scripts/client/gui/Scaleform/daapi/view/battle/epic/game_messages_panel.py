@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/game_messages_panel.py
 import BattleReplay
+from ReservesEvents import randomReservesEvents
 from gui.Scaleform.daapi.view.meta.GameMessagesPanelMeta import GameMessagesPanelMeta
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -9,7 +10,6 @@ from gui.battle_control import avatar_getter
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.Scaleform.daapi.view.battle.shared.game_messages_panel import PlayerMessageData
 from gui.battle_results.components.common import makeEpicBattleFinishResultLabel
-import time
 
 class EpicMessagePanel(GameMessagesPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -17,22 +17,16 @@ class EpicMessagePanel(GameMessagesPanelMeta):
     def __init__(self):
         super(EpicMessagePanel, self).__init__()
         self.__blockNewMessages = False
-        self.currentHint = None
-        self.currentHintStartTime = 0
-        return
 
     def showHint(self, hint, data):
         if hint.name == 'CaptureBase':
             ctrl = self.sessionProvider.dynamic.missions
             if ctrl is not None:
                 ctrl.onSectorBaseCaptured(int(data.get('param1', 0)), data.get('param2', 'false') == 'true')
-            self.currentHintStartTime = time.time()
-            self.currentHint = hint
         return
 
     def hideHint(self, hint):
-        self.currentHint = None
-        return
+        pass
 
     def sendEndGameMessage(self, winningTeam, reason, extraData):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
@@ -52,6 +46,7 @@ class EpicMessagePanel(GameMessagesPanelMeta):
     def onMessageStarted(self, messageType, modificator, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
+            randomReservesEvents.hidePanel(True)
             ctrl.onMessagePlaybackStarted(messageType, {'id': id_,
              'modificator': modificator})
         return
@@ -72,6 +67,7 @@ class EpicMessagePanel(GameMessagesPanelMeta):
     def onMessageHiding(self, messageType, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
+            randomReservesEvents.showPanel()
             ctrl.onMessagePlaybackHide(messageType, {'id': id_})
         return
 

@@ -6,7 +6,6 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
-from gui.collection.sounds import COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE
 from gui.collection.account_settings import getShownNewItemsCount, isItemNew, isRewardNew, isTutorialCompleted, setCollectionRenewSeen, setCollectionTutorialCompleted, setItemShown, setRewardShown, setShownNewItemsCount
 from gui.collection.collections_helpers import composeBonuses, getItemResKey, setHangarState
 from gui.collection.resources.cdn.models import Group, Sub, makeImageID
@@ -18,7 +17,6 @@ from gui.impl.gen.view_models.views.lobby.collection.page_backgrounds_model impo
 from gui.impl.gen.view_models.views.lobby.collection.reward_info_model import RewardInfoModel, RewardState
 from gui.impl.gen.view_models.views.lobby.collection.tab_model import TabModel
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import BattlePassCoinTooltipView
-from gui.impl.lobby.collection.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -31,13 +29,12 @@ from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import ICollectionsSystemController
 _logger = logging.getLogger(__name__)
 _INITIAL_PAGE = -1
-_SEPARATOR = ','
 if typing.TYPE_CHECKING:
     from typing import Dict
-_COLLECTION_NAME_TO_SOUNDSPACE = {'mt_birthday2023': COLLECTIONS_MT_BIRTHDAY23_SOUND_SPACE}
 
 class CollectionView(ViewImpl):
-    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__pagesCount', '__rewardTooltips', '__content', '__bonusData', '_COMMON_SOUND_SPACE')
+    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__pagesCount', '__rewardTooltips', '__content')
+    _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
     def __init__(self, collectionId, backCallback, backBtnText, page):
@@ -48,11 +45,9 @@ class CollectionView(ViewImpl):
         self.__backBtnText = backBtnText
         self.__collection = self.__collectionsSystem.getCollection(collectionId)
         self.__rewardTooltips = {}
-        self.__bonusData = []
         self.__page = page
         self.__pagesCount = 0
         self.__content = {}
-        self._COMMON_SOUND_SPACE = _COLLECTION_NAME_TO_SOUNDSPACE.get(self.__collection.name, ACHIEVEMENTS_SOUND_SPACE)
         super(CollectionView, self).__init__(settings)
 
     @property
@@ -73,10 +68,6 @@ class CollectionView(ViewImpl):
                 tooltipData = self.getTooltipData(event)
                 if tooltipData is not None:
                     return CollectionItemTooltipView(*tooltipData.specialArgs)
-            if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
-                tooltipIds = map(int, event.getArgument('hiddenRewards').split(_SEPARATOR))
-                bonuses = [ bonus for index, bonus in enumerate(self.__bonusData) if index in tooltipIds ]
-                return AdditionalRewardsTooltip(bonuses)
             return super(CollectionView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
@@ -173,7 +164,7 @@ class CollectionView(ViewImpl):
         pagesBackgroundsModels.clear()
         for pbg in range(1, self.__pagesCount + 1):
             pageBackgroundsModel = PageBackgroundsModel()
-            pageBg = self.__getContent(Group.BG, self.__collection.name, 'bgPage{}'.format(pbg), optionalContent=True)
+            pageBg = self.__getContent(Group.BG, self.__collection.name, 'bgPage{}'.format(pbg))
             if pageBg:
                 pageBackgroundsModel.setMain(pageBg)
             pagesBackgroundsModels.addViewModel(pageBackgroundsModel)
@@ -243,14 +234,11 @@ class CollectionView(ViewImpl):
         rewardInfoModels = model.getRewardsInfo()
         rewardInfoModels.clear()
         self.__rewardTooltips.clear()
-        self.__bonusData = []
         for requiredCount, rewards in rewardItems:
             rewardInfoModel = RewardInfoModel()
             rewardInfoModel.setRequiredItemsCount(requiredCount)
             rewardInfoModel.setState(self.__getRewardState(requiredCount))
-            composedBonuses = composeBonuses([rewards])
-            packBonusModelAndTooltipData(composedBonuses, rewardInfoModel.getRewards(), self.__rewardTooltips, getCollectionsBonusPacker())
-            self.__bonusData.extend((bonus for bonus in composedBonuses if bonus.isShowInGUI()))
+            packBonusModelAndTooltipData(composeBonuses([rewards]), rewardInfoModel.getRewards(), self.__rewardTooltips, getCollectionsBonusPacker())
             rewardInfoModels.addViewModel(rewardInfoModel)
 
         rewardInfoModels.invalidate()
@@ -322,9 +310,9 @@ class CollectionView(ViewImpl):
         self.destroyWindow()
         return
 
-    def __getContent(self, group, sub, name, optionalContent=False):
+    def __getContent(self, group, sub, name):
         path = self.__content.get(group, {}).get(sub, {}).get(name, '')
-        if not path and not optionalContent:
+        if not path:
             _logger.warning('Resource: %s not found', '/'.join((group, sub, name)))
         return path
 

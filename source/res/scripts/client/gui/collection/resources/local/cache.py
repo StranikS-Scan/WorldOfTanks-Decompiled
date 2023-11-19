@@ -26,8 +26,8 @@ class CollectionsLocalCacheMgr(object):
             group, sub, name = imageID.split('/')
             packed.setdefault(group, {})
             packed[group].setdefault(sub, {})
-            res = self.__IMG.dyn(group).dyn(sub).dyn(name)
-            if res.exists():
-                packed[group][sub][name] = backport.image(res())
+            resID = self.__IMG.dyn(group).dyn(sub).dyn(name)()
+            if resID != R.invalid():
+                packed[group][sub][name] = backport.image(resID)
 
         return packed

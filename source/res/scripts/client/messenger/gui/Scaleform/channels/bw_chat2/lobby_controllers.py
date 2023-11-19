@@ -45,11 +45,11 @@ class UnitChannelController(LobbyLayout):
     def _broadcast(self, message):
         self._getChat().broadcast(message)
 
-    def _format(self, message, doFormatting=True, shouldAddTextLink=False):
+    def _format(self, message, doFormatting=True):
         if not doFormatting:
             return message.text
         dbID = message.accountDBID
-        return self._mBuilder.setGuiType(dbID).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.text).setTextLink(dbID, message.accountName, shouldAddTextLink).build()
+        return self._mBuilder.setGuiType(dbID).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.text).build()
 
     def _fireInitEvent(self):
         g_eventBus.handleEvent(MessengerEvent(MessengerEvent.PRB_CHANNEL_CTRL_INITED, {'prbType': self._channel.getPrebattleType(),

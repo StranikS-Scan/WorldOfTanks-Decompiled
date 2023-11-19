@@ -54,7 +54,6 @@ class QUESTS(object):
     BONUSES_ITEM_PREMIUM = '#quests:bonuses/item/premium'
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
-    BONUSES_ITEM_LOOTBOXES = '#quests:bonuses/item/lootBoxes'
     BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSES_CREWBOOK_TEXT = '#quests:bonuses/crewBook/text'
     BONUSES_CREWSKIN_TEXT = '#quests:bonuses/crewSkin/text'
@@ -695,6 +694,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEBLOCKEDBYARMOR = '#quests:details/conditions/cumulative/damageBlockedByArmor'
     DETAILS_CONDITIONS_CUMULATIVE_FREEXP = '#quests:details/conditions/cumulative/freeXP'
     DETAILS_CONDITIONS_CUMULATIVE_SUBTOTALXP = '#quests:details/conditions/cumulative/subtotalXP'
+    DETAILS_CONDITIONS_CUMULATIVE_FACTUALXP = '#quests:details/conditions/cumulative/factualXP'
     DETAILS_CONDITIONS_CUMULATIVE_POTENTIALDAMAGEDEALT = '#quests:details/conditions/cumulative/potentialDamageDealt'
     DETAILS_CONDITIONS_CUMULATIVE_SOLOHITSASSISTED = '#quests:details/conditions/cumulative/soloHitsAssisted'
     DETAILS_CONDITIONS_CUMULATIVE_ORIGINALXP = '#quests:details/conditions/cumulative/originalXP'
@@ -1558,7 +1558,6 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK = '#quests:personalMission/status/addBottom/vehicleType/heavyTank'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG = '#quests:personalMission/status/addBottom/vehicleType/AT-SPG'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG = '#quests:personalMission/status/addBottom/vehicleType/SPG'
-    PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY = '#quests:personalMission/status/addBottom/vehicleType/any'
     PERSONALMISSION_STATUS_MISSIONDISABLED = '#quests:personalMission/status/missionDisabled'
     PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS = '#quests:personalMission/status/lockedByPrevMissions'
     PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION = '#quests:personalMission/status/lockedByPrevOperation'
@@ -1715,11 +1714,6 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
     DETAILS_CONDITIONS_CUMULATIVE_COMP7PRESTIGEPOINTS = '#quests:details/conditions/cumulative/comp7PrestigePoints'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION1 = '#quests:debutBoxes/missions/header/caption1'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION2 = '#quests:debutBoxes/missions/header/caption2'
-    DEBUTBOXES_MISSIONS_HEADER_CAPTION3 = '#quests:debutBoxes/missions/header/caption3'
-    DEBUTBOXES_MISSIONS_HEADER_DISABLED = '#quests:debutBoxes/missions/header/disabled'
-    DEBUTBOXES_MISSIONS_HEADER_INFO = '#quests:debutBoxes/missions/header/info'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -2236,8 +2230,7 @@ class QUESTS(object):
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_MEDIUMTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG,
-     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ANY)
+     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG)
 
     @classmethod
     def getTokenTitle(cls, style):

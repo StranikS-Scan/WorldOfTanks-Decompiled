@@ -1,8 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/platform/products_fetcher/product_descriptor.py
 from helpers.events_handler import EventsHandler
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Dict
 
 class ProductDescriptor(EventsHandler):
+    STOREFRONT_NAMESPACE = 'wot_subscriptions'
 
     def __init__(self, params):
         self._params = params
@@ -23,7 +27,7 @@ class ProductDescriptor(EventsHandler):
 
     @property
     def metadata(self):
-        return self._getFromParams('metadata', {}).get('wot', {})
+        return self._getFromParams('metadata', {}).get(self.STOREFRONT_NAMESPACE, {})
 
     @property
     def description(self):

@@ -123,7 +123,7 @@ class RestoreController(IRestoreController, Notifiable):
                 delta = vehicle.restoreInfo.getRestoreCooldownTimeLeft()
             else:
                 delta = vehicle.restoreInfo.getRestoreTimeLeft()
-            if 0 < delta < float('inf'):
+            if delta > 0:
                 if delta > time_utils.ONE_DAY:
                     period = time_utils.ONE_DAY
                 elif delta > time_utils.ONE_HOUR:

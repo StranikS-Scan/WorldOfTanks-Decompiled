@@ -6,6 +6,7 @@ from frameworks.wulf import ViewModel
 class ButtonType(Enum):
     CREWOPERATIONS = 'crewOperations'
     CREWBOOKS = 'crewBooks'
+    ACCELERATEDTRAINING = 'acceleratedTraining'
     WOTPLUS = 'wotPlus'
 
 

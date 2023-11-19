@@ -110,6 +110,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
     def _getCallbacks(self):
         return (('inventory', self._onInventoryUpdate),
          ('inventory.1.crew', self._onCrewChanged),
+         ('inventory.8.compDescr', self._onCrewChanged),
          ('tokens', self._onCrewChanged),
          ('potapovQuests', self._onCrewChanged))
 
@@ -166,7 +167,6 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     def _finalize(self):
         self.__dataProviders.unsubscribe()
-        self.__dataProviders.clear()
         super(MemberChangeView, self)._finalize()
         self.__currentVehicle = None
         self.__tankman = None
@@ -174,8 +174,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__filterPanelWidget = None
         self.__paramsView = None
         self.__dataProviders = None
+        self.__paramsView = None
         self.__uiTooltipLogger.finalize()
-        self.__uiTooltipLogger = None
         return
 
     def _onPopoverTooltipCreated(self, event, window):

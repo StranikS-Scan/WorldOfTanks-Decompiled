@@ -79,7 +79,7 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
         self.__state = RANKEDBATTLES_CONSTS.INTRO_STATE_NORMAL
         if self.__rankedController.isFrozen():
             self.__state = RANKEDBATTLES_CONSTS.INTRO_STATE_DISABLED
-            if not self.__rankedController.getSeasonPassed() and not self.__rankedController.getCurrentSeason():
+            if not self.__rankedController.getSeasonsPassed() and not self.__rankedController.getCurrentSeason():
                 self.__state = RANKEDBATTLES_CONSTS.INTRO_STATE_BEFORE_SEASON
         if self.__state == RANKEDBATTLES_CONSTS.INTRO_STATE_DISABLED:
             self.as_setAlertMessageBlockDataS({'alertIcon': backport.image(R.images.gui.maps.icons.library.alertBigIcon()),

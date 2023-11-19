@@ -22,7 +22,6 @@ def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.lobby.rally.UnitUserCMHandler import UnitUserCMHandler
     return ((CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, user_cm_handlers.UserVehicleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.BASE_USER, user_cm_handlers.BaseUserCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.BASE_USER_APPEAL, user_cm_handlers.BaseUserAppealCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, UnitUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler))

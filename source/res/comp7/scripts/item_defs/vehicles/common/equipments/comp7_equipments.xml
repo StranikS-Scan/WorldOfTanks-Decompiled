@@ -120,9 +120,9 @@
       </visualScript>
       <cooldownSeconds>	3	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15	  <exports>	vse tooltip	</exports>
+      <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
-      <gunReloadTimeBuff>	0.75 0.7 0.6	  <exports>	vse	</exports>
+      <gunReloadTimeBuff>	0.75 0.7 0.65	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
       <damageDistance>	150	  <exports>	vse tooltip	</exports>
       </damageDistance>
@@ -148,7 +148,7 @@
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	15 25 35	  <exports>	vse tooltip	</exports>
+      <crewBuff>	17.5 30 42.5	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_aoe_inspire>
@@ -173,9 +173,9 @@
       </delay>
       <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	75 150 250	  <exports>	vse tooltip	</exports>
+      <damage>	70 135 225	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	0 6 10	  <exports>	vse tooltip	</exports>
+      <stunDuration>	0 6 8	  <exports>	vse tooltip	</exports>
       </stunDuration>
       <fraction>	0	  <exports>	vse tooltip	</exports>
       </fraction>
@@ -237,13 +237,13 @@
       </cooldownSeconds>
       <duration>	10 20 30	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerFactor>	1.25	  <exports>	vse	</exports>
+      <enginePowerFactor>	1.30	  <exports>	vse	</exports>
       </enginePowerFactor>
       <stunDurationFactor>	0.25	  <exports>	vse	</exports>
       </stunDurationFactor>
-      <repairBuff>	15	  <exports>	vse tooltip	</exports>
+      <repairBuff>	30	  <exports>	vse tooltip	</exports>
       </repairBuff>
-      <gunReloadBoost>	4.0	  <exports>	vse tooltip	</exports>
+      <gunReloadBoost>	5.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
     </script>
   </comp7_juggernaut>
@@ -315,11 +315,11 @@
       </visualScript>
       <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	8	  <exports>	vse tooltip	</exports>
+      <duration>	6	  <exports>	vse tooltip	</exports>
       </duration>
       <healDuration>	10	  <exports>	vse tooltip	</exports>
       </healDuration>
-      <baseHeal>	150	  <exports>	vse tooltip	</exports>
+      <baseHeal>	75	  <exports>	vse tooltip	</exports>
       </baseHeal>
       <extraHealFactor>	0.35 0.6 0.85	  <exports>	vse	</exports>
       </extraHealFactor>

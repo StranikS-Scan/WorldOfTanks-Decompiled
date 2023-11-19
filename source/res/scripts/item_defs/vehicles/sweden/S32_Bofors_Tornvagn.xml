@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	32	</forward>
+    <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -70,6 +70,13 @@
       <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <S32_Bofors_Tornvagn_SumS_3DSt>
+          <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Hull.model	</exploded>
+        </S32_Bofors_Tornvagn_SumS_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -841,6 +848,30 @@
         <clipAngle>	0.609507	</clipAngle>
         <anchorShift>	0.741477	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15067	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+        <position>	-0.496725 1.52429 2.24636	</position>
+        <rotation>	0.234236 -0.001748 3.14158	</rotation>
+        <scale>	0.633171 0.263797 0.633171	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.469403	</clipAngle>
+        <anchorShift>	0.014593	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15068	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+        <position>	1.14449 1.64295 -3.60342	</position>
+        <rotation>	-3.13985 -0.000082 -0.000011	</rotation>
+        <scale>	0.4243 0.176776 0.424301	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.608815	</clipAngle>
+        <anchorShift>	-0.005413	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -869,7 +900,7 @@
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -882,6 +913,13 @@
         <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <S32_Bofors_Tornvagn_SumS_3DSt>
+            <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Chassis.model	</exploded>
+          </S32_Bofors_Tornvagn_SumS_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1135,7 +1173,7 @@
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
           <anchorPosition>	0.000113 2.48233 0.092236	</anchorPosition>
-          <anchorDirection>	0 1 -0	</anchorDirection>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>
@@ -1719,13 +1757,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
       <maxHealth>	320	</maxHealth>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1743,11 +1781,11 @@
             <maxPitch>	0 10 0.30856 10 0.422222 2 0.557778 2 0.67144 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	15	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.25	</turretRotation>
+            <turretRotation>	0.2	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1755,6 +1793,13 @@
             <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <S32_Bofors_Tornvagn_SumS_3DSt>
+                <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </S32_Bofors_Tornvagn_SumS_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/sweden/S32_Bofors_Tornvagn/collision/Gun_01.model	</collisionModelServer>
@@ -1762,6 +1807,30 @@
           </hitTester>
           <effects>	shot_large_mb	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
+          <drivenJoints>
+            <sets>
+              <S32_Bofors_Tornvagn_SumS_3DSt>
+                <master>
+                  <node>	Gun	</node>
+                  <table>
+                    <row>	-20	</row>
+                    <row>	0	</row>
+                    <row>	10	</row>
+                  </table>
+                  <slaves>
+                    <slave>
+                      <node>	Joint_01	</node>
+                      <table>
+                        <row>	-20	</row>
+                        <row>	0	</row>
+                        <row>	10	</row>
+                      </table>
+                    </slave>
+                  </slaves>
+                </master>
+              </S32_Bofors_Tornvagn_SumS_3DSt>
+            </sets>
+          </drivenJoints>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1810,6 +1879,13 @@
         <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <S32_Bofors_Tornvagn_SumS_3DSt>
+            <undamaged>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S32_Bofors_Tornvagn/_skins/S32_Bofors_Tornvagn_SumS_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </S32_Bofors_Tornvagn_SumS_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/sweden/S32_Bofors_Tornvagn/collision/Turret_01.model	</collisionModelServer>
@@ -2273,6 +2349,54 @@
           <clipAngle>	0.411839	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+          <position>	-0.827903 2.13946 -1.02902	</position>
+          <rotation>	1.56848 -1.56926 3.13982	</rotation>
+          <scale>	0.375912 0.051493 0.375911	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.36855	</clipAngle>
+          <anchorShift>	0.04459	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+          <position>	0.929218 2.11554 -0.333506	</position>
+          <rotation>	1.56861 1.56957 -3.05967	</rotation>
+          <scale>	0.262899 0.2 0.262898	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.36855	</clipAngle>
+          <anchorShift>	0.03459	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35038	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+          <position>	0.001115 2.476 0.527841	</position>
+          <rotation>	0.142897 -0.001748 3.14158	</rotation>
+          <scale>	0.524793 0.218644 0.524791	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.411839	</clipAngle>
+          <anchorShift>	0.014587	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	S32_Bofors_Tornvagn_SumS_3DSt	</compatibleModels>
+          <position>	0.295948 2.18295 -2.38917	</position>
+          <rotation>	1.35011 -0.01667 -0.010344	</rotation>
+          <scale>	0.447462 0.061294 0.447461	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.36855	</clipAngle>
+          <anchorShift>	0.04459	</anchorShift>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2301,7 +2425,7 @@
       <engines>
         <_2_st_Scania_DS14>
           <smplEnginePower>	500	</smplEnginePower>
-          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_2_st_Scania_DS14>
       </engines>
       <chassis>

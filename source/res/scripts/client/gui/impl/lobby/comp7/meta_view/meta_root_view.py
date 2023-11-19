@@ -17,6 +17,8 @@ from gui.impl.lobby.comp7.meta_view.pages.leaderboard_page import LeaderboardPag
 from gui.impl.lobby.comp7.meta_view.pages.progression_page import ProgressionPage
 from gui.impl.lobby.comp7.meta_view.pages.rank_rewards_page import RankRewardsPage
 from gui.impl.lobby.comp7.meta_view.pages.weekly_quests_page import WeeklyQuestsPage
+from gui.impl.lobby.comp7.meta_view.pages.yearly_rewards_page import YearlyRewardsPage
+from gui.impl.lobby.comp7.meta_view.pages.yearly_statistics_page import YearlyStatisticsPage
 from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
@@ -147,8 +149,10 @@ class MetaRootView(ViewImpl, IGlobalListener):
     def __initPages(self):
         pages = (ProgressionPage(self.viewModel.progressionModel, self),
          RankRewardsPage(self.viewModel.rankRewardsModel, self),
+         YearlyRewardsPage(self.viewModel.yearlyRewardsModel, self),
          WeeklyQuestsPage(self.viewModel.weeklyQuestsModel, self),
-         LeaderboardPage(self.viewModel.leaderboardModel, self))
+         LeaderboardPage(self.viewModel.leaderboardModel, self),
+         YearlyStatisticsPage(self.viewModel.yearlyStatisticsModel, self))
         self.__pages = {p.pageId:p for p in pages}
 
     def __clearPages(self):

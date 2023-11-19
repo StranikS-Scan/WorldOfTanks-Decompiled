@@ -26,6 +26,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.profile.ProfileTechniqueWindow import ProfileTechniqueWindow
     from gui.Scaleform.daapi.view.lobby.profile.ProfileWindow import ProfileWindow
     from gui.Scaleform.daapi.view.lobby.profile.ProfileHof import ProfileHof
+    from gui.Scaleform.daapi.view.lobby.profile.profile_technique_prestige_injects import ProfileTechniquePrestigeInject, ProfileTechniquePrestigeEmblemInject
     return (ViewSettings(VIEW_ALIAS.LOBBY_PROFILE, ProfilePage, 'profile.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_PROFILE, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.PROFILE_WINDOW, ProfileWindow, 'profileWindow.swf', WindowLayer.WINDOW, 'profileWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_AWARDS, ProfileAwards, ScopeTemplates.DEFAULT_SCOPE),
@@ -37,7 +38,9 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE, ProfileTechniquePage, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, ProfileTechniqueWindow, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_HOF, ProfileHof, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE, ProfileCollectionsPage, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE, ProfileCollectionsPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_PRESTIGE_WIDGET, ProfileTechniquePrestigeInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_PRESTIGE_EMBLEM_WIDGET, ProfileTechniquePrestigeEmblemInject, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -47,5 +50,12 @@ def getBusinessHandlers():
 class ProfilePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.LOBBY_PROFILE, self.loadViewByCtxEvent), (VIEW_ALIAS.PROFILE_WINDOW, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.LOBBY_PROFILE, self.__loadOrUpdateView), (VIEW_ALIAS.PROFILE_WINDOW, self.loadViewByCtxEvent))
         super(ProfilePackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+    def __loadOrUpdateView(self, event):
+        view = self.findViewByAlias(WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_PROFILE)
+        if view and event.ctx.get('selectedAlias'):
+            view.updateSubView(event.ctx)
+            return
+        self.loadViewByCtxEvent(event)

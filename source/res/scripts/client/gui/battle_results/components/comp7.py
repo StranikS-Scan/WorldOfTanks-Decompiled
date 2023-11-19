@@ -11,7 +11,7 @@ from constants import FAIRPLAY_VIOLATIONS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.qualification_battle import BattleState
-from gui.impl.lobby.comp7 import comp7_shared, comp7_i18n_helpers
+from gui.impl.lobby.comp7 import comp7_shared, comp7_i18n_helpers, comp7_model_helpers
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
@@ -48,10 +48,35 @@ class PrestigePointsBlock(base.StatsBlock):
             return
         else:
             achievedComp7Rating = result.get('avatar', {}).get('comp7RatingDelta', 0)
+            if achievedComp7Rating != 0:
+                achievedComp7Rating = getFormattedRating(achievedComp7Rating)
+            else:
+                achievedComp7Rating = str(achievedComp7Rating)
             if achievedComp7Rating is not None:
-                self.value = text_styles.grandTitle(getFormattedRating(achievedComp7Rating))
+                self.value = text_styles.grandTitle(achievedComp7Rating)
                 self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
                 self.tooltip = TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_PRESTIGE_POINTS
+            return
+
+
+class TournamentPrestigePointsBlock(PrestigePointsBlock):
+
+    def setRecord(self, result, reusable):
+        avatarResults = result.get('avatar', {})
+        isQualificationBattle = avatarResults.get('comp7QualActive', False)
+        self.isVisible = not isQualificationBattle
+        if not self.isVisible:
+            return
+        else:
+            achievedComp7Rating = result.get('avatar', {}).get('comp7RatingDelta', 0)
+            if achievedComp7Rating != 0:
+                achievedComp7Rating = getFormattedRating(achievedComp7Rating)
+            else:
+                achievedComp7Rating = str(achievedComp7Rating)
+            if achievedComp7Rating is not None:
+                self.value = text_styles.grandTitle(achievedComp7Rating)
+                self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
+                self.tooltip = TOOLTIPS_CONSTANTS.TOURNAMENT_COMP7_BATTLE_RESULTS_PRESTIGE_POINTS
             return
 
 
@@ -113,9 +138,10 @@ class Comp7RankBlock(base.StatsBlock):
         currentRating = max(prevRating + achievedRating, 0)
         currentDivision = comp7_shared.getPlayerDivisionByRating(currentRating)
         currentRankValue = comp7_shared.getRankEnumValue(currentDivision).value
+        seasonName = comp7_model_helpers.getSeasonNameEnum().value
         rankName = comp7_i18n_helpers.RANK_MAP[currentRankValue]
         self.linkage = COMP7_CONSTS.COMP7_RANK_SUB_TASK_UI
-        self.icon = backport.image(R.images.gui.maps.icons.comp7.ranks.c_64.dyn(rankName)())
+        self.icon = backport.image(R.images.gui.maps.icons.comp7.ranks.dyn(seasonName).c_64.dyn(rankName)())
         self.title = self.__getTitle(currentDivision, prevDivision)
         self.descr = self.__getDescription(achievedRating, currentDivision)
         self.ratingDiff = self.__getRatingDiff(achievedRating)
@@ -156,7 +182,7 @@ class Comp7RankBlock(base.StatsBlock):
         formattedRating = getFormattedRating(achievedRating)
         if achievedRating < 0:
             return text_styles.error(formattedRating)
-        return text_styles.tutorial(formattedRating) if achievedRating == 0 else text_styles.bonusAppliedText(formattedRating)
+        return text_styles.tutorial(str(achievedRating)) if achievedRating == 0 else text_styles.bonusAppliedText(formattedRating)
 
     @staticmethod
     def __getQualificationTitle():

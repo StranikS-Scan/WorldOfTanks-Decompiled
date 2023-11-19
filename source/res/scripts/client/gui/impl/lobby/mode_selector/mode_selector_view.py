@@ -7,7 +7,6 @@ import adisp
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowLayer, WindowStatus, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
@@ -20,6 +19,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_t
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
 from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
@@ -76,7 +76,7 @@ def _getTooltipByContentIdMap():
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
-class ModeSelectorView(ViewImpl):
+class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
     __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
@@ -182,7 +182,7 @@ class ModeSelectorView(ViewImpl):
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.suspendLobbyHeader(self.uniqueID)
         app = self.__appLoader.getApp()
         self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(_BACKGROUND_ALPHA)
@@ -195,7 +195,7 @@ class ModeSelectorView(ViewImpl):
 
     def _onLoaded(self):
         if self.__subSelectorCallback is not None:
-            self.__subSelectorCallback()
+            self.__subSelectorCallback(parent=self.getParentWindow())
             self.__subSelectorCallback = None
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
@@ -217,7 +217,7 @@ class ModeSelectorView(ViewImpl):
         self.__dataProvider.dispose()
         self.__tooltipConstants = None
         self.__subSelectorCallback = None
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.resumeLobbyHeader(self.uniqueID)
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': False}))
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.__restoreGraphics()

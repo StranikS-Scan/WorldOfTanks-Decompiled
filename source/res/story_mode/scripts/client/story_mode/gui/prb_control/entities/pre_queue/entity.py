@@ -1,10 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/prb_control/entities/pre_queue/entity.py
 import BigWorld
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.base.pre_queue.ctx import DequeueCtx
+from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import REQUEST_TYPE
+from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
+from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from story_mode.gui.impl.battle.prebattle_window import getOpenedPrebattleView
@@ -13,15 +19,11 @@ from story_mode.gui.prb_control.entities.pre_queue.actions_validator import Stor
 from story_mode.gui.prb_control.entities.pre_queue.ctx import StoryModeQueueCtx
 from story_mode.gui.prb_control.entities.pre_queue.permissions import StoryModePermissions
 from story_mode.gui.shared.event_dispatcher import showQueueWindow
-from story_mode_common.story_mode_constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG
-from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
-from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
+from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
-from gui.prb_control.items import SelectResult
-from helpers import dependency
 from story_mode.skeletons.story_mode_controller import IStoryModeController
+from story_mode_common.story_mode_constants import QUEUE_TYPE
+from wg_async import wg_async, wg_await
 
 class StoryModeEntryPoint(PreQueueEntryPoint):
 
@@ -49,8 +51,7 @@ class StoryModeEntity(PreQueueEntity):
 
     def init(self, ctx=None):
         self.storage.queueType = self.getQueueType()
-        if self._skippedShowGUI:
-            self._modeFlags |= FUNCTIONAL_FLAG.LOAD_PAGE
+        self._modeFlags |= FUNCTIONAL_FLAG.LOAD_PAGE
         return super(StoryModeEntity, self).init(ctx=ctx)
 
     def doAction(self, action=None):
@@ -81,7 +82,7 @@ class StoryModeEntity(PreQueueEntity):
             isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
             isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
             if isExit or isSwitch and not isLoadPage:
-                g_eventDispatcher.loadHangar()
+                self._loadHangar()
                 self.storage.queueType = QUEUE_TYPE.UNKNOWN
         return super(StoryModeEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
@@ -94,6 +95,11 @@ class StoryModeEntity(PreQueueEntity):
     @missionCompletionCheck
     def queue(self, ctx, callback=None):
         super(StoryModeEntity, self).queue(ctx, callback=callback)
+
+    @wg_async
+    def _loadHangar(self):
+        yield wg_await(waitForLobby())
+        g_eventDispatcher.loadHangar()
 
     @property
     def _guiCtx(self):

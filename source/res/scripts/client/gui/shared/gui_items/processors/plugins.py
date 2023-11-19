@@ -40,6 +40,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if not IS_EDITOR:
     from gui.impl.pub.dialog_window import DialogResult, DialogButtons, SingleDialogResult
+    from gui.impl.dialogs.gf_builders import ResDialogBuilder
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from post_progression_common import ACTION_TYPES
@@ -717,6 +718,20 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
         settings = self._getSetting()
         settings[self.settingFieldName] = value
         AccountSettings.setSettings(CheckBoxConfirmator.__ACC_SETT_MAIN_KEY, settings)
+
+
+class TmenXPAcceleratorConfirmator(AwaitConfirmator):
+
+    @future_async.wg_async
+    def _confirm(self, callback):
+        from gui.impl.dialogs import dialogs as dlg
+        builder = ResDialogBuilder()
+        builder.setMessagesAndButtons(R.strings.dialogs.xpToTmenCheckbox, buttons=R.strings.dialogs.xpToTmenCheckbox)
+        builder.setIcon(R.images.gui.maps.icons.tankmen.windows.crew_exp_speed_up())
+        result = yield future_async.wg_await(dlg.show(builder.build()))
+        if result.result != DialogButtons.SUBMIT:
+            callback(makeError())
+        callback(makeSuccess())
 
 
 class PMSelectConfirmator(CheckBoxConfirmator):

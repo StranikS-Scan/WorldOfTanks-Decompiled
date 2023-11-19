@@ -12,10 +12,10 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.device_upgrade_dialog_model
 from gui.impl.gen.view_models.views.lobby.tank_setup.dialogs.main_content.kpi_item_model import KpiItemModel
 from gui.impl.lobby.tank_setup.dialogs.dialog_helpers.balance import initBalance
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.shared.event_dispatcher import showDeconstructionDeviceWindow
 from gui.shared.gui_items import getKpiValueString, GUI_ITEM_TYPE
 from gui.shared.money import Currency
+from gui.shared.tooltips.common import getSimpleTooltipFactory
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -116,7 +116,7 @@ class UpgradableDeviceUpgradeConfirmView(DialogTemplateView):
 
     def __getSubmitTooltipFactory(self):
         body = backport.text(R.strings.dialogs.equipmentUpgrade.getMoreCurrencyButtonTooltip.body())
-        return SimpleTooltipContent(body=body) if self.__isSubmitDisabled() else None
+        return getSimpleTooltipFactory(body=body) if self.__isSubmitDisabled() else None
 
     def __isSubmitDisabled(self, canGetMoreCurrency=None):
         if canGetMoreCurrency is None:

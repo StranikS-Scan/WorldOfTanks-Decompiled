@@ -288,20 +288,20 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             self.delayCallback(0.0, self.enable, preferredPos, closesDist, postmortemParams, turretYaw, gunPitch, camTransitionParams, initialVehicleMatrix)
             return
         elif initialVehicleMatrix is None:
-            initialVehicleMatrix = player.getOwnVehicleMatrix(self.vehicleMProv) if vehicle is None else vehicle.matrix
+            initialVehicleMatrix = player.getOwnVehicleMatrix(Math.Matrix(self.vehicleMProv)) if vehicle is None else vehicle.matrix
         vehicleMProv = initialVehicleMatrix
-        if self._ArcadeCamera__compareCurrStateSettingsKey(GAME.COMMANDER_CAM) or arcadeState is not None:
+        if (not self._ArcadeCamera__isSettingsEnabled(GAME.COMMANDER_CAM) and self._ArcadeCamera__compareCurrStateSettingsKey(GAME.COMMANDER_CAM)) or (arcadeState is not None):
             state = None
             newCameraDistance = self._ArcadeCamera__distRange.max
             if arcadeState is not None:
                 self._ArcadeCamera__zoomStateSwitcher.switchToState(arcadeState.zoomSwitcherState)
                 state = self._ArcadeCamera__zoomStateSwitcher.getCurrentState()
                 newCameraDistance = arcadeState.camDist
-        self._ArcadeCamera__updateProperties(state = state)
-        self._ArcadeCamera__updateCameraSettings(newCameraDistance)
-        self._ArcadeCamera__inputInertia.glideFov(self._ArcadeCamera__calcRelativeDist())
-        if arcadeState is None:
-            self._ArcadeCamera__aimingSystem.aimMatrix = self._ArcadeCamera__calcAimMatrix()
+            self._ArcadeCamera__updateProperties(state = state)
+            self._ArcadeCamera__updateCameraSettings(newCameraDistance)
+            self._ArcadeCamera__inputInertia.glideFov(self._ArcadeCamera__calcRelativeDist())
+            if arcadeState is None:
+                self._ArcadeCamera__aimingSystem.aimMatrix = self._ArcadeCamera__calcAimMatrix()
         camDist = None
         if self._ArcadeCamera__postmortemMode:
             if postmortemParams is not None:

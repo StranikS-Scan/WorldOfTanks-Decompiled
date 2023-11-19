@@ -12,7 +12,6 @@ import typing
 from backports.functools_lru_cache import lru_cache
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
-from ItemRestore import RESTORE_VEHICLE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui import GUI_SETTINGS
@@ -169,7 +168,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CLAN_WARS_BATTLES = 'clanWarsBattles'
     FUN_RANDOM = 'fun_random'
     COMP7_BATTLES = 'comp7'
-    DEBUT_BOXES = 'debutBoxes'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 
@@ -1001,7 +999,7 @@ class Vehicle(FittingItem):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMinSize
+        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMinSize or self.isOnlyForBattleRoyaleBattles
 
     @property
     def isAmmoNotFullInSetups(self):
@@ -1839,7 +1837,7 @@ class Vehicle(FittingItem):
         return vehicleDisclaimerURLs.get(self.getDisclaimerTag(), None) is not None
 
     def hasLimitedRestore(self):
-        return self.restoreInfo.isUnlimited() or self.restoreInfo.isFinite() and self.restoreInfo.getRestoreTimeLeft() > 0 if self.isRestorePossible() and self.restoreInfo.restoreType == RESTORE_VEHICLE_TYPE.PREMIUM else False
+        return self.isRestorePossible() and self.restoreInfo.isLimited() and self.restoreInfo.getRestoreTimeLeft() > 0
 
     def hasRestoreCooldown(self):
         return self.isRestorePossible() and self.restoreInfo.isInCooldown()

@@ -10,6 +10,7 @@ from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 _TOOLTIP_MIN_WIDTH = 364
 _AWARD_STEP = 63
 _AWARDS_RIGHT_PADDING = 25
@@ -84,6 +85,8 @@ class RankedTooltipData(BlocksTooltipData):
                     comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision(), division=text_styles.stats(nextDivision.getUserName())))
             else:
                 comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isLastInDivision.league()))
+        elif item.isFirstInDivision() and division.getUserID() != RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION:
+            comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isFirstInDivision()))
         return comment
 
     def __getShieldComment(self):

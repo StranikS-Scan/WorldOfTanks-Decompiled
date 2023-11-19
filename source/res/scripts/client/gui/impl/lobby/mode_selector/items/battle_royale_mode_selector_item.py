@@ -38,7 +38,9 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
         return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
 
     def _onInitializing(self):
-        super(BattleRoyaleModeSelectorItem, self)._onInitializing()
+        ModeSelectorLegacyItem._onInitializing(self)
+        self.viewModel.setName(backport.text(R.strings.mode_selector.mode.battleRoyaleQueue.title()))
+        self.viewModel.setPriority(self._legacySelectorItem.getOrder())
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
         self.__battleRoyaleController.onUpdated += self.__onUpdate
         self.brProgression.onProgressPointsUpdated += self.__fillWidgetData
@@ -73,9 +75,8 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
             self.__resetViewModel(vm)
             if season.hasActiveCycle(currTime):
                 if self.__battleRoyaleController.isEnabled():
-                    if self.__battleRoyaleController.isShowTimeLeft():
-                        timeLeftStr = time_utils.getTillTimeString(season.getCycleEndDate() - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                        vm.setTimeLeft(timeLeftStr)
+                    timeLeftStr = time_utils.getTillTimeString(season.getCycleEndDate() - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                    vm.setTimeLeft(timeLeftStr)
                     self._addReward(ModeSelectorRewardID.CREDITS)
                     self._addReward(ModeSelectorRewardID.OTHER)
             else:

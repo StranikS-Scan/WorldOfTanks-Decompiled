@@ -76,7 +76,7 @@ class BadgesController(IBadgesController, Notifiable):
             return
 
     def __onSyncCompleted(self, updateReason, _):
-        if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC,):
+        if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             self.__updateBadges()
 
     def __initCurrentBadges(self):

@@ -13,9 +13,11 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
+from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.story_mode_constants import LOGGER_NAME
+from wg_async import wg_async, wg_await
 _logger = getLogger(LOGGER_NAME)
 
 class _ArenaLoadedChecker(IArenaLoadController):
@@ -101,6 +103,7 @@ def showCongratulationsWindow(isCloseVisible=False, onClose=None):
 
 @UseHeaderNavigationImpossible()
 @UseStoryModeFading(layer=WindowLayer.TOP_SUB_VIEW, waitForLayoutReady=R.views.story_mode.lobby.MissionSelectionView())
+@wg_async
 def showMissionSelectionView():
     _logger.debug('showMissionSelectionView')
     contentResId = R.views.story_mode.lobby.MissionSelectionView()
@@ -108,14 +111,15 @@ def showMissionSelectionView():
         sendViewLoadedEvent(contentResId)
         return
     else:
+        yield wg_await(waitForLobby())
         from story_mode.gui.impl.lobby.mission_selection_view import MissionSelectionView
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MissionSelectionView, ScopeTemplates.DEFAULT_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
 
-def showBattleResultWindow(arenaUniqueId, isForceOnboarding=False):
+def showBattleResultWindow(arenaUniqueId):
     from story_mode.gui.impl.lobby.battle_result_view import BattleResultWindow
-    BattleResultWindow(arenaUniqueId, isForceOnboarding).load()
+    BattleResultWindow(arenaUniqueId).load()
 
 
 def sendViewLoadedEvent(layoutID):

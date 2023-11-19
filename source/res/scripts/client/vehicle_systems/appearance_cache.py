@@ -149,9 +149,6 @@ class AppearanceCache(IAppearanceCache):
             onFinishedCallback(appearance)
             return appearance
 
-    def createAppearanceInstance(self):
-        return CompoundAppearance()
-
     def __load(self, key, info, onLoadedCallback=None):
         _logger.debug('__load(%d)', key[0])
         loadInfo = self.__loadingAssemblerQueue.get(key)
@@ -160,7 +157,7 @@ class AppearanceCache(IAppearanceCache):
                 loadInfo.onConstructed += onLoadedCallback
             return loadInfo.appearance
         else:
-            appearance = self.createAppearanceInstance()
+            appearance = CompoundAppearance()
             prereqs = appearance.prerequisites(info.typeDescr, key[0], info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
             taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, key), loadingPriority(key[0]))
             _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', key[0], taskId)

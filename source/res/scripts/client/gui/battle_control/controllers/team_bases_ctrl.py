@@ -156,6 +156,12 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         arenaDP = self.__battleCtx.getArenaDP()
         playerTeam = arenaDP.getNumberOfTeam()
         isEnemyBase = arenaDP.isEnemyTeam(baseTeam)
+        prevPointsState = self.__points.get(clientID)
+        if prevPointsState:
+            prevPoints, _, prevInvCount, __ = prevPointsState
+            prevTeamBaseLeft = self._teamBaseLeft(prevPoints, prevInvCount)
+        else:
+            prevTeamBaseLeft = True
         self.__points[clientID] = (points,
          timeLeft,
          invadersCnt,
@@ -170,7 +176,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                     if not invadersCnt:
                         viewCmp.removeTeamBase(clientID)
 
-                if not self.__hasBaseID(baseTeam) or isEnemyBase:
+                if not self.__hasBaseID(baseTeam) or isEnemyBase or not prevTeamBaseLeft:
                     self.__stopCaptureSound(baseTeam)
         else:
             if clientID in self.__clientIDs:

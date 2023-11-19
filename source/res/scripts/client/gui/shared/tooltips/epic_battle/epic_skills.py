@@ -30,24 +30,24 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
     def _packBlocks(self, skillID, level=None):
         items = super(EpicSkillBaseTooltipData, self)._packBlocks()
         skillInfo = self._epicMetaGameCtrl.getAllSkillsInformation().get(skillID)
-        skillLevel = skillInfo.levels.get(1) if skillInfo else None
-        if skillInfo is None or skillLevel is None:
+        if skillInfo is None:
             return items
         else:
-            items.append(formatters.packBuildUpBlockData(self._constructHeader(skillLevel), padding=formatters.packPadding(left=2)))
-            items.append(formatters.packBuildUpBlockData(self.__constructDescr(skillLevel), padding=formatters.packPadding(top=-6, bottom=-20), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+            items.append(formatters.packBuildUpBlockData(self._constructHeader(skillInfo), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
             statBlocks = self.__constructStatsBlock(skillInfo)
             for i, _ in enumerate(statBlocks):
-                linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if i == 1 else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE
-                items.append(formatters.packBuildUpBlockData(statBlocks[i], linkage=linkage))
+                items.append(formatters.packBuildUpBlockData(statBlocks[i], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
 
             realLevel = self._epicMetaGameCtrl.getSkillLevels().get(skillID)
             if not realLevel:
                 items.append(formatters.packBuildUpBlockData(self.__constructInactiveStateBlock(skillInfo), padding=formatters.packPadding(top=-6, bottom=-21)))
+            items.append(self.__constructModesInfoBlock(realLevel))
             return items
 
-    def _constructHeader(self, skillLevel):
-        block = [formatters.packImageTextBlockData(title=text_styles.highTitle(skillLevel.name), txtPadding=formatters.packPadding(left=19), img=backport.image(R.images.gui.maps.icons.epicBattles.skills.c_80x80.dyn(skillLevel.icon)()), titleAtMiddle=True)]
+    @staticmethod
+    def _constructHeader(skillInfo):
+        skillLevel = skillInfo.levels.get(1)
+        block = [formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.epicBattles.skills.c_80x80.dyn(skillLevel.icon)()), padding=formatters.packPadding(right=10)), formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.highTitle(skillLevel.name), txtPadding=formatters.packPadding(top=10)), formatters.packImageTextBlockData(title=text_styles.main(backport.text(R.strings.epic_battle.skill.category.dyn(skillInfo.category)())), txtPadding=formatters.packPadding(left=-5, top=7), padding=formatters.packPadding(left=-10), img=backport.image(R.images.gui.maps.icons.epicBattles.category.small.dyn(skillInfo.category)()))])]
         return block
 
     def __constructDescr(self, skillLevel):
@@ -77,6 +77,12 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
             dynamicBlocks.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.epic_battle.metaAbilityScreen.activation_depends())), padding=formatters.packPadding(top=12)))
             blocks.append(dynamicBlocks)
         return blocks
+
+    @staticmethod
+    def __constructModesInfoBlock(isPurchased):
+        sectionName = 'purchased' if isPurchased else 'locked'
+        resID = R.strings.epic_battle.tooltips.slotSetupInfo.reserve.dyn(sectionName)()
+        return formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.InformationIcon()), desc=text_styles.standard(backport.text(resID)), imgPadding=formatters.packPadding(top=3), descPadding=formatters.packPadding(left=3), padding=formatters.packPadding(bottom=3))
 
     @staticmethod
     def __constructInactiveStateBlock(skillInfo):

@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/status_notifications/panel.py
 import logging
-import BigWorld
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import IS_CHINA
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import sn_items
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import components
@@ -29,7 +27,6 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
     def _generateItems(self):
         items = [_BattleRoyaleHighPriorityGroup,
          sn_items.StunSN,
-         sn_items.StunFlameSN,
          br_sn_items.BRDeathZoneWarningSN,
          br_sn_items.BerserkerSN,
          br_sn_items.ShotPassionSN,
@@ -57,23 +54,14 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         else:
             deathZoneIcon = _LINKS.DEATHZONE_ICON
             damaginDeathZoneIcon = _LINKS.DAMAGING_DEATHZONE_ICON
-        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link)
+        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link, _COLORS.RED)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_ZONE, damaginDeathZoneIcon, _LINKS.BATTLE_ROYALE_TIMER_UI, _COLORS.RED, countdownVisible=False)
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        if liftOverEnabled:
-            overturnedIcon = _LINKS.OVERTURNED_GREEN_ICON
-            overturnedColor = _COLORS.GREEN
-            iconOffsetY = 1
-        else:
-            overturnedIcon = _LINKS.OVERTURNED_ICON
-            overturnedColor = _COLORS.ORANGE
-            iconOffsetY = 0
-        self._addNotificationTimerSetting(data, _TYPES.OVERTURNED, overturnedIcon, link, color=overturnedColor, iconOffsetY=iconOffsetY)
-        self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, overturnedIcon, link, noiseVisible=False, iconOffsetY=iconOffsetY, color=overturnedColor)
+        self._addNotificationTimerSetting(data, _TYPES.OVERTURNED, _LINKS.OVERTURNED_GREEN_ICON, link, color=_COLORS.GREEN, iconOffsetY=1)
+        self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, _LINKS.OVERTURNED_GREEN_ICON, link, noiseVisible=False, iconOffsetY=1, color=_COLORS.GREEN)
         self._addNotificationTimerSetting(data, _TYPES.FIRE, _LINKS.FIRE_ICON, link)
+        self._addNotificationTimerSetting(data, _TYPES.ORANGE_ZONE, _LINKS.DESTROY_TIMER_DANGER_ZONE, _LINKS.STATUS_NOTIFICATION_TIMER, _COLORS.YELLOW, iconOffsetY=-11, iconSmallName=_LINKS.DESTROY_TIMER_DANGER_ZONE_SMALL)
         link = _LINKS.SECONDARY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True)
-        self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True)
         self._addNotificationTimerSetting(data, _TYPES.CAPTURE_BLOCK, _LINKS.BLOCKED_ICON, link, _COLORS.ORANGE, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.SMOKE, _LINKS.SMOKE_ICON, link, _COLORS.GREEN, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_SMOKE, _LINKS.DAMAGING_SMOKE_ICON, link, _COLORS.RED, noiseVisible=False)
@@ -89,7 +77,6 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.REPAIRING_CD, _LINKS.RECOVERY_ZONE_ICON, link, _COLORS.GREEN, noiseVisible=False)
         link = _LINKS.BATTLE_ROYALE_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.LOOT_PICKUP, _LINKS.RECOVERY_ICON_CONTENT, link, _COLORS.GREEN, noiseVisible=False)
-        self._addNotificationTimerSetting(data, _TYPES.ORANGE_ZONE, _LINKS.ORANGE_ZONE_ICON_CONTENT, link, _COLORS.ORANGE, noiseVisible=False, countdownVisible=False)
         link = _LINKS.BATTLE_ROYALE_COUNTER_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.SHOT_PASSION, _LINKS.SHOT_PASSION_ICON, link, _COLORS.GREEN, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.HP_RESTORE_ON_DAMAGE, _LINKS.HP_RESTORE_ON_DAMAGE_ICON, link, _COLORS.GREEN, noiseVisible=False)

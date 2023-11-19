@@ -2,13 +2,25 @@
   <name>	#arenas:08_ruinberg/name	</name>
   <description>	#arenas:08_ruinberg/description	</description>
   <geometry>	spaces/08_ruinberg	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
     <bottomLeft>	-425.000000 -400.000000	</bottomLeft>
     <upperRight>	425.000000 450.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/08_ruinberg/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/08_ruinberg/mmap_bigCityBombing_danger_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/08_ruinberg/mmap_bigCityBombing_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -24,89 +36,65 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
         <team1>
-          <position1>	-66.399986 306.099945	</position1>
+          <position1>	-66.399994 306.099976	</position1>
         </team1>
+        <team2>
+          <position1>	-83.002838 -290.901428	</position1>
+        </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-49 337	</position>
+          <position>	-49.000000 337.000000	</position>
         </team1>
         <team2>
-          <position>	-9 -282	</position>
+          <position>	-9.000000 -282.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-346.377228 -60.446960	</controlPoint>
+      <controlPoint>	-346.377258 -60.446964	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	320.434 334.328	</position>
+          <position>	320.433990 334.328003	</position>
         </team1>
         <team2>
-          <position>	-336.217 -48.082	</position>
+          <position>	-336.217010 -48.082001	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-66.490181 305.920776	</position1>
-          <position2>	218.213928 -89.148491	</position2>
+          <position1>	-66.490189 305.920807	</position1>
+          <position2>	218.213943 -89.148499	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
-    <bootcamp>
-      <wwmusicSetup>
-        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
-        <wwmusicIntensive>	bc_music_mission_04	</wwmusicIntensive>
-        <wwmusicRelaxed>	bc_music_mission_04	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
-      </wwmusicSetup>
-      <boundingBox>
-        <bottomLeft>	-200.000000 -400.000000	</bottomLeft>
-        <upperRight>	350.000000 400.000000	</upperRight>
-      </boundingBox>
-      <maxPlayersInTeam>	1	</maxPlayersInTeam>
-      <minimap>	spaces/08_ruinberg/mmap_bootcamp.dds	</minimap>
-      <runDelay>	10	</runDelay>
-      <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
-        <team1>
-          <position1>	-66.490181 305.920776	</position1>
-        </team1>
-      </teamBasePositions>
-      <visualScript>
-        <server>
-          <plan>	BootCamp/Lesson_4_arena_08_ruinberg	</plan>
-        </server>
-        <client>
-          <plan>	BootCamp/Lesson_4_hints_08_ruinberg	</plan>
-        </client>
-      </visualScript>
-    </bootcamp>
     <maps_training>
       <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
         <team1>
-          <position1>	-66.399986 306.099945	</position1>
+          <position1>	-66.399994 306.099976	</position1>
         </team1>
+        <team2>
+          <position1>	-83.002838 -290.901428	</position1>
+        </team2>
       </teamBasePositions>
     </maps_training>
   </gameplayTypes>

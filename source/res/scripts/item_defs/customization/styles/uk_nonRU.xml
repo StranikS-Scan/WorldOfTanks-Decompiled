@@ -1,0 +1,43 @@
+<uk_nonRU.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB86_Centurion_Action_X	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	803	</id>
+      <texture>	gui/maps/vehicles/styles/GB86_Centurion_Action_X_3DSt_HW23.png	</texture>
+      <modelsSet>	GB86_Centurion_Action_X_3DSt_HW23	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB86_Centurion_Action_X_3DSt_HW23	</userString>
+      <description>	#vehicle_customization:special_style/GB86_Centurion_Action_X_3DSt_HW23_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB86_Centurion_Action_X_3DSt_HW23_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</uk_nonRU.xml>

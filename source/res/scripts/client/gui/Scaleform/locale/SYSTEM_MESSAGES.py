@@ -201,8 +201,6 @@ class SYSTEM_MESSAGES(object):
     GRAFICSOPTIONSFAIL = '#system_messages:graficsOptionsFail'
     GRAFICSPRESETFAIL = '#system_messages:graficsPresetFail'
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
-    DENUNCIATION_HANGARCHATSUCCESS_TITLE = '#system_messages:denunciation/hangarChatSuccess/title'
-    DENUNCIATION_HANGARCHATSUCCESS_BODY = '#system_messages:denunciation/hangarChatSuccess/body'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
     CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
     CUSTOMIZATION_INVALIDVEHICLE = '#system_messages:customization/invalidVehicle'
@@ -520,6 +518,12 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
+    VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
+    VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
+    VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
+    VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_tmenxp_accelerator/vehicle_need_repair'
+    VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED = '#system_messages:vehicle_tmenxp_accelerator/vehicle_locked'
+    VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR = '#system_messages:vehicle_tmenxp_accelerator/server_error'
     VEHICLE_REPAIR_SUCCESS = '#system_messages:vehicle_repair/success'
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
     VEHICLE_REPAIR_CREDITS_ERROR = '#system_messages:vehicle_repair/credits_error'
@@ -1173,9 +1177,9 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/noSubscriptions'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlusEnabled/wotPlus'
-    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM = '#system_messages:maps_black_list/select/success/wotPlusEnabled/premium'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS = '#system_messages:maps_black_list/select/success/noSubscriptions'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS = '#system_messages:maps_black_list/select/success/wotPlus'
+    MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM = '#system_messages:maps_black_list/select/success/premium'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
     MAPS_BLACK_LIST_SWITCH_OFF_TITLE = '#system_messages:maps_black_list/switch_off/title'
@@ -1230,10 +1234,8 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
-    BATTLEPASS_SWITCH_STARTED_STYLE_TITLE = '#system_messages:battlePass/switch_started/style/title'
-    BATTLEPASS_SWITCH_STARTED_STYLE_BODY = '#system_messages:battlePass/switch_started/style/body'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE = '#system_messages:battlePass/switch_started/tankman/title'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY = '#system_messages:battlePass/switch_started/tankman/body'
+    BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
+    BATTLEPASS_SWITCH_STARTED_BODY = '#system_messages:battlePass/switch_started/body'
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
@@ -1356,11 +1358,6 @@ class SYSTEM_MESSAGES(object):
     ACHIEVEMENTS_SERVER_ERROR = '#system_messages:achievements/server_error'
     LIMITEDUI_SWITCHON = '#system_messages:limitedUI/switchOn'
     LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
-    REFERRAL_PROGRAM_DISABLED = '#system_messages:referral_program/disabled'
-    DEBUTBOXES_ENABLED_HEADER = '#system_messages:debutBoxes/enabled/header'
-    DEBUTBOXES_ENABLED_BODY = '#system_messages:debutBoxes/enabled/body'
-    DEBUTBOXES_DISABLED_HEADER = '#system_messages:debutBoxes/disabled/header'
-    DEBUTBOXES_DISABLED_BODY = '#system_messages:debutBoxes/disabled/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1685,8 +1682,6 @@ class SYSTEM_MESSAGES(object):
      GRAFICSOPTIONSFAIL,
      GRAFICSPRESETFAIL,
      DENUNCIATION_SUCCESS,
-     DENUNCIATION_HANGARCHATSUCCESS_TITLE,
-     DENUNCIATION_HANGARCHATSUCCESS_BODY,
      CUSTOMIZATION_UNAVAILABLE,
      CUSTOMIZATION_PROHIBITED,
      CUSTOMIZATION_INVALIDVEHICLE,
@@ -2004,6 +1999,12 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_RESTORE_FINISHED,
+     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
+     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
+     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
+     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR,
+     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED,
+     VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR,
      VEHICLE_REPAIR_SUCCESS,
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
      VEHICLE_REPAIR_CREDITS_ERROR,
@@ -2657,9 +2658,9 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_NOSUBSCRIPTIONS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_WOTPLUS,
-     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUSENABLED_PREMIUM,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_NOSUBSCRIPTIONS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_WOTPLUS,
+     MAPS_BLACK_LIST_SELECT_SUCCESS_PREMIUM,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,
      MAPS_BLACK_LIST_SWITCH_OFF_TITLE,
@@ -2714,10 +2715,8 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
-     BATTLEPASS_SWITCH_STARTED_STYLE_TITLE,
-     BATTLEPASS_SWITCH_STARTED_STYLE_BODY,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY,
+     BATTLEPASS_SWITCH_STARTED_TITLE,
+     BATTLEPASS_SWITCH_STARTED_BODY,
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,
@@ -2839,12 +2838,7 @@ class SYSTEM_MESSAGES(object):
      WINBACK_TURNOFFBATTLESERROR,
      ACHIEVEMENTS_SERVER_ERROR,
      LIMITEDUI_SWITCHON,
-     LIMITEDUI_SWITCHOFF,
-     REFERRAL_PROGRAM_DISABLED,
-     DEBUTBOXES_ENABLED_HEADER,
-     DEBUTBOXES_ENABLED_BODY,
-     DEBUTBOXES_DISABLED_HEADER,
-     DEBUTBOXES_DISABLED_BODY)
+     LIMITEDUI_SWITCHOFF)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

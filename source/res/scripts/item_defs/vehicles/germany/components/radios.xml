@@ -34,6 +34,8 @@
     <SEM_25_funkgerat>	36	</SEM_25_funkgerat>
     <SEM_25A>	37	</SEM_25A>
     <SEM_25_f>	38	</SEM_25_f>
+    <FuG5F>	39	</FuG5F>
+    <FuG7D>	41	</FuG7D>
     <FuG5_T>	252	</FuG5_T>
     <Radio_PzIV>	254	</Radio_PzIV>
     <Radio_VK4502P>	255	</Radio_VK4502P>
@@ -46,8 +48,10 @@
     <FuG12_SH>	316	</FuG12_SH>
     <G00_Bomber_SH_Radio>	318	</G00_Bomber_SH_Radio>
     <_10WSc_7x7>	401	</_10WSc_7x7>
+    <FuG_Spr.1_SH>	319	</FuG_Spr.1_SH>
+    <FuG5A_SH_bot>	320	</FuG5A_SH_bot>
+    <FuG7A_SH_B>	321	</FuG7A_SH_B>
     <FuG12_FL>	501	</FuG12_FL>
-    <FuG12_C>	31001	</FuG12_C>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
     <FuG7_IGR>	60003	</FuG7_IGR>
@@ -108,6 +112,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </FuG5A>
+    <FuG5F>
+      <userString>	#germany_vehicles:FuG5F	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	630	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	620	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG5F>
     <FuG5_T>
       <userString>	#germany_vehicles:FuG5A	</userString>
       <tags></tags>
@@ -191,6 +207,18 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG7A>
+    <FuG7D>
+      <userString>	#germany_vehicles:FuG7D	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8160	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	70	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG7D>
     <FuG7A_CN>
       <userString>	#germany_vehicles:FuG7A	</userString>
       <tags></tags>
@@ -271,18 +299,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12>
-    <FuG12_C>
-      <userString>	#germany_vehicles:FuG12	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	150	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </FuG12_C>
     <FuG12_FL>
       <userString>	#germany_vehicles:FuG12	</userString>
       <tags></tags>
@@ -676,6 +692,20 @@
       <radarRadius>	250	</radarRadius>
       <radarCooldown>	20	</radarCooldown>
     </FuG7_SH>
+    <FuG7A_SH_B>
+      <userString>	#germany_vehicles:FuG7_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	370	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </FuG7A_SH_B>
     <FuG12_SH>
       <userString>	#germany_vehicles:FuG12_SH	</userString>
       <tags></tags>
@@ -690,6 +720,30 @@
       <radarRadius>	450	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </FuG12_SH>
+    <FuG_Spr.1_SH>
+      <userString>	#germany_vehicles:FuG_Spr.1	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	455	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG_Spr.1_SH>
+    <FuG5A_SH_bot>
+      <userString>	#germany_vehicles:FuG5A	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	620	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </FuG5A_SH_bot>
     <G00_Bomber_SH_Radio>
       <userString>	#germany_vehicles:G00_Bomber_SH_Radio	</userString>
       <tags></tags>

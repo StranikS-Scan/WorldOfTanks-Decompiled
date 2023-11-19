@@ -2,13 +2,40 @@
   <name>	#arenas:04_himmelsdorf/name	</name>
   <description>	#arenas:04_himmelsdorf/description	</description>
   <geometry>	spaces/04_himmelsdorf	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <boundingBox>
     <bottomLeft>	-300.0 -300.0	</bottomLeft>
     <upperRight>	400.0 400.0	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/04_himmelsdorf/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/04_himmelsdorf/mmap_crash01_airship_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/04_himmelsdorf/mmap_airship_crash01_destroyed.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer3	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/04_himmelsdorf/mmap_crash02_train_lower_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer4	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/04_himmelsdorf/mmap_train_crash01_destroyed.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer5	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/04_himmelsdorf/mmap_crash02_train_upper_zone.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <defaultGroundEffect>	None	</defaultGroundEffect>
   <wwmusicSetup>
@@ -22,6 +49,16 @@
     <wwmusicResultDefeat>	music_himmelsdorf_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	amb_map_04_himmelsdorf_wind_spring	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <gameplayTypes>
@@ -116,10 +153,10 @@
   <roadMap></roadMap>
   <mapActivities>
     <scenario>
-      <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	100.000000	</possibility>
+      <startTime>	420.000000 0.000000	</startTime>
+      <possibility>	90.000000	</possibility>
       <interval>	0.000000	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
+      <arenaPeriod>	0	</arenaPeriod>
       <name>	himmelsdorf_bomber	</name>
       <trajectories>
         <warplane>

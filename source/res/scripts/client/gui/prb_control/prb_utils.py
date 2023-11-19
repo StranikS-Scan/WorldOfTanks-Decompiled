@@ -3,7 +3,6 @@
 import logging
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS, BATTLES_SELECTOR_SQUAD_ITEMS
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS
-from gui.prb_control.factories.PreQueueFactory import DEFAULT_QUEUE_TYPE_PRIORITIES
 from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_QUEUE_TYPE
 from gui.prb_control.settings import FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, QUEUE_TYPE_TO_PREBATTLE_TYPE, PREBATTLE_TYPE_TO_QUEUE_TYPE, REQUEST_TYPE, REQUEST_TYPE_NAMES
 from messenger.ext.channel_num_gen import PRB_CLIENT_COMBINED_IDS, initPrbTypeToClientID
@@ -138,14 +137,6 @@ def addPrbTypeToQueueType(queueType, prbType, personality):
         raise SoftException('PREBATTLE_TYPE_TO_QUEUE_TYPE already has pre battle type:{prbType}. Personality: {p}'.format(prbType=prbType, p=personality))
     PREBATTLE_TYPE_TO_QUEUE_TYPE.update({prbType: queueType})
     msg = 'prbType:{prbType} was added to PREBATTLE_TYPE_TO_QUEUE_TYPE. Personality: {p}'.format(prbType=prbType, p=personality)
-    logging.debug(msg)
-
-
-def addDefaultQueueTypePriority(queueType, priority, personality):
-    if queueType in DEFAULT_QUEUE_TYPE_PRIORITIES:
-        raise SoftException('DEFAULT_QUEUE_TYPE_PRIORITIES already has queueType:{queueType}. Personality: {p}'.format(queueType=queueType, p=personality))
-    DEFAULT_QUEUE_TYPE_PRIORITIES.update({queueType: priority})
-    msg = 'queueType:{queueType} was added to DEFAULT_QUEUE_TYPE_PRIORITIES. Personality: {p}'.format(queueType=queueType, p=personality)
     logging.debug(msg)
 
 

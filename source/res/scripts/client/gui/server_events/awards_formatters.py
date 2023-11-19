@@ -801,7 +801,7 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         else:
             images = {}
             for size in AWARDS_SIZES.ALL():
-                images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getIconName())
+                images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getType())
 
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 

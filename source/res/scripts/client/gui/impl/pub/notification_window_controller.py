@@ -89,6 +89,8 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__isLobbyLoaded = False
         self.stopGlobalListening()
         self.__updateEnabled()
+        self.__activeQueue = self.__discardNonPersistentCommands(self.__activeQueue)
+        self.__postponedQueue = self.__discardNonPersistentCommands(self.__postponedQueue)
 
     def onPrbEntitySwitched(self):
         self.__updateEnabled()
@@ -168,6 +170,17 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def hasLock(self, key):
         return key in self.__locks
+
+    @staticmethod
+    def __discardNonPersistentCommands(queue):
+        result = []
+        for cmd in queue:
+            if cmd.isPersistent:
+                result.append(cmd)
+            _logger.debug('Throwing away non-persistent notification command: %s', cmd)
+            cmd.fini()
+
+        return result
 
     def __tryProcess(self):
         if not self.__locks:

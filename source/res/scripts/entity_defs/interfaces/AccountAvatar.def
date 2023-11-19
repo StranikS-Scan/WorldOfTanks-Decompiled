@@ -10,7 +10,6 @@
     </accountAvatar_onAvatarCreationFailure>
     <accountAvatar_onAvatarLeftArena>
       <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
       <Arg>	BOOL	</Arg>
     </accountAvatar_onAvatarLeftArena>
     <accountAvatar_unlockUnusedVehicles>
@@ -54,12 +53,6 @@
       <Arg>	ARRAY	  <of>	STRING	</of>
       </Arg>
     </accountAvatar_logClientXMPPEvents>
-    <accountAvatar_logClientSessionStats>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT8	</Arg>
-    </accountAvatar_logClientSessionStats>
     <accountAvatar_setActiveVehSeasonInBattle>
       <Arg>	INT64	</Arg>
       <Arg>	INT64	</Arg>

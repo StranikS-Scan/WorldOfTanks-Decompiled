@@ -417,7 +417,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress', '__prestigeResults')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, bonusType, personal):
@@ -440,6 +440,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__xpProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         self.__dogTags = {}
+        self.__prestigeResults = {}
         self.__goldBankGain = 0
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
@@ -539,6 +540,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getProgressiveReward(self):
         return self.__progressiveReward
 
+    def getPrestigeResults(self):
+        return self.__prestigeResults
+
     def getBaseCreditsRecords(self):
         return self._economicsRecords.getBaseCreditsRecords()
 
@@ -615,6 +619,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__c11nProgress[intCD] = data.get('c11nProgress', {})
             self.__xpProgress[intCD] = {'xp': data.get('xp', 0),
              'xpByTmen': data.get('xpByTmen', [])}
+            self.__prestigeResults[intCD] = data.get('prestigeResults', {})
 
         if lifeTimes:
             self.__lifeTimeInfo = _LifeTimeInfo(True, min(lifeTimes))

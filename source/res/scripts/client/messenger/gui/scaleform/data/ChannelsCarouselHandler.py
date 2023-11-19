@@ -47,7 +47,6 @@ class ChannelsCarouselHandler(object):
         add(ChannelManagementEvent.REQUEST_TO_REMOVE, self.__handleRequestToRemove, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelManagementEvent.REQUEST_TO_CHANGE, self.__handleRequestToChange, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelManagementEvent.REQUEST_TO_SHOW, self.__handleRequestToShow, scope=EVENT_BUS_SCOPE.LOBBY)
-        add(ChannelManagementEvent.REQUEST_TO_MULTI_CHANGE, self.__handleRequestMultipleChanges, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def clear(self):
         self.__guiEntry = None
@@ -69,7 +68,6 @@ class ChannelsCarouselHandler(object):
         remove(ChannelManagementEvent.REQUEST_TO_CHANGE, self.__handleRequestToChange, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelManagementEvent.REQUEST_TO_SHOW, self.__handleRequestToShow, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.CAROUSEL_DESTROYED, self.__handleCarouselDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
-        remove(ChannelManagementEvent.REQUEST_TO_MULTI_CHANGE, self.__handleRequestMultipleChanges, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def start(self):
@@ -96,7 +94,6 @@ class ChannelsCarouselHandler(object):
     def addChannel(self, channel, lazy=False, isNotified=False):
         clientID = channel.getClientID()
         isSystem = channel.isSystem()
-        isPrivate = channel.isPrivate()
         if lazy:
             order = channel_num_gen.getOrder4LazyChannel(channel.getName())
             openHandler = lambda : events_dispatcher.showLazyChannelWindow(clientID)
@@ -109,10 +106,7 @@ class ChannelsCarouselHandler(object):
          'isNotified': isNotified,
          'icon': None,
          'order': order,
-         'isInProgress': False,
-         'isPrivate': isPrivate,
-         'dbID': 0,
-         'userName': None})
+         'isInProgress': False})
         return
 
     def removeChannel(self, channel):
@@ -245,11 +239,6 @@ class ChannelsCarouselHandler(object):
                 self.__setItemField(clientID, key, value)
                 self.__showByReqs.pop(clientID, None)
             return
-
-    def __handleRequestMultipleChanges(self, event):
-        ctx = event.ctx
-        clientID = event.clientID
-        self.__channelsDP.setItemFields(clientID, ctx)
 
     def __handleRequestToShow(self, event):
         ctx = event.ctx

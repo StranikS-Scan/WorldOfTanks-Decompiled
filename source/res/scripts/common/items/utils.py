@@ -6,11 +6,14 @@ from functools import partial
 from typing import Any, Dict, Tuple
 from constants import VEHICLE_TTC_ASPECTS
 from debug_utils import *
-from items import tankmen
+from items import tankmen, ITEM_TYPES
 from items import vehicles
 from items.components.c11n_constants import CUSTOMIZATION_SLOTS_VEHICLE_PARTS
-from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
+from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL, getSkillsConfig
 from items.vehicles import vehicleAttributeFactors, VehicleDescriptor
+from items.artefacts import StaticOptionalDevice, AdditiveBattleBooster
+from items.components import component_constants
+from account_shared import AmmoIterator
 import ResMgr
 __defaultGlossTexture = None
 
@@ -333,3 +336,48 @@ def getDifferVehiclePartNames(newVehDescr, oldVehDescr):
     elif 'gun' in differPartNames:
         differPartNames.append('turret')
     return differPartNames
+
+
+def commanderTutorXpBonusFactorForCrew(crew, ammo, vehCompDescr):
+    tutorLevel = component_constants.ZERO_FLOAT
+    brotherhoodSum = 0.0
+    for t in crew:
+        if t.role == 'commander':
+            tutorLevel = t.skillLevel('commander_tutor')
+            if not tutorLevel:
+                return component_constants.ZERO_FLOAT
+        tmanBrotherhoodLevel = t.skillLevel('brotherhood') or 0
+        brotherhoodSum += tmanBrotherhoodLevel
+
+    brotherhoodLevel = brotherhoodSum / (len(crew) * MAX_SKILL_LEVEL)
+    skillsConfig = getSkillsConfig()
+    brotherhoodBonus = brotherhoodLevel * skillsConfig.getSkill('brotherhood').crewLevelIncrease
+    tutorLevel += brotherhoodBonus
+    equipCrewLevelIncrease = component_constants.ZERO_FLOAT
+    optionalDevCrewLevelIncrease = component_constants.ZERO_FLOAT
+    cache = vehicles.g_cache
+    optDev = set()
+    for compDescr, count in AmmoIterator(ammo):
+        itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
+        if itemTypeIdx == ITEM_TYPES.optionalDevice:
+            obj = cache.optionalDevices()[itemIdx]
+            if isinstance(obj, StaticOptionalDevice):
+                vehDescriptor = VehicleDescriptor(compactDescr=vehCompDescr)
+                optionalDevCrewLevelIncrease += obj.getFactorValue(vehDescriptor, 'miscAttrs/crewLevelIncrease')
+                optDev.add(obj)
+
+    for compDescr, count in AmmoIterator(ammo):
+        itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
+        if itemTypeIdx == ITEM_TYPES.equipment:
+            eqip = cache.equipments()[itemIdx]
+            equipCrewLevelIncrease += getattr(eqip, 'crewLevelIncrease', component_constants.ZERO_FLOAT)
+            if isinstance(eqip, AdditiveBattleBooster):
+                for device in optDev:
+                    levelParams = eqip.getLevelParamsForDevice(device)
+                    if levelParams is not None and 'crewLevelIncrease' in levelParams:
+                        equipCrewLevelIncrease += levelParams[1]
+                        break
+
+    tutorLevel += optionalDevCrewLevelIncrease
+    tutorLevel += equipCrewLevelIncrease
+    return tutorLevel * skillsConfig.getSkill('commander_tutor').xpBonusFactorPerLevel

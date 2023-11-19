@@ -264,7 +264,6 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
         with self.viewModel.transaction() as viewModel:
             self.__updateDisabledMaps(viewModel)
             self.__updateMainData(viewModel)
-            self.__updateEnvironment(viewModel)
 
     def __onWotPlusChanged(self, data):
         if 'isEnabled' in data:
@@ -338,9 +337,6 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
     @staticmethod
     def __mapNameToID(mapName):
         return ArenaType.g_geometryNamesToIDs[mapName]
-
-    def __updateEnvironment(self, viewModel):
-        viewModel.setIsWotPlusEnabled(self.__wotPlusCtrl.isWotPlusEnabled())
 
 
 class MapsBlacklistInfoTooltipContent(View):

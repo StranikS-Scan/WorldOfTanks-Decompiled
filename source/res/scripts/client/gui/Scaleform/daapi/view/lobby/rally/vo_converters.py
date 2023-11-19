@@ -34,7 +34,6 @@ from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 MAX_PLAYER_COUNT_ALL = 0
 
 def getPlayerStatus(slotState, pInfo):
@@ -356,6 +355,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
          'isLocked': isLocked,
          'role': role,
          'roleIcon': _ROLE_ICONS.get(role & equipmentCommanderRoles, '')}
+        if slotInfo.profileVehicle is not None and slotInfo.profileVehicle.prestigeLevel > 0:
+            slot['prestigeLevel'] = slotInfo.profileVehicle.prestigeLevel
         if withPrem:
             slot['hasPremiumAccount'] = player and player.hasPremium
         if unit.isSquad() or unit.getPrebattleType() == PREBATTLE_TYPE.FUN_RANDOM:
@@ -390,9 +391,8 @@ def _getBalancedSquadInfo(isPlayerCreator, levelsRange, player, unit, vehicle):
      'additionalMsg': additionMsg}
 
 
-@dependency.replace_none_kwargs(epicMetaGameController=IEpicBattleMetaGameController)
-def _updateEpicBattleSlotInfo(player, vehicle, epicMetaGameController=None):
-    return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction(), level=epicMetaGameController.getSuitableForQueueVehicleLevelStr()))
+def _updateEpicBattleSlotInfo(player, vehicle):
+    return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction()))
 
 
 def _updateSpecialBattleSlotInfo(player, vehicle, message):

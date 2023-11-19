@@ -31,7 +31,7 @@ class RosterSlot10(BaseUnitRosterSlot):
 
 
 class EpicSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (7, 7)
+    DEFAULT_LEVELS = (8, 9)
 
 
 class Comp7Slot(BaseUnitRosterSlot):
@@ -104,11 +104,3 @@ class Comp7Roster(BaseUnitRoster):
     DEFAULT_SLOT_PACK = Comp7Slot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
     MAX_VEHICLES = 10000
-
-
-class VersusAIRoster(BaseUnitRoster):
-    MAX_SLOTS = 3
-    MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    LIMITS_TYPE = BaseUnitRosterLimits

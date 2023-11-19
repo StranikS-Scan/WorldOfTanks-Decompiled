@@ -200,3 +200,6 @@ class CREW_SKINS(object):
     COSM_GEORGE_NAME = '#crew_skins:cosm_george/Name'
     COSM_GEORGE_LASTNAME = '#crew_skins:cosm_george/LastName'
     COSM_GEORGE_DESCR = '#crew_skins:cosm_george/Descr'
+    ERMELINDA_NAME = '#crew_skins:ermelinda/Name'
+    ERMELINDA_LASTNAME = '#crew_skins:ermelinda/LastName'
+    ERMELINDA_DESCR = '#crew_skins:ermelinda/Descr'

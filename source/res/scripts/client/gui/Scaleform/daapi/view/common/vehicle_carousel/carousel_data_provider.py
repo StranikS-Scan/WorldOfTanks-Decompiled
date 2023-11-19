@@ -19,7 +19,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -63,12 +63,12 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController)
-def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None):
-    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl)
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
+def getVehicleDataVO(vehicle, bootcampCtrl=None):
+    return _getVehicleDataVO(vehicle, bootcampCtrl)
 
 
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
+def _getVehicleDataVO(vehicle, bootcampCtrl):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -96,10 +96,6 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
-    if debutBoxCtrl.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in vState and debutBoxCtrl.isQuestsAvailableOnVehicle(vehicle):
-        debutBoxesImage = getButtonsAssetPath('debut_boxes')
-    else:
-        debutBoxesImage = ''
     if bootcampCtrl.isInBootcamp():
         userName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=vehicle.shortUserName)
     else:
@@ -130,7 +126,6 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
      'favorite': vehicle.isFavorite,
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
-     'debutBoxesImgSource': debutBoxesImage,
      'tankType': tankType,
      'rentLeft': rentInfoText,
      'clickEnabled': vehicle.isInInventory and vehicle.activeInNationGroup or vehicle.isRentPromotion,
@@ -297,10 +292,15 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self.__sortedIndices = sortedIndices(self._vehicles, self._vehicleComparisonKey, reverse)
         return self.__sortedIndices
 
+    def _populate(self):
+        super(CarouselDataProvider, self)._populate()
+        g_currentVehicle.onChanged += self.__updateCurrentVehicle
+
     def _dispose(self):
         self._filter = None
         self._itemsCache = None
         self._randomStats = None
+        g_currentVehicle.onChanged -= self.__updateCurrentVehicle
         super(CarouselDataProvider, self)._dispose()
         return
 
@@ -415,3 +415,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def __resetSortedIndices(self):
         self.__sortedIndices = []
+
+    def __updateCurrentVehicle(self):
+        self._currentVehicleInvID = g_currentVehicle.invID
+        self.applyFilter()

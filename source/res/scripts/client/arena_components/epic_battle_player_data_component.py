@@ -38,6 +38,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.onPlayerXPUpdated = Event.Event(self._eventManager)
         self.onFrontlineCenterUpdated = Event.Event(self._eventManager)
         self.onRespawnOffsetsUpdated = Event.Event(self._eventManager)
+        self.purchasedAbilities = []
         return
 
     def activate(self):
@@ -127,6 +128,9 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
     def setPlayerXP(self, xp):
         self.__playerXP = xp
         self.onPlayerXPUpdated(xp)
+
+    def setPurchasedAbilities(self, purchasedAbilities):
+        self.purchasedAbilities = purchasedAbilities
 
     def setPlayerLaneByPlayerGroups(self):
         playerId = avatar_getter.getPlayerVehicleID()

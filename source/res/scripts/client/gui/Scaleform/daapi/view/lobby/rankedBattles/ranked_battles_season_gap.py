@@ -5,7 +5,7 @@ from helpers import dependency, time_utils
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.ranked_battles.ranked_builders import season_gap_vos
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
-from gui.ranked_battles.constants import SeasonResultTokenPatterns, RankedDossierKeys, ZERO_RANK_ID, SeasonGapStates, NOT_IN_LEAGUES_QUEST, PLAYER_IN_LEAGUES_TOKEN
+from gui.ranked_battles.constants import SeasonResultTokenPatterns, RankedDossierKeys, ZERO_RANK_ID, SeasonGapStates, NOT_IN_LEAGUES_QUEST
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonGapViewMeta import RankedBattlesSeasonGapViewMeta
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -122,13 +122,7 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         self.as_setDataS(season_gap_vos.getDataVO(season_gap_vos.StateBlock(self.__resultState, achievedRankID, achievedDivision, self.__resultLeague, self.__isSprinter, self.__rankedController.isYearRewardEnabled())))
 
     def __updateEfficiency(self):
-        efficiency = None
-        if self.__prevSeason.getSeasonID() == self.__itemsCache.items.ranked.season[0]:
-            efficiency = self.__rankedController.getStatsComposer().currentSeasonEfficiency.efficiency
-        if not efficiency:
-            efficiency = self.__dossier.getStepsEfficiency()
-        self.as_setEfficiencyDataS(season_gap_vos.getEfficiencyVO(efficiency))
-        return
+        self.as_setEfficiencyDataS(season_gap_vos.getEfficiencyVO(self.__dossier.getStepsEfficiency()))
 
     def __updateRating(self):
         isMastered = self.__resultState in (SeasonGapStates.IN_LEAGUES, SeasonGapStates.WAITING_IN_LEAGUES)
@@ -160,10 +154,6 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         elif resultTokenPattern is not None:
             self.__resultState = SeasonGapStates.IN_LEAGUES
             self.__resultLeague = int(resultTokenPattern.split('_')[-1])
-        elif not self.__rankedController.isLeagueRewardEnabled() and self.__itemsCache.items.tokens.getTokens().get(PLAYER_IN_LEAGUES_TOKEN.format(self.__prevSeason.getSeasonID())) > 0:
-            webSeasonInfo = self.__rankedController.getWebSeasonProvider().seasonInfo
-            self.__resultState = SeasonGapStates.IN_LEAGUES
-            self.__resultLeague = webSeasonInfo.league
         else:
             notLeagueQuest = self.__getNotLeagueQuest()
             if notLeagueQuest is not None and notLeagueQuest.getStartTime() < time.time():

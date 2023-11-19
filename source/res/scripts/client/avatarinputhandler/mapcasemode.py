@@ -911,7 +911,7 @@ class MapCaseControlMode(MapCaseControlModeBase):
         return StrategicCamera.StrategicCamera(config)
 
     def _initCamera(self):
-        self.camera.create(None, False)
+        self.camera.create(None)
         self.camera.setMaxDist()
         return
 

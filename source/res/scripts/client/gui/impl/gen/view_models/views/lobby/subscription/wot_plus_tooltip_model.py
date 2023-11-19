@@ -14,7 +14,7 @@ class SubscriptionState(IntEnum):
 class WotPlusTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(WotPlusTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getNextCharge(self):
@@ -23,17 +23,23 @@ class WotPlusTooltipModel(ViewModel):
     def setNextCharge(self, value):
         self._setString(0, value)
 
+    def getExpirationDate(self):
+        return self._getString(1)
+
+    def setExpirationDate(self, value):
+        self._setString(1, value)
+
     def getState(self):
-        return SubscriptionState(self._getNumber(1))
+        return SubscriptionState(self._getNumber(2))
 
     def setState(self, value):
-        self._setNumber(1, value.value)
+        self._setNumber(2, value.value)
 
     def getBonuses(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setBonuses(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getBonusesType():
@@ -42,5 +48,6 @@ class WotPlusTooltipModel(ViewModel):
     def _initialize(self):
         super(WotPlusTooltipModel, self)._initialize()
         self._addStringProperty('nextCharge', '')
+        self._addStringProperty('expirationDate', '')
         self._addNumberProperty('state')
         self._addArrayProperty('bonuses', Array())

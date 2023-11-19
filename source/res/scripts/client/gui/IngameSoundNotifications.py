@@ -11,6 +11,7 @@ import BattleReplay
 import Event
 import SoundGroups
 import VSE
+from helpers import isPlayerAvatar
 from visual_script_client.contexts.sound_notifications_context import SoundNotificationsContext
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 
@@ -247,7 +248,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             del self.__queues[queueNum][0]
             checkCooldown = queueItem.eventName not in self.__eventsCooldowns or not self.__eventsCooldowns[queueItem.eventName]
             checkVehicle = queueItem.vehicleID is None or BigWorld.entity(queueItem.vehicleID) is not None
-            checkFunction = queueItem.checkFn() if queueItem.checkFn else True
+            checkFunction = queueItem.checkFn() if isPlayerAvatar() and queueItem.checkFn else True
             if checkFunction and checkVehicle and checkCooldown:
                 vehicle = BigWorld.entity(queueItem.vehicleID) if queueItem.vehicleID is not None else None
                 boundVehicle = BigWorld.entity(queueItem.boundVehicleID) if queueItem.boundVehicleID is not None else None

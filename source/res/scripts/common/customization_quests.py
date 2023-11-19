@@ -12,9 +12,10 @@ g_cust_cache = None
 def customizationQuestsFromFile(pathToFiles):
     quests = {}
     for pathToFile in pathToFiles:
-        for quest in readQuestsFromFile(pathToFile, EVENT_TYPE.QUEST_USE_FOR_C11N_PROGRESS):
-            questID, questName, questDescr, questClientData, _ = quest
-            quests[questID] = CustomizationQuest(questID, questName, questDescr, questClientData)
+        for et in EVENT_TYPE.QUEST_USE_FOR_C11N_PROGRESS:
+            for quest in readQuestsFromFile(pathToFile, et):
+                questID, questName, questDescr, questClientData, _ = quest
+                quests[questID] = CustomizationQuest(questID, questName, questDescr, questClientData)
 
     return quests
 

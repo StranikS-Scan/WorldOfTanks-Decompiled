@@ -49,9 +49,11 @@ class BattleSessionView(ViewImpl):
             isInClan = g_clanCache.isInClan
             if isInClan:
                 tx.setClanName(g_clanCache.clanName)
-                tx.setClanIcon(getClanEmblemURL(g_clanCache.clanDBID, EmblemSize.SIZE_32))
+                clanIcon = getClanEmblemURL(g_clanCache.clanDBID, EmblemSize.SIZE_32)
+                tx.setClanIcon(clanIcon if clanIcon is not None else '')
             tx.setIsInClan(isInClan)
             tx.setIsTournamentLinkIGB(isTournamentEnabled())
+        return
 
     def __tournamentsClickedHandler(self):
         if isTournamentEnabled():

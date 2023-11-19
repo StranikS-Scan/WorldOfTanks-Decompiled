@@ -25,11 +25,11 @@ class MessengerBarMeta(BaseDAAPIComponent):
     def as_setReferralButtonEnabledS(self, value):
         return self.flashObject.as_setReferralButtonEnabled(value) if self._isDAAPIInited() else None
 
+    def as_enableReferralRecruterEffectS(self, value):
+        return self.flashObject.as_enableReferralRecruterEffect(value) if self._isDAAPIInited() else None
+
     def as_setReferralBtnCounterS(self, value):
         return self.flashObject.as_setReferralBtnCounter(value) if self._isDAAPIInited() else None
-
-    def as_setReferralBtnLimitIndicationS(self, value):
-        return self.flashObject.as_setReferralBtnLimitIndication(value) if self._isDAAPIInited() else None
 
     def as_openVehicleCompareCartPopoverS(self, value):
         return self.flashObject.as_openVehicleCompareCartPopover(value) if self._isDAAPIInited() else None

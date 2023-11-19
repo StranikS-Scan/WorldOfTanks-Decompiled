@@ -10,14 +10,14 @@
   <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	57	</forward>
+    <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.236	</moving>
-    <still>	0.315	</still>
+    <moving>	0.201	</moving>
+    <still>	0.268	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.473	</firePenalty>
+    <firePenalty>	0.402	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -1570,7 +1570,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_D54_VR>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_100mm_D54_TS>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 5 0.472222 5 0.486111 4 0.513889 4 0.527778 5 1 5	</maxPitch>
@@ -1584,8 +1584,8 @@
             </armor_3>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	7.01	</reloadTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	6.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -1657,7 +1657,7 @@
             <density>	147.798 146.919	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_D54_VR>
+        </_100mm_D54_TS>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R87_T62A/normal/lod0/Turret_01.model	</undamaged>
@@ -2332,8 +2332,8 @@
     <detailed>
       <engines>
         <V-55>
-          <smplEnginePower>	750	</smplEnginePower>
-          <smplFwMaxSpeed>	57	</smplFwMaxSpeed>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </V-55>
       </engines>
       <chassis>

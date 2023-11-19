@@ -39,6 +39,7 @@ from gui.impl.dialogs.builders import ResPureDialogBuilder, ResSimpleDialogBuild
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.lobby.customization.customization_cart.customization_cart_view import CustomizationCartView
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import events
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
@@ -189,7 +190,7 @@ class _CustomizationCloseConfirmatorsHelper(CloseConfirmatorsHelper):
         super(_CustomizationCloseConfirmatorsHelper, self).stop()
 
 
-class MainView(LobbySubView, CustomizationMainViewMeta):
+class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     __background_alpha__ = 0.0
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
     _ZOOM_ON_EMBLEM = 0.1
@@ -272,6 +273,12 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def onShopEntryPointClick(self):
         self.__exitingToShop = True
         showShop(getShowcaseUrl())
+
+    @adisp.adisp_async
+    @wg_async
+    def showCloseConfirmator(self, callback):
+        result = yield wg_await(self.__closeConfirmator())
+        callback(result)
 
     def __onVehicleChangeStarted(self):
         entity = self.hangarSpace.getVehicleEntity()
@@ -775,7 +782,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
          'setIdle': True,
          'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
+        self.suspendLobbyHeader(self.key, HeaderMenuVisibilityState.ONLINE_COUNTER)
         self.__renderEnv = BigWorld.CustomizationEnvironment()
         self.__renderEnv.enable(True)
         if self.__ctx.vehicleAnchorsUpdater is not None:
@@ -811,7 +818,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             entity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
+        self.resumeLobbyHeader(self.key)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
          'setIdle': True,
          'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)

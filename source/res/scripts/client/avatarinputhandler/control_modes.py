@@ -24,17 +24,17 @@ from AvatarInputHandler import AimingSystems, aih_global_binding, gun_marker_ctr
 from AvatarInputHandler.DynamicCameras.camera_switcher import SwitchToPlaces
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import getSPGShotResult, getSPGShotFlyTime
-from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera, OnlyArtyCamera
+from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
 from TriggersManager import TRIGGER_TYPE
 from Vehicle import Vehicle as VehicleEntity
 from account_helpers.AccountSettings import AccountSettings, WHEELED_DEATH_DELAY_COUNT, LAST_ARTY_CTRL_MODE
-from account_helpers.settings_core.settings_constants import SPGAim, SPGAimEntranceModeOptions, GAME
+from account_helpers.settings_core.settings_constants import SPGAim, SPGAimEntranceModeOptions
 from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTRL_MODES, CHARGE_MARKER_STATE
 from constants import AIMING_MODE
 from constants import VEHICLE_SIEGE_STATE
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
@@ -631,7 +631,7 @@ class ArcadeControlMode(_GunControlMode):
         ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
         if ownVehicle is not None and ownVehicle.isStarted and avatar_getter.isVehicleBarrelUnderWater() or BigWorld.player().isGunLocked or BigWorld.player().isObserver():
             return
-        elif self._aih.isSPG and not bByScroll or self._aih.isOnlyArty:
+        elif self._aih.isSPG and not bByScroll:
             self._cam.update(0, 0, 0, False, False)
             equipmentID = None
             if BattleReplay.isPlaying():
@@ -639,7 +639,7 @@ class ArcadeControlMode(_GunControlMode):
                 pos = BattleReplay.g_replayCtrl.getGunMarkerPos()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
             else:
-                mode = CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE if self._aih.isOnlyArty else self.__getSpgAlternativeMode()
+                mode = self.__getSpgAlternativeMode()
                 if pos is None:
                     pos = self.camera.aimingSystem.getDesiredShotPoint()
                     if pos is None:
@@ -664,7 +664,7 @@ class ArcadeControlMode(_GunControlMode):
                 desiredShotPoint = BattleReplay.g_replayCtrl.getGunMarkerPos()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
             else:
-                mode = CTRL_MODE_NAME.DUAL_GUN if self._aih.isDualGun else CTRL_MODE_NAME.SNIPER
+                mode = CTRL_MODE_NAME.SNIPER if not self._aih.isDualGun else CTRL_MODE_NAME.DUAL_GUN
                 equipmentID = None
                 desiredShotPoint = self.camera.aimingSystem.getDesiredShotPoint()
             self._aih.onControlModeChanged(mode, preferredPos=desiredShotPoint, aimingMode=self._aimingMode, saveZoom=not bByScroll, equipmentID=equipmentID)
@@ -832,7 +832,7 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.isAimOffsetEnabled = True
 
     def __switchToNextControlMode(self, switchToPos=None, switchToPlace=None):
-        if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and self._aih.isSPG and self._nextControlMode is not None:
+        if GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
             soundName = self._SWITCH_SOUND.get(self._nextControlMode)
             if soundName:
                 SoundGroups.g_instance.playSound2D(soundName)
@@ -910,15 +910,15 @@ class _TrajectoryControlMode(_GunControlMode):
                     shotPos, shotVel, shotGravity = player.gunRotator.getShotParams(targetPoint, ignoreYawLimits=True)
                     self.__updateTrajectoryDrawer(targetPoint, shotPos, shotVel, target)
                     if self.__needSPGIndicatorUpdate(shotDescr):
-                        shotsIndicatorState[i] = self._getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
+                        shotsIndicatorState[i] = self.__getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
                 if self.__needSPGIndicatorUpdate(shotDescr):
                     shotPos, shotVel, shotGravity = player.gunRotator.getShotParams(targetPoint, ignoreYawLimits=True, overrideShotIdx=i)
-                    shotsIndicatorState[i] = self._getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
+                    shotsIndicatorState[i] = self.__getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
 
             self.spgShotsIndicatorState = shotsIndicatorState
             return
 
-    def _getShotIndicatorState(self, shotIdx, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr):
+    def __getShotIndicatorState(self, shotIdx, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr):
         shotResult = getSPGShotResult(targetPoint, shotIdx, shotPos, shotVel, shotGravity, player, target)
         flyTime = getSPGShotFlyTime(targetPoint, shotVel, shotPos, shotDescr.maxDistance, shotDescr.speed)
         return (shotResult, flyTime)
@@ -942,9 +942,8 @@ class _TrajectoryControlMode(_GunControlMode):
         return
 
     def onChangeControlModeByScroll(self, switchToName, switchToPos, switchToPlace):
-        if self._nextControlMode is not None and self._nextControlMode == switchToName:
+        if self._nextControlMode == switchToName:
             BigWorld.callback(0.0, partial(self.__switchToNextControlMode, switchToPos=switchToPos, switchToPlace=switchToPlace))
-        return
 
 
 class StrategicControlMode(_TrajectoryControlMode):
@@ -984,46 +983,6 @@ class ArtyControlMode(_TrajectoryControlMode):
     def disable(self):
         super(ArtyControlMode, self).disable()
         self.strategicCamera = STRATEGIC_CAMERA.AERIAL
-
-
-class OnlyArtyControlMode(_TrajectoryControlMode):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    _TRAJECTORY_UPDATE_INTERVAL = 0.05
-
-    def __init__(self, dataSection, avatarInputHandler):
-        super(OnlyArtyControlMode, self).__init__(dataSection, avatarInputHandler, CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE, OnlyArtyControlMode._TRAJECTORY_UPDATE_INTERVAL)
-        self._nextControlMode = None
-        self._cam = OnlyArtyCamera.OnlyArtyCamera(dataSection['camera'])
-        return
-
-    def enable(self, **args):
-        super(OnlyArtyControlMode, self).enable(**args)
-        self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
-        if self._aih.isFlamethrower:
-            self._cam.setMaxDistance(BigWorld.player().getVehicleDescriptor().shot.maxDistance)
-        ammoCtrl = self.__sessionProvider.shared.ammo
-        if ammoCtrl is not None:
-            ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
-        return
-
-    def disable(self):
-        super(OnlyArtyControlMode, self).disable()
-        self.strategicCamera = STRATEGIC_CAMERA.AERIAL
-        ammoCtrl = self.__sessionProvider.shared.ammo
-        if ammoCtrl is not None:
-            ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
-        return
-
-    def __onCurrentShellChanged(self, intCD):
-        ctrl = self.__sessionProvider.shared.ammo
-        if ctrl is not None:
-            shotIdx = ctrl.getGunSettings().getShotIndex(intCD)
-            if shotIdx < 0:
-                LOG_WARNING('FlamethrowerControlMode __onCurrentShellChanged invalid shellID', intCD)
-                return
-            shotDesc = BigWorld.player().getVehicleDescriptor().gun.shots[shotIdx]
-            self._cam.setMaxDistance(shotDesc.maxDistance)
-        return
 
 
 class SniperControlMode(_GunControlMode):
@@ -1939,5 +1898,4 @@ def _swap(data, index1, index2):
 
 
 def _isEnabledChangeModeByScroll(camera, aih):
-    sniperModeByShift = camera.getUserConfigValue(GAME.SNIPER_MODE_BY_SHIFT)
-    return not sniperModeByShift and not aih.isOnlyArty or aih.isObserverFPV
+    return not camera.getUserConfigValue('sniperModeByShift') or aih.isObserverFPV

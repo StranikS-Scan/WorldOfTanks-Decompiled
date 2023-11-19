@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
-import logging
 from contextlib import contextmanager
 from account_helpers.AccountSettings import DOG_TAGS, WOT_PLUS, TELECOM_RENTALS
 from gui.shared import utils
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-_logger = logging.getLogger(__name__)
 
 class _PMSettings(utils.SettingRecord):
 
@@ -51,9 +49,7 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isExclusiveVehicleEnabled=False, rentPendingVehCD=None, **kwargs):
-        if kwargs:
-            _logger.warning('Not expected argument in WotPlus settings. Check preference.xml. kwargs=%r', kwargs)
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, **_):
         super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance)
 
     def setIsFirstTime(self, isFirstTime):

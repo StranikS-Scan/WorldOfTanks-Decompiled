@@ -2,14 +2,10 @@
 # Embedded file name: scripts/client/gui/wgnc/xml/proxy_data_parsers.py
 import logging
 import json
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
 from gui.wgcg.promo_screens.parsers import PromoDataParser
 from gui.wgnc import proxy_data
-from gui.wgnc.errors import ParseError
 from gui.wgnc.wgnc_helpers import parseSize
 from gui.wgnc.xml.shared_parsers import ParsersCollection, SectionParser
-from helpers import dependency
-from skeletons.gui.game_control import IReferralProgramController
 _logger = logging.getLogger(__name__)
 
 class _ClanApplicationParser(SectionParser):
@@ -178,44 +174,6 @@ class _ReferralBubbleParser(SectionParser):
         return proxy_data.UpdateRefferalBubbleItem()
 
 
-class _ReferralProgramEnabledChecker(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        isCurrentlyEnabled = isReferralProgramEnabled()
-        value = section.asBool
-        if value != isCurrentlyEnabled:
-            raise ParseError('Referral Program is {}'.format('enabled' if isCurrentlyEnabled else 'disabled'))
-
-
-class _ReferralProgramPGBFullChecker(SectionParser):
-    __referralProgramController = dependency.descriptor(IReferralProgramController)
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        isCurrentlyFull = self.__referralProgramController.isScoresLimitReached()
-        value = section.asBool
-        if value != isCurrentlyFull:
-            raise ParseError('Referral Program PGB is {}'.format('full' if isCurrentlyFull else 'not full'))
-
-
-class _CheckClientStateParser(ParsersCollection):
-
-    def __init__(self):
-        super(_CheckClientStateParser, self).__init__((_ReferralProgramEnabledChecker(), _ReferralProgramPGBFullChecker()))
-
-    def parse(self, section):
-        for _ in super(_CheckClientStateParser, self).parse(section):
-            pass
-
-    def getTagName(self):
-        pass
-
-
 class _ClanNotificationParser(SectionParser):
 
     def getTagName(self):
@@ -344,25 +302,13 @@ class _IntegratedAuctionLostRateParser(SectionParser):
 
     def parse(self, section):
         messageData = json.loads(section['data'].asString)
-        messageData.setdefault('result', 'lost')
-        return proxy_data.ShowAuctionResultMessage(messageData=messageData)
-
-
-class _IntegratedAuctionResultParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        messageData = json.loads(section['data'].asString)
-        return proxy_data.ShowAuctionResultMessage(messageData=messageData)
+        return proxy_data.ShowAuctionLostRateMessage(messageData=messageData)
 
 
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):
 
     def __init__(self):
-        super(ProxyDataItemParser_v2, self).__init__((_CheckClientStateParser(),
-         _ClanApplicationParser(),
+        super(ProxyDataItemParser_v2, self).__init__((_ClanApplicationParser(),
          _ClanAppAcceptedActionParser(),
          _ClanAppDeclinedActionParser(),
          _ClanInviteParser(),
@@ -385,5 +331,4 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _MapboxRewardReceivedParser(),
          _IntegratedAuctionRateErrorParser(),
          _IntegratedAuctionBelowCompetitiveRateParser(),
-         _IntegratedAuctionResultParser(),
          _IntegratedAuctionLostRateParser()))

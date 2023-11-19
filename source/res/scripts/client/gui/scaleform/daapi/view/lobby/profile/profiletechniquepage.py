@@ -69,6 +69,15 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         self._receiveVehicleDossier(int(vehicleId), None)
         return
 
+    def updateView(self, ctx):
+        isPrestigeSorting = ctx.get('initVehicleSorting', {}).get('selectedColumnStr') == 'prestigeLevel'
+        if isPrestigeSorting:
+            self._selectedData = ctx
+            self._selectedVehicleIntCD = self._selectedData.get('itemCD', -1)
+            self.as_setSelectedVehicleIntCDS(self._selectedVehicleIntCD)
+            self.as_setInitDataS(self._getInitData())
+            self.invokeUpdate()
+
     def invokeUpdate(self):
         super(ProfileTechniquePage, self).invokeUpdate()
         if self._selectedVehicleIntCD is not None:

@@ -1,24 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/platform/products_fetcher/controller.py
-import typing
 import json
 import logging
 from functools import partial
 import BigWorld
-import wg_async
+import typing
 from BWUtil import AsyncReturn
+import wg_async
 from adisp import adisp_process
 from gui.Scaleform.Waiting import Waiting
 from gui.platform.products_fetcher.fetch_result import FetchResult
 from gui.platform.products_fetcher.product_descriptor import ProductDescriptor
 from gui.wgcg.utils.contexts import PlatformFetchProductListCtx
+from gui.wgcg.web_controller import WebController
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.platform.controller import IPlatformRequestController
 from skeletons.gui.platform.product_fetch_controller import IProductFetchController
 from skeletons.gui.web import IWebController
 from web.cache.web_downloader import WebDownloader
 if typing.TYPE_CHECKING:
-    from typing import List
+    from typing import List, Optional, Dict
 _logger = logging.getLogger(__name__)
 
 class _PlatformProductListParams(object):
@@ -53,7 +55,7 @@ class ProductsDownloader(object):
     _TIMEOUT = 30
 
     def __init__(self):
-        self.__downloader = None
+        self._downloader = None
         self.__downloadQueue = {}
         self.__onFinishCallback = None
         self.__timeoutTimer = None
@@ -62,18 +64,18 @@ class ProductsDownloader(object):
     def download(self, products, callback):
         self.__onFinishCallback = callback
         self.__downloadQueue.clear()
-        self.__downloader = WebDownloader(self._DOWNLOAD_WORKERS_LIMIT)
+        self._downloader = WebDownloader(self._DOWNLOAD_WORKERS_LIMIT)
         self.__timeoutTimer = BigWorld.callback(self._TIMEOUT, self.__onTimeoutTimer)
         for product in products:
             _logger.debug('Download product with url %s', product.productUrl)
             self.__downloadQueue[product.productUrl] = product
-            self.__downloader.download(product.productUrl, self._onProductDownloaded)
+            self._downloader.download(product.productUrl, self._onProductDownloaded)
 
     def stop(self):
         self.__destroyTimer()
         self.__downloadQueue.clear()
-        if self.__downloader:
-            self.__downloader.close()
+        if self._downloader:
+            self._downloader.close()
 
     def _onProductDownloaded(self, url, productData):
         _logger.debug('Product with url=%s downloaded', url)
@@ -109,35 +111,40 @@ class ProductsDownloader(object):
                 self.__onFinishCallback(False)
 
 
-class ProductsFetchController(IProductFetchController):
-    _webCtrl = dependency.descriptor(IWebController)
+class FetchController(IPlatformRequestController):
     _connectionMgr = dependency.descriptor(IConnectionManager)
-    platformParams = _PlatformProductListParams
-    platformFetchCtx = PlatformFetchProductListCtx
-    defaultProductDescriptor = ProductDescriptor
-    productIDToDescriptor = {}
 
     def __init__(self):
-        self.__downloader = None
+        self._downloader = None
         self._fetchResult = None
         return
 
     def init(self):
-        self.__downloader = ProductsDownloader()
+        self._downloader = ProductsDownloader()
         self._fetchResult = FetchResult()
         self._connectionMgr.onDisconnected += self._onDisconnect
 
     def fini(self):
-        self.__downloader.stop()
+        self._downloader.stop()
         self._fetchResult.stop()
         self._connectionMgr.onDisconnected -= self._onDisconnect
 
-    @property
-    def isProductsReady(self):
-        return self._fetchResult.isProductsReady
+    def _onDisconnect(self):
+        if self._downloader:
+            self._downloader.stop()
+        self._fetchResult.stop()
+
+
+class ProductsFetchController(FetchController, IProductFetchController):
+    _webCtrl = dependency.descriptor(IWebController)
+    platformParams = _PlatformProductListParams
+    platformFetchCtx = PlatformFetchProductListCtx
+    defaultProductDescriptor = ProductDescriptor
+    productIDToDescriptor = {}
+    dataGetKey = 'items'
 
     @wg_async.wg_async
-    def getProducts(self, showWaiting=True):
+    def getProducts(self, showWaiting=False):
         _logger.debug('Trying to fetch products')
         if self._fetchResult.isProductsReady:
             _logger.debug('Return products from cache')
@@ -151,7 +158,7 @@ class ProductsFetchController(IProductFetchController):
         if requestSuccess and productsData:
             _logger.debug('Products request has been successfully processed. Downloading additional data')
             self._createDescriptors(productsData)
-            yield wg_async.await_callback(partial(self.__downloader.download, self._fetchResult.products))()
+            yield wg_async.await_callback(partial(self._downloader.download, self._fetchResult.products))()
             self._fetchResult.setProcessed()
         else:
             self._fetchResult.setFailed()
@@ -165,17 +172,12 @@ class ProductsFetchController(IProductFetchController):
         _logger.debug('Request products for params %s', params)
         response = yield self._webCtrl.sendRequest(ctx=ctx)
         data = response.getData()
-        items = data.get('items') if data else None
+        items = data.get(self.dataGetKey) if data else None
         callback((response.isSuccess(), items))
         return
 
     def _createDescriptors(self, productsData):
         for data in productsData:
             productCode = data.get('product_code', '')
-            descriptor = next((v for k, v in self.productIDToDescriptor.items() if productCode.startswith(k)), self.defaultProductDescriptor)
+            descriptor = next((productDescriptor for descriptorPrefix, productDescriptor in self.productIDToDescriptor.iteritems() if productCode.startswith(descriptorPrefix)), self.defaultProductDescriptor)
             self._fetchResult.products.append(descriptor(data))
-
-    def _onDisconnect(self):
-        if self.__downloader:
-            self.__downloader.stop()
-        self._fetchResult.stop()

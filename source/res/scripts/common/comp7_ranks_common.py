@@ -6,7 +6,7 @@ from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
 COMP7_MASCOT_ID = 3
-COMP7_SEASON_IDX = 2
+COMP7_SEASON_IDX = 1
 COMP7_RATING_ENTITLEMENT_TMPL = 'comp7_rating_points'
 COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
 COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
@@ -108,11 +108,16 @@ def parseRatingEnt(entCode):
         return (int(mascotID), int(index))
 
 
-class Comp7EntitlementCodes(enum.Enum):
+def makeRatingEntForSeason(seasonNumber):
+    return ':'.join([COMP7_RATING_ENTITLEMENT_TMPL, str(COMP7_MASCOT_ID), seasonNumber])
+
+
+class Comp7EntitlementCodes(object):
     LEGEND_RANK = 'legendRank'
     RATING_POINTS = 'ratingPoints'
     ACTIVITY_POINTS = 'activityPoints'
-
-    @classmethod
-    def all(cls):
-        return [ element.value for element in cls ]
+    SEASON_POINTS = 'seasonPoints'
+    ALL = (LEGEND_RANK,
+     RATING_POINTS,
+     ACTIVITY_POINTS,
+     SEASON_POINTS)

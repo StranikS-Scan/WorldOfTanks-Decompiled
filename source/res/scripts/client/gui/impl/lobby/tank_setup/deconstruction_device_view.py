@@ -9,6 +9,7 @@ from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_pop_over import BackportPopOverContent, createPopOverData
 from gui.impl.gen import R
@@ -106,10 +107,7 @@ class DeconstructionDeviceView(ViewImpl):
             vehicle = g_currentVehicle.item
             if not vehicle:
                 return
-            tx.currentVehicleInfo.setVehicleName(vehicle.descriptor.type.shortUserString)
-            tx.currentVehicleInfo.setVehicleType(vehicle.type)
-            tx.currentVehicleInfo.setVehicleLvl(vehicle.level)
-            tx.currentVehicleInfo.setIsPremiumIGR(vehicle.isPremiumIGR)
+            fillVehicleInfo(tx.currentVehicleInfo, vehicle)
 
     def _updateSlots(self, ctx=None, fullUpdate=True, updateData=True):
         if self._storageProvider is None or self._onVehicleProvider is None:

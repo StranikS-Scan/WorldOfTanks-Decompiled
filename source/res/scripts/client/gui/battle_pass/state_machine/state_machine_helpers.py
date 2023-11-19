@@ -24,16 +24,6 @@ def isProgressionComplete(_, battlePass=None):
     return isCompleteState and isAllChosen and isAllChaptersBought
 
 
-@dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def getChapterForStyleId(style, battlePass=None):
-    config = battlePass.getStylesConfig()
-    for chapterId, styleId in config.iteritems():
-        if styleId == style:
-            return chapterId
-
-    return None
-
-
 def separateRewards(rewards):
     styleTokens = []
     chosenStyle = None
@@ -54,13 +44,6 @@ def separateRewards(rewards):
 
         if not rewardBlock.get('tokens', {}):
             rewardBlock.pop('tokens', None)
-        if 'customizations' in rewardBlock:
-            for custItem in rewardBlock['customizations']:
-                if custItem['custType'] == 'style':
-                    chapterId = getChapterForStyleId(custItem['id'])
-                    if chapterId is not None:
-                        chosenStyle = chapterId
-
         if not rewardBlock:
             blocksToRemove.append(index)
         styleTokens = []
@@ -85,6 +68,7 @@ def packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=None):
         newLevel = data['newLevel']
         chapter = data['chapter']
         prevLevel = data['prevLevel']
+        data.update({'needVideo': needToShowLevelUpVideo(chapter, newLevel, battlePass=battlePass)})
         isFinalLevel = battlePass.isFinalLevel(chapter, newLevel)
         isRareLevel = False
         if newLevel is not None:
@@ -120,6 +104,11 @@ def defaultEventMethod(rewards, data, packageRewards, battlePass=None):
 def packToken(tokenID):
     return {'tokens': {tokenID: {'count': 1,
                           'expires': {'after': 1}}}}
+
+
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def needToShowLevelUpVideo(chapterID, level, battlePass=None):
+    return battlePass.isFinalLevel(chapterID, level) and battlePass.isExtraChapter(chapterID)
 
 
 @dependency.replace_none_kwargs(offers=IOffersDataProvider)

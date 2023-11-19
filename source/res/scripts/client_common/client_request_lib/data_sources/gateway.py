@@ -70,8 +70,8 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                         pass
 
                     data = json.loads(data)
-                except:
-                    LOG_ERROR('Can not process request response')
+                except Exception as error:
+                    LOG_ERROR('Can not process request response. Exception occured: %s' % type(error).__name__, str(error))
                     data = None
                     headers = None
 
@@ -180,8 +180,8 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v4/commerce/fetchProductListState/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
-    def agate_v5_get_user_subscriptions(self, callback, request_data, fields=None):
-        url = '/agate/api/v5/commerce/getUserSubscriptions/'
+    def agate_v6_get_user_subscriptions2(self, callback, request_data, fields=None):
+        url = '/agate/api/v6/commerce/getUserSubscriptions2/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
     def get_clan_members(self, callback, clan_id, fields=None):

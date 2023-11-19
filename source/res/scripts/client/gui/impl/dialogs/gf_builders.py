@@ -185,6 +185,22 @@ class ConfirmCancelWarningDialogBuilder(ConfirmCancelDialogBuilder):
             template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning(self.__descriptionMsg, self.__warningMsg))
 
 
+class ConfirmCancelDescriptionDialogBuilder(ConfirmCancelDialogBuilder):
+    __slots__ = ('__descriptionMsg',)
+
+    def __init__(self, uniqueID=None):
+        super(ConfirmCancelDescriptionDialogBuilder, self).__init__(uniqueID)
+        self.__descriptionMsg = None
+        return
+
+    def setDescriptionMsg(self, text):
+        self.__descriptionMsg = toString(text)
+
+    def _extendTemplate(self, template):
+        if self.__descriptionMsg:
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning(self.__descriptionMsg, ''))
+
+
 class AlertBuilder(BaseDialogBuilder):
     __slots__ = ()
 

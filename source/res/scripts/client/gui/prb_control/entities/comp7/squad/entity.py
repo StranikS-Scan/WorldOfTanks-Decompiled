@@ -3,7 +3,7 @@
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7IntroPresenter
+from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
 from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
 from gui.prb_control.entities.base.ctx import Comp7PrbAction
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
@@ -44,7 +44,7 @@ class Comp7SquadEntity(SquadEntity):
     def __init__(self):
         super(Comp7SquadEntity, self).__init__(FUNCTIONAL_FLAG.COMP7, PREBATTLE_TYPE.COMP7)
         self.__watcher = None
-        self.__introPresenter = Comp7IntroPresenter()
+        self.__introPresenter = Comp7ViewPresenter()
         self.__validIntCDs = set()
         self.storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
         return

@@ -79,15 +79,15 @@ class _FireCircle(_TriggerItem):
         return []
 
 
+CorrodingShotInfo = namedtuple('CorrodingShotInfo', ('stage', 'endTime'))
+
 class _CorrodingShotIndicator(object):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __EQUIPMENT_NAME = BattleRoyaleEquipments.CORRODING_SHOT
 
     @classmethod
     def updateIndicator(cls, stage, timeRemaining):
-        info = namedtuple('CorrodingShotInfo', ('stage', 'endTime'))
-        info.stage = stage
-        info.endTime = BigWorld.serverTime() + timeRemaining
+        info = CorrodingShotInfo(stage, BigWorld.serverTime() + timeRemaining)
         cls.guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(cls.__EQUIPMENT_NAME, None, info)
         return
 

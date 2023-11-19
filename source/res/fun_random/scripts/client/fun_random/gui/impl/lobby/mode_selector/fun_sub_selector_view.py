@@ -48,6 +48,7 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
         settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=FunRandomSubSelectorModel())
         self.__tooltips = {}
         super(FunModeSubSelectorView, self).__init__(settings)
+        g_eventBus.handleEvent(ModeSubSelectorEvent(ModeSubSelectorEvent.CHANGE_VISIBILITY, ctx={'visible': True}))
 
     @property
     def viewModel(self):
@@ -92,7 +93,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
     def closeSelection(self):
         self.__removeSelectorListeners()
         g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(R.views.lobby.mode_selector.ModeSelectorView()))
-        self.destroyWindow()
 
     def setDisabledProgression(self, model=None):
         model = model or self.viewModel

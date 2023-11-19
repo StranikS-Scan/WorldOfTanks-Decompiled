@@ -164,7 +164,12 @@ class MultipleAwardRewardsMainPacker(object):
         if productCode:
             purchasePackage = yield self.__purchaseCache.requestPurchaseByID(productCode)
             bonusData = deepcopy(invoiceData['data'])
-            compensation = invoiceData.get('compensation', {})
+            compensation = deepcopy(invoiceData.get('compensation', {}))
+            vehCompensation = compensation.get('vehicles', {})
+            for k in vehCompensation:
+                if not vehCompensation[k]:
+                    vehCompensation[k] = {'rent': {'battles': 1}}
+
             _addCompensation(compensation, bonusData)
             sortedBList = _OrderHelper.buildSortedBonusList(bonusData, metaData.get('order', EMPTY_TUPLE), purchasePackage.getEntitlements())
             self.__extendSortedBonusList(sortedBList, purchasePackage.getExtraData())

@@ -131,7 +131,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def updateVehicleEffects(self, vehicle):
         if vehicle is not None:
             vehicle.onDebuffEffectApplied(vehicle.debuff > 0)
-            if vehicle.stunInfo.stunFinishTime > 0.0:
+            if vehicle.stunInfo > 0.0:
                 vehicle.updateStunInfo()
             if vehicle.inspired:
                 vehicle.set_inspired()
@@ -175,7 +175,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isBattleRoyale() and not self.__arenaVisitor.gui.isMapsTraining():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isMapsTraining():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():

@@ -535,11 +535,14 @@ def getProgressionItemStatusText(level):
 
 def vehicleHasSlot(slotType, vehicle=None):
     vehicle = vehicle or g_currentVehicle.item
-    for areaId in Area.ALL:
-        if any(vehicle.getAnchors(slotType, areaId)):
-            return True
+    if vehicle is None:
+        return False
+    else:
+        for areaId in Area.ALL:
+            if any(vehicle.getAnchors(slotType, areaId)):
+                return True
 
-    return False
+        return False
 
 
 def getItemTypesAvailableForVehicle(vehicle=None):

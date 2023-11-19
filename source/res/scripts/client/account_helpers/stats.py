@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Stats.py
 import cPickle
+import logging
 from functools import partial, wraps
 import AccountCommands
 import constants
@@ -12,6 +13,7 @@ from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
 from gui.shared.money import Currency
+_logger = logging.getLogger(__name__)
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -23,8 +25,8 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
-_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals', 'refSystem20', 'denunciations')
+_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
+_DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
 _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isSsrPlayEnabled', 'isEmergencyModeEnabled')
@@ -32,6 +34,7 @@ _CACHE_DICT_STATS = ('SPA', 'entitlements', 'dynamicCurrencies', 'comp7')
 _PREFERRED_MAPS_KEY = 'preferredMaps'
 _ADDITIONAL_XP_CACHE_KEY = '_additionalXPCache'
 _LIMITED_UI = 'limitedUi'
+_AB_FEATURE_TEST = 'abFeatureTest'
 
 def _checkIfNonPlayer(*args):
 
@@ -58,9 +61,10 @@ def _get_callback_proxy(callback=None):
 
 class Stats(object):
 
-    def __init__(self, syncData):
+    def __init__(self, syncData, commandsProxy):
         self.__account = None
         self.__syncData = syncData
+        self.__commandsProxy = commandsProxy
         self.__cache = {}
         self.__ignore = True
         return
@@ -141,6 +145,8 @@ class Stats(object):
             synchronizeDicts(diff[_PREFERRED_MAPS_KEY], cache.setdefault(_PREFERRED_MAPS_KEY, {}))
         if _LIMITED_UI in diff:
             synchronizeDicts(diff[_LIMITED_UI], cache.setdefault(_LIMITED_UI, {}))
+        if _AB_FEATURE_TEST in diff:
+            synchronizeDicts(diff[_AB_FEATURE_TEST], cache.setdefault(_AB_FEATURE_TEST, {}))
         return
 
     def getCache(self, callback=None):
@@ -474,6 +480,30 @@ class Stats(object):
     @_checkIfNonPlayer()
     def changeBRPoints(self, points, ignoreUnburnableTitles=False, callback=None):
         self.__account._doCmdInt3(AccountCommands.CMD_CHANGE_BR_POINTS, points, int(ignoreUnburnableTitles), 0, _get_callback_proxy(callback))
+
+    @_checkIfNonPlayer()
+    def updateVehiclePrestige(self, vehCD=46849, points=10, callback=None):
+        if not isinstance(points, int):
+            LOG_ERROR('Wrong type of points.')
+            return
+        elif self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+
+            def response(code, errStr='', ctx=None):
+                if code >= 0:
+                    _logger.info('Server success response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
+                    return
+                _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
+
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = lambda requestID, resultID, errorStr, ext={}: response(resultID, errorStr, ext)
+            self.__commandsProxy.perform(AccountCommands.CMD_RECOMPUTE_PRESTIGE_POINTS, vehCD, points, proxy)
+            return
 
     def __onGetResponse(self, statName, callback, resultID):
         if resultID < 0:

@@ -311,9 +311,6 @@ class TurretInstaller(CommonModuleInstallProcessor):
             self._findAvailableGun(vehicle, item)
         self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.gunCD))
 
-    def _skippedWarnings(self):
-        return ['error_too_heavy']
-
     def _findAvailableGun(self, vehicle, item):
         for gun in item.descriptor.guns:
             gunItem = self.itemsCache.items.getItemByCD(gun.compactDescr)
@@ -356,6 +353,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
 
     def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
         super(OtherModuleInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.CHASSIS,
+         GUI_ITEM_TYPE.GUN,
          GUI_ITEM_TYPE.ENGINE,
          GUI_ITEM_TYPE.FUEL_TANK,
          GUI_ITEM_TYPE.RADIO,
@@ -367,28 +365,9 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
         BigWorld.player().inventory.equip(self.vehicle.invID, self.item.intCD, lambda code, ext: self._response(code, callback, ctx=ext))
 
 
-class GunModuleInstaller(CommonModuleInstallProcessor):
-
-    def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
-        super(GunModuleInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.GUN,), True, conflictedEqs, skipConfirm=skipConfirm)
-        self.addPlugin(plugins.CompatibilityInstallValidator(vehicle, item, 0))
-
-    def _request(self, callback):
-        BigWorld.player().inventory.equip(self.vehicle.invID, self.item.intCD, lambda code, ext: self._response(code, callback, ctx=ext))
-
-    def _skippedWarnings(self):
-        return ['error_need_turret', 'error_too_heavy']
-
-
-def previewInstallModule(vehicle, item, moduleName, itemsFactory):
-    vehicle.descriptor.installComponent(item.intCD)
-    itemDescr = getattr(vehicle.descriptor, moduleName)
-    module = itemsFactory.createGuiItem(item.itemTypeID, itemDescr.compactDescr, descriptor=itemDescr)
-    setattr(vehicle, moduleName, module)
-
-
 class PreviewVehicleModuleInstaller(OtherModuleInstaller):
-    OTHER_PREVIEW_MODULES = {GUI_ITEM_TYPE.CHASSIS: 'chassis',
+    OTHER_PREVIEW_MODULES = {GUI_ITEM_TYPE.GUN: 'gun',
+     GUI_ITEM_TYPE.CHASSIS: 'chassis',
      GUI_ITEM_TYPE.ENGINE: 'engine',
      GUI_ITEM_TYPE.RADIO: 'radio'}
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
@@ -396,16 +375,10 @@ class PreviewVehicleModuleInstaller(OtherModuleInstaller):
     def _request(self, callback):
         itemTypeID = self.item.itemTypeID
         moduleName = self.OTHER_PREVIEW_MODULES[itemTypeID]
-        previewInstallModule(self.vehicle, self.item, moduleName, self.itemsFactory)
-        callback(makeSuccess())
-
-
-class PreviewVehicleGunInstaller(GunModuleInstaller):
-    itemsFactory = dependency.descriptor(IGuiItemsFactory)
-
-    def _request(self, callback):
-        moduleName = 'gun'
-        previewInstallModule(self.vehicle, self.item, moduleName, self.itemsFactory)
+        self.vehicle.descriptor.installComponent(self.item.intCD)
+        itemDescr = getattr(self.vehicle.descriptor, moduleName)
+        module = self.itemsFactory.createGuiItem(itemTypeID, itemDescr.compactDescr, descriptor=itemDescr)
+        setattr(self.vehicle, moduleName, module)
         callback(makeSuccess())
 
 
@@ -572,12 +545,8 @@ def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, is
         return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseMoney, conflictedEqs, skipConfirm)
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
         return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
-    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-        return BattleAbilityInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
-    return GunModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.GUN else OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
+    return BattleAbilityInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY else OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
 
 
 def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):
-    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
-        return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs)
-    return PreviewVehicleGunInstaller(vehicle, newComponentItem, conflictedEqs) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.GUN else PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+    return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET else PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)

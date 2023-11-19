@@ -37,9 +37,6 @@ class ProjectileMover(object):
         self.__debugDrawer = None
         return
 
-    def getProjectile(self, shotID):
-        return self.__projectiles.get(shotID)
-
     def destroy(self):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
@@ -140,9 +137,8 @@ class ProjectileMover(object):
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
-        shellType = proj['effectsDescr']['shellType']
         isOwnShot = proj['autoScaleProjectile']
-        BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, shellType, isOwnShot)
+        BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
         FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, proj, velocityDir):

@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroVideoURL, isIntroVideoExist, isExtraIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import getExtraIntroVideoURL, getIntroVideoURL
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsView
@@ -52,7 +52,7 @@ class _IntroVideoManager(object):
         g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
 
     def showIntroVideoIfNeeded(self, *_):
-        if not self.isIntroVideoShown and isIntroVideoExist():
+        if not self.isIntroVideoShown:
             _showOverlayVideo(getIntroVideoURL())
             _setTrueToBPStorage(_INTRO_VIDEO_SHOWN)
             self.__isIntroVideoShown = True
@@ -66,7 +66,7 @@ class _IntroVideoManager(object):
 
     @nextTick
     def __showExtraVideoIfNeeded(self):
-        if not self.isExtraVideoShown and self.__battlePass.hasExtra() and isExtraIntroVideoExist():
+        if not self.isExtraVideoShown and self.__battlePass.hasExtra():
             _showOverlayVideo(getExtraIntroVideoURL())
             _setTrueToBPStorage(_EXTRA_VIDEO_SHOWN)
             if not self.__isIntroVideoShown:
@@ -115,13 +115,12 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
 
     def start(self):
         if self._injectView is not None:
-            self._injectView.updateData()
-            self._injectView.startListeners()
+            self.__safeCall(self._injectView, 'activate')
         return
 
     def stop(self):
         if self._injectView is not None:
-            self._injectView.stopListeners()
+            self.__safeCall(self._injectView, 'deactivate')
         return
 
     def _onPopulate(self):
@@ -193,6 +192,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         else:
             self.as_setBackgroundS('')
             self.as_hideDummyS()
+
+    @staticmethod
+    def __safeCall(obj, attrName, *args, **kwargs):
+        return getattr(obj, attrName, lambda *__, **_: None)(*args, **kwargs)
 
 
 def _showOverlayVideo(url):

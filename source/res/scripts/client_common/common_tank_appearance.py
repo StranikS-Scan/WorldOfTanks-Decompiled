@@ -208,28 +208,25 @@ class CommonTankAppearance(ScriptGameObject):
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
         prereqs.extend(camouflages.getModelAnimatorsPrereqs(self.outfit, self.spaceID))
         prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.spaceID))
+        modelsSetParams = self.modelsSetParams
+        if IS_EDITOR and not modelsSetParams.skin:
+            modelsSetParams = ModelsSetParams(self.currentModelsSet, modelsSetParams.state, modelsSetParams.attachments)
         splineDesc = self.typeDescriptor.chassis.splineDesc
-        modelsSet = self.outfit.modelsSet
-        if IS_EDITOR:
-            modelsSet = self.currentModelsSet
+        modelsSet = self.outfit.modelsSet if not IS_EDITOR else modelsSetParams.skin
         if splineDesc is not None:
             for _, trackDesc in splineDesc.trackPairs.iteritems():
                 prereqs += trackDesc.prerequisites(modelsSet)
 
-        modelsSetParams = self.modelsSetParams
         compoundAssembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.spaceID, self.isTurretDetached, renderMode=self.renderMode)
         prereqs.append(compoundAssembler)
         if renderMode == TankRenderMode.OVERLAY_COLLISION:
             self.damageState.update(0, isCrewActive, False)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.spaceID)
         prereqs.append(collisionAssembler)
-        skin = modelsSetParams.skin
-        if IS_EDITOR:
-            skin = self.currentModelsSet
         physicalTracksBuilders = self.typeDescriptor.chassis.physicalTracks
         for name, builders in physicalTracksBuilders.iteritems():
             for index, builder in enumerate(builders):
-                prereqs.append(builder.createLoader(self.spaceID, '{0}{1}PhysicalTrack'.format(name, index), skin))
+                prereqs.append(builder.createLoader(self.spaceID, '{0}{1}PhysicalTrack'.format(name, index), modelsSetParams.skin))
 
         return prereqs
 
@@ -255,7 +252,7 @@ class CommonTankAppearance(ScriptGameObject):
         if not isCurrentModelDamaged:
             modelsSet = self.outfit.modelsSet
             if IS_EDITOR:
-                modelsSet = self.currentModelsSet
+                modelsSet = self.modelsSetParams.skin if self.modelsSetParams.skin else self.currentModelsSet
             self._splineTracks = model_assembler.setupSplineTracks(self.fashion, self.typeDescriptor, self.compoundModel, resourceRefs, modelsSet)
             self.crashedTracksController = CrashedTrackController(self.typeDescriptor, self.fashion, modelsSet)
         else:

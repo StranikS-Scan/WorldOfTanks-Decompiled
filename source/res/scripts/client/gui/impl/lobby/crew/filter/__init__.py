@@ -97,7 +97,7 @@ def getTankmanRoleSettings(hasDiscount=False):
 
 
 def getVehicleTypeSettings(labelResId=R.strings.crew.filter.group.vehicleType.barracks.title(), customTooltipBody=R.strings.crew.filter.tooltip.vehicleType.body()):
-    return FilterGroupSettings(toggleID=ToggleGroupType.VEHICLETYPE.value, labelResId=labelResId, toggleType=ToggleGroupType.VEHICLETYPE, toggles=[ ToggleButtonSettings(toggleID=vehicleType, icon=R.images.gui.maps.icons.vehicleTypes.extraSmall.dyn(vehicleType.replace('-', '_'))(), tooltipHeader=R.strings.menu.header.vehicleType.dyn(vehicleType.replace('-', '_'))(), tooltipBody=customTooltipBody) for vehicleType in VEHICLE_TYPES_ORDER ])
+    return FilterGroupSettings(toggleID=ToggleGroupType.VEHICLETYPE.value, labelResId=labelResId, toggleType=ToggleGroupType.VEHICLETYPE, toggles=[ ToggleButtonSettings(toggleID=vehicleType, icon=R.images.gui.maps.icons.vehicleTypes.extraSmall.dyn(vehicleType.replace('-', '_'))(), tooltipHeader=R.strings.crew.filter.tooltip.vehicleType.header.dyn(vehicleType.replace('-', '_'))(), tooltipBody=customTooltipBody) for vehicleType in VEHICLE_TYPES_ORDER ])
 
 
 def getVehicleTierSettings(labelResId=R.strings.crew.filter.group.vehicleTier.longTitle()):

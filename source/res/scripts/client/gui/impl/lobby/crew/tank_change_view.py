@@ -61,6 +61,10 @@ class TankChangeView(BaseCrewView):
         return self.__vehicle
 
     @property
+    def selectedTmanInvID(self):
+        return self.__selectedTmanInvID
+
+    @property
     def viewModel(self):
         return super(TankChangeView, self).getViewModel()
 
@@ -93,7 +97,6 @@ class TankChangeView(BaseCrewView):
         super(TankChangeView, self)._finalize()
         self._filterPanelWidget = None
         self.__filterState = None
-        self.__dataProvider.clear()
         self.__dataProvider = None
         if not self.vehicle or not self.vehicle.hasCrew:
             self._destroySubViews()
@@ -150,7 +153,10 @@ class TankChangeView(BaseCrewView):
         return (NO_TANKMAN, NO_SLOT)
 
     def _onEmptySlotClick(self, tankmanID, slotIdx):
-        showChangeCrewMember(slotIdx, self.vehicle.invID, self.layoutID)
+        _, vehicle, __ = self.crewWidget.getWidgetData()
+        vehicleInvID = vehicle.invID if vehicle else self.vehicle.invID
+        self.__selectedTmanInvID = NO_TANKMAN
+        showChangeCrewMember(slotIdx, vehicleInvID, self.layoutID)
 
     def _onFilterStateUpdated(self):
         self.__dataProvider.update()

@@ -40,13 +40,55 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-303.160919 -345.729309	</position1>
+          <position1>	-303.160950 -345.729340	</position1>
         </team1>
         <team2>
-          <position1>	356.137360 246.011520	</position1>
+          <position1>	356.137238 246.011429	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-299.010590 346.889465	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-245.974335 245.552032	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	22.389448 -47.798672	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-473.821716 -129.706757	</position>
+        </team1>
+        <team2>
+          <position>	237.861359 319.852936	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-148.626923 139.288040	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

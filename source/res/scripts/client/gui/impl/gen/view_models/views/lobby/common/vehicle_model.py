@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/common/vehicle_model.py
-from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 
 class VehicleModel(ViewModel):
@@ -21,6 +20,9 @@ class VehicleModel(ViewModel):
     HEAVY_TANK = 'heavyTank'
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
+    PREMIUM_TAG = 'premium'
+    PREMIUM_IGR_TAG = 'premiumIGR'
+    WOT_PLUS_TAG = 'wotPlus'
 
     def __init__(self, properties=9, commands=0):
         super(VehicleModel, self).__init__(properties=properties, commands=commands)
@@ -56,14 +58,10 @@ class VehicleModel(ViewModel):
         self._setBool(4, value)
 
     def getTags(self):
-        return self._getArray(5)
+        return self._getString(5)
 
     def setTags(self, value):
-        self._setArray(5, value)
-
-    @staticmethod
-    def getTagsType():
-        return unicode
+        self._setString(5, value)
 
     def getNation(self):
         return self._getString(6)
@@ -90,7 +88,7 @@ class VehicleModel(ViewModel):
         self._addNumberProperty('tier', 0)
         self._addStringProperty('type', '')
         self._addBoolProperty('isPremium', False)
-        self._addArrayProperty('tags', Array())
+        self._addStringProperty('tags', '')
         self._addStringProperty('nation', '')
         self._addStringProperty('roleKey', '')
         self._addNumberProperty('vehicleCD', 0)

@@ -57,11 +57,12 @@ class BattlePassStateMachine(StateMachine):
         choiceState.configure()
         rewardState.configure()
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasChoiceOption, priority=2), target=choiceState.choiceItem)
-        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
+        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasVideo, priority=1), target=videoState)
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasAnyReward, priority=0), target=rewardState.rewardAny)
         choiceState.choiceItem.addTransition(ConditionTransition(self.__hasAnyReward, priority=1), target=rewardState.rewardAny)
         choiceState.choiceItem.addTransition(ConditionTransition(lambda _: True, priority=0), target=lobbyState.lobbyWait)
-        videoState.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardStyle)
+        videoState.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=rewardState.rewardStyle)
+        videoState.addTransition(ConditionTransition(lambda _: True, priority=0), target=rewardState.rewardAny)
         rewardState.rewardAny.addTransition(ConditionTransition(isProgressionComplete, priority=1), target=lobbyState.lobbyFinal)
         rewardState.rewardAny.addTransition(ConditionTransition(lambda _: True, priority=0), target=lobbyState.lobbyWait)
         self.addState(lobbyState)
@@ -141,3 +142,6 @@ class BattlePassStateMachine(StateMachine):
 
     def __hasAnyReward(self, *_):
         return bool(self.__rewards) or bool(self.__packageRewards)
+
+    def __hasVideo(self, *_):
+        return self.__hasStyleReward() or self.__data is not None and self.__data.get('needVideo', False)

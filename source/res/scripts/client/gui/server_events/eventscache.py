@@ -7,12 +7,11 @@ import typing
 import BigWorld
 import motivation_quests
 import customization_quests
-import static_quests
 import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async, adisp_process
-from constants import EVENT_CLIENT_DATA, EVENT_TYPE
+from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
@@ -27,6 +26,7 @@ from gui.shared.system_factory import collectQuestBuilders
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first, findFirst
@@ -38,10 +38,10 @@ from skeletons.gui.shared.utils import IRaresCache
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest
-PM_TOKEN_PREFIXES = frozenset(['pm2_',
- 'token:pt:',
- 'free_award_list',
- 'regular_'])
+NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
+ RECRUIT_TMAN_TOKEN_PREFIX,
+ TWITCH_TOKEN_PREFIX,
+ OFFER_TOKEN_PREFIX)
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
@@ -217,7 +217,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm2_progress' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if any((tokenID.startswith(t) for t in PM_TOKEN_PREFIXES)):
+                        if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
                             isQPUpdated = True
                             break
 
@@ -800,32 +800,11 @@ class EventsCache(IEventsCache):
         for qID, qData in self.__getDailyQuestsData().iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
-    def getQuestByID(self, questID):
-        questData = self.__getQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getPersonalMissionsHiddenQuests()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        questData = self.__getDailyQuestsData()
-        if questID in questData:
-            return self._makeQuest(questID, questData[questID])
-        elif questID in motivation_quests.g_cache:
-            return self._makeQuest(questID, motivation_quests.g_cache.getQuestByID(questID).questData, maker=_motiveQuestMaker)
-        elif questID in customization_quests.g_cust_cache:
-            return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData)
-        else:
-            return self._makeQuest(questID, static_quests.g_static_quest_cache[questID]) if questID in static_quests.g_static_quest_cache else None
-
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
         questsData.update(self.__getPersonalQuestsData())
         questsData.update(self.__getPersonalMissionsHiddenQuests())
         questsData.update(self.__getDailyQuestsData())
-        questsData.update(static_quests.g_static_quest_cache)
         for qID, qData in questsData.iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
@@ -864,7 +843,7 @@ class EventsCache(IEventsCache):
     def __getPersonalMissionsHiddenQuests(self):
         if not self.__personalMissionsHidden:
             xmlPath = PERSONAL_MISSIONS_XML_PATH + '/tiles.xml'
-            for quest in readQuestsFromFile(xmlPath, (EVENT_TYPE.TOKEN_QUEST,)):
+            for quest in readQuestsFromFile(xmlPath, EVENT_TYPE.TOKEN_QUEST):
                 self.__personalMissionsHidden[quest[0]] = quest[3]
 
         return self.__personalMissionsHidden.copy()

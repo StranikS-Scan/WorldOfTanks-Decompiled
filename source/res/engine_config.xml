@@ -1,6 +1,6 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
-  <appTitle>	Мир танков	</appTitle>
   <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
@@ -88,7 +88,6 @@
       <frames>	6	</frames>
     </lod>
     <dynamicShadows>	false	</dynamicShadows>
-    <dynamicShadowsInHangar>	true	</dynamicShadowsInHangar>
   </animation>
   <screenShot>
     <extension>	jpg	</extension>
@@ -200,7 +199,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.lstprod.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
@@ -211,8 +210,6 @@
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
-    <statisticsLog>	false	</statisticsLog>
-    <battleLogOnly>	false	</battleLogOnly>
     <enableLoggingAssetMsg>	false	</enableLoggingAssetMsg>
     <assetLogPath>	asset.log	</assetLogPath>
     <enableColorFill>	false	</enableColorFill>
@@ -434,7 +431,7 @@
           <name>	tasks.bnk	</name>
         </bank>
         <bank>
-          <name>	lesta_battle_pass.bnk	</name>
+          <name>	task_special.bnk	</name>
         </bank>
         <bank>
           <name>	cons_hangar.bnk	</name>
@@ -488,19 +485,13 @@
           <name>	achievements.bnk	</name>
         </bank>
         <bank>
-          <name>	armory_yard.bnk	</name>
-        </bank>
-        <bank>
-          <name>	lootboxes.bnk	</name>
-        </bank>
-        <bank>
-          <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
-        </bank>
-        <bank>
           <name>	crew.bnk	</name>
         </bank>
         <bank>
-          <name>	style_3D_R123_Kirovets_Svaroshich.bnk	</name>
+          <name>	custom_styles.bnk	</name>
+        </bank>
+        <bank>
+          <name>	custom_styles.pck	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -589,30 +580,6 @@
         </bank>
         <bank>
           <name>	rocket_accelerator.pck	</name>
-        </bank>
-        <bank>
-          <name>	flamethrower.bnk	</name>
-        </bank>
-        <bank>
-          <name>	flamethrower.pck	</name>
-        </bank>
-        <bank>
-          <name>	style_monster.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_Ch29_Type_62C.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_F18_Bat_Chatillon25t.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_R144_K_91.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_R123_Kirovets_Svaroshich.bnk	</name>
-        </bank>
-        <bank>
-          <name>	gameplay.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
@@ -867,7 +834,7 @@
     <logVerbosity>	disable	</logVerbosity>
     <enableFlash>	true	</enableFlash>
     <ignoreCertErrors>	false	</ignoreCertErrors>
-    <debugPort>	9999	</debugPort>
+    <debugPort>	-1	</debugPort>
     <maxFrameRate>	60	</maxFrameRate>
     <acceptLangList></acceptLangList>
     <locale></locale>

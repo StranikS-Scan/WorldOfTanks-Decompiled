@@ -11,6 +11,7 @@ import Event
 import adisp
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from ClientSelectableCameraObject import ClientSelectableCameraObject
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.server_events.events_helpers import getC11nQuestsConfig, isC11nQuest
 from gui.shared.event_dispatcher import hideVehiclePreview
@@ -25,6 +26,7 @@ from gui.shared.gui_items.customization.c11n_items import Customization
 from items import vehicles
 from items.customizations import createNationalEmblemComponents
 from serializable_types.customizations import CustomizationOutfit
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from vehicle_outfit.outfit import Outfit, Area
@@ -238,6 +240,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
             if not lobbyHeaderNavigationPossible:
                 return
+        elif self.__customizationCtx.isOutfitsModified() and g_currentVehicle.invID != vehInvID:
+            result = yield self.__confirmClose()
+            if not result:
+                return
         self.__showCustomizationKwargs = {'vehInvID': vehInvID,
          'callback': callback,
          'season': season,
@@ -272,6 +278,18 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                     vEntity.appearance.rotateGunToDefault()
             self.__delayedShowCustomization()
             return
+
+    @adisp.adisp_async
+    @adisp.adisp_process
+    @dependency.replace_none_kwargs(appLoader=IAppLoader)
+    def __confirmClose(self, appLoader=None, callback=None):
+        result = True
+        app = appLoader.getApp()
+        customizationView = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION))
+        if customizationView is not None:
+            result = yield customizationView.showCloseConfirmator()
+        callback(result)
+        return
 
     def __delayedShowCustomization(self):
         self.hangarSpace.onVehicleChanged -= self.__delayedShowCustomization

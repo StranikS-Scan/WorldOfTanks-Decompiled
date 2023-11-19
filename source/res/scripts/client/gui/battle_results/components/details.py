@@ -753,7 +753,10 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def __setBlockedByXPToTman(self):
         self.xpValue = ''
-        textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenChanged()
+        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
+            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
+        else:
+            textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()
         self.statusBonusLabel = text_styles.neutral(backport.text(textKey))
         self.statusBonusTooltip = makeTooltip(body=TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY)
 

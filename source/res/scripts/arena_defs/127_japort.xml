@@ -2,13 +2,20 @@
   <name>	#arenas:127_japort/name	</name>
   <description>	#arenas:127_japort/description	</description>
   <geometry>	spaces/127_japort	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
-    <upperRight>	500.000000 500.000000	</upperRight>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/127_japort/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/127_japort/mmap_bunker_crash01_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
   <wwmusicSetup>
@@ -22,6 +29,16 @@
     <wwmusicResultDefeat>	music_japort_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -31,32 +48,13 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-367.279236 156.182098	</position1>
+          <position1>	-367.279205 156.182083	</position1>
         </team1>
         <team2>
-          <position1>	337.413452 152.013916	</position1>
+          <position1>	337.413422 152.013901	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
-    <assault2>
-      <winnerIfTimeout>	1	</winnerIfTimeout>
-      <winnerIfExtermination>	1	</winnerIfExtermination>
-      <teamSpawnPoints>
-        <team1>
-          <position>	-279.974823 -451.633392	</position>
-        </team1>
-        <team2>
-          <position>	364.110046 192.922302	</position>
-        </team2>
-      </teamSpawnPoints>
-      <teamBasePositions>
-        <team1>
-          <position1>	-132.764832 197.782181	</position1>
-          <position2>	48.933105 -142.072617	</position2>
-        </team1>
-        <team2></team2>
-      </teamBasePositions>
-    </assault2>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

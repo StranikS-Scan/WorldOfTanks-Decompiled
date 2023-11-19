@@ -95,7 +95,7 @@
     <GMC_302_x2>	118	</GMC_302_x2>
     <Daimler_DQ450>	119	</Daimler_DQ450>
     <Rolls_Royce_B80P>	120	</Rolls_Royce_B80P>
-    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>	31001	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
+    <AEC_A7E3>	122	</AEC_A7E3>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -110,6 +110,8 @@
     <Rolls_Royse_Meteor_Mk_XI_supercharged_SH>	10001	</Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
     <Leyland_L60_No_4_SH>	10002	</Leyland_L60_No_4_SH>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Nuffield_liberty_MKIV_NewOnBoarding>	64001	</Nuffield_liberty_MKIV_NewOnBoarding>
+    <Wright_Continental_R-975C4_NewOnBoarding>	64002	</Wright_Continental_R-975C4_NewOnBoarding>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -603,6 +605,23 @@
       <rpm_min>	700	</rpm_min>
       <rpm_max>	3000	</rpm_max>
     </AEC_197>
+    <AEC_A7E3>
+      <userString>	#gb_vehicles:AEC_A7E3	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	252	</power>
+      <weight>	331	</weight>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	32	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	287	</rpm_min>
+      <rpm_max>	2124	</rpm_max>
+    </AEC_A7E3>
     <Leyland>
       <userString>	#gb_vehicles:Leyland	</userString>
       <tags>	diesel	</tags>
@@ -1264,7 +1283,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
-      <power>	680	</power>
+      <power>	580	</power>
       <weight>	700	</weight>
       <maxHealth>	320	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1340,23 +1359,6 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2161	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
-    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
-      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	65000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1040	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	320	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2161	</rpm_max>
-    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <Ford_V8-220>
       <userString>	#gb_vehicles:Ford_V8-220	</userString>
       <tags>	gasoline	</tags>
@@ -1887,14 +1889,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1110	</power>
+      <power>	1180	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0	</fireStartingChance>
-      <rpm_min>	429	</rpm_min>
-      <rpm_max>	2224	</rpm_max>
+      <rpm_min>	410	</rpm_min>
+      <rpm_max>	2287	</rpm_max>
     </Rolls_Royse_Meteor_Mk_XI_supercharged_SH>
     <Leyland_L60_No_4_SH>
       <userString>	#gb_vehicles:Leyland_L60_No_4_SH	</userString>
@@ -1930,5 +1932,41 @@
       <rpm_max>	2721	</rpm_max>
       <notInShop>	True	</notInShop>
     </Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
+    <Nuffield_liberty_MKIV_NewOnBoarding>
+      <userString>	#gb_vehicles:Nuffield_liberty_MKIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	395	</power>
+      <weight>	383	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	377	</rpm_min>
+      <rpm_max>	2590	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Nuffield_liberty_MKIV_NewOnBoarding>
+    <Wright_Continental_R-975C4_NewOnBoarding>
+      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_NewOnBoarding>
   </shared>
 </engines.xml>

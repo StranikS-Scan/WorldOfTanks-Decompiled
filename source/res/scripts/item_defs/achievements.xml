@@ -3745,21 +3745,6 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:13YearsOfService	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1.0	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	all	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
       <name>	singleAchievements:12YearsOfService	</name>
       <type>	dict	</type>
       <value>
@@ -4833,6 +4818,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1442.014	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:BattlePassCommonPr_12extra	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1442.015	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -6535,51 +6535,6 @@
       </value>
     </achievement>
     <achievement>
-      <name>	mtAchievements:rpBronzeMedal	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1000.0	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	mtAchievements:rpSilverMedal	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1000.1	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	mtAchievements:rpGoldMedal	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1000.2	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
       <name>	singleAchievements:onboardingMedal	</name>
       <type>	dict	</type>
       <value>
@@ -6610,6 +6565,51 @@
       </value>
     </achievement>
     <achievement>
+      <name>	achievements:wt2023HunterWins	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1447.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:wt2023BossWins	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1447.4	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:wt2023MaxPlasma	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1447.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	singleAchievements:september23	</name>
       <type>	dict	</type>
       <value>
@@ -6625,22 +6625,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:mt_comp_3_1	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1469.0	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	singleAchievements:hw2023Medal01	</name>
+      <name>	singleAchievements:hw2023Medal	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -6651,36 +6636,6 @@
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	singleAchievements:hw2023Medal02	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1448.6	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	all	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	singleAchievements:comp7_3_2	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1470.0	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

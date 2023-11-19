@@ -5,8 +5,7 @@ from battle_royale.gui.impl.lobby.views.widget_view import WidgetView
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from helpers import int2roman
 from helpers import dependency
-from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.BATTLE_ROYALE import BATTLE_ROYALE
 from gui.Scaleform.daapi.view.meta.BattleRoyaleHangarWidgetMeta import BattleRoyaleHangarWidgetMeta
 from skeletons.gui.game_control import IBattleRoyaleController
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
@@ -18,7 +17,7 @@ from helpers import time_utils
 from gui.shared import event_dispatcher
 from battle_royale_progression.gui.shared import event_dispatcher as battle_royale_event_dispatcher
 from gui.shared.formatters import text_styles
-BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'tooltipId', 'showAlert'))
+BattleRoyaleWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'showAlert'))
 
 class BattleRoyaleHangarWidgetInject(InjectComponentAdaptor):
 
@@ -49,7 +48,7 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
 
     def __update(self):
         showAlert = not self.__battleRoyaleController.isInPrimeTime() and self.__battleRoyaleController.isEnabled()
-        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, showAlert=showAlert)._asdict()
+        data = BattleRoyaleWidgetVO(calendarStatus=self.__getStatusBlock().asDict(), showAlert=showAlert)._asdict()
         self.as_setDataS(data)
 
     def _dispose(self):
@@ -61,9 +60,6 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
         showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
         unsuitablePeriphery = status in (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
         hasAvailableServers = self.__battleRoyaleController.hasAvailablePrimeTimeServers()
-        if unsuitablePeriphery:
-            peripheryID = self.__battleRoyaleController.getAnyPrimeStatusServerID((PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE))
-            timeLeft = self.__battleRoyaleController.getPeriodInfo(peripheryID=peripheryID).primeDelta
         return AlertData(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.battle_royale.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, unsuitablePeriphery, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
 
     def __getAlertStatusText(self, timeLeft, unsuitablePeriphery, hasAvailableServers):
@@ -79,12 +75,12 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
             currTime = time_utils.getCurrentLocalServerTimestamp()
             primeTime = self.__battleRoyaleController.getPrimeTimes().get(self.__connectionMgr.peripheryID)
             isCycleNow = currSeason and currSeason.hasActiveCycle(currTime) and primeTime and primeTime.getPeriodsBetween(currTime, currSeason.getCycleEndDate())
-            if isCycleNow or timeLeft:
+            if isCycleNow:
                 if self.__connectionMgr.isStandalone():
                     key = rAlertMsgBlock.singleModeHalt
                 else:
                     key = rAlertMsgBlock.allPeripheriesHalt
-                timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                timeLeftStr = time_utils.getTillTimeString(timeLeft, BATTLE_ROYALE.STATUS_TIMELEFT, removeLeadingZeros=True)
                 alertStr = backport.text(key(), time=timeLeftStr)
             else:
                 nextSeason = currSeason or self.__battleRoyaleController.getNextSeason()
@@ -92,7 +88,7 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
                         cycleNumber = nextCycle.getEpicCycleNumber()
-                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
+                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, BATTLE_ROYALE.STATUS_TIMELEFT, removeLeadingZeros=True)
                         alertStr = backport.text(rAlertMsgBlock.startIn.single() if nextSeason.isSingleCycleSeason() else rAlertMsgBlock.startIn.multi(), cycle=int2roman(cycleNumber), time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.__battleRoyaleController.getPreviousSeason()

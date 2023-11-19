@@ -99,7 +99,7 @@ class AreaDestructibles(BigWorld.Entity):
         g_destructiblesManager._addController(chunkID, self)
         self.__prevFallenColumns = frozenset(self.fallenColumns)
         for fallData in self.fallenColumns:
-            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_FALLING_ATOM, fallData, False)
+            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_FALLING_ATOM, fallData, False, False, True)
 
         self.__prevFallenTrees = frozenset(self.fallenTrees)
         for fallData in self.fallenTrees:
@@ -255,6 +255,9 @@ class DestructiblesManager(object):
             chunkEntries = self.__destructiblesWaitDestroy.get(chunkID)
             if chunkEntries is not None:
                 for dmgType, destrData, isNeedAnimation in chunkEntries:
+                    if dmgType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
+                        destrIndex, _, _ = DestructiblesCache.decodeFallenColumn(destrData)
+                        self.__setFragileDestroyed(self.__spaceID, chunkID, destrIndex, False, False)
                     self.__destroyDestructible(chunkID, dmgType, destrData, isNeedAnimation)
 
                 del self.__destructiblesWaitDestroy[chunkID]
@@ -299,10 +302,14 @@ class DestructiblesManager(object):
         if not gotDestrs:
             BigWorld.callback(_SHOT_EXPLOSION_SYNC_TIMEOUT, partial(self.__delayedHavokExplosion, self.__spaceID, explosionInfo))
 
-    def orderDestructibleDestroy(self, chunkID, dmgType, destrData, isNeedAnimation, syncWithProjectile=False):
+    def orderDestructibleDestroy(self, chunkID, dmgType, destrData, isNeedAnimation, syncWithProjectile=False, forceRemove=False):
         if self.forceNoAnimation:
             isNeedAnimation = False
         if self.__loadedChunkIDs.has_key(chunkID):
+            if forceRemove and dmgType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
+                destrIndex, _, _ = DestructiblesCache.decodeFallenColumn(destrData)
+                self.__setFragileDestroyed(self.__spaceID, chunkID, destrIndex, False, False)
+                return
             if isNeedAnimation and syncWithProjectile:
                 if dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
                     itemIndex, _ = DestructiblesCache.decodeFragile(destrData)

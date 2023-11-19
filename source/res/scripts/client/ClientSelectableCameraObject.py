@@ -29,7 +29,7 @@ class ClientSelectableCameraObject(ClientSelectableObject):
         return self.state != CameraMovementStates.FROM_OBJECT
 
     @classmethod
-    def switchCamera(cls, clickedObject=None, cameraName=None):
+    def switchCamera(cls, clickedObject=None, cameraName=None, instantly=False):
         if not cls.hangarSpace.spaceInited:
             return
         else:
@@ -40,10 +40,10 @@ class ClientSelectableCameraObject(ClientSelectableObject):
             cls.deselectAll()
             cameraManager = CGF.getManager(cls.hangarSpace.spaceID, HangarCameraManager)
             if cameraName is None:
-                cameraManager.switchToTank(False)
+                cameraManager.switchToTank(instantly)
             else:
-                cameraManager.switchByCameraName(cameraName, False)
-            clickedObject.onSelect()
+                cameraManager.switchByCameraName(cameraName, instantly)
+            clickedObject.onSelect(instantly)
             return
 
     @classmethod
@@ -51,9 +51,10 @@ class ClientSelectableCameraObject(ClientSelectableObject):
         for cameraObject in ClientSelectableCameraObject.allCameraObjects:
             cameraObject.onDeselect()
 
-    def onSelect(self):
+    def onSelect(self, instantly=False):
         self.setEnable(False)
-        self.setState(CameraMovementStates.MOVING_TO_OBJECT)
+        if not instantly:
+            self.setState(CameraMovementStates.MOVING_TO_OBJECT)
         self.setState(CameraMovementStates.ON_OBJECT)
 
     def onDeselect(self):

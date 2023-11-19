@@ -64,7 +64,8 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 model.setCurrentPoints(curPoints)
                 model.setMaxPoints(limitPoints)
                 model.setIsBattlePassPurchased(isBattlePassPurchased)
-                model.setBattleType(getPreQueueName(battleType).lower())
+                if battleType:
+                    model.setBattleType(getPreQueueName(battleType).lower())
                 model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
                 model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
                 model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))

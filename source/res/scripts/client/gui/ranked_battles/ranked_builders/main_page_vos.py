@@ -128,6 +128,7 @@ def getRankedMainSeasonOffItems(isRankedShop, yearLBState, isYearRewardEnabled, 
 def getRankedMainSeasonAllItems(isRankedShop, yearLBState, yearLBSize):
     result = list()
     result.extend(_getShopPage(isRankedShop))
+    result.append(_getRatingPage())
     result.extend(_getYearRatingPage(yearLBState != SwitchState.HIDDEN, yearLBSize, disabled=yearLBState == SwitchState.DISABLED))
     if getRankedBattlesInfoPageUrl():
         result.append(_getInfoPage())

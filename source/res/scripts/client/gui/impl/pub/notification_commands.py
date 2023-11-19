@@ -22,6 +22,7 @@ class NotificationEvent(object):
 
 class NotificationCommand(object):
     __slots__ = ()
+    isPersistent = True
 
     def __eq__(self, other):
         return False
@@ -83,3 +84,8 @@ class EventNotificationCommand(NotificationCommand):
 
     def getWindow(self):
         return None
+
+
+class NonPersistentEventNotificationCommand(EventNotificationCommand):
+    __slots__ = ()
+    isPersistent = False

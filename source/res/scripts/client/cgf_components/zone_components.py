@@ -39,6 +39,9 @@ class ZoneMarker(object):
     category = 'UI'
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Zone Marker'
+    isVisibleOnMinimap = CompProp(type=CGFMetaTypes.BOOL, value=True, editorName='Visible on minimap')
+    isVisibleOn3DScene = CompProp(type=CGFMetaTypes.BOOL, value=False, editorName='Visible on 3D scene')
+    reduceDuration = CompProp(type=CGFMetaTypes.FLOAT, value=0.0, editorName='Duration reduce')
 
     def __init__(self):
         super(ZoneMarker, self).__init__()
@@ -114,7 +117,7 @@ class MapZoneManager(CGF.ComponentManager):
     def onMarkerUpdated(self, zoneMarker):
         _logger.debug('on marker updated')
         mapZones = self.__guiSessionProvider.shared.mapZones
-        if mapZones and zoneMarker.isActive():
+        if mapZones:
             mapZones.onMarkerProgressUpdated(zoneMarker)
 
     @onAddedQuery(CGF.GameObject, ZoneUINotification)
@@ -157,8 +160,9 @@ class MapZoneManager(CGF.ComponentManager):
 
     @onAddedQuery(ZoneMarker, GenericComponents.TimedActivatedComponent)
     def onActivationAndZone(self, marker, activator):
+        reduce = max(marker.reduceDuration, 0.0)
         marker.startTime = activator.serverStartTime
-        marker.finishTime = activator.serverEndTime
+        marker.finishTime = max(activator.serverStartTime, activator.serverEndTime - reduce)
 
     @onAddedQuery(ZoneUINotification, GenericComponents.TimedActivatedComponent)
     def onActivationMarker(self, zone, activator):
@@ -173,7 +177,7 @@ class MapZoneManager(CGF.ComponentManager):
             if zoneUINotification.isActive():
                 if vehicle:
                     zoneUINotification.inZoneVehicles.add(vehicle.id)
-                    if vehicle.id == avatar_getter.getVehicleIDAttached():
+                    if vehicle.id == avatar_getter.getVehicleIDAttached() and vehicle.isAlive():
                         mapZones.enterDangerZone(zoneUINotification)
 
     def __onExitDangerZone(self, zoneUINotification, go, _):
@@ -216,7 +220,8 @@ class MapZoneManager(CGF.ComponentManager):
         if avatarVehicle is None or not avatarVehicle.isAlive():
             return
         else:
-            for dZone in self.queryUINotifications:
+            zones = [ zone for zone in self.queryUINotifications ]
+            for dZone in sorted(zones, key=lambda z: z.zoneType == ZoneUINotificationType.DANGER_ZONE, reverse=True):
                 if avatarVehicle.id in dZone.inZoneVehicles:
                     mapZones = self.__guiSessionProvider.shared.mapZones
                     if mapZones:

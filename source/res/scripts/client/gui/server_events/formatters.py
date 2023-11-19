@@ -293,12 +293,10 @@ def packNewStyleBonusesBlock(bonusesList, endlineSymbol=''):
     return UiElement(data)
 
 
-def packVehiclesBonusBlock(label, questID, isOneOf=False):
+def packVehiclesBonusBlock(label, questID):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,
      'questID': questID}
-    if isOneOf:
-        blockData['tooltip'] = label
     return UiElement(blockData, 'label')
 
 
@@ -357,7 +355,7 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.TOURNAMENT
         if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING):
             bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
-        if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP,):
+        if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP, ARENA_BONUS_TYPE.RANDOM_NP2):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
@@ -459,6 +457,7 @@ def titleComplexRelationFormat(value, relation, titleKey=None):
 
 
 def titleComplexRelationFormatPlain(value, relation, titleKey=None):
+    _logger.error('Information loss: We are loosing information about the image.')
     return titleRelationFormatPlain(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey)
 
 

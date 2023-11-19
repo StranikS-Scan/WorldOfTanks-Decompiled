@@ -4,7 +4,6 @@ import logging
 import typing
 import BigWorld
 import Event
-import personal_missions
 from Account import PlayerAccount
 from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
@@ -12,15 +11,12 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results import composer, context, emblems, reusable, stored_sorting
-from gui.battle_results.components.progress import VehicleProgressHelper
 from gui.battle_results.composer import StatsComposer
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
 from gui.shared.utils import decorators
 from helpers import dependency
-from shared_utils import first
-from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -191,71 +187,6 @@ class BattleResultsService(IBattleResultsService):
             _logger.debug('Only random battles results are logging')
             return
         else:
-            statisticsResult = getEmptyClientPB20UXStats()
-            vehTypeCompDescr, vData = first(reusableInfo.personal.getVehicleCDsIterator(result['personal']))
-            statisticsResult['vehTypeCompDescr'] = vehTypeCompDescr
-            if reusableInfo.isPostBattlePremiumPlus:
-                statisticsResult['premiumType'] = PREMIUM_TYPE.PLUS
-            elif reusableInfo.isPostBattlePremium:
-                statisticsResult['premiumType'] = PREMIUM_TYPE.BASIC
-            else:
-                statisticsResult['premiumType'] = PREMIUM_TYPE.NONE
-            statisticsResult['timestamp'] = result['common'].get('arenaCreateTime', 0)
-            statisticsResult['arenaTypeID'] = reusableInfo.common.arenaTypeID
-            personalMissions = {}
-            questsProgress = reusableInfo.personal.getQuestsProgress()
-            if questsProgress:
-                premiumQuests = self.eventsCache.getPremiumQuests()
-                allCommonQuests = self.eventsCache.getQuests()
-                allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
-                for qID, qProgress in questsProgress.iteritems():
-                    _, pPrev, pCur = qProgress
-                    isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
-                    if qID in allCommonQuests:
-                        if qID in premiumQuests:
-                            questType = 'premium'
-                        else:
-                            questType = 'other'
-                        if isCompleted:
-                            statisticsResult[questType + 'QuestsCompleted'] += 1
-                        else:
-                            statisticsResult[questType + 'QuestsInProgress'] += 1
-                    if personal_missions.g_cache.isPersonalMission(qID):
-                        pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
-                        questsCache = self.eventsCache.getPersonalMissions()
-                        quest = questsCache.getAllQuests()[pqID]
-                        personalMissions.setdefault(quest, {})[qID] = isCompleted
-
-            pm2Progress = reusableInfo.personal.getPM2Progress()
-            if pm2Progress:
-                quests = self.eventsCache.getPersonalMissions().getAllQuests()
-                for qID, data in pm2Progress.iteritems():
-                    personalMissions.setdefault(quests[qID], {}).update(data)
-
-            pmCompletedMain = 0
-            pmCompletedFull = 0
-            for quest, data in personalMissions.items():
-                if data.get(quest.getAddQuestID(), False):
-                    pmCompletedFull += 1
-                if data.get(quest.getMainQuestID(), False):
-                    pmCompletedMain += 1
-
-            statisticsResult['personalMissionsInProgress'] = len(personalMissions) - pmCompletedMain - pmCompletedFull
-            statisticsResult['personalMissionsCompletedFull'] = pmCompletedFull
-            statisticsResult['personalMissionsCompletedMain'] = pmCompletedMain
-            vehicleBattleXp = vData.get('xp', 0)
-            pureCreditsReceived = vData.get('pureCreditsReceived', 0)
-            tmenXps = dict(vData.get('xpByTmen', []))
-            helper = VehicleProgressHelper(vehTypeCompDescr)
-            ready2UnlockVehicles, ready2UnlockModules = helper.getReady2UnlockItems(vehicleBattleXp)
-            ready2BuyVehicles, ready2BuyModules = helper.getReady2BuyItems(pureCreditsReceived)
-            tankmen = helper.getNewSkilledTankmen(tmenXps)
-            statisticsResult['vehicleProgressReady2UnlockVehicles'] = len(ready2UnlockVehicles)
-            statisticsResult['vehicleProgressReady2UnlockModules'] = len(ready2UnlockModules)
-            statisticsResult['vehicleProgressReady2BuyVehicles'] = len(ready2BuyVehicles)
-            statisticsResult['vehicleProgressReady2BuyModules'] = len(ready2BuyModules)
-            statisticsResult['vehicleProgressTankmen'] = len(tankmen)
-            playerAccount.logClientPB20UXStats(statisticsResult)
             return
 
     def __getAdditionalXPBattles(self):

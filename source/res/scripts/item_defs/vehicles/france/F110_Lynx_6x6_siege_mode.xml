@@ -61,6 +61,13 @@
       <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F110_Lynx_6x6_3Dst_HW23>
+          <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Hull.model	</exploded>
+        </F110_Lynx_6x6_3Dst_HW23>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -83,10 +90,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.248208 0.057485 1.76122	</rayStart>
-        <rayEnd>	-0.200203 -0.109005 1.66133	</rayEnd>
-        <rayUp>	0.149612 0.035992 -0.98809	</rayUp>
-        <size>	0.22	</size>
+        <rayStart>	-0.110808 0.250099 1.396346	</rayStart>
+        <rayEnd>	-0.110808 0.080412 1.290479	</rayEnd>
+        <rayUp>	-0 0.529327 -0.848418	</rayUp>
+        <size>	0.17	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -1006,6 +1013,32 @@
         <clipAngle>	1.22826	</clipAngle>
         <anchorShift>	-0.032428	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+        <position>	0.903085 1.32569 1.99243	</position>
+        <rotation>	0.160849 -0.000023 3.14156	</rotation>
+        <scale>	0.348641 0.332402 0.348638	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.773745	</clipAngle>
+        <anchorShift>	0.02	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+        <position>	-0.234186 1.40668 -1.56798	</position>
+        <rotation>	2.95235 -0.000055 -0.000169039	</rotation>
+        <scale>	0.292167 0.0755436 0.292168	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.688059	</clipAngle>
+        <anchorShift>	0.068424	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1057,6 +1090,13 @@
         <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F110_Lynx_6x6_3Dst_HW23>
+            <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Chassis.model	</exploded>
+          </F110_Lynx_6x6_3Dst_HW23>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1419,6 +1459,13 @@
         <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F110_Lynx_6x6_3Dst_HW23>
+            <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Chassis.model	</exploded>
+          </F110_Lynx_6x6_3Dst_HW23>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1814,6 +1861,13 @@
             <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <F110_Lynx_6x6_3Dst_HW23>
+                <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_03.model	</exploded>
+              </F110_Lynx_6x6_3Dst_HW23>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Gun_03.model	</collisionModelServer>
@@ -1912,6 +1966,13 @@
             <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F110_Lynx_6x6_3Dst_HW23>
+                <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_01.model	</exploded>
+              </F110_Lynx_6x6_3Dst_HW23>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Gun_01.model	</collisionModelServer>
@@ -2005,6 +2066,13 @@
             <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <F110_Lynx_6x6_3Dst_HW23>
+                <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_02.model	</exploded>
+              </F110_Lynx_6x6_3Dst_HW23>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Gun_02.model	</collisionModelServer>
@@ -2081,6 +2149,13 @@
         <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F110_Lynx_6x6_3Dst_HW23>
+            <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Turret_01.model	</exploded>
+          </F110_Lynx_6x6_3Dst_HW23>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Turret_01.model	</collisionModelServer>
@@ -2453,6 +2528,58 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.547131	</clipAngle>
           <anchorShift>	0.588502	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+          <position>	-0.772272 1.74281 -0.0747128	</position>
+          <rotation>	1.72587 1.56313 -0.000063	</rotation>
+          <scale>	0.255025 0.188064 0.255026	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.22826	</clipAngle>
+          <anchorShift>	0.018327	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+          <position>	0.742275 1.7348 -0.0522723	</position>
+          <rotation>	1.41592 1.57061 3.14111	</rotation>
+          <scale>	0.249026 0.18364 0.249027	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.22826	</clipAngle>
+          <anchorShift>	0.046215	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+          <position>	0.391899 2.1086 -0.0560386	</position>
+          <rotation>	-0.00953087 -0.000019 3.14156	</rotation>
+          <scale>	0.284407 0.0700409 0.284412	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.19191	</clipAngle>
+          <anchorShift>	0.081987	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	F110_Lynx_6x6_3Dst_HW23	</compatibleModels>
+          <position>	0.0020002 2.15032 -0.569295	</position>
+          <rotation>	3.06808 -0.000038 -0.000056	</rotation>
+          <scale>	0.278746 0.068647 0.278751	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.041258	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

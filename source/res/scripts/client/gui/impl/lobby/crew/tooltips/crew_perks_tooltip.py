@@ -24,14 +24,15 @@ class CrewPerksTooltip(ViewImpl):
     def __init__(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksTooltip(), args=args, kwargs=kwargs)
         settings.model = CrewPerksTooltipModel()
+        skillCustomisation = kwargs.get('skillCustomisation', None)
         self._skillName = skillName
         self._isCommonExtraAvailable = isCommonExtraAvailable
         self._showAdditionalInfo = showAdditionalInfo
         self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
         self._tankmanVehicle = self._getVehicle()
         self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
-        self._skill = getTankmanSkill(skillName, tankman=self._tankman)
-        self._descrArgs = getSkillsConfig().getSkill(skillName).uiSettings.descrArgs
+        self._skill = getTankmanSkill(self._skillName, tankman=self._tankman, skillCustomisation=skillCustomisation)
+        self._descrArgs = getSkillsConfig().getSkill(self._skillName).uiSettings.descrArgs
         self._skillLevel = self._getSkillLevel(skillLevel, self._IsIrrelevant())
         super(CrewPerksTooltip, self).__init__(settings)
         return
@@ -76,7 +77,7 @@ class CrewPerksTooltip(ViewImpl):
             isZeroPerk, isIrrelevant = (self._tankman and self._skill.name in self._tankman.freeSkillsNames, self._IsIrrelevant()) if self._showAdditionalInfo else (False, False)
             vm.setIsZeroPerk(isZeroPerk)
             vm.setIsIrrelevant(isIrrelevant)
-            if self._skillLevel > 0 and self._skill.isEnable:
+            if self._skillLevel > 0 and (self._skill.isEnable or not self._tankman):
                 self.fillCurrentLvlInfo(vm)
             else:
                 vm.setDescription(self._skill.getMaxLvlDescription())

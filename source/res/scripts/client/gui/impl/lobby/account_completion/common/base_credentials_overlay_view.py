@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.account_completion.tooltips.tooltip_co
 from gui.impl.lobby.account_completion.common import errors
 from gui.impl.lobby.account_completion.common.base_wgnp_overlay_view import BaseWGNPOverlayView
 from gui.impl.lobby.account_completion.common.field_presenters import EmailPresenter, PasswordPresenter
-from gui.impl.lobby.account_completion.utils.common import fillRewards, getBonuses, DISABLE_BUTTON_TIME
+from gui.impl.lobby.account_completion.utils.common import fillRewards, DISABLE_BUTTON_TIME
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 _WARNING_TIMEOUT = DISABLE_BUTTON_TIME
@@ -73,11 +73,11 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
         self.viewModel.setQuestID(EMAIL_CONFIRMATION_QUEST_ID)
         self.viewModel.setRewardsTitle(self._REWARDS_TITLE)
 
-    def _finalize(self):
-        super(BaseCredentialsOverlayView, self)._finalize()
+    def _doFinalize(self):
         self._email.dispose()
         self._password.dispose()
         self._tooltipItems = None
+        super(BaseCredentialsOverlayView, self)._doFinalize()
         return
 
     def _inputValueChangeHandler(self):
@@ -97,7 +97,7 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
 
     def _fillRewards(self, model):
         self._tooltipItems.clear()
-        fillRewards(model, getBonuses(), self._tooltipItems)
+        fillRewards(model, tooltipItems=self._tooltipItems)
 
     def _onSyncCompleted(self, *args):
         with self.viewModel.transaction() as model:

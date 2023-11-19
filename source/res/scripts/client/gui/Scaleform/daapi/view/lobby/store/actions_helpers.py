@@ -550,7 +550,7 @@ class VehPriceActionInfo(ActionInfo):
                                          'hullArmor',
                                          'turretArmor',
                                          DUAL_GUN_CHARGE_TIME),
-         VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
+         VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
          VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
          'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
         block = []
@@ -659,12 +659,6 @@ class EquipmentActionInfo(ActionInfo):
             res.append(item)
 
         return res[:3]
-
-
-class BattleBoosterActionInfo(EquipmentActionInfo):
-
-    def getTriggerChainID(self):
-        pass
 
 
 class OptDeviceActionInfo(ActionInfo):
@@ -1023,9 +1017,6 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_EquipmentPriceAll': EquipmentActionInfo,
  'mul_EquipmentPrice': EquipmentActionInfo,
  'set_EquipmentPrice': EquipmentActionInfo,
- 'mul_PrebattleInstructionsPriceAll': BattleBoosterActionInfo,
- 'mul_PrebattleInstructionsPrice': BattleBoosterActionInfo,
- 'set_PrebattleInstructionsPrice': BattleBoosterActionInfo,
  'mul_OptionalDevicePriceAll': OptDeviceActionInfo,
  'mul_OptionalDevicePrice': OptDeviceActionInfo,
  'set_OptionalDevicePrice': OptDeviceActionInfo,

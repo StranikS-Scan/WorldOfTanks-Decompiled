@@ -38,7 +38,7 @@
     </accountPrebattle_createTraining>
     <accountPrebattle_createDevPrebattle>
       <Arg>	UINT8	</Arg>
-      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
@@ -91,5 +91,12 @@
     <accountPrebattle_removeAccountFromWhiteList>
       <Arg>	DB_ID	</Arg>
     </accountPrebattle_removeAccountFromWhiteList>
+    <accountPrebattle_setPrebattleVehiclesLimits>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountPrebattle_setPrebattleVehiclesLimits>
+    <accountPrebattle_setPrebattleBonusType>
+      <Arg>	UINT32	</Arg>
+    </accountPrebattle_setPrebattleBonusType>
   </BaseMethods>
 </AccountPrebattle.def>

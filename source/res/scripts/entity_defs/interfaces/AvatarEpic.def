@@ -39,6 +39,17 @@
       <Arg>	INT64	</Arg>
       <Arg>	UINT8	</Arg>
     </onCrewRoleFactorAndRankUpdate>
+    <syncPurchasedAbilities>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+    </syncPurchasedAbilities>
+    <onRandomReserveOffer>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	UINT8	</of>
+      </Arg>
+      <Arg>	UINT8	</Arg>
+    </onRandomReserveOffer>
     <onRankUpdate>
       <Arg>	UINT8	</Arg>
     </onRankUpdate>

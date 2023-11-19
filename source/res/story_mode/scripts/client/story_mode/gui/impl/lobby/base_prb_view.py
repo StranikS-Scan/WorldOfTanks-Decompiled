@@ -2,11 +2,8 @@
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/base_prb_view.py
 from logging import getLogger
 from adisp import adisp_process
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.header import LobbyHeader
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
-from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.pub import ViewImpl
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -17,7 +14,7 @@ from frameworks.wulf import ViewSettings, ViewFlags
 from story_mode_common.story_mode_constants import LOGGER_NAME
 _logger = getLogger(LOGGER_NAME)
 
-class BasePrbView(ViewImpl):
+class BasePrbView(ViewImpl, LobbyHeaderVisibility):
     LAYOUT_ID = None
     MODEL_CLASS = None
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
@@ -28,15 +25,11 @@ class BasePrbView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BasePrbView, self)._onLoading(*args, **kwargs)
-        LobbyHeader.toggleMenuVisibility(HeaderMenuVisibilityState.NOTHING)
+        self.suspendLobbyHeader(self.uniqueID)
 
     def _finalize(self):
-        if not self._isInCustomization():
-            LobbyHeader.toggleMenuVisibility(HeaderMenuVisibilityState.ALL)
+        self.resumeLobbyHeader(self.uniqueID)
         super(BasePrbView, self)._finalize()
-
-    def _isInCustomization(self):
-        return self._appLoader.getApp().containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_CUSTOMIZATION)) is not None
 
     @adisp_process
     def _quit(self):

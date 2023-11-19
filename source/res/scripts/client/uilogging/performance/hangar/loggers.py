@@ -5,6 +5,7 @@ import typing
 from uilogging.base.logger import _BaseLogger as Logger, createPartnerID
 from uilogging.constants import DEFAULT_LOGGER_NAME
 from uilogging.performance.hangar.constants import Features, Groups, LogActions
+from uilogging.helpers import getClientSessionID
 import BigWorld
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
@@ -68,9 +69,10 @@ class HangarMetricsLogger(object):
     @noexcept
     def log(self):
         _logger.debug('Hangar performance metrics requested.')
+        if not self._defaultLogger.disabled or BigWorld.wg_debugLogging():
+            data = BigWorld.wg_getHangarStatistics()
         if self._defaultLogger.disabled:
             return
-        data = BigWorld.wg_getHangarStatistics()
         if not data:
             _logger.debug('Hangar performance metrics are empty.')
             return
@@ -78,7 +80,7 @@ class HangarMetricsLogger(object):
         if diff:
             _logger.error('Difference in loggers and received metrics groups: %s.', diff)
             return
-        clientSessionID = str(BigWorld.player().connectionMgr.lastSessionID)
         partnerID = createPartnerID()
+        clientSessionID = getClientSessionID()
         for group, stats in data.iteritems():
             self._loggers[group].log(stats, partnerID=partnerID, sessionID=clientSessionID)

@@ -78,11 +78,6 @@
           <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Hull.model	</exploded>
         </F18_Bat_Chatillon25t_BP8_3DSt>
-        <F18_Bat_Chatillon25t_3DSt_BP_MT>
-          <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Hull.model	</exploded>
-        </F18_Bat_Chatillon25t_3DSt_BP_MT>
       </sets>
     </models>
     <swinging>
@@ -822,11 +817,6 @@
             <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Chassis.model	</exploded>
           </F18_Bat_Chatillon25t_BP8_3DSt>
-          <F18_Bat_Chatillon25t_3DSt_BP_MT>
-            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Chassis.model	</exploded>
-          </F18_Bat_Chatillon25t_3DSt_BP_MT>
         </sets>
       </models>
       <traces>
@@ -911,45 +901,6 @@
                   <row3>	-1.259010 1.164883 2.759726	</row3>
                 </boxCollider>
               </hullCollider>
-              <hullCollider>
-                <modelsSet>	F18_Bat_Chatillon25t_3DSt_BP_MT	</modelsSet>
-                <boxCollider>
-                  <row0>	1.848996 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.127993 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.200039	</row2>
-                  <row3>	0.000000 0.964554 0.070547	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.197760 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.806738	</row2>
-                  <row3>	0.000000 1.233748 -0.003239	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.678974 0.000000 -0.000001	</row0>
-                  <row1>	0.000000 0.295945 0.049155	</row1>
-                  <row2>	0.000001 -0.066967 0.403179	</row2>
-                  <row3>	-1.259010 1.176190 2.759726	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.636517 0.771263 0.000000	</row0>
-                  <row1>	-0.231379 0.190955 0.000000	</row1>
-                  <row2>	-0.000001 0.000001 4.000000	</row2>
-                  <row3>	-1.969241 0.922657 -0.901725	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	1.000000 -0.000003 -0.000006	</row0>
-                  <row1>	-0.000001 0.199883 -0.223712	</row1>
-                  <row2>	0.000006 0.745706 0.666275	</row2>
-                  <row3>	-1.259010 1.143639 -2.934964	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.300000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 0.500000	</row2>
-                  <row3>	-1.787589 0.821365 -2.906158	</row3>
-                </boxCollider>
-              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1019,45 +970,6 @@
                   <row1>	0.000000 0.271535 0.127548	</row1>
                   <row2>	0.000000 -0.173765 0.369924	</row2>
                   <row3>	1.259010 1.164883 2.759726	</row3>
-                </boxCollider>
-              </hullCollider>
-              <hullCollider>
-                <modelsSet>	F18_Bat_Chatillon25t_3DSt_BP_MT	</modelsSet>
-                <boxCollider>
-                  <row0>	1.848996 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.127993 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.200039	</row2>
-                  <row3>	0.000000 0.964554 0.070547	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.197760 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.806738	</row2>
-                  <row3>	0.000000 1.233748 -0.003239	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.678974 0.000000 0.000001	</row0>
-                  <row1>	0.000000 0.295945 0.049156	</row1>
-                  <row2>	-0.000001 -0.066967 0.403179	</row2>
-                  <row3>	1.259010 1.176190 2.759726	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.636517 -0.771263 0.000000	</row0>
-                  <row1>	0.231379 0.190955 0.000000	</row1>
-                  <row2>	0.000001 0.000001 4.000000	</row2>
-                  <row3>	1.969241 0.922657 -0.901725	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	1.000000 0.000003 0.000006	</row0>
-                  <row1>	0.000001 0.199883 -0.223712	</row1>
-                  <row2>	-0.000006 0.745706 0.666275	</row2>
-                  <row3>	1.259010 1.143639 -2.934964	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.300000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 0.500000	</row2>
-                  <row3>	1.787589 0.821365 -2.906158	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1267,14 +1179,6 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
-          <modelSets>
-            <F18_Bat_Chatillon25t_3DSt_BP_MT>
-              <segmentModelLeft>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/track/segment_01.model	</segmentModelLeft>
-              <segmentModelRight>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/track/segment_01.model	</segmentModelRight>
-              <segment2ModelLeft></segment2ModelLeft>
-              <segment2ModelRight></segment2ModelRight>
-            </F18_Bat_Chatillon25t_3DSt_BP_MT>
-          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1302,12 +1206,6 @@
             <model>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</model>
             <length>	0.131828	</length>
           </mainSegment>
-          <modelSets>
-            <F18_Bat_Chatillon25t_3DSt_BP_MT>
-              <mainSegmentModel>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/track/segment_01.model	</mainSegmentModel>
-              <secSegmentModel></secSegmentModel>
-            </F18_Bat_Chatillon25t_3DSt_BP_MT>
-          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1540,12 +1438,6 @@
             <model>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</model>
             <length>	0.131835	</length>
           </mainSegment>
-          <modelSets>
-            <F18_Bat_Chatillon25t_3DSt_BP_MT>
-              <mainSegmentModel>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/track/segment_01.model	</mainSegmentModel>
-              <secSegmentModel></secSegmentModel>
-            </F18_Bat_Chatillon25t_3DSt_BP_MT>
-          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1872,11 +1764,6 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_01.model	</exploded>
               </F18_Bat_Chatillon25t_BP8_3DSt>
-              <F18_Bat_Chatillon25t_3DSt_BP_MT>
-                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_01.model	</exploded>
-              </F18_Bat_Chatillon25t_3DSt_BP_MT>
             </sets>
           </models>
           <hitTester>
@@ -2211,15 +2098,6 @@
               <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
               <size>	0.492	</size>
             </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49002	</slotId>
-              <rayStart>	-0.002105 0.017195 2.91	</rayStart>
-              <rayEnd>	-0.002105 0.017195 3.402	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_BP_MT	</compatibleModels>
-              <size>	0.492	</size>
-            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2290,11 +2168,6 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_02.model	</exploded>
               </F18_Bat_Chatillon25t_BP8_3DSt>
-              <F18_Bat_Chatillon25t_3DSt_BP_MT>
-                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_02.model	</exploded>
-              </F18_Bat_Chatillon25t_3DSt_BP_MT>
             </sets>
           </models>
           <hitTester>
@@ -2629,15 +2502,6 @@
               <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
               <size>	0.705	</size>
             </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49002	</slotId>
-              <rayStart>	-0.004211 0.016304 4.5	</rayStart>
-              <rayEnd>	-0.004211 0.016304 5.205	</rayEnd>
-              <rayUp>	0.137 0 0	</rayUp>
-              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_BP_MT	</compatibleModels>
-              <size>	0.705	</size>
-            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2704,11 +2568,6 @@
                 <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Gun_03.model	</exploded>
               </F18_Bat_Chatillon25t_BP8_3DSt>
-              <F18_Bat_Chatillon25t_3DSt_BP_MT>
-                <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Gun_03.model	</exploded>
-              </F18_Bat_Chatillon25t_3DSt_BP_MT>
             </sets>
           </models>
           <hitTester>
@@ -3043,15 +2902,6 @@
               <compatibleModels>	F18_Bat_Chatillon25t_3DSt_TLXXL	</compatibleModels>
               <size>	0.438	</size>
             </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49002	</slotId>
-              <rayStart>	-0.004211 0.016504 3.61	</rayStart>
-              <rayEnd>	-0.004211 0.016504 4.048	</rayEnd>
-              <rayUp>	0.134 0 0	</rayUp>
-              <compatibleModels>	F18_Bat_Chatillon25t_3DSt_BP_MT	</compatibleModels>
-              <size>	0.438	</size>
-            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -3087,11 +2937,6 @@
             <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_BP8_3DSt/crash/lod0/Turret_01.model	</exploded>
           </F18_Bat_Chatillon25t_BP8_3DSt>
-          <F18_Bat_Chatillon25t_3DSt_BP_MT>
-            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/french/F18_Bat_Chatillon25t/_skins/F18_Bat_Chatillon25t_3DSt_BP_MT/crash/lod0/Turret_01.model	</exploded>
-          </F18_Bat_Chatillon25t_3DSt_BP_MT>
         </sets>
       </models>
       <hitTester>

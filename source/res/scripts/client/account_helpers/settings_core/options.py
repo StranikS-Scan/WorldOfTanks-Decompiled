@@ -40,7 +40,7 @@ from helpers import i18n
 from Event import Event
 from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
 from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera, DualGunCamera
-from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode, OnlyArtyCamera
+from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
@@ -1272,8 +1272,8 @@ class VideoModeSettings(PreferencesSetting):
         return self._storage.windowMode
 
     def _set(self, value):
-        self._storage.windowMode = int(value)
-        self.__videoMode = int(value)
+        self._storage.windowMode = value
+        self.__videoMode = value
 
     def _savePrefsCallback(self, prefsRoot):
         prefsRoot['devicePreferences'].writeInt('windowMode', self.__videoMode)
@@ -1300,7 +1300,6 @@ class VehicleMarkerSetting(StorageAccountSetting):
             VEHICLE_NAME = 'VehicleName'
             PLAYER_NAME = 'PlayerName'
             AIM_MARKER_2D = 'AimMarker2D'
-            VEHICLE_DIST = 'VehicleDist'
 
         @classmethod
         def getOptionName(cls, mType, mOption):
@@ -1703,8 +1702,7 @@ class MouseSetting(ControlSetting):
      CTRL_MODE_NAME.SNIPER: (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
      CTRL_MODE_NAME.STRATEGIC: (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera'),
      CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera'),
-     CTRL_MODE_NAME.DUAL_GUN: (DualGunCamera.getCameraAsSettingsHolder, 'dualGunMode/camera'),
-     CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE: (OnlyArtyCamera.getCameraAsSettingsHolder, 'flamethrowerMode/camera')}
+     CTRL_MODE_NAME.DUAL_GUN: (DualGunCamera.getCameraAsSettingsHolder, 'dualGunMode/camera')}
 
     def __init__(self, mode, setting, default, isPreview=False, masterSwitch=''):
         super(MouseSetting, self).__init__(isPreview)

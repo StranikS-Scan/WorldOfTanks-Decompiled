@@ -121,19 +121,23 @@ class ViewStateUpdater(object):
             self.invalidate()
 
     def invalidate(self, _=None):
-        isActive = self._component.isActive
-        if isActive or self._isActive:
-            self._isActive = isActive
-            self._invalidateState()
+        if self._component is None:
+            return
+        else:
+            isActive = self._component.isActive
+            if isActive or self._isActive:
+                self._isActive = isActive
+                self._invalidateState()
+            return
 
     def destroy(self):
+        if self._vehicleStateCtrl:
+            self._vehicleStateCtrl.onVehicleControlling -= self.onVehicleControlling
+        g_eventBus.removeListener(MarkersManagerEvent.MARKERS_CREATED, self.invalidate, EVENT_BUS_SCOPE.BATTLE)
         self._component = None
         if self._isActive:
             self._isActive = False
             self._invalidateState()
-        if self._vehicleStateCtrl:
-            self._vehicleStateCtrl.onVehicleControlling -= self.onVehicleControlling
-        g_eventBus.removeListener(MarkersManagerEvent.MARKERS_CREATED, self.invalidate, EVENT_BUS_SCOPE.BATTLE)
         return
 
     def _invalidateState(self):

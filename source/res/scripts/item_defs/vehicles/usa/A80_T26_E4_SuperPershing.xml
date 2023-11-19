@@ -39,6 +39,7 @@
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
+    <density>	0.995698 0.995698	</density>
   </camouflage>
   <hull>
     <armor>
@@ -643,7 +644,7 @@
     </customization>
     <camouflage>
       <tiling>	0.955 0.955 0.13 0.07	</tiling>
-      <density>	97.2711 97.3277	</density>
+      <density>	97.27459 97.324852	</density>
       <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
@@ -1745,9 +1746,31 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-20	</row>
+                <row>	-10	</row>
+                <row>	0	</row>
+                <row>	10	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	11.8	</row>
+                    <row>	5.45	</row>
+                    <row>	0	</row>
+                    <row>	-5.09	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	0.475 0.475 0.17 0.000000	</tiling>
-            <density>	114.387 119.809	</density>
+            <density>	110.044319 120.489685	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T15E1>
@@ -2138,7 +2161,7 @@
       </customization>
       <camouflage>
         <tiling>	0.685 0.685 0.75 0.54	</tiling>
-        <density>	86.5352 86.6134	</density>
+        <density>	86.219368 86.2967	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_T26_E4_SuperPershing>

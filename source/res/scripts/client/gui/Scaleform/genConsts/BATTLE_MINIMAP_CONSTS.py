@@ -15,4 +15,3 @@ class BATTLE_MINIMAP_CONSTS(object):
     STATE_NOT_ACTIVE = 'notActive'
     SCENARIO_EVENT_EFFECT = 'scenarioEventEffect'
     SCENARIO_EVENT_ALERT = 'scenarioEventAlert'
-    SET_SCALE = 'setScale'

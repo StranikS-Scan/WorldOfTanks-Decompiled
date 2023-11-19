@@ -224,8 +224,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__canvas.script = self
         self.__canvas.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__canvas.scaleProperties = GUI_SETTINGS.markerScaleSettings
+        self.__canvas.enableMarkerHovering = self._isMarkerHoveringEnabled
         self.__canvas.stickyMarkerRadiusScale = _STICKY_MARKER_RADIUS_SCALE
-        self.enableMarkerHovering()
         self.__canvasProxy = weakref.ref(self.__canvas)
         self.component.addChild(self.__canvas, 'vehicleMarkersCanvas')
 
@@ -252,10 +252,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             self.__plugins.fini()
         return
 
-    def enableMarkerHovering(self):
-        if self.__canvas:
-            self.__canvas.enableMarkerHovering = self._isMarkerHoveringEnabled
-
     def __onSettingsChange(self, diff):
         addSettings = {}
         for item in diff:
@@ -273,7 +269,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         new3DMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_LOCATION_MARKERS, self.__showLocationMarkers))
         if newIBCEnabled != self.__isIBCEnabled:
             self.__isIBCEnabled = newIBCEnabled
-            self.enableMarkerHovering()
+            self.__canvas.enableMarkerHovering = self._isMarkerHoveringEnabled
         if not newIsSticky:
             for markerId in self.__ids:
                 self.__canvas.markerSetSticky(markerId, False)

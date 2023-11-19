@@ -74,6 +74,11 @@
           <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Hull.model	</exploded>
         </GB86_Centurion_Action_X_3DSt_BVI>
+        <GB86_Centurion_Action_X_3DSt_HW23>
+          <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Hull.model	</exploded>
+        </GB86_Centurion_Action_X_3DSt_HW23>
       </sets>
     </models>
     <swinging>
@@ -98,9 +103,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.395118 0.344709 3.13799	</rayStart>
-        <rayEnd>	0.395118 0.176346 3.03003	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
+        <rayStart>	-0.430393 0.379852 3.157426	</rayStart>
+        <rayEnd>	-0.430393 0.211492 3.049468	</rayEnd>
+        <rayUp>	0 0.539791 -0.841799	</rayUp>
         <size>	0.22	</size>
       </slot>
       <slot>
@@ -1069,6 +1074,48 @@
         <anchorShift>	-0.20857	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <position>	-1.33658 1.39883 3.24778	</position>
+        <rotation>	0.000001 0.000111 3.14154	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB86_Centurion_Action_X_3DSt_HW23	</compatibleModels>
+        <scale>	0.42431 0.130909 0.424309	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.57783	</clipAngle>
+        <anchorShift>	0.109164	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <position>	-0.797268 1.77942 -3.28328	</position>
+        <rotation>	3.14159 0.000000 -0.000008	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB86_Centurion_Action_X_3DSt_HW23	</compatibleModels>
+        <scale>	0.381195 0.0922797 0.381194	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.10842	</clipAngle>
+        <anchorShift>	0.039249	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15085	</slotId>
+        <position>	-0.633066 1.67955 2.39072	</position>
+        <rotation>	0.0817375 0.000122039 3.14156	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB86_Centurion_Action_X_3DSt_HW23	</compatibleModels>
+        <scale>	0.529728 0.395923 0.529728	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.03785	</clipAngle>
+        <anchorShift>	0.120597	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	sequence	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
@@ -1123,6 +1170,11 @@
             <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Chassis.model	</exploded>
           </GB86_Centurion_Action_X_3DSt_BVI>
+          <GB86_Centurion_Action_X_3DSt_HW23>
+            <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Chassis.model	</exploded>
+          </GB86_Centurion_Action_X_3DSt_HW23>
         </sets>
       </models>
       <traces>
@@ -2224,6 +2276,11 @@
                 <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Gun_01.model	</exploded>
               </GB86_Centurion_Action_X_3DSt_BVI>
+              <GB86_Centurion_Action_X_3DSt_HW23>
+                <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Gun_01.model	</exploded>
+              </GB86_Centurion_Action_X_3DSt_HW23>
             </sets>
           </models>
           <hitTester>
@@ -2280,6 +2337,11 @@
             <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/crash/lod0/Turret_01.model	</exploded>
           </GB86_Centurion_Action_X_3DSt_BVI>
+          <GB86_Centurion_Action_X_3DSt_HW23>
+            <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Turret_01.model	</exploded>
+          </GB86_Centurion_Action_X_3DSt_HW23>
         </sets>
       </models>
       <hitTester>
@@ -2684,6 +2746,32 @@
           <showOn>	272	</showOn>
           <clipAngle>	1.06605	</clipAngle>
           <anchorShift>	1.57346	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB86_Centurion_Action_X_3DSt_HW23	</compatibleModels>
+          <position>	-1.11915 2.42813 -0.116165	</position>
+          <rotation>	1.56887 0.643575 -0.752377	</rotation>
+          <scale>	0.286993 0.15839 0.286993	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.908818	</clipAngle>
+          <anchorShift>	0.009205	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB86_Centurion_Action_X_3DSt_HW23	</compatibleModels>
+          <position>	1.08493 2.41556 -0.192808	</position>
+          <rotation>	1.56878 -0.651407 0.820072	</rotation>
+          <scale>	0.286993 0.158391 0.286993	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.908818	</clipAngle>
+          <anchorShift>	0.009205	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

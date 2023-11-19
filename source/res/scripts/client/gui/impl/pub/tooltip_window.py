@@ -44,7 +44,7 @@ class SimpleToolTipWindow(ToolTipWindow):
 class SimpleTooltipContent(View):
     __slots__ = ()
 
-    def __init__(self, contentID=R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent(), header='', body='', note='', alert=''):
+    def __init__(self, contentID, header='', body='', note='', alert=''):
         settings = ViewSettings(contentID)
         settings.model = SimpleTooltipContentModel()
         settings.args = (header,

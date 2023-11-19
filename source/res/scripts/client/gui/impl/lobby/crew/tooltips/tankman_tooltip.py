@@ -11,6 +11,7 @@ from gui.impl.pub import ViewImpl
 from gui.shared.gui_items.Tankman import Tankman
 from helpers import dependency
 from helpers import time_utils
+from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.shared import IItemsCache
 
 class TankmanTooltip(ViewImpl):
@@ -35,19 +36,15 @@ class TankmanTooltip(ViewImpl):
         tankman = self.itemsCache.items.getTankman(self.tankmanID)
         with self.viewModel.transaction() as vm:
             nativeVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-            hasPenalty = False
-            isInTank = tankman.isInTank
-            if isInTank:
-                hasPenalty = tankman.isUntrained
             vm.setRole(tankman.role)
             vm.setFullName(tankman.getFullUserNameWithSkin())
             vm.setRankUserName(tankman.rankUserName)
             vm.setIsFemale(tankman.isFemale)
             vm.setRankIcon(tankman.extensionLessIconRank)
-            self.__fillVehicleSpecialization(vm.nativeVehicle, nativeVehicle, tankman.roleLevel, hasPenalty=hasPenalty)
-            if isInTank:
+            self.__fillVehicleSpecialization(vm.nativeVehicle, nativeVehicle, tankman.roleLevel, hasPenalty=tankman.roleLevel < MAX_SKILL_LEVEL)
+            if tankman.isInTank:
                 vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-                self.__fillVehicleSpecialization(vm.currentVehicle, vehicle, tankman.realRoleLevel.lvl, hasPenalty=hasPenalty)
+                self.__fillVehicleSpecialization(vm.currentVehicle, vehicle, tankman.realRoleLevel.lvl, hasPenalty=tankman.efficiencyRoleLevel < MAX_SKILL_LEVEL)
             if tankman.isDismissed:
                 vm.setIsDismissed(True)
                 dismissalLength = time_utils.getTimeDeltaTillNow(tankman.dismissedAt)
@@ -73,7 +70,4 @@ class TankmanTooltip(ViewImpl):
         vm.setSpecializationLevel(level)
         vm.setHasPenalty(hasPenalty)
         vm.setNation(vehicle.nationName)
-        for tag in vehicle.tags:
-            vm.getTags().addString(tag)
-
-        fillVehicleInfo(vm, vehicle, True)
+        fillVehicleInfo(vm, vehicle, True, vehicle.tags)

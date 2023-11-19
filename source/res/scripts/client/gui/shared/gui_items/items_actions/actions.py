@@ -1229,6 +1229,35 @@ class InstallBattleAbilities(AsyncGUIItemAction):
         return
 
 
+class FrontlineInstallReserves(AsyncGUIItemAction):
+    __slots__ = ('__vehicle', '__applyForAllOfType', '__skillIds')
+
+    def __init__(self, vehicle, applyForAllOfType=False, skillIds=None):
+        super(FrontlineInstallReserves, self).__init__()
+        self.__vehicle = vehicle
+        self.__applyForAllOfType = applyForAllOfType
+        self.__skillIds = skillIds
+
+    @adisp_async
+    @decorators.adisp_process('techMaintenance')
+    def _action(self, callback):
+        result = yield InstallBattleAbilitiesProcessor(self.__vehicle, self.__applyForAllOfType).request()
+        callback(result)
+
+    @adisp_async
+    @future_async.wg_async
+    def _confirm(self, callback):
+        if not self.__skillIds:
+            callback(True)
+        else:
+            dialogResult = yield future_async.wg_await(shared_events.showFrontlineConfirmDialog(skillIds=self.__skillIds, vehicleType=self.__vehicle.type, applyForAllOfType=self.__applyForAllOfType, isBuy=False))
+            if dialogResult is None or dialogResult.busy:
+                callback(False)
+            isOK, _ = dialogResult.result
+            callback(isOK)
+        return
+
+
 class BuyBattleAbilities(AsyncGUIItemAction):
     __slots__ = ('__skillIDs',)
 

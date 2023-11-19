@@ -58,7 +58,6 @@ YEAR_STRIPE_SERVER_TOKEN = 'ranked_2021_final_top'
 YEAR_STRIPE_CLIENT_TOKEN = 'ranked_final_ready'
 YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX = 'offer:ranked_battles:deluxe'
 ENTITLEMENT_EVENT_TOKEN = 'ranked_entitlement_event'
-PLAYER_IN_LEAGUES_TOKEN = 'ranked_{}_leagues'
 LOBBY_SUB_LANDING_PARAM = '?is_landing='
 SEASON_RATING_PARAM = '?spaID={}'
 

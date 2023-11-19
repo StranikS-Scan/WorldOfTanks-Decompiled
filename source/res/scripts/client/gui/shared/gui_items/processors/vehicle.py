@@ -581,6 +581,21 @@ class VehicleSettingsProcessor(ItemProcessor):
         BigWorld.player().inventory.changeVehicleSetting(self.item.invID, self._setting, bool(self._value), self._source, lambda code: self._response(code, callback))
 
 
+class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
+
+    def __init__(self, vehicle, value, confirmationEnabled=True):
+        plugins = []
+        if confirmationEnabled:
+            plugins.append(proc_plugs.TmenXPAcceleratorConfirmator(isEnabled=value))
+        super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, plugins)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='vehicle_tmenxp_accelerator/{}'.format(errStr), defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
+
+
 class VehicleFavoriteProcessor(VehicleSettingsProcessor):
 
     def __init__(self, vehicle, value):

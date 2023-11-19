@@ -4,11 +4,11 @@ from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_royale_entr
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
-from gui.periodic_battles.models import PeriodType, PrimeTimeStatus
+from gui.periodic_battles.models import PeriodType
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared import event_dispatcher
-from helpers import dependency, time_utils
+from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 
 @dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
@@ -34,11 +34,17 @@ class BattleRoyaleEntryPoint(ViewImpl):
         self.__isSingle = value
         self.__updateViewModel()
 
-    def _getEvents(self):
-        return ((self.viewModel.onClick, self.__onClick),
-         (self.__battleRoyaleController.onUpdated, self.__onUpdate),
-         (self.__battleRoyaleController.onPrimeTimeStatusUpdated, self.__onUpdate),
-         (self.__battleRoyaleController.onWidgetUpdate, self.__onUpdate))
+    def _initialize(self, *args, **kwargs):
+        super(BattleRoyaleEntryPoint, self)._initialize(*args, **kwargs)
+        self.viewModel.onClick += self.__onClick
+        self.__battleRoyaleController.onUpdated += self.__onUpdate
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
+
+    def _finalize(self):
+        self.viewModel.onClick -= self.__onClick
+        self.__battleRoyaleController.onUpdated -= self.__onUpdate
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onUpdate
+        super(BattleRoyaleEntryPoint, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
         super(BattleRoyaleEntryPoint, self)._onLoading(*args, **kwargs)
@@ -60,16 +66,9 @@ class BattleRoyaleEntryPoint(ViewImpl):
     def __getPeriodStateAndActualTime(self):
         periodInfo = self.__battleRoyaleController.getPeriodInfo()
         status = State.DISABLED
+        actualTime = None
         if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            status = State.ANNOUNCE
             actualTime = periodInfo.cycleBorderRight.timestamp
-            currTime = time_utils.getCurrentLocalServerTimestamp()
-            currSeason = self.__battleRoyaleController.getCurrentSeason()
-            nextSeason = currSeason or self.__battleRoyaleController.getNextSeason()
-            if nextSeason is not None:
-                nextCycle = nextSeason.getNextByTimeCycle(currTime)
-                if nextCycle is not None:
-                    actualTime = nextCycle.startDate - currTime
         elif periodInfo.periodType in (PeriodType.AFTER_SEASON,
          PeriodType.AFTER_CYCLE,
          PeriodType.ALL_NOT_AVAILABLE_END,
@@ -78,9 +77,6 @@ class BattleRoyaleEntryPoint(ViewImpl):
             actualTime = None
         elif periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):
             actualTime = periodInfo.primeDelta
-        elif periodInfo.periodType in (PeriodType.NOT_SET, PeriodType.FROZEN) and not self.__battleRoyaleController.hasAvailablePrimeTimeServers():
-            peripheryID = self.__battleRoyaleController.getAnyPrimeStatusServerID([PrimeTimeStatus.NOT_AVAILABLE])
-            actualTime = self.__battleRoyaleController.getPeriodInfo(peripheryID=peripheryID).primeDelta
         else:
             status = State.ACTIVE
             actualTime = periodInfo.cycleBorderRight.timestamp
@@ -88,11 +84,8 @@ class BattleRoyaleEntryPoint(ViewImpl):
 
     def __onClick(self):
         brController = self.__battleRoyaleController
-        periodType = brController.getPeriodInfo().periodType
         if not brController.isInPrimeTime() and brController.hasAvailablePrimeTimeServers():
             event_dispatcher.showBattleRoyalePrimeTimeWindow()
-        elif periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            pass
         else:
             brController.selectRoyaleBattle()
             selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)

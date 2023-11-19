@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'MarkersManagerEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -303,8 +303,6 @@ class LobbySimpleEvent(HasCtxEvent):
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
-    ENTITY_TOOLTIP_SHOW = 'entityTooltipShow'
-    ENTITY_TOOLTIP_HIDE = 'entityTooltipHide'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -450,7 +448,6 @@ class ChannelManagementEvent(HasCtxEvent):
     REQUEST_TO_ADD = 'requestToAdd'
     REQUEST_TO_REMOVE = 'requestToRemove'
     REQUEST_TO_CHANGE = 'requestToChange'
-    REQUEST_TO_MULTI_CHANGE = 'requestMultiChange'
     REQUEST_TO_SHOW = 'requestToShow'
     REQUEST_TO_ACTIVATE = 'rqActivateChannel'
     REQUEST_TO_DEACTIVATE = 'rqDeactivateChannel'
@@ -551,6 +548,7 @@ class OpenLinkEvent(SharedEvent):
     FRONTLINE_CHANGES = 'frontlineChangesURL'
     WOT_PLUS_STEAM_SHOP = 'wotPlusSteamURL'
     WOT_PLUS_SHOP = 'wotPlusShopURL'
+    STEAM_SUBSCRIPTION_MANAGEMENT = 'steamSubscriptionManagementURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -674,6 +672,7 @@ class AirDropEvent(HasCtxEvent):
     AIR_DROP_LANDED = 'onAirDropLanded'
     AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
     AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
+    AIR_DROP_NXT_SPAWNED = 'onAirDropNxtSpawned'
 
 
 class ProfilePageEvent(HasCtxEvent):
@@ -806,12 +805,6 @@ class CollectionsEvent(HasCtxEvent):
     TAB_COUNTER_UPDATED = 'tabCounterUpdated'
     COLLECTION_VIEW_CLOSED = 'collectionViewClosed'
     COLLECTION_INTRO_CLOSED = 'collectionIntroClosed'
-
-
-class ArmoryYardEvent(HasCtxEvent):
-    STAGE_FINISHED = 'ayStageFinished'
-    DESTROY_ARMORY_YARD_MAIN_VIEW = 'armoryYardEvents/destroyMainView'
-    SHOW_ARMORY_YARD_BUY_VIEW = 'armoryYardEvents/showBuyView'
 
 
 class Achievements20Event(HasCtxEvent):

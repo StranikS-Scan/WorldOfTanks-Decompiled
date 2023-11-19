@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/account_completion/add_credentials_model.py
 from frameworks.wulf import Array
 from gui.impl.gen import R
+from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.views.lobby.account_completion.common.base_wgnp_overlay_view_model import BaseWgnpOverlayViewModel
 from gui.impl.gen.view_models.views.lobby.account_completion.common.field_email_model import FieldEmailModel
 from gui.impl.gen.view_models.views.lobby.account_completion.common.field_password_model import FieldPasswordModel
@@ -39,6 +40,10 @@ class AddCredentialsModel(BaseWgnpOverlayViewModel):
 
     def setBonuses(self, value):
         self._setArray(12, value)
+
+    @staticmethod
+    def getBonusesType():
+        return ItemBonusModel
 
     def getRewardsTitle(self):
         return self._getResource(13)

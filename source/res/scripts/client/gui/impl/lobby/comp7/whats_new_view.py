@@ -37,7 +37,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         settings = ViewSettings(layoutID)
         settings.model = WhatsNewViewModel()
         super(WhatsNewView, self).__init__(settings)
-        self.__vehicles = [58385, 20817, 9569]
+        self.__vehicles = [58161, 58689, 54913]
 
     @property
     def viewModel(self):

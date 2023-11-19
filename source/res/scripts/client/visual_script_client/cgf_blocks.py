@@ -3,7 +3,6 @@
 import weakref
 import BigWorld
 import logging
-import GenericComponents
 from debug_utils import LOG_WARNING
 from visual_script.block import Block
 from visual_script.slot_types import SLOT_TYPE
@@ -72,32 +71,6 @@ class GetVehicleGameObject(Block, CGFMeta):
         else:
             self._vehicleObject.setValue(None)
         return
-
-
-class GetHangarVehicleGameObject(Block, CGFMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetHangarVehicleGameObject, self).__init__(*args, **kwargs)
-        self._object = self._makeDataInputSlot('gameObject', SLOT_TYPE.GAME_OBJECT)
-        self._vehicleObject = self._makeDataOutputSlot('hangarVehicleObject', SLOT_TYPE.GAME_OBJECT, self._exec)
-
-    def validate(self):
-        return 'GameObject is required' if not self._object.hasValue() else super(GetHangarVehicleGameObject, self).validate()
-
-    def _exec(self):
-        currentGO = self._object.getValue()
-        hierarchy = CGF.HierarchyManager(currentGO.spaceID)
-        topGO = hierarchy.getTopMostParent(currentGO)
-        if topGO.findComponentByType(GenericComponents.EntityGOSync) is not None:
-            goWrapper = GameObjectWrapper(topGO)
-            self._vehicleObject.setValue(weakref.proxy(goWrapper))
-        else:
-            self._vehicleObject.setValue(None)
-        return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.HANGAR]
 
 
 class RocketAcceleratorEvents(Block, CGFMeta):

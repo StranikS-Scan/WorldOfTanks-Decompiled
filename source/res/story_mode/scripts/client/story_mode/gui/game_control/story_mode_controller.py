@@ -141,6 +141,9 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self.__syncData = {}
         self.__onExitPrb()
 
+    def onAccountBecomeNonPlayer(self):
+        g_eventBus.removeListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__guiImplViewLoaded, EVENT_BUS_SCOPE.LOBBY)
+
     def isEnabled(self):
         return self.settings.enabled
 

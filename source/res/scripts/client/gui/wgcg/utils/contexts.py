@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgcg/utils/contexts.py
+from typing import TYPE_CHECKING
 from gui.wgcg.base.contexts import CommonWebRequestCtx
 from gui.wgcg.settings import WebRequestDataType
+if TYPE_CHECKING:
+    from gui.platform.products_fetcher.user_subscriptions.controller import PlatformGetUserSubscriptionsParams
 
 class SPAAccountAttributeCtx(CommonWebRequestCtx):
 

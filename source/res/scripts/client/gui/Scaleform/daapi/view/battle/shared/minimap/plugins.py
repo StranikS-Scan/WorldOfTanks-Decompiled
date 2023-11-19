@@ -11,6 +11,7 @@ import Keys
 import Math
 import aih_constants
 from AvatarInputHandler import AvatarInputHandler
+from Event import EventsSubscriber
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
@@ -179,21 +180,20 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             return
 
     def updateSettings(self, diff):
-        if not self.__isAlive:
-            return
-        if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
-            value = diff[settings_constants.GAME.SHOW_VECTOR_ON_MAP]
-            if value:
-                self.__showDirectionLine()
-            else:
-                self.__hideDirectionLine()
-        if settings_constants.GAME.SHOW_SECTOR_ON_MAP in diff and GUI_SETTINGS.showSectorLines:
-            value = diff[settings_constants.GAME.SHOW_SECTOR_ON_MAP]
-            if value:
-                self.__setupYawLimit()
-            else:
-                self.__clearYawLimit()
-        if not self.__isObserver:
+        vInfo = self._arenaDP.getVehicleInfo(self._arenaDP.getAttachedVehicleID())
+        if self.__isAlive or self.__isObserver and vInfo and vInfo.isAlive():
+            if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
+                value = diff[settings_constants.GAME.SHOW_VECTOR_ON_MAP]
+                if value:
+                    self.__showDirectionLine()
+                else:
+                    self.__hideDirectionLine()
+            if settings_constants.GAME.SHOW_SECTOR_ON_MAP in diff and GUI_SETTINGS.showSectorLines:
+                value = diff[settings_constants.GAME.SHOW_SECTOR_ON_MAP]
+                if value:
+                    self.__setupYawLimit()
+                else:
+                    self.__clearYawLimit()
             if settings_constants.GAME.MINIMAP_DRAW_RANGE in diff:
                 if self._canShowDrawRangeCircle():
                     self.__addDrawRangeCircle()
@@ -262,8 +262,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
-        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes or _CTRL_MODE.SPG_ONLY_ARTY_MODE in modes:
-            if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode():
+        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes:
+            if self._isInStrategicMode() or self._isInArtyMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
             else:
@@ -288,7 +288,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __updateCameraEntries(self):
         activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode():
+        if self._isInStrategicMode() or self._isInArtyMode():
             activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
             matrix = matrix_factory.makeStrategicCameraMatrix()
         elif self._isInArcadeMode():
@@ -478,6 +478,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             self.__removeAllCircles()
 
     def __onRespawnBaseMoving(self):
+        self.__isAlive = True
         self.__isAlive = True
         self._invalidateMarkup(True)
 
@@ -758,7 +759,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__clearAoIToFarCallback(vehicleID)
             if location == VEHICLE_LOCATION.FAR:
                 entry.updatePosition(position)
-                self._setInAoI(entry, True)
                 self.__setActive(entry, True)
             if location in (VEHICLE_LOCATION.UNDEFINED, VEHICLE_LOCATION.AOI_TO_FAR):
                 self._setInAoI(entry, True)
@@ -1439,16 +1439,18 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
         super(RadarPlugin, self).__init__(parent)
         self._vehicleEntries = {}
         self._lootEntries = []
+        self.__es = EventsSubscriber()
         self._params = RadarPluginParams(fadeIn=0.0, fadeOut=0.0, lifetime=0.0, vehicleEntryParams=RadarEntryParams(container='', symbol=''), lootEntryParams=RadarEntryParams(container='', symbol=''))
 
     def init(self, arenaVisitor, arenaDP):
         super(RadarPlugin, self).init(arenaVisitor, arenaDP)
-        if self.sessionProvider.dynamic.radar:
-            self.sessionProvider.dynamic.radar.addRuntimeView(self)
+        radarCtrl = self.sessionProvider.dynamic.radar
+        if radarCtrl:
+            radarCtrl.addRuntimeView(self)
+            self.__es.addCallbackOnUnsubscribe(lambda : radarCtrl.removeRuntimeView(self))
 
     def fini(self):
-        if self.sessionProvider.dynamic.radar:
-            self.sessionProvider.dynamic.radar.removeRuntimeView(self)
+        self.__es.unsubscribeFromAllEvents()
         for lootData in self._lootEntries:
             lootData.destroy()
 

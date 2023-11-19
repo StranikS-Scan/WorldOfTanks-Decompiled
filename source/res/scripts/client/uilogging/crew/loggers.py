@@ -184,12 +184,12 @@ class CrewBringToFrontViewLogger(CrewViewLogger):
 
 
 class CrewPersonalCaseTabLogger(CrewBringToFrontViewLogger):
-    __slots__ = ('_parentView', '_layoutID', '_canModifyAction')
+    __slots__ = ('_parentView', '_layoutID', '_isTabActive')
 
     def __init__(self, currentView, parentView, layoutID, parentViewKey=None):
         self._parentView = parentView
         self._layoutID = layoutID
-        self._canModifyAction = True
+        self._isTabActive = False
         super(CrewPersonalCaseTabLogger, self).__init__(currentView, layoutID, parentViewKey)
 
     @ifUILoggingEnabled()
@@ -198,31 +198,40 @@ class CrewPersonalCaseTabLogger(CrewBringToFrontViewLogger):
         self._parentView.onTabChanged += self._onTabChanged
 
     def finalize(self):
-        if self._canModifyAction:
-            self._viewClosed()
+        self._stopTabLogging()
         self._parentView.onTabChanged -= self._onTabChanged
         self.gui.windowsManager.onWindowStatusChanged -= self._onWindowStatusChanged
         self._clear()
 
     def _pause(self):
-        if self._canModifyAction:
+        if self._isTabActive:
             super(CrewPersonalCaseTabLogger, self)._pause()
-            self._viewClosed()
 
     def _resume(self):
-        if self._canModifyAction:
+        if self._isTabActive:
             super(CrewPersonalCaseTabLogger, self)._resume()
+
+    def _clear(self):
+        super(CrewPersonalCaseTabLogger, self)._clear()
+        self._isTabActive = False
+
+    def _startTabLogging(self):
+        if not self._isTabActive:
+            self._isTabActive = True
             self._viewOpened()
+
+    def _stopTabLogging(self):
+        if self._isTabActive:
+            self._isTabActive = False
+            self._viewClosed()
 
     def _onTabChanged(self, tabID, prevTabKey=None):
         if self._layoutID == tabID:
-            self._canModifyAction = True
             if prevTabKey is not None:
                 self._parentViewKey = prevTabKey
-            self._resume()
+            self._startTabLogging()
         else:
-            self._pause()
-            self._canModifyAction = False
+            self._stopTabLogging()
         return
 
 

@@ -15,9 +15,9 @@ from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.crew_books_purchase_dialog_model import CrewBooksPurchaseDialogModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.processors.module import BookBuyer
+from gui.shared.tooltips.common import getSimpleTooltipFactory
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -82,7 +82,7 @@ class CrewBooksPurchaseDialog(BaseCrewDialogTemplateView):
         self.setSubView(Placeholder.TITLE, SimpleTextTitle(result))
 
     def _getToolTipBuilder(self):
-        return SimpleTooltipContent(body=backport.text(R.strings.dialogs.crewBookPurchase.btnDisabledTooltip()))
+        return getSimpleTooltipFactory(body=backport.text(R.strings.dialogs.crewBookPurchase.btnDisabledTooltip()))
 
     @args2params(int)
     def _onStepperChanged(self, quantity):

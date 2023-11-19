@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	2	</historical>
-    <priceGroup>	MT Progression 3D style 10 level 2000g notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R148_Object_430_U	</vehicles>
@@ -100,7 +100,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -190,6 +190,45 @@
               <tags>	formfactor_rect1x2 cover direction_right_to_left	</tags>
             </item>
           </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R205_Tank_Rozanova_Obsidian	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	807	</id>
+      <texture>	gui/maps/vehicles/styles/R205_Tank_Rozanova_3Dst_HW23.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R205_Tank_Rozanova_3Dst_HW23_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R205_Tank_Rozanova_3Dst_HW23	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R205_Tank_Rozanova_3Dst_HW23	</userString>
+      <tags>	lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	743	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	423	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
         </outfit>
       </outfits>
     </style>

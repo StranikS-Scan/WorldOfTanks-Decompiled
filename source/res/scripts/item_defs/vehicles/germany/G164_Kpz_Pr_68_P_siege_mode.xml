@@ -10,8 +10,8 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	55	</forward>
-    <backward>	20	</backward>
+    <forward>	50	</forward>
+    <backward>	18	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.188	</moving>
@@ -81,6 +81,13 @@
       <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G164_Kpz_Pr_68_P_N23_3Dst>
+          <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Hull.model	</exploded>
+        </G164_Kpz_Pr_68_P_N23_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -103,9 +110,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.284562 0.283463 3.282392	</rayStart>
-        <rayEnd>	1.284562 0.186321 3.258656	</rayEnd>
-        <rayUp>	0 0.237358 -0.971422	</rayUp>
+        <rayStart>	0.870791 0.374402 3.056689	</rayStart>
+        <rayEnd>	0.870791 0.27726 3.032953	</rayEnd>
+        <rayUp>	0 0.23736 -0.971422	</rayUp>
         <size>	0.26	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
@@ -425,6 +432,12 @@
         <hiddenForUser>	true	</hiddenForUser>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -467,6 +480,13 @@
         <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G164_Kpz_Pr_68_P_N23_3Dst>
+            <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G164_Kpz_Pr_68_P_N23_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -882,6 +902,12 @@
             <model>	vehicles/german/G164_Kpz_Pr_68_P/track/segment2.model	</model>
             <length>	0.099409	</length>
           </secSegment>
+          <modelSets>
+            <G164_Kpz_Pr_68_P_N23_3Dst>
+              <mainSegmentModel>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/track/segment_02_L.model	</secSegmentModel>
+            </G164_Kpz_Pr_68_P_N23_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.098332	</back>
@@ -1124,6 +1150,12 @@
             <model>	vehicles/german/G164_Kpz_Pr_68_P/track/segment2.model	</model>
             <length>	0.099409	</length>
           </secSegment>
+          <modelSets>
+            <G164_Kpz_Pr_68_P_N23_3Dst>
+              <mainSegmentModel>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/track/segment_02_R.model	</secSegmentModel>
+            </G164_Kpz_Pr_68_P_N23_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.098332	</back>
@@ -1503,6 +1535,15 @@
               <rayUp>	0.13 0 0	</rayUp>
               <size>	0.479465	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 3.9	</rayStart>
+              <rayEnd>	0 0 4.379465	</rayEnd>
+              <rayUp>	0.19 0 0	</rayUp>
+              <compatibleModels>	G164_Kpz_Pr_68_P_N23_3Dst	</compatibleModels>
+              <size>	0.479465	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1514,12 +1555,50 @@
             <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G164_Kpz_Pr_68_P_N23_3Dst>
+                <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G164_Kpz_Pr_68_P_N23_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G164_Kpz_Pr_68_P/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G164_Kpz_Pr_68_P/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-20	</row>
+                <row>	-14	</row>
+                <row>	-6.748	</row>
+                <row>	0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	rotate_joint1	</node>
+                  <table>
+                    <row>	25.736	</row>
+                    <row>	41.746	</row>
+                    <row>	29.719	</row>
+                    <row>	0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	static_joint1	</node>
+                  <table>
+                    <row>	-20.054	</row>
+                    <row>	-14.038	</row>
+                    <row>	-6.766	</row>
+                    <row>	0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <density>	110.482101 109.146057	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -1530,6 +1609,13 @@
         <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G164_Kpz_Pr_68_P/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G164_Kpz_Pr_68_P_N23_3Dst>
+            <undamaged>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G164_Kpz_Pr_68_P/_skins/G164_Kpz_Pr_68_P_N23_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G164_Kpz_Pr_68_P_N23_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G164_Kpz_Pr_68_P/collision/Turret_01.model	</collisionModelServer>
@@ -1901,8 +1987,8 @@
     <detailed>
       <engines>
         <Daimler-Benz_MB_880_Ea-500B>
-          <smplEnginePower>	900	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplEnginePower>	780	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Daimler-Benz_MB_880_Ea-500B>
       </engines>
       <chassis>

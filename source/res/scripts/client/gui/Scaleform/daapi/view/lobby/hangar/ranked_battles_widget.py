@@ -9,7 +9,6 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RankedBattlesHangarWidgetMeta import RankedBattlesHangarWidgetMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.ranked_battles.constants import ZERO_DIVISION_ID
 from gui.ranked_battles.ranked_builders.widget_vos import StateBlock, WidgetPreferences, getQualAddVOs, getVOsSequence, getLeagueAdditionalVOs
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency
@@ -159,7 +158,7 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
             return statesSequence
         firstBlock = statesSequence[0]
         if firstBlock.state in (RANKEDBATTLES_ALIASES.QUAL_IDLE_STATE, RANKEDBATTLES_ALIASES.QUAL_DIVISION_FINISHED_STATE):
-            battlesInQualification = self.rankedController.getStatsComposer().divisionsStats.get(ZERO_DIVISION_ID, {}).get('battles', 0)
+            battlesInQualification = self.rankedController.getStatsComposer().amountBattles
             totalQualificationBattles = self.rankedController.getTotalQualificationBattles()
             statesSequence[0] = StateBlock(firstBlock.state, firstBlock.lastID, firstBlock.currentID, getQualAddVOs(battlesInQualification, totalQualificationBattles))
         return statesSequence

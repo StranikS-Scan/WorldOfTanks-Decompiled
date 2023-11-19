@@ -2,11 +2,10 @@
 # Embedded file name: scripts/common/visual_script/contexts/perks_context.py
 import weakref
 from VSPlanEvents import OnVehicleEquipmentActivated, OnInnerDeviceWasCrit, OnVehicleTotalDamageDealtIncrease, OnVehicleAssistIncrease, OnVehicleInRange, OnVehicleShotDamagedEnemyVehicle, OnVehicleRadioDistanceChange, OnWitnessEnemyDamaged, OnTankmanStatusChanged
-from items.components.perks_constants import PerkState, CrewPerkLevelCollectors
+from items.components.perks_constants import PerkState
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.context import VScriptContext, vse_get_property, vse_func_call, vse_forward_event, vse_context_effect_forward_event
 from visual_script.type import VScriptEnum
-from visual_script.misc import ASPECT
 
 class PerkNotifyState(VScriptEnum):
 
@@ -17,21 +16,6 @@ class PerkNotifyState(VScriptEnum):
     @classmethod
     def vs_enum(cls):
         return PerkState
-
-
-class CrewPerkLevelCollector(VScriptEnum):
-
-    @classmethod
-    def vs_name(cls):
-        pass
-
-    @classmethod
-    def vs_enum(cls):
-        return CrewPerkLevelCollectors
-
-    @classmethod
-    def vs_aspects(cls):
-        return [ASPECT.SERVER]
 
 
 class PerkContext(VScriptContext):
@@ -165,10 +149,6 @@ class CrewContext(PerkContext):
     @vse_func_call(None, (SLOT_TYPE.FLOAT,), display_name='SetAmmoChangeFactorForVehicle', description='Set ammo change factor for vehicle (information only, does not change TTC)', display_group='Perk_403')
     def setAmmoChangeFactorForVehicle(self, factor):
         self._aspectImpl.setAmmoChangeFactorForVehicle(factor)
-
-    @vse_func_call(None, (CrewPerkLevelCollector.slotType(),), display_name='SetLevelCollector', description='Update level of crew based on selected collector', display_group='Crew')
-    def setLevelCollector(self, levelCollector):
-        self._aspectImpl.setLevelCollector(levelCollector)
 
     def __init__(self, aspectImplClass, perksControllerWeakRef, perkID, perkLevel, scopeID, skillData):
         super(PerkContext, self).__init__(aspectImplClass.ASPECT)

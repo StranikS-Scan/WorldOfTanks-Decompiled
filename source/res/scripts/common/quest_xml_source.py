@@ -539,8 +539,6 @@ class Source(object):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
             bonusTypes.update(('vehicleXP', 'vehicleXPFactor'))
-        if eventType in (EVENT_TYPE.RANKED_QUEST,):
-            bonusTypes.update(('optionalDevice',))
         return bonusTypes
 
     def __readCondition_groupBy(self, _, section, node):

@@ -157,7 +157,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__filterExpander = _FilterExpander()
         self.__isActiveSearchView = False
         self.__startAutoSearchOnUnitJoin = False
-        self.__currentlyDisplayedTanks = set()
+        self.__currentlyDisplayedTanks = 0
         self.__isPlatoonVisualizationEnabled = False
         self.__availablePlatoonTanks = {}
         self.__tankDisplayPosition = {}
@@ -598,6 +598,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.__channelCtrl.addMessage(messages.getUnitPlayerNotification(settings.UNIT_NOTIFICATION_KEY.GIVE_LEADERSHIP, pInfo))
         self.onMembersUpdate()
 
+    def onUnitPlayerProfileVehicleChanged(self, accountDBID):
+        if self.getPrbEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
+            return
+        self.onMembersUpdate()
+
     def hasVehiclesForSearch(self, tierLevel=None):
         return bool(self.__availableTiersForSearch) if tierLevel is None else self.__availableTiersForSearch & 1 << tierLevel != 0
 
@@ -799,7 +804,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
 
     def __onHangarSpaceCreate(self):
-        self.__currentlyDisplayedTanks.clear()
+        self.__currentlyDisplayedTanks = 0
         if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
             self.__updatePlatoonTankInfo()
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
@@ -887,17 +892,15 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             self.__updatePlatoonTankInfo()
 
     def __platoonTankLoaded(self, event):
-        entity = event.ctx.get('entity')
-        if entity in self.__availablePlatoonTanks.values():
-            self.__currentlyDisplayedTanks.add(entity)
-        if len(self.__currentlyDisplayedTanks) == 1:
+        self.__currentlyDisplayedTanks += 1
+        if self.__currentlyDisplayedTanks == 1:
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
                 cameraManager.enablePlatoonMode(True)
 
     def __platoonTankDestroyed(self, event):
-        self.__currentlyDisplayedTanks.discard(event.ctx.get('entity'))
-        if len(self.__currentlyDisplayedTanks) <= 0:
+        self.__currentlyDisplayedTanks = max(0, self.__currentlyDisplayedTanks - 1)
+        if self.__currentlyDisplayedTanks <= 0:
             cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
                 cameraManager.enablePlatoonMode(False)

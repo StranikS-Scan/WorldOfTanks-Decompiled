@@ -7,6 +7,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -33,7 +34,9 @@ from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT
 from gui.shared.gui_items.Vehicle import getIconResourceName, getRetrainTankmenIds, NO_VEHICLE_ID
+from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.utils import decorators
 from helpers import dependency, int2roman
 from helpers.dependency import descriptor
 from items.tankmen import compareMastery, MAX_SKILL_LEVEL
@@ -240,6 +243,7 @@ class CrewWidget(ViewImpl):
          (self.viewModel.onChangeCrewClick, self.__onChangeCrewClick),
          (self.viewModel.onDogMoreInfoClick, self.__onDogMoreInfoClick),
          (self.viewModel.buttonsBar.onCrewBooksClick, self.__onCrewBooksClick),
+         (self.viewModel.buttonsBar.onAcceleratedTrainingClick, self.__onAcceleratedTrainingClick),
          (self.viewModel.buttonsBar.onWotPlusClick, self.__onWotPlusClick),
          (self.itemsCache.onSyncCompleted, self.__onCacheResync),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChange),
@@ -411,13 +415,18 @@ class CrewWidget(ViewImpl):
         vmButtonsBar.crewBooks.setType(ButtonType.CREWBOOKS)
         vmButtonsBar.crewBooks.setIsDisabled(isCrewEmpty or self.__currentViewID == R.views.lobby.crew.QuickTrainingView())
         self.__updateCrewBooksAmount(vmButtonsBar.crewBooks)
+        vmButtonsBar.acceleratedTraining.setType(ButtonType.ACCELERATEDTRAINING)
+        vmButtonsBar.acceleratedTraining.setIsDisabled(isCrewEmpty)
         vmButtonsBar.wotPlus.setType(ButtonType.WOTPLUS)
         vmButtonsBar.wotPlus.setIsDisabled(isCrewEmpty)
         if self.__currentVehicle is None:
             vmButtonsBar.crewBooks.setHasDiscount(False)
+            vmButtonsBar.acceleratedTraining.setState(ToggleState.HIDDEN)
             vmButtonsBar.wotPlus.setState(ToggleState.HIDDEN)
         else:
             self.__updateCrewBooksDiscount(vmButtonsBar.crewBooks)
+            isXPToTman = self.__currentVehicle.isXPToTman if self.__currentVehicle else False
+            vmButtonsBar.acceleratedTraining.setState(ToggleState.ON if isXPToTman else (ToggleState.OFF if self.__currentVehicle.isElite else ToggleState.DISABLED))
             self.__updateWotPlusButtonModel(vmButtonsBar.wotPlus)
         return
 
@@ -449,7 +458,7 @@ class CrewWidget(ViewImpl):
         isInteractive = True
         if tman is not None:
             rrl = tman.realRoleLevel
-            isUntrained = tman.isUntrained if tman.isInTank else False
+            isUntrained = tman.roleLevel < MAX_SKILL_LEVEL or rrl.bonuses.penalty < 0
             hasWarning = isUntrained
             if self.__currentViewID == R.views.lobby.crew.QuickTrainingView():
                 isInteractive = not isUntrained
@@ -502,6 +511,28 @@ class CrewWidget(ViewImpl):
         from gui.shared.event_dispatcher import showQuickTraining
         showQuickTraining(vehicleInvID=self.__currentVehicle.invID, previousViewID=self.currentViewID)
         self.__uiLogger.logClick(CrewWidgetKeys.QUIK_TRAINING_BUTTON)
+
+    @wg_async
+    def __onAcceleratedTrainingClick(self):
+        from gui.shared.event_dispatcher import showAccelerateCrewTrainingDialog
+        vehicle = self.__currentVehicle
+        if vehicle:
+            wasActive = vehicle.isXPToTman
+            self.__uiLogger.logClick(CrewWidgetKeys.ACCELERATE_BUTTON)
+
+            def toggleCallback():
+                self.__onAccelerateCrewTrainingConfirmed(vehicle, wasActive)
+
+            if wasActive:
+                toggleCallback()
+            else:
+                yield wg_await(showAccelerateCrewTrainingDialog(toggleCallback))
+
+    @decorators.adisp_process('updateTankmen')
+    def __onAccelerateCrewTrainingConfirmed(self, vehicle, wasActive):
+        result = yield VehicleTmenXPAccelerator(vehicle, not wasActive, False).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @wg_async
     def __onWotPlusClick(self):

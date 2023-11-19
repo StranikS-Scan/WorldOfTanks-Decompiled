@@ -46,7 +46,6 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     AUTOLOADER_GUN = 'autoreloadGun'
     AUTOLOADER_WITH_BOOST_GUN = 'autoReloadWithBoostGun'
     CLIP_GUN = 'clipGun'
-    FLAME_GUN = 'flameGun'
     DUAL_GUN = 'dualGun'
     DUAL_ACCURACY_GUN = 'dualAccuracyGun'
     TURBOSHAFT_ENGINE = 'turboshaftEngine'
@@ -60,7 +59,6 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
 _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
  _ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel.boost, _IMG_EXTRA_PATH.autoLoaderGunBoost),
  _ModuleExtraStatuses.CLIP_GUN: (_STR_EXTRA_PATH.clipGunLabel, _IMG_EXTRA_PATH.magazineGunIcon),
- _ModuleExtraStatuses.FLAME_GUN: (_STR_EXTRA_PATH.flameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
  _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
  _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
  _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
@@ -175,7 +173,6 @@ class ModuleTooltipBlockConstructor(object):
     TURBOSHAFT_ENGINE_MODULE_PARAM = 'turboshaftEngine'
     ROCKET_ACCELERATION_ENGINE_MODULE_PARAM = 'rocketAcceleration'
     COOLDOWN_SECONDS = 'cooldownSeconds'
-    ACTIVE_SECONDS = 'activeSeconds'
     RELOAD_COOLDOWN_SECONDS = 'reloadCooldownSeconds'
     CALIBER = 'caliber'
     DUAL_ACCURACY_MODULE_PARAM = 'dualAccuracy'
@@ -187,6 +184,7 @@ class ModuleTooltipBlockConstructor(object):
                          RELOAD_TIME_SECS_PROP_NAME,
                          RELOAD_TIME_PROP_NAME,
                          'avgDamagePerMinute',
+                         'stunMinDurationList',
                          'stunMaxDurationList',
                          DISPERSION_RADIUS,
                          DUAL_ACCURACY_COOLING_DELAY,
@@ -198,14 +196,13 @@ class ModuleTooltipBlockConstructor(object):
      CLIP_GUN_MODULE_PARAM: ('avgDamageList',
                              'avgPiercingPower',
                              SHELLS_COUNT_PROP_NAME,
-                             'shellsBurstCount',
-                             'shellsFlameBurstCount',
                              SHELL_RELOADING_TIME_PROP_NAME,
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
                              BURST_TIME_INTERVAL,
                              BURST_COUNT,
                              BURST_SIZE,
                              'avgDamagePerMinute',
+                             'stunMinDurationList',
                              'stunMaxDurationList',
                              DISPERSION_RADIUS,
                              DUAL_ACCURACY_COOLING_DELAY,
@@ -219,6 +216,7 @@ class ModuleTooltipBlockConstructor(object):
                                     BURST_TIME_INTERVAL,
                                     BURST_COUNT,
                                     BURST_SIZE,
+                                    'stunMinDurationList',
                                     'stunMaxDurationList',
                                     DISPERSION_RADIUS,
                                     DUAL_ACCURACY_COOLING_DELAY,
@@ -287,10 +285,6 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 descList.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
             elif module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 descParts = []
-                if module.descriptor.isActivatable():
-                    paramName = ModuleTooltipBlockConstructor.ACTIVE_SECONDS
-                    paramValue = params_formatters.formatParameter(paramName, module.descriptor.activeSeconds)
-                    descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 cooldownSeconds = module.descriptor.cooldownSeconds
                 if cooldownSeconds:
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
@@ -485,7 +479,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 isFreeToDemount = self.wotPlusController.isFreeToDemount(module)
                 if needValue <= 0 or self.configuration.isStaticInfoOnly or isFreeToDemount:
                     needValue = None
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=119, gap=13, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled))
+                forcedText = ''
+                if module.isModernized:
+                    levelText = backport.text(R.strings.tooltips.level.num(module.level)())
+                    forcedText = backport.text(R.strings.tooltips.moduleFits.not_removable.dismantling.level.price(), level=levelText)
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=119, gap=13, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled, forcedText=forcedText))
                 isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
                 if isModernized:
                     itemPrice = module.getDeconstructPrice(self.itemsCache.items)
@@ -669,8 +667,6 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         result = []
         if module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
-        elif module.isFlameGun():
-            result.append(_ModuleExtraStatuses.FLAME_GUN)
         elif module.isAutoReloadable(vDescr):
             hasBoost = False
             for gun in vDescr.type.getGuns():
@@ -845,8 +841,8 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
                 for index, value in enumerate(kpiFormatter.getValues()):
                     textStyle = text_styles.bonusAppliedText if index == currentModuleIndex else text_styles.standard
                     if index == lastIndex:
-                        kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), textStyle(value), blockWidth=320, valueWidth=48, gap=15))
-                    kpiList.append(formatters.packAlignedTextBlockData(textStyle(value), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=50))
+                        kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), textStyle(value), blockWidth=320, valueWidth=40, gap=15))
+                    kpiList.append(formatters.packAlignedTextBlockData(textStyle(value), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=40))
 
                 block.append(formatters.packBuildUpBlockData(kpiList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(left=paddingLeft, bottom=-6)))
 
@@ -1215,10 +1211,12 @@ class RegularKPIFormatter(KpiFormatter):
     def getValues(self):
         value = self.kpi.value
         specValue = self.kpi.specValue if self.kpi.specValue is not None else self.kpi.value
-        return (getKpiValueString(self.kpi, value, True), getKpiValueString(self.kpi, specValue, True))
+        return (getKpiValueString(self.kpi, value, False), getKpiValueString(self.kpi, specValue, False))
 
     def getDescription(self):
-        return backport.text(self.kpi.getLongDescriptionR())
+        ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(self.kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+        endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+        return ' '.join((backport.text(self.kpi.getLongDescriptionR()), text_styles.standard(endingText)))
 
     def getColumnsCount(self):
         pass
@@ -1230,10 +1228,12 @@ class DeluxKPIFormatter(KpiFormatter):
         self.kpi = kpi
 
     def getValues(self):
-        return (getKpiValueString(self.kpi, self.kpi.value, True),)
+        return (getKpiValueString(self.kpi, self.kpi.value, False),)
 
     def getDescription(self):
-        return backport.text(self.kpi.getLongDescriptionR())
+        ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(self.kpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+        endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+        return ' '.join((backport.text(self.kpi.getLongDescriptionR()), text_styles.standard(endingText)))
 
 
 class ComplexFormatter(KpiFormatter):
@@ -1243,11 +1243,16 @@ class ComplexFormatter(KpiFormatter):
         self.kpis = kpis
 
     def getValues(self):
-        return (getKpiValueString(kpi, kpi.value, True) for kpi in self.kpis)
+        return (getKpiValueString(kpi, kpi.value, False) for kpi in self.kpis)
 
     def getDescription(self):
         firstKpi = first(self.kpis)
-        return backport.text(firstKpi.getLongDescriptionR()) if firstKpi is not None else None
+        if firstKpi is not None:
+            ending = R.strings.tank_setup.kpi.bonus.valueTypes.dyn(firstKpi.name, R.strings.tank_setup.kpi.bonus.valueTypes.default)()
+            endingText = backport.text(R.strings.tank_setup.kpi.bonus.valueTypes.brackets(), value=backport.text(ending))
+            return ' '.join((backport.text(firstKpi.getLongDescriptionR()), text_styles.standard(endingText)))
+        else:
+            return
 
     def getColumnsCount(self):
         return len(self.kpis)

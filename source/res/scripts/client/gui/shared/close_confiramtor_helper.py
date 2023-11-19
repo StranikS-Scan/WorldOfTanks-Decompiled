@@ -33,7 +33,6 @@ class CloseConfirmatorsHelper(object):
         return [VIEW_ALIAS.VEHICLE_COMPARE,
          VIEW_ALIAS.LOBBY_STORE,
          VIEW_ALIAS.LOBBY_PROFILE,
-         VIEW_ALIAS.LOBBY_BARRACKS,
          VIEW_ALIAS.LOBBY_MISSIONS,
          VIEW_ALIAS.LOBBY_RESEARCH,
          VIEW_ALIAS.WIKI_VIEW,
@@ -41,7 +40,7 @@ class CloseConfirmatorsHelper(object):
          VIEW_ALIAS.VEHICLE_PREVIEW]
 
     def getRestrictedGuiImplViews(self):
-        return [R.views.lobby.dog_tags.DogTagsView()]
+        return [R.views.lobby.dog_tags.DogTagsView(), R.views.lobby.crew.BarracksView()]
 
     def start(self, closeConfirmator):
         self.__closeConfirmator = closeConfirmator

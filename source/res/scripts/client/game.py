@@ -104,8 +104,6 @@ def init(scriptConfig, engineConfig, userPreferences):
         motivation_quests.init()
         import customization_quests
         customization_quests.init()
-        import static_quests
-        static_quests.init()
         import game_params_configs
         game_params_configs.init()
         BigWorld.worldDrawEnabled(False)
@@ -135,7 +133,7 @@ def init(scriptConfig, engineConfig, userPreferences):
         BigWorld.pauseDRRAutoscaling(True)
         if constants.HAS_DEV_RESOURCES:
             import development
-            development.init(isReplay=g_replayCtrl.isLoading)
+            development.init()
         gameLoading.step()
     except Exception:
         LOG_CURRENT_EXCEPTION()
@@ -347,8 +345,7 @@ def handleKeyEvent(event):
             return True
     if constants.HAS_DEV_RESOURCES:
         from development.dev_input_handler import g_devInputHandlerInstance
-        if g_devInputHandlerInstance.handleKeyEvent(event):
-            return True
+        g_devInputHandlerInstance.handleKeyEvent(event)
     if OfflineMode.handleKeyEvent(event):
         return True
     elif LightingGenerationMode.handleKeyEvent(event):

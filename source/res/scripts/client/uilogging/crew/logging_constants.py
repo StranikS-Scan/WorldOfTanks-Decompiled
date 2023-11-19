@@ -38,6 +38,7 @@ class CrewDialogKeys(Enum):
 class CrewWidgetKeys(Enum):
     CREW_OPERATIONS_BUTTON = 'crew_widget_crew_operations_button'
     QUIK_TRAINING_BUTTON = 'crew_widget_quik_training_button'
+    ACCELERATE_BUTTON = 'crew_widget_accelerate_button'
     TANKMAN_SLOT = 'crew_widget_tankman_slot'
     CHANGE_TANKMAN_BUTTON = 'crew_widget_change_tankman_button'
     SLOT_CONTEXT_MENU = 'crew_widget_slot_context_menu'

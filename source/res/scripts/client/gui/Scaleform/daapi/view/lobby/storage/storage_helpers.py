@@ -97,7 +97,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonLabel=None, actionButtonIcon=None, actionButtonTooltip=None, active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=()):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonIcon=None, actionButtonTooltip=None, active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=()):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -110,7 +110,6 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'enabled': enabled,
      'available': available,
      'additionalInfo': additionalInfo,
-     'actionButtonLabel': actionButtonLabel,
      'actionButtonIcon': actionButtonIcon,
      'actionButtonTooltip': actionButtonTooltip,
      'active': active == GOODIE_STATE.ACTIVE,

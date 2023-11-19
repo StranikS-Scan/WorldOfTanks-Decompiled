@@ -47,7 +47,6 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         self.__isViewWatchedLogStopped = False
         self.__rewardsSelectionWindow = None
         self.__awardsWindow = None
-        self.__rewardSelectionLogged = False
         self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
         return
 

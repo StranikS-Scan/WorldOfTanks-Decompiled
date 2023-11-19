@@ -39,10 +39,6 @@ def isWitchesCrewCompleted(vehicleType, tankmenGroups):
     return len(actualGroupIDs & requiredGroupIDs) == len(uniqueRoles)
 
 
-def isHWCrewCompleted(vehicleType, tankmenGroups):
-    return _isHW23CrewCompleted(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.HW_CREW)
-
-
 def _hasTagInTankmenGroup(tankmanDescr, tag):
     return tankmen.hasTagInTankmenGroup(tankmanDescr.nationID, tankmanDescr.gid, tankmanDescr.isPremium, tag)
 
@@ -53,19 +49,3 @@ def _isCrewCompleted(vehicleType, tankmenGroups, tag):
     requiredCrew = tankmen.getTankmenWithTag(nationID, isPremium, tag)
     actualCrew = [ tankmen.unpackCrewParams(tGroup)[0] for tGroup in tankmenGroups ]
     return set(actualCrew) <= requiredCrew if len(actualCrew) <= len(requiredCrew) else requiredCrew < set(actualCrew)
-
-
-def _isHW23CrewCompleted(vehicleType, tankmenGroups, tag):
-    _, _, isPremium = tankmen.unpackCrewParams(tankmenGroups[0])
-    nationID, _ = vehicleType.id
-    requiredCrew = tankmen.getTankmenWithTag(nationID, isPremium, tag)
-    actualCrew = [ tankmen.unpackCrewParams(tGroup)[0] for tGroup in tankmenGroups ]
-    lenRequired = len(requiredCrew)
-    uniqueRequiredCount = len(requiredCrew & set(actualCrew))
-    if uniqueRequiredCount == lenRequired:
-        return True
-    lenActual = len(actualCrew)
-    if lenActual < lenRequired:
-        if uniqueRequiredCount == lenActual:
-            return True
-    return False

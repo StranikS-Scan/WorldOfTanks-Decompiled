@@ -41,7 +41,7 @@ class RankedEfficiencyTooltip(ViewImpl):
                 items.invalidate()
 
     def __addPassedSeasons(self, itemsArr):
-        seasons = sorted([ seasonData[0] for seasonData in self.__rankedController.getSeasonPassed() ])
+        seasons = sorted([ seasonData[0] for seasonData in self.__rankedController.getSeasonsPassed() ])
         previousSeason = self.__rankedController.getPreviousSeason()
         previousSeasonId = previousSeason.getSeasonID() if previousSeason else None
         playerDogTag = BigWorld.player().dogTags.getDisplayableDT()

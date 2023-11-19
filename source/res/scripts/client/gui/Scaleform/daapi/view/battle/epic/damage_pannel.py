@@ -19,5 +19,5 @@ class EpicDamagePanel(DamagePanel, EpicDamagePanelMeta):
                 componentSystem.playerDataComponent.onCrewRolesFactorUpdated -= self.__setGeneralBonus
         return
 
-    def __setGeneralBonus(self, newFactor, _=None, __=None):
+    def __setGeneralBonus(self, newFactor, allyVehID=None, allyNewRank=None):
         self.as_setGeneralBonusS(newFactor)

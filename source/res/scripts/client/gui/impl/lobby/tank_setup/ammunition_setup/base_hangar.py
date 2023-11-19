@@ -61,10 +61,9 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.__isClosed = False
         self.__closeConfirmatorHelper = TankSetupCloseConfirmatorsHelper()
         self.__moneyCache = self._itemsCache.items.stats.money
-        self._previousSectionName = None
+        self._previousSectionName = kwargs.get('selectedSection')
         self.onClose = Event()
         self.onAnimationEnd = Event()
-        return
 
     @prbDispatcherProperty
     def prbDispatcher(self):

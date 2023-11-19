@@ -12,8 +12,6 @@ from helpers import dependency
 from wg_async import wg_async, wg_await
 from constants import IS_DEVELOPMENT
 from frameworks.wulf import ViewFlags, ViewSettings, Array
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import LobbyHeaderMenuEvent
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.dialogs.builders import WarningDialogBuilder
@@ -21,13 +19,13 @@ from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.dialogs import dialogs
 from gui.impl.gen.view_models.ui_kit.gf_drop_down_item import GfDropDownItem
 from gui.impl.pub import ViewImpl
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.prb_control import prbEntityProperty
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.shared import IItemsCache
 
-class PreBattleView(ViewImpl, LobbySubView):
+class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -57,14 +55,14 @@ class PreBattleView(ViewImpl, LobbySubView):
         self.viewModel.onClose += self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.suspendLobbyHeader(self.uniqueID)
         Waiting.hide('loadPage')
 
     def _finalize(self):
         self.viewModel.onBattleClick -= self.__onBattleClick
         self.viewModel.onClose -= self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants -= self.__updateParticipants
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.resumeLobbyHeader(self.uniqueID)
         super(PreBattleView, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):

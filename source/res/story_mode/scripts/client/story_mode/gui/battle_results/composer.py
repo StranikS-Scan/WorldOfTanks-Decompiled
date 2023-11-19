@@ -5,7 +5,7 @@ from gui.battle_results.composer import IStatsComposer
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from helpers import dependency
 from story_mode.gui.battle_results.templates import STORY_MODE_RESULTS_BLOCK
-from story_mode.gui.shared.event_dispatcher import showOnboardingBattleResultWindow, showEpilogueWindow, showPrebattleAndGoToQueue, showBattleResultWindow
+from story_mode.gui.shared.event_dispatcher import showEpilogueWindow, showOnboardingBattleResultWindow, showPrebattleAndGoToQueue, showBattleResultWindow
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.story_mode_constants import LOGGER_NAME
 _logger = getLogger(LOGGER_NAME)
@@ -35,21 +35,19 @@ class StoryModeStatsComposer(IStatsComposer):
 
     def onResultsPosted(self, arenaUniqueID):
         resultVO = self._block.getVO()
-        isForceOnboarding = resultVO['isForceOnboarding']
-        if isForceOnboarding:
+        if resultVO['isForceOnboarding']:
             if not self._storyModeCtrl.isEnabled():
                 self._storyModeCtrl.skipOnboarding()
                 return
             missionId = resultVO['missionId']
-            finishResult = resultVO['finishResult']
-            if finishResult == PLAYER_TEAM_RESULT.WIN:
+            if resultVO['finishResult'] == PLAYER_TEAM_RESULT.WIN:
                 nextMission = self._storyModeCtrl.getNextMission(missionId)
                 if missionId == self._storyModeCtrl.missions.onboardingLastMissionId or nextMission is None:
                     showEpilogueWindow()
                 else:
                     showPrebattleAndGoToQueue(missionId=nextMission.missionId)
             else:
-                showOnboardingBattleResultWindow(finishReason=finishResult, missionId=missionId)
+                showOnboardingBattleResultWindow(finishReason=resultVO['finishReason'], missionId=missionId)
         else:
             showBattleResultWindow(arenaUniqueID)
         return

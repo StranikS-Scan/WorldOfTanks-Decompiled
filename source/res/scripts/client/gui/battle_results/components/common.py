@@ -60,7 +60,7 @@ class RegularArenaFullNameItem(base.StatsItem):
     def _convert(self, record, reusable):
         arenaGuiType = reusable.common.arenaGuiType
         arenaType = reusable.common.arenaType
-        if arenaGuiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM):
+        if arenaGuiType in ARENA_GUI_TYPE.RANDOM_RANGE:
             i18nKey = _ARENA_TYPE_FORMAT.format(arenaType.getGamePlayName())
         else:
             i18nKey = _ARENA_TYPE_EXT_FORMAT.format(arenaGuiType)

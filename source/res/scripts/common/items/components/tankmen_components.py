@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/tankmen_components.py
 from debug_utils import LOG_ERROR
-import weakref
-import itertools
-from constants import IS_CLIENT
 from items.components import component_constants
 from items.components import legacy_stuff
 from items.components import shared_components
@@ -25,18 +22,20 @@ class SPECIAL_VOICE_TAG(object):
     QUICKY_BABY = 'quickyBabySpecialVoice'
     WITCHES_CREW = 'witchesSpecialVoice'
     HAND_OF_BLOOD = 'handOfBloodSpecialVoice'
-    HW_CREW = 'crewHWvoice'
+    NAMELESS = 'japan:J29_Nameless'
+    EDELWEISS = 'japan:J30_Edelweiss'
+    TALKTOME_GOOSE = 'talktomeGooseSpecialVoice'
+    SKILL_4_LTU = 'skill4ltuSpecialVoice'
     BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     BATTLE_OF_BLOGGERS_2021 = ('bb21_ru1_Yusha_specialVoice', 'bb21_ru1_Vspishka_specialVoice', 'bb21_ru2_Amway921_specialVoice', 'bb21_ru2_Korbendailas_specialVoice', 'bb21_ru3_Lebwa_specialVoice', 'bb21_ru3_Inspirer_specialVoice', 'bb21_ru4_Evilgranny_specialVoice', 'bb21_ru4_Nearyou_specialVoice', 'bb21_eu1_Circon_specialVoice', 'bb21_eu2_Dakillzor_specialVoice', 'bb21_eu3_Newmulti2k_specialVoice', 'bb21_eu4_Orzanel_specialVoice', 'bb21_na1_Cabbagemechanic_specialVoice', 'bb21_na2_Tragicloss_specialVoice', 'bb21_na3_Cmdraf_specialVoice', 'bb21_asia1_Mastertortoise_specialVoice', 'bb21_asia2_Summertiger_specialVoice', 'bb21_asia3_Maharlika_specialVoice')
     G_I_JOE_TWITCH_2021 = ('duke_specialVoice', 'cobra_specialVoice')
     WHITE_TIGER_EVENT_2021 = ('letov_SpecialVoice', 'armand_SpecialVoice', 'elisa_SpecialVoice', 'krieger_SpecialVoice')
     WHITE_TIGER_EVENT_2022 = ('villanelle_SpecialVoice', 'ermelinda_SpecialVoice')
+    WHITE_TIGER_EVENT_2023 = ('hannelore_SpecialVoice', 'jana_SpecialVoice')
     SABATON_2021 = 'sabaton21_specialVoice'
     G_I_JOE_2022 = ('baroness22SpecialVoice', 'coverGirl22SpecialVoice')
     BPH_2022 = ('commander_bph_2022_1', 'commander_bph_2022_2', 'commander_bph_2022_3', 'commander_bph_2022_4')
-    BPH_MT_2022 = ('IvanCarevichSpecialVoice', 'VasilisaSpecialVoice', 'KashcheiSpecialVoice', 'BabaYagaSpecialVoice')
-    HW_2023 = ('IvanCarevichHWSpecialVoice', 'VasilisaHWSpecialVoice', 'KashcheiHWSpecialVoice', 'BabaYagaHWSpecialVoice', 'KatrinaHWSpecialVoice')
-    MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
+    BP_12_M = ('tankman_bp_12_m_5', 'tankman_bp_12_m_8', 'tankman_bp_12_m_9', 'tankman_bp_12_m_10')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
@@ -50,9 +49,12 @@ class SPECIAL_VOICE_TAG(object):
      SABATON_2021,
      QUICKY_BABY,
      WITCHES_CREW,
-     HW_CREW,
      CELEBRITY_2023,
-     HAND_OF_BLOOD) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023
+     HAND_OF_BLOOD,
+     NAMELESS,
+     EDELWEISS,
+     SKILL_4_LTU,
+     TALKTOME_GOOSE) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M
 
 
 class SPECIAL_CREW_TAG(object):
@@ -61,13 +63,11 @@ class SPECIAL_CREW_TAG(object):
     MIHO = 'mihoCrew'
     YHA = 'yhaCrew'
     WITCHES_CREW = 'witchesCrew'
-    HW_CREW = 'hwCrew'
     ALL = (SABATON,
      OFFSPRING,
      MIHO,
      YHA,
-     WITCHES_CREW,
-     HW_CREW)
+     WITCHES_CREW)
 
 
 class GROUP_TAG(object):
@@ -197,7 +197,7 @@ class RoleRanks(legacy_stuff.LegacyStuff):
 
 
 class NationGroup(legacy_stuff.LegacyStuff):
-    __slots__ = ('__name', '__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags', '__roles', '__groupID', '__weakref__')
+    __slots__ = ('__name', '__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags', '__roles', '__groupID')
 
     def __init__(self, groupID, name, isFemales, notInShop, firstNamesIDs, lastNamesIDs, iconsIDs, weight, tags, roles):
         super(NationGroup, self).__init__()
@@ -281,23 +281,18 @@ class NationGroup(legacy_stuff.LegacyStuff):
 
 
 class NationConfig(legacy_stuff.LegacyStuff):
-    __slots__ = ('__name', '__normalGroups', '__premiumGroups', '__roleRanks', '__firstNames', '__lastNames', '__icons', '__ranks', '__lastNameIndex')
+    __slots__ = ('__name', '__normalGroups', '__premiumGroups', '__roleRanks', '__firstNames', '__lastNames', '__icons', '__ranks')
 
     def __init__(self, name, normalGroups=None, premiumGroups=None, roleRanks=None, firstNames=None, lastNames=None, icons=None, ranks=None):
         super(NationConfig, self).__init__()
         self.__name = name
-        self.__normalGroups = normalGroups or component_constants.EMPTY_DICT
-        self.__premiumGroups = premiumGroups or component_constants.EMPTY_DICT
+        self.__normalGroups = normalGroups or component_constants.EMPTY_TUPLE
+        self.__premiumGroups = premiumGroups or component_constants.EMPTY_TUPLE
         self.__roleRanks = roleRanks
         self.__firstNames = firstNames or {}
         self.__lastNames = lastNames or {}
         self.__icons = icons or {}
         self.__ranks = ranks
-        self.__lastNameIndex = {}
-        if not IS_CLIENT:
-            for gid, g in itertools.chain(normalGroups.iteritems(), premiumGroups.iteritems()):
-                for lnid in g.lastNames:
-                    self.__lastNameIndex[lnid] = weakref.proxy(g)
 
     def __repr__(self):
         return 'NationConfig({})'.format(self.__name)
@@ -373,9 +368,6 @@ class NationConfig(legacy_stuff.LegacyStuff):
         else:
             return
             return
-
-    def getGroupByLastName(self, nameID):
-        return self.__lastNameIndex.get(nameID)
 
 
 class LoreGroupComponent(object):

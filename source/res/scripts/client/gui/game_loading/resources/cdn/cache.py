@@ -22,7 +22,7 @@ if typing.TYPE_CHECKING:
 _logger = loggers.getCdnCacheLogger()
 
 class GameLoadingCdnCache(BaseExternalCache):
-    _CACHE_DIR_NAME = 'game_loading_cache_mt'
+    _CACHE_DIR_NAME = 'game_loading_cache'
     _RESOURCES_SUB_DIR_NAME = 'cdn'
     _WORKERS_LIMIT = 2
     _CONFIGS_DIR_NAME = None

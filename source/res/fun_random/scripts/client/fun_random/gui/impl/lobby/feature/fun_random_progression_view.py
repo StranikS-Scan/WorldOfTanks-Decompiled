@@ -58,11 +58,11 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMix
 
     def _initialize(self, *args, **kwargs):
         super(FunRandomProgressionView, self)._initialize(*args, **kwargs)
-        self.suspendLobbyHeader()
+        self.suspendLobbyHeader(self.uniqueID)
 
     def _finalize(self):
         self.__tooltips.clear()
-        self.resumeLobbyHeader()
+        self.resumeLobbyHeader(self.uniqueID)
         self.stopProgressionListening(self.__invalidateAll, tickMethod=self.__invalidateTimer)
         super(FunRandomProgressionView, self)._finalize()
 

@@ -18,8 +18,6 @@ from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getAvailableNationsNames
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
-from soft_exception import SoftException
 
 def _packAvgDmgLditItemData(avgDmg):
     return PUtils.packLditItemData(backport.getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDAMAGE, 'avgDamage40x32.png')
@@ -459,13 +457,8 @@ class ProfileStatisticsBattleRoyaleVO(BaseDictStatisticsVO):
 
 class ProfileComp7StatisticsVO(ProfileDictStatisticsVO):
 
-    def __init__(self, targetData, accountDossier, isCurrentUser, archive=None, season=None):
-        if archive:
-            self.__headerKey = 'comp7_archive_{}'.format(archive)
-        elif season:
-            self.__headerKey = 'comp7_season_{}'.format(season)
-        else:
-            raise SoftException('comp7 season or archive number must be specified!')
+    def __init__(self, targetData, accountDossier, isCurrentUser, headerKey):
+        self.__headerKey = headerKey
         super(ProfileComp7StatisticsVO, self).__init__(targetData, accountDossier, isCurrentUser)
 
     def _getHeaderText(self, data):
@@ -505,32 +498,8 @@ def getVOMapping():
      PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: _VOData(ProfileEpicRandomStatisticsVO, {}),
      PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: _VOData(ProfileStatisticsBattleRoyaleVO, {}),
      PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _VOData(ProfileStatisticsBattleRoyaleVO, {}),
-     PROFILE_DROPDOWN_KEYS.VERSUS_AI: _VOData(ProfileVersusAIStatisticsVO, {})}
-    for archive in COMP7_ARCHIVE_NAMES:
-        mapping[getDropdownKeyByArchiveName(archive)] = _VOData(ProfileComp7StatisticsVO, {'archive': archive})
-
-    for season in COMP7_SEASON_NUMBERS:
-        mapping[getDropdownKeyBySeason(season)] = _VOData(ProfileComp7StatisticsVO, {'season': season})
-
+     PROFILE_DROPDOWN_KEYS.COMP7: _VOData(ProfileComp7StatisticsVO, {'headerKey': PROFILE_DROPDOWN_KEYS.COMP7})}
     return mapping
-
-
-class ProfileVersusAIStatisticsVO(ProfileDictStatisticsVO):
-
-    def _getHeaderText(self, data):
-        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_VERSUSAI)
-
-    def _getHeaderData(self, data):
-        targetData = data[0]
-        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
-         PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
-         _packAvgDmgLditItemData(self._avgDmg),
-         _packAvgXPLditItemData(self._avgXP),
-         PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)))
-
-    def _getDetailedData(self, data):
-        targetData = data[0]
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsFullData(targetData))
 
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):

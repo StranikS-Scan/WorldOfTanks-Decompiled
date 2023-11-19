@@ -13,6 +13,8 @@ from PlayerEvents import g_playerEvents
 from aih_constants import CTRL_MODE_NAME
 from comp7_common import ROLE_EQUIPMENT_TAG
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES, ARENA_BONUS_TYPE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.system_factory import collectEquipmentItem
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.BATTLE_MARKERS_CONSTS import BATTLE_MARKERS_CONSTS
@@ -24,7 +26,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import i18n, dependency
 from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
-from points_of_interest_shared import POI_EQUIPMENT_TAG
+from points_of_interest_shared import POI_EQUIPMENT_TAG, PoiTypesByPoiEquipmentName
 from shared_utils import findFirst, forEach, CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
@@ -58,11 +60,16 @@ class NotReadyError(_ActivationError):
 
 class PoiUnavailableError(_ActivationError):
 
+    @staticmethod
+    def _getPoiName(equipmentName):
+        poiType = PoiTypesByPoiEquipmentName.get(equipmentName)
+        return backport.text(R.strings.points_of_interest.type.dyn(poiType.name.lower())())
+
     def __new__(cls, name):
-        return super(PoiUnavailableError, cls).__new__(cls, 'equipmentPoiUnavailable', {'name': name})
+        return super(PoiUnavailableError, cls).__new__(cls, 'equipmentPoiUnavailable', {'name': cls._getPoiName(name)})
 
     def __init__(self, name):
-        super(PoiUnavailableError, self).__init__('equipmentPoiUnavailable', {'name': name})
+        super(PoiUnavailableError, self).__init__('equipmentPoiUnavailable', {'name': self._getPoiName(name)})
 
 
 class Comp7RoleSkillUnavailable(_ActivationError):
@@ -131,7 +138,7 @@ class EquipmentSound(object):
 
 @ReprInjector.simple(('_tags', 'tags'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'), ('_totalTime', 'totalTime'), ('_animationType', 'animationType'))
 class _EquipmentItem(object):
-    __slots__ = ('_tags', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime', '_animationType', '_serverPrevStage')
+    __slots__ = ('_tags', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime', '_animationType', '_serverPrevStage', '_index')
 
     def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags):
         super(_EquipmentItem, self).__init__()
@@ -143,6 +150,7 @@ class _EquipmentItem(object):
         self._prevStage = 0
         self._prevQuantity = 0
         self._timeRemaining = 0
+        self._index = 0
         self._totalTime = totalTime
         self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
         self.update(quantity, stage, timeRemaining, totalTime)
@@ -216,17 +224,21 @@ class _EquipmentItem(object):
 
     def activate(self, entityName=None, avatar=None):
         if 'avatar' in self._descriptor.tags:
-            avatar_getter.activateAvatarEquipment(self.getEquipmentID(), avatar)
+            index = self._index if hasattr(self, '_index') and self._index > 0 else 0
+            avatar_getter.activateAvatarEquipment(self.getEquipmentID(), avatar, index)
         else:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getActivationCode(entityName, avatar), avatar=avatar)
 
     def deactivate(self):
         if not self.canDeactivate():
             return
-        if 'avatar' in self._descriptor.tags:
-            avatar_getter.activateAvatarEquipment(self.getEquipmentID())
         else:
-            avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
+            index = self._index if hasattr(self, '_index') and self._index > 0 else 0
+            if 'avatar' in self._descriptor.tags:
+                avatar_getter.activateAvatarEquipment(self.getEquipmentID(), None, index)
+            else:
+                avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
+            return
 
     @property
     def isReusable(self):
@@ -269,6 +281,13 @@ class _EquipmentItem(object):
 
     def getTimeRemaining(self):
         return self._timeRemaining
+
+    @property
+    def index(self):
+        return self._index
+
+    def setIndex(self, index):
+        self._index = index
 
     def getTotalTime(self):
         return self._totalTime
@@ -405,26 +424,7 @@ class _ExpandedItem(_EquipmentItem):
         return (False, NotApplyingError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)})) if entityName not in deviceStates else (True, None)
 
 
-class _ActivatableEquipment(_RefillEquipmentItem, _EquipmentItem):
-
-    def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
-        self.__totalCooldownTime = descriptor.cooldownSeconds
-        self.__totalActiveTime = descriptor.activeSeconds
-        super(_ActivatableEquipment, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
-
-    def getAnimationType(self):
-        return ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_GREEN if self._stage == EQUIPMENT_STAGES.ACTIVE else super(_ActivatableEquipment, self).getAnimationType()
-
-    def update(self, quantity, stage, timeRemaining, totalTime):
-        super(_ActivatableEquipment, self).update(quantity, stage, timeRemaining, totalTime)
-        if stage == EQUIPMENT_STAGES.ACTIVE and self._prevStage != EQUIPMENT_STAGES.ACTIVE:
-            totalTime = self.__totalActiveTime
-        elif stage == EQUIPMENT_STAGES.COOLDOWN:
-            totalTime = self.__totalCooldownTime
-        self._totalTime = totalTime
-
-
-class _ExtinguisherItem(_ActivatableEquipment):
+class _ExtinguisherItem(_RefillEquipmentItem, _EquipmentItem):
 
     def canActivate(self, entityName=None, avatar=None):
         result, error = super(_ExtinguisherItem, self).canActivate(entityName, avatar)
@@ -437,7 +437,7 @@ class _ExtinguisherItem(_ActivatableEquipment):
         return 65536 + self._descriptor.id[1]
 
 
-class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
+class _MedKitItem(_RefillEquipmentItem, _ExpandedItem):
 
     def getActivationCode(self, entityName=None, avatar=None):
         activationCode = super(_MedKitItem, self).getActivationCode(entityName, avatar)
@@ -472,7 +472,7 @@ class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
         pass
 
 
-class _RepairKitItem(_ActivatableEquipment, _ExpandedItem):
+class _RepairKitItem(_RefillEquipmentItem, _ExpandedItem):
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
@@ -951,7 +951,7 @@ class _PoiEquipmentItemVS(_VisualScriptItem):
         return (False, self._getErrorMsg()) if not self._getComponent() else super(_PoiEquipmentItemVS, self).canActivate(entityName, avatar)
 
     def _getErrorMsg(self):
-        return PoiUnavailableError(self._descriptor.userString) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiEquipmentItemVS, self)._getErrorMsg()
+        return PoiUnavailableError(self._descriptor.name) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiEquipmentItemVS, self)._getErrorMsg()
 
 
 class _PoiArtilleryItem(_ArtilleryItem):
@@ -963,7 +963,7 @@ class _PoiArtilleryItem(_ArtilleryItem):
         return BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
     def _getErrorMsg(self):
-        return PoiUnavailableError(self._descriptor.userString) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiArtilleryItem, self)._getErrorMsg()
+        return PoiUnavailableError(self._descriptor.name) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiArtilleryItem, self)._getErrorMsg()
 
     def canActivate(self, entityName=None, avatar=None):
         return (False, self._getErrorMsg()) if self._stage in (EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.NOT_RUNNING, EQUIPMENT_STAGES.EXHAUSTED) else super(_PoiArtilleryItem, self).canActivate(entityName, avatar)
@@ -1163,6 +1163,8 @@ class EquipmentsController(MethodsRules, IBattleController):
         super(EquipmentsController, self).__init__()
         self._eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self._eManager)
+        self.onSlotWaited = Event.Event(self._eManager)
+        self.onSlotBlocked = Event.Event(self._eManager)
         self.onEquipmentUpdated = Event.Event(self._eManager)
         self.onEquipmentReset = Event.Event(self._eManager)
         self.onEquipmentsCleared = Event.Event(self._eManager)
@@ -1173,6 +1175,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         self.onCombatEquipmentUsed = Event.Event(self._eManager)
         self._order = []
         self._equipments = {}
+        self._equipmentsIdxSlot = {}
         self.__preferredPosition = None
         self.__equipmentCount = 0
         self.__arena = setup.arenaEntity
@@ -1220,6 +1223,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             item.clear()
 
         self.__equipmentCount = 0
+        self._equipmentsIdxSlot.clear()
         if not leave:
             self.onEquipmentsCleared()
 
@@ -1250,8 +1254,20 @@ class EquipmentsController(MethodsRules, IBattleController):
 
         return item
 
+    def getEquipmentByIDx(self, idx):
+        try:
+            item = self._equipmentsIdxSlot[idx][0]
+        except KeyError:
+            _logger.error('Equipment is not found. %d', idx)
+            item = None
+
+        return item
+
     def getOrderedEquipmentsLayout(self):
         return [ (intCD, self._equipments[intCD]) for intCD in self._order if intCD ]
+
+    def getOrderedEquipments(self):
+        return [ self._equipments[intCD] for intCD in self._order if intCD in self._equipments ]
 
     @MethodsRules.delayable()
     def notifyPlayerVehicleSet(self, vID):
@@ -1263,27 +1279,34 @@ class EquipmentsController(MethodsRules, IBattleController):
         return
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
-    def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
+    def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime, index=0):
         _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
-        item = None
+        index -= 1
+        slot = self._equipmentsIdxSlot.get(index, None)
+        equipmentItem = slot[0] if slot and slot[1] == intCD else None
+        slotIdx = len(self._equipmentsIdxSlot)
         if not intCD:
             if len(self._order) < self.__equipmentCount:
                 self._order.append(0)
                 self.onEquipmentAdded(0, None)
-        elif intCD in self._equipments:
-            item = self._equipments[intCD]
+        elif intCD in self._equipments and index < 0 or equipmentItem:
+            item = equipmentItem if equipmentItem else self._equipments[intCD]
             item.update(quantity, stage, timeRemaining, totalTime)
             self.onEquipmentUpdated(intCD, item)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
                 item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
+                if not item:
+                    return
                 self._equipments[intCD] = item
                 self._order.append(intCD)
                 item.updateMapCase()
+                if index >= 0:
+                    item.setIndex(index + 1)
+                    self._equipmentsIdxSlot[index] = (item, intCD, slotIdx)
                 self.onEquipmentAdded(intCD, item)
-        if item:
-            item.setServerPrevStage(None)
+                item.setServerPrevStage(None)
         return
 
     def updateMapCase(self):
@@ -1291,17 +1314,25 @@ class EquipmentsController(MethodsRules, IBattleController):
             item.updateMapCase()
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
-    def resetEquipment(self, oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime):
+    def resetEquipment(self, oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime, index):
         if oldIntCD not in self._order:
             return
-        oldOrderIndex = self._order.index(oldIntCD)
-        del self._equipments[oldIntCD]
-        _logger.debug('Equipment reset: oldIntCD=%d, newIntCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime)
-        descriptor = vehicles.getItemByCompactDescr(newIntCD)
-        item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
-        self._equipments[newIntCD] = item
-        self._order[oldOrderIndex] = newIntCD
-        self.onEquipmentReset(oldIntCD, newIntCD, item)
+        else:
+            index -= 1
+            slot = self._equipmentsIdxSlot.get(index, None)
+            equipmentItem = slot if slot else None
+            if oldIntCD in self._equipments:
+                del self._equipments[oldIntCD]
+            _logger.debug('Equipment reset: oldIntCD=%d, newIntCD=%d, quantity=%d, stage=%s, timeRemaining=%d,totalTime=%d, index=%d', oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime, index)
+            descriptor = vehicles.getItemByCompactDescr(newIntCD)
+            item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
+            if equipmentItem:
+                item.setIndex(index + 1)
+                self._equipmentsIdxSlot[index] = (item, newIntCD, equipmentItem[2])
+            self._equipments[newIntCD] = item
+            self._order[self._order.index(oldIntCD)] = newIntCD
+            self.onEquipmentReset(oldIntCD, newIntCD, item)
+            return
 
     def setServerPrevStage(self, prevStage, intCD):
         if intCD in self._equipments:
@@ -1324,12 +1355,15 @@ class EquipmentsController(MethodsRules, IBattleController):
             result, error = item.canActivate(entityName, avatar)
         return (result, error)
 
-    def changeSetting(self, intCD, entityName=None, avatar=None):
+    def changeSetting(self, intCD, entityName=None, avatar=None, idx=None):
         if not avatar_getter.isVehicleAlive(avatar):
             return (False, None)
         else:
             result, error = False, None
-            item = self.getEquipment(intCD)
+            if idx is not None and idx >= 0:
+                item = self.getEquipmentByIDx(idx)
+            else:
+                item = self.getEquipment(intCD)
             if item:
                 result, error = self.__doChangeSetting(item, entityName, avatar)
             return (result, error)
@@ -1409,18 +1443,14 @@ class _ReplayItem(_EquipmentItem):
         return round(float(totalTime - timeRemaining) / totalTime * 100.0) if totalTime > 0 else 0.0
 
 
-class _ReplayExtinguisherItem(_ReplayItem, _ActivatableEquipment):
-    pass
-
-
-class _ReplayMedKitItem(_ReplayItem, _ActivatableEquipment):
+class _ReplayMedKitItem(_ReplayItem):
     __slots__ = ('__cooldownTime',)
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
 
 
-class _ReplayRepairKitItem(_ReplayItem, _ActivatableEquipment):
+class _ReplayRepairKitItem(_ReplayItem):
     __slots__ = ('__cooldownTime',)
 
     def getEntitiesIterator(self, avatar=None):
@@ -1769,7 +1799,7 @@ def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalT
 _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('stimulator',): _ReplayItem,
  ('trigger',): _replayTriggerItemFactory,
- ('extinguisher',): _ReplayExtinguisherItem,
+ ('extinguisher',): _ReplayItem,
  ('medkit',): _ReplayMedKitItem,
  ('repairkit',): _ReplayRepairKitItem,
  ('regenerationKit',): _replayTriggerItemFactory,
@@ -1806,8 +1836,8 @@ class EquipmentsReplayPlayer(EquipmentsController):
         return
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
-    def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime):
-        super(EquipmentsReplayPlayer, self).setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
+    def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime, index=0):
+        super(EquipmentsReplayPlayer, self).setEquipment(intCD, quantity, stage, timeRemaining, totalTime, index)
         self.__percents.pop(intCD, None)
         self.__percentGetters.pop(intCD, None)
         self.__times.pop(intCD, None)

@@ -86,13 +86,13 @@ class EntryPoint(ViewImpl):
         self.__setLastState()
 
     def __getEventState(self):
-        if self.__resourceWell.isNotStarted():
-            return EventState.NOTSTARTED
         if isForbiddenAccount(resourceWell=self.__resourceWell):
             return EventState.FORBIDDEN
         if self.__resourceWell.isPaused():
             return EventState.PAUSED
-        return EventState.COMPLETED if self.__resourceWell.isCompleted() else EventState.ACTIVE
+        if self.__resourceWell.isCompleted():
+            return EventState.COMPLETED
+        return EventState.NOTSTARTED if self.__resourceWell.isNotStarted() else EventState.ACTIVE
 
     def __getProgress(self):
         maxPoints = self.__resourceWell.getMaxPoints()

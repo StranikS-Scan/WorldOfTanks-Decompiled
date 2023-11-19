@@ -169,7 +169,9 @@ class HeaderFeature(FeatureItem):
             submodel.setClanAbbrev(clanProfile.getClanAbbrev())
             submodel.setRoleInClan(getClanRoleName(clanProfile.getRole()) or '')
             submodel.setClanDescription(clanProfile.getClanFullName())
-            submodel.setClanIcon(getClanEmblemURL(clanProfile.getClanDbID(), EmblemSize.SIZE_32))
+            clanIcon = getClanEmblemURL(clanProfile.getClanDbID(), EmblemSize.SIZE_32)
+            submodel.setClanIcon(clanIcon if clanIcon is not None else '')
+        return
 
     @replaceNoneKwargsModel
     def _updateBadges(self, model=None):

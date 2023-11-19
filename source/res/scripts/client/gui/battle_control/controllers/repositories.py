@@ -530,7 +530,7 @@ class Comp7ControllerRepository(ClassicControllersRepository):
     @classmethod
     def create(cls, setup):
         repository = super(Comp7ControllerRepository, cls).create(setup)
-        repository.addArenaViewController(Comp7PrebattleSetupController(), setup)
+        repository.addArenaViewController(Comp7PrebattleSetupController(setup), setup)
         repository.addArenaController(Comp7VOIPController(), setup)
         repository.addController(Comp7BattleSoundController())
         return repository
@@ -549,3 +549,4 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
+registerBattleControllerRepo(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7ControllerRepository)

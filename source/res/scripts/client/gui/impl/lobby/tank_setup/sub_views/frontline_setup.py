@@ -189,7 +189,7 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
             self.__pendingPurchaseItemIntCDs = []
             self.__totalPurchasePrice = 0
             currentItems = self._interactor.getChangedList()
-            epicSkills = self.__getEpicSkills()
+            epicSkills = self.__epicController.getEpicSkills()
             for item in currentItems:
                 skill = epicSkills[item.innationID]
                 if not skill.isActivated:
@@ -260,17 +260,13 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def __hasBattleAbilities(self):
         return bool(self._itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED))
 
-    def __getEpicSkills(self):
-        allSkills = self.__epicController.getAllSkillsInformation().values()
-        return {skill.getSkillInfo().eqID:skill for skill in allSkills}
-
     def __updateDetails(self):
         item = self._interactor.getCurrentLayout()[self.__selectedSlotId]
         if not item:
             return
         detailsModel = self._viewModel.details
         with detailsModel.transaction() as vm:
-            epicSkills = self.__getEpicSkills()
+            epicSkills = self.__epicController.getEpicSkills()
             skill = epicSkills[item.innationID]
             info = skill.getSkillInfo()
             needFullUpdate = vm.getIntCD() != item.intCD

@@ -158,6 +158,16 @@ class LogHandler(object):
             self._getSession()
             self._startSender()
 
+    @_ifDestroyed()
+    def logImmediately(self, log):
+        session = self._getSession()
+        if session is None:
+            self._logger.warning('No session for immediate log.')
+            return
+        else:
+            self._send(session, [log], wait=True)
+            return
+
     @_ifDestroyed(False)
     def isFeatureEnabled(self, feature):
         return self._features.verifyFeature(feature)

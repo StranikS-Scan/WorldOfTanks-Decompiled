@@ -30,14 +30,12 @@ class ExtraIntroView(ViewImpl):
     def viewModel(self):
         return super(ExtraIntroView, self).getViewModel()
 
-    def startListeners(self):
+    def activate(self):
         self._subscribe()
-
-    def stopListeners(self):
-        self._unsubscribe()
-
-    def updateData(self):
         self.__fillModel()
+
+    def deactivate(self):
+        self._unsubscribe()
 
     def _onLoading(self, *args, **kwargs):
         super(ExtraIntroView, self)._onLoading(*args, **kwargs)

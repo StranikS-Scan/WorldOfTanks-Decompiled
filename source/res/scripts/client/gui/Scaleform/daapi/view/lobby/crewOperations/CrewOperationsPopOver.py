@@ -81,37 +81,36 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'vehicleInBattle')
         crew = vehicle.crew
         lastCrewIDs = vehicle.lastCrew
+        if lastCrewIDs is None:
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, 'noPrevious')
         freeBerths = self.itemsCache.items.freeTankmenBerthsCount()
         tankmenToBarracksCount = 0
-        for tankman in crew:
-            if tankman[1] is not None:
-                tankmenToBarracksCount += 1
-
         demobilizedMembersCounter = 0
         isCrewAlreadyInCurrentVehicle = True
-        if lastCrewIDs is not None:
-            for lastTankmenInvID in lastCrewIDs:
-                actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
-                if actualLastTankman is not None:
-                    if actualLastTankman.isInTank:
-                        lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
-                        if lastTankmanVehicle:
-                            if lastTankmanVehicle.isLocked:
-                                return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP)
-                            if lastTankmanVehicle.invID != vehicle.invID:
-                                isCrewAlreadyInCurrentVehicle = False
-                            elif lastTankmanVehicle.invID == vehicle.invID:
-                                tankmenToBarracksCount -= 1
-                    else:
-                        isCrewAlreadyInCurrentVehicle = False
-                        freeBerths += 1
-                demobilizedMembersCounter += 1
+        for _, tankman in crew:
+            if tankman is not None:
+                tankmenToBarracksCount += 1
 
-            if tankmenToBarracksCount > 0 and tankmenToBarracksCount > freeBerths:
-                return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_NOSPACE_TOOLTIP)
-        else:
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, 'noPrevious')
-        if demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
+        for lastTankmenInvID in lastCrewIDs:
+            actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
+            if actualLastTankman is None or actualLastTankman.isDismissed:
+                demobilizedMembersCounter += 1
+                continue
+            if actualLastTankman.isInTank:
+                lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
+                if lastTankmanVehicle:
+                    if lastTankmanVehicle.isLocked:
+                        return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP)
+                    if lastTankmanVehicle.invID != vehicle.invID:
+                        isCrewAlreadyInCurrentVehicle = False
+                    else:
+                        tankmenToBarracksCount -= 1
+            isCrewAlreadyInCurrentVehicle = False
+            freeBerths += 1
+
+        if tankmenToBarracksCount > 0 and tankmenToBarracksCount > freeBerths:
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_NOSPACE_TOOLTIP)
+        elif demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'allDemobilized')
         elif isCrewAlreadyInCurrentVehicle:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')

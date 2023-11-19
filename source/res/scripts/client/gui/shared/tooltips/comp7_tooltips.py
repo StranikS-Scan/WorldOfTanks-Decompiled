@@ -148,15 +148,32 @@ class BattleResultsPrestigePointsTooltip(BlocksTooltipData):
         items.append(self.__packDescriptionBlock())
         return items
 
-    @classmethod
-    def __packHeaderBlock(cls):
+    def __packHeaderBlock(self):
         blocks = [formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.comp7.battleResult.personal.tooltip.title()))), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.comp7.battleResult.personal.tooltip.descr())))]
         return formatters.packBuildUpBlockData(blocks=blocks)
 
-    @classmethod
-    def __packDescriptionBlock(cls):
+    def __packDescriptionBlock(self):
         blocks = [formatters.packTextBlockData(text_styles.alert(backport.text(R.strings.comp7.battleResult.personal.tooltip.loseTitle())), padding=formatters.packPadding(top=-6, bottom=4)), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.comp7.battleResult.personal.tooltip.loseDescr())))]
         return formatters.packBuildUpBlockData(blocks=blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+
+class BattleResultsTournamentPrestigePointsTooltip(BlocksTooltipData):
+
+    def __init__(self, ctx):
+        super(BattleResultsTournamentPrestigePointsTooltip, self).__init__(ctx, None)
+        self._setContentMargin(top=14, left=20, bottom=10, right=20)
+        self._setMargins(afterBlock=10)
+        self._setWidth(350)
+        return
+
+    def _packBlocks(self, *args):
+        items = super(BattleResultsTournamentPrestigePointsTooltip, self)._packBlocks()
+        items.append(self.__packHeaderBlock())
+        return items
+
+    def __packHeaderBlock(self):
+        blocks = [formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.comp7.battleResult.personal.tooltip.title()))), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.comp7.tournament.battleResult.personal.tooltip.descr())))]
+        return formatters.packBuildUpBlockData(blocks=blocks)
 
 
 def getRoleEquipmentTooltipParts(equipment):

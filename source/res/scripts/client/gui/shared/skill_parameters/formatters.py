@@ -17,7 +17,7 @@ def getDescriptionValue(paramDescrArg, value):
 
 def _formatParamValue(paramDescrArg, value):
     convertedValue = value * 100 if paramDescrArg.measureType is ParamMeasureType.PERCENTS else value
-    formattedValue = str(getNiceNumberFormat(convertedValue))
+    formattedValue = str(getNiceNumberFormat(round(convertedValue, 3)))
     measuredValue = getMeasureText(formattedValue, paramDescrArg)
     return measuredValue
 

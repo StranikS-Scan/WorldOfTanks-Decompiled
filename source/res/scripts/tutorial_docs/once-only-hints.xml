@@ -384,14 +384,12 @@
       <update-runtime>	True	</update-runtime>
     </hint>
     <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemManual	</global-active>
       </condition>
     </hint>
     <hint>	LobbyMenuBootcampHint	  <item-id>	LobbyMenuBootcampItem	</item-id>
-      <ignore-outside-click>	True	</ignore-outside-click>
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemBootcamp	</global-active>
@@ -574,55 +572,6 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	ReferralEntryPointHint	  <item-id>	ReferralEntryPoint	</item-id>
-      <text>	_(#tutorial:messengerBar/referralBtn)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <condition-hint-showed>
-          <hint-id>	ReferralRecruitEntryPointHint	</hint-id>
-          <value>	False	</value>
-        </condition-hint-showed>
-      </condition>
-    </hint>
-    <hint>	ReferralRecruitEntryPointHint	  <item-id>	ReferralEntryPoint	</item-id>
-      <text>	_(#tutorial:messengerBar/referralBtn)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	ReferralRecruitEntryPointHint	</arguments>
-        </class-condition>
-      </condition>
     </hint>
     <hint>	SoundButtonExHint	  <item-id>	SoundButtonEx	</item-id>
       <text>	_(#crew_operations:crewBooks/tutorial/readBook)	</text>

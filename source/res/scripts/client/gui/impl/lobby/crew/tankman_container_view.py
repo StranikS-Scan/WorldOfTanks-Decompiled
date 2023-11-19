@@ -178,6 +178,7 @@ class TankmanContainerView(BaseCrewView):
 
     def __selectTankman(self, tankmanInvID):
         self._tankmanInvID = tankmanInvID
+        self.vehicleID = self.itemsCache.items.getTankman(tankmanInvID).vehicleInvID
         self.__updateTab(tankmanInvID)
         self._crewWidget.updateTankmanId(tankmanInvID)
 

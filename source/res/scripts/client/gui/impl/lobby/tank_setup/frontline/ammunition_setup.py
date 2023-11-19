@@ -1,14 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/frontline/ammunition_setup.py
-from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_setup.hangar import HangarAmmunitionSetupView
 from gui.impl.gen import R
 
 class FrontlineAmmunitionSetupView(HangarAmmunitionSetupView):
-
-    def __init__(self, layoutID=R.views.lobby.tanksetup.HangarAmmunitionSetup(), **kwargs):
-        super(FrontlineAmmunitionSetupView, self).__init__(layoutID, **kwargs)
-        self._previousSectionName = TankSetupConstants.BATTLE_ABILITIES
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.frontline.lobby.tooltips.SkillOrderTooltip():

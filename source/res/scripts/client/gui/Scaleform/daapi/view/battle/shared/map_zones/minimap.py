@@ -25,7 +25,8 @@ class MapZonesEntriesPlugin(common.EntriesPlugin, MapZonesListener):
         mapZones = self.sessionProvider.shared.mapZones
         if mapZones:
             for zoneMarker, matrix in mapZones.getZoneMarkers().itervalues():
-                self.__addMarkerToZone(zoneMarker, matrix)
+                if zoneMarker.isVisibleOnMinimap:
+                    self.__addMarkerToZone(zoneMarker, matrix)
 
             for transformedZone in mapZones.getTransformedZones().itervalues():
                 self.__addTransromedZone(transformedZone)
@@ -40,13 +41,16 @@ class MapZonesEntriesPlugin(common.EntriesPlugin, MapZonesListener):
         super(MapZonesEntriesPlugin, self).stop()
 
     def _onMarkerToZoneAdded(self, zoneMarker, matrix):
-        self.__addMarkerToZone(zoneMarker, matrix)
+        if zoneMarker.isVisibleOnMinimap:
+            self.__addMarkerToZone(zoneMarker, matrix)
 
     def _onMarkerFromZoneRemoved(self, zoneMarker):
-        self.__removeMarkerFromZone(zoneMarker)
+        if zoneMarker.isVisibleOnMinimap:
+            self.__removeMarkerFromZone(zoneMarker)
 
     def _onMarkerProgressUpdated(self, zoneMarker):
-        self.__updateProgress(zoneMarker)
+        if zoneMarker.isVisibleOnMinimap:
+            self.__updateProgress(zoneMarker)
 
     def _onZoneTransformed(self, zone):
         self.__addTransromedZone(zone)

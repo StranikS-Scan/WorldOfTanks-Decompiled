@@ -10,8 +10,8 @@
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <speedLimits>
-    <forward>	20	</forward>
-    <backward>	12	</backward>
+    <forward>	25	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.062	</moving>
@@ -1277,8 +1277,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
@@ -2306,8 +2306,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	190	</maxHealth>
@@ -3470,13 +3470,13 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB10_Black_Prince/normal/lod0/Gun_02.model	</undamaged>
@@ -4012,11 +4012,11 @@
       <engines>
         <Vauxhall_Bedford_Twin_Six>
           <smplEnginePower>	370.0484	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Vauxhall_Bedford_Twin_Six>
         <Rolls_Royse_Meteor>
           <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Rolls_Royse_Meteor>
       </engines>
       <chassis>

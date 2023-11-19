@@ -45,9 +45,9 @@ class BaseConfirmCredentialsOverlayView(BaseWGNPOverlayView):
         self.viewModel.onResendClicked -= self._onResend
         super(BaseConfirmCredentialsOverlayView, self).deactivate()
 
-    def _finalize(self):
+    def _doFinalize(self):
         self._code.dispose()
-        super(BaseConfirmCredentialsOverlayView, self)._finalize()
+        super(BaseConfirmCredentialsOverlayView, self)._doFinalize()
 
     def _updateConfirmButtonAvailability(self):
         self.viewModel.setIsConfirmEnabled(self._code.isValid)

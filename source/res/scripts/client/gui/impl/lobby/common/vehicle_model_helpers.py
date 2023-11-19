@@ -3,7 +3,6 @@
 import typing
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
 from gui.impl.lobby.platoon.platoon_helpers import removeNationFromTechName
-from gui.shared.gui_items import checkForTags
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 if typing.TYPE_CHECKING:
@@ -20,7 +19,4 @@ def fillVehicleModel(model, vehicleItem, tags=None):
     model.setVehicleCD(vehicleItem.compactDescr)
     if not tags:
         return
-    tagsArray = model.getTags()
-    for tag in tags:
-        if checkForTags(vehicleItem.tags, tag):
-            tagsArray.addString(tag)
+    model.setTags(','.join(frozenset(tags) & vehicleItem.tags))

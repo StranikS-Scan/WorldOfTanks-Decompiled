@@ -54,9 +54,12 @@ class LobbyMenu(LobbyMenuMeta):
     def prbEntity(self):
         pass
 
+    @adisp_process
     def postClick(self):
         self.destroy()
-        self.promo.showFieldPost()
+        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if navigationPossible:
+            self.promo.showFieldPost()
 
     def settingsClick(self):
         event_dispatcher.showSettingsWindow(redefinedKeyMode=False)

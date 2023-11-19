@@ -26,6 +26,7 @@ from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.bonuses import SimpleBonus
+    from gui.shared.missions.packers.bonus import BonusUIPacker
 _logger = logging.getLogger(__name__)
 DEFAULT_AWARDS_COUNT = 10
 DAILY_QUEST_AWARDS_COUNT = 1000
@@ -60,10 +61,9 @@ class _EventUIDataPacker(object):
 
 class BattleQuestUIDataPacker(_EventUIDataPacker):
 
-    def __init__(self, event, bonusPackerGetter=getDefaultBonusPacker):
+    def __init__(self, event):
         super(BattleQuestUIDataPacker, self).__init__(event)
         self._tooltipData = {}
-        self.__bonusPackerGetter = bonusPackerGetter
 
     def pack(self, model=None):
         if model is not None and not isinstance(model, QuestModel):
@@ -85,9 +85,13 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
         self._packDefaultConds(model)
 
     def _packBonuses(self, model):
-        packer = self.__bonusPackerGetter()
+        packer = self._getBonusPacker()
         self._tooltipData = {}
         packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
+
+    def _getBonusPacker(self):
+        packer = getDefaultBonusPacker()
+        return packer
 
     def _packPostBattleConds(self, model):
         postBattleContitionPacker = PostBattleConditionPacker()

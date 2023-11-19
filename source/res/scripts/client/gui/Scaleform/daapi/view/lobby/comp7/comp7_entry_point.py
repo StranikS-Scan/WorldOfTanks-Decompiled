@@ -17,8 +17,7 @@ from skeletons.gui.game_control import IComp7Controller
 
 def isComp7EntryPointAvailable():
     comp7Ctrl = dependency.instance(IComp7Controller)
-    settings = comp7Ctrl.getModeSettings()
-    return comp7Ctrl.isEnabled() and not comp7Ctrl.isFrozen() and settings is not None and settings.seasons
+    return comp7Ctrl.isEnabled() and not comp7Ctrl.isFrozen() and comp7Ctrl.hasAnySeason()
 
 
 class Comp7EntryPoint(ResizableEntryPointMeta):

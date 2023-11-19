@@ -60,4 +60,5 @@ class VehiclePointsTooltipView(ViewImpl):
             dispatcher = g_prbLoader.getDispatcher()
             if dispatcher:
                 queueType = dispatcher.getEntity().getQueueType()
-                model.setBattleType(getPreQueueName(queueType, True))
+                if queueType:
+                    model.setBattleType(getPreQueueName(queueType, True))

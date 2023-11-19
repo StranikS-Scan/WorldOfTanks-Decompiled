@@ -6,14 +6,13 @@ from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
 from gui.shared.tooltips import shell, advanced
 from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, AdvancedComplexBuilder
-from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 __all__ = ('getTooltipBuilders',)
 
 def _advancedBlockCondition(context):
 
     def advancedTooltipExist(*args):
         item = context.buildItem(*args)
-        return not item.isFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
+        return item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
 
     return advancedTooltipExist
 

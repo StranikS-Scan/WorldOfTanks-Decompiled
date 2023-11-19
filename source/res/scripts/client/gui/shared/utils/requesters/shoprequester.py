@@ -8,7 +8,6 @@ import logging
 import BigWorld
 from adisp import adisp_async
 from constants import WIN_XP_FACTOR_MODE, ARENA_BONUS_TYPE
-from helpers import dependency
 from items import ItemsPrices
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_RESOURCE_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
@@ -17,7 +16,6 @@ from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from post_progression_common import CUSTOM_ROLE_SLOT_CHANGE_PRICE
 from post_progression_prices_common import getPostProgressionPrice
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 _logger = logging.getLogger(__name__)
@@ -45,7 +43,6 @@ class _NamedGoodieData(GoodieData):
 
 class ShopCommonStats(IShopCommonStats):
     __metaclass__ = ABCMeta
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     @abstractmethod
     def getValue(self, key, defaultValue=None):
@@ -337,7 +334,7 @@ class ShopCommonStats(IShopCommonStats):
         return ''.join(('paidModernized', str(level), 'RemovalCost'))
 
     def __getRestoreConfig(self):
-        return self.__lobbyContext.getServerSettings().restoreConfig.asDict()
+        return self.getValue('restore_config', {})
 
 
 class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):

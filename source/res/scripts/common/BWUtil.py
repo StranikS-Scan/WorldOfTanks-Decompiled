@@ -87,7 +87,7 @@ def bwResRelativeOpen(name, *args):
     try:
         absname = ResMgr.resolveToAbsolutePath(name)
     except Exception as e:
-        raise IOError(2, str(e))
+        raise IOError(2, 'Error = {}; name = {}'.format(str(e), name))
 
     absname = unicode(absname)
     return _open_accessor.original(absname, *args)

@@ -6,12 +6,12 @@ from PlayerEvents import g_playerEvents
 from crew_sounds import CREW_SOUND_SPACE, CREW_SOUND_OVERLAY_SPACE
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.base_crew_view_model import BaseCrewViewModel
 from gui.impl.pub import ViewImpl
+from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import event_dispatcher, g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showPersonalCase, showChangeCrewMember
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
@@ -31,7 +31,7 @@ class BaseCrewSubView(ViewImpl):
     _COMMON_SOUND_SPACE = CREW_SOUND_OVERLAY_SPACE
 
 
-class BaseCrewView(BaseCrewSoundView, IGlobalListener):
+class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
     __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_currentViewKey', '_uiLogger')
 
     def __init__(self, settings, parentViewKey=None):
@@ -58,10 +58,6 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
         windowsOnCurrentLayer = self.gui.windowsManager.findWindows(lambda w: w.layer == parentLayer and isinstance(w.content, BaseCrewView))
         for window in windowsOnCurrentLayer:
             window.content.onBringToFront(parentWindow)
-
-    @staticmethod
-    def toggleMenu(isVisible=False):
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL if isVisible else HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @property
     def viewModel(self):
@@ -101,7 +97,7 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
 
     def _finalize(self):
         super(BaseCrewView, self)._finalize()
-        self.toggleMenu(True)
+        self.resumeLobbyHeader(self.uniqueID)
         self._crewWidget = None
         self._uiLogger.finalize()
         return
@@ -140,7 +136,7 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
         vm.setBackButtonLabel(R.strings.crew.common.navigation.toPersonalFile())
 
     def _onLoaded(self, *args, **kwargs):
-        self.toggleMenu()
+        self.suspendLobbyHeader(self.uniqueID)
         super(BaseCrewView, self)._onLoaded(*args, **kwargs)
 
     def _getEvents(self):
@@ -167,7 +163,8 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
             return []
         else:
             crew = vehicle.crew
-            return crew[slotIDX::] + crew[:slotIDX:] if slotIDX != NO_SLOT else crew
+            index = self._getCrewTankmanIndex(slotIDX, crew)
+            return crew[index::] + crew[:index:] if index != NO_SLOT else crew
 
     def _getAutoSelectWidget(self, tankmanID, slotIDX):
         crew = self._getCrewBySlotIDX(slotIDX)
@@ -240,7 +237,6 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
         showChangeCrewMember(slotIdx, vehicleInvID, currentViewID)
 
     def _onEmptySlotAutoSelect(self, slotIDX):
-        self._destroySubViews()
         self.destroyWindow()
 
     def onPrbEntitySwitched(self):

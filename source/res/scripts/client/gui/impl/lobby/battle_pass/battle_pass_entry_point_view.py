@@ -95,6 +95,10 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return self.__battlePass.getCurrentChapterID()
 
     @property
+    def seasonNum(self):
+        return self.__battlePass.getSeasonNum()
+
+    @property
     def level(self):
         return self.__battlePass.getCurrentLevel()
 
@@ -200,7 +204,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         self._updateData()
 
     def __onClientUpdated(self, diff, _):
-        if self.isCompleted and diff.get('cache', {}).get('dynamicCurrencies', {}).get(CurrencyBP.BIT.value, ''):
+        if self.isCompleted and CurrencyBP.BIT.value in diff.get('cache', {}).get('dynamicCurrencies', {}):
             self._updateData()
 
 
@@ -286,6 +290,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setPrevLevel(getPresentLevel(_g_entryLastState.level))
             tx.setLevel(getPresentLevel(self.level))
             tx.setChapterID(self.chapterID)
+            tx.setSeasonNum(self.seasonNum)
             tx.setPreviousChapterID(_g_entryLastState.chapterID)
             tx.setPrevProgression(_g_entryLastState.progress)
             tx.setProgression(self.progress)
@@ -298,7 +303,9 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setAnimState(self.__getAnimationState())
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
             if not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType()):
-                tx.setBattleType(getPreQueueName(self._getQueueType(), True))
+                queueType = self._getQueueType()
+                if queueType:
+                    tx.setBattleType(getPreQueueName(queueType, True))
         self._saveLastState(isNotChosenRewardCount)
 
     def __getAnimationState(self):

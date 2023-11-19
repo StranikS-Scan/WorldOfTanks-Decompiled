@@ -4,6 +4,7 @@ from gui.impl.gen.resources import R
 from gui.impl import backport
 from gui.server_events import recruit_helper
 from gui.shared.utils.functions import replaceHyphenToUnderscore
+RECRUIT_BG_DYN = R.images.gui.maps.icons.tankmen.windows.recruits.recruit_dialog
 
 def getTitle(name=None):
     if name:
@@ -29,12 +30,12 @@ def getIcon(iconName='', isFemale=False):
         return (R.images.gui.maps.icons.tankmen.icons.special.dyn(replaceHyphenToUnderscore(getIconName(icon)))(), True)
 
 
-def getIconBackground(resurceID=None, dynIconName=None):
+def getIconBackground(resurceID=None, dynIconName=None, dynPath=RECRUIT_BG_DYN):
     for event in recruit_helper.RecruitSourceID.EVENTS:
         if resurceID and event in resurceID or dynIconName and event in dynIconName:
-            return R.images.gui.maps.icons.tankmen.windows.bg_recruitment_twitch()
+            return dynPath.bg_recruitment_twitch()
 
-    return R.images.gui.maps.icons.tankmen.windows.bg_recruitment_ny() if resurceID and resurceID[:2] == 'ny' else R.images.gui.maps.icons.tankmen.windows.bg_recruitment_regular()
+    return dynPath.bg_recruitment_ny() if resurceID and resurceID[:2] == 'ny' else dynPath.bg_recruitment_regular()
 
 
 def getSortedItems(unsortedItems, itemsOrderedList):

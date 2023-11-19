@@ -3,7 +3,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	2	</historical>
-    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	france:F18_Bat_Chatillon25t	</vehicles>
@@ -47,7 +47,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
@@ -103,6 +103,47 @@
           </projection_decals>
         </outfit>
       </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F110_Lynx_6x6	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	816	</id>
+      <texture>	gui/maps/vehicles/styles/F110_Lynx_6x6_3Dst_HW23.png	</texture>
+      <modelsSet>	F110_Lynx_6x6_3Dst_HW23	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F110_Lynx_6x6_3Dst_HW23	</userString>
+      <description>	#vehicle_customization:special_style/F110_Lynx_6x6_3Dst_HW23_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F110_Lynx_6x6_3Dst_HW23_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
 </france_nonRU.xml>

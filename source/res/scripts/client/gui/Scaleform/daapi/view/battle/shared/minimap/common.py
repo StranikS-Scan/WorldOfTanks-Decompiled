@@ -85,9 +85,6 @@ class SimplePlugin(IPlugin):
     def _isInArtyMode(self):
         return self._ctrlMode == CTRL_MODE_NAME.ARTY
 
-    def _isInOnlyArtyMode(self):
-        return self._ctrlMode == CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE
-
     def _isInPostmortemMode(self):
         return self._ctrlMode == CTRL_MODE_NAME.POSTMORTEM
 

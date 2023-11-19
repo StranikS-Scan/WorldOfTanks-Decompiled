@@ -28,7 +28,6 @@ class _ChannelController(LobbyLayout):
         self._hasUnreadMessages = False
         self.fireInitEvent()
         self.__isChat2Enabled = g_settings.server.BW_CHAT2.isEnabled()
-        self._updatePrivateCarouselMembers()
 
     @proto_getter(PROTO_TYPE.XMPP)
     def proto(self):
@@ -52,11 +51,11 @@ class _ChannelController(LobbyLayout):
     def hasUnreadMessages(self):
         return self._hasUnreadMessages and self._channel.getHistory()
 
-    def _format(self, message, doFormatting=True, shouldAddTextLink=False):
+    def _format(self, message, doFormatting=True):
         if not doFormatting:
             return message.text
         dbID = message.accountDBID
-        return self._mBuilder.setGuiType(dbID).setRole(message.accountRole).setAffiliation(message.accountAffiliation).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).setTextLink(dbID, message.accountName, shouldAddTextLink).build()
+        return self._mBuilder.setGuiType(dbID).setRole(message.accountRole).setAffiliation(message.accountAffiliation).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).build()
 
     def _onConnectStateChanged(self, _):
         for view in self._views:
@@ -64,7 +63,6 @@ class _ChannelController(LobbyLayout):
 
     def _onMembersListChanged(self):
         self._refreshMembersDP()
-        self._updatePrivateCarouselMembers()
 
     def _onMemberStatusChanged(self, _):
         self._refreshMembersDP()

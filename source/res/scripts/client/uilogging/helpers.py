@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/helpers.py
 import typing
+import BigWorld
 if typing.TYPE_CHECKING:
     from uilogging.base.logger import LOGGERS_TYPING
 
@@ -25,3 +26,11 @@ class _LazyLoggerDescriptor(object):
 
 def lazyUILogger(class_, *args, **kwargs):
     return _LazyLoggerDescriptor(class_, *args, **kwargs)
+
+
+def getClientSessionID():
+    return '' if BigWorld.player() is None else str(BigWorld.player().connectionMgr.lastSessionID)
+
+
+def getClientPeripheryID():
+    return 0 if BigWorld.player() is None else BigWorld.player().connectionMgr.peripheryID

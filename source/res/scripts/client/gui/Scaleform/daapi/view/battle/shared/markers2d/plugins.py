@@ -510,17 +510,9 @@ class VehicleMarkerTargetPluginReplayPlaying(VehicleMarkerTargetPlugin):
     def __init__(self, parentObj):
         super(VehicleMarkerTargetPluginReplayPlaying, self).__init__(parentObj)
         if BattleReplay.g_replayCtrl.isPlaying:
+            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.SHOW_AUTO_AIM_MARKER, self._addMarker)
+            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.HIDE_AUTO_AIM_MARKER, self._hideVehicleMarker)
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.ON_TARGET_VEHICLE_CHANGED, self._handleAutoAimMarker)
-
-    def start(self):
-        super(VehicleMarkerTargetPluginReplayPlaying, self).start()
-        if self._vehicleID is not None:
-            self._addMarker(self._vehicleID)
-        return
-
-    def stop(self):
-        self._hideAllMarkers(clearVehicleID=False)
-        super(VehicleMarkerTargetPluginReplayPlaying, self).stop()
 
 
 class VehicleMarkerTargetPluginReplayRecording(VehicleMarkerTargetPlugin):

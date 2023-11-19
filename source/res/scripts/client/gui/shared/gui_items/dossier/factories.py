@@ -228,7 +228,6 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'twitchPrime4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'alphaTester'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, 'betaTester'): _AchieveFactory.get(LoyalServiceAchievement),
- (_AB.SINGLE, '13YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '12YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '11YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '10YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
@@ -371,14 +370,12 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'BattlePassCommonPr_10'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_11'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_12'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BattlePassCommonPr_12extra'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'collectorVehicle'): _NationAchieveFactory.get(_as.nation_specific.VehicleCollectorAchievement),
  (_AB.SINGLE, 'dedicationMedal1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'mt_comp_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'hw2023Medal01'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'hw2023Medal02'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'TenYearsCountdownParticipation'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'TenYearsCountdownStageMedal'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
  (_AB.SINGLE, 'TenYearsCountdownSPGEventMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -441,12 +438,12 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'comp7_2023_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'Cosmic_MartianStalker'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'Cosmic_SpaceTrace'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.MT, 'rpBronzeMedal'): _AchieveFactory.get(_as.regular.ReferralProgramSingleAchievement),
- (_AB.MT, 'rpSilverMedal'): _AchieveFactory.get(_as.regular.ReferralProgramSingleAchievement),
- (_AB.MT, 'rpGoldMedal'): _AchieveFactory.get(_as.regular.ReferralProgramSingleAchievement),
  (_AB.SINGLE, 'onboardingMedal'): _AchieveFactory.get(_abstract_achievements.RegularAchievement),
  (_AB.SINGLE, 'comp7_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'comp7_3_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.TOTAL, 'wt2023HunterWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'wt2023BossWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'wt2023MaxPlasma'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'hw2023Medal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

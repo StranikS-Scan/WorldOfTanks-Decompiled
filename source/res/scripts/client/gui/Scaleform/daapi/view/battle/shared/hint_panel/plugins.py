@@ -4,8 +4,8 @@ import logging
 import BigWorld
 import typing
 from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
-import aih_constants
 import CommandMapping
+from Event import EventsSubscriber
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
@@ -33,7 +33,6 @@ from skeletons.gui.goodies import IBoostersStateProvider
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from gui.goodies.booster_state_provider import BoosterStateProvider
-    from items.vehicles import VehicleDescriptor
 _logger = logging.getLogger(__name__)
 _HINT_MIN_VEHICLE_LEVEL = 4
 _HINT_TIMEOUT = 6
@@ -156,7 +155,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
 
     def __onCrosshairViewChanged(self, viewID):
         haveHintsLeft = self._haveHintsLeft(self.__settings)
-        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE:
+        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft:
             self.__addHint()
         elif self.__isHintShown:
             self.__removeHint()
@@ -467,6 +466,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self._isUnderFire = False
         self.__cbOnRadarCooldown = None
         self.__radarInProgress = False
+        self.__es = EventsSubscriber()
         return
 
     def start(self):
@@ -477,12 +477,14 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         arena = BigWorld.player().arena
         if arena is not None:
             self.__isEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR)
-        if self._sessionProvider.dynamic.radar:
-            self._sessionProvider.dynamic.radar.addRuntimeView(self)
+        radarCtrl = self._sessionProvider.dynamic.radar
+        if radarCtrl:
+            radarCtrl.addRuntimeView(self)
+            self.__es.addCallbackOnUnsubscribe(lambda : radarCtrl.removeRuntimeView(self))
         vStateCtrl = self._sessionProvider.shared.vehicleState
         if vStateCtrl:
-            vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
-            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            self.__es.subscribeToEvent(vStateCtrl.onPostMortemSwitched, self.__onPostMortemSwitched)
+            self.__es.subscribeToEvent(vStateCtrl.onVehicleStateUpdated, self.__onVehicleStateUpdated)
         return
 
     @classmethod
@@ -490,15 +492,10 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         return cls._sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.BATTLE_ROYALE
 
     def stop(self):
-        if self._sessionProvider.dynamic.radar:
-            self._sessionProvider.dynamic.radar.removeRuntimeView(self)
-        vStateCtrl = self._sessionProvider.shared.vehicleState
         if self.__cbOnRadarCooldown is not None:
             BigWorld.cancelCallback(self.__cbOnRadarCooldown)
             self.__cbOnRadarCooldown = None
-        if vStateCtrl:
-            vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
-            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        self.__es.unsubscribeFromAllEvents()
         AccountSettings.setSettings(RADAR_HINT_SECTION, self.__settings)
         self.destroy()
         return
@@ -711,9 +708,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
     def _canDisplayCustomHelpHint(self):
         return False
 
-    def __checkHintConditions(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or self.__checkFlameThrowerConditions(typeDescriptor)
-
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
             return
@@ -722,7 +716,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if self.__checkHintConditions(vTypeDesc):
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy:
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__canDisplayVehicleHelpHint(vTypeDesc) or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -767,11 +761,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayVehicleHelpHint(self, typeDescriptor):
-        return self.__checkHintConditions(typeDescriptor) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
-
-    def __checkFlameThrowerConditions(self, typeDescriptor):
-        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        return typeDescriptor.isFlamethrower and guiType in ARENA_GUI_TYPE.RANDOM_RANGE
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)
@@ -823,7 +813,8 @@ class PreBattleHintPlugin(HintPanelPlugin):
             viewCtx = event.kwargs.get('ctx', {})
             if viewCtx.get('hasUniqueVehicleHelpScreen', False):
                 vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
-                if self.__checkHintConditions(vehicle.typeDescriptor):
+                vTypeDesc = vehicle.typeDescriptor
+                if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy:
                     hintStats = self.__helpHintSettings[self.__vehicleId]
                     self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return

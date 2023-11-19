@@ -35,14 +35,10 @@ class CollectionItemTooltipView(ViewImpl):
             model.setIsReceived(self.__collectionsSystem.isItemReceived(self.__collectionId, self.__item.itemId))
 
     def __getDescription(self):
-        collRes = getCollectionRes(self.__collectionId, collectionsSystem=self.__collectionsSystem)
-        itemRes = collRes.dyn('item') if collRes else None
-        if itemRes:
-            isItemAvailable = self.__collectionsSystem.isRelatedEventActive(self.__collectionId)
-            conditionRes = itemRes.condition.available if isItemAvailable else itemRes.condition.unavailable
-            return backport.text(conditionRes.dyn(getItemResKey(self.__collectionId, self.__item))())
-        else:
-            return ''
+        itemRes = getCollectionRes(self.__collectionId, collectionsSystem=self.__collectionsSystem).item
+        isItemAvailable = self.__collectionsSystem.isRelatedEventActive(self.__collectionId)
+        conditionRes = itemRes.condition.available if isItemAvailable else itemRes.condition.unavailable
+        return backport.text(conditionRes.dyn(getItemResKey(self.__collectionId, self.__item))())
 
     def __getImage(self):
         return getImagePath(R.images.gui.maps.icons.collectionItems.c_296x222.dyn(getItemResKey(self.__collectionId, self.__item)))

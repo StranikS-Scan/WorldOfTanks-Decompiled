@@ -35,8 +35,9 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IGuiLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -1175,16 +1176,16 @@ class SeniorityAwardsDecorator(MessageDecorator):
 
 
 class EventLootBoxesDecorator(MessageDecorator):
-    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
+    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
 
     def __init__(self, entityID, message, model):
         super(EventLootBoxesDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
-        self.__guiLootBoxes.onStatusChange += self.__update
-        self.__guiLootBoxes.onAvailabilityChange += self.__update
+        self.__eventLootBoxes.onStatusChange += self.__update
+        self.__eventLootBoxes.onAvailabilityChange += self.__update
 
     def clear(self):
-        self.__guiLootBoxes.onStatusChange -= self.__update
-        self.__guiLootBoxes.onAvailabilityChange -= self.__update
+        self.__eventLootBoxes.onStatusChange -= self.__update
+        self.__eventLootBoxes.onAvailabilityChange -= self.__update
 
     def _make(self, formatted=None, settings=None):
         self.__updateEntityButtons()
@@ -1201,10 +1202,10 @@ class EventLootBoxesDecorator(MessageDecorator):
             return
         else:
             labelText = backport.text(R.strings.lootboxes.notification.eventStart.button())
-            if self.__guiLootBoxes.useExternalShop():
+            if self.__eventLootBoxes.useExternalShop():
                 labelText = text_styles.concatStylesWithSpace(labelText, icons.webLink())
             self._entity['buttonsLayout'][0]['label'] = labelText
-            if self.__guiLootBoxes.isEnabled() and self.__guiLootBoxes.isLootBoxesAvailable():
+            if self.__eventLootBoxes.isActive() and self.__eventLootBoxes.isLootBoxesAvailable():
                 state = NOTIFICATION_BUTTON_STATE.DEFAULT
             else:
                 state = NOTIFICATION_BUTTON_STATE.VISIBLE
@@ -1249,6 +1250,26 @@ class CollectionsLockButtonDecorator(MessageDecorator):
         if self._model is not None:
             self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
         return
+
+
+class CollectionCustomMessageDecorator(CollectionsLockButtonDecorator):
+
+    def __init__(self, entityID, message, messageType, notificationType, savedData, model):
+        self.__notificationType = notificationType
+        entity = self.__makeEntity(message, messageType, savedData)
+        super(CollectionCustomMessageDecorator, self).__init__(entityID, entity, self.__makeSettings(), model=model)
+
+    def getType(self):
+        return self.__notificationType
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def __makeEntity(self, message, messageType, savedData):
+        return g_settings.msgTemplates.format(messageType, ctx=message, data={'savedData': savedData})
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
 
 
 class WinbackSelectableRewardReminderDecorator(MessageDecorator):
@@ -1372,3 +1393,46 @@ class BattleMattersReminderDecorator(MessageDecorator):
         if self.__battleMattersController.isActive():
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
         return (state, tooltip)
+
+
+class PrestigeFirstEntryDecorator(LockButtonMessageDecorator):
+
+    def __init__(self, entityID, message, linkageData, model):
+        super(PrestigeFirstEntryDecorator, self).__init__(entityID, self.__makeEntity(message, linkageData), self.__makeSettings(), model)
+
+    def isShouldCountOnlyOnce(self):
+        return True
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PRESTIGE_FIRST_ENTRY
+
+    def __makeEntity(self, message, linkageData):
+        return g_settings.msgTemplates.format('PrestigeFirstEntryMessage', ctx=message, data={'linkageData': linkageData})
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+
+
+class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(PrestigeLvlUpDecorator, self).__init__(entityID, entity, settings, model)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+
+    def clear(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(PrestigeLvlUpDecorator, self).clear()
+
+    def _updateButtonsState(self, lock=False):
+        config = self.__lobbyContext.getServerSettings().prestigeConfig
+        lock |= not config.isEnabled
+        super(PrestigeLvlUpDecorator, self)._updateButtonsState(lock)
+
+    def __onServerSettingsChange(self, diff):
+        prestigeChanged = diff.get('prestige_config')
+        if not prestigeChanged:
+            return
+        config = self.__lobbyContext.getServerSettings().prestigeConfig
+        if not config.isEnabled and self._model:
+            self._updateButtonsState(lock=True)

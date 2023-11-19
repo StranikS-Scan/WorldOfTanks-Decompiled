@@ -40,11 +40,10 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             self.__periodicNotifier.startNotification()
             g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
             self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.HANGAR.value, (TOOLTIPS_CONSTANTS.EPIC_BATTLE_WIDGET_INFO,))
-            self.__epicController.onUpdated += self.__update
             self.__update()
             return
 
-    def __update(self, *_):
+    def __update(self):
         if not self.__epicController.isEnabled():
             return
         else:
@@ -59,7 +58,6 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             self.__periodicNotifier.stopNotification()
             self.__periodicNotifier.clear()
             self.__periodicNotifier = None
-        self.__epicController.onUpdated -= self.__update
         super(EpicBattlesWidget, self)._dispose()
         self.__periodicNotifier = None
         self.__uiEpicBattleLogger.reset()

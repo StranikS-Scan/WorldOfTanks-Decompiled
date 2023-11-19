@@ -128,8 +128,6 @@ class RadarController(ViewComponentsController, IRadarController, EventsSubscrib
     def removeRuntimeView(self, view):
         if view in self.__dynamicViews:
             self.__dynamicViews.remove(view)
-        else:
-            _logger.warning('View has not been found - %s', view)
 
     @staticmethod
     def _getRadarCooldownTotalTime():

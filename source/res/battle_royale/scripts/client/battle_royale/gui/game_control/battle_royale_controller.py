@@ -2,19 +2,21 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/battle_royale_controller.py
 import json
 import logging
+from collections import namedtuple
 from functools import partial
+from itertools import groupby
 import BigWorld
 import typing
-from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
-from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
-from battle_royale.gui.royale_models import BattleRoyaleSeason
 import Event
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
+from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
+from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
+from battle_royale.gui.royale_models import BattleRoyaleSeason
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE, BATTLE_ROYALE_SCENE
 from gui import GUI_NATIONS_ORDER_INDEX
@@ -27,7 +29,6 @@ from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.game_control.links import URLMacros
 from gui.game_control.season_provider import SeasonProvider
 from gui.impl.gen import R
-from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
@@ -37,6 +38,7 @@ from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
+from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -58,6 +60,7 @@ from stats_params import BATTLE_ROYALE_STATS_ENABLED
 if typing.TYPE_CHECKING:
     from helpers.server_settings import BattleRoyaleConfig
 _logger = logging.getLogger(__name__)
+BattleRoyaleProgressionPoints = namedtuple('BattleRoyaleProgressionPoints', ['lastInRange', 'points'])
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
     SYSTEM_DATA = 0
@@ -116,21 +119,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
         self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
         self.__spaceSwitchController.onCheckSceneChange += self.__onCheckSceneChange
-
-    def getTimer(self, now=None, peripheryID=None):
-        now = now or self._getNow()
-        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus(now, peripheryID)
-        if primeTimeStatus != PrimeTimeStatus.AVAILABLE:
-            for pID in self._getAllPeripheryIDs():
-                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(now, pID)
-                if peripheryStatus in (PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE):
-                    timeLeft = peripheryTime
-                    break
-
-        seasonsChangeTime = self.getClosestStateChangeTime(now)
-        if seasonsChangeTime and (now + timeLeft > seasonsChangeTime or timeLeft == 0):
-            timeLeft = seasonsChangeTime - now
-        return timeLeft + 1 if timeLeft > 0 else 0
 
     def fini(self):
         self.__voControl.fini()
@@ -215,9 +203,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def isEnabled(self):
         return self.getModeSettings().isEnabled
-
-    def isShowTimeLeft(self):
-        return self.getModeSettings().isShowTimeLeft
 
     def getEndTime(self):
         return self.getCurrentSeason().getCycleEndDate()
@@ -377,12 +362,46 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return False
 
     def getIntroVideoURL(self):
-        introVideoUrl = GUI_SETTINGS.battleRoyaleVideo.get('introVideo')
-        return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(introVideoUrl)
+        if not hasattr(GUI_SETTINGS, 'battleRoyaleVideo'):
+            return None
+        else:
+            introVideoUrl = GUI_SETTINGS.battleRoyaleVideo.get('introVideo')
+            return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(introVideoUrl) if introVideoUrl else introVideoUrl
+
+    def getProgressionPointsTableData(self):
+        gameModes = sorted(self.__progressionPointsConfig().keys())
+        gameModeLists = []
+        for gameMode in gameModes:
+            gameModeLists.append(self.__getProgressionPointsPerPlace(gameMode))
+
+        return (gameModes, gameModeLists)
+
+    def __progressionPointsConfig(self):
+        return self.__battleRoyaleSettings.progressionTokenAward
+
+    def __getProgressionPointsPerPlace(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO):
+        pointsList = self.__progressionPointsConfig().get(gameMode, [])
+        if not pointsList:
+            return []
+        pointList = [ (key, len(list(group))) for key, group in groupby(zip(*pointsList)[1]) ]
+        result = []
+        count = 0
+        for points, pointsCount in pointList:
+            count += pointsCount
+            result.append(BattleRoyaleProgressionPoints(count, points))
+
+        return result
 
     def __modeEntered(self):
-        if self.isBattleRoyaleMode() and not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
+        if not self.isBattleRoyaleMode():
+            return
+        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
             SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+        introVideoUrl = self.getIntroVideoURL()
+        if AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN) or not introVideoUrl:
+            return
+        AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN, True)
+        showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -528,7 +547,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__eventAvailabilityUpdate()
 
     def __timerTick(self):
-        self.onWidgetUpdate()
+        if self.isBattleRoyaleMode():
+            self.onWidgetUpdate()
 
     def __resetTimer(self):
         self.startNotification()

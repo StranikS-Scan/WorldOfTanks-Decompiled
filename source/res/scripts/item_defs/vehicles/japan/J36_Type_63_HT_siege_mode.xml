@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	14	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.055	</moving>
@@ -42,7 +42,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	90	</armor_1>
+      <armor_1>	80	</armor_1>
       <armor_2>	100	</armor_2>
       <armor_3>	55	</armor_3>
       <armor_4>	40	</armor_4>
@@ -50,7 +50,7 @@
       <armor_6>	20	</armor_6>
       <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	65	</armor_9>
+      <armor_9>	55	</armor_9>
       <armor_10>	30	</armor_10>
       <armor_11>	40	</armor_11>
       <armor_12>	40	</armor_12>
@@ -1352,7 +1352,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1386,18 +1386,14 @@
             <maxPitch>	0.00000 8.00 0.25000 8.00 0.37500 8.00 0.50000 6.00 0.62500 10.00 0.79167 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.28	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
+          <reloadTime>	10.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <dualAccuracy>
-            <afterShotDispersionRadius>	0.4	</afterShotDispersionRadius>
-            <coolingDelay>	12.7	</coolingDelay>
-          </dualAccuracy>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

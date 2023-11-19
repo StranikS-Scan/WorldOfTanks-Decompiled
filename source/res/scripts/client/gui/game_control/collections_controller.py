@@ -74,7 +74,7 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
 
     def getCollection(self, collectionId):
         collection = self.__getConfig().getCollection(collectionId)
-        if collection is None and collectionId != 0:
+        if collection is None:
             _logger.error('Collection with id <%s> does not exist!', collectionId)
         return collection
 

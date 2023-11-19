@@ -27,7 +27,7 @@ from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from comp7_common import Comp7QuestType, COMP7_QUALIFICATION_QUEST_ID
-from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
+from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, ARENA_BONUS_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -51,6 +51,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import Loo
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, parseComp7TokensQuestID
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
+from gui.prestige.prestige_helpers import hasVehiclePrestige, showPrestigeRewardWindow, needShowPrestigeRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
@@ -63,7 +64,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showSteamEmailConfirmRewardsView
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -81,7 +82,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -145,15 +146,6 @@ def _showDailyQuestEpicRewardScreen(quest, context):
     bonusesFromMissionAward = awards.EpicAward(quest, context, None).getAwards()
     if bonusesFromMissionAward:
         showProgressiveRewardAwardWindow(bonusesFromMissionAward, LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS, 0)
-    return
-
-
-def _showACEmailConfirmedRewardScreen(quest, context):
-    missionAwards = awards.MissionAward(quest, context, None).getAwards()
-    if missionAwards:
-        showProgressiveRewardAwardWindow(missionAwards, LootCongratsTypes.INIT_CONGRAT_TYPE_AC_EMAIL_CONFIRMATION, 0)
-    else:
-        _logger.warning('Empty mission [%s] awards.', quest.getID())
     return
 
 
@@ -260,9 +252,6 @@ class AwardController(IAwardController, IGlobalListener):
         app = self.appLoader.getApp()
         handler = _NonOverlappingViewsLifecycleHandler(postponeAwardsCallback=self.__postponeAwards, handlePostponedCallback=self.handlePostponed)
         self.__viewLifecycleWatcher.start(app.containerManager, [handler])
-
-    def addMonitoredDynamicViewKey(self, viewKey):
-        self.__viewLifecycleWatcher.addMonitoredDynamicViewKey(viewKey)
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         self.handlePostponed()
@@ -374,6 +363,7 @@ class EliteWindowHandler(AwardHandler):
 
 
 class PunishWindowHandler(ServiceChannelHandler):
+    EXCLUDED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD]
 
     def __init__(self, awardCtrl):
         super(PunishWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
@@ -387,7 +377,8 @@ class PunishWindowHandler(ServiceChannelHandler):
             arenaType = None
         arenaCreateTime = message.data.get('arenaCreateTime', None)
         fairplayViolations = message.data.get('fairplayViolations', None)
-        if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
+        bonusType = message.data.get('bonusType')
+        if arenaCreateTime and arenaType and bonusType not in self.EXCLUDED_ARENA_BONUS_TYPES and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
             banDuration = message.data['restriction'][1] if 'restriction' in message.data else None
             showPunishmentDialog(arenaType, arenaCreateTime, fairplayViolations, banDuration)
         return
@@ -463,8 +454,6 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
         for quest, context in completedQuests.itervalues():
             if isDailyQuest(str(quest.getID())):
                 continue
-            if isACEmailConfirmationQuest(quest.getID()):
-                _showACEmailConfirmedRewardScreen(quest, context)
             self._showWindow(quest, context)
 
     @staticmethod
@@ -801,6 +790,32 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
         for qID in data.get('completedQuestIDs', set()):
             if qID in motiveQuests and self.isShowCongrats(motiveQuests[qID]):
                 quests_events.showMotiveAward(motiveQuests[qID])
+
+
+class PrestigeAwardWindowHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(PrestigeAwardWindowHandler, self).__init__(SYS_MESSAGE_TYPE.prestigeLevelChanged.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        res = super(PrestigeAwardWindowHandler, self)._needToShowAward(ctx)
+        if res:
+            data = first(message.data.items())
+            if not data:
+                return False
+            vehCD, (oldLvl, newLvl) = data
+            hasPrestige = hasVehiclePrestige(vehCD)
+            if not hasPrestige:
+                return False
+            return needShowPrestigeRewardWindow(vehCD, oldLvl, newLvl)
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = first(message.data.items())
+        vehCD, (_, newLvl) = data
+        showPrestigeRewardWindow(vehIntCD=vehCD, level=newLvl)
 
 
 class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
@@ -1804,24 +1819,33 @@ class WinbackQuestHandler(MultiTypeServiceChannelHandler):
         return qIDs
 
 
-class CollectionsRewardHandler(ServiceChannelHandler):
-    __collections = dependency.descriptor(ICollectionsSystemController)
+class EmailConfirmationQuestHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(CollectionsRewardHandler, self).__init__(SYS_MESSAGE_TYPE.collectionsReward.index(), awardCtrl)
+        super(EmailConfirmationQuestHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__completedQuest = None
+        return
+
+    def fini(self):
+        self.__completedQuest = None
+        super(EmailConfirmationQuestHandler, self).fini()
+        return
 
     def _needToShowAward(self, ctx):
-        if not super(CollectionsRewardHandler, self)._needToShowAward(ctx):
+        _, message = ctx
+        if not super(EmailConfirmationQuestHandler, self)._needToShowAward(ctx):
             return False
-        _, message = ctx
-        data = message.data
-        isFinal = data['requiredCount'] == self.__collections.getMaxProgressItemCount(data['collectionId'])
-        return isFinal
+        else:
+            completedQuests = message.data.get('completedQuestIDs', set())
+            self.__completedQuest = next(ifilter(isACEmailConfirmationQuest, completedQuests), None)
+            return self.__completedQuest
 
-    def _showAward(self, ctx):
+    def _showAward(self, ctx=None):
         _, message = ctx
-        data = message.data
-        showCollectionAwardsWindow(data['collectionId'], [data['reward']], isFinal=True)
+        rewards = message.data.get('detailedRewards', {}).get(self.__completedQuest, {})
+        showSteamEmailConfirmRewardsView(rewards)
+        self.__completedQuest = None
+        return
 
 
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
@@ -1864,4 +1888,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  ResourceWellRewardHandler,
  Comp7RewardHandler,
  WinbackQuestHandler,
- CollectionsRewardHandler))
+ PrestigeAwardWindowHandler,
+ EmailConfirmationQuestHandler))

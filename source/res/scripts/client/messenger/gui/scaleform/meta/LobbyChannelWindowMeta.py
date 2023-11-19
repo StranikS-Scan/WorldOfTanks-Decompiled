@@ -15,6 +15,3 @@ class LobbyChannelWindowMeta(SimpleChannelWindow):
 
     def as_showWarningS(self, warning):
         return self.flashObject.as_showWarning(warning) if self._isDAAPIInited() else None
-
-    def as_setIsPrivateS(self, isPrivate):
-        return self.flashObject.as_setIsPrivate(isPrivate) if self._isDAAPIInited() else None

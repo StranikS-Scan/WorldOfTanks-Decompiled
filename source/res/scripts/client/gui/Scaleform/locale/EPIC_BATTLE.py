@@ -131,7 +131,6 @@ class EPIC_BATTLE(object):
     OVERTIME_LABEL = '#epic_battle:overtime/label'
     EPICBATTLESCAROUSEL_LOCKEDTOOLTIP_HEADER = '#epic_battle:epicBattlesCarousel/lockedTooltip/header'
     EPICBATTLESCAROUSEL_LOCKEDTOOLTIP_BODY = '#epic_battle:epicBattlesCarousel/lockedTooltip/body'
-    EPICBATTLESCAROUSEL_WRONGMODE_BODY = '#epic_battle:epicBattlesCarousel/wrongMode/body'
     EPICBATTLESCAROUSEL_LOBBY_LEVELINFO = '#epic_battle:epicBattlesCarousel/lobby/levelInfo'
     EPICBATTLESCAROUSEL_LOBBY_LEVELINFO_LEVEL = '#epic_battle:epicBattlesCarousel/lobby/levelInfo/level'
     TAB_SCREEN_SHOW_MY_LANE = '#epic_battle:tab_screen/show_my_lane'

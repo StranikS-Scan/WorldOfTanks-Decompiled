@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	9.090910	</repairCost>
+  <repairCost>	8.333334	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -42,35 +42,35 @@
     <variants>
       <hull2>
         <chassis>	Chassis_T69_2_SH	</chassis>
-        <armor>
-          <armor_1>	65	</armor_1>
-          <armor_2>	65	</armor_2>
-          <armor_3>	50	</armor_3>
-          <armor_4>	30	</armor_4>
-          <armor_5>	25	</armor_5>
-          <armor_6>	15	</armor_6>
-          <armor_7>	50	</armor_7>
-          <armor_8>	0	</armor_8>
-          <armor_9>	40	</armor_9>
-          <armor_10>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-          </armor_10>
-          <armor_11>	25	</armor_11>
-          <armor_12>	15	</armor_12>
-          <armor_13>	75	</armor_13>
-          <armor_14>	25	</armor_14>
-          <armor_15>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-          </armor_15>
-          <armor_16>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-          </armor_16>
-        </armor>
-        <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
         <weight>	14800	</weight>
-        <maxHealth>	1100	</maxHealth>
+        <maxHealth>	1300	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
           <repairCost>	0	</repairCost>
         </ammoBayHealth>
+        <armor>
+          <armor_1>	75	</armor_1>
+          <armor_2>	60	</armor_2>
+          <armor_3>	70	</armor_3>
+          <armor_4>	30	</armor_4>
+          <armor_5>	25	</armor_5>
+          <armor_6>	15	</armor_6>
+          <armor_7>	70	</armor_7>
+          <armor_8>	0	</armor_8>
+          <armor_9>	40	</armor_9>
+          <armor_10>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_10>
+          <armor_11>	25	</armor_11>
+          <armor_12>	15	</armor_12>
+          <armor_13>	55	</armor_13>
+          <armor_14>	35	</armor_14>
+          <armor_15>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_15>
+          <armor_16>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          </armor_16>
+        </armor>
+        <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
         <turretHardPoints>
           <hardPoint>	HP_turretJoint	</hardPoint>
         </turretHardPoints>
@@ -111,26 +111,45 @@
             <rayUp>	0 0 -1	</rayUp>
             <size>	0.32	</size>
           </slot>
+          <slot>
+            <slotType>	projectionDecal	</slotType>
+            <slotId>	15000	</slotId>
+            <tags>	formfactor_rect1x2 direction_right_to_left cover	</tags>
+            <position>	-0.000492 1.249619 0.207164	</position>
+            <rotation>	-0 -1.570796 2.588323	</rotation>
+            <scale>	5.361576 4.114125 7.31007	</scale>
+            <hiddenForUser>	true	</hiddenForUser>
+            <showOn>	4368	</showOn>
+            <clipAngle>	0.722566	</clipAngle>
+            <anchorShift>	1.73	</anchorShift>
+          </slot>
         </customizationSlots>
       </hull2>
       <hull3>
         <chassis>	Chassis_T26_E4_SuperPershing_SH	</chassis>
+        <weight>	19300	</weight>
+        <maxHealth>	1300	</maxHealth>
+        <ammoBayHealth>
+          <maxHealth>	103	</maxHealth>
+          <maxRegenHealth>	65	</maxRegenHealth>
+          <repairCost>	0	</repairCost>
+        </ammoBayHealth>
         <armor>
-          <armor_1>	60	</armor_1>
-          <armor_2>	50	</armor_2>
-          <armor_3>	75	</armor_3>
+          <armor_1>	55	</armor_1>
+          <armor_2>	55	</armor_2>
+          <armor_3>	80	</armor_3>
           <armor_4>	40	</armor_4>
-          <armor_5>	40	</armor_5>
+          <armor_5>	30	</armor_5>
           <armor_6>	25	</armor_6>
-          <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          <armor_7>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
           </armor_7>
           <armor_8>	0	</armor_8>
           <armor_9>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
           </armor_9>
-          <armor_10>	20	</armor_10>
-          <armor_11>	75	</armor_11>
-          <armor_12>	75	</armor_12>
-          <armor_13>	100	</armor_13>
+          <armor_10>	25	</armor_10>
+          <armor_11>	80	</armor_11>
+          <armor_12>	80	</armor_12>
+          <armor_13>	90	</armor_13>
           <armor_14>	25	</armor_14>
           <armor_15>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
           </armor_15>
@@ -140,20 +159,13 @@
           </armor_17>
           <armor_18>	100	</armor_18>
           <armor_19>	90	</armor_19>
-          <armor_20>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          <armor_20>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
           </armor_20>
           <armor_21>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
           </armor_21>
-          <armor_22>	120	</armor_22>
+          <armor_22>	105	</armor_22>
         </armor>
         <primaryArmor>	armor_22 armor_3 armor_4	</primaryArmor>
-        <weight>	19300	</weight>
-        <maxHealth>	1100	</maxHealth>
-        <ammoBayHealth>
-          <maxHealth>	103	</maxHealth>
-          <maxRegenHealth>	65	</maxRegenHealth>
-          <repairCost>	0	</repairCost>
-        </ammoBayHealth>
         <turretHardPoints>
           <hardPoint>	HP_turretJoint	</hardPoint>
         </turretHardPoints>
@@ -194,12 +206,31 @@
             <rayUp>	0 0 -1	</rayUp>
             <size>	0.32	</size>
           </slot>
+          <slot>
+            <slotType>	projectionDecal	</slotType>
+            <slotId>	15000	</slotId>
+            <tags>	formfactor_rect1x2 direction_right_to_left cover	</tags>
+            <position>	-0.000492 1.346694 0.049989	</position>
+            <rotation>	-0 -1.570796 2.588323	</rotation>
+            <scale>	5.599669 4.114124 6.438024	</scale>
+            <hiddenForUser>	true	</hiddenForUser>
+            <showOn>	4368	</showOn>
+            <clipAngle>	0.722566	</clipAngle>
+            <anchorShift>	1.73	</anchorShift>
+          </slot>
         </customizationSlots>
       </hull3>
     </variants>
+    <weight>	9800	</weight>
+    <maxHealth>	800	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </ammoBayHealth>
     <armor>
       <armor_1>	80	</armor_1>
-      <armor_2>	40	</armor_2>
+      <armor_2>	65	</armor_2>
       <armor_3>	40	</armor_3>
       <armor_4>	25	</armor_4>
       <armor_5>	40	</armor_5>
@@ -212,16 +243,9 @@
       </armor_11>
       <armor_12>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_12>
-      <armor_16>	40	</armor_16>
+      <armor_16>	85	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	9800	</weight>
-    <maxHealth>	700	</maxHealth>
-    <ammoBayHealth>
-      <maxHealth>	103	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </ammoBayHealth>
     <models>
       <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Hull_01.model	</undamaged>
       <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Hull_01.model	</destroyed>
@@ -266,6 +290,17 @@
         <anchorPosition>	0 0.554603 -1.94267	</anchorPosition>
         <anchorDirection>	0 0.274517 -0.961582	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15000	</slotId>
+        <tags>	formfactor_rect1x2 direction_right_to_left cover	</tags>
+        <position>	-0.000492 1.341067 0.059093	</position>
+        <rotation>	3.141593 1.570796 -0.553269	</rotation>
+        <scale>	5.161551 4.11414 4.865917	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+        <showOn>	4368	</showOn>
+        <clipAngle>	0.509636	</clipAngle>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -284,10 +319,6 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
-      </armor>
       <weight>	3920	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
@@ -302,6 +333,10 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Chassis_01.model	</undamaged>
         <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Chassis_01.model	</destroyed>
@@ -1179,24 +1214,24 @@
         <turret>	Turret_3_A120_M48A5_SH	  <cost>	23670	</cost>
         </turret>
       </unlocks>
-      <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
-      </armor>
       <weight>	5920	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	54	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Chassis_02.model	</undamaged>
         <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Chassis_02.model	</destroyed>
@@ -2001,10 +2036,6 @@
         <turret>	Turret_3_A120_M48A5_SH	  <cost>	23670	</cost>
         </turret>
       </unlocks>
-      <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
-      </armor>
       <weight>	7720	</weight>
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.0 1.1 2.0	</terrainResistance>
@@ -2019,6 +2050,10 @@
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	0	</repairCost>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
       <models>
         <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Chassis_03.model	</undamaged>
         <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Chassis_03.model	</destroyed>
@@ -2919,9 +2954,18 @@
         <turret>	Turret_3_A120_M48A5_SH	  <cost>	23670	</cost>
         </turret>
       </unlocks>
+      <weight>	5880	</weight>
+      <maxHealth>	400	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <armor>
-        <armor_1>	110	</armor_1>
-        <armor_3>	40	</armor_3>
+        <armor_1>	105	</armor_1>
+        <armor_3>	65	</armor_3>
         <armor_5>	20	</armor_5>
         <armor_6>	25	</armor_6>
         <armor_7>	40	</armor_7>
@@ -2936,29 +2980,28 @@
         </surveyingDevice>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
-      <weight>	5880	</weight>
-      <maxHealth>	400	</maxHealth>
-      <rotationSpeed>	50	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	103	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
-        <repairCost>	0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_SPH_M4_L23_SH>	shared	  <maxAmmo>	50	</maxAmmo>
-          <reloadTime>	3.5	</reloadTime>
+        <_105mm_SPH_M4_L23_SH>	shared	  <maxAmmo>	70	</maxAmmo>
+          <reloadTime>	4	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -2970,14 +3013,6 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_01.model	</destroyed>
@@ -3027,25 +3062,12 @@
             <chassis>	Chassis_T26_E4_SuperPershing_SH	  <cost>	9025	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	89	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <reloadTime>	12	</reloadTime>
-          <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	44.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
+          <reloadTime>	11.1	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3058,6 +3080,19 @@
             <count>	5	</count>
             <rate>	30	</rate>
           </clip>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	44.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_03.model	</destroyed>
@@ -3109,14 +3144,23 @@
             <chassis>	Chassis_T26_E4_SuperPershing_SH	  <cost>	9025	</cost>
             </chassis>
           </unlocks>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	71	</maxAmmo>
           <reloadTime>	5	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -3128,15 +3172,6 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_02.model	</destroyed>
@@ -3230,20 +3265,29 @@
         <gun>	_105mm_Gun_M68_SH	  <cost>	52000	</cost>
         </gun>
       </unlocks>
+      <weight>	8880	</weight>
+      <maxHealth>	700	</maxHealth>
+      <rotationSpeed>	55	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <armor>
-        <armor_1>	110	</armor_1>
-        <armor_2>	25	</armor_2>
-        <armor_3>	60	</armor_3>
+        <armor_1>	115	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	90	</armor_3>
         <armor_4>	40	</armor_4>
-        <armor_5>	60	</armor_5>
+        <armor_5>	35	</armor_5>
         <armor_6>	25	</armor_6>
         <armor_7>	0	</armor_7>
         <armor_8>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_8>
         <armor_9>	25	</armor_9>
-        <armor_10>	80	</armor_10>
-        <armor_11>	60	</armor_11>
-        <armor_12>	110	</armor_12>
+        <armor_10>	100	</armor_10>
+        <armor_11>	90	</armor_11>
+        <armor_12>	85	</armor_12>
         <armor_13>	25	</armor_13>
         <armor_14>	60	</armor_14>
         <armor_15>	110	</armor_15>
@@ -3258,27 +3302,30 @@
         </surveyingDevice>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	8880	</weight>
-      <maxHealth>	800	</maxHealth>
-      <rotationSpeed>	58	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	103	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
-        <repairCost>	0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_T185_A_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_76mm_Gun_T185_A_SH>	shared	  <maxAmmo>	89	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
           </pitchLimits>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	11.1	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	5	</count>
+            <rate>	30	</rate>
+          </clip>
           <armor>
             <armor_1>	139.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3296,18 +3343,6 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	1.8	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <clip>
-            <count>	5	</count>
-            <rate>	30	</rate>
-          </clip>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_05.model	</destroyed>
@@ -3353,12 +3388,21 @@
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_T185_A_SH>
-        <_90mm_Gun_M3_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_90mm_Gun_M3_SH>	shared	  <maxAmmo>	71	</maxAmmo>
           <reloadTime>	5	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
             <armor_1>	139.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3376,15 +3420,6 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_04.model	</destroyed>
@@ -3428,7 +3463,20 @@
             <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_90mm_Gun_M3_SH>
-        <_90mm_AT_Gun_T15E2_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_90mm_AT_Gun_T15E2_SH>	shared	  <maxAmmo>	86	</maxAmmo>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -14 1 -14	</minPitch>
+            <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
             <armor_1>	139.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3446,19 +3494,6 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -14 1 -14	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_06.model	</destroyed>
@@ -3504,11 +3539,24 @@
             <tiling>	0.85 0.85 0.000000 0.12	</tiling>
           </camouflage>
         </_90mm_AT_Gun_T15E2_SH>
-        <_105mm_Gun_M68_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_Gun_M68_SH>	shared	  <maxAmmo>	91	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 9 0.375 9 0.388889 7 0.611111 7 0.625 9 1 9	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	4	</count>
+            <rate>	34.29	</rate>
+          </clip>
           <armor>
             <armor_1>	139.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3526,19 +3574,6 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	13	</reloadTime>
-          <aimingTime>	1.6	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <clip>
-            <count>	4	</count>
-            <rate>	40	</rate>
-          </clip>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_07.model	</destroyed>
@@ -3634,6 +3669,15 @@
         <gun>	_120mm_Gun_M58_SH	  <cost>	52000	</cost>
         </gun>
       </unlocks>
+      <weight>	11580	</weight>
+      <maxHealth>	700	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	103	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <armor>
         <armor_1>	160	</armor_1>
         <armor_2>	135	</armor_2>
@@ -3649,8 +3693,8 @@
         <armor_12>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_12>
         <armor_13>	0	</armor_13>
-        <armor_14>	100	</armor_14>
-        <armor_15>	100	</armor_15>
+        <armor_14>	80	</armor_14>
+        <armor_15>	80	</armor_15>
         <armor_16>	40	</armor_16>
         <armor_17>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_17>
@@ -3664,39 +3708,19 @@
           <chanceToHitByExplosion>	0.7	</chanceToHitByExplosion>
         </surveyingDevice>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	11580	</weight>
-      <maxHealth>	800	</maxHealth>
-      <rotationSpeed>	48	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	103	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
-        <repairCost>	0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <primaryArmor>	armor_18 armor_3 armor_4	</primaryArmor>
       <surveyingDeviceHealth>
         <maxHealth>	52	</maxHealth>
         <maxRegenHealth>	33	</maxRegenHealth>
         <repairCost>	0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_T185_A_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_76mm_Gun_T185_A_SH>	shared	  <maxAmmo>	89	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <reloadTime>	12	</reloadTime>
-          <armor>
-            <armor_1>	177.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	30	</gun>
-          </armor>
+          <reloadTime>	11.1	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3709,6 +3733,17 @@
             <count>	5	</count>
             <rate>	30	</rate>
           </clip>
+          <armor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	30	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_09.model	</destroyed>
@@ -3754,14 +3789,23 @@
             <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_T185_A_SH>
-        <_90mm_Gun_M3_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_90mm_Gun_M3_SH>	shared	  <maxAmmo>	71	</maxAmmo>
           <reloadTime>	5	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
-            <armor_1>	177.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -3771,15 +3815,6 @@
             </armor_5>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_08.model	</destroyed>
@@ -3823,24 +3858,13 @@
             <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_90mm_Gun_M3_SH>
-        <_105mm_Gun_M68_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_Gun_M68_SH>	shared	  <maxAmmo>	91	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <armor>
-            <armor_1>	177.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	13	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3850,8 +3874,19 @@
           </shotDispersionFactors>
           <clip>
             <count>	4	</count>
-            <rate>	40	</rate>
+            <rate>	34.29	</rate>
           </clip>
+          <armor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	30	</gun>
+          </armor>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/american/A72_T25_2_SH/crash/lod0/Gun_10.model	</destroyed>
@@ -3897,22 +3932,11 @@
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_Gun_M68_SH>
-        <_120mm_Gun_M58_SH>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_120mm_Gun_M58_SH>	shared	  <maxAmmo>	67	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <armor>
-            <armor_1>	177.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	30	</gun>
-          </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
@@ -3922,6 +3946,17 @@
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <armor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	30	</gun>
+          </armor>
           <effects>	shot_large_mb	</effects>
           <models>
             <undamaged>	vehicles/american/A72_T25_2_SH/normal/lod0/Gun_11.model	</undamaged>
@@ -4055,7 +4090,7 @@
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Ford_GAN_SH>
         <Continental_AOSI-895-5_SH>
-          <smplEnginePower>	1090	</smplEnginePower>
+          <smplEnginePower>	1150	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Continental_AOSI-895-5_SH>
         <Ford_GAF_V8_SH>

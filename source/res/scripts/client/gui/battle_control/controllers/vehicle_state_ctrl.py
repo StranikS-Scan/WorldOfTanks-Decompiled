@@ -54,7 +54,6 @@ class _SpeedStateHandler(_StateHandler):
         self.__isOwnVehicle = False
 
     def _invalidate(self, vehicle):
-        fwdSpeedLimit, bckwdSpeedLimit = vehicle.typeDescriptor.physics['speedLimits']
         player = BigWorld.player()
         if self.__isOwnVehicle or player.isObserver():
             if player is None:
@@ -65,12 +64,11 @@ class _SpeedStateHandler(_StateHandler):
                 speed = 0
         else:
             try:
-                speed = vehicle.speedInfo.value[0]
+                speed, _ = player.getOwnVehicleSpeeds(isAttached=True)
             except (AttributeError, IndexError, ValueError):
                 LOG_CURRENT_EXCEPTION()
                 return ()
 
-            speed = max(min(speed, fwdSpeedLimit), -bckwdSpeedLimit)
         speed = self._formatSpeed(speed)
         states = []
         if self.__speed != speed:

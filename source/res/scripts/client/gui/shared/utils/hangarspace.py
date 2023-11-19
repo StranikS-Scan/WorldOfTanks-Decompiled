@@ -9,14 +9,15 @@ import Event
 import Keys
 import ResMgr
 import constants
+from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
 from gui.game_loading.resources.consts import Milestones
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
+from MemoryCriticalController import g_critMemHandler
 from shared_utils import BoundMethodWeakref
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IGameSessionController, IIGRController, IHangarSpaceSwitchController
@@ -32,6 +33,7 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from uilogging.performance.hangar.loggers import HangarMetricsLogger
+from uilogging.performance.battle.loggers import BattleMetricsLogger
 from cgf_components.hangar_camera_manager import HangarCameraManager
 _Q_CHECK_DELAY = 0.0
 
@@ -191,6 +193,7 @@ class HangarSpace(IHangarSpace):
         self.__isCursorOver3DScene = False
         self.__isSelectionEnabledCounter = 0
         self._performanceMetricsLogger = HangarMetricsLogger()
+        self._statisticsLogger = BattleMetricsLogger()
         return
 
     @property
@@ -270,6 +273,8 @@ class HangarSpace(IHangarSpace):
             g_keyEventHandlers.add(self.__handleKeyEvent)
             g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
             self._performanceMetricsLogger.initialize()
+            self._statisticsLogger.initialize()
+            g_critMemHandler.initializeLogger()
         return
 
     def refreshSpace(self, isPremium, forceRefresh=False):
@@ -435,15 +440,7 @@ class HangarSpace(IHangarSpace):
         uniprof.exitFromRegion('client.loading')
 
     def __logStatistics(self):
-        stats = self.statsCollector.getStatistics()
-        player = BigWorld.player()
-        if player is not None:
-            LOG_DEBUG_DEV(stats)
-            if stats['system'] and hasattr(player, 'logClientSystem'):
-                player.logClientSystem(stats['system'])
-            if stats['session'] and hasattr(player, 'logClientSessionStats'):
-                player.logClientSessionStats(stats['session'])
-        return
+        self._statisticsLogger.log()
 
     def __delayedRefresh(self):
         self.__delayedRefreshCallback = None

@@ -1,15 +1,10 @@
 <ServerReplayArenaComponent.def>
   <Properties></Properties>
-  <BaseMethods>
-    <onRecorderCellReady></onRecorderCellReady>
-    <onCellRecordingStarted></onCellRecordingStarted>
-    <onCellRecordingStopped></onCellRecordingStopped>
-    <onRecordingFinalized></onRecordingFinalized>
-  </BaseMethods>
+  <BaseMethods></BaseMethods>
   <CellMethods>
-    <storeInitialRecordingData>
+    <storeInitialState>
       <Arg>	PYTHON	</Arg>
-    </storeInitialRecordingData>
+    </storeInitialState>
     <recordReplayAvatarMethod>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>

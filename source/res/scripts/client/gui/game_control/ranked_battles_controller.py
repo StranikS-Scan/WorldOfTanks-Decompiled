@@ -270,9 +270,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isYearRewardEnabled(self):
         return self.__rankedSettings.yearRewardState == SwitchState.ENABLED
 
-    def isLeagueRewardEnabled(self):
-        return self.__rankedSettings.leagueRewardEnabled
-
     def hasSpecialSeason(self):
         return self.__rankedSettings.hasSpecialSeason
 
@@ -706,7 +703,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         isYearGap = self.isYearGap()
         isYearLBEnabled = self.isYearLBEnabled()
         hasCurSeason = self.getCurrentSeason() is not None
-        passedSeasons = self.getSeasonPassed()
+        passedSeasons = self.getSeasonsPassed()
         if isEnabled:
             if self.isFrozen() or not passedSeasons and not hasCurSeason:
                 self.__showPreSeason()
@@ -832,7 +829,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __hasMatchMakerGroups(self, division, divisionLayout):
         matchMakerUnits = len(divisionLayout)
         amountRanks = len(division.getRanksIDs())
-        return matchMakerUnits != 0 and matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
+        return matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
 
     def __hasPrimeTimesLeft(self, currTime):
         season = self.getCurrentSeason()

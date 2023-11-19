@@ -1,0 +1,28 @@
+<VehicleBRRespawnComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <position>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </position>
+    <lives>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lives>
+    <resurrectTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </resurrectTime>
+    <teammateResurrectTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teammateResurrectTime>
+    <timeBlockToRessurect>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </timeBlockToRessurect>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <DefaultKeyName>	vehicleBRRespawnComponent	</DefaultKeyName>
+</VehicleBRRespawnComponent.def>

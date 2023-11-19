@@ -61,6 +61,12 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_updateLevelInformationS(self, idx, level):
         return self.flashObject.as_updateLevelInformation(idx, level) if self._isDAAPIInited() else None
 
+    def as_showPossibleStacksS(self, idx, stack):
+        return self.flashObject.as_showPossibleStacks(idx, stack) if self._isDAAPIInited() else None
+
+    def as_updateStacksS(self, idx, stack):
+        return self.flashObject.as_updateStacks(idx, stack) if self._isDAAPIInited() else None
+
     def as_updateTooltipS(self, idx, tooltipStr):
         return self.flashObject.as_updateTooltip(idx, tooltipStr) if self._isDAAPIInited() else None
 
@@ -108,3 +114,12 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_setRoleSkillSlotCounterS(self, idx, value):
         return self.flashObject.as_setRoleSkillSlotCounter(idx, value) if self._isDAAPIInited() else None
+
+    def as_addRespawnSlotS(self, idx, keyCode, sfKeyCode, quantity, tooltipText, isTooltipSpecial, isAvailable):
+        return self.flashObject.as_addRespawnSlot(idx, keyCode, sfKeyCode, quantity, tooltipText, isTooltipSpecial, isAvailable) if self._isDAAPIInited() else None
+
+    def as_setRespawnSlotQuantityS(self, idx, quantity):
+        return self.flashObject.as_setRespawnSlotQuantity(idx, quantity) if self._isDAAPIInited() else None
+
+    def as_setRespawnSlotStateS(self, idx, isAvailable):
+        return self.flashObject.as_setRespawnSlotState(idx, isAvailable) if self._isDAAPIInited() else None

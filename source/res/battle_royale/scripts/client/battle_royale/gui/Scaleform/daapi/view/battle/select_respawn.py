@@ -3,17 +3,17 @@
 import logging
 import time
 import weakref
-from frameworks.wulf import ViewFlags
+from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
+from frameworks.wulf import ViewFlags, ViewSettings
+from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
-from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from gui.impl import backport
-from gui.impl.pub import ViewImpl
-from gui.impl.gen.view_models.views.battle_royale.select_respawn_view_model import SelectRespawnViewModel
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.battle_royale.respawn_point_view_model import RespawnPointViewModel
-from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.impl.gen.view_models.views.battle_royale.select_respawn_view_model import SelectRespawnViewModel
+from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
@@ -47,6 +47,10 @@ class SelectRespawnComponent(InjectComponentAdaptor, ISpawnListener):
     def updatePoint(self, vehicleId, pointId, prevPointId):
         if self.__view:
             self.__view.updatePoint(vehicleId, pointId, prevPointId)
+
+    def onSelectPoint(self, pointId):
+        if self.__view:
+            self.__view.updateSelectedPoint(pointId)
 
     def showSpawnPoints(self):
         if self.__view:
@@ -88,7 +92,8 @@ class SelectRespawnView(ViewImpl):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, *args, **kwargs):
-        super(SelectRespawnView, self).__init__(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.VIEW, SelectRespawnViewModel, *args, **kwargs)
+        settings = ViewSettings(R.views.battle.battleRoyale.select_respawn.SelectRespawn(), ViewFlags.VIEW, SelectRespawnViewModel(), *args, **kwargs)
+        super(SelectRespawnView, self).__init__(settings)
         arenaVisitor = self.__sessionProvider.arenaVisitor
         self.__mapTexture = 'url:../../{}'.format(arenaVisitor.type.getMinimapTexture())
         self.__background = self.__getBgByGeometryName(arenaVisitor.type.getGeometryName())
@@ -125,6 +130,10 @@ class SelectRespawnView(ViewImpl):
                 vmPoints.addViewModel(pointVM)
 
             vmPoints.invalidate()
+
+    def updateSelectedPoint(self, pointId):
+        with self.viewModel.transaction() as vm:
+            vm.setSelectedPointID(pointId)
 
     def updatePoint(self, vehicleId, pointId, prevPointId):
         arenaDP = self.__sessionProvider.getArenaDP()

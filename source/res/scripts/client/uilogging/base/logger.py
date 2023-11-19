@@ -95,6 +95,11 @@ class _BaseLogger(object):
 
     @noexcept
     @ifUILoggingEnabled()
+    def _logImmediately(self, action, loglevel=LogLevels.INFO, **params):
+        return self._core.logImmediately(feature=self._feature, group=self._group, action=action, loglevel=loglevel, **params)
+
+    @noexcept
+    @ifUILoggingEnabled()
     def _logOnce(self, action, loglevel=LogLevels.INFO, **params):
         if action in self._logOnceSet:
             _logger.debug('%s log once action: %s already logged.', self, action)

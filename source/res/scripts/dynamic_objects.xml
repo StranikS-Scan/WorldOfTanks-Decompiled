@@ -45,13 +45,13 @@
       <edgeState>	safe	</edgeState>
       <scale>	5.0 1.0 1.0	</scale>
       <spacing>	5.0	</spacing>
-      <color>	0x65643200	</color>
+      <color>	0x65005244	</color>
     </modelSetting>
     <modelSetting>
       <edgeState>	danger	</edgeState>
       <scale>	5.0 1.0 1.0	</scale>
       <spacing>	5.0	</spacing>
-      <color>	0x64fa0700	</color>
+      <color>	0x72ff0000	</color>
     </modelSetting>
   </SectorBorderVisual>
   <SmokeScreenEffect_lev1>
@@ -462,6 +462,9 @@
       <offset>	0.0 0.0 0.0	</offset>
     </effect>
   </VehicleUpgrade>
+  <VehicleRespawn>
+    <prefab>	content/CGFPrefabs/steel_hunter/respawn_effect.prefab	</prefab>
+  </VehicleRespawn>
   <KamikazeActivated>
     <effect>
       <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_glow.ssm	</path>

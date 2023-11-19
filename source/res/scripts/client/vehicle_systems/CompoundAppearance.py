@@ -41,10 +41,6 @@ _PITCH_SWINGING_MODIFIERS = (0.9, 1.88, 0.3, 4.0, 1.0, 1.0)
 _MIN_DEPTH_FOR_HEAVY_SPLASH = 0.5
 _logger = logging.getLogger(__name__)
 
-def createHighlighter(isAlive):
-    return Highlighter(isAlive, None)
-
-
 class CompoundHolder(object):
 
     def __init__(self, compound):
@@ -208,14 +204,14 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self._vehicle.isPlayerVehicle:
             self.delayCallback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
             self.highlighter.highlight(True)
-        self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self._onPeriodicTimerDirt)
+        self.delayCallback(_PERIODIC_TIME_DIRT[0][0], self.__onPeriodicTimerDirt)
 
     def _stopSystems(self):
         super(CompoundAppearance, self)._stopSystems()
         if self._vehicle.isPlayerVehicle:
             self.highlighter.highlight(False)
             self.stopCallback(self.__onPeriodicTimerEngine)
-        self.stopCallback(self._onPeriodicTimerDirt)
+        self.stopCallback(self.__onPeriodicTimerDirt)
 
     def _onEngineStart(self):
         super(CompoundAppearance, self)._onEngineStart()
@@ -339,6 +335,10 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         else:
             _logger.warning('Component "%s" has not been found', name)
         return
+
+    def removeTempGameObjectIfExists(self, name):
+        if name in self.__tmpGameObjects:
+            self.removeTempGameObject(name)
 
     def showStickers(self, show):
         if self.vehicleStickers is not None:
@@ -502,7 +502,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         impulseDir = super(CompoundAppearance, self)._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
         node = self.compoundModel.node(gunFireNodeName)
         gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, self.typeDescriptor.shot.shell.kind, ShakeReason.OWN_SHOT_DELAYED)
+        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
         return impulseDir
 
     def __applyVehicleOutfit(self):
@@ -609,7 +609,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.__updateTransmissionScroll()
             return
 
-    def _onPeriodicTimerDirt(self):
+    def __onPeriodicTimerDirt(self):
         if self.fashion is None or self._vehicle is None:
             return
         else:

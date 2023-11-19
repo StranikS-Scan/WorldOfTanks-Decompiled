@@ -5,9 +5,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
-from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters.chat_message import LobbyMessageBuilder
-from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform import FILL_COLORS
 from messenger.gui.Scaleform.data.MembersDataProvider import MembersDataProvider
 from messenger.gui.interfaces import IChannelController, IBattleChannelView
@@ -104,8 +102,7 @@ class LobbyLayout(IChannelController):
         return result
 
     def addMessage(self, message, doFormatting=True):
-        shouldAddTextLink = self._channel.isPrivate() and not isCurrentPlayer(message.accountDBID)
-        text = self._format(message, doFormatting, shouldAddTextLink)
+        text = self._format(message, doFormatting)
         if self._activated:
             for view in self._views:
                 view.as_addMessageS(text)
@@ -144,22 +141,10 @@ class LobbyLayout(IChannelController):
             self._membersDP.buildList(self._channel.getMembers())
             self._membersDP.refresh()
 
-    def _updatePrivateCarouselMembers(self):
-        if not self._channel.isPrivate():
-            return
-        for member in self._channel.getMembers():
-            memberDBID = member.getDatabaseID()
-            if isCurrentPlayer(memberDBID):
-                continue
-            clientID = self._channel.getClientID()
-            memberUsername = member.getFullName()
-            events_dispatcher.updatePrivateCarouselMembers(clientID, memberDBID, memberUsername)
-            break
-
     def _broadcast(self, message):
         raise NotImplementedError
 
-    def _format(self, message, doFormatting=True, addTextLink=False):
+    def _format(self, message, doFormatting=True):
         raise NotImplementedError
 
     def _fireInitEvent(self):

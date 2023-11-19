@@ -60,4 +60,5 @@ class RotatingCoursorCamera(object):
         self.__camera = BigWorld.CursorCamera()
         self.__camera.maxDistHalfLife = self.__maxDistHalfLife
         self.__camera.pivotPosition = self.__pivotOffset
+        self.__camera.enableAdvancedCollider(True)
         BigWorld.camera(self.__camera)

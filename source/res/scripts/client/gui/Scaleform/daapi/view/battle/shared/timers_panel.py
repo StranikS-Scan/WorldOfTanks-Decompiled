@@ -9,7 +9,6 @@ from battle_royale.gui.constants import BattleRoyaleEquipments
 import BattleReplay
 import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
-from constants import StunTypes
 from ReplayEvents import g_replayEvents
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
@@ -31,20 +30,18 @@ from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
-_TIMERS_PRIORITY = {(_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
- (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 2,
- (_TIMER_STATES.DANGER_ZONE, _TIMER_STATES.CRITICAL_VIEW): 3,
- (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 4,
- (_TIMER_STATES.STUN_FLAME, _TIMER_STATES.WARNING_VIEW): 4,
- (_TIMER_STATES.MAP_DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 4,
- (_TIMER_STATES.WARNING_ZONE, _TIMER_STATES.WARNING_VIEW): 5,
- (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 5,
- (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 6,
- (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 7,
- (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 8,
- (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 8}
+_TIMERS_PRIORITY = {(_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 1,
+ (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 2,
+ (_TIMER_STATES.OVERTURNED, _TIMER_STATES.WARNING_VIEW): 3,
+ (_TIMER_STATES.DROWN, _TIMER_STATES.CRITICAL_VIEW): 4,
+ (_TIMER_STATES.DANGER_ZONE, _TIMER_STATES.CRITICAL_VIEW): 5,
+ (_TIMER_STATES.MAP_DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 6,
+ (_TIMER_STATES.WARNING_ZONE, _TIMER_STATES.WARNING_VIEW): 7,
+ (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 8,
+ (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 9,
+ (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 10,
+ (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 10}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
- _TIMER_STATES.STUN_FLAME,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD,
@@ -389,7 +386,6 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         self._timers = _createTimersCollection(self)
         self.__sound = None
         self.__stunSoundPlaying = None
-        self.__stunType = None
         self.__vehicleID = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__equipmentCtrl = None
@@ -429,7 +425,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             iconOffsetY = 0
             overturnedText = ''
         data = [self._getNotificationTimerData(_TIMER_STATES.DROWN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DROWN_ICON, link),
-         self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, overturnedIcon, link, description=overturnedText, color=overturnedColor, iconOffsetY=iconOffsetY),
+         self._getNotificationTimerData(_TIMER_STATES.OVERTURNED, overturnedIcon, link, text=overturnedText, color=overturnedColor, iconOffsetY=iconOffsetY),
          self._getNotificationTimerData(_TIMER_STATES.FIRE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.FIRE_ICON, link),
          self._getNotificationTimerData(_TIMER_STATES.DANGER_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DANGER_ICON, link, text=INGAME_GUI.DANGER_ZONE_INDICATOR, iconOffsetY=-10),
          self._getNotificationTimerData(_TIMER_STATES.MAP_DEATH_ZONE, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DANGER_ICON, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.GRAY),
@@ -438,7 +434,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)]
         return data
 
     def _getNotificationTimerData(self, typeId, iconName, linkage, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
@@ -480,11 +476,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
     def __hideAll(self):
         self._timers.removeTimers()
         if self.__stunSoundPlaying:
-            stunStopSoundName = 'flamer_stun_effect_end' if self.__stunType == StunTypes.FLAME.value else 'artillery_stun_effect_end'
-            SoundGroups.g_instance.playSound2D(stunStopSoundName)
+            SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
             self.__stunSoundPlaying = False
-            self.__stunType = None
-        return
 
     def __setFireInVehicle(self, isInFire):
         if isInFire:
@@ -583,32 +576,27 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__sound.play()
         return
 
-    def __playStunSoundIfNeed(self, isVisible, timerType, stunType):
+    def __playStunSoundIfNeed(self, isVisible):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
         if vehicle is None or not vehicle.isPlayerVehicle:
             return
         else:
-            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(timerType)
-            stunStartSoundName, stunStopSoundName = ('flamer_stun_effect_start', 'flamer_stun_effect_end') if stunType == StunTypes.FLAME.value else ('artillery_stun_effect_start', 'artillery_stun_effect_end')
+            hasActiveSecondaryTimer = self._timers.hasActiveSecondaryTimer(_TIMER_STATES.STUN)
             if isVisible:
-                SoundGroups.g_instance.playSound2D(stunStartSoundName)
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_start')
                 self.__stunSoundPlaying = True
             elif not isVisible and hasActiveSecondaryTimer and self.__stunSoundPlaying:
-                SoundGroups.g_instance.playSound2D(stunStopSoundName)
+                SoundGroups.g_instance.playSound2D('artillery_stun_effect_end')
                 self.__stunSoundPlaying = False
             return
 
     def __showStunTimer(self, value):
         isVisible = value.duration > 0.0
-        stunTypeForClient = value.stunType if isVisible else self.__stunType
-        timerType = _TIMER_STATES.STUN_FLAME if stunTypeForClient == StunTypes.FLAME.value else _TIMER_STATES.STUN
-        self.__playStunSoundIfNeed(isVisible, timerType, stunTypeForClient)
-        self.__stunType = value.stunType
+        self.__playStunSoundIfNeed(isVisible=isVisible)
         if isVisible:
-            self._showTimer(timerType, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
+            self._showTimer(_TIMER_STATES.STUN, value.totalTime, _TIMER_STATES.WARNING_VIEW, value.endTime, value.startTime)
         else:
             self._hideTimer(_TIMER_STATES.STUN)
-            self._hideTimer(_TIMER_STATES.STUN_FLAME)
 
     def __showCaptureBlockTimer(self, value):
         if value:

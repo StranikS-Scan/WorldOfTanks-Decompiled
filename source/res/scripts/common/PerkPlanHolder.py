@@ -48,7 +48,7 @@ class PCPlanHolder(object):
 
     def loadPlan(self, owner, loadScopeID, loadPerkID, isAutostart=False):
         scope, creator = self._scopedPerks[loadScopeID]
-        callback = self._loader._onStatusChanged() if self._loader else self._onPlanReady()
+        callback = self._loader._onStatusChanged if self._loader else self._onPlanReady
         for perkID, (level, args) in scope:
             if perkID != loadPerkID:
                 continue

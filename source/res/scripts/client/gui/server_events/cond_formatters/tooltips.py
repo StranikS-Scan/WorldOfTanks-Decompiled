@@ -20,11 +20,7 @@ def reqStyle(_):
 
 def getSeparatorBlock(groupType=GROUP_TYPE.AND):
     label = getSeparator(groupType)
-    if label:
-        item = packText(text_styles.standard(label))
-        return item
-    else:
-        return None
+    return packText(text=label, styler=text_styles.standard) if label else None
 
 
 class MissionsAccountRequirementsFormatter(ConditionsFormatter):
@@ -44,9 +40,19 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
 
     def format(self, conditions, event):
         if event.isGuiDisabled():
-            return {}
+            return []
         group = prepareAccountConditionsGroup(conditions, event)
         rqs = self._format(group, event)
+        return self._processRequirements(rqs)
+
+    @staticmethod
+    def _processRequirements(rqs):
+        for item in rqs:
+            styler = item.get('styler')
+            if styler:
+                item['text'] = styler(item['text'])
+                del item['styler']
+
         return rqs
 
     def _format(self, group, event, isNested=False, topHasOrGroup=False):
@@ -72,12 +78,12 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
                     if fmt:
                         branch = fmt.format(condition, event, reqStyle)
                     if branch:
-                        result.extend(self._processNonGroupConidtions(branch, isNested, separator, topHasOrGroup, isNotLast))
+                        result.extend(self._processNonGroupConditions(branch, isNested, separator, topHasOrGroup, isNotLast))
 
         return result
 
     @classmethod
-    def _processNonGroupConidtions(cls, branch, isNested, separator, isInOrGroup, isNotLast):
+    def _processNonGroupConditions(cls, branch, isNested, separator, isInOrGroup, isNotLast):
         formattedBranch = []
         for item in branch:
             if not isNested or not isInOrGroup:
@@ -115,4 +121,4 @@ class _TokenRequirementFormatter(ConditionFormatter):
             msg = cls._getSpecialTokenText(condition)
             if msg is None:
                 msg = backport.text(R.strings.tooltips.quests.unavailable.token(), tokenName=text_styles.neutral(condition.getUserName()), count=condition.getNeededCount())
-            return [packText(style(msg))]
+            return [packText(text=msg, styler=style)]

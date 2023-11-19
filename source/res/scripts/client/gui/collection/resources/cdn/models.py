@@ -28,7 +28,6 @@ class Sub(str, Enum):
     BP_10 = 'battle_pass_10'
     BP_11 = 'battle_pass_11'
     BP_12 = 'battle_pass_12'
-    MT_BIRTHDAY_2023 = 'mt_birthday2023'
 
 
 class ImageModel(Model):

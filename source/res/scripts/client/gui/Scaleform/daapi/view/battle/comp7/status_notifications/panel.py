@@ -23,9 +23,9 @@ _logger = logging.getLogger(__name__)
 class Comp7BattleHighPriorityGroup(components.StatusNotificationsGroup):
 
     def __init__(self, updateCallback):
-        super(Comp7BattleHighPriorityGroup, self).__init__((sn_items.OverturnedSN,
+        super(Comp7BattleHighPriorityGroup, self).__init__((sn_items.DrownSN,
+         sn_items.OverturnedSN,
          sn_items.HalfOverturnedSN,
-         sn_items.DrownSN,
          sn_items.UnderFireSN,
          sn_items.FireSN), updateCallback)
 
@@ -57,7 +57,6 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
         items = [Comp7BattleHighPriorityGroup,
          PoiNotificationsGroup,
          sn_items.StunSN,
-         sn_items.StunFlameSN,
          comp7_sn_items.AoeHealSN,
          comp7_sn_items.AoeInspireSN,
          comp7_sn_items.RiskyAttackBuffSN,
@@ -94,7 +93,6 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self.__genPoiTimersSettings(data)
         link = _LINKS.SECONDARY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)
-        self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)
         self.__gerRoleSkillsTimersSettings(data)
         return data
 

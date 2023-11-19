@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
-import typing
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
 from gui.impl import backport
 from gui.impl.gen import R
@@ -11,8 +10,6 @@ from gui.server_events.bonuses import BlueprintsBonusSubtypes, formatBlueprint
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
 from nations import NAMES
-if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import VehiclesBonus
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -76,7 +73,7 @@ class VehiclesFormatter(OldStyleBonusFormatter):
         formattedList = bonus.formattedList()
         if formattedList:
             vehiclesLbl, _ = _joinUpToMax(formattedList)
-            self._result.append(formatters.packVehiclesBonusBlock(vehiclesLbl, self.__eventID, bonus.isOneOf()))
+            self._result.append(formatters.packVehiclesBonusBlock(vehiclesLbl, self.__eventID))
 
 
 class CrewBookFormatter(OldStyleBonusFormatter):

@@ -154,8 +154,6 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_COLLECTIONS)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
-    BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
-    BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
 
     @classmethod
     def getBackBtnLabel(cls, key):
@@ -183,13 +181,3 @@ class VEHICLE_PREVIEW(object):
             return None
         else:
             return outcome
-
-    @classmethod
-    def hasOfferName(cls, key):
-        outcome = '#vehicle_preview:buyingPanel/offer/rent/name/{}'.format(key)
-        return outcome in cls.BUYINGPANEL_OFFER_RENT_NAME_ENUM
-
-    @classmethod
-    def hasOfferLabel(cls, key):
-        outcome = '#vehicle_preview:buyingPanel/offer/rent/label/{}'.format(key)
-        return outcome in cls.BUYINGPANEL_OFFER_RENT_LABEL_ENUM

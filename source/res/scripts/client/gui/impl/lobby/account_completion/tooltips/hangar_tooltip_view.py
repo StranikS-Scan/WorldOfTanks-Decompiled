@@ -20,11 +20,5 @@ class HangarTooltipView(ViewImpl):
 
     def _fillModel(self, model):
         if self.__email:
-            model.setTitle(R.strings.tooltips.accountCompletionHangar.email.title())
-            model.setText(R.strings.tooltips.accountCompletionHangar.email.text())
             model.setEmail(self.__email)
-        else:
-            model.setTitle(R.strings.tooltips.accountCompletionHangar.title())
-            model.setText(R.strings.tooltips.accountCompletionHangar.text())
-            model.setTextInner(R.strings.tooltips.accountCompletionHangar.holder())
         fillRewards(model)

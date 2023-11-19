@@ -5,6 +5,7 @@ import functools
 import logging
 import types
 from collections import namedtuple
+from enum import Enum
 import typing
 import constants
 import post_progression_common
@@ -26,6 +27,7 @@ from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
 from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
+from prestige_system.prestige_common import PrestigeConfig
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
 from schema_manager import getSchemaManager
@@ -374,7 +376,6 @@ class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'shopState',
  'yearLBState',
  'yearRewardState',
- 'leagueRewardEnabled',
  'seasonRatingPageUrl',
  'yearRatingPageUrl',
  'infoPageUrl',
@@ -385,7 +386,7 @@ class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, leagueRewardEnabled=True, seasonRatingPageUrl='', yearRatingPageUrl='', infoPageUrl='', introPageUrl='', seasonGapPageUrl='', shopPageUrl='', hasSpecialSeason=False)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, seasonRatingPageUrl='', yearRatingPageUrl='', infoPageUrl='', introPageUrl='', seasonGapPageUrl='', shopPageUrl='', hasSpecialSeason=False)
         defaults.update(kwargs)
         return super(RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -426,7 +427,8 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
  'slots',
  'inBattleReservesByRank',
  'skipParamsValidation',
- 'destructibleTypeId'])):
+ 'randomReservesMode',
+ 'randomReservesOpt'])):
 
     def asDict(self):
         return self._asdict()
@@ -445,9 +447,11 @@ _EpicMetaGameConfig.__new__.__defaults__ = (0,
  {},
  {},
  0,
- 0)
+ 0,
+ {})
 
 class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
+ 'enableWelcomeScreen',
  'validVehicleLevels',
  'battlePassDataEnabled',
  'levelsToUpgrateAllReserves',
@@ -458,12 +462,11 @@ class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'rentVehicles',
- 'tooltips',
- 'forbiddenVehTypes'))):
+ 'tooltips'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={}, forbiddenVehTypes=set())
+        defaults = dict(isEnabled=False, enableWelcomeScreen=True, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={})
         defaults.update(kwargs)
         return super(EpicGameConfig, cls).__new__(cls, **defaults)
 
@@ -565,11 +568,12 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'vehiclesSlotsConfig',
  'economics',
  'url',
- 'isShowTimeLeft'))):
+ 'respawns',
+ 'progressionTokenAward'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', isShowTimeLeft=False)
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={})
         defaults.update(kwargs)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
@@ -1022,53 +1026,6 @@ class _BattleMattersConfig(namedtuple('_BattleMattersConfig', ('isEnabled',
         return cls()
 
 
-class _CollectiveGoalEntryPointConfig(namedtuple('_CollectiveGoalConfig', ('isEnabled',
- 'startTime',
- 'finishTime',
- 'marathonPrefix',
- 'hermodChannelName',
- 'marathonName',
- 'goalType',
- 'goalDescription',
- 'rulesCaption'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, startTime=None, finishTime=None, marathonPrefix=None, hermodChannelName=None, marathonName=None, goalType=None, goalDescription=None, rulesCaption=None)
-        defaults.update(kwargs)
-        return super(_CollectiveGoalEntryPointConfig, cls).__new__(cls, **defaults)
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class _CollectiveGoalMarathonsConfig(namedtuple('_CollectiveGoalMarathonsConfig', ('isEnabled',
- 'startTime',
- 'finishTime',
- 'url'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, startTime=None, finishTime=None, url=None)
-        defaults.update(kwargs)
-        return super(_CollectiveGoalMarathonsConfig, cls).__new__(cls, **defaults)
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class PeripheryRoutingConfig(namedtuple('_PeripheryRoutingConfig', ('isEnabled', 'peripheryRoutingGroups'))):
     __slots__ = ()
 
@@ -1264,17 +1221,17 @@ class PreModerationConfig(namedtuple('_PreModerationConfig', ('prebattleDescript
         return self._replace(**dataToUpdate)
 
 
-GUI_LOOT_BOXES_CONFIG = 'gui_loot_boxes_config'
+EVENT_LOOT_BOXES_CONFIG = 'event_loot_boxes_config'
 
-class _GuiLootBoxesConfig(object):
-    __slots__ = ('__isEnabled', '__lootBoxBuyDayLimit', '__isBuyAvailable', '__shopCategoryUrl')
+class _EventLootBoxesConfig(object):
+    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit')
 
     def __init__(self, **kwargs):
-        super(_GuiLootBoxesConfig, self).__init__()
+        super(_EventLootBoxesConfig, self).__init__()
         self.__isEnabled = kwargs.get('enabled', False)
+        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
+        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
         self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
-        self.__isBuyAvailable = kwargs.get('isBuyAvailable', False)
-        self.__shopCategoryUrl = kwargs.get('shopCategoryUrl', '')
 
     @property
     def isEnabled(self):
@@ -1284,47 +1241,8 @@ class _GuiLootBoxesConfig(object):
     def lootBoxBuyDayLimit(self):
         return self.__lootBoxBuyDayLimit
 
-    @property
-    def isBuyAvailable(self):
-        return self.__isBuyAvailable
-
-    def getShopCategoryUrl(self):
-        return self.__shopCategoryUrl
-
-
-class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
- 'isPaused',
- 'seasons',
- 'animations',
- 'cycleTimes',
- 'tokenBase',
- 'receivedRewardTokenPostfix',
- 'stageTokenPostfix',
- 'currencyTokenPostfix',
- 'tokenCost',
- 'rewards',
- 'introVideoLink',
- 'infoPageLink',
- 'activeHoursCountdown',
- 'announcementCountdown'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0)
-        defaults.update(kwargs)
-        return super(ArmoryYardConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
+    def getEventActiveTime(self):
+        return (self.__startDateInUTC, self.__finishDateInUTC)
 
 
 class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'version'))):
@@ -1351,13 +1269,13 @@ class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'vers
         return cls()
 
 
-class RPConfig(namedtuple('RPConfig', ('pgbCapacity', 'pgbDayLimit'))):
+class _SteamShadeConfig(namedtuple('_SteamShadeConfig', ('battlesPlayed', 'sessions'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(pgbCapacity=0, pgbDayLimit=0)
+        defaults = dict(battlesPlayed=10, sessions=3)
         defaults.update(kwargs)
-        return super(RPConfig, cls).__new__(cls, **defaults)
+        return super(_SteamShadeConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
@@ -1372,62 +1290,24 @@ class RPConfig(namedtuple('RPConfig', ('pgbCapacity', 'pgbDayLimit'))):
         return cls()
 
 
-class RestoreConfig(namedtuple('RestoreConfig', ('tankmen', 'vehicles'))):
+class _ABFeatureTestConfig(namedtuple('_ABFeatureTestConfig', ('steamShade',))):
     __slots__ = ()
 
+    class DefaultSteamShadeProperties(Enum):
+        battlesPlayed = -1
+        sessions = -1
+
     def __new__(cls, **kwargs):
-        defaults = dict(tankmen={}, vehicles={})
+        defaults = dict(steamShade={})
         defaults.update(kwargs)
-        return super(RestoreConfig, cls).__new__(cls, **defaults)
+        return super(_ABFeatureTestConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
 
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class VersusAIConfig(namedtuple('VersusAIConfig', ('isEnabled', 'levels', 'forbiddenVehicleTags'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, levels=tuple(), forbiddenVehicleTags=set())
-        defaults.update(kwargs)
-        return super(VersusAIConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class DebutBoxesConfig(namedtuple('DebutBoxesConfig', ('isEnabled',
- 'startDate',
- 'endDate',
- 'infoPageUrl',
- 'questIDs'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, startDate=0, endDate=0, infoPageUrl='', questIDs=[])
-        defaults.update(kwargs)
-        return super(DebutBoxesConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
+    def getSteamShadeProperties(self, group):
+        properties = namedtuple('Properties', ('battlesPlayed', 'sessions'))
+        return properties(int(self.steamShade.get(group, {}).get('properties', {}).get('battlesPlayed', self.DefaultSteamShadeProperties.battlesPlayed.value)), int(self.steamShade.get(group, {}).get('properties', {}).get('sessions', self.DefaultSteamShadeProperties.sessions.value)))
 
     def replace(self, data):
         allowedFields = self._fields
@@ -1476,8 +1356,6 @@ class ServerSettings(object):
         self.__giftSystemConfig = GiftSystemConfig()
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
-        self.__collectiveGoalEntryPointConfig = _CollectiveGoalEntryPointConfig()
-        self.__collectiveGoalMarathonsConfig = _CollectiveGoalMarathonsConfig()
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.__comp7Config = Comp7Config()
         self.__comp7RanksConfig = Comp7RanksConfig()
@@ -1485,14 +1363,13 @@ class ServerSettings(object):
         self.__personalReservesConfig = PersonalReservesConfig()
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
-        self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
+        self.__eventLootBoxesConfig = _EventLootBoxesConfig()
         self.__collectionsConfig = CollectionsConfig()
         self.__winbackConfig = WinbackConfig()
         self.__limitedUIConfig = _LimitedUIConfig()
-        self.__referralProgramConfig = RPConfig()
-        self.__restoreConfig = RestoreConfig()
-        self.__versusAISettings = VersusAIConfig()
-        self.__debutBoxesConfig = DebutBoxesConfig()
+        self.__prestigeConfig = PrestigeConfig({})
+        self.__steamShadeConfig = _SteamShadeConfig()
+        self.__abFeatureTestConfig = _ABFeatureTestConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1549,8 +1426,6 @@ class ServerSettings(object):
             self.__battleRoyaleSettings = makeTupleByDict(BattleRoyaleConfig, self.__serverSettings[Configs.BATTLE_ROYALE_CONFIG.value])
         else:
             self.__battleRoyaleSettings = BattleRoyaleConfig.defaults()
-        if Configs.VERSUS_AI_CONFIG.value in self.__serverSettings:
-            self.__versusAISettings = makeTupleByDict(VersusAIConfig, self.__serverSettings[Configs.VERSUS_AI_CONFIG.value])
         if 'telecom_config' in self.__serverSettings:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'blueprints_config' in self.__serverSettings:
@@ -1572,7 +1447,7 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
-        self.__updateGuiLootBoxesConfig(self.__serverSettings)
+        self.__updateEventLootBoxesConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1600,10 +1475,6 @@ class ServerSettings(object):
             self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
-        if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in self.__serverSettings:
-            self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-        if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in self.__serverSettings:
-            self.__collectiveGoalMarathonsConfig = makeTupleByDict(_CollectiveGoalMarathonsConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
             self.__peripheryRoutingConfig = makeTupleByDict(PeripheryRoutingConfig, self.__serverSettings[Configs.PERIPHERY_ROUTING_CONFIG.value])
         if Configs.COMP7_CONFIG.value in self.__serverSettings:
@@ -1642,25 +1513,23 @@ class ServerSettings(object):
             self.__winbackConfig = makeTupleByDict(WinbackConfig, self.__serverSettings[Configs.WINBACK_CONFIG.value])
         else:
             self.__winbackConfig = WinbackConfig.defaults()
-        if Configs.ARMORY_YARD_CONFIG.value in self.__serverSettings:
-            self.__armoryYardSettings = makeTupleByDict(ArmoryYardConfig, self.__serverSettings[Configs.ARMORY_YARD_CONFIG.value])
-        else:
-            self.__armoryYardSettings = ArmoryYardConfig.defaults()
         if Configs.LIMITED_UI_CONFIG.value in self.__serverSettings:
             self.__limitedUIConfig = makeTupleByDict(_LimitedUIConfig, self.__serverSettings[Configs.LIMITED_UI_CONFIG.value])
         else:
             self.__limitedUIConfig = _LimitedUIConfig.defaults()
-        if Configs.REFERRAL_PROGRAM_CONFIG.value in self.__serverSettings:
-            self.__referralProgramConfig = makeTupleByDict(RPConfig, self.__serverSettings[Configs.REFERRAL_PROGRAM_CONFIG.value])
+        if Configs.PRESTIGE_CONFIG.value in self.__serverSettings:
+            self.__prestigeConfig = PrestigeConfig(self.__serverSettings.get(Configs.PRESTIGE_CONFIG.value, {}))
         else:
-            self.__referralProgramConfig = RPConfig.defaults()
-        if Configs.RESTORE_CONFIG.value in self.__serverSettings:
-            self.__restoreConfig = makeTupleByDict(RestoreConfig, self.__serverSettings[Configs.RESTORE_CONFIG.value])
-        if Configs.DEBUT_BOXES_CONFIG.value in self.__serverSettings:
-            self.__debutBoxesConfig = makeTupleByDict(DebutBoxesConfig, self.__serverSettings[Configs.DEBUT_BOXES_CONFIG.value])
-        else:
-            self.__debutBoxesConfig = DebutBoxesConfig.defaults()
+            self.__prestigeConfig = PrestigeConfig({})
         self.__schemaManager.set(self.__serverSettings)
+        if Configs.STEAM_SHADE_CONFIG.value in self.__serverSettings:
+            self.__steamShadeConfig = makeTupleByDict(_SteamShadeConfig, self.__serverSettings[Configs.STEAM_SHADE_CONFIG.value])
+        else:
+            self.__steamShadeConfig = _SteamShadeConfig.defaults()
+        if Configs.AB_FEATURE_TEST.value in self.__serverSettings:
+            self.__abFeatureTestConfig = makeTupleByDict(_ABFeatureTestConfig, self.__serverSettings[Configs.AB_FEATURE_TEST.value])
+        else:
+            self.__abFeatureTestConfig = _ABFeatureTestConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1762,26 +1631,17 @@ class ServerSettings(object):
             self.__serverSettings[key] = serverSettingsDiff[key]
         if Configs.WINBACK_CONFIG.value in serverSettingsDiff:
             self.__updateWinbackConfig(serverSettingsDiff)
-        if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in serverSettingsDiff:
-            self.__updateCollectiveGoalEntryPointConfig(serverSettingsDiff)
-        if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in serverSettingsDiff:
-            self.__updateCollectiveGoalMarathonsConfig(serverSettingsDiff)
-        if Configs.ARMORY_YARD_CONFIG.value in serverSettingsDiff:
-            self.__updateArmoryYard(serverSettingsDiff)
-        if Configs.REFERRAL_PROGRAM_CONFIG.value in serverSettingsDiff:
-            self.__updateRPConfig(serverSettingsDiff)
-        if Configs.VERSUS_AI_CONFIG.value in serverSettingsDiff:
-            self.__updateVersusAI(serverSettingsDiff)
         self.__updatePersonalReserves(serverSettingsDiff)
-        self.__updateGuiLootBoxesConfig(serverSettingsDiff)
+        self.__updateEventLootBoxesConfig(serverSettingsDiff)
         if Configs.COLLECTIONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectionsConfig(serverSettingsDiff)
         self.__updateLimitedUIConfig(serverSettingsDiff)
-        if Configs.RESTORE_CONFIG.value in serverSettingsDiff:
-            self.__updateRestoreConfig(serverSettingsDiff)
-        if Configs.DEBUT_BOXES_CONFIG.value in serverSettingsDiff:
-            self.__updateDebutBoxesCoinfig(serverSettingsDiff)
+        if Configs.PRESTIGE_CONFIG.value in serverSettingsDiff:
+            self.__serverSettings[Configs.PRESTIGE_CONFIG.value] = serverSettingsDiff[Configs.PRESTIGE_CONFIG.value]
+            self.__prestigeConfig = PrestigeConfig(self.__serverSettings.get(Configs.PRESTIGE_CONFIG.value, {}))
         self.__schemaManager.update(serverSettingsDiff)
+        self.__updateSteamShadeConfig(serverSettingsDiff)
+        self.__updateABFeatureTestConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1930,14 +1790,6 @@ class ServerSettings(object):
         return self.__battleMattersConfig
 
     @property
-    def collectiveGoalEntryPointConfig(self):
-        return self.__collectiveGoalEntryPointConfig
-
-    @property
-    def collectiveGoalMarathonsConfig(self):
-        return self.__collectiveGoalMarathonsConfig
-
-    @property
     def peripheryRoutingConfig(self):
         return self.__peripheryRoutingConfig
 
@@ -1958,24 +1810,20 @@ class ServerSettings(object):
         return self.__winbackConfig
 
     @property
-    def armoryYard(self):
-        return self.__armoryYardSettings
-
-    @property
     def limitedUIConfig(self):
         return self.__limitedUIConfig
 
     @property
-    def restoreConfig(self):
-        return self.__restoreConfig
+    def prestigeConfig(self):
+        return self.__prestigeConfig
 
     @property
-    def versusAIConfig(self):
-        return self.__versusAISettings
+    def steamShadeConfig(self):
+        return self.__steamShadeConfig
 
     @property
-    def debutBoxesConfig(self):
-        return self.__debutBoxesConfig
+    def abFeatureTestConfig(self):
+        return self.__abFeatureTestConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2310,14 +2158,11 @@ class ServerSettings(object):
     def getTradeInConfig(self):
         return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
-    def getGuiLootBoxesConfig(self):
-        return self.__guiLootBoxesConfig
+    def getEventLootBoxesConfig(self):
+        return self.__eventLootBoxesConfig
 
     def getAchievements20GeneralConfig(self):
         return Achievements20GeneralConfig(self.__getGlobalSetting(Configs.ACHIEVEMENTS20_CONFIG.value, {}))
-
-    def getRPConfig(self):
-        return self.__referralProgramConfig
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
@@ -2428,12 +2273,6 @@ class ServerSettings(object):
     def __updateBattleMatters(self, targetSettings):
         self.__battleMattersConfig = self.__battleMattersConfig.replace(targetSettings[Configs.BATTLE_MATTERS_CONFIG.value])
 
-    def __updateCollectiveGoalEntryPointConfig(self, diff):
-        self.__collectiveGoalEntryPointConfig = self.__collectiveGoalEntryPointConfig.replace(diff[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-
-    def __updateCollectiveGoalMarathonsConfig(self, diff):
-        self.__collectiveGoalMarathonsConfig = self.__collectiveGoalMarathonsConfig.replace(diff[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
-
     def __updatePeripheryRoutingConfig(self, diff):
         self.__peripheryRoutingConfig = self.__peripheryRoutingConfig.replace(diff[Configs.PERIPHERY_ROUTING_CONFIG.value])
 
@@ -2448,43 +2287,35 @@ class ServerSettings(object):
     def __updateTournamentsConfig(self, diff):
         self.__tournamentSettings = self.__tournamentSettings.replace(diff[TOURNAMENT_CONFIG])
 
-    def __updateGuiLootBoxesConfig(self, settings):
-        if GUI_LOOT_BOXES_CONFIG in settings:
-            config = settings[GUI_LOOT_BOXES_CONFIG]
+    def __updateEventLootBoxesConfig(self, settings):
+        if EVENT_LOOT_BOXES_CONFIG in settings:
+            config = settings[EVENT_LOOT_BOXES_CONFIG]
             if config is None:
-                self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
+                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
             elif isinstance(config, dict):
-                self.__guiLootBoxesConfig = _GuiLootBoxesConfig(**config)
+                self.__eventLootBoxesConfig = _EventLootBoxesConfig(**config)
             else:
                 _logger.error('Unexpected format of subscriptions service config: %r', config)
-                self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
+                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
         return
 
     def __updateCollectionsConfig(self, diff):
         self.__collectionsConfig = self.__collectionsConfig.replace(diff[Configs.COLLECTIONS_CONFIG.value])
 
-    def __updateRPConfig(self, diff):
-        self.__referralProgramConfig = self.__referralProgramConfig.replace(diff[Configs.REFERRAL_PROGRAM_CONFIG.value])
-
     def __updateWinbackConfig(self, diff):
         self.__winbackConfig = self.__winbackConfig.replace(diff[Configs.WINBACK_CONFIG.value])
-
-    def __updateArmoryYard(self, diff):
-        self.__armoryYardSettings = self.__armoryYardSettings.replace(diff[Configs.ARMORY_YARD_CONFIG.value])
 
     def __updateLimitedUIConfig(self, serverSettingsDiff):
         if Configs.LIMITED_UI_CONFIG.value in serverSettingsDiff:
             self.__limitedUIConfig = self.__limitedUIConfig.replace(serverSettingsDiff[Configs.LIMITED_UI_CONFIG.value])
 
-    def __updateRestoreConfig(self, serverSettingsDiff):
-        self.__restoreConfig = self.__restoreConfig.replace(serverSettingsDiff[Configs.RESTORE_CONFIG.value])
+    def __updateSteamShadeConfig(self, serverSettingsDiff):
+        if Configs.STEAM_SHADE_CONFIG.value in serverSettingsDiff:
+            self.__steamShadeConfig = self.__steamShadeConfig.replace(serverSettingsDiff[Configs.STEAM_SHADE_CONFIG.value])
 
-    def __updateDebutBoxesCoinfig(self, diff):
-        self.__debutBoxesConfig = self.__debutBoxesConfig.replace(diff[Configs.DEBUT_BOXES_CONFIG.value])
-
-    def __updateVersusAI(self, targetSettings):
-        data = targetSettings[Configs.VERSUS_AI_CONFIG.value]
-        self.__versusAISettings = self.__versusAISettings.replace(data)
+    def __updateABFeatureTestConfig(self, serverSettingsDiff):
+        if Configs.AB_FEATURE_TEST.value in serverSettingsDiff:
+            self.__abFeatureTestConfig = self.__abFeatureTestConfig.replace(serverSettingsDiff[Configs.AB_FEATURE_TEST.value])
 
 
 def serverSettingsChangeListener(*configKeys):

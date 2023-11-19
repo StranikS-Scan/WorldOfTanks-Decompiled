@@ -97,11 +97,10 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        isForbidden = vehicle.intCD in cls.__epicController.getForbiddenVehicles()
         return (not vehicle.isInInventory,
          not vehicle.isEvent,
          not vehicle.isOnlyForBattleRoyaleBattles,
-         not isForbidden and not cls._isSuitableForQueue(vehicle),
+         not cls._isSuitableForQueue(vehicle),
          vehicle.level,
          not vehicle.isFavorite,
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
@@ -111,24 +110,17 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _isSuitableForQueue(cls, vehicle):
-        controller = cls.__epicController
-        return vehicle.level in controller.getValidVehicleLevels() and vehicle.intCD not in controller.getForbiddenVehicles()
+        return vehicle.level in cls.__epicController.getValidVehicleLevels()
 
     def _buildVehicle(self, vehicle):
         result = super(EpicBattleCarouselDataProvider, self)._buildVehicle(vehicle)
         state, _ = vehicle.getState()
-        resShortCut = R.strings.epic_battle.epicBattlesCarousel
+        resShortCut = R.strings.epic_battle.epicBattlesCarousel.lockedTooltip
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
-            header = backport.text(resShortCut.lockedTooltip.header())
-            if vehicle.level in self.__epicController.getValidVehicleLevels():
-                body = backport.text(resShortCut.wrongMode.body())
-            else:
-                body = backport.text(resShortCut.lockedTooltip.body(), level=self.__epicController.getSuitableForQueueVehicleLevelStr())
-            result['lockedTooltip'] = makeTooltip(header, body)
+            result['lockedTooltip'] = makeTooltip(backport.text(resShortCut.header()), backport.text(resShortCut.body()))
         if state == Vehicle.VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE:
             result['unlockedInBattle'] = True
         result['xpImgSource'] = ''
-        result['debutBoxesImgSource'] = ''
         return result
 
     def _getSupplyIndices(self):

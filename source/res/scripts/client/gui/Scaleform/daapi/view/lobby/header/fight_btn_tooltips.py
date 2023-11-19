@@ -88,7 +88,7 @@ def getEpicFightBtnTooltipData(result):
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.header())
-        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
+        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.body())
     elif state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
         header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
         body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
@@ -121,8 +121,7 @@ def getEpicBattlesOnlyVehicleTooltipData(result):
      UNIT_RESTRICTION.VEHICLE_WRONG_MODE,
      PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER,
      PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER,
-     PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE,
-     PREBATTLE_RESTRICTION.LIMIT_LEVEL):
+     PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE):
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.body())
         return makeTooltip(header, body)
@@ -247,14 +246,3 @@ def getComp7FightBtnTooltipData(result):
     else:
         return ''
     return makeTooltip(header, body)
-
-
-def getVersusAIFightBtnTooltipData(result):
-    restriction = result.restriction
-    resShortCut = R.strings.versusAI.headerButtons.fightBtn.tooltip
-    if restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
-        levels = backport.text(resShortCut.versusAIVehLevel.levelSubStr(), levels=toRomanRangeString(result.ctx['levels']))
-        header = backport.text(resShortCut.versusAIVehLevel.header())
-        body = backport.text(resShortCut.versusAIVehLevel.body(), levelSubStr=levels)
-        return makeTooltip(header, body)
-    return getRandomTooltipData(result)

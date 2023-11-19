@@ -3,9 +3,14 @@
 import vehicles
 SPAWNED_TAG_NAME = 'spawned'
 BATTLE_ROYALE_TAG_NAME = 'battle_royale'
+HUNTER_BOT_TAG_NAME = 'bot_hunter'
 
 def isSpawnedBot(vehicleTags):
     return SPAWNED_TAG_NAME in vehicleTags
+
+
+def isHunterBot(vehicleTags):
+    return HUNTER_BOT_TAG_NAME in vehicleTags
 
 
 def isBattleRoyale(vehicleTags):

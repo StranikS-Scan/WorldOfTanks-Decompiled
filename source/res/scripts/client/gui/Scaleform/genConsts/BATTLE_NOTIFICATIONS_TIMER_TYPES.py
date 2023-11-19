@@ -17,7 +17,6 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     HALF_OVERTURNED = 'halfOverturned'
     EVENT_WARNING = 'eventWarning'
     STUN = 'stun'
-    STUN_FLAME = 'stunFlame'
     CAPTURE_BLOCK = 'captureLock'
     SMOKE = 'smoke'
     DAMAGING_SMOKE = 'damagingSmoke'

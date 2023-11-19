@@ -76,6 +76,20 @@ class ProgressiveItemsView(ViewImpl):
             return window
         return super(ProgressiveItemsView, self).createToolTip(event)
 
+    def update(self, *args, **kwargs):
+        itemIntCD = kwargs.get('itemIntCD')
+        self._vehicle = g_currentVehicle.item
+        self._possibleItems = self._getPossibleItemsForVehicle()
+        self._itemsProgressData = self.__itemsCache.items.inventory.getC11nProgressionDataForVehicle(self._vehicle.intCD)
+        with self.getViewModel().transaction() as model:
+            model.setTankName(self._vehicle.userName)
+            model.setTankLevel(int2roman(self._vehicle.level))
+            model.setTankType(self._vehicle.typeBigIconResource())
+            self.__setItems(model)
+            model.setIsRendererPipelineDeferred(isRendererPipelineDeferred())
+            model.setItemToScroll(0 if itemIntCD is None else itemIntCD)
+        return
+
     @property
     def viewModel(self):
         return super(ProgressiveItemsView, self).getViewModel()
@@ -103,18 +117,7 @@ class ProgressiveItemsView(ViewImpl):
         return
 
     def _onLoading(self, *args, **kwargs):
-        self._vehicle = g_currentVehicle.item
-        self._possibleItems = self._getPossibleItemsForVehicle()
-        self._itemsProgressData = self.__itemsCache.items.inventory.getC11nProgressionDataForVehicle(self._vehicle.intCD)
-        itemIntCD = kwargs.get('itemIntCD')
-        with self.getViewModel().transaction() as model:
-            model.setTankName(self._vehicle.userName)
-            model.setTankLevel(int2roman(self._vehicle.level))
-            model.setTankType(self._vehicle.typeBigIconResource())
-            self.__setItems(model)
-            model.setIsRendererPipelineDeferred(isRendererPipelineDeferred())
-            model.setItemToScroll(0 if itemIntCD is None else itemIntCD)
-        return
+        self.update(*args, **kwargs)
 
     def _onLoaded(self, *args, **kwargs):
         self.__blur.enable()
@@ -157,6 +160,7 @@ class ProgressiveItemsView(ViewImpl):
         return [ item.compactDescr for item in sortedItems if (item.filter is None or item.filter.matchVehicleType(vehicleType)) and item.itemType == CustomizationType.PROJECTION_DECAL ]
 
     def __setItems(self, model):
+        model.progressiveItems.clearItems()
         for intCD in self._possibleItems:
             itemModel = ItemModel()
             item = self.__customizationService.getItemByCD(intCD)

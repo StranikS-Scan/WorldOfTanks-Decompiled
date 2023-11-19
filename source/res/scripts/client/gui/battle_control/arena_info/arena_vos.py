@@ -471,7 +471,6 @@ class VehicleArenaInfoVO(object):
     def isChatCommandsDisabled(self, isAlly):
         arena = avatar_getter.getArena()
         isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
-        isEvent = isEvent or arena.guiType == ARENA_GUI_TYPE.HALLOWEEN_BATTLES if arena else False
         if not (self.player.avatarSessionID or isEvent):
             if isAlly:
                 return True

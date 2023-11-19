@@ -111,10 +111,6 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     _limitedUIController = dependency.descriptor(ILimitedUIController)
     _NEW_PLAYER_BATTLES = 2
 
-    def __init__(self):
-        super(MessengerBar, self).__init__()
-        self.__disableReferralQueues = {QUEUE_TYPE.HALLOWEEN_BATTLES}
-
     @prbDispatcherProperty
     def prbDispatcher(self):
         return None
@@ -188,12 +184,8 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.as_setReferralBtnLimitIndicationS(self._referralCtrl.isScoresLimitReached())
 
     def __handleFightButtonUpdated(self, event):
-        self.__updateReferralBtnEnabled()
-
-    def __updateReferralBtnEnabled(self):
         state = self.prbDispatcher.getFunctionalState()
-        enabled = self.prbEntity.getQueueType() not in self.__disableReferralQueues
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and enabled)
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

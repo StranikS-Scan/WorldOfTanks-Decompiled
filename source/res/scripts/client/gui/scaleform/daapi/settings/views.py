@@ -178,7 +178,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     BATTLEPASS_CAROUSEL_FILTER_POPOVER = 'BattlePassCarouselFilterPopover'
     BATTLEROYALE_CAROUSEL_FILTER_POPOVER = 'BattleRoyaleCarouselFilterPopover'
-    HW22_CAROUSEL_FILTER_POPOVER = 'HW22CarouselFilterPopover'
     VEHICLES_FILTER_POPOVER = 'VehiclesFilterPopover'
     STORAGE_VEHICLES_FILTER_POPOVER = 'StorageVehiclesFilterPopover'
     STORAGE_BLUEPRINTS_FILTER_POPOVER = 'StorageBlueprintsFilterPopover'

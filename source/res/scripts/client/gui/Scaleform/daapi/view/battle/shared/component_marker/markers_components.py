@@ -11,8 +11,8 @@ from helpers import dependency
 from shared_utils import BitmaskHelper
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from gui.Scaleform.daapi.view.battle.shared import indicators
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
-from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import MARKER_SYMBOL_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION
 import CombatSelectedArea
 from gui.battle_control import minimap_utils
@@ -111,19 +111,15 @@ class World2DMarkerComponent(_IMarkerComponentBase):
 
     def __init__(self, idx, data):
         super(World2DMarkerComponent, self).__init__(data)
-        self._marker2DData = data.get(self.maskType)[idx]
+        self.__marker2DData = data.get(self.maskType)[idx]
         self._gui = lambda : None
         self._isMarkerExists = False
-        self._displayDistance = self._marker2DData.get('displayDistance', True)
-        self._distance = self._marker2DData.get('distance', 0)
+        self.__displayDistance = self.__marker2DData.get('displayDistance', True)
+        self.__distance = self.__marker2DData.get('distance', 0)
 
     @property
     def maskType(self):
         return ComponentBitMask.MARKER_2D
-
-    @property
-    def _symbol(self):
-        return MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER
 
     def attachGUI(self, guiProvider):
         self._gui = weakref.ref(guiProvider.getMarkers2DPlugin())
@@ -154,7 +150,7 @@ class World2DMarkerComponent(_IMarkerComponentBase):
     def update(self, distance, *args, **kwargs):
         self.__distance = distance
         gui = self._gui()
-        if not self._displayDistance:
+        if not self.__displayDistance:
             distance = -1
         if self._isVisible and self._isMarkerExists and gui:
             gui.markerSetDistance(self._componentID, distance)
@@ -178,23 +174,21 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         self._isVisible = False
 
     def __createMarkerAndSetup(self, gui, objectID):
-        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible, symbol=self._symbol):
+        symbol = self.__marker2DData.get('symbol', settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER)
+        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible, symbol=symbol):
             return False
-        self._setupMarker(gui)
+        gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('metersString', backport.text(R.strings.ingame_gui.marker.meters())), self.__marker2DData.get('distanceFieldColor', 'yellow'))
         return True
-
-    def _setupMarker(self, gui):
-        gui.setupMarker(self._componentID, self._marker2DData.get('shape', 'arrow'), self._marker2DData.get('min-distance', 0), self._marker2DData.get('max-distance', 0), self._distance, self._marker2DData.get('metersString', backport.text(R.strings.ingame_gui.marker.meters())), self._marker2DData.get('distanceFieldColor', 'yellow'))
 
 
 class MinimapMarkerComponent(_IMarkerComponentBase):
 
     def __init__(self, idx, data):
         super(MinimapMarkerComponent, self).__init__(data)
-        self._minimapData = data.get(self.maskType)[idx]
+        self.__minimapData = data.get(self.maskType)[idx]
         self._gui = lambda : None
         self._isMarkerExists = False
-        self._onlyTranslation = self._minimapData.get('onlyTranslation', False)
+        self._onlyTranslation = self.__minimapData.get('onlyTranslation', False)
         self._translationOnlyMP = Math.WGTranslationOnlyMP()
         self._translationOnlyMP.source = self._matrixProduct.a
 
@@ -232,9 +226,7 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         gui = self._gui()
         if gui and not self._isMarkerExists:
             matrix = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
-            self._isMarkerExists = gui.createMarker(self._componentID, self._minimapData.get('symbol', ''), self._minimapData.get('container', ''), matrix=matrix, active=self._isVisible)
-            if self._isMarkerExists:
-                self._setupMarker(gui)
+            self._isMarkerExists = gui.createMarker(self._componentID, self.__minimapData.get('symbol', ''), self.__minimapData.get('container', ''), matrix=matrix, active=self._isVisible)
 
     def _deleteMarker(self):
         gui = self._gui()
@@ -255,9 +247,6 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         if gui and self._isMarkerExists:
             mtx = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
             gui.setMatrix(self._componentID, mtx)
-
-    def _setupMarker(self, gui):
-        pass
 
 
 class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
@@ -469,7 +458,7 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
 
     @property
     def isVisible(self):
-        return self._entity.entityPolygonalTrigger.isActive and self._entity.clientVisualComp.isVisible if hasattr(self._entity, 'entityPolygonalTrigger') and hasattr(self._entity, 'clientVisualComp') else True
+        return self._entity.entityPolygonalTrigger.isActive and self._entity.clientVisualComp.isVisible
 
     def getPolygon(self):
         udo = BigWorld.userDataObjects.get(self._entity.clientVisualComp.udoGuid, None)
@@ -530,7 +519,7 @@ class StaticDeathZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent)
 
     @property
     def isVisible(self):
-        return self._entity.isActive if hasattr(self._entity, 'isActive') else True
+        return self._entity.isActive
 
     def getPolygon(self):
         p = self._entity.position

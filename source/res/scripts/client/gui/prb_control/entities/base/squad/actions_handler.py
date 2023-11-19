@@ -103,10 +103,10 @@ class SquadActionsHandler(AbstractActionsHandler):
                 result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNotReadyPlayer))
             if not result:
                 raise AsyncReturn(result)
-            if self._checkVehicleAmmo():
-                result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
-            raise AsyncReturn(result)
-        elif not fullData.playerInfo.isReady and self._checkVehicleAmmo():
+            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            if not result:
+                raise AsyncReturn(result)
+        elif not fullData.playerInfo.isReady:
             result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
             if not result:
                 raise AsyncReturn(result)
@@ -147,9 +147,6 @@ class SquadActionsHandler(AbstractActionsHandler):
             SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite', type=SystemMessages.SM_TYPE.Information)
 
         return
-
-    def _checkVehicleAmmo(self):
-        return True
 
     def _onKickedFromQueue(self, _):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

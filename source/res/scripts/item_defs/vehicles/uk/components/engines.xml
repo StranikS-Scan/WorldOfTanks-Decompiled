@@ -95,6 +95,7 @@
     <GMC_302_x2>	118	</GMC_302_x2>
     <Daimler_DQ450>	119	</Daimler_DQ450>
     <Rolls_Royce_B80P>	120	</Rolls_Royce_B80P>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>	31001	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -1263,7 +1264,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
-      <power>	580	</power>
+      <power>	680	</power>
       <weight>	700	</weight>
       <maxHealth>	320	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1339,6 +1340,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2161	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1040	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2161	</rpm_max>
+    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <Ford_V8-220>
       <userString>	#gb_vehicles:Ford_V8-220	</userString>
       <tags>	gasoline	</tags>

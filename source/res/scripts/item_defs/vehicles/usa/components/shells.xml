@@ -109,6 +109,59 @@
       </damage>
     </armorSpalls>
   </_37mm_HE_M63>
+  <_37mm_AP_M74_E2>
+    <id>	198	</id>
+    <userString>	#usa_vehicles:_37mm_AP_M74_E2	</userString>
+    <icon>	ap	</icon>
+    <price>	18	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	50	</devices>
+    </damage>
+  </_37mm_AP_M74_E2>
+  <_37mm_APC_M51_E2>
+    <id>	199	</id>
+    <userString>	#usa_vehicles:_37mm_APC_M51_E2	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	50	</devices>
+    </damage>
+  </_37mm_APC_M51_E2>
+  <_37mm_HE_M63_E2>
+    <id>	200	</id>
+    <userString>	#usa_vehicles:_37mm_HE_M63_E2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	40	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_HE_M63_E2>
   <_37mm_AP1937>
     <id>	6	</id>
     <userString>	#usa_vehicles:_37mm_AP1937	</userString>

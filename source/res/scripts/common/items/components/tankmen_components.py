@@ -35,8 +35,8 @@ class SPECIAL_VOICE_TAG(object):
     G_I_JOE_2022 = ('baroness22SpecialVoice', 'coverGirl22SpecialVoice')
     BPH_2022 = ('commander_bph_2022_1', 'commander_bph_2022_2', 'commander_bph_2022_3', 'commander_bph_2022_4')
     BPH_MT_2022 = ('IvanCarevichSpecialVoice', 'VasilisaSpecialVoice', 'KashcheiSpecialVoice', 'BabaYagaSpecialVoice')
-    MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
     HW_2023 = ('IvanCarevichHWSpecialVoice', 'VasilisaHWSpecialVoice', 'KashcheiHWSpecialVoice', 'BabaYagaHWSpecialVoice', 'KatrinaHWSpecialVoice')
+    MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,

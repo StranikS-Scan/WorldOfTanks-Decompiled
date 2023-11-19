@@ -52,9 +52,5 @@
       <pattern>	.*/server_xml/personal_reserves_config\.xml$	</pattern>
       <type>	merge	</type>
     </rule>
-    <rule>
-      <pattern>	gui/battle_hints\.xml$	</pattern>
-      <type>	include	</type>
-    </rule>
   </xml_whitelist>
 </extension_rules.xml>

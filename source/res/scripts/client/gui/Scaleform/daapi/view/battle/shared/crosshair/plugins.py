@@ -485,9 +485,6 @@ class AmmoPlugin(CrosshairPlugin):
             BigWorld.cancelCallback(self.__autoReloadCallbackID)
         super(AmmoPlugin, self).fini()
 
-    def _setAmmoStock(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, clipState, clipReloaded)
-
     def __setup(self, ctrl, isReplayPlaying=False):
         self.__shellsInClip = ctrl.getCurrentShells()[1]
         if isReplayPlaying:

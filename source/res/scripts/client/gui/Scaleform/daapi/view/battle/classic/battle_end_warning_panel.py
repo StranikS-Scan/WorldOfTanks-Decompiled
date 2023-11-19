@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/battle_end_warning_panel.py
 import WWISE
-import Event
 from gui.Scaleform.daapi.view.meta.BattleEndWarningPanelMeta import BattleEndWarningPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
@@ -19,8 +18,6 @@ _CALLBACK_NAME = 'battle.onLoadEndWarningPanel'
 
 class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    onBattleEndWarningShow = Event.Event()
-    onBattleEndWarningHide = Event.Event()
 
     def __init__(self):
         super(BattleEndWarningPanel, self).__init__()
@@ -48,11 +45,9 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))
             self.as_setStateS(True)
             self.__isShown = True
-            BattleEndWarningPanel.onBattleEndWarningShow()
         if (totalTime <= self.__appearTime - self.__duration or totalTime > self.__appearTime) and self.__isShown:
             self.as_setStateS(False)
             self.__isShown = False
-            BattleEndWarningPanel.onBattleEndWarningHide()
 
     def _callWWISE(self, wwiseEventName):
         WWISE.WW_eventGlobal(wwiseEventName)

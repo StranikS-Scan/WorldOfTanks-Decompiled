@@ -7,6 +7,7 @@ import typing
 import BigWorld
 import motivation_quests
 import customization_quests
+import static_quests
 import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
@@ -334,13 +335,13 @@ class EventsCache(IEventsCache):
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
-    def getHiddenQuests(self, filterFunc=None, noSkip=False):
+    def getHiddenQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
         def hiddenFilterFunc(q):
             return q.isHidden() and filterFunc(q)
 
-        return self._getQuests(hiddenFilterFunc, noSkip=noSkip)
+        return self._getQuests(hiddenFilterFunc)
 
     def getRankedQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -350,8 +351,8 @@ class EventsCache(IEventsCache):
 
         return self._getQuests(rankedFilterFunc)
 
-    def getAllQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
-        return self._getQuests(filterFunc, includePersonalMissions, noSkip)
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
+        return self._getQuests(filterFunc, includePersonalMissions)
 
     def getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -541,7 +542,7 @@ class EventsCache(IEventsCache):
             alias = first((m.getAlias() for m in action.getModifiers()))
         return (alias, counterValue)
 
-    def _getQuests(self, filterFunc=None, includePersonalMissions=False, noSkip=False):
+    def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -551,8 +552,7 @@ class EventsCache(IEventsCache):
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
-            noSkipResult = noSkip and q.noSkip()
-            if q.getFinishTimeLeft() <= 0 and not noSkipResult:
+            if q.getFinishTimeLeft() <= 0:
                 continue
             if not filterFunc(q):
                 continue
@@ -815,14 +815,17 @@ class EventsCache(IEventsCache):
             return self._makeQuest(questID, questData[questID])
         elif questID in motivation_quests.g_cache:
             return self._makeQuest(questID, motivation_quests.g_cache.getQuestByID(questID).questData, maker=_motiveQuestMaker)
+        elif questID in customization_quests.g_cust_cache:
+            return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData)
         else:
-            return self._makeQuest(questID, customization_quests.g_cust_cache[questID].questClientData) if questID in customization_quests.g_cust_cache else None
+            return self._makeQuest(questID, static_quests.g_static_quest_cache[questID]) if questID in static_quests.g_static_quest_cache else None
 
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
         questsData.update(self.__getPersonalQuestsData())
         questsData.update(self.__getPersonalMissionsHiddenQuests())
         questsData.update(self.__getDailyQuestsData())
+        questsData.update(static_quests.g_static_quest_cache)
         for qID, qData in questsData.iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
@@ -861,7 +864,7 @@ class EventsCache(IEventsCache):
     def __getPersonalMissionsHiddenQuests(self):
         if not self.__personalMissionsHidden:
             xmlPath = PERSONAL_MISSIONS_XML_PATH + '/tiles.xml'
-            for quest in readQuestsFromFile(xmlPath, EVENT_TYPE.TOKEN_QUEST):
+            for quest in readQuestsFromFile(xmlPath, (EVENT_TYPE.TOKEN_QUEST,)):
                 self.__personalMissionsHidden[quest[0]] = quest[3]
 
         return self.__personalMissionsHidden.copy()

@@ -199,7 +199,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_CREW_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
         modulesAll = self.itemsCache.items.getVehicles(criteria).values()
         modulesAll.sort()

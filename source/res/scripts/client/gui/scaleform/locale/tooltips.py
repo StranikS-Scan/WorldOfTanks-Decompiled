@@ -1452,9 +1452,6 @@ class TOOLTIPS(object):
     VEHICLESELLDIALOG_RENDERER_ALERTICONSELL_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconSell/body'
     VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCT_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct/header'
     VEHICLESELLDIALOG_RENDERER_ALERTICONDECONSTRUCT_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct/body'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONEQUIPCOIN_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIconEquipCoin/header'
-    VEHICLESELLDIALOG_RENDERER_ALERTICONEQUIPCOIN_BODY = '#tooltips:vehicleSellDialog/renderer/alertIconEquipCoin/body'
-    VEHICLESELLDIALOG_RENDERER_SBSCR_DELUXE_NONSUB_DEMOUNTNOTENABLED_HEADER = '#tooltips:vehicleSellDialog/renderer/sbscr/Deluxe/nonsub/demountNotEnabled/header'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_CONTROLNUMBERVALID_HEADER = '#tooltips:vehicleSellDialog/acceptButtonTooltip/controlNumberValid/header'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_CONTROLNUMBERVALID_BODY = '#tooltips:vehicleSellDialog/acceptButtonTooltip/controlNumberValid/body'
     VEHICLESELLDIALOG_ACCEPTBUTTONTOOLTIP_NOTENABLE_HEADER = '#tooltips:vehicleSellDialog/acceptButtonTooltip/notEnable/header'
@@ -1720,7 +1717,6 @@ class TOOLTIPS(object):
     CONTACT_STATUS_INBATTLE_HISTORICAL = '#tooltips:Contact/status/inBattle/historical'
     CONTACT_STATUS_INBATTLE_FORTIFICATIONS = '#tooltips:Contact/status/inBattle/fortifications'
     CONTACT_STATUS_INBATTLE_SPECIAL = '#tooltips:Contact/status/inBattle/special'
-    CONTACT_STATUS_INBATTLE_EVENT = '#tooltips:Contact/status/inBattle/event'
     CONTACT_STATUS_ONLINE = '#tooltips:Contact/status/online'
     CONTACT_STATUS_OFFLINE = '#tooltips:Contact/status/offline'
     CONTACT_RESOURCE_WOWP = '#tooltips:Contact/resource/wowp'
@@ -3787,8 +3783,7 @@ class TOOLTIPS(object):
      CONTACT_STATUS_INBATTLE_RANKED,
      CONTACT_STATUS_INBATTLE_HISTORICAL,
      CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
-     CONTACT_STATUS_INBATTLE_SPECIAL,
-     CONTACT_STATUS_INBATTLE_EVENT)
+     CONTACT_STATUS_INBATTLE_SPECIAL)
     TANK_PARAMS_DESC_ENUM = (TANK_PARAMS_DESC_MAXHEALTH,
      TANK_PARAMS_DESC_VEHICLEWEIGHT,
      TANK_PARAMS_DESC_ENGINEPOWER,

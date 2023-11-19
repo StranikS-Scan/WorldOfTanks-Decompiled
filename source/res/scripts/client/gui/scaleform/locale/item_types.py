@@ -53,7 +53,6 @@ class ITEM_TYPES(object):
     EQUIPMENT_TAGS = '#item_types:equipment/tags'
     BATTLEBOOSTER_NAME = '#item_types:battleBooster/name'
     BATTLEABILITY_NAME = '#item_types:battleAbility/name'
-    HWEQUIPMENT_NAME = '#item_types:hwequipment/name'
     TANKMAN_SKILLS_MAIN = '#item_types:tankman/skills/main'
     TANKMAN_ROLES_COMMANDER = '#item_types:tankman/roles/commander'
     TANKMAN_ROLES_DRIVER = '#item_types:tankman/roles/driver'

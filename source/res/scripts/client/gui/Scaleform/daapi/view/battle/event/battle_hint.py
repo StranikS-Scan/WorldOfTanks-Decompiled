@@ -9,4 +9,5 @@ class BattleHint(BattleHintComponent, BattleHintMeta):
         self.as_showHintS(data)
 
     def _hideHint(self):
-        self.as_hideHintS()
+        if self.currentHint:
+            self.as_hideHintS()

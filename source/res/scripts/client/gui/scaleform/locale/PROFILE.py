@@ -630,8 +630,10 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE_BODY = '#profile:profile/params/tooltip/brAvgDamage/body'
     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN = '#profile:profile/dropdown/labels/comp7_archive_Griffin'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1 = '#profile:profile/dropdown/labels/comp7_season_1'
+    PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2 = '#profile:profile/dropdown/labels/comp7_season_2'
     SECTION_STATISTICS_HEADERTEXT_COMP7_ARCHIVE_GRIFFIN = '#profile:section/statistics/headerText/comp7_archive_Griffin'
     SECTION_STATISTICS_HEADERTEXT_COMP7_SEASON_1 = '#profile:section/statistics/headerText/comp7_season_1'
+    SECTION_STATISTICS_HEADERTEXT_COMP7_SEASON_2 = '#profile:section/statistics/headerText/comp7_season_2'
     SECTION_STATISTICS_SCORES_AVGPRESTIGEPOINTS = '#profile:section/statistics/scores/avgPrestigePoints'
     SECTION_STATISTICS_DETAILED_AVGPRESTIGEPOINTS = '#profile:section/statistics/detailed/avgPrestigePoints'
     PROFILE_PARAMS_TOOLTIP_AVGPRESTIGEPOINTS_HEADER = '#profile:profile/params/tooltip/avgPrestigePoints/header'
@@ -700,7 +702,8 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD,
      PROFILE_DROPDOWN_LABELS_VERSUSAI,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN,
-     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1)
+     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1,
+     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2)
     PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ARCHIVE,
      PROFILE_RANKED_SEASONSDROPDOWN_1,
      PROFILE_RANKED_SEASONSDROPDOWN_2,

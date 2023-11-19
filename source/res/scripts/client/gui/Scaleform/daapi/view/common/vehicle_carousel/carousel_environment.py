@@ -106,7 +106,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def onPrbEntitySwitched(self):
         self.updateAviability()
-        self.updateVehicles()
 
     def onEnqueued(self, queueType, *args):
         self.updateAviability()

@@ -247,5 +247,3 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))
-    registerMessengerServerFormatter(_SM_TYPE.hwDailyQuest.index(), _sc.HWDailyQuestFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.prbVehicleBadTypeKick.index(), _sc.PrbVehicleBadTypeKickFormatter())

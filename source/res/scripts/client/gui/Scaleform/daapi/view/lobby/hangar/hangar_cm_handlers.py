@@ -260,7 +260,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if vehicle.isFavorite:
                     options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
                 else:
-                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
+                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
             return options
 
     def _manageVehCompareOptions(self, options, vehicle):

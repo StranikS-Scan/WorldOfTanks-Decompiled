@@ -65,7 +65,3 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     COMP7_POINT_RECON = 'pointRecon'
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'
-    HW_VEHICLE_FROZEN_ARROW = 'hwVehicleFrozenArrow'
-    HW_VEHICLE_HEALING_ARROW = 'hwVehicleHealingArrow'
-    HW_VEHICLE_LAUGH_ARROW = 'hwVehicleLaughArrow'
-    HW_VEHICLE_FROZEN_MANTLE = 'hwVehicleFrozenMantle'

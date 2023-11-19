@@ -14,7 +14,6 @@ from gui.shared.events import AmmunitionPanelViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHalloweenController
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = (OnceOnlyHints.AMMUNITION_PANEL_HINT, OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT)
 _HINT_TO_RULE_ID = {OnceOnlyHints.AMMUNITION_PANEL_HINT: LuiRules.AP_ZONE_HINT,
@@ -23,7 +22,6 @@ _HINT_TO_RULE_ID = {OnceOnlyHints.AMMUNITION_PANEL_HINT: LuiRules.AP_ZONE_HINT,
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _limitedUIController = dependency.descriptor(ILimitedUIController)
-    _hwController = dependency.descriptor(IHalloweenController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -59,10 +57,7 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @wg_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        isEventHangar = self._hwController.isEventHangar()
         yield showIntro(selectedSection, self.getParentWindow())
-        if isEventHangar and not self._hwController.isEnabled():
-            return
         if self.viewStatus != ViewStatus.LOADED:
             return
         super(HangarAmmunitionPanelView, self)._onPanelSectionSelected(args)

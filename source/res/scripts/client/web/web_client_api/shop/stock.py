@@ -90,8 +90,7 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
  ShopItemType.EQUIPMENT: {'inventory': REQ_CRITERIA.INVENTORY,
                           'secret': REQ_CRITERIA.SECRET,
                           'hidden': REQ_CRITERIA.HIDDEN,
-                          'builtin': REQ_CRITERIA.EQUIPMENT.BUILTIN,
-                          'halloween_equipment': REQ_CRITERIA.VEHICLE.HAS_TAGS(['halloween_equipment'])},
+                          'builtin': REQ_CRITERIA.EQUIPMENT.BUILTIN},
  ShopItemType.DEVICE: {'inventory': REQ_CRITERIA.INVENTORY,
                        'secret': REQ_CRITERIA.SECRET,
                        'hidden': REQ_CRITERIA.HIDDEN},
@@ -207,8 +206,6 @@ class ItemsWebApiMixin(object):
 
     @w2c(_GetItemsSchema, 'get_items')
     def getItems(self, cmd):
-        if cmd.type == 'equipment' and cmd.criteria:
-            cmd.criteria.append('!halloween_equipment')
         criteria = _parseCriteriaSpec(cmd.type, cmd.criteria, cmd.id_list)
         allowedFields = set(cmd.fields) if cmd.fields else None
         return [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]

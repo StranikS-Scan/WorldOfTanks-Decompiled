@@ -193,6 +193,16 @@
       <touchdownEffect>	tree_Birch_Bold_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_bush_large_01.srt	</filename>
+      <health>	5	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Birch_Dry_2m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Birch_Dry_2m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_17m.srt	</filename>
       <health>	40	</health>
       <density>	0.25	</density>
@@ -441,6 +451,16 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_Apple_8m_Classic_fall	</fractureEffect>
       <touchdownEffect>	tree_Apple_8m_Classic_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Apple_Frost/Apple_Frost_8m_Classic_Dry.srt	</filename>
+      <health>	15	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_deadtree_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Apple/Apple_8m_Classic_Dry.srt	</filename>
@@ -806,6 +826,16 @@
       <filename>	vegetation/Broadleaves/DryTree_Frost/DryTree_Frost_Bush_var1.srt	</filename>
       <health>	3	</health>
       <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_bush_dry_fall	</fractureEffect>
+      <touchdownEffect>	inf_tree_bush_dry_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Shrubs/Swamp_Reed_Frost/Swamp_Reed_Frost_Bush.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
@@ -1274,6 +1304,16 @@
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Oak_dry_moss/Oak_dry_moss_20m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_oak_dry_fall_med	</fractureEffect>
+      <touchdownEffect>	inf_tree_oak_dry_touchdown_med	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Oak_Dry_Frost/Oak_Dry_Frost_20m.srt	</filename>
       <health>	30	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3053,6 +3093,26 @@
       <touchdownEffect>	inf_tree_scots_pine_touchdown_big	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_hv3_0.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_hv3_3.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_22m.srt	</filename>
       <health>	60	</health>
       <density>	0.5	</density>
@@ -3083,6 +3143,26 @@
       <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost_Branch/Scots_Pine_Frost_Branch_22m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost_Branch/Scots_Pine_Frost_Branch_Bend.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Pine_Young/Pine_Young_4m.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
@@ -3104,6 +3184,16 @@
     </entry>
     <entry>
       <filename>	vegetation/Conifers/Pine_Young/Pine_Young_almoust_2m_Brr.srt	</filename>
+      <health>	10	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_pine_young_fall_small	</fractureEffect>
+      <touchdownEffect>	tree_pine_young_touchdown_small	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Pine_Young_Frost/Pine_Young_Frost_3m.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3273,6 +3363,16 @@
       <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_24m_Rare.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_33m_Ragged.srt	</filename>
       <health>	30	</health>
       <density>	0.5	</density>
@@ -3285,6 +3385,56 @@
     <entry>
       <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_33m_Ragged_Top.srt	</filename>
       <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_8m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_Dry_Bottom_10m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_24m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_33m.srt	</filename>
+      <health>	90	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_top_33m.srt	</filename>
+      <health>	90	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
@@ -3973,6 +4123,36 @@
       <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_24m.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_33m_Ragged.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_8m.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Scaevola_Taccada/Scaevola_Taccada_3.5m.srt	</filename>
       <health>	3	</health>
       <density>	0.5	</density>
@@ -4110,6 +4290,15 @@
       <touchdownEffect>	none	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/DryTree_Frost/DryTree_Frost_01.srt	</filename>
+      <health>	40	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	tree_Birch_Dry_Frost_17m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Birch_Dry_Frost_17m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/DryTree_Frost_Light/DryTree_Frost_Light_01.srt	</filename>
       <health>	40	</health>
       <density>	0.25	</density>
@@ -4156,36 +4345,6 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	inf_deadtree_fall	</fractureEffect>
       <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/Hogweed/Hogweed.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/Hogweed/HogweedBig.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Misc/Hogweed/HogweedMini.srt	</filename>
-      <health>	3	</health>
-      <density>	0.5	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	none	</fractureEffect>
-      <touchdownEffect>	none	</touchdownEffect>
     </entry>
   </trees>
   <fallingAtoms>
@@ -5099,6 +5258,16 @@
       <lifetimeEffect>	none	</lifetimeEffect>
       <fractureEffect>	inf_envJA_011_SmallPoleFracture	</fractureEffect>
       <touchdownEffect>	hd_env_101_RoadPoles_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0002_PoleGarland/normal/lod0/hd_env_UNI_0002_PoleGarland.model	</filename>
+      <health>	1	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	inf_env414_pole_fall_ny_fracture	</fractureEffect>
+      <touchdownEffect>	inf_env414_Pole_Touchdown	</touchdownEffect>
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
     </entry>
@@ -17817,226 +17986,6 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
-      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_01.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
-      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_02.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
-      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_03.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
-      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_04.model	</filename>
-      <health>	10	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_668_PumpkinHalloween_big	</effect>
-      <hitEffect>	hd_env_UNI_668_PumpkinHalloween_big	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_UNI_668_PumpkinHalloween/normal/lod0/hd_env_UNI_668_PumpkinHalloween_05.model	</filename>
-      <health>	10	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_668_PumpkinHalloween	</effect>
-      <hitEffect>	hd_env_UNI_668_PumpkinHalloween	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_01.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_01	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_01	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_02	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_02	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_2.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_02_2	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_02_2	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_3.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_02_3	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_02_3	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_03.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_03	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_03	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_04.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_04	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_04	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_05.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_05	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_05	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_01.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_01	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_01	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02_2.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_02_2	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02_2	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02_3.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_02_3	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02_3	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_03.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_3	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_3	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_04.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_04	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_04	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_05.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_05	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_05	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_AM_036_Scarecrow/normal/lod0/hd_env_AM_036_Scarecrow_101.model	</filename>
-      <health>	10	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_AM_036_Scarecrow	</effect>
-      <hitEffect>	hd_env_AM_036_Scarecrow	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_wood0_1_2_3	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Environment/hd_env_HW_036_Scarecrow_1/normal/lod0/hd_env_HW_036_Scarecrow_1.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_036_Scarecrow_1	</effect>
-      <hitEffect>	hd_env_HW_036_Scarecrow_1	</hitEffect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1.000000	</effectScale>
-      <matName>	n_wood0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
       <filename>	content/Environment/hd_env_AS_039_OysterFarm/normal/lod0/hd_env_AS_039_OysterFarm_08.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
@@ -18991,25 +18940,102 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Mushroom_02_4.model	</filename>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_0001_FenceLamp/normal/lod0/hd_gaf_UNI_0001_FenceLamp.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Mushroom_02	</effect>
-      <hitEffect>	hd_env_HW_02_Mushroom_02	</hitEffect>
+      <effect>	inf_gaf011_fencetile_ny	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	none	</hitEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0004_IceCubeGlow/normal/lod0/hd_env_UNI_0004_IceCubeGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_balldestr_ny	</effect>
+      <hitEffect>	inf_env_balldestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal1	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
-      <filename>	content/Hangars/hangar_v3_hw_22/Environment/hd_env_HW_02_Glowing_Mushrooms/normal/lod0/hd_env_HW_02_Glowing_Mushroom_02.model	</filename>
+      <filename>	content/Environment/hd_env_UNI_0005_DeerGlow/normal/lod0/hd_env_UNI_0005_DeerGlow.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_HW_02_Glowing_Mushroom_02	</effect>
-      <hitEffect>	hd_env_HW_02_Glowing_Mushroom_02	</hitEffect>
+      <effect>	inf_env_deerdestr_ny	</effect>
+      <hitEffect>	inf_env_deerdestr_ny	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
-      <matName>	n_stone0_1_2	</matName>
+      <matName>	n_metal0_1	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0006_SledGlow/normal/lod0/hd_env_UNI_0006_SledGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_deerdestr_ny	</effect>
+      <hitEffect>	inf_env_deerdestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0_1	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0010_BallGlow/normal/lod0/hd_env_UNI_0010_BallGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_balldestr_ny	</effect>
+      <hitEffect>	inf_env_balldestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0011_BallGlow/normal/lod0/hd_env_UNI_0011_BallGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_balldestr_ny	</effect>
+      <hitEffect>	inf_env_balldestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0012_SnowmanGlow/normal/lod0/hd_env_UNI_0012_SnowmanGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_deerdestr_ny	</effect>
+      <hitEffect>	inf_env_deerdestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0013_SnowmanGlow/normal/lod0/hd_env_UNI_0013_SnowmanGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_deerdestr_ny	</effect>
+      <hitEffect>	inf_env_deerdestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_0003_IceCubeGlow/normal/lod0/hd_env_UNI_0003_IceCubeGlow.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_balldestr_ny	</effect>
+      <hitEffect>	inf_env_balldestr_ny	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal1	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
   </fragiles>
@@ -25083,6 +25109,518 @@
           <ramEffect>	inf_rw005_locomotive_2	</ramEffect>
           <hitEffect>	inf_rw005_locomotive_2_hit	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_EU_0001_VHouseGarland/normal/lod0/hd_bld_EU_0001_VHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	hd_bld_EU_236_VHouse	</ramEffect>
+          <hitEffect>	hd_bld_EU_236_VHouse_hit	</hitEffect>
+          <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	hd_bld_EU_236_VHouse_01_ram	</ramEffect>
+          <hitEffect>	hd_bld_EU_236_VHouse_01_hit	</hitEffect>
+          <effectHP>	HP_module2	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	hd_bld_EU_236_VHouse_02_ram	</ramEffect>
+          <hitEffect>	hd_bld_EU_236_VHouse_02_hit	</hitEffect>
+          <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	hd_bld_EU_236_VHouse_03_ram	</ramEffect>
+          <hitEffect>	hd_bld_EU_236_VHouse_03_hit	</hitEffect>
+          <effectHP>	HP_module4	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood8_5	</matName>
+          <health>	1	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_EU_0002_FisherHouseGarland/normal/lod0/hd_bld_EU_0002_FisherHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_04_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_04_hit	</hitEffect>
+          <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_05_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_05_hit	</hitEffect>
+          <effectHP>	HP_module2	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_06_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_06_hit	</hitEffect>
+          <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_07_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_07_hit	</hitEffect>
+          <effectHP>	HP_module4	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood4_5	</matName>
+          <health>	10	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_07_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_07_hit	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood4_6	</matName>
+          <health>	10	</health>
+          <decayEffect>	inf_building_fire	</decayEffect>
+          <ramEffect>	inf_bldNW_001_Fisherhouse_07_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_001_Fisherhouse_07_hit	</hitEffect>
+          <effectHP>	HP_module6	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood5_7	</matName>
+          <health>	1	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
+          <effectHP>	HP_module0	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_EU_0003_FisherHouseGarland/normal/lod0/hd_bld_EU_0003_FisherHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood11_7	</matName>
+          <health>	1	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
+          <effectHP>	HP_module7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_1_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_hit	</hitEffect>
+          <effectHP>	HP_module1_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_2_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse_01_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_01_hit	</hitEffect>
+          <effectHP>	HP_module2_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_3_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse_02_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_02_hit	</hitEffect>
+          <effectHP>	HP_module3_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_4_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse_03_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_03_hit	</hitEffect>
+          <effectHP>	HP_module4_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_5_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse_04_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_04_hit	</hitEffect>
+          <effectHP>	HP_module5_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_6_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bldNW_002_Fisherhouse_05_ram	</ramEffect>
+          <hitEffect>	inf_bldNW_002_Fisherhouse_05_hit	</hitEffect>
+          <effectHP>	HP_module6_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_SU_0050_VHouseGarland/normal/lod0/hd_bld_SU_0050_VHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_03_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_03_hit	</hitEffect>
+          <effectHP>	HP_module1_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_04_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_04_hit	</hitEffect>
+          <effectHP>	HP_module2_8	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3_9	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_05_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_05_hit	</hitEffect>
+          <effectHP>	HP_module3_9	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4_10	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_06_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_06_hit	</hitEffect>
+          <effectHP>	HP_module4_10	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_5_11	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_07_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_07_hit	</hitEffect>
+          <effectHP>	HP_module5_11	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_6_12	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_08_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_08_hit	</hitEffect>
+          <effectHP>	HP_module6_12	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_10	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_05_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_05_hit	</hitEffect>
+          <effectHP>	HP_module10	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_11	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_06_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_06_hit	</hitEffect>
+          <effectHP>	HP_module11	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_12	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_07_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_07_hit	</hitEffect>
+          <effectHP>	HP_module12	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_08_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_08_hit	</hitEffect>
+          <effectHP>	HP_module7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_09_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_09_hit	</hitEffect>
+          <effectHP>	HP_module8	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_9	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld205_bathhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_10_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_10_hit	</hitEffect>
+          <effectHP>	HP_module9	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood6_13	</matName>
+          <health>	1	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
+          <effectHP>	HP_module13	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_SU_0051_VHouseGarland/normal/lod0/hd_bld_SU_0051_VHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1_5	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_roof_01_07_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_roof_01_07_hit	</hitEffect>
+          <effectHP>	HP_module1_5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2_6	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_wall_01_07_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_wall_01_07_hit	</hitEffect>
+          <effectHP>	HP_module2_6	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_wall_01_08_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_wall_01_08_hit	</hitEffect>
+          <effectHP>	HP_module3_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_wall_01_09_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_wall_01_09_hit	</hitEffect>
+          <effectHP>	HP_module4_8	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_5	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_roof_01_07_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_roof_01_07_hit	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_6	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_roof_01_08_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_roof_01_08_hit	</hitEffect>
+          <effectHP>	HP_module6	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_roof_01_09_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_roof_01_09_hit	</hitEffect>
+          <effectHP>	HP_module7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse02_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse02_roof_01_06_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse02_roof_01_06_hit	</hitEffect>
+          <effectHP>	HP_module8	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood6_9	</matName>
+          <health>	1	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	none	</ramEffect>
+          <hitEffect>	none	</hitEffect>
+          <effectHP>	HP_module9	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_SU_0052_BathHouseGarland/normal/lod0/hd_bld_SU_0052_BathHouseGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1_3	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_01_01_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_01_01_hit	</hitEffect>
+          <effectHP>	HP_module1_3	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2_4	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_wall_02_01_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_wall_02_01_hit	</hitEffect>
+          <effectHP>	HP_module2_4	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_3	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_01_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_01_hit	</hitEffect>
+          <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_4	</matName>
+          <health>	50	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_bld205_bathhouse01_roof_01_02_ram	</ramEffect>
+          <hitEffect>	inf_bld205_bathhouse01_roof_01_02_hit	</hitEffect>
+          <effectHP>	HP_module4	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_SU_0053_ShedGarland/normal/lod0/hd_bld_SU_0053_ShedGarland.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1_5	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_wall_01_12_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_wall_01_12_hit	</hitEffect>
+          <effectHP>	HP_module1_5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2_6	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_wall_01_13_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_wall_01_13_hit	</hitEffect>
+          <effectHP>	HP_module2_6	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_wall_01_14_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_wall_01_14_hit	</hitEffect>
+          <effectHP>	HP_module3_7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_wall_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_wall_01_15_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_wall_01_15_hit	</hitEffect>
+          <effectHP>	HP_module4_8	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_5	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_roof_01_16_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_roof_01_16_hit	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_6	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_roof_01_17_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_roof_01_17_hit	</hitEffect>
+          <effectHP>	HP_module6	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_7	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_roof_01_18_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_roof_01_18_hit	</hitEffect>
+          <effectHP>	HP_module7	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood1_8	</matName>
+          <health>	50	</health>
+          <decayEffect>	inf_bld201_vhouse01_roof_01	</decayEffect>
+          <ramEffect>	inf_bld201_vhouse01_roof_01_19_ram	</ramEffect>
+          <hitEffect>	inf_bld201_vhouse01_roof_01_19_hit	</hitEffect>
+          <effectHP>	HP_module8	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
       </modules>

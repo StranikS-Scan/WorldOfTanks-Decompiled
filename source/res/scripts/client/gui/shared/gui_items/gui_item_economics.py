@@ -39,9 +39,6 @@ def cmpByCurrencyWeight(p1, p2):
 def isItemBuyPriceAvailable(item, itemPrice, shop):
     currency = itemPrice.getCurrency(byWeight=True)
     originalCurrency = item.buyPrices.itemPrice.getCurrency()
-    isEquipment = item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT
-    if isEquipment and 'halloween_equipment' in item.tags and itemPrice.price.getSignValue(currency) <= 0:
-        return False
     if currency == originalCurrency:
         return True
     if item.itemTypeID == GUI_ITEM_TYPE.SHELL:

@@ -30,7 +30,6 @@ from skeletons.gui.game_control import IBootcampController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.shared.tooltips.contexts import ModuleInfoContext
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -158,14 +157,6 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=statusTopPadding, bottom=-15)))
         if bonus_helper.isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=_DEFAULT_PADDING)))
-        isArtefacts = itemTypeID in GUI_ITEM_TYPE.ARTEFACTS
-        if isArtefacts and not isinstance(self.context, ModuleInfoContext) and 'halloween_equipment' in module.tags and 'halloween_reward_equipment' not in module.tags:
-            for itemPrice in module.buyPrices.iteritems(directOrder=False):
-                currency = itemPrice.getCurrency()
-                if itemPrice.price.getSignValue(currency) <= 0:
-                    items.append(formatters.packAlignedTextBlockData(text_styles.tutorial(backport.text(R.strings.tooltips.equipment.forFree())), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=-4)))
-                    break
-
         if statsConfig.isStaticInfoOnly:
             lastItem = items[-1]
             lastPadding = lastItem.get('padding', None)
@@ -302,10 +293,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 cooldownSeconds = module.descriptor.cooldownSeconds
                 if cooldownSeconds:
-                    if 'halloween_equipment' in module.tags:
-                        paramName = ModuleTooltipBlockConstructor.RELOAD_COOLDOWN_SECONDS
-                    else:
-                        paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
+                    paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
                     paramValue = params_formatters.formatParameter(paramName, cooldownSeconds)
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 if module.isBuiltIn:
@@ -786,8 +774,6 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
             block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(onUseStr), padding=formatters.packPadding(top=5)))
         if hasString(restrictionStr):
             block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.restriction())), desc=text_styles.main(restrictionStr), padding=formatters.packPadding(top=5)))
-        if 'halloween_reward_equipment' in module.tags:
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.howToUse())), desc=text_styles.main(backport.text(R.strings.tooltips.equipment.reward())), padding=formatters.packPadding(top=5)))
         if block:
             block[0]['padding']['top'] = -1
             block[-1]['padding']['bottom'] = -5
@@ -922,9 +908,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         if not isFit:
             reason = reason.replace(' ', '_')
             tooltipHeader, tooltipText = getComplexStatusWULF(R.strings.tooltips.moduleFits.dyn(reason))
-            if reason == 'not_with_installed_equipment' or reason == 'hw_not_with_installed_equipment':
-                if 'halloween_reward_equipment' in module.tags:
-                    tooltipHeader, tooltipText = getComplexStatusWULF(R.strings.tooltips.moduleFits.status.dyn(reason))
+            if reason == 'not_with_installed_equipment':
                 if vehicle is not None:
                     titleFormatter = text_styles.critical
                     conflictEqs = module.getConflictedEquipments(vehicle)

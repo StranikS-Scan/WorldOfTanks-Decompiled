@@ -632,24 +632,12 @@ class ProbabilityVisitor(NodeVisitor):
             availableBonusNodes = []
             sumOfAvailableProbabilities = 0
             sumOfPreviousProbabilities = 0
-            previousOwnProbability = 0.0
-            canUsePrevInsteadOfZeroProbability = False
             for index, (probabilities, bonusProbability, _, bonusValue) in enumerate(bonusNodes):
                 ownProbability = bonusProbability if useBonusProbability else probabilities[probablitiesStage]
-                if ownProbability != 0.0:
-                    ownProbability, sumOfPreviousProbabilities = ownProbability - sumOfPreviousProbabilities, ownProbability
-                if ownProbability != 0.0:
-                    canUsePrevInsteadOfZeroProbability = True
-                    previousOwnProbability = ownProbability
-                    probability = ownProbability
-                elif canUsePrevInsteadOfZeroProbability and previousOwnProbability != 0.0:
-                    probability = previousOwnProbability
-                else:
-                    continue
+                ownProbability, sumOfPreviousProbabilities = ownProbability - sumOfPreviousProbabilities, ownProbability
                 if index != selectedIdx and bonusValue.get('properties', {}).get('compensation', False) and isAcceptable(bonusValue):
-                    sumOfAvailableProbabilities += probability
-                    availableBonusNodes.append((index, probability, bonusValue))
-                    canUsePrevInsteadOfZeroProbability = False
+                    sumOfAvailableProbabilities += ownProbability
+                    availableBonusNodes.append((index, ownProbability, bonusValue))
 
             if not availableBonusNodes:
                 shouldCompensated = selectedValue.get('properties', {}).get('shouldCompensated', False)

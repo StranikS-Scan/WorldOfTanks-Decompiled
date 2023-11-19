@@ -25,7 +25,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getComp7BattlesOnlyVehicleTooltipData, getComp7FightBtnTooltipData, getEpicBattlesOnlyVehicleTooltipData, getEpicFightBtnTooltipData, getEventTooltipData, getFunRandomFightBtnTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getPreviewTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData, getSquadFightBtnTooltipData, getVersusAIFightBtnTooltipData, getHalloweenTooltipData
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getComp7BattlesOnlyVehicleTooltipData, getComp7FightBtnTooltipData, getEpicBattlesOnlyVehicleTooltipData, getEpicFightBtnTooltipData, getEventTooltipData, getFunRandomFightBtnTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getPreviewTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData, getSquadFightBtnTooltipData, getVersusAIFightBtnTooltipData
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getTabCounter
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyGoldUrl, getBuyPremiumUrl, isSubscriptionEnabled, getShopRootUrl
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl
@@ -95,8 +95,6 @@ from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.tutorial import ITutorialLoader
 from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
 from uilogging.wot_plus.loggers import WotPlusHeaderLogger
-from skeletons.gui.game_control import IHalloweenController
-from skeletons.gui.customization import ICustomizationService
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -287,7 +285,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     offersNovelty = dependency.descriptor(IOffersNovelty)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __mapsTrainingController = dependency.descriptor(IMapsTrainingController)
-    __halloweenController = dependency.descriptor(IHalloweenController)
     __eventBattlesController = dependency.descriptor(IEventBattlesController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     platoonCtrl = dependency.descriptor(IPlatoonController)
@@ -303,7 +300,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __winbackController = dependency.descriptor(IWinbackController)
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __c11nService = dependency.descriptor(ICustomizationService)
     __SELECTOR_TOOLTIP_TYPE = TOOLTIPS.HEADER_BATTLETYPE
 
     def __init__(self):
@@ -317,7 +313,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__clanIconID = None
         self.__visibility = HeaderMenuVisibilityState.ALL
         self.__menuVisibilityHelper = _LobbyHeaderVisibilityHelper()
-        self.__inHalloween = None
         self._pr20UILogger = PersonalReservesActivationScreenFlowLogger()
         self._wotPlusUILogger = WotPlusHeaderLogger()
         return
@@ -340,7 +335,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def onPrbEntitySwitched(self):
         self._updatePrebattleControls()
-        self.__updateVisibilityOnEntitySwitched()
 
     def onDequeued(self, *_):
         self._updatePrebattleControls()
@@ -658,7 +652,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.__limitedUIController.startObserve(LuiRules.PR_HANGAR_BUTTON, self.__updatePersonalReservesVisibility)
-        self.__c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
 
     def __updatePersonalReservesVisibility(self, *_):
         self._populateButtons()
@@ -736,7 +729,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self.__limitedUIController.stopObserve(LuiRules.PR_HANGAR_BUTTON, self.__updatePersonalReservesVisibility)
-        self.__c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
 
     def _addWGNPListeners(self):
         self.wgnpSteamAccCtrl.statusEvents.subscribe(StatusTypes.CONFIRMED, self.__onEmailConfirmed)
@@ -766,9 +758,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onFullScreenModeSelector(self, event):
         if event:
             self.as_setIsFullscreenBattleSelectorShowingS(event.ctx['showing'])
-
-    def __onC11nVisibilityChanged(self, inCustomisation):
-        self.__updateVisibilityOnEntitySwitched(not inCustomisation)
 
     def __updateAccountAttrs(self):
         accAttrs = self.itemsCache.items.stats.attributes
@@ -1135,10 +1124,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
         isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
-        isHalloween = self.__halloweenController.isEnabled()
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
         winbackAvailable = self.__winbackController.isModeAvailable()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable or isHalloween)
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable)
 
     def _updatePrebattleControls(self, *_):
         if self._isLobbyHeaderControlsDisabled:
@@ -1172,7 +1160,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isLegacyTraining = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
             isComp7 = state.isInPreQueue(constants.QUEUE_TYPE.COMP7) or state.isInUnit(constants.PREBATTLE_TYPE.COMP7)
             isVersusAI = state.isInPreQueue(constants.QUEUE_TYPE.VERSUS_AI) or state.isInUnit(constants.PREBATTLE_TYPE.VERSUS_AI)
-            isHalloween = state.isInPreQueue(constants.QUEUE_TYPE.HALLOWEEN_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.HALLOWEEN_BATTLES) or state.isInPreQueue(constants.QUEUE_TYPE.HALLOWEEN_BATTLES_WHEEL)
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
                 extendedSquadInfoVo = self.platoonCtrl.buildExtendedSquadInfoVo()
                 if isSquadEnabled:
@@ -1197,8 +1184,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7SQUAD
                     elif isVersusAI:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_VERSUSAISQUAD
-                    elif isHalloween:
-                        tooltip = makeTooltip(header=backport.text(R.strings.platoon.headerButton.tooltips.inHWSquad.header()), body=backport.text(R.strings.platoon.headerButton.tooltips.inHWSquad.body()))
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 else:
@@ -1216,7 +1201,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tooltipData, isSpecial = '', False
             if self.__isFightBtnDisabled and not state.hasLockedState:
                 if isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                    tooltipData = getEventTooltipData(state, canDoMsg)
+                    tooltipData = getEventTooltipData()
                 elif g_currentVehicle.isTooHeavy():
                     tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
                 elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1238,13 +1223,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 elif isMapsTraining:
                     tooltipData = getMapsTrainingTooltipData()
                 elif isRandom or isLegacyTraining:
-                    tooltipData = getRandomTooltipData(result, g_currentVehicle.isEvent)
+                    tooltipData = getRandomTooltipData(result)
                 elif isComp7:
                     tooltipData = getComp7FightBtnTooltipData(result)
                 elif isVersusAI:
                     tooltipData = getVersusAIFightBtnTooltipData(result)
-                elif isHalloween:
-                    tooltipData = getHalloweenTooltipData(state, canDoMsg)
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
                 tooltipData = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED
                 isSpecial = True
@@ -1283,9 +1266,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']
-        self.__toggleVisibilityMenu(state)
-
-    def __toggleVisibilityMenu(self, state):
         self.__menuVisibilityHelper.updateStates(state)
         activeState = self.__menuVisibilityHelper.getActiveState()
         self.as_toggleVisibilityMenuS(activeState)
@@ -1531,7 +1511,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         eventBattlesStateChanged = 'event_battles_config' in diff
         renameApiSettingsChanged = 'wgnp' in diff and any((k in diff['wgnp'] for k in ['renameApiEnabled', 'enabled']))
         isTournamentsChanged = constants.TOURNAMENT_CONFIG in diff
-        halloweenStateChanged = 'halloween_config' in diff
         updateHangarMenuData = any((strongholdSettingsChanged,
          epicRandomStateChanged,
          commandBattlesStateChanged,
@@ -1546,8 +1525,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'epic_config' in diff,
          battleRoyaleStateChanged,
          mapsTrainingStateChanged,
-         eventBattlesStateChanged,
-         halloweenStateChanged))
+         eventBattlesStateChanged))
         if bootcampStateChanged:
             self._rebootBattleSelector()
         if updateHangarMenuData:
@@ -1760,13 +1738,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_doDisableNavigationS()
         else:
             self.as_setScreenS(self.__currentScreen)
-
-    def __updateVisibilityOnEntitySwitched(self, forceUpdate=False):
-        isHalloween = self.__halloweenController.isEventPrbActive()
-        if forceUpdate and isHalloween or isHalloween != self.__inHalloween:
-            state = HeaderMenuVisibilityState.NOTHING if isHalloween else HeaderMenuVisibilityState.ALL
-            self.__toggleVisibilityMenu(state)
-        self.__inHalloween = isHalloween
 
 
 class _BoosterInfoPresenter(object):

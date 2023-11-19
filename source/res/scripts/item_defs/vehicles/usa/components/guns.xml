@@ -138,6 +138,7 @@
     <_105mm_L7A3_P>	284	</_105mm_L7A3_P>
     <_105mm_Gun_T5E1_M>	285	</_105mm_Gun_T5E1_M>
     <_120mm_Gun_T123E6_66>	286	</_120mm_Gun_T123E6_66>
+    <_37mm_Browning_Semi_Automatic_E2>	287	</_37mm_Browning_Semi_Automatic_E2>
     <_76mm_Gun_T185E_IGR>	60001	</_76mm_Gun_T185E_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
     <_120mm_Gun_T53A1_IGR>	60003	</_120mm_Gun_T53A1_IGR>
@@ -972,6 +973,64 @@
         </_37mm_HE_M63>
       </shots>
     </_37mm_Browning_Semi_Automatic>
+    <_37mm_Browning_Semi_Automatic_E2>
+      <userString>	#usa_vehicles:_37mm_Browning_Semi_Automatic_E2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	5400	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	6.85714285714286	</reloadTime>
+      <maxAmmo>	90	</maxAmmo>
+      <aimingTime>	2.05714285714286	</aimingTime>
+      <weight>	84	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.514285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_AP_M74_E2>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	730	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 58	</piercingPower>
+        </_37mm_AP_M74_E2>
+        <_37mm_APC_M51_E2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	86 74	</piercingPower>
+        </_37mm_APC_M51_E2>
+        <_37mm_HE_M63_E2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	480	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	19 19	</piercingPower>
+        </_37mm_HE_M63_E2>
+      </shots>
+    </_37mm_Browning_Semi_Automatic_E2>
     <_37mm_semiautomatic_gun_M1924A1>
       <userString>	#usa_vehicles:_37mm_semiautomatic_gun_M1924A1	</userString>
       <shortUserString>	#usa_vehicles:_37mm_semiautomatic_gun_M1924A1_short	</shortUserString>

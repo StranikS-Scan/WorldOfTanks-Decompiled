@@ -14,7 +14,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest, isFunRandomQuest
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
-from skeletons.gui.game_control import IHalloweenController
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
     from gui.server_events.event_items import Quest
@@ -127,7 +126,6 @@ class QuestsController(IQuestsController):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    _hwController = dependency.descriptor(IHalloweenController)
 
     def __init__(self):
         super(QuestsController, self).__init__()
@@ -181,11 +179,6 @@ class QuestsController(IQuestsController):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return list(self.__battleRoyaleController.getQuests().values())
-        if self._hwController.isEventPrbActive():
-            if notCompleted:
-                quests = [ q for q in self.getQuestForVehicle(vehicle) if q.shouldBeShown() and not q.isCompleted() ]
-                return quests
-            return [ q for q in self.getQuestForVehicle(vehicle) if q.shouldBeShown() ]
         if notCompleted:
             quests = [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and q.shouldBeShown() and not q.isCompleted() ]
             return quests

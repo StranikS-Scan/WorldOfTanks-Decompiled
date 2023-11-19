@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_car
 class ModeSelectorBattleRoyaleModel(ModeSelectorNormalCardModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(ModeSelectorBattleRoyaleModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def widget(self):
-        return self._getViewModel(21)
+        return self._getViewModel(20)
 
     @staticmethod
     def getWidgetType():

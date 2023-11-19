@@ -1267,7 +1267,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
             synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
-            events.onClientSynchronize(isFullSync, diff)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):

@@ -12,7 +12,7 @@ from gui.limited_ui.lui_rules_storage import LuiRules
 from helpers import dependency
 from skeletons.gui.game_control import IGuiLootBoxesController, ILimitedUIController
 from skeletons.gui.hangar import ICarouselEventEntry
-_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
+_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.VERSUS_AI)
 
 class LootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)

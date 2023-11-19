@@ -117,9 +117,7 @@ class SearchView(ViewImpl, CallbackDelayer):
         backgrounds = R.images.gui.maps.icons.platoon.dropdown_backgrounds
         background = backgrounds.squad()
         with self.viewModel.transaction() as model:
-            if queueType == QUEUE_TYPE.HALLOWEEN_BATTLES:
-                background = backgrounds.event()
-            elif queueType == QUEUE_TYPE.EVENT_BATTLES:
+            if queueType == QUEUE_TYPE.EVENT_BATTLES:
                 background = backgrounds.event()
             elif queueType == QUEUE_TYPE.EPIC:
                 background = backgrounds.epic()

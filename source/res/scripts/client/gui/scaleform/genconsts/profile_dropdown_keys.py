@@ -22,4 +22,5 @@ class PROFILE_DROPDOWN_KEYS(object):
     BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
     COMP7_ARCHIVE_GRIFFIN = 'comp7_archive_Griffin'
     COMP7_SEASON_1 = 'comp7_season_1'
+    COMP7_SEASON_2 = 'comp7_season_2'
     VERSUS_AI = 'versusAI'

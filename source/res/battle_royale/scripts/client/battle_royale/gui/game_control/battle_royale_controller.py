@@ -125,6 +125,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
                 peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(now, pID)
                 if peripheryStatus in (PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE):
                     timeLeft = peripheryTime
+                    break
 
         seasonsChangeTime = self.getClosestStateChangeTime(now)
         if seasonsChangeTime and (now + timeLeft > seasonsChangeTime or timeLeft == 0):

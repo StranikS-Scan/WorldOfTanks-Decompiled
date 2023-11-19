@@ -293,10 +293,12 @@ def packNewStyleBonusesBlock(bonusesList, endlineSymbol=''):
     return UiElement(data)
 
 
-def packVehiclesBonusBlock(label, questID):
+def packVehiclesBonusBlock(label, questID, isOneOf=False):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,
      'questID': questID}
+    if isOneOf:
+        blockData['tooltip'] = label
     return UiElement(blockData, 'label')
 
 
@@ -363,8 +365,6 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         if bonusType == ARENA_BONUS_TYPE.WINBACK:
             bonusType = getQuestsFormatterBonusType()
-        if bonusType in (ARENA_BONUS_TYPE.HALLOWEEN_BATTLES_WHEEL,):
-            bonusType = ARENA_BONUS_TYPE.HALLOWEEN_BATTLES
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

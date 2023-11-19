@@ -268,6 +268,20 @@
       <devices>	64	</devices>
     </damage>
   </_47mm_Prurazny_vz_36>
+  <_47mm_Prurazny_vz_36_M>
+    <id>	31004	</id>
+    <userString>	#czech_vehicles:_47mm_Prurazny_vz_36_M	</userString>
+    <icon>	ap	</icon>
+    <price>	30	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	64	</devices>
+    </damage>
+  </_47mm_Prurazny_vz_36_M>
   <_47mm_Prurazny_vz_40_s_wolf_jadrem>
     <id>	19	</id>
     <userString>	#czech_vehicles:_47mm_Prurazny_vz_40_s_wolf_jadrem	</userString>
@@ -283,6 +297,21 @@
       <devices>	64	</devices>
     </damage>
   </_47mm_Prurazny_vz_40_s_wolf_jadrem>
+  <_47mm_Prurazny_vz_40_s_wolf_jadrem_M>
+    <id>	31005	</id>
+    <userString>	#czech_vehicles:_47mm_Prurazny_vz_40_s_wolf_jadrem_M	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	1600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	64	</devices>
+    </damage>
+  </_47mm_Prurazny_vz_40_s_wolf_jadrem_M>
   <_47mm_Narazovy_vz_36>
     <id>	20	</id>
     <userString>	#czech_vehicles:_47mm_Narazovy_vz_36	</userString>
@@ -307,6 +336,30 @@
       </damage>
     </armorSpalls>
   </_47mm_Narazovy_vz_36>
+  <_47mm_Narazovy_vz_36_M>
+    <id>	31006	</id>
+    <userString>	#czech_vehicles:_47mm_Narazovy_vz_36_M	</userString>
+    <icon>	he_modern	</icon>
+    <price>	16	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	47	</caliber>
+    <explosionRadius>	0.47	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	75	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	40	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
+  </_47mm_Narazovy_vz_36_M>
   <_75mm_Prurazny_vz_42>
     <id>	21	</id>
     <userString>	#czech_vehicles:_75mm_Prurazny_vz_42	</userString>

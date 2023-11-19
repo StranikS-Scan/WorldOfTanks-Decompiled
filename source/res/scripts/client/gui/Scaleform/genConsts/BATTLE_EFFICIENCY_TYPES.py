@@ -54,5 +54,3 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BY_CLING_BRANDER = 'receivedByClingBrander'
     DEALT_DMG_BY_THUNDER_STRIKE = 'dealtDamageByThunderStrike'
     RECEIVED_BY_THUNDER_STRIKE = 'receivedByThunderStrike'
-    HALLOWEEN_REPAIR = 'halloweenRepair'
-    HALLOWEEN_HEALTH_RESTORE = 'halloweenHealthRestore'

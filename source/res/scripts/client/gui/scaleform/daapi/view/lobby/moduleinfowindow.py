@@ -5,7 +5,7 @@ from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.gui_items import GUI_ITEM_TYPE, checkForTags
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.crew_book import CrewBookTooltipDataBlock
 from gui.shared.tooltips.module import ModuleBlockTooltipData
@@ -55,8 +55,6 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 titleArr = [module.userType, backport.text(R.strings.item_types.shell.kinds.FLAME()), module.userName]
             else:
                 titleArr = [module.userType, module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
-        elif itemTypeID in GUI_ITEM_TYPE.ARTEFACTS and checkForTags(module.tags, 'halloween_equipment'):
-            titleArr = [backport.text(R.strings.item_types.hwequipment.name()) + ' ' + module.userName]
         else:
             titleArr = [module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
         data['windowTitle'] = ' '.join(titleArr)

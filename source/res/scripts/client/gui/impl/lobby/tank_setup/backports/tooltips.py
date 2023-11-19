@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/backports/tooltips.py
 from collections import namedtuple
-import BigWorld
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl.backport import createTooltipData
@@ -104,29 +103,6 @@ class ConsumableToolitpBuilder(HangarModuleTooltipBuilder):
         return vehicle.consumables.installed[int(slotID)]
 
 
-class HWConsumableTooltipBuilder(ConsumableToolitpBuilder):
-    TOOLTIP = '#halloween.tooltips.extend:hangar/ammo_panel/hw_equipment/empty'
-
-    @classmethod
-    def getEmptyTooltip(cls, *args):
-        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AMMUNITION_EMPTY_SLOT, specialArgs=[cls.TOOLTIP])
-
-    @classmethod
-    def getVehicle(cls, vehicle, currentSection=None):
-        hwEqCtrl = BigWorld.player().HWAccountEquipmentController
-        copyVehicle = hwEqCtrl.makeVehicleHWAdapter(super(HWConsumableTooltipBuilder, cls).getVehicle(vehicle, currentSection))
-        vehicle = hwEqCtrl.makeVehicleHWAdapter(vehicle)
-        if currentSection == TankSetupConstants.HWCONSUMABLES:
-            copyVehicle.hwConsumables.installed = vehicle.hwConsumables.layout.copy()
-        else:
-            copyVehicle.hwConsumables.installed = vehicle.hwConsumables.installed.copy()
-        return copyVehicle
-
-    @classmethod
-    def _getSlotItem(cls, vehicle, slotID):
-        return vehicle.hwConsumables.installed[int(slotID)]
-
-
 class BattleBoostersTooltipBuilder(HangarModuleTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -222,7 +198,6 @@ PANEL_SLOT_TOOLTIPS = {TankSetupConstants.BATTLE_BOOSTERS: BattleBoostersTooltip
  TankSetupConstants.BATTLE_ABILITIES: BattleAbilitiesToolitpBuilder,
  TankSetupConstants.OPT_DEVICES: OptDeviceTooltipBuilder,
  TankSetupConstants.CONSUMABLES: ConsumableToolitpBuilder,
- TankSetupConstants.HWCONSUMABLES: HWConsumableTooltipBuilder,
  TankSetupConstants.SHELLS: ShellTooltipBuilder}
 
 def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, tooltipsMap=None):

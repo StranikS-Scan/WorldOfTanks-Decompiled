@@ -995,8 +995,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2012,7 +2012,7 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9.5	</reloadTime>
+          <reloadTime>	8.4	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2142,8 +2142,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	3	</switchOnTime>
-    <switchOffTime>	3	</switchOffTime>
+    <switchOnTime>	2	</switchOnTime>
+    <switchOffTime>	2	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>
       <on>	strv_siege_mode_on_PC	</on>

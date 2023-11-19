@@ -1,0 +1,110 @@
+<13_erlenberg_fep_ny24.xml>
+  <name>	#arenas:13_erlenberg/name	</name>
+  <description>	#arenas:13_erlenberg/description	</description>
+  <geometry>	spaces/13_erlenberg_fep_ny24	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/13_erlenberg_fep_ny24/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_erlenberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_erlenberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_erlenberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_erlenberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_erlenberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_erlenberg_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_13_erlenberg_fep_ny24_wind_winter	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	100.745850 -411.833069	</position1>
+        </team1>
+        <team2>
+          <position1>	-98.510864 404.362335	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-87.502998 404.509003	</position>
+        </team1>
+        <team2>
+          <position>	76.001999 -373.688995	</position>
+          <position>	-105.752998 -373.688995	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	81.471550 440.415894	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+  </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	0	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	erlenberg_airplane	</name>
+      <trajectories>
+        <warplane>
+          <preset>	erlenberg_airplane_fly	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_airplane_explosion	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	47.65 47.65	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	35.000000 35.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	30.000000 30.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	erlenberg_attack_airplane3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	32.500000 32.500000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</13_erlenberg_fep_ny24.xml>

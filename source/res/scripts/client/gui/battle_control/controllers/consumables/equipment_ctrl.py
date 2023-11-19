@@ -1775,9 +1775,7 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('regenerationKit',): _replayTriggerItemFactory,
  ('medkit', 'repairkit'): _replayTriggerItemFactory,
  (ROLE_EQUIPMENT_TAG,): _replayComp7ItemFactory,
- (POI_EQUIPMENT_TAG,): _replayPoiItemFactory,
- ('hpRepairAndCrewHeal',): _ReplayItem,
- ('eventBuff',): _ReplayItem}
+ (POI_EQUIPMENT_TAG,): _replayPoiItemFactory}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')

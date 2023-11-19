@@ -390,7 +390,6 @@ class MENU(object):
     PREBATTLE_ALREADY_IN_AWAITING_BATTLE = '#menu:prebattle/already_in_awaiting_battle'
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
-    PREBATTLE_EVENTWHEELEDVEHICLESWARNING = '#menu:prebattle/eventWheeledVehiclesWarning'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
@@ -664,7 +663,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_STANDART = '#menu:headerButtons/battle/types/standart'
     HEADERBUTTONS_BATTLE_TYPES_STANDART_DESCR = '#menu:headerButtons/battle/types/standart/descr'
     HEADERBUTTONS_BATTLE_TYPES_STANDARTLEAVE_DESCR = '#menu:headerButtons/battle/types/standartLeave/descr'
-    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_RANKED = '#menu:headerButtons/battle/types/ranked'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_DESCR = '#menu:headerButtons/battle/types/ranked/descr'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON = '#menu:headerButtons/battle/types/ranked/availability/season'
@@ -1626,7 +1624,6 @@ class MENU(object):
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
-    CONTEXTMENU_CREATEHALLOWEENSQUAD = '#menu:contextMenu/createHalloweenSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
@@ -2335,7 +2332,6 @@ class MENU(object):
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
-     CONTEXTMENU_CREATEHALLOWEENSQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
      CONTEXTMENU_INVITE,

@@ -167,6 +167,7 @@
     <V-2-34_C>	248	</V-2-34_C>
     <M-40_R200_KV_4_Turchaninov>	249	</M-40_R200_KV_4_Turchaninov>
     <V_2_IS_520_Roz>	251	</V_2_IS_520_Roz>
+    <M-17B-IT>	253	</M-17B-IT>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -179,6 +180,7 @@
     <M-40-2V_SH>	326	</M-40-2V_SH>
     <V_2K>	327	</V_2K>
     <V_2>	328	</V_2>
+    <B_2>	329	</B_2>
     <V-55U_FL>	501	</V-55U_FL>
     <V-12_7x7>	503	</V-12_7x7>
     <V-54K_FL>	31006	</V-54K_FL>
@@ -191,10 +193,8 @@
     <V-2-34A_NewOnBoarding>	10009	</V-2-34A_NewOnBoarding>
     <V_26>	31001	</V_26>
     <GAZ_T_26>	31002	</GAZ_T_26>
-    <V_64R_122>	31007	</V_64R_122>
-    <V_11_Kirovets_1_HW>	31004	</V_11_Kirovets_1_HW>
-    <V_54_105_DR_HW>	31005	</V_54_105_DR_HW>
     <_2xV_16>	31010	</_2xV_16>
+    <V_64R_122>	31007	</V_64R_122>
   </ids>
   <shared>
     <V-2>
@@ -364,6 +364,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </M-17F>
+    <M-17B-IT>
+      <userString>	#ussr_vehicles:M-17B-IT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13460	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	610	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </M-17B-IT>
     <M-17F_R>
       <userString>	#ussr_vehicles:M-17F_R	</userString>
       <tags>	gasoline	</tags>
@@ -1132,23 +1149,6 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </V_11_Kirovets_1>
-    <V_11_Kirovets_1_HW>
-      <userString>	#ussr_vehicles:V_11_Kirovets_1	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	55000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	720	</power>
-      <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
-    </V_11_Kirovets_1_HW>
     <V-12P>
       <userString>	#ussr_vehicles:V-12P	</userString>
       <tags>	diesel	</tags>
@@ -3057,23 +3057,6 @@
       <rpm_min>	221	</rpm_min>
       <rpm_max>	2256	</rpm_max>
     </V_54_105_DR>
-    <V_54_105_DR_HW>
-      <userString>	#ussr_vehicles:V_54_105_DR	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	400	</power>
-      <weight>	920	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	221	</rpm_min>
-      <rpm_max>	2256	</rpm_max>
-    </V_54_105_DR_HW>
     <MG_31F>
       <userString>	#ussr_vehicles:MG_31F	</userString>
       <tags>	gasoline	</tags>
@@ -3108,6 +3091,23 @@
       <rpm_min>	381	</rpm_min>
       <rpm_max>	2056	</rpm_max>
     </V-11-IS-3_S>
+    <B_2>
+      <userString>	#ussr_vehicles:B_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
+    </B_2>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
       <tags>	gasoline	</tags>

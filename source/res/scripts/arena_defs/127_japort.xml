@@ -4,8 +4,8 @@
   <geometry>	spaces/127_japort	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/127_japort/mmap.dds	</minimap>
@@ -31,13 +31,32 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-367.279205 156.182083	</position1>
+          <position1>	-367.279236 156.182098	</position1>
         </team1>
         <team2>
-          <position1>	337.413422 152.013901	</position1>
+          <position1>	337.413452 152.013916	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-279.974823 -451.633392	</position>
+        </team1>
+        <team2>
+          <position>	364.110046 192.922302	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-132.764832 197.782181	</position1>
+          <position2>	48.933105 -142.072617	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

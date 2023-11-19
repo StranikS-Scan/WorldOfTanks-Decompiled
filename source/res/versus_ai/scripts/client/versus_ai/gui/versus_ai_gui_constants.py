@@ -3,7 +3,7 @@
 from constants_utils import ConstInjector
 from gui.prb_control import settings
 DEFAULT_QUEUE_TYPE_PRIORITY = 0
-NOOB_MIN_BATTLES_COUNT = 30
+NOOB_MIN_BATTLES_COUNT = 10
 NOOB_VEHICLE_LEVELS = [1, 2, 3]
 
 class FUNCTIONAL_FLAG(settings.FUNCTIONAL_FLAG, ConstInjector):

@@ -188,7 +188,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self._crewBuffManager = None
         self.__tankIndicator = None
         self.__isShow = True
-        self._maxHealth = 0
+        self.__maxHealth = 0
         self.__isAutoRotationOff = False
         self.__isAutoRotationShown = False
         self.__initialized = False
@@ -232,13 +232,13 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         for player in self._statusAnimPlayers.itervalues():
             player.hideStatus(False)
 
-    def updateVehicleParams(self, vehicle, *args):
-        self._updateMaxHealth()
-        self._updateHealth(self._maxHealth)
+    def updateVehicleParams(self, vehicle, _):
+        self.__updateMaxHealth()
+        self._updateHealth(self.__maxHealth)
 
     def updateVehiclesInfo(self, updated, arenaDP):
         super(DamagePanel, self).updateVehiclesInfo(updated, arenaDP)
-        myVehicle = self._getControllingVehicle()
+        myVehicle = self.__getControllingVehicle()
         if myVehicle is None:
             return
         else:
@@ -319,7 +319,7 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self.as_setPlayerInfoS(result.playerName, result.clanAbbrev, result.regionCode, result.vehicleName)
 
     def _updateDeviceState(self, value):
-        if self._getControllingVehicle() is None:
+        if self.__getControllingVehicle() is None:
             return
         else:
             self.as_updateDeviceStateS(*value[:2])
@@ -338,20 +338,15 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self.hideStatusImmediate()
 
     def _updateHealth(self, health):
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            vehicle = ctrl.getControllingVehicle()
-            self._maxHealth = vehicle.maxHealth
-        if health <= self._maxHealth and self._maxHealth > 0:
-            healthStr = formatHealthProgress(health, self._maxHealth)
-            healthProgress = normalizeHealthPercent(health, self._maxHealth)
+        if health <= self.__maxHealth and self.__maxHealth > 0:
+            healthStr = formatHealthProgress(health, self.__maxHealth)
+            healthProgress = normalizeHealthPercent(health, self.__maxHealth)
             self.as_updateHealthS(healthStr, healthProgress)
-        return
 
     def _updateHealthFromServer(self, health):
         if self.sessionProvider.shared.prebattleSetups.isSelectionStarted():
             return
-        self._updateMaxHealth()
+        self.__updateMaxHealth()
         self._updateHealth(health)
 
     def _updateRepairPoint(self, value):
@@ -426,19 +421,19 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self.__updateStunSources(objID, stunInfo)
         self.__updateStunAnimations(stunInfo)
 
-    def _updateMaxHealth(self):
+    def __updateMaxHealth(self):
         prebattleCtrl = self.sessionProvider.shared.prebattleSetups
         if prebattleCtrl is not None:
             prebattleVehicle = prebattleCtrl.getPrebattleSetupsVehicle()
             if prebattleVehicle is not None:
-                self._maxHealth = prebattleVehicle.descriptor.maxHealth
+                self.__maxHealth = prebattleVehicle.descriptor.maxHealth
                 return
-            vehicle = self._getControllingVehicle()
+            vehicle = self.__getControllingVehicle()
             if vehicle is not None:
-                self._maxHealth = vehicle.maxHealth
+                self.__maxHealth = vehicle.maxHealth
         return
 
-    def _getControllingVehicle(self):
+    def __getControllingVehicle(self):
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         return vehStateCtrl.getControllingVehicle() if vehStateCtrl is not None else None
 
@@ -501,12 +496,12 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
                 self.__isAutoRotationOff = False
         self.__isWheeledTech = vehicle.isWheeledTech
         self.__isTrackWithinVehicle = vehicle.isTrackWithinTrack
-        self._updateMaxHealth()
+        self.__updateMaxHealth()
         prebattleCtrl = self.sessionProvider.shared.prebattleSetups
         prebattleVehicle = prebattleCtrl.getPrebattleSetupsVehicle() if prebattleCtrl is not None else None
-        health = self._maxHealth if prebattleVehicle is not None else vehicle.health
-        healthStr = formatHealthProgress(health, self._maxHealth)
-        healthProgress = normalizeHealthPercent(health, self._maxHealth)
+        health = self.__maxHealth if prebattleVehicle is not None else vehicle.health
+        healthStr = formatHealthProgress(health, self.__maxHealth)
+        healthProgress = normalizeHealthPercent(health, self.__maxHealth)
         self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff, self.__isTrackWithinVehicle)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())

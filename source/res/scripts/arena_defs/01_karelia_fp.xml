@@ -1,0 +1,100 @@
+<01_karelia_fp.xml>
+  <name>	#arenas:01_karelia_fp/name	</name>
+  <description>	#arenas:01_karelia_fp/description	</description>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <geometry>	spaces/01_karelia_fp	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/01_karelia_fp/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_karelia_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_karelia_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_karelia_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_karelia_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_karelia_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_karelia_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_winter_02	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	env_Mountain.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	397.524078 402.612030	</position1>
+        </team1>
+        <team2>
+          <position1>	-401.340332 -399.975006	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	316.212006 266.048004	</position>
+        </team1>
+        <team2>
+          <position>	-283.829010 -372.661011	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-284.113770 227.256287	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2>
+          <position>	45.721001 -424.924011	</position>
+          <position>	287.085999 -271.998993	</position>
+          <position>	448.251007 -37.818001	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-278.753235 213.265732	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+  </gameplayTypes>
+  <mapActivities>
+    <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
+      <preset>	karelia_lightning_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <interval>	100.000000	</interval>
+    </warplane>
+    <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
+      <preset>	karelia_lightning_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	30.000000 30.000000	</startTime>
+      <interval>	110.000000	</interval>
+    </warplane>
+  </mapActivities>
+</01_karelia_fp.xml>

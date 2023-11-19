@@ -43,7 +43,6 @@ class CONDITION_ICON:
     IMPROVE = 'improve'
     RANK_UP = 'rank_up'
     PRESTIGE_POINTS = 'prestige_points'
-    HALLOWEEN_EXPERIENCE = 'halloween_experience'
 
 
 class PROGRESS_TEMPLATE:

@@ -31,7 +31,7 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
     def hasExtendedCalendarTooltip(self):
         return True
 
-    def getExtendedCalendarTooltip(self, parentWindow, event=None):
+    def getExtendedCalendarTooltip(self, parentWindow):
         return createAndLoadBackportTooltipWindow(parentWindow, tooltipId=TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_CALENDAR_INFO, isSpecial=True, specialArgs=(None,))
 
     def _urlProcessing(self, url):

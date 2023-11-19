@@ -376,9 +376,9 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'dedicationMedal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'mt_comp_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'hw2023Medal01'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'hw2023Medal02'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'mt_comp_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'TenYearsCountdownParticipation'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'TenYearsCountdownStageMedal'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
  (_AB.SINGLE, 'TenYearsCountdownSPGEventMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -445,7 +445,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.MT, 'rpSilverMedal'): _AchieveFactory.get(_as.regular.ReferralProgramSingleAchievement),
  (_AB.MT, 'rpGoldMedal'): _AchieveFactory.get(_as.regular.ReferralProgramSingleAchievement),
  (_AB.SINGLE, 'onboardingMedal'): _AchieveFactory.get(_abstract_achievements.RegularAchievement),
- (_AB.SINGLE, 'comp7_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'comp7_3_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_3_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

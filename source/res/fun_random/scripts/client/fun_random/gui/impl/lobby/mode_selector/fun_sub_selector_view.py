@@ -23,7 +23,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_t
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.shared import events, g_eventBus
-from gui.shared.events import ModeSelectorLoadedEvent, ModeSubSelectorEvent, FullscreenModeSelectorEvent
+from gui.shared.events import ModeSubSelectorEvent, FullscreenModeSelectorEvent
 from helpers import dependency, time_utils
 from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
@@ -101,7 +101,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
 
     def _onLoading(self, *args, **kwargs):
         super(FunModeSubSelectorView, self)._onLoading(*args, **kwargs)
-        g_eventBus.handleEvent(ModeSubSelectorEvent(ModeSubSelectorEvent.CHANGE_VISIBILITY, ctx={'visible': True}))
         self.__addListeners()
         self.__invalidate(self.getSubModesStatus())
 
@@ -122,7 +121,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
         self.startSubStatusListening(self.__invalidateAll, tickMethod=self.__invalidateSubModesTimer)
         self.startProgressionListening(self.__invalidateProgression, tickMethod=self.__invalidateProgressionTimer)
         g_eventBus.addListener(FullscreenModeSelectorEvent.NAME, self.__onModeSelectorClosed)
-        g_eventBus.addListener(ModeSelectorLoadedEvent.NAME, self.__onModeSelectorLoaded)
 
     def __removeListeners(self):
         self.stopSubSettingsListening(self.__invalidateAll)
@@ -132,7 +130,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
 
     def __removeSelectorListeners(self):
         g_eventBus.removeListener(FullscreenModeSelectorEvent.NAME, self.__onModeSelectorClosed)
-        g_eventBus.removeListener(ModeSelectorLoadedEvent.NAME, self.__onModeSelectorLoaded)
 
     def __getSubModeByEvent(self, event):
         assetsPointer = event.getArgument('modeName', DEFAULT_ASSETS_PACK)
@@ -187,12 +184,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
     def __onModeSelectorClosed(self, event):
         if event is not None and not event.ctx.get('showing', False):
             self.abortSelection()
-        return
-
-    def __onModeSelectorLoaded(self, *_):
-        parent = self.getParentWindow()
-        if parent is not None:
-            parent.tryFocus()
         return
 
     def __onAbortSelection(self, *_):

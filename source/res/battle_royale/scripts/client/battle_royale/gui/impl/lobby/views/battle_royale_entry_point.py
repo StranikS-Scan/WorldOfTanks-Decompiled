@@ -34,19 +34,11 @@ class BattleRoyaleEntryPoint(ViewImpl):
         self.__isSingle = value
         self.__updateViewModel()
 
-    def _initialize(self, *args, **kwargs):
-        super(BattleRoyaleEntryPoint, self)._initialize(*args, **kwargs)
-        self.viewModel.onClick += self.__onClick
-        self.__battleRoyaleController.onUpdated += self.__onUpdate
-        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
-        self.__battleRoyaleController.onWidgetUpdate += self.__onUpdate
-
-    def _finalize(self):
-        self.viewModel.onClick -= self.__onClick
-        self.__battleRoyaleController.onUpdated -= self.__onUpdate
-        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onUpdate
-        self.__battleRoyaleController.onWidgetUpdate -= self.__onUpdate
-        super(BattleRoyaleEntryPoint, self)._finalize()
+    def _getEvents(self):
+        return ((self.viewModel.onClick, self.__onClick),
+         (self.__battleRoyaleController.onUpdated, self.__onUpdate),
+         (self.__battleRoyaleController.onPrimeTimeStatusUpdated, self.__onUpdate),
+         (self.__battleRoyaleController.onWidgetUpdate, self.__onUpdate))
 
     def _onLoading(self, *args, **kwargs):
         super(BattleRoyaleEntryPoint, self)._onLoading(*args, **kwargs)

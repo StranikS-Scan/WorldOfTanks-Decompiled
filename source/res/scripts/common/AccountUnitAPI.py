@@ -87,9 +87,6 @@ class UnitClientAPI(object):
     def createEventSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EVENT)
 
-    def createHalloweenSquad(self):
-        return self._doCreate(PREBATTLE_TYPE.HALLOWEEN_BATTLES)
-
     def createMapboxSquad(self):
         return self._doCreate(PREBATTLE_TYPE.MAPBOX)
 

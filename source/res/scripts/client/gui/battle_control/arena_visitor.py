@@ -279,9 +279,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
-    def isHalloweenBattle(self):
-        return self._guiType == _GUI_TYPE.HALLOWEEN_BATTLES
-
     def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
 

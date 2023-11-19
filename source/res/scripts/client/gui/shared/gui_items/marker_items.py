@@ -97,7 +97,3 @@ class MarkerParamsFactory(object):
                 bitMask |= key
 
         return bitMask
-
-    @classmethod
-    def registerMarker(cls, markerStyle, markerParams):
-        cls.MARKER_DATA[markerStyle] = markerParams

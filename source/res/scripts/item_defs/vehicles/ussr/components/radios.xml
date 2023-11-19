@@ -35,6 +35,7 @@
     <_71_TK_1SH>	36	</_71_TK_1SH>
     <_9RU_CN>	40	</_9RU_CN>
     <_12RT_Roz>	41	</_12RT_Roz>
+    <_71-TK-IT>	42	</_71-TK-IT>
     <Radio_01_KV>	200	</Radio_01_KV>
     <Radio_T-50-2>	201	</Radio_T-50-2>
     <Observer>	202	</Observer>
@@ -50,8 +51,6 @@
     <R113M_122>	31002	</R113M_122>
     <_10RT-26M>	220	</_10RT-26M>
     <R113K>	223	</R113K>
-    <_10RKM_HW>	31004	</_10RKM_HW>
-    <R113M_DR_HW>	31005	</R113M_DR_HW>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -399,6 +398,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113_R200_KV_4_Turchaninov>
+    <_71-TK-IT>
+      <userString>	#ussr_vehicles:_71-TK-IT	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	23000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_71-TK-IT>
     <R113_FL>
       <userString>	#ussr_vehicles:R113	</userString>
       <tags></tags>
@@ -459,18 +470,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M_DR>
-    <R113M_DR_HW>
-      <userString>	#ussr_vehicles:R113M_DR	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113M_DR_HW>
     <R113M_cl>
       <userString>	#ussr_vehicles:R113M	</userString>
       <tags></tags>
@@ -553,18 +552,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </_10RKM>
-    <_10RKM_HW>
-      <userString>	#ussr_vehicles:_10RKM	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </_10RKM_HW>
     <R123>
       <userString>	#ussr_vehicles:R123	</userString>
       <tags></tags>

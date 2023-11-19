@@ -48,8 +48,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
-from PlayerEvents import g_extPlayerEvents
-from skeletons.gui.game_control import IHalloweenController
 if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
@@ -251,7 +249,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    _hwController = dependency.descriptor(IHalloweenController)
     __resourceWell = dependency.descriptor(IResourceWellController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __collectiveGoalEntryPointController = dependency.descriptor(ICollectiveGoalEntryPointController)
@@ -385,28 +382,22 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _makeHeaderVO(self):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
-        ctx = {'headerVO': None,
-         'emptyHeaderVO': emptyHeaderVO}
-        g_extPlayerEvents.onExtGetHangarHeaderVO(ctx)
-        if ctx['headerVO'] is not None:
-            return ctx['headerVO']
-        elif not self.__tutorialLoader.gui.hangarHeaderEnabled:
+        if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        elif self.__rankedController.isRankedPrbActive():
+        if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
-        elif self.__epicController.isEpicPrbActive():
+        if self.__epicController.isEpicPrbActive():
             return {'isVisible': True,
              'quests': self.__getEpicQuestsToHeaderVO()}
-        elif self.__funRandomCtrl.isFunRandomPrbActive():
+        if self.__funRandomCtrl.isFunRandomPrbActive():
             return {'isVisible': True,
              'quests': []}
-        elif self._currentVehicle.isPresent():
+        if self._currentVehicle.isPresent():
             return {'isVisible': True,
              'quests': self._getCommonQuestsToHeaderVO(self._currentVehicle.item)}
-        else:
-            return {'isVisible': True,
-             'quests': []} if self.__comp7Controller.isComp7PrbActive() else emptyHeaderVO
+        return {'isVisible': True,
+         'quests': []} if self.__comp7Controller.isComp7PrbActive() else emptyHeaderVO
 
     def _getCommonQuestsToHeaderVO(self, vehicle):
         quests = []
@@ -439,7 +430,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def isPersonalMissionEnabled(self):
-        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS) and not self._hwController.isEventPrbActive()
+        return self._lobbyContext.getServerSettings().isPersonalMissionsEnabled() and not self.__mapboxCtrl.isMapboxMode() and not self.__comp7Controller.isComp7PrbActive() and self.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS)
 
     def isElenQuestsEnabled(self):
         return not self.__comp7Controller.isComp7PrbActive()
@@ -476,7 +467,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     @widgetFunc(FUNRANDOM_ALIASES.FUN_RANDOM_HANGAR_WIDGET)
     def __getFunRandomWidget(self):
-        return self.__funRandomCtrl.isFunRandomPrbActive()
+        return self.__funRandomCtrl.isFunRandomPrbActive() and self.__funRandomCtrl.hasHangarHeaderEntry()
 
     @widgetFunc(HANGAR_ALIASES.BATTLE_ROYALE_ENTRY_POINT)
     def __getBattleRoyaleWidgetAlias(self):

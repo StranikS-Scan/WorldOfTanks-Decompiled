@@ -33,7 +33,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import FullscreenModeSelectorEvent, ModeSelectorLoadedEvent, ModeSubSelectorEvent, LoadViewEvent
+from gui.shared.events import FullscreenModeSelectorEvent, ModeSubSelectorEvent, LoadViewEvent
 from gui.shared.system_factory import registerModeSelectorTooltips, collectModeSelectorTooltips
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
@@ -123,7 +123,7 @@ class ModeSelectorView(ViewImpl):
                 body = modeSelectorItem.disabledTooltipText
                 if tooltipId == ModeSelectorTooltipsConstants.CALENDAR_TOOLTIP:
                     if modeSelectorItem.hasExtendedCalendarTooltip:
-                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow(), event)
+                        return modeSelectorItem.getExtendedCalendarTooltip(self.getParentWindow())
                     body = modeSelectorItem.calendarTooltipText
                 return createSimpleTooltip(self.getParentWindow(), event, body=body)
             if tooltipId == ModeSelectorTooltipsConstants.RANDOM_BP_PAUSED_TOOLTIP:
@@ -189,18 +189,17 @@ class ModeSelectorView(ViewImpl):
         self.__prevOptimizationEnabled = app.graphicsOptimizationManager.getEnable()
         if self.__prevOptimizationEnabled:
             app.graphicsOptimizationManager.switchOptimizationEnabled(False)
-        if self.__subSelectorCallback is not None:
-            self.__subSelectorCallback()
-            self.__subSelectorCallback = None
-        return
 
     def _initialize(self):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': True}))
 
     def _onLoaded(self):
-        g_eventBus.handleEvent(ModeSelectorLoadedEvent(ModeSelectorLoadedEvent.NAME))
+        if self.__subSelectorCallback is not None:
+            self.__subSelectorCallback()
+            self.__subSelectorCallback = None
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
+        return
 
     def _finalize(self):
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.CLOSED)

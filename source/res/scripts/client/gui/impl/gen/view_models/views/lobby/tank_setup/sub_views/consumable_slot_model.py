@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model i
 class ConsumableSlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=25, commands=0):
+    def __init__(self, properties=24, commands=0):
         super(ConsumableSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getDescription(self):
@@ -32,16 +32,9 @@ class ConsumableSlotModel(BaseSlotModel):
     def setIsBuyMoreDisabled(self, value):
         self._setBool(23, value)
 
-    def getIsBuyMoreHidden(self):
-        return self._getBool(24)
-
-    def setIsBuyMoreHidden(self, value):
-        self._setBool(24, value)
-
     def _initialize(self):
         super(ConsumableSlotModel, self)._initialize()
         self._addStringProperty('description', '')
         self._addBoolProperty('isBuiltIn', False)
         self._addStringProperty('itemName', '')
         self._addBoolProperty('isBuyMoreDisabled', False)
-        self._addBoolProperty('isBuyMoreHidden', False)

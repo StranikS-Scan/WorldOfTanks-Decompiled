@@ -33,7 +33,6 @@ from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IWinbackController
-from skeletons.gui.game_control import IHalloweenController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -59,7 +58,6 @@ class USER(object):
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
     CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
-    CREATE_HALLOWEEN_SQUAD = 'createHalloweenSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -83,7 +81,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
     __winbackController = dependency.descriptor(IWinbackController)
-    __halloweenCtrl = dependency.descriptor(IHalloweenController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -180,9 +177,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createBattleRoyaleSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, (self.databaseID,))
 
-    def createHalloweenSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.HALLOWEEN_BATTLE_SQUAD, (self.databaseID,))
-
     def createMapboxSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, (self.databaseID,))
 
@@ -211,7 +205,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.CREATE_SQUAD: 'createSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
-         USER.CREATE_HALLOWEEN_SQUAD: 'createHalloweenSquad',
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship',
          USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad',
@@ -302,9 +295,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
-            if self.__halloweenCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT) and not self.__halloweenCtrl.isPostPhase():
-                options.append(self._makeItem(USER.CREATE_HALLOWEEN_SQUAD, MENU.contextmenu(USER.CREATE_HALLOWEEN_SQUAD), optInitData={'enabled': canCreate,
-                 'textColor': 13347959}))
             if self.__battleRoyale.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):
                 primeTimeStatus, _, _ = self.__battleRoyale.getPrimeTimeStatus()
                 options.append(self._makeItem(USER.CREATE_BATTLE_ROYALE_SQUAD, MENU.contextmenu(USER.CREATE_BATTLE_ROYALE_SQUAD), optInitData={'enabled': canCreate and primeTimeStatus == PrimeTimeStatus.AVAILABLE,
@@ -391,20 +381,22 @@ class BaseAppealCMLobbyChatHandler(AbstractContextMenuHandler, EventSystemEntity
         return
 
     def appealIncorrectBehavior(self):
-        self.__denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, 0)
+        self.__denunciator.makeAppeal(self.databaseID, self.displayName, DENUNCIATIONS.INCORRECT_BEHAVIOR, 0)
 
     def appealForbiddenNick(self):
-        self.__denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FORBIDDEN_NICK, 0)
+        self.__denunciator.makeAppeal(self.databaseID, self.displayName, DENUNCIATIONS.FORBIDDEN_NICK, 0)
 
     def _initFlashValues(self, ctx):
         self.databaseID = long(ctx.dbID)
         self.userName = ctx.userName
+        self.displayName = self.userName
         super(BaseAppealCMLobbyChatHandler, self)._initFlashValues(ctx)
 
     def _clearFlashValues(self):
         super(BaseAppealCMLobbyChatHandler, self)._clearFlashValues()
         self.databaseID = None
         self.userName = None
+        self.displayName = None
         return
 
     def _getHandlers(self):
@@ -425,6 +417,9 @@ class BaseAppealCMLobbyChatHandler(AbstractContextMenuHandler, EventSystemEntity
     def _generateOptions(self, ctx=None):
         isEnabled = False
         showCheckmark = False
+        userCMInfo = self._getUseCmInfo()
+        if userCMInfo.hasClan:
+            self.displayName = userCMInfo.displayName
         if not self.__denunciator.isAppealsEnabled():
             labelStr = MENU.CONTEXTMENU_REPORTLIMITREACHED
         elif not self._isAppealsForTopicEnabled(DENUNCIATIONS.INCORRECT_BEHAVIOR):

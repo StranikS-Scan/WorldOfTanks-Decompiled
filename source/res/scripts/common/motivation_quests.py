@@ -33,7 +33,7 @@ class MotivationQuest(object):
 
 def motivationQuestsFromFile(pathToFile):
     quests = {}
-    for quest in readQuestsFromFile(pathToFile, EVENT_TYPE.MOTIVE_QUEST):
+    for quest in readQuestsFromFile(pathToFile, (EVENT_TYPE.MOTIVE_QUEST,)):
         questID, questName, questDescr, questClientData, node = quest
         questData = __parseMotivationsQuest(node)
         if questData is None:

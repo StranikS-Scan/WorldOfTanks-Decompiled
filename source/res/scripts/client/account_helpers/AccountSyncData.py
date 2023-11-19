@@ -148,7 +148,8 @@ class AccountSyncData(object):
         if self.__ignore:
             return
         crc = self.__persistentCache.getDescr()
-        self.__account._doCmdInt3(AccountCommands.CMD_SYNC_DATA, self.revision, 0 if not crc else crc, 0, proxy)
+        gameParamsRevision = self.__account.serverSettings.get('rev', 0)
+        self.__account._doCmdInt3(AccountCommands.CMD_SYNC_DATA, self.revision, 0 if not crc else crc, gameParamsRevision, proxy)
 
     def __clearPersistentCache(self):
         self.__persistentCache.data = None

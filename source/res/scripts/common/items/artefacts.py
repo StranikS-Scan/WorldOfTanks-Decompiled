@@ -2706,55 +2706,6 @@ class PoiArtilleryEquipment(AreaOfEffectEquipment):
         self.requireAssists = section.readBool('requireAssists', False)
 
 
-class EventEquipment(Equipment):
-    __slots__ = ('durationSeconds', 'cooldownSeconds', 'reuseCount')
-
-    def __init__(self):
-        super(EventEquipment, self).__init__()
-        self.durationSeconds = component_constants.ZERO_FLOAT
-        self.cooldownSeconds = component_constants.ZERO_FLOAT
-        self.reuseCount = component_constants.ZERO_INT
-
-    def _readConfig(self, xmlCtx, section):
-        super(EventEquipment, self)._readConfig(xmlCtx, section)
-        try:
-            self.durationSeconds = _xml.readFloat(xmlCtx, section, 'durationSeconds')
-            self.cooldownSeconds = _xml.readFloat(xmlCtx, section, 'cooldownSeconds')
-            self.reuseCount = _xml.readInt(xmlCtx, section, 'reuseCount')
-        except SoftException:
-            pass
-
-
-class BuffEquipment(EventEquipment):
-    __slots__ = 'buffNames'
-
-    def __init__(self):
-        super(BuffEquipment, self).__init__()
-        self.buffNames = None
-        return
-
-    def _readConfig(self, xmlCtx, section):
-        super(BuffEquipment, self)._readConfig(xmlCtx, section)
-        self.buffNames = self._readBuffs(xmlCtx, section, 'buffs')
-
-    @staticmethod
-    def _readBuffs(xmlCtx, section, subsectionName):
-        buffNames = _xml.readString(xmlCtx, section, subsectionName).split()
-        return frozenset({intern(name) for name in buffNames})
-
-
-class HpRepairAndCrewHealEquipment(BuffEquipment):
-    __slots__ = ('isInterruptable',)
-
-    def __init__(self):
-        super(HpRepairAndCrewHealEquipment, self).__init__()
-        self.isInterruptable = False
-
-    def _readConfig(self, xmlCtx, section):
-        super(HpRepairAndCrewHealEquipment, self)._readConfig(xmlCtx, section)
-        self.isInterruptable = _xml.readBool(xmlCtx, section, 'isInterruptable')
-
-
 _readTags = vehicles._readTags
 
 def _readStun(xmlCtx, scriptSection):

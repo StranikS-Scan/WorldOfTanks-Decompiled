@@ -51,6 +51,52 @@
       </teamSpawnPoints>
       <controlPoint>	13.035101 203.235397	</controlPoint>
     </domination>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-357.889832 22.651075	</position>
+        </team1>
+        <team2>
+          <position>	386.882141 19.475840	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	18.674437 -136.867844	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	8.680021 470.668640	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-216.362869 373.986145	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	219.171570 388.419617	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	9.551332 197.940002	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <useAdvancedPhysics>	true	</useAdvancedPhysics>
   <roadMap></roadMap>

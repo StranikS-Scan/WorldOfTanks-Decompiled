@@ -148,7 +148,7 @@ class RocketAcceleratorEvents(Block, CGFMeta):
                 controller.unsubscribe(self.__onStateChange, self.__onTryActivate)
             self.__controllerLink = None
         else:
-            LOG_WARNING('  ')
+            LOG_WARNING('')
         self._deactivateOut.call()
         return
 

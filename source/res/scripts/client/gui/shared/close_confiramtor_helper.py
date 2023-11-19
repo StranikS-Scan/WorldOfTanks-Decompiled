@@ -45,15 +45,13 @@ class CloseConfirmatorsHelper(object):
 
     def start(self, closeConfirmator):
         self.__closeConfirmator = closeConfirmator
-        if self._isAddHeaderNavigationConfirmator:
-            self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.addRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def stop(self):
         self.__closeConfirmator = None
-        if self._isAddHeaderNavigationConfirmator:
-            self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.removeRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -64,10 +62,6 @@ class CloseConfirmatorsHelper(object):
 
     def _deletePlatoonCreationConfirmator(self):
         self._lobbyContext.deletePlatoonCreationConfirmator(self.__confirmPlatoonCreation)
-
-    @property
-    def _isAddHeaderNavigationConfirmator(self):
-        return True
 
     @adisp.adisp_async
     @wg_async

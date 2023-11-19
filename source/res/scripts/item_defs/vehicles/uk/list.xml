@@ -1071,6 +1071,7 @@
     <longDescriptionSpecial>	#gb_vehicles:GB99_Turtle_Mk1_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB99_Turtle_Mk1>
@@ -1138,4 +1139,16 @@
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB121_GSOR_1010_FB>
+  <GB86_Centurion_Action_X_7x7>
+    <id>	81	</id>
+    <userString>	#gb_vehicles:GB86_Centurion_Action_X_7x7	</userString>
+    <description>	#gb_vehicles:GB86_Centurion_Action_X_descr	</description>
+    <shortUserString>	#gb_vehicles:GB86_Centurion_Action_X_7x7_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals comp7 private secret special cannot_be_sold	</tags>
+    <level>	10	</level>
+  </GB86_Centurion_Action_X_7x7>
 </list.xml>

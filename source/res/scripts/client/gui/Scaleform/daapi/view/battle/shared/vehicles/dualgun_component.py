@@ -138,7 +138,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         self.__soundManager = DualGunSounds()
         return
 
-    def updateVehicleParams(self, vehicle, factors, _):
+    def updateVehicleParams(self, vehicle, factors):
         leftTime = getFirstReloadTime(vehicle.descriptor, factors)
         rightTime = getFirstReloadTime(vehicle.descriptor, factors, ignoreRespawn=True)
         self.__currentTotalTimeTimer = (leftTime + rightTime) * DualGunConstants.CHARGE_TIME_MULTIPLIER

@@ -34,6 +34,7 @@
     <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
     <CKD_AXL_CN>	34	</CKD_AXL_CN>
     <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
+    <Tatra_T-78>	31002	</Tatra_T-78>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -182,6 +183,23 @@
       <rpm_min>	462	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </Praga_V_8_H>
+    <Tatra_T-78>
+      <userString>	#czech_vehicles:Tatra_T-78	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	260	</power>
+      <weight>	500	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	462	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
+    </Tatra_T-78>
     <Skoda_V12_16_2_liter>
       <userString>	#czech_vehicles:Skoda_V12_16_2_liter	</userString>
       <tags>	gasoline	</tags>

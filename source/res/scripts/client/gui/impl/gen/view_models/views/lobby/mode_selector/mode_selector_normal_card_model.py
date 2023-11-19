@@ -4,7 +4,6 @@ from enum import IntEnum
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_base_widget_model import ModeSelectorBaseWidgetModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_model import ModeSelectorCardModel
-from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import ModeSelectorPerformanceModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
 
 class BattlePassState(IntEnum):
@@ -16,7 +15,7 @@ class BattlePassState(IntEnum):
 class ModeSelectorNormalCardModel(ModeSelectorCardModel):
     __slots__ = ()
 
-    def __init__(self, properties=21, commands=0):
+    def __init__(self, properties=20, commands=0):
         super(ModeSelectorNormalCardModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -27,76 +26,67 @@ class ModeSelectorNormalCardModel(ModeSelectorCardModel):
     def getWidgetType():
         return ModeSelectorBaseWidgetModel
 
-    @property
-    def performance(self):
-        return self._getViewModel(11)
-
-    @staticmethod
-    def getPerformanceType():
-        return ModeSelectorPerformanceModel
-
     def getName(self):
-        return self._getString(12)
+        return self._getString(11)
 
     def setName(self, value):
-        self._setString(12, value)
+        self._setString(11, value)
 
     def getEventName(self):
-        return self._getString(13)
+        return self._getString(12)
 
     def setEventName(self, value):
-        self._setString(13, value)
+        self._setString(12, value)
 
     def getStatusNotActive(self):
-        return self._getString(14)
+        return self._getString(13)
 
     def setStatusNotActive(self, value):
-        self._setString(14, value)
+        self._setString(13, value)
 
     def getStatusActive(self):
-        return self._getString(15)
+        return self._getString(14)
 
     def setStatusActive(self, value):
-        self._setString(15, value)
+        self._setString(14, value)
 
     def getDescription(self):
-        return self._getString(16)
+        return self._getString(15)
 
     def setDescription(self, value):
-        self._setString(16, value)
+        self._setString(15, value)
 
     def getConditions(self):
-        return self._getString(17)
+        return self._getString(16)
 
     def setConditions(self, value):
-        self._setString(17, value)
+        self._setString(16, value)
 
     def getTimeLeft(self):
-        return self._getString(18)
+        return self._getString(17)
 
     def setTimeLeft(self, value):
-        self._setString(18, value)
+        self._setString(17, value)
 
     def getRewardList(self):
-        return self._getArray(19)
+        return self._getArray(18)
 
     def setRewardList(self, value):
-        self._setArray(19, value)
+        self._setArray(18, value)
 
     @staticmethod
     def getRewardListType():
         return ModeSelectorRewardModel
 
     def getBattlePassState(self):
-        return BattlePassState(self._getNumber(20))
+        return BattlePassState(self._getNumber(19))
 
     def setBattlePassState(self, value):
-        self._setNumber(20, value.value)
+        self._setNumber(19, value.value)
 
     def _initialize(self):
         super(ModeSelectorNormalCardModel, self)._initialize()
         self._addViewModelProperty('widget', ModeSelectorBaseWidgetModel())
-        self._addViewModelProperty('performance', ModeSelectorPerformanceModel())
         self._addStringProperty('name', '')
         self._addStringProperty('eventName', '')
         self._addStringProperty('statusNotActive', '')

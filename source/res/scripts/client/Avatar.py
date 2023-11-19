@@ -1188,8 +1188,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     self.__deviceStates = {'crew': 'destroyed'}
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CREW_DEACTIVATED, deathReasonID)
                 elif not self.guiSessionProvider.getCtx().isObserver(self.playerVehicleID):
-                    if self.arenaGuiType != ARENA_GUI_TYPE.HALLOWEEN_BATTLES or not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
-                        self.soundNotifications.play('vehicle_destroyed')
+                    self.soundNotifications.play('vehicle_destroyed')
                     self.__deviceStates = {'vehicle': 'destroyed'}
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DESTROYED, deathReasonID)
                 if self.vehicle is not None:
@@ -2636,8 +2635,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if soundType is not None and damageCode not in self.__damageInfoNoNotification:
             sound = extra.sounds.get(soundType)
             if sound is not None and not ignoreMessages:
-                if sound == 'track_destroyed' and damageCode.find('AT_SUPER_SHOT') != -1:
-                    sound = 'track_destroyed_at_super_shot'
                 self.playSoundIfNotMuted(sound, soundNotificationCheckFn)
         return
 
@@ -2675,9 +2672,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'TANKMAN_HIT_AT_WORLD_COLLISION',
      'TANKMAN_HIT_AT_DROWNING',
      'ENGINE_DESTROYED_AT_UNLIMITED_RPM',
-     'ENGINE_DESTROYED_AT_BURNOUT',
-     'DEVICE_DESTROYED_AT_SUPER_SHOT',
-     'TANKMAN_HIT_AT_SUPER_SHOT')
+     'ENGINE_DESTROYED_AT_BURNOUT')
     __damageInfoHealings = ('DEVICE_REPAIRED', 'TANKMAN_RESTORED', 'FIRE_STOPPED')
     __damageInfoNoNotification = ('DEVICE_CRITICAL',
      'DEVICE_DESTROYED',

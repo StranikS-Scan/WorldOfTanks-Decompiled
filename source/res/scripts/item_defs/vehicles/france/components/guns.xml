@@ -114,7 +114,6 @@
     <_120mm_D_1203_CL>	31003	</_120mm_D_1203_CL>
     <Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>	24	</Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>
     <_90mm_canon_DCA_30_CA_bootcamp>	1002	</_90mm_canon_DCA_30_CA_bootcamp>
-    <_75mm_SA50_mle_54_HW>	10	</_75mm_SA50_mle_54_HW>
   </ids>
   <shared>
     <_13.2mm_Hotchkiss_mle._1930>
@@ -6524,63 +6523,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_90mm_canon_DCA_30_CA_bootcamp>
-    <_75mm_SA50_mle_54_HW>
-      <userString>	#france_vehicles:_75mm_SA50_mle_54	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	110000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.46	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.65	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	35	</rotationSpeed>
-      <reloadTime>	10	</reloadTime>
-      <maxAmmo>	50	</maxAmmo>
-      <aimingTime>	2	</aimingTime>
-      <weight>	988	</weight>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.3	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	3.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_75mm_OFL_mle_54_HW>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	1300	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	180 144	</piercingPower>
-        </_75mm_OFL_mle_54_HW>
-        <_75mm_OCC_mle_54_HW>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	850	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	220 220	</piercingPower>
-        </_75mm_OCC_mle_54_HW>
-        <_75mm_OE_mle_54_HW>
-          <defaultPortion>	0.3	</defaultPortion>
-          <speed>	850	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	75 75	</piercingPower>
-        </_75mm_OE_mle_54_HW>
-      </shots>
-    </_75mm_SA50_mle_54_HW>
   </shared>
 </guns.xml>

@@ -8,7 +8,7 @@ import BigWorld
 import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import isRoamingEnabled
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, INVITATION_TYPE
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
@@ -42,7 +42,6 @@ from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IHalloweenController
 _logger = logging.getLogger(__name__)
 
 class _InviteVersion(CONST_CONTAINER):
@@ -302,7 +301,6 @@ class InvitesManager(UsersInfoHelper):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     appLoader = dependency.descriptor(IAppLoader)
-    __halloweenController = dependency.descriptor(IHalloweenController)
 
     def __init__(self, loader):
         super(InvitesManager, self).__init__()
@@ -423,36 +421,33 @@ class InvitesManager(UsersInfoHelper):
 
     def canAcceptInvite(self, invite):
         result = False
-        if invite.type == INVITATION_TYPE.HALLOWEEN_BATTLES and not self.__halloweenController.isEnabled() and not self.__halloweenController.isPostPhase():
-            return result
-        else:
-            if invite.alwaysAvailable is True:
-                result = True
-            elif invite.clientID in self.__invites:
-                dispatcher = self.__loader.getDispatcher()
-                if dispatcher:
-                    if invite.alreadyJoined:
-                        return False
-                    if dispatcher.getEntity().hasLockedState():
-                        return False
-                    if not dispatcher.getEntity().canInvite(invite.type):
-                        return False
-                another = invite.anotherPeriphery
-                if another:
-                    if g_preDefinedHosts.periphery(invite.peripheryID) is None:
-                        _logger.error('Periphery not found')
-                        result = False
-                    elif self.lobbyContext.getCredentials() is None:
-                        _logger.error('Login info not found')
-                        result = False
-                    elif g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID) and not isRoamingEnabled(self.itemsCache.items.stats.attributes):
-                        _logger.error('Roaming is not supported')
-                        result = False
-                    else:
-                        result = invite.clientID > 0 and invite.isActive()
+        if invite.alwaysAvailable is True:
+            result = True
+        elif invite.clientID in self.__invites:
+            dispatcher = self.__loader.getDispatcher()
+            if dispatcher:
+                if invite.alreadyJoined:
+                    return False
+                if dispatcher.getEntity().hasLockedState():
+                    return False
+                if not dispatcher.getEntity().canInvite(invite.type):
+                    return False
+            another = invite.anotherPeriphery
+            if another:
+                if g_preDefinedHosts.periphery(invite.peripheryID) is None:
+                    _logger.error('Periphery not found')
+                    result = False
+                elif self.lobbyContext.getCredentials() is None:
+                    _logger.error('Login info not found')
+                    result = False
+                elif g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID) and not isRoamingEnabled(self.itemsCache.items.stats.attributes):
+                    _logger.error('Roaming is not supported')
+                    result = False
                 else:
                     result = invite.clientID > 0 and invite.isActive()
-            return result
+            else:
+                result = invite.clientID > 0 and invite.isActive()
+        return result
 
     def canDeclineInvite(self, invite):
         result = False
@@ -541,9 +536,6 @@ class InvitesManager(UsersInfoHelper):
 
     def _addInvite(self, invite, creator):
         if self.__isInviteSenderIgnored(invite, creator):
-            self.__invitesIgnored[invite.clientID] = invite
-            return False
-        if invite.type == INVITATION_TYPE.HALLOWEEN_BATTLES and not self.__halloweenController.isEnabled():
             self.__invitesIgnored[invite.clientID] = invite
             return False
         self.__invites[invite.clientID] = invite

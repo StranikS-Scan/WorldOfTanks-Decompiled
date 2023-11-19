@@ -23,7 +23,6 @@ class FittingTypes(ViewModel):
     VEHICLE_RADIO = 'vehicleRadio'
     POST_PROGRESSION_MODIFICATION = 'postProgressionModification'
     POST_PROGRESSION_PAIR_MODIFICATION = 'postProgressionPairModification'
-    HWCONSUMABLES = 'hwConsumables'
 
     def __init__(self, properties=0, commands=0):
         super(FittingTypes, self).__init__(properties=properties, commands=commands)

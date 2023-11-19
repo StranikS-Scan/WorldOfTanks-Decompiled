@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/hangar_rules.py
 import CGF
+from cgf_components.tooltip_component import TooltipManager
 from cgf_script.managers_registrator import registerManager, Rule, registerRule
 from hover_component import HoverManager
 from highlight_component import HighlightManager
@@ -22,6 +23,10 @@ class SelectionRule(Rule):
 
     @registerManager(ClickManager)
     def reg3(self):
+        return None
+
+    @registerManager(TooltipManager)
+    def reg4(self):
         return None
 
 

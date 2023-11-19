@@ -74,7 +74,3 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     COMP7_AOE_INSPIRE_ICON = 'Comp7AoeInspireIconUI'
     COMP7_MARCH_ICON = 'Comp7MarchIconUI'
     COMP7_AGGRESSIVE_DETECTION_ICON = 'Comp7AggressiveDetectionIconUI'
-    HW_VEHICLE_FROZEN_ARROW_ICON = 'HWVehicleFrozenArrowIconUI'
-    HW_VEHICLE_HEALING_ARROW_ICON = 'HWVehicleHealingArrowIconUI'
-    HW_VEHICLE_LAUGH_ARROW_ICON = 'HWVehicleLaughArrowIconUI'
-    HW_VEHICLE_FROZEN_MANTLE_ICON = 'HWVehicleFrozenMantleIconUI'

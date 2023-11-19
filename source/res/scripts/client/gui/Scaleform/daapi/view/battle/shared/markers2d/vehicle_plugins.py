@@ -390,9 +390,6 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
 
-    def _removeState(self, vehicleID, state):
-        self._markersStates[vehicleID].remove(state)
-
     @staticmethod
     def __isStatusActive(statusID, activeStatuses):
         for activeStatusID, _ in activeStatuses:
@@ -529,7 +526,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if vehicleID in self._markersStates:
             currentStates = self._markersStates[vehicleID]
             for state in currentStates:
-                self._removeState(vehicleID, state)
+                self._markersStates[vehicleID].remove(state)
                 self._invokeMarker(handle, 'hideStatusMarker', state, -1, False, False)
 
     def __setupDynamic(self, marker, accountDBID=0):
@@ -796,5 +793,4 @@ class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
         self._isSquadIndicatorEnabled = False
 
     def _hideVehicleMarker(self, vehicleID):
-        super(RespawnableVehicleMarkerPlugin, self)._hideVehicleMarker(vehicleID)
         self._destroyVehicleMarker(vehicleID)

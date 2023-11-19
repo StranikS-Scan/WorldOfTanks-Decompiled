@@ -9,6 +9,7 @@ from gui.battle_control import avatar_getter
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.Scaleform.daapi.view.battle.shared.game_messages_panel import PlayerMessageData
 from gui.battle_results.components.common import makeEpicBattleFinishResultLabel
+import time
 
 class EpicMessagePanel(GameMessagesPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -16,16 +17,22 @@ class EpicMessagePanel(GameMessagesPanelMeta):
     def __init__(self):
         super(EpicMessagePanel, self).__init__()
         self.__blockNewMessages = False
+        self.currentHint = None
+        self.currentHintStartTime = 0
+        return
 
     def showHint(self, hint, data):
         if hint.name == 'CaptureBase':
             ctrl = self.sessionProvider.dynamic.missions
             if ctrl is not None:
                 ctrl.onSectorBaseCaptured(int(data.get('param1', 0)), data.get('param2', 'false') == 'true')
+            self.currentHintStartTime = time.time()
+            self.currentHint = hint
         return
 
     def hideHint(self, hint):
-        pass
+        self.currentHint = None
+        return
 
     def sendEndGameMessage(self, winningTeam, reason, extraData):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam

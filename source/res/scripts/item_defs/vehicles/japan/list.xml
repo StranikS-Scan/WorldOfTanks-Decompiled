@@ -371,10 +371,10 @@
     <description>	#japan_vehicles:J36_Type_63_HT_descr	</description>
     <shortDescriptionSpecial>	#japan_vehicles:J36_Type_63_HT_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#japan_vehicles:J36_Type_63_HT_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD siegeMode autoSiege tankRammer_class1_user improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <tags>	heavyTank role_HT_universal HD siegeMode autoSiege tankRammer_class1_user improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </J36_Type_63_HT>
   <J13_STA_1_IGR>
@@ -404,17 +404,16 @@
     <tags>	mediumTank role_MT_universal private secret premiumIGR improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </J16_ST_B1_IGR>
-  <J27_O_I_120_BP_HW>
-    <id>	154	</id>
-    <userString>	#japan_vehicles:J27_O_I_120_BP	</userString>
-    <shortUserString>	#japan_vehicles:J27_O_I_120_BP_short	</shortUserString>
-    <description>	#japan_vehicles:J27_O_I_120_BP_descr	</description>
-    <shortDescriptionSpecial>	#japan_vehicles:J27_O_I_120_BP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#japan_vehicles:J27_O_I_120_BP_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
+  <J20_Type_2605_7x7>
+    <id>	37	</id>
+    <userString>	#japan_vehicles:J20_Type_2605_7x7	</userString>
+    <shortUserString>	#japan_vehicles:J20_Type_2605_7x7_short	</shortUserString>
+    <description>	#japan_vehicles:J20_Type_2605_descr	</description>
+    <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user event_battles cannot_be_sold lockOutfit lockCrew secret lockCrewSkills restoreWithStyle	</tags>
-    <level>	8	</level>
-  </J27_O_I_120_BP_HW>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals comp7 private secret special cannot_be_sold	</tags>
+    <level>	10	</level>
+  </J20_Type_2605_7x7>
 </list.xml>

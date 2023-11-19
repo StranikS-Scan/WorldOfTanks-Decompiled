@@ -104,6 +104,8 @@ def init(scriptConfig, engineConfig, userPreferences):
         motivation_quests.init()
         import customization_quests
         customization_quests.init()
+        import static_quests
+        static_quests.init()
         import game_params_configs
         game_params_configs.init()
         BigWorld.worldDrawEnabled(False)

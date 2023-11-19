@@ -64,7 +64,6 @@ class BattleGameInputMgr(object):
 
     def handleKey(self, isDown, key, mods):
         isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
-        isEventBattle = isEventBattle or self.guiSessionProvider.arenaVisitor.gui.isHalloweenBattle()
         if key == Keys.KEY_ESCAPE:
             if self.__keyHandlers:
                 for handler in self.__keyHandlers[:]:

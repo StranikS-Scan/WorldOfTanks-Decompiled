@@ -17,7 +17,6 @@ class PrebattleTypes(Enum):
     MAPBOX = 'mapbox'
     COMP7 = 'comp7'
     FUNRANDOM = 'funRandom'
-    HALLOWEEN = 'halloween'
 
 
 class MembersWindowModel(WindowModel):

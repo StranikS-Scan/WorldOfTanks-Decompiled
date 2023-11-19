@@ -518,7 +518,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
     @adisp_process
     def _onSwitchReady(self):
-        result = yield self._platoonCtrl.togglePlayerReadyAction(checkAmmo=True)
+        result = yield self._platoonCtrl.togglePlayerReadyAction()
         if result:
             with self.viewModel.transaction() as model:
                 model.btnSwitchReady.setIsEnabled(False)
@@ -538,8 +538,7 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             return
         isInQueue = self._platoonCtrl.isInQueue()
         actionButtonStateVO = self.__getActionButtonStateVO()
-        prbType = self._platoonCtrl.getPrbEntityType()
-        simpleState = actionButtonStateVO.getSimpleState(prbType)
+        simpleState = actionButtonStateVO.getSimpleState()
         onlyReadinessText = actionButtonStateVO.isReadinessTooltip()
         with self.viewModel.transaction() as model:
             if not self._platoonCtrl.isInCoolDown(REQUEST_TYPE.SET_PLAYER_STATE):
@@ -649,13 +648,6 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
 class EventMembersView(SquadMembersView):
     _prebattleType = PrebattleTypes.EVENT
-
-    @adisp_process
-    def _onSwitchReady(self):
-        result = yield self._platoonCtrl.togglePlayerReadyAction(checkAmmo=False)
-        if result:
-            with self.viewModel.transaction() as model:
-                model.btnSwitchReady.setIsEnabled(False)
 
     def _addSubviews(self):
         self._addSubviewToLayout(ChatSubview())

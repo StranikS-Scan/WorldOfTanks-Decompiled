@@ -5031,6 +5031,42 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	Halloween 2023	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31026	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	17 16 16 255	</color>
+      <gloss>	0.738	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/Halloween_2023_hero_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31031	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_30.png	</texture>
+      <color>	38 43 51 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/Small_pack_2023_MT	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Compendium 3	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -5207,42 +5243,6 @@
     </paint>
   </itemGroup>
   <itemGroup>
-    <name>	Halloween 2023	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	31026	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <color>	17 16 16 255	</color>
-      <gloss>	0.738	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/Halloween_2023_hero_MT	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	31031	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_30.png	</texture>
-      <color>	38 43 51 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.3	</metallic>
-      <userString>	#vehicle_customization:repaint/Small_pack_2023_MT	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	Synergy 2023	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -5260,6 +5260,60 @@
       <color>	42 20 53 255	</color>
       <gloss>	0.5	</gloss>
       <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	ArmoryYard 2023	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31044	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_01.png	</texture>
+      <userString>	#vehicle_customization:repaint/ArmoryYard_Summer_2023_MT	</userString>
+      <color>	86 102 66 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31045	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <userString>	#vehicle_customization:repaint/ArmoryYard_Winter_2023_MT	</userString>
+      <color>	147 151 153 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31046	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_01.png	</texture>
+      <userString>	#vehicle_customization:repaint/ArmoryYard_Desert_2023_MT	</userString>
+      <color>	174 155 102 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
       <tags>	hiddenInUI	</tags>
       <vehicleFilter>
         <exclude>
@@ -5287,6 +5341,151 @@
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
       <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	NEW YEAR 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31054	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_FireBird_2024_MT	</userString>
+      <color>	17 17 33 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31055	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_07.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Circus_2024_MT	</userString>
+      <color>	84 50 50 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31056	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_19.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Sgushchenka_2024_Paint_01_MT	</userString>
+      <color>	36 82 181 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31057	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_02.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Sgushchenka_2024_Paint_02_MT	</userString>
+      <color>	153 135 101 255	</color>
+      <gloss>	0.55	</gloss>
+      <metallic>	0.8	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31058	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Cone_2024_MT	</userString>
+      <color>	25 25 25 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.25	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31059	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Birds_2024_MT	</userString>
+      <color>	163 163 191 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31060	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_28.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Dragon_2024_MT	</userString>
+      <color>	33 23 38 255	</color>
+      <gloss>	0.1	</gloss>
+      <metallic>	0.1	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31061	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <userString>	#vehicle_customization:repaint/NY_Birds_2024_MT	</userString>
+      <color>	109 110 115 255	</color>
+      <gloss>	0.25	</gloss>
+      <metallic>	0.25	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	rush ice wolf 2023	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31048	</id>
+      <color>	35 35 35 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_01_MT	</userString>
+    </paint>
+    <paint>
+      <id>	31049	</id>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_02_MT	</userString>
+    </paint>
+    <paint>
+      <id>	31050	</id>
+      <color>	56 56 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_03_MT	</userString>
+    </paint>
+    <paint>
+      <id>	31051	</id>
+      <color>	28 28 28 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_04_MT	</userString>
+    </paint>
+    <paint>
+      <id>	31052	</id>
+      <color>	23 23 23 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_05_MT	</userString>
+    </paint>
+    <paint>
+      <id>	31053	</id>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:repaint/Rush_2023_Ice_06_MT	</userString>
     </paint>
   </itemGroup>
 </custom_paints.xml>

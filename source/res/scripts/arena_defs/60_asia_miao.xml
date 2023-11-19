@@ -4,8 +4,8 @@
   <geometry>	spaces/60_asia_miao	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/60_asia_miao/mmap.dds	</minimap>
@@ -33,23 +33,42 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-317.599976 299.599701	</position1>
+          <position1>	-317.600006 299.599731	</position1>
         </team1>
         <team2>
-          <position1>	300.999878 -304.499908	</position1>
+          <position1>	300.998779 -304.499603	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-317 300	</position>
+          <position>	-317.000000 300.000000	</position>
         </team1>
         <team2>
-          <position>	300 -305	</position>
+          <position>	300.000000 -305.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-265.739685 -303.382355	</controlPoint>
+      <controlPoint>	-265.739716 -303.382385	</controlPoint>
     </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-459.609741 196.024292	</position>
+        </team1>
+        <team2>
+          <position>	292.345612 -165.882401	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-63.174095 170.228210	</position1>
+          <position2>	-112.143036 -164.795654	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
   </gameplayTypes>
 </60_asia_miao.xml>

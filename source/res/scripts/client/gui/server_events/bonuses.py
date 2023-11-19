@@ -1641,6 +1641,12 @@ class VehiclesBonus(SimpleBonus):
 
         return pack
 
+    def isOneOf(self):
+        for _, vehicleData in self.getVehicles():
+            return vehicleData.get('oneof', False)
+
+        return False
+
     def __getCommonAwardsVOs(self, vehicle, vehInfo, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
         vehicleVO = self.__getVehicleVO(vehicle, vehInfo, partial(RES_ICONS.getBonusIcon, iconSize))
         vehicleVO.update({'label': self.getIconLabel()})

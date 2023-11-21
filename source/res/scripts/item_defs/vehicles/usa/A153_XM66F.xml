@@ -12,7 +12,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	12	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.148	</moving>
@@ -772,8 +772,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1735,7 +1735,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_120mm_Gun_T123E6_66>	shared	  <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	9.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2352,7 +2352,7 @@
     <detailed>
       <engines>
         <LVDS_1100_2>
-          <smplEnginePower>	750	</smplEnginePower>
+          <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </LVDS_1100_2>
       </engines>

@@ -319,7 +319,7 @@ class ClientHangarSpace(object):
         BigWorld.worldDrawEnabled(True)
         AnimationSequence.setEnableAnimationSequenceUpdate(True)
         WebBrowser.pauseExternalCache(False)
-        if self.__loadingStatus < 1 or not BigWorld.virtualTextureRenderComplete():
+        if self.__loadingStatus < 1:
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
             BigWorld.uniprofSceneStart()

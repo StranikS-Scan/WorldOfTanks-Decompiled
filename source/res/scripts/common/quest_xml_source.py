@@ -4,6 +4,7 @@ import time
 import ArenaType
 import ResMgr
 import nations
+from items.components.ny_constants import CurrentNYConstants
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
@@ -534,7 +535,11 @@ class Source(object):
          'freePremiumCrew',
          'entitlementList',
          'dailyQuestReroll',
-         'noviceReset'}
+         'noviceReset',
+         CurrentNYConstants.TOY_FRAGMENTS,
+         CurrentNYConstants.FILLERS,
+         CurrentNYConstants.TOY_BONUS,
+         CurrentNYConstants.ANY_OF}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

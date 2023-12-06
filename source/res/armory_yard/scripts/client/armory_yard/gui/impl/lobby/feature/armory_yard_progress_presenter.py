@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_progress_presenter.py
-from functools import partial
 import BigWorld
 from armory_yard.gui.shared.gui_items.items_actions import COLLECT_REWARDS
+from armory_yard_constants import State
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.items_actions import factory
@@ -24,7 +24,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBon
 from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController
 from skeletons.account_helpers.settings_core import ISettingsCore
-from armory_yard.gui.window_events import showArmoryYardVideoRewardWindow, showArmoryYardInfoPage, showArmoryYardBuyWindow, showArmoryYardVehiclePreview
+from armory_yard.gui.window_events import showArmoryYardVideoRewardWindow, showArmoryYardInfoPage, showArmoryYardBuyWindow, showArmoryYardVehiclePreview, showArmoryYardBundlesWindow
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 
@@ -78,12 +78,12 @@ class _ProgressionTabPresenter(object):
 
     def init(self, parent):
         self.__parent = parent
-        self.__eventsSubscriber.subscribeToEvents((self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__stageManager.onStartStage, self.__onStartStage), (self.__stageManager.onFinishStage, self.__onFinishStage), (self.__viewModel.onCollectReward, self.__onCollectReward), (self.__viewModel.onPlayAnimation, self.__onPlayAnimation), (self.__armoryYardCtrl.onProgressUpdated, self.__onProgressUpdate), (self.__viewModel.onAboutEvent, self.__onAboutEvent), (self.__viewModel.onClose, self.__closeView), (self.__viewModel.onSkipAnimation, self.__onSkipAnimation), (self.__viewModel.onMoveSpace, self.__onMoveSpace), (self.__viewModel.onBuyTokens, self.__onBuyTokens), (self.__viewModel.onStartMoving, self.__onStartMoving), (self.__viewModel.onShowVehiclePreview, self.__onShowVehiclePreview), (self.__hangarSpace.onSpaceDestroy, lambda _: self.__closeView()), (self.__armoryYardCtrl.onStatusChange, self.__updateState))
+        self.__eventsSubscriber.subscribeToEvents((self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__stageManager.onStartStage, self.__onStartStage), (self.__stageManager.onFinishStage, self.__onFinishStage), (self.__viewModel.onCollectReward, self.__onCollectReward), (self.__viewModel.onPlayAnimation, self.__onPlayAnimation), (self.__armoryYardCtrl.onProgressUpdated, self.__onProgressUpdate), (self.__armoryYardCtrl.onCollectFinalReward, self._checkAndShowFinalRewardWindow), (self.__viewModel.onAboutEvent, self.__onAboutEvent), (self.__viewModel.onClose, self.__closeView), (self.__viewModel.onSkipAnimation, self.__onSkipAnimation), (self.__viewModel.onMoveSpace, self.__onMoveSpace), (self.__viewModel.onBuyTokens, self.__onBuyTokens), (self.__viewModel.onStartMoving, self.__onStartMoving), (self.__viewModel.onShowVehiclePreview, self.__onShowVehiclePreview), (self.__armoryYardCtrl.onStatusChange, self.__updateState))
         self.__eventsSubscriber.pause()
+        self.__armoryYardCtrl.cameraManager.init()
 
     def fini(self):
         self.__eventsSubscriber.unsubscribeFromAllEvents()
-        self.__onSkipAnimation(isClosing=True)
         self.__viewModel = None
         self.__stageManager = None
         self.__playAnimationLastID = None
@@ -133,7 +133,11 @@ class _ProgressionTabPresenter(object):
             return
 
     def __onBuyTokens(self):
-        if not self.__armoryYardCtrl.isCompleted():
+        if self.__armoryYardCtrl.isCompleted():
+            return
+        if self.__armoryYardCtrl.isStarterPackAvailable():
+            showArmoryYardBundlesWindow(parent=self.__parent)
+        else:
             showArmoryYardBuyWindow(parent=self.__parent)
 
     def __setEmptyRewardsButton(self):
@@ -157,7 +161,7 @@ class _ProgressionTabPresenter(object):
                     self._checkAndShowFinalRewardWindow()
                 ctx = {'index': stage}
                 g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_FINISHED, ctx=ctx))
-            self.__goToPositionByStage(stage)
+            self.__stageManager.gotToPositionByStage(stage)
             self.__stageManager.skip(stage)
             self.__updateCollectRewardsButton()
         self.__state.reset()
@@ -196,10 +200,10 @@ class _ProgressionTabPresenter(object):
     def __onProgressUpdate(self):
         self.__viewModel.setCurrentLevel(self.__armoryYardCtrl.getCurrentProgress())
         if not self.__state.isAnimation:
-            self.__updateView()
+            self.__updateView(progressUpdated=True)
 
-    def __updateView(self):
-        self.__updateStage()
+    def __updateView(self, progressUpdated=False):
+        self.__updateStage(progressUpdated=progressUpdated)
         self.__updateProgress()
         self.__updateState()
         self.__fillFinalReward()
@@ -218,10 +222,10 @@ class _ProgressionTabPresenter(object):
         self.__updateView()
 
     def __updateProgressionTimes(self, model):
-        startProgressionTime, _ = self.__armoryYardCtrl.getProgressionTimes()
-        _, endSeasonTime = self.__armoryYardCtrl.getSeasonInterval()
-        model.setToTimestamp(endSeasonTime)
-        model.setFromTimestamp(startProgressionTime)
+        state = self.__armoryYardCtrl.getState()
+        startTime, endTime = self.__armoryYardCtrl.getPostProgressionTimes() if state == State.POSTPROGRESSION else self.__armoryYardCtrl.getProgressionTimes()
+        model.setToTimestamp(endTime)
+        model.setFromTimestamp(startTime)
 
     def __updateState(self):
         if not self.__armoryYardCtrl.isActive():
@@ -261,7 +265,7 @@ class _ProgressionTabPresenter(object):
         self.__setSkipButton()
         self.__stageManager.pause()
         if not skipCameraTransition:
-            self.__goToPositionByStage(stage)
+            self.__stageManager.gotToPositionByStage(stage, instantly=False)
         self.__stageManager.resume()
 
     def __playProgress(self, progress, isReplay=False):
@@ -301,12 +305,8 @@ class _ProgressionTabPresenter(object):
                 model.setCurrentLevel(currentLvl)
         return
 
-    def __goToPositionByStage(self, stage):
-        data = self.__stageManager.getPositionByStage(stage)
-        self.__armoryYardCtrl.cameraManager.goToPosition(data)
-
     def __onFinishStage(self, stage):
-        self.__goToPositionByStage(stage)
+        self.__stageManager.gotToPositionByStage(stage)
         if self.__state.isBuilding:
             self.__setLastPlayedStageID(stage)
             self.__updateProgress()
@@ -331,10 +331,10 @@ class _ProgressionTabPresenter(object):
         self._checkAndShowFinalRewardWindow()
 
     def _checkAndShowFinalRewardWindow(self):
-        if self.__lastPlayedStageID == self.__armoryYardCtrl.getTotalSteps():
-            if not self.__armoryYardCtrl.isClaimedFinalReward():
-                self._showVideoRewardWindow()
-                BigWorld.player().AccountArmoryYardComponent.claimFinalReward()
+        if self.__lastPlayedStageID != self.__armoryYardCtrl.getTotalSteps() or self.__armoryYardCtrl.isClaimedFinalReward() or not self.__armoryYardCtrl.isFinalQuestCompleted:
+            return
+        self._showVideoRewardWindow()
+        BigWorld.player().AccountArmoryYardComponent.claimFinalReward()
 
     def __updateCollectRewardsButton(self):
         if self.__armoryYardCtrl.hasCurrentRewards():
@@ -342,11 +342,10 @@ class _ProgressionTabPresenter(object):
         else:
             self.__setEmptyRewardsButton()
 
-    def __updateStage(self):
-        progress = self.__lastPlayedStageID
-        if progress >= 0:
-            self.__stageManager.setStage(progress)
-            self.__goToPositionByStage(self.__lastPlayedStageID)
+    def __updateStage(self, progressUpdated=False):
+        if not progressUpdated:
+            self.__stageManager.setStage(max(0, self.__lastPlayedStageID))
+        self.__stageManager.gotToPositionByStage(max(0, self.__lastPlayedStageID), instantly=not progressUpdated)
 
     @property
     def __lastPlayedStageID(self):
@@ -362,6 +361,12 @@ class _ProgressionTabPresenter(object):
 
     def __onShowVehiclePreview(self):
         vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
-        if vehicle is not None:
-            g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.DESTROY_ARMORY_YARD_MAIN_VIEW, ctx={'destroyCallback': partial(showArmoryYardVehiclePreview, vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=self.__armoryYardCtrl.goToArmoryYard, backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))}), EVENT_BUS_SCOPE.DEFAULT)
-        return
+        if vehicle is None:
+            return
+        else:
+            if self.__state.isAnimation:
+                self.__onSkipAnimation()
+            self.__armoryYardCtrl.isVehiclePreview = True
+            showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=self.__armoryYardCtrl.goToArmoryYard, backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))
+            self.__armoryYardCtrl.cameraManager.goToHangar()
+            return

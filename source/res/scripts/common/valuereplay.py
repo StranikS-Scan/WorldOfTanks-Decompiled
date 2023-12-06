@@ -5,12 +5,16 @@ from bit_coder import BitCoder
 from soft_exception import SoftException
 from battle_results import g_config as battleResultsConfig
 
+def _makeFactorWithPrecision(factor, digits):
+    return int(round(factor * 10 ** digits))
+
+
 def makeFactor10(factor):
-    return int(round(factor * 10))
+    return _makeFactorWithPrecision(factor, 1)
 
 
 def makeFactor100(factor):
-    return int(round(factor * 100))
+    return _makeFactorWithPrecision(factor, 2)
 
 
 class BattleResults(dict):
@@ -295,7 +299,9 @@ class ValueReplay:
 
     def __getFactorValue(self, other):
         other = other.lower()
-        if 'factor100' in other or 'factors100' in other:
+        if 'factor1000' in other or 'factors1000' in other:
+            return 1000.0
+        elif 'factor100' in other or 'factors100' in other:
             return 100.0
         elif 'factor10' in other or 'factors10' in other:
             return 10.0

@@ -11,9 +11,9 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _HANDLERS_TYPES_LIST = []
 
-def getUniqueRewardHandler(rewards):
+def getUniqueRewardHandler(resultData):
     for handlerType in _HANDLERS_TYPES_LIST:
-        possibleHandler = handlerType.createHandlerFromRewards(rewards)
+        possibleHandler = handlerType.createHandler(resultData)
         if possibleHandler is not None:
             return possibleHandler
 
@@ -26,7 +26,7 @@ class IUniqueRewardHandler(object):
         super(IUniqueRewardHandler, self).__init__()
 
     @classmethod
-    def createHandlerFromRewards(cls, rewards):
+    def createHandler(cls, resultData):
         raise NotImplementedError
 
     def getRewardsData(self):
@@ -52,7 +52,7 @@ class BaseUniqueRewardHandler(IUniqueRewardHandler):
         return
 
     @classmethod
-    def createHandlerFromRewards(cls, rewards):
+    def createHandler(cls, resultData):
         return None
 
     def getRewardsData(self):
@@ -88,3 +88,7 @@ class BaseUniqueRewardsView(ViewImpl):
 
 def registerHandler(handlerType):
     _HANDLERS_TYPES_LIST.append(handlerType)
+
+
+def unregisterHandler(handlerType):
+    _HANDLERS_TYPES_LIST.remove(handlerType)

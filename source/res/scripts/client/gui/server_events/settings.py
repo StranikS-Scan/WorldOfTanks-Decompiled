@@ -155,11 +155,17 @@ def get():
 
 def isNewCommonEvent(svrEvent, settings=None):
     settings = settings or get()
-    if svrEvent.isAvailable()[0]:
-        setting = 'visited'
+    if settings is not None and not svrEvent.isCompleted() and not svrEvent.isOutOfDate():
+        eventID = svrEvent.getID()
+        isVisitedSettings = eventID in settings['visited']
+        isNaVisitedSettings = eventID in settings['naVisited']
+        if isVisitedSettings and isNaVisitedSettings:
+            return False
+        if svrEvent.isAvailable()[0]:
+            return not isVisitedSettings
+        return not isNaVisitedSettings
     else:
-        setting = 'naVisited'
-    return settings is not None and svrEvent.getID() not in settings[setting] and not svrEvent.isCompleted() and not svrEvent.isOutOfDate()
+        return False
 
 
 def isGroupMinimized(groupID, settings=None):

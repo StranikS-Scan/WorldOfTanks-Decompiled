@@ -6,9 +6,12 @@ if TYPE_CHECKING:
     from gui.shared.gui_items import ItemsCollection
     from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
+    from Event import Event
+    from gui.shared.utils.requesters import battle_pass_requester
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
     from gui.shared.gui_items.dossier import AccountDossier
+    from new_year import ny_requester
 
 class IItemsRequester(requesters.IRequester):
 
@@ -94,6 +97,10 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def refProgram(self):
+        raise NotImplementedError
+
+    @property
+    def festivity(self):
         raise NotImplementedError
 
     def requestUserDossier(self, databaseID, callback):
@@ -213,6 +220,9 @@ class IItemsRequester(requesters.IRequester):
     def getLayoutState(self, databaseID=None):
         raise NotImplementedError
 
+    def resetBattleAbilitiesUnlock(self):
+        raise NotImplementedError
+
 
 class IHangarSpace(object):
     onStatsReceived = None
@@ -234,6 +244,10 @@ class IHangarSpace(object):
 
     @property
     def space(self):
+        raise NotImplementedError
+
+    @property
+    def spaceID(self):
         raise NotImplementedError
 
     @property
@@ -313,6 +327,9 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def updateAnchorsParams(self, *args):
+        raise NotImplementedError
+
+    def resetLastUpdatedVehicle(self):
         raise NotImplementedError
 
 

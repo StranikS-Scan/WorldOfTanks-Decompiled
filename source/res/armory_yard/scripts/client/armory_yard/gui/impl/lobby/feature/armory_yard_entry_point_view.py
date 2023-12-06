@@ -48,9 +48,11 @@ class ArmoryYardEntryPointView(ViewImpl):
             return
         else:
             currentTime = time_utils.getServerUTCTime()
+            _, finishProgressionTime = self.__armoryYardCtrl.getProgressionTimes()
+            deltaFinishProgressionTime = finishProgressionTime - currentTime
             state = self.__armoryYardCtrl.getState()
             availableQuestsCount = self.__armoryYardCtrl.getAvailableQuestsCount()
-            if state in (State.ACTIVE, State.ACTIVELASTHOURS):
+            if state == State.ACTIVE:
                 nextCycle = self.__armoryYardCtrl.getNextCycle(currentTime)
                 if nextCycle is not None and nextCycle.startDate - currentTime <= time_utils.ONE_DAY:
                     state = State.ACTIVE
@@ -59,6 +61,8 @@ class ArmoryYardEntryPointView(ViewImpl):
             with self.viewModel.transaction() as model:
                 model.setProgressionLevel(availableQuestsCount)
                 model.setState(state)
+                if deltaFinishProgressionTime < time_utils.ONE_DAY:
+                    model.setEndTimestamp(deltaFinishProgressionTime)
             return
 
     def __onActionClick(self):

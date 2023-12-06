@@ -3,8 +3,10 @@
 import zlib
 import json
 import urllib
+import BigWorld
 from base64 import b64encode
 from datetime import datetime, timedelta, time as dt_time
+from constants import SPA_ATTRS
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
 from debug_utils import LOG_ERROR
@@ -178,6 +180,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
     def agate_v4_fetch_product_list_state(self, callback, request_data, fields=None):
         url = '/agate/api/v4/commerce/fetchProductListState/'
+        return self._request_data(callback, url, method='POST', post_data=request_data)
+
+    def agate_v6_fetch_product_list_personal(self, callback, request_data, fields=None):
+        url = '/agate/api/v6/commerce/fetchProductListPersonal/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
     def agate_v5_get_user_subscriptions(self, callback, request_data, fields=None):
@@ -646,6 +652,22 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             urlencoded_string = urllib.urlencode([ ('entitlement_codes', code) for code in entitlement_codes ])
             url = '{}?{}'.format(url, urlencoded_string)
         return self._request_data(callback, url, method='GET')
+
+    def get_storefront_products(self, callback, storefront):
+        url = '/shop/storefront/{}/products/'.format(storefront)
+        headers = {}
+        country = BigWorld.player().spaFlags.getFlag(SPA_ATTRS.USER_COUNTRY)
+        if country:
+            headers['X-User-Country'] = country.upper()
+        return self._request_data(callback, url, method='GET', headers=headers)
+
+    def buy_storefront_products(self, callback, storefront, productCode, requestData):
+        url = 'shop/storefront/{}/buy/product/{}/'.format(storefront, productCode)
+        headers = {}
+        country = BigWorld.player().spaFlags.getFlag(SPA_ATTRS.USER_COUNTRY)
+        if country:
+            headers['X-User-Country'] = country.upper()
+        return self._request_data(callback, url, method='POST', headers=headers, post_data=requestData)
 
     def get_inventory_entitlements_v5(self, callback, entitlementsFilter):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'

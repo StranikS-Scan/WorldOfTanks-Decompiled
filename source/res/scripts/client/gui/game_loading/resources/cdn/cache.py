@@ -255,9 +255,13 @@ class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
             self._tryToDownload()
 
     def _onServerSettingsChanged(self, *args, **kwargs):
+        self._getExternalConfigURLParam()
         self._lobbyCtx.getServerSettings().onServerSettingsChange += self._onServerSettingsUpdated
 
     def _onServerSettingsUpdated(self, *args, **kwargs):
+        self._getExternalConfigURLParam()
+
+    def _getExternalConfigURLParam(self):
         if self._cacheParams.isServerSettingsParamsReady:
             return
         configUrl = self._getExternalConfigUrl()

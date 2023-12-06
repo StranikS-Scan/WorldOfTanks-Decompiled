@@ -9,17 +9,18 @@ from gui.shared.utils import decorators
 
 class CollectRewardsAction(AsyncGUIItemAction):
 
-    def __init__(self, stageCount):
+    def __init__(self, stageCount, closeCallback=None):
         super(CollectRewardsAction, self).__init__()
         self.skipConfirm = True
         self.__stageCount = stageCount
+        self.__closeCallback = closeCallback
 
     @adisp_async
     @adisp_process
     def _action(self, callback):
         result = yield CollectRewardsProcessor().request()
         if result.success and result.auxData is not None:
-            showArmoryYardRewardWindow(bonuses=result.auxData, state=ArmoryYardRewardState.STAGE, stage=self.__stageCount)
+            showArmoryYardRewardWindow(bonuses=result.auxData, state=ArmoryYardRewardState.STAGE, stage=self.__stageCount, closeCallback=self.__closeCallback)
         callback(result)
         return
 

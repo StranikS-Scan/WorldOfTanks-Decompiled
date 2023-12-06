@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_main_view.py
 import logging
-from armory_yard.gui.window_events import showArmoryYardBuyWindow
+from armory_yard.gui.window_events import showArmoryYardBuyWindow, showArmoryYardBundlesWindow
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.events import ArmoryYardEvent
 from helpers import dependency
 from shared_utils import first
@@ -26,7 +27,7 @@ from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_currency_tooltip_vi
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_simple_tooltip_view import ArmoryYardSimpleTooltipView
 _logger = logging.getLogger(__name__)
 
-class ArmoryYardMainView(ViewImpl):
+class ArmoryYardMainView(ViewImpl, IGlobalListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __gui = dependency.descriptor(IGuiLoader)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -49,21 +50,28 @@ class ArmoryYardMainView(ViewImpl):
          TabId.QUESTS: _QuestsTabPresenter(self.viewModel, self.__closeView, self.layer)}
         return
 
+    def onPrbEntitySwitching(self):
+        self.__armoryYardCtrl.unloadScene(isReload=False)
+        self.__closeView()
+
     def _initialize(self, *args, **kwargs):
         super(ArmoryYardMainView, self)._initialize(*args, **kwargs)
         self.__updateVisibilityHangarHeaderMenu()
+        self.startGlobalListening()
 
     def _finalize(self):
         for tab in self.__tabs.values():
             tab.fini()
 
         self.__tabs.clear()
-        self.__updateVisibilityHangarHeaderMenu(isVisible=True)
-        self.__armoryYardCtrl.onLoadingHangar()
-        super(ArmoryYardMainView, self)._finalize()
         self.__stageManager.destroy()
         self.__stageManager = None
         self.__state = None
+        self.__updateVisibilityHangarHeaderMenu(isVisible=True)
+        if not self.__armoryYardCtrl.isVehiclePreview:
+            self.__armoryYardCtrl.onLoadingHangar()
+        self.stopGlobalListening()
+        super(ArmoryYardMainView, self)._finalize()
         if self.__destroyCallback is not None:
             self.__destroyCallback()
         return
@@ -81,7 +89,7 @@ class ArmoryYardMainView(ViewImpl):
         return
 
     def _getEvents(self):
-        return super(ArmoryYardMainView, self)._getEvents() + ((self.viewModel.onTabChange, self.__onTabChange), (self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated))
+        return super(ArmoryYardMainView, self)._getEvents() + ((self.viewModel.onTabChange, self.__onTabChange), (self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__armoryYardCtrl.onTabIdChanged, self.__onTabChange))
 
     def _getListeners(self):
         return ((ArmoryYardEvent.DESTROY_ARMORY_YARD_MAIN_VIEW, self.__destroyWindowEvent), (ArmoryYardEvent.SHOW_ARMORY_YARD_BUY_VIEW, self.__showArmoryYardBuyView))
@@ -136,7 +144,6 @@ class ArmoryYardMainView(ViewImpl):
     def __onServerSettingsUpdated(self):
         if not self.__armoryYardCtrl.isEnabled():
             self.destroyWindow()
-            return
 
     def __updateVisibilityHangarHeaderMenu(self, isVisible=False):
         state = HeaderMenuVisibilityState.NOTHING if not isVisible else HeaderMenuVisibilityState.ALL
@@ -156,7 +163,9 @@ class ArmoryYardMainView(ViewImpl):
         self.__setTab(TabId(first(args).get('tabId')))
 
     def __showArmoryYardBuyView(self, event):
-        ctx = event.ctx
         if self.__tabId == TabId.PROGRESS and not self.__armoryYardCtrl.isCompleted():
-            showArmoryYardBuyWindow(parent=self.getParentWindow(), onLoadedCallback=ctx.get('onLoadedCallback', None))
+            if self.__armoryYardCtrl.isStarterPackAvailable():
+                showArmoryYardBundlesWindow(parent=self.getParentWindow(), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
+            else:
+                showArmoryYardBuyWindow(parent=self.getParentWindow(), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
         return

@@ -12,6 +12,8 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.game_control import IArmoryYardController
 from cache import cached_property
 from gui.impl.lobby.video.video_view import VideoViewWindow
+from gui.shared import g_eventBus
+from gui.shared.events import ArmoryYardEvent
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sounds import ArmoryYardVideoSoundControl
 from armory_yard.managers.fade_manager import ArmoryYardFadeManager, ArmoryYardFadeState
 from adisp import adisp_process
@@ -21,7 +23,14 @@ def showVideo(videoName, onVideoClose, isAutoClose=True):
     if not videoSource or not videoSource.exists():
         onVideoClose()
         return
-    window = VideoViewWindow(videoSource(), onVideoClosed=onVideoClose, isAutoClose=isAutoClose, soundControl=ArmoryYardVideoSoundControl(videoSource()))
+
+    def onVideoCloseWrapper(*args, **kwargs):
+        if onVideoClose:
+            onVideoClose(*args, **kwargs)
+        g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+
+    g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_MUTE_SOUND))
+    window = VideoViewWindow(videoSource(), onVideoClosed=onVideoCloseWrapper, isAutoClose=isAutoClose, soundControl=ArmoryYardVideoSoundControl(videoSource()))
     window.load()
 
 
@@ -41,6 +50,7 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
         self.__isPlaying = False
         self.__lastAnimStageID = -1
         self.__paused = False
+        self.__viewedVideo = False
         self.__hidedDetailsOnStage = False
         self.__fadeManager = ArmoryYardFadeManager()
         self.__fadeManager.setup()
@@ -58,6 +68,7 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
         self.__isPlaying = False
         self.__paused = False
         self.__hidedDetailsOnStage = False
+        self.__viewedVideo = False
         while not self.__stageQueue.empty():
             self.__stageQueue.get()
 
@@ -73,6 +84,7 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
         if reset:
             self.cgfStageManager.tryUnhideUnnecessaryPartsAfterStage(toStage)
             self.cgfStageManager.tryUnhideUnnecessaryPartsOnStage(toStage)
+            self.cgfStageManager.hideNonSequenceObjectAfterStage()
             self.reset()
         for stage in range(fromStage, toStage):
             if self.cgfStageManager.stageExists(stage):
@@ -82,8 +94,12 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
 
                 else:
                     self.__stageQueue.put((stage, None))
+            if self.cgfStageManager.isSchemeStage(stage):
+                self.__stageQueue.put((stage, 0))
 
-        if not self.__stageQueue.empty() and not self.__isPlaying:
+        if not self.__stageQueue.empty() and not self.__isPlaying and self.__currentStage is None:
+            self.cgfStageManager.turnOffHighlight()
+            self.__armoryYardCtrl.cameraManager.isStagePlaying = True
             currentState = self.__stageQueue.get()
             self.__currentStage = currentState[0]
             self.__currentGroup = currentState[1]
@@ -106,27 +122,42 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
     def setStage(self, stage):
         self.cgfStageManager.activateToStage(0, stage + 1)
         self.cgfStageManager.tryHideUnnecessaryPartsAfterStage(stage)
+        self.cgfStageManager.hideNonSequenceObjectAfterStage()
+        self.cgfStageManager.showNonSequenceObjectAfterStage(stage)
         self.cgfStageManager.tryHideUnnecessaryPartsOnStage(stage)
 
     def skip(self, toStage):
         self.reset()
         self.setStage(toStage)
+        self.cgfStageManager.turnOnHighlight(self.cgfStageManager.getCameraDataByStageIndex(toStage))
+        self.__armoryYardCtrl.cameraManager.isStagePlaying = False
 
     def playProgress(self, start, stageCount):
-        end = start + stageCount
-        self.startStages(start, end, forceUpdate=start == 0)
+        self.startStages(start, start + stageCount, forceUpdate=start == 0)
 
-    def getPositionByStage(self, stage):
-        return self.cgfStageManager.getCameraDataByStageIndex(stage)
+    def gotToPositionByStage(self, stage, instantly=True):
+        self.__armoryYardCtrl.cameraManager.goToPosition(self.cgfStageManager.getCameraDataByStageIndex(stage), instantly=instantly)
+
+    def __setStartStage(self, stage):
+        if self.cgfStageManager.stageHasDurationPart(stage):
+            self.onStartStage(stage, self.cgfStageManager.stageDuration(stage) or 1.0, skipCameraTransition=False)
+        else:
+            self.onStartStage(stage, 1.0, skipCameraTransition=True)
 
     def __update(self):
         if self.__paused:
             return 0.0
         elif self.__currentStage is None:
-            self.__isPlaying = False
-            self.__playTime = None
+            self.__clear()
             return
         else:
+            videoName = self.cgfStageManager.stageVideoName(self.__currentStage)
+            if videoName is not None and not self.__viewedVideo:
+                if self.__previousStage != self.__currentStage:
+                    self.__setStartStage(self.__currentStage)
+                self.cgfStageManager.turnOffRecorderHighlight()
+                self.__fadeIn(partial(showVideo, videoName, self.__fadeOut))
+                return 0.0
             if not self.__isPlaying:
                 self.__playTime = 0.0
                 self.__isPlaying = True
@@ -134,13 +165,7 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
                 self.cgfStageManager.activateStageGroup(self.__currentStage, self.__currentGroup)
                 self.__hidedDetailsOnStage = False
                 if self.__previousStage != self.__currentStage:
-                    stageDuration = 1.0
-                    skipCameraTransition = False
-                    if self.cgfStageManager.stageHasDurationPart(self.__currentStage):
-                        stageDuration = self.cgfStageManager.stageDuration(self.__currentStage)
-                    else:
-                        skipCameraTransition = True
-                    self.onStartStage(self.__currentStage, stageDuration, skipCameraTransition=skipCameraTransition)
+                    self.__setStartStage(self.__currentStage)
             else:
                 self.__playTime += self.measureDeltaTime()
                 stageGroupDuration = 0.0
@@ -154,45 +179,40 @@ class StageManager(CallbackDelayer, TimeDeltaMeter):
                     self.__isPlaying = False
                     self.__previousStage = self.__currentStage
                     self.__previousGroup = self.__currentGroup
+                    self.__viewedVideo = False
                     if self.__stageQueue.empty():
-                        self.__currentStage = None
-                        self.__currentGroup = None
+                        self.__currentStage = self.__currentGroup = None
+                        self.cgfStageManager.turnOnHighlight(self.cgfStageManager.getCameraDataByStageIndex(self.__previousStage))
+                        self.__armoryYardCtrl.cameraManager.isStagePlaying = False
                     else:
-                        currentState = self.__stageQueue.get()
-                        self.__currentStage = currentState[0]
-                        self.__currentGroup = currentState[1]
+                        self.__currentStage, self.__currentGroup = self.__stageQueue.get()
                     if self.__previousStage != self.__currentStage:
                         self.cgfStageManager.tryHideUnnecessaryPartsAfterStage(self.__previousStage)
-                        videoName = self.cgfStageManager.stageVideoName(self.__previousStage)
-                        if videoName is not None:
-                            self.pause()
-                            self.__fadeIn(partial(showVideo, videoName, partial(self.__onFinishStageVideo, self.__fadeOut)))
-                        else:
-                            self.cgfStageManager.endStageGroup(self.__previousStage, self.__previousGroup)
-                            self.onFinishStage(self.__previousStage)
+                        self.cgfStageManager.showNonSequenceObjectAfterStage(self.__previousStage)
+                        self.onFinishStage(self.__previousStage)
+                        self.stopCallback(self.__update)
             return 0.0
-
-    def __onFinishStageVideo(self, callback=None):
-        self.cgfStageManager.endStageGroup(self.__previousStage, self.__previousGroup)
-        self.onFinishStage(self.__previousStage)
-        self.resume()
-        if callback:
-            callback()
 
     @adisp_process
     def __fadeIn(self, fadeCallback=None):
+        self.pause()
         result = yield self.__fadeManager.startFade()
-        if (result == ArmoryYardFadeState.released or result == ArmoryYardFadeState.destroying) and fadeCallback is not None:
+        if fadeCallback is not None and result in (ArmoryYardFadeState.released, ArmoryYardFadeState.destroying):
             fadeCallback()
         return
 
     @adisp_process
     def __fadeOut(self, fadeCallback=None):
+        self.cgfStageManager.deactivateAllStage()
+        self.setStage(self.__currentStage)
+        self.cgfStageManager.turnOnRecorderHighlight()
+        self.__viewedVideo = True
+        self.resume()
         if not self.__fadeManager.isActive():
             return
         else:
             result = yield self.__fadeManager.startFade(fadeIn=False)
-            if (result == ArmoryYardFadeState.released or result == ArmoryYardFadeState.destroying) and fadeCallback is not None:
+            if fadeCallback is not None and result in (ArmoryYardFadeState.released, ArmoryYardFadeState.destroying):
                 fadeCallback()
             return
 

@@ -136,11 +136,16 @@ class VehicleState(object):
     __slots__ = ('_unlocks', '_pairs', '_features', '_disabledSwitches')
 
     def __init__(self, data=None):
-        data = data or self.getDefaultState()
-        self._unlocks = copy(data[POST_PROGRESSION_UNLOCKS_IDX])
-        self._pairs = copy(data[POST_PROGRESSION_PAIRS_IDX])
-        self._features = copy(data[POST_PROGRESSION_FEATURES_IDX])
-        self._disabledSwitches = copy(data[POST_PROGRESSION_DISABLED_SWITCHES_IDX])
+        if data:
+            self._unlocks = copy(data[POST_PROGRESSION_UNLOCKS_IDX])
+            self._pairs = copy(data[POST_PROGRESSION_PAIRS_IDX])
+            self._features = copy(data[POST_PROGRESSION_FEATURES_IDX])
+            self._disabledSwitches = copy(data[POST_PROGRESSION_DISABLED_SWITCHES_IDX])
+        else:
+            self._unlocks = self.__getDefaultUnlocksState()
+            self._pairs = self.__getDefaultPairsState()
+            self._features = self.__getDefaultFeaturesState()
+            self._disabledSwitches = self.__getDefaultDisabledSwitchesState()
 
     def __eq__(self, other):
         return self.unlocks == other.unlocks and self.pairs == other.pairs and self.features == other.features and self._disabledSwitches == other.disabledSwitches

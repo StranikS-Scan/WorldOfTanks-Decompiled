@@ -6,20 +6,24 @@ from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager, SoundMa
 from shared_utils import CONST_CONTAINER
 
 class ArmoryYardSounds(CONST_CONTAINER):
-    VIDEO_INTRO = 'ay_video_intro_01'
-    VIDEO_ARMOUR = 'ay_video_armour_02'
-    VIDEO_TRACKS = 'ay_video_tracks_03'
-    VIDEO_REWARD = 'ay_video_reward_04'
+    VIDEO_EP2_ARMOUR = 'ay_ep_02_video_stage_09'
+    VIDEO_EP2_GUN = 'ay_ep_02_video_stage_22'
+    VIDEO_EP2_TURRET = 'ay_ep_02_video_stage_29'
+    VIDEO_EP2_TRACKS = 'ay_ep_02_video_stage_32'
+    VIDEO_EP2_REWARD = 'ay_ep_02_video_stage_38'
+    VIDEO_EP2_INTRO = 'ay_ep_02_video_stage_00'
     VIDEO_PAUSE = 'ay_video_pause'
     VIDEO_RESUME = 'ay_video_resume'
     VIDEO_STOP = 'ay_video_stop'
 
 
 class ArmoryYardVideoSoundControl(IVideoSoundManager):
-    __VIDEO_TO_SOUND = {'ay_intro': ArmoryYardSounds.VIDEO_INTRO,
-     'ay_armour': ArmoryYardSounds.VIDEO_ARMOUR,
-     'ay_tracks': ArmoryYardSounds.VIDEO_TRACKS,
-     'ay_reward': ArmoryYardSounds.VIDEO_REWARD}
+    __VIDEO_TO_SOUND = {'ay_ep2_armour': ArmoryYardSounds.VIDEO_EP2_ARMOUR,
+     'ay_ep2_gun': ArmoryYardSounds.VIDEO_EP2_GUN,
+     'ay_ep2_turret': ArmoryYardSounds.VIDEO_EP2_TURRET,
+     'ay_ep2_tracks': ArmoryYardSounds.VIDEO_EP2_TRACKS,
+     'ay_ep2_reward': ArmoryYardSounds.VIDEO_EP2_REWARD,
+     'ay_ep2_intro': ArmoryYardSounds.VIDEO_EP2_INTRO}
 
     def __init__(self, videoID):
         self.__videoID = videoID
@@ -66,4 +70,4 @@ class ArmoryYardRewardVideoSoundControl(ArmoryYardVideoSoundControl):
 
     @property
     def videoSoundEvent(self):
-        return ArmoryYardSounds.VIDEO_REWARD
+        return ArmoryYardSounds.VIDEO_EP2_REWARD

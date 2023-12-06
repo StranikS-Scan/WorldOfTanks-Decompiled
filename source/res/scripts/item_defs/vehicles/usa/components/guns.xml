@@ -166,6 +166,7 @@
     <_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>	26	</_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
     <_120mm_Gun_M58_7x7>	31001	</_120mm_Gun_M58_7x7>
+    <_75mm_Gun_M6_594>	31003	</_75mm_Gun_M6_594>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -1927,6 +1928,64 @@
         </_75mm_M48>
       </shots>
     </_75mm_Gun_M6>
+    <_75mm_Gun_M6_594>
+      <userString>	#usa_vehicles:_75mm_Gun_M6_594	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	33350	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4.0	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2.05714285714286	</aimingTime>
+      <weight>	186	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_M61_594>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	792	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	116 98	</piercingPower>
+        </_75mm_M61_594>
+        <_75mm_M72_594>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	990	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	153 118	</piercingPower>
+        </_75mm_M72_594>
+        <_75mm_M48_594>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	792	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_M48_594>
+      </shots>
+    </_75mm_Gun_M6_594>
     <_75mm_Gun_M17>
       <userString>	#usa_vehicles:_75mm_Gun_M17	</userString>
       <tags></tags>

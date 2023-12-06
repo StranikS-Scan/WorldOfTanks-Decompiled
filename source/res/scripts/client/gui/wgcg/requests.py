@@ -19,6 +19,7 @@ from gui.wgcg.hof.handlers import HofRequestHandlers
 from gui.wgcg.mapbox.handlers import MapboxRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
+from gui.wgcg.shop.handlers import ShopRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandlers
 from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
@@ -108,6 +109,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(GiftSystemRequestHandlers(requester).get())
         self.__handlers.update(UILoggingRequestHandlers(requester).get())
         self.__handlers.update(AgateRequestHandlers(requester).get())
+        self.__handlers.update(ShopRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

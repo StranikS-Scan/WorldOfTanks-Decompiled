@@ -126,6 +126,12 @@ class _ShowAdditionalRewardsTooltipSchema(W2CSchema):
     y = Field(required=True, type=int)
 
 
+class _GuaranteedRewardTooltipSchema(W2CSchema):
+    id = Field(required=True, type=int)
+    x = Field(required=True, type=int)
+    y = Field(required=True, type=int)
+
+
 class UtilWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
@@ -226,6 +232,10 @@ class UtilWebApiMixin(object):
             bonuses.extend(getNonQuestBonuses(key, value))
 
         self.__getTooltipMgr().onCreateWulfTooltip(TC.ADDITIONAL_REWARDS, [bonuses], cmd.x, cmd.y)
+
+    @w2c(_GuaranteedRewardTooltipSchema, 'show_guaranteed_reward_tooltip')
+    def showLootboxGuaranteedRewardTooltip(self, cmd):
+        self.__getTooltipMgr().onCreateWulfTooltip(TC.LOOT_BOX_GUARANTEED_REWARD_TOOLTIP, [cmd.id], cmd.x, cmd.y)
 
     @w2c(W2CSchema, 'server_timestamp')
     def getCurrentLocalServerTimestamp(self, _):

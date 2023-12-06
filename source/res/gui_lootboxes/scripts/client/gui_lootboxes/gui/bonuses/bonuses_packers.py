@@ -31,20 +31,31 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 _logger = logging.getLogger(__name__)
+EXTRA_BONUS_PACKER_MAPS_DEFAULT = {}
+EXTRA_BONUS_PACKER_MAPS_REWARDS = {}
+EXTRA_BONUS_PACKER_MAPS_MAIN_REWARDS = {}
 
 def getLootBoxesBonusPackerMap():
     mapping = getDefaultBonusPackersMap()
-    mapping.update({'crewBooks': LootBoxCrewBookBonusUIPacker(),
+    mapping.update({'vehicles': LootBoxVehiclesBonusUIPacker(),
+     'crewBooks': LootBoxCrewBookBonusUIPacker(),
      'tmanToken': TmanTemplateBonusPacker(),
      'customizations': LootBoxCustomizationBonusUIPacker(),
      'collectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      'anyCollectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      'dogTagComponents': LootBoxDogTagUIPacker()})
+    mapping.update(EXTRA_BONUS_PACKER_MAPS_DEFAULT)
     return mapping
 
 
 def getLootBoxesBonusPacker():
     return BonusUIPacker(getLootBoxesBonusPackerMap())
+
+
+def getLootboxesWithPossibleCompensationBonusPacker():
+    mapping = getLootBoxesBonusPackerMap()
+    mapping.update({'vehicles': LootBoxVehiclesWithPossibleCompensationBonusUIPacker()})
+    return BonusUIPacker(mapping)
 
 
 def getRewardsScreenDefaultBonusPackerMap():
@@ -58,12 +69,14 @@ def getRewardsScreenDefaultBonusPackerMap():
      'dogTagComponents': LootBoxDogTagUIPacker(),
      'anyCollectionItem': LootBoxAnyCollectionItemBonusUIPacker(),
      constants.PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusPacker()})
+    mapping.update(EXTRA_BONUS_PACKER_MAPS_REWARDS)
     return mapping
 
 
 def getAdditionalRewardsTooltipBonusPacker():
     mapping = getRewardsScreenDefaultBonusPackerMap()
-    mapping.update({'customizations': AdditionalRewardsCustomizationBonusUIPacker()})
+    mapping.update({'customizations': AdditionalRewardsCustomizationBonusUIPacker(),
+     'vehicles': VehiclesBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -75,6 +88,7 @@ def getMainRewardsBonusPacker():
     mapping = getRewardsScreenDefaultBonusPackerMap()
     mapping.update({'tmanToken': TmanTemplateRewardScreenBonusPacker(),
      'customizations': LootBoxUniqueCustomizationBonusUIPacker()})
+    mapping.update(EXTRA_BONUS_PACKER_MAPS_MAIN_REWARDS)
     return BonusUIPacker(mapping)
 
 
@@ -240,7 +254,7 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
 
     @classmethod
     def _getIcon(cls, bonus, c11Item):
-        return str(c11Item.itemTypeName)
+        return str(c11Item.itemTypeName) + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else str(c11Item.itemTypeName)
 
     @classmethod
     def __getCompBonus(cls, compensation):
@@ -348,6 +362,13 @@ class LootBoxCompensationBonusUIPacker(SimpleBonusUIPacker):
         return [R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.CompensationTooltip()]
 
 
+class LootBoxPossibleCompensationBonusUIPacker(LootBoxCompensationBonusUIPacker):
+
+    @classmethod
+    def _getCompensatedBonus(cls, bonus):
+        return bonus.getCompensationReason()
+
+
 class LootBoxTokensBonusUIPacker(TokenBonusUIPacker):
 
     @classmethod
@@ -403,10 +424,13 @@ class LootBoxVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setIsCompensation(bonus.isCompensation())
         model.setIsElite(vehicle.isElite)
         model.setIsRent(vehicle.isRented)
+        model.setInInventory(vehicle.isInInventory)
+        model.setWasSold(vehicle.restoreInfo is not None)
         if vehicle.isRented:
             model.setRentDays(bonus.getRentDays(vehInfo) or 0)
             model.setRentBattles(bonus.getRentBattles(vehInfo) or 0)
         model.setLabel(cls._getLabel(vehicle))
+        model.setShortVehicleLabel(vehicle.shortUserName)
         return model
 
     @classmethod
@@ -439,6 +463,72 @@ class LootBoxVehiclesBonusUIPacker(VehiclesBonusUIPacker):
                     contentIds.extend(packer.getContentId(bonusComp))
 
             contentIds.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return contentIds
+
+
+class LootBoxVehiclesWithPossibleCompensationBonusUIPacker(LootBoxVehiclesBonusUIPacker):
+
+    @classmethod
+    def _packVehicles(cls, bonus, vehicles):
+        packedVehicles = []
+        for vehicle, vehInfo in vehicles:
+            compensation = bonus.compensation(vehicle, bonus)
+            if compensation:
+                packer = LootBoxCompensationBonusUIPacker()
+                for bonusComp in compensation:
+                    packedVehicles.extend(packer.pack(bonusComp))
+
+            packedVehicles.append(cls._packVehicle(bonus, vehInfo, vehicle))
+            if bonus.isNonZeroCompensation(vehInfo):
+                packer = LootBoxPossibleCompensationBonusUIPacker()
+                compensationBonuses = bonus.getPossibleCompensationBonuses(vehicle, bonus)
+                for compensationBonus in compensationBonuses:
+                    if not compensationBonus.isShowInGUI():
+                        continue
+                    packedVehicles.extend(packer.pack(compensationBonus))
+
+        return packedVehicles
+
+    @classmethod
+    def _packTooltips(cls, bonus, vehicles):
+        packedTooltips = []
+        for vehicle, vehInfo in vehicles:
+            compensation = bonus.compensation(vehicle, bonus)
+            if compensation:
+                for bonusComp in compensation:
+                    packedTooltips.extend(cls._packCompensationTooltip(bonusComp, vehicle))
+
+            packedTooltips.append(cls._packTooltip(bonus, vehicle, vehInfo))
+            if bonus.isNonZeroCompensation(vehInfo):
+                packer = LootBoxPossibleCompensationBonusUIPacker()
+                compensationBonuses = bonus.getPossibleCompensationBonuses(vehicle, bonus)
+                for compensationBonus in compensationBonuses:
+                    if not compensationBonus.isShowInGUI():
+                        continue
+                    packedTooltips.extend(packer.getToolTip(compensationBonus))
+
+        return packedTooltips
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        contentIds = []
+        vehicles = bonus.getVehicles()
+        for vehicle, vehInfo in vehicles:
+            compensation = bonus.compensation(vehicle, bonus)
+            if compensation:
+                for bonusComp in compensation:
+                    packer = LootBoxCompensationBonusUIPacker()
+                    contentIds.extend(packer.getContentId(bonusComp))
+
+            contentIds.append(BACKPORT_TOOLTIP_CONTENT_ID)
+            if bonus.isNonZeroCompensation(vehInfo):
+                packer = LootBoxPossibleCompensationBonusUIPacker()
+                compensationBonuses = bonus.getPossibleCompensationBonuses(vehicle, bonus)
+                for compensationBonus in compensationBonuses:
+                    if not compensationBonus.isShowInGUI():
+                        continue
+                    contentIds.extend(packer.getContentId(compensationBonus))
 
         return contentIds
 

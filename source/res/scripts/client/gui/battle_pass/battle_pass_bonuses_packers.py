@@ -33,7 +33,7 @@ if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import TokensBonus
 _logger = logging.getLogger(__name__)
 
-def getBattlePassBonusPacker():
+def getBattlePassBonusPackersMap():
     mapping = getDefaultBonusPackersMap()
     currencyBonusUIPacker = ExtendedCurrencyBonusUIPacker()
     mapping.update({'berths': BattlePassBerthsBonusPacker(),
@@ -57,6 +57,11 @@ def getBattlePassBonusPacker():
      Currency.CREDITS: currencyBonusUIPacker,
      Currency.CRYSTAL: currencyBonusUIPacker,
      Currency.GOLD: currencyBonusUIPacker})
+    return mapping
+
+
+def getBattlePassBonusPacker():
+    mapping = getBattlePassBonusPackersMap()
     return BonusUIPacker(mapping)
 
 

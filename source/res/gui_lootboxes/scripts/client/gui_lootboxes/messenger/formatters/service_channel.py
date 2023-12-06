@@ -23,17 +23,26 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         allRewards = message.get('rewards')
         boxesData = message.get('boxesData')
+        header = message.get('header', self.__formHeader(boxesData))
+        infoText = message.get('infoText', '')
         receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards = self.__splitRewards(allRewards)
         dateFmt = backport.getDateTimeFormat(time_utils.getServerRegionalTime())
         openedFmt = self.__formOpenedBoxesSection(boxesData)
         receivedRewardsFmt = self.__formReceivedRewardsSection(receivedRewards)
         compensationFmt = self.__formCompensationSection(vehicleCompensatedRewards, collectionCompensatedRewards)
-        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'date': dateFmt,
+        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
+         'infoText': infoText,
+         'date': dateFmt,
          'openedBoxes': openedFmt,
          'receivedRewards': receivedRewardsFmt,
          'compensation': compensationFmt})
         settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
         return [MessageData(formatted, settings)]
+
+    def __formHeader(self, boxesData):
+        allCount = sum([ boxesData[boxID] for boxID in boxesData ])
+        headerStr = backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBox.header()) if allCount == 1 else backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBoxes.header())
+        return headerStr
 
     def __formOpenedBoxesSection(self, boxesData):
         openedBoxes = []
@@ -108,6 +117,7 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
 
 class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     __MESSAGE_TEMPLATE = 'LootBoxRewardsSysMessage'
+    __SEPARATOR = '<br/>'
 
     def __init__(self, subFormatters=()):
         super(LootBoxAutoOpenFormatter, self).__init__()
@@ -135,8 +145,13 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
             if openedBoxesIDs:
                 data = message.data
                 rewards = getRewardsForBoxes(message, data.keys())
-                messageData = LootBoxOpenedFormatter().format({'rewards': rewards,
-                 'boxesData': {boxID:data[boxID]['count'] for boxID in openedBoxesIDs}})[0]
+                boxesData = {boxID:data[boxID]['count'] for boxID in openedBoxesIDs}
+                header = self.__formHeader(boxesData)
+                infoText = self.__SEPARATOR + backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.autoOpenedLootBox.opened())
+                messageData = LootBoxOpenedFormatter().format({'header': header,
+                 'infoText': infoText,
+                 'rewards': rewards,
+                 'boxesData': boxesData})[0]
                 if messageData is not None:
                     messageDataList.append(messageData)
         if messageDataList:
@@ -145,3 +160,8 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
         else:
             callback([MessageData(None, None)])
             return
+
+    def __formHeader(self, boxesData):
+        allCount = sum([ boxesData[boxID] for boxID in boxesData ])
+        headerStr = backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.autoOpenedLootBox.header()) if allCount == 1 else backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.autoOpenedLootBoxes.header())
+        return headerStr

@@ -80,6 +80,7 @@ class _PlayerEvents(object):
         self.onUpdateSpecBattlesWindow = Event.Event()
         self.onLoadingMilestoneReached = Event.Event()
         self.onConfigModelUpdated = Event.Event()
+        self.onShowShooterTracer = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

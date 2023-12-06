@@ -72,6 +72,40 @@ class PlatformFetchProductListCtx(CommonWebRequestCtx):
         return None
 
 
+class PlatformFetchProductListPersonalCtx(CommonWebRequestCtx):
+
+    def __init__(self, ctx, waitingID=''):
+        self.__params = {'storefront': ctx.storefront,
+         'language': ctx.language,
+         'country': ctx.country}
+        if ctx.product_codes:
+            self.__params.update(product_codes=ctx.product_codes)
+        super(PlatformFetchProductListPersonalCtx, self).__init__(waitingID=waitingID)
+
+    def getRequestType(self):
+        return WebRequestDataType.PLATFORM_FETCH_PRODUCT_LIST_PERSONAL
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    def isCaching(self):
+        return False
+
+    def getParams(self):
+        return self.__params
+
+    @staticmethod
+    def getDataObj(incomeData):
+        return incomeData
+
+    @staticmethod
+    def getDefDataObj():
+        return None
+
+
 class PlatformGetUserSubscriptionsCtx(CommonWebRequestCtx):
 
     def __init__(self, ctx, waitingID=''):

@@ -417,6 +417,20 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_M61>
+  <_75mm_M61_594>
+    <id>	31001	</id>
+    <userString>	#usa_vehicles:_75mm_M61	</userString>
+    <icon>	ap	</icon>
+    <price>	56	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_M61_594>
   <_75mm_M61_bootcamp>
     <id>	141	</id>
     <userString>	#usa_vehicles:_75mm_M61	</userString>
@@ -461,6 +475,21 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_M72>
+  <_75mm_M72_594>
+    <id>	31002	</id>
+    <userString>	#usa_vehicles:_75mm_M72	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_M72_594>
   <_75mm_M48>
     <id>	16	</id>
     <userString>	#usa_vehicles:_75mm_M48	</userString>
@@ -485,6 +514,30 @@
       </damage>
     </armorSpalls>
   </_75mm_M48>
+  <_75mm_M48_594>
+    <id>	31003	</id>
+    <userString>	#usa_vehicles:_75mm_M48	</userString>
+    <icon>	he_modern	</icon>
+    <price>	56	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	75	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_M48_594>
   <_75mm_M48_spg>
     <id>	58	</id>
     <userString>	#usa_vehicles:_75mm_M48	</userString>

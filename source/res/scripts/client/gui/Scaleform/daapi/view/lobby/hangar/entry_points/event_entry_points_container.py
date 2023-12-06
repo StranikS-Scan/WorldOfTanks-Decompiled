@@ -155,7 +155,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
         return
 
     def _isQueueEnabled(self):
-        enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
+        enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.VERSUS_AI)
         return any((self.__isQueueSelected(queueType) for queueType in enabledQueues))
 
     def __isQueueSelected(self, queueType):

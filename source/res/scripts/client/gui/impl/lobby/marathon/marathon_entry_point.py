@@ -24,15 +24,12 @@ _eventsCache = dependency.descriptor(IEventsCache)
 
 @dependency.replace_none_kwargs(marathonsCtrl=IMarathonEventsController)
 def isMarathonEntryPointAvailable(marathonsCtrl=None):
-    marathonEvent = marathonsCtrl.getMarathon(_MARATHON_PREFIX)
-    if marathonEvent is not None:
-        state = marathonEvent.getState()
+    marathon = marathonsCtrl.getMarathon(_MARATHON_PREFIX)
+    if marathon is not None:
+        state = marathon.getState()
     else:
         state = None
-    if state in (MarathonState.NOT_STARTED, MarathonState.IN_PROGRESS):
-        return True
-    else:
-        return True if state == MarathonState.FINISHED and not (marathonEvent.isRewardObtained() and marathonEvent.isPostRewardObtained()) else False
+    return state in (MarathonState.NOT_STARTED, MarathonState.IN_PROGRESS) or state == MarathonState.FINISHED and not (marathon.isRewardObtained() and marathon.isPostRewardObtained())
 
 
 class MarathonEntryPoint(ViewImpl):

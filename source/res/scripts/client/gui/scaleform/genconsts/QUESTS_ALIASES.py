@@ -23,6 +23,8 @@ class QUESTS_ALIASES(object):
     MISSIONS_EVENT_BOARDS_VIEW_LINKAGE = 'MissionsEventBoardsViewUI'
     MISSIONS_CATEGORIES_VIEW_PY_ALIAS = 'MissionsCategoriesView'
     MISSIONS_CATEGORIES_VIEW_LINKAGE = 'MissionsCategoriesViewUI'
+    MISSIONS_NY_BANNER_VIEW_ALIAS = 'MissionsNYBannerUI'
+    MISSIONS_NY_GIFT_OFF_BANNER_VIEW_ALIAS = 'MissionsNYGiftsDisabledBannerUI'
     CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS = 'CurrentVehicleMissionsView'
     CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE = 'CurrentVehicleMissionsViewUI'
     BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS = 'BattlePassMissionsView'

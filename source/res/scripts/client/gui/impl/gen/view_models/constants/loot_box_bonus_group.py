@@ -13,6 +13,7 @@ class LootBoxBonusGroup(ViewModel):
     EQUIPMENTS = 'equipments'
     ACCOUNTCUSTOMIZATIONS = 'accountCustomizations'
     FEATUREITEMS = 'featureItems'
+    LOOTBOX_STAGE_ROTATION = 'lootboxStageRotation'
 
     def __init__(self, properties=0, commands=0):
         super(LootBoxBonusGroup, self).__init__(properties=properties, commands=commands)

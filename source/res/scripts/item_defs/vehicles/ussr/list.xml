@@ -802,7 +802,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank private HD secret testTank siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
     <level>	8	</level>
   </R165_Object_703_II_2>
   <R173_K_91_2>
@@ -2108,10 +2108,10 @@
     <description>	#ussr_vehicles:R201_IT_3_descr	</description>
     <shortDescriptionSpecial>	#ussr_vehicles:R201_IT_3_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#ussr_vehicles:R201_IT_3_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	3500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret testTank	</tags>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </R201_IT_3>
   <R87_T62A_fallout>
@@ -2236,4 +2236,17 @@
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit	</tags>
     <level>	8	</level>
   </R180_Object_274_A_MT_BF>
+  <R219_Waffentrager_E100_Gold>
+    <id>	220	</id>
+    <userString>	#ussr_vehicles:R219_Waffentrager_E100_Gold	</userString>
+    <description>	#ussr_vehicles:R219_Waffentrager_E100_Gold_descr	</description>
+    <shortUserString>	#ussr_vehicles:R219_Waffentrager_E100_Gold_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R219_Waffentrager_E100_Gold_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R219_Waffentrager_E100_Gold_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals lockOutfit special	</tags>
+    <level>	10	</level>
+  </R219_Waffentrager_E100_Gold>
 </list.xml>

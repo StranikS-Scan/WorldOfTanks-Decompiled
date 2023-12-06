@@ -3,6 +3,7 @@
 import logging
 import Windowing
 import BigWorld
+from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.video.video_view_model import VideoViewModel
@@ -103,9 +104,11 @@ class VideoView(ViewImpl):
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
+            self.viewModel.setCanEscape(kwargs.get('canEscape', True))
             self.viewModel.onCloseBtnClick += self.__onCloseWindow
             self.viewModel.onVideoStarted += self.__onVideoStarted
             self.viewModel.onVideoStopped += self.__onVideoStopped
+            g_playerEvents.onAccountBecomeNonPlayer += self.__removeClosedHandle
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
         return
@@ -123,6 +126,7 @@ class VideoView(ViewImpl):
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
+        g_playerEvents.onAccountBecomeNonPlayer -= self.__removeClosedHandle
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         if self.__onVideoClosedHandle is not None:
             self.__onVideoClosedHandle()
@@ -136,6 +140,10 @@ class VideoView(ViewImpl):
 
     def __onCloseWindow(self, _=None):
         self.destroyWindow()
+
+    def __removeClosedHandle(self):
+        self.__onVideoClosedHandle = None
+        return
 
     def __onVideoStarted(self, _=None):
         if self.__onVideoStartedHandle is not None:

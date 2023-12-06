@@ -11,7 +11,6 @@ from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_reward
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    ACTIVELASTHOURS = 'activeLastHours'
     POSTPROGRESSION = 'postProgression'
     COMPLETED = 'completed'
     DISABLED = 'disabled'

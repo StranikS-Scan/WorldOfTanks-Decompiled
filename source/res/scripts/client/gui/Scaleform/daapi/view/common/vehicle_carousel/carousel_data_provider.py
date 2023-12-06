@@ -4,7 +4,6 @@ import typing
 from CurrentVehicle import g_currentVehicle
 from constants import SEASON_NAME_BY_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl.gen import R
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
@@ -12,6 +11,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
@@ -20,8 +20,12 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController
+from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
+_BONUS_ICONS_EXTRA_SMALL = {'xpFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_battle_exp_small()),
+ 'freeXPFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_free_exp_small()),
+ 'tankmenXPFactor': backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.icon_crew_exp_small())}
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -49,26 +53,30 @@ def _isLockedBackground(vState, vStateLvl):
     return result
 
 
-def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, ctx=None):
+def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, styleLarge=None, ctx=None):
     ctx = ctx or {}
     state = MENU.tankcarousel_vehiclestates(vState)
     status = ms(state, **ctx)
     if style is None:
         smallStyle, largeStyle = getStatusCountStyle(vStateLvl)
     else:
-        smallStyle = largeStyle = style
+        smallStyle = style
+        if styleLarge is None:
+            largeStyle = smallStyle
+        else:
+            largeStyle = styleLarge
     if status:
         return (smallStyle(status), largeStyle(status))
     else:
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController)
-def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None):
-    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl)
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController, nyController=INewYearController)
+def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, nyController=None):
+    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, nyController)
 
 
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
+def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, nyController):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -226,6 +234,12 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self._currentVehicleInvID = vehicle.invID
         return self._currentVehicleInvID
 
+    def selectFilteredVehicle(self, vehicle):
+        if vehicle is not None and vehicle.isInInventory:
+            self._selectedIdx = -1
+            self._currentVehicleInvID = vehicle.invID
+        return
+
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
         if self._itemsCache is None:
             return
@@ -269,6 +283,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
+        self._filteredIndices += self._getBeforeAdditionalItemsIndexes()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -308,6 +323,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return []
 
     def _getAdditionalItemsIndexes(self):
+        return []
+
+    def _getBeforeAdditionalItemsIndexes(self):
         return []
 
     def _syncRandomStats(self):

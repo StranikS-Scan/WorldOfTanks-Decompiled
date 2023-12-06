@@ -1,10 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/hangar_config.py
 import math
-from Math import Vector3
+from Math import Vector3, Vector2
 from items.components import component_constants
 
 class HangarConfig(object):
+    NY_SLOTS = ['camDistConstrPlatoon',
+     'camStartDistPlatoon',
+     'camPitchConstrPlatoon',
+     'camStartAngles',
+     'camStartAnglesPlatoon',
+     'camStartTargetPos',
+     'camStartDist',
+     'camDistConstr',
+     'camPitchConstr',
+     'camYawConstr',
+     'camSens',
+     'camDistSens',
+     'camPivotPos',
+     'camFluency',
+     'camIdlePitchConstr',
+     'camIdleDistConstr',
+     'camIdleYawPeriod',
+     'camIdlePitchPeriod',
+     'camIdleDistPeriod',
+     'camIdleEasingInTime',
+     'camParallaxDistance',
+     'camParallaxAngles',
+     'camParallaxSmoothing']
     __slots__ = ['cfg',
      'vStartAngles',
      'vStartPos',
@@ -20,7 +43,7 @@ class HangarConfig(object):
      'vehicleTurretYaw',
      'camMinDistVehicleHullLengthK',
      'camCapsuleScale',
-     'camCapsuleGunScale']
+     'camCapsuleGunScale'] + NY_SLOTS
 
     def __init__(self):
         self.cfg = {}
@@ -39,6 +62,29 @@ class HangarConfig(object):
         self.camMinDistVehicleHullLengthK = component_constants.ZERO_FLOAT
         self.camCapsuleScale = Vector3()
         self.camCapsuleGunScale = Vector3()
+        self.camDistConstrPlatoon = Vector2()
+        self.camStartDistPlatoon = component_constants.ZERO_FLOAT
+        self.camPitchConstrPlatoon = Vector2()
+        self.camStartAngles = Vector2()
+        self.camStartAnglesPlatoon = Vector2()
+        self.camStartTargetPos = Vector3()
+        self.camStartDist = component_constants.ZERO_FLOAT
+        self.camDistConstr = Vector2()
+        self.camPitchConstr = Vector2()
+        self.camYawConstr = Vector2()
+        self.camSens = component_constants.ZERO_FLOAT
+        self.camDistSens = component_constants.ZERO_FLOAT
+        self.camPivotPos = Vector3()
+        self.camFluency = component_constants.ZERO_FLOAT
+        self.camIdlePitchConstr = Vector2()
+        self.camIdleDistConstr = Vector2()
+        self.camIdleYawPeriod = component_constants.ZERO_FLOAT
+        self.camIdlePitchPeriod = component_constants.ZERO_FLOAT
+        self.camIdleDistPeriod = component_constants.ZERO_FLOAT
+        self.camIdleEasingInTime = component_constants.ZERO_FLOAT
+        self.camParallaxDistance = Vector2()
+        self.camParallaxAngles = Vector2()
+        self.camParallaxSmoothing = component_constants.ZERO_FLOAT
 
     def __iter__(self):
         return iter(self.cfg)
@@ -80,6 +126,38 @@ class HangarConfig(object):
         self.camMinDistVehicleHullLengthK = self.loadConfigValue('cam_min_dist_vehicle_hull_length_k', xml, xml.readFloat, defaultCfg)
         self.camCapsuleScale = self.loadConfigValue('cam_capsule_scale', xml, xml.readVector3, defaultCfg)
         self.camCapsuleGunScale = self.loadConfigValue('cam_capsule_gun_scale', xml, xml.readVector3, defaultCfg)
+        self.camStartTargetPos = self.loadConfigValue('cam_start_target_pos', xml, xml.readVector3, defaultCfg)
+        self.camStartDist = self.loadConfigValue('cam_start_dist', xml, xml.readFloat, defaultCfg)
+        self.camStartDistPlatoon = self.loadConfigValue('cam_start_dist_platoon', xml, xml.readFloat, {'cam_start_dist_platoon': self.camStartDist})
+        self.camStartAngles = self.loadConfigValue('cam_start_angles', xml, xml.readVector2, defaultCfg)
+        self.camStartAnglesPlatoon = self.loadConfigValue('cam_start_angles_platoon', xml, xml.readVector2, {'cam_start_angles_platoon': self.camStartAngles})
+        self.camDistConstr = self.loadConfigValue('cam_dist_constr', xml, xml.readVector2, defaultCfg)
+        self.camDistConstrPlatoon = self.loadConfigValue('cam_dist_constr_platoon', xml, xml.readVector2, {'cam_dist_constr_platoon': self.camDistConstr})
+        self.camPitchConstr = self.loadConfigValue('cam_pitch_constr', xml, xml.readVector2, defaultCfg)
+        self.camPitchConstrPlatoon = self.loadConfigValue('cam_pitch_constr_platoon', xml, xml.readVector2, {'cam_pitch_constr_platoon': self.camPitchConstr})
+        self.camYawConstr = self.loadConfigValue('cam_yaw_constr', xml, xml.readVector2, defaultCfg)
+        self.camSens = self.loadConfigValue('cam_sens', xml, xml.readFloat, defaultCfg)
+        self.camDistSens = self.loadConfigValue('cam_dist_sens', xml, xml.readFloat, defaultCfg)
+        self.camPivotPos = self.loadConfigValue('cam_pivot_pos', xml, xml.readVector3, defaultCfg)
+        self.camFluency = self.loadConfigValue('cam_fluency', xml, xml.readFloat, defaultCfg)
+        defaultIdleCfg = {'cam_idle_pitch_constr': Vector2(0.0, 0.0),
+         'cam_idle_dist_constr': Vector2(10.0, 10.0),
+         'cam_idle_yaw_period': 0.0,
+         'cam_idle_pitch_period': 0.0,
+         'cam_idle_dist_period': 0.0,
+         'cam_idle_easing_in_time': 0.0}
+        self.camIdlePitchConstr = self.loadConfigValue('cam_idle_pitch_constr', xml, xml.readVector2, defaultIdleCfg)
+        self.camIdleDistConstr = self.loadConfigValue('cam_idle_dist_constr', xml, xml.readVector2, defaultIdleCfg)
+        self.camIdleYawPeriod = self.loadConfigValue('cam_idle_yaw_period', xml, xml.readFloat, defaultIdleCfg)
+        self.camIdlePitchPeriod = self.loadConfigValue('cam_idle_pitch_period', xml, xml.readFloat, defaultIdleCfg)
+        self.camIdleDistPeriod = self.loadConfigValue('cam_idle_dist_period', xml, xml.readFloat, defaultIdleCfg)
+        self.camIdleEasingInTime = self.loadConfigValue('cam_idle_easing_in_time', xml, xml.readFloat, defaultIdleCfg)
+        defaultParallaxCfg = {'cam_parallax_distance': Vector2(0.0, 0.0),
+         'cam_parallax_angles': Vector2(0.0, 0.0),
+         'cam_parallax_smoothing': 0.0}
+        self.camParallaxDistance = self.loadConfigValue('cam_parallax_distance', xml, xml.readVector2, defaultParallaxCfg)
+        self.camParallaxAngles = self.loadConfigValue('cam_parallax_angles', xml, xml.readVector2, defaultParallaxCfg)
+        self.camParallaxSmoothing = self.loadConfigValue('cam_parallax_smoothing', xml, xml.readFloat, defaultParallaxCfg)
         return
 
     def loadDefaultHangarConfig(self, xml, hangarPathKey):
@@ -95,6 +173,15 @@ class HangarConfig(object):
         self.vStartAngles = self.loadConfigValue('v_start_angles', xml, xml.readVector3, self)
         self.shadowForwardYOffset = self.loadConfigValue('shadow_forward_y_offset', xml, xml.readFloat, defaultFakeShadowOffsetsCfg)
         self.shadowDeferredYOffset = self.loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, defaultFakeShadowOffsetsCfg)
+        self.camStartDist = self.loadConfigValue('cam_start_dist', xml, xml.readFloat, self)
+        self.camStartDistPlatoon = self.loadConfigValue('cam_start_dist_platoon', xml, xml.readFloat, {'cam_start_dist_platoon': self.camStartDist})
+        self.camDistConstr = self.loadConfigValue('cam_dist_constr', xml, xml.readVector2, self)
+        self.camDistConstrPlatoon = self.loadConfigValue('cam_dist_constr_platoon', xml, xml.readVector2, {'cam_dist_constr_platoon': self.camDistConstr})
+        self.camStartAngles = self.loadConfigValue('cam_start_angles', xml, xml.readVector2, self)
+        self.camStartAnglesPlatoon = self.loadConfigValue('cam_start_angles_platoon', xml, xml.readVector2, {'cam_start_angles_platoon': self.camStartAngles})
+        self.camPivotPos = self.loadConfigValue('cam_pivot_pos', xml, xml.readVector3, self)
+        self.camStartTargetPos = self.loadConfigValue('cam_start_target_pos', xml, xml.readVector3, self)
+        self.camFluency = self.loadConfigValue('cam_fluency', xml, xml.readFloat, self)
 
     def loadSecondaryConfig(self, xml):
         defaultShadowOffsetsCfg = {'shadow_forward_y_offset': 0.0,
@@ -106,6 +193,14 @@ class HangarConfig(object):
 
         self.shadowForwardYOffset = self.loadConfigValue('shadow_forward_y_offset', xml, xml.readFloat, defaultShadowOffsetsCfg)
         self.shadowDeferredYOffset = self.loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, defaultShadowOffsetsCfg)
+        self.camStartDist = self.loadConfigValue('cam_start_dist', xml, xml.readFloat, self)
+        self.camStartDistPlatoon = self.loadConfigValue('cam_start_dist_platoon', xml, xml.readFloat, {'cam_start_dist_platoon': self.camStartDist})
+        self.camDistConstr = self.loadConfigValue('cam_dist_constr', xml, xml.readVector2, self)
+        self.camDistConstrPlatoon = self.loadConfigValue('cam_dist_constr_platoon', xml, xml.readVector2, {'cam_dist_constr_platoon': self.camDistConstr})
+        self.camStartAngles = self.loadConfigValue('cam_start_angles', xml, xml.readVector2, self)
+        self.camStartAnglesPlatoon = self.loadConfigValue('cam_start_angles_platoon', xml, xml.readVector2, {'cam_start_angles_platoon': self.camStartAngles})
+        self.camPivotPos = self.loadConfigValue('cam_pivot_pos', xml, xml.readVector3, self)
+        self.camStartTargetPos = self.loadConfigValue('cam_start_target_pos', xml, xml.readVector3, self)
 
     def loadConfigValue(self, name, xml, fn, defaultCfg=None):
         if xml.has_key(name):

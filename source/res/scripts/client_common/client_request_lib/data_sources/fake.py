@@ -68,7 +68,7 @@ def get_gift_system_state(req_event_ids):
      'expiration_time': current_time + time_utils.ONE_MINUTE,
      'expiration_delta': 5 * time_utils.ONE_MINUTE,
      'state': []}
-    return {event_id:event_stub for event_id in req_event_ids}
+    return {str(event_id):event_stub for event_id in req_event_ids}
 
 
 def post_gift_system_gift(*_):

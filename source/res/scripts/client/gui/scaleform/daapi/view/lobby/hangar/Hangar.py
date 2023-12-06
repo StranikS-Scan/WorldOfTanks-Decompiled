@@ -36,6 +36,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event import MarathonEvent
 from gui.periodic_battles.models import PrimeTimeStatus
+from gui.impl.new_year.sounds import NewYearSoundVars, NewYearSoundStates
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
@@ -43,6 +44,7 @@ from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
@@ -58,12 +60,14 @@ from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from skeletons.new_year import INewYearController
 from sound_gui_manager import CommonSoundSpaceSettings
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
@@ -80,11 +84,10 @@ def predicateHelpLayoutAllowedWindow(window):
 
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
-    _SOUND_STATE_PLACE = 'STATE_hangar_place'
-    _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     __background_alpha__ = 0.0
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
-     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={StatesGroup.HANGAR_PLACE: States.HANGAR_PLACE_GARAGE,
+     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF,
+     NewYearSoundVars.STATE_NEWYEAR_PLACE: NewYearSoundStates.HANGAR}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     battlePassController = dependency.descriptor(IBattlePassController)
@@ -100,6 +103,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    _festivityController = dependency.descriptor(IFestivityController)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __marathonCtrl = dependency.descriptor(IMarathonEventsController)
@@ -110,11 +114,14 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
+    __nyController = dependency.descriptor(INewYearController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
         self.__currentCarouselAlias = None
+        self.__isNYSpaceCreated = False
+        self.__isNyTutorialCompleted = True
         self.__isSpaceReadyForC11n = False
         self.__isVehicleReadyForC11n = False
         self.__isVehicleCameraReadyForC11n = False
@@ -192,6 +199,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateRankedHeaderComponent()
 
     def onEscape(self):
+        if self.__nyController.tutorial.isActive:
+            return
         dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -221,6 +230,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__hangarComponentsCtrl.holdHangar(self)
         self.__timer = CallbackDelayer()
         self.__banTimer = CallbackDelayer()
+        self.__isNYSpaceCreated = self.hangarSpace.spaceInited
+        self.__isNyTutorialCompleted = not self.__nyController.tutorial.shouldStartIntro()
+        if not self.__isNyTutorialCompleted:
+            self.__nyController.tutorial.onTutorialComplete += self.__onNYTutorialComplete
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
         self.__isVehicleReadyForC11n = self.hangarSpace.isModelLoaded
         self.__checkVehicleCameraState()
@@ -306,6 +319,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onStatusTick -= self.__updateAlertMessage
         self.__comp7Controller.onBanUpdated -= self.__updateAlertMessage
         self.__comp7Controller.onOfflineStatusUpdated -= self.__updateAlertMessage
+        self.__nyController.tutorial.onTutorialComplete -= self.__onNYTutorialComplete
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -483,7 +497,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __showArmoryYardVehiclePreview(self, vehicleCD):
         if self.__armoryYardCtrl.isActive() and self.__armoryYardCtrl.getFinalRewardVehicle().intCD == vehicleCD:
-            self.__armoryYardCtrl.showHeroTankVehiclePreview()
+            shared_events.showHeroTankPreview(vehicleCD, bottomPanelTextData={'uniqueVehicleTitle': text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))})
             return True
         return False
 
@@ -584,8 +598,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateState()
 
     def __onSpaceCreate(self):
+        self.__isNYSpaceCreated = True
         self.__isSpaceReadyForC11n = True
         self.__updateState()
+        self.__updateCarouselEventEntryState()
 
     def __onVehicleLoading(self):
         self.__isVehicleReadyForC11n = False
@@ -725,7 +741,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__switchCarousels(True)
 
     def __updateCarouselEventEntryState(self):
-        self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())
+        if self.__isNYSpaceCreated and self.__isNyTutorialCompleted:
+            self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())
+
+    def __onNYTutorialComplete(self):
+        self.__isNyTutorialCompleted = True
+        self.__updateCarouselEventEntryState()
 
     @ifComponentAvailable(HANGAR_CONSTS.COMP7_MODIFIERS)
     def __updateComp7ModifiersWidget(self):

@@ -20,8 +20,14 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.WinbackRewardFormatter(),
- token_quest_subformatters.CrewPerksFormatter()))
-_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
+ token_quest_subformatters.CrewPerksFormatter(),
+ token_quest_subformatters.NewYearCollectionRewardFormatter(),
+ token_quest_subformatters.NewYearLevelUpRewardFormatter()))
+_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),
+ token_quest_subformatters.NewYearCollectionRewardFormatter(),
+ token_quest_subformatters.NewYearCollectionMegaRewardFormatter(),
+ token_quest_subformatters.NewYearLevelUpRewardFormatter(),
+ token_quest_subformatters.NewYearOldCollectionRewardFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -247,3 +253,4 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE, _sc.NewNYEventFormatter())

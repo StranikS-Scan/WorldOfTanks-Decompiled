@@ -818,6 +818,59 @@
       </damage>
     </armorSpalls>
   </_100mm_Narazovy_vz_50>
+  <_24mm_Prurazny_vz_38>
+    <id>	67	</id>
+    <userString>	#czech_vehicles:_24mm_Prurazny_vz_38	</userString>
+    <icon>	ap	</icon>
+    <price>	16	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	24	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	20	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_24mm_Prurazny_vz_38>
+  <_24mm_Prurazny_vz_38_s_wolf_jadrem>
+    <id>	68	</id>
+    <userString>	#czech_vehicles:_24mm_Prurazny_vz_38_s_wolf_jadrem	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	24	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	20	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_24mm_Prurazny_vz_38_s_wolf_jadrem>
+  <_24mm_Narazovy_vz_38>
+    <id>	69	</id>
+    <userString>	#czech_vehicles:_24mm_Narazovy_vz_38	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	24	</caliber>
+    <explosionRadius>	0.30	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	30	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.30	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	15	</armor>
+        <devices>	15	</devices>
+      </damage>
+    </armorSpalls>
+  </_24mm_Narazovy_vz_38>
   <_105mm_vz_39N_OPG>
     <id>	33	</id>
     <userString>	#czech_vehicles:_105mm_vz_39N_OPG	</userString>
@@ -889,7 +942,7 @@
     <id>	31001	</id>
     <userString>	#czech_vehicles:_105mm_vz_39N_VM_TST	</userString>
     <icon>	ap	</icon>
-    <price>	610	</price>
+    <price>	850	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
@@ -918,7 +971,7 @@
     <id>	31002	</id>
     <userString>	#czech_vehicles:_105mm_vz_42N_VM_TST	</userString>
     <icon>	ap_cr_premium	</icon>
-    <price>	4800	</price>
+    <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	105	</caliber>
@@ -957,7 +1010,7 @@
     <id>	31003	</id>
     <userString>	#czech_vehicles:_105mm_Narazovy_14_48_TST	</userString>
     <icon>	he_modern	</icon>
-    <price>	460	</price>
+    <price>	650	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>

@@ -422,6 +422,8 @@ class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
     onHidden = None
+    onHeroTankChanged = None
+    onHeroTankBought = None
 
     def hasAdventHero(self):
         raise NotImplementedError
@@ -1656,6 +1658,9 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
+    def mustShow(self):
+        raise NotImplementedError
+
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1706,7 +1711,16 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isPostEvent(self):
+        raise NotImplementedError
+
     def getHangarQuestsFlagData(self):
+        raise NotImplementedError
+
+    def getHangarWidgetLinkage(self):
+        raise NotImplementedError
+
+    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 
@@ -2346,7 +2360,7 @@ class IEntitlementsController(IGameController):
         raise NotImplementedError
 
 
-class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
+class IGuiLootBoxesController(IGameController):
     onStatusChange = None
     onAvailabilityChange = None
     onBoxesCountChange = None
@@ -2385,15 +2399,6 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def openShop(self):
-        raise NotImplementedError
-
-    def getDayInfoStatistics(self):
-        raise NotImplementedError
-
-    def getExpiresAtLootBoxBuyCounter(self):
-        raise NotImplementedError
-
-    def getTimeLeftToResetPurchase(self):
         raise NotImplementedError
 
     def getBoxInfo(self, boxType):
@@ -2980,12 +2985,22 @@ class IArmoryYardController(IGameController):
     onAnnouncement = None
     onPayed = None
     onPayedError = None
+    onBundleOutTime = None
     onServerSwitchChange = None
     onStyleQuestEnds = None
     onCollectReward = None
+    cameraManager = None
+    isVehiclePreview = None
+    bundlesProducts = None
+    onTabIdChanged = None
+    onCollectFinalReward = None
 
     @property
     def serverSettings(self):
+        raise NotImplementedError
+
+    @property
+    def isFinalQuestCompleted(self):
         raise NotImplementedError
 
     def getCollectableRewards(self):
@@ -3007,6 +3022,9 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def getProgressionTimes(self):
+        raise NotImplementedError
+
+    def getPostProgressionTimes(self):
         raise NotImplementedError
 
     def totalTokensInChapter(self, cycleID):
@@ -3060,6 +3078,9 @@ class IArmoryYardController(IGameController):
     def isQuestActive(self):
         raise NotImplementedError
 
+    def isSceneLoaded(self):
+        raise NotImplementedError
+
     def getAvailableQuestsCount(self):
         raise NotImplementedError
 
@@ -3072,7 +3093,28 @@ class IArmoryYardController(IGameController):
     def update(self):
         raise NotImplementedError
 
-    def showHeroTankVehiclePreview(self):
+    def onLoadingHangar(self):
+        raise NotImplementedError
+
+    def unloadScene(self, isReload=True):
+        raise NotImplementedError
+
+    def isCompleted(self):
+        raise NotImplementedError
+
+    def isStarterPackAvailable(self):
+        raise NotImplementedError
+
+    def disableVideoStreaming(self):
+        raise NotImplementedError
+
+    def getStarterPackSettings(self):
+        raise NotImplementedError
+
+    def refreshBundle(self):
+        raise NotImplementedError
+
+    def checkAnnouncement(self):
         raise NotImplementedError
 
 

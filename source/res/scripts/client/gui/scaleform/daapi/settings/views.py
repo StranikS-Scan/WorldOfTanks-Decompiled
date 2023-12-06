@@ -237,6 +237,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
+    NY_SELECT_VEHICLE_FOR_DISCOUNT_POPOVER = 'NYSelectVehicleForDiscountPopover'
+    NY_BROWSER_VIEW = 'NyBrowserView'
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,

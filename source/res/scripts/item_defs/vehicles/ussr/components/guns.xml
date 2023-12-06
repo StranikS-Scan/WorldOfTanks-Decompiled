@@ -231,6 +231,7 @@
     <_100mm_D54_VR>	31007	</_100mm_D54_VR>
     <_203mm_U_3BM_5>	31009	</_203mm_U_3BM_5>
     <_122mm_M62_T2_122>	31008	</_122mm_M62_T2_122>
+    <R219_128mm_KwK44_L55_G>	31011	</R219_128mm_KwK44_L55_G>
   </ids>
   <shared>
     <_12.7mm_DSHK>
@@ -5034,27 +5035,27 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_100mm_UBR-412-DG>
+        <_100mm_UBR-412-DG_703_II_2>
           <defaultPortion>	0.95	</defaultPortion>
-          <speed>	980	</speed>
+          <speed>	1140	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	221 193	</piercingPower>
-        </_100mm_UBR-412-DG>
-        <_100mm_UBR-412P-DG>
+          <piercingPower>	225 205	</piercingPower>
+        </_100mm_UBR-412-DG_703_II_2>
+        <_100mm_UBR-412P-DG_703_II_2>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1250	</speed>
+          <speed>	1350	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	256 240	</piercingPower>
-        </_100mm_UBR-412P-DG>
-        <_100mm_UOF-412-DG>
+          <piercingPower>	265 250	</piercingPower>
+        </_100mm_UBR-412P-DG_703_II_2>
+        <_100mm_UOF-412-DG_703_II_2>
           <defaultPortion>	0.05	</defaultPortion>
-          <speed>	900	</speed>
+          <speed>	1040	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	50 50	</piercingPower>
-        </_100mm_UOF-412-DG>
+        </_100mm_UOF-412-DG_703_II_2>
       </shots>
     </_100mm_S34_P_dualgun>
     <_100mm_D10T>
@@ -11792,10 +11793,18 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
+        <_203mm_F-625DS_5>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	150	</speed>
+          <gravity>	72.3136060897357	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	300 300	</piercingPower>
+          <maxHeight>	395	</maxHeight>
+        </_203mm_F-625DS_5>
         <_203mm_F-625DS>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	110	</speed>
-          <gravity>	55	</gravity>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	150	</speed>
+          <gravity>	72.3136060897357	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	52 52	</piercingPower>
           <maxHeight>	395	</maxHeight>
@@ -13274,5 +13283,63 @@
       <invulnerable>	true	</invulnerable>
       <notInShop>	true	</notInShop>
     </_85mm_ZiS_S-53A_NewOnBoarding>
+    <R219_128mm_KwK44_L55_G>
+      <userString>	#ussr_vehicles:R219_128mm_KwK44_L55_G	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.77714285714290	</reloadTime>
+      <maxAmmo>	62	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	3480	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_128mm_PzGr39_GW_R>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	276 261	</piercingPower>
+        </_128mm_PzGr39_GW_R>
+        <_128mm_PzGr40_GW_R>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	352 295	</piercingPower>
+        </_128mm_PzGr40_GW_R>
+        <_128mm_SprG18_GW_R>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_128mm_SprG18_GW_R>
+      </shots>
+    </R219_128mm_KwK44_L55_G>
   </shared>
 </guns.xml>

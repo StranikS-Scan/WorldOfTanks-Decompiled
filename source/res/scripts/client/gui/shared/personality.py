@@ -198,10 +198,10 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
         ServicesLocator.lobbyContext.update(diff)
     else:
         if isPlayerAccount():
-            yield crewBooksViewedCache().onCrewBooksUpdated(diff)
-            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
-            yield ServicesLocator.eventsCache.update(diff)
-            yield g_clanCache.update(diff)
+            yield (crewBooksViewedCache().onCrewBooksUpdated(diff),
+             ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff),
+             ServicesLocator.eventsCache.update(diff),
+             g_clanCache.update(diff))
         ServicesLocator.lobbyContext.update(diff)
         _logger.info('onClientUpdate: diff = %r', diff)
         g_clientUpdateManager.update(diff)

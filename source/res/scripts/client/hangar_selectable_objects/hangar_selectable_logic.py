@@ -16,7 +16,6 @@ class HangarSelectableLogic(BaseSelectableLogic):
         super(HangarSelectableLogic, self).__init__()
         self.__selected3DEntity = None
         self.__selected3DEntityUnderMouseDown = None
-        self._hangarSpace.setSelectionEnabled(True)
         return
 
     def init(self, callback=None):

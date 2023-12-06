@@ -146,6 +146,8 @@ class ItemPackType(CONST_CONTAINER):
     CREW_BOOK_PERSONAL_BOOK = 'crew_book/personalBook'
     CREW_BOOK_UNIVERSAL_BOOK = 'crew_book/universalBook'
     CREW_BOOK_RANDOM = 'crew_book/random'
+    CREW_BOOK_UNIVERSAL_GUIDE = 'crew_book/universalGuide'
+    CREW_BOOK_UNIVERSAL_BROCHURE = 'crew_book/universalBrochure'
     BLUEPRINT = 'blueprint'
     BLUEPRINT_NATIONAL = 'blueprint/national'
     BLUEPRINT_INTELEGENCE_DATA = 'blueprint/intelligence_data'
@@ -213,7 +215,9 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CREW_BOOK_GUIDE,
      ItemPackType.CREW_BOOK_CREW_BOOK,
      ItemPackType.CREW_BOOK_PERSONAL_BOOK,
-     ItemPackType.CREW_BOOK_UNIVERSAL_BOOK)
+     ItemPackType.CREW_BOOK_UNIVERSAL_BOOK,
+     ItemPackType.CREW_BOOK_UNIVERSAL_GUIDE,
+     ItemPackType.CREW_BOOK_UNIVERSAL_BROCHURE)
     BLUEPRINTS = (ItemPackType.BLUEPRINT,
      ItemPackType.BLUEPRINT_ANY,
      ItemPackType.BLUEPRINT_NATIONAL,

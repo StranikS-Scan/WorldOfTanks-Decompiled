@@ -57,6 +57,18 @@ class ProductDescriptor(EventsHandler):
     def isDescriptorFull(self):
         return self._isFull
 
+    @property
+    def entitlements(self):
+        return self._getFromParams('entitlements', [])
+
+    @property
+    def price(self):
+        return self._getFromParams('price', {}).get('virtual_price', [])
+
+    @property
+    def tags(self):
+        return self._getFromParams('tags', [])
+
     def destroy(self):
         self._unsubscribe()
 

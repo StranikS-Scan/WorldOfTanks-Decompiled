@@ -12,3 +12,6 @@ class GameInputManagerMeta(BaseDAAPIComponent):
 
     def as_clearKeyHandlerS(self, keyCode, eventType):
         return self.flashObject.as_clearKeyHandler(keyCode, eventType) if self._isDAAPIInited() else None
+
+    def as_setIgnoredKeyCodeS(self, keyCode):
+        return self.flashObject.as_setIgnoredKeyCode(keyCode) if self._isDAAPIInited() else None

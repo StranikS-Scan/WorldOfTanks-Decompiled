@@ -10,7 +10,7 @@ class SOUNDS(CONST_CONTAINER):
     COMMON_SOUND_VIDEO_REWARD_SPACE = 'armory_yard_reward_video'
     STATE_PLACE = 'STATE_hangar_place'
     STATE_PLACE_AY = 'STATE_hangar_place_customization'
-    VO_TAPE_RECORDER = 'ay_voiceover_taperecorder_stage_{:02d}_start'
+    VO_TAPE_RECORDER = 'ay_voiceover_taperecorder_ep_02_stage_{:02d}_start'
     FIRST_ENTER = 'armory_yard_enter_first'
     ENTER = 'armory_yard_enter'
     EXIT = 'armory_yard_exit'

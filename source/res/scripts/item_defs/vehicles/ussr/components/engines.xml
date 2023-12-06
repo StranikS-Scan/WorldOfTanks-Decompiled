@@ -195,6 +195,8 @@
     <GAZ_T_26>	31002	</GAZ_T_26>
     <_2xV_16>	31010	</_2xV_16>
     <V_64R_122>	31007	</V_64R_122>
+    <V_11_Kirovets_1_703_II_2>	31008	</V_11_Kirovets_1_703_II_2>
+    <Engine_R219_VK4502P_G>	31011	</Engine_R219_VK4502P_G>
   </ids>
   <shared>
     <V-2>
@@ -1149,6 +1151,23 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </V_11_Kirovets_1>
+    <V_11_Kirovets_1_703_II_2>
+      <userString>	#ussr_vehicles:V_11_Kirovets_1_703_II_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	960	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	264	</rpm_min>
+      <rpm_max>	2408	</rpm_max>
+    </V_11_Kirovets_1_703_II_2>
     <V-12P>
       <userString>	#ussr_vehicles:V-12P	</userString>
       <tags>	diesel	</tags>
@@ -3105,8 +3124,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
     </B_2>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
@@ -3451,5 +3470,22 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </V_26>
+    <Engine_R219_VK4502P_G>
+      <userString>	#ussr_vehicles:Engine_R219_VK4502P_G	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	296	</rpm_min>
+      <rpm_max>	2312	</rpm_max>
+    </Engine_R219_VK4502P_G>
   </shared>
 </engines.xml>

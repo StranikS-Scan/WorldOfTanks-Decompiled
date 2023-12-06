@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/reward_window.py
 import logging
 from frameworks.wulf import ViewSettings
-from frameworks.wulf.gui_constants import WindowFlags, WindowLayer, ViewFlags
+from frameworks.wulf.gui_constants import WindowFlags, ViewFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer, CurtailingAwardsComposer, RawLabelBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
+from gui.Scaleform.framework import WindowLayer
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.backport import TooltipData, BackportTooltipWindow
 from gui.impl.gen import R

@@ -7,7 +7,7 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE
+from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
@@ -455,6 +455,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                             newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
+                    if not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED):
+                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = self.__getSuitableEvents(self.currentTab)
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
@@ -646,13 +648,14 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
+        nyBannerAdded = self._appendNYBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
             self._filteredQuestsCount += self._getQuestFilteredCountFromBlockData(data)
 
         self._questsDP.buildList(result)
-        if not self._totalQuestsCount:
+        if not self._totalQuestsCount and not nyBannerAdded:
             self.as_showDummyS(self._getDummy())
         else:
             self.as_hideDummyS()
@@ -709,6 +712,9 @@ class MissionView(MissionViewBase):
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()
+
+    def _appendNYBanner(self, _):
+        return False
 
 
 class ElenMissionView(MissionViewBase):

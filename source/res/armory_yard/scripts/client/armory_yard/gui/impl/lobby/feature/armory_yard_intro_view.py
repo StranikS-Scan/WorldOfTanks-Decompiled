@@ -16,7 +16,7 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 _logger = logging.getLogger(__name__)
 
 class ArmoryYardIntroView(ViewImpl):
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     _COMMON_SOUND_SPACE = ARMORY_YARD_INTRO_SOUND_SPACE
     __slots__ = ('__closeCallback', '__loadedCallback')
 
@@ -33,7 +33,7 @@ class ArmoryYardIntroView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(ArmoryYardIntroView, self)._onLoading(*args, **kwargs)
         finalRewardVehicle = args[0]
-        currentSeason = self.__armoryYard.serverSettings.getCurrentSeason()
+        currentSeason = self.__armoryYardCtrl.serverSettings.getCurrentSeason()
         with self.viewModel.transaction() as vm:
             vm.setVehicleName(finalRewardVehicle.userName)
             vm.setVehicleType(getVehicleClassFromVehicleType(finalRewardVehicle.descriptor.type))
@@ -41,16 +41,20 @@ class ArmoryYardIntroView(ViewImpl):
             vm.setIsElite(finalRewardVehicle.isElite)
             vm.setStartDate(currentSeason.getStartDate())
             vm.setEndDate(currentSeason.getEndDate())
-        showArmoryYardIntroVideo(parent=self.getParentWindow())
+            url = self.__armoryYardCtrl.serverSettings.getModeSettings().introVideoLink
+            if url:
+                vm.setHasIntroVideoLink(True)
+                showArmoryYardIntroVideo(url, parent=self.getParentWindow())
 
     def _onLoaded(self, *args, **kwargs):
-        self.__loadedCallback()
+        if self.__loadedCallback:
+            self.__loadedCallback()
 
     def _getEvents(self):
         return ((self.viewModel.onClose, self.__onClose),
          (self.viewModel.onContinue, self.__onContinue),
          (self.viewModel.onGoBack, self.__onGoBack),
-         (self.__armoryYard.onUpdated, self.__onEventUpdated))
+         (self.__armoryYardCtrl.onUpdated, self.__onEventUpdated))
 
     def __onClose(self):
         self.__close()
@@ -59,13 +63,14 @@ class ArmoryYardIntroView(ViewImpl):
         self.__close()
 
     def __onGoBack(self):
-        showArmoryYardIntroVideo(parent=self.getParentWindow())
+        url = self.__armoryYardCtrl.serverSettings.getModeSettings().introVideoLink
+        showArmoryYardIntroVideo(url, parent=self.getParentWindow())
 
     def __setIntroViewed(self):
-        AccountSettings.setArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED, self.__armoryYard.serverSettings.getCurrentSeason().getSeasonID())
+        AccountSettings.setArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED, self.__armoryYardCtrl.serverSettings.getCurrentSeason().getSeasonID())
 
     def __onEventUpdated(self):
-        if not self.__armoryYard.isEnabled():
+        if not self.__armoryYardCtrl.isEnabled():
             self.destroyWindow()
 
     def __close(self):

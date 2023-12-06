@@ -1773,7 +1773,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_203mm_U_3BM>	shared	  <maxAmmo>	25	</maxAmmo>
+        <_203mm_U_3BM>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	320	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1803,18 +1803,18 @@
             </armor_13>
             <gun>	55	</gun>
           </armor>
-          <shotDispersionRadius>	3.0	</shotDispersionRadius>
-          <reloadTime>	32	</reloadTime>
-          <aimingTime>	4.2	</aimingTime>
+          <shotDispersionRadius>	1.0	</shotDispersionRadius>
+          <reloadTime>	28.5	</reloadTime>
+          <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.5	</turretRotation>
+            <afterShot>	5.0	</afterShot>
+            <whileGunDamaged>	3.0	</whileGunDamaged>
           </shotDispersionFactors>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <customizationSlots>

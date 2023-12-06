@@ -11,6 +11,8 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import getUn
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import playEnterSound
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.bonus_group_tooltip import BonusGroupTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.guaranteed_reward_tooltip import GuaranteedRewardTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip_rotation import LootboxRotationTooltip
 from gui_lootboxes.gui.shared.event_dispatcher import showLootBoxOpenErrorWindow, showLootBoxesWelcomeScreen, showBonusProbabilitiesWindow, showRewardScreenWindow
 from gui_lootboxes.gui.shared.gui_helpers import getLootBoxViewModel
 from gui_lootboxes.gui.storage_context.context import LootBoxesContext, ViewEvents, ReturnPlaces
@@ -21,6 +23,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from helpers import dependency
 from helpers.func_utils import waitEventAndCall
+from lootboxes_common import makeLootboxTokenID
 from shared_utils import findFirst
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.impl import IGuiLoader
@@ -40,18 +43,20 @@ class LootBoxesStorageView(ViewImpl):
     _REWARD_SCREEN = R.views.gui_lootboxes.lobby.gui_lootboxes.LootboxRewardsView()
     _ERROR_SCREEN = R.views.gui_lootboxes.lobby.gui_lootboxes.OpenBoxErrorView()
     _CHILD_VIEWS = (_ERROR_SCREEN, _REWARD_SCREEN)
-    __slots__ = ('__context', '__currentLootBoxId', '__openingAnimEvent', '__uniqueRewardsViewId', '__uniqueRewardsViewClosedEvent', '__waitStatesHandlers')
+    __slots__ = ('__context', '__currentLootBoxId', '__openingAnimEvent', '__uniqueRewardsViewId', '__uniqueRewardsViewClosedEvent', '__waitStatesHandlers', '__returnPlace', '__initialLootBox')
 
-    def __init__(self, layoutID):
+    def __init__(self, layoutID, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0):
         settings = ViewSettings(layoutID)
         settings.model = LootboxesStorageViewModel()
         super(LootBoxesStorageView, self).__init__(settings)
         self.__context = LootBoxesContext()
+        self.__initialLootBox = initialLootBox
         self.__currentLootBoxId = 0
         self.__openingAnimEvent = AsyncEvent(scope=self.__context.getAsyncScope())
         self.__uniqueRewardsViewClosedEvent = AsyncEvent(scope=self.__context.getAsyncScope())
         self.__waitStatesHandlers = defaultdict(list)
         self.__uniqueRewardsViewId = 0
+        self.__returnPlace = returnPlace
 
     @property
     def viewModel(self):
@@ -63,10 +68,18 @@ class LootBoxesStorageView(ViewImpl):
             lootBoxID = event.getArgument('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
             return BonusGroupTooltip(bonusGroup, lootBox.getBonusesByGroup(bonusGroup), lootBox.getCategory())
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxRotationTooltip():
+            lootBoxID = event.getArgument('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxRotationTooltip(lootBox)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
             lootBoxID = event.getArgument('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
             return LootboxTooltip(lootBox)
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.GuaranteedRewardTooltip():
+            lootBoxID = event.getArgument('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return GuaranteedRewardTooltip(lootBox)
         return super(LootBoxesStorageView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
@@ -132,11 +145,12 @@ class LootBoxesStorageView(ViewImpl):
     def __onBuyBox(self):
         if self.__guiLootBoxesCtr.isBuyAvailable():
             self.__context.setReturnPlace(ReturnPlaces.TO_SHOP)
-            self.destroy()
+            self.destroyWindow()
             self.__guiLootBoxesCtr.openShop()
 
     def __onClose(self):
-        self.destroy()
+        self.__context.setReturnPlace(self.__returnPlace)
+        self.destroyWindow()
 
     @replaceNoneKwargsModel
     def __fillLootBoxesModel(self, model=None):
@@ -144,13 +158,20 @@ class LootBoxesStorageView(ViewImpl):
         lbArray.clear()
         lootBoxes = sorted(self.__itemsCache.items.tokens.getLootBoxes().values())
         if not self.__currentLootBoxId:
-            lastAddedLootBoxID = self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_LAST_ADDED_ID)
-            lastAddedLootBox = findFirst(lambda lootBox: lootBox.getID() == lastAddedLootBoxID, lootBoxes)
-            if lastAddedLootBox is not None and lastAddedLootBox.getInventoryCount() > 0:
-                self.__selectLootBox(lastAddedLootBoxID, model=model)
+            if self.__initialLootBox:
+                box = self.__itemsCache.items.tokens.getLootBoxByTokenID(makeLootboxTokenID(self.__initialLootBox))
+                if box and box.getInventoryCount() > 0:
+                    self.__selectLootBox(self.__initialLootBox, model=model)
+                self.__initialLootBox = 0
+            else:
+                lastAddedLootBoxID = self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_LAST_ADDED_ID)
+                lastAddedLootBox = findFirst(lambda lootBox: lootBox.getID() == lastAddedLootBoxID, lootBoxes)
+                if lastAddedLootBox is not None and lastAddedLootBox.getInventoryCount() > 0:
+                    self.__selectLootBox(lastAddedLootBoxID, model=model)
         for lootbox in lootBoxes:
             if lootbox is not None and lootbox.getInventoryCount() > 0:
-                lbArray.addViewModel(getLootBoxViewModel(lootbox))
+                attemptsAfterGuaranteed = self.__itemsCache.items.tokens.getAttemptsAfterGuaranteedRewards(lootbox)
+                lbArray.addViewModel(getLootBoxViewModel(lootbox, attemptsAfterGuaranteed))
                 if not self.__currentLootBoxId:
                     self.__selectLootBox(lootbox.getID(), model=model)
 
@@ -161,6 +182,7 @@ class LootBoxesStorageView(ViewImpl):
     def __setMainData(self, model=None):
         model.setIsAnimationEnabled(self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_OPEN_ANIMATION_ENABLED))
         model.setIsBuyAvailable(self.__guiLootBoxesCtr.isBuyAvailable())
+        model.setReturnPlace(self.__returnPlace)
 
     def __handleStateChanged(self, state, event):
         self.viewModel.setCurrentState(States(state))
@@ -174,8 +196,8 @@ class LootBoxesStorageView(ViewImpl):
                 showLootBoxOpenErrorWindow(parent=self.getParentWindow())
             elif state == States.OPENING.value:
                 result = event.getArgument('result', None)
-                rewards = result.auxData.get('bonus', []) if result else None
-                waitEventAndCall(self.__openingAnimEvent, partial(self.__context.postViewEvent, ViewEvents.ON_OPENING_FINISH, (getUniqueRewardHandler(rewards), rewards)))
+                resultData = result.auxData if result else None
+                waitEventAndCall(self.__openingAnimEvent, partial(self.__context.postViewEvent, ViewEvents.ON_OPENING_FINISH, (getUniqueRewardHandler(resultData), resultData.get('bonus', []))))
             elif state == States.REWARDING.value:
                 rewards = event.getArgument('rewards', None)
                 lootBox = self.__itemsCache.items.tokens.getLootBoxByID(self.__currentLootBoxId)
@@ -257,5 +279,5 @@ class LootBoxesStorageView(ViewImpl):
 class LootBoxesStorageWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self):
-        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView()), layer=WindowLayer.TOP_WINDOW)
+    def __init__(self, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0):
+        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView(), returnPlace, initialLootBox), layer=WindowLayer.TOP_WINDOW)

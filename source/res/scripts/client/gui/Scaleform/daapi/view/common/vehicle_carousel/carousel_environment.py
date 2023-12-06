@@ -284,6 +284,9 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
             filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
                 self._carouselDP.selectVehicle(filteredIndex)
+                self._carouselDP.refresh()
+            elif filteredIndex == -1:
+                self._carouselDP.selectFilteredVehicle(g_currentVehicle.item)
         return
 
     def __onVehicleBecomeElite(self, *vehicles):

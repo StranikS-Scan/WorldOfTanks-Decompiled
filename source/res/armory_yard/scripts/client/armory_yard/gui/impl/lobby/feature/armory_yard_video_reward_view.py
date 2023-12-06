@@ -6,13 +6,15 @@ from CurrentVehicle import g_currentVehicle
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants import ARMORY_YARD_REWARD_VIDEO_SOUND_SPACE
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sounds import ArmoryYardRewardVideoSoundControl
 from helpers import dependency
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_video_reward_view_model import ArmoryYardVideoRewardViewModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from skeletons.gui.shared import IItemsCache
 from gui.shared.event_dispatcher import showHangar
+from gui.shared import g_eventBus
+from gui.shared.events import ArmoryYardEvent
 from items.vehicles import getVehicleClassFromVehicleType
 
 class ArmoryYardVideoRewardView(ViewImpl):
@@ -30,8 +32,10 @@ class ArmoryYardVideoRewardView(ViewImpl):
         super(ArmoryYardVideoRewardView, self).__init__(settings)
         self.__vehicle = vehicle
         self.__soundControl = ArmoryYardRewardVideoSoundControl()
+        BigWorld.worldDrawEnabled(False)
 
     def _finalize(self):
+        BigWorld.worldDrawEnabled(True)
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         self.__soundControl.stop()
         super(ArmoryYardVideoRewardView, self)._finalize()
@@ -42,6 +46,7 @@ class ArmoryYardVideoRewardView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(ArmoryYardVideoRewardView, self)._onLoading(*args, **kwargs)
+        g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_MUTE_SOUND))
         with self.viewModel.transaction() as vm:
             vm.setVehicleName(self.__vehicle.userName)
             vm.setVehicleLvl(self.__vehicle.level)
@@ -67,6 +72,7 @@ class ArmoryYardVideoRewardView(ViewImpl):
             self.destroyWindow()
 
     def __onClose(self):
+        g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_UNMUTE_SOUND))
         self.destroyWindow()
 
     def __onVideoStarted(self):
@@ -86,4 +92,4 @@ class ArmoryYardVideoRewardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, vehicle, parent=None):
-        super(ArmoryYardVideoRewardWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=ArmoryYardVideoRewardView(R.views.armory_yard.lobby.feature.ArmoryYardVideoRewardView(), vehicle=vehicle), parent=parent)
+        super(ArmoryYardVideoRewardWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=ArmoryYardVideoRewardView(R.views.armory_yard.lobby.feature.ArmoryYardVideoRewardView(), vehicle=vehicle), parent=parent, layer=WindowLayer.OVERLAY)

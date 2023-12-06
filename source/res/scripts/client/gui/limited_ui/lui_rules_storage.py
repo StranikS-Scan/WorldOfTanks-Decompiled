@@ -44,6 +44,7 @@ class LuiRules(enum.Enum):
     PR_HANGAR_BUTTON = 'PersonalReservesHangarButton'
     STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'
     BR_ENTRY_POINT = 'BREntryPoint'
+    ARMORY_YARD_ENTRY_POINT = 'ArmoryYardEntryPoint'
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'

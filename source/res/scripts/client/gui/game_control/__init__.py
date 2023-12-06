@@ -87,6 +87,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.debut_boxes_controller import DebutBoxesController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
+    from skeletons import new_year as _NYInterface
+    from new_year.craft_machine_controller import NewYearCraftMachineController as _NewYearCraftMachineController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -170,4 +172,5 @@ def getGameControllersConfig(manager):
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
     _config(_interface.IDebutBoxesController, DebutBoxesController())
+    _config(_NYInterface.INewYearCraftMachineController, _NewYearCraftMachineController())
     collectGameControllers(_config)

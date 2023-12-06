@@ -322,6 +322,7 @@ class CommonTankAppearance(ScriptGameObject):
         camouflages.updateFashions(self)
         model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
         self._createStickers()
+        model_assembler.addShellCasingsEjectionPrefab(self, self.typeDescriptor)
         while self._loadingQueue:
             prefab, go, vector, callback = self._loadingQueue.pop()
             CGF.loadGameObjectIntoHierarchy(prefab, go, vector, callback)

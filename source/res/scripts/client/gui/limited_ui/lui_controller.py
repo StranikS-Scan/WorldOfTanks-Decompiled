@@ -395,7 +395,7 @@ class LimitedUIController(ILimitedUIController):
         return
 
     def __tryNotifyStateChanged(self):
-        if self.__bootcampController.isInBootcamp() or self.version <= 0 or self.isOnlyUISpamOff or not self.__luiConfig.hasRules() or self.isFullCompleted:
+        if self.__bootcampController.isInBootcamp() or self.version <= 0 or self.isOnlyUISpamOff or not self.__luiConfig.hasRules():
             return
         else:
             isLuiConfigEnabled = self.__luiConfig.enabled
@@ -405,7 +405,8 @@ class LimitedUIController(ILimitedUIController):
                 return
             if luiSwitcherState != isLuiConfigEnabled:
                 AccountSettings.setUIFlag(_ACC_SETTINGS_SWITCHER_FLAG, isLuiConfigEnabled)
-                self.__changeSwitcherNotifier(isLuiConfigEnabled)
+                if not self.isFullCompleted:
+                    self.__changeSwitcherNotifier(isLuiConfigEnabled)
             return
 
     def __changeSwitcherNotifier(self, isOn):

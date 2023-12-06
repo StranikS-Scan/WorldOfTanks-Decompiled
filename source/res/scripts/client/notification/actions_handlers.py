@@ -18,19 +18,25 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModeSource, CustomizationModes
+from gui.impl.new_year.navigation import ViewAliases
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
+from gui.server_events.bonuses import getAllNonQuestBonuses
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showPersonalReservesConversion, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showPersonalReservesConversion, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showNYLevelUpWindow
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from items import new_year
+from new_year.ny_navigation_helper import switchNewYearView, showLootBox
+from new_year.ny_constants import AnchorNames
+from skeletons.new_year import INewYearController
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -859,25 +865,7 @@ class _OpenLootBoxesHandler(NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None:
-            pass
-        return
-
-
-class _LootBoxesAutoOpenHandler(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        notification = model.getNotification(self.getNotType(), entityID)
-        savedData = notification.getSavedData()
-        if savedData is not None and 'rewards' in savedData:
-            pass
+            showLootBox(lootBoxType=savedData)
         return
 
 
@@ -1313,6 +1301,21 @@ class _OpenArmoryYardMain(NavigationDisabledActionHandler):
         self.__ctrl.goToArmoryYard()
 
 
+class _OpenArmoryYardBuyView(NavigationDisabledActionHandler):
+    __ctrl = dependency.descriptor(IArmoryYardController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        self.__ctrl.goToArmoryYard(loadBuyView=True)
+
+
 class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
     __ctrl = dependency.descriptor(IArmoryYardController)
 
@@ -1360,6 +1363,79 @@ class _OpenWotDailyRewardView(ActionHandler):
         showWotPlusIntroView()
 
 
+class _OpenPsaShop(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.PSACOIN_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showShop(getPlayerSeniorityAwardsUrl())
+
+
+class _NewYearOpenRewardsScreenHandler(NavigationDisabledActionHandler):
+    _nyController = dependency.descriptor(INewYearController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        switchNewYearView(AnchorNames.TREE, ViewAliases.REWARDS_VIEW)
+
+    def _canNavigate(self):
+        if not self._nyController.isEnabled():
+            BigWorld.callback(0.0, self.__showMessage)
+            return False
+        return super(_NewYearOpenRewardsScreenHandler, self)._canNavigate()
+
+    def __showMessage(self):
+        self._nyController.showStateMessage()
+
+
+class _NewYearOpenPremShopHandler(ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
+
+
+class _NewYearCollectionCompleteHandler(ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None and savedData.get('completedQuestID'):
+            questID = savedData.get('completedQuestID')
+            collectionStrID = new_year.g_cache.collectionIDByCollectionRewards[questID]
+            collectionRewards = {collectionStrID: getAllNonQuestBonuses(savedData.get('rewards', {}))}
+            showNYLevelUpWindow(collectionRewards=collectionRewards)
+        return
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1390,9 +1466,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenNotrecruitedHandler,
  OpenPersonalMissionHandler,
  _OpenLootBoxesHandler,
- _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
+ _NewYearOpenRewardsScreenHandler,
  _OpenBattlePassProgressionView,
  _OpenBattlePassChapterChoiceView,
  _OpenBPExtraWillEndSoon,
@@ -1425,10 +1501,15 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenWinbackSelectableRewardViewFromQuest,
  _OpenArmoryYardMain,
  _OpenArmoryYardQuest,
+ _OpenArmoryYardBuyView,
  _OpenAchievementsScreen,
  _OpenWotPlusIntroView,
  _OpenWotDailyRewardView,
- _OpenBarracksHandler)
+ _OpenBarracksHandler,
+ _OpenPsaShop,
+ _OpenMissingEventsHandler,
+ _NewYearCollectionCompleteHandler,
+ _NewYearOpenPremShopHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

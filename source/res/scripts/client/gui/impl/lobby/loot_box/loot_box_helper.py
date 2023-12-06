@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/loot_box/loot_box_helper.py
 from collections import namedtuple
-from gui.server_events.bonuses import getNonQuestBonuses
+from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from skeletons.gui.shared import IItemsCache
 BonusInfo = namedtuple('SlotBonusInfo', ['probabilitiesList',
  'bonusProbability',
  'limitIDs',
@@ -38,55 +39,14 @@ def aggregateSimilarBonuses(bonuses):
     return result
 
 
-def parseAllOfBonusInfoSection(data):
-    slots = dict()
-    if data:
-        for idx, slotsData in enumerate(data):
-            probability, bonuses = __parseSlotBonusInfoSection(__toNamedTuple(slotsData, BonusInfo))
-            slots.setdefault(idx, {}).setdefault('probability', probability)
-            slots.setdefault(idx, {}).setdefault('bonuses', bonuses)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def isAllVehiclesObtainedInSlot(slot, itemsCache=None):
+    inventoryVehicles = itemsCache.items.inventory.getIventoryVehiclesCDs()
+    restoreVehicles = itemsCache.items.recycleBin.getVehiclesIntCDs()
+    existVehicles = inventoryVehicles + restoreVehicles
+    for bonus in slot['bonuses']:
+        if bonus.getName() == 'vehicles':
+            if any((i[0].intCD not in existVehicles for i in bonus.getVehicles())):
+                return False
 
-    return slots
-
-
-def parseLimitBoxInfoSection(data):
-    return data.get('limits', {}).get('guaranteedBonusLimit', {}).get('guaranteedFrequency', 30)
-
-
-def __parseSlotBonusInfoSection(slotBonusInfo):
-    if slotBonusInfo is not None:
-        bonuses = []
-        bonuses.extend(__parseGroupsBonusInfoSection(slotBonusInfo.subBonusRawData))
-        return (slotBonusInfo.probabilitiesList, bonuses)
-    else:
-        return (0, [])
-
-
-def __parseGroupsBonusInfoSection(data):
-    groups = data.get('groups', [])
-    bonuses = []
-    for groupData in groups:
-        bonuses.extend(__parseOneOfBonusInfoSection(groupData))
-
-    return bonuses
-
-
-def __parseOneOfBonusInfoSection(data):
-    oneOfBonusInfo = __toNamedTuple(data.get('oneof', ()), OneOfBonusInfo)
-    bonuses = []
-    if oneOfBonusInfo is None:
-        return bonuses
-    else:
-        for item in oneOfBonusInfo.subBonusRawData:
-            bonusInfo = __toNamedTuple(item, BonusInfo)
-            if bonusInfo and bonusInfo.subBonusRawData:
-                for k, v in bonusInfo.subBonusRawData.iteritems():
-                    if k == 'groups':
-                        bonuses.extend(__parseGroupsBonusInfoSection(bonusInfo.subBonusRawData))
-                    bonuses.extend(getNonQuestBonuses(k, v))
-
-        return bonuses
-
-
-def __toNamedTuple(data, nameTupleType):
-    return nameTupleType._make(data) if isinstance(data, tuple) and len(data) == len(nameTupleType._fields) else None
+    return True

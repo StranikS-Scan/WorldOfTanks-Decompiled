@@ -39,6 +39,22 @@ def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, o
         window.load()
 
 
+@dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
+def showArmoryYardBundlesWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_bundles_view import ArmoryYardBundlesWindow
+    if armoryYard.isActive():
+        window = ArmoryYardBundlesWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
+        window.load()
+
+
+@dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
+def showArmoryYardBuyBundleWindow(bundleId, armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None, onClosedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_buy_bundle_view import ArmoryYardBuyBundleWindow
+    if armoryYard.isActive():
+        window = ArmoryYardBuyBundleWindow(bundleId, parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback, onClosedCallback=onClosedCallback)
+        window.load()
+
+
 def showArmoryYardVideoRewardWindow(vehicle):
     from armory_yard.gui.impl.lobby.feature.armory_yard_video_reward_view import ArmoryYardVideoRewardWindow
     if vehicle is None:
@@ -71,9 +87,16 @@ def showArmoryYardVehiclePreview(vehTypeCompDescr, showHeroTankText=False, backT
     previewAppearance = None
     if backToHangar:
         previewAppearance = HeroTankPreviewAppearance()
+
+    def previewBackCbWrapper(*args, **kwargs):
+        if previewBackCb:
+            previewBackCb(*args, **kwargs)
+        g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+
+    g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_MUTE_SOUND))
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAppearance': previewAppearance,
-     'previewBackCb': previewBackCb,
+     'previewBackCb': previewBackCbWrapper,
      'backBtnLabel': backBtnLabel,
      'previewAlias': previewAlias,
      'showHeroTankText': showHeroTankText,
@@ -89,21 +112,27 @@ def _createArmoryYardBrowserView(url, viewFlags, returnClb=None):
     return BrowserView(R.views.lobby.common.BrowserView(), settings)
 
 
-@dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
-def showArmoryYardIntroVideo(parent=None, armoryYard=None):
-    window = LobbyWindow(content=_createArmoryYardBrowserView(url=armoryYard.serverSettings.getModeSettings().introVideoLink, viewFlags=ViewFlags.VIEW), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, parent=parent, layer=WindowLayer.OVERLAY)
+def showArmoryYardIntroVideo(url, parent=None):
+    window = LobbyWindow(content=_createArmoryYardBrowserView(url=url, viewFlags=ViewFlags.VIEW), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, parent=parent, layer=WindowLayer.OVERLAY)
     window.load()
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
 def showArmoryYardInfoPage(parent=None, closeCallback=None, armoryYard=None):
-    window = LobbyWindow(content=_createArmoryYardBrowserView(url=armoryYard.serverSettings.getModeSettings().infoPageLink, viewFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, returnClb=closeCallback), wndFlags=WindowFlags.WINDOW, parent=parent, layer=WindowLayer.TOP_SUB_VIEW)
+
+    def closeCallbackWrapper(*args, **kwargs):
+        if closeCallback:
+            closeCallback(*args, **kwargs)
+        g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+
+    g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_MUTE_SOUND))
+    window = LobbyWindow(content=_createArmoryYardBrowserView(url=armoryYard.serverSettings.getModeSettings().infoPageLink, viewFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, returnClb=closeCallbackWrapper), wndFlags=WindowFlags.WINDOW, parent=parent, layer=WindowLayer.TOP_SUB_VIEW)
     window.load()
 
 
 def showArmoryYardWaiting():
     if not Waiting.isOpened('loadArmoryYard'):
-        Waiting.show('loadArmoryYard', showSparks=False, isSingle=True, backgroundImage=backport.image(R.images.gui.maps.icons.lobby.ay_loading_bg()))
+        Waiting.show('loadArmoryYard', showSparks=False, isSingle=True, isAlwaysOnTop=True, backgroundImage=backport.image(R.images.gui.maps.icons.lobby.ay_loading_bg()))
 
 
 def hideArmoryYardWaiting():

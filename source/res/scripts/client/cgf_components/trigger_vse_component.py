@@ -4,7 +4,7 @@ import CGF
 import Event
 from GenericComponents import VSEComponent
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
+from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 
 @registerComponent
 class TriggerVSEComponent(object):
@@ -16,12 +16,10 @@ class TriggerVSEComponent(object):
         self.triggerEvent = Event.Event()
 
 
-@autoregister(presentInAllWorlds=False, category='lobby')
 class TriggerVSEComponentsManager(CGF.ComponentManager):
 
     @onAddedQuery(TriggerVSEComponent, VSEComponent)
     def handleComponentAdded(self, triggerVseComponent, vseComponent):
-        self.doAction(triggerVseComponent.eventName)
         triggerVseComponent.triggerEvent += vseComponent.context.onTriggerEvent
 
     @onRemovedQuery(TriggerVSEComponent, VSEComponent)

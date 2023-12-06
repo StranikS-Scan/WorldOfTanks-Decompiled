@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NewYearStorageKeys
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -73,6 +73,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LIMITED_UI_1 = 'LIMITED_UI_1'
     LIMITED_UI_2 = 'LIMITED_UI_2'
     ARMORY_YARD = 'ARMORY_YARD'
+    NEW_YEAR = 'NEW_YEAR'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
 
 
@@ -784,6 +785,10 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.ARMORY_YARD: Section(masks={}, offsets={ARMORY_YARD_KEYS.BUILD_PROGRESS: Offset(0, 65535)}),
+     SETTINGS_SECTIONS.NEW_YEAR: Section(masks={NewYearStorageKeys.HAS_TOYS_HINT_SHOWN: 0,
+                                  NewYearStorageKeys.GLADE_INTRO_VISITED: 8,
+                                  NewYearStorageKeys.DECORATIONS_POPOVER_VIEWED: 9,
+                                  NewYearStorageKeys.DECORATIONS_POPOVER_BROKEN: 10}, offsets={}),
      SETTINGS_SECTIONS.VERSUS_AI_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                      'germany': 1,
                                                      'usa': 2,
@@ -943,6 +948,12 @@ class ServerSettingsManager(object):
 
     def saveInUIStorage(self, fields):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+
+    def getNewYearStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.NEW_YEAR, defaults) if self.settingsCache.isSynced() else {}
+
+    def saveInNewYearStorage(self, settings):
+        return self.setSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, settings)
 
     def getUIStorage2(self, defaults=None):
         return self.getSection(SETTINGS_SECTIONS.UI_STORAGE_2, defaults)
@@ -1279,7 +1290,9 @@ class ServerSettingsManager(object):
          'delete': [],
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
          SETTINGS_SECTIONS.LIMITED_UI_2: {},
-         SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {}}
+         SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
+         SETTINGS_SECTIONS.ARMORY_YARD: {},
+         'nyStorage': {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1339,6 +1352,10 @@ class ServerSettingsManager(object):
         clearRankedFilterCarousel2 = clear.get('rankedCarouselFilter2', 0)
         if rankedFilterCarousel2 or clearRankedFilterCarousel2:
             settings[SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2, rankedFilterCarousel2) ^ clearRankedFilterCarousel2
+        mapBoxFilterCarousel2 = data.get('mapBoxCarouselFilter2', {})
+        clearMapBoxFilterCarousel2 = clear.get('mapBoxCarouselFilter2', 0)
+        if mapBoxFilterCarousel2 or clearMapBoxFilterCarousel2:
+            settings[SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2, mapBoxFilterCarousel2) ^ clearMapBoxFilterCarousel2
         funRandomFilterCarousel1 = data.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, {})
         clearFunRandomFilterCarousel1 = clear.get(SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, 0)
         if funRandomFilterCarousel1 or clearFunRandomFilterCarousel1:
@@ -1432,6 +1449,9 @@ class ServerSettingsManager(object):
         clearArmoryYard = clear.get(SETTINGS_SECTIONS.ARMORY_YARD, 0)
         if armoryYard or clearArmoryYard:
             settings[SETTINGS_SECTIONS.ARMORY_YARD] = self._buildSectionSettings(SETTINGS_SECTIONS.ARMORY_YARD, armoryYard) ^ clearArmoryYard
+        nyData = data.get('nyStorage', {})
+        if nyData:
+            settings[SETTINGS_SECTIONS.NEW_YEAR] = self._buildSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, nyData)
         for luiStorage in LIMITED_UI_STORAGES:
             limitedUI = data.get(luiStorage, {})
             clearLimitedUI = clear.get(luiStorage, 0)

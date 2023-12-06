@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/game_control/armory_yard_controller.py
+from enum import Enum
 from functools import partial
+import adisp
 import BigWorld
-import CGF
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
-from armory_yard_constants import getCurrencyToken, getGroupName, getStageToken, getEndToken, getEndQuestID, PROGRESSION_LEVEL_PDATA_KEY, State, CLAIMED_FINAL_REWARD, PDATA_KEY_ARMORY_YARD, INTO_VIDEO, isArmoryYardStyleQuest, DAY_BEFORE_END_STYLE_QUEST, AY_VIDEOS, VEHICLE_NAME
-from armory_yard.gui.window_events import showArmoryYardIntroWindow, showArmoryYardVehiclePreview, showArmoryYardWaiting, hideArmoryYardWaiting
+from armory_yard_constants import getCurrencyToken, getGroupName, getStageToken, getEndToken, getEndQuestID, getBundleBlockToken, getFinalEndQuestID, PROGRESSION_LEVEL_PDATA_KEY, State, CLAIMED_FINAL_REWARD, PDATA_KEY_ARMORY_YARD, INTO_VIDEO, isArmoryYardStyleQuest, DAY_BEFORE_END_STYLE_QUEST, AY_VIDEOS, VEHICLE_NAME
+from armory_yard.gui.window_events import showArmoryYardIntroWindow, showArmoryYardWaiting, hideArmoryYardWaiting
 from armory_yard.gui.impl.lobby.feature.armory_yard_main_view import ArmoryYardMainView
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import TabId
 from armory_yard.managers.sound_manager import ArmorySoundManager
@@ -23,6 +24,7 @@ from gui.game_control.season_provider import SeasonProvider
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.Scaleform.framework import ScopeTemplates
+from gui.wgcg.shop.contexts import ShopStorefrontProductsCtx
 from helpers.server_settings import serverSettingsChangeListener
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
@@ -30,8 +32,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import IArmoryYardController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from cgf_components.armory_yard_components import AssemblyStageIndexManager
-from skeletons.gui.shared.utils import IHangarSpace
+from skeletons.gui.web import IWebController
 from armory_yard.managers.stage_manager import showVideo
 from gui.impl.gen import R
 import ScaleformFileLoader
@@ -39,12 +40,19 @@ from gui.doc_loaders.GuiDirReader import GuiDirReader
 from items import vehicles
 AY_VIDEOS_FOLDER = '/'.join((GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, 'armory_yard'))
 
+class BundleState(Enum):
+    EMPTY = 0
+    FILLING = 1
+    FILL = 2
+
+
 class ArmoryYardController(IArmoryYardController):
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __appLoader = dependency.descriptor(IAppLoader)
+    __webCtrl = dependency.descriptor(IWebController)
     __BACKGROUND_ALPHA = 0
 
     def __init__(self):
@@ -60,6 +68,9 @@ class ArmoryYardController(IArmoryYardController):
         self.onStyleQuestEnds = Event(self.__eventManager)
         self.onCollectReward = Event(self.__eventManager)
         self.onPayedError = Event(self.__eventManager)
+        self.onBundleOutTime = Event(self.__eventManager)
+        self.onTabIdChanged = Event(self.__eventManager)
+        self.onCollectFinalReward = Event(self.__eventManager)
         self.__serverSettings = _ServerSettings()
         self.__soundManager = ArmorySoundManager()
         self.__cameraManager = CameraManager()
@@ -68,8 +79,14 @@ class ArmoryYardController(IArmoryYardController):
         self.__isPaused = False
         self.__isStarted = False
         self.__isStreamingEnabled = False
+        self.__isVisiting = False
+        self.__bundlesProducts = []
+        self.__bundlesState = BundleState.EMPTY
+        self.__isFinalQuestCompleted = False
         nationID, vehID = vehicles.g_list.getIDsByName(VEHICLE_NAME)
         self.__vehicleCD = vehicles.makeIntCompactDescrByID('vehicle', nationID, vehID)
+        self.__isVehiclePreview = False
+        super(ArmoryYardController, self).__init__()
 
     def disableVideoStreaming(self):
         if self.__isStreamingEnabled:
@@ -83,12 +100,30 @@ class ArmoryYardController(IArmoryYardController):
             ScaleformFileLoader.enableStreaming(files)
 
     @property
+    def isVehiclePreview(self):
+        return self.__isVehiclePreview
+
+    @isVehiclePreview.setter
+    def isVehiclePreview(self, value):
+        self.__isVehiclePreview = value
+        if self.__isVehiclePreview:
+            self.__isVisiting = False
+
+    @property
     def serverSettings(self):
         return self.__serverSettings
 
     @property
     def cameraManager(self):
         return self.__cameraManager
+
+    @property
+    def bundlesProducts(self):
+        return self.__bundlesProducts
+
+    @property
+    def isFinalQuestCompleted(self):
+        return self.__isFinalQuestCompleted
 
     def onLobbyInited(self, event):
         self.__serverSettings.start()
@@ -100,12 +135,17 @@ class ArmoryYardController(IArmoryYardController):
         self.__checkStyleQuest()
         if self.isEnabled():
             self.onCheckNotify()
-            self.__checkAnnouncement()
+            self.checkAnnouncement()
+            if self.__bundlesState == BundleState.EMPTY:
+                self.__fillBundlesProducts()
             self.__isPaused = self.serverSettings.isPaused
             if not self.__isStarted and self.getCollectableRewards() > int(self.isClaimedFinalReward()):
                 self.onCollectReward()
         self.__connectionMgr.onDisconnected += self.__onDisconnected
         self.__isStarted = True
+        token = self.serverSettings.getCurrencyToken()
+        if self.getTotalSteps() == self.__eventsCache.questsProgress.getTokenCount(token):
+            self.__isFinalQuestCompleted = True
 
     def onAccountBecomeNonPlayer(self):
         self.__serverSettings.stop()
@@ -126,6 +166,11 @@ class ArmoryYardController(IArmoryYardController):
 
     def __onDisconnected(self):
         self.__isStarted = False
+        self.__isPaused = False
+        self.__isStreamingEnabled = False
+        self.__isVisiting = False
+        self.__bundlesState = BundleState.EMPTY
+        self.__bundlesProducts = []
 
     def isActive(self):
         return self.getState() not in (State.DISABLED, State.BEFOREPROGRESSION)
@@ -148,6 +193,12 @@ class ArmoryYardController(IArmoryYardController):
     def isProgressionQuest(self, questID):
         return any([ quest.getID() == questID for _, quest in self.iterProgressionQuests() ])
 
+    def isStarterPackAvailable(self):
+        packsSettings = self.serverSettings.getModeSettings().starterPacks
+        if not packsSettings.get('isEnabled', False) or not self.__bundlesProducts or self.__itemsCache.items.tokens.getTokenCount(self.getBundleBlockToken()) > 0:
+            return False
+        return packsSettings.get('startTime', 0) <= time_utils.getServerUTCTime() < packsSettings.get('endTime', 0)
+
     def iterProgressionQuests(self):
         for cycleID, _ in self.serverSettings.iterAllCycles():
             for quest in self.iterCycleProgressionQuests(cycleID):
@@ -158,6 +209,13 @@ class ArmoryYardController(IArmoryYardController):
             quest = self.__eventsCache.getQuestByID(questID)
             if quest.getType() != EVENT_TYPE.TOKEN_QUEST:
                 yield quest
+
+    def isSceneLoaded(self):
+        return self.__sceneLoadingManager.sceneIsLoaded()
+
+    def getBundleBlockToken(self):
+        curSeason = self.__serverSettings.getCurrentSeason()
+        return '' if curSeason is None else getBundleBlockToken(curSeason.getSeasonID())
 
     def getNextCycle(self, currentTime=None):
         if currentTime is None:
@@ -188,6 +246,9 @@ class ArmoryYardController(IArmoryYardController):
         currentSeason = self.__serverSettings.getCurrentSeason()
         return 0 if currentSeason is None else self.__serverSettings.getModeSettings().rewards.get(currentSeason.getSeasonID(), {}).get('maxNumberOfSteps', 0)
 
+    def getStarterPackSettings(self):
+        return self.serverSettings.getModeSettings().starterPacks
+
     def getStepsRewards(self):
         currentSeason = self.__serverSettings.getCurrentSeason()
         return {} if currentSeason is None else self.__serverSettings.getModeSettings().rewards.get(currentSeason.getSeasonID(), {}).get('steps', {})
@@ -205,11 +266,55 @@ class ArmoryYardController(IArmoryYardController):
 
         return ZERO_MONEY
 
+    def refreshBundle(self):
+        self.__fillBundlesProducts()
+
+    @adisp.adisp_process
+    def __fillBundlesProducts(self):
+        if self.__bundlesState == BundleState.FILLING or self.__itemsCache.items.tokens.getTokenCount(self.getBundleBlockToken()) > 0:
+            return
+        else:
+            packSettings = self.getStarterPackSettings()
+            if not (not packSettings.get('isEnabled', False) or 'storefrontName' not in packSettings):
+                if packSettings.get('startTime', 0) > time_utils.getServerUTCTime() >= packSettings.get('endTime', 0):
+                    return
+                if not self.__webCtrl.isEnabled() and self.__webCtrl.isAvailable() and self.__webCtrl.isStarted:
+                    return
+                self.__bundlesState = BundleState.FILLING
+                result = yield self.__webCtrl.sendRequest(ctx=ShopStorefrontProductsCtx(storefront=packSettings['storefrontName']))
+                self.__bundlesState = BundleState.FILL
+                return result.isSuccess() or None
+            self.__bundlesProducts = []
+            for product in result.getData().get('data', []):
+                entitlements = product['entitlements']
+                price = product['price']
+                cost = float(price['value'])
+                promotion = product.get('promotion', None)
+                tokens = 0
+                tokenName = getCurrencyToken(self.serverSettings.getCurrentSeason().getSeasonID())
+                if promotion:
+                    cost = float(promotion['discounted_cost'])
+                for entitlement in entitlements:
+                    if tokenName == entitlement['cd']:
+                        tokens = int(entitlement['amount'])
+                        break
+
+                if tokens == 0:
+                    continue
+                self.__bundlesProducts.append({'tokens': tokens,
+                 'tags': product['tags'],
+                 'price': Money.makeFrom(price['currency'], cost),
+                 'productCode': product['code'],
+                 'id': product['id']})
+
+            self.__bundlesProducts.sort(key=lambda elem: elem['tokens'])
+            return
+
     def isChapterFinished(self, cycleID):
         return bool(self.__eventsCache.questsProgress.getTokenCount(getEndToken(cycleID)))
 
     def receivedTokensInChapter(self, cycleID):
-        return sum([ quest.isCompleted() for quest in self.iterCycleProgressionQuests(cycleID) ])
+        return self.__eventsCache.questsProgress.getTokenCount(self.__serverSettings.getStageToken(cycleID))
 
     def getSeasonInterval(self):
         season = self.serverSettings.getCurrentSeason()
@@ -239,6 +344,15 @@ class ArmoryYardController(IArmoryYardController):
 
         return (startProgressionTime, finishProgressionTime)
 
+    def getPostProgressionTimes(self):
+        startPostProgressionTime = None
+        for _, data in self.serverSettings.iterAllCycles():
+            if startPostProgressionTime is None or startPostProgressionTime < data.endDate:
+                startPostProgressionTime = data.endDate
+
+        finishPostProgressionTime = self.__serverSettings.getCurrentSeason().getEndDate()
+        return (startPostProgressionTime, finishPostProgressionTime)
+
     def getAvailableQuestsCount(self):
         currentTime = time_utils.getServerUTCTime()
         isPrevChapterFinished = True
@@ -259,14 +373,17 @@ class ArmoryYardController(IArmoryYardController):
         startProgressionTime, finishProgressionTime = self.getProgressionTimes()
         if currDate < startProgressionTime:
             return State.BEFOREPROGRESSION
-        if currDate >= finishProgressionTime:
-            return State.POSTPROGRESSION
-        lastCountdownTime = self.serverSettings.getModeSettings().activeHoursCountdown * time_utils.ONE_HOUR
-        return State.ACTIVELASTHOURS if finishProgressionTime - currDate <= lastCountdownTime else State.ACTIVE
+        return State.POSTPROGRESSION if currDate >= finishProgressionTime else State.ACTIVE
 
     def goToArmoryYard(self, tabId=TabId.PROGRESS, loadBuyView=False):
         if not self.isActive():
             return
+        if self.__isVisiting:
+            self.onTabIdChanged({'tabId': tabId})
+            if loadBuyView:
+                g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.SHOW_ARMORY_YARD_BUY_VIEW), EVENT_BUS_SCOPE.DEFAULT)
+            return
+        self.isVehiclePreview = False
         app = self.__appLoader.getApp()
         app.setBackgroundAlpha(self.__BACKGROUND_ALPHA)
         self.enableVideoStreaming()
@@ -277,32 +394,38 @@ class ArmoryYardController(IArmoryYardController):
             else:
                 BigWorld.callback(0.0, hideArmoryYardWaiting)
 
-        showArmoryYardWaiting()
         if not self.__sceneLoadingManager.isLoading() and not self.__sceneLoadingManager.sceneIsLoaded():
-            self.__sceneLoadingManager.loadScene(partial(self.goToArmoryYard, tabId, loadBuyView))
+            showArmoryYardWaiting()
+            lastSeasonID = AccountSettings.getArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED) or -1
+            isShowIntro = lastSeasonID != self.serverSettings.getCurrentSeason().getSeasonID()
+            if isShowIntro:
+                showArmoryYardIntroWindow(partial(self.showIntroVideo, tabId))
+            self.__sceneLoadingManager.loadScene(partial(self.goToArmoryYard, tabId, loadBuyView) if not isShowIntro else hideArmoryYardWaiting)
             self.__soundManager.onSoundModeChanged(True)
             return
-        lastSeasonID = AccountSettings.getArmoryYard(ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED) or -1
-        if lastSeasonID != self.serverSettings.getCurrentSeason().getSeasonID():
-            showArmoryYardIntroWindow(partial(self.showIntroVideo, tabId), loadedCallback=hideArmoryYardWaiting)
-            return
+        self.__isVisiting = True
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.armory_yard.lobby.feature.ArmoryYardMainView(), ArmoryYardMainView, ScopeTemplates.LOBBY_SUB_SCOPE), tabId, _loadedCallback), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @dependency.replace_none_kwargs(hangarSpace=IHangarSpace)
-    def showIntroVideo(self, tabId, hangarSpace=None):
-        stageManager = CGF.getManager(hangarSpace.space.getSpaceID(), AssemblyStageIndexManager)
-        self.cameraManager.goToPosition(stageManager.getCameraDataByStageIndex(0))
-        showVideo(INTO_VIDEO, partial(self.goToArmoryYard, tabId))
+    def showIntroVideo(self, tabId):
+        showVideo(INTO_VIDEO, None)
+        self.goToArmoryYard(tabId)
+        return
 
     def goToArmoryYardQuests(self):
         if self.isQuestActive():
             self.goToArmoryYard(TabId.QUESTS)
 
-    def onLoadingHangar(self):
-        self.__sceneLoadingManager.unloadScene()
+    def unloadScene(self, isReload=True):
         self.__soundManager.onSoundModeChanged(False)
+        self.__sceneLoadingManager.unloadScene(isReload=isReload)
+        self.__isVisiting = False
+
+    def onLoadingHangar(self):
+        self.__soundManager.onSoundModeChanged(False)
+        self.__sceneLoadingManager.unloadScene()
         self.__cameraManager.goToHangar()
         self.__cameraManager.destroy()
+        self.__isVisiting = False
 
     def hasCurrentRewards(self):
         stepRewards = self.getStepsRewards()
@@ -318,22 +441,17 @@ class ArmoryYardController(IArmoryYardController):
 
         return False
 
-    def showHeroTankVehiclePreview(self):
-        reward = self.getFinalRewardVehicle()
-        if reward is not None:
-            showArmoryYardVehiclePreview(self.getFinalRewardVehicle().intCD, True, True, True)
-        return
-
     def update(self):
         if self.isEnabled():
             self.onCheckNotify()
-            self.__checkAnnouncement()
+            self.checkAnnouncement()
+            self.__fillBundlesProducts()
             if self.__isPaused != self.serverSettings.isPaused:
                 self.__isPaused = self.serverSettings.isPaused
                 self.onServerSwitchChange()
         self.onUpdated()
 
-    def __checkAnnouncement(self):
+    def checkAnnouncement(self):
         if self.getState() == State.BEFOREPROGRESSION:
             startTime, _ = self.getProgressionTimes()
             self.onAnnouncement(startTime)
@@ -355,10 +473,14 @@ class ArmoryYardController(IArmoryYardController):
                 self.onStyleQuestEnds(quest.getFinishTime())
 
     def __onTokensUpdate(self, diff):
+        if self.getBundleBlockToken() in diff:
+            self.__bundlesProducts = []
         if self.serverSettings.getCurrencyToken() in diff:
             self.onProgressUpdated()
-        if set([ getEndToken(cycleID) for cycleID, _ in self.serverSettings.iterAllCycles() ]) & set(diff):
-            self.onQuestsUpdated()
+        for cycleID, _ in self.serverSettings.iterAllCycles():
+            if getEndToken(cycleID) in diff or getStageToken(cycleID) in diff:
+                self.onQuestsUpdated()
+                break
 
     def __onPdataUpdated(self, diff):
         if PROGRESSION_LEVEL_PDATA_KEY in diff or CLAIMED_FINAL_REWARD in diff:
@@ -367,6 +489,11 @@ class ArmoryYardController(IArmoryYardController):
     def __onQuestsUpdated(self, diff):
         if set([ quest.getID() for _, quest in self.iterProgressionQuests() ]) & set(diff):
             self.onQuestsUpdated()
+        currentSeason = self.serverSettings.getCurrentSeason()
+        if currentSeason and getFinalEndQuestID(currentSeason.getSeasonID()) in diff:
+            self.__isFinalQuestCompleted = True
+            self.onProgressUpdated()
+            self.onCollectFinalReward()
 
     def __getTimeToStatusChange(self):
         if self.isEnabled():
@@ -401,7 +528,8 @@ class ArmoryYardController(IArmoryYardController):
         self.onStatusChange()
         self.onUpdated()
         self.onCheckNotify()
-        self.__checkAnnouncement()
+        self.checkAnnouncement()
+        self.__fillBundlesProducts()
 
     def __stopNotification(self):
         self.__statusChangeNotifier.stopNotification()
@@ -410,7 +538,7 @@ class ArmoryYardController(IArmoryYardController):
 
 class _ArmoryYardSeasonProvider(SeasonProvider):
     __slots__ = ('onUpdated', '__notificationManager')
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
         super(_ArmoryYardSeasonProvider, self).__init__()
@@ -432,7 +560,7 @@ class _ArmoryYardSeasonProvider(SeasonProvider):
         return
 
     def getModeSettings(self):
-        return self.__armoryYard.serverSettings.getModeSettings()
+        return self.__armoryYardCtrl.serverSettings.getModeSettings()
 
     def getTimer(self, now=None, peripheryID=None):
         stateChange = self.getClosestStateChangeTime(now)
@@ -445,14 +573,14 @@ class _ArmoryYardSeasonProvider(SeasonProvider):
 
     def __onPrimeTimeUpdate(self):
         self.onUpdated()
-        self.__armoryYard.update()
+        self.__armoryYardCtrl.update()
         self.__notificationManager.startNotification()
 
 
 class _ServerSettings(object):
     __slots__ = ('__seasonProvider', 'onUpdated')
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
         super(_ServerSettings, self).__init__()
@@ -515,4 +643,4 @@ class _ServerSettings(object):
     def __onServerSettingsChanged(self, diff, *args, **kwards):
         self.__seasonProvider.onSettingsUpdated(diff)
         self.onUpdated()
-        self.__armoryYard.update()
+        self.__armoryYardCtrl.update()

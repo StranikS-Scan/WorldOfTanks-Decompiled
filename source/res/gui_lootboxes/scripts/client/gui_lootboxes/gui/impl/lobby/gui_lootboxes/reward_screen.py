@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/reward_screen.py
 import logging
+from constants import LOOTBOX_TOKEN_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
 from gui.impl.gen import R
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
+from gui.shared.event_dispatcher import selectVehicleInHangar
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
@@ -17,8 +19,10 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
 from helpers import dependency
+from shared_utils import findFirst
 from skeletons.gui.game_control import IGuiLootBoxesController
 _logger = logging.getLogger(__name__)
+SECONDARY_REWARDS_PROCESSORS = []
 
 class LootBoxesRewardScreen(ViewImpl):
     __slots__ = ('__rewards', '__tooltipData', '__mainVehicleCd', '__lootbox', '__bonusData')
@@ -33,6 +37,12 @@ class LootBoxesRewardScreen(ViewImpl):
         self.__rewards = rewards
         self.__lootbox = lootbox
         self.__bonusData = []
+        for rewardDict in self.__rewards:
+            for token, value in rewardDict.get('tokens', {}).iteritems():
+                if token.startswith(LOOTBOX_TOKEN_PREFIX) and value.get('count') < 0:
+                    rewardDict['tokens'].pop(token)
+                    break
+
         super(LootBoxesRewardScreen, self).__init__(settings)
         return
 
@@ -41,12 +51,14 @@ class LootBoxesRewardScreen(ViewImpl):
         return super(LootBoxesRewardScreen, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
+        tooltipData = self.getTooltipData(event)
+        if tooltipData and isinstance(tooltipData.tooltip, dict):
+            if contentID in tooltipData.tooltip:
+                return tooltipData.tooltip[contentID](*tooltipData.specialArgs)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.CompensationTooltip():
-            tooltipData = self.getTooltipData(event)
             if tooltipData:
                 return LootBoxesCompensationTooltip(*tooltipData.specialArgs)
         elif contentID == R.views.lobby.collection.tooltips.CollectionItemTooltipView():
-            tooltipData = self.getTooltipData(event)
             if tooltipData:
                 return CollectionItemTooltipView(*tooltipData.specialArgs)
         elif contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
@@ -78,7 +90,14 @@ class LootBoxesRewardScreen(ViewImpl):
         self.destroyWindow()
 
     def __showVehicleInHangar(self):
-        self.destroyWindow()
+        if self.__mainVehicleCd is not None:
+            window = self.getParentWindow()
+            if window and window.parent:
+                window.parent.destroy()
+            else:
+                self.destroyWindow()
+            selectVehicleInHangar(self.__mainVehicleCd)
+        return
 
     @replaceNoneKwargsModel
     def __fillRewardsModel(self, bonuses, model=None):
@@ -86,19 +105,22 @@ class LootBoxesRewardScreen(ViewImpl):
         mainRewardsList = model.getMainRewards()
         lootboxCategory = self.__lootbox.getCategory() if self.__lootbox else None
         rewards = []
-        mainRewards = []
         for bonusesDict in bonuses:
             for bonusType, bonusValue in bonusesDict.items():
                 rewards.extend(getNonQuestBonuses(bonusType, bonusValue))
 
         rewards = sortBonuses(mergeBonuses(rewards), self.__guiLootBoxes.getBonusesOrder(lootboxCategory))
-        if len(rewards) <= LootboxesRewardsViewModel.MAX_MAIN_REWARDS:
-            mainRewards = rewards[:LootboxesRewardsViewModel.MAX_MAIN_REWARDS]
-            rewards = rewards[LootboxesRewardsViewModel.MAX_MAIN_REWARDS:]
-        elif rewards:
-            mainRewards.append(rewards.pop(0))
-        if mainRewards == LootboxesRewardsViewModel.MAX_MAIN_REWARDS:
+        vehicleBonus = findFirst(lambda bonus: bonus.getName() == 'vehicles', rewards)
+        if vehicleBonus:
+            vehicle, _ = vehicleBonus.getVehicles()[0]
+            self.__mainVehicleCd = vehicle.intCD
+        mainRewards = rewards[:LootboxesRewardsViewModel.MAX_MAIN_REWARDS]
+        rewards = rewards[LootboxesRewardsViewModel.MAX_MAIN_REWARDS:]
+        if len(mainRewards) == LootboxesRewardsViewModel.MAX_MAIN_REWARDS:
             mainRewards[0], mainRewards[1] = mainRewards[1], mainRewards[0]
+        for processor in SECONDARY_REWARDS_PROCESSORS:
+            rewards = processor(rewards)
+
         self.__bonusData = rewards
         packBonusModelAndTooltipData(mainRewards, mainRewardsList, self.__tooltipData, getMainRewardsBonusPacker())
         packBonusModelAndTooltipData(rewards, rewardsList, self.__tooltipData, getRewardsBonusPacker(), len(mainRewardsList))

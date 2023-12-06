@@ -5,11 +5,14 @@ CMD_COLLECT_REWARDS = 31002
 CMD_BUY_STEP_TOKENS = 31003
 CMD_CLAIM_FINAL_REWARD = 31004
 DEV_CMD_ADD_TOKEN_S = 31005
-MAX_TOKEN_AT_CHAPTER = 6
+DEV_CMD_SET_CYCLE = 31009
+DEV_CMD_SET_QUEST = 31010
+MAX_TOKEN_AT_CHAPTER = 7
 DAY_BEFORE_END_STYLE_QUEST = 2
 PDATA_KEY_ARMORY_YARD = 'armoryYard'
 FEATURE_NAME_BASE = 'armory_yard'
-STAGE_TOKEN_POSTFIX = 'B'
+STAGE_TOKEN_POSTFIX = 'C'
+BATTLE_TOKEN_POSTFIX = 'B'
 CURRENCY_TOKEN_POSTFIX = 'S'
 END_TOKEN_POSTFIX = 'end'
 END_QUEST_POSTFIX = 'end'
@@ -17,18 +20,18 @@ CONVERTER_QUEST_POSTFIX = 'converter'
 PROGRESSION_LEVEL_PDATA_KEY = 'progressionLevel'
 CLAIMED_FINAL_REWARD = 'claimedFinalReward'
 POSTBATTLE_QUEST = 'postBattle'
-INTO_VIDEO = 'ay_intro'
+INTO_VIDEO = 'ay_ep2_intro'
 STYLE_QUEST_POSTFIX = 'style'
-VEHICLE_NAME = 'ussr:R208_Object_156O'
-AY_VIDEOS = ['ay_armour.usm',
- 'ay_intro.usm',
- 'ay_reward.usm',
- 'ay_tracks.usm']
+VEHICLE_NAME = 'czech:Cz21_TST'
+AY_VIDEOS = ['ay_ep2_armour.usm',
+ 'ay_ep2_intro.usm',
+ 'ay_ep2_tracks.usm',
+ 'ay_ep2_gun.usm',
+ 'ay_ep2_turret.usm']
 
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    ACTIVELASTHOURS = 'activeLastHours'
     POSTPROGRESSION = 'postProgression'
     COMPLETED = 'completed'
     DISABLED = 'disabled'
@@ -60,8 +63,16 @@ def getEndQuestID(cycleID):
     return '_'.join((FEATURE_NAME_BASE, 'cycle_{}'.format(cycleID), END_QUEST_POSTFIX))
 
 
-def isArmoryYardCurrencyToken(tokenID):
-    return tokenID.startswith(FEATURE_NAME_BASE) and tokenID.endswith(CURRENCY_TOKEN_POSTFIX)
+def getBundleBlockToken(seasonID):
+    return '{}_starter_pack:season_{}'.format(FEATURE_NAME_BASE, seasonID)
+
+
+def getFinalEndQuestID(seasonID):
+    return '_'.join((FEATURE_NAME_BASE, 'season_{}'.format(seasonID), END_QUEST_POSTFIX))
+
+
+def isArmoryYardBattleToken(tokenID):
+    return tokenID.startswith(FEATURE_NAME_BASE) and tokenID.endswith(BATTLE_TOKEN_POSTFIX)
 
 
 def isArmoryYardStyleQuest(questId):

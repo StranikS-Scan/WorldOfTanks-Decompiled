@@ -9,6 +9,7 @@ from gui.shared.money import Currency
 from gui_lootboxes.gui.bonuses.bonuses_helpers import TOKEN_COMPENSATION_PREFIX, parseCompenstaionToken
 from gui_lootboxes.gui.bonuses.bonuses_order_config import BonusesSortTags
 from shared_utils import first
+VEHICLE_MAX_LEVEL = 10
 
 def _getCustomizationTag(bonus):
     item = bonus.getC11nItem(first(bonus.getCustomizations()))
@@ -58,7 +59,7 @@ def _getTokensTag(bonus):
     return BonusesSortTags.UNSORTABLE
 
 
-_BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
+BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
  Currency.GOLD: lambda b: BonusesSortTags.RARITY_CURRENCY,
  Currency.CRYSTAL: lambda b: BonusesSortTags.RARITY_CURRENCY,
  Currency.EVENT_COIN: lambda b: BonusesSortTags.CURRENCY,
@@ -84,20 +85,29 @@ _BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
  'tmanToken': _getTankmenTokenTag,
  'battleToken': _getTokensTag,
  'freeXP': lambda b: BonusesSortTags.CURRENCY}
-_BONUSES_KEY_FUNC = {'items': lambda b: first(b.getItems()),
+
+def getVehBonusSortKey(bonus):
+    vehicle, vehInfo = first(bonus.getVehicles())
+    compensatedNumber = vehInfo.get('compensatedNumber', 0)
+    compensation = vehInfo.get('customCompensation')
+    hasCompensation = compensatedNumber and compensation is not None
+    return (hasCompensation, -vehicle.level, vehicle)
+
+
+BONUSES_KEY_FUNC = {'items': lambda b: first(b.getItems()),
  'crewBooks': lambda b: first(b.getItems()),
- 'vehicles': lambda b: first(b.getVehicles())}
+ 'vehicles': getVehBonusSortKey}
 
 def _defaultBonusKeyFunc(bonus):
     return bonus.getName()
 
 
 def getBonusSortTag(bonus):
-    return _BONUS_TAG_HANDLER_MAP.get(bonus.getName(), lambda b: BonusesSortTags.UNSORTABLE)(bonus)
+    return BONUS_TAG_HANDLER_MAP.get(bonus.getName(), lambda b: BonusesSortTags.UNSORTABLE)(bonus)
 
 
 def getBonusesSortKeyFunc(order):
-    return lambda b: (order.index(getBonusSortTag(b)), _BONUSES_KEY_FUNC.get(b.getName(), _defaultBonusKeyFunc)(b))
+    return lambda b: (order.index(getBonusSortTag(b)), BONUSES_KEY_FUNC.get(b.getName(), _defaultBonusKeyFunc)(b))
 
 
 def sortBonuses(bonuses, order):

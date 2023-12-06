@@ -118,7 +118,7 @@ class EventLootBoxesFormatter(EventBoxesFormatter):
 class NYPostEventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
     __MESSAGE_TEMPLATE = 'LootBoxesAutoOpenMessage'
     __REWARDS_TEMPLATE = 'LootBoxRewardsSysMessage'
-    __REQUIERED_BOX_TYPES = {NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM, NewYearLootBoxes.SPECIAL}
+    __REQUIERED_BOX_TYPES = {NewYearLootBoxes.COMMON_OLD, NewYearLootBoxes.PREMIUM_OLD, NewYearLootBoxes.SPECIAL_OLD}
 
     @adisp_async
     @adisp_process
@@ -136,7 +136,7 @@ class NYPostEventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
         return cls._isBoxOfRequiredTypes(boxID, cls.__REQUIERED_BOX_TYPES)
 
     def __getMainMessage(self, message, openedBoxesIDs):
-        count = backport.text(R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.counter(), count=sum((message.data[boxId]['count'] for boxId in openedBoxesIDs)))
+        count = backport.text(R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.event.counter(), count=sum((message.data[boxId]['count'] for boxId in openedBoxesIDs)))
         oldStyleCount = {bID:message.data[bID]['count'] for bID in openedBoxesIDs}
         rewards = getRewardsForBoxes(message, openedBoxesIDs)
         formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'count': count}, data={'savedData': {'rewards': rewards,

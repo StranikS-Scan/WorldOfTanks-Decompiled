@@ -82,6 +82,8 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_progression_preview import VehicleStyleProgressionPreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.style_buying_preview import VehicleStyleBuyingPreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.showcase_style_buying_preview import VehicleShowcaseStyleBuyingPreview
+    from gui.impl.lobby.new_year.ny_browser_view import NyBrowserView
+    from gui.impl.new_year.views.ny_select_vehicle_for_discount_popover import NYSelectVehicleForDiscountPopover
     from gui.Scaleform.daapi.view.bootcamp.bootcamp_progress_component import BootcampProgressComponent
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.rental_vehicle_preview import RentalVehiclePreview
     from gui.Scaleform.daapi.view.lobby.telecom_rentals.telecom_rentals_browser_pages import VehicleTelecomRentalView
@@ -116,6 +118,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.TELECOM_RENTAL_VIEW, VehicleTelecomRentalView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.TELECOM_RENTAL_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, BlueprintsExchangeView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BLUEPRINTS_EXCHANGE_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ResourceWellBrowserView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.RESOURCE_WELL_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.NY_BROWSER_VIEW, NyBrowserView, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.NY_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', WindowLayer.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', WindowLayer.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, UseAwardSheetWindow, 'useAwardSheetWindow.swf', WindowLayer.TOP_WINDOW, 'useAwardSheetWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -145,6 +148,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_SELL_DIALOG, VehicleSellDialog, 'vehicleSellDialog.swf', WindowLayer.TOP_WINDOW, 'vehicleSellWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.MISSION_AWARD_WINDOW, MissionAwardWindow, 'missionAwardWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.TRADEIN_POPOVER, TradeInPopup, 'TradeInPopover.swf', WindowLayer.TOP_WINDOW, 'TradeInPopover', VIEW_ALIAS.TRADEIN_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.NY_SELECT_VEHICLE_FOR_DISCOUNT_POPOVER, NYSelectVehicleForDiscountPopover, 'NYSelectVehiclePopover.swf', WindowLayer.TOP_WINDOW, VIEW_ALIAS.NY_SELECT_VEHICLE_FOR_DISCOUNT_POPOVER, VIEW_ALIAS.NY_SELECT_VEHICLE_FOR_DISCOUNT_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BADGES_PAGE, BadgesPage, 'badgesPage.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BADGES_PAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -211,10 +215,13 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_INFO_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.ADVENT_CALENDAR, self.showAdventCalendarWindow),
          (VIEW_ALIAS.MISSION_AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.NY_SELECT_VEHICLE_FOR_DISCOUNT_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.NY_BROWSER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent),
@@ -227,6 +234,13 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
         window = self.findViewByName(WindowLayer.WINDOW, name)
         if window is not None:
             self.bringViewToFront(name)
+        else:
+            self.loadViewByCtxEvent(event)
+        return
+
+    def showAdventCalendarWindow(self, event):
+        if self.findViewByName(WindowLayer.WINDOW, event.name) is not None:
+            self.bringViewToFront(event.name)
         else:
             self.loadViewByCtxEvent(event)
         return

@@ -269,6 +269,14 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
+NEW_YEAR = 'newYear'
+NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
+NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
+NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
+NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
+NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
+NY_LAST_SEEN_TOTAL_BONUS = 'NYLastSeenTotalBonus'
+NY_INTRO_SEEN = 'NYIntroSeen'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -1215,7 +1223,27 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  LOOT_BOXES_VIEWED_COUNT: 0,
                                  LOOT_BOXES_COUNT: {},
                                  LOOT_BOXES_LAST_ADDED_ID: 0},
-                BIRTHDAY_2023_INTRO_SHOWN: False},
+                BIRTHDAY_2023_INTRO_SHOWN: False,
+                NEW_YEAR: {NY_DAILY_QUESTS_VISITED: False,
+                           NY_BONUS_DAILY_QUEST_VISITED: False,
+                           NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {18: False,
+                                                                19: False,
+                                                                20: False,
+                                                                21: False,
+                                                                22: False,
+                                                                23: False,
+                                                                24: False},
+                           NY_OLD_REWARDS_BY_YEAR_VISITED: {18: False,
+                                                            19: False,
+                                                            20: False,
+                                                            21: False,
+                                                            22: False,
+                                                            23: False,
+                                                            24: False},
+                           NY_LAST_SEEN_LEVEL_INFO: {'level': 1,
+                                                     'points': 0},
+                           NY_INTRO_SEEN: False,
+                           NY_LAST_SEEN_TOTAL_BONUS: 0}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1422,7 +1450,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 66
+    version = 67
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2051,6 +2079,27 @@ class AccountSettings(object):
                         bmSettings.update(bmAccSettings)
                         accSettings.write(bmKey, _pack(bmSettings))
 
+            if currVersion < 67:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if NEW_YEAR in accSettings.keys():
+                        accSettings.deleteSection(NEW_YEAR)
+                    accUiFlags = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    for uiKey in {NY_DAILY_QUESTS_VISITED,
+                     NY_BONUS_DAILY_QUEST_VISITED,
+                     NY_OLD_COLLECTIONS_BY_YEAR_VISITED,
+                     NY_OLD_REWARDS_BY_YEAR_VISITED,
+                     NY_LAST_SEEN_LEVEL_INFO,
+                     'NYCelebrityQuestsCompletedMask',
+                     'NYCelebrityQuestsVisitedMask',
+                     'NYCelebrityCompletedQuestsAnimationShownMask'}.intersection(accUiFlags.keys()):
+                        accUiFlags.deleteSection(uiKey)
+
+                    if GUI_LOOT_BOXES in accSettings.keys():
+                        lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
+                        lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = False
+                        accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2216,6 +2265,22 @@ class AccountSettings(object):
     @staticmethod
     def setArmoryYard(name, value):
         AccountSettings._setValue(name, value, ArmoryYard.ARMORY_YARD_SETTINGS, True)
+
+    @classmethod
+    def getNewYear(cls, name):
+        return cls.getSettings(NEW_YEAR).get(name)
+
+    @classmethod
+    def setNewYear(cls, name, value):
+        section = cls.getSettings(NEW_YEAR)
+        section[name] = value
+        cls._setValue(NEW_YEAR, section, KEY_SETTINGS, True)
+
+    @staticmethod
+    def clearArmoryYard():
+        fds = AccountSettings._readSection(AccountSettings._readUserSection(), ArmoryYard.ARMORY_YARD_SETTINGS)
+        for name in fds.keys():
+            fds.deleteSection(name)
 
     @staticmethod
     def _getValue(name, setting, force=False):

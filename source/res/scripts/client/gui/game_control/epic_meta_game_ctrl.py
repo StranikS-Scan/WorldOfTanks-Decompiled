@@ -687,17 +687,21 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             return
 
     def __invalidateBattleAbilityItems(self):
-        data = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.EMPTY)
-        vehicle = g_currentVehicle.item
-        for item in data.values():
-            if self.__isInValidPrebattle():
-                item.isUnlocked = item.innationID in self.getUnlockedAbilityIds()
-                if vehicle is not None:
-                    mayInstall, _ = item.mayInstall(vehicle)
-                    if not mayInstall:
-                        item.isUnlocked = False
-            item.isUnlocked = False
+        if self.__isInValidPrebattle():
+            eqs = vehicles.g_cache.equipments()
+            vehicle = g_currentVehicle.item
+            unlockAbilitiyIds = self.getUnlockedAbilityIds()
+            for eqDescr in eqs.itervalues():
+                if eqDescr.equipmentType == GUI_ITEM_TYPE.BATTLE_ABILITY:
+                    item = self.__itemsCache.items.getItemByCD(eqDescr.compactDescr)
+                    item.isUnlocked = item.innationID in unlockAbilitiyIds
+                    if vehicle is not None:
+                        mayInstall, _ = item.mayInstall(vehicle)
+                        if not mayInstall:
+                            item.isUnlocked = False
 
+        else:
+            self.__itemsCache.items.resetBattleAbilitiesUnlock()
         return
 
     def __invalidateBattleAbilitiesForVehicle(self):

@@ -1969,6 +1969,18 @@
       </isRespawnActive>
     </Properties>
   </VEHICLE_HEALTH_INFO>
+  <CAMERA_FLIGHT_POINT>	FIXED_DICT	  <Properties>
+      <point>
+        <Type>	VECTOR3	</Type>
+      </point>
+      <anchorName>
+        <Type>	STRING	</Type>
+      </anchorName>
+      <flightSpeed>
+        <Type>	FLOAT	</Type>
+      </flightSpeed>
+    </Properties>
+  </CAMERA_FLIGHT_POINT>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <gunPosition>

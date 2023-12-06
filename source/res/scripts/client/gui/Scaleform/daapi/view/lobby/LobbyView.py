@@ -25,7 +25,7 @@ from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController, IMapsTrainingController
+from skeletons.gui.game_control import IIGRController, IMapsTrainingController, IArmoryYardController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -95,6 +95,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
+    armoryYardController = dependency.descriptor(IArmoryYardController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -127,6 +128,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
             view = container.getView()
             if view and view.alias not in VEHICLE_PREVIEW_ALIASES:
                 return
+        if self.armoryYardController.isSceneLoaded() and not isOver3dScene:
+            return
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': isOver3dScene}))
 
     def notifyCursorDragging(self, isDragging):
@@ -142,6 +145,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -171,6 +176,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -216,3 +223,9 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         elif roomType in [constants.IGR_TYPE.BASE, constants.IGR_TYPE.NONE] and self.__currIgrType == constants.IGR_TYPE.PREMIUM:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
+
+    def __turnLobbyDraggingOn(self, _):
+        self.as_switchLobbyDraggingS(True)
+
+    def __turnLobbyDraggingOff(self, _):
+        self.as_switchLobbyDraggingS(False)

@@ -14,6 +14,7 @@ from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMet
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -25,8 +26,9 @@ from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBootcampController, ILimitedUIController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.new_year import INewYearController
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 from tutorial.control.context import GLOBAL_FLAG
@@ -39,10 +41,13 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    _nyController = dependency.descriptor(INewYearController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
         self.__hangarMessage = None
+        g_currentVehicle.onChanged += self.__updateTankName
         return
 
     def update(self):
@@ -73,18 +78,27 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
 
+    @staticmethod
+    def _getVehicleIcon(vehicleType):
+        vehTypeStr = vehicleType.replace('-', '_') + '_widget'
+        backPortImage = backport.image(R.images.gui.maps.icons.newYear.vehicles.icons.dyn(vehTypeStr)())
+        return "<img src='{0}' vspace='-3'/>".format(backPortImage.replace('../', 'img://gui/'))
+
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         self.startGlobalListening()
         g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self._nyController.onStateChanged += self.__onNewYearStateUpdated
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__hangarMessage = None
+        self._nyController.onStateChanged -= self.__onNewYearStateUpdated
+        g_currentVehicle.onChanged -= self.__updateTankName
         super(AmmunitionPanel, self)._dispose()
         return
 
@@ -136,12 +150,18 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 tutorialStorage.setValue(GLOBAL_FLAG.IS_NEED_TO_SHOW_SPECIALIZATION_SLOT, isNeedToShowSpecializationSlot)
         return
 
+    def __isNewYearSupportedPrbActive(self):
+        return self.prbEntity and not bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
+
     def __inventoryUpdateCallBack(self, *args):
         self.update()
 
     def __onServerSettingChanged(self, diff):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self.update()
+
+    def __updateTankName(self):
+        self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
         if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp():
@@ -178,3 +198,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         if g_currentVehicle.isPresent():
             stateWarning = vehicle.isBroken
         self.as_setWarningStateS(stateWarning)
+
+    def __onNewYearStateUpdated(self):
+        self._update()

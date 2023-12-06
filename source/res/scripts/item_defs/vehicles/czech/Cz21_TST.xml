@@ -50,8 +50,8 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	80	</armor_1>
-      <armor_2>	140	</armor_2>
+      <armor_1>	90	</armor_1>
+      <armor_2>	195	</armor_2>
       <armor_3>	75	</armor_3>
       <armor_4>	75	</armor_4>
       <armor_5>	40	</armor_5>
@@ -1682,7 +1682,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.400556 5 0.424444 4 0.575556 4 0.599444 5 1 5	</maxPitch>
+            <maxPitch>	0 8 0.400556 8 0.424444 4 0.575556 4 0.599444 8 1 8	</maxPitch>
           </pitchLimits>
           <reloadTime>	7.3	</reloadTime>
           <aimingTime>	2	</aimingTime>
@@ -2199,6 +2199,7 @@
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
+    <shellCasingsEjectionPrefab>	vehicles/czech/Cz21_TST/Cz21_TST_animations.prefab	</shellCasingsEjectionPrefab>
   </effects>
   <emblems>
     <default>	15514	</default>

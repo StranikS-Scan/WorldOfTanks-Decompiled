@@ -30,6 +30,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import ICarouselEnvironment
 _logger = logging.getLogger(__name__)
@@ -261,6 +262,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
 
 
 class TankCarouselFilterPopover(VehiclesFilterPopover):
+    _nyController = dependency.descriptor(INewYearController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -285,8 +287,13 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         super(TankCarouselFilterPopover, self)._update(isInitial)
         self._carousel.updateHotFilters()
 
+    def _populate(self):
+        super(TankCarouselFilterPopover, self)._populate()
+        self._nyController.onStateChanged += self.__onNyStateChanged
+
     def _dispose(self):
         self._saveRowCount()
+        self._nyController.onStateChanged -= self.__onNyStateChanged
         super(TankCarouselFilterPopover, self)._dispose()
 
     def _readRowCount(self, _):
@@ -324,6 +331,9 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
          FILTER_KEYS.PREMIUM,
          FILTER_KEYS.ELITE,
          FILTER_KEYS.CRYSTALS]
+
+    def __onNyStateChanged(self):
+        self.destroy()
 
 
 class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):

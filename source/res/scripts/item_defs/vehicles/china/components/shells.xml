@@ -331,6 +331,59 @@
       </damage>
     </armorSpalls>
   </_47mm_HE>
+  <_47mm_AP_B>
+    <id>	172	</id>
+    <userString>	#china_vehicles:_47mm_AP_B	</userString>
+    <icon>	ap	</icon>
+    <price>	10	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	64	</devices>
+    </damage>
+  </_47mm_AP_B>
+  <_47mm_APCR_B>
+    <id>	173	</id>
+    <userString>	#china_vehicles:_47mm_APCR_B	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	64	</devices>
+    </damage>
+  </_47mm_APCR_B>
+  <_47mm_HE_B>
+    <id>	174	</id>
+    <userString>	#china_vehicles:_47mm_HE_B	</userString>
+    <icon>	he_modern	</icon>
+    <price>	13	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	47	</caliber>
+    <explosionRadius>	0.47	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	90	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	45	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
+  </_47mm_HE_B>
   <_47mm_APHE_Type1>
     <id>	52	</id>
     <userString>	#china_vehicles:_47mm_APHE_Type1	</userString>

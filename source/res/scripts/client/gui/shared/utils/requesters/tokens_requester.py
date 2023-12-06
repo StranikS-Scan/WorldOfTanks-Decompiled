@@ -41,6 +41,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getTokens(self):
         return self.getCacheValue('tokens', {})
 
+    def getLootBoxesInfo(self):
+        return self.getCacheValue('lootBoxes', {})
+
     def getToken(self, tokenID):
         return self.getTokens().get(tokenID)
 
@@ -93,7 +96,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def updateAllLootBoxes(self, data):
         lootBoxTokensList = self.__createLootBoxes(data)
         self.__clearLootBoxes(lootBoxTokensList, isRemove=True)
-        self.__updateLootBoxes(self.getTokens())
+        self.__updateLootBoxes(self.getTokens(), self.getLootBoxesInfo())
 
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
@@ -102,15 +105,12 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 
     def getAttemptsAfterGuaranteedRewards(self, box):
-        boxesHistory = self.getCacheValue('lootBoxes').get('history', {})
+        boxesHistory = self.getCacheValue('lootBoxes', {}).get('history', {})
         historyName, guaranteedFrequencyName = box.getHistoryName(), box.getGuaranteedFrequencyName()
         if historyName not in boxesHistory:
             return 0
         _, limits, _ = boxesHistory[historyName]
-        if guaranteedFrequencyName not in limits:
-            return 0
-        _, _, attempts = limits[guaranteedFrequencyName]
-        return attempts
+        return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1] or limits[guaranteedFrequencyName][2]
 
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)
@@ -132,7 +132,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         if 'tokens' in result:
             if not self.__lootBoxCache:
                 self.__createLootBoxes(self.lobbyContext.getServerSettings().getLootBoxConfig())
-            self.__updateLootBoxes(result['tokens'])
+            self.__updateLootBoxes(result['tokens'], result.get('lootBoxes', {}))
         callback(result)
 
     @adisp_async
@@ -151,15 +151,19 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
         return lootBoxTokensList
 
-    def __updateLootBoxes(self, tokensCache):
+    def __updateLootBoxes(self, tokensCache, lootboxes):
         for lootBoxTokenID, data in tokensCache.items():
             _, count = data
             if lootBoxTokenID in self.__lootBoxCache:
                 item = self.__lootBoxCache[lootBoxTokenID]
                 self.__lootBoxTotalCount += count - item.getInventoryCount()
                 item.updateCount(count)
+                item.updateRotationStage(self.__getLootBoxRotationStage(lootboxes.get('history', {}), item))
 
         self.__clearLootBoxes(tokensCache)
+
+    def __getLootBoxRotationStage(self, history, lootBox):
+        return history.get(lootBox.getHistoryName(), (0, None, 0))[2]
 
     def __clearLootBoxes(self, data, isRemove=False):
         lootBoxIDs = self.__lootBoxCache.keys()

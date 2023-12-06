@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 import typing
+from collections import namedtuple
 from operator import attrgetter
 from BWUtil import AsyncReturn
 import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
-from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
+from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus, ViewStatus
 from gui import DialogsInterface, GUI_SETTINGS, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialogMeta, I18nInfoDialogMeta
@@ -53,6 +54,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.Vehicle import getNationLessName, getUserName, NO_VEHICLE_ID
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.lock_overlays import lockNotificationManager
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
@@ -71,6 +73,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
@@ -613,7 +616,7 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 activeMarathon = next((marathon for marathon in marathons if marathon.vehicleID == descriptor.type.compactDescr), None)
                 isArmoryYard = armoryYardCtrl is not None and armoryYardCtrl.isActive() and armoryYardCtrl.getFinalRewardVehicle().intCD == descriptor.type.compactDescr
                 if isArmoryYard:
-                    armoryYardCtrl.showHeroTankVehiclePreview()
+                    showHeroTankPreview(vehTypeCompDescr, bottomPanelTextData={'uniqueVehicleTitle': text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))})
                 elif activeMarathon:
                     title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                     showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
@@ -622,19 +625,21 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity, 'HeroTank')
+            entity.onSelect()
             break
 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None):
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
      'previousBackAlias': previousBackAlias,
      'previewBackCb': previewBackCb,
-     'hangarVehicleCD': hangarVehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'hangarVehicleCD': hangarVehicleCD,
+     'bottomPanelTextData': bottomPanelTextData}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview(back=True, close=False):
@@ -891,6 +896,37 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
+def showLootBoxEntry(lootBoxType=NewYearLootBoxes.NY_24_STANDARD, category='', lobbyCtx=None, nyCtrl=None, isReturnToHangar=True):
+    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
+    if not enabled:
+        if nyCtrl.isSuspended():
+            from gui.impl.lobby.loot_box.ny_loot_box_helper import showRestrictedSysMessage
+            showRestrictedSysMessage()
+        else:
+            nyCtrl.showStateMessage()
+        return
+    from gui_lootboxes.gui.shared.event_dispatcher import showSpecificBoxInStorageView
+    from gui_lootboxes.gui.storage_context.context import ReturnPlaces
+    returnPlace = ReturnPlaces.TO_HANGAR if isReturnToHangar else ReturnPlaces.TO_SHARDS
+    showSpecificBoxInStorageView(category=category, lootBoxType=lootBoxType, returnPlace=returnPlace)
+
+
+def showNYLevelUpWindow(layer=WindowLayer.OVERLAY, useQueue=True, *args, **kwargs):
+    from gui.impl.lobby.new_year.atmosphere_level_up.ny_level_up_view import NyLevelUpWindow
+    window = findAndLoadWindow(useQueue, NyLevelUpWindow, layer=layer, *args, **kwargs)
+    view = window.content
+    if view is not None and view.viewStatus in (ViewStatus.CREATED, ViewStatus.LOADING, ViewStatus.LOADED):
+        view.appendRewards(*args, **kwargs)
+    return
+
+
+def showVideoView(videoResID, onVideoStarted=None, onVideoStopped=None, onVideoClosed=None, isAutoClose=False, soundControl=None, canEscape=True):
+    from gui.impl.lobby.video.video_view import VideoViewWindow
+    window = VideoViewWindow(videoResID, onVideoStarted=onVideoStarted, onVideoStopped=onVideoStopped, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=soundControl, canEscape=canEscape)
+    window.load()
+
+
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -931,19 +967,16 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     return
 
 
-def showProgressiveRewardWindow():
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showProgressiveRewardWindow(notificationMgr=None):
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
         SystemMessages.pushMessage(backport.text(R.strings.system_messages.progressiveReward.error()), type=SystemMessages.SM_TYPE.Error)
         return
-    else:
-        from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
-        uiLoader = dependency.instance(IGuiLoader)
-        contentResId = R.views.lobby.progressive_reward.progressive_reward_view.ProgressiveRewardView()
-        if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-            window = ProgressiveRewardWindow(contentResId)
-            window.load()
-        return
+    from gui.impl.lobby.progressive_reward.progressive_reward_view import ProgressiveRewardWindow
+    contentResId = R.views.lobby.progressive_reward.progressive_reward_view.ProgressiveRewardView()
+    window = ProgressiveRewardWindow(contentResId)
+    notificationMgr.append(WindowNotificationCommand(window))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -1170,6 +1203,23 @@ def tryToShowReplaceExistingStyleDialog(parent=None):
     if result and dontShowAgain:
         serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: True})
     raise AsyncReturn(result)
+    return
+
+
+NYViewCtx = namedtuple('NYViewCtx', ('menuName', 'tabName', 'args', 'kwargs'))
+NYTabCtx = namedtuple('NYTabCtx', ('tabName', 'menuName'))
+
+def showNewYearMainView(menuName, tabName=None, *args, **kwargs):
+    from gui.impl.lobby.new_year.main_view import MainView
+    ctx = NYViewCtx(menuName=menuName, tabName=tabName, args=args, kwargs=kwargs)
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.new_year.MainView()
+    mainView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if mainView is not None:
+        event = events.NewYearEvent(events.NewYearEvent.ON_PRE_SWITCH_VIEW, ctx=ctx)
+        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+    else:
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MainView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 

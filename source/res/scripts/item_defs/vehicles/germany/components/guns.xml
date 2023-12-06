@@ -161,6 +161,7 @@
     <_88mm_KwK_43_L71_N_FL>	31003	</_88mm_KwK_43_L71_N_FL>
     <_128mm_KwK46_L61_7x7>	31002	</_128mm_KwK46_L61_7x7>
     <_75mm_KwK41_L58_conic_C>	31001	</_75mm_KwK41_L58_conic_C>
+    <Gun_VK4502P_G>	31004	</Gun_VK4502P_G>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -7494,6 +7495,64 @@
         </_128mm_SprG18>
       </shots>
     </Gun_VK4502P>
+    <Gun_VK4502P_G>
+      <userString>	#germany_vehicles:_128mm_KwK44_L55_G	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.77714285714290	</reloadTime>
+      <maxAmmo>	62	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	3480	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_128mm_PzGr39_GW>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	276 261	</piercingPower>
+        </_128mm_PzGr39_GW>
+        <_128mm_PzGr40_GW>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	352 295	</piercingPower>
+        </_128mm_PzGr40_GW>
+        <_128mm_SprG18_GW>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_128mm_SprG18_GW>
+      </shots>
+    </Gun_VK4502P_G>
     <_128mm_PaK44_2_L61>
       <userString>	#germany_vehicles:_128mm_PaK44_2_L61	</userString>
       <tags></tags>

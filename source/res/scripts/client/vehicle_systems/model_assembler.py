@@ -880,6 +880,17 @@ def assembleCustomLogicComponents(appearance, typeDescriptor, attachments, model
         loadAppearancePrefab(prefab, appearance)
 
 
+def addShellCasingsEjectionPrefab(appearance, typeDescriptor, force=False):
+    if typeDescriptor.hasShellCasingsEjection:
+        from cgf_components.on_shot_components import ShellCasingsEjectionController
+        hasComponent = appearance.findComponentByType(ShellCasingsEjectionController)
+        if hasComponent and force:
+            appearance.removeComponentByType(ShellCasingsEjectionController)
+            appearance.createComponent(ShellCasingsEjectionController, appearance, typeDescriptor.type.shellCasingsEjectionPrefab)
+        elif not hasComponent:
+            appearance.createComponent(ShellCasingsEjectionController, appearance, typeDescriptor.type.shellCasingsEjectionPrefab)
+
+
 def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelAnimators):
     mainAnimator = None
     for i, modelAnimator in enumerate(modelAnimators):

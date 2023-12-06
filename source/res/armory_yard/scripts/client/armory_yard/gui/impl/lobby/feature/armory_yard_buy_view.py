@@ -23,7 +23,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.server_events.bonuses import getNonQuestBonuses, VehiclesBonus, mergeBonuses, splitBonuses
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ArmoryYardEvent
+from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID
 from gui.shared.money import Currency
@@ -38,7 +38,7 @@ _VIEW_KEY_TO_PARENT_ALIASES = {value:key for key, value in _PARENT_ALIASES_TO_VI
 
 class ArmoryYardBuyView(ViewImpl):
     __slots__ = ('__tooltipData', '__selectedStep', '__blur', '__onLoadedCallback')
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wallet = dependency.descriptor(IWalletController)
@@ -76,13 +76,17 @@ class ArmoryYardBuyView(ViewImpl):
         tooltipType = event.getArgument('tooltipType')
         return self.__tooltipData.get(tooltipType, {}).get(tooltipId, None) if tooltipId is not None and tooltipType is not None else None
 
-    def onCancel(self):
+    def onCancel(self, *args):
         self.destroyWindow()
+
+    def destroyWindow(self):
+        g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)
+        super(ArmoryYardBuyView, self).destroyWindow()
 
     @adisp_process
     def onBuySteps(self, args):
         stepCount = int(args.get('steps'))
-        price = self.__armoryYard.getCurrencyTokenCost() * stepCount
+        price = self.__armoryYardCtrl.getCurrencyTokenCost() * stepCount
         playerMoney = self.__itemsCache.items.stats.money
         shortage = playerMoney.getShortage(price)
         if shortage:
@@ -93,26 +97,25 @@ class ArmoryYardBuyView(ViewImpl):
             action = factory.getAction(BUY_STEP_TOKENS, stepCount)
             result = yield factory.asyncDoAction(action)
             if result:
-                self.__armoryYard.onPayed(stepCount)
+                self.__armoryYardCtrl.onPayed(stepCount, price)
                 self.destroyWindow()
             else:
-                self.__armoryYard.onPayedError()
+                self.__armoryYardCtrl.onPayedError()
 
     def onBack(self):
         self.destroyWindow()
 
     def onChangeSelectedStep(self, args):
         selectedStep = int(args.get('count')) + self.__getPassedSteps()
-        if selectedStep <= self.__armoryYard.getTotalSteps():
+        if selectedStep <= self.__armoryYardCtrl.getTotalSteps():
             with self.viewModel.transaction() as vm:
                 self.__setSelectedStep(selectedStep, vm)
 
     def onShowVehiclePreview(self):
-        vehicle = self.__armoryYard.getFinalRewardVehicle()
-        if vehicle is not None:
-            g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.DESTROY_ARMORY_YARD_MAIN_VIEW, ctx={'destroyCallback': partial(showArmoryYardVehiclePreview, vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=partial(self.__armoryYard.goToArmoryYard, loadBuyView=True), backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))}), EVENT_BUS_SCOPE.DEFAULT)
-            self.destroyWindow()
-        return
+        vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
+        self.__armoryYardCtrl.isVehiclePreview = True
+        showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=partial(self.__armoryYardCtrl.goToArmoryYard, loadBuyView=True), backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))
+        self.__armoryYardCtrl.cameraManager.goToHangar()
 
     def _onLoaded(self, *args, **kwargs):
         super(ArmoryYardBuyView, self)._onLoaded(*args, **kwargs)
@@ -122,6 +125,7 @@ class ArmoryYardBuyView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(ArmoryYardBuyView, self)._onLoading(*args, **kwargs)
+        g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': False}), EVENT_BUS_SCOPE.GLOBAL)
         if self.__blur is not None:
             self.__blur.enable()
         self.__selectedStep = self.__calcSelectedStep()
@@ -142,9 +146,10 @@ class ArmoryYardBuyView(ViewImpl):
          (self.viewModel.onBuySteps, self.onBuySteps),
          (self.viewModel.onShowVehiclePreview, self.onShowVehiclePreview),
          (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChange),
-         (self.__armoryYard.onUpdated, self.__onEventUpdated),
-         (self.__armoryYard.onProgressUpdated, self.__onProgressUpdated),
-         (self.__wallet.onWalletStatusChanged, self.__onWalletStatusChanged))
+         (self.__armoryYardCtrl.onUpdated, self.__onEventUpdated),
+         (self.__armoryYardCtrl.onProgressUpdated, self.__onProgressUpdated),
+         (self.__wallet.onWalletStatusChanged, self.__onWalletStatusChanged),
+         (self.__armoryYardCtrl.onTabIdChanged, self.onCancel))
 
     def _getCallbacks(self):
         return (('stats', self.__onStatsUpdated),)
@@ -161,15 +166,15 @@ class ArmoryYardBuyView(ViewImpl):
         else:
             parentViewKey = None
         model.setParentAlias(_VIEW_KEY_TO_PARENT_ALIASES.get(parentViewKey, ParentAlias.MAINVIEW))
-        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYard.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
         return
 
     def __fillSteps(self, model):
         stepsModel = model.getSteps()
         stepsModel.clear()
         self.__tooltipData[ArmoryYardBuyViewModel.STEP_VEHICLE_TOOLTIP_TYPE].clear()
-        stepsRewads = self.__armoryYard.getStepsRewards()
-        for stepId in range(1, self.__armoryYard.getTotalSteps() + 1):
+        stepsRewads = self.__armoryYardCtrl.getStepsRewards()
+        for stepId in range(1, self.__armoryYardCtrl.getTotalSteps() + 1):
             stepModel = ArmoryYardBuyStepConfig()
             vehicleReward = stepsRewads[stepId].get(VehiclesBonus.VEHICLES_BONUS, None)
             if vehicleReward:
@@ -199,21 +204,21 @@ class ArmoryYardBuyView(ViewImpl):
             self.__fillFinalReward(vm)
 
     def __onProgressUpdated(self):
-        if self.__armoryYard.isCompleted():
+        if self.__armoryYardCtrl.isCompleted():
             self.destroyWindow()
         else:
             with self.viewModel.transaction() as vm:
                 self.__updatePassedSteps(vm)
 
     def __onEventUpdated(self):
-        if not self.__armoryYard.isActive() or self.__armoryYardCtrl.isCompleted():
+        if not self.__armoryYardCtrl.isActive() or self.__armoryYardCtrl.isCompleted():
             self.destroyWindow()
 
     def __getPassedSteps(self):
-        return self.__armoryYard.getCurrencyTokenCount()
+        return self.__armoryYardCtrl.getCurrencyTokenCount()
 
     def __calcSelectedStep(self):
-        return min(self.__getPassedSteps() + 1, self.__armoryYard.getTotalSteps())
+        return min(self.__getPassedSteps() + 1, self.__armoryYardCtrl.getTotalSteps())
 
     def __updatePassedSteps(self, model):
         model.setStepsPassed(self.__getPassedSteps())
@@ -224,14 +229,14 @@ class ArmoryYardBuyView(ViewImpl):
         self.__selectedStep = selectedStep
         model.setStepSelected(self.__selectedStep)
         self.__clearPrice(model)
-        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYard.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
         self.__fillRewards(model)
 
     def __fillRewards(self, model):
         rewards = model.getRewards()
         rewards.clear()
         self.__tooltipData[ArmoryYardBuyViewModel.MERGED_REWARD_TOOLTIP_TYPE].clear()
-        stepsRewads = self.__armoryYard.getStepsRewards()
+        stepsRewads = self.__armoryYardCtrl.getStepsRewards()
         rewardsList = []
         for stepId in range(max(self.__getPassedSteps() + 1, 1), self.__selectedStep + 1):
             for rewardType, rewardValue in stepsRewads[stepId].items():
@@ -239,15 +244,20 @@ class ArmoryYardBuyView(ViewImpl):
 
         rewardsList = splitBonuses(mergeBonuses(rewardsList))
         rewardsList.sort(key=bonusesSortKeyFunc)
+        for idx, value in enumerate(rewardsList):
+            if value.getName() == 'battleToken' and value.getValue().get('ny24_yaga') is not None:
+                rewardsList.pop(idx)
+
         if len(rewardsList) > ArmoryYardBuyViewModel.MAX_VISIBLE_REWARDS:
             packBonusModelAndTooltipData(rewardsList[:ArmoryYardBuyViewModel.MAX_VISIBLE_REWARDS - 1], rewards, self.__tooltipData[ArmoryYardBuyViewModel.MERGED_REWARD_TOOLTIP_TYPE], packer=getArmoryYardBuyViewPacker())
             packRestModel(rewardsList[ArmoryYardBuyViewModel.MAX_VISIBLE_REWARDS - 1:], rewards, self.__tooltipData[ArmoryYardBuyViewModel.MERGED_REWARD_TOOLTIP_TYPE], ArmoryYardBuyViewModel.MAX_VISIBLE_REWARDS - 1)
         else:
             packBonusModelAndTooltipData(rewardsList, rewards, self.__tooltipData[ArmoryYardBuyViewModel.MERGED_REWARD_TOOLTIP_TYPE], packer=getArmoryYardBuyViewPacker())
         rewards.invalidate()
+        return
 
     def __fillFinalReward(self, model):
-        finalRewardVehicle = self.__armoryYard.getFinalRewardVehicle()
+        finalRewardVehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
         if finalRewardVehicle:
             packVehicleModel(model.finalReward, finalRewardVehicle)
             self.__tooltipData[ArmoryYardBuyViewModel.FINAL_REWARD_TOOLTIP_TYPE] = {'0': backport.createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.ARMORY_YARD_AWARD_VEHICLE, specialArgs=[finalRewardVehicle.intCD])}
@@ -257,13 +267,13 @@ class ArmoryYardBuyView(ViewImpl):
     def __onStatsUpdated(self, _):
         with self.viewModel.transaction() as vm:
             self.__clearPrice(vm)
-            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYard.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
 
     def __onWalletStatusChanged(self, *_):
         with self.viewModel.transaction() as vm:
             vm.setIsWalletAvailable(self.__wallet.isAvailable)
             self.__clearPrice(vm)
-            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYard.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
 
     def __clearPrice(self, model):
         model.price.getDiscount().clear()

@@ -174,8 +174,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         smallBuySlotString, buySlotString = getStatusStrings('buySlot')
         smallBuyTankString, buyTankString = getStatusStrings('buyTank')
         smallRestoreTankString, restoreTankString = getStatusStrings('restoreTank')
-        smallRestoreTankCountString, restoreTankCountString = getStatusStrings('restoreTankCount', style=text_styles.main, ctx={'count': self._restorableVehiclesCount})
-        smallEmptySlotsString, emptySlotsString = getStatusStrings('buyTankEmptyCount', style=text_styles.main, ctx={'count': self._emptySlotsCount})
+        smallRestoreTankCountString, restoreTankCountString = getStatusStrings('restoreTankCount', style=text_styles.main, styleLarge=text_styles.main, ctx={'count': self._restorableVehiclesCount})
+        smallEmptySlotsString, emptySlotsString = getStatusStrings('buyTankEmptyCount', style=text_styles.main, styleLarge=text_styles.main, ctx={'count': self._emptySlotsCount})
         self._supplyItems.append({'buyTank': True,
          'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
          'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),

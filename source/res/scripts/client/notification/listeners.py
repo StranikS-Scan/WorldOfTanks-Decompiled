@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
 import json
-import logging
 import time
-import weakref
+import logging
 from collections import defaultdict
 from functools import partial
 from typing import TYPE_CHECKING
@@ -42,6 +41,8 @@ from gui.server_events import settings as settings_records
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import events, g_eventBus
 from gui.shared.formatters import text_styles, time_formatters
+from gui.shared.money import Currency
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
@@ -56,12 +57,13 @@ from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.formatters import TimeFormatter
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
+from ids_generators import SequenceIDGenerator
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator
+from notification.base_listener import NotificationListener
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, NyMessageButtonDecorator, PsaCoinReminderMessageDecorator, GiftSystemOperationsFactory
 from notification.settings import NOTIFICATION_TYPE, NotificationData
-from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IGuiLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController, IReferralProgramController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
@@ -74,6 +76,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.game_vars import getVehicleByIntCD
 from wg_async import wg_async, wg_await
+from shared_utils import first
 if TYPE_CHECKING:
     from typing import List, Dict, Optional, Any, Type
     from notification.NotificationsModel import NotificationsModel
@@ -166,34 +169,13 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
                              _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                              _FUNCTION: _StateExtractor.getMapsTrainingState}}
 
-class _NotificationListener(object):
-
-    def __init__(self):
-        super(_NotificationListener, self).__init__()
-
-        def model():
-            pass
-
-        self._model = model
-
-    def start(self, model):
-        self._model = weakref.ref(model)
-        return True
-
-    def stop(self):
-        self._model = lambda : None
-
-    def request(self):
-        pass
-
-
-class _WGNCNotificationListener(_NotificationListener):
+class _WGNCNotificationListener(NotificationListener):
 
     def onProviderEnabled(self):
         pass
 
 
-class ServiceChannelListener(_NotificationListener):
+class ServiceChannelListener(NotificationListener):
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
@@ -261,10 +243,12 @@ class ServiceChannelListener(_NotificationListener):
                     return C2DProgressionStyleDecorator
                 if self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
                     return CollectionsLockButtonDecorator
+                if messageSubtype == SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE:
+                    return NyMessageButtonDecorator
             return MessageDecorator
 
 
-class BaseReminderListener(_NotificationListener):
+class BaseReminderListener(NotificationListener):
 
     def __init__(self, notificationType, notificationId):
         super(BaseReminderListener, self).__init__()
@@ -314,7 +298,7 @@ class BaseReminderListener(_NotificationListener):
             return False
 
 
-class MissingEventsListener(_NotificationListener):
+class MissingEventsListener(NotificationListener):
     __notificationMgr = dependency.descriptor(INotificationWindowController)
 
     def start(self, model):
@@ -335,7 +319,7 @@ class MissingEventsListener(_NotificationListener):
         return
 
 
-class PrbInvitesListener(_NotificationListener, IGlobalListener):
+class PrbInvitesListener(NotificationListener, IGlobalListener):
 
     @prbInvitesProperty
     def prbInvites(self):
@@ -428,7 +412,7 @@ class PrbInvitesListener(_NotificationListener, IGlobalListener):
                 model.updateNotification(NOTIFICATION_TYPE.INVITE, invite.clientID, invite, False)
 
 
-class FriendshipRqsListener(_NotificationListener):
+class FriendshipRqsListener(NotificationListener):
 
     @proto_getter(PROTO_TYPE.XMPP)
     def proto(self):
@@ -839,7 +823,7 @@ class _WGNCListener(_WGNCNotificationListener):
             model.updateNotification(NOTIFICATION_TYPE.WGNC_POP_UP, notID, item, False)
 
 
-class _WGNCListenersContainer(_NotificationListener):
+class _WGNCListenersContainer(NotificationListener):
 
     def __init__(self):
         super(_WGNCListenersContainer, self).__init__()
@@ -866,7 +850,7 @@ class _WGNCListenersContainer(_NotificationListener):
         super(_WGNCListenersContainer, self).stop()
 
 
-class ProgressiveRewardListener(_NotificationListener):
+class ProgressiveRewardListener(NotificationListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __bootcampController = dependency.descriptor(IBootcampController)
 
@@ -925,7 +909,7 @@ class ProgressiveRewardListener(_NotificationListener):
             return
 
 
-class SwitcherListener(_NotificationListener):
+class SwitcherListener(NotificationListener):
     slots = ('__currentStates',)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -967,7 +951,7 @@ class SwitcherListener(_NotificationListener):
                 SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
 
 
-class TankPremiumListener(_NotificationListener):
+class TankPremiumListener(NotificationListener):
     __gameSession = dependency.descriptor(IGameSessionController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -1003,7 +987,7 @@ class TankPremiumListener(_NotificationListener):
             SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
 
 
-class BattlePassListener(_NotificationListener):
+class BattlePassListener(NotificationListener):
     __slots__ = ('__isStarted', '__isFinished', '__arenaBonusTypesEnabledState', '__arenaBonusTypesHandlers')
     __battlePassController = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -1255,7 +1239,7 @@ class BattlePassSwitchChapterReminder(BaseReminderListener):
         self.__tryNotify()
 
 
-class UpgradeTrophyDeviceListener(_NotificationListener):
+class UpgradeTrophyDeviceListener(NotificationListener):
     __slots__ = ('__enabled',)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -1283,7 +1267,7 @@ class UpgradeTrophyDeviceListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
 
 
-class RecertificationFormStateListener(_NotificationListener):
+class RecertificationFormStateListener(NotificationListener):
     __slots__ = ('_state',)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -1421,7 +1405,7 @@ class EmailConfirmationReminderListener(BaseReminderListener):
         self._removeNotification()
 
 
-class VehiclePostProgressionUnlockListener(_NotificationListener):
+class VehiclePostProgressionUnlockListener(NotificationListener):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def start(self, model):
@@ -1524,7 +1508,7 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
         AccountSettings.setNotifications(SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, currentTimestamp)
 
 
-class SeniorityAwardsQuestListener(_NotificationListener):
+class SeniorityAwardsQuestListener(NotificationListener):
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST
     __TEMPLATE = 'seniorityAwardsQuest22'
     __ENTITY_ID = 0
@@ -1554,7 +1538,7 @@ class SeniorityAwardsQuestListener(_NotificationListener):
             return
 
 
-class ResourceWellListener(_NotificationListener):
+class ResourceWellListener(NotificationListener):
     __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
     __START_ENTITY_ID = 0
     __resourceWell = dependency.descriptor(IResourceWellController)
@@ -1633,7 +1617,7 @@ class ResourceWellListener(_NotificationListener):
         AccountSettings.setNotifications(RESOURCE_WELL_NOTIFICATIONS, settings)
 
 
-class IntegratedAuctionListener(_NotificationListener):
+class IntegratedAuctionListener(NotificationListener):
     __slots__ = ('__startNotifiers', '__finishNotifiers')
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
     __EVENT_TYPE_TO_SETTING = {AUCTION_START_EVENT_TYPE: AUCTION_STAGE_START_SEEN,
@@ -1737,7 +1721,7 @@ class IntegratedAuctionListener(_NotificationListener):
         return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
 
 
-class EventLootBoxesListener(_NotificationListener, EventsHandler):
+class EventLootBoxesListener(NotificationListener, EventsHandler):
     __slots__ = ('__isActive',)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __START_ENTITY_ID = 0
@@ -1779,7 +1763,7 @@ class EventLootBoxesListener(_NotificationListener, EventsHandler):
         SystemMessages.pushMessage(text=backport.text(R.strings.lootboxes.notification.lootBoxesIsDisabled.text()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.EventLootBoxDisabled, messageData={'title': backport.text(R.strings.lootboxes.notification.lootBoxesIsDisabled.title())})
 
 
-class CollectionsListener(_NotificationListener, EventsHandler):
+class CollectionsListener(NotificationListener, EventsHandler):
     __collections = dependency.descriptor(ICollectionsSystemController)
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
@@ -1941,10 +1925,12 @@ class WinbackSelectableRewardReminder(BaseReminderListener):
         self._notifyOrRemove(isAdding)
 
 
-class ArmoryYardListener(_NotificationListener):
+class ArmoryYardListener(NotificationListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __armoryYardText = R.strings.armory_yard.notifications
     __systemMessages = dependency.descriptor(ISystemMessages)
+    __lastTimeErrorShown = 0
+    __timeDelay = 2
     ARMORY_YARD_TEXT = R.strings.armory_yard.notifications
 
     def start(self, model):
@@ -1958,6 +1944,9 @@ class ArmoryYardListener(_NotificationListener):
         self.__armoryYardCtrl.onQuestsUpdated += self.__checkChapter
         self.__armoryYardCtrl.onCollectReward += self.__collectReward
         self.__armoryYardCtrl.onPayedError += self.__payedError
+        self.__armoryYardCtrl.onBundleOutTime += self.__bundleOutTime
+        self.__lastTimeErrorShown = 0
+        self.__onCheckNotify()
         return True
 
     def stop(self):
@@ -1970,6 +1959,8 @@ class ArmoryYardListener(_NotificationListener):
         self.__armoryYardCtrl.onQuestsUpdated -= self.__checkChapter
         self.__armoryYardCtrl.onCollectReward -= self.__collectReward
         self.__armoryYardCtrl.onPayedError -= self.__payedError
+        self.__armoryYardCtrl.onBundleOutTime -= self.__bundleOutTime
+        self.__lastTimeErrorShown = 0
         super(ArmoryYardListener, self).stop()
 
     def __getHeader(self):
@@ -1997,16 +1988,28 @@ class ArmoryYardListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.chapter(), count=chapterInfo.ordinalNumber, chapter_name=backport.text(R.strings.armory_yard.mainView.chapter.index.dyn('c_%d' % chapterInfo.ordinalNumber)()), startDate=backport.getDateTimeFormat(startDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
         return
 
-    def __payed(self, count):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.payed(), count=count), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+    def __payed(self, count, price=None):
+        messageResID = self.ARMORY_YARD_TEXT.payed.single() if count == 1 else self.ARMORY_YARD_TEXT.payed.multiple()
+        SystemMessages.pushMessage(text=backport.text(messageResID, count=count), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        if price is None:
+            return
+        else:
+            messagePriceGoldResID = self.ARMORY_YARD_TEXT.payed.priceGold()
+            SystemMessages.pushMessage(text=backport.text(messagePriceGoldResID, price=backport.getGoldFormat(price.getSignValue(Currency.GOLD))), type=SystemMessages.SM_TYPE.FinancialTransactionWithGold, priority=NotificationPriorityLevel.MEDIUM)
+            return
 
     def __payedError(self):
+        currentTime = time_utils.getServerUTCTime()
+        if currentTime - self.__lastTimeErrorShown < self.__timeDelay:
+            return
+        self.__lastTimeErrorShown = currentTime
         SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.payed.error()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
+
+    def __bundleOutTime(self):
+        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.bundleOutTime()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
 
     def __checkState(self):
         state = self.__armoryYardCtrl.getState()
-        if state == State.ACTIVELASTHOURS:
-            state = State.ACTIVE
         if self.__armoryYardCtrl.isActive() and not AccountSettings.getArmoryYard(state.value):
             AccountSettings.setArmoryYard(state.value, True)
             if state == State.POSTPROGRESSION:
@@ -2015,16 +2018,19 @@ class ArmoryYardListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.active()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
 
     def __checkChapter(self):
-        if self.__armoryYardCtrl.getState() not in (State.ACTIVELASTHOURS, State.ACTIVE):
+        if self.__armoryYardCtrl.getState() != State.ACTIVE:
             return
         nowTime = time_utils.getServerUTCTime()
         for cycle in self.__armoryYardCtrl.serverSettings.getCurrentSeason().getAllCycles().values():
             key = '%s_%s' % (ArmoryYard.START_CHAPTER_PREFIX, cycle.ID)
             if cycle.startDate <= nowTime < cycle.endDate and not AccountSettings.getArmoryYard(key):
                 AccountSettings.setArmoryYard(key, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.started.chapter(), count=cycle.ordinalNumber, chapter_name=backport.text(R.strings.armory_yard.mainView.chapter.index.dyn('c_%d' % cycle.ordinalNumber)())), type=SystemMessages.SM_TYPE.ArmoryYardOpenChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.started.chapter.untitled()), type=SystemMessages.SM_TYPE.ArmoryYardOpenChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
 
     def __onCheckNotify(self):
+        if not self.__armoryYardCtrl.isEnabled():
+            return
+        self.__armoryYardCtrl.checkAnnouncement()
         self.__checkState()
         self.__checkChapter()
 
@@ -2034,7 +2040,7 @@ class ArmoryYardListener(_NotificationListener):
             SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.styleQuest(), endDate=backport.getDateTimeFormat(endDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
 
 
-class ReferralProgramListener(_NotificationListener):
+class ReferralProgramListener(NotificationListener):
     __referralProgramController = dependency.descriptor(IReferralProgramController)
 
     def start(self, model):
@@ -2071,7 +2077,7 @@ class ReferralProgramListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.ReferralProgramPGBFull, priority=NotificationPriorityLevel.MEDIUM)
 
 
-class WotPlusIntroViewListener(_NotificationListener):
+class WotPlusIntroViewListener(NotificationListener):
     __wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     ATTENDANCE_NOTIFICATION_LIMIT = 11
@@ -2186,7 +2192,7 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         return todayStart <= timestamp <= todayEnd
 
 
-class Birthday2023Listener(_NotificationListener):
+class Birthday2023Listener(NotificationListener):
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
 
     def start(self, model):
@@ -2211,6 +2217,151 @@ class Birthday2023Listener(_NotificationListener):
                     return
                 from gui.shared.event_dispatcher import showBirthday2023Intro
                 showBirthday2023Intro()
+
+
+class PsaCoinReminderListener(NotificationListener):
+    __bootCampController = dependency.descriptor(IBootcampController)
+    __saCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    MSG_ID = 0
+
+    def start(self, model):
+        result = super(PsaCoinReminderListener, self).start(model)
+        if result:
+            self.__saCtrl.onUpdated += self.__tryNotify
+            self.__itemsCache.onSyncCompleted += self.__tryNotify
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(PsaCoinReminderListener, self).stop()
+        self.__saCtrl.onUpdated -= self.__tryNotify
+        self.__itemsCache.onSyncCompleted -= self.__tryNotify
+
+    def __tryNotify(self, *_):
+        if self.__bootCampController.isInBootcamp():
+            return
+        coinsCount = self.__saCtrl.getSACoin()
+        if not self.__saCtrl.isEnabled or coinsCount <= 0:
+            self.__onCoinsRemoved()
+        else:
+            msgPrLevel = NotificationPriorityLevel.LOW
+            notification = PsaCoinReminderMessageDecorator(self.MSG_ID, coinsCount, msgPrLevel)
+            self.__onCoinsAdded(notification)
+
+    def __onCoinsAdded(self, newNotification):
+        model = self._model()
+        if model:
+            prevNotifacation = model.getNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID())
+            if prevNotifacation is None:
+                model.addNotification(newNotification)
+            else:
+                savedCount = newNotification.getSavedData()
+                prevSavedCount = prevNotifacation.getSavedData()
+                if prevSavedCount != savedCount:
+                    model.updateNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID(), newNotification.getEntity(), False)
+        return
+
+    def __onCoinsRemoved(self):
+        model = self._model()
+        if model:
+            model.removeNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, self.MSG_ID)
+
+
+class LootBoxConfigListener(NotificationListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(LootBoxConfigListener, self).__init__()
+        self.__isAnyDisabled = False
+
+    def start(self, model):
+        result = super(LootBoxConfigListener, self).start(model)
+        self.__processSettings()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        return result
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        super(LootBoxConfigListener, self).stop()
+
+    def __onServerSettingsChange(self, _):
+        self.__processSettings(True)
+
+    def __processSettings(self, isNeedNotification=False):
+        isAnyDisabled = False
+        hasAny = False
+        for lootBox in self.__itemsCache.items.tokens.getLootBoxes().itervalues():
+            if lootBox.getType() in NewYearLootBoxes.ALL():
+                hasAny = True
+                if not self.__lobbyContext.getServerSettings().isLootBoxEnabled(lootBox.getID()):
+                    isAnyDisabled = True
+                    break
+
+        isAnyDisabled = isAnyDisabled or not hasAny
+        if isAnyDisabled != self.__isAnyDisabled and isNeedNotification:
+            if isAnyDisabled:
+                rKey = R.strings.ny.notification.lootBox.suspend
+                SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(rKey.body()), type=SystemMessages.SM_TYPE.ErrorHeader, messageData={'header': backport.text(rKey.header())})
+        self.__isAnyDisabled = isAnyDisabled
+
+
+class GiftSystemOperationsListener(NotificationListener, UsersInfoHelper):
+    __NOTIFICATION_TYPE = NOTIFICATION_TYPE.GIFT_SYSTEM_OPERATION
+
+    def __init__(self):
+        super(GiftSystemOperationsListener, self).__init__()
+        self.__idGenerator = SequenceIDGenerator()
+        self.__userNamePendingNotifications = defaultdict(set)
+
+    def start(self, model):
+        result = super(GiftSystemOperationsListener, self).start(model)
+        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
+        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
+        return result
+
+    def stop(self):
+        self.__userNamePendingNotifications.clear()
+        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
+        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
+        super(GiftSystemOperationsListener, self).stop()
+
+    def onUserNamesReceived(self, names):
+        model = self._model()
+        if not model:
+            return
+        for userDBID, userName in names.iteritems():
+            if userDBID not in self.__userNamePendingNotifications:
+                continue
+            for entityID in self.__userNamePendingNotifications[userDBID]:
+                operationDecorator = model.getNotification(self.__NOTIFICATION_TYPE, entityID)
+                if not operationDecorator:
+                    continue
+                operationDecorator.setUserInfo(userName)
+                model.updateNotification(self.__NOTIFICATION_TYPE, entityID, operationDecorator.getEntity(), False)
+
+            self.__userNamePendingNotifications[userDBID] = set()
+
+    def __onGiftOpened(self, event):
+        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftOpenedDecorator, event.ctx)
+
+    def __onGiftSent(self, event):
+        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftSentDecorator, event.ctx)
+
+    def __addOperationNofication(self, factory, ctx):
+        model = self._model()
+        if not model:
+            return
+        notification = factory(self.__idGenerator.next(), model, ctx)
+        userName = self.getUserName(notification.getUserID())
+        if userName:
+            notification.initUserInfo(userName, self.getUserClanAbbrev(notification.getUserID()))
+        else:
+            self.__userNamePendingNotifications[notification.getUserID()].add(notification.getID())
+            self.syncUsersInfo()
+        if notification:
+            model.addNotification(notification)
 
 
 registerNotificationsListeners((ServiceChannelListener,
@@ -2241,7 +2392,7 @@ registerNotificationsListeners((ServiceChannelListener,
  Birthday2023Listener,
  BattleMattersTaskReminderListener))
 
-class NotificationsListeners(_NotificationListener):
+class NotificationsListeners(NotificationListener):
 
     def __init__(self):
         super(NotificationsListeners, self).__init__()

@@ -10,21 +10,19 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
-from gui.entitlements.entitlement_common import LOOT_BOX_COUNTER_ENTITLEMENT
-from gui.impl.lobby.loot_box.loot_box_helper import parseAllOfBonusInfoSection, parseLimitBoxInfoSection
+from gui.impl.lobby.loot_box.loot_box_bonus_parsers.default_parser import parseLimitBoxInfoSection, parseAllOfBonusInfoSection
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.server_events.bonuses import mergeBonuses
 from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY, EventLootBoxes
 from gui.shared.gui_items.processors.loot_boxes import LootBoxGetInfoProcessor
-from gui_lootboxes.gui.bonuses.bonuses_order_config import readConfig, BONUSES_CONFIG_PATH
+from gui_lootboxes.gui.bonuses.bonuses_order_config import readConfig, BONUSES_CONFIG_PATH_LIST
 from gui_lootboxes.gui.storage_context.hangar_optimizer import HangarOptimizer
 from helpers import dependency
 from helpers.server_settings import GUI_LOOT_BOXES_CONFIG
-from helpers.time_utils import getServerUTCTime
 from shared_utils import nextTick, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IGuiLootBoxesController, IEntitlementsController, ISteamCompletionController, ILimitedUIController
+from skeletons.gui.game_control import IGuiLootBoxesController, ISteamCompletionController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -49,7 +47,6 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     __slots__ = ('__em', '__boxesCount', '__isLootBoxesAvailable', '__isActive', '__boxInfo', '__bonusesConfig', '__hangarOptimizer')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
-    __entitlements = dependency.descriptor(IEntitlementsController)
     __steam = dependency.descriptor(ISteamCompletionController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
@@ -83,7 +80,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
 
     def onLobbyInited(self, event):
         if self.__bonusesConfig is None:
-            self.__bonusesConfig = readConfig(BONUSES_CONFIG_PATH)
+            self.__bonusesConfig = readConfig(BONUSES_CONFIG_PATH_LIST)
         g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
         g_clientUpdateManager.addCallbacks({'lootBoxes': self.__onBoxesUpdate})
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
@@ -139,24 +136,6 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     def getGuaranteedBonusLimit(self, boxType):
         return self.getBoxInfo(boxType).get('limit', 0)
 
-    def getDayInfoStatistics(self):
-        entitlement = self.__entitlements.getBalanceEntitlementFromCache(LOOT_BOX_COUNTER_ENTITLEMENT)
-        grantedEntitlements = self.__entitlements.getGrantedEntitlementFromCache(LOOT_BOX_COUNTER_ENTITLEMENT)
-        if entitlement is None:
-            return 0
-        elif entitlement.isExpires():
-            return 0
-        else:
-            granted = grantedEntitlements.getAmount() if grantedEntitlements is not None else 0
-            return entitlement.getAmount() + granted
-
-    def getExpiresAtLootBoxBuyCounter(self):
-        entitlement = self.__entitlements.getBalanceEntitlementFromCache(LOOT_BOX_COUNTER_ENTITLEMENT)
-        return entitlement.getExpiresAtInTimestamp() if entitlement is not None else 0
-
-    def getTimeLeftToResetPurchase(self):
-        return max(int(self.getExpiresAtLootBoxBuyCounter() - getServerUTCTime()), 0)
-
     def openShop(self):
         if self.isBuyAvailable():
             showShop(getShopURL() + self.__getConfig().getShopCategoryUrl())
@@ -210,8 +189,6 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.__limitedUIController.stopObserve(LuiRules.GUI_LOOTBOXES_ENTRY_POINT, self.__onStatusChange)
 
     def __onServerSettingsChange(self, settings):
-        if self.isLootBoxesAvailable() and self.isEnabled() and not (self.__isLootBoxesAvailable and self.__isActive):
-            self.__entitlements.updateCache([LOOT_BOX_COUNTER_ENTITLEMENT])
         if 'isLootBoxesEnabled' in settings:
             self.onAvailabilityChange(self.__isLootBoxesAvailable, self.isLootBoxesAvailable())
             self.__isLootBoxesAvailable = self.isLootBoxesAvailable()
@@ -231,8 +208,6 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         if any((token.startswith(LOOTBOX_TOKEN_PREFIX) for token in diff.iterkeys())):
             boxesCount = self.__getBoxesCount()
             self.onBoxesCountChange(boxesCount, self.__boxesCount)
-            if self.isLootBoxesAvailable() and self.isEnabled() and boxesCount > self.__boxesCount:
-                self.__entitlements.updateCache([LOOT_BOX_COUNTER_ENTITLEMENT])
             self.__boxesCount = boxesCount
             self.__updateLastAddedLootBox()
             self.__hadLootBoxesTokens(hasTokens=True)

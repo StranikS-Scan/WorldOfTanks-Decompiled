@@ -19,8 +19,8 @@ from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 _DEFAULT_VEHICLE_PRICE = 3000
-_DEFAULT_EQUIPMENT_PRICE = 3000
-_DEFAULT_INSTRUCTION_PRICE = 6
+_DEFAULT_EQUIPMENT_PRICE = 5000
+_DEFAULT_INSTRUCTION_PRICE = 12
 _DEFAULT_LEVEL = 10
 _STR_PATH = R.strings.menu.crystals.info.tab.get
 _IMG_PATH = R.images.gui.maps.icons.crystalsInfo.get

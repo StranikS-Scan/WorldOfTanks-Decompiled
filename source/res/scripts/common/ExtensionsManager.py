@@ -38,6 +38,10 @@ class ExtensionsManager(object):
     def activePaths(self):
         return [ '/'.join((_EXTENSIONS_ABS_DIR, extension.dirName, relativePath)) for extension in self.activeExtensions for relativePath in _EXTENSION_IMPORT_PATHS ]
 
+    def isExtensionEnabled(self, name):
+        extension = self._extensions.get(name)
+        return extension and extension.isEnabled
+
     def hasExtensions(self):
         return bool(self._extensions)
 

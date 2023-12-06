@@ -37,4 +37,4 @@ class LootboxTooltipModel(ViewModel):
         self._addStringProperty('userNameKey', '')
         self._addStringProperty('descriptionKey', '')
         self._addNumberProperty('tier', 0)
-        self._addNumberProperty('count', 0)
+        self._addNumberProperty('count', -1)

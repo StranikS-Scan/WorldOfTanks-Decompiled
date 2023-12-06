@@ -19,7 +19,7 @@ from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import BoundMethodWeakref
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IGameSessionController, IIGRController, IHangarSpaceSwitchController
+from skeletons.gui.game_control import IGameSessionController, IIGRController, IHangarSpaceSwitchController, IArmoryYardController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from gui import g_keyEventHandlers
@@ -156,6 +156,7 @@ class HangarSpace(IHangarSpace):
     igrCtrl = dependency.descriptor(IIGRController)
     statsCollector = dependency.descriptor(IStatisticsCollector)
     hangarSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
         self.__space = None
@@ -395,10 +396,15 @@ class HangarSpace(IHangarSpace):
 
     def setVehicleSelectable(self, flag):
         self.__space.setVehicleSelectable(flag)
+        self.setSelectionEnabled(flag)
+
+    def isSceneBlocked(self):
+        return self.armoryYardCtrl.isSceneLoaded()
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
         self.__isSpacePremium = isPremium
-        self.hangarSwitchController.processPossibleSceneChange()
+        if not self.isSceneBlocked():
+            self.hangarSwitchController.processPossibleSceneChange()
 
     def resetLastUpdatedVehicle(self):
         self.__lastUpdatedVehicle = None

@@ -41,6 +41,7 @@ from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltip
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
+from gui.impl.lobby.new_year.tooltips.ny_total_bonus_tooltip import NyTotalBonusTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
@@ -1415,6 +1416,30 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(SquadBonusTooltipContent())
+
+
+class NYCreditBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(NyTotalBonusTooltip(), useDecorator=False)
+
+
+class NewYearFillers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(NewYearFillers, self).__init__(context, None)
+        self._setWidth(365)
+        self._setContentMargin(0, 0, 0, 0)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
+        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.newYear.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
+        items.append(formatters.packBuildUpBlockData(blocks=blocks))
+        return items
 
 
 class DebutBoxesBadgeTooltipContentWindowData(ToolTipBaseData):

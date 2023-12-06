@@ -27,6 +27,10 @@ def getShopRootUrl():
     return _getUrl('shopRootUrl')
 
 
+def newYearOldCollectionRewardUrl():
+    return _getUrl('newYearOldCollectionRewardUrl')
+
+
 def getBuyMoreGoldUrl():
     return _getUrl('buyMoreGoldUrl')
 

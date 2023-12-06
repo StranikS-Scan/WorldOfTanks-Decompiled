@@ -2935,6 +2935,59 @@
       </damage>
     </armorSpalls>
   </_128mm_SprG18>
+  <_128mm_PzGr39_GW>
+    <id>	31003	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr39	</userString>
+    <icon>	ap	</icon>
+    <price>	1270	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr39_GW>
+  <_128mm_PzGr40_GW>
+    <id>	31004	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr40	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_128mm_PzGr40_GW>
+  <_128mm_SprG18_GW>
+    <id>	31005	</id>
+    <userString>	#germany_vehicles:_128mm_SprG18	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1055	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	128	</caliber>
+    <explosionRadius>	2.71	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.71	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	350	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_128mm_SprG18_GW>
   <_128mm_PzGr39_TM>
     <id>	363	</id>
     <userString>	#germany_vehicles:_128mm_PzGr39_TM	</userString>

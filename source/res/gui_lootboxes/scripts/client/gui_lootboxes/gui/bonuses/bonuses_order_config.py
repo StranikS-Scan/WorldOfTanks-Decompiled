@@ -2,12 +2,12 @@
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/bonuses/bonuses_order_config.py
 import logging
 from collections import namedtuple
-from enum import Enum
 import resource_helper
 _logger = logging.getLogger(__name__)
 BONUSES_CONFIG_PATH = 'gui_lootboxes/gui/bonuses_gui_config.xml'
+BONUSES_CONFIG_PATH_LIST = [BONUSES_CONFIG_PATH]
 
-class BonusesSortTags(Enum):
+class BonusesSortTags(object):
     UNSORTABLE = 'unsortable'
     VEHICLE = 'vehicle'
     UNIQUE_CUSTOMIZATION = 'uniqueCustomization'
@@ -29,33 +29,64 @@ class BonusesSortTags(Enum):
     BLUEPRINT = 'blueprint'
     NARRATIVE_CLLC_ITEM = 'narrativeCollectionItem'
     CLLC_ITEM_COMP = 'collectionItemCompensation'
+    RANGE = (UNSORTABLE,
+     VEHICLE,
+     UNIQUE_CUSTOMIZATION,
+     RARITY_OPT_DEV,
+     RARITY_CURRENCY,
+     PREMIUM,
+     UNIQUE_TANKMEN,
+     TANKMEN,
+     STYLE,
+     PERSONAL_BOOSTER,
+     CREW_BOOK,
+     CURRENCY,
+     OPT_DEV,
+     EQUIPMENT,
+     BATTLE_BOOSTER,
+     CUSTOMIZATION,
+     SLOT,
+     BERTH,
+     BLUEPRINT,
+     NARRATIVE_CLLC_ITEM,
+     CLLC_ITEM_COMP)
 
 
 BonusesConfig = namedtuple('BonusesConfig', ['orders', 'defaultOrder'])
 
-def readConfig(path):
+def readConfig(pathList):
+    finalOrders = {}
+    defaultOrder = tuple((v for v in BonusesSortTags.RANGE))
+    for path in pathList:
+        orders, default = _readConfig(path)
+        finalOrders.update(orders)
+        if default:
+            defaultOrder = default
+
+    return BonusesConfig(finalOrders, defaultOrder)
+
+
+def _readConfig(path):
     orders = {}
-    defaultOrder = tuple((v for v in BonusesSortTags))
+    defaultOrder = tuple()
     tags = set()
     ctx, root = resource_helper.getRoot(path)
     if not root:
         _logger.error('bonuses gui config not found. Path %s', path)
-        return BonusesConfig(orders, defaultOrder)
+        return (orders, None)
     else:
         for _, tag in resource_helper.getIterator(ctx, root['bonusTags']):
             tags.add(tag.name)
 
         for _, order in resource_helper.getIterator(ctx, root['orders']):
-            if order.name == 'default':
-                defaultOrder = _readOrder(ctx, order, tags)
-                if defaultOrder is None:
-                    defaultOrder = tuple((v for v in BonusesSortTags))
             orderTags = _readOrder(ctx, order, tags)
+            if order.name == 'default':
+                defaultOrder = orderTags
             if orderTags is not None:
                 for category in resource_helper.readStringItem(ctx, order['categories']).value.split():
                     orders[category] = orderTags
 
-        return BonusesConfig(orders, defaultOrder)
+        return (orders, defaultOrder)
 
 
 def _readOrder(ctx, order, tags):
@@ -66,9 +97,9 @@ def _readOrder(ctx, order, tags):
         if tag.name not in tags:
             _logger.error('tag %s in order %s not in tags set', tag, order.name)
             return None
-        res.append(BonusesSortTags(tag.name))
+        res.append(tag.name)
 
-    for tag in BonusesSortTags:
+    for tag in BonusesSortTags.RANGE:
         if tag not in res:
             res.append(tag)
 

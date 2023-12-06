@@ -11,6 +11,7 @@ from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
 from constants import IS_VS_EDITOR
+from PlayerEvents import g_playerEvents
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount
     from skeletons.gui.shared import IItemsCache
@@ -128,6 +129,25 @@ class OnAnyVehicleDamaged(TunableEventBlock, VehicleMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
+
+
+class OnAnyVehicleShoot(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnAnyVehicleShoot, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._outVehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, None)
+        return
+
+    def onStartScript(self):
+        g_playerEvents.onShowShooterTracer += self.__onShotEvent
+
+    def onFinishScript(self):
+        g_playerEvents.onShowShooterTracer -= self.__onShotEvent
+
+    def __onShotEvent(self, shooterEntity):
+        self._outVehicle.setValue(weakref.proxy(shooterEntity))
+        self._out.call()
 
 
 class IsVehicleBurning(Block, VehicleMeta):

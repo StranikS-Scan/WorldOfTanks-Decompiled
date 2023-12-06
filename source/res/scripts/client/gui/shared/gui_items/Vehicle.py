@@ -54,6 +54,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
+from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
@@ -256,6 +257,7 @@ class Vehicle(FittingItem):
     __customizationService = dependency.descriptor(ICustomizationService)
     __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
+    nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
@@ -570,10 +572,10 @@ class Vehicle(FittingItem):
         return
 
     def _getOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        if style is not None:
+        if style is not None and season != SeasonType.EVENT:
             return self.__getStyledOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season)
         else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled and season != SeasonType.EVENT else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -614,6 +616,10 @@ class Vehicle(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
         return getShopVehicleIconPath(size, name)
+
+    def getSnapshotIcon(self):
+        name = getIconResourceName(getNationLessName(self.name))
+        return RES_ICONS.getSnapshotIcon(name)
 
     @property
     def invID(self):
@@ -914,7 +920,7 @@ class Vehicle(FittingItem):
 
     @property
     def isRentPromotion(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.RENT_PROMOTION) and self.rentExpiryState and self.isRentable and self.isRentAvailable and self.isUnlocked
+        return self.isUnlocked and self.isRentable and VEHICLE_TAGS.RENT_PROMOTION in self.tags and self.isRentAvailable and self.rentExpiryState
 
     @property
     def minRentPrice(self):
@@ -1211,7 +1217,7 @@ class Vehicle(FittingItem):
 
     @property
     def isSecret(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.SECRET)
+        return VEHICLE_TAGS.SECRET in self.tags
 
     @property
     def isSpecial(self):

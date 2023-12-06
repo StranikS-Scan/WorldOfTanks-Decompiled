@@ -139,10 +139,8 @@ class State(Node):
     def configure(self, *args, **kwargs):
         pass
 
-    def enter(self):
-        if self.__isEntered:
-            raise StateError('{} is already activated'.format(self))
-        self.__isEntered = True
+    def enter(self, event=None):
+        self._setEntered()
         self._onEntered()
 
     def exit(self):
@@ -157,7 +155,12 @@ class State(Node):
     def removeChild(self, child):
         raise StateError('Routine is not allowed in {}', self.__class__.__name__)
 
-    def _onEntered(self):
+    def _setEntered(self):
+        if self.__isEntered:
+            raise StateError('{} is already activated'.format(self))
+        self.__isEntered = True
+
+    def _onEntered(self, event=None):
         pass
 
     def _onExited(self):

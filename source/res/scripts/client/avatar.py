@@ -1665,6 +1665,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             startPoint = refStartPoint
             shooter = BigWorld.entity(shooterID)
+            if shooter is not None:
+                g_playerEvents.onShowShooterTracer(shooter)
             if not isRicochet and shooter is not None and shooter.isStarted and effectsDescr.get('artilleryID') is None:
                 multiGun = shooter.typeDescriptor.turret.multiGun
                 nodeName = multiGun[gunIndex].gunFire if shooter.typeDescriptor.isDualgunVehicle and multiGun is not None else 'HP_gunFire'

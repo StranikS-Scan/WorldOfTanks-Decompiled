@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/development/__init__.py
+from account_helpers.AccountSettings import LOOT_BOXES_INTRO_SHOWN
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui_lootboxes.gui.shared.event_dispatcher import showRewardScreenWindow
@@ -142,3 +143,8 @@ def devShowRewardScreenWindow(bonuses=None, itemsCache=None, mainReward='vehicle
 @dependency.replace_none_kwargs(guiLootBoxesCtrl=IGuiLootBoxesController)
 def getGuiLootBoxesCtr(guiLootBoxesCtrl=None):
     return guiLootBoxesCtrl
+
+
+@dependency.replace_none_kwargs(guiLootBoxesCtrl=IGuiLootBoxesController)
+def devResetLootBoxesIntro(guiLootBoxesCtrl=None):
+    guiLootBoxesCtrl.setSetting(LOOT_BOXES_INTRO_SHOWN, False)

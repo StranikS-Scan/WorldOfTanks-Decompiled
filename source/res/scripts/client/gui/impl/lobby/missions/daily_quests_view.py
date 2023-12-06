@@ -4,6 +4,8 @@ import logging
 from collections import defaultdict, OrderedDict
 from copy import deepcopy
 import typing
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NY_DAILY_QUESTS_VISITED, NY_BONUS_DAILY_QUEST_VISITED
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, OFFERS_ENABLED_KEY
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui import SystemMessages
@@ -36,7 +38,7 @@ from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBo
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller, IFestivityController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -73,6 +75,7 @@ class DailyQuestsView(ViewImpl):
     battlePassController = dependency.descriptor(IBattlePassController)
     __winbackController = dependency.descriptor(IWinbackController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __festivityController = dependency.descriptor(IFestivityController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage', '__winbackData')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -98,7 +101,17 @@ class DailyQuestsView(ViewImpl):
             tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData:
                 return SelectableRewardTooltip(**tooltipData)
-        return MainRewardTooltip(self.__winbackData.get('lastQuest', {}).get('bonuses', [])) if contentID == R.views.lobby.winback.tooltips.MainRewardTooltip() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
+        if contentID == R.views.lobby.winback.tooltips.MainRewardTooltip():
+            return MainRewardTooltip(self.__winbackData.get('lastQuest', {}).get('bonuses', []))
+        lootBoxRes = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
+        if lootBoxRes.exists() and contentID == lootBoxRes():
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            missionId, tooltipId = event.getArgument('tooltipId', '').rsplit(':', 1)
+            tooltipData = self.__tooltipData.get(missionId, {}).get(tooltipId)
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
+        return super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createToolTip(self, event):
         missionParam = event.getArgument('tooltipId', '')
@@ -157,6 +170,8 @@ class DailyQuestsView(ViewImpl):
         super(DailyQuestsView, self)._onLoading()
         self.__updateWinbackData()
         with self.viewModel.transaction() as tx:
+            if not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED) and not self.__festivityController.isPostEvent():
+                tx.setIsLootboxesIntroVisible(True)
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
@@ -169,6 +184,7 @@ class DailyQuestsView(ViewImpl):
         return
 
     def _updateModel(self, model):
+        model.setIsNewYearAvailable(self.__festivityController.isEnabled())
         self._updatePremiumMissionsModel(model)
         self._updateDailyQuestModel(model)
         self._updateEpicQuestModel(model)
@@ -189,6 +205,14 @@ class DailyQuestsView(ViewImpl):
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
             tx.setBonusMissionVisited(not newBonusQuests)
+            if self.__festivityController.isEnabled():
+                if not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED):
+                    tx.setPlayNYQuestLootboxAnimation(True)
+                    AccountSettings.setNewYear(NY_DAILY_QUESTS_VISITED, True)
+                if not AccountSettings.getNewYear(NY_BONUS_DAILY_QUEST_VISITED) and tx.getBonusMissionVisited():
+                    tx.setPlayNYBonusQuestLootboxAnimation(True)
+                    AccountSettings.setNewYear(NY_DAILY_QUESTS_VISITED, True)
+                    AccountSettings.setNewYear(NY_BONUS_DAILY_QUEST_VISITED, True)
 
     def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
@@ -358,6 +382,7 @@ class DailyQuestsView(ViewImpl):
          (self.viewModel.onRerollEnabled, self.__onRerollEnabled),
          (self.viewModel.onClaimRewards, self.__onClaimRewards),
          (self.viewModel.winbackProgression.onTakeReward, self.__onTakeReward),
+         (self.viewModel.onLootboxesIntroClosed, self.__onLootboxesIntroClosed),
          (self.eventsCache.onSyncCompleted, self._onSyncCompleted),
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged),
@@ -614,6 +639,9 @@ class DailyQuestsView(ViewImpl):
             if offer is not None:
                 showWinbackSelectRewardView([offer.token])
             return
+
+    def __onLootboxesIntroClosed(self):
+        self.viewModel.setIsLootboxesIntroVisible(False)
 
     def __getWinbackOffersState(self):
         if self.__winbackController.hasWinbackOfferToken() and self.__winbackController.winbackConfig.isEnabled:

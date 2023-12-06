@@ -438,6 +438,7 @@ class VehicleDescriptor(object):
     hasHydraulicChassis = property(lambda self: self.type.hasHydraulicChassis)
     hasCharge = property(lambda self: self.type.hasCharge)
     hasRocketAcceleration = property(lambda self: self.type.hasRocketAcceleration)
+    hasShellCasingsEjection = property(lambda self: self.type.hasShellCasingsEjection)
     hasBurst = property(lambda self: self.gun.burst != component_constants.DEFAULT_GUN_BURST)
     role = property(lambda self: self.type.role)
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
@@ -1861,6 +1862,8 @@ class VehicleType(object):
      'rocketAccelerationParams',
      'classTag',
      'armorMaxHealth',
+     'hasShellCasingsEjection',
+     'shellCasingsEjectionPrefab',
      '__weakref__')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
@@ -1887,6 +1890,7 @@ class VehicleType(object):
         self.hasCharge = 'charger' in self.tags
         self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasRocketAcceleration = 'rocketAcceleration' in self.tags
+        self.hasShellCasingsEjection = 'shellCasingsEjection' in self.tags
         self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
         self.isPremium = 'premium' in self.tags
         self.role = self.__getRoleFromTags() if self.level in ROLE_LEVELS else ROLE_TYPE.NOT_DEFINED
@@ -2032,6 +2036,10 @@ class VehicleType(object):
             self.rocketAccelerationParams = _readRocketAccelerationParams(xmlCtx, section)
         else:
             self.rocketAccelerationParams = None
+        if self.hasShellCasingsEjection:
+            self.shellCasingsEjectionPrefab = _readShellCasingsEjectionPrefab(xmlCtx, section)
+        else:
+            self.shellCasingsEjectionPrefab = None
         if IS_CELLAPP:
             overmatchVer = _xml.readIntOrNone(xmlCtx, section, 'overmatchMechanicsVer')
             if overmatchVer is None:
@@ -6733,6 +6741,15 @@ def _readRocketAccelerationParams(xmlCtx, section):
     else:
         effectsPrefab = None
     return shared_components.RocketAccelerationParams(deployTime=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'deployTime'), reloadTime=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'reloadTime'), reuseCount=_xml.readInt(rocketCtx, rocketSection, 'reuseCount', minVal=-1), duration=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'duration'), impulse=impulse, modifiers=modifiers, kpi=kpi, effectsPrefab=effectsPrefab)
+
+
+def _readShellCasingsEjectionPrefab(xmlCtx, section):
+    if IS_CLIENT or IS_UE_EDITOR:
+        effectsCtx, effectsSection = _xml.getSubSectionWithContext(xmlCtx, section, 'effects')
+        effectsPrefab = _xml.readStringOrEmpty(effectsCtx, effectsSection, 'shellCasingsEjectionPrefab')
+    else:
+        effectsPrefab = None
+    return effectsPrefab
 
 
 def _readGunDualGunParams(xmlCtx, section):

@@ -1,7 +1,7 @@
 <engine_config.xml>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -395,6 +395,12 @@
         <bank>
           <name>	field_modernization.bnk	</name>
         </bank>
+        <bank>
+          <name>	newyear_loading_screen.bnk	</name>
+        </bank>
+        <bank>
+          <name>	newyear_loading_screen.pck	</name>
+        </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <bank>
@@ -486,9 +492,6 @@
         </bank>
         <bank>
           <name>	achievements.bnk	</name>
-        </bank>
-        <bank>
-          <name>	armory_yard.bnk	</name>
         </bank>
         <bank>
           <name>	lootboxes.bnk	</name>
@@ -610,6 +613,9 @@
         </bank>
         <bank>
           <name>	style_3D_R123_Kirovets_Svaroshich.bnk	</name>
+        </bank>
+        <bank>
+          <name>	shell_extraction.bnk	</name>
         </bank>
         <bank>
           <name>	gameplay.bnk	</name>

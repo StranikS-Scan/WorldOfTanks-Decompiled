@@ -25,7 +25,7 @@ class Tokens(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        for item in ('tokens',):
+        for item in ('tokens', 'lootBoxes'):
             itemDiff = diff.get(item, None)
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))

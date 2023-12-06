@@ -57,7 +57,7 @@ class _QuestsTabPresenter(object):
             return None
         else:
             questId, tooltipId = missionParams
-            return self.__tooltipData.get(questId, {}).get(int(tooltipId))
+            return self.__tooltipData.get(questId, {}).get(tooltipId)
 
     def __closeView(self, *args):
         self.__closeCB(*args)

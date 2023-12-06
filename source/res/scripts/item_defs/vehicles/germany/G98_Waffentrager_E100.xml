@@ -9,6 +9,8 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
     <backward>	15	</backward>
@@ -34,7 +36,8 @@
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	10.50	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <density>	1.19 1.19	</density>
@@ -71,7 +74,7 @@
       <sensitivityToImpulse>	0.08	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_large	</pixie>
+      <pixie>	diesel_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
@@ -1478,7 +1481,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Gun_VK4502P>	shared	  <maxAmmo>	60	</maxAmmo>
+        <Gun_VK4502P_G>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -1554,7 +1557,7 @@
             <density>	91.9939 93.2722	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </Gun_VK4502P>
+        </Gun_VK4502P_G>
       </guns>
       <models>
         <undamaged>	vehicles/german/G98_Waffentrager_E100/normal/lod0/Turret_01.model	</undamaged>
@@ -1566,7 +1569,7 @@
         <collisionModelClient>	vehicles/german/G98_Waffentrager_E100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 1.42445 -0.713915	</gunPosition>
-      <physicsShape>	1 0 0.944 0 0.928 0 0.674 0 0.5 0.5 0.019 0.5 0 0 0.454	</physicsShape>
+      <physicsShape>	1 0 0.944 0 1.021 -0.005 0.674 0 0.5 0.5 0.019 0.5 0 0 0.454	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customizationSlots>
         <slot>
@@ -2138,21 +2141,21 @@
     </Turret_1_Waffentrager_E100>
   </turrets0>
   <engines>
-    <Engine_VK4502P>	shared	</Engine_VK4502P>
+    <Engine_VK4502P_G>	shared	</Engine_VK4502P_G>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <Radio_VK4502P>	shared	</Radio_VK4502P>
+    <Radio_VK4502P_G>	shared	</Radio_VK4502P_G>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Engine_VK4502P>
+        <Engine_VK4502P_G>
           <smplEnginePower>	1268.737	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Engine_VK4502P>
+        </Engine_VK4502P_G>
       </engines>
       <chassis>
         <Chassis_Waffentrager_E100>

@@ -7,23 +7,23 @@ from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController
 
 class ArmoryYardEventValidator(SyncValidator):
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def _validate(self):
-        return makeError('event_is_not_active') if not self.__armoryYard.isActive() else makeSuccess()
+        return makeError('event_is_not_active') if not self.__armoryYardCtrl.isActive() else makeSuccess()
 
 
 class BuyStepTokenCountValidator(SyncValidator):
     __slots__ = ('__buyCount',)
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self, buyCount, plugins=None):
         super(BuyStepTokenCountValidator, self).__init__(plugins)
         self.__buyCount = buyCount
 
     def _validate(self):
-        currencyTokenCount = self.__armoryYard.getCurrencyTokenCount()
-        maximumTokenCount = self.__armoryYard.getTotalSteps()
+        currencyTokenCount = self.__armoryYardCtrl.getCurrencyTokenCount()
+        maximumTokenCount = self.__armoryYardCtrl.getTotalSteps()
         if self.__buyCount <= 0:
             return makeError('invalid_count')
         return makeError('result_token_count_more_than_max') if currencyTokenCount + self.__buyCount > maximumTokenCount else makeSuccess()
@@ -42,17 +42,17 @@ class CollectRewardsProcessor(Processor):
 
 class BuyStepTokens(Processor):
     __slots__ = ('__count',)
-    __armoryYard = dependency.descriptor(IArmoryYardController)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self, count, plugins=None):
         super(BuyStepTokens, self).__init__(plugins)
         self.__count = count
-        price = self.__count * self.__armoryYard.getCurrencyTokenCost()
+        price = self.__count * self.__armoryYardCtrl.getCurrencyTokenCost()
         self.addPlugins((ArmoryYardEventValidator(),
          BuyStepTokenCountValidator(self.__count),
          WalletValidator(),
          MoneyValidator(price)))
 
     def _request(self, callback):
-        BigWorld.player().AccountArmoryYardComponent.buyStepTokens(self.__armoryYard.getCurrencyTokenCost().getCurrency(), self.__count, lambda requestID, resultID, errorStr, ctx=None: self._response(resultID, callback, errorStr, ctx))
+        BigWorld.player().AccountArmoryYardComponent.buyStepTokens(self.__armoryYardCtrl.getCurrencyTokenCost().getCurrency(), self.__count, lambda requestID, resultID, errorStr, ctx=None: self._response(resultID, callback, errorStr, ctx))
         return

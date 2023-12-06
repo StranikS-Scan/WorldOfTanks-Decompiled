@@ -6,7 +6,6 @@ from frameworks.wulf import ViewModel
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    ACTIVELASTHOURS = 'activeLastHours'
     POSTPROGRESSION = 'postProgression'
     COMPLETED = 'completed'
     DISABLED = 'disabled'
@@ -15,7 +14,7 @@ class State(Enum):
 class ArmoryYardEntryPointViewModel(ViewModel):
     __slots__ = ('onAction',)
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=3, commands=1):
         super(ArmoryYardEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -30,8 +29,15 @@ class ArmoryYardEntryPointViewModel(ViewModel):
     def setProgressionLevel(self, value):
         self._setNumber(1, value)
 
+    def getEndTimestamp(self):
+        return self._getNumber(2)
+
+    def setEndTimestamp(self, value):
+        self._setNumber(2, value)
+
     def _initialize(self):
         super(ArmoryYardEntryPointViewModel, self)._initialize()
         self._addStringProperty('state')
         self._addNumberProperty('progressionLevel', 0)
+        self._addNumberProperty('endTimestamp', 0)
         self.onAction = self._addCommand('onAction')

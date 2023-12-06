@@ -33,6 +33,7 @@
     <Skoda_V16_diesel_600_a>	32	</Skoda_V16_diesel_600_a>
     <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
     <CKD_AXL_CN>	34	</CKD_AXL_CN>
+    <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
     <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
     <Tatra_T-78>	31002	</Tatra_T-78>
     <Development_Engine>	65000	</Development_Engine>
@@ -103,6 +104,23 @@
       <rpm_min>	349	</rpm_min>
       <rpm_max>	2482	</rpm_max>
     </Praga_TNHPS>
+    <Saurer_CT1D_SZ1007>
+      <userString>	#czech_vehicles:Saurer_CT1D_SZ1007	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1150	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	110	</power>
+      <weight>	500	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	361	</rpm_min>
+      <rpm_max>	2442	</rpm_max>
+    </Saurer_CT1D_SZ1007>
     <Praga_TNHPS_II>
       <userString>	#czech_vehicles:Praga_TNHPS_II	</userString>
       <tags>	gasoline	</tags>
@@ -490,8 +508,8 @@
       <maxRegenHealth>	127	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </Skoda_AHK_TST>
     <Skoda_16_AH_145>
       <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>

@@ -182,7 +182,8 @@ class ModeSelectorView(ViewImpl):
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING,
+         'alias': self.layoutID}), scope=EVENT_BUS_SCOPE.LOBBY)
         app = self.__appLoader.getApp()
         self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
         app.setBackgroundAlpha(_BACKGROUND_ALPHA)

@@ -124,6 +124,9 @@ class AgateAccessor(BaseAccessor):
     def get_inventory_entitlements_v5(self, callback, entitlementsFilter):
         return self._data_source.get_inventory_entitlements_v5(callback, entitlementsFilter)
 
+    def agate_v6_fetch_product_list_personal(self, callback, requestData):
+        return self._data_source.agate_v6_fetch_product_list_personal(callback, requestData)
+
 
 class ClansAccessor(BaseAccessor):
 
@@ -377,6 +380,18 @@ class GiftSystemAccessor(BaseAccessor):
         return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 
 
+class ShopAccessor(BaseAccessor):
+
+    def get_inventory_entitlements(self, callback, entitlement_codes):
+        return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
+
+    def get_storefront_products(self, callback, storefront):
+        return self._data_source.get_storefront_products(callback, storefront)
+
+    def buy_storefront_products(self, callback, storefront, productCode, requestData):
+        return self._data_source.buy_storefront_products(callback, storefront, productCode, requestData)
+
+
 class UILoggingAccessor(BaseAccessor):
 
     def get_uilogging_session(self, callback):
@@ -404,6 +419,7 @@ class Requester(object):
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)
     uilogging = RequestDescriptor(UILoggingAccessor)
+    shop = RequestDescriptor(ShopAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

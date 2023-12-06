@@ -15,6 +15,8 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.b
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.gui_helpers import VEHICLES_BONUS_NAME
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.gui_helpers import detectBonusType
+from gui.server_events.bonuses import splitBonuses
+BONUS_GROUP_TOOLTIP_PROCESSORS = []
 
 class BonusGroupTooltip(ViewImpl):
     __slots__ = ('__bonuses', '__bonusGroup')
@@ -24,9 +26,11 @@ class BonusGroupTooltip(ViewImpl):
         settings = ViewSettings(R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.BonusGroupTooltip())
         settings.model = BonusGroupTooltipModel()
         super(BonusGroupTooltip, self).__init__(settings)
+        self.__bonusGroup = bonusGroup
         self.__bonuses = sortBonuses(bonuses, self.__guiLootBoxes.getBonusesOrder(lootBoxCategory))
         self.__bonuses = aggregateSimilarBonuses(self.__bonuses)
-        self.__bonusGroup = bonusGroup
+        for processor in BONUS_GROUP_TOOLTIP_PROCESSORS:
+            self.__bonuses = processor(self.__bonuses)
 
     @property
     def viewModel(self):
@@ -42,7 +46,7 @@ class BonusGroupTooltip(ViewImpl):
         bonusRowsModel = model.getBonusRows()
         packer = getLootBoxesBonusPacker()
         if first(self.__bonuses).getName() == VEHICLES_BONUS_NAME:
-            premiumVehicles, rentedVehicles = self.__splitVehicleGroup(self.__bonuses)
+            premiumVehicles, rentedVehicles = self.__splitVehicleGroup(splitBonuses(self.__bonuses))
             if premiumVehicles:
                 bonusRowsModel.addViewModel(self.__createBonusRow(premiumVehicles, packer))
             if rentedVehicles:

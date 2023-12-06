@@ -83,7 +83,7 @@ class ArmoryYardFadeManager(CallbackDelayer, TimeDeltaMeter):
 class _FadeWindow(object):
 
     def __init__(self):
-        self.__component = GUI.Flash(_FADE_WINDOW_PATH, 0)
+        self.__component = GUI.Flash(_FADE_WINDOW_PATH)
         self.__component.size = (2, 2)
         self.__component.focus = True
         self.__component.moveFocus = True

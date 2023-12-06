@@ -11,21 +11,20 @@ TOKEN_COMPENSATION_TEMPLATE = 'lb_comp:{}:{}:{}:{}'
 TOKEN_COMPENSATION_PREFIX = 'lb_comp:'
 _logger = logging.getLogger(__name__)
 
-def preformatCompensationValue(rewardsList):
-    for rewards in rewardsList:
-        vehiclesList = rewards.get('vehicles', [])
-        compValue = _getCompensationVehicleValue(vehiclesList)
-        for tokenID in rewards.get('tokens', {}).keys():
-            if tokenID.startswith(TOKEN_COMPENSATION_PREFIX):
-                compValue += _getCompensationValueFromToken(tokenID)
+def preformatCompensationValue(rewards):
+    vehiclesList = rewards.get('vehicles', [])
+    compValue = _getCompensationVehicleValue(vehiclesList)
+    for tokenID in rewards.get('tokens', {}).keys():
+        if tokenID.startswith(TOKEN_COMPENSATION_PREFIX):
+            compValue += _getCompensationValueFromToken(tokenID)
 
-        for currency in Currency.ALL:
-            if compValue.get(currency, 0) > 0:
-                currencyValue = rewards.pop(currency, 0)
-                if currency is not None:
-                    newCurrencyValue = currencyValue - compValue.get(currency, 0)
-                    if newCurrencyValue:
-                        rewards[currency] = max(newCurrencyValue, 0)
+    for currency in Currency.ALL:
+        if compValue.get(currency, 0) > 0:
+            currencyValue = rewards.pop(currency, 0)
+            if currency is not None:
+                newCurrencyValue = currencyValue - compValue.get(currency, 0)
+                if newCurrencyValue:
+                    rewards[currency] = max(newCurrencyValue, 0)
 
     return
 
@@ -47,10 +46,21 @@ def _getCompensationValueFromToken(tokenID):
     return Money.makeFrom(currency, value)
 
 
+def preformatStyle(rewards):
+    customizations = rewards.get('customizations', [])
+    if customizations:
+        rewards['customizations'] = [ cData for cData in customizations if not cData.get('boundToCurrentVehicle', False) ]
+        if not rewards['customizations']:
+            rewards.pop('customizations')
+
+
 def prepareOpenResult(result):
     if result and result.success and result.auxData:
         bonus = result.auxData.get('bonus', [])
-        preformatCompensationValue(bonus)
+        for rewards in bonus:
+            preformatCompensationValue(rewards)
+            preformatStyle(rewards)
+
         rewards = getMergedBonusesFromDicts(bonus)
         boxesData = {}
         for token in rewards.get('tokens', {}).keys():

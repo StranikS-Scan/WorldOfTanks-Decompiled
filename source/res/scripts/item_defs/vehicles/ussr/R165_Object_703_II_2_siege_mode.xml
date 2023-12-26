@@ -11,7 +11,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	46	</forward>
+    <forward>	41	</forward>
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
@@ -1751,24 +1751,24 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 7 0.425 7 0.433333 3.5 0.486111 1 0.513889 1 0.566667 3.5 0.575 7 1 7	</maxPitch>
+            <maxPitch>	0 5 0.425 5 0.433333 3.5 0.486111 1 0.513889 1 0.566667 3.5 0.575 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.11	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
-            <reloadLockTime>	1.5	</reloadLockTime>
-            <reloadTimes>	8.5 8.5	</reloadTimes>
-            <rateTime>	3	</rateTime>
+            <reloadLockTime>	3	</reloadLockTime>
+            <reloadTimes>	9.5 9.5	</reloadTimes>
+            <rateTime>	4	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -2692,8 +2692,8 @@
     <detailed>
       <engines>
         <V_11_Kirovets_1_703_II_2>
-          <smplEnginePower>	1014.99	</smplEnginePower>
-          <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
+          <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	41	</smplFwMaxSpeed>
         </V_11_Kirovets_1_703_II_2>
       </engines>
       <chassis>

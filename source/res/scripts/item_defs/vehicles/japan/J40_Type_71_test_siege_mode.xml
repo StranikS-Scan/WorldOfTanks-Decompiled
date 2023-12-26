@@ -14,8 +14,8 @@
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.04	</moving>
-    <still>	0.078	</still>
+    <moving>	0.049	</moving>
+    <still>	0.099	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.117	</firePenalty>
   </invisibility>
@@ -1628,7 +1628,8 @@
         <armor_26>	80	</armor_26>
         <armor_27>	155	</armor_27>
         <armor_28>	130	</armor_28>
-        <armor_29>	62	</armor_29>
+        <armor_29>	70	</armor_29>
+        <armor_30>	110	</armor_30>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
@@ -1696,7 +1697,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0.00000 9.00 0.25000 9.00 0.36111 6.00 0.50000 0.00 0.63889 6.00 0.75000 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <shotDispersionRadius>	0.28	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2357,8 +2358,8 @@
       <on>	strv_siege_mode_on_PC	</on>
       <off>	strv_siege_mode_off_PC	</off>
     </soundStateChange>
-    <autoSwitchOffRequiredVehicleSpeed>	19	</autoSwitchOffRequiredVehicleSpeed>
-    <autoSwitchOnRequiredVehicleSpeed>	10	</autoSwitchOnRequiredVehicleSpeed>
+    <autoSwitchOffRequiredVehicleSpeed>	23	</autoSwitchOffRequiredVehicleSpeed>
+    <autoSwitchOnRequiredVehicleSpeed>	23	</autoSwitchOnRequiredVehicleSpeed>
   </siege_mode>
   <hull_aiming>
     <pitch>

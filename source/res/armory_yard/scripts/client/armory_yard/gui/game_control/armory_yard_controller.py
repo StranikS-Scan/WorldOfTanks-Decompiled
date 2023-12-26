@@ -143,8 +143,7 @@ class ArmoryYardController(IArmoryYardController):
                 self.onCollectReward()
         self.__connectionMgr.onDisconnected += self.__onDisconnected
         self.__isStarted = True
-        token = self.serverSettings.getCurrencyToken()
-        if self.getTotalSteps() == self.__eventsCache.questsProgress.getTokenCount(token):
+        if self.getTotalSteps() == self.getCurrencyTokenCount():
             self.__isFinalQuestCompleted = True
 
     def onAccountBecomeNonPlayer(self):

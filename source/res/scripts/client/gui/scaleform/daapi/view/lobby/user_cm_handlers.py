@@ -434,6 +434,14 @@ class BaseAppealCMLobbyChatHandler(AbstractContextMenuHandler, EventSystemEntity
 
 class BaseUserAppealCMHandler(BaseUserCMHandler, BaseAppealCMLobbyChatHandler):
 
+    def _initFlashValues(self, ctx):
+        BaseUserCMHandler._initFlashValues(self, ctx)
+        BaseAppealCMLobbyChatHandler._initFlashValues(self, ctx)
+
+    def _clearFlashValues(self):
+        BaseAppealCMLobbyChatHandler._clearFlashValues(self)
+        BaseUserCMHandler._clearFlashValues(self)
+
     def _getHandlers(self):
         handlers = BaseUserCMHandler._getHandlers(self)
         handlers.update(BaseAppealCMLobbyChatHandler._getHandlers(self))

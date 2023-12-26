@@ -118,13 +118,15 @@ def getServerRegionalDaysLeftInGameWeek():
 
 
 def getServerGameDay():
+    return int(getServerUTCTime() - getStartOfNewGameDayOffset()) / ONE_DAY
+
+
+def getStartOfNewGameDayOffset():
     regionalSettings = BigWorld.player().serverSettings['regional_settings']
     dayStartOffset = 0
     if 'starting_time_of_a_new_game_day' in regionalSettings:
-        dayStartOffset = regionalSettings['starting_day_of_a_new_week']
-    elif 'starting_time_of_a_new_day' in regionalSettings:
-        dayStartOffset = regionalSettings['starting_time_of_a_new_day']
-    return int(getServerRegionalTime() - dayStartOffset) / ONE_DAY
+        dayStartOffset = regionalSettings['starting_time_of_a_new_game_day']
+    return dayStartOffset
 
 
 def getTimeDeltaFromNow(t):

@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NYLootBoxesStorageKeys, NewYearStorageKeys
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -62,12 +62,19 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
     BATTLE_COMM = 'BATTLE_COMM'
     DOG_TAGS = 'DOG_TAGS'
+    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
+    LOOT_BOX_ORIENTAL = 'LOOT_BOX_ORIENTAL'
+    LOOT_BOX_NEW_YEAR = 'LOOT_BOX_NEW_YEAR'
+    LOOT_BOX_FAIRYTALE = 'LOOT_BOX_FAIRYTALE'
+    LOOT_BOX_CHRISTMAS = 'LOOT_BOX_CHRISTMAS'
+    NEW_YEAR = 'NEW_YEAR'
     UNIT_FILTER = 'UNIT_FILTER'
     BATTLE_HUD = 'BATTLE_HUD'
     SPG_AIM = 'SPG_AIM'
     CONTOUR = 'CONTOUR'
     LIMITED_UI_1 = 'LIMITED_UI_1'
     LIMITED_UI_2 = 'LIMITED_UI_2'
+    SENIORITY_AWARDS_STORAGE = 'SENIORITY_AWARDS_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
@@ -162,6 +169,7 @@ class ServerSettingsManager(object):
     BATTLE_COMM = settings_constants.BattleCommStorageKeys
     BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SCORE_PANEL = settings_constants.ScorePanelStorageKeys
+    SENIORITY_AWARDS = settings_constants.SeniorityAwardsStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -233,6 +241,7 @@ class ServerSettingsManager(object):
                                  SPGAim.AUTO_CHANGE_AIM_MODE: 3}, offsets={SPGAim.AIM_ENTRANCE_MODE: Offset(4, 3 << 4)}),
      SETTINGS_SECTIONS.CONTOUR: Section(masks={CONTOUR.ENHANCED_CONTOUR: 0}, offsets={CONTOUR.CONTOUR_PENETRABLE_ZONE: Offset(1, 3 << 1),
                                  CONTOUR.CONTOUR_IMPENETRABLE_ZONE: Offset(3, 3 << 3)}),
+     SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE: Section(masks={SENIORITY_AWARDS.SENIORITY_AWARDS_ON_PAUSE_NOTIFICATION_SHOWED: 0}, offsets={}),
      SETTINGS_SECTIONS.MARKERS: Section(masks={'markerBaseIcon': 0,
                                  'markerBaseLevel': 1,
                                  'markerBaseHpIndicator': 2,
@@ -282,6 +291,7 @@ class ServerSettingsManager(object):
                                            'bonus': 6,
                                            'event': 7,
                                            'crystals': 8,
+                                           'newYear': 10,
                                            'role_HT_assault': 11,
                                            'role_HT_break': 12,
                                            'role_HT_support': 13,
@@ -383,6 +393,7 @@ class ServerSettingsManager(object):
                                                       'bonus': 6,
                                                       'event': 7,
                                                       'crystals': 8,
+                                                      'newYear': 10,
                                                       'role_HT_assault': 11,
                                                       'role_HT_break': 12,
                                                       'role_HT_support': 13,
@@ -706,6 +717,7 @@ class ServerSettingsManager(object):
                                                   'bonus': 6,
                                                   'event': 7,
                                                   'crystals': 8,
+                                                  'newYear': 10,
                                                   'role_HT_assault': 11,
                                                   'role_HT_break': 12,
                                                   'role_HT_support': 13,
@@ -773,6 +785,24 @@ class ServerSettingsManager(object):
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
                                                       'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_ORIENTAL: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
+                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_NEW_YEAR: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
+                                           NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_FAIRYTALE: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
+                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_CHRISTMAS: Section(masks={}, offsets={NYLootBoxesStorageKeys.NEW_COUNT: Offset(0, 65535),
+                                            NYLootBoxesStorageKeys.DELIVERED_COUNT: Offset(16, 4294901760L)}),
+     SETTINGS_SECTIONS.NEW_YEAR: Section(masks={NewYearStorageKeys.NY_VEHICLES_PROGRESS_ENTRY: 1,
+                                  NewYearStorageKeys.NY_STATISTICS_HINT_SHOWN: 7,
+                                  NewYearStorageKeys.CELEBRITY_SCREEN_VISITED: 10,
+                                  NewYearStorageKeys.CELEBRITY_WELCOME_VIEWED: 11,
+                                  NewYearStorageKeys.DECORATIONS_POPOVER_VIEWED: 12,
+                                  NewYearStorageKeys.DECORATIONS_POPOVER_BROKEN: 13,
+                                  NewYearStorageKeys.LOOT_BOX_VIDEO_OFF: 14,
+                                  NewYearStorageKeys.TUTORIAL_STAGE_3_SEEN: 15}, offsets={NewYearStorageKeys.TUTORIAL_STATE: Offset(19, 3670016),
+                                  NewYearStorageKeys.NY_VEHICLES_LEVEL_UP_ENTRY: Offset(3, 15 << 3)}),
      SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
@@ -883,6 +913,12 @@ class ServerSettingsManager(object):
     def saveInBPStorage(self, settings):
         if self.settingsCache.isSynced():
             self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
+
+    def getNewYearStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.NEW_YEAR, defaults) if self.settingsCache.isSynced() else {}
+
+    def saveInNewYearStorage(self, settings):
+        return self.setSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
@@ -1182,6 +1218,8 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
+         SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE: {},
+         SETTINGS_SECTIONS.NEW_YEAR: {},
          'clear': {},
          'delete': [],
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
@@ -1218,6 +1256,10 @@ class ServerSettingsManager(object):
         clearGraphics = clear.get(SETTINGS_SECTIONS.GRAPHICS, 0)
         if graphicsData or clearGraphics:
             settings[SETTINGS_SECTIONS.GRAPHICS] = self._buildSectionSettings(SETTINGS_SECTIONS.GRAPHICS, graphicsData) ^ clearGraphics
+        seniorityAwardsData = data.get(SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE, {})
+        clearSeniorityAwards = clear.get(SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE, 0)
+        if seniorityAwardsData or clearSeniorityAwards:
+            settings[SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE, seniorityAwardsData) ^ clearSeniorityAwards
         aimData = data.get('aimData', {})
         if aimData:
             settings.update(self._buildAimSettings(aimData))
@@ -1327,6 +1369,10 @@ class ServerSettingsManager(object):
         clearRoyaleFilterCarousel2 = clear.get(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, 0)
         if royaleFilterCarousel2 or clearRoyaleFilterCarousel2:
             settings[SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2, royaleFilterCarousel2) ^ clearRoyaleFilterCarousel2
+        newYearSettings = data.get(SETTINGS_SECTIONS.NEW_YEAR, {})
+        clearNewYearSettings = clear.get(SETTINGS_SECTIONS.NEW_YEAR, 0)
+        if newYearSettings or clearNewYearSettings:
+            settings[SETTINGS_SECTIONS.NEW_YEAR] = self._buildSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, newYearSettings) ^ clearNewYearSettings
         battleMatters = data.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, {})
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:

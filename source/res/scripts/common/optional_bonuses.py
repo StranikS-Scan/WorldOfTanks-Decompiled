@@ -4,7 +4,9 @@ import copy
 import random
 import time
 import typing
+from itertools import izip
 from account_shared import getCustomizationItem
+from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from battle_pass_common import NON_VEH_CD
 from dog_tags_common.components_config import componentConfigAdapter
 from soft_exception import SoftException
@@ -226,6 +228,14 @@ def __mergeDailyQuestReroll(total, key, value, isLeaf, count, *args):
     total.setdefault(key, set()).update(value)
 
 
+def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for slotID, toysData in value.iteritems():
+        slotData = result.setdefault(slotID, {})
+        for toyID, toyCount in toysData.iteritems():
+            slotData[toyID] = slotData.get(toyID, 0) + count * toyCount
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -267,10 +277,13 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'freePremiumCrew': __mergeFreePremiumCrew,
  'meta': __mergeMeta,
  'dailyQuestReroll': __mergeDailyQuestReroll,
- 'noviceReset': __mergeNoviceReset}
+ 'noviceReset': __mergeNoviceReset,
+ CurrentNYConstants.TOYS: __mergeNYToys}
+BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key)}
+ 'tokens': lambda account, key: account._quests.hasToken(key),
+ CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
 RENT_ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._rent.isVehicleRented(account._inventory.getVehicleInvID(key))}
 
 class BonusItemsCache(object):
@@ -415,6 +428,11 @@ class BonusNodeAcceptor(object):
                 c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
                 cache.onItemAccepted('customizations', c11nItem.compactDescr)
 
+        if CurrentNYConstants.TOYS in bonusNode:
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    cache.onItemAccepted(CurrentNYConstants.TOYS, toyID)
+
         return
 
     def isBonusExists(self, bonusNode):
@@ -434,6 +452,12 @@ class BonusNodeAcceptor(object):
                 c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
                 if cache.isItemExists('customizations', c11nItem.compactDescr):
                     return True
+
+        if CurrentNYConstants.TOYS in bonusNode:
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    if cache.isItemExists(CurrentNYConstants.TOYS, toyID):
+                        return True
 
         return False
 
@@ -718,14 +742,25 @@ class StripVisitor(NodeVisitor):
         self.__needProbabilitiesInfo = needProbabilitiesInfo
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
+    def __getShownProbability(self, probability, prevProbability=None):
+        if self.__needProbabilitiesInfo:
+            if prevProbability and probability != [0.0] * len(probability):
+                return [ currProb - prevProb for currProb, prevProb in izip(probability, prevProbability) ]
+            return probability
+        else:
+            return [-1]
+
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
-        for probability, bonusProbability, refGlobalID, bonusValue in values:
+        for index, (probability, bonusProbability, refGlobalID, bonusValue) in enumerate(values):
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            prevProbability = values[index - 1][0] if index > 0 else None
+            bonusValueName = bonusValue.get('properties', {}).get('name', None)
+            if bonusValueName:
+                stippedValue['properties'] = {'name': bonusValueName}
+            strippedValues.append((self.__getShownProbability(probability, prevProbability),
              -1,
              None,
              stippedValue))
@@ -735,11 +770,13 @@ class StripVisitor(NodeVisitor):
 
     def onAllOf(self, storage, values):
         strippedValues = []
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            bonusValueName = bonusValue.get('properties', {}).get('name', None)
+            if bonusValueName:
+                stippedValue['properties'] = {'name': bonusValueName}
+            strippedValues.append((self.__getShownProbability(probability),
              -1,
              None,
              stippedValue))

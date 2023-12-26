@@ -5,6 +5,8 @@ from collections import defaultdict, OrderedDict
 from copy import deepcopy
 import typing
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, OFFERS_ENABLED_KEY
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NY_DAILY_QUESTS_VISITED
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -36,9 +38,10 @@ from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBo
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller, IFestivityController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.new_year import INewYearController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, List, Dict
@@ -73,7 +76,9 @@ class DailyQuestsView(ViewImpl):
     battlePassController = dependency.descriptor(IBattlePassController)
     __winbackController = dependency.descriptor(IWinbackController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __slots__ = ('__tooltipData', '__proxyMissionsPage', '__winbackData')
+    __slots__ = ('__tooltipData', '__proxyMissionsPage', '__winbackData', '__hasNYResourcesReward')
+    __festivityController = dependency.descriptor(IFestivityController)
+    __nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
         viewSettings = ViewSettings(layoutID, ViewFlags.VIEW, DailyQuestsViewModel())
@@ -81,6 +86,7 @@ class DailyQuestsView(ViewImpl):
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
         self.__winbackData = {}
+        self.__hasNYResourcesReward = False
         return
 
     @property
@@ -114,7 +120,7 @@ class DailyQuestsView(ViewImpl):
                 tooltipsData = self.__tooltipData.get(missionId, {})
                 tooltipData = tooltipsData.get(tooltipId)
             if tooltipData and isinstance(tooltipData, TooltipData):
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
+                window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event) if tooltipData is not None else None
                 if window is not None:
                     window.load()
             else:
@@ -161,6 +167,7 @@ class DailyQuestsView(ViewImpl):
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
+            tx.setIsNewYearAvailable(self.__nyController.isEnabled() and self.__hasNYResourcesReward)
         self.__updateCommonData()
 
     def _finalize(self):
@@ -179,9 +186,15 @@ class DailyQuestsView(ViewImpl):
         isEnabled = isDailyQuestsEnable()
         quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
         newBonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
+        self.__hasNYResourcesReward = any([ bonus.getName() == 'nyRandomResource' for quest in quests for bonus in quest.getBonuses() ])
         self._updateRerollEnabledFlag(model)
         with model.dailyQuests.transaction() as tx:
             tx.setIsEnabled(isEnabled)
+            if self.__festivityController.isEnabled():
+                if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
+                    if isEnabled:
+                        tx.setPlayNYQuestLootboxAnimation(True)
+                    model.setIsNewYearIntroVisible(self.__nyController.isEnabled() and self.__hasNYResourcesReward)
             if not isEnabled:
                 return
             if not fullUpdate and not needToUpdateQuestsInModel(quests + newBonusQuests, tx.getQuests()):
@@ -358,6 +371,7 @@ class DailyQuestsView(ViewImpl):
          (self.viewModel.onRerollEnabled, self.__onRerollEnabled),
          (self.viewModel.onClaimRewards, self.__onClaimRewards),
          (self.viewModel.winbackProgression.onTakeReward, self.__onTakeReward),
+         (self.viewModel.onNewYearIntroClosed, self.__onNewYearIntroClosed),
          (self.eventsCache.onSyncCompleted, self._onSyncCompleted),
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged),
@@ -421,6 +435,36 @@ class DailyQuestsView(ViewImpl):
 
     def __onRerollEnabled(self):
         self.viewModel.dailyQuests.setRerollCountDown(0)
+
+    def __onNewYearIntroClosed(self):
+        self.viewModel.setIsNewYearIntroVisible(False)
+        AccountSettings.setUIFlag(NY_DAILY_QUESTS_VISITED, True)
+
+    def __addListeners(self):
+        self.viewModel.onBuyPremiumBtnClick += self.__onBuyPremiumBtn
+        self.viewModel.onTabClick += self.__onTabClick
+        self.viewModel.onInfoToggle += self.__onInfoToggle
+        self.viewModel.onClose += self.__onCloseView
+        self.viewModel.onReroll += self.__onReRoll
+        self.viewModel.onRerollEnabled += self.__onRerollEnabled
+        self.viewModel.onNewYearIntroClosed += self.__onNewYearIntroClosed
+        self.eventsCache.onSyncCompleted += self._onSyncCompleted
+        self.gameSession.onPremiumTypeChanged += self._onPremiumTypeChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChanged
+        self.__nyController.onStateChanged += self.__onNYStateChanged
+
+    def __removeListeners(self):
+        self.viewModel.onBuyPremiumBtnClick -= self.__onBuyPremiumBtn
+        self.viewModel.onTabClick -= self.__onTabClick
+        self.viewModel.onInfoToggle -= self.__onInfoToggle
+        self.viewModel.onClose -= self.__onCloseView
+        self.viewModel.onReroll -= self.__onReRoll
+        self.viewModel.onRerollEnabled -= self.__onRerollEnabled
+        self.viewModel.onNewYearIntroClosed -= self.__onNewYearIntroClosed
+        self.eventsCache.onSyncCompleted -= self._onSyncCompleted
+        self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChanged
+        self.__nyController.onStateChanged -= self.__onNYStateChanged
 
     def __updateQuestsInModel(self, questsInModelToUpdate, sortedNewQuests):
         _logger.debug('DailyQuestsView::__updateQuestsInModel')
@@ -629,3 +673,8 @@ class DailyQuestsView(ViewImpl):
         else:
             winbackOffer = WinbackSelectableRewardManager.getBonusOffer(selectableBonus)
             return max(0, min(winbackOffer.expiration - time_utils.getServerUTCTime(), ONE_MONTH)) if winbackOffer and self.__winbackController.isEnabled() and not self.__winbackController.isProgressionAvailable() else 0
+
+    def __onNYStateChanged(self, *args):
+        with self.viewModel.transaction() as model:
+            model.setIsNewYearAvailable(self.__nyController.isEnabled() and self.__hasNYResourcesReward)
+            model.setIsNewYearIntroVisible(not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED) and self.__nyController.isEnabled() and self.__hasNYResourcesReward)

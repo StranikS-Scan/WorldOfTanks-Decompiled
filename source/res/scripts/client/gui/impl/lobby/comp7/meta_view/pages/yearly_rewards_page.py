@@ -94,10 +94,8 @@ class YearlyRewardsPage(PageSubModelPresenter):
             self.__setCards(tx)
 
     def __setCommonData(self, model):
-        cacheIsSynced = self.__comp7Controller.entitlementsCache.isSynced
-        model.setHasDataError(not cacheIsSynced)
-        if not cacheIsSynced:
-            self.__comp7Controller.entitlementsCache.reloadSeasonPoints(self.__onSeasonPointsReloaded)
+        receivedSeasonPoints = self.__comp7Controller.getReceivedSeasonPoints()
+        model.setHasDataError(not receivedSeasonPoints)
         model.setSeasonPointsReceived(self.__areLastSeasonPointsReceived())
         if self.__comp7Controller.isAvailable() and not self.__comp7Controller.isQualificationActive():
             model.setCurrentRank(comp7_shared.getRankEnumValue(comp7_shared.getPlayerDivision()))

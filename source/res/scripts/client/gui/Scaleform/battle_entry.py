@@ -15,8 +15,7 @@ from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
-from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager
 from gui.Scaleform.managers.ColorSchemeManager import BattleColorSchemeManager
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
@@ -56,9 +55,6 @@ class TopWindowContainer(PopUpContainer):
             self.__app.leaveGuiControlMode(pyView.uniqueName)
         return result
 
-
-BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('minimapAlphaEnabled', True),
- BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting()}
 
 class BattleEntry(AppEntry):
 
@@ -159,7 +155,7 @@ class BattleEntry(AppEntry):
         return TweenManager()
 
     def _createGraphicsOptimizationManager(self):
-        return GraphicsOptimizationManager(config=BATTLE_OPTIMIZATION_CONFIG)
+        return GraphicsOptimizationManager()
 
     def _setup(self):
         self.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT

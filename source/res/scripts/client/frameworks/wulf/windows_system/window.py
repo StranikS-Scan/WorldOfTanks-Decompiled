@@ -94,10 +94,11 @@ class WindowSettings(object):
 
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__')
+    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__')
 
     def __init__(self, settings):
-        settings.name = self.getName()
+        if not settings.name:
+            settings.name = self.getName()
         super(Window, self).__init__(PyObjectWindow(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus
@@ -107,6 +108,8 @@ class Window(PyObjectEntity):
         self.__isReady = False
         self.__isFocused = False
         self.onFocusChanged = Event.Event()
+        self.onSizeChanged = Event.Event()
+        self.onPositionChanged = Event.Event()
         _logger.debug('Creating %r with %r', self, settings)
         return
 
@@ -233,6 +236,9 @@ class Window(PyObjectEntity):
     def isHidden(self):
         return self.proxy.isHidden()
 
+    def canBeClosed(self):
+        return self.content.canBeClosed() if self.content is not None else True
+
     def _getDecoratorViewModel(self):
         decorator = self.decorator
         return decorator.getViewModel() if decorator is not None else None
@@ -309,6 +315,13 @@ class Window(PyObjectEntity):
         self.__isFocused = focused
         self._onFocus(focused)
         self.onFocusChanged(focused)
+
+    def _cResized(self, width, height):
+        _logger.debug('Size changed to %d %d for %r', width, height, self)
+        self.onSizeChanged(self.uniqueID, width, height)
+
+    def _cPositionChanged(self, x, y):
+        self.onPositionChanged(self.uniqueID, x, y)
 
     def __attachToDecorator(self):
         decorator = self.decorator

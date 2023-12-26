@@ -18,6 +18,7 @@ from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers.advent_calendar_v2 import AdventCalendarManager
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -186,6 +187,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell = g_accountRepository.resourceWell
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
+        self.adventCalendarV2 = g_accountRepository.adventCalendarV2
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -1483,6 +1485,7 @@ class _AccountRepository(object):
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
+        self.adventCalendarV2 = AdventCalendarManager(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

@@ -25,6 +25,7 @@ from gui.integrated_auction.constants import AUCTION_FINISH_STAGE_SEEN, AUCTION_
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from items.components.ny_constants import YEARS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -88,6 +89,10 @@ BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
+LAST_LOGGED_SERVER_DAY = 'lastLoggedServerDay'
+LAST_SEEN_COLLECTING_NOTIFY_TIME = 'lastSeenCollectingNotifyTime'
+LAST_SEEN_FRIENDS_NOTIFY_TIME = 'lastSeenFriendsNotifyTime'
+LAST_SEEN_NO_FRIENDS_NOTIFY_TIME = 'lastSeenNoFriendsNotifyTime'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -230,6 +235,18 @@ FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS = 'funRandomNotificationsProgressions'
 FUN_RANDOM_NOTIFICATIONS_SUB_MODES = 'funRandomNotificationsSubModes'
 LOOT_BOXES = 'lootBoxes'
 EVENT_LOOT_BOXES = 'eventLootBoxes'
+NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
+NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
+NY_OLD_COLLECTIONS_BY_YEAR_VISITED = 'NYOldCollectionsByYearVisited'
+NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
+NY_GIFT_MACHINE_BUY_TOKEN_VISITED = 'NYGiftMachineBuyTokenVisited'
+NY_SACK_INFO_VISITED = 'NYSackInfoVisited'
+NY_SACK_INFO_LAST_SELECTED = 'NYSackInfoLastSelected'
+NY_RESOURCE_COLLECTING_AVAILABLE = 'NYResourceCollectingAvailable'
+NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE = 'NYResourceFriendsCollectingAvailable'
+ADVENT_CALENDAR_NOTIFICATION_SHOWED = 'AdventCalendarNotificationShowed'
+ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED = 'AdventCalendarPostEventNotificationShowed'
+ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN = 'AdventCalendarLastDayPopupSeen'
 LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
 LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
@@ -265,6 +282,7 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
+ADVENT_CALENDAR_V2_ANIMATION_LAST_SHOWN_DOOR = 'adventV2DoorAnimationShown'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -274,6 +292,9 @@ class BattleMatters(object):
     REMINDER_LAST_DISPLAY_TIME = 'reminderLastDisplayTime'
 
 
+NY_CELEBRITY_DAY_QUESTS_VISITED_MASK = 'NYCelebrityDayQuestsVisitedMask'
+NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK = 'NYCelebrityDayQuestsCompletedMask'
+
 class Winback(object):
     WINBACK_SETTINGS = 'winbackSettings'
     COMPLETED_STARTING_QUEST_COUNT = 'completedStartingQuestCount'
@@ -281,6 +302,20 @@ class Winback(object):
     BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN = 'battleSelectorSettingsBulletShown'
 
 
+NY_CELEBRITY_ADD_QUESTS_VISITED_MASK = 'NYCelebrityAddQuestsVisitedMask'
+NY_CELEBRITY_ADD_QUESTS_COMPLETED_MASK = 'NYCelebrityAddQuestsCompletedMask'
+NY_GUEST_ACTIVITY_SHOWN = 'NYGuestActivityShown'
+NY_MAX_LEVEL_MESSAGE_CLOSE = 'NYMaxLevelMessageClose'
+NY_DOG_INFO_VISITED = 'NYDogInfoVisited'
+NY_DOG_PAGE_VISITED = 'NYDogPageVisited'
+NY_NARKET_PLACE_PAGE_VISITED = 'NYMarketPlaceVisited'
+NY_CAT_PAGE_VISITED = 'NYCatPageVisited'
+NY_FRIENDS_BANNER_SHOWN = 'NYFriendsBannerShown'
+NY_HAS_BEST_FRIENDS = 'NYHasBestFriends'
+NY_FRIENDS_RESOURCES_COLLECT_DAY = 'NYFriendsResourcesCollectDay'
+NY_INTRO_SHOWN = 'NYIntroShown'
+NY_NO_FRIENDS_PAGE_RESET_TIME = 'NYNoFriendsPageResetTime'
+NY_REWARD_KIT_OPEN = 'NYRewardKitOpen'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -516,6 +551,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'favorite': False,
                                               'bonus': False,
                                               'crystals': False,
+                                              'newYear': False,
                                               'role_HT_assault': False,
                                               'role_HT_break': False,
                                               'role_HT_support': False,
@@ -577,6 +613,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False,
                                           'crystals': False,
+                                          'newYear': False,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_support': False,
@@ -970,6 +1007,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'contentType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
+                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         BattleCommStorageKeys.SHOW_LOCATION_MARKERS: True,
                                                         GAME.DISPLAY_PLATOON_MEMBERS: True,
@@ -1123,6 +1161,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
+                LAST_LOGGED_SERVER_DAY: 0,
+                LAST_SEEN_COLLECTING_NOTIFY_TIME: -1,
+                LAST_SEEN_FRIENDS_NOTIFY_TIME: -1,
+                LAST_SEEN_NO_FRIENDS_NOTIFY_TIME: -1,
                 ACHIEVEMENTS_INFO: {ACHIEVEMENTS_WTR_RANKS: {},
                                     ACHIEVEMENTS_INITIAL_BATTLE_COUNT: -1,
                                     ACHIEVEMENTS_MAX_WTR_POINTS: 0,
@@ -1301,7 +1343,42 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'uiSpamVisited_PersonalReservesHangarHint': False,
                 'uiSpamVisited_ModernizedSetupTabHint': False,
                 'uiSpamVisited_OfferBannerWindow': False,
-                'uiSpamVisited_StrongholdView': False}}
+                'uiSpamVisited_StrongholdView': False,
+                NY_DAILY_QUESTS_VISITED: False,
+                NY_BONUS_DAILY_QUEST_VISITED: False,
+                NY_CELEBRITY_DAY_QUESTS_VISITED_MASK: 0,
+                NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK: 0,
+                NY_CELEBRITY_ADD_QUESTS_VISITED_MASK: 0,
+                NY_CELEBRITY_ADD_QUESTS_COMPLETED_MASK: 0,
+                NY_GUEST_ACTIVITY_SHOWN: False,
+                NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {YEARS.YEAR18: False,
+                                                     YEARS.YEAR19: False,
+                                                     YEARS.YEAR20: False,
+                                                     YEARS.YEAR21: False},
+                NY_OLD_REWARDS_BY_YEAR_VISITED: {YEARS.YEAR18: False,
+                                                 YEARS.YEAR19: False,
+                                                 YEARS.YEAR20: False,
+                                                 YEARS.YEAR21: False},
+                NY_GIFT_MACHINE_BUY_TOKEN_VISITED: False,
+                NY_MAX_LEVEL_MESSAGE_CLOSE: False,
+                NY_DOG_INFO_VISITED: False,
+                NY_DOG_PAGE_VISITED: False,
+                NY_NARKET_PLACE_PAGE_VISITED: None,
+                NY_CAT_PAGE_VISITED: False,
+                NY_FRIENDS_BANNER_SHOWN: False,
+                NY_HAS_BEST_FRIENDS: False,
+                NY_FRIENDS_RESOURCES_COLLECT_DAY: 0,
+                NY_NO_FRIENDS_PAGE_RESET_TIME: 0,
+                NY_SACK_INFO_VISITED: False,
+                NY_SACK_INFO_LAST_SELECTED: 1,
+                NY_RESOURCE_COLLECTING_AVAILABLE: False,
+                ADVENT_CALENDAR_V2_ANIMATION_LAST_SHOWN_DOOR: 0,
+                ADVENT_CALENDAR_NOTIFICATION_SHOWED: False,
+                ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED: False,
+                ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN: 0,
+                NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE: False,
+                NY_INTRO_SHOWN: False,
+                NY_REWARD_KIT_OPEN: False}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1336,7 +1413,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 67
+    version = 70
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1973,6 +2050,84 @@ class AccountSettings(object):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if CREW_SKINS_VIEWED in accSettings.keys():
                         accSettings.deleteSection(CREW_SKINS_VIEWED)
+
+            if currVersion < 68:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
+                    if SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP in keySettings.keys():
+                        keySettings.write(SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, _pack(None))
+
+            if currVersion < 69:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    if NY_DAILY_QUESTS_VISITED in keySettings.keys():
+                        keySettings.write(NY_DAILY_QUESTS_VISITED, _pack(False))
+                    if NY_BONUS_DAILY_QUEST_VISITED in keySettings.keys():
+                        keySettings.write(NY_BONUS_DAILY_QUEST_VISITED, _pack(False))
+                    if NY_CELEBRITY_DAY_QUESTS_VISITED_MASK in keySettings.keys():
+                        keySettings.write(NY_CELEBRITY_DAY_QUESTS_VISITED_MASK, _pack(0))
+                    if NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK in keySettings.keys():
+                        keySettings.write(NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK, _pack(0))
+                    if NY_CELEBRITY_ADD_QUESTS_VISITED_MASK in keySettings.keys():
+                        keySettings.write(NY_CELEBRITY_ADD_QUESTS_VISITED_MASK, _pack(0))
+                    if NY_GUEST_ACTIVITY_SHOWN in keySettings.keys():
+                        keySettings.write(NY_GUEST_ACTIVITY_SHOWN, _pack(False))
+                    if NY_OLD_COLLECTIONS_BY_YEAR_VISITED in keySettings.keys():
+                        collections = {YEARS.YEAR18: False,
+                         YEARS.YEAR19: False,
+                         YEARS.YEAR20: False,
+                         YEARS.YEAR21: False}
+                        keySettings.write(NY_OLD_COLLECTIONS_BY_YEAR_VISITED, _pack(collections))
+                    if NY_OLD_REWARDS_BY_YEAR_VISITED in keySettings.keys():
+                        collections = {YEARS.YEAR18: False,
+                         YEARS.YEAR19: False,
+                         YEARS.YEAR20: False,
+                         YEARS.YEAR21: False}
+                        keySettings.write(NY_OLD_REWARDS_BY_YEAR_VISITED, _pack(collections))
+                    if NY_GIFT_MACHINE_BUY_TOKEN_VISITED in keySettings.keys():
+                        keySettings.write(NY_GIFT_MACHINE_BUY_TOKEN_VISITED, _pack(False))
+                    if NY_MAX_LEVEL_MESSAGE_CLOSE in keySettings.keys():
+                        keySettings.write(NY_MAX_LEVEL_MESSAGE_CLOSE, _pack(False))
+                    if NY_DOG_INFO_VISITED in keySettings.keys():
+                        keySettings.write(NY_DOG_INFO_VISITED, _pack(False))
+                    if NY_DOG_PAGE_VISITED in keySettings.keys():
+                        keySettings.write(NY_DOG_PAGE_VISITED, _pack(False))
+                    if NY_NARKET_PLACE_PAGE_VISITED in keySettings.keys():
+                        keySettings.write(NY_NARKET_PLACE_PAGE_VISITED, _pack(None))
+                    if NY_CAT_PAGE_VISITED in keySettings.keys():
+                        keySettings.write(NY_CAT_PAGE_VISITED, _pack(False))
+                    if NY_FRIENDS_BANNER_SHOWN in keySettings.keys():
+                        keySettings.write(NY_FRIENDS_BANNER_SHOWN, _pack(False))
+                    if NY_HAS_BEST_FRIENDS in keySettings.keys():
+                        keySettings.write(NY_HAS_BEST_FRIENDS, _pack(False))
+                    if NY_FRIENDS_RESOURCES_COLLECT_DAY in keySettings.keys():
+                        keySettings.write(NY_FRIENDS_RESOURCES_COLLECT_DAY, _pack(0))
+                    if NY_SACK_INFO_VISITED in keySettings.keys():
+                        keySettings.write(NY_SACK_INFO_VISITED, _pack(False))
+                    if NY_SACK_INFO_LAST_SELECTED in keySettings.keys():
+                        keySettings.write(NY_SACK_INFO_LAST_SELECTED, _pack(1))
+                    if NY_RESOURCE_COLLECTING_AVAILABLE in keySettings.keys():
+                        keySettings.write(NY_RESOURCE_COLLECTING_AVAILABLE, _pack(False))
+                    if NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE in keySettings.keys():
+                        keySettings.write(NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE, _pack(False))
+                    if NY_INTRO_SHOWN in keySettings.keys():
+                        keySettings.write(NY_INTRO_SHOWN, _pack(False))
+                    if NY_REWARD_KIT_OPEN in keySettings.keys():
+                        keySettings.write(NY_REWARD_KIT_OPEN, _pack(False))
+                    if NY_NO_FRIENDS_PAGE_RESET_TIME in keySettings.keys():
+                        keySettings.write(NY_NO_FRIENDS_PAGE_RESET_TIME, _pack(0))
+
+            if currVersion < 70:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    if ADVENT_CALENDAR_NOTIFICATION_SHOWED in keySettings.keys():
+                        keySettings.write(ADVENT_CALENDAR_NOTIFICATION_SHOWED, _pack(False))
+                    if ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED in keySettings.keys():
+                        keySettings.write(ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED, _pack(False))
+                    if ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN in keySettings.keys():
+                        keySettings.write(ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN, _pack(0))
+                    if ADVENT_CALENDAR_V2_ANIMATION_LAST_SHOWN_DOOR in keySettings.keys():
+                        keySettings.write(ADVENT_CALENDAR_V2_ANIMATION_LAST_SHOWN_DOOR, _pack(0))
 
             ads.writeInt('version', AccountSettings.version)
         return

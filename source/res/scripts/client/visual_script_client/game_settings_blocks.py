@@ -7,8 +7,11 @@ from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
 if not IS_VS_EDITOR:
+    import Windowing
+    from gui import InputHandler
     from helpers import dependency
     from skeletons.account_helpers.settings_core import ISettingsCore
+    from skeletons.gui.app_loader import IAppLoader
 
 class GameSettingsMeta(Meta):
 
@@ -79,3 +82,60 @@ class OnGameSettingsChanged(TunableEventBlock, GameSettingsMeta):
     @TunableEventBlock.eventProcessor
     def _callOutput(self, res):
         self._settings.setValue(res)
+
+
+class OnWindowAccessibilityChanged(Block, GameSettingsMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnWindowAccessibilityChanged, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._isAccessible = self._makeDataOutputSlot('isAccessible', SLOT_TYPE.BOOL, None)
+        return
+
+    def onStartScript(self):
+        Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
+
+    def onFinishScript(self):
+        Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
+
+    def _onWindowAccessibilityChanged(self, isWindowAccessible):
+        self._isAccessible.setValue(isWindowAccessible)
+        self._out.call()
+
+
+class HandleKeyEvent(Block, GameSettingsMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(HandleKeyEvent, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._key = self._makeDataOutputSlot('key', SLOT_TYPE.INT, None)
+        return
+
+    def onStartScript(self):
+        InputHandler.g_instance.onKeyDown += self._handleKeyEvent
+
+    def onFinishScript(self):
+        InputHandler.g_instance.onKeyDown -= self._handleKeyEvent
+
+    def _handleKeyEvent(self, event):
+        if event.isKeyDown():
+            self._key.setValue(event.key)
+            self._out.call()
+
+
+class ShowSimpleTooltip(Block, GameSettingsMeta):
+    __appLoader = dependency.descriptor(IAppLoader) if not IS_VS_EDITOR else None
+
+    def __init__(self, *args, **kwargs):
+        super(ShowSimpleTooltip, self).__init__(*args, **kwargs)
+        self._show = self._makeEventInputSlot('show', self._onShowSimpleTooltip)
+        self._hide = self._makeEventInputSlot('hide', self._onHideSimpleTooltip)
+        self._tooltipHeader = self._makeDataInputSlot('header', SLOT_TYPE.STR)
+        self._tooltipBody = self._makeDataInputSlot('body', SLOT_TYPE.STR)
+
+    def _onShowSimpleTooltip(self):
+        from gui.shared.utils.functions import makeTooltip
+        self.__appLoader.getApp().getToolTipMgr().onCreateComplexTooltip(makeTooltip(header=self._tooltipHeader.getValue(), body=self._tooltipBody.getValue()), 'INFO')
+
+    def _onHideSimpleTooltip(self):
+        self.__appLoader.getApp().getToolTipMgr().as_hideS()

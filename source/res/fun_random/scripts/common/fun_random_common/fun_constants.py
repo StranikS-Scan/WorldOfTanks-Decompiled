@@ -12,7 +12,8 @@ UNKNOWN_WWISE_REMAPPING = 'unknownRemapping'
 class FunSubModeImpl(object):
     DEV_TEST = 0
     DEFAULT = 1
-    ALL = (DEFAULT,) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
+    NEW_YEAR = 2
+    ALL = (DEFAULT, NEW_YEAR) + ((DEV_TEST,) if IS_DEVELOPMENT else ())
 
 
 class FunProgressionCondition(object):

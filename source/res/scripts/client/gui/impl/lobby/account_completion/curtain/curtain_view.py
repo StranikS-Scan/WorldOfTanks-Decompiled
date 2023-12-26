@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/account_completion/curtain/curtain_view.py
 import typing
 from bootcamp.Bootcamp import g_bootcamp
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import ViewSettings, WindowLayer
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.account_completion.curtain.curtain_view_model import CurtainViewModel, CurtainStateEnum
@@ -17,6 +17,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IOverlayController, IBootcampController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearTutorialController
 if typing.TYPE_CHECKING:
     from typing import Optional, Type, Dict
 _DYN_ACCESSOR = R.views.lobby.account_completion.CurtainView
@@ -24,6 +25,7 @@ _DYN_ACCESSOR = R.views.lobby.account_completion.CurtainView
 class CurtainView(ViewImpl, IGlobalListener):
     __slots__ = ('_subViews', '_activeSubView')
     _overlay = dependency.descriptor(IOverlayController)
+    _nyTutorController = dependency.descriptor(INewYearTutorialController)
 
     def __init__(self):
         settings = ViewSettings(_DYN_ACCESSOR())
@@ -61,6 +63,7 @@ class CurtainView(ViewImpl, IGlobalListener):
             self._activeSubView.onWaitingChanged -= self._waitingChangedHandler
             self._activeSubView = None
         self._overlay.setOverlayState(False)
+        self._nyTutorController.overlayStateChanged()
         super(CurtainView, self)._finalize()
         return
 
@@ -170,7 +173,7 @@ class CurtainWindow(LobbyWindow):
 
     def __init__(self):
         view = BootcampCurtainView() if self.bootcampController.isInBootcampAccount() else CurtainView()
-        super(CurtainWindow, self).__init__(wndFlags=DialogFlags.TOP_FULLSCREEN_WINDOW, content=view)
+        super(CurtainWindow, self).__init__(wndFlags=DialogFlags.TOP_FULLSCREEN_WINDOW, content=view, layer=WindowLayer.OVERLAY)
 
     @property
     def content(self):

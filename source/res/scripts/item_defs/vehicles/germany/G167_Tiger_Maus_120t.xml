@@ -13,7 +13,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	32	</forward>
-    <backward>	15	</backward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.025	</moving>
@@ -45,7 +45,7 @@
   <hull>
     <armor>
       <armor_1>	200	</armor_1>
-      <armor_2>	140	</armor_2>
+      <armor_2>	130	</armor_2>
       <armor_3>	120	</armor_3>
       <armor_4>	100	</armor_4>
       <armor_5>	40	</armor_5>
@@ -701,8 +701,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1763,8 +1763,8 @@
         <armor_7>	50	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	150	</armor_9>
-        <armor_10>	200	</armor_10>
-        <armor_11>	75	</armor_11>
+        <armor_10>	185	</armor_10>
+        <armor_11>	70	</armor_11>
         <armor_12>	100	</armor_12>
         <armor_13>	50	</armor_13>
         <armor_14>	60	</armor_14>
@@ -1801,13 +1801,13 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-          <reloadTime>	16	</reloadTime>
+          <reloadTime>	15.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.4	</aimingTime>
           <armor>
             <armor_1>	310	  <vehicleDamageFactor>	0	</vehicleDamageFactor>

@@ -24,6 +24,7 @@ class VehicleShowcaseStyleBuyingPreview(VehicleStylePreview):
         self.__discountPercent = ctx.get('discountPercent')
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
+        self.__obtainingMethod = ctx.get('obtainingMethod')
 
     def setBottomPanel(self, linkage=None):
         self.as_setBottomPanelS(linkage)
@@ -31,7 +32,7 @@ class VehicleShowcaseStyleBuyingPreview(VehicleStylePreview):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehicleShowcaseStyleBuyingPreview, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_PY_ALIAS:
-            viewPy.setData(self.__style, self.__price, self.__endTime, self.__originalPrice, self.__buyParams, self.__discountPercent)
+            viewPy.setData(self.__style, self.__price, self.__endTime, self.__originalPrice, self.__buyParams, self.__discountPercent, self.__obtainingMethod)
             viewPy.update()
 
     def _populate(self):

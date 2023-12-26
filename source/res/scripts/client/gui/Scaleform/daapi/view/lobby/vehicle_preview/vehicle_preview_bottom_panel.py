@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants import getHeroTankPreviewParams
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.preview_bottom_panel_constants import ObtainingMethodInfo, ObtainingMethods, getItemPackObtainingInfo
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_dp import DefaultVehPreviewDataProvider
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelMeta import VehiclePreviewBottomPanelMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -49,6 +50,7 @@ from skeletons.gui.game_control import ICalendarController, IExternalLinksContro
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 from uilogging.shop.loggers import ShopBundleVehiclePreviewMetricsLogger
 from web.web_client_api.common import ItemPackEntry, ItemPackTypeGroup
 _ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'icon', 'iconAlign', 'isAction', 'actionTooltip', 'tooltip', 'title', 'isMoneyEnough', 'isUnlock', 'isPrevItemsUnlock', 'customOffer', 'isShowSpecial'))
@@ -131,6 +133,9 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         self.__endTime = None
         self.__oldPrice = MONEY_UNDEFINED
         self.__buyParams = None
+        self.__obtainingInfo = getItemPackObtainingInfo(ObtainingMethods.BUY.value)
+        if not self.__obtainingInfo:
+            raise SoftException('obtainingMethod: %s is not supported' % ObtainingMethods.BUY.value)
         self.__backAlias = None
         self.__backCallback = None
         self.__timeCallbackID = None
@@ -193,6 +198,11 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
 
     def setBuyParams(self, buyParams):
         self.__buyParams = buyParams
+
+    def setObtainingInfo(self, obtainingMethod):
+        self.__obtainingInfo = getItemPackObtainingInfo(obtainingMethod)
+        if not self.__obtainingInfo:
+            raise SoftException('obtainingMethod: %s is not supported' % obtainingMethod)
 
     def setBundlePreviewMetricsLogger(self, bundlePreviewMetricsLogger):
         if isinstance(bundlePreviewMetricsLogger, ShopBundleVehiclePreviewMetricsLogger):
@@ -340,6 +350,8 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         key = 'buyConfirmation'
         if self.__isReferralWindow():
             key = 'referralReward'
+        if self.__items:
+            key = self.__obtainingInfo.confirmation_key
         return key
 
     def __buyRequestConfirmation(self, key='buyConfirmation'):
@@ -455,7 +467,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             buyButtonTooltip = buttonData['btnTooltip']
             customOffer = buttonData['customOffer']
         elif self.__items and self.__couponInfo is None:
-            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
+            buttonLabel = backport.text(self.__obtainingInfo.btn_label)
         elif self.__offers and self.__currentOffer:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
             currentOffer = self.__currentOffer

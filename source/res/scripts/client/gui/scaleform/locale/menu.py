@@ -254,6 +254,9 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
+    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
+    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
+    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -1810,6 +1813,7 @@ class MENU(object):
     DATETIME_MONTHS_SHORT_11 = '#menu:dateTime/months/short/11'
     DATETIME_MONTHS_SHORT_12 = '#menu:dateTime/months/short/12'
     DATETIME_SHORTDATEFORMATWITHOUTYEAR = '#menu:dateTime/shortDateFormatWithoutYear'
+    DATETIME_DATEMONTH = '#menu:dateTime/dateMonth'
     VALIDATION_PUBLICINFO_ABBREV_INVALID = '#menu:validation/publicInfo/abbrev/invalid'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_CN = '#menu:validation/publicInfo/abbrev/invalid/CN'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_KR = '#menu:validation/publicInfo/abbrev/invalid/KR'
@@ -2406,6 +2410,9 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
+     TANKCAROUSEL_VEHICLESTATES_NYTANK,
+     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
+     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,

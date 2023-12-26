@@ -6,6 +6,7 @@ from shared_utils import CONST_CONTAINER
 
 class StatesGroup(CONST_CONTAINER):
     HANGAR_FILTERED = 'STATE_hangar_filtered'
+    HANGAR_PLACE = 'STATE_hangar_place'
     BOOTCAMP_ARENA_FILTERED = 'STATE_bootcamp_arena_filtered'
     HANGAR_PLACE_BATTLE_PASS = 'STATE_hangar_place_battle_pass'
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
@@ -23,6 +24,7 @@ class States(CONST_CONTAINER):
     HANGAR_FILTERED_OFF = _OFF_PATTERN.format(StatesGroup.HANGAR_FILTERED)
     VIDEO_OVERLAY_ON = _ON_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
     VIDEO_OVERLAY_OFF = _OFF_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
+    HANGAR_PLACE_GARAGE = 'STATE_hangar_place_garage'
     HANGAR_PLACE_TASKS_DAILY = 'STATE_hangar_place_tasks_daily'
     HANGAR_PLACE_TASKS_MISSIONS = 'STATE_hangar_place_tasks_missions'
     HANGAR_PLACE_TASKS_BATTLE_PASS = 'STATE_hangar_place_tasks_battle_pass'

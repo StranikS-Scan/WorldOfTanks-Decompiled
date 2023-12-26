@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
-from battle_pass_common import BattlePassConsts
+from account_helpers.settings_core.settings_constants import NewYearStorageKeys
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
@@ -14,16 +14,22 @@ from gui.impl.pub.notification_commands import WindowNotificationCommand, EventN
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
+from gui.server_events.events_helpers import isCelebrityQuest
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
 from gui.shared.events import PersonalMissionsEvent
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from helpers import dependency
-from shared_utils import first
+from gui.impl.new_year.navigation import ViewAliases
+from new_year.ny_navigation_helper import switchNewYearView
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from shared_utils import first
+from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
@@ -73,6 +79,7 @@ _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWi
  recruit_helper.RecruitSourceID.TWITCH_44: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_45: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_46: TwitchRewardWindow,
+ recruit_helper.RecruitSourceID.TWITCH_47: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_MARINA: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.COMMANDER_PATRICK: TwitchRewardWindow,
  anniversary_helper.ANNIVERSARY_EVENT_PREFIX: GiveAwayRewardWindow}
@@ -236,12 +243,21 @@ def showMission(eventID, eventType=None):
         itemIntCD, vehicleIntCD = parseEventID(eventID)
         service = dependency.instance(ICustomizationService)
         vehicle = service.getItemByCD(vehicleIntCD)
-        service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
+        service.showCustomization(vehicle.invID, callback=lambda : showProgressiveItemsView(itemIntCD))
         return
     elif isC11nQuest(eventID):
         service = dependency.instance(ICustomizationService)
         from gui.customization.constants import CustomizationModes
         service.showCustomization(modeId=CustomizationModes.STYLED)
+        return
+    elif isCelebrityQuest(eventID):
+        from gui.impl.gen.view_models.views.lobby.new_year.ny_constants import TutorialStates
+        from new_year.ny_constants import NYObjects
+        settingsCore = dependency.instance(ISettingsCore)
+        if settingsCore.serverSettings.getNewYearStorage().get(NewYearStorageKeys.TUTORIAL_STATE, TutorialStates.INTRO) < TutorialStates.FINISHED:
+            switchNewYearView(NYObjects.TOWN, ViewAliases.GLADE_VIEW, instantly=True)
+        else:
+            switchNewYearView(NYObjects.CHALLENGE, ViewAliases.CELEBRITY_VIEW, instantly=True)
         return
     else:
         eventsCache = dependency.instance(IEventsCache)
@@ -339,6 +355,8 @@ def showMissionAward(quest, ctx):
             lootboxes = getLootboxesFromBonuses(bonuses)
             if lootboxes:
                 for lootboxId, lootboxInfo in lootboxes.iteritems():
+                    if lootboxId in NewYearLootBoxes.ALL():
+                        continue
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:

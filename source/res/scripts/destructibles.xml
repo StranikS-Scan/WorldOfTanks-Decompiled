@@ -193,6 +193,16 @@
       <touchdownEffect>	tree_Birch_Bold_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_bush_large_01.srt	</filename>
+      <health>	5	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Birch_Dry_2m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Birch_Dry_2m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_17m.srt	</filename>
       <health>	40	</health>
       <density>	0.25	</density>
@@ -441,6 +451,16 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_Apple_8m_Classic_fall	</fractureEffect>
       <touchdownEffect>	tree_Apple_8m_Classic_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Apple_Frost/Apple_Frost_8m_Classic_Dry.srt	</filename>
+      <health>	15	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_deadtree_fall	</fractureEffect>
+      <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Apple/Apple_8m_Classic_Dry.srt	</filename>
@@ -806,6 +826,16 @@
       <filename>	vegetation/Broadleaves/DryTree_Frost/DryTree_Frost_Bush_var1.srt	</filename>
       <health>	3	</health>
       <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_bush_dry_fall	</fractureEffect>
+      <touchdownEffect>	inf_tree_bush_dry_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Shrubs/Swamp_Reed_Frost/Swamp_Reed_Frost_Bush.srt	</filename>
+      <health>	3	</health>
+      <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
@@ -1274,6 +1304,16 @@
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Oak_dry_moss/Oak_dry_moss_20m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_oak_dry_fall_med	</fractureEffect>
+      <touchdownEffect>	inf_tree_oak_dry_touchdown_med	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Oak_Dry_Frost/Oak_Dry_Frost_20m.srt	</filename>
       <health>	30	</health>
       <density>	0.25	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3053,6 +3093,26 @@
       <touchdownEffect>	inf_tree_scots_pine_touchdown_big	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_hv3_0.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_hv3_3.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_22m.srt	</filename>
       <health>	60	</health>
       <density>	0.5	</density>
@@ -3083,6 +3143,16 @@
       <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Scots_Pine_Frost_Branch/Scots_Pine_Frost_Branch_22m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	inf_tree_scots_pine_frost_fall_big	</fractureEffect>
+      <touchdownEffect>	inf_tree_scots_pine_frost_touchdown_big	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Pine_Young/Pine_Young_4m.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
@@ -3104,6 +3174,16 @@
     </entry>
     <entry>
       <filename>	vegetation/Conifers/Pine_Young/Pine_Young_almoust_2m_Brr.srt	</filename>
+      <health>	10	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_pine_young_fall_small	</fractureEffect>
+      <touchdownEffect>	tree_pine_young_touchdown_small	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Pine_Young_Frost/Pine_Young_Frost_3m.srt	</filename>
       <health>	10	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
@@ -3273,6 +3353,16 @@
       <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_24m_Rare.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_33m_Ragged.srt	</filename>
       <health>	30	</health>
       <density>	0.5	</density>
@@ -3285,6 +3375,56 @@
     <entry>
       <filename>	vegetation/Conifers/Spruce_Snow/Spruce_Snow_33m_Ragged_Top.srt	</filename>
       <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_8m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_Dry_Bottom_10m.srt	</filename>
+      <health>	30	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_24m.srt	</filename>
+      <health>	60	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_33m.srt	</filename>
+      <health>	90	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Frost/Spruce_Frost_ragged_top_33m.srt	</filename>
+      <health>	90	</health>
       <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
@@ -3973,6 +4113,36 @@
       <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_24m.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_33m_Ragged.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_24m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_24m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Conifers/Spruce_Snow_Arctic_AO/Spruce_Snow_Arctic_AO_8m.srt	</filename>
+      <health>	40	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Spruce_Frost_8m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Spruce_Frost_8m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Scaevola_Taccada/Scaevola_Taccada_3.5m.srt	</filename>
       <health>	3	</health>
       <density>	0.5	</density>
@@ -4108,6 +4278,15 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	none	</fractureEffect>
       <touchdownEffect>	none	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/DryTree_Frost/DryTree_Frost_01.srt	</filename>
+      <health>	40	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	tree_Birch_Dry_Frost_17m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Birch_Dry_Frost_17m_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/DryTree_Frost_Light/DryTree_Frost_Light_01.srt	</filename>

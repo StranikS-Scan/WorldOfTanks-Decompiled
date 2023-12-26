@@ -44,10 +44,12 @@ class HeroTankController(IHeroTankController):
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateInventoryVehiclesData
         g_eventBus.addListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
+        self.__isEnabled = True
 
     def fini(self):
         g_eventBus.removeListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
         self.itemsCache.onSyncCompleted -= self.__updateInventoryVehiclesData
+        self.__isEnabled = False
 
     def __onEventsCacheSyncCompleted(self, *_):
         self.__applyActions()
@@ -64,7 +66,11 @@ class HeroTankController(IHeroTankController):
         self._eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
 
     def isEnabled(self):
-        return self.__isEnabled and not self.bootcampController.isInBootcamp()
+        return self.__isEnabled and bool(self.__data) and not self.bootcampController.isInBootcamp()
+
+    def setEnabled(self, enabled):
+        self.__isEnabled = enabled
+        self.onUpdated()
 
     def hasAdventHero(self):
         return self.__actionInfo is not None and self.__actionInfo.isEnabled
@@ -154,7 +160,6 @@ class HeroTankController(IHeroTankController):
                 self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), shopUrl=vData.get('shopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
 
         self.__applyActions()
-        self.__isEnabled = bool(self.__data)
         self.onUpdated()
 
     def __applyActions(self):

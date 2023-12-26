@@ -46,6 +46,15 @@ class NotRecruitedTankmanTooltipBuilder(DataBuilder):
         return super(NotRecruitedTankmanTooltipBuilder, self)._buildData(_advanced, invID)
 
 
+class AdventCalendarNotRecruitedTankmanTooltipBuilder(DataBuilder):
+
+    def __init__(self, tooltipType, linkage):
+        super(AdventCalendarNotRecruitedTankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.AdventCalendarNotRecruitedTooltipData(contexts.NotRecruitedTankmanContext()))
+
+    def _buildData(self, _advanced, invID, state, doorsToOpenAmount, *args, **kwargs):
+        return super(AdventCalendarNotRecruitedTankmanTooltipBuilder, self)._buildData(_advanced, invID, state, doorsToOpenAmount)
+
+
 class CrewPerkTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -107,5 +116,6 @@ def getTooltipBuilders():
     return (NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      BattleRoyaleTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.CREW_PERK_GF, None, CrewPerkTooltipData(contexts.ToolTipContext(None)), CrewPerkTooltipDataAdditional(contexts.ToolTipContext(None)), condition=_advancedPerkCondition),
+     AdventCalendarNotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.ADVENT_CALENDAR_TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.COMMANDER_BONUS, None, CommanderBonusTooltipData(contexts.ToolTipContext(None)), CommanderBonusTooltipDataAdditional(contexts.ToolTipContext(None))),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.TANKMAN, None, TankmanTooltipData(contexts.TankmanHangarContext()), TankmanTooltipAdditional(contexts.TankmanHangarContext())))

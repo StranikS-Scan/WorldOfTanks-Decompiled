@@ -4,11 +4,13 @@ from gui.shared.event_dispatcher import showShop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from web.web_client_api import webApiCollection
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.ny20 import NYLootBoxWebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.loot_boxes import LootBoxWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
 from web.web_client_api.request import RequestWebApi
+from web.web_client_api.seniority_awards import SeniorityAwardsWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.hero_tank import HeroTankWebApi
@@ -34,4 +36,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, LootBoxWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, NYLootBoxWebApi, UILoggingWebApi, SeniorityAwardsWebApi)

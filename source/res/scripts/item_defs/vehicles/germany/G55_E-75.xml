@@ -68,6 +68,11 @@
           <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Hull.model	</exploded>
         </G55_E75_3DSt_NEx>
+        <G55_E-75_MDXXIII4_3DSt>
+          <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Hull.model	</exploded>
+        </G55_E-75_MDXXIII4_3DSt>
       </sets>
     </models>
     <swinging>
@@ -1201,6 +1206,11 @@
             <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</exploded>
           </G55_E75_3DSt_NEx>
+          <G55_E-75_MDXXIII4_3DSt>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G55_E-75_MDXXIII4_3DSt>
         </sets>
       </models>
       <traces>
@@ -1635,6 +1645,12 @@
               <segment2ModelLeft>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
               <segment2ModelRight>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
             </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <segmentModelLeft>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_R.model	</segment2ModelRight>
+            </G55_E-75_MDXXIII4_3DSt>
           </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
@@ -1643,7 +1659,7 @@
         <left>
           <segmentsCount>	92	</segmentsCount>
           <segmentsOuterThickness>	0.109177	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.007457	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.00001	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.442	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -1672,6 +1688,10 @@
               <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_L.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
             </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_L.model	</secSegmentModel>
+            </G55_E-75_MDXXIII4_3DSt>
           </modelSets>
           <collisionHull>
             <bottom></bottom>
@@ -1724,7 +1744,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L1	</name>
-              <radius>	0.340833	</radius>
+              <radius>	0.335	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
@@ -1838,7 +1858,7 @@
         <right>
           <segmentsCount>	92	</segmentsCount>
           <segmentsOuterThickness>	0.109177	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.007457	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.00001	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.442	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -1867,6 +1887,10 @@
               <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_R.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
             </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_R.model	</secSegmentModel>
+            </G55_E-75_MDXXIII4_3DSt>
           </modelSets>
           <collisionHull>
             <bottom></bottom>
@@ -1919,7 +1943,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R1	</name>
-              <radius>	0.340832	</radius>
+              <radius>	0.335	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
@@ -2086,6 +2110,11 @@
             <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Chassis.model	</exploded>
           </G55_E75_3DSt_NEx>
+          <G55_E-75_MDXXIII4_3DSt>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G55_E-75_MDXXIII4_3DSt>
         </sets>
       </models>
       <traces>
@@ -2353,7 +2382,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	1.95	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.136	</offset>
+          <offset>	-0.13	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -2412,6 +2441,22 @@
         </node>
         <node>
           <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
@@ -2423,7 +2468,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	1.95	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.136	</offset>
+          <offset>	-0.13	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -2480,22 +2525,6 @@
           <offset>	-0.081	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
         </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-        </node>
       </trackNodes>
       <splineDesc>
         <trackPair>
@@ -2513,14 +2542,28 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G55_E75_3DSt_NEx>
+              <segmentModelLeft>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
+            </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <segmentModelLeft>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_R.model	</segment2ModelRight>
+            </G55_E-75_MDXXIII4_3DSt>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
       <physicalTracks>
         <left>
           <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.109168	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.007448	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.109177	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.0001	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.442	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -2538,19 +2581,29 @@
           </springsLength>
           <mainSegment>
             <model>	vehicles/german/G55_E-75/track/segment_L.model	</model>
-            <length>	0.159044	</length>
+            <length>	0.157704	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G55_E-75/track/segment2_L.model	</model>
-            <length>	0.159667	</length>
+            <length>	0.158774	</length>
           </secSegment>
+          <modelSets>
+            <G55_E75_3DSt_NEx>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
+            </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_L.model	</secSegmentModel>
+            </G55_E-75_MDXXIII4_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
               <part>
-                <xStart>	-3.2237	</xStart>
-                <xStep>	0.079522	</xStep>
-                <ySamples>	1.03321 1.05868 1.06286 1.07039 1.07406 1.07774 1.08142 1.08509 1.08877 1.09245 1.09612 1.0998 1.10348 1.10754 1.11253 1.11752 1.13155 1.13608 1.13984 1.14361 1.14669 1.14877 1.15245 1.15613 1.16053 1.16562 1.17026 1.17403 1.17781 1.18158 1.18536 1.18913 1.1767 1.17824 1.18023 1.18343 1.18663 1.18983 1.19303 1.19623 1.19943 1.20263 1.20583 1.20904 1.21422 1.21906 1.22251 1.23463 1.24007 1.24551 1.25095 1.2564 1.26184 1.267 1.27061 1.27422 1.27783 1.28143 1.28504 1.28865 1.29225 1.29586 1.31522 1.31724 1.31927 1.3213 1.32333 1.32559 1.32881 1.33202 1.33524 1.33845 1.34167 1.34488 1.3481 1.35145 1.35544 1.35942 1.42751 1.38174 1.34252 1.29989	</ySamples>
+                <xStart>	-3.1703	</xStart>
+                <xStep>	0.078852	</xStep>
+                <ySamples>	1.0576 1.06088 1.06912 1.07276 1.07641 1.08005 1.0837 1.08735 1.09099 1.09464 1.09828 1.10193 1.10557 1.11035 1.11529 1.12024 1.13408 1.13807 1.1418 1.14553 1.14743 1.15059 1.15424 1.15788 1.16292 1.16797 1.17196 1.17571 1.17945 1.18319 1.18694 1.17579 1.17732 1.17885 1.18146 1.18463 1.18781 1.19098 1.19416 1.19733 1.2005 1.20368 1.20685 1.21054 1.21582 1.22007 1.22349 1.23613 1.24152 1.24692 1.25232 1.25771 1.26311 1.26782 1.27139 1.27497 1.27855 1.28212 1.2857 1.28928 1.29285 1.29643 1.31552 1.31753 1.31954 1.32155 1.32356 1.32594 1.32912 1.33231 1.3355 1.33869 1.34188 1.34506 1.34825 1.35161 1.35556 1.35951 1.42689 1.38144 1.34261 1.30035	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2570,36 +2623,36 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	2.69306 0.829474	</basePos>
-              <shiftVec>	0.415365 0.183308	</shiftVec>
+              <shiftVec>	0.411572 0.181084	</shiftVec>
               <jointIdx>	10	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L1	</wheelName>
               <basePos>	-2.81691 0.647266	</basePos>
-              <shiftVec>	-0.284801 0.196621	</shiftVec>
+              <shiftVec>	-0.28467 0.197828	</shiftVec>
               <jointIdx>	53	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L7	</wheelName>
-              <basePos>	-2.06328 0.498685	</basePos>
-              <shiftVec>	-0.032095 -0.401271	</shiftVec>
+              <basePos>	-2.06328 0.498686	</basePos>
+              <shiftVec>	-0.034921 -0.401025	</shiftVec>
               <jointIdx>	63	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
               <basePos>	2.06393 0.492532	</basePos>
-              <shiftVec>	0.097133 -0.390657	</shiftVec>
+              <shiftVec>	0.091579 -0.391987	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L1	</name>
-              <radius>	0.34016	</radius>
+              <radius>	0.335	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.449519	</radius>
+              <radius>	0.44517	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2607,100 +2660,100 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-3.02816	</startAngle>
+              <startAngle>	-9.29952	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-5.00778	</startAngle>
+              <startAngle>	-5.01505	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
             <top>
               <range>
-                <point>	1.72697 1.17742 -3.1703	</point>
-                <point>	1.72697 1.18071 -3.09145	</point>
-                <point>	1.72697 1.18894 -3.01259	</point>
-                <point>	1.72697 1.19259 -2.93374	</point>
-                <point>	1.72697 1.19623 -2.85489	</point>
-                <point>	1.72697 1.19988 -2.77604	</point>
-                <point>	1.72697 1.20352 -2.69719	</point>
-                <point>	1.72697 1.20717 -2.61833	</point>
-                <point>	1.72698 1.21081 -2.53948	</point>
-                <point>	1.72698 1.21446 -2.46063	</point>
-                <point>	1.72698 1.21811 -2.38178	</point>
-                <point>	1.72698 1.22175 -2.30293	</point>
-                <point>	1.72698 1.2254 -2.22407	</point>
-                <point>	1.72698 1.23017 -2.14522	</point>
-                <point>	1.72698 1.23512 -2.06637	</point>
-                <point>	1.72698 1.24006 -1.98752	</point>
-                <point>	1.72698 1.25391 -1.90867	</point>
-                <point>	1.72698 1.25789 -1.82981	</point>
-                <point>	1.72698 1.26162 -1.75096	</point>
-                <point>	1.72698 1.26536 -1.67211	</point>
-                <point>	1.72698 1.26725 -1.59326	</point>
-                <point>	1.72698 1.27041 -1.51441	</point>
-                <point>	1.72698 1.27406 -1.43555	</point>
-                <point>	1.72698 1.27771 -1.3567	</point>
-                <point>	1.72698 1.28274 -1.27785	</point>
-                <point>	1.72698 1.2878 -1.199	</point>
-                <point>	1.72698 1.29179 -1.12014	</point>
-                <point>	1.72698 1.29553 -1.04129	</point>
-                <point>	1.72698 1.29927 -0.962441	</point>
-                <point>	1.72698 1.30302 -0.883589	</point>
-                <point>	1.72698 1.30676 -0.804737	</point>
-                <point>	1.72698 1.29562 -0.725885	</point>
-                <point>	1.72698 1.29714 -0.647033	</point>
-                <point>	1.72698 1.29867 -0.568181	</point>
-                <point>	1.72698 1.30128 -0.489329	</point>
-                <point>	1.72698 1.30446 -0.410477	</point>
-                <point>	1.72698 1.30763 -0.331625	</point>
-                <point>	1.72698 1.3108 -0.252773	</point>
-                <point>	1.72698 1.31398 -0.17392	</point>
-                <point>	1.72698 1.31715 -0.095069	</point>
-                <point>	1.72698 1.32033 -0.016217	</point>
-                <point>	1.72698 1.3235 0.062635	</point>
-                <point>	1.72698 1.32668 0.141487	</point>
-                <point>	1.72698 1.33036 0.220339	</point>
-                <point>	1.72698 1.33564 0.299191	</point>
-                <point>	1.72698 1.3399 0.378043	</point>
-                <point>	1.72698 1.34332 0.456896	</point>
-                <point>	1.72698 1.35595 0.535747	</point>
-                <point>	1.72698 1.36135 0.614599	</point>
-                <point>	1.72698 1.36674 0.693452	</point>
-                <point>	1.72698 1.37214 0.772303	</point>
-                <point>	1.72698 1.37754 0.851155	</point>
-                <point>	1.72698 1.38293 0.930008	</point>
-                <point>	1.72698 1.38764 1.00886	</point>
-                <point>	1.72698 1.39122 1.08771	</point>
-                <point>	1.72698 1.39479 1.16656	</point>
-                <point>	1.72698 1.39837 1.24542	</point>
-                <point>	1.72698 1.40195 1.32427	</point>
-                <point>	1.72698 1.40552 1.40312	</point>
-                <point>	1.72698 1.4091 1.48197	</point>
-                <point>	1.72698 1.41268 1.56082	</point>
-                <point>	1.72698 1.41625 1.63968	</point>
-                <point>	1.72698 1.43534 1.71853	</point>
-                <point>	1.72698 1.43735 1.79738	</point>
-                <point>	1.72698 1.43936 1.87623	</point>
-                <point>	1.72698 1.44138 1.95508	</point>
-                <point>	1.72698 1.44339 2.03394	</point>
-                <point>	1.72698 1.44576 2.11279	</point>
-                <point>	1.72698 1.44895 2.19164	</point>
-                <point>	1.72698 1.45214 2.27049	</point>
-                <point>	1.72698 1.45532 2.34934	</point>
-                <point>	1.72698 1.45851 2.4282	</point>
-                <point>	1.72698 1.4617 2.50705	</point>
-                <point>	1.72698 1.46489 2.5859	</point>
-                <point>	1.72698 1.46808 2.66475	</point>
-                <point>	1.72698 1.47143 2.7436	</point>
-                <point>	1.72698 1.47539 2.82246	</point>
-                <point>	1.72698 1.47934 2.90131	</point>
-                <point>	1.50698 1.54672 2.98016	</point>
-                <point>	1.72698 1.50126 3.05901	</point>
-                <point>	1.50698 1.46244 3.13786	</point>
-                <point>	1.50698 1.42017 3.21672	</point>
+                <point>	-1.72697 1.17742 -3.1703	</point>
+                <point>	-1.72697 1.18071 -3.09145	</point>
+                <point>	-1.72697 1.18894 -3.01259	</point>
+                <point>	-1.72697 1.19259 -2.93374	</point>
+                <point>	-1.72697 1.19623 -2.85489	</point>
+                <point>	-1.72697 1.19988 -2.77604	</point>
+                <point>	-1.72697 1.20352 -2.69719	</point>
+                <point>	-1.72697 1.20717 -2.61833	</point>
+                <point>	-1.72698 1.21081 -2.53948	</point>
+                <point>	-1.72698 1.21446 -2.46063	</point>
+                <point>	-1.72698 1.21811 -2.38178	</point>
+                <point>	-1.72698 1.22175 -2.30293	</point>
+                <point>	-1.72698 1.2254 -2.22407	</point>
+                <point>	-1.72698 1.23017 -2.14522	</point>
+                <point>	-1.72698 1.23512 -2.06637	</point>
+                <point>	-1.72698 1.24006 -1.98752	</point>
+                <point>	-1.72698 1.25391 -1.90867	</point>
+                <point>	-1.72698 1.25789 -1.82981	</point>
+                <point>	-1.72698 1.26162 -1.75096	</point>
+                <point>	-1.72698 1.26536 -1.67211	</point>
+                <point>	-1.72698 1.26725 -1.59326	</point>
+                <point>	-1.72698 1.27041 -1.51441	</point>
+                <point>	-1.72698 1.27406 -1.43555	</point>
+                <point>	-1.72698 1.27771 -1.3567	</point>
+                <point>	-1.72698 1.28274 -1.27785	</point>
+                <point>	-1.72698 1.2878 -1.199	</point>
+                <point>	-1.72698 1.29179 -1.12014	</point>
+                <point>	-1.72698 1.29553 -1.04129	</point>
+                <point>	-1.72698 1.29927 -0.962441	</point>
+                <point>	-1.72698 1.30302 -0.883589	</point>
+                <point>	-1.72698 1.30676 -0.804737	</point>
+                <point>	-1.72698 1.29562 -0.725885	</point>
+                <point>	-1.72698 1.29714 -0.647033	</point>
+                <point>	-1.72698 1.29867 -0.568181	</point>
+                <point>	-1.72698 1.30128 -0.489329	</point>
+                <point>	-1.72698 1.30446 -0.410477	</point>
+                <point>	-1.72698 1.30763 -0.331625	</point>
+                <point>	-1.72698 1.3108 -0.252773	</point>
+                <point>	-1.72698 1.31398 -0.17392	</point>
+                <point>	-1.72698 1.31715 -0.095069	</point>
+                <point>	-1.72698 1.32033 -0.016217	</point>
+                <point>	-1.72698 1.3235 0.062635	</point>
+                <point>	-1.72698 1.32668 0.141487	</point>
+                <point>	-1.72698 1.33036 0.220339	</point>
+                <point>	-1.72698 1.33564 0.299191	</point>
+                <point>	-1.72698 1.3399 0.378043	</point>
+                <point>	-1.72698 1.34332 0.456896	</point>
+                <point>	-1.72698 1.35595 0.535747	</point>
+                <point>	-1.72698 1.36135 0.614599	</point>
+                <point>	-1.72698 1.36674 0.693452	</point>
+                <point>	-1.72698 1.37214 0.772303	</point>
+                <point>	-1.72698 1.37754 0.851155	</point>
+                <point>	-1.72698 1.38293 0.930008	</point>
+                <point>	-1.72698 1.38764 1.00886	</point>
+                <point>	-1.72698 1.39122 1.08771	</point>
+                <point>	-1.72698 1.39479 1.16656	</point>
+                <point>	-1.72698 1.39837 1.24542	</point>
+                <point>	-1.72698 1.40195 1.32427	</point>
+                <point>	-1.72698 1.40552 1.40312	</point>
+                <point>	-1.72698 1.4091 1.48197	</point>
+                <point>	-1.72698 1.41268 1.56082	</point>
+                <point>	-1.72698 1.41625 1.63968	</point>
+                <point>	-1.72698 1.43534 1.71853	</point>
+                <point>	-1.72698 1.43735 1.79738	</point>
+                <point>	-1.72698 1.43936 1.87623	</point>
+                <point>	-1.72698 1.44138 1.95508	</point>
+                <point>	-1.72698 1.44339 2.03394	</point>
+                <point>	-1.72698 1.44576 2.11279	</point>
+                <point>	-1.72698 1.44895 2.19164	</point>
+                <point>	-1.72698 1.45214 2.27049	</point>
+                <point>	-1.72698 1.45532 2.34934	</point>
+                <point>	-1.72698 1.45851 2.4282	</point>
+                <point>	-1.72698 1.4617 2.50705	</point>
+                <point>	-1.72698 1.46489 2.5859	</point>
+                <point>	-1.72698 1.46808 2.66475	</point>
+                <point>	-1.72698 1.47143 2.7436	</point>
+                <point>	-1.72698 1.47539 2.82246	</point>
+                <point>	-1.72698 1.47934 2.90131	</point>
+                <point>	-1.50698 1.54672 2.98016	</point>
+                <point>	-1.72698 1.50126 3.05901	</point>
+                <point>	-1.50698 1.46244 3.13786	</point>
+                <point>	-1.50698 1.42017 3.21672	</point>
               </range>
             </top>
           </sourceCollisionHullPoints>
@@ -2708,8 +2761,8 @@
         </left>
         <right>
           <segmentsCount>	92	</segmentsCount>
-          <segmentsOuterThickness>	0.109168	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.007448	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.109177	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.005	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.442	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
@@ -2727,19 +2780,29 @@
           </springsLength>
           <mainSegment>
             <model>	vehicles/german/G55_E-75/track/segment_R.model	</model>
-            <length>	0.159047	</length>
+            <length>	0.157709	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G55_E-75/track/segment2_R.model	</model>
-            <length>	0.159636	</length>
+            <length>	0.158774	</length>
           </secSegment>
+          <modelSets>
+            <G55_E75_3DSt_NEx>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
+            </G55_E75_3DSt_NEx>
+            <G55_E-75_MDXXIII4_3DSt>
+              <mainSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/track/segment2_R.model	</secSegmentModel>
+            </G55_E-75_MDXXIII4_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
               <part>
-                <xStart>	-3.22364	</xStart>
-                <xStep>	0.079523	</xStep>
-                <ySamples>	1.04612 1.06444 1.06822 1.072 1.07579 1.07957 1.08335 1.08714 1.09092 1.0947 1.09848 1.10227 1.10641 1.1118 1.11718 1.12072 1.12999 1.13327 1.13535 1.13849 1.14163 1.14478 1.14792 1.15106 1.15421 1.15735 1.16049 1.16363 1.16678 1.17249 1.17962 1.18675 1.1846 1.18871 1.19252 1.19555 1.19857 1.2016 1.20462 1.20765 1.21068 1.2137 1.21673 1.22004 1.22454 1.22903 1.23284 1.23267 1.2389 1.24234 1.24577 1.2492 1.25264 1.25607 1.25951 1.26294 1.26698 1.27161 1.27625 1.28088 1.28551 1.29015 1.31283 1.31647 1.3181 1.31923 1.32035 1.32251 1.32578 1.32904 1.3323 1.33556 1.33882 1.34208 1.35101 1.3612 1.36636 1.3789 1.36636 1.31156 1.25829 1.20937	</ySamples>
+                <xStart>	-3.1702	</xStart>
+                <xStep>	0.078855	</xStep>
+                <ySamples>	1.0632 1.06695 1.0707 1.07445 1.0782 1.08195 1.0857 1.08945 1.09321 1.09696 1.10071 1.10446 1.10949 1.11482 1.11963 1.12226 1.13175 1.13435 1.13699 1.1401 1.14322 1.14633 1.14945 1.15257 1.15568 1.1588 1.16192 1.16503 1.16847 1.17554 1.18261 1.18217 1.18625 1.19033 1.19369 1.19669 1.19969 1.20269 1.20569 1.20869 1.21169 1.21469 1.21769 1.22144 1.22589 1.23017 1.23744 1.235 1.23982 1.24323 1.24663 1.25004 1.25345 1.25685 1.26026 1.26366 1.26791 1.27251 1.2771 1.28169 1.28629 1.29088 1.31338 1.31699 1.31825 1.31937 1.32048 1.32287 1.3261 1.32934 1.33257 1.3358 1.33904 1.34227 1.35152 1.36162 1.36655 1.37956 1.36572 1.31117 1.25832 1.20983	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2759,36 +2822,36 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	2.69306 0.829474	</basePos>
-              <shiftVec>	0.415344 0.183304	</shiftVec>
+              <shiftVec>	0.411572 0.181078	</shiftVec>
               <jointIdx>	10	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R1	</wheelName>
               <basePos>	-2.81691 0.647266	</basePos>
-              <shiftVec>	-0.284797 0.196613	</shiftVec>
+              <shiftVec>	-0.28467 0.197829	</shiftVec>
               <jointIdx>	53	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R7	</wheelName>
               <basePos>	-2.06328 0.498669	</basePos>
-              <shiftVec>	-0.032089 -0.401271	</shiftVec>
+              <shiftVec>	-0.034926 -0.401025	</shiftVec>
               <jointIdx>	63	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	2.06393 0.492516	</basePos>
-              <shiftVec>	0.097123 -0.39066	</shiftVec>
+              <shiftVec>	0.091577 -0.391987	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R1	</name>
-              <radius>	0.340152	</radius>
+              <radius>	0.335	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.449499	</radius>
+              <radius>	0.445168	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2796,12 +2859,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-3.02811	</startAngle>
+              <startAngle>	-9.29952	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-5.00783	</startAngle>
+              <startAngle>	-5.01504	</startAngle>
               <teethCount>	9	</teethCount>
             </sync>
           </teethSyncs>
@@ -2906,8 +2969,8 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	0.000084 2.84285 -0.162516	</anchorPosition>
-          <anchorDirection>	-0 1 0	</anchorDirection>
+          <anchorPosition>	0.000086 2.84285 -0.162513	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>
@@ -3006,6 +3069,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -3042,6 +3110,15 @@
               <rayStart>	-0.000072 -0.052243 4.13744	</rayStart>
               <rayEnd>	-0.000072 -0.052243 4.59744	</rayEnd>
               <rayUp>	0.075 0 0	</rayUp>
+              <size>	0.46	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000072 -0.052243 4.29	</rayStart>
+              <rayEnd>	-0.000072 -0.052243 4.75	</rayEnd>
+              <rayUp>	0.09 0 0	</rayUp>
+              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -3102,6 +3179,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -3136,6 +3218,15 @@
               <rayStart>	0.000138 -0.051689 3.68456	</rayStart>
               <rayEnd>	0.000138 -0.051689 4.14456	</rayEnd>
               <rayUp>	0.087 0 0	</rayUp>
+              <size>	0.46	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000138 -0.051689 3.81	</rayStart>
+              <rayEnd>	0.000138 -0.051689 4.27	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
+              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -3192,6 +3283,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -3225,7 +3321,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	0 -0.051509 5.09467	</rayStart>
               <rayEnd>	0 -0.051509 5.55467	</rayEnd>
-              <rayUp>	0.084 0 0	</rayUp>
+              <rayUp>	0.1 0 0	</rayUp>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -3252,6 +3348,11 @@
             <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_01.model	</exploded>
           </G55_E75_3DSt_NEx>
+          <G55_E-75_MDXXIII4_3DSt>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G55_E-75_MDXXIII4_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -3286,9 +3387,9 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.23875 0.594434 0.161609	</rayStart>
-          <rayEnd>	0.873598 0.456652 0.073987	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
+          <rayStart>	1.23875 0.615891 0.161609	</rayStart>
+          <rayEnd>	0.873598 0.478109 0.073987	</rayEnd>
+          <rayUp>	-0.334949 0.938802 -0.080375	</rayUp>
           <size>	0.28	</size>
         </slot>
         <slot>
@@ -3877,6 +3978,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_05.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -3910,9 +4016,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000072 -0.052243 4.325	</rayStart>
-              <rayEnd>	-0.000072 -0.052243 4.785	</rayEnd>
-              <rayUp>	0.075 0 0	</rayUp>
+              <rayStart>	-0.000072 -0.052243 4.3	</rayStart>
+              <rayEnd>	-0.000072 -0.052243 4.76	</rayEnd>
+              <rayUp>	0.09 0 0	</rayUp>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -3965,6 +4071,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_06.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -3999,6 +4110,15 @@
               <rayStart>	0.000138 -0.051689 3.83	</rayStart>
               <rayEnd>	0.000138 -0.051689 4.29	</rayEnd>
               <rayUp>	0.086 0 0	</rayUp>
+              <size>	0.46	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000138 -0.051689 3.04	</rayStart>
+              <rayEnd>	0.000138 -0.051689 3.5	</rayEnd>
+              <rayUp>	0.13 0 0	</rayUp>
+              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -4055,6 +4175,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_03.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -4088,7 +4213,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	0 -0.051509 5.11787	</rayStart>
               <rayEnd>	0 -0.051509 5.57787	</rayEnd>
-              <rayUp>	0.084 0 0	</rayUp>
+              <rayUp>	0.11 0 0	</rayUp>
               <size>	0.46	</size>
             </slot>
           </customizationSlots>
@@ -4143,6 +4268,11 @@
                 <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_09.model	</destroyed>
                 <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_09.model	</exploded>
               </G55_E75_3DSt_NEx>
+              <G55_E-75_MDXXIII4_3DSt>
+                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_09.model	</undamaged>
+                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_09.model	</destroyed>
+                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_09.model	</exploded>
+              </G55_E-75_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -4181,6 +4311,15 @@
               <rayUp>	0.103 0 0	</rayUp>
               <size>	0.596	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000194 -0.051509 3.16	</rayStart>
+              <rayEnd>	-0.000194 -0.051509 3.756	</rayEnd>
+              <rayUp>	0.12 0 0	</rayUp>
+              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
+              <size>	0.596	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -4205,6 +4344,11 @@
             <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Turret_02.model	</exploded>
           </G55_E75_3DSt_NEx>
+          <G55_E-75_MDXXIII4_3DSt>
+            <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Turret_02.model	</exploded>
+          </G55_E-75_MDXXIII4_3DSt>
         </sets>
       </models>
       <hitTester>

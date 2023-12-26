@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -692,10 +693,10 @@
     <description>	#usa_vehicles:A153_XM66F_descr	</description>
     <shortDescriptionSpecial>	#usa_vehicles:A153_XM66F_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A153_XM66F_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	8600	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
-    <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user NY2024_video	</tags>
     <level>	8	</level>
   </A153_XM66F>
   <A152_M_Project_2>
@@ -846,10 +847,10 @@
     <shortUserString>	#usa_vehicles:A161_ARMT_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A161_ARMT_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A161_ARMT_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	1500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank HD improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </A161_ARMT>
   <A103_T71E1_IGR>
@@ -996,10 +997,10 @@
     <shortUserString>	#usa_vehicles:A160_M24_594_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A160_M24_594_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A160_M24_594_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	1400	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user secret testTank	</tags>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	5	</level>
   </A160_M24_594>
   <A169_PattonIII_120>
@@ -1012,7 +1013,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD special secret testTank patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal HD special patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </A169_PattonIII_120>
   <A136_T42>
@@ -1101,6 +1102,7 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
+    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1478,7 +1480,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_universal HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user NY_style	</tags>
     <level>	9	</level>
   </A125_AEP_1>
   <A124_T54E2>

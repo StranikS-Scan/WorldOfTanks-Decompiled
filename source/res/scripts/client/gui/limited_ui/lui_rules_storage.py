@@ -47,6 +47,7 @@ class LuiRules(enum.Enum):
     BR_ENTRY_POINT = 'BREntryPoint'
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
+    WDR_NEWBIE_REWARD = 'WDRNewbieReward'
     HALLOWEEN_ENTRY_POINT = 'HalloweenEntryPoint'
 
 

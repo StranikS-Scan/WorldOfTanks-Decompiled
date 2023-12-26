@@ -299,6 +299,10 @@ class Stats(object):
         self.__account._doCmdIntStr(AccountCommands.CMD_ADD_TOKENS, tokenCount, token, proxy)
         return
 
+    def addTokensList(self, tokens):
+        for token in tokens:
+            self.addTokens(token)
+
     def drawTokens(self, token, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)

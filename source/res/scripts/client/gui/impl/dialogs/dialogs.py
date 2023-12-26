@@ -16,6 +16,7 @@ from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import Upgrad
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus, WindowLayer
+from gui.impl.pub.wait_view_impl import WaitWindowWrapper
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View

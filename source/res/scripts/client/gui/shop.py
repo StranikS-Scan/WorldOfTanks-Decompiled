@@ -43,6 +43,7 @@ class _GoldPurchaseReason(object):
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
     PERSONAL_RESERVES = 'personal_reserves'
+    SACK = 'sack'
 
 
 class Source(object):
@@ -184,6 +185,10 @@ def showBuyGoldForBundle(fullPrice, params=None):
     params = dict(params) or {}
     params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
     showBuyGoldWebOverlay(params)
+
+
+def showBuyGoldForSack(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.SACK, fullPrice))
 
 
 def showBlueprintsExchangeOverlay(url=None, parent=None):

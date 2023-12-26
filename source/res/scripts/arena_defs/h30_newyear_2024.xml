@@ -1,0 +1,103 @@
+<h30_newyear_2024.xml>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+  <wwmusic>	hangar_newyear_silence	</wwmusic>
+  <wwambientSound>	hangar_newyear_ambient_main	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	hangar_h30_newyear_2022.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h30_newyear_2022.pck	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_bush_yellow_dry_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_bush_yellow_dry_small_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_coniferous_01	</name>
+        <mod>	hangar_newyear_silence	</mod>
+      </event>
+      <event>
+        <name>	h25_barking_dog_whine_and_barking	</name>
+        <mod>	hangar_newyear_barking_dog_whine_and_barking	</mod>
+      </event>
+      <event>
+        <name>	h25_playing_dog_bark	</name>
+        <mod>	hangar_newyear_playing_dog_bark	</mod>
+      </event>
+      <event>
+        <name>	h25_playing_dog_breathing	</name>
+        <mod>	hangar_newyear_playing_dog_breathing	</mod>
+      </event>
+      <event>
+        <name>	h25_revival_dog_barking_01	</name>
+        <mod>	hangar_newyear_revival_dog_barking_01	</mod>
+      </event>
+      <event>
+        <name>	h25_revival_dog_barking_02	</name>
+        <mod>	hangar_newyear_revival_dog_barking_02	</mod>
+      </event>
+      <event>
+        <name>	h25_revival_dog_whine_and_barking	</name>
+        <mod>	hangar_newyear_revival_dog_whine_and_barking	</mod>
+      </event>
+      <event>
+        <name>	h25_revival_whoosh	</name>
+        <mod>	hangar_newyear_revival_whoosh	</mod>
+      </event>
+      <event>
+        <name>	h25_runaway_dog_barking_01	</name>
+        <mod>	hangar_newyear_runaway_dog_barking_01	</mod>
+      </event>
+      <event>
+        <name>	h25_runaway_whoosh	</name>
+        <mod>	hangar_newyear_runaway_whoosh	</mod>
+      </event>
+      <event>
+        <name>	h25_dog_breathing	</name>
+        <mod>	hangar_newyear_dog_breathing	</mod>
+      </event>
+      <event>
+        <name>	h25_dog_drinking	</name>
+        <mod>	hangar_newyear_dog_drinking	</mod>
+      </event>
+      <event>
+        <name>	h25_dog_howling	</name>
+        <mod>	hangar_newyear_dog_howling	</mod>
+      </event>
+      <event>
+        <name>	h25_dog_scratching	</name>
+        <mod>	hangar_newyear_dog_scratching	</mod>
+      </event>
+      <event>
+        <name>	h25_dog_whine	</name>
+        <mod>	hangar_newyear_dog_whine	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <mapActivities></mapActivities>
+</h30_newyear_2024.xml>

@@ -12,7 +12,6 @@ from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT
 from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
-from gui.comp7.entitlements_cache import EntitlementsCache
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
@@ -65,7 +64,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__banTimer = CallbackDelayer()
         self.__banExpiryTime = None
         self.__leaderboardDataProvider = _LeaderboardDataProvider()
-        self.__entitlementsCache = EntitlementsCache()
         self.__eventsManager = em = EventManager()
         self.onStatusUpdated = Event.Event(em)
         self.onStatusTick = Event.Event(em)
@@ -139,10 +137,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def qualificationState(self):
         return self.__qualificationState
 
-    @property
-    def entitlementsCache(self):
-        return self.__entitlementsCache
-
     def init(self):
         super(Comp7Controller, self).init()
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
@@ -162,8 +156,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__qualificationState = None
         self.__banTimer.clearCallbacks()
         self.__banTimer = None
-        self.__entitlementsCache.clear()
-        self.__entitlementsCache = None
         super(Comp7Controller, self).fini()
         return
 
@@ -181,15 +173,12 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def onConnected(self):
         self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
         self.__spaceSwitchController.onCheckSceneChange += self.__onCheckSceneChange
-        if self.isEnabled():
-            self.__entitlementsCache.makePreload()
 
     def onDisconnected(self):
         self.stopNotification()
         self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
         self.__spaceSwitchController.onCheckSceneChange -= self.__onCheckSceneChange
-        self.__entitlementsCache.reset()
         if self.__serverSettings is not None:
             self.__serverSettings.onServerSettingsChange -= self.__onUpdateComp7Settings
         self.__serverSettings = None
@@ -316,7 +305,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def getReceivedSeasonPoints(self):
         result = {}
         for entCode in SEASON_POINTS_ENTITLEMENTS:
-            result[entCode] = self.__entitlementsCache.getEntitlementCount(entCode)
+            result[entCode] = self.__itemsCache.items.stats.entitlements.get(entCode, 0)
 
         return result
 
@@ -417,8 +406,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def __updateMainConfig(self):
         self.__comp7Config = self.__serverSettings.comp7Config
-        if self.isEnabled() and not self.__entitlementsCache.isSynced:
-            self.__entitlementsCache.makePreload()
 
     def __resetTimer(self):
         self.startNotification()
@@ -434,13 +421,13 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__updateOfflineStatus()
         self.__updateQualificationBattles()
         self.__updateQualificationState()
-        self.__updateSeasonPoints()
 
     def __onEntitlementsChanged(self, entitlements):
         if self.__ENTITLEMENTS & set(entitlements.keys()):
             self.__updateRank()
-        elif set(SEASON_POINTS_ENTITLEMENTS) & set(entitlements.keys()):
-            self.__updateSeasonPoints()
+        updatedSeasonPointCodes = set(SEASON_POINTS_ENTITLEMENTS) & set(entitlements.keys())
+        if updatedSeasonPointCodes:
+            self.onSeasonPointsUpdated()
 
     def __updateRank(self):
         entitlements = self.__itemsCache.items.stats.entitlements
@@ -472,13 +459,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def __updateQualificationState(self):
         self.__qualificationState = self.__itemsCache.items.stats.comp7.get('qualification', {}).get('state', Comp7QualificationState.NOT_STARTED)
         self.onQualificationStateUpdated()
-
-    def __updateSeasonPoints(self):
-        self.__entitlementsCache.reloadSeasonPoints(self.__onSeasonPointsReloaded)
-
-    def __onSeasonPointsReloaded(self, isSuccess):
-        if isSuccess and any(self.getReceivedSeasonPoints().values()):
-            self.onSeasonPointsUpdated()
 
 
 class _LeaderboardDataProvider(object):

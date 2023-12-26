@@ -1,0 +1,3 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/new_year/surprise_gift_entrypoint_view/__init__.py
+pass

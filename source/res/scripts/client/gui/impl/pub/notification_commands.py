@@ -4,6 +4,8 @@ import typing
 from frameworks.wulf import WindowStatus
 from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from helpers import dependency
+from skeletons.new_year import INewYearController
 
 class NotificationEvent(object):
     __slots__ = ('_args', '_kwargs', '_method')
@@ -39,6 +41,9 @@ class NotificationCommand(object):
     def getWindow(self):
         raise NotImplementedError
 
+    def isOverdue(self):
+        raise NotImplementedError
+
 
 class WindowNotificationCommand(NotificationCommand):
     __slots__ = ('__window',)
@@ -61,6 +66,9 @@ class WindowNotificationCommand(NotificationCommand):
 
     def getWindow(self):
         return self.__window
+
+    def isOverdue(self):
+        return False
 
 
 class EventNotificationCommand(NotificationCommand):
@@ -85,7 +93,17 @@ class EventNotificationCommand(NotificationCommand):
     def getWindow(self):
         return None
 
+    def isOverdue(self):
+        return False
+
 
 class NonPersistentEventNotificationCommand(EventNotificationCommand):
     __slots__ = ()
     isPersistent = False
+
+
+class NyWindowNotificationCommand(WindowNotificationCommand):
+    __nyController = dependency.descriptor(INewYearController)
+
+    def isOverdue(self):
+        return not self.__nyController.isEnabled()

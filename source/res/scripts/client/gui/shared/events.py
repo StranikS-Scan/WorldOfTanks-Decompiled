@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'NyGladeVisibilityEvent', 'NyMarketPlaceRewardEvent', 'NyCelebrityStoriesEvent', 'NyCelebrityAnimationEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -85,6 +85,7 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
+    IMAGE_VIEW_DONE = 'game/imageViewDone'
 
 
 class GUICommonEvent(SharedEvent):
@@ -299,10 +300,17 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
     WAITING_HIDDEN = 'waitingHidden'
+    WAITING_SHOW = 'waitingShow'
+    WAITING_HIDE = 'waitingHide'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+    TURN_LOBBY_DRAGGING_ON = 'turnLobbyDraggingOn'
+    TURN_LOBBY_DRAGGING_OFF = 'turnLobbyDraggingOff'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
+    SWITCH_NEW_YEAR_VIEW = 'switchNewYearView'
+    SHOW_LOOT_BOX_VIEW = 'showLootBoxView'
+    MESSENGER_BAR_VISIBLE = 'messengerBarVisibleChanged'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -355,6 +363,14 @@ class FightButtonEvent(LobbySimpleEvent):
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
+
+
+class LobbyHeaderEvent(LobbySimpleEvent):
+    TOGGLE_VISIBILITY = 'toggleVisibilityHeader'
+
+
+class SkillDropEvent(SharedEvent):
+    SKILL_DROPPED_SUCCESSFULLY = 'skillDroppedSuccess'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -513,6 +529,59 @@ class StrongholdEvent(HasCtxEvent):
     STRONGHOLD_LOADED = 'strongholdLoaded'
 
 
+class NyCelebrityAnimationEvent(HasCtxEvent):
+    ANIMATION_VIEW_OPENED = 'animationViewOpened'
+    ANIMATION_VIEW_CLOSED = 'animationViewClosed'
+    CLOSE_ANIMATION_VIEW = 'closeAnimationView'
+
+
+class NyCelebrityStoriesEvent(HasCtxEvent):
+    STORIES_VIEW_OPENED = 'storiesViewOpened'
+    STORIES_VIEW_CLOSED = 'storiesViewClosed'
+
+
+class NyMarketPlaceRewardEvent(HasCtxEvent):
+    ON_VEHICLE_APPEARANCE_RESET = 'onVehicleAppearanceReset'
+
+
+class NyGladeVisibilityEvent(HasCtxEvent):
+    START_FADE_IN = 'startFadeIn'
+    END_FADE_IN = 'endFadeIn'
+    START_FADE_OUT = 'startFadeOut'
+    END_FADE_OUT = 'endFadeOut'
+
+
+class NyDogEvent(SharedEvent):
+    DOG_PAGE_VISITED = 'dogPageVisited'
+    TO_HANGAR = 'toHangar'
+
+
+class NyResourcesEvent(HasCtxEvent):
+    RESOURCE_COLLECTED = 'resourceCollected'
+    FRIEND_RESOURCE_COLLECTED = 'friendResourceCollected'
+
+
+class NyJukeboxEvent(SharedEvent):
+    ON_CLICK_SIDA_A = 'onClickSideA'
+    ON_CLICK_SIDA_B = 'onClickSideB'
+    ON_HIGHLIGHT_ON = 'onHighlightOn'
+    ON_HIGHLIGHT_OFF = 'onHighlightOff'
+
+
+class NyResourcesConverterPopup(SharedEvent):
+    SHOW = 'show'
+    HIDE = 'hide'
+
+
+class NyInitialNotificationEvent(SharedEvent):
+    INITIAL_NOTIFICATION_SHOWN = 'initialNotificationShown'
+
+
+class ObjectHoverEvent(HasCtxEvent):
+    HOVER_IN = 'hoverIn'
+    HOVER_OUT = 'hoverOut'
+
+
 class ShopEvent(HasCtxEvent):
     SHOP_ACTIVATED = 'shopActivated'
     SHOP_DEACTIVATED = 'shopDeactivated'
@@ -618,6 +687,7 @@ class VehicleBuyEvent(HasCtxEvent):
 
 
 class HangarVehicleEvent(HasCtxEvent):
+    ON_HERO_TANK_LABEL_UPDATE_REQUIRED = 'hangarVehicle/onHeroTankLabelUpdateRequired'
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     ON_PLATOON_TANK_LOADED = 'hangarVehicle/onPlatoonTankLoaded'
@@ -647,6 +717,32 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
+class LootboxesEvent(HasCtxEvent):
+    ON_REWARD_VIEW_CLOSED = 'lootboxes/onRewardViewClosed'
+    ON_MULTI_OPEN_VIEW_CLOSED = 'lootboxes/onMultiOpenViewClosed'
+    ON_SHOW_SPECIAL_REWARDS_CLOSED = 'lootboxes/onShowSpecialRewardsClosed'
+    ON_ENTRY_VIEW_LOADED = 'lootboxes/onEntryViewLoaded'
+    ON_MAIN_VIEW_CLOSED = 'lootboxes/onMainViewClosed'
+    ON_OPENING_START = 'lootboxes/onOpeningStart'
+    ON_OPENING_END = 'lootboxes/onOpeningEnd'
+    ON_OPEN_LOOTBOX = 'lootboxes/onOpenNext'
+    ON_SHOW_GUEST_C_IDLE = 'lootboxes/idleGuestC'
+    NEED_SHOW_REWARDS = 'lootboxes/needShowRewards'
+    NEED_STOP_ENTRY_VIDEO = 'lootboxes/needStopEntryVideo'
+    REMOVE_HIDE_VIEW = 'lootboxes/removeHideView'
+    HIDE_COMPLETE = 'lootboxes/hideComplete'
+    ON_VIDEO_OFF_MOVIE_LOADED = 'lootboxes/onVideoOffMovieLoaded'
+    ON_VIDEO_LOAD_ERROR = 'lootboxes/onVideoLoadError'
+    ON_TAB_SELECTED = 'lootboxes/onTabSelected'
+    NEED_DELIVERY_VIDEO_START = 'lootboxes/needDeliveryVideoStart'
+    NEED_DELIVERY_VIDEO_STOP = 'lootboxes/needDeliveryVideoStop'
+    ON_DELIVERY_VIDEO_END = 'lootboxes/onDeliveryVideoEnd'
+    ON_BOX_TRANSITION_END = 'lootboxes/onBoxTransitionEnd'
+    ON_STATISTICS_RESET = 'lootboxes/onStatisticsReset'
+    SWITCH_BOX_HOVER = 'lootboxes/switchBoxHover'
+    ON_BUY_VIEW_CLOSED = 'lootboxes/onBuyViewClosed'
+
+
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -657,6 +753,11 @@ class ReferralProgramEvent(HasCtxEvent):
 class AdventCalendarEvent(HasCtxEvent):
     ADVENT_CALENDAR = 'adventCalendar'
     HERO_ADVENT_ACTION_STATE_CHANGED = 'heroAdventActionStateChanged'
+
+
+class AdventCalendarV2Event(HasCtxEvent):
+    PROGRESSION_REWARD_VIEWED = 'progressionRewardViewed'
+    CHANGE_BLUR_STATUS = 'changeBlurStatus'
 
 
 class ProgressiveRewardEvent(HasCtxEvent):

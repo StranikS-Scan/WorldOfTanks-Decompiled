@@ -490,4 +490,33 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
     ENABLE_TIER_GROUPING = 'enableTierGrouping'
 
 
+class SeniorityAwardsStorageKeys(CONST_CONTAINER):
+    SENIORITY_AWARDS_ON_PAUSE_NOTIFICATION_SHOWED = 'seniorityAwardsOnPauseShowed'
+
+
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
+
+class NYLootBoxesStorageKeys(CONST_CONTAINER):
+    NEW_COUNT = 'newCount'
+    DELIVERED_COUNT = 'deliveredCount'
+
+
+class NewYearStorageKeys(CONST_CONTAINER):
+    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
+    NY_VEHICLES_LEVEL_UP_ENTRY = 'nyVehiclesLevelUpEntry'
+    NY_STATISTICS_HINT_SHOWN = 'nyLootboxStatisticsHintShown'
+    TUTORIAL_STATE = 'tutorialState'
+    TUTORIAL_STAGE_3_SEEN = 'tutorialStage3Seen'
+    DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
+    DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
+    CELEBRITY_SCREEN_VISITED = 'celebrityScreenVisited'
+    CELEBRITY_WELCOME_VIEWED = 'celebrityChallengeWelcomeViewed'
+    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
+    BOOL_FLAGS = (NY_VEHICLES_PROGRESS_ENTRY,
+     NY_STATISTICS_HINT_SHOWN,
+     DECORATIONS_POPOVER_VIEWED,
+     DECORATIONS_POPOVER_BROKEN,
+     CELEBRITY_SCREEN_VISITED,
+     CELEBRITY_WELCOME_VIEWED,
+     LOOT_BOX_VIDEO_OFF,
+     TUTORIAL_STAGE_3_SEEN)

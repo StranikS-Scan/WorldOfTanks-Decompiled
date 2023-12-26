@@ -18,16 +18,19 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import LoadViewEvent, ViewEventType
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController, IMapsTrainingController
+from skeletons.gui.game_control import IIGRController, IMapsTrainingController, IFestivityController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import GLOBAL_FLAG
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
@@ -95,6 +98,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
+    __festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -107,8 +111,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def bwProto(self):
         return None
 
-    def showWaiting(self, message, _=False):
-        self.as_showWaitingS(backport.text(message))
+    def showWaiting(self, message, softStart=False, showBg=True):
+        self.as_showWaitingS(backport.text(message), softStart, showBg)
 
     def hideWaiting(self):
         self.as_hideWaitingS()
@@ -137,11 +141,17 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         View._populate(self)
         self.__currIgrType = self.igrCtrl.getRoomType()
         g_prbLoader.setEnabled(True)
+        self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+        self.__festivityController.onStateChanged += self.__festivityStateChanged
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.MESSENGER_BAR_VISIBLE, self.__messengerBarVisibleChanged, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -152,6 +162,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
+        self.__updateNYVisibility()
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.MESSENGER_BAR_VISIBLE, True)
 
     def _invalidate(self, *args, **kwargs):
         g_prbLoader.setEnabled(True)
@@ -161,16 +173,22 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.__viewLifecycleWatcher.stop()
+        self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
+        self.__festivityController.onStateChanged -= self.__festivityStateChanged
         if self._entityEnqueueCancelCallback:
             self._entityEnqueueCancelCallback = None
             g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.MESSENGER_BAR_VISIBLE, self.__messengerBarVisibleChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_ON, self.__turnLobbyDraggingOn, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.TURN_LOBBY_DRAGGING_OFF, self.__turnLobbyDraggingOff, EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -198,6 +216,11 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def __closeHelpLayout(self, _):
         self.as_closeHelpLayoutS()
 
+    def __messengerBarVisibleChanged(self, event):
+        visible = event.ctx['visible']
+        self.as_hideMessengerBarS(visible)
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.MESSENGER_BAR_VISIBLE, visible)
+
     def __handleScreenShotMade(self, event):
         if 'path' not in event.ctx:
             return
@@ -216,3 +239,43 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         elif roomType in [constants.IGR_TYPE.BASE, constants.IGR_TYPE.NONE] and self.__currIgrType == constants.IGR_TYPE.PREMIUM:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
+
+    def __updateNYVisibility(self, alias=None):
+        if alias is None:
+            topSubViewContainer = self.app.containerManager.getContainer(WindowLayer.TOP_SUB_VIEW)
+            if topSubViewContainer is None:
+                return
+            if topSubViewContainer.getViewCount():
+                alias = 'hasTopSubViews'
+            else:
+                subViewContainer = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
+                if subViewContainer is None:
+                    return
+                currentSubView = subViewContainer.getView()
+                alias = 'noSubView'
+                if currentSubView is not None:
+                    alias = currentSubView.alias
+        nyWidgetVisible = self.__festivityController.isEnabled() and alias in (VIEW_ALIAS.LOBBY_HANGAR, R.views.lobby.new_year.MainView())
+        self.as_updateNYVisibilityS(nyWidgetVisible)
+        return
+
+    def __turnLobbyDraggingOn(self, _):
+        self.as_switchLobbyDraggingS(True)
+
+    def __turnLobbyDraggingOff(self, _):
+        self.as_switchLobbyDraggingS(False)
+
+    def __onViewAddedToContainer(self, _, pyEntity):
+        if not pyEntity.isDisposed() and pyEntity.layer in (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW):
+            self.__updateNYVisibility(pyEntity.alias)
+            pyEntity.onDispose += self.__onViewDisposed
+
+    def __onViewDisposed(self, pyEntity):
+        pyEntity.onDispose -= self.__onViewDisposed
+        self.__updateNYVisibility()
+
+    def __festivityStateChanged(self):
+        self.__updateNYVisibility()
+
+    def __onToggleVisibilityMenu(self, event):
+        self.__updateNYVisibility(event.ctx.get('alias'))

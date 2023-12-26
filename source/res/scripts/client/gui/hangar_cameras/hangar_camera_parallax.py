@@ -80,11 +80,10 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.__wasPreviousUpdateSkipped = True
 
     def deactivate(self):
-        if not self.__isActive:
-            return
-        self.stopCallback(self.__update)
-        self.__isActive = False
         self.__isInitialized = False
+        if self.__isActive:
+            self.stopCallback(self.__update)
+            self.__isActive = False
 
     def isActive(self):
         return self.__isActive

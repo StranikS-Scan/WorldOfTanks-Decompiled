@@ -7,11 +7,24 @@ import weakref
 from collections import defaultdict
 from functools import partial
 from typing import TYPE_CHECKING
+import BigWorld
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters, LAST_SEEN_COLLECTING_NOTIFY_TIME, NY_RESOURCE_COLLECTING_AVAILABLE, ADVENT_CALENDAR_NOTIFICATION_SHOWED, ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN, ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED, LAST_SEEN_FRIENDS_NOTIFY_TIME, LAST_SEEN_NO_FRIENDS_NOTIFY_TIME, NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE
+from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys, NewYearStorageKeys
 from adisp import adisp_process
+from gui.goodies.pr2_conversion_result import getConversionResult
+from gui.impl.gen.view_models.views.lobby.advent_calendar.notifications.doors_available_view_model import DoorsAvailableNotificationState
+from gui.impl.gen.view_models.views.lobby.new_year.notifications.ny_resources_reminder_model import reminderType
+from gui.impl.new_year.navigation import NewYearNavigation
+from gui.shared.advent_calendar_v2_consts import MIN_AVAILABLE_DOORS_REQUIRED_FOR_NOTIFICATION
+from items.components.ny_constants import NY_STATE
+from new_year.ny_constants import NY_MARKETPLACE_UNLOCK, AdventCalendarGFNotificationTemplates
+from new_year.friend_service_controller import BestFriendStatus, BestFriendFields
+from new_year.celebrity.celebrity_quests_helpers import isDogPageVisited
+from new_year.ny_helper import getNYGeneralConfig
+from new_year.ny_resource_collecting_helper import getAvgResourcesByCollecting, isExtraCollectingAvailable, getNYResourceCollectingConfig, isCollectingAvailable
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
@@ -26,10 +39,12 @@ from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.collection.account_settings import isCollectionRenewSeen, isCollectionStartedSeen, isCollectionsUpdatedEntrySeen, setCollectionStartedSeen
 from gui.collection.collections_constants import COLLECTIONS_RENEW_EVENT_TYPE, COLLECTIONS_UPDATED_ENTRY_EVENT_TYPE, COLLECTION_START_EVENT_TYPE
+from gui.game_control.seniority_awards_controller import WDR_CURRENCY
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.prestige.prestige_helpers import mapGradeIDToUI, MAX_GRADE_ID, isFirstEntryNotificationShown, setFirstEntryNotificationShown
+from gui.impl.lobby.seniority_awards.seniority_awards_helper import isSeniorityAwardsSystemNotificationShowed, setSeniorityAwardEventStateSetting
 from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
@@ -37,9 +52,10 @@ from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import settings as settings_records
 from gui.server_events.recruit_helper import getAllRecruitsInfo
-from gui.shared import events, g_eventBus
-from gui.shared.formatters import text_styles, time_formatters
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.formatters import time_formatters, text_styles
 from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
@@ -57,11 +73,13 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator
+from new_year.ny_constants import NyWidgetTopMenu
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator, PersonalReservesConversionMessageDecorator, NyMessageButtonDecorator, NYDogReminderDecorator, NYMarketplaceAvailableDecorator, NYFriendResourceCollectingAvailableDecorator, NYResourceReminderDecorator, AdventCalendarDoorsAvailableDecorator, NYFriendResourceReminderDecorator, NYNoFriendsReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IWotPlusController, IAdventCalendarV2Controller
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -69,7 +87,11 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
+from skeletons.new_year import IFriendServiceController
 from tutorial.control.game_vars import getVehicleByIntCD
+from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
+from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
 from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
     from typing import List, Dict, Optional, Any, Type
@@ -260,6 +282,10 @@ class ServiceChannelListener(_NotificationListener):
                     return C2DProgressionStyleDecorator
                 if self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
                     return CollectionsLockButtonDecorator
+                if messageSubtype == SCH_CLIENT_MSG_TYPE.NY_FRIEND_RESOURCE_COLLECTING_AVAILABLE:
+                    return NYFriendResourceCollectingAvailableDecorator
+                if messageSubtype == SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE:
+                    return NyMessageButtonDecorator
             return MessageDecorator
 
 
@@ -1441,21 +1467,24 @@ class VehiclePostProgressionUnlockListener(_NotificationListener):
 
 
 class SeniorityAwardsTokenListener(BaseReminderListener):
+    __slots__ = ('__uiCoinsNotificationLogger',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
-    __bootCampController = dependency.descriptor(IBootcampController)
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_TOKENS
     __ENTITY_ID = 0
+    __DAYS_BETWEEN_NOTIFICATIONS = 30
     __TEMPLATE = 'seniorityAwardsTokens'
 
     def __init__(self):
         super(SeniorityAwardsTokenListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
+        self.__uiCoinsNotificationLogger = CoinsNotificationLogger()
 
     def start(self, model):
         result = super(SeniorityAwardsTokenListener, self).start(model)
         if result:
             self.__seniorityAwardCtrl.onUpdated += self.__onUpdated
-            g_clientUpdateManager.addCallbacks({'cache.dynamicCurrencies.sacoin': self.__onBalanceUpdate})
+            g_clientUpdateManager.addCallbacks({'cache.dynamicCurrencies.{}'.format(WDR_CURRENCY): self.__onBalanceUpdate})
+            self.__tryNotify()
         return result
 
     def stop(self):
@@ -1488,30 +1517,30 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
         self.__tryNotify()
 
     def __tryNotify(self):
-        if self.__bootCampController.isInBootcamp():
+        coinsCount = self.__seniorityAwardCtrl.getSACoin()
+        if coinsCount < 1 or not self.__seniorityAwardCtrl.isAvailable or self.__seniorityAwardCtrl.timeLeft <= 0:
+            self._removeNotification()
             return
         else:
-            coinsCount = self.__seniorityAwardCtrl.getSACoin()
-            if coinsCount < 1 or not self.__seniorityAwardCtrl.isEnabled or self.__seniorityAwardCtrl.timeLeft <= 0:
-                self._removeNotification()
-                return
             lastShownTime = AccountSettings.getNotifications(SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP)
             if lastShownTime is None:
-                if self.__seniorityAwardCtrl.isRewardReceived:
-                    self.__updateLastShownTimestamp()
+                self.__updateLastShownTimestamp()
                 return
             pendingReminderTimestamp = self.__seniorityAwardCtrl.pendingReminderTimestamp
             currentTimestamp = time_utils.getServerUTCTime()
             showByPending = bool(pendingReminderTimestamp and lastShownTime < pendingReminderTimestamp)
-            showByInterval = bool(not pendingReminderTimestamp and currentTimestamp - lastShownTime >= time_utils.ONE_DAY * 30)
+            showByInterval = bool(not pendingReminderTimestamp and currentTimestamp - lastShownTime >= time_utils.ONE_DAY * self.__DAYS_BETWEEN_NOTIFICATIONS)
             if showByPending or showByInterval:
                 priority = NotificationPriorityLevel.MEDIUM
+                parentScreen = SeniorityAwardsLogSpaces.HANGAR
             else:
                 priority = NotificationPriorityLevel.LOW
+                parentScreen = SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
             if self._notify(priority=priority):
                 if priority != NotificationPriorityLevel.LOW:
                     WWISE.WW_eventGlobal(backport.sound(R.sounds.wdr_hangar_notification()))
                 self.__updateLastShownTimestamp()
+                self.__uiCoinsNotificationLogger.handleDisplayedAction(parentScreen)
             return
 
     @staticmethod
@@ -1521,20 +1550,31 @@ class SeniorityAwardsTokenListener(BaseReminderListener):
 
 
 class SeniorityAwardsQuestListener(_NotificationListener):
+    __slots__ = ('__uiRewardNotificationLogger',)
     __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_QUEST
     __TEMPLATE = 'seniorityAwardsQuest22'
     __ENTITY_ID = 0
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
+
+    def __init__(self):
+        super(SeniorityAwardsQuestListener, self).__init__()
+        self.__uiRewardNotificationLogger = RewardNotificationLogger()
 
     def start(self, model):
         result = super(SeniorityAwardsQuestListener, self).start(model)
         self.__seniorityAwardCtrl.onUpdated += self.__tryNotify
+        self.__limitedUIController.startObserve(LuiRules.WDR_NEWBIE_REWARD, self.__NotifyHandler)
         self.__tryNotify()
         return result
 
     def stop(self):
-        super(SeniorityAwardsQuestListener, self).stop()
         self.__seniorityAwardCtrl.onUpdated -= self.__tryNotify
+        self.__limitedUIController.stopObserve(LuiRules.WDR_NEWBIE_REWARD, self.__NotifyHandler)
+        super(SeniorityAwardsQuestListener, self).stop()
+
+    def __NotifyHandler(self, *_):
+        self.__tryNotify()
 
     def __tryNotify(self):
         model = self._model()
@@ -1542,12 +1582,106 @@ class SeniorityAwardsQuestListener(_NotificationListener):
             return
         else:
             if self.__seniorityAwardCtrl.isNeedToShowRewardNotification:
-                if not model.hasNotification(self.__TYPE, self.__ENTITY_ID):
-                    model.addNotification(SeniorityAwardsDecorator(self.__ENTITY_ID, self.__TYPE, None, model, self.__TEMPLATE, NotificationPriorityLevel.MEDIUM, useCounterOnce=False))
+                limitedUIRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.WDR_NEWBIE_REWARD)
+                showRewardNotification = self.__seniorityAwardCtrl.showRewardHangarNotification
+                isHangarNotification = showRewardNotification and limitedUIRuleCompleted
+                priority = NotificationPriorityLevel.MEDIUM if isHangarNotification else NotificationPriorityLevel.LOW
+                prevNotification = model.getNotification(self.__TYPE, self.__ENTITY_ID)
+                if prevNotification:
+                    if prevNotification.getPriorityLevel() == priority:
+                        return
+                    model.removeNotification(self.__TYPE, self.__ENTITY_ID)
+                model.addNotification(SeniorityAwardsDecorator(self.__ENTITY_ID, self.__TYPE, None, model, self.__TEMPLATE, priority, useCounterOnce=False, isNotify=self.__seniorityAwardCtrl.isNeedToShowNotificationBullet))
+                parentScreen = SeniorityAwardsLogSpaces.NOTIFICATION_CENTER
+                if priority != NotificationPriorityLevel.LOW:
+                    parentScreen = SeniorityAwardsLogSpaces.HANGAR
                     WWISE.WW_eventGlobal(backport.sound(R.sounds.wdr_hangar_notification()))
+                self.__uiRewardNotificationLogger.handleDisplayedAction(parentScreen, limitedUIRuleCompleted, self.__seniorityAwardCtrl.isNeedToShowNotificationBullet)
             else:
                 model.removeNotification(self.__TYPE, self.__ENTITY_ID)
             return
+
+
+class SeniorityAwardsStateListener(_NotificationListener):
+    __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
+
+    def start(self, model):
+        result = super(SeniorityAwardsStateListener, self).start(model)
+        if result:
+            self.__seniorityAwardCtrl.onUpdated += self.__checkLastEventState
+            self.__checkLastEventState()
+        return result
+
+    def stop(self):
+        self.__seniorityAwardCtrl.onUpdated -= self.__checkLastEventState
+        super(SeniorityAwardsStateListener, self).stop()
+
+    @staticmethod
+    def __pushPause():
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.seniorityAwards.switch_pause_on.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
+
+    @staticmethod
+    def __pushPauseFinished():
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.seniorityAwards.switch_pause_off.body()), type=SystemMessages.SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
+
+    def __checkLastEventState(self):
+        if self.__seniorityAwardCtrl.isEnabled:
+            isActive = self.__seniorityAwardCtrl.isActive
+            showedOnPause = isSeniorityAwardsSystemNotificationShowed(SeniorityAwardsStorageKeys.SENIORITY_AWARDS_ON_PAUSE_NOTIFICATION_SHOWED)
+            if not isActive and not showedOnPause:
+                self.__pushPause()
+                setSeniorityAwardEventStateSetting(True)
+            elif isActive and showedOnPause:
+                self.__pushPauseFinished()
+                setSeniorityAwardEventStateSetting(False)
+
+
+class SeniorityAwardsVehicleSelectionListener(BaseReminderListener):
+    __slots__ = ('__uiVehicleSelectionNotificationLogger',)
+    __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_VEHICLE_SELECTION
+    __ENTITY_ID = 0
+    __PRIORITY = NotificationPriorityLevel.LOW
+    __TEMPLATE = 'seniorityAwardsVehicleSelection'
+
+    def __init__(self):
+        super(SeniorityAwardsVehicleSelectionListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
+        self.__uiVehicleSelectionNotificationLogger = VehicleSelectionNotificationLogger()
+
+    def start(self, model):
+        result = super(SeniorityAwardsVehicleSelectionListener, self).start(model)
+        if result:
+            self.__seniorityAwardCtrl.onUpdated += self.__onUpdated
+            self.__seniorityAwardCtrl.onVehicleSelectionChanged += self.__onVehicleSelectionChanged
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(SeniorityAwardsVehicleSelectionListener, self).stop()
+        self.__seniorityAwardCtrl.onUpdated -= self.__onUpdated
+        self.__seniorityAwardCtrl.onVehicleSelectionChanged -= self.__onVehicleSelectionChanged
+
+    def _createNotificationData(self, priority, **ctx):
+        vehiclesCanSelect = self.__seniorityAwardCtrl.getVehiclesForSelectionCount
+        allVehiclesForSelection = len(self.__seniorityAwardCtrl.getAvailableVehicleSelectionRewards())
+        data = {'count': str(min(vehiclesCanSelect, allVehiclesForSelection))}
+        return NotificationData(self._getNotificationId(), data, priority, None)
+
+    def _createDecorator(self, data):
+        return SeniorityAwardsDecorator(data.entityID, self._getNotificationType(), data.savedData, self._model(), self.__TEMPLATE, data.priorityLevel)
+
+    def __onUpdated(self):
+        self.__tryNotify()
+
+    def __onVehicleSelectionChanged(self, *args):
+        self.__tryNotify()
+
+    def __tryNotify(self):
+        if self.__seniorityAwardCtrl.isVehicleSelectionAvailable:
+            if self._notify(priority=self.__PRIORITY):
+                self.__uiVehicleSelectionNotificationLogger.handleDisplayedAction()
+        else:
+            self._removeNotification()
 
 
 class ResourceWellListener(_NotificationListener):
@@ -1731,6 +1865,430 @@ class IntegratedAuctionListener(_NotificationListener):
 
     def __isNotificationNeeded(self, eventType):
         return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
+
+
+class PersonalReservesConversionListener(_NotificationListener):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def start(self, model):
+        result = super(PersonalReservesConversionListener, self).start(model)
+        if self.__lobbyContext.getServerSettings().personalReservesConfig.displayConversionNotification and getConversionResult(self.__itemsCache.items.goodies.pr2ConversionResult):
+            model.addNotification(PersonalReservesConversionMessageDecorator())
+        return result
+
+
+class NyDogReminderListener(BaseReminderListener):
+    __bootCampController = dependency.descriptor(IBootcampController)
+    __nyController = dependency.descriptor(INewYearController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    MSG_ID = 0
+
+    def __init__(self):
+        super(NyDogReminderListener, self).__init__(NOTIFICATION_TYPE.NY_DOG_REMINDER, self.MSG_ID)
+
+    def start(self, model):
+        result = super(NyDogReminderListener, self).start(model)
+        if result:
+            self.__tryNotify()
+            g_eventBus.addListener(events.NyDogEvent.DOG_PAGE_VISITED, self.__tryNotify, EVENT_BUS_SCOPE.LOBBY)
+        return result
+
+    def stop(self):
+        super(NyDogReminderListener, self).stop()
+        g_eventBus.removeListener(events.NyDogEvent.DOG_PAGE_VISITED, self.__tryNotify, EVENT_BUS_SCOPE.LOBBY)
+
+    def _createDecorator(self, notificationData):
+        return NYDogReminderDecorator(self._getNotificationId(), self._model())
+
+    def __tryNotify(self, *_):
+        state = None
+        for action in self.__eventsCache.getActions().itervalues():
+            if 'EventState' in action.getModifiersDict():
+                state = action.getModifiersDict()['EventState'].getState()
+
+        if self.__bootCampController.isInBootcamp() or not state == NY_STATE.IN_PROGRESS:
+            return
+        else:
+            needToAddOrUpdate = self.__isDogAvailable() and not isDogPageVisited()
+            self._notifyOrRemove(needToAddOrUpdate)
+            return
+
+    def __isDogAvailable(self):
+        return self.__nyController.isDogTokenReceived()
+
+
+class NyResourceReminderListener(BaseReminderListener):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __nyController = dependency.descriptor(INewYearController)
+    __friendController = dependency.descriptor(IFriendServiceController)
+    MSG_ID = 0
+
+    def __init__(self):
+        super(NyResourceReminderListener, self).__init__(NOTIFICATION_TYPE.NY_RESOURCE_REMINDER, self.MSG_ID)
+
+    def start(self, model):
+        result = super(NyResourceReminderListener, self).start(model)
+        self.__tryNotify()
+        self.__nyController.resourceCollecting.onSwitchCollectingState += self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState += self.__tryNotify
+        return result
+
+    def stop(self):
+        super(NyResourceReminderListener, self).stop()
+        self.__nyController.resourceCollecting.onSwitchCollectingState -= self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState -= self.__tryNotify
+
+    def _createDecorator(self, notificationData):
+        return NYResourceReminderDecorator(self._getNotificationId(), self._model(), data=notificationData)
+
+    def _createNotificationData(self, **ctx):
+        return ctx.get('ctx')
+
+    def __tryNotify(self, isDefaultState=True):
+        if not self.__nyController.isEnabled():
+            return
+        newYearSettingsStorage = self.__settingsCore.serverSettings.getNewYearStorage()
+        tutorialSufficient = newYearSettingsStorage.get(NewYearStorageKeys.TUTORIAL_STAGE_3_SEEN, False)
+        canCollect = isCollectingAvailable(forceFriend=False)
+        if not tutorialSufficient:
+            return
+        lastSeenCollectingNotifyTime = AccountSettings.getSettings(LAST_SEEN_COLLECTING_NOTIFY_TIME)
+        serverUTCTime = time_utils.getServerUTCTime()
+        previousCollectingState = AccountSettings.getUIFlag(NY_RESOURCE_COLLECTING_AVAILABLE)
+        AccountSettings.setUIFlag(NY_RESOURCE_COLLECTING_AVAILABLE, canCollect)
+        if not canCollect:
+            self._notifyOrRemove(False)
+            return
+        notifyTimeout = getNYResourceCollectingConfig().getCollectingNotifyTimeout()
+        if not isDefaultState or canCollect and canCollect != previousCollectingState:
+            notifyTimeout = 0
+        if self.__nyController.isEnabled() and serverUTCTime >= lastSeenCollectingNotifyTime + notifyTimeout:
+            self._notifyOrRemove(False)
+            AccountSettings.setSettings(LAST_SEEN_COLLECTING_NOTIFY_TIME, serverUTCTime)
+            ctx = self.createCtx()
+            self._notifyOrRemove(True, isStateChanged=False, ctx=ctx)
+
+    @staticmethod
+    def createCtx():
+        resourcesCount = getAvgResourcesByCollecting(forceFriend=False)
+        isExtra = isExtraCollectingAvailable()
+        ctx = {'linkageData': {BestFriendFields.resourceCount: resourcesCount,
+                         BestFriendFields.isExtra: isExtra,
+                         BestFriendFields.viewType: reminderType.PERSONAL.value}}
+        return ctx
+
+
+class NyFriendResourceReminderListener(BaseReminderListener):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __nyController = dependency.descriptor(INewYearController)
+    __friendController = dependency.descriptor(IFriendServiceController)
+    MSG_ID = 0
+
+    def __init__(self):
+        super(NyFriendResourceReminderListener, self).__init__(NOTIFICATION_TYPE.NY_FRIEND_RESOURCE_REMINDER, self.MSG_ID)
+
+    def start(self, model):
+        result = super(NyFriendResourceReminderListener, self).start(model)
+        self.__tryNotify()
+        self.__nyController.resourceCollecting.onSwitchCollectingState += self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState += self.__friendStateChanged
+        return result
+
+    def stop(self):
+        super(NyFriendResourceReminderListener, self).stop()
+        self.__nyController.resourceCollecting.onSwitchCollectingState -= self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState -= self.__friendStateChanged
+
+    def _createDecorator(self, notificationData):
+        return NYFriendResourceReminderDecorator(self._getNotificationId(), self._model(), data=notificationData)
+
+    def _createNotificationData(self, **ctx):
+        return ctx.get('ctx')
+
+    def __friendStateChanged(self, isDefaultState):
+        self._notifyOrRemove(False)
+        self.__tryNotify(isDefaultState)
+
+    @adisp_process
+    def __tryNotify(self, isDefaultState=True):
+        if not self.__nyController.isEnabled() or not self.__friendController.isServiceEnabled:
+            return
+        newYearSettingsStorage = self.__settingsCore.serverSettings.getNewYearStorage()
+        tutorialSufficient = newYearSettingsStorage.get(NewYearStorageKeys.TUTORIAL_STAGE_3_SEEN, False)
+        if not tutorialSufficient:
+            return
+        serverUTCTime = time_utils.getServerUTCTime()
+        lastSeenFriendsNotifyTime = AccountSettings.getSettings(LAST_SEEN_FRIENDS_NOTIFY_TIME)
+        canCollect = isCollectingAvailable(forceFriend=False)
+        previousCollectingState = AccountSettings.getUIFlag(NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE)
+        AccountSettings.setUIFlag(NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE, canCollect)
+        if canCollect:
+            return
+        isSuccess = yield self.__friendController.updateFriendList()
+        if not isSuccess:
+            return
+        res = self.__friendController.getBestFriendsResourceData()
+        resState = res.get(BestFriendFields.state, BestFriendStatus.error)
+        friendCollectingAvailable = resState == BestFriendStatus.friend
+        if not friendCollectingAvailable:
+            return
+        notifyTimeout = getNYResourceCollectingConfig().getCollectingNotifyTimeout()
+        if not isDefaultState or previousCollectingState and previousCollectingState != canCollect:
+            notifyTimeout = 0
+        if serverUTCTime >= lastSeenFriendsNotifyTime + notifyTimeout:
+            AccountSettings.setSettings(LAST_SEEN_FRIENDS_NOTIFY_TIME, serverUTCTime)
+            self._notifyOrRemove(False)
+            ctx = self.createCtx(res)
+            self._notifyOrRemove(True, isStateChanged=False, ctx=ctx)
+
+    @staticmethod
+    def createCtx(res):
+        resourcesCount = getAvgResourcesByCollecting(forceFriend=True)
+        ctx = {'linkageData': {BestFriendFields.resourceCount: resourcesCount,
+                         BestFriendFields.friendName: res[BestFriendFields.friendName],
+                         BestFriendFields.friendID: res[BestFriendFields.friendID],
+                         BestFriendFields.viewType: reminderType.FRIENDS.value}}
+        return ctx
+
+
+class NyNoFriendResourceReminderListener(BaseReminderListener):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __nyController = dependency.descriptor(INewYearController)
+    __friendController = dependency.descriptor(IFriendServiceController)
+    MSG_ID = 0
+
+    def __init__(self):
+        super(NyNoFriendResourceReminderListener, self).__init__(NOTIFICATION_TYPE.NY_NO_FRIENDS_REMINDER, self.MSG_ID)
+
+    def start(self, model):
+        result = super(NyNoFriendResourceReminderListener, self).start(model)
+        self.__tryNotify()
+        self.__nyController.resourceCollecting.onSwitchCollectingState += self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState += self.__tryNotify
+        NewYearNavigation.onSwitchView += self.__onSwitchView
+        return result
+
+    def stop(self):
+        super(NyNoFriendResourceReminderListener, self).stop()
+        self.__nyController.resourceCollecting.onSwitchCollectingState -= self.__tryNotify
+        self.__friendController.onSwitchFriendCollectingState -= self.__tryNotify
+        NewYearNavigation.onSwitchView -= self.__onSwitchView
+
+    def _createDecorator(self, notificationData):
+        return NYNoFriendsReminderDecorator(self._getNotificationId(), self._model(), data=notificationData)
+
+    def _createNotificationData(self, **ctx):
+        return ctx.get('ctx')
+
+    def __onSwitchView(self, ctx):
+        if ctx.menuName == NyWidgetTopMenu.FRIENDS:
+            self._notifyOrRemove(False)
+
+    @adisp_process
+    def __tryNotify(self, _=None):
+        if not self.__nyController.isEnabled() or not self.__friendController.isServiceEnabled:
+            return
+        newYearSettingsStorage = self.__settingsCore.serverSettings.getNewYearStorage()
+        tutorialSufficient = newYearSettingsStorage.get(NewYearStorageKeys.TUTORIAL_STAGE_3_SEEN, False)
+        if not tutorialSufficient or isCollectingAvailable(forceFriend=False):
+            return
+        serverUTCTime = time_utils.getServerUTCTime()
+        lastSeenNoFriendsNotifyTime = AccountSettings.getSettings(LAST_SEEN_NO_FRIENDS_NOTIFY_TIME)
+        notifyNoFriendsTimeout = getNYResourceCollectingConfig().getNoFriendsNotifyTimeout()
+        if serverUTCTime >= lastSeenNoFriendsNotifyTime + notifyNoFriendsTimeout:
+            isSuccess = yield self.__friendController.updateFriendList()
+            if not isSuccess:
+                return
+            res = self.__friendController.getBestFriendsResourceData()
+            resState = res.get(BestFriendFields.state, BestFriendStatus.error)
+            needForFriends = resState == BestFriendStatus.noFriends
+            if not needForFriends:
+                return
+            AccountSettings.setSettings(LAST_SEEN_NO_FRIENDS_NOTIFY_TIME, serverUTCTime)
+            ctx = self.createCtx()
+            self._notifyOrRemove(True, isStateChanged=False, ctx=ctx)
+
+    def createCtx(self):
+        resourcesCount = getAvgResourcesByCollecting(forceFriend=True) * (self.__friendController.maxBestFriendsCount - len(self.__friendController.bestFriendList))
+        ctx = {'linkageData': {BestFriendFields.resourceCount: resourcesCount,
+                         BestFriendFields.viewType: reminderType.FINDFRIENDS.value}}
+        return ctx
+
+
+class NyMarketplaceAvailableListener(BaseReminderListener):
+    __bootCampController = dependency.descriptor(IBootcampController)
+    __nyController = dependency.descriptor(INewYearController)
+    MSG_ID = 0
+
+    def __init__(self):
+        super(NyMarketplaceAvailableListener, self).__init__(NOTIFICATION_TYPE.NY_MARKETPLACE_AVAILABLE, self.MSG_ID)
+
+    def start(self, model):
+        result = super(NyMarketplaceAvailableListener, self).start(model)
+        if result:
+            g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdated})
+        return result
+
+    def stop(self):
+        super(NyMarketplaceAvailableListener, self).stop()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def _createDecorator(self, notificationData):
+        return NYMarketplaceAvailableDecorator(self._getNotificationId(), self._model())
+
+    def __tryNotify(self, *_):
+        if self.__bootCampController.isInBootcamp():
+            return
+        needToAddOrUpdate = self.__isMarketplaceAvailable()
+        self._notifyOrRemove(needToAddOrUpdate)
+
+    def __onTokensUpdated(self, diff):
+        if NY_MARKETPLACE_UNLOCK in diff:
+            self.__tryNotify()
+
+    def __isMarketplaceAvailable(self):
+        return self.__nyController.isTokenReceived(NY_MARKETPLACE_UNLOCK)
+
+
+class AdventCalendarDoorsAvailableListener(BaseReminderListener):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __adventCalendarV2Ctrl = dependency.descriptor(IAdventCalendarV2Controller)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    MSG_ID = 0
+    POPUP_NOTIFICATION_DELAY = 20
+
+    def __init__(self):
+        super(AdventCalendarDoorsAvailableListener, self).__init__(NOTIFICATION_TYPE.ADVENT_CALENDAR_DOORS_AVAILABLE, self.MSG_ID)
+        self.__popUpNotificationCallbackID = None
+        return
+
+    def start(self, model):
+        result = super(AdventCalendarDoorsAvailableListener, self).start(model)
+        self.__tryNotify()
+        self.__adventCalendarV2Ctrl.onDoorOpened += self.__tryNotify
+        self.__adventCalendarV2Ctrl.onConfigChanged += self.__tryNotify
+        g_eventBus.addListener(events.NyInitialNotificationEvent.INITIAL_NOTIFICATION_SHOWN, self.__onNyInitialNotificationShown, EVENT_BUS_SCOPE.LOBBY)
+        return result
+
+    def stop(self):
+        super(AdventCalendarDoorsAvailableListener, self).stop()
+        self.__cancelPopUpNotificationCallback()
+        g_eventBus.removeListener(events.NyInitialNotificationEvent.INITIAL_NOTIFICATION_SHOWN, self.__onNyInitialNotificationShown, EVENT_BUS_SCOPE.LOBBY)
+        self.__adventCalendarV2Ctrl.onConfigChanged -= self.__tryNotify
+        self.__adventCalendarV2Ctrl.onDoorOpened -= self.__tryNotify
+
+    def _createNotificationData(self, **ctx):
+        return ctx.get('ctx')
+
+    def _createDecorator(self, notificationData):
+        return AdventCalendarDoorsAvailableDecorator(self._getNotificationId(), self._model(), data=notificationData)
+
+    def __tryNotify(self):
+        if not self.__adventCalendarV2Ctrl.isAvailable():
+            return self._notifyOrRemove(False)
+        else:
+            availableDoorsAmount = self.__adventCalendarV2Ctrl.getAvailableDoorsToOpenAmount()
+            if availableDoorsAmount:
+                state = None
+                template = AdventCalendarGFNotificationTemplates.ADVENT_CALENDAR_DOORS_AVAILABLE
+                postEventStartDate = self.__adventCalendarV2Ctrl.postEventStartDate
+                postEventEndDate = self.__adventCalendarV2Ctrl.postEventEndDate
+                currentTime = self.__adventCalendarV2Ctrl.getCurrentTime
+                currentDay = self.__adventCalendarV2Ctrl.getCurrentDayNumber()
+                if postEventStartDate + time_utils.ONE_DAY > currentTime > postEventStartDate or postEventEndDate > currentTime > postEventEndDate - time_utils.ONE_DAY or not AccountSettings.getUIFlag(ADVENT_CALENDAR_POST_EVENT_NOTIFICATION_SHOWED) and self.__adventCalendarV2Ctrl.isInPostActivePhase():
+                    state = DoorsAvailableNotificationState.POST_EVENT
+                    template = AdventCalendarGFNotificationTemplates.ADVENT_CALENDAR_DOORS_AVAILABLE_POST_EVENT
+                elif not AccountSettings.getUIFlag(ADVENT_CALENDAR_NOTIFICATION_SHOWED) and self.__adventCalendarV2Ctrl.isInActivePhase():
+                    state = DoorsAvailableNotificationState.FIRST_ENTRY
+                    template = AdventCalendarGFNotificationTemplates.ADVENT_CALENDAR_DOORS_AVAILABLE_FIRST_ENTRY
+                elif availableDoorsAmount >= MIN_AVAILABLE_DOORS_REQUIRED_FOR_NOTIFICATION:
+                    state = DoorsAvailableNotificationState.DOORS_AVAILABLE
+                data = {'eventEndDate': postEventEndDate,
+                 'currentDay': currentDay}
+                if state and self.__canHandleState(state) and self.__canShowPopUp(currentDay):
+                    data.update({'state': state.value,
+                     'template': template})
+                    action = {'sentTime': time.time(),
+                     'data': {'type': SYS_MESSAGE_TYPE.adventCalendarDoorsAvailability.index(),
+                              'data': data}}
+                    self.__cancelPopUpNotificationCallback()
+                    self.__popUpNotificationCallbackID = BigWorld.callback(self.POPUP_NOTIFICATION_DELAY, partial(self.__showPopUp, action))
+                elif self.__adventCalendarV2Ctrl.isInPostActivePhase():
+                    template = AdventCalendarGFNotificationTemplates.ADVENT_CALENDAR_DOORS_AVAILABLE_POST_EVENT
+                    state = DoorsAvailableNotificationState.POST_EVENT
+                else:
+                    state = DoorsAvailableNotificationState.DOORS_AVAILABLE
+                data.update({'state': state.value,
+                 'template': template})
+                self._notifyOrRemove(True, ctx={'template': template,
+                 'linkageData': data})
+            else:
+                self._notifyOrRemove(False)
+            return
+
+    @staticmethod
+    def __canShowPopUp(currentDay):
+        return AccountSettings.getUIFlag(ADVENT_CALENDAR_LAST_DAY_POPUP_SEEN) < currentDay
+
+    def __canHandleState(self, state):
+        if state in (DoorsAvailableNotificationState.FIRST_ENTRY, DoorsAvailableNotificationState.POST_EVENT):
+            hangarNameSetToken = getNYGeneralConfig().getHangarNameSetToken()
+            return self.__itemsCache.items.tokens.getTokenCount(hangarNameSetToken) != 0
+        return True
+
+    def __onNyInitialNotificationShown(self, _):
+        self.__tryNotify()
+
+    def __showPopUp(self, action):
+        self.__popUpNotificationCallbackID = None
+        MessengerEntry.g_instance.protos.BW.serviceChannel.onReceivePersonalSysMessage(action)
+        return
+
+    def __cancelPopUpNotificationCallback(self):
+        if self.__popUpNotificationCallbackID is not None:
+            BigWorld.cancelCallback(self.__popUpNotificationCallbackID)
+            self.__popUpNotificationCallbackID = None
+        return
+
+
+class LootBoxConfigListener(_NotificationListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(LootBoxConfigListener, self).__init__()
+        self.__isAnyDisabled = False
+
+    def start(self, model):
+        result = super(LootBoxConfigListener, self).start(model)
+        self.__processSettings()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        return result
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        super(LootBoxConfigListener, self).stop()
+
+    def __onServerSettingsChange(self, _):
+        self.__processSettings(True)
+
+    def __processSettings(self, isNeedNotification=False):
+        isAnyDisabled = not self.__lobbyContext.getServerSettings().isLootBoxesEnabled()
+        hasAny = False
+        for lootBox in self.__itemsCache.items.tokens.getLootBoxes().itervalues():
+            if lootBox.getType() in NewYearLootBoxes.ALL():
+                hasAny = True
+                if not self.__lobbyContext.getServerSettings().isLootBoxEnabled(lootBox.getID()):
+                    isAnyDisabled = True
+                    break
+
+        isAnyDisabled = isAnyDisabled or not hasAny
+        if isAnyDisabled != self.__isAnyDisabled and isNeedNotification:
+            if isAnyDisabled:
+                rKey = R.strings.ny.notification.lootBox.suspend
+                SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(rKey.body()), type=SystemMessages.SM_TYPE.ErrorHeader, messageData={'header': backport.text(rKey.header())})
+        self.__isAnyDisabled = isAnyDisabled
 
 
 class EventLootBoxesListener(_NotificationListener, EventsHandler):
@@ -2157,6 +2715,7 @@ registerNotificationsListeners((ServiceChannelListener,
  BattlePassSwitchChapterReminder,
  ResourceWellListener,
  IntegratedAuctionListener,
+ SeniorityAwardsStateListener,
  SeniorityAwardsQuestListener,
  SeniorityAwardsTokenListener,
  EventLootBoxesListener,
@@ -2164,7 +2723,16 @@ registerNotificationsListeners((ServiceChannelListener,
  WinbackSelectableRewardReminder,
  WotPlusIntroViewListener,
  BattleMattersTaskReminderListener,
- PrestigeListener))
+ PrestigeListener,
+ SeniorityAwardsVehicleSelectionListener,
+ PersonalReservesConversionListener,
+ NyDogReminderListener,
+ NyMarketplaceAvailableListener,
+ LootBoxConfigListener,
+ NyResourceReminderListener,
+ AdventCalendarDoorsAvailableListener,
+ NyFriendResourceReminderListener,
+ NyNoFriendResourceReminderListener))
 
 class NotificationsListeners(_NotificationListener):
 

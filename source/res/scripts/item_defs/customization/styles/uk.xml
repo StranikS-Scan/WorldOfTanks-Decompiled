@@ -1650,4 +1650,43 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB106_Cobra	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	848	</id>
+      <texture>	gui/maps/vehicles/styles/GB106_Cobra_MDXXIII4_3DSt.png	</texture>
+      <modelsSet>	GB106_Cobra_MDXXIII4_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB106_Cobra_MDXXIII4_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB106_Cobra_MDXXIII4_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	46	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

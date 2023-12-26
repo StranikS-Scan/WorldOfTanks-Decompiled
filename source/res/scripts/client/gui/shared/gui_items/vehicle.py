@@ -53,6 +53,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
+from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
@@ -254,6 +255,7 @@ class Vehicle(FittingItem):
     __customizationService = dependency.descriptor(ICustomizationService)
     __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
+    nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
@@ -294,7 +296,7 @@ class Vehicle(FittingItem):
         self._invData = invData or dict()
         postProgressionFeatures = None
         if self._proxy is not None and self._proxy.inventory.isSynced() and self._proxy.stats.isSynced() and self._proxy.shop.isSynced() and self._proxy.vehicleRotation.isSynced() and self._proxy.recycleBin.isSynced():
-            invDataTmp = self._proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
+            invDataTmp = self._proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
             if invDataTmp is not None:
                 self._invData = invDataTmp
             self._xp = self._proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
@@ -568,10 +570,10 @@ class Vehicle(FittingItem):
         return
 
     def _getOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        if style is not None:
+        if style is not None and season != SeasonType.EVENT:
             return self.__getStyledOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season)
         else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled and season != SeasonType.EVENT else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -612,6 +614,10 @@ class Vehicle(FittingItem):
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         name = getNationLessName(self.name)
         return getShopVehicleIconPath(size, name)
+
+    def getSnapshotIcon(self):
+        name = getIconResourceName(getNationLessName(self.name))
+        return RES_ICONS.getSnapshotIcon(name)
 
     @property
     def invID(self):

@@ -6,6 +6,7 @@ from web.client_web_api.battle_pass import BattlePassEventHandler
 from web.client_web_api.platform import PlatformEventHandler
 from web.client_web_api.ranked import BrowsersBridgeC2W, RankedEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
+from web.client_web_api.seniority_awards import SeniorityAwardsEventHandler
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.telecom_rentals import TelecomTokenEventHandler
 from web.client_web_api.shop.unified_trade_in import UnifiedTradeInEventHandler
@@ -43,4 +44,5 @@ class WebEventSender(object):
          RankedEventHandler(self),
          BrowsersBridgeC2W(self),
          TelecomTokenEventHandler(self),
-         BattlePassEventHandler(self))
+         BattlePassEventHandler(self),
+         SeniorityAwardsEventHandler(self))

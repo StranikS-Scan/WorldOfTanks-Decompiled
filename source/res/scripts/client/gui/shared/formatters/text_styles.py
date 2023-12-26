@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/text_styles.py
 import types
+import re
 from gui import makeHtmlString
 from gui.shared.money import Currency
 from helpers import i18n
@@ -62,7 +63,16 @@ __all__ = ('standard',
  'greenText',
  'poiCapturedBoldText',
  'poiCapturedRegularText',
- 'prestige')
+ 'prestige',
+ 'nyAmber',
+ 'nyCrystal',
+ 'nyEmerald',
+ 'nyIron',
+ 'cream',
+ 'creamBold',
+ 'creamTitle',
+ 'lightGray',
+ 'lightBlue')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -308,6 +318,22 @@ def brProgressionToken(text):
     return _formatText('brProgressionToken', text)
 
 
+def nyAmber(text):
+    return _formatText('nyAmber', text)
+
+
+def nyIron(text):
+    return _formatText('nyIron', text)
+
+
+def nyCrystal(text):
+    return _formatText('nyCrystal', text)
+
+
+def nyEmerald(text):
+    return _formatText('nyEmerald', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 
@@ -330,6 +356,10 @@ def titleFont(text):
 
 def tutorial(text):
     return _formatText('tutorialText', text)
+
+
+def tutorialBig(text):
+    return _formatText('tutorialTextBig', text)
 
 
 def playerOnline(text):
@@ -482,6 +512,26 @@ def poiCapturedRegularText(text):
     return _formatText('poiCapturedRegularText', text)
 
 
+def cream(text):
+    return _formatText('cream', text)
+
+
+def creamBold(text):
+    return _formatText('creamBold', text)
+
+
+def creamTitle(text):
+    return _formatText('creamTitle', text)
+
+
+def lightGray(text):
+    return _formatText('lightGray', text)
+
+
+def lightBlue(text):
+    return _formatText('lightBlue', text)
+
+
 def prestige(text):
     return _formatText('prestigeText', text)
 
@@ -542,3 +592,19 @@ class _StylesBuilder(object):
 
 def builder(delimiter=''):
     return _StylesBuilder(delimiter)
+
+
+def formatStyledText(text):
+    styledTextPattern = '{\\w+_(?:Open|Close)}'
+    stylePattern = '{(\\w+)_\\w+}'
+    splitString = re.split(styledTextPattern, text)
+    if len(splitString) == 3:
+        textToStyle = splitString[1]
+        style = re.findall(stylePattern, re.findall(styledTextPattern, text)[0])
+        if style:
+            style = style[0]
+            styledText = _formatText(style, textToStyle)
+            if styledText != style:
+                splitString[1] = styledText
+                return ''.join(splitString)
+    return text

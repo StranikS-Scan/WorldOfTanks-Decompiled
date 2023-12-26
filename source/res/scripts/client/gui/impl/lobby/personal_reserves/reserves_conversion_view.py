@@ -11,6 +11,7 @@ from gui.impl.gen.view_models.views.lobby.personal_reserves.converted_booster_li
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_conversion_view_model import ReservesConversionViewModel
 from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVES_SOUND_SPACE
 from gui.impl.lobby.personal_reserves.view_utils.reserves_view_monitor import ReservesViewMonitor
+from gui.impl.new_year.navigation import NewYearNavigation
 from gui.shared.event_dispatcher import closeViewsExceptReservesActivationView
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
@@ -39,7 +40,11 @@ class ReservesConversionView(ReservesViewMonitor):
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = ReservesConversionViewModel()
         super(ReservesConversionView, self).__init__(settings)
+        isNewYearView = NewYearNavigation.getCurrentObject() is not None
+        if isNewYearView:
+            NewYearNavigation.closeMainView()
         self._uiLogger = PersonalReservesMetricsLogger(parent=PersonalReservesLogKeys.HANGAR, item=PersonalReservesLogKeys.RESERVES_CONVERSION_WINDOW)
+        return
 
     @property
     def _viewModel(self):

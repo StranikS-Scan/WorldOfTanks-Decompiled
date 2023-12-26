@@ -252,7 +252,10 @@ class AS3_AppFactory(IAppFactory):
          'guiControlsLobbyDynamic.swf',
          'guiControlsLobbyDynamic2.swf',
          'popovers.swf',
-         'iconLibrary.swf']
+         'iconLibrary.swf',
+         'ub_lootboxes.swf',
+         'ub_newYear1.swf',
+         'animations/fadeWindow/fadeWindow.swf']
         if self.bootcampCtrl.isInBootcamp():
             libs.extend(['BCGuiControlsLobbyBattle.swf', 'BCGuiControlsLobby.swf'])
         app.as_loadLibrariesS(libs)

@@ -9,6 +9,7 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.impl.gen.view_models.views.lobby.subscription.wot_plus_intro_view_model import WotPlusIntroViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared import EVENT_BUS_SCOPE
+from gui.impl.new_year.navigation import NewYearNavigation
 from gui.shared.event_dispatcher import showWotPlusInfoPage
 from gui.shared.events import ViewEventType, LoadViewEvent
 from helpers import dependency
@@ -26,7 +27,11 @@ class WotPlusIntroView(ViewImpl, EventSystemEntity):
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = WotPlusIntroViewModel()
         self._wotPlusLogger = WotPlusAttendanceRewardScreenLogger()
+        isNewYearView = NewYearNavigation.getCurrentObject() is not None
+        if isNewYearView:
+            NewYearNavigation.closeMainView()
         super(WotPlusIntroView, self).__init__(settings)
+        return
 
     @property
     def viewModel(self):

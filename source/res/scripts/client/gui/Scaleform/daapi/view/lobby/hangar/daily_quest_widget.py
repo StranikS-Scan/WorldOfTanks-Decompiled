@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.gui.game_control import IPromoController, ILimitedUIController
+from skeletons.gui.game_control import IPromoController, ILimitedUIController, IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
@@ -20,6 +20,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
     eventsCache = dependency.descriptor(IEventsCache)
     promoController = dependency.descriptor(IPromoController)
     limitedUIController = dependency.descriptor(ILimitedUIController)
+    __funRandomCtrl = dependency.descriptor(IFunRandomController)
     __layout = 0
 
     def updateWidgetLayout(self, value):

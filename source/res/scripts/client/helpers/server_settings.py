@@ -7,6 +7,8 @@ import types
 from collections import namedtuple
 from enum import Enum
 import typing
+from ny_common.NYDogConfig import NYDogConfig
+from ny_common.NYPiggyBankConfig import NYPiggyBankConfig
 import constants
 import post_progression_common
 from BonusCaps import BonusCapsConst
@@ -25,6 +27,15 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
+from ny_common.GeneralConfig import GeneralConfig
+from ny_common.BattleBonusesConfig import BattleBonusesConfig
+from ny_common.GiftMachineConfig import GiftMachineConfig
+from ny_common.MarketplaceConfig import MarketplaceConfig
+from ny_common.CelebrityConfig import CelebrityConfig
+from ny_common.GuestsQuestsConfig import GuestsQuestsConfig
+from ny_common.ObjectsConfig import ObjectsConfig
+from ny_common.ResourceCollectingConfig import ResourceCollectingConfig
+from ny_common.settings import BattleBonusesConsts, NYLootBoxConsts, NYGeneralConsts, NY_CONFIG_NAME, CelebrityConsts, MarketplaceConsts, GuestsQuestsConsts, ObjectsConsts, GiftMachineConsts, ResourceCollectingConsts, NYPiggyBankConsts, NYDogConsts
 from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from prestige_system.prestige_common import PrestigeConfig
@@ -462,11 +473,12 @@ class EpicGameConfig(namedtuple('EpicGameConfig', ('isEnabled',
  'peripheryIDs',
  'primeTimes',
  'rentVehicles',
- 'tooltips'))):
+ 'tooltips',
+ 'url'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, enableWelcomeScreen=True, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={})
+        defaults = dict(isEnabled=False, enableWelcomeScreen=True, validVehicleLevels=[], battlePassDataEnabled=True, levelsToUpgrateAllReserves=[], unlockableInBattleVehLevels=[], inBattleModifiers={}, seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, rentVehicles=[], tooltips={}, url='')
         defaults.update(kwargs)
         return super(EpicGameConfig, cls).__new__(cls, **defaults)
 
@@ -655,18 +667,23 @@ class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConvers
 
 
 class SeniorityAwardsConfig(typing.NamedTuple('SeniorityAwardsConfig', (('enabled', bool),
+ ('active', bool),
  ('endTime', int),
  ('reminders', list),
  ('clockOnNotification', int),
  ('showRewardNotification', bool),
  ('receivedRewardsToken', str),
+ ('claimVehicleRewardTokenPattern', str),
  ('rewardEligibilityToken', str),
  ('claimRewardToken', str),
- ('rewardQuestsPrefix', str)))):
+ ('vehicleSelectionTokenPattern', str),
+ ('rewardQuestsPrefix', str),
+ ('categories', dict),
+ ('vehicleSelectionQuestPattern', str)))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', rewardQuestsPrefix='')
+        defaults = dict(enabled=False, active=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', claimVehicleRewardTokenPattern='', vehicleSelectionTokenPattern='', rewardQuestsPrefix='', categories={}, vehicleSelectionQuestPattern='')
         defaults.update(kwargs)
         return super(SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -691,6 +708,43 @@ class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 
         allowedFields = self._fields
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
+
+
+class _AdventCalendarV2Config(namedtuple('_AdventCalendarV2Config', ('isEnabled',
+ 'startDate',
+ 'postEventStartDate',
+ 'postEventEndDate',
+ 'doorsCost',
+ 'doorOpenTokenMask'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, startDate=0, postEventStartDate=0, postEventEndDate=0, doorsCost=[], doorOpenTokenMask='')
+        defaults.update(kwargs)
+        return super(_AdventCalendarV2Config, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+class _LootBoxesTooltipConfig(namedtuple('_LootBoxesTooltipConfig', ('boxes',))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(boxes={})
+        defaults.update(kwargs)
+        return super(_LootBoxesTooltipConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        return self._replace(**{'boxes': data})
 
 
 _crystalRewardInfo = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop3, loseTop3, winTop10, loseTop10, topLength firstTopLength')
@@ -886,7 +940,7 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
         return self.giftEventState == GiftEventState.DISABLED
 
 
-class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
+class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
@@ -907,7 +961,16 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
 
     @classmethod
     def __packEventConfigs(cls, data):
-        data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        events = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
+        data['events'], data['itemToEventID'] = events, cls.__getItemToEventMap(events)
+
+    @classmethod
+    def __getItemToEventMap(cls, events):
+        result = {}
+        for eventID, eventConfig in events.iteritems():
+            result.update({itemID:eventID for itemID in eventConfig.giftItemIDs})
+
+        return result
 
 
 class _WellRewardConfig(namedtuple('_WellRewardConfig', ('bonus',
@@ -1185,11 +1248,11 @@ class WinbackConfig(namedtuple('WinbackConfig', ('isEnabled',
         return cls()
 
 
-class PersonalReservesConfig(namedtuple('_PersonalReserves', ('isReservesInBattleActivationEnabled', 'supportedQueueTypes'))):
+class PersonalReservesConfig(namedtuple('_PersonalReserves', ('isReservesInBattleActivationEnabled', 'displayConversionNotification', 'supportedQueueTypes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isReservesInBattleActivationEnabled=False, supportedQueueTypes={})
+        defaults = dict(isReservesInBattleActivationEnabled=False, displayConversionNotification=False, supportedQueueTypes=frozenset())
         defaults.update(**kwargs)
         return super(PersonalReservesConfig, cls).__new__(cls, **defaults)
 
@@ -1342,6 +1405,8 @@ class ServerSettings(object):
         self.__rankedBattlesSettings = RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
         self.__adventCalendar = _AdventCalendarConfig()
+        self.__adventCalendarV2 = _AdventCalendarV2Config()
+        self.__lootBoxesTooltipConfig = _LootBoxesTooltipConfig()
         self.__epicGameSettings = EpicGameConfig()
         self.__unitAssemblerConfig = _UnitAssemblerConfig.defaults()
         self.__telecomConfig = _TelecomConfig.defaults()
@@ -1412,7 +1477,9 @@ class ServerSettings(object):
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(RankedBattlesConfig, self.__serverSettings['ranked_config'])
         if 'advent_calendar_config' in self.__serverSettings:
-            self.__adventCalendar = makeTupleByDict(_AdventCalendarConfig, self.__serverSettings['advent_calendar_config'])
+            self.__adventCalendarV2 = makeTupleByDict(_AdventCalendarV2Config, self.__serverSettings['advent_calendar_config'])
+        if 'lootboxes_tooltip_config' in self.__serverSettings:
+            self.__lootBoxesTooltipConfig = makeTupleByDict(_LootBoxesTooltipConfig, {'boxes': self.__serverSettings['lootboxes_tooltip_config']})
         if 'epic_config' in self.__serverSettings:
             LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
             self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
@@ -1553,6 +1620,9 @@ class ServerSettings(object):
         if 'advent_calendar_config' in serverSettingsDiff:
             self.__updateAdventCalendar(serverSettingsDiff)
             self.__serverSettings['advent_calendar_config'] = serverSettingsDiff['advent_calendar_config']
+        if 'lootboxes_tooltip_config' in serverSettingsDiff:
+            self.__updateLootBoxesTooltipConfig(serverSettingsDiff)
+            self.__serverSettings['lootboxes_tooltip_config'] = serverSettingsDiff['lootboxes_tooltip_config']
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
@@ -1614,6 +1684,8 @@ class ServerSettings(object):
             self.__updateBattleMatters(serverSettingsDiff)
         if TRADE_IN_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
+        if NY_CONFIG_NAME in serverSettingsDiff:
+            self.__serverSettings[NY_CONFIG_NAME] = serverSettingsDiff[NY_CONFIG_NAME]
         if Configs.RESOURCE_WELL.value in serverSettingsDiff:
             self.__updateResourceWellConfig(serverSettingsDiff)
         if Configs.PERIPHERY_ROUTING_CONFIG.value in serverSettingsDiff:
@@ -1720,6 +1792,14 @@ class ServerSettings(object):
     @property
     def adventCalendar(self):
         return self.__adventCalendar
+
+    @property
+    def adventCalendarV2(self):
+        return self.__adventCalendarV2
+
+    @property
+    def lootBoxesTooltipConfig(self):
+        return self.__lootBoxesTooltipConfig
 
     @property
     def epicMetaGame(self):
@@ -1866,6 +1946,9 @@ class ServerSettings(object):
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
 
+    def isLootBoxEnabled(self, boxId):
+        return self.__getGlobalSetting('lootBoxes_config', {}).get(boxId, {}).get('enabled', False)
+
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
 
@@ -1904,6 +1987,9 @@ class ServerSettings(object):
 
     def isBlueprintDataChangedInDiff(self, diff):
         return 'blueprints_config' in diff
+
+    def isSandboxEnabled(self):
+        return self.__getGlobalSetting('isSandboxEnabled', False)
 
     def isBootcampEnabled(self):
         return self.__getGlobalSetting('isBootcampEnabled', False)
@@ -2158,6 +2244,42 @@ class ServerSettings(object):
     def getTradeInConfig(self):
         return self.__getGlobalSetting(TRADE_IN_CONFIG_NAME, {})
 
+    def getNewYearBattleBonusConfig(self):
+        return BattleBonusesConfig(self.__getNYConfig(BattleBonusesConsts.CONFIG_NAME))
+
+    def getLootBoxShop(self):
+        return self.__getNYConfig(NYLootBoxConsts.CONFIG_NAME)
+
+    def getNewYearCelebrityConfig(self):
+        return CelebrityConfig(self.__getNYConfig(CelebrityConsts.CONFIG_NAME))
+
+    def getNewYearMarketplaceConfig(self):
+        return MarketplaceConfig(self.__getNYConfig(MarketplaceConsts.CONFIG_NAME))
+
+    def getNewYearGuestsQuestsConfig(self):
+        return GuestsQuestsConfig(self.__getNYConfig(GuestsQuestsConsts.CONFIG_NAME))
+
+    def getNewYearObjectsConfig(self):
+        return ObjectsConfig(self.__getNYConfig(ObjectsConsts.CONFIG_NAME))
+
+    def getNewYearGeneralConfig(self):
+        return GeneralConfig(self.__getNYConfig(NYGeneralConsts.CONFIG_NAME))
+
+    def getNewYearGiftMachineConfig(self):
+        return GiftMachineConfig(self.__getNYConfig(GiftMachineConsts.CONFIG_NAME))
+
+    def getNewYearResourceCollectingConfig(self):
+        return ResourceCollectingConfig(self.__getNYConfig(ResourceCollectingConsts.CONFIG_NAME))
+
+    def getNewYearPiggyBank(self):
+        return NYPiggyBankConfig(self.__getNYConfig(NYPiggyBankConsts.CONFIG_NAME))
+
+    def getNewYearDogConfig(self):
+        return NYDogConfig(self.__getNYConfig(NYDogConsts.CONFIG_NAME))
+
+    def __getNYConfig(self, configName):
+        return self.__getGlobalSetting(NY_CONFIG_NAME, {}).get(configName, {})
+
     def getEventLootBoxesConfig(self):
         return self.__eventLootBoxesConfig
 
@@ -2188,7 +2310,10 @@ class ServerSettings(object):
         self.__eula = _EULA(cProfile.get('enabled', False), cProfile.get('demoAccEnabled', False), cProfile.get('steamAccEnabled', False))
 
     def __updateAdventCalendar(self, targetSettings):
-        self.__adventCalendar = self.__adventCalendar.replace(targetSettings['advent_calendar_config'])
+        self.__adventCalendarV2 = self.__adventCalendarV2.replace(targetSettings['advent_calendar_config'])
+
+    def __updateLootBoxesTooltipConfig(self, targetSettings):
+        self.__lootBoxesTooltipConfig = self.__lootBoxesTooltipConfig.replace(targetSettings['lootboxes_tooltip_config'])
 
     def __updateRanked(self, targetSettings):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])

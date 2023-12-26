@@ -66,6 +66,11 @@
           <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Hull.model	</exploded>
         </tramontana>
+        <F108_Panhard_EBR_105_MDXXIII4_3DSt>
+          <undamaged>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Hull.model	</exploded>
+        </F108_Panhard_EBR_105_MDXXIII4_3DSt>
       </sets>
     </models>
     <swinging>
@@ -94,10 +99,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.471751 0.184528 1.45468	</rayStart>
-        <rayEnd>	0.423747 0.01804 1.3548	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
-        <size>	0.25	</size>
+        <rayStart>	0.650493 0.294648 0.994549	</rayStart>
+        <rayEnd>	0.650493 0.094651 0.994549	</rayEnd>
+        <rayUp>	0 -0.000002 -1	</rayUp>
+        <size>	0.2	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -526,6 +531,12 @@
         <clipAngle>	0.827194	</clipAngle>
         <anchorShift>	0.534993	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -574,6 +585,11 @@
             <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Chassis.model	</exploded>
           </tramontana>
+          <F108_Panhard_EBR_105_MDXXIII4_3DSt>
+            <undamaged>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Chassis.model	</exploded>
+          </F108_Panhard_EBR_105_MDXXIII4_3DSt>
         </sets>
       </models>
       <traces>
@@ -1043,6 +1059,11 @@
                 <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Gun_01.model	</exploded>
               </tramontana>
+              <F108_Panhard_EBR_105_MDXXIII4_3DSt>
+                <undamaged>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </F108_Panhard_EBR_105_MDXXIII4_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1101,6 +1122,15 @@
               <rayUp>	0.106354 0 0	</rayUp>
               <size>	0.7	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 1.51	</rayStart>
+              <rayEnd>	0 0 2.21	</rayEnd>
+              <rayUp>	0.11635 0 0	</rayUp>
+              <compatibleModels>	F108_Panhard_EBR_105_MDXXIII4_3DSt	</compatibleModels>
+              <size>	0.7	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1128,6 +1158,11 @@
             <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/tramontana/crash/lod0/Turret_01.model	</exploded>
           </tramontana>
+          <F108_Panhard_EBR_105_MDXXIII4_3DSt>
+            <undamaged>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F108_Panhard_EBR_105/_skins/F108_Panhard_EBR_105_MDXXIII4_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </F108_Panhard_EBR_105_MDXXIII4_3DSt>
         </sets>
       </models>
       <hitTester>

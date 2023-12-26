@@ -18,9 +18,7 @@ from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
 from gui.Scaleform.framework.managers.event_logging import EventLogManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
-from gui.Scaleform.genConsts.GRAPHICS_OPTIMIZATION_ALIASES import GRAPHICS_OPTIMIZATION_ALIASES
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GameInputMgr import GameInputMgr
@@ -30,43 +28,51 @@ from gui.Scaleform.required_libraries_config import LOBBY_REQUIRED_LIBRARIES
 from gui.sounds.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
+from gui.Scaleform.managers.fade_manager import FadeManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency, uniprof
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
-LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
- VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
- VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
- HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.RANKED_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.ROYALE_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.COMP7_TANK_CAROUSEL: OptimizationSetting(),
- GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
+_EXTENDED_RENDER_PIPELINE = 0
 
 class LobbyEntry(AppEntry):
     bootcampCtrl = dependency.descriptor(IBootcampController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, appNS, ctrlModeFlags):
         super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
+        self.__fadeManager = None
+        return
 
     @property
     def waitingManager(self):
         return self.__getWaitingFromContainer()
 
+    @property
+    def fadeManager(self):
+        return self.__fadeManager
+
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
+        self.__fadeManager.setup()
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.close()
         super(LobbyEntry, self).beforeDelete()
+        if self.__fadeManager:
+            self.__fadeManager.destroy()
+            self.__fadeManager = None
+        return
+
+    def _createManagers(self):
+        super(LobbyEntry, self)._createManagers()
+        self.__fadeManager = FadeManager()
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)
@@ -128,7 +134,7 @@ class LobbyEntry(AppEntry):
         return ScaleformTutorialManager()
 
     def _createGraphicsOptimizationManager(self):
-        return GraphicsOptimizationManager(config=LOBBY_OPTIMIZATION_CONFIG)
+        return GraphicsOptimizationManager()
 
     def _setup(self):
         self.movie.backgroundAlpha = 0.0

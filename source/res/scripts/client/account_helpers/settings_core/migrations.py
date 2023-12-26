@@ -1005,6 +1005,20 @@ def _migrateTo112(core, data, initialized):
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
 
 
+def _migrateTo113(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys as keys
+    data[SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE][keys.SENIORITY_AWARDS_ON_PAUSE_NOTIFICATION_SHOWED] = False
+
+
+def _migrateTo114(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, 0)
+    if storedValue:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.NEW_YEAR] = clear.get(SETTINGS_SECTIONS.NEW_YEAR, 0) | storedValue
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1447,6 +1461,14 @@ _versions = ((1,
   False),
  (112,
   _migrateTo112,
+  False,
+  False),
+ (113,
+  _migrateTo113,
+  False,
+  False),
+ (114,
+  _migrateTo114,
   False,
   False))
 

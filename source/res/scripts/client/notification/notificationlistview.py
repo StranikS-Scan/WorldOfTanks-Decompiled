@@ -2,12 +2,15 @@
 # Embedded file name: scripts/client/notification/NotificationListView.py
 import typing
 from debug_utils import LOG_ERROR
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
 from gui.Scaleform.genConsts.NOTIFICATIONS_CONSTANTS import NOTIFICATIONS_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl.gen import R
+from gui.impl.lobby.gf_notifications import GFNotificationInject
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.formatters import icons
 from gui.shared.notifications import NotificationGroup
 from helpers import dependency
@@ -33,6 +36,16 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.setModel(NotificationMVC.g_instance.getModel())
         self.__currentGroup = NotificationGroup.INFO
         self.__countersLabels = [''] * 3
+
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        from gui.Scaleform.framework import g_entitiesFactories
+        idx = WindowLayer.UNDEFINED
+        componentPy = g_entitiesFactories.initialize(GFNotificationInject(gfViewName, isPopUp, linkageData), component, idx)
+        self.components[alias] = componentPy
+        componentPy.setEnvironment(self.app)
+        componentPy.create()
+        g_eventBus.handleEvent(events.ComponentEvent(events.ComponentEvent.COMPONENT_REGISTERED, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)
+        self._onRegisterFlashComponent(componentPy, alias)
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
@@ -118,7 +131,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.resetNotifiedMessagesCount(self.__currentGroup)
 
     def __getMessagesList(self):
-        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup ]
+        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup and not item.onlyPopUp() ]
         return [ self.__getListVO(item) for item in filtered ]
 
     def __getEmptyListMsg(self, hasMessages):

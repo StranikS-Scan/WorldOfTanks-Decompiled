@@ -501,7 +501,7 @@ class TankmanDescr(object):
         levelsDropped = MAX_SKILL_LEVEL
         if numSkills == 1:
             levelsDropped = self.__lastSkillLevel
-            self.__lastSkillLevel = 0
+            self.__lastSkillLevel = MAX_SKILL_LEVEL if self.freeSkillsNumber else 0
         elif idx + 1 == numSkills:
             levelsDropped = self.__lastSkillLevel
             self.__lastSkillLevel = MAX_SKILL_LEVEL

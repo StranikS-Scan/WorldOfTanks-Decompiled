@@ -827,7 +827,7 @@ def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, inst
 
 def assembleCollisionObstaclesCollector(appearance, lodStateLink, desc):
     isWheeledVehicle = 'wheeledVehicle' in desc.type.tags
-    collisionObstaclesCollector = appearance.createComponent(Vehicular.CollisionObstaclesCollector, appearance.compoundModel, isWheeledVehicle)
+    collisionObstaclesCollector = appearance.createComponent(Vehicular.CollisionObstaclesCollector, appearance.compoundModel, appearance.spaceID, isWheeledVehicle)
     if lodStateLink is not None:
         collisionObstaclesCollector.setLodLink(lodStateLink)
         collisionObstaclesCollector.setLodSettings(shared_components.LodSettings(appearance.typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))

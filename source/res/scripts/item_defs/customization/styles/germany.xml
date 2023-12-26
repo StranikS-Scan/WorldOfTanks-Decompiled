@@ -2169,6 +2169,39 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G61_G_E	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	825	</id>
+      <texture>	gui/maps/vehicles/styles/G61_G_E_MDXXIII4_3DSt.png	</texture>
+      <modelsSet>	G61_G_E_MDXXIII4_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G61_G_E_MDXXIII4_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G61_G_E_MDXXIII4_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
@@ -2285,6 +2318,39 @@
               <appliedTo>	4096	</appliedTo>
             </item>
           </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G55_E-75	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	851	</id>
+      <texture>	gui/maps/vehicles/styles/G55_E-75_MDXXIII4_3DSt.png	</texture>
+      <modelsSet>	G55_E-75_MDXXIII4_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G55_E-75_MDXXIII4_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G55_E-75_MDXXIII4_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	addNationalEmblem NY_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

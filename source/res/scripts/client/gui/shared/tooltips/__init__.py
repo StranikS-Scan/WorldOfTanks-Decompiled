@@ -4,10 +4,12 @@ import sys
 import weakref
 import typing
 from debug_utils import LOG_CURRENT_EXCEPTION
+from frameworks.wulf import WindowFlags
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL, UnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
+from gui.impl.pub import WindowImpl
 from gui.shared.formatters import icons
 from helpers import dependency
 from helpers.i18n import makeString
@@ -16,6 +18,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
 from gui.impl import backport
 from gui.impl.gen import R
+from soft_exception import SoftException
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
@@ -66,6 +69,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BATTLE_ROYALE_SELECTOR_CALENDAR_INFO = 'battleRoyaleSelectorCalendarInfo'
     BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
     SQUAD_BONUS = 'squadBonus'
+    NY_VEHICLE_BONUS = 'nyVehicleBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
@@ -187,6 +191,19 @@ class ToolTipData(ToolTipBaseData):
                 result[key] = value
 
         return result
+
+
+class WulfTooltipData(ToolTipData):
+
+    def getDisplayableData(self, *args, **kwargs):
+        parent = kwargs.get('parent', None)
+        return WindowImpl(wndFlags=WindowFlags.SERVICE_WINDOW, content=self.getTooltipContent(*args, **kwargs), parent=parent, areaID=R.areas.specific())
+
+    def buildToolTip(self, *args, **kwargs):
+        return None
+
+    def getTooltipContent(self, *args, **kwargs):
+        raise SoftException('getTooltipContent should be overriden in {}'.format(self))
 
 
 class ToolTipDataField(object):

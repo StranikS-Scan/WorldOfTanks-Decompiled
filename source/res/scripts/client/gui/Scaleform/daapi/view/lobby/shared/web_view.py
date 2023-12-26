@@ -149,7 +149,7 @@ class WebViewTransparent(WebView):
 
     def setParentWindow(self, window):
         super(WebViewTransparent, self).setParentWindow(window)
-        self.__blur = CachedBlur(enabled=True, ownLayer=window.layer)
+        self.__blur = CachedBlur(enabled=True, ownLayer=window.layer - 1)
 
     def onEscapePress(self):
         self.destroy()

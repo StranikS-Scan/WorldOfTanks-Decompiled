@@ -7,6 +7,9 @@ class NotificationPopUpViewerMeta(BaseDAAPIComponent):
     def setListClear(self):
         self._printOverrideError('setListClear')
 
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        self._printOverrideError('registerGFNotification')
+
     def onMessageHidden(self, byTimeout, wasNotified, typeID, entityID):
         self._printOverrideError('onMessageHidden')
 

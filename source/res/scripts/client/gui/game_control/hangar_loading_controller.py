@@ -36,7 +36,7 @@ class HangarLoadingController(IHangarLoadingController):
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
 
     def onLobbyInited(self, event):
-        if self.__isHangarLoadedAfterLogin():
+        if self.isHangarLoadedAfterLogin():
             if self.__hangarSpace.spaceInited:
                 self.__hangarLoadedAfterLoginNotify()
             else:
@@ -51,5 +51,5 @@ class HangarLoadingController(IHangarLoadingController):
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
         self.onHangarLoadedAfterLogin()
 
-    def __isHangarLoadedAfterLogin(self):
+    def isHangarLoadedAfterLogin(self):
         return self.__isConnectedAsAccount and not self.__bootcamp.isInBootcamp() and not self.__bootcamp.isInBootcampAccount()

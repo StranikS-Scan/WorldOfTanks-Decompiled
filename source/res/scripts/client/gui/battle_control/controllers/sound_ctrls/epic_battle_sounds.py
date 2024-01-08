@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/sound_ctrls/epic_battle_sounds.py
 import SoundGroups
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import EQUIPMENT_STAGES
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control.avatar_getter import getSoundNotifications
@@ -11,8 +10,8 @@ from gui.battle_control.controllers.sound_ctrls.common import BaseEfficiencySoun
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from items import vehicles
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicBattleSoundController(SoundPlayersController):
 
@@ -93,7 +92,7 @@ class _EquipmentSoundPlayer(object):
         return
 
     def __onPlayerRankUpdated(self, rank):
-        if self.__epicController.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
+        if self.__epicController.isRandomBattleReserves():
             return
         missionsCtrl = self.__sessionProvider.dynamic.missions
         firstUnlocked, _ = missionsCtrl.getRankUpdateData(rank)

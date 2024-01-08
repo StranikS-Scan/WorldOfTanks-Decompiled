@@ -35,6 +35,7 @@ from gui.shared.gui_items.Vehicle import getTypeBigIconPath, Vehicle, getShopVeh
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.module_upd_available_helper import updateViewedItems
 from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import int2roman, dependency
 from helpers.blueprint_generator import g_blueprintGenerator
@@ -181,6 +182,7 @@ class Research(ResearchMeta):
         self._data.setRootCD(vehCD)
         self.redraw()
         self._vehPostProgressionEntryPoint.tryUnlock()
+        updateViewedItems(vehicle=self.vehicle)
 
     def redraw(self):
         self._data.load()
@@ -275,6 +277,7 @@ class Research(ResearchMeta):
 
     def invalidateVTypeXP(self, xps):
         self._vehPostProgressionEntryPoint.redraw(self.vehicle)
+        updateViewedItems(vehicle=self.vehicle)
         super(Research, self).invalidateVTypeXP(xps)
 
     def invalidateRent(self, vehicles):
@@ -337,6 +340,7 @@ class Research(ResearchMeta):
         self.__preloadingBP = self._data.getRootCD()
         g_blueprintGenerator.generate(self.__preloadingBP)
         self._vehPostProgressionEntryPoint = VehPostProgressionEntryPoint(self)
+        updateViewedItems(vehicle=self.vehicle)
 
     def _dispose(self):
         if self.__preloadingBP is not None:

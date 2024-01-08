@@ -39,6 +39,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         return
 
     def _onRegisterFlashComponent(self, componentPy, alias):
+        super(EpicBattleRespawn, self)._onRegisterFlashComponent(componentPy, alias)
         if alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL:
             self.__carousel = componentPy
         elif alias == BATTLE_VIEW_ALIASES.EPIC_RESPAWN_AMMUNITION_PANEL:

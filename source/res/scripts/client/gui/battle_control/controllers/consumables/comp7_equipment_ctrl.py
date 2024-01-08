@@ -71,10 +71,11 @@ class Comp7EquipmentController(equipment_ctrl.EquipmentsController):
     def __rediscoverRoleSkill(self):
         from VisualScriptEquipment import VisualScriptEquipment
         vehicle = avatar_getter.getPlayerVehicle()
-        if vehicle is not None and vehicle.entityGameObject is not None:
-            equipmentComponent = vehicle.entityGameObject.findComponentByType(VisualScriptEquipment)
-            if equipmentComponent is not None:
-                equipmentComponent.update()
+        if vehicle is not None:
+            for dynamicComponent in vehicle.dynamicComponents.itervalues():
+                if isinstance(dynamicComponent, VisualScriptEquipment):
+                    dynamicComponent.update()
+
         return
 
     def __addPoiByType(self, poiType):

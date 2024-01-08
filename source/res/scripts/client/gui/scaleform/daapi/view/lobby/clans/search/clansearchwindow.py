@@ -3,7 +3,8 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans.clan_helpers import ClanListener, ClanFinder
-from gui.clans.items import ClanCommonData, formatField
+from gui.clans.items import ClanCommonData
+from gui.clans.data_wrapper.utils import formatField
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _CCR
 from gui.impl import backport

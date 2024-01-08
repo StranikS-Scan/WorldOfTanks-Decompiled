@@ -13,7 +13,6 @@ from gui.prb_control.storages.comp7_storage import Comp7Storage
 from gui.prb_control.storages.maps_training_storage import MapsTrainingStorage
 from gui.prb_control.storages.prb_storage import TrainingStorage
 from gui.prb_control.storages.ranked_storage import RankedStorage
-from gui.prb_control.storages.epic_storage import EpicStorage
 from gui.prb_control.storages.event_battles_storage import EventBattlesStorage
 from gui.prb_control.storages.stronghold_storage import StrongholdStorage
 from gui.prb_control.storages.tournament_storage import TournamentStorage
@@ -41,7 +40,6 @@ RECENT_PRB_STORAGE = 'recentPrbStorage'
 registerPrbStorage(RECENT_PRB_STORAGE, RecentPrbStorage())
 registerPrbStorage(_makeLegacyName(_P_TYPE.TRAINING), TrainingStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.RANKED), RankedStorage())
-registerPrbStorage(makeQueueName(_Q_TYPE.EPIC), EpicStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.EVENT_BATTLES), EventBattlesStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.STRONGHOLD_UNITS), StrongholdStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.TOURNAMENT_UNITS), TournamentStorage())

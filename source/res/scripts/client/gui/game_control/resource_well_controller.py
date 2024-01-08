@@ -43,6 +43,8 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         self.__stop()
 
     def onDisconnected(self):
+        self.__serialNumberRequester.clear()
+        self.__regularNumberRequester.clear()
         self.__stop()
 
     def fini(self):
@@ -158,21 +160,21 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         if not self.__serialNumberRequester.isDataAvailable():
             return 0
         remainingValuesCount = self.__serialNumberRequester.getRemainingValues()
-        givenValuesCount = self.__serialNumberRequester.getGivenValues()
+        givenValuesCount = self.__serialNumberRequester.getGivenValues() or 0
         rewardLimit = self.getRewardLimit(True)
         if remainingValuesCount > rewardLimit:
             _logger.error('Remaining values count cannot exceed reward limit!')
             return 0
-        elif remainingValuesCount < rewardLimit / 2.0 or givenValuesCount is None:
+        if remainingValuesCount < rewardLimit / 2.0:
             return remainingValuesCount
-        elif givenValuesCount > rewardLimit:
+        if givenValuesCount > rewardLimit:
             _logger.error('Given values count cannot exceed reward limit!')
             return 0
-        else:
-            return rewardLimit - givenValuesCount
+        return rewardLimit - givenValuesCount
 
     def __getInitialRemainingValues(self, isSerial):
-        return self.__itemsCache.items.resourceWell.getInitialNumberAmounts().get(self.getRewardSequence(isSerial))
+        initialAmountsInCache = self.__itemsCache.items.resourceWell.getInitialNumberAmounts().get(self.getRewardSequence(isSerial))
+        return initialAmountsInCache if initialAmountsInCache == 0 else self.getRewardLimit(isSerial)
 
     @serverSettingsChangeListener(Configs.RESOURCE_WELL.value)
     def __onServerSettingsChanged(self, diff):
@@ -186,8 +188,10 @@ class ResourceWellController(IResourceWellController, EventsHandler):
         self.onSettingsChanged()
 
     def __onClientUpdated(self, diff, _):
-        if RESOURCE_WELL_PDATA_KEY in diff and 'initialAmounts' in diff[RESOURCE_WELL_PDATA_KEY]:
+        isRemaining = self.__serialNumberRequester.getValuesLeft() is not None and self.__regularNumberRequester.getValuesLeft() is not None
+        if RESOURCE_WELL_PDATA_KEY in diff and 'initialAmounts' in diff[RESOURCE_WELL_PDATA_KEY] and not isRemaining:
             self.__setNumberInitialValues()
+        return
 
     def __onRequesterUpdated(self):
         self.onNumberRequesterUpdated()

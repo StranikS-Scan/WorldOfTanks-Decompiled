@@ -5,9 +5,11 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
+from shared_utils import nextTick
 from skeletons.gui.game_control import IEventLootBoxesController
 from skeletons.gui.impl import IGuiLoader
 
+@nextTick
 def showEventLootBoxesWelcomeScreen():
     from event_lootboxes.gui.impl.lobby.event_lootboxes.welcome_screen import EventLootBoxesWelcomeScreenWindow
     uiLoader = dependency.instance(IGuiLoader)

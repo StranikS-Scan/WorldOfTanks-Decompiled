@@ -1,0 +1,17 @@
+<FLAccountPrebattleComponent.def>
+  <BaseMethods>
+    <createEpicTrainingPrebattle>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+    </createEpicTrainingPrebattle>
+    <createEpicDevPrebattle>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </createEpicDevPrebattle>
+  </BaseMethods>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+  <DefaultKeyName>	fLAccountPrebattleComponent	</DefaultKeyName>
+</FLAccountPrebattleComponent.def>

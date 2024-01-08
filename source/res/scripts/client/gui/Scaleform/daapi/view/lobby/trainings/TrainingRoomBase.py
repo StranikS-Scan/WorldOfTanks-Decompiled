@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx, SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
-from gui.prb_control.entities.epic_battle_training.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
+from gui.prb_control.entities.training.legacy.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE

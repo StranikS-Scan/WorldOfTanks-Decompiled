@@ -4,6 +4,7 @@ from datetime import datetime
 from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
+from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.Scaleform.daapi.view.lobby.comp7.tooltips.comp7_calendar_day_tooltip import Comp7CalendarDayTooltip
 from gui.Scaleform.daapi.view.lobby.formatters.tooltips import packCalendarBlock
 from helpers import time_utils
@@ -28,7 +29,7 @@ class Comp7CalendarDayExtendedTooltip(Comp7CalendarDayTooltip):
         return items
 
     def __packTimeLeftBlock(self, daysLeft):
-        return formatters.packTextBlockData(text=text_styles.stats(backport.ntext(self._RES_ROOT.timeLeft(), daysLeft, days=daysLeft)), blockWidth=_TOOLTIP_MIN_WIDTH)
+        return formatters.packTextBlockData(text=text_styles.stats(backport.ntext(self._RES_ROOT.timeLeft.dyn(comp7_model_helpers.getSeasonNameEnum().value)(), daysLeft, days=daysLeft)), blockWidth=_TOOLTIP_MIN_WIDTH)
 
     def __isSeasonEnded(self, selectedTime):
         if selectedTime is None:

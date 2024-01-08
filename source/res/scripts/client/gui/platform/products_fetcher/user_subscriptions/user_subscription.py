@@ -41,7 +41,7 @@ class UserSubscription(object):
         self.status = SubscriptionStatus(subscriptionData.get('status'))
         try:
             self.nextBillingTime = int(getTimestampFromISO(subscriptionData.get('next_billing_time')))
-        except ValueError:
+        except (ValueError, TypeError):
             _logger.warning('Unknown billing time in subscription: %s', subscriptionData.get('next_billing_time'))
 
         try:

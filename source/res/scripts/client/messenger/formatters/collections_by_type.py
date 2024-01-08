@@ -8,6 +8,7 @@ from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
+ auto_boxes_subformatters.EventLootBoxesFormatter(),
  auto_boxes_subformatters.NYPostEventBoxesFormatter(),
  auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
  auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter())
@@ -27,13 +28,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
- token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.NewYearCollectionRewardFormatter(),
- token_quest_subformatters.NewYearCollectionMegaRewardFormatter(),
- token_quest_subformatters.NewYearLevelUpRewardFormatter(),
- token_quest_subformatters.NewYearOldCollectionRewardFormatter(),
- token_quest_subformatters.NewYearPiggyBankRewardFormatter(),
- token_quest_subformatters.AdventCalendarQuestRewardFormatter()))
+ token_quest_subformatters.SteamCompletionFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
@@ -133,8 +128,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
  _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
  _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
- _SM_TYPE.prestigeLevelChanged.index(): _sc.PrestigeFormatter(),
- _SM_TYPE.nyErrorNotification.index(): _sc.NyErrorNotificationFormatter()}
+ _SM_TYPE.prestigeLevelChanged.index(): _sc.PrestigeFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -265,13 +259,3 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))
     registerMessengerServerFormatter(_SM_TYPE.prestigeLevelChanged.index(), _sc.PrestigeFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.nyErrorNotification.index(), _sc.NyErrorNotificationFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE, _sc.NewNYEventFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_RESOURCES_CONVERTED_MESSAGE, _sc.NYResourcesConvertedFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_GUEST_QUEST_COMPLETED_MESSAGE, _sc.NYCelebrityGuestQuestRewardFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_COLLECTING_MESSAGE, _sc.NYCollectingFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_CURRENCY_FINANCIAL_OPERATION_MESSAGE, _sc.NYCurrencyFinancialOperationFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_COLLECTION_REWARD_MESSAGE, _sc.NYCollectionRewardFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_FRIEND_RESOURCE_COLLECTING_AVAILABLE, _sc.NYFriendResourceCollectingAvailableFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_SACK_BOUGHT_MESSAGE, _sc.NYSackBoughtFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.NY_GF_SM_TYPE, _sc.NyGFSMFormatter())

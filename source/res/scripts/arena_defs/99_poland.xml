@@ -36,7 +36,7 @@
           <position1>	-391.189667 -32.940750	</position1>
         </team1>
         <team2>
-          <position2>	403.925659 -44.092274	</position2>
+          <position1>	403.925659 -44.092274	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -51,6 +51,53 @@
       </teamSpawnPoints>
       <controlPoint>	13.035101 203.235397	</controlPoint>
     </domination>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/99_poland/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	9.720159 79.336220	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	233.902344 366.218628	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-220.952240 363.418396	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	7.651236 479.061035	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-390.596802 221.077728	</position>
+        </team1>
+        <team2>
+          <position>	412.795532 235.061035	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	12.043573 183.852127	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <useAdvancedPhysics>	true	</useAdvancedPhysics>
   <roadMap></roadMap>

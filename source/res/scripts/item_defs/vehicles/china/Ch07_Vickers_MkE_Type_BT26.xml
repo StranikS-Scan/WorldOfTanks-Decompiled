@@ -2872,8 +2872,6 @@
       <unlocks>
         <turret>	Turret_2_Ch07_Vickers_MkE_Type_BT26	  <cost>	100	</cost>
         </turret>
-        <vehicle>	Ch08_Type97_Chi_Ha	  <cost>	1300	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	12.7	</armor_1>
@@ -3382,9 +3380,9 @@
       <level>	2	</level>
       <price>	500	</price>
       <unlocks>
-        <gun>	_45mm_20K	  <cost>	125	</cost>
-        </gun>
         <gun>	_40mm_Pom_Pom	  <cost>	500	</cost>
+        </gun>
+        <gun>	_45mm_20K	  <cost>	125	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3488,6 +3486,10 @@
           </camouflage>
         </_47mm_QFSA>
         <_45mm_20K>	shared	  <maxAmmo>	270	</maxAmmo>
+          <unlocks>
+            <vehicle>	Ch08_Type97_Chi_Ha	  <cost>	1300	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>

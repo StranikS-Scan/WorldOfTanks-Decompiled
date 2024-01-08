@@ -346,7 +346,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
 
     def __onWinnerScreen(self, *_):
         if not BigWorld.player().userSeesWorld():
-            self.__es.subscribeToEvent(PlayerEvents.g_playerEvents.onRoundFinished, self.__onWinnerScreen)
+            self.__es.subscribeToEvent(PlayerEvents.g_playerEvents.crosshairPanelInitialized, self.__onWinnerScreen)
             return
         hideSet = set(self.as_getComponentsVisibilityS())
         hideSet.difference_update([BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS])

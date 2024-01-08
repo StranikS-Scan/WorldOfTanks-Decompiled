@@ -3,6 +3,7 @@
 import weakref
 import BattleReplay
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
+from frontline.gui.frontline_helpers import FLBattleTypeDescription
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform import getNecessaryArenaFrameName
@@ -10,8 +11,9 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.shared.utils import toUpper, functions
-from helpers import i18n
+from helpers import i18n, dependency
 from gui.shared.system_factory import registerArenaDescrs, collectArenaDescrs
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _getDefaultTeamName(isAlly):
     return i18n.makeString(MENU.LOADING_TEAMS_ALLIES) if isAlly else i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
@@ -279,13 +281,21 @@ class BattleRoyaleDescription(ArenaWithLabelDescription):
 
 class EpicBattlesDescription(ArenaWithLabelDescription):
     __slots__ = ()
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleTypeDescription = FLBattleTypeDescription()
 
     def getWinString(self, isInBattle=True):
-        return functions.getBattleSubTypeWinText(self._visitor.type.getID(), self._team)
+        return self.__battleTypeDescription.getDescription()
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
         return not replayCtrl.isPlaying
+
+    def getBattleTypeIconPath(self, sizeFolder='c_136x136'):
+        return self.__battleTypeDescription.getBattleTypeIconPath(sizeFolder)
+
+    def getDescriptionString(self, isInBattle=True):
+        return self.__battleTypeDescription.getTitle()
 
     def getTeamName(self, team):
         from epic_constants import EPIC_BATTLE_TEAM_ID

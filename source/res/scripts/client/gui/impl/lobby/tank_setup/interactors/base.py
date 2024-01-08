@@ -3,6 +3,7 @@
 import typing
 import Event
 from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
+from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -50,10 +51,19 @@ class BaseAutoRenewal(object):
         self._value = value
 
     def changeValue(self, callback):
-        raise NotImplementedError
+        value = self.getLocalValue()
+        if value != self.getValue():
+            self.processVehicleAutoRenewal(callback)
+        else:
+            callback(None)
+        return
 
     def updateVehicle(self, vehicle):
         self._vehicle = vehicle
+
+    @decorators.adisp_process('techMaintenance')
+    def processVehicleAutoRenewal(self, callback):
+        raise NotImplementedError
 
 
 class BaseInteractor(object):
@@ -141,7 +151,7 @@ class BaseInteractor(object):
 
     def applyAutoRenewal(self, callback):
         autoRenewal = self.getAutoRenewal()
-        if autoRenewal is not None:
+        if autoRenewal is not None and autoRenewal.getValue() != autoRenewal.getLocalValue():
             autoRenewal.changeValue(callback)
         else:
             callback(None)

@@ -88,7 +88,8 @@ class Comp7EntryPointView(ViewImpl, Notifiable):
                 tx.setIsSingle(self.__isSingle)
                 tx.setState(self.__getPeriodState(periodInfo))
                 tx.setTimeLeftUntilPrimeTime(periodInfo.primeDelta)
-                comp7_model_helpers.setSeasonInfo(model=tx.season)
+                season = self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getNextSeason() or self.__comp7Controller.getPreviousSeason()
+                comp7_model_helpers.setSeasonInfo(model=tx.season, season=season)
         else:
             nextTick(self.destroy)()
 

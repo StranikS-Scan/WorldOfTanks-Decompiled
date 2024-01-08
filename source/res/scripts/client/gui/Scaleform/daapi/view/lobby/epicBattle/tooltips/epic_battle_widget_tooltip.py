@@ -64,7 +64,7 @@ class EpicBattleWidgetTooltip(BlocksTooltipData):
         items.append(formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(R.strings.epic_battle.tooltips.common.title())), padding=formatters.packPadding(left=20, right=20)))
         currentCycle = season.getCycleInfo()
         tDiff = currentCycle.endDate - time_utils.getCurrentLocalServerTimestamp() if currentCycle is not None else 0
-        timeLeft = backport.text(R.strings.epic_battle.tooltips.end()) if tDiff == 0 else text_styles.middleTitle(getTimeToEndStr(tDiff))
+        timeLeft = backport.text(R.strings.epic_battle.tooltips.end()) if tDiff == 0 else text_styles.main(getTimeToEndStr(tDiff))
         items.append(formatters.packTextBlockData(text=text_styles.main(timeLeft), padding=formatters.packPadding(left=20, right=20)))
         items.append(formatters.packBuildUpBlockData(blocks=[formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_EPIC_BATTLE_META_LEVEL_BLOCK_LINKAGE, data=getProgressionIconVODict(cycleNumber=cycleNumber, playerLevel=currentLevel), padding=formatters.packPadding(left=-20))], layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
         items.append(self.__packLevelBlock(currentLevel))

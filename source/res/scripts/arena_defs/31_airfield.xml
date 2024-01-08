@@ -45,32 +45,6 @@
         </team2>
       </teamBasePositions>
     </ctf>
-    <bootcamp>
-      <wwmusicSetup>
-        <wwmusicLoading></wwmusicLoading>
-        <wwmusicIntensive></wwmusicIntensive>
-        <wwmusicRelaxed></wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_airfield_result_win	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_airfield_result_drawn	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_airfield_result_defeat	</wwmusicResultDefeat>
-      </wwmusicSetup>
-      <boundingBox>
-        <bottomLeft>	-500.000000 150.000000	</bottomLeft>
-        <upperRight>	50.000000 500.000000	</upperRight>
-      </boundingBox>
-      <maxPlayersInTeam>	1	</maxPlayersInTeam>
-      <runDelay>	5	</runDelay>
-      <visualScript>
-        <server>
-          <plan>	BootCamp/Lesson_1_arena_31_airfield	</plan>
-        </server>
-        <client>
-          <plan>	BootCamp/Lesson_1_hints_31_airfield	</plan>
-        </client>
-      </visualScript>
-    </bootcamp>
     <comp7>
       <visualScript>
         <server>
@@ -89,6 +63,7 @@
           </flyDirection>
         </flyDirections>
       </recon>
+      <minimap>	spaces/31_airfield/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
           <position>	-2.228362 -121.632729	</position>
@@ -103,7 +78,6 @@
           <type>	2	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	10.227814 66.492439	</controlPoint>
       <teamSpawnPoints>
         <team1>
           <position>	401.789551 19.933319	</position>
@@ -112,6 +86,7 @@
           <position>	-384.827271 17.202351	</position>
         </team2>
       </teamSpawnPoints>
+      <controlPoint>	10.227814 66.492439	</controlPoint>
     </comp7>
   </gameplayTypes>
   <mapActivities>

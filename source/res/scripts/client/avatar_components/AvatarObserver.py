@@ -14,7 +14,8 @@ _OBSERVABLE_VIEWS = (CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.DUAL_GUN,
  CTRL_MODE_NAME.STRATEGIC,
- CTRL_MODE_NAME.ARTY)
+ CTRL_MODE_NAME.ARTY,
+ CTRL_MODE_NAME.MAP_CASE)
 _STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
 
 class ObservedVehicleData(object):
@@ -29,7 +30,6 @@ class AvatarObserver(CallbackDelayer):
     observedVehicleID = property(lambda self: self.__observedVehicleID)
     observedVehicleData = property(lambda self: self.__observedVehicleData)
     isFPVModeSwitching = property(lambda self: self.__isFPVModeSwitching)
-    observerFPVControlMode = property(lambda self: self.__observerFPVControlMode)
 
     def __init__(self):
         super(AvatarObserver, self).__init__()
@@ -191,7 +191,7 @@ class AvatarObserver(CallbackDelayer):
                 self.delayCallback(0.0, self.__applyObserverModeChange)
                 return
             self.stopCallback(self.__applyObserverModeChange)
-            self.inputHandler.onVehicleControlModeChanged(None)
+            self.inputHandler.onObserverControlModeChanged(self.__getFPVControlMode())
             if vehicle is not None:
                 if self.isObserverFPV:
                     self.guiSessionProvider.stopVehicleVisual(vehicle.id, False)
@@ -217,9 +217,9 @@ class AvatarObserver(CallbackDelayer):
                     self.__switchToObservedControlMode()
 
     def __switchToObservedControlMode(self):
-        eMode = CTRL_MODES[self.__observerFPVControlMode]
+        eMode = self.__getFPVControlMode()
         _logger.info('AvatarObserver.__switchToObservedControlMode(): %r, %r', self.__observerFPVControlMode, eMode)
-        if self.observerSeesAll() and self.inputHandler.ctrlModeName == eMode:
+        if self.inputHandler.ctrlModeName == eMode:
             return
         else:
             filteredValue = None
@@ -229,8 +229,11 @@ class AvatarObserver(CallbackDelayer):
                 _logger.info('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch... %r', filteredValue)
                 self.delayCallback(0.0, self.__switchToObservedControlMode)
                 return
-            self.inputHandler.onVehicleControlModeChanged(eMode)
+            self.inputHandler.onObserverControlModeChanged(eMode)
             return
+
+    def __getFPVControlMode(self):
+        return CTRL_MODES[self.__observerFPVControlMode]
 
     def set_remoteCamera(self, _):
         self.setRemoteCamera(self.remoteCamera)

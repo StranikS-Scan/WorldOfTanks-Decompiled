@@ -1,22 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileTableStatisticsView.py
-from debug_utils import LOG_ERROR
-from gui.impl import backport
-from helpers import int2roman
-from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
-from gui.clans.items import formatField, isValueAvailable
-from gui.shared.utils import sortByFields
-from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
-from helpers.i18n import makeString as _ms
 from adisp import adisp_process
-from gui.shared.formatters import icons, text_styles
+from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
 from gui.Scaleform.daapi.view.meta.ClanProfileTableStatisticsViewMeta import ClanProfileTableStatisticsViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
-from helpers import time_utils
 from gui.clans import formatters
+from gui.clans.data_wrapper.utils import formatField, isValueAvailable
+from gui.impl import backport
+from gui.shared.formatters import icons, text_styles
+from gui.shared.utils import sortByFields
+from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
+from helpers import int2roman
+from helpers import time_utils
+from helpers.i18n import makeString as _ms
 from skeletons.gui.web import IWebController
 
 def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon='', sortOrder=-1, showSeparator=True, textAlign='left'):

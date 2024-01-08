@@ -14,8 +14,8 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.rank_item_model import
 class InfoView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, layoutID=R.views.frontline.lobby.InfoView(), showFullScreen=False, **kwargs):
-        self._isFullScreen = showFullScreen
+    def __init__(self, layoutID=R.views.frontline.lobby.InfoView(), showFullScreen=False, autoscrollSection='', **kwargs):
+        self._autoscrollSection = autoscrollSection
         settings = ViewSettings(layoutID, ViewFlags.VIEW if showFullScreen else ViewFlags.LOBBY_TOP_SUB_VIEW, InfoViewModel())
         settings.kwargs = kwargs
         super(InfoView, self).__init__(settings)
@@ -25,7 +25,7 @@ class InfoView(ViewImpl):
         return super(InfoView, self).getViewModel()
 
     def _getEvents(self):
-        return ((self.__epicController.onUpdated, self._fillModel), (self.viewModel.onClose, self.__onViewClose)) if self._isFullScreen else ((self.__epicController.onUpdated, self._fillModel),)
+        return ((self.__epicController.onUpdated, self._fillModel), (self.viewModel.onClose, self.__onViewClose))
 
     def _onLoading(self, *args, **kwargs):
         super(InfoView, self)._onLoading(*args, **kwargs)
@@ -33,7 +33,7 @@ class InfoView(ViewImpl):
 
     def _fillModel(self, _=None):
         with self.viewModel.transaction() as vm:
-            vm.setIsFullScreen(self._isFullScreen)
+            vm.setAutoscrollSection(self._autoscrollSection)
             vm.setIsBattlePassAvailable(self.__epicController.isBattlePassDataEnabled())
             vm.setIsNinthLevelEnabled(self.__epicController.isUnlockVehiclesInBattleEnabled())
             vm.setIsRandomReservesModeEnabled(self.__epicController.isRandomReservesModeEnabled())
@@ -43,7 +43,7 @@ class InfoView(ViewImpl):
                 vm.setEndTimestamp(endTimestamp)
             categories = vm.getSkillsCategories()
             categories.clear()
-            for category, skillsData in self.__epicController.getOrderedSkillTree():
+            for category, skillsData in self.__epicController.getGroupedSkills():
                 categoryModel = SkillCategoryBaseModel()
                 categoryModel.setType(SkillCategoryType(category))
                 skills = categoryModel.getSkills()
@@ -68,5 +68,5 @@ class InfoView(ViewImpl):
 
 class InfoViewWindow(WindowImpl):
 
-    def __init__(self, parent=None):
-        super(InfoViewWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.TOP_WINDOW, content=InfoView(showFullScreen=True), parent=parent)
+    def __init__(self, parent=None, autoscrollSection=''):
+        super(InfoViewWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.TOP_WINDOW, content=InfoView(autoscrollSection=autoscrollSection, showFullScreen=True), parent=parent)

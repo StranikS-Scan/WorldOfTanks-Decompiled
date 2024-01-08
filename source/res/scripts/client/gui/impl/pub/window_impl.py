@@ -23,7 +23,6 @@ class WindowImpl(Window):
         settings.decorator = kwargs.pop('decorator', None)
         settings.content = kwargs.pop('content', None)
         settings.parent = kwargs.pop('parent', None)
-        settings.name = kwargs.pop('name', '')
         super(WindowImpl, self).__init__(settings)
         return
 

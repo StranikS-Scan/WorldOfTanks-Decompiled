@@ -3,7 +3,7 @@
 from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
-from gui.clans.items import isValueAvailable
+from gui.clans.data_wrapper.utils import isValueAvailable
 
 class ClanProfileGlobalMapView(ClanProfileBaseView):
 

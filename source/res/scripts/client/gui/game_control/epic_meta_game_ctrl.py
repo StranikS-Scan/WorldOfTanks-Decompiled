@@ -1,51 +1,53 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/epic_meta_game_ctrl.py
+import logging
+import typing
 from bisect import insort_right
 from operator import itemgetter
-import adisp
-import typing
-import logging
 import BigWorld
-import WWISE
 import Event
-from account_helpers.client_epic_meta_game import skipResponse
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.entities.base.ctx import PrbAction
-from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showFrontlineContainerWindow
-from gui.shared.utils import SelectorBattleTypesUtils
-from helpers import dependency, i18n, time_utils
-from items import vehicles
-from skeletons.gui.game_control import IEpicBattleMetaGameController
-from skeletons.gui.game_control import IBootcampController
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
-from season_provider import SeasonProvider
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.gui_items import GUI_ITEM_TYPE
+import WWISE
+import adisp
 from CurrentVehicle import g_currentVehicle
-from items.vehicles import getVehicleClassFromVehicleType
-from items.components.supply_slot_categories import SlotCategories
-from shared_utils import first
+from ReservesEvents import randomReservesEvents
+from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR, EPIC_LAST_CYCLE_ID
+from account_helpers.client_epic_meta_game import skipResponse
+from account_helpers.settings_core.settings_constants import GRAPHICS
+from adisp import adisp_async, adisp_process
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
+from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
+from frontline.frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
+from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES, FLBattleReservesModifier
+from gui import DialogsInterface
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
+from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
+from gui.shared import event_dispatcher
+from gui.shared.event_dispatcher import showFrontlineContainerWindow
+from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils import SelectorBattleTypesUtils
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
+from helpers import dependency, i18n, time_utils
 from helpers.statistics import HARDWARE_SCORE_PARAMS
-from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR, EPIC_LAST_CYCLE_ID
-from gui import DialogsInterface
-from adisp import adisp_async, adisp_process
-from account_helpers.settings_core.settings_constants import GRAPHICS
+from items import vehicles
+from items.components.supply_slot_categories import SlotCategories
+from items.vehicles import getVehicleClassFromVehicleType
 from player_ranks import getSettings as getRankSettings
-from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
-from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
-from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from season_provider import SeasonProvider
 if typing.TYPE_CHECKING:
     from helpers.server_settings import EpicGameConfig
     from season_common import GameSeasonCycle
@@ -148,6 +150,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__isEpicSoundMode = False
         self.__showedResultsForArenas = []
         self.__eventEndedNotifier = None
+        self.__reservesModifier = None
         return
 
     def init(self):
@@ -156,8 +159,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
         self.__eventEndedNotifier = SimpleNotifier(self.getEventTimeLeft, self.__onEventEnded)
         self.addNotificator(self.__eventEndedNotifier)
+        randomReservesEvents.onChangedReservesModifier += self.onChangedReservesModifier
 
     def fini(self):
+        randomReservesEvents.onChangedReservesModifier -= self.onChangedReservesModifier
         del self.__showedResultsForArenas[:]
         self.onUpdated.clear()
         self.onPrimeTimeStatusUpdated.clear()
@@ -189,6 +194,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def onDisconnected(self):
         self.__clear()
 
+    def setBattleTypeAsKnown(self):
+        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.EPIC):
+            SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.EPIC)
+
     def onPrbEntitySwitching(self):
         if self.prbEntity is None:
             return
@@ -200,20 +209,40 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def onPrbEntitySwitched(self):
         self.__invalidateBattleAbilities()
+        entityType = self.prbEntity.getEntityType()
         if self.prbEntity is None:
             return
         else:
-            isEpicSoundMode = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
-            if isEpicSoundMode:
+            if entityType in _VALID_PREBATTLE_TYPES or self.prbEntity.getQueueType() == QUEUE_TYPE.EPIC:
                 self.__updateSounds(True)
+                if entityType != PREBATTLE_TYPE.EPIC_TRAINING:
+                    self.setBattleTypeAsKnown()
+                    self.showWelcomeScreenIfNeed()
+                    self.showProgressionDuringSomeStates()
             return
 
     def onAccountBecomePlayer(self):
-        self.__battleResultsService.onResultPosted += self.__showBattleResults
+        self.__itemsCache.onSyncCompleted += self.__onAvatarBecomePlayerAndSynced
 
     def onAvatarBecomePlayer(self):
         self.__clear()
         self.__battleResultsService.onResultPosted -= self.__showBattleResults
+        self.__itemsCache.onSyncCompleted -= self.__onAvatarBecomePlayerAndSynced
+        if BONUS_CAPS.checkAny(BigWorld.player().arenaBonusType, 'EPIC'):
+            reservesModifier = BigWorld.player().arenaExtraData.get('reservesModifier')
+            if reservesModifier is None:
+                _logger.error('reservesModifier is None')
+                return
+            self.onChangedReservesModifier(RESERVES_MODIFIER_NAMES[reservesModifier])
+        return
+
+    def __onAvatarBecomePlayerAndSynced(self, _, invalidItems):
+        if self.getCurrentSeason() is not None:
+            self.__battleResultsService.onResultPosted += self.__showBattleResults
+        return
+
+    def isRandomBattleReserves(self):
+        return self.__reservesModifier == RESERVES_MODIFIER_NAMES[FLBattleReservesModifier.RANDOM]
 
     def getModeSettings(self):
         return self.__lobbyContext.getServerSettings().epicBattles
@@ -302,7 +331,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getAllSkillsInformation(self):
         return self.__skillData
 
-    def getOrderedSkillTree(self):
+    def getGroupedSkills(self):
         result = {category:[] for category in CATEGORIES_ORDER}
         for _, skillData in self.getAllSkillsInformation().iteritems():
             result[skillData.category].append(skillData)
@@ -364,19 +393,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return len(notRentedVehicles) > 0
 
     def increaseSkillLevel(self, skillID, callback=skipResponse):
-        BigWorld.player().epicMetaGame.increaseAbility(skillID, callback)
+        BigWorld.player().FLAccountComponent.increaseAbility(skillID, callback)
 
     def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None, classVehs=False):
-        if classVehs:
-            if callback is None:
-                BigWorld.player().epicMetaGame.setSelectedAbilitiesVehsClass(skillIDArray, vehicleCD)
-            else:
-                BigWorld.player().epicMetaGame.setSelectedAbilitiesVehsClass(skillIDArray, vehicleCD, callback)
-        elif callback is None:
-            BigWorld.player().epicMetaGame.setSelectedAbilities(skillIDArray, vehicleCD)
-        else:
-            BigWorld.player().epicMetaGame.setSelectedAbilities(skillIDArray, vehicleCD, callback)
-        return
+        BigWorld.player().FLAccountComponent.setSelectedAbilities(skillIDArray, vehicleCD, callback, classVehs)
 
     def getCycleInfo(self, cycleID=None):
         season = self.getCurrentSeason()
@@ -409,7 +429,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return (skill.getSkillInfo().eqID for skill in self.getAllSkillsInformation().itervalues() if skill.isActivated and skill.getSkillInfo() is not None)
 
     def getStoredEpicDiscount(self):
-        return BigWorld.player().epicMetaGame.getStoredDiscount()
+        return BigWorld.player().FLAccountComponent.getStoredDiscount()
 
     def getEventTimeLeft(self):
         if not self.isEnabled():
@@ -516,7 +536,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def isReserveStack(self, reserve):
         data = self.getReserveData(reserve)
-        return data.get('isStack', False)
+        return data.get('random', {}).get('isStack', False)
 
     def getReserveCategory(self, reserve):
         data = self.getReserveData(reserve)
@@ -525,6 +545,12 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getReserveTechName(self, reserve):
         data = self.getReserveData(reserve)
         return data.get('name')
+
+    def onChangedReservesModifier(self, modifier):
+        self.__reservesModifier = modifier
+
+    def getEpicBattlesReservesModifier(self):
+        return self.__reservesModifier
 
     def showProgressionDuringSomeStates(self, showDefaultTab=False):
         from frontline.gui.frontline_helpers import isHangarAvailable, getProperTabWhileHangarUnavailable
@@ -544,10 +570,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def hasAnyOfferGiftToken(self):
         return any((token.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
-
-    @staticmethod
-    def hasBonusCap(cap):
-        return hasattr(BigWorld.player(), 'arenaBonusType') and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, cap)
 
     def replaceOfferByGift(self, bonuses):
         result = []
@@ -625,7 +647,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         skills = self.getCombatReserves()
         maxSkillLvl = self.__metaSettings.maxCombatReserveLevel
         eqs = vehicles.g_cache.equipments()
-        if skills != {}:
+        if skills:
             for key, value in skills.iteritems():
                 self.__skillData[key] = EpicMetaGameSkill(key, maxSkillLvl, value.get('tags'), value.get('price', 0))
                 lvls = value['levels']

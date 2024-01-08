@@ -1077,16 +1077,16 @@
           <startIndex>	0	</startIndex>
           <count>	5	</count>
           <isLeft>	true	</isLeft>
-          <minOffset>	0.003	</minOffset>
-          <maxOffset>	0.149652	</maxOffset>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	5	</count>
           <isLeft>	false	</isLeft>
-          <minOffset>	0.003	</minOffset>
-          <maxOffset>	0.15	</maxOffset>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
       <trackThickness>	0.005	</trackThickness>
@@ -2028,16 +2028,16 @@
           <startIndex>	0	</startIndex>
           <count>	5	</count>
           <isLeft>	true	</isLeft>
-          <minOffset>	0.003	</minOffset>
-          <maxOffset>	0.149652	</maxOffset>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	5	</count>
           <isLeft>	false	</isLeft>
-          <minOffset>	0.003	</minOffset>
-          <maxOffset>	0.15	</maxOffset>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
       <trackThickness>	0.005	</trackThickness>
@@ -2050,12 +2050,12 @@
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -2236,6 +2236,16 @@
           <leftSibling>	Track_VT_R9	</leftSibling>
         </node>
       </trackNodes>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.097760 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.303100 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.181350	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
@@ -2702,16 +2712,6 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.092840 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.303100 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.181350	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2722,8 +2722,8 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	0.000066 2.40367 0.528056	</anchorPosition>
-          <anchorDirection>	-0 1 0	</anchorDirection>
+          <anchorPosition>	0.001997 2.40368 0.528074	</anchorPosition>
+          <anchorDirection>	0.000036 1 0.000001	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

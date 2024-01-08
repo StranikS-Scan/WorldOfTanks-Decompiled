@@ -17,6 +17,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import MinimapArtyHitSetting
+from account_helpers.settings_core.settings_constants import GAME
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
 from constants import VISIBILITY, AOI
@@ -1110,7 +1111,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
             ctrl.onStaticMarkerAdded += self.__addStaticMarker
             ctrl.onStaticMarkerRemoved += self.__delStaticMarker
             ctrl.onReplyFeedbackReceived += self._onReplyFeedbackReceived
-        minimapSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings('minimapSize'))
+        minimapSize = settings.clampMinimapSizeIndex(self.settingsCore.getSetting(GAME.MINIMAP_SIZE))
         self._curScale = self.__calculateMarkerScale(minimapSize)
         self.__checkMarkers()
         return

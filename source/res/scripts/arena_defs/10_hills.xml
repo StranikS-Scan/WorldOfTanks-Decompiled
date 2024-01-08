@@ -79,36 +79,6 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
-    <bootcamp>
-      <wwmusicSetup>
-        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
-        <wwmusicIntensive>	bc_music_mission_05	</wwmusicIntensive>
-        <wwmusicRelaxed>	bc_music_mission_05	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_mines_result_win	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_mines_result_drawn	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_mines_result_defeat	</wwmusicResultDefeat>
-      </wwmusicSetup>
-      <teamBasePositions>
-        <team1>
-          <position1>	175.658508 -305.792603	</position1>
-        </team1>
-        <team2>
-          <position1>	-236.649323 329.638184	</position1>
-        </team2>
-      </teamBasePositions>
-      <maxPlayersInTeam>	1	</maxPlayersInTeam>
-      <runDelay>	10	</runDelay>
-      <visualScript>
-        <server>
-          <plan>	BootCamp/Lesson_5_arena_10_hills	</plan>
-        </server>
-        <client>
-          <plan>	BootCamp/Lesson_5_client_10_hills	</plan>
-        </client>
-      </visualScript>
-    </bootcamp>
     <maps_training>
       <teamBasePositions>
         <team1>

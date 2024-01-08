@@ -4,7 +4,7 @@ import inspect
 from functools import update_wrapper
 from typing import TypeVar, Type, Generic
 from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR
-from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
@@ -37,7 +37,7 @@ def noexcept(func):
             return func(*args, **kwArgs)
         except:
             _logErrorMessageFromArgs('Exception in noexcept', args)
-            LOG_WRAPPED_CURRENT_EXCEPTION(noexceptWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_CURRENT_EXCEPTION()
 
     return noexceptWrapper
 
@@ -51,7 +51,7 @@ def noexceptReturn(returnOnExcept):
                 return func(*args, **kwArgs)
             except:
                 _logErrorMessageFromArgs('Exception in noexcept', args)
-                LOG_WRAPPED_CURRENT_EXCEPTION(noexceptWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+                LOG_CURRENT_EXCEPTION()
 
             return returnOnExcept
 
@@ -66,7 +66,7 @@ def nofail(func):
         try:
             return func(*args, **kwArgs)
         except:
-            LOG_WRAPPED_CURRENT_EXCEPTION(nofailWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_CURRENT_EXCEPTION()
             CRITICAL_ERROR('Exception in no-fail code')
 
     return nofailWrapper
@@ -89,7 +89,7 @@ def exposedtoclient(func):
             return result
         except:
             _logErrorMessageFromArgs('Exception in exposedtoclient', args)
-            LOG_WRAPPED_CURRENT_EXCEPTION(exposedtoclientWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_CURRENT_EXCEPTION()
 
     return exposedtoclientWrapper
 

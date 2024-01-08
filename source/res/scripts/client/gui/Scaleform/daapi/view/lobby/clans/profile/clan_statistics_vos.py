@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/clan_statistics_vos.py
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
-from gui.clans.items import formatField
-from gui.impl import backport
-from helpers.i18n import makeString as _ms
-from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import BaseDictStatisticsVO
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as SUtils
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils
+from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import BaseDictStatisticsVO
 from gui.Scaleform.locale.CLANS import CLANS as CL
+from gui.clans.data_wrapper.utils import formatField
+from gui.impl import backport
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
+from helpers.i18n import makeString as _ms
 
 def _resourceParam(value):
     return ''.join((text_styles.defRes(value), icons.nutStat()))

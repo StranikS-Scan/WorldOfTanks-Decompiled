@@ -11,8 +11,10 @@ from ids_generators import SequenceIDGenerator
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from uilogging.constants import DEFAULT_LOGGER_NAME
-from uilogging.core.core_constants import LOGS_MAX_COUNT_PER_SEND, LOG_RECORD_MAX_PROPERTIES_COUNT, MAX_SESSION_GET_RETRIES, MIN_SESSION_LIFE_TIME, REQUEST_SESSION_TIMEOUT
-from uilogging.core.log import LogRecord
+from uilogging.core.core_constants import LOGS_MAX_COUNT_PER_SEND, LOG_RECORD_MAX_PROPERTIES_COUNT, MAX_SESSION_GET_RETRIES, MIN_SESSION_LIFE_TIME, REQUEST_SESSION_TIMEOUT, RETRY_REQUEST_SESSION_DELAY
+if typing.TYPE_CHECKING:
+    from gui.wgcg.requests import WgcgRequestResponse
+    from uilogging.core.log import LogRecord
 
 class WaitingSessionData(SoftException):
     pass
@@ -70,6 +72,9 @@ class SessionData(object):
     def verifyLog(self, log):
         return len(log) <= self.maxLogPropertiesCount
 
+    def __repr__(self):
+        return '<SessionData>(id={}, lifetime={})'.format(self.id, self.lifetime)
+
 
 class Session(object):
     webController = dependency.descriptor(IWebController)
@@ -118,12 +123,16 @@ class Session(object):
         retries = MAX_SESSION_GET_RETRIES
         try:
             while True:
-                self._sessionData = yield wg_async.await_callback(self._getSessionData, REQUEST_SESSION_TIMEOUT)()
-                if not self._sessionData or not self._sessionData.isExpired:
+                sessionData, retry = yield wg_async.await_callback(self._getSessionData, REQUEST_SESSION_TIMEOUT)()
+                if not retry:
+                    self._sessionData = sessionData
                     break
                 retries -= 1
                 if retries <= 0:
                     self._sessionData = None
+                    break
+                yield wg_async.delay(RETRY_REQUEST_SESSION_DELAY)
+                if self._destroyed:
                     break
 
         except wg_async.TimeoutError:
@@ -138,6 +147,7 @@ class Session(object):
 
         self._initialized = True
         self._requesting = False
+        self._logger.debug('Session data %s received and saved.', self._sessionData)
         raise AsyncReturn(self._sessionData)
         return
 
@@ -172,11 +182,20 @@ class Session(object):
     def _getSessionData(self, callback):
         self._logger.debug('Request session data.')
         response = yield self.webController.sendRequest(ctx=UILoggingSessionCtx())
-        self._logger.debug('Response session data: code=%s', response.getCode())
-        if not self._destroyed and response.isSuccess() and isinstance(response.data, dict):
-            data = SessionData(self._idGen.next(), response.data)
-            if data.isValid:
-                callback(data)
-                return
-        callback(None)
+        self._logger.debug('Session response: %s', response)
+        sessionData, retry = None, False
+        if not self._destroyed:
+            if response.isSuccess():
+                if isinstance(response.data, dict):
+                    data = SessionData(self._idGen.next(), response.data)
+                    if data.isValid:
+                        sessionData, retry = data, data.isExpired
+                    else:
+                        self._logger.warning('Invalid session data.')
+                else:
+                    self._logger.warning('Unsupported session response data type.')
+            else:
+                retry = True
+        self._logger.debug('Session data: %s, retry: %s.', sessionData, retry)
+        callback((sessionData, retry))
         return

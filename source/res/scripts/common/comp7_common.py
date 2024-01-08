@@ -1,42 +1,102 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/comp7_common.py
 import enum
+import re
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
-COMP7_QUEST_PREFIX = 'comp7_3_1'
-COMP7_TOKEN_PREFIX = 'comp7_3_1'
-COMP7_QUEST_DELIMITER = '_'
-COMP7_TOKEN_WEEKLY_REWARD_ID = 'comp7_3_1_weekly_rewards_token'
-COMP7_TOKEN_WEEKLY_REWARD_NAME = 'comp7TokenWeeklyReward'
-COMP7_QUALIFICATION_QUEST_ID = 'comp7_3_1_ranks_65'
-COMP7_QAULIFICATION_TOKEN_TEMPLATE = 'comp7_3_{season}:qualification'
-COMP7_CURRENT_SEASON = 1
-COMP7_MASKOT_ID = '3'
+__COMP7_QUEST_PREFIX = 'comp7'
+__COMP7_MASKOT_ID = '3'
 SEASONS_IN_YEAR = 3
-COMP7_SEASON_POINTS_ENTITLEMENT_TMPL = 'comp7_season_points'
+__COMP7_QUALIFICATION_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}:qualification'
+__COMP7_QUALIFICATION_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_ranks_65'
+__COMP7_TOKEN_PREFIX_TEMPLATE = 'comp7_{maskot}_{season}'
+__COMP7_WEEKLY_REWARD_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}_weekly_rewards_token'
+__COMP7_SEASON_POINT_ASSET_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
+__COMP7_SEASON_POINTS_ENTITLEMENT_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
+__COMP7_RATING_ENTITLEMENT_PREFIX = 'comp7_rating_points'
+__COMP7_RATING_ENTITLEMENT_TEMPLATE = __COMP7_RATING_ENTITLEMENT_PREFIX + ':{maskot}:{season}'
+__COMP7_ELITE_ENTITLEMENT_TEMPLATE = 'comp7_elite_rank:{maskot}:{season}'
+__COMP7_ACTIVITY_ENTITLEMENT_TEMPLATE = 'comp7_activity_points:{maskot}:{season}'
+__COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE = 'comp7_max_achieved_rank:{maskot}:{season}'
+COMP7_WEEKLY_REWARD_TOKEN_REGEXP = re.compile(__COMP7_WEEKLY_REWARD_TOKEN_TEMPLATE.format(maskot='\\d', season='\\d'))
+COMP7_ENTITLEMENT_EXPIRES = None
 
 def seasonPointsCodeBySeasonNumber(seasonNumber):
-    return ':'.join((COMP7_SEASON_POINTS_ENTITLEMENT_TMPL, COMP7_MASKOT_ID, str(seasonNumber)))
+    return __COMP7_SEASON_POINTS_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
 
 
-def makeQualificationTokenForSeason(seasonNumber):
-    return COMP7_QAULIFICATION_TOKEN_TEMPLATE.format(season=seasonNumber)
+def qualificationTokenBySeasonNumber(seasonNumber):
+    return __COMP7_QUALIFICATION_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def seasonPointsAssetBySeasonNumber(seasonNumber):
+    return __COMP7_SEASON_POINT_ASSET_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def qualificationQuestIDBySeasonNumber(seasonNumber):
+    return __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def tokenPrefixBySeasonNumber(seasonNumber):
+    return __COMP7_TOKEN_PREFIX_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def weeklyRewardTokenBySeasonNumber(seasonNumber):
+    return __COMP7_WEEKLY_REWARD_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def ratingEntNameBySeasonNumber(seasonNumber):
+    return __COMP7_RATING_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def eliteRankEntNameBySeasonNumber(seasonNumber):
+    return __COMP7_ELITE_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def activityPointsEntNameBySeasonNumber(seasonNumber):
+    return __COMP7_ACTIVITY_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def maxRankEntNameBySeasonNumber(seasonNumber):
+    return __COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
 
 
 SEASON_POINTS_ENTITLEMENTS = [ seasonPointsCodeBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]
+SEASON_POINTS_ASSETS = [ seasonPointsAssetBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]
+
+def parseRatingEnt(entCode):
+    if not entCode.startswith(__COMP7_RATING_ENTITLEMENT_PREFIX):
+        return (None, None)
+    else:
+        _, mascotID, index = entCode.split(':', 3)
+        return (int(mascotID), int(index))
+
+
+class Comp7EntitlementCodes(object):
+    LEGEND_RANK = 'legendRank'
+    RATING_POINTS = 'ratingPoints'
+    ACTIVITY_POINTS = 'activityPoints'
+    SEASON_POINTS = 'seasonPoints'
+    ALL = (LEGEND_RANK,
+     RATING_POINTS,
+     ACTIVITY_POINTS,
+     SEASON_POINTS)
+
 
 @enum.unique
 class Comp7QuestType(enum.Enum):
     RANKS = 'ranks'
-    TOKENS = 'token'
+    TOKENS = 'token_rewards'
     PERIODIC = 'period'
     ACTIVITY = 'activity'
     WEEKLY = 'weekly'
 
 
+__ALL_QUEST_TYPES = [ qType.value for qType in Comp7QuestType ]
 CLIENT_VISIBLE_QUESTS_TYPE = (Comp7QuestType.TOKENS,
  Comp7QuestType.RANKS,
  Comp7QuestType.PERIODIC,
  Comp7QuestType.WEEKLY)
+COMP7_QUEST_ID_REGEXP = __COMP7_QUEST_PREFIX + '_(\\d)_(\\d)_({types})_(.+)'.format(types='|'.join(__ALL_QUEST_TYPES))
 
 class BattleStatuses(object):
     STARTED = 0

@@ -107,7 +107,8 @@ COMP7_TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.Achievement
  ('respawns', 0, 'respawns'),
  ('suffixBadgeIcon', '', 'suffixBadgeIcon'),
  ('suffixBadgeStripIcon', '', 'suffixBadgeStripIcon'),
- ('prestigePoints', 0, 'prestigePoints')))
+ ('prestigePoints', 0, 'prestigePoints'),
+ ('isSuperSquad', False, 'isSuperSquad')))
 COMP7_TEAM_ITEM_VO_META.bind(comp7.Comp7VehicleStatsBlock)
 COMP7_TEAMS_STATS_BLOCK = vehicles.TwoTeamsStatsBlock(TEAMS_VO_META, '', _RECORD.VEHICLES)
 COMP7_TEAMS_STATS_BLOCK.addNextComponent(comp7.Comp7TeamStatsBlock(meta=base.ListMeta(), field='team1'))

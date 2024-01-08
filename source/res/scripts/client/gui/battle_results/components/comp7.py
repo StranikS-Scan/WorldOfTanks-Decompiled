@@ -208,15 +208,18 @@ class Comp7RankBlock(base.StatsBlock):
 
 
 class Comp7VehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('prestigePoints',)
+    __slots__ = ('prestigePoints', 'isSuperSquad')
 
     def __init__(self, meta=None, field='', *path):
         super(Comp7VehicleStatsBlock, self).__init__(meta, field, *path)
         self.prestigePoints = 0
+        self.isSuperSquad = False
 
     def setRecord(self, result, reusable):
         super(Comp7VehicleStatsBlock, self).setRecord(result, reusable)
         self.prestigePoints = result.prestigePoints
+        avatar = reusable.avatars.getAvatarInfo(result.player.dbID)
+        self.isSuperSquad = avatar.extensionInfo.get('isSuperSquad', False)
 
 
 class Comp7TeamStatsBlock(TeamStatsBlock):

@@ -889,22 +889,16 @@ class RageEquipmentConfigReader(object):
 
 
 class SharedCooldownConsumableConfigReader(object):
-    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('cooldownTimeRespawnFactor', 'reserveUnlockFactor', 'startCooldownTimeFactor', 'cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage', 'setUnavailableAfterAmmoLeft')
+    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage', 'setUnavailableAfterAmmoLeft')
 
     def initSharedCooldownConsumableSlots(self):
         self.cooldownTime = component_constants.ZERO_FLOAT
-        self.cooldownTimeRespawnFactor = component_constants.ZERO_FLOAT
-        self.reserveUnlockFactor = component_constants.ZERO_FLOAT
-        self.startCooldownTimeFactor = component_constants.ZERO_FLOAT
         self.cooldownFactors = component_constants.EMPTY_DICT
         self.consumeAmmo = False
         self.disableAllyDamage = False
         self.setUnavailableAfterAmmoLeft = False
 
     def readSharedCooldownConsumableConfig(self, xmlCtx, section):
-        self.cooldownTimeRespawnFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTimeRespawnFactor', 1.0)
-        self.reserveUnlockFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'reserveUnlockFactor', -1.0)
-        self.startCooldownTimeFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'startCooldownTimeFactor', 1.0)
         self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTime')
         self.cooldownFactors = self._readCooldownFactors(xmlCtx, section, 'cooldownFactors')
         self.sharedCooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'sharedCooldownTime')
@@ -1728,7 +1722,7 @@ class EpicInspire(ConsumableInspire):
         self.selfIncreaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'selfIncreaseFactors')
 
 
-class EpicEngineering(PassiveEngineering):
+class FLPassiveEngineering(PassiveEngineering):
     pass
 
 

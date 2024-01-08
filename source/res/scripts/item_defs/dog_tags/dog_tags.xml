@@ -814,11 +814,11 @@
     <viewType>	engraving	</viewType>
     <purpose>	DEDICATION	</purpose>
     <isExternalUnlockOnly>	true	</isExternalUnlockOnly>
-    <progressKey>	stats_api.comp7Season1Wins	</progressKey>
+    <progressKey>	stats_api.comp7AnnualWins	</progressKey>
     <grades>	0 60 70 80 90 110 130 150 175 200	</grades>
     <isDefault>	false	</isDefault>
     <battleTypes>	43	</battleTypes>
-    <glossaryName>	COMP7_3_1_WINS	</glossaryName>
+    <glossaryName>	COMP7_ANNUAL_WINS	</glossaryName>
   </component>
   <component>
     <componentId>	617	</componentId>
@@ -826,6 +826,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_IRON	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	618	</componentId>
@@ -833,6 +834,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_BRONZE	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	619	</componentId>
@@ -840,6 +842,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_SILVER	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	620	</componentId>
@@ -847,6 +850,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_GOLD	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	621	</componentId>
@@ -854,6 +858,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_CHAMPION	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	622	</componentId>
@@ -861,6 +866,49 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_1_LEGEND	</glossaryName>
+    <isSecret>	true	</isSecret>
+  </component>
+  <component>
+    <componentId>	623	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/623	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_IRON	</glossaryName>
+  </component>
+  <component>
+    <componentId>	624	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/624	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_BRONZE	</glossaryName>
+  </component>
+  <component>
+    <componentId>	625	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/625	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_SILVER	</glossaryName>
+  </component>
+  <component>
+    <componentId>	626	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/626	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_GOLD	</glossaryName>
+  </component>
+  <component>
+    <componentId>	627	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/627	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_CHAMPION	</glossaryName>
+  </component>
+  <component>
+    <componentId>	628	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/628	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_3_2_LEGEND	</glossaryName>
   </component>
   <startingComponents>
     <components>	66 300	</components>

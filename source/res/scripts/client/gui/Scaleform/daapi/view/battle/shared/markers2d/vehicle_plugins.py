@@ -414,7 +414,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 duration = max(endTime - data.inactivationStartTime, 0)
             else:
                 endTime = data.endTime
-                duration = max(endTime - data.startTime, 0)
+                duration = max(endTime - currentTime, 0)
             self._updateInspireMarker(marker.getVehicleID(), marker.getMarkerID(), isSourceVehicle=bool(data.inactivationSource), isInactivation=isInactivation, endTime=endTime, duration=duration, primary=bool(data.primary), equipmentID=data.equipmentID)
         return
 

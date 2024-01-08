@@ -74,9 +74,10 @@ class RankedWebSeasonProvider(object):
         self.__callbackID = None
         if not self.__fakeInfo or not constants.IS_DEVELOPMENT:
             if self.__webController.isAvailable():
-                result = yield self.__webController.sendRequest(RankedPositionCtx())
+                ctx = RankedPositionCtx()
+                result = yield self.__webController.sendRequest(ctx)
                 if result.isSuccess():
-                    results = RankedPositionCtx.getDataObj(result.data).get('results')
+                    results = ctx.getDataObj(result.data).get('results')
                     if results is not None and isinstance(results, dict):
                         self.__webSeasonInfo = WebSeasonInfo(results.get('league', UNDEFINED_LEAGUE_ID), results.get('position'), results.get('isSprinter', False), results.get('isTop', False))
                         self.__lastUpdateTime = time.time()

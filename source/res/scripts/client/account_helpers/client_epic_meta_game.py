@@ -19,18 +19,6 @@ class ClientEpicMetaGame(object):
         self.__ignore = True
         return
 
-    def setSelectedAbilities(self, listOfAbilities, vehicleCD, callback=skipResponse):
-        self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
-
-    def setSelectedAbilitiesVehsClass(self, listOfAbilities, vehicleCD, callback=skipResponse):
-        self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_SELECTED_EPIC_META_ABILITY_VEHICLES, listOfAbilities + [vehicleCD], lambda requestID, resultID, errorCode: callback(resultID, errorCode))
-
-    def increaseAbility(self, abilityID, callback=skipResponse):
-        self.__account._doCmdInt(AccountCommands.CMD_INCREASE_EPIC_META_ABILITY, abilityID, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
-
-    def resetEpicMetaGame(self, metaLevel=0, abilityPoints=0, callback=skipResponse):
-        self.__account._doCmdInt2(AccountCommands.CMD_RESET_EPIC_META_GAME, metaLevel, abilityPoints, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
-
     def getStoredDiscount(self):
         return self.__cache[self.__DATA_KEY].get('freeEpicDiscount', {})
 

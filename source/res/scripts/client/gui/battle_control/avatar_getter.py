@@ -456,11 +456,22 @@ def isObserverBothTeams(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
-        result = BigWorld.player().isObserverBothTeams
+        result = avatar.isObserverBothTeams
     except AttributeError as error:
         _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error.message)
         result = False
 
+    return result
+
+
+def getObserverTeam(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    result = getPlayerTeam(avatar)
+    if isObserver(avatar) and isObserverBothTeams(avatar):
+        vehicle = getPlayerVehicle(avatar)
+        if vehicle:
+            result = vehicle.publicInfo['team']
     return result
 
 
@@ -483,8 +494,9 @@ def getSpaceID():
     return spaceID
 
 
-def getPlayerVehicle():
-    avatar = BigWorld.player()
+def getPlayerVehicle(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
     try:
         vehicle = avatar.getVehicleAttached()
     except AttributeError:

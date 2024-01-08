@@ -3,7 +3,7 @@
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicMinimapComponent, GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest import minimap as poi_plugins
-from account_helpers.AccountSettings import COMP7_PREBATTLE_MINIMAP_SIZE, MINIMAP_SIZE
+from account_helpers.settings_core.settings_constants import GAME
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 
 class Comp7MinimapComponent(ClassicMinimapComponent):
@@ -22,15 +22,15 @@ class Comp7GlobalSettingsPlugin(GlobalSettingsPlugin):
         super(Comp7GlobalSettingsPlugin, self).start()
         arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
         if arenaPeriod >= ARENA_PERIOD.BATTLE:
-            self._changeSizeSettings(MINIMAP_SIZE)
+            self._changeSizeSettings(GAME.MINIMAP_SIZE)
         else:
-            prebattleMinimapSize = self._AccountSettingsClass.getSettings(COMP7_PREBATTLE_MINIMAP_SIZE)
+            prebattleMinimapSize = self.settingsCore.getSetting(GAME.COMP7_MINIMAP_SIZE)
             if prebattleMinimapSize == -1:
                 self._sizeIndex = settings.clampMinimapSizeIndex(prebattleMinimapSize)
-                self._currentSizeSettings = COMP7_PREBATTLE_MINIMAP_SIZE
-                self._parentObj.as_initPrebattleSizeS(self._AccountSettingsClass.getSettings(MINIMAP_SIZE))
+                self._currentSizeSettings = GAME.COMP7_MINIMAP_SIZE
+                self._parentObj.as_initPrebattleSizeS(self.settingsCore.getSetting(GAME.MINIMAP_SIZE))
             else:
-                self._changeSizeSettings(COMP7_PREBATTLE_MINIMAP_SIZE)
+                self._changeSizeSettings(GAME.COMP7_MINIMAP_SIZE)
             prebattleSetup = self.sessionProvider.dynamic.comp7PrebattleSetup
             if prebattleSetup:
                 prebattleSetup.onBattleStarted += self.__onBattleStarted
@@ -42,4 +42,4 @@ class Comp7GlobalSettingsPlugin(GlobalSettingsPlugin):
         super(Comp7GlobalSettingsPlugin, self).stop()
 
     def __onBattleStarted(self):
-        self._changeSizeSettings(MINIMAP_SIZE)
+        self._changeSizeSettings(GAME.MINIMAP_SIZE)

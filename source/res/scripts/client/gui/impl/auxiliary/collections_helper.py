@@ -11,7 +11,7 @@ from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.reward_model import RewardModel
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, SimpleBonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, CustomizationBonusUIPacker
+from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BonusUIPacker, CustomizationBonusUIPacker, SimpleBonusUIPacker, getDefaultBonusPackersMap
 from gui.shared.money import Currency
 from helpers.dependency import replace_none_kwargs
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -25,7 +25,7 @@ if typing.TYPE_CHECKING:
 
 @replace_none_kwargs(collectionsSystem=ICollectionsSystemController)
 def fillCollectionModel(model, collectionId, collectionsSystem=None):
-    isEnabled = collectionsSystem.isEnabled() and collectionsSystem.getCollection(collectionId) is not None
+    isEnabled = collectionsSystem.isEnabled() and collectionId and collectionsSystem.getCollection(collectionId) is not None
     model.setIsCollectionsEnabled(isEnabled)
     if isEnabled:
         model.setCollectionItemCount(collectionsSystem.getReceivedProgressItemCount(collectionId))

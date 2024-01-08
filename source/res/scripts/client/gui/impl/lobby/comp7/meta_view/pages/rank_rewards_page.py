@@ -1,59 +1,52 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/pages/rank_rewards_page.py
 import logging
+from collections import namedtuple
 from functools import partial
 import typing
-from collections import namedtuple
-from CurrentVehicle import g_currentVehicle
+from shared_utils import first
 from comp7_common import Comp7QuestType
-from gui.impl.lobby.comp7.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
-from items.vehicles import VehicleDescriptor
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_model import RankRewardsModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_item_model import RankRewardsItemModel
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_model import RankRewardsModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.gui_decorators import args2params
-from gui.impl.lobby.comp7.meta_view.meta_view_helper import setRankData, setDivisionData, getRankDivisions
-from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses
+from gui.impl.lobby.comp7.comp7_c11n_helpers import getStylePreviewVehicle, getPreviewOutfit
 from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7PeriodicQuestID, isComp7VisibleQuest, getComp7QuestType
+from gui.impl.lobby.comp7.meta_view.meta_view_helper import setProgressionItemData, getRankDivisions
+from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
+from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from gui.impl.lobby.comp7.tooltips.general_rank_tooltip import GeneralRankTooltip
 from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
-from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from shared_utils import first
+from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_SEASON_NUMBERS
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
     from gui.impl.gen.view_models.views.lobby.comp7.qualification_model import QualificationModel
     from gui.server_events.event_items import TokenQuest
-    from gui.shared.gui_items.customization.c11n_items import Style
     from helpers.server_settings import Comp7RanksConfig
-    from vehicle_outfit.outfit import Outfit
 _logger = logging.getLogger(__name__)
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
-_DEFAULT_PREVIEW_VEHICLE_TYPE = 'uk:GB91_Super_Conqueror'
+_DEFAULT_PREVIEW_VEHICLE = 'uk:GB91_Super_Conqueror'
 
 class RankRewardsPage(PageSubModelPresenter):
     __slots__ = ('__bonusData', '__rankQuests', '__periodicQuests')
     __itemsCache = dependency.descriptor(IItemsCache)
     __c11nService = dependency.descriptor(ICustomizationService)
-    __itemsFactory = dependency.descriptor(IGuiItemsFactory)
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyCtx = dependency.descriptor(ILobbyContext)
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -148,8 +141,7 @@ class RankRewardsPage(PageSubModelPresenter):
     def __setRank(self, itemModel, rank):
         divisions = getRankDivisions(rank, self.ranksConfig)
         division = first(divisions)
-        setRankData(itemModel, self.viewModel, rank, self.ranksConfig)
-        setDivisionData(itemModel, divisions)
+        setProgressionItemData(itemModel, self.viewModel, rank, self.ranksConfig)
         self.__setRankRewards(itemModel, division)
 
     def __setRankRewards(self, itemModel, division):
@@ -190,48 +182,9 @@ class RankRewardsPage(PageSubModelPresenter):
     def __onPreviewOpen(self, rank, index):
         bonus = first(self.__bonusData[rank]).bonus
         style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, bonus.getStyleID())
-        vehicleCD = self.__getPreviewVehicle(style)
-        outfit = self.__getPreviewOutfit(style, bonus)
+        vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
+        outfit = getPreviewOutfit(style, bonus.getBranchID(), bonus.getProgressLevel())
         showStylePreview(vehicleCD, style, backCallback=partial(shared_events.showComp7MetaRootView, self.pageId, index), outfit=outfit)
-
-    @classmethod
-    def __getPreviewVehicle(cls, style):
-        if g_currentVehicle.isPresent() and style.mayInstall(g_currentVehicle.item):
-            return g_currentVehicle.item.intCD
-        accDossier = cls.__itemsCache.items.getAccountDossier()
-        vehicles = accDossier.getComp7Stats(season=COMP7_SEASON_NUMBERS[-1]).getVehicles()
-        if not vehicles:
-            vehicles = accDossier.getRandomStats().getVehicles()
-        if vehicles:
-            sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
-            for vehicleCD, _ in sortedVehicles:
-                vehicle = cls.__itemsCache.items.getVehicleCopyByCD(vehicleCD)
-                if style.mayInstall(vehicle):
-                    return vehicleCD
-
-        else:
-            getVehicles = cls.__itemsCache.items.getVehicles
-            sortedVehicles = sorted(getVehicles(REQ_CRITERIA.INVENTORY).values(), key=lambda vehicle: vehicle.level, reverse=True)
-            for vehicle in sortedVehicles:
-                if style.mayInstall(vehicle):
-                    return vehicle.intCD
-
-        vehicleDescr = VehicleDescriptor(typeName=_DEFAULT_PREVIEW_VEHICLE_TYPE)
-        return vehicleDescr.type.compactDescr
-
-    @classmethod
-    def __getPreviewOutfit(cls, style, bonus):
-        branchID = bonus.getBranchID()
-        progressLevel = bonus.getProgressLevel()
-        camo = getComp7ProgressionStyleCamouflage(style.id, branchID, progressLevel)
-        season = first(style.seasons)
-        outfit = style.getOutfit(season)
-        outfitComponent = outfit.pack()
-        for camoComponent in outfitComponent.camouflages:
-            camoComponent.id = camo.id
-
-        outfitComponent = style.descriptor.addPartsToOutfit(season, outfitComponent, outfit.vehicleCD)
-        return cls.__itemsFactory.createOutfit(component=outfitComponent, vehicleCD=outfit.vehicleCD)
 
     @staticmethod
     def __setRewards(itemModel, bonusData):

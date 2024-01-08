@@ -33,8 +33,8 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
         self.__callback = None
         return
 
-    def showWaiting(self, messageID, softStart=False, showBg=True):
-        self.as_showWaitingS(backport.text(messageID), softStart, showBg)
+    def showWaiting(self, messageID, softStart=False):
+        self.as_showWaitingS(backport.text(messageID), softStart)
 
     def hideWaiting(self):
         self.__callback = None

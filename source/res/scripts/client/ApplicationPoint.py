@@ -12,6 +12,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from items import vehicles
 from items.artefacts import AoeEffects, AreaShow
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.shared.gui_items.marker_items import MarkerItem
 from AreaOfEffect import EffectRunner
@@ -89,7 +90,7 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
         self._updateViewState()
         self._updateCoordinates()
         self._vehicle = BigWorld.entities.get(self._entity.vehicleID)
-        if not self._isEnemy():
+        if self._isVisible():
             duration = self._getAreaDuration()
             if duration > 0:
                 self._createArea(duration)
@@ -151,6 +152,10 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
     def _isEnemy(self):
         vInfo = self._guiSessionProvider.getArenaDP().getVehicleInfo(self._entity.vehicleID)
         return vInfo.team != BigWorld.player().team
+
+    def _isVisible(self):
+        vInfo = self._guiSessionProvider.getArenaDP().getVehicleInfo(self._entity.vehicleID)
+        return vInfo.team == avatar_getter.getObserverTeam()
 
     def _getRadius(self):
         return self._equipment.getRadiusBasedOnSkillLevel(self._entity.level)

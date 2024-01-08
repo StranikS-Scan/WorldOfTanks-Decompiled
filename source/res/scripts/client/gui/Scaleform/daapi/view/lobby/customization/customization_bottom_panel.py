@@ -10,7 +10,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey, FilterTypes, FilterAliases
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot, BillPopoverButtons
+from gui.Scaleform.daapi.view.lobby.customization.shared import checkSlotsFilling, isItemUsedUp, getItemTypesAvailableForVehicle, CustomizationTabs, getMultiSlot, BillPopoverButtons
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -32,7 +32,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from tutorial.hints_manager import HINT_SHOWN_STATUS
 from vehicle_outfit.outfit import Area
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks', 'arrows', 'showSeparators'))
 
@@ -132,8 +131,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self.__ctx.mode.selectItem(intCD, progressionLevel)
             if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
                 self.__onProjectionDecalOnlyOnceHintHidden(record=True)
-            elif self.__ctx.mode.tabId == CustomizationTabs.STYLES:
-                self.__onEditableStylesHintsHidden(record=True)
         else:
             self.__ctx.mode.unselectItem()
 
@@ -251,8 +248,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=availableItemTypes, itemFilter=itemFilter)
         else:
             switchersCounter = vehicle.getC11nItemsNoveltyCounter(proxy, itemTypes=(GUI_ITEM_TYPE.STYLE,), itemFilter=itemFilter)
-            styles = self._carouselDP.getItemsData(season, CustomizationModes.STYLED, CustomizationTabs.STYLES)
-            switchersCounter += getEditableStylesExtraNotificationCounter(styles)
         self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
          'switchersCounter': switchersCounter})
 
@@ -572,10 +567,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateTabs()
         self.__setBottomPanelBillData()
         self.__rebuildCarousel()
-        if slotId == self.__ctx.mode.selectedSlot and (season is None or season == self.__ctx.season):
-            self.__scrollToItem(item.intCD, self._selectedItem.id == item.id)
         self.__updateSetSwitcherData()
-        return
 
     def __onTabChanged(self, tabIndex, itemCD=None):
         self.__updateTabs()
@@ -583,7 +575,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updateStyleLabel()
         self.__updateSetSwitcherData()
         self.__setNotificationCounters()
-        itemCD = itemCD or self.__updateHints()
+        self.__updateHints()
         if itemCD is not None:
             self.__scrollToItem(itemCD)
         elif self._selectedItem is None:
@@ -593,12 +585,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __onItemsRemoved(self, *_, **__):
         self.__updateTabs()
         self.__setBottomPanelBillData()
-        selectedItem = self._selectedItem
         self.__rebuildCarousel()
-        if selectedItem is not None:
-            self.__scrollToItem(selectedItem.intCD, immediately=True)
         self.__updateSetSwitcherData()
-        return
 
     def __onModeChanged(self, modeId, prevModeId):
         self._carouselDP.onModeChanged(modeId, prevModeId)
@@ -606,9 +594,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setFooterInitData()
         self.__refreshHotFilters()
         self.__resetTabs()
-        if modeId == CustomizationModes.EDITABLE_STYLE:
-            record = self.__ctx.mode.source in (CustomizationModeSource.CAROUSEL, CustomizationModeSource.PROPERTIES_SHEET, CustomizationModeSource.CONTEXT_MENU)
-            self.__onEditableStylesHintsHidden(record=record)
         self.__updatePopoverBtnIcon()
 
     def __onChangesCanceled(self):
@@ -660,23 +645,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             self._selectedItem = None
         self._carouselDP.selectItem(self._selectedItem)
-        if self._selectedItem is not None and scroll:
-            self.__scrollToItem(self._selectedItem.intCD, True)
         self.__updateStageSwitcherVisibility()
         self.__updatePopoverBtnIcon()
         return
 
     def __updateHints(self):
-        intCD = None
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__onProjectionDecalOnlyOnceHintShown()
         else:
             self.__onProjectionDecalOnlyOnceHintHidden()
-        if self.__ctx.mode.tabId == CustomizationTabs.STYLES:
-            intCD = self.__onEditableStylesHintsShown()
-        else:
-            self.__onEditableStylesHintsHidden()
-        return intCD
 
     def __onProjectionDecalOnlyOnceHintShown(self):
         if self.__c11nSettings.get(PROJECTION_DECAL_HINT_SHOWN_FIELD, False):
@@ -695,61 +672,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             self.__c11nSettings[PROJECTION_DECAL_HINT_SHOWN_FIELD] = True
             AccountSettings.setSettings(CUSTOMIZATION_SECTION, self.__c11nSettings)
         self.as_setProjectionDecalHintVisibilityS(False)
-
-    def __onEditableStylesHintsShown(self):
-        if not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):
-            for intCD in self._carouselDP.collection:
-                item = self.service.getItemByCD(intCD)
-                if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                    return
-                if item.canBeEditedForVehicle(g_currentVehicle.item.intCD):
-                    self.as_setEditableStyleHintVisibilityS(True)
-                    return item.intCD
-
-            self.__onEditableStylesHintsHidden(record=False)
-        elif not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT):
-            for intCD in self._carouselDP.collection:
-                item = self.service.getItemByCD(intCD)
-                if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                    return
-                if item.isProgressionRequiredCanBeEdited(g_currentVehicle.item.intCD):
-                    self.as_setEditableProgressionRequiredStyleHintVisibilityS(True)
-                    return item.intCD
-
-            self.__onEditableStylesHintsHidden(record=False)
-        else:
-            self.__onEditableStylesHintsHidden(record=False)
-
-    def __onEditableStylesHintsHidden(self, record=False):
-        self.as_setEditableStyleHintVisibilityS(False)
-        self.as_setEditableProgressionRequiredStyleHintVisibilityS(False)
-        if not record:
-            return
-        else:
-            editableStylesVisited = self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT)
-            editableProgressionRequiredStylesVisited = self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT)
-            if not editableStylesVisited or not editableProgressionRequiredStylesVisited:
-                editable = None
-                editableProgressionRequired = None
-                styles = self._carouselDP.getCarouselData(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES)
-                for intCD in styles:
-                    item = self.service.getItemByCD(intCD)
-                    if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-                        break
-                    if item.isEditable:
-                        editable = item
-                        if editable.isProgressionRequiredCanBeEdited(g_currentVehicle.item.intCD):
-                            editableProgressionRequired = editable
-                            break
-
-                settings = {}
-                if editable is not None:
-                    settings[OnceOnlyHints.C11N_EDITABLE_STYLES_HINT] = HINT_SHOWN_STATUS
-                if editableProgressionRequired is not None:
-                    settings[OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT] = HINT_SHOWN_STATUS
-                if settings:
-                    self.__serverSettings.setOnceOnlyHintsSettings(settings)
-            return
 
     def __processBillDataPurchaseItems(self, purchseItems):
         if self.__ctx.modeId not in (CustomizationModes.EDITABLE_STYLE, CustomizationModes.STYLED):

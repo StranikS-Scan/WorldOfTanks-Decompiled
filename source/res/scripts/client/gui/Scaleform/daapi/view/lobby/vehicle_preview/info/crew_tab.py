@@ -23,8 +23,9 @@ from shared_utils import first
 from soft_exception import SoftException
 from web.web_client_api.common import ItemPackType, ItemPackTypeGroup
 NEW_SKILL_ICON = '../maps/icons/tankmen/skills/big/preview_new_skill.png'
-_SimpleSkill = namedtuple('_SimpleSkill', ('name', 'userName', 'bigIconPath', 'isPerk'))
+_SimpleSkill = namedtuple('_SimpleSkill', ('name', 'customName', 'userName', 'bigIconPath', 'isPerk'))
 _SimpleSkill.__new__.__defaults__ = ('new',
+ '',
  'new',
  NEW_SKILL_ICON,
  False)
@@ -90,13 +91,16 @@ class PreviewTankman(object):
         return self.freeXP > 0
 
     def getVO(self, showTankmanSkills=True):
-        skillsList = [ {'tankmanID': 1,
-         'id': str(self.skills.index(skill)),
-         'name': skill.userName,
-         'desc': skill.description,
-         'icon': skill.icon,
-         'level': tankmen.MAX_SKILL_LEVEL,
-         'active': True} for skill in self.skills ]
+        skillsList = []
+        for idx, skill in enumerate(self.skills):
+            skillsList.append({'tankmanID': 1,
+             'id': str(idx),
+             'name': skill.userName,
+             'desc': skill.description,
+             'icon': skill.icon,
+             'level': tankmen.MAX_SKILL_LEVEL,
+             'active': True})
+
         if self.hasNewSkill:
             skillsList.append({'buy': True,
              'buyCount': 0,
@@ -126,7 +130,7 @@ class PreviewTankman(object):
         return (self.role,)
 
     def _buildSkills(self, skills):
-        return [ getTankmanSkill(skill, self) for skill in skills ]
+        return [ getTankmanSkill(skill, self, proxy=(0,)) for skill in skills ]
 
 
 class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
@@ -215,7 +219,10 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
         skills = [ (tMan.skills[:] + [_SimpleSkill()] if tMan.hasNewSkill else tMan.skills[:]) for tMan in crew ]
         notEmptySkills = [ s for s in skills if s ]
         if not notEmptySkills:
-            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, crewLevel), '', '')
+            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, crewLevel),
+             '',
+             '',
+             '')
         if all((len(s) <= 1 for s in skills)):
             firstSkill = first(notEmptySkills)[0]
             icon = firstSkill.bigIconPath

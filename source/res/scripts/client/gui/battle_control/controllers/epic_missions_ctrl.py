@@ -1,32 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/epic_missions_ctrl.py
+import typing
 from collections import defaultdict
 from collections import namedtuple
-import typing
 import BigWorld
-import Event
 import BattleReplay
+import Event
 from ReplayEvents import g_replayEvents
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import SECTOR_STATE, PLAYER_RANK
 from debug_utils import verify, LOG_ERROR, LOG_DEBUG
+from epic_constants import EPIC_BATTLE_TEAM_ID
+from gui import makeHtmlString
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control.controllers.game_messages_ctrl import PlayerMessageData
-from gui.battle_control.view_components import IViewComponentsController
 from gui.battle_control.controllers.game_notification_ctrl import EPIC_NOTIFICATION, OVERTIME_DURATION_WARNINGS
-from gui import makeHtmlString
+from gui.battle_control.view_components import IViewComponentsController
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency, i18n
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 from items.vehicles import getVehicleClassFromVehicleType
-from skeletons.gui.battle_session import IBattleSessionProvider
 from shared_utils import first
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
     from SectorBase import SectorBase
 TIMER_WARNINGS = [(5, 0), (2, 0)]
@@ -692,7 +691,7 @@ class EpicMissionsController(IViewComponentsController):
         subTitleText = self.EMPTY_SUB_TITLE_TEXT
         rankIdx = rank + 1
         rRank = R.strings.epic_battle.rank
-        if self.__epicController.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES):
+        if self.__epicController.isRandomBattleReserves():
             subTitleText = backport.text(rRank.slotUnlocked(), slotNumber=backport.text(rRank.dyn('slot_{}'.format(rankIdx))())) if rankIdx in [PLAYER_RANK.SERGEANT, PLAYER_RANK.LIEUTENANT] else (backport.text(rRank.allReserveUpgraded()) if rankIdx != PLAYER_RANK.GENERAL else self.EMPTY_SUB_TITLE_TEXT)
         else:
             firstUnlocked, updateInfo = self.getRankUpdateData(rank)

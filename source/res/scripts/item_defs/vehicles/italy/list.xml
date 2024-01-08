@@ -169,7 +169,7 @@
     <shortUserString>	#italy_vehicles:It23_CC_3_short	</shortUserString>
     <description>	#italy_vehicles:It23_CC_3_descr	</description>
     <price>	6100000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals NY_style	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </It23_CC_3>
   <It24_Controcarro_1_Mk2>
@@ -292,4 +292,16 @@
     <tags>	mediumTank role_MT_support private HD secret bob cannot_be_sold mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	10	</level>
   </It08_Progetto_M40_mod_65_bob>
+  <It23_CC_3_7x7>
+    <id>	205	</id>
+    <userString>	#italy_vehicles:It23_CC_3_7x7	</userString>
+    <shortUserString>	#italy_vehicles:It23_CC_3_7x7_short	</shortUserString>
+    <description>	#italy_vehicles:It23_CC_3_7x7_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
+    <level>	10	</level>
+  </It23_CC_3_7x7>
 </list.xml>

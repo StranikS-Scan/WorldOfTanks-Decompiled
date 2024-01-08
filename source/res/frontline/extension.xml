@@ -1,16 +1,21 @@
 <extension.xml>
-  <FeatureName>	FrontLine	</FeatureName>
+  <FeatureName>	frontline	</FeatureName>
   <Components>
     <StaticComponents>
-      <ArenaFrontLineComponent></ArenaFrontLineComponent>
+      <FLArenaComponent></FLArenaComponent>
+      <FLAccountComponent></FLAccountComponent>
+      <FLAccountPrebattleComponent></FLAccountPrebattleComponent>
+      <FLAccountBattleResultComponent></FLAccountBattleResultComponent>
+      <FLArenaBattleResultComponent></FLArenaBattleResultComponent>
     </StaticComponents>
     <DynamicComponents>
       <FLReservesComponent></FLReservesComponent>
+      <FLAvatarComponent></FLAvatarComponent>
       <FLBattleUpgradeReserves></FLBattleUpgradeReserves>
-      <ArenaFLMinefieldComponent></ArenaFLMinefieldComponent>
-      <VehicleFLRegenerationKitComponent></VehicleFLRegenerationKitComponent>
-      <StealthRadarComponent></StealthRadarComponent>
-      <ArenaFLBattleModifiersComponent></ArenaFLBattleModifiersComponent>
+      <FLArenaMinefieldComponent></FLArenaMinefieldComponent>
+      <FLVehicleRegenerationKitComponent></FLVehicleRegenerationKitComponent>
+      <FLStealthRadarComponent></FLStealthRadarComponent>
+      <FLArenaBattleModifiersComponent></FLArenaBattleModifiersComponent>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>

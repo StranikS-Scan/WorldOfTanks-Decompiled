@@ -75,8 +75,7 @@ class FrontlineInteractor(BaseEquipmentInteractor):
     @wg_async
     def showBuyConfirmDialog(self, skillIds):
         result = yield wg_await(showFrontlineConfirmDialog(skillIds=skillIds))
-        isOk, _ = result.result
-        raise AsyncReturn(isOk)
+        raise AsyncReturn(result)
 
     @wg_async
     def showExitConfirmDialog(self):
@@ -85,3 +84,6 @@ class FrontlineInteractor(BaseEquipmentInteractor):
         epicSkills = self.__epicController.getEpicSkills()
         result = yield wg_await(showFrontlineConfirmDialog(isBuy=False, vehicleType=vehicle.type, applyForAllOfType=self._checkboxState, skillIds=[ epicSkills[item.innationID].skillID for item in setupItems ]))
         raise AsyncReturn(result)
+
+    def getChangedList(self):
+        return self.getCurrentLayout() or [] if self._checkboxState else super(FrontlineInteractor, self).getChangedList() or []

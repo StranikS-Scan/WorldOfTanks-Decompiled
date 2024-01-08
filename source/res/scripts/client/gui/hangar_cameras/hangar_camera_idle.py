@@ -79,13 +79,14 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
         self.__isActive = True
 
     def deactivate(self):
+        if not self.__isActive:
+            return
+        self._deactivate(True)
+        self.stopCallback(self.__updateIdleMovement)
+        self.stopCallback(self.__updateEasingOut)
+        BigWorld.removeAllIdleCallbacks()
+        self.__isActive = False
         self.__isInitialized = False
-        if self.__isActive:
-            self._deactivate(True)
-            self.stopCallback(self.__updateIdleMovement)
-            self.stopCallback(self.__updateEasingOut)
-            BigWorld.removeAllIdleCallbacks()
-            self.__isActive = False
 
     def isActive(self):
         return self.__isActive

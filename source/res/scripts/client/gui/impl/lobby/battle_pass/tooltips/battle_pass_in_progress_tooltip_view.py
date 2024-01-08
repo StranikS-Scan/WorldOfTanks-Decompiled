@@ -5,12 +5,12 @@ from battle_pass_common import BattlePassConsts
 import constants
 from frameworks.wulf import ViewSettings, Array
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_by_place_model import RewardPointsByPlaceModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.pub import ViewImpl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
-from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft, getSupportedCurrentArenaBonusType
+from gui.battle_pass.battle_pass_helpers import getChapterType, isSeasonEndingSoon, getFormattedTimeLeft, getSupportedCurrentArenaBonusType
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
 from helpers import dependency
@@ -58,6 +58,9 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 curLevel = self.__battlePass.getCurrentLevel()
                 chapterID = self.__battlePass.getCurrentChapterID()
                 curPoints, limitPoints = self.__battlePass.getLevelProgression(chapterID)
+                expireTime = self.__battlePass.getChapterRemainingTime(chapterID)
+                if self.__battlePass.isHoliday():
+                    expireTime = self.__battlePass.getSeasonTimeLeft()
                 isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID)
                 model.setLevel(curLevel)
                 model.setChapter(chapterID)
@@ -67,8 +70,8 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 if battleType:
                     model.setBattleType(getPreQueueName(battleType).lower())
                 model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
-                model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
-                model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
+                model.setExpireTime(expireTime)
+                model.setChapterType(ChapterType(getChapterType(self.__battlePass.getCurrentChapterID())))
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft())

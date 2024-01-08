@@ -20,8 +20,7 @@ _LAYERS = (WindowLayer.MARKER,
  WindowLayer.WINDOW,
  WindowLayer.WAITING,
  WindowLayer.SYSTEM_MESSAGE,
- WindowLayer.FULLSCREEN_WINDOW,
- WindowLayer.TOP_WINDOW)
+ WindowLayer.FULLSCREEN_WINDOW)
 
 class OverlayController(IOverlayController):
     _hangarSpace = dependency.descriptor(IHangarSpace)
@@ -39,7 +38,6 @@ class OverlayController(IOverlayController):
         self._wasBlurEnabled = False
         self._showEvent = AsyncEvent()
         self._cameraState = CameraMovementStates.ON_OBJECT
-        self.__previouslyVisibleLayers = []
         super(OverlayController, self).__init__()
 
     def init(self):
@@ -74,7 +72,7 @@ class OverlayController(IOverlayController):
     def _changeGUIVisibility(self):
         lobby = self._appLoader.getDefLobbyApp()
         if self._guiState:
-            lobby.containerManager.showContainers(self.__previouslyVisibleLayers, _ANIMATION_DURATION)
+            lobby.containerManager.showContainers(_LAYERS, _ANIMATION_DURATION)
             if self._wasBlurEnabled:
                 self._globalBlur.enable = True
                 self._wasBlurEnabled = False
@@ -85,7 +83,6 @@ class OverlayController(IOverlayController):
             lobby.graphicsOptimizationManager.switchOptimizationEnabled(False)
             self._backgroundAlpha = lobby.getBackgroundAlpha()
             lobby.setBackgroundAlpha(0)
-            self.__previouslyVisibleLayers = lobby.containerManager.getVisibleLayers()
             lobby.containerManager.hideContainers(_LAYERS, _ANIMATION_DURATION)
             if self._globalBlur.enable:
                 self._globalBlur.enable = False

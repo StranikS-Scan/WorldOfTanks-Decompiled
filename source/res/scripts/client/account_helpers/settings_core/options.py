@@ -9,7 +9,7 @@ import sys
 import fractions
 import itertools
 import weakref
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from operator import itemgetter
 import logging
 from aih_constants import CTRL_MODE_NAME
@@ -45,7 +45,7 @@ from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, L
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
-from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT, GAME
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -61,6 +61,7 @@ from messenger.proto import proto_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
 from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
@@ -592,6 +593,55 @@ class PlayersPanelSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault(self._settingKey).get(self._settingSubKey)
+
+
+class PlayersPanelStateSetting(AccountDumpSetting):
+    itemsCache = dependency.descriptor(IItemsCache)
+    DEFAULT_NEWBIES_STATE = 3
+    DEFAULT_STATE = 2
+
+    def __init__(self, settingName, key, subKey=None):
+        super(PlayersPanelStateSetting, self).__init__(settingName, key, subKey)
+        self.newbieGroup = None
+        return
+
+    def getDefaultValue(self):
+        if self.newbieGroup is None:
+            self.newbieGroup = self.itemsCache.items.stats.defaultSettingsGroup
+        return self.DEFAULT_NEWBIES_STATE if self.newbieGroup == 'new' else self.DEFAULT_STATE
+
+
+class MinimapSizeSetting(AccountDumpSetting):
+    itemsCache = dependency.descriptor(IItemsCache)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    DEFAULT_MINIMAP_SIZE = 1
+    DEFAULT_MAPS_TRAINING_SIZE = 3
+    MINIMAP_SIZE_INDEX = OrderedDict([(1300, 4),
+     (1050, 3),
+     (900, 2),
+     (0, 1)])
+    MINIMAP_SIZE_INDEX_WITH_SCALE = OrderedDict([(1050, 3), (900, 2), (0, 1)])
+
+    def __init__(self, settingName, key, subKey=None):
+        super(MinimapSizeSetting, self).__init__(settingName, key, subKey=None)
+        self.newbieGroup = None
+        return
+
+    def getDefaultValue(self):
+        if self.newbieGroup is None:
+            self.newbieGroup = self.itemsCache.items.stats.defaultSettingsGroup
+        if self.newbieGroup == 'new':
+            return self.__defineNewbiesSizeIndex()
+        else:
+            return self.DEFAULT_MAPS_TRAINING_SIZE if self.key == GAME.TRAINING_MINIMAP_SIZE else self.DEFAULT_MINIMAP_SIZE
+
+    def __defineNewbiesSizeIndex(self):
+        currentWindowHeight = g_monitorSettings.screenResolution.height
+        scale = self.settingsCore.interfaceScale.getScaleByIndex(0)
+        minimapSizeStorage = self.MINIMAP_SIZE_INDEX if scale < 2 else self.MINIMAP_SIZE_INDEX_WITH_SCALE
+        for monitorHeightDeps in minimapSizeStorage:
+            if currentWindowHeight >= monitorHeightDeps:
+                return minimapSizeStorage[monitorHeightDeps]
 
 
 class VOIPSetting(AccountSetting):
@@ -1443,9 +1493,24 @@ class SPGAimSetting(StorageDumpSetting):
 class _BaseAimContourSetting(StorageDumpSetting):
     _RES_ROOT = None
     _OPTIONS_NUMBER = None
+    __itemsCache = dependency.descriptor(IItemsCache)
+    _LOW_QUALITY_PRESETS = ('LOW', 'MIN')
+    _NEWBIE_DEFAULT_VALUE = None
+
+    def __init__(self, settingName, storage, isPreview=False):
+        self._newbieGroup = None
+        super(_BaseAimContourSetting, self).__init__(settingName, storage, isPreview)
+        return
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault('contour').get(self.settingName, None)
+
+    def _get(self):
+        if self._newbieGroup is None:
+            self._newbieGroup = self.__itemsCache.items.stats.defaultSettingsGroup
+            if self._newbieGroup == 'new' and self._isHighQualityPreset():
+                self._default = self._NEWBIE_DEFAULT_VALUE
+        return super(_BaseAimContourSetting, self)._get()
 
     def setSystemValue(self, value):
         raise NotImplementedError
@@ -1458,10 +1523,17 @@ class _BaseAimContourSetting(StorageDumpSetting):
         return [ {'data': value,
          'label': backport.text(self._RES_ROOT.dyn('type{}'.format(value))())} for value in xrange(self._OPTIONS_NUMBER) ]
 
+    def _isHighQualityPreset(self):
+        presetIndx = BigWorld.detectGraphicsPresetFromSystemSettings()
+        lowQualityPresets = [ BigWorld.getSystemPerformancePresetIdFromName(pName) for pName in self._LOW_QUALITY_PRESETS ]
+        isHighQualityPreset = presetIndx not in lowQualityPresets
+        return isHighQualityPreset
+
 
 class ContourSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contour
     _OPTIONS_NUMBER = 2
+    _NEWBIE_DEFAULT_VALUE = 1
 
     def setSystemValue(self, value):
         BigWorld.enableEdgeDrawerVisual(not value)
@@ -1478,6 +1550,7 @@ class ContourSetting(_BaseAimContourSetting):
 class ContourPenetratableZoneSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contourPenetrableZone
     _OPTIONS_NUMBER = 3
+    _NEWBIE_DEFAULT_VALUE = 2
 
     def setSystemValue(self, value):
         BigWorld.setEdgeDrawerPenetratableZoneOverlay(value)
@@ -1486,6 +1559,7 @@ class ContourPenetratableZoneSetting(_BaseAimContourSetting):
 class ContourImpenetratableZoneSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contourImpenetrableZone
     _OPTIONS_NUMBER = 3
+    _NEWBIE_DEFAULT_VALUE = 1
 
     def setSystemValue(self, value):
         BigWorld.setEdgeDrawerImpenetratableZoneOverlay(value)

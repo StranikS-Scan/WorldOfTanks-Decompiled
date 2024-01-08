@@ -13,7 +13,6 @@ from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
 from gui.prb_control.entities.bootcamp.pre_queue.entity import BootcampEntity, BootcampEntryPoint
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
-from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
 from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
 from gui.prb_control.entities.comp7.pre_queue.entity import Comp7Entity, Comp7EntryPoint
@@ -25,7 +24,6 @@ __all__ = ('PreQueueFactory',)
 registerQueueEntity(QUEUE_TYPE.RANDOMS, RandomEntity)
 registerQueueEntity(QUEUE_TYPE.RANKED, RankedEntity)
 registerQueueEntity(QUEUE_TYPE.BOOTCAMP, BootcampEntity)
-registerQueueEntity(QUEUE_TYPE.EPIC, EpicEntity)
 registerQueueEntity(QUEUE_TYPE.MAPBOX, MapboxEntity)
 registerQueueEntity(QUEUE_TYPE.MAPS_TRAINING, MapsTrainingEntity)
 registerQueueEntity(QUEUE_TYPE.EVENT_BATTLES, EventBattleEntity)
@@ -34,7 +32,6 @@ registerQueueEntity(QUEUE_TYPE.WINBACK, WinbackEntity)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANDOM, RandomEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANKED, RankedEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.BOOTCAMP, BootcampEntryPoint)
-registerEntryPoint(PREBATTLE_ACTION_NAME.EPIC, EpicEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX, MapboxEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
@@ -45,7 +42,7 @@ class PreQueueFactory(ControlFactory):
 
     def __init__(self):
         self.rankedStorage = prequeue_storage_getter(QUEUE_TYPE.RANKED)()
-        self.epicStorage = prequeue_storage_getter(QUEUE_TYPE.EPIC)()
+        self.frontlineStorage = prequeue_storage_getter(QUEUE_TYPE.EPIC)()
         self.battleRoyaleStorage = prequeue_storage_getter(QUEUE_TYPE.BATTLE_ROYALE)()
         self.mapboxStorage = prequeue_storage_getter(QUEUE_TYPE.MAPBOX)()
         self.mapsTrainingStorage = prequeue_storage_getter(QUEUE_TYPE.MAPS_TRAINING)()
@@ -90,8 +87,8 @@ class PreQueueFactory(ControlFactory):
             return BootcampEntity()
         elif self.rankedStorage.isModeSelected():
             return RankedEntity()
-        elif self.epicStorage.isModeSelected():
-            return EpicEntity()
+        elif self.frontlineStorage.isModeSelected():
+            return self.__createByQueueType(QUEUE_TYPE.EPIC)
         elif self.battleRoyaleStorage.isModeSelected():
             return self.__createByQueueType(QUEUE_TYPE.BATTLE_ROYALE)
         elif self.mapboxStorage.isModeSelected():

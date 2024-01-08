@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileGlobalMapInfoView.py
 import weakref
 from adisp import adisp_process
-from gui.impl import backport
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
-from gui.clans import items
-from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.lobby.clans.profile.clan_statistics_vos import FortGlobalMapStatistics
 from gui.Scaleform.daapi.view.meta.ClanProfileGlobalMapInfoViewMeta import ClanProfileGlobalMapInfoViewMeta
-from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.locale.CLANS import CLANS
+from gui.clans.data_wrapper.utils import formatField
+from gui.impl import backport
+from gui.shared.formatters import text_styles
+from helpers import time_utils
+from helpers.i18n import makeString as _ms
 
 class ClanProfileGlobalMapInfoView(ClanProfileGlobalMapInfoViewMeta):
 
@@ -30,7 +30,7 @@ class ClanProfileGlobalMapInfoView(ClanProfileGlobalMapInfoViewMeta):
         favouriteAttrs = yield clanDossier.requestFavouriteAttributes()
         if self.isDisposed():
             return
-        primeTime = items.formatField(getter=favouriteAttrs.getFavoritePrimetime, formatter=lambda x: backport.getShortTimeFormat(x.hour * time_utils.ONE_HOUR + x.minute * time_utils.ONE_MINUTE))
+        primeTime = formatField(getter=favouriteAttrs.getFavoritePrimetime, formatter=lambda x: backport.getShortTimeFormat(x.hour * time_utils.ONE_HOUR + x.minute * time_utils.ONE_MINUTE))
         primeTime = text_styles.standard(_ms(CLANS.GLOBALMAPVIEW_POPULARPRIMETIME, time=text_styles.main(primeTime)))
         data = FortGlobalMapStatistics({'stats': globalMapStats,
          'ratings': ratings,

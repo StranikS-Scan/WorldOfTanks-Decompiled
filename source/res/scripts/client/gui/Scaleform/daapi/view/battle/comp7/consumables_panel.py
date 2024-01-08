@@ -153,6 +153,10 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
             if vehicle is not None:
                 roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
                 roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
+                if roleSkillEquipment is None:
+                    if not avatar_getter.isObserver():
+                        _logger.error('No equipment found for vehicle %s', vehicle.descriptor.name)
+                    return
                 bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)
                 icon = backport.image(self._R_COMP7_EQUIPMENT_ICON.dyn(roleSkillEquipment.icon[0])())
                 tooltip = TOOLTIP_FORMAT.format(*getRoleEquipmentTooltipParts(roleSkillEquipment))

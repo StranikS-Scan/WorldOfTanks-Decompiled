@@ -55,6 +55,10 @@ class IStoryModeController(IGameController):
         raise NotImplementedError
 
     @staticmethod
+    def exitQueue():
+        raise NotImplementedError
+
+    @staticmethod
     def goToBattle():
         raise NotImplementedError
 

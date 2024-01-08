@@ -7,9 +7,11 @@ from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonName, SeasonState
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
+    from helpers.server_settings import Comp7RanksConfig
     from season_common import GameSeason
     from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import DivisionInfoModel
     from gui.impl.gen.view_models.views.lobby.comp7.schedule_info_model import ScheduleInfoModel
@@ -57,6 +59,27 @@ def setRanksInactivityInfo(model, comp7Controller=None):
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def setElitePercentage(model, comp7Controller=None):
     model.setTopPercentage(comp7Controller.leaderboard.getEliteRankPercent())
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
+def setRankInfo(model, comp7Controller=None):
+    seasonNumber = comp7Controller.getActualSeasonNumber()
+    if not seasonNumber:
+        return
+    division = comp7_shared.getPlayerDivisionByRating(comp7Controller.getRatingForSeason(seasonNumber))
+    model.setCurrentRank(comp7_shared.getRankEnumValue(division))
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller, lobbyCtx=ILobbyContext)
+def setMaxRankInfo(model, comp7Controller=None, lobbyCtx=None):
+    seasonNumber = comp7Controller.getActualSeasonNumber()
+    if not seasonNumber:
+        return
+    maxAchivedRankNumber = comp7Controller.getMaxRankNumberForSeason(seasonNumber)
+    config = lobbyCtx.getServerSettings().comp7RanksConfig
+    ranksOrder = config.ranksOrder
+    rankId = ranksOrder[maxAchivedRankNumber - 1]
+    model.setMaxAchievedRank(comp7_shared.getRankById(rankId))
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)

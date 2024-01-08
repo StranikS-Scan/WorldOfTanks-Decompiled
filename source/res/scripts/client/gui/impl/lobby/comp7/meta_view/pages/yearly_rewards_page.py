@@ -5,22 +5,32 @@ import typing
 from comp7_common import seasonPointsCodeBySeasonNumber
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_card_model import YearlyRewardsCardModel, RewardsState
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_model import YearlyRewardsModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_card_model import SeasonPointState, YearlyRewardsCardModel, RewardsState
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import ProgressionItemBaseModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
-from gui.impl.lobby.comp7 import comp7_shared
-from gui.impl.lobby.comp7.comp7_bonus_packer import packQuestBonuses, getComp7BonusPacker
-from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating
+from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointState, SeasonName, SeasonPointModel
+from gui.impl.gen.view_models.views.lobby.comp7.tooltips.general_rank_tooltip_model import Rank
+from gui.impl.lobby.comp7.comp7_bonus_packer import packYearlyRewardsBonuses
+from gui.impl.lobby.comp7.comp7_model_helpers import SEASONS_NUMBERS_BY_NAME, getSeasonNameEnum, setElitePercentage
+from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating, getRankEnumValue, getPlayerDivision
+from gui.impl.lobby.comp7.meta_view.meta_view_helper import getRankDivisions, setDivisionData, setRankData
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
+from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
+from gui.impl.lobby.comp7.tooltips.general_rank_tooltip import GeneralRankTooltip
 from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
-from gui.server_events.bonuses import getNonQuestBonuses
+from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.lobby_context import ILobbyContext
+if typing.TYPE_CHECKING:
+    from helpers.server_settings import Comp7RanksConfig
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class YearlyRewardsPage(PageSubModelPresenter):
     __slots__ = ('__tooltips',)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __lobbyCtx = dependency.descriptor(ILobbyContext)
 
     def __init__(self, viewModel, parentView):
         super(YearlyRewardsPage, self).__init__(viewModel, parentView)
@@ -34,12 +44,17 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def viewModel(self):
         return super(YearlyRewardsPage, self).getViewModel()
 
+    @property
+    def ranksConfig(self):
+        return self.__lobbyCtx.getServerSettings().comp7RanksConfig
+
     def initialize(self):
         super(YearlyRewardsPage, self).initialize()
         self.__updateAllData()
+        self.__comp7Controller.setYearlyRewardsAnimationSeen()
 
     def finalize(self):
-        self.__tooltips = {}
+        self.__tooltips = []
         super(YearlyRewardsPage, self).finalize()
 
     def createToolTip(self, event):
@@ -56,16 +71,26 @@ class YearlyRewardsPage(PageSubModelPresenter):
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.comp7.tooltips.SeasonPointTooltip():
-            params = {'state': SeasonPointState(event.getArgument('state'))}
+            params = {'state': SeasonPointState(event.getArgument('state')),
+             'ignoreState': event.getArgument('ignoreState')}
             return SeasonPointTooltip(params=params)
+        elif contentID == R.views.lobby.comp7.tooltips.GeneralRankTooltip():
+            params = {'rank': Rank(event.getArgument('rank')),
+             'divisions': event.getArgument('divisions'),
+             'from': event.getArgument('from'),
+             'to': event.getArgument('to')}
+            return GeneralRankTooltip(params=params)
+        elif contentID == R.views.lobby.comp7.tooltips.FifthRankTooltip():
+            return FifthRankTooltip()
         else:
-            return None
+            return SixthRankTooltip() if contentID == R.views.lobby.comp7.tooltips.SixthRankTooltip() else None
 
     def _getEvents(self):
         return ((self.__comp7Controller.onQualificationStateUpdated, self.__onQualificationStateUpdated),
          (self.__comp7Controller.onSeasonPointsUpdated, self.__onSeasonPointsUpdated),
          (self.__comp7Controller.onRankUpdated, self.__onRankUpdated),
          (self.__comp7Controller.onComp7ConfigChanged, self.__onConfigChanged),
+         (self.__comp7Controller.onComp7RanksConfigChanged, self.__onRanksConfigChanged),
          (self.__comp7Controller.onComp7RewardsConfigChanged, self.__onRewardsConfigChanged))
 
     def __onQualificationStateUpdated(self):
@@ -84,6 +109,10 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def __onConfigChanged(self):
         self.__updateAllData()
 
+    def __onRanksConfigChanged(self):
+        with self.viewModel.transaction() as tx:
+            self.__setLegendData(tx)
+
     def __onRewardsConfigChanged(self):
         with self.viewModel.transaction() as tx:
             self.__setCards(tx)
@@ -96,58 +125,73 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def __setCommonData(self, model):
         receivedSeasonPoints = self.__comp7Controller.getReceivedSeasonPoints()
         model.setHasDataError(not receivedSeasonPoints)
-        model.setSeasonPointsReceived(self.__areLastSeasonPointsReceived())
-        if self.__comp7Controller.isAvailable() and not self.__comp7Controller.isQualificationActive():
-            model.setCurrentRank(comp7_shared.getRankEnumValue(comp7_shared.getPlayerDivision()))
-        else:
-            prevSeason = self.__comp7Controller.getPreviousSeason()
-            if not prevSeason:
-                return
-            seasonNumber = prevSeason.getNumber()
-            if self.__comp7Controller.isRankAchievedInSeason(seasonNumber):
-                prevDivision = getPlayerDivisionByRating(self.__comp7Controller.getRatingForSeason(seasonNumber))
-                model.setCurrentRank(comp7_shared.getRankEnumValue(prevDivision))
+        model.setHasInitialCardsAnimation(not self.__comp7Controller.isYearlyRewardsAnimationSeen())
+        self.__setSeasonData(model)
+        self.__setLegendData(model)
 
     def __areLastSeasonPointsReceived(self):
-        prevSeason = self.__comp7Controller.getPreviousSeason()
-        if prevSeason is None:
+        lastSeason = self.__comp7Controller.getActualSeasonNumber()
+        if lastSeason is None:
             return False
         else:
-            lastSeasonPointsEntitlement = seasonPointsCodeBySeasonNumber(prevSeason.getNumber())
+            lastSeasonPointsEntitlement = seasonPointsCodeBySeasonNumber(lastSeason)
             return self.__comp7Controller.getReceivedSeasonPoints().get(lastSeasonPointsEntitlement, 0) > 0
+
+    def __setSeasonData(self, model):
+        actualSeason = self.__comp7Controller.getActualSeasonNumber()
+        if actualSeason is None:
+            return
+        else:
+            if self.__comp7Controller.getCurrentSeason() is not None:
+                isQualificationActive = self.__comp7Controller.isQualificationActive()
+            else:
+                isQualificationActive = not self.__comp7Controller.isQualificationPassedInSeason(actualSeason)
+            model.setIsQualificationActive(isQualificationActive)
+            if not isQualificationActive:
+                division = getPlayerDivisionByRating(self.__comp7Controller.getRatingForSeason(actualSeason))
+                model.setCurrentRank(getRankEnumValue(division))
+            return
+
+    def __setLegendData(self, model):
+        ranksArray = model.getRanks()
+        ranksArray.clear()
+        for rank in self.ranksConfig.ranksOrder:
+            rankModel = ProgressionItemBaseModel()
+            setRankData(rankModel, rank, self.ranksConfig)
+            setDivisionData(rankModel, getRankDivisions(rank, self.ranksConfig))
+            ranksArray.addViewModel(rankModel)
+
+        ranksArray.invalidate()
+        setElitePercentage(model)
 
     def __setCards(self, model):
         cards = model.getCards()
         cards.clear()
+        self.__tooltips = []
         prevRewardsCost = 0
-        pointStatesGenerator = _PointsStatesGenerator(self.__areLastSeasonPointsReceived())
+        seasonPointsGenerator = _SeasonPointsGenerator(self.__areLastSeasonPointsReceived())
         for rewardsData in sorted(self.__comp7Controller.getYearlyRewards().main, key=lambda data: data['cost']):
-            currentPointsStates = pointStatesGenerator.getNext(rewardsData['cost'] - prevRewardsCost)
+            cardSeasonPoints = seasonPointsGenerator.getNext(rewardsData['cost'] - prevRewardsCost)
             prevRewardsCost = rewardsData['cost']
             cardModel = YearlyRewardsCardModel()
-            cardModel.setRewardsState(self.__getRewardStateForCard(currentPointsStates))
-            self.__setCardSeasonPoints(cardModel, currentPointsStates)
+            cardModel.setRewardsState(self.__getRewardStateForCard(cardSeasonPoints))
+            self.__setCardSeasonPoints(cardModel, cardSeasonPoints)
             self.__setRewards(cardModel, rewardsData['bonus'])
             cards.addViewModel(cardModel)
 
         cards.invalidate()
 
-    def __getRewardStateForCard(self, cardPointsState):
-        if all((pointState == SeasonPointState.ACHIEVED for pointState in cardPointsState)):
+    def __getRewardStateForCard(self, cardSeasonPoints):
+        if all((pointState == SeasonPointState.ACHIEVED for pointState, _ in cardSeasonPoints)):
             if self.__comp7Controller.isYearlyRewardReceived():
                 return RewardsState.CLAIMED
             return RewardsState.GUARANTEED
-        return RewardsState.POSSIBLE if not any((pointState == SeasonPointState.NOTACHIEVED for pointState in cardPointsState)) else RewardsState.NOTAVAILABLE
+        return RewardsState.POSSIBLE if not any((pointState == SeasonPointState.NOTACHIEVED for pointState, _ in cardSeasonPoints)) else RewardsState.NOTAVAILABLE
 
     def __setRewards(self, cardModel, bonuses):
         rewards = cardModel.getRewards()
         rewards.clear()
-        self.__tooltips = []
-        bonusObjects = []
-        for key, value in bonuses.iteritems():
-            bonusObjects.extend(getNonQuestBonuses(key, value))
-
-        bonusModels, tooltipsData = packQuestBonuses(bonusObjects, getComp7BonusPacker())
+        bonusModels, tooltipsData = packYearlyRewardsBonuses(bonuses)
         for idx, bonusModel in enumerate(bonusModels):
             bonusModel.setTooltipId(str(len(self.__tooltips)))
             rewards.addViewModel(bonusModel)
@@ -156,23 +200,22 @@ class YearlyRewardsPage(PageSubModelPresenter):
         rewards.invalidate()
 
     @staticmethod
-    def __setCardSeasonPoints(cardModel, seasonPoints):
+    def __setCardSeasonPoints(cardModel, cardSeasonPoints):
         pointsList = cardModel.getSeasonPoints()
         pointsList.clear()
-        for state in seasonPoints:
-            pointsList.addString(state.value)
+        for state, season in cardSeasonPoints:
+            pointModel = SeasonPointModel()
+            pointModel.setState(state)
+            if season is not None:
+                pointModel.setSeason(season)
+            pointsList.addViewModel(pointModel)
 
         pointsList.invalidate()
+        return
 
 
-class _PointsStatesGenerator(object):
+class _SeasonPointsGenerator(object):
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __RANK_ID_TO_SEASON_POINTS_COUNT = {6: 1,
-     5: 2,
-     4: 3,
-     3: 4,
-     2: 5,
-     1: 6}
 
     def __init__(self, areLastSeasonPointsReceived):
         self.__allPointsStates = self.__composePointsStates(areLastSeasonPointsReceived)
@@ -180,13 +223,29 @@ class _PointsStatesGenerator(object):
     def getNext(self, rewardsCount):
         result, self.__allPointsStates = self.__allPointsStates[:rewardsCount], self.__allPointsStates[rewardsCount:]
         if len(result) < rewardsCount:
-            result += [SeasonPointState.NOTACHIEVED] * (rewardsCount - len(result))
+            result += [(SeasonPointState.NOTACHIEVED, None)] * (rewardsCount - len(result))
         return result
 
     def __composePointsStates(self, areLastSeasonPointsReceived):
-        achievedPointsCount = sum(self.__comp7Controller.getReceivedSeasonPoints().values())
-        result = [SeasonPointState.ACHIEVED] * achievedPointsCount
-        if not self.__comp7Controller.isQualificationActive() and not areLastSeasonPointsReceived:
-            possiblePointsCount = self.__RANK_ID_TO_SEASON_POINTS_COUNT.get(comp7_shared.getPlayerDivision().rank, 0)
-            result += [SeasonPointState.POSSIBLE] * possiblePointsCount
-        return result
+        result = []
+        achievedPoints = self.__getAchievedPoints()
+        for seasonName, count in achievedPoints:
+            result += [(SeasonPointState.ACHIEVED, seasonName)] * count
+
+        if self.__comp7Controller.getActualSeasonNumber() is None:
+            return result
+        else:
+            if not self.__comp7Controller.isQualificationActive() and not areLastSeasonPointsReceived:
+                possiblePointsCount = getPlayerDivision().seasonPoints
+                result += [(SeasonPointState.POSSIBLE, getSeasonNameEnum())] * possiblePointsCount
+            return result
+
+    def __getAchievedPoints(self):
+        achievedPoints = []
+        entitlementsCount = self.__comp7Controller.getReceivedSeasonPoints()
+        orderedSeasons = sorted(SEASONS_NUMBERS_BY_NAME.items(), key=lambda x: x[1])
+        for seasonName, seasonNumber in orderedSeasons:
+            count = entitlementsCount.get(seasonPointsCodeBySeasonNumber(seasonNumber), 0)
+            achievedPoints.append((SeasonName(seasonName), count))
+
+        return achievedPoints

@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tankmen_voiceover_view.py
 import logging
-from battle_pass_common import BattlePassTankmenSource
+from urlparse import urljoin
+from battle_pass_common import BattlePassTankmenSource, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
 from frameworks.wulf import ViewSettings, WindowFlags
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyBattlePassUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
+from gui.battle_pass.battle_pass_helpers import getReceivedTankmenCount
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import getTankmanFullName
 from gui.impl.gen import R
@@ -16,7 +18,6 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 _logger = logging.getLogger(__name__)
-_TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX = '_qch'
 
 class TankmenVoiceoverView(ViewImpl):
     __slots__ = ()
@@ -39,12 +40,12 @@ class TankmenVoiceoverView(ViewImpl):
 
     def _finalize(self):
         switchHangarOverlaySoundFilter(on=False)
-        self.soundManager.playInstantSound(BattlePassSounds.VOICEOVER_STOP)
+        self.soundManager.playInstantSound(BattlePassSounds.HOLIDAY_VOICEOVER_STOP if self.__battlePass.isHoliday() else BattlePassSounds.VOICEOVER_STOP)
         super(TankmenVoiceoverView, self)._finalize()
 
     def __fillModel(self):
         with self.viewModel.transaction() as model:
-            self.__fillTankmen(self.__battlePass.getTankmen(), model.getTankmen())
+            self.__fillTankmen(self.__battlePass.getSpecialTankmen(), model.getTankmen())
 
     def _getEvents(self):
         return ((self.viewModel.close, self.__close),
@@ -52,18 +53,19 @@ class TankmenVoiceoverView(ViewImpl):
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassChange),
          (self.__battlePass.onSeasonStateChanged, self.__onBattlePassChange),
          (self.__battlePass.onExtraChapterExpired, self.__onBattlePassChange),
-         (self.__battlePass.onTankmenTokensUpdated, self.__updateCacheWithWaiting),
          (self.__battlePass.onEntitlementCacheUpdated, self.__fillModel))
 
     def __close(self):
         self.destroyWindow()
 
-    def __showShop(self):
-        showShop(getBuyBattlePassUrl())
+    def __showShop(self, args):
+        tankmanGroupName = args.get('tankmanGroupName')
+        tankmanBundlePath = self.__battlePass.getSpecialTankmen().get(tankmanGroupName, {}).get('bundlePath', '')
+        showShop(urljoin(getShopURL(), tankmanBundlePath))
         self.destroyWindow()
 
     def __tankmanInfo(self, tankman):
-        return self.__battlePass.getTankmen().get(tankman, {})
+        return self.__battlePass.getSpecialTankmen().get(tankman, {})
 
     def __getTankmenByPriority(self, tankmenDict):
         return sorted(tankmenDict.keys(), key=lambda k: tankmenDict[k].get('priority', 0))
@@ -87,11 +89,12 @@ class TankmenVoiceoverView(ViewImpl):
         model.setGroupName(groupName)
         model.setFullName(getTankmanFullName(groupName))
         model.setCount(count)
+        model.setHasVoiceover(self.__battlePass.isVoicedTankman(groupName))
         self.__fillTankmenStateForModel(model, groupName, source, count)
         self.__fillTankmenProgressionInfo(model, tankmanInfo, source)
 
     def __fillTankmenStateForModel(self, model, groupName, source, count):
-        receivedCount = self.__receivedTankmenCount(groupName)
+        receivedCount = getReceivedTankmenCount(groupName)
         availableCount = count - receivedCount
         if source == BattlePassTankmenSource.SHOP:
             state = self.__getStateForShopTankmanModel(count, availableCount)
@@ -117,7 +120,7 @@ class TankmenVoiceoverView(ViewImpl):
         return TankmanModel.IN_SHOP if availableCount == count else TankmanModel.NOT_FULL
 
     def __getStateForQuestChainTankmanModel(self, groupName, count):
-        receivedQuestCount = self.__receivedTankmenCount(groupName + _TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX)
+        receivedQuestCount = getReceivedTankmenCount(groupName + TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX)
         questChainsLeftToBuy = count - receivedQuestCount
         if questChainsLeftToBuy <= 0:
             state = TankmanModel.AVAILABLE_IN_QUEST_CHAIN
@@ -130,24 +133,17 @@ class TankmenVoiceoverView(ViewImpl):
     def __getStateForProgressionTankmanModel(self, source, receivedCount=0):
         if receivedCount:
             return TankmanModel.RECEIVED
-        if self.__battlePass.isActive() and self.__battlePass.hasExtra():
+        if self.__battlePass.isActive() and (self.__battlePass.hasExtra() or self.__battlePass.isHoliday()):
             if source == BattlePassTankmenSource.PAID:
                 return TankmanModel.PAID
             return TankmanModel.FREE
         return TankmanModel.UNAVAILABLE
-
-    def __receivedTankmenCount(self, groupName):
-        entitlement = self.__battlePass.getTankmenEntitlements().get(groupName)
-        return entitlement.amount if entitlement is not None else 0
 
     def __onBattlePassChange(self, *_):
         if self.__battlePass.getSpecialVoiceChapters():
             self.__battlePass.tankmenCacheUpdate()
         else:
             self.__close()
-
-    def __updateCacheWithWaiting(self):
-        self.__battlePass.tankmenCacheUpdate(isWaiting=True)
 
 
 class TankmenVoiceoverWindow(LobbyWindow):

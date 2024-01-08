@@ -23,11 +23,10 @@ from gui.prb_control.entities.base.entity import NotSupportedEntity
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.invites import InvitesManager, AutoInvitesNotifier
 from gui.prb_control.items import PlayerDecorator, FunctionalState
-from gui.prb_control.settings import CTRL_ENTITY_TYPE as _CTRL_TYPE, ENTER_UNIT_MGR_ERRORS
+from gui.prb_control.settings import CTRL_ENTITY_TYPE as _CTRL_TYPE, ENTER_UNIT_MGR_RESTORE_ERRORS, ENTER_UNIT_MGR_RESET_ERRORS
 from gui.prb_control.settings import IGNORED_UNIT_BROWSER_ERRORS
 from gui.prb_control.settings import IGNORED_UNIT_MGR_ERRORS
 from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
-from gui.prb_control.settings import UNIT_COMP7_ERRORS
 from gui.prb_control.settings import UNIT_NOTIFICATION_TO_DISPLAY
 from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
 from gui.prb_control.storages import PrbStorageDecorator
@@ -358,11 +357,13 @@ class _PreBattleDispatcher(ListenersCollection):
         SystemMessages.pushMessage(messages.getKickReasonMessage(reasonCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onClientUpdated(self, diff, _):
-        isRandomQueue = self.__entity.getQueueType() == QUEUE_TYPE.RANDOMS
-        if not isRandomQueue:
+        queueType = self.__entity.getQueueType()
+        if queueType not in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK):
             return
         isSquadMode = isinstance(self.__entity, SquadEntity)
-        if not isSquadMode and self.winbackCtrl.isModeAvailable():
+        isWinbackAvailable = self.winbackCtrl.isModeAvailable()
+        needToUpdate = queueType == QUEUE_TYPE.RANDOMS and isWinbackAvailable and not isSquadMode or queueType == QUEUE_TYPE.WINBACK and not isWinbackAvailable
+        if needToUpdate:
             self.__unsetEntity()
             self.__setDefault()
 
@@ -473,9 +474,9 @@ class _PreBattleDispatcher(ListenersCollection):
             msgType, msgBody = messages.getUnitMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
             self.__requestCtx.stopProcessing()
-        if errorCode in ENTER_UNIT_MGR_ERRORS:
+        if errorCode in ENTER_UNIT_MGR_RESTORE_ERRORS:
             self.restorePrevious()
-        elif errorCode in UNIT_COMP7_ERRORS:
+        elif errorCode in ENTER_UNIT_MGR_RESET_ERRORS:
             if isinstance(self.__entity, NotSupportedEntity):
                 self.__setDefault()
 

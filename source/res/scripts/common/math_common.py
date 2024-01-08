@@ -3,9 +3,9 @@
 from math import ceil
 _CEIL_EPS = 1
 
-def ceilTo(num, decimals=0):
+def ceilTo(num, decimals=0, epsilon=0.0004):
     multiplier = 10 ** decimals
-    return ceil(round(num / multiplier, _CEIL_EPS)) * multiplier
+    return ceil(round((num + epsilon) / multiplier, _CEIL_EPS)) * multiplier
 
 
 def round_int(number):

@@ -6,8 +6,8 @@ from gui.Scaleform.daapi.view.meta.ClanProfileBaseViewMeta import ClanProfileBas
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
-from gui.clans import items
 from gui.clans.clan_helpers import ClanListener
+from gui.clans.data_wrapper.utils import formatField
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
 from gui.impl import backport
 from gui.shared.formatters import text_styles
@@ -73,8 +73,8 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self._updateHeaderState()
 
     def _updateClanInfo(self, clanInfo):
-        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=items.formatField(getter=clanInfo.getCreatedAt, formatter=backport.getShortDateFormat))
-        self.as_setClanInfoS({'name': items.formatField(getter=clanInfo.getFullName),
+        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=formatField(getter=clanInfo.getCreatedAt, formatter=backport.getShortDateFormat))
+        self.as_setClanInfoS({'name': formatField(getter=clanInfo.getFullName),
          'bgIcon': RES_ICONS.MAPS_ICONS_CLANS_CLAN_CARD_HEADER,
          'creationDate': creationDate})
 

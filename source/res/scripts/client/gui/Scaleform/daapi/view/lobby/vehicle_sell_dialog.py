@@ -408,7 +408,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             formattedItems.append(backport.text(acceptButtonTooltip.notEnoughTankmenBerths.body()))
         if not isInLimit:
             formattedItems.append(backport.text(acceptButtonTooltip.vehicleSellLimit.body()))
-        warningMessage = '.\n'.join(formattedItems) + '.'
+        warningMessage = '{}\n'.format(backport.text(R.strings.common.common.dot())).join(formattedItems) + backport.text(R.strings.common.common.dot())
         if formattedItems:
             header = backport.text(acceptButtonTooltip.notEnable.header())
             tooltip = makeTooltip(header, warningMessage)

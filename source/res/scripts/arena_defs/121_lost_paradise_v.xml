@@ -45,5 +45,56 @@
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/121_lost_paradise_v/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-30.094339 89.361267	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-334.107697 424.294739	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-256.218750 -24.943279	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	83.158897 378.382324	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	54.569550 31.304195	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-385.908447 -111.806091	</position>
+        </team1>
+        <team2>
+          <position>	207.791779 445.928589	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-203.355820 310.139221	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </121_lost_paradise_v.xml>

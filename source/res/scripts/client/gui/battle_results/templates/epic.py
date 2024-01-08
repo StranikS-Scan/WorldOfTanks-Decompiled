@@ -3,7 +3,7 @@
 from gui.battle_results.templates import regular
 from helpers import i18n
 from gui.Scaleform.locale.MENU import MENU
-from gui.battle_results.components import base
+from gui.battle_results.components import base, epic
 from gui.battle_results.components import personal
 from gui.battle_results.components import vehicles
 from gui.battle_results.components import common
@@ -28,11 +28,13 @@ EPIC_TIME_STATS_BLOCK.addComponent(1, common.ArenaDurationVO('duration', 'durati
 EPIC_TIME_STATS_BLOCK.addNextComponent(common.ObjectivesReachedVO('objectivesReached'))
 EPIC_TIME_STATS_BLOCK.addNextComponent(common.ObjectivesDestroyedVO('objectivesDestroyed'))
 EPIC_TIME_STATS_BLOCK.addNextComponent(common.BasesCapturedVO('basesCaptured'))
-EPIC_COMMON_STATS_BLOCK = regular.REGULAR_COMMON_STATS_BLOCK.clone(7, 9, 10, 11)
+EPIC_COMMON_STATS_BLOCK = regular.REGULAR_COMMON_STATS_BLOCK.clone(7, 9, 10, 11, 15, 16)
 EPIC_COMMON_STATS_BLOCK.addComponent(7, common.EpicBattleBattleFinishResultBlock())
 EPIC_COMMON_STATS_BLOCK.addComponent(9, personal.EpicVehicleNamesBlock(base.ListMeta(), 'playerVehicleNames'))
 EPIC_COMMON_STATS_BLOCK.addComponent(10, personal.EpicVehiclesBlock(base.ListMeta(), 'playerVehicles', _RECORD.PERSONAL))
 EPIC_COMMON_STATS_BLOCK.addComponent(11, EPIC_TIME_STATS_BLOCK.clone())
+EPIC_COMMON_STATS_BLOCK.addComponent(15, epic.StrBattleModificationItem('modificationStr'))
+EPIC_COMMON_STATS_BLOCK.addComponent(16, epic.BattleModificationItem('modificationIconPath'))
 EPIC_COMMON_STATS_BLOCK.addNextComponent(shared.WasInEpicBattleItem('epicMode'))
 EPIC_PERSONAL_STATS_BLOCK = regular.REGULAR_PERSONAL_STATS_BLOCK.clone(8)
 EPIC_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesEpicStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))

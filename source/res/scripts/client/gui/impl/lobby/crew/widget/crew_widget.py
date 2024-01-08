@@ -326,7 +326,7 @@ class CrewWidget(ViewImpl):
             if self.__currentVehicle.invID in changedVehicles:
                 self.__currentVehicle = self.itemsCache.items.getVehicle(self.__currentVehicle.invID)
                 self.__updateWidgetModel()
-        elif self.__currentTankman and any((self.__currentTankman.invID in tankmen for tankmen in crews.itervalues())):
+        elif self.__currentTankman and any((self.__currentTankman.invID in tankmen for tankmen in crews.itervalues() if tankmen is not None)):
             self.__currentTankman = self.itemsCache.items.getTankman(self.__currentTankman.invID)
             if self.__currentTankman.isInTank:
                 self.__currentVehicle = self.itemsCache.items.getVehicle(self.__currentTankman.vehicleInvID)

@@ -5,8 +5,8 @@ from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, ingame_help_ctrl, epic_maps_ctrl, default_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
 from gui.battle_control.controllers import aiming_sounds_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl
 from gui.battle_control.controllers import battle_hints_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
@@ -20,7 +20,6 @@ from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
 from gui.shared.system_factory import registerBattleControllerRepo
-from gui.battle_control.controllers.sound_ctrls.new_year_battle_sounds import NewYearSoundController
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 if TYPE_CHECKING:
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
@@ -452,36 +451,11 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
-        guiVisitor = setup.arenaVisitor.gui
-        if not (guiVisitor.isStrongholdRange() or guiVisitor.isComp7Battle() or guiVisitor.isFunRandom()):
-            repository.addController(NewYearSoundController())
         return repository
 
     @staticmethod
     def _getAppearanceCacheController(setup):
         return DefaultAppearanceCacheController(setup)
-
-
-class EpicControllersRepository(_ControllersRepository):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(EpicControllersRepository, cls).create(setup)
-        repository.addViewController(epic_respawn_ctrl.EpicRespawnsController(setup), setup)
-        repository.addController(progress_circle_ctrl.ProgressTimerController(setup))
-        repository.addViewController(epic_maps_ctrl.EpicMapsController(setup), setup)
-        repository.addViewController(debug_ctrl.DebugController(), setup)
-        repository.addViewController(epic_spectator_ctrl.SpectatorViewController(setup), setup)
-        repository.addViewController(perk_ctrl.PerksController(), setup)
-        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
-        repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
-        repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
-        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
-        repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
-        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
-        return repository
 
 
 class EventControllerRepository(_ControllersRepositoryByBonuses):
@@ -543,9 +517,6 @@ class Comp7ControllerRepository(ClassicControllersRepository):
     def _getAppearanceCacheController(setup):
         return Comp7AppearanceCacheController(setup)
 
-
-for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
-    registerBattleControllerRepo(guiType, EpicControllersRepository)
 
 for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
     registerBattleControllerRepo(guiType, StrongholdControllerRepository)

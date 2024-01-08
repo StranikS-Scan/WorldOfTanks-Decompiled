@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/comp7_shared.py
 import typing
+from shared_utils import findFirst
 from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import Division
 from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import Rank
 from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonState
 from gui.impl.gen.view_models.views.lobby.comp7.year_model import YearState
 from gui.periodic_battles.models import PeriodType
 from helpers import dependency, time_utils
-from shared_utils import findFirst
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
@@ -24,14 +24,18 @@ def getRankEnumValue(division):
     return tuple(Rank)[division.rank - 1]
 
 
+def getRankById(rankId):
+    return Rank(rankId)
+
+
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def getRating(comp7Controller=None):
     return comp7Controller.rating
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def isElite(comp7Controller=None):
-    return comp7Controller.isElite
+def isElite(seasonNumber=None, comp7Controller=None):
+    return comp7Controller.isEliteForSeason(seasonNumber)
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
@@ -40,9 +44,9 @@ def isQualification(comp7Controller=None):
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
-def getPlayerDivisionByRating(rating, lobbyCtx=None):
+def getPlayerDivisionByRating(rating, seasonNumber=None, lobbyCtx=None):
     ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
-    division = findFirst(lambda d: rating in d.range, ranksConfig.divisions if not isElite() else reversed(ranksConfig.divisions))
+    division = findFirst(lambda d: rating in d.range, ranksConfig.divisions if not isElite(seasonNumber) else reversed(ranksConfig.divisions))
     return division
 
 
@@ -77,8 +81,6 @@ def hasPlayerRankInactivityWarning(lobbyCtx=None, comp7Controller=None):
 def getCurrentSeasonState(comp7Controller=None):
     currentTime = time_utils.getCurrentLocalServerTimestamp()
     periodInfo = comp7Controller.getPeriodInfo()
-    if periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE, PeriodType.UNDEFINED):
-        return SeasonState.DISABLED
     if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE):
         return SeasonState.NOTSTARTED
     if periodInfo.periodType in (PeriodType.AFTER_SEASON,
@@ -106,7 +108,18 @@ def getProgressionYearState(comp7Controller=None):
      PeriodType.ALL_NOT_AVAILABLE_END,
      PeriodType.NOT_AVAILABLE_END):
         return YearState.FINISHED
-    elif periodInfo.periodType in (PeriodType.AVAILABLE, PeriodType.BETWEEN_CYCLES):
-        return YearState.ACTIVE
     else:
-        return YearState.OFFSEASON if periodInfo.periodType == PeriodType.BETWEEN_SEASONS or periodInfo.periodType == PeriodType.AFTER_CYCLE and hasNextSeason or periodInfo.periodType == PeriodType.BEFORE_CYCLE and hasPrevSeason else YearState.NOTSTARTED
+        return YearState.OFFSEASON if periodInfo.periodType == PeriodType.BETWEEN_SEASONS or periodInfo.periodType == PeriodType.AFTER_CYCLE and hasNextSeason or periodInfo.periodType == PeriodType.BEFORE_CYCLE and hasPrevSeason else YearState.ACTIVE
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def getRankByName(rankName, lobbyCtx=None):
+    config = lobbyCtx.getServerSettings().comp7RanksConfig
+    rank = findFirst(lambda rankData: rankData['name'].lower() == rankName.lower(), config.ranks.values())
+    return Rank(rank['id'])
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def getRankOrder(rank, lobbyCtx=None):
+    config = lobbyCtx.getServerSettings().comp7RanksConfig
+    return config.ranksOrder.index(rank.value) + 1

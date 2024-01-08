@@ -77,7 +77,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         super(GlobalSettingsPlugin, self).stop()
 
     def setSettings(self):
-        newSize = settings.clampMinimapSizeIndex(self._AccountSettingsClass.getSettings(self._currentSizeSettings))
+        newSize = settings.clampMinimapSizeIndex(self.settingsCore.getSetting(self._currentSizeSettings))
         if self._sizeIndex != newSize:
             self._sizeIndex = newSize
             self._parentObj.as_setSizeS(self._sizeIndex)

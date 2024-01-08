@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/items_kit_helper.py
 import itertools
-import random
 import typing
 from collections import Container, namedtuple
 from sys import maxint
@@ -816,36 +815,6 @@ def canInstallStyle(styleId, service=None):
         return StyleInstallInfo(canInstall=True, style=style, vehicle=vehicle)
 
 
-@dependency.replace_none_kwargs(service=ICustomizationService, itemsCache=IItemsCache)
-def getSuitableStyledVehicle(styleId, inInventory=False, service=None, itemsCache=None):
-    styledVehicleCD = None
-    style = service.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
-    vehicle = g_currentVehicle.item if g_currentVehicle.isPresent() else None
-    if vehicle is not None and not vehicle.descriptor.type.isCustomizationLocked and style.mayInstall(vehicle):
-        styledVehicleCD = vehicle.intCD
-    else:
-        accDossier = itemsCache.items.getAccountDossier()
-        vehiclesStats = accDossier.getRandomStats().getVehicles()
-        vehicleGetter = itemsCache.items.getItemByCD
-        vehiclesStats = {vehicleCD:(vehicleGetter(vehicleCD).level, value) for vehicleCD, value in vehiclesStats.iteritems() if not vehicleGetter(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(vehicleGetter(vehicleCD))}
-        if vehiclesStats:
-            sortedVehicles = sorted(vehiclesStats.iteritems(), key=lambda vStat: (vStat[1][0], vStat[1][1].battlesCount), reverse=True)
-            if inInventory:
-                res = findFirst(lambda data: vehicleGetter(data[0]).inventoryCount > 0, sortedVehicles)
-                styledVehicleCD = res[0] if res else None
-            else:
-                styledVehicleCD = sortedVehicles[0][0] if sortedVehicles else None
-    if not styledVehicleCD:
-        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
-        vehicle = first(__getVehiclesForStylePreview(itemsCache, criteria=criteria))
-        styledVehicleCD = vehicle.intCD if vehicle else None
-    if not styledVehicleCD and inInventory is False:
-        criteria = ~REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED | REQ_CRITERIA.VEHICLE.FOR_ITEM(style) | ~REQ_CRITERIA.VEHICLE.EVENT
-        vehicle = random.choice(__getVehiclesForStylePreview(itemsCache, criteria=criteria))
-        styledVehicleCD = vehicle.intCD if vehicle else None
-    return styledVehicleCD
-
-
 def _sortItemsByOrder(items, rule=None):
     if rule is None:
         rule = _PACK_ITEMS_SORT_ORDER
@@ -877,11 +846,6 @@ def _packDataMultiVehicles(itemsPack, vehicle):
 
     inContainerVOs = container.getVO()
     return addCompensationInfo([inContainerVOs], itemsPack) if inContainerVOs else []
-
-
-def __getVehiclesForStylePreview(itemsCache, criteria=None):
-    vehs = itemsCache.items.getVehicles(criteria=criteria).values()
-    return sorted(vehs, key=lambda item: item.level, reverse=True)
 
 
 def __getItemsSortRule(itemsPack):

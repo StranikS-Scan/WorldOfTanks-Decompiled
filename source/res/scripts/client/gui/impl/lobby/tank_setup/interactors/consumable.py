@@ -19,11 +19,9 @@ class ConsumableAutoRenewal(BaseAutoRenewal):
         return self._vehicle.isAutoEquip
 
     @decorators.adisp_process('techMaintenance')
-    def changeValue(self, callback):
-        value = self.getLocalValue()
-        if value != self.getValue():
-            yield VehicleAutoEquipProcessor(self._vehicle, value).request()
-            self.setLocalValue(None)
+    def processVehicleAutoRenewal(self, callback):
+        yield VehicleAutoEquipProcessor(self._vehicle, self.getLocalValue()).request()
+        self.setLocalValue(None)
         callback(None)
         return
 

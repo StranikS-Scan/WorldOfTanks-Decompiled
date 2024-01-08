@@ -74,15 +74,10 @@ class ShopOverlay(_ShopOverlayBase):
     def __init__(self, ctx=None):
         super(ShopOverlay, self).__init__(ctx)
         self.__uiLogger = ShopMetricsLogger(item=ShopLogKeys.SHOP_OVERLAY)
-        self.__uniqueBrowserName = VIEW_ALIAS.OVERLAY_WEB_STORE
 
     def _dispose(self):
         self.__uiLogger.onViewClosed()
         super(ShopOverlay, self)._dispose()
-
-    @property
-    def uniqueBrowserName(self):
-        return self.__uniqueBrowserName
 
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):

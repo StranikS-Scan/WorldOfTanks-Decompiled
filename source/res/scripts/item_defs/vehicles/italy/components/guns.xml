@@ -43,6 +43,7 @@
     <Cannone_da_75_34_semovente>	44	</Cannone_da_75_34_semovente>
     <Cannone_da_90_50_T119E1_LE>	45	</Cannone_da_90_50_T119E1_LE>
     <_47_mm_Cannone_Da_47_40_bis>	46	</_47_mm_Cannone_Da_47_40_bis>
+    <_130mm_Cannone_da_130_45_7x7>	501	</_130mm_Cannone_da_130_45_7x7>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -2500,5 +2501,63 @@
         </_130mm_HE_Mark_80>
       </shots>
     </_130mm_Cannone_da_130_45>
+    <_130mm_Cannone_da_130_45_7x7>
+      <userString>	#italy_vehicles:_130mm_Cannone_da_130_45_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_AP_Mark_46>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1303	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 245	</piercingPower>
+        </_130mm_AP_Mark_46>
+        <_130mm_HEAT_Mark_71>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1256	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_130mm_HEAT_Mark_71>
+        <_130mm_HE_Mark_80>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1256	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	130 130	</piercingPower>
+        </_130mm_HE_Mark_80>
+      </shots>
+    </_130mm_Cannone_da_130_45_7x7>
   </shared>
 </guns.xml>

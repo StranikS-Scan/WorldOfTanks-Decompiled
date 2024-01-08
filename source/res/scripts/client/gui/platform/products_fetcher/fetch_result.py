@@ -40,6 +40,12 @@ class FetchResult(object):
     def isProductsReady(self):
         return self.isProcessed and self.products
 
+    def getProducts(self):
+        return self.products
+
+    def setProducts(self, products):
+        self.products = products
+
     def reset(self):
         self.stop()
 

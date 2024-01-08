@@ -3,12 +3,9 @@
 import random
 import re
 import typing
-import GUI
 import ArenaType
 import wg_async as future_async
-from account_helpers.settings_core import ISettingsCore
 from adisp import adisp_async
-from helpers import dependency
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.impl import backport
@@ -275,11 +272,3 @@ def getImageResourceFromPath(path):
 def capitalizeText(text):
     t = text.decode()
     return t[0].upper() + t[1:]
-
-
-def mouseScreenPosition():
-    settingsCore = dependency.instance(ISettingsCore)
-    scale = settingsCore.interfaceScale.get()
-    clipPos = GUI.mcursor().position
-    res = GUI.screenResolution()
-    return ((clipPos[0] + 1.0) / (scale * 2) * res[0], (-clipPos[1] + 1.0) / (scale * 2) * res[1])

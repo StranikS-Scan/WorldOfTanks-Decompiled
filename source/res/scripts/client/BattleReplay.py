@@ -938,7 +938,7 @@ class BattleReplay(object):
             if not self.isControllingCamera and forceControlMode is None:
                 return
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
-            if forceControlMode is None and not self.isControllingCamera and controlMode in _IGNORED_SWITCHING_CTRL_MODES:
+            if forceControlMode is None and not self.isControllingCamera and controlMode in _IGNORED_SWITCHING_CTRL_MODES or controlMode == CTRL_MODE_NAME.MAP_CASE_EPIC:
                 return
             if self.__equipmentId is None and controlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
                 return

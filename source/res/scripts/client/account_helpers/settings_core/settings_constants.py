@@ -94,6 +94,7 @@ class GAME(CONST_CONTAINER):
     ANONYMIZER = 'anonymizer'
     SHOW_VICTIMS_DOGTAG = 'showVictimsDogTag'
     SHOW_DOGTAG_TO_KILLER = 'showDogTagToKiller'
+    SHOW_KILLERS_DOGTAG = 'showKillersDogTag'
     DYNAMIC_CAMERA = 'dynamicCamera'
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'
@@ -120,6 +121,9 @@ class GAME(CONST_CONTAINER):
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
     SHOW_ARTY_HIT_ON_MAP = 'showArtyHitOnMap'
+    MINIMAP_SIZE = 'minimapSize'
+    TRAINING_MINIMAP_SIZE = 'mapsTrainingMinimapSize'
+    COMP7_MINIMAP_SIZE = 'comp7PrebattleMinimapSize'
     MINIMAP_VIEW_RANGE = 'minimapViewRange'
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
@@ -329,11 +333,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT = 'HangarHaveNewSuffixBadgeHint'
     BADGE_PAGE_NEW_SUFFIX_BADGE_HINT = 'BadgePageNewSuffixBadgeHint'
     C11N_AUTOPROLONGATION_HINT = 'CustomizationAutoprolongationHint'
-    C11N_PROGRESSION_VIEW_HINT = 'CustomizationProgressionViewHint'
-    C11N_EDITABLE_STYLES_HINT = 'CustomizationEditableStylesHint'
     C11N_EDITABLE_STYLE_SLOT_HINT = 'C11nEditableStyleSlotHint'
     C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT = 'C11nEditableStyleSlotButtonHint'
-    C11N_PROGRESSION_REQUIRED_STYLES_HINT = 'C11nProgressionRequiredStylesHint'
     C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT = 'C11nProgressionRequiredStyleSlotHint'
     C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT = 'C11nProgressionRequiredStyleSlotButtonHint'
     BLUEPRINTS_SWITCHBUTTON_HINT = 'BlueprintsSwitchButtonHint'
@@ -348,7 +349,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
     VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
-    AMMUNITION_PANEL_HINT = 'AmmunitionPanelHintZoneHint'
     PLATOON_BTN_HINT = 'PlatoonBtnHint'
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
@@ -378,6 +378,8 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_MATTERS_FIGHT_BUTTON_HINT = 'BattleMattersFightButtonHint'
     BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT = 'BattleMattersEntryPointHint'
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'
+    FL_SCENARIO_HINT = 'FrontlineScenariosHint'
+    FL_SCENARIO_HINT_SMALL = 'FrontlineScenariosHintSmallSizes'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -472,6 +474,7 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     DAILY_QUESTS_INTRO_SHOWN = 'dailyQuestsIntroShown'
     EXTRA_CHAPTER_INTRO_SHOWN = 'extraChapterIntroShown'
     EXTRA_CHAPTER_VIDEO_SHOWN = 'extraChapterVideoShown'
+    FLAGS_VERSION_HOLIDAY = 'flagsVersionHoliday'
 
 
 class BattleCommStorageKeys(CONST_CONTAINER):
@@ -495,28 +498,3 @@ class SeniorityAwardsStorageKeys(CONST_CONTAINER):
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
-
-class NYLootBoxesStorageKeys(CONST_CONTAINER):
-    NEW_COUNT = 'newCount'
-    DELIVERED_COUNT = 'deliveredCount'
-
-
-class NewYearStorageKeys(CONST_CONTAINER):
-    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
-    NY_VEHICLES_LEVEL_UP_ENTRY = 'nyVehiclesLevelUpEntry'
-    NY_STATISTICS_HINT_SHOWN = 'nyLootboxStatisticsHintShown'
-    TUTORIAL_STATE = 'tutorialState'
-    TUTORIAL_STAGE_3_SEEN = 'tutorialStage3Seen'
-    DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
-    DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
-    CELEBRITY_SCREEN_VISITED = 'celebrityScreenVisited'
-    CELEBRITY_WELCOME_VIEWED = 'celebrityChallengeWelcomeViewed'
-    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
-    BOOL_FLAGS = (NY_VEHICLES_PROGRESS_ENTRY,
-     NY_STATISTICS_HINT_SHOWN,
-     DECORATIONS_POPOVER_VIEWED,
-     DECORATIONS_POPOVER_BROKEN,
-     CELEBRITY_SCREEN_VISITED,
-     CELEBRITY_WELCOME_VIEWED,
-     LOOT_BOX_VIDEO_OFF,
-     TUTORIAL_STAGE_3_SEEN)

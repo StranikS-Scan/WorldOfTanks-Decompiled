@@ -3,6 +3,7 @@
 import typing
 from bootcamp.Bootcamp import g_bootcamp
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.genConsts.RESEARCH_COUNTER_STATES import RESEARCH_COUNTER_STATES
 from gui.veh_post_progression.helpers import needToShowCounter
 from items.battle_royale import isBattleRoyale
 from constants import IGR_TYPE
@@ -17,6 +18,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from gui.shared.utils.module_upd_available_helper import getResearchInfo
 from gui.veh_post_progression.models.ext_money import ExtendedMoney
 from helpers import i18n, dependency
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
@@ -38,10 +40,18 @@ class ResearchPanel(ResearchPanelMeta):
     def _populate(self):
         super(ResearchPanel, self)._populate()
         g_clientUpdateManager.addCallbacks({'stats.vehTypeXP': self.onVehicleTypeXPChanged,
-         'stats.eliteVehicles': self.onVehicleBecomeElite})
+         'stats.eliteVehicles': self.onVehicleBecomeElite,
+         'blueprints': self.__onUpdateBlueprints,
+         'serverSettings.blueprints_config': self.__onBlueprintsSettingsChanged})
         self.onCurrentVehicleChanged()
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.onCurrentVehicleChanged
+
+    def __onBlueprintsSettingsChanged(self, diff):
+        self.__onUpdateBlueprints(diff)
+
+    def __onUpdateBlueprints(self, _):
+        self.__updateModuleUpdateAvailable()
 
     def _dispose(self):
         super(ResearchPanel, self)._dispose()
@@ -81,6 +91,7 @@ class ResearchPanel(ResearchPanelMeta):
         else:
             self.as_updateCurrentVehicleS({'earnedXP': 0})
         self.__onIgrTypeChanged()
+        self.__updateModuleUpdateAvailable()
 
     def __onIgrTypeChanged(self, *args):
         igrType = self.igrCtrl.getRoomType()
@@ -99,6 +110,17 @@ class ResearchPanel(ResearchPanelMeta):
             vehicleIgrTimeLeft = getTimeLeftStr(localization, rentInfo.getTimeLeft(), timeStyle=text_styles.stats, ctx={'igrIcon': igrActionIcon})
         self.as_actionIGRDaysLeftS(vehicleIgrTimeLeft is not None, text_styles.main(vehicleIgrTimeLeft))
         return
+
+    def __updateModuleUpdateAvailable(self):
+        status = RESEARCH_COUNTER_STATES.RESEARCH_NOT_AVAILABLE
+        if g_currentVehicle.isPresent():
+            researchInfo = getResearchInfo(vehicle=g_currentVehicle.item)
+            if researchInfo and researchInfo.hasUnviewedItems():
+                if researchInfo.hasUnviewedVehicles():
+                    status = RESEARCH_COUNTER_STATES.RESEARCH_VEHICLE_AVAILABLE
+                else:
+                    status = RESEARCH_COUNTER_STATES.RESEARCH_MODULE_AVAILABLE
+        self.as_setModuleUpdateAvailableS(status)
 
     def onVehicleTypeXPChanged(self, xps):
         if g_currentVehicle.isPresent():

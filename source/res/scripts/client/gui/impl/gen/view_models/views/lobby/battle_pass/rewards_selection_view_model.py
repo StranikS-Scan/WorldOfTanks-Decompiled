@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.common.selectable_reward_base_model im
 class RewardsSelectionViewModel(SelectableRewardBaseModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(RewardsSelectionViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
@@ -26,8 +26,15 @@ class RewardsSelectionViewModel(SelectableRewardBaseModel):
     def setIsExtra(self, value):
         self._setBool(3, value)
 
+    def getIsHoliday(self):
+        return self._getBool(4)
+
+    def setIsHoliday(self, value):
+        self._setBool(4, value)
+
     def _initialize(self):
         super(RewardsSelectionViewModel, self)._initialize()
         self._addNumberProperty('level', 0)
         self._addNumberProperty('chapterID', 0)
         self._addBoolProperty('isExtra', False)
+        self._addBoolProperty('isHoliday', False)

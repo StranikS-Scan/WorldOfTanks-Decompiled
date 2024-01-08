@@ -7,9 +7,6 @@ class NotificationsListMeta(SmartPopOverView):
     def onClickAction(self, typeID, entityID, action):
         self._printOverrideError('onClickAction')
 
-    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
-        self._printOverrideError('registerGFNotification')
-
     def getMessageActualTime(self, msTime):
         self._printOverrideError('getMessageActualTime')
 

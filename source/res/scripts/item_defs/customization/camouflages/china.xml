@@ -3642,4 +3642,37 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch52_WZ_122_6_F3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	754	</id>
+      <texture>	vehicles/russian/Camouflage/Ch52_WZ_122_6_F3_GMIII_IV_3DSt.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Ch52_WZ_122_6_F3_GMIII_IV_3DSt/description	</description>
+      <scales>	1 1 1	</scales>
+      <userString>	#vehicle_customization:camouflage/Ch52_WZ_122_6_F3_GMIII_IV_3DSt/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	122 122 122 255	</c0>
+          <c1>	64 73 87 255	</c1>
+          <c2>	56 51 46 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.99 1.99	</factor>
+        <offset>	5.39 -1.15	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </china.xml>

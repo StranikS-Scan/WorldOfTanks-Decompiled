@@ -11,6 +11,7 @@ import ResMgr
 from AvatarInputHandler.AimingSystems import disableShotPointCache
 from AvatarInputHandler.vehicles_selection_mode import VehiclesSelectionControlMode
 from AvatarInputHandler.commands.fl_random_reserves import FLRandomReserves
+from aih_constants import MAP_CASE_MODES
 from helpers.CallbackDelayer import CallbackDelayer
 import BattleReplay
 import CommandMapping
@@ -237,9 +238,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
         self.__ctrlModeName = _CTRLS_FIRST
         self.__isDetached = False
-        self.__waitObserverCallback = None
+        self.__pendingModeSwitch = None
         self.__observerVehicle = None
-        self.__observerIsSwitching = False
         self.__commands = []
         self.__detachedCommands = []
         self.__persistentCommands = [PrebattleSetupsControl()]
@@ -511,7 +511,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         arena = avatar.arena
         arena.onPeriodChange += self.__onArenaStarted
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        avatar.consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleChanged
+        avatar.consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleMatrixBindingChanged
         self.__onArenaStarted(arena.period)
         if not avatar.isObserver() and arena.hasObservers:
             self.__remoteCameraSender = RemoteCameraSender(self)
@@ -546,24 +546,22 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             g_guiResetters.remove(self.__onRecreateDevice)
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStarted
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleChanged
+        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleMatrixBindingChanged
         ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)
         return
 
-    def __onVehicleChanged(self, isStatic):
+    def __onVehicleMatrixBindingChanged(self, isStatic):
         self.steadyVehicleMatrixCalculator.relinkSources()
         self.__identifyVehicleType()
         self.__constructComponents()
-        if self.__waitObserverCallback is not None and self.__observerVehicle is not None:
+        if self.__pendingModeSwitch:
             player = BigWorld.player()
             ownVehicle = BigWorld.entity(player.playerVehicleID)
             vehicle = player.getVehicleAttached()
             if vehicle != ownVehicle:
-                self.__waitObserverCallback()
-                self.__observerIsSwitching = False
-                self.__observerVehicle = None
-        return
+                pendingMode, args = self.__pendingModeSwitch
+                self.onControlModeChanged(pendingMode, *args)
 
     def setObservedVehicle(self, vehicleID):
         for control in self.__ctrls.itervalues():
@@ -579,22 +577,22 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         else:
             player = BigWorld.player()
             isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
-            if self.__waitObserverCallback is not None:
-                self.__waitObserverCallback = None
+            self.__pendingModeSwitch = None
             if not isObserverMode and self.__isDualGun:
                 gui_event_dispatcher.controlModeChange(eMode)
             if not player.observerSeesAll():
                 if isObserverMode and eMode == _CTRL_MODE.POSTMORTEM:
-                    if self.__observerVehicle is not None and not self.__observerIsSwitching:
-                        self.__waitObserverCallback = partial(self.onControlModeChanged, eMode, **args)
-                        self.__observerIsSwitching = True
+                    if self.__observerVehicle is not None:
                         player.positionControl.followCamera(False)
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
-                        return
+                        if player.playerVehicleID == player.getVehicleAttached().id:
+                            self.__pendingModeSwitch = (eMode, args)
+                            return
             if isObserverMode and self.__ctrlModeName == _CTRL_MODE.POSTMORTEM:
-                self.__observerVehicle = None
-                if player.vehicle and player.vehicle.id != player.playerVehicleID:
-                    self.__observerVehicle = player.vehicle.id
+                if player.observedVehicleID and player.observedVehicleID != player.playerVehicleID:
+                    self.__observerVehicle = player.observedVehicleID
+                else:
+                    self.__observerVehicle = None
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setControlMode(eMode)
@@ -626,9 +624,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     else:
                         player.positionControl.bindToVehicle(True)
-                elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind() and isObserverMode and not self.isObserverFPV:
-                    if not (prevCtrlModeName == _CTRL_MODE.VIDEO and self.__observerIsSwitching):
-                        player.positionControl.bindToVehicle(True)
                 newAutoRotationMode = self.__curCtrl.getPreferredAutorotationMode()
                 if newAutoRotationMode is not None:
                     if prevCtrl.getPreferredAutorotationMode() is None:
@@ -650,9 +645,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             if isObserverMode:
                 args.update(vehicleID=self.__observerVehicle)
-                self.__curCtrl.enable(**args)
-            else:
-                self.__curCtrl.enable(**args)
+            self.__curCtrl.enable(**args)
             isReplayPlaying = replayCtrl.isPlaying
             vehicleID = None
             vehicle = player.getVehicleAttached()
@@ -669,16 +662,16 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
             return
 
-    def onVehicleControlModeChanged(self, eMode):
-        LOG_DEBUG('onVehicleControlModeChanged: ', eMode, self.isObserverFPV)
+    def onObserverControlModeChanged(self, eMode):
+        LOG_DEBUG('onObserverControlModeChanged: ', eMode, self.isObserverFPV)
         if not self.isObserverFPV:
             self.onControlModeChanged(_CTRL_MODE.POSTMORTEM)
             return
+        elif eMode in MAP_CASE_MODES:
+            return
         else:
-            if eMode is None:
-                eMode = _CTRL_MODES[BigWorld.player().observerFPVControlMode]
             targetPos = self.getDesiredShotPoint() or Math.Vector3(0, 0, 0)
-            LOG_DEBUG('onVehicleControlModeChanged: ', eMode, targetPos)
+            LOG_DEBUG('onObserverControlModeChanged targetPos: ', targetPos)
             vehicle = BigWorld.player().getVehicleAttached()
             self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=vehicle.id if vehicle is not None else BigWorld.player().playerVehicleID)
             return

@@ -182,13 +182,19 @@ class ClientArena(object):
         return
 
     def registerTeamInfo(self, teamInfo):
+        if self.__teamInfo is not None:
+            self.onTeamInfoUnregistered(self.__teamInfo)
         self.__teamInfo = teamInfo
         self.onTeamInfoRegistered(teamInfo)
+        return
 
     def unregisterTeamInfo(self, teamInfo):
-        self.__teamInfo = None
-        self.onTeamInfoUnregistered(teamInfo)
-        return
+        if self.__teamInfo is not teamInfo:
+            return
+        else:
+            self.__teamInfo = None
+            self.onTeamInfoUnregistered(teamInfo)
+            return
 
     def __setupBBColliders(self):
         if BigWorld.wg_getSpaceBounds().length == 0.0:

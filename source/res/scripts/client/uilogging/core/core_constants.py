@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/core/core_constants.py
 from enum import Enum
+from constants import AUTH_TOKEN_REQUEST_TIMEOUT
+from gui.clans.settings import REQUEST_TIMEOUT
 
 class HttpHeaders(str, Enum):
     AUTH_TOKEN = 'X-TOKEN'
@@ -18,7 +20,8 @@ LOGS_FORCE_SEND_PERIOD = 600.0
 LOGS_MAX_QUEUE_SIZE = 5000
 LOGS_MAX_COUNT_PER_SEND = 50
 LOG_RECORD_MAX_PROPERTIES_COUNT = 1000
-REQUEST_SESSION_TIMEOUT = 45
+REQUEST_SESSION_TIMEOUT = AUTH_TOKEN_REQUEST_TIMEOUT + REQUEST_TIMEOUT + 1.0
+RETRY_REQUEST_SESSION_DELAY = 0.5
 ENSURE_SESSION_TICK = 5.0
 MAX_SESSION_GET_RETRIES = 3
 MIN_SESSION_LIFE_TIME = LOGS_SEND_PERIOD * 2

@@ -192,9 +192,6 @@ class FunRandomController(IFunRandomController):
     def getLocalsResRoot(self):
         return R.strings.fun_random.modes.undefined if R.strings.dyn('fun_random') else R.invalid
 
-    def hasHangarHeaderEntry(self):
-        return False
-
     def getSettings(self):
         return _FUN_CONFIG_STUB
 

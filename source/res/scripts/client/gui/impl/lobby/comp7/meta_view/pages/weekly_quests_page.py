@@ -5,7 +5,6 @@ from collections import namedtuple
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT
-from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_ID
 from frameworks.wulf.view.array import fillViewModelsArray
 from gui.impl import backport
 from gui.impl.gen import R
@@ -13,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progress_points_
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import WeeklyQuestsModel, SeasonState
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7.comp7_bonus_packer import getComp7BonusPacker, packTokensRewardsQuestBonuses, packQuestBonuses
-from gui.impl.lobby.comp7.comp7_quest_helpers import getComp7TokensQuests, getComp7WeeklyQuests
+from gui.impl.lobby.comp7.comp7_quest_helpers import getComp7WeeklyProgressionQuests, getComp7WeeklyQuests, getActualSeasonWeeklyRewardToken
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.periodic_battles.models import PeriodType
 from gui.shared.missions.packers.events import Comp7WeeklyQuestPacker
@@ -112,16 +111,21 @@ class WeeklyQuestsPage(PageSubModelPresenter):
     def __updateProgression(self, model):
         settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
         lastTokensCount = settings.get(COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT, 0)
-        currentTokensCount = self.__eventsCache.questsProgress.getTokenCount(COMP7_TOKEN_WEEKLY_REWARD_ID)
+        progressionTokenName = getActualSeasonWeeklyRewardToken()
+        if progressionTokenName is not None:
+            currentTokensCount = self.__eventsCache.questsProgress.getTokenCount(progressionTokenName)
+        else:
+            currentTokensCount = 0
         model.setPreviousTokenValue(lastTokensCount)
         model.setCurrentTokenValue(currentTokensCount)
         self.__updateProgressionPoints(model)
         settings[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = currentTokensCount
         AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
+        return
 
     def __updateProgressionPoints(self, model):
         progressPointsModels = []
-        quests = getComp7TokensQuests()
+        quests = getComp7WeeklyProgressionQuests()
         for qID in sorted(quests.keys()):
             quest = quests[qID]
             progressPointsModel = ProgressPointsModel()

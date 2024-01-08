@@ -61,6 +61,9 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent):
     def onDestroy(self):
         self.cleanup()
 
+    def onLeaveWorld(self):
+        self.cleanup()
+
     def subscribe(self, callback=None, tryActivateCallback=None):
         try:
             if callback is not None:

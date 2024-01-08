@@ -88,24 +88,27 @@ class ReplayFinishDialogAction(ShowDialogAction):
             BigWorld.callback(0.0, _stopBattleReplay)
 
 
-class CloseWaitingListenerMixin(object):
+class CloseGameLoadingMixin(object):
 
     def __init__(self, *args, **kwargs):
-        super(CloseWaitingListenerMixin, self).__init__(*args, **kwargs)
+        super(CloseGameLoadingMixin, self).__init__(*args, **kwargs)
         self.__callbackID = None
         return
 
     def init(self, *args, **kwargs):
-        super(CloseWaitingListenerMixin, self).init(*args, **kwargs)
+        super(CloseGameLoadingMixin, self).init(*args, **kwargs)
+        if not Waiting.isVisible():
+            self._closeGameLoading()
+            return
         for scope in (EVENT_BUS_SCOPE.LOBBY, EVENT_BUS_SCOPE.BATTLE):
             g_eventBus.addListener(LobbySimpleEvent.WAITING_HIDDEN, self.__waitingHiddenHandler, scope=scope)
 
     def fini(self, *args, **kwargs):
         self._unsubscribe()
-        super(CloseWaitingListenerMixin, self).fini(*args, **kwargs)
+        super(CloseGameLoadingMixin, self).fini(*args, **kwargs)
 
-    def _onWaitingHidden(self):
-        pass
+    def _closeGameLoading(self):
+        gameLoading.getLoader().idl()
 
     def _unsubscribe(self):
         self.__cancelCallback()
@@ -126,7 +129,7 @@ class CloseWaitingListenerMixin(object):
         self.__callbackID = None
         if not Waiting.isVisible():
             self._unsubscribe()
-            self._onWaitingHidden()
+            self._closeGameLoading()
         return
 
 
@@ -262,7 +265,7 @@ class WaitingSpace(IGlobalSpace):
 
 
 @ReprInjector.simple()
-class LobbySpace(CloseWaitingListenerMixin, IGlobalSpace):
+class LobbySpace(CloseGameLoadingMixin, IGlobalSpace):
     __slots__ = ()
     gameplay = dependency.descriptor(IGameplayLogic)
 
@@ -282,13 +285,10 @@ class LobbySpace(CloseWaitingListenerMixin, IGlobalSpace):
             appFactory.attachCursor(appNS)
             appFactory.goToLobby(appNS)
             if gameLoading.getLoader().isStateEntered(GameLoadingStates.LOGIN_SCREEN.value):
-                gameLoading.getLoader().idl()
+                self._closeGameLoading()
 
     def hideGUI(self, appFactory, newState):
         appFactory.detachCursor(APP_NAME_SPACE.SF_LOBBY)
-
-    def _onWaitingHidden(self):
-        gameLoading.getLoader().idl()
 
     @staticmethod
     def _disconnectStartHandler(*_):
@@ -304,7 +304,7 @@ class _ArenaSpace(IGlobalSpace):
 
 
 @ReprInjector.simple()
-class BattleLoadingSpace(CloseWaitingListenerMixin, _ArenaSpace):
+class BattleLoadingSpace(CloseGameLoadingMixin, _ArenaSpace):
     __slots__ = ()
 
     def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
@@ -334,14 +334,14 @@ class BattleLoadingSpace(CloseWaitingListenerMixin, _ArenaSpace):
         appFactory.showBattle()
         appFactory.goToBattleLoading(appNS)
         if BattleReplay.g_replayCtrl.getAutoStartFileName():
-            gameLoading.getLoader().idl()
+            super(BattleLoadingSpace, self)._closeGameLoading()
 
-    def _onWaitingHidden(self):
+    def _closeGameLoading(self):
         lobbyContext = dependency.instance(ILobbyContext)
         if lobbyContext.getGuiCtx().get('skipShowGUI', False):
             return
         if not BattleReplay.g_replayCtrl.getAutoStartFileName():
-            gameLoading.getLoader().idl()
+            super(BattleLoadingSpace, self)._closeGameLoading()
 
 
 @ReprInjector.simple()

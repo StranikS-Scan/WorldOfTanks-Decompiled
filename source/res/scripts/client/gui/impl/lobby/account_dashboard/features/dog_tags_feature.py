@@ -6,16 +6,18 @@ from gui.impl.gen.view_models.views.lobby.account_dashboard.dog_tags_model impor
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
 from gui.impl.lobby.dog_tags.dog_tag_composer import DogTagComposerLobby
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showDogTags
 from gui.shared.events import DogTagsEvent
 from helpers import dependency
-from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IGameSessionController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 
 class DogTagsFeature(FeatureItem):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
     __slots__ = ('_composer', '_dtHelper')
 
     def __init__(self, viewModel):
@@ -29,6 +31,7 @@ class DogTagsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify += self.__updatePrem
         self._dtHelper.onDogTagDataChanged += self.__onDogTagDataChanged
         g_eventBus.addListener(DogTagsEvent.COUNTERS_UPDATED, self.__onCountersUpdated, EVENT_BUS_SCOPE.LOBBY)
+        self.__limitedUIController.startObserve(LuiRules.DOG_TAG_HINT, self.__onLuiRuleDogTagCompleted)
         self._viewModel.dogTags.onClick += self.__onClick
 
     def finalize(self):
@@ -37,6 +40,7 @@ class DogTagsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify -= self.__updatePrem
         self._dtHelper.onDogTagDataChanged -= self.__onDogTagDataChanged
         g_eventBus.removeListener(DogTagsEvent.COUNTERS_UPDATED, self.__onCountersUpdated, EVENT_BUS_SCOPE.LOBBY)
+        self.__limitedUIController.stopObserve(LuiRules.DOG_TAG_HINT, self.__onLuiRuleDogTagCompleted)
         super(DogTagsFeature, self).finalize()
 
     def _fillModel(self, model):
@@ -53,6 +57,9 @@ class DogTagsFeature(FeatureItem):
         self.__updateModel()
 
     def __onCountersUpdated(self, event):
+        self.__updateModel()
+
+    def __onLuiRuleDogTagCompleted(self, *_):
         self.__updateModel()
 
     @replaceNoneKwargsModel

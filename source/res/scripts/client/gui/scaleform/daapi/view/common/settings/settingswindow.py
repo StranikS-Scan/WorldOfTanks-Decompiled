@@ -16,6 +16,7 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui import DialogsInterface, g_guiResetters
+from gui.limited_ui.lui_rules_storage import LuiRuleTypes
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import flashObject2Dict, decorators, graphics
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
@@ -389,5 +390,5 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_showLimitedUISettingS(self.limitedUIController.isUserSettingsMayShow)
 
     def __applyLimitedUISetting(self):
-        self.limitedUIController.completeAllRules()
+        self.limitedUIController.completeAllRulesByTypes(LuiRuleTypes.NOVICE)
         LimitedUILogger().handleClickOnce(LimitedUILogItem.DISABLE_LIMITED_UI_BUTTON, LimitedUILogScreenParent.SETTINGS_WINDOW)

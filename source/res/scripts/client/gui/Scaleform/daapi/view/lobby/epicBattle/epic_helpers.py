@@ -3,7 +3,9 @@
 import logging
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.Scaleform.genConsts.ALERTMESSAGE_CONSTANTS import ALERTMESSAGE_CONSTANTS
 from gui.shared.formatters import time_formatters, text_styles
+from gui.shared.utils.functions import makeTooltip
 from gui.periodic_battles.models import AlertData, PrimeTimeStatus
 from helpers import dependency, i18n, time_utils
 from items import vehicles
@@ -411,10 +413,11 @@ def getOfferTokenByGift(tokenID):
 
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)
 def getAlertStatusVO(epicController=None):
+    isInfoAlert = not epicController.isInPrimeTime()
     status, timeLeft, _ = epicController.getPrimeTimeStatus()
     showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
     hasAvailableServers = epicController.hasAvailablePrimeTimeServers()
-    return AlertData(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=_getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None, isSimpleTooltip=False)
+    return AlertData(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, statusText=_getAlertStatusText(timeLeft, hasAvailableServers), shadowFilterVisible=showPrimeTimeAlert) if isInfoAlert else AlertData(state=ALERTMESSAGE_CONSTANTS.ALERT_MESSAGE_STATE_INFO, statusText=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.details()), additionalText=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.modification()), shadowFilterVisible=True, tooltip=makeTooltip(body=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.tooltip.body())), isSimpleTooltip=True)
 
 
 @dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController, connectionMgr=IConnectionManager)
@@ -450,7 +453,7 @@ def _getAlertStatusText(timeLeft, hasAvailableServers, connectionMgr=None, epicC
                 if prevSeason is not None:
                     prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
                     if prevCycle is not None:
-                        alertStr = backport.text(rAlertMsgBlock.noCycleMessage())
+                        alertStr = backport.text(rAlertMsgBlock.finished())
     return text_styles.vehicleStatusCriticalText(alertStr)
 
 

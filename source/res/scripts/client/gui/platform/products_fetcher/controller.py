@@ -121,13 +121,17 @@ class FetchController(IPlatformRequestController):
 
     def init(self):
         self._downloader = ProductsDownloader()
-        self._fetchResult = FetchResult()
+        self._fetchResult = self._fetchResultType()
         self._connectionMgr.onDisconnected += self._onDisconnect
 
     def fini(self):
         self._downloader.stop()
         self._fetchResult.stop()
         self._connectionMgr.onDisconnected -= self._onDisconnect
+
+    @property
+    def _fetchResultType(self):
+        return FetchResult
 
     def _onDisconnect(self):
         if self._downloader:
@@ -142,23 +146,28 @@ class ProductsFetchController(FetchController, IProductFetchController):
     defaultProductDescriptor = ProductDescriptor
     productIDToDescriptor = {}
     dataGetKey = 'items'
+    downloadRequired = True
+
+    def reset(self):
+        self._fetchResult.reset()
 
     @wg_async.wg_async
-    def getProducts(self, showWaiting=False):
+    def getProducts(self, showWaiting=False, **kwargs):
         _logger.debug('Trying to fetch products')
         if self._fetchResult.isProductsReady:
             _logger.debug('Return products from cache')
             raise AsyncReturn(self._fetchResult)
         if showWaiting:
             Waiting.show('loadingData')
-        self._fetchResult.reset()
+        self.reset()
         params = self.platformParams()
         yield wg_async.wg_await(params.setFields())
         requestSuccess, productsData = yield wg_async.await_callback(partial(self._requestProducts, params))()
         if requestSuccess and productsData:
             _logger.debug('Products request has been successfully processed. Downloading additional data')
             self._createDescriptors(productsData)
-            yield wg_async.await_callback(partial(self._downloader.download, self._fetchResult.products))()
+            if self.downloadRequired:
+                yield wg_async.await_callback(partial(self._downloader.download, self._fetchResult.products))()
             self._fetchResult.setProcessed()
         else:
             self._fetchResult.setFailed()

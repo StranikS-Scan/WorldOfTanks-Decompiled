@@ -642,10 +642,10 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </vehicle_stopTrackingWithGun>
-    <setupRandomAmmo>
+    <setupAmmo>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	INT64	</Arg>
-    </setupRandomAmmo>
+    </setupAmmo>
     <vehicle_changeSetting>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT8	</Arg>
@@ -673,6 +673,9 @@
     <leaveArena>
       <Exposed></Exposed>
     </leaveArena>
+    <onLoginToCellFailed>
+      <Exposed></Exposed>
+    </onLoginToCellFailed>
     <unlockUnusedVehicles>
       <Arg>	ARRAY	  <of>	INT32	</of>
       </Arg>

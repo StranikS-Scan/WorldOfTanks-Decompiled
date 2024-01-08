@@ -37,6 +37,7 @@
     <_100mm_BS_3>	35	</_100mm_BS_3>
     <_130mm_vz_54_2A_CN>	36	</_130mm_vz_54_2A_CN>
     <_24_mm_Panzerwagen_Kanone_1938>	39	</_24_mm_Panzerwagen_Kanone_1938>
+    <_130mm_59-130T_56G>	41	</_130mm_59-130T_56G>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -302,20 +303,20 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss>
+        <_24_mm_Panzer_Granate_Vollgeschoss>
           <defaultPortion>	0.90	</defaultPortion>
           <speed>	700	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	45 40	</piercingPower>
-        </_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss>
-        <_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss_41>
+        </_24_mm_Panzer_Granate_Vollgeschoss>
+        <_24_mm_Panzer_Granate_Vollgeschoss_41>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	60 55	</piercingPower>
-        </_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss_41>
+        </_24_mm_Panzer_Granate_Vollgeschoss_41>
         <_24_mm_St_G_Stahlgranate>
           <defaultPortion>	0.10	</defaultPortion>
           <speed>	600	</speed>
@@ -2098,6 +2099,64 @@
         </_130mm_Narazovy_vz_55>
       </shots>
     </_130mm_vz_54_2A>
+    <_130mm_59-130T_56G>
+      <userString>	#czech_vehicles:_130mm_59-130T_56G	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2.8	</aimingTime>
+      <weight>	3090	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_Prurazny_59-56G>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	244 225	</piercingPower>
+        </_130mm_Prurazny_59-56G>
+        <_130mm_Prurazny_59-56G_s_oc_jadrem>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1180	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	306 266	</piercingPower>
+        </_130mm_Prurazny_59-56G_s_oc_jadrem>
+        <_130mm_Narazovy_59-56G>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_Narazovy_59-56G>
+      </shots>
+    </_130mm_59-130T_56G>
     <_130mm_vz_54_2A_CN>
       <userString>	#czech_vehicles:_130mm_vz_54_2A_CN	</userString>
       <tags></tags>

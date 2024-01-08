@@ -308,9 +308,6 @@ class FovExtended(object):
         multiplier = horizontalFov / self.horizontalFov
         self.setFovByMultiplier(multiplier, rampTime)
 
-    def getFovAbsoluteValue(self):
-        return self.horizontalFov * self.__multiplier
-
     def refreshFov(self):
         self.__verticalFov = self.actualDefaultVerticalFov
         self.setFovByMultiplier(self.__multiplier)

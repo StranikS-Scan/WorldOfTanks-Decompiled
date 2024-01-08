@@ -134,6 +134,13 @@ class Block(Meta):
     def _makeDataInputSlot(self, name, slotType, editorType=-1):
         return self.__agent.makeDataInputSlot(name, slotType, editorType)
 
+    def planName(self):
+        return self.__agent.planName()
+
+    def blockId(self):
+        id = self.__agent.blockId()
+        return id if id else self.blockName()
+
     def _makeDataOutputSlot(self, name, slotType, fun):
         return self.__agent.makeDataOutputSlot(name, slotType, fun)
 

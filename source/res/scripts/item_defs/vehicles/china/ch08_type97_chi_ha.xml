@@ -2954,10 +2954,6 @@
       <tags></tags>
       <level>	2	</level>
       <price>	840	</price>
-      <unlocks>
-        <vehicle>	Ch09_M5	  <cost>	3200	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <armor_1>	35	</armor_1>
         <armor_2>	25	</armor_2>
@@ -3012,7 +3008,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch08_Type97_Chi_Ha/normal/lod0/Gun_01.model	</undamaged>
@@ -3076,7 +3072,7 @@
             </armor_2>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -3632,7 +3628,7 @@
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch08_Type97_Chi_Ha/normal/lod0/Gun_03.model	</undamaged>
@@ -3692,7 +3688,7 @@
             </armor_2>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3749,6 +3745,8 @@
         </_45mm_20K>
         <_47mm_Gun_Type_1>	shared	  <unlocks>
             <vehicle>	Ch32_SU-76G_FT	  <cost>	3100	</cost>
+            </vehicle>
+            <vehicle>	Ch09_M5	  <cost>	3200	</cost>
             </vehicle>
           </unlocks>
           <maxAmmo>	180	</maxAmmo>
@@ -4276,12 +4274,12 @@
   </turrets0>
   <engines>
     <_Type97>	shared	  <unlocks>
-        <engine>	_Type100_W	  <cost>	700	</cost>
+        <engine>	_Type100_W	  <cost>	350	</cost>
         </engine>
       </unlocks>
     </_Type97>
     <_Type100_W>	shared	  <unlocks>
-        <engine>	_Type100_A	  <cost>	850	</cost>
+        <engine>	_Type100_A	  <cost>	500	</cost>
         </engine>
       </unlocks>
     </_Type100_W>
@@ -4296,12 +4294,7 @@
         </radio>
       </unlocks>
     </_Type94_Hei>
-    <_Type96_Bo>	shared	  <unlocks>
-        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </_Type96_Bo>
-    <_Type3_Otsu>	shared	</_Type3_Otsu>
+    <_Type96_Bo>	shared	</_Type96_Bo>
   </radios>
   <physics>
     <detailed>

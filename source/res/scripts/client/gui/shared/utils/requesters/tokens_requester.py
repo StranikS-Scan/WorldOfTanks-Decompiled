@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/tokens_requester.py
-import typing
 import functools
 import logging
 import time
@@ -13,12 +12,9 @@ from gui.shared.utils.requesters.common import BaseDelta
 from gui.shared.utils.requesters.token import Token
 from helpers import dependency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from new_year.gift_machine_helper import getCoinType
 from skeletons.gui.shared.utils.requesters import ITokensRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.lobby_context import ILobbyContext
-if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.loot_box import LootBox
 _logger = logging.getLogger(__name__)
 TOTAL_KEY = 'total'
 
@@ -102,26 +98,19 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
 
-    def getNyCoins(self):
-        for lootBox in self.__lootBoxCache.values():
-            if lootBox.getType() == getCoinType():
-                return lootBox
-
-        return None
-
     def getLootBoxByID(self, boxID):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 
     def getAttemptsAfterGuaranteedRewards(self, box):
-        boxesHistory = self.getCacheValue('lootBoxes', {}).get('history', {})
+        boxesHistory = self.getCacheValue('lootBoxes').get('history', {})
         historyName, guaranteedFrequencyName = box.getHistoryName(), box.getGuaranteedFrequencyName()
         if historyName not in boxesHistory:
             return 0
         _, limits, _ = boxesHistory[historyName]
-        return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1] or limits[guaranteedFrequencyName][2]
-
-    def getLootBoxesStats(self):
-        return self.getCacheValue('lootBoxes', {}).get('stats')
+        if guaranteedFrequencyName not in limits:
+            return 0
+        _, _, attempts = limits[guaranteedFrequencyName]
+        return attempts
 
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)
@@ -167,18 +156,17 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             _, count = data
             if lootBoxTokenID in self.__lootBoxCache:
                 item = self.__lootBoxCache[lootBoxTokenID]
-                if item.getType() != getCoinType():
-                    self.__lootBoxTotalCount += count - item.getInventoryCount()
+                self.__lootBoxTotalCount += count - item.getInventoryCount()
                 item.updateCount(count)
 
         self.__clearLootBoxes(tokensCache)
 
     def __clearLootBoxes(self, data, isRemove=False):
-        for lootBoxID in self.__lootBoxCache.keys():
+        lootBoxIDs = self.__lootBoxCache.keys()
+        for lootBoxID in lootBoxIDs:
             if lootBoxID not in data:
                 item = self.__lootBoxCache[lootBoxID]
-                if item.getType() != getCoinType():
-                    self.__lootBoxTotalCount -= item.getInventoryCount()
+                self.__lootBoxTotalCount -= item.getInventoryCount()
                 if not isRemove:
                     item.updateCount(invCount=0)
                 else:

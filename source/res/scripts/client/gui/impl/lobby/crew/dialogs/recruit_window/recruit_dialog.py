@@ -16,6 +16,7 @@ from gui import SystemMessages, _logger
 from gui.shared.gui_items.processors.tankman import TankmanTokenRecruit, TankmanUnload, TankmanEquip
 from gui.shared.utils import decorators
 from helpers import dependency
+from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from sound_gui_manager import CommonSoundSpaceSettings
@@ -65,6 +66,7 @@ class BaseRecruitDialog(BaseCrewDialogTemplateView):
 class TokenRecruitDialog(BaseRecruitDialog):
     __slots__ = ('__tokenName', '__tokenData', '__vehicleSlotToUnpack', '__vehicle')
     _itemsCache = dependency.descriptor(IItemsCache)
+    _specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE,
      StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.WOMAN_AWARD_WINDOW, exitEvent='')
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
@@ -83,6 +85,7 @@ class TokenRecruitDialog(BaseRecruitDialog):
         if self.__tokenData.getSmallIcon() in (recruit_helper._TANKWOMAN_ICON, recruit_helper._TANKMAN_ICON):
             name = None
         self.viewModel.setText(getTitle(name))
+        self.viewModel.setHasVoiceover(bool(self.__tokenData.getSpecialVoiceTag(self._specialSounds)))
         self._addButtons()
         predefinedData = {'predefinedNations': self.__tokenData.getNations(),
          'predefinedRoles': self.__tokenData.getRoles(),

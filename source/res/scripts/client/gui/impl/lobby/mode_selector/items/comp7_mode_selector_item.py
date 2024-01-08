@@ -57,7 +57,7 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
         self.__fillWidgetData()
 
     def __fillViewModel(self):
-        isStarted = self.__comp7Controller.isAvailable()
+        isStarted = self.__comp7Controller.hasActiveSeason()
         nextSeason = self.__comp7Controller.getNextSeason()
         isBeforeSeasons = self.__comp7Controller.getPreviousSeason() is None and nextSeason is not None
         with self.viewModel.transaction() as vm:

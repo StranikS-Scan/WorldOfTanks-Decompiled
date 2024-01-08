@@ -70,12 +70,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setProjectionDecalHintVisibilityS(self, value):
         return self.flashObject.as_setProjectionDecalHintVisibility(value) if self._isDAAPIInited() else None
 
-    def as_setEditableStyleHintVisibilityS(self, value):
-        return self.flashObject.as_setEditableStyleHintVisibility(value) if self._isDAAPIInited() else None
-
-    def as_setEditableProgressionRequiredStyleHintVisibilityS(self, value):
-        return self.flashObject.as_setEditableProgressionRequiredStyleHintVisibility(value) if self._isDAAPIInited() else None
-
     def as_showPopoverBtnIconS(self, src, tooltip):
         return self.flashObject.as_showPopoverBtnIcon(src, tooltip) if self._isDAAPIInited() else None
 

@@ -7,7 +7,7 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
+from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LuiRules
 from wg_async import wg_async, wg_await
@@ -28,6 +28,7 @@ from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown
+from gui.battle_pass.sounds import HOLIDAY_TASKS_SOUND_SPACE
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import getMarathons
@@ -114,6 +115,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__currentTabAlias = None
         self.__subTab = None
         self.__ctx = ctx or {}
+        self.__soundSpace = self._COMMON_SOUND_SPACE
+        self.__changeSoundSpace()
         self._initialize(ctx)
         return
 
@@ -371,6 +374,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __updateBattlePassTab(self, *_):
         self.__updateHeader()
+        self.__changeSoundSpace()
+
+    def __changeSoundSpace(self):
+        newSoundSpace = HOLIDAY_TASKS_SOUND_SPACE if self.battlePass.isHoliday() and self.battlePass.isActive() else TASKS_SOUND_SPACE
+        if self.__soundSpace != newSoundSpace:
+            self.__soundSpace = newSoundSpace
+            self.initSoundManager(self.__soundSpace)
 
     def __updateHeader(self, updateTabsDataProvider=True):
         data = []
@@ -444,8 +454,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                             newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
-                    if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
-                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = self.__getSuitableEvents(self.currentTab)
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
@@ -637,14 +645,13 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
-        nyBannerAdded = self._appendNYBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
             self._filteredQuestsCount += self._getQuestFilteredCountFromBlockData(data)
 
         self._questsDP.buildList(result)
-        if not self._totalQuestsCount and not nyBannerAdded:
+        if not self._totalQuestsCount:
             self.as_showDummyS(self._getDummy())
         else:
             self.as_hideDummyS()
@@ -701,9 +708,6 @@ class MissionView(MissionViewBase):
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()
-
-    def _appendNYBanner(self, _):
-        return False
 
 
 class ElenMissionView(MissionViewBase):

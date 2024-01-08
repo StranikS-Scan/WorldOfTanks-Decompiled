@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.battle.epic.status_notifications.panel import EpicStatusNotificationTimerPanel
 from gui.Scaleform.daapi.view.battle.epic.damage_pannel import EpicDamagePanel
+from gui.Scaleform.daapi.view.battle.epic.status_notifications.panel import EpicStatusNotificationTimerPanel
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, GroupedViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -38,13 +38,11 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import recovery_panel
     from gui.Scaleform.daapi.view.battle.epic import battle_carousel
     from gui.Scaleform.daapi.view.battle.epic import super_platoon_panel
-    from gui.Scaleform.daapi.view.battle.epic import consumables_panel
     from gui.Scaleform.daapi.view.common.filter_popover import BattleTankCarouselFilterPopover
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.epic import ingame_rank_panel
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
-    from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import messages
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject, respawn_ammunition_panel_inject
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
@@ -72,14 +70,12 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RECOVERY_PANEL, recovery_panel.RecoveryPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL, super_platoon_panel.SuperPlatoonPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.EpicBattleConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK, ingame_rank_panel.InGameRankPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, component.BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, prebattle_ammunition_panel_inject.PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_RESPAWN_AMMUNITION_PANEL, respawn_ammunition_panel_inject.EpicRespawnAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, battle_timers.PreBattleTimer, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
 class EpicBattlePageBusinessHandler(PackageBusinessHandler):

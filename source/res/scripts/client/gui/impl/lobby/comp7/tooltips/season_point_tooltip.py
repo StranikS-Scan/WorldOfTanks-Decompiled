@@ -25,4 +25,5 @@ class SeasonPointTooltip(ViewImpl):
         super(SeasonPointTooltip, self)._onLoading()
         with self.viewModel.transaction() as vm:
             vm.setState(self.__params['state'])
+            vm.setIgnoreState(self.__params['ignoreState'])
             vm.setSeasonPointExchangeRate(self.__comp7Controller.getYearlyRewards().extra.get('crystal', 0))

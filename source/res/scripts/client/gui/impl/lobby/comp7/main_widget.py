@@ -82,6 +82,8 @@ class Comp7MainWidget(ViewImpl):
         comp7_qualification_helpers.setQualificationInfo(model.qualificationModel)
 
     def __updateProgressionData(self, model):
+        if not self.__comp7Controller.isAvailable():
+            return
         division = comp7_shared.getPlayerDivision()
         rating = self.__comp7Controller.rating
         viewData = self.__comp7Controller.getViewData(HANGAR_ALIASES.COMP7_WIDGET)
@@ -92,7 +94,7 @@ class Comp7MainWidget(ViewImpl):
         model.setPrevScore(prevRating)
         comp7_model_helpers.setDivisionInfo(model=model.divisionInfo, division=division)
         comp7_model_helpers.setElitePercentage(model)
-        if self.__comp7Controller.isAvailable():
+        if self.__comp7Controller.hasActiveSeason():
             comp7_model_helpers.setRanksInactivityInfo(model)
 
     def __addListeners(self):

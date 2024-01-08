@@ -43,17 +43,15 @@ class HeroTankController(IHeroTankController):
 
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateInventoryVehiclesData
-        g_eventBus.addListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
-        self.__isEnabled = True
+        g_eventBus.addListener(_CALENDAR_ACTION_CHANGED, self.__updateCalendarActionInfo, EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
-        g_eventBus.removeListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(_CALENDAR_ACTION_CHANGED, self.__updateCalendarActionInfo, EVENT_BUS_SCOPE.LOBBY)
         self.itemsCache.onSyncCompleted -= self.__updateInventoryVehiclesData
-        self.__isEnabled = False
 
     def __onEventsCacheSyncCompleted(self, *_):
-        self.__applyActions()
-        self.onUpdated()
+        if self.__applyActions():
+            self.onUpdated()
 
     def onLobbyStarted(self, ctx):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
@@ -66,11 +64,7 @@ class HeroTankController(IHeroTankController):
         self._eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
 
     def isEnabled(self):
-        return self.__isEnabled and bool(self.__data) and not self.bootcampController.isInBootcamp()
-
-    def setEnabled(self, enabled):
-        self.__isEnabled = enabled
-        self.onUpdated()
+        return self.__isEnabled and not self.bootcampController.isInBootcamp()
 
     def hasAdventHero(self):
         return self.__actionInfo is not None and self.__actionInfo.isEnabled
@@ -141,7 +135,7 @@ class HeroTankController(IHeroTankController):
                 self.__updateSettings()
             return
 
-    def __updateActionInfo(self, *_):
+    def __updateCalendarActionInfo(self, *_):
         self.__actionInfo = self.calendarController.getHeroAdventActionInfo()
         self.onUpdated()
 
@@ -160,9 +154,11 @@ class HeroTankController(IHeroTankController):
                 self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), shopUrl=vData.get('shopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
 
         self.__applyActions()
+        self.__isEnabled = bool(self.__data)
         self.onUpdated()
 
     def __applyActions(self):
+        hasHeroTankActions = False
         actions = self._eventsCache.getActions()
         for action in actions.itervalues():
             steps = action.getData().get('steps', [])
@@ -171,7 +167,10 @@ class HeroTankController(IHeroTankController):
             for step in steps:
                 if step.get('name') != _ADD_HERO_STEP_NAME:
                     continue
+                hasHeroTankActions = True
                 self.__addActionVehicle(step['params'])
+
+        return hasHeroTankActions
 
     def __addActionVehicle(self, params):
         vName = params.get('name')

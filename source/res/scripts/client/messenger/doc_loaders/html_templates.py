@@ -68,7 +68,6 @@ class MessageTemplates(templates.XMLCollection):
         sourceID = source.name
         data = {'type': source.readString('type'),
          'linkage': source.readString('linkage'),
-         'gfViewName': source.readString('gfViewName'),
          'timestamp': -1,
          'savedData': None,
          'bgIcon': self._makeBgIconsData(source['bgIcon']),
@@ -76,15 +75,9 @@ class MessageTemplates(templates.XMLCollection):
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],
-         'buttonsStates': {},
          'buttonsLayout': [],
-         'buttonsAlign': source.readString('buttonsAlign', default='left'),
+         'buttonsAlign': source.readString('buttonsAlign', 'left'),
          'lifeTime': source.readInt('lifeTime')}
-        if data.get('gfViewName'):
-            data['gfViewHeight'] = int(source.readString('gfViewHeight'))
-            data['gfViewWidth'] = int(source.readString('gfViewWidth'))
-            data['gfViewPopUpWidth'] = int(source.readString('gfViewPopUpWidth'))
-            data['gfViewPopUpHeight'] = int(source.readString('gfViewPopUpHeight'))
         priority = source.readString('priority', NotificationPriorityLevel.MEDIUM)
         if priority not in NotificationPriorityLevel.RANGE:
             LOG_WARNING('Priority is invalid', sourceID, priority)

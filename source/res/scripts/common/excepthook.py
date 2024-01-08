@@ -4,7 +4,7 @@ import BigWorld
 import sys
 import re
 import linecache
-from functools import partial
+from functools import wraps
 from traceback import format_exception_only
 from constants import IS_BASEAPP
 _MAX_OBJECT_SIZE = 16384
@@ -126,15 +126,20 @@ def __processLocals(locals, localsProcessorCache):
     return {k:__processVar(k, v, localsProcessorCache) for k, v in locals.iteritems()}
 
 
-def __excepthook(originalExceptHook, fileNameToTrim, exctype, value, traceback):
-    originalExceptHook(exctype, value, traceback)
-    extMsg = extendedTracebackAsString(fileNameToTrim, None, None, exctype, value, traceback)
-    BigWorld.logError('EXCEPTION', extMsg, None)
-    return
+def __excepthook(excepthook, fileNameToTrim):
+
+    @wraps(excepthook)
+    def wrapper(exctype, value, traceback):
+        excepthook(exctype, value, traceback)
+        extMsg = extendedTracebackAsString(fileNameToTrim, None, None, exctype, value, traceback)
+        BigWorld.logError('EXCEPTION', extMsg, None)
+        return
+
+    return wrapper
 
 
 def init(enableExtendedTraceBack, fileNameToTrim):
     global _ENABLE_EXTENDED_TRACEBACK
     _ENABLE_EXTENDED_TRACEBACK = enableExtendedTraceBack
     if _ENABLE_EXTENDED_TRACEBACK:
-        sys.excepthook = partial(__excepthook, sys.excepthook, fileNameToTrim)
+        sys.excepthook = __excepthook(sys.excepthook, fileNameToTrim)

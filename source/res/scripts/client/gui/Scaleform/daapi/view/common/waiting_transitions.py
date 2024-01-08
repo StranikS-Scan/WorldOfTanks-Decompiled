@@ -46,7 +46,7 @@ class WaitingTransition(ExternalFlashComponent, WaitingTransitionMeta, IWaitingW
         if self._isDAAPIInited():
             self.__setupBackground()
 
-    def showWaiting(self, messageID, *args):
+    def showWaiting(self, messageID, _=False):
         self.active(True)
         if self.__mode & TransitionMode.PERMANENT_MESSAGE > 0 and self.__textID:
             return

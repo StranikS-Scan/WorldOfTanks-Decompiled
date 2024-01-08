@@ -1,23 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/comp7_ranks_common.py
-import enum
 from typing import Optional, FrozenSet, Tuple
 from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
-COMP7_MASCOT_ID = 3
-COMP7_SEASON_IDX = 1
-COMP7_RATING_ENTITLEMENT_TMPL = 'comp7_rating_points'
-COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
-COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
-COMP7_ACTIVITY_ENTITLEMENT = 'comp7_activity_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
-COMP7_ENTITLEMENT_EXPIRES = None
 EXTRA_RANK_TAG = 'extra'
 COMP7_UNDEFINED_RANK_ID = 0
 COMP7_UNDEFINED_DIVISION_ID = 0
 
 class Comp7Division(object):
-    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity')
+    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints')
 
     def __init__(self, dvsnDict):
         pointsRange = dvsnDict['range']
@@ -28,6 +20,7 @@ class Comp7Division(object):
         self.tags = frozenset(dvsnDict.get('tags', ()))
         self.activityPointsPerBattle = dvsnDict['rankInactivity']['activityPointsPerBattle'] if 'rankInactivity' in dvsnDict else 0
         self.hasRankInactivity = dvsnDict.get('hasRankInactivity', False)
+        self.seasonPoints = dvsnDict.get('seasonPoints', 0)
 
     def __cmp__(self, other):
         if not isinstance(other, Comp7Division):
@@ -94,30 +87,3 @@ class Comp7RanksConfig(object):
         for division in self.divisions:
             if division.rank == rank and division.index == divisionIdx:
                 return division.activityPointsPerBattle
-
-
-def checkIfRatingEnt(entCode):
-    return entCode.startswith(COMP7_RATING_ENTITLEMENT_TMPL)
-
-
-def parseRatingEnt(entCode):
-    if not checkIfRatingEnt(entCode):
-        return (None, None)
-    else:
-        _, mascotID, index = entCode.split(':', 3)
-        return (int(mascotID), int(index))
-
-
-def makeRatingEntForSeason(seasonNumber):
-    return ':'.join([COMP7_RATING_ENTITLEMENT_TMPL, str(COMP7_MASCOT_ID), seasonNumber])
-
-
-class Comp7EntitlementCodes(object):
-    LEGEND_RANK = 'legendRank'
-    RATING_POINTS = 'ratingPoints'
-    ACTIVITY_POINTS = 'activityPoints'
-    SEASON_POINTS = 'seasonPoints'
-    ALL = (LEGEND_RANK,
-     RATING_POINTS,
-     ACTIVITY_POINTS,
-     SEASON_POINTS)

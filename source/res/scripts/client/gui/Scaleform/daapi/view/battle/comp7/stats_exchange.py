@@ -31,7 +31,8 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
          'rank': rankName,
          'rankDivision': divisionName,
          'isQualification': vInfoVO.gameModeSpecific.getValue(Comp7Keys.IS_QUAL_ACTIVE, default=False),
-         'voiceChatConnected': self.__getVoiceChatConnected(vInfoVO)})
+         'voiceChatConnected': self.__getVoiceChatConnected(vInfoVO),
+         'isSuperSquad': self.__isSuperSquad(vInfoVO)})
 
     @classmethod
     def __getVoiceChatConnected(cls, vInfoVO):
@@ -40,6 +41,10 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
             return True
         else:
             return True if vInfoVO.isEnemy() or not vInfoVO.isPlayer() else vInfoVO.gameModeSpecific.getValue(Comp7Keys.VOIP_CONNECTED, default=False)
+
+    def __isSuperSquad(self, vInfoVO):
+        superSquads = self.__sessionProvider.arenaVisitor.getArenaExtraData().get('superSquads', [])
+        return vInfoVO.prebattleID in superSquads
 
 
 class Comp7StatisticsDataController(Comp7BattleStatisticDataControllerMeta):

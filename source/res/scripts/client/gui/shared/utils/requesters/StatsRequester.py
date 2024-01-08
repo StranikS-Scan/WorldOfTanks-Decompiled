@@ -338,6 +338,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def steamShadeGroup(self):
         return self.getCacheValue('abFeatureTest', {}).get('steamShade')
 
+    @property
+    def defaultSettingsGroup(self):
+        return self.getCacheValue('abFeatureTest', {}).get('defaultSettings', 'new')
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))

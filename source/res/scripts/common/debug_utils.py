@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/debug_utils.py
 import sys
 import re
+import inspect
 import subprocess
 import BigWorld
 import excepthook
@@ -59,6 +60,14 @@ class _LogWrapper(object):
 
 
 class CriticalError(BaseException):
+    pass
+
+
+class HandledError(BaseException):
+    pass
+
+
+class SentryError(BaseException):
     pass
 
 
@@ -131,16 +140,18 @@ def CRITICAL_ERROR(msg, *kargs):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
-    msg = _makeMsgHeader(sys._getframe(frame)) + '\n'
-    etype, value, tb = sys.exc_info()
-    msg += ''.join(format_exception(etype, value, tb, None))
-    with _g_logLock:
-        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
-        extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
-        if extMsg:
-            BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, extMsg), None)
-    return
+def LOG_CURRENT_EXCEPTION(tags=()):
+    _, value, tb = sys.exc_info()
+    error = HandledError(value, tags)
+    sys.excepthook(HandledError, error, tb)
+
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_SENTRY(msg, *kargs):
+    error = SentryError('{} {}'.format(msg, kargs))
+    frame = inspect.currentframe()
+    BigWorld.logExceptionFrame(SentryError, error, frame.f_back)
+    del frame
 
 
 LOG_EXPECTED_EXCEPTION = LOG_CURRENT_EXCEPTION
@@ -181,22 +192,9 @@ def LOG_ERROR(msg, *kargs, **kwargs):
     _doLog('ERROR', msg, kargs, kwargs)
 
 
-@_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_SENTRY(msg, *kargs):
-    try:
-        raise SoftException('{} {}'.format(msg, kargs))
-    except:
-        LOG_CURRENT_EXCEPTION(frame=2)
-
-
 @_LogWrapper(LOG_LEVEL.DEV)
 def LOG_ERROR_DEV(msg, *kargs, **kwargs):
     _doLog('ERROR', msg, kargs, kwargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_ACHTUNG(msg, *kargs, **kwargs):
-    _doLog('ACHTUNG', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)

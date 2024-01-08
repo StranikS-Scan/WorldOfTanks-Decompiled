@@ -948,8 +948,7 @@ class Configs(enum.Enum):
     TRIGGER_SYSTEM_CONFIG = 'trigger_system_config'
     PRESTIGE_CONFIG = 'prestige_config'
     STEAM_SHADE_CONFIG = 'steam_shade_config'
-    NY_DOG_CONFIG = 'ny_dog_config'
-    LOOTBOXES_TOOLTIP_CONFIG = 'lootboxes_tooltip_config'
+    SYSTEM_CHANNELS = 'system_channels'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -958,6 +957,7 @@ INBATTLE_CONFIGS = ['spgRedesignFeatures',
  'epic_config',
  'vehicle_post_progression_config',
  Configs.COMP7_CONFIG.value,
+ Configs.COMP7_RANKS_CONFIG.value,
  Configs.FUN_RANDOM_CONFIG.value]
 
 class RESTRICTION_TYPE:
@@ -1465,7 +1465,6 @@ EPIC_ABILITY_PTS_NAME = 'abilityPts'
 OFFER_TOKEN_PREFIX = 'offer:'
 ENDLESS_TOKEN_TIME_STRING = '28.01.2100 00:01'
 ENDLESS_TOKEN_TIME = int(calendar.timegm(time.strptime(ENDLESS_TOKEN_TIME_STRING, '%d.%m.%Y %H:%M')))
-END_OF_GAME_DAY = {'endOfGameDay': True}
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
 CUSTOMIZATION_PROGRESS_PREFIX = 'cust_progress_'
@@ -1815,7 +1814,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 0.3
+    LOOTBOX = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1830,21 +1829,6 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_BUY_MARKETPLACE_ITEM = 1.0
-    NEW_YEAR_REROLL_CELEBRITY_QUEST = 1.0
-    NEW_YEAR_CHOOSE_XP_BONUS = 0.5
-    NEW_YEAR_CONVERT_RESOURCES = 0.5
-    NEW_YEAR_UPGRADE_OBJECT_LEVEL = 0.5
-    NEW_YEAR_COMPLETE_GUEST_QUEST = 0.5
-    NEW_YEAR_SET_HANGAR_NAME_MASK = 0.5
-    NEW_YEAR_BUY_GIFT_MACHINE_COIN = 0.5
-    NEW_YEAR_MANUAL_RESOURCE_COLLECTING = 0.5
-    NEW_YEAR_GET_NY_PIGGY_BANK_REWARDS = 0.5
-    NEW_YEAR_BUY_DOG_LEVEL = 1.0
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -1874,7 +1858,6 @@ class REQUEST_COOLDOWN:
     COMPLEX_OPERATION = 10.0
     CMD_EQUIP_TMAN = 0.5
     CMD_TMAN_RESTORE = 1.0
-    OPEN_ADVENT_CALENDAR_DOOR = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2213,10 +2196,6 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.BATTLE_MATTERS_QUESTS: 'battle matters quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Oriental loot box last viewed count',
- 93: 'New year loot box last viewed count',
- 94: 'Fairytale loot box last viewed count',
- 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -2226,14 +2205,12 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
- 105: 'New Year settings storage',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
  107: 'Fun Random carousel filter 1',
  108: 'Fun Random carousel filter 2',
  USER_SERVER_SETTINGS.UI_STORAGE_2: 'ui storage 2, used for preserving first entry flags etc',
  110: 'Competitive7x7 carousel filter 1',
  111: 'Competitive7x7 carousel filter 2',
- 112: 'Common loot box last viewed count',
  USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings'}
 
 class WG_GAMES:
@@ -2270,6 +2247,8 @@ class TOKEN_TYPE:
      WOTB: 'REQUEST_TOKEN',
      WGNI_JWT: 'REQUEST_TOKEN'}
 
+
+AUTH_TOKEN_REQUEST_TIMEOUT = 35.0
 
 class NC_MESSAGE_TYPE:
     INFO = 1
@@ -2314,6 +2293,7 @@ class WIN_XP_FACTOR_MODE:
 
 
 OBSERVER_VEH_INVENTORY_ID = -5000
+OBSERVER_VEH_NAME = 'ussr:Observer'
 
 class PREBATTLE_INVITE_STATUS:
     OK = 0
@@ -3238,6 +3218,7 @@ class UpgradeProhibitionReason(object):
     DROWNING = 2
     OVERTURNED = 3
     SETTLING = 4
+    NOT_DROWN = 5
 
 
 class AreaTriggerActionType(enum.IntEnum):

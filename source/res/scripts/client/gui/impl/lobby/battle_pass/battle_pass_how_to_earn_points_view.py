@@ -20,10 +20,7 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR,
- ARENA_BONUS_TYPE.COMP7,
- ARENA_BONUS_TYPE.EPIC_BATTLE,
- ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO]
+SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.COMP7]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -194,11 +191,10 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.__createEpicBattlePointsCard(viewModel)
 
     def __createComp7CardsModel(self, gameType, viewModel):
-        self.__createSpecialVehCard(viewModel, gameType)
+        self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
 
     def __createRandomCardsModel(self, gameType, viewModel):
-        self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.REGULAR)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 

@@ -6,6 +6,10 @@ from PlayerEvents import g_playerEvents as events
 from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN, LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN
 from account_helpers.counter_settings import getCountNewSettings
 from adisp import adisp_process
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.impl import backport
+from gui.impl.gen import R
 from wg_async import wg_async, wg_await
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
@@ -17,11 +21,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.dialogs import dialogs
 from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
 from gui.prb_control import prbEntityProperty
-from gui.shared import event_dispatcher
+from gui.shared import event_dispatcher, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
-from helpers import i18n, getShortClientVersion, dependency
+from helpers import i18n, getShortClientVersion, dependency, getFullClientVersion
 from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.game_control import IManualController
@@ -111,6 +115,9 @@ class LobbyMenu(LobbyMenuMeta):
                 self.manualController.show()
         return
 
+    def showLegal(self):
+        self.fireEvent(event_dispatcher.events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LEGAL_INFO_TOP_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
+
     def _populate(self):
         super(LobbyMenu, self)._populate()
         self.__addListeners()
@@ -119,7 +126,9 @@ class LobbyMenu(LobbyMenuMeta):
         self.__updateBootcampBtn(isDemoAccountWithOpenedCurtain)
         if isDemoAccountWithOpenedCurtain:
             self.as_showManualButtonS(False)
-        self.as_setVersionMessageS(u'{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())))
+        self.as_setVersionMessageS(text_styles.main(getFullClientVersion()))
+        self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
+        self.__updateVersionState()
         self.__updateManualBtn()
         if self.__manualBtnIsVisible:
             self.as_setManualButtonIconS(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MANUALICON, 24, 24, -6, 0))
@@ -164,6 +173,9 @@ class LobbyMenu(LobbyMenuMeta):
             self.__manualBtnIsVisible = isVisible
         if self.__manualBtnIsVisible and not AccountSettings.getManualData(LOBBY_MENU_MANUAL_TRIGGER_SHOWN):
             getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL, True)
+
+    def __updateVersionState(self):
+        self.as_showVersionS(not self.__isInQueue())
 
     def __updateBootcampBtnContent(self, enabledOnServer):
         bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON

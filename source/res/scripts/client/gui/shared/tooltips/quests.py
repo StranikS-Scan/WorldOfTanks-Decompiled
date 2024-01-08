@@ -32,7 +32,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController, IComp7Controller
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
-from skeletons.new_year import INewYearController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -60,7 +59,6 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -142,8 +140,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
             questHeader = backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)
             img = backport.image(R.images.gui.maps.icons.quests.questTooltipHeader())
             desc = text_styles.main(backport.text(description, vehicle=vehicleName))
-        isNYEventEnabled = self._nyController.isEnabled()
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(questHeader), img=backport.image(R.images.gui.maps.icons.quests.nyQuestTooltipHeader()) if isNYEventEnabled else img, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=desc)
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(questHeader), img=img, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=desc)
 
     def _getBottom(self, value):
         if value > 0:

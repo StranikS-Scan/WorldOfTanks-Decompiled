@@ -11,6 +11,7 @@ from AvatarInputHandler.control_modes import IControlMode
 from AvatarInputHandler.rotating_cursor_camera import RotatingCoursorCamera
 from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD, VEHICLE_SELECTION_BLOCK_DELAY
+from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
@@ -35,6 +36,10 @@ class _CameraManager(object):
         self.__cameraMover = _CameraMover(self.__camera)
         self.__pendingVehicles = set()
         return
+
+    @property
+    def camera(self):
+        return self.__camera
 
     def start(self):
         self.__locateCameraOnAllVehicles()
@@ -196,6 +201,10 @@ class VehiclesSelectionControlMode(IControlMode):
         self.__callbackDelayer = CallbackDelayer()
         return
 
+    @property
+    def camera(self):
+        return self.__camManager.camera
+
     def destroy(self):
         if self.__camManager is not None:
             self.__camManager.stop()
@@ -239,6 +248,8 @@ class VehiclesSelectionControlMode(IControlMode):
     def __onLockedState(self):
         self.__lockedState = True
         g_eventBus.handleEvent(GameEvent(GameEvent.PREBATTLE_INPUT_STATE_LOCKED), scope=EVENT_BUS_SCOPE.BATTLE)
+        if avatar_getter.isObserver():
+            return
         self.__aih.ctrls[CTRL_MODE_NAME.ARCADE].camera.enable(camTransitionParams={'cameraTransitionDuration': self.__camManager.CAMERA_TRANSITION_DURATION})
 
     def __onArenaPeriodChanged(self, period, periodEndTime, *_):

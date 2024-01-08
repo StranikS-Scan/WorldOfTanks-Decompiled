@@ -4,7 +4,6 @@ import logging
 import BigWorld
 from adisp import adisp_process
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.shared.view_helpers.blur_manager import CachedBlur
@@ -28,7 +27,6 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.account_helpers.settings_core import ISettingsCore
-from tutorial.hints_manager import HINT_SHOWN_STATUS
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import CustomizationType
@@ -121,7 +119,6 @@ class ProgressiveItemsView(ViewImpl):
 
     def _onLoaded(self, *args, **kwargs):
         self.__blur.enable()
-        self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: HINT_SHOWN_STATUS})
 
     def _onSelectItem(self, args=None):
         if args is not None:

@@ -171,6 +171,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         g_prbLoader.setEnabled(enabled=True)
         self.prbEntity.doAction()
 
+    def exitQueue(self):
+        g_prbLoader.onAccountBecomeNonPlayer()
+        self.goToHangar()
+
     @staticmethod
     def goToBattle():
         _logger.debug('goToBattle')

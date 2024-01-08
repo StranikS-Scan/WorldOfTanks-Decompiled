@@ -6,7 +6,7 @@ from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.battle_results.components import base
+from gui.battle_results.components import base, epic
 from gui.battle_results.components import common
 from gui.battle_results.components import details
 from gui.battle_results.components import personal
@@ -76,6 +76,8 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'clientArenaIdx': 0,
  'uiVisibility': 0,
  'eligibleForCrystalRewards': False,
+ 'modificationStr': '',
+ 'modificationIconPath': '',
  'rank': None,
  'epicMode': False})
 _CLAN_COMMON_VO_META = base.PropertyMeta((('clanDBID', -1, 'clanDBID'), ('clanAbbrev', '', 'clanAbbrev')))
@@ -134,6 +136,8 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(11, _TIME_STATS_BLOCK.clone())
 REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaIdx'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibility'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(15, epic.StrBattleModificationItem('modificationStr'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(16, epic.BattleModificationItem('modificationIconPath'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'isLegionnaire': False,
  'creditsStr': '0',

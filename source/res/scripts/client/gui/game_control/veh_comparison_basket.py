@@ -3,17 +3,18 @@
 from collections import namedtuple
 from itertools import imap
 import BigWorld
+from helpers.local_cache import FileLocalCache
+from typing import TYPE_CHECKING
 import Event
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
-from gui.shared.gui_items.Tankman import CrewTypes
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from helpers.local_cache import FileLocalCache
 from items import ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from items.vehicles import VehicleDescr
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
@@ -22,6 +23,9 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampContro
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    import typing
+    from typing import Optional, List
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('brotherhood',
  'repair',
  'camouflage',
@@ -436,6 +440,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
     def onLobbyStarted(self, ctx):
         self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled() and not self.bootcampController.isInBootcamp()
+        diff = {GUI_ITEM_TYPE.VEHICLE: [ vehicle.getVehicleCD() for vehicle in self.__vehicles ]}
+        self.__onCacheResync(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
 
     def onLobbyInited(self, event):
         if self.isEnabled() and self.isAvailable() and not self.isLocked:

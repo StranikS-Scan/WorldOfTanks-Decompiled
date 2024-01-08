@@ -8,8 +8,9 @@ class MetaRootViews(IntEnum):
     RANKREWARDS = 1
     YEARLYREWARDS = 2
     WEEKLYQUESTS = 3
-    LEADERBOARD = 4
-    YEARLYSTATISTICS = 5
+    SHOP = 4
+    LEADERBOARD = 5
+    YEARLYSTATISTICS = 6
 
 
 class TabModel(ViewModel):

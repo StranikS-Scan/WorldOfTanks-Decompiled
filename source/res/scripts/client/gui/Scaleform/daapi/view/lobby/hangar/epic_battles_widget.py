@@ -38,10 +38,17 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             if self.__periodicNotifier is None:
                 self.__periodicNotifier = PeriodicNotifier(self.__epicController.getTimer, self.__update)
             self.__periodicNotifier.startNotification()
-            g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+            g_clientUpdateManager.addCallbacks({'epicMetaGame': self.__onEpicUpdated,
+             'tokens': self.__onTokensUpdate})
             self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.HANGAR.value, (TOOLTIPS_CONSTANTS.EPIC_BATTLE_WIDGET_INFO,))
             self.__update()
             return
+
+    def __onEpicUpdated(self, diff):
+        if not self.__epicController.isEnabled():
+            return
+        if 'abilityPts' in diff:
+            self.__update()
 
     def __update(self):
         if not self.__epicController.isEnabled():

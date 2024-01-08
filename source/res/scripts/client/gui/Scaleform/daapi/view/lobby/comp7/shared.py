@@ -3,6 +3,7 @@
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.periodic_battles.models import AlertData, PeriodType
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTillTimeByResource
@@ -11,6 +12,10 @@ from gui.shared.utils.functions import makeTooltip
 class Comp7AlertData(AlertData):
     _RES_ROOT = R.strings.comp7.alertMessage
     _RES_REASON_ROOT = R.strings.comp7.noVehicles.text
+    _PERIOD_TYPES_WITH_SEASON = (PeriodType.ALL_NOT_AVAILABLE_END,
+     PeriodType.STANDALONE_NOT_AVAILABLE_END,
+     PeriodType.AFTER_SEASON,
+     PeriodType.BETWEEN_SEASONS)
     _PERIOD_TYPES_WITH_BUTTON = (PeriodType.NOT_AVAILABLE,
      PeriodType.STANDALONE_NOT_AVAILABLE,
      PeriodType.NOT_AVAILABLE_END,
@@ -28,6 +33,16 @@ class Comp7AlertData(AlertData):
      PeriodType.STANDALONE_NOT_AVAILABLE_END,
      PeriodType.AFTER_SEASON)
     _PERIOD_TYPES_WITHOUT_TOOLTIP = (PeriodType.ALL_NOT_SET, PeriodType.ALL_NOT_AVAILABLE_END, PeriodType.AFTER_SEASON)
+
+    @classmethod
+    def _getAlertLabel(cls, periodInfo, serverShortName):
+        params = cls._getAlertLabelParams(periodInfo)
+        params['serverName'] = serverShortName
+        if periodInfo.periodType in cls._PERIOD_TYPES_WITH_SEASON:
+            periodType = periodInfo.periodType.value
+            seasonName = comp7_model_helpers.getSeasonNameEnum().value
+            return backport.text(cls._RES_ROOT.dyn(periodType, cls._RES_ROOT.undefined).dyn(seasonName)(), **params)
+        return super(Comp7AlertData, cls)._getAlertLabel(periodInfo, serverShortName)
 
     @classmethod
     def _getTooltip(cls, periodInfo):

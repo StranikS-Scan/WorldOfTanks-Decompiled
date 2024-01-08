@@ -27,14 +27,6 @@ class SPAAccountAttributeCtx(CommonWebRequestCtx):
     def getRequestedAttr(self):
         return self.__attrPrefix
 
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
-
 
 class PlatformFetchProductListCtx(CommonWebRequestCtx):
 
@@ -66,14 +58,6 @@ class PlatformFetchProductListCtx(CommonWebRequestCtx):
     def getParams(self):
         return self.__params
 
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
-
 
 class PlatformGetUserSubscriptionsCtx(CommonWebRequestCtx):
 
@@ -96,11 +80,3 @@ class PlatformGetUserSubscriptionsCtx(CommonWebRequestCtx):
 
     def getParams(self):
         return self.__params
-
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None

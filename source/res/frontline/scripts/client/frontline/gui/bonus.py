@@ -38,7 +38,7 @@ def mergeSelectable(frontlineLevel, startLvl, endLvl, bonuses, bonusesByLvl):
             if level > frontlineLevel:
                 bonuses[idx].updateContext({'canClaim': False})
                 indexToCheck.remove(idx)
-            if not mergedBonus.isReceived():
+            if mergedBonus.getName() == EPIC_SELECT_BONUS_NAME and not mergedBonus.isReceived():
                 bonuses[idx].updateContext({'canClaim': True})
                 indexToCheck.remove(idx)
 

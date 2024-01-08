@@ -1,10 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/tooltips/battle_pass_in_progress_tooltip_view_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_royale_reward_points import BattleRoyaleRewardPoints
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
+
+class ChapterType(Enum):
+    COMMON = 'common'
+    EXTRA = 'extra'
+    HOLIDAY = 'holiday'
+
 
 class BattlePassInProgressTooltipViewModel(ViewModel):
     __slots__ = ()
@@ -92,17 +99,17 @@ class BattlePassInProgressTooltipViewModel(ViewModel):
     def setNotChosenRewardCount(self, value):
         self._setNumber(11, value)
 
-    def getIsExtra(self):
-        return self._getBool(12)
-
-    def setIsExtra(self, value):
-        self._setBool(12, value)
-
     def getExpireTime(self):
-        return self._getNumber(13)
+        return self._getNumber(12)
 
     def setExpireTime(self, value):
-        self._setNumber(13, value)
+        self._setNumber(12, value)
+
+    def getChapterType(self):
+        return ChapterType(self._getString(13))
+
+    def setChapterType(self, value):
+        self._setString(13, value.value)
 
     def _initialize(self):
         super(BattlePassInProgressTooltipViewModel, self)._initialize()
@@ -118,5 +125,5 @@ class BattlePassInProgressTooltipViewModel(ViewModel):
         self._addStringProperty('timeTillEnd', '')
         self._addStringProperty('battleType', '')
         self._addNumberProperty('notChosenRewardCount', 0)
-        self._addBoolProperty('isExtra', False)
         self._addNumberProperty('expireTime', 0)
+        self._addStringProperty('chapterType')

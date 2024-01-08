@@ -95,8 +95,12 @@ class BuyBattlePass(Processor):
 
     def _successHandler(self, code, ctx=None):
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
+        if self.__battlePass.isHoliday():
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassHReward.buyWithoutRewards.text())
+        else:
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName))
         return makeSuccess(msgType=SM_TYPE.BattlePassBuy, userMsg='', auxData={'header': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP()),
-         'description': backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName)),
+         'description': description,
          'additionalText': self.__makePriceString()})
 
     def __makePriceString(self):

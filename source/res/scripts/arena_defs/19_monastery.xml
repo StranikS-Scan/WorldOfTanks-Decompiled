@@ -34,39 +34,13 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	20.061766 -387.906860	</position1>
+          <position1>	20.087029 -387.839294	</position1>
         </team1>
         <team2>
-          <position1>	-0.393303 397.375824	</position1>
+          <position1>	-0.422340 397.399780	</position1>
         </team2>
       </teamBasePositions>
       <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
     </ctf>
-    <bootcamp>
-      <wwmusicSetup>
-        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
-        <wwmusicIntensive>	bc_music_mission_02	</wwmusicIntensive>
-        <wwmusicRelaxed>	bc_music_mission_02	</wwmusicRelaxed>
-        <wwmusicStop>	music_dron_stop	</wwmusicStop>
-        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
-        <wwmusicResultWin>	music_abbey_result_win	</wwmusicResultWin>
-        <wwmusicResultDrawn>	music_abbey_result_drawn	</wwmusicResultDrawn>
-        <wwmusicResultDefeat>	music_abbey_result_defeat	</wwmusicResultDefeat>
-      </wwmusicSetup>
-      <boundingBox>
-        <bottomLeft>	-50.000000 -500.000000	</bottomLeft>
-        <upperRight>	150.000000 500.000000	</upperRight>
-      </boundingBox>
-      <maxPlayersInTeam>	1	</maxPlayersInTeam>
-      <runDelay>	5	</runDelay>
-      <visualScript>
-        <server>
-          <plan>	BootCamp/Lesson_2_arena_19_monastery	</plan>
-        </server>
-        <client>
-          <plan>	BootCamp/Lesson_2_hints_19_monastery	</plan>
-        </client>
-      </visualScript>
-    </bootcamp>
   </gameplayTypes>
 </19_monastery.xml>

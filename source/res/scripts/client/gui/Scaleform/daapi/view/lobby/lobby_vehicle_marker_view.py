@@ -20,7 +20,6 @@ if typing.TYPE_CHECKING:
     from cgf_components.marker_component import LobbyFlashMarker
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
-    hangarSpace = dependency.descriptor(IHangarSpace)
     __LAYERS_WITHOUT_MARKERS = {WindowLayer.FULLSCREEN_WINDOW,
      WindowLayer.OVERLAY,
      WindowLayer.SUB_VIEW,
@@ -49,10 +48,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
+        self.__markersCache = None
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
-        self.__destroyAllMarkers()
+        return
 
     def __onSpaceDestroy(self, _):
         self.__destroyAllMarkers()
@@ -134,12 +134,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__createVehicleMarker(vehicle)
 
     def __createVehicleMarker(self, vehicle):
-        if vehicle and vehicle.typeDescriptor and vehicle.model:
-            vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
-            flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
-            self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
-            self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
-            self.__updateMarkerVisibility(vehicle.id)
+        vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
+        flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
+        self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
+        self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
+        self.__updateMarkerVisibility(vehicle.id)
 
     def __createPlatoonMarker(self, vehicle, playerName):
         vClass, _, vMatrix = self.__getVehicleInfo(vehicle)
@@ -154,13 +153,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         return
 
     def __destroyAllMarkers(self):
-        for k, marker in self.__markersCache.iteritems():
+        for k in self.__markersCache.keys():
             self.as_removeMarkerS(k)
-            if marker is not None:
-                marker.markerSetActive(False)
+            self.__markersCache.pop(k)
 
         self.__markersCache.clear()
-        return
 
     def __onWindowStatusChanged(self, uniqueID, newStatus):
         if newStatus in (WindowStatus.LOADING, WindowStatus.DESTROYED):

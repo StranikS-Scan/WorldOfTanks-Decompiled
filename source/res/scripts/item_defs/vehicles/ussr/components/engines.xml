@@ -168,6 +168,7 @@
     <V_2_IS_520_Roz>	251	</V_2_IS_520_Roz>
     <V-14>	252	</V-14>
     <M-17B-IT>	253	</M-17B-IT>
+    <V-12V>	256	</V-12V>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -1209,6 +1210,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </V-12>
+    <V-12V>
+      <userString>	#ussr_vehicles:V-12V	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </V-12V>
     <V-12_7x7>
       <userString>	#ussr_vehicles:V-12	</userString>
       <tags>	diesel	</tags>
@@ -2201,7 +2219,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	800	</power>
+      <power>	750	</power>
       <weight>	1000	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>

@@ -23,14 +23,14 @@ class PointsOfInterestController(IPointsOfInterestController):
         self.onPoiEquipmentUsed = Event.Event(self.__eManager)
         self.onPoiCaptured = Event.Event(self.__eManager)
         self.onPoiInvaderDestroyed = Event.Event(self.__eManager)
-        self._vehPoiRegistry = {}
+        self.__vehPoiRegistry = {}
 
     def startControl(self):
         _logger.debug('[POI] PointsOfInterestController started.')
 
     def stopControl(self):
         _logger.debug('[POI] PointsOfInterestController stopped.')
-        self._vehPoiRegistry.clear()
+        self.__vehPoiRegistry.clear()
         self.__eManager.clear()
 
     def getControllerID(self):
@@ -46,9 +46,9 @@ class PointsOfInterestController(IPointsOfInterestController):
         return BigWorld.entities.get(poiID)
 
     def getVehicleCapturingPoiGO(self, poiName, entityGameObject, vehicleID, spaceID):
-        poiGameObject = self._vehPoiRegistry.get(vehicleID, {}).get(poiName)
-        if poiGameObject is None:
-            self._vehPoiRegistry.setdefault(vehicleID, {})[poiName] = poiGameObject = CGF.GameObject(spaceID, poiName)
+        poiGameObject = self.__vehPoiRegistry.get(vehicleID, {}).get(poiName)
+        if poiGameObject is None or not poiGameObject.isValid():
+            self.__vehPoiRegistry.setdefault(vehicleID, {})[poiName] = poiGameObject = CGF.GameObject(spaceID, poiName)
             poiGameObject.createComponent(GenericComponents.HierarchyComponent, entityGameObject)
             poiGameObject.activate()
         return poiGameObject

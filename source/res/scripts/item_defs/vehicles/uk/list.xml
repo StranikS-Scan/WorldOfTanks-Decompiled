@@ -499,7 +499,7 @@
     <description>	#gb_vehicles:GB91_Super_Conqueror_descr	</description>
     <shortUserString>	#gb_vehicles:GB91_Super_Conqueror_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals NY_style	</tags>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB91_Super_Conqueror>
   <GB92_FV217>
@@ -1099,7 +1099,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special builtinRepairkit_user NY_style	</tags>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special builtinRepairkit_user	</tags>
     <level>	9	</level>
   </GB106_Cobra>
   <GB115_Gonsalo>
@@ -1138,9 +1138,22 @@
     <price>	8850	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user NY2024_video	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB121_GSOR_1010_FB>
+  <GB128_Nemesis>
+    <id>	240	</id>
+    <userString>	#gb_vehicles:GB128_Nemesis	</userString>
+    <description>	#gb_vehicles:GB128_Nemesis_descr	</description>
+    <shortUserString>	#gb_vehicles:GB128_Nemesis_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD special mediumTank3 improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </GB128_Nemesis>
   <GB127_A7E3>
     <id>	241	</id>
     <userString>	#gb_vehicles:GB127_A7E3	</userString>
@@ -1154,6 +1167,19 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </GB127_A7E3>
+  <GB133_Charioteer_MkVII>
+    <id>	244	</id>
+    <userString>	#gb_vehicles:GB133_Charioteer_MkVII	</userString>
+    <description>	#gb_vehicles:GB133_Charioteer_MkVII_descr	</description>
+    <shortUserString>	#gb_vehicles:GB133_Charioteer_MkVII_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB133_Charioteer_MkVII_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB133_Charioteer_MkVII_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </GB133_Charioteer_MkVII>
   <GB1020_Crusader_NewOnBoarding>
     <id>	400	</id>
     <userString>	#gb_vehicles:GB20_Crusader	</userString>

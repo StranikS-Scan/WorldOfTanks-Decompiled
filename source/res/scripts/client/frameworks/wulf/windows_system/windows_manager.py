@@ -10,13 +10,12 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class WindowsManager(PyObjectEntity):
-    __slots__ = ('__eManager', 'onWindowStatusChanged', 'onWindowShowingStatusChanged', 'onViewStatusChanged', '__weakref__')
+    __slots__ = ('__eManager', 'onWindowStatusChanged', 'onViewStatusChanged', '__weakref__')
 
     def __init__(self, cppObject=None):
         super(WindowsManager, self).__init__(cppObject)
         self.__eManager = Event.EventManager()
         self.onWindowStatusChanged = Event.Event(self.__eManager)
-        self.onWindowShowingStatusChanged = Event.Event(self.__eManager)
         self.onViewStatusChanged = Event.Event(self.__eManager)
 
     @classmethod
@@ -81,9 +80,6 @@ class WindowsManager(PyObjectEntity):
 
     def _cWindowStatusChangedEvent(self, uniqueID, newStatus):
         self.onWindowStatusChanged(uniqueID, newStatus)
-
-    def _cWindowShowingStatusChangedEvent(self, uniqueID, newStatus):
-        self.onWindowShowingStatusChanged(uniqueID, newStatus)
 
     def _cViewStatusChangedEvent(self, uniqueID, newStatus):
         self.onViewStatusChanged(uniqueID, newStatus)

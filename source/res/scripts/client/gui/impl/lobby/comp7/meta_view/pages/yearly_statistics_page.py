@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/pages/yearly_statistics_page.py
+from shared_utils import findFirst
 from comp7_common import seasonPointsCodeBySeasonNumber
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen.view_models.views.lobby.comp7.constants import Constants
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_statistics_model import YearlyStatisticsModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_statistics_season_model import YearlyStatisticsSeasonModel
-from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonState
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.comp7_model_helpers import setSeasonInfo, SEASONS_NUMBERS_BY_NAME
-from gui.shared.event_dispatcher import showComp7SeasonStatisticsScreen
-from shared_utils import findFirst
-from skeletons.gui.game_control import IComp7Controller
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
-from helpers import dependency
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
+from gui.shared.event_dispatcher import showComp7SeasonStatisticsScreen
+from helpers import dependency, time_utils
+from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.shared import IItemsCache
 
 class YearlyStatisticsPage(PageSubModelPresenter):
@@ -47,13 +46,20 @@ class YearlyStatisticsPage(PageSubModelPresenter):
         super(YearlyStatisticsPage, self).finalize()
 
     def _getEvents(self):
-        return ((self.viewModel.onGoToSeasonStatistics, self.__onGoToSeasonStatistics), (self.__comp7Controller.onRankUpdated, self.__onRatingUpdated))
+        return ((self.viewModel.onGoToSeasonStatistics, self.__onGoToSeasonStatistics),
+         (self.__comp7Controller.onRankUpdated, self.__onRatingUpdated),
+         (self.__comp7Controller.onComp7ConfigChanged, self.__updateSeasonModels),
+         (self.__comp7Controller.onStatusUpdated, self.__updateSeasonModels))
 
     def __onRatingUpdated(self, *_):
         self.__invalidateCurrentSeasonCard()
 
     def __onDossierReceived(self, *_):
         self.__invalidateCurrentSeasonCard()
+
+    def __updateSeasonModels(self, *_):
+        for season, model in zip(self.__comp7Controller.getAllSeasons(), self.viewModel.getSeasonCards()):
+            self.__fillSeasonCard(model, season)
 
     def __invalidateCurrentSeasonCard(self):
         currSeason = self.__comp7Controller.getCurrentSeason()
@@ -69,9 +75,9 @@ class YearlyStatisticsPage(PageSubModelPresenter):
 
     def __setPlayerStatistics(self, seasonStatisticsModel, season):
         seasonNumber = season.getNumber()
-        hasRankReceived = self.__comp7Controller.isRankAchievedInSeason(seasonNumber)
+        hasRankReceived = self.__comp7Controller.isQualificationPassedInSeason(seasonNumber)
         rating = self.__comp7Controller.getRatingForSeason(seasonNumber)
-        division = comp7_shared.getPlayerDivisionByRating(rating)
+        division = comp7_shared.getPlayerDivisionByRating(rating, seasonNumber)
         dossier = self.__itemsCache.items.getAccountDossier().getComp7Stats(season=seasonNumber)
         superSquadBattlesCount = dossier.getSuperSquadBattlesCount()
         singleBattlesCount = dossier.getBattlesCount() - superSquadBattlesCount
@@ -90,15 +96,20 @@ class YearlyStatisticsPage(PageSubModelPresenter):
             tx.setHasStatisticsCalculated(self.__isSeasonPointsReceived(seasonNumber))
             tx.setDivision(comp7_shared.getDivisionEnumValue(division))
             tx.setRank(comp7_shared.getRankEnumValue(division))
-            tx.setRating(rating if hasRankReceived else Constants.NOT_AVAILABLE_STATISTIC_VALUE)
-            if seasonStatisticsModel.season.getState() == SeasonState.NOTSTARTED:
-                tx.setSingleBattlesCount(Constants.NOT_AVAILABLE_STATISTIC_VALUE)
-                tx.setSuperPlatoonBattlesCount(Constants.NOT_AVAILABLE_STATISTIC_VALUE)
-            else:
-                tx.setSingleBattlesCount(singleBattlesCount)
-                tx.setSuperPlatoonBattlesCount(superSquadBattlesCount)
+            tx.setRating(self.__getRatingValue(hasRankReceived, rating))
+            tx.setSingleBattlesCount(self.__getBattlesCountValue(season, singleBattlesCount))
+            tx.setSuperPlatoonBattlesCount(self.__getBattlesCountValue(season, superSquadBattlesCount))
             tx.setSingleBattlesWinRate(singleWinRate)
             tx.setSuperPlatoonBattlesWinRate(superSquadWinRate)
+
+    @staticmethod
+    def __getRatingValue(hasRankReceived, value):
+        return value if hasRankReceived else Constants.NOT_AVAILABLE_STATISTIC_VALUE
+
+    @staticmethod
+    def __getBattlesCountValue(season, value):
+        isCurrentOrPastSeason = season.getStartDate() <= time_utils.getCurrentLocalServerTimestamp()
+        return value if isCurrentOrPastSeason else Constants.NOT_AVAILABLE_STATISTIC_VALUE
 
     def __isSeasonPointsReceived(self, seasonNumber):
         receivedPoints = self.__comp7Controller.getReceivedSeasonPoints()

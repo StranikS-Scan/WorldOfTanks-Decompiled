@@ -1,0 +1,20 @@
+<FLArenaBattleResultComponent.def>
+  <CellMethods>
+    <setConfig>
+      <Arg>	PYTHON	</Arg>
+    </setConfig>
+    <onAvatarReservesUpdated>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </onAvatarReservesUpdated>
+  </CellMethods>
+  <BaseMethods></BaseMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+  <DefaultKeyName>	fLArenaBattleResultComponent	</DefaultKeyName>
+</FLArenaBattleResultComponent.def>

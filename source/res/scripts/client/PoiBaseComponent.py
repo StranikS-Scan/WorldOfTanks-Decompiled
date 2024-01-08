@@ -12,8 +12,9 @@ class PoiBaseComponent(DynamicScriptComponent):
         super(PoiBaseComponent, self).__init__()
         self._poiGameObject = self.__getPoiGameObject()
 
-    def onLeaveWorld(self):
+    def onDestroy(self):
         self._poiGameObject = None
+        super(PoiBaseComponent, self).onDestroy()
         return
 
     def __getPoiGameObject(self):

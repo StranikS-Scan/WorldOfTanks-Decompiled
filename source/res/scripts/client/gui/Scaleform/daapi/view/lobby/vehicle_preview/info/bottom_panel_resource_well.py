@@ -33,12 +33,7 @@ class _ResourceWellPanelView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(_ResourceWellPanelView, self)._onLoading(*args, **kwargs)
-        self.__resourceWell.startNumberRequesters()
         self.__updateModel()
-
-    def _finalize(self):
-        self.__resourceWell.stopNumberRequesters()
-        super(_ResourceWellPanelView, self)._finalize()
 
     def _getEvents(self):
         return ((self.viewModel.onAction, self.__showResourcesLoading), (self.__resourceWell.onNumberRequesterUpdated, self.__onNumberRequesterUpdated))

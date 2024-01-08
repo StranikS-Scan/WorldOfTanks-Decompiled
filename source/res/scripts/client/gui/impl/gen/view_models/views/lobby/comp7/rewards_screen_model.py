@@ -38,10 +38,16 @@ class SeasonName(Enum):
     THIRD = 'third'
 
 
-class RewardsScreenModel(ViewModel):
-    __slots__ = ('onClose',)
+class ShopInfoType(Enum):
+    NONE = 'none'
+    OPEN = 'open'
+    DISCOUNT = 'discount'
 
-    def __init__(self, properties=10, commands=1):
+
+class RewardsScreenModel(ViewModel):
+    __slots__ = ('onClose', 'onOpenShop')
+
+    def __init__(self, properties=11, commands=2):
         super(RewardsScreenModel, self).__init__(properties=properties, commands=commands)
 
     def getSeasonName(self):
@@ -74,47 +80,53 @@ class RewardsScreenModel(ViewModel):
     def setDivision(self, value):
         self._setNumber(4, value.value)
 
+    def getShopInfoType(self):
+        return ShopInfoType(self._getString(5))
+
+    def setShopInfoType(self, value):
+        self._setString(5, value.value)
+
     def getTokensCount(self):
-        return self._getNumber(5)
+        return self._getNumber(6)
 
     def setTokensCount(self, value):
-        self._setNumber(5, value)
+        self._setNumber(6, value)
 
     def getRankList(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setRankList(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getRankListType():
         return Rank
 
     def getQualificationBattleList(self):
-        return self._getArray(7)
+        return self._getArray(8)
 
     def setQualificationBattleList(self, value):
-        self._setArray(7, value)
+        self._setArray(8, value)
 
     @staticmethod
     def getQualificationBattleListType():
         return QualificationBattle
 
     def getMainRewards(self):
-        return self._getArray(8)
+        return self._getArray(9)
 
     def setMainRewards(self, value):
-        self._setArray(8, value)
+        self._setArray(9, value)
 
     @staticmethod
     def getMainRewardsType():
         return Comp7BonusModel
 
     def getAdditionalRewards(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setAdditionalRewards(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getAdditionalRewardsType():
@@ -127,9 +139,11 @@ class RewardsScreenModel(ViewModel):
         self._addNumberProperty('rank')
         self._addBoolProperty('hasRankInactivity', False)
         self._addNumberProperty('division')
+        self._addStringProperty('shopInfoType')
         self._addNumberProperty('tokensCount', 0)
         self._addArrayProperty('rankList', Array())
         self._addArrayProperty('qualificationBattleList', Array())
         self._addArrayProperty('mainRewards', Array())
         self._addArrayProperty('additionalRewards', Array())
         self.onClose = self._addCommand('onClose')
+        self.onOpenShop = self._addCommand('onOpenShop')

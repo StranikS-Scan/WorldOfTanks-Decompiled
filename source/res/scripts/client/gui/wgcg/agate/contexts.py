@@ -29,10 +29,6 @@ class InventoryEntitlementsCtx(CommonWebRequestCtx):
     def getEntitlementCodes(self):
         return self.__entitlementCodes
 
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
 
 class AgateGetInventoryEntitlementsCtx(CommonWebRequestCtx):
 
@@ -66,14 +62,6 @@ class AgateGetInventoryEntitlementsCtx(CommonWebRequestCtx):
 
     def getEntitlementsFilter(self):
         return self.__entitlementsFilter
-
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
 
     @classmethod
     def createFilterByTags(cls, tags):

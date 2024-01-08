@@ -48,8 +48,8 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def init(self):
         self.__gui.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
-        g_eventBus.addListener(LobbySimpleEvent.WAITING_SHOW, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(LobbySimpleEvent.WAITING_HIDE, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
         g_bootcampEvents.onBootcampStarted += self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished += self.__onExitBootcamp
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
@@ -58,8 +58,8 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.stopGlobalListening()
         self.clear()
         self.__gui.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
-        g_eventBus.removeListener(LobbySimpleEvent.WAITING_SHOW, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(LobbySimpleEvent.WAITING_HIDE, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
         self.onPostponedQueueUpdated.clear()
         g_bootcampEvents.onBootcampStarted -= self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished -= self.__onExitBootcamp
@@ -182,10 +182,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
         return result
 
-    @staticmethod
-    def isQueuePausingWindow(window):
-        return window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and window.layer in (WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW, WindowLayer.FULLSCREEN_WINDOW)
-
     def __tryProcess(self):
         if not self.__locks:
             if self.isEnabled():
@@ -235,17 +231,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             return
         else:
             self.__processAfterWaiting = False
-            if self.isEnabled() and not self.__locks and not self.__gui.windowsManager.findWindows(self.isQueuePausingWindow):
+            if self.isEnabled() and not self.__locks and not self.__gui.windowsManager.findWindows(self.__overlappingWindowsPredicate):
                 command = self.__activeQueue.pop(0)
-                if command.isOverdue():
-                    _logger.debug('Command %r is overdue. Skip it.', command)
-                    self.__processNext()
-                else:
-                    _logger.debug('Executing next command: %r', command)
-                    self.__currentWindow = command.getWindow()
-                    self.__isExecuting = True
-                    command.execute()
-                    self.__isExecuting = False
+                _logger.debug('Executing next command: %r', command)
+                self.__currentWindow = command.getWindow()
+                self.__isExecuting = True
+                command.execute()
+                self.__isExecuting = False
             return
 
     def __destroyCurrentWindow(self):
@@ -273,3 +265,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         return
+
+    @staticmethod
+    def __overlappingWindowsPredicate(window):
+        return window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and window.layer in (WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW, WindowLayer.FULLSCREEN_WINDOW)

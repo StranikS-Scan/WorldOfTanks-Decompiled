@@ -94,7 +94,7 @@ class BattlePassAwardsView(ViewImpl):
         isRewardSelected = reason == BattlePassRewardReason.SELECT_REWARD
         self.viewModel.setIsNeedToShowOffer(not (isBattlePassPurchased or isRewardSelected))
         switchHangarOverlaySoundFilter(on=True)
-        SoundGroups.g_instance.playSound2D(BattlePassSounds.REWARD_SCREEN)
+        SoundGroups.g_instance.playSound2D(BattlePassSounds.HOLIDAY_REWARD_SCREEN if self.__battlePass.isHoliday() else BattlePassSounds.REWARD_SCREEN)
         self.__needNotifyClosing = needNotifyClosing
         return
 

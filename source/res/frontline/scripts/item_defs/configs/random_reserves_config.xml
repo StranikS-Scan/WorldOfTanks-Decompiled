@@ -1,0 +1,170 @@
+<random_reserves_config.xml>
+  <options>
+    <boardingVehAmmo>
+      <extraWeight>	10	</extraWeight>
+    </boardingVehAmmo>
+    <sameTimeBlocking>	5 9 8	</sameTimeBlocking>
+    <debug>	0	</debug>
+  </options>
+  <reconAbility>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </reconAbility>
+  <artilleryAbility>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </artilleryAbility>
+  <bomberAbility>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </bomberAbility>
+  <smokeAbility>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </smokeAbility>
+  <inspireAbility>
+    <isStack>	0	</isStack>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </inspireAbility>
+  <passiveEngineering>
+    <mode>	stack	</mode>
+    <modFactors>
+      <lv_1>
+        <resupplyCooldownFactor>	0.7692 0.72 0.68	</resupplyCooldownFactor>
+        <captureBlockBonusTime>	5 8 11	</captureBlockBonusTime>
+        <captureSpeedFactor>	1.5 1.7 2	</captureSpeedFactor>
+      </lv_1>
+      <lv_2>
+        <resupplyCooldownFactor>	0.7143 0.67 0.63	</resupplyCooldownFactor>
+        <captureBlockBonusTime>	7 10 12	</captureBlockBonusTime>
+        <captureSpeedFactor>	1.7 1.9 2.1	</captureSpeedFactor>
+      </lv_2>
+      <lv_3>
+        <resupplyCooldownFactor>	0.6667 0.6 0.55	</resupplyCooldownFactor>
+        <captureBlockBonusTime>	10 13 16	</captureBlockBonusTime>
+        <captureSpeedFactor>	1.8 2 2.2	</captureSpeedFactor>
+      </lv_3>
+      <lv_4>
+        <resupplyCooldownFactor>	0.64 0.59 0.5	</resupplyCooldownFactor>
+        <captureBlockBonusTime>	12 15 18	</captureBlockBonusTime>
+        <captureSpeedFactor>	1.9 2.1 2.3	</captureSpeedFactor>
+      </lv_4>
+    </modFactors>
+  </passiveEngineering>
+  <acrcadeMinefieldEpicBattle>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </acrcadeMinefieldEpicBattle>
+  <regenerationKitFL>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </regenerationKitFL>
+  <stealthRadarAbility>
+    <mode>	no_stack	</mode>
+    <modFactors>
+      <lv_1>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_1>
+      <lv_2>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_2>
+      <lv_3>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_3>
+      <lv_4>
+        <startCooldownTimeFactor>	0.5 0.5 0.5	</startCooldownTimeFactor>
+      </lv_4>
+    </modFactors>
+  </stealthRadarAbility>
+</random_reserves_config.xml>

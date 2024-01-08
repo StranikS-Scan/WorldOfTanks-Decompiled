@@ -8,8 +8,7 @@ _ALIAS_TO_RULE_ID = {'blueprintsButton': LuiRules.BLUEPRINTS_BUTTON,
  'PersonalReservesHangarHint': LuiRules.PR_HANGAR_HINT,
  'sessionStats': LuiRules.SESSION_STATS,
  'ModernizedSetupTabHint': LuiRules.MODERNIZE_SETUP_HINT,
- 'ModeSelectorWidgetsBtnHint': LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT,
- 'AmmunitionPanelHintZoneHint': LuiRules.AP_ZONE_HINT}
+ 'ModeSelectorWidgetsBtnHint': LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT}
 
 class LimitedUIHintChecker(object):
 

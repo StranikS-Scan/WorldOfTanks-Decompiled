@@ -4,7 +4,7 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters
-from gui.clans.items import formatField, isValueAvailable
+from gui.clans.data_wrapper.utils import formatField, isValueAvailable
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanInvitesViewMeta import ClanInvitesViewMeta
 from gui.clans.settings import CLAN_INVITE_STATES

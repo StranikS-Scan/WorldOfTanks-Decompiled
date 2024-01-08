@@ -95,7 +95,9 @@
     <GMC_302_x2>	118	</GMC_302_x2>
     <Daimler_DQ450>	119	</Daimler_DQ450>
     <Rolls_Royce_B80P>	120	</Rolls_Royce_B80P>
+    <MTU_870_N>	121	</MTU_870_N>
     <AEC_A7E3>	122	</AEC_A7E3>
+    <Rolls_Royse_Meteor_MkIV_N>	124	</Rolls_Royse_Meteor_MkIV_N>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -324,6 +326,23 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Rolls_Royse_Meteor_MkIV>
+    <Rolls_Royse_Meteor_MkIV_N>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV_N	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Rolls_Royse_Meteor_MkIV_N>
     <Rolls_Royce_Meteor_Mark_IVB_900>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_Mark_IVB_900	</userString>
       <tags>	gasoline	</tags>
@@ -889,14 +908,14 @@
       <price>	2500	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	131	</power>
+      <power>	145	</power>
       <weight>	800	</weight>
       <maxHealth>	66	</maxHealth>
       <maxRegenHealth>	33	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	341	</rpm_min>
-      <rpm_max>	2016	</rpm_max>
+      <rpm_min>	335	</rpm_min>
+      <rpm_max>	2029	</rpm_max>
     </AEC_A1909>
     <GMC_6-71_Mk10>
       <userString>	#gb_vehicles:GMC_6-71_Mk10	</userString>
@@ -905,14 +924,14 @@
       <price>	9000	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	138	</power>
+      <power>	155	</power>
       <weight>	991	</weight>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	338	</rpm_min>
-      <rpm_max>	2022	</rpm_max>
+      <rpm_min>	330	</rpm_min>
+      <rpm_max>	2038	</rpm_max>
     </GMC_6-71_Mk10>
     <GMC_6-71_Mk11>
       <userString>	#gb_vehicles:GMC_6-71_Mk11	</userString>
@@ -1561,6 +1580,23 @@
       <rpm_min>	460	</rpm_min>
       <rpm_max>	2125	</rpm_max>
     </Continental_AOI_1195_5A>
+    <MTU_870_N>
+      <userString>	#gb_vehicles:MTU_870_N	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </MTU_870_N>
     <L50>
       <userString>	#gb_vehicles:L50	</userString>
       <tags>	diesel	</tags>

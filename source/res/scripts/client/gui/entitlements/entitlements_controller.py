@@ -79,14 +79,15 @@ class EntitlementsController(IEntitlementsController):
             return
         else:
             if self.__webController.isAvailable():
+                ctx = InventoryEntitlementsCtx(entitlementCodes=codes)
                 try:
                     self.__cacheWaitSync = True
-                    response = yield self.__webController.sendRequest(ctx=InventoryEntitlementsCtx(entitlementCodes=codes))
+                    response = yield self.__webController.sendRequest(ctx=ctx)
                 finally:
                     self.__cacheWaitSync = False
 
                 if response.isSuccess():
-                    result = InventoryEntitlementsCtx.getDataObj(response.data)
+                    result = ctx.getDataObj(response.data)
                     if self.__cache is not None:
                         self.__cache.update(codes, result.get('data', {}))
                         self.__lastFailedEntitlements.difference_update(codes)

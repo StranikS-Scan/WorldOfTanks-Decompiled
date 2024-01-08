@@ -425,10 +425,11 @@ class MapboxProgressionDataProvider(Notifiable):
         result = None
         if self.__webCtrl.isAvailable() and not self.__isSyncing:
             self.__isSyncing = True
-            result = yield self.__webCtrl.sendRequest(MapboxProgressionCtx())
+            ctx = MapboxProgressionCtx()
+            result = yield self.__webCtrl.sendRequest(ctx)
             self.__isSyncing = False
             if result.isSuccess():
-                data = MapboxProgressionCtx.getDataObj(result.data)
+                data = ctx.getDataObj(result.data)
             self.__onSyncCompleted()
         elif self.__isSyncing:
             callback(False)

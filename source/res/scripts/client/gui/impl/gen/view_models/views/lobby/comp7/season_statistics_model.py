@@ -29,16 +29,11 @@ class Division(IntEnum):
     E = 5
 
 
-class SeasonPointState(Enum):
-    ACHIEVED = 'achieved'
-    NOTACHIEVED = 'notAchieved'
-
-
 class SeasonStatisticsModel(ViewModel):
     __slots__ = ('onClose',)
     DEFAULT_POSITION = -1
 
-    def __init__(self, properties=11, commands=1):
+    def __init__(self, properties=12, commands=1):
         super(SeasonStatisticsModel, self).__init__(properties=properties, commands=commands)
 
     def getSeason(self):
@@ -89,31 +84,33 @@ class SeasonStatisticsModel(ViewModel):
     def setLeaderboardPosition(self, value):
         self._setNumber(7, value)
 
-    def getSeasonPoints(self):
-        return self._getArray(8)
+    def getAchievedSeasonPoints(self):
+        return self._getNumber(8)
 
-    def setSeasonPoints(self, value):
-        self._setArray(8, value)
+    def setAchievedSeasonPoints(self, value):
+        self._setNumber(8, value)
 
-    @staticmethod
-    def getSeasonPointsType():
-        return SeasonPointState
+    def getSeasonPointsLimit(self):
+        return self._getNumber(9)
+
+    def setSeasonPointsLimit(self, value):
+        self._setNumber(9, value)
 
     def getSummaryStatistics(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setSummaryStatistics(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getSummaryStatisticsType():
         return SummaryStatisticsModel
 
     def getVehicleStatistics(self):
-        return self._getArray(10)
+        return self._getArray(11)
 
     def setVehicleStatistics(self, value):
-        self._setArray(10, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getVehicleStatisticsType():
@@ -129,7 +126,8 @@ class SeasonStatisticsModel(ViewModel):
         self._addNumberProperty('rank')
         self._addNumberProperty('division')
         self._addNumberProperty('leaderboardPosition', -1)
-        self._addArrayProperty('seasonPoints', Array())
+        self._addNumberProperty('achievedSeasonPoints', 0)
+        self._addNumberProperty('seasonPointsLimit', 0)
         self._addArrayProperty('summaryStatistics', Array())
         self._addArrayProperty('vehicleStatistics', Array())
         self.onClose = self._addCommand('onClose')

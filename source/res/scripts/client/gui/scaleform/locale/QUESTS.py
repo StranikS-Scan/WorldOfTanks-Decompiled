@@ -78,17 +78,7 @@ class QUESTS(object):
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
-    BONUSES_ITEM_NY23RANDOMRESOURCES = '#quests:bonuses/item/ny23RandomResources'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
-    BONUSNAME_NY22FILLERS = '#quests:bonusName/ny22Fillers'
-    BONUSNAME_NEWYEARSLOT = '#quests:bonusName/newYearSlot'
-    BONUSNAME_NYRANDOMRESOURCE = '#quests:bonusName/nyRandomResource'
-    BONUSNAME_NY_CRYSTAL = '#quests:bonusName/ny_crystal'
-    BONUSNAME_NY_EMERALD = '#quests:bonusName/ny_emerald'
-    BONUSNAME_NY_AMBER = '#quests:bonusName/ny_amber'
-    BONUSNAME_NY_IRON = '#quests:bonusName/ny_iron'
-    BONUSES_VARIADICDISCOUNT_DISCOUNTAMOUNT = '#quests:bonuses/variadicDiscount/discountAmount'
-    BONUSES_VARIADICDISCOUNT_BUTTONLABEL = '#quests:bonuses/variadicDiscount/buttonLabel'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
     QUESTS_TITLE_CURRENTLYAVAILABLE = '#quests:quests/title/currentlyAvailable'
@@ -1679,11 +1669,8 @@ class QUESTS(object):
     INFOPAGE_INFOBUTTONTOOLTIP_HEADER_WINBACK = '#quests:infoPage/infoButtonTooltip/header/winback'
     INFOPAGE_DAILYMISSIONTITLE = '#quests:infoPage/dailyMissionTitle'
     INFOPAGE_PREMIUMMISSIONSTITLE = '#quests:infoPage/premiumMissionsTitle'
-    INFOPAGE_DAILYMISSIONS_NYDAILYDAILYMISSIONS = '#quests:infoPage/dailyMissions/nyDailyDailyMissions'
     INFOPAGE_DAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/default'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/battlePassDailyMissions/default'
-    DAILYQUESTS_INFO_DAILYMISSIONTITLE = '#quests:dailyQuests/info/dailyMissionTitle'
-    DAILYQUESTS_INFO_BATTLEPASSDAILYMISSIONS = '#quests:dailyQuests/info/battlePassDailyMissions'
     INFOPAGE_DAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/winback'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/battlePassDailyMissions/winback'
     INFOPAGE_PREMIUMMISSIONS_DEFAULT = '#quests:infoPage/premiumMissions/default'
@@ -1763,13 +1750,6 @@ class QUESTS(object):
      BONUSNAME_BLUEPRINTS_NATION,
      BONUSNAME_BLUEPRINTS_NATION_ANY,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,
-     BONUSNAME_NY22FILLERS,
-     BONUSNAME_NEWYEARSLOT,
-     BONUSNAME_NYRANDOMRESOURCE,
-     BONUSNAME_NY_CRYSTAL,
-     BONUSNAME_NY_EMERALD,
-     BONUSNAME_NY_AMBER,
-     BONUSNAME_NY_IRON,
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,

@@ -1132,6 +1132,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.goodiesSnapshot = updatedSnapshot
         self.onGoodiesSnapshotUpdated()
 
+    def onLoginToCellFailed(self):
+        self.base.onLoginToCellFailed()
+
     def onRandomEvent(self, eventName):
         _logger.info('onRandomEvent happened, event name: %s', eventName)
         self.__randomEvents.append(eventName)
@@ -1275,7 +1278,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         processor = self.__updateConsumablesProcessors.get(itemTypeIdx)
         if processor:
             if itemTypeIdx == ITEM_TYPE_INDICES['equipment'] and self.arena.period == ARENA_PERIOD.BATTLE:
-                self.guiSessionProvider.shared.equipments.setServerPrevStage(previousStage, compactDescr)
+                self.guiSessionProvider.shared.equipments.setServerPrevStage(previousStage=previousStage, compactDescr=compactDescr, index=index)
             getattr(self, processor)(vehicleID, compactDescr, quantity, quantityInClipOrNextStage, timeRemaining, totalTime, index)
         else:
             LOG_WARNING('Not supported item type index', itemTypeIdx)
@@ -3029,8 +3032,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         strArgs = ','.join(map(str, value))
         self.base.setDevelopmentFeature(0, 'flRandomReservesOffer', 0, strArgs)
 
-    def flGetAbilitysProperties(self):
-        self.base.setDevelopmentFeature(0, 'flGetAbilitysProperties', 0, '')
+    def flGetAbilitiesProperties(self):
+        self.base.setDevelopmentFeature(0, 'flGetAbilitiesProperties', 0, '')
 
     def receivePhysicsDebugInfo(self, info):
         modifD = dict()

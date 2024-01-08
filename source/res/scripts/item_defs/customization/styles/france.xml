@@ -1752,4 +1752,44 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F116_Bat_Chatillon_Bourrasque	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	769	</id>
+      <texture>	gui/maps/vehicles/styles/F116_Bat_Chatillon_Bourrasque_DV_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_DV_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F116_Bat_Chatillon_Bourrasque_DV_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_DV_3DSt	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </france.xml>

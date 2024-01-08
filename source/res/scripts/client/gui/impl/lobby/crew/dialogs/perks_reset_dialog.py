@@ -24,7 +24,8 @@ from gui.shop import showBuyGoldForCrew
 from helpers import dependency
 from messenger import MessengerEntry
 from skeletons.gui.shared import IItemsCache
-from uilogging.epic_battle.constants import EpicBattleLogActions, EpicBattleLogKeys
+from uilogging.crew.logging_constants import CrewViewKeys, CrewDialogKeys
+from uilogging.epic_battle.constants import EpicBattleLogActions
 from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 if typing.TYPE_CHECKING:
     pass
@@ -53,8 +54,8 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
             self.setSubView(DefaultDialogPlaceHolders.CONTENT, self._priceListContent)
         self.addButton(ConfirmButton(_LOC.submit(), isDisabled=not self._isFreePerkReset))
         self.addButton(CancelButton(_LOC.cancel()))
-        self._uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=EpicBattleLogKeys.DROP_SKILL_DIALOG_CONFIRM.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
-        self._uiEpicBattleLogger.initialize(EpicBattleLogKeys.DROP_SKILL_DIALOG_CONFIRM.value)
+        self._uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=CrewDialogKeys.PERKS_RESET, parentScreen=CrewViewKeys.PERSONAL_FILE)
+        self._uiEpicBattleLogger.initialize(CrewDialogKeys.PERKS_RESET)
         super(PerksResetDialog, self)._onLoading(*args, **kwargs)
 
     def _finalize(self):
@@ -74,7 +75,7 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
         return
 
     def _setResult(self, result):
-        self._uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=result, parentScreen=EpicBattleLogKeys.DROP_SKILL_DIALOG_CONFIRM.value)
+        self._uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=result, parentScreen=CrewDialogKeys.PERKS_RESET)
         if result == DialogButtons.SUBMIT:
             if not self._resetPerks():
                 return

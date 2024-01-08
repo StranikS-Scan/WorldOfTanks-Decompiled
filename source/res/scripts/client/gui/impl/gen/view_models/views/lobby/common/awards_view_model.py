@@ -6,9 +6,11 @@ from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.common.reward_item_model import RewardItemModel
 
 class AwardsViewModel(ViewModel):
-    __slots__ = ('onCloseClick',)
+    __slots__ = ('onAnimationEnded', 'onClose')
+    CLOSE_REASON_CANCEL = 'cancel'
+    CLOSE_REASON_CONFIRM = 'confirm'
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=6, commands=2):
         super(AwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -59,4 +61,5 @@ class AwardsViewModel(ViewModel):
         self._addResourceProperty('title', R.invalid())
         self._addResourceProperty('subTitle', R.invalid())
         self._addResourceProperty('buttonTitle', R.invalid())
-        self.onCloseClick = self._addCommand('onCloseClick')
+        self.onAnimationEnded = self._addCommand('onAnimationEnded')
+        self.onClose = self._addCommand('onClose')

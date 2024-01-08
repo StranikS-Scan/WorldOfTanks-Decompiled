@@ -51,9 +51,6 @@ class IFunSubMode(ISeasonProvider, Notifiable):
     def isSuitableVehicleAvailable(self):
         raise NotImplementedError
 
-    def hasHangarHeaderEntry(self):
-        raise NotImplementedError
-
     def hasSuitableVehicles(self):
         raise NotImplementedError
 
@@ -161,9 +158,6 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
         criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM
         unlockedVehicles = self.__itemsCache.items.getVehicles(criteria)
         return len(unlockedVehicles) > 0
-
-    def hasHangarHeaderEntry(self):
-        return True
 
     def hasSuitableVehicles(self):
         return len(self.getSuitableVehicles()) > 0

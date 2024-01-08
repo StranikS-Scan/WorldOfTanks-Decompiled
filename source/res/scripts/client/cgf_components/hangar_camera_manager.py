@@ -23,6 +23,7 @@ if IS_CLIENT:
     from gui.hangar_cameras.hangar_camera_yaw_filter import HangarCameraYawFilter
     from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
     from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
+    from gui.hangar_cameras.hangar_camera_flyby import HangarCameraFlyby
 _EASE_SQUARE_INOUT = 3
 _MIN_DURATION_ = 2.0
 _MAX_DURATION_ = 3.0
@@ -33,7 +34,6 @@ DOFParams = namedtuple('DOFParams', ['nearStart',
  'nearDist',
  'farStart',
  'farDist'])
-TANK_CAMERA_NAMES = ('Tank', 'Platoon', 'Customization')
 
 class CameraMode(object):
     DEFAULT = 'Tank'
@@ -100,10 +100,14 @@ class HangarCameraManager(CGF.ComponentManager):
         super(HangarCameraManager, self).__init__(*args)
         self.__cam = None
         self.__flightCam = None
+        self.onCameraSwitched = None
+        self.onCameraSwitchCancel = None
+        self.__isInSwitching = False
         self.__customizationHelper = None
         self.__yawCameraFilter = None
         self.__cameraIdle = None
         self.__cameraParallax = None
+        self.__cameraFlyby = None
         self.__mouseMoveParams = _MouseMoveParams()
         self.__flightParams = _FlightParams()
         self.__minDist = None
@@ -117,8 +121,7 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__cameraMode = CameraMode.DEFAULT
         self.__cameraName = None
         self.__isActive = False
-        self.onCameraSwitched = Event.Event()
-        self.onNewCameraAdded = Event.Event()
+        self.__flybyCallback = None
         return
 
     def activate(self):
@@ -134,11 +137,14 @@ class HangarCameraManager(CGF.ComponentManager):
             BigWorld.camera(self.__cam)
             self.__cameraParallax = HangarCameraParallax(self.__cam)
             self.__cameraIdle = HangarCameraIdle(self.__cam)
+            self.__cameraFlyby = HangarCameraFlyby(self.__cam)
             self.__customizationHelper = BigWorld.PyCustomizationHelper(None, 0, False, None)
             g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
             FovExtended.instance().onSetFovSettingEvent += self.__onSetFovSetting
             self.__prevDOFParams = _DOFParams()
             self.__currentDOFParams = _DOFParams()
+            self.onCameraSwitched = Event.Event()
+            self.onCameraSwitchCancel = Event.Event()
             self.__currentHorizontalFov = FovExtended.instance().horizontalFov
             self.__isActive = True
             _logger.info('HangarCameraManager::activate')
@@ -152,6 +158,10 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__customizationHelper = None
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
             FovExtended.instance().onSetFovSettingEvent -= self.__onSetFovSetting
+            self.onCameraSwitched.clear()
+            self.onCameraSwitched = None
+            self.onCameraSwitchCancel.clear()
+            self.onCameraSwitchCancel = None
             currentCameraQuery = CGF.Query(self.spaceID, (CGF.GameObject, CurrentCameraObject))
             for gameObject, _ in currentCameraQuery:
                 gameObject.removeComponentByType(CurrentCameraObject)
@@ -161,29 +171,19 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cameraParallax = None
             self.__cameraIdle.destroy()
             self.__cameraIdle = None
+            self.__cameraFlyby.fini()
+            self.__cameraFlyby = None
             self.__isActive = False
+            self.__flybyCallback = None
             return
 
     @onAddedQuery(CGF.GameObject, CameraComponent, TransformComponent, tickGroup='postHierarchyUpdate')
     def onCameraAdded(self, go, cameraComponent, transformComponent):
         if not self.__isActive:
             return
-        self.onNewCameraAdded(cameraComponent.name)
         if cameraComponent.name == self.__cameraMode:
-            if not self.isCameraSwitching():
-                self.switchToTank()
-            _logger.info('HangarCameraManager::onTankCameraAdded')
-
-    def isCameraAdded(self, cameraName):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, CameraComponent)
-        for cameraComponent in cameraQuery:
-            if cameraComponent.name == cameraName:
-                return True
-
-        return False
-
-    def isCameraSwitching(self):
-        return self.__flightCam and self.__flightCam.isInTransition()
+            self.switchToTank()
+            _logger.info('HangarCameraManager::onCameraAdded')
 
     def getCurrentCameraName(self):
         return self.__cameraName
@@ -198,6 +198,9 @@ class HangarCameraManager(CGF.ComponentManager):
         self.switchByCameraName(self.__cameraMode, instantly, resetTransform)
 
     def switchByCameraName(self, name, instantly=True, resetTransform=True):
+        self.__onCameraSwitchCancel(name)
+        self.__cameraName = name
+        self.__isInSwitching = True
         cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
         gameObject = None
         prevCameraName = None
@@ -206,11 +209,11 @@ class HangarCameraManager(CGF.ComponentManager):
                 if go.findComponentByType(CurrentCameraObject) is None:
                     go.createComponent(CurrentCameraObject)
                     gameObject = go
-                elif self.isCameraSwitching():
-                    _logger.debug('Camera is already flying: %s', name)
+                elif self.__flightCam and self.__flightCam.isInTransition() and self.__flightCam == BigWorld.camera():
+                    _logger.warning('Camera is already flying: %s', name)
                     return
                 else:
-                    _logger.debug('Camera already installed: %s', name)
+                    _logger.warning('Camera already installed: %s', name)
                     self.__onCameraSwitched()
                     return
 
@@ -220,12 +223,16 @@ class HangarCameraManager(CGF.ComponentManager):
 
         if gameObject is None:
             _logger.warning("Can't find camera: %s", name)
+            self.__onCameraSwitchCancel(name)
             return
         else:
-            self.__cameraName = name
             self.__cam.stop()
             if instantly:
                 self.__setupCamera(gameObject, resetTransform)
+                FovExtended.instance().setFovByAbsoluteValue(self.__currentHorizontalFov)
+                if self.__flightCam:
+                    self.__flightCam.finish()
+                    self.__flightCam = None
                 BigWorld.camera(self.__cam)
                 self.__onCameraSwitched()
             else:
@@ -260,6 +267,7 @@ class HangarCameraManager(CGF.ComponentManager):
                 pitch = self.__normaliseAngle(orbitComponent.currentPitch + worldPitch) if resetRotation else None
                 distance = orbitComponent.currentDist if resetRotation else None
                 distConstraints = orbitComponent.distLimits
+                self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
 
             self.moveCamera(targetPos, yaw=yaw, pitch=pitch, distance=distance, duration=duration, distConstraints=distConstraints)
             return
@@ -283,8 +291,6 @@ class HangarCameraManager(CGF.ComponentManager):
     def setMinDist(self, value):
         if not self.__isActive or self.__cameraName is None:
             self.__minDist = value
-            return
-        elif self.__cameraName not in TANK_CAMERA_NAMES:
             return
         else:
             self.__mouseMoveParams.distConstraints[0] = min(value, self.__mouseMoveParams.distConstraints[1])
@@ -318,6 +324,32 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__cam.moveTo(targetMatrix, sourceMatrix, pivotMaxDist, duration)
         return
 
+    def activateCameraFlyby(self, callback=None):
+        if self.__cameraFlyby is not None:
+            self.enableMovementByMouse(False, False)
+            self.__cameraFlyby.activate(self.__onFlybyFinished)
+            self.__flybyCallback = callback
+        else:
+            _logger.warning('Could not start camera fly-by, camera manager is not activated')
+        return
+
+    def deactivateCameraFlyby(self):
+        if self.__cameraFlyby is not None:
+            self.__cameraFlyby.deactivate()
+            if self.__flybyCallback is not None:
+                self.__flybyCallback()
+                self.__flybyCallback = None
+        else:
+            _logger.warning('Could not interact camera fly-by, camera manager is not activated')
+        return
+
+    def __onFlybyFinished(self):
+        self.enableMovementByMouse(True, True)
+        if self.__flybyCallback is not None:
+            self.__flybyCallback()
+            self.__flybyCallback = None
+        return
+
     def __startFlight(self, prevMatrix, targetMatrix):
         if self.__flightParams.route:
             self.__flightCam = BigWorld.RouteTransitionCamera()
@@ -338,7 +370,7 @@ class HangarCameraManager(CGF.ComponentManager):
         BigWorld.camera(self.__flightCam)
 
     def __handleLobbyViewMouseEvent(self, event):
-        if self.isCameraSwitching() or self.__cam.isInTransition():
+        if self.__flightCam and self.__flightCam.isInTransition() or self.__cam.isInTransition():
             return
         ctx = event.ctx
         sourceMat = Math.Matrix(self.__cam.source)
@@ -401,18 +433,7 @@ class HangarCameraManager(CGF.ComponentManager):
             distConstraints = orbitComponent.distLimits
             self.__mouseMoveParams = _MouseMoveParams(cameraComponent.rotationSensitivity, cameraComponent.zoomSensitivity, yawConstraints, pitchConstraints, distConstraints)
             self.__yawCameraFilter = HangarCameraYawFilter(yawConstraints[0], orbitComponent.yawLimits.y - orbitComponent.yawLimits.x, cameraComponent.rotationSensitivity)
-            shiftComponent = gameObject.findComponentByType(ShiftComponent)
-            if shiftComponent:
-                shiftPivotDistances = shiftComponent.shiftPivotDistances
-                shiftPivotLows = shiftComponent.shiftPivotLows
-                movementHalfLifeMultiplier = shiftComponent.pivotHalfTimeMultiplier
-            else:
-                shiftPivotDistances = Math.Vector3(0.0, 0.0, 0.0)
-                shiftPivotLows = Math.Vector3(0.0, 0.0, 0.0)
-                movementHalfLifeMultiplier = 2.0
-            self.__cam.movementHalfLifeMultiplier = movementHalfLifeMultiplier
-            self.__cam.pivotPosition = shiftPivotLows + shiftPivotDistances
-            self.__mouseMoveParams.setPivotShifts(shiftPivotLows, shiftPivotDistances)
+            self.__setCameraShift(gameObject.findComponentByType(ShiftComponent))
             if resetTransform:
                 targetPos = parentTransformComponent.worldTransform.translation
                 yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi)
@@ -435,7 +456,7 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cam.turningHalfLife = cameraComponent.fluency
             self.__cam.movementHalfLife = cameraComponent.fluency
             self.__cam.forceUpdate()
-            self.__prevHorizontalFov = FovExtended.instance().getFovAbsoluteValue()
+            self.__prevHorizontalFov = self.__currentHorizontalFov
             fovComponent = gameObject.findComponentByType(FovComponent)
             if fovComponent:
                 self.__customFov = True
@@ -478,6 +499,19 @@ class HangarCameraManager(CGF.ComponentManager):
             self.enableMovementByMouse()
             return
 
+    def __setCameraShift(self, shiftComponent):
+        if shiftComponent:
+            shiftPivotDistances = shiftComponent.shiftPivotDistances
+            shiftPivotLows = shiftComponent.shiftPivotLows
+            movementHalfLifeMultiplier = shiftComponent.pivotHalfTimeMultiplier
+        else:
+            shiftPivotDistances = Math.Vector3(0.0, 0.0, 0.0)
+            shiftPivotLows = Math.Vector3(0.0, 0.0, 0.0)
+            movementHalfLifeMultiplier = 2.0
+        self.__cam.movementHalfLifeMultiplier = movementHalfLifeMultiplier
+        self.__cam.pivotPosition = shiftPivotLows + shiftPivotDistances
+        self.__mouseMoveParams.setPivotShifts(shiftPivotLows, shiftPivotDistances)
+
     def __setupFlightParams(self, gameObject, prevCameraName):
         self.__flightParams = _FlightParams()
         if not prevCameraName:
@@ -487,22 +521,26 @@ class HangarCameraManager(CGF.ComponentManager):
             children = hierarchy.getChildren(gameObject)
             if not children:
                 return
+            flightHolder = None
             cameraFlightComponent = None
             for child in children:
-                flightComponent = child.findComponentByType(CameraFlightComponent)
-                if flightComponent and flightComponent.cameraName and flightComponent.cameraName == prevCameraName:
-                    cameraFlightComponent = flightComponent
+                cameraFlightComponent = child.findComponentByType(CameraFlightComponent)
+                if cameraFlightComponent and cameraFlightComponent.cameraName and cameraFlightComponent.cameraName == prevCameraName:
+                    flightHolder = child
                     break
 
-            if not cameraFlightComponent:
+            if not flightHolder:
                 return
-            transforms = []
-            for point in cameraFlightComponent.points:
-                cameraComponent = point.findComponentByType(CameraComponent)
-                transformComponent = point.findComponentByType(TransformComponent)
-                if cameraComponent and transformComponent:
-                    transforms.append(transformComponent.worldTransform)
+            route = {}
+            points = hierarchy.getChildren(flightHolder)
+            if points:
+                for p in points:
+                    cameraComponent = p.findComponentByType(CameraComponent)
+                    transformComponent = p.findComponentByType(TransformComponent)
+                    if cameraComponent and transformComponent:
+                        route[int(cameraComponent.name)] = transformComponent.worldTransform
 
+            transforms = [ route[key] for key in sorted(route.keys()) ]
             self.__flightParams = _FlightParams(cameraFlightComponent.minDuration, cameraFlightComponent.maxDuration, cameraFlightComponent.positionEasing, cameraFlightComponent.rotationEasing, cameraFlightComponent.motionBlur, transforms)
             return
 
@@ -513,24 +551,30 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__currentHorizontalFov = FovExtended.instance().horizontalFov
 
     def __deactivateCameraComponents(self):
-        self.__cameraIdle.deactivate()
-        self.__cameraParallax.deactivate()
+        if self.__cameraIdle.isActive():
+            self.__cameraIdle.deactivate()
+        if self.__cameraParallax.isActive():
+            self.__cameraParallax.deactivate()
+        if self.__cameraFlyby.isActive:
+            self.__cameraFlyby.deactivate()
 
     def __activateDOF(self):
         self.__customizationHelper.setDOFenabled(self.__currentDOFParams.active)
         self.__customizationHelper.setDOFparams(self.__currentDOFParams.nearStart, self.__currentDOFParams.nearDist, self.__currentDOFParams.farStart, self.__currentDOFParams.farDist)
 
     def __onCameraSwitched(self):
-        self.onCameraSwitched(self.__cameraName)
-        self.__customizationHelper.setMotionBlurAmount(_DEFAULT_MOTION_BLUR_)
-        FovExtended.instance().setFovByAbsoluteValue(self.__currentHorizontalFov)
-        self.__activateDOF()
-        self.__cameraIdle.activate()
-        self.__cameraParallax.activate()
-        if self.__flightCam:
-            self.__flightCam.finish()
-            self.__flightCam = None
-        return
+        if self.__isInSwitching:
+            self.__isInSwitching = False
+            self.onCameraSwitched(self.__cameraName)
+            self.__customizationHelper.setMotionBlurAmount(_DEFAULT_MOTION_BLUR_)
+            self.__activateDOF()
+            self.__cameraIdle.activate()
+            self.__cameraParallax.activate()
+
+    def __onCameraSwitchCancel(self, toCamName):
+        if self.__isInSwitching:
+            self.__isInSwitching = False
+            self.onCameraSwitchCancel(self.__cameraName, toCamName)
 
     @tickGroup(groupName='Simulation')
     def tick(self):
@@ -540,18 +584,21 @@ class HangarCameraManager(CGF.ComponentManager):
                 self.__currentHorizontalFov = dynamicFov
                 FovExtended.instance().setFovByAbsoluteValue(dynamicFov, 0.1)
             return
-        if BigWorld.camera() != self.__cam and not self.isCameraSwitching():
-            BigWorld.camera(self.__cam)
-            self.__onCameraSwitched()
-        elif self.isCameraSwitching():
-            progress = self.__flightCam.positionEasingProgress()
-            if self.__prevHorizontalFov != self.__currentHorizontalFov:
-                newFov = self.__prevHorizontalFov + progress * (self.__currentHorizontalFov - self.__prevHorizontalFov)
-                FovExtended.instance().setFovByAbsoluteValue(newFov)
-            if self.__currentDOFParams.active and (self.__prevDOFParams.active or progress > _DOF_START_PROGRESS_):
-                nearStart = self.__prevDOFParams.nearStart + progress * (self.__currentDOFParams.nearStart - self.__prevDOFParams.nearStart)
-                nearDist = self.__prevDOFParams.nearDist + progress * (self.__currentDOFParams.nearDist - self.__prevDOFParams.nearDist)
-                farStart = self.__prevDOFParams.farStart + progress * (self.__currentDOFParams.farStart - self.__prevDOFParams.farStart)
-                farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
-                self.__customizationHelper.setDOFenabled(True)
-                self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
+        else:
+            if BigWorld.camera() != self.__cam and not self.__flightCam.isInTransition():
+                self.__flightCam = None
+                BigWorld.camera(self.__cam)
+                self.__onCameraSwitched()
+            elif self.__flightCam.isInTransition():
+                progress = self.__flightCam.positionEasingProgress()
+                if self.__prevHorizontalFov != self.__currentHorizontalFov:
+                    newFov = self.__prevHorizontalFov + progress * (self.__currentHorizontalFov - self.__prevHorizontalFov)
+                    FovExtended.instance().setFovByAbsoluteValue(newFov)
+                if self.__currentDOFParams.active and (self.__prevDOFParams.active or progress > _DOF_START_PROGRESS_):
+                    nearStart = self.__prevDOFParams.nearStart + progress * (self.__currentDOFParams.nearStart - self.__prevDOFParams.nearStart)
+                    nearDist = self.__prevDOFParams.nearDist + progress * (self.__currentDOFParams.nearDist - self.__prevDOFParams.nearDist)
+                    farStart = self.__prevDOFParams.farStart + progress * (self.__currentDOFParams.farStart - self.__prevDOFParams.farStart)
+                    farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
+                    self.__customizationHelper.setDOFenabled(True)
+                    self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
+            return

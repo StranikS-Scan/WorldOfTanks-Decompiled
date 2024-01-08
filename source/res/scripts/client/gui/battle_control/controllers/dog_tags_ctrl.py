@@ -30,7 +30,8 @@ class DogTagsController(IBattleController):
         self.onKillerDogTagCheat = Event.Event(self.__eManager)
 
     def setKillerDogTag(self, killerDogTag):
-        if not self.__isEnabled:
+        showKillersDogTag = bool(self.settingsCore.getSetting(GAME.SHOW_KILLERS_DOGTAG))
+        if not self.__isEnabled or not showKillersDogTag:
             return
         _logger.info('DogTagsController.setKillerDogTag: killerDogTag %s', str(killerDogTag))
         killerDogTag = self._extendDogTagInfo([killerDogTag])[0]

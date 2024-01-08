@@ -79,12 +79,14 @@ class _EntitlementsRequest(object):
         if response.isSuccess():
             result = self.__formatResult(response.data)
             self.__sendResult(True, result)
-        else:
+        elif not self.__skipRetry(response):
             retryTime = self.__getNextRetryTime()
             if retryTime:
                 self.__getDelayer().delayCallback(retryTime, self.send)
             else:
                 self.__sendResult(False, {})
+        else:
+            self.__sendResult(False, {})
 
     def __getDelayer(self):
         if self.__delayer is None:
@@ -96,6 +98,9 @@ class _EntitlementsRequest(object):
             callback((isSuccess, result))
 
         self.__onFinished(self.__ctx)
+
+    def __skipRetry(self, response):
+        return 500 <= response.code <= 511
 
     def __getNextRetryTime(self):
         return self.__retryTimes.pop(0) if self.__retryTimes else 0

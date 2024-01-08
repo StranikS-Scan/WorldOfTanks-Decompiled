@@ -54,6 +54,7 @@ class BATTLE_VIEW_ALIASES(object):
     EPIC_MISSIONS_PANEL = 'epicMissionsPanel'
     EPIC_SPECTATOR_VIEW = 'epicSpectatorView'
     EPIC_REINFORCEMENT_PANEL = 'epicReinforcementPanel'
+    EPIC_MODIFICATION_PANEL = 'epicModificationPanel'
     RECOVERY_PANEL = 'recoveryPanel'
     EPIC_INGAME_RANK = 'epicInGameRank'
     SUPER_PLATOON_PANEL = 'superPlatoonPanel'

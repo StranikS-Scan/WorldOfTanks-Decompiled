@@ -179,18 +179,6 @@ class RandomQueueProvider(QueueProvider):
         self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': playerCount}))
 
 
-class _EpicQueueProvider(RandomQueueProvider):
-
-    def forceStart(self):
-        currPlayer = BigWorld.player()
-        if currPlayer is not None and hasattr(currPlayer, 'forceEpicDevStart'):
-            currPlayer.forceEpicDevStart()
-        return
-
-    def getTankInfoLabel(self):
-        return makeString(MENU.PREBATTLE_STARTINGTANKLABEL)
-
-
 class _EventQueueProvider(RandomQueueProvider):
     pass
 
@@ -288,7 +276,6 @@ class _WinbackQueueProvider(RandomQueueProvider):
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANDOMS, RandomQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.EVENT_BATTLES, _EventQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANKED, _RankedQueueProvider)
-registerBattleQueueProvider(constants.QUEUE_TYPE.EPIC, _EpicQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.BATTLE_ROYALE, _BattleRoyaleQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.MAPBOX, _MapboxQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.COMP7, _Comp7QueueProvider)

@@ -44,17 +44,12 @@
       <Arg>	STRING	</Arg>
       <Exposed></Exposed>
     </accountPrebattle_createDevPrebattle>
-    <accountPrebattle_createEpicTrainingPrebattle>
+    <accountPrebattle_createExtTrainingPrebattle>
       <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
       <Arg>	BOOL	</Arg>
-      <Arg>	STRING	</Arg>
-      <Exposed></Exposed>
-    </accountPrebattle_createEpicTrainingPrebattle>
-    <accountPrebattle_createEpicDevPrebattle>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Exposed></Exposed>
-    </accountPrebattle_createEpicDevPrebattle>
+      <Arg>	PYTHON	</Arg>
+    </accountPrebattle_createExtTrainingPrebattle>
     <accountPrebattle_sendPrebattleInvites>
       <Arg>	ARRAY	  <of>	INT64	</of>
       </Arg>

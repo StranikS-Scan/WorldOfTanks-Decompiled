@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/season_statistics.py
-import typing
 import BigWorld
+import typing
 import SoundGroups
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from comp7_common import seasonPointsCodeBySeasonNumber
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
-from frameworks.wulf.view.array import fillViewModelsArray, fillStringsArray
+from frameworks.wulf.view.array import fillViewModelsArray
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.season_statistics_model import SeasonStatisticsModel, SeasonPointState, SummaryStatisticsModel, VehicleStatisticsModel, SeasonName
 from gui.impl.gen.view_models.views.lobby.comp7.constants import Constants
+from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointState
+from gui.impl.gen.view_models.views.lobby.comp7.season_statistics_model import SeasonStatisticsModel, SummaryStatisticsModel, VehicleStatisticsModel, SeasonName
 from gui.impl.gen.view_models.views.lobby.comp7.summary_statistics_model import SummaryStatisticsType
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.comp7 import comp7_shared
+from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from helpers import dependency
@@ -58,6 +60,14 @@ class SeasonStatistics(ViewImpl):
     def _finalize(self):
         self.__removeListeners()
 
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.comp7.tooltips.SeasonPointTooltip():
+            params = {'state': SeasonPointState(event.getArgument('state')),
+             'ignoreState': event.getArgument('ignoreState')}
+            return SeasonPointTooltip(params=params)
+        else:
+            return None
+
     def __addListeners(self):
         self.viewModel.onClose += self.__onClose
 
@@ -79,12 +89,13 @@ class SeasonStatistics(ViewImpl):
 
     def __updatePersonalData(self, model):
         model.setUserName(BigWorld.player().name)
-        model.setScore(self.__comp7Controller.rating)
+        rating = self.__comp7Controller.getRatingForSeason(self.__seasonNumber)
+        model.setScore(rating)
         clanProfile = self.__webCtrl.getAccountProfile()
         if clanProfile.isInClan():
             model.setClanTag(clanProfile.getClanAbbrev())
             model.setClanTagColor('#FFFFFF')
-        division = comp7_shared.getPlayerDivision()
+        division = comp7_shared.getPlayerDivisionByRating(rating, self.__seasonNumber)
         model.setDivision(comp7_shared.getDivisionEnumValue(division))
         model.setRank(comp7_shared.getRankEnumValue(division))
         model.setSeason(list(SeasonName)[self.__seasonNumber - 1])
@@ -93,10 +104,8 @@ class SeasonStatistics(ViewImpl):
         seasonPointsCode = seasonPointsCodeBySeasonNumber(self.__seasonNumber)
         receivedSeasonPoints = self.__comp7Controller.getReceivedSeasonPoints().get(seasonPointsCode, 0)
         maxSeasonPoints = self.__comp7Controller.getMaxAvailableSeasonPoints()
-        result = [SeasonPointState.ACHIEVED.value] * receivedSeasonPoints
-        if len(result) < maxSeasonPoints:
-            result += [SeasonPointState.NOTACHIEVED.value] * (maxSeasonPoints - receivedSeasonPoints)
-        fillStringsArray(result, model.getSeasonPoints())
+        model.setAchievedSeasonPoints(receivedSeasonPoints)
+        model.setSeasonPointsLimit(maxSeasonPoints)
 
     def __updateSummaryStatistics(self, model):
         accDossier = self.__itemsCache.items.getAccountDossier()

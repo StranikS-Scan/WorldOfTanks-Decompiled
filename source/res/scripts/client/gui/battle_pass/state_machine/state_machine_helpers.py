@@ -3,7 +3,7 @@
 import logging
 import typing
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassConsts, BattlePassRewardReason, BattlePassState, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName
-from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter, makeChapterMediaName
 from gui.impl.gen import R
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
 from gui.server_events.events_dispatcher import showMissionsBattlePass
@@ -68,7 +68,7 @@ def packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=None):
         newLevel = data['newLevel']
         chapter = data['chapter']
         prevLevel = data['prevLevel']
-        data.update({'needVideo': needToShowLevelUpVideo(chapter, newLevel, battlePass=battlePass)})
+        data.update({'needVideo': needToShowVideo(chapter, newLevel, battlePass=battlePass)})
         isFinalLevel = battlePass.isFinalLevel(chapter, newLevel)
         isRareLevel = False
         if newLevel is not None:
@@ -107,8 +107,8 @@ def packToken(tokenID):
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def needToShowLevelUpVideo(chapterID, level, battlePass=None):
-    return battlePass.isFinalLevel(chapterID, level) and battlePass.isExtraChapter(chapterID)
+def needToShowVideo(chapterID, level, battlePass=None):
+    return R.videos.battle_pass.dyn(makeChapterMediaName(chapterID)).exists()
 
 
 @dependency.replace_none_kwargs(offers=IOffersDataProvider)

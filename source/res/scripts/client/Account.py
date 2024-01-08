@@ -6,8 +6,8 @@ import logging
 import weakref
 import zlib
 from collections import namedtuple
-import AccountCommands
 import BigWorld
+import AccountCommands
 import ClientPrebattle
 import Event
 from ChatManager import chatManager
@@ -18,47 +18,46 @@ from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
-from account_helpers.advent_calendar_v2 import AdventCalendarManager
-from account_helpers.dog_tags import DogTags
-from account_helpers.maps_training import MapsTraining
-from account_helpers.offers.sync_data import OffersSyncData
 from account_helpers import ClientInvitations, vehicle_rotation
-from account_helpers import client_ranked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
+from account_helpers import client_ranked, ClientBadges
 from account_helpers.AccountSettings import CURRENT_VEHICLE
+from account_helpers.achievements20 import Achievements20
 from account_helpers.battle_pass import BattlePassManager
+from account_helpers.dog_tags import DogTags
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.game_restrictions import GameRestrictions
-from account_helpers.resource_well import ResourceWell
-from account_helpers.achievements20 import Achievements20
-from account_helpers.telecom_rentals import TelecomRentals
-from account_helpers.settings_core import IntUserSettings
-from account_helpers.session_statistics import SessionStatistics
-from account_helpers.spa_flags import SPAFlags
 from account_helpers.gift_system import GiftSystem
+from account_helpers.maps_training import MapsTraining
+from account_helpers.offers.sync_data import OffersSyncData
+from account_helpers.resource_well import ResourceWell
+from account_helpers.session_statistics import SessionStatistics
+from account_helpers.settings_core import IntUserSettings
+from account_helpers.spa_flags import SPAFlags
+from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
 from account_shared import NotificationItem, readClientServerVersion
-from gui.prb_control import prbEntityProperty
-from items import tankmen
 from adisp import adisp_process
 from bootcamp.Bootcamp import g_bootcamp
-from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE, IS_DEVELOPMENT
+from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.clans.clan_cache import g_clanCache
+from gui.prb_control import prbEntityProperty
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
+from items import tankmen
 from messenger import MessengerEntry
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
-from shared_utils.account_helpers.diff_utils import synchronizeDicts
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -187,7 +186,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell = g_accountRepository.resourceWell
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
-        self.adventCalendarV2 = g_accountRepository.adventCalendarV2
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -761,14 +759,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANKED)
 
-    def enqueueEpic(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EPIC, vehInvID, 0, 0)
-
-    def dequeueEpic(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_EPIC, 0, 0, 0)
-
     def enqueueBattleRoyale(self, vehInvID):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BATTLE_ROYALE, vehInvID, 0, 0)
@@ -792,10 +782,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueComp7(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.COMP7)
-
-    def forceEpicDevStart(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_EPIC_DEV_START, 0, 0, 0)
 
     def enqueueMapsTraininig(self, mapGeometryID, vehCompDescr, team):
         if not events.isPlayerEntityChanging:
@@ -832,16 +818,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if events.isPlayerEntityChanging:
             return
         self.base.accountPrebattle_createDevPrebattle(bonusType, arenaGuiType, arenaTypeID, roundLength, comment)
-
-    def prb_createEpicTrainingBattle(self, arenaTypeID, roundLength, isOpened, comment, bonusType=ARENA_BONUS_TYPE.EPIC_BATTLE):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.accountPrebattle_createEpicTrainingPrebattle(arenaTypeID, isOpened, comment)
-
-    def prb_createDevEpicBattle(self, arenaTypeID, roundLength, isOpened, comment, bonusType=ARENA_BONUS_TYPE.EPIC_BATTLE):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.accountPrebattle_createEpicDevPrebattle(arenaTypeID, comment)
 
     def prb_sendInvites(self, accountsToInvite, comment):
         if events.isPlayerEntityChanging:
@@ -1132,14 +1108,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_BLUEPRINTS_CONVERT_SALE, offerID, count, proxy)
         return
 
-    def showFrontlineSysMessage(self, msgID):
-        self._doCmdInt(AccountCommands.CMD_SHOW_FRONTLINE_SYS_MSG, msgID, None)
-        return
-
-    def unlockFrontlineReserves(self):
-        self._doCmdInt(AccountCommands.CMD_FRONTLINE_UNLOCK_RESERVES, 0, None)
-        return
-
     def addEquipment(self, deviceID, count=1):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
         return
@@ -1148,16 +1116,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         bookItem = tankmen.g_cache.crewBooks().books[int(book)]
         self._doCmdIntArr(AccountCommands.CMD_ADD_CREW_BOOK, [bookItem.compactDescr, count], None)
         return
-
-    @staticmethod
-    def resetScreenShown(screenName):
-        if IS_DEVELOPMENT:
-            from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-            settingsCore = dependency.instance(ISettingsCore)
-            defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-            settings = settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-            settings[screenName] = False
-            settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, settings)
 
     def removeEquipment(self, deviceID, count=-1):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
@@ -1485,7 +1443,6 @@ class _AccountRepository(object):
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
-        self.adventCalendarV2 = AdventCalendarManager(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

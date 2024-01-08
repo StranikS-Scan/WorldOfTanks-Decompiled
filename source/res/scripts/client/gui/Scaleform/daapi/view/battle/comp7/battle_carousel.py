@@ -92,7 +92,7 @@ def getComp7CarouselVehicleDataVO(vehicle):
      'vehicleTypeIconSmall': _TYPE_ICON_SMALL_TEMPLATE % vehicle.type,
      'favorite': vehicle.isFavorite,
      'enabled': True,
-     'roleName': vehicle.roleLabel if vehicle.roleLabel != 'role_SPG' else ''}
+     'roleName': '' if vehicle.roleLabel in ('NotDefined', 'role_SPG') else vehicle.roleLabel}
 
 
 class _PrebattleCarouselDataProvider(CarouselDataProvider):

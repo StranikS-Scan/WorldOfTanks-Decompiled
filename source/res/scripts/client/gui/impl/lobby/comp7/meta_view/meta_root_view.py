@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/meta_root_view.py
 import logging
 import typing
-from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -13,9 +13,11 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.tab_model import MetaRootViews, TabModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7 import comp7_model_helpers
+from gui.impl.lobby.comp7.comp7_lobby_sounds import getComp7MetaSoundSpace, playComp7MetaViewTabSound
 from gui.impl.lobby.comp7.meta_view.pages.leaderboard_page import LeaderboardPage
 from gui.impl.lobby.comp7.meta_view.pages.progression_page import ProgressionPage
 from gui.impl.lobby.comp7.meta_view.pages.rank_rewards_page import RankRewardsPage
+from gui.impl.lobby.comp7.meta_view.pages.shop_page import ShopPage
 from gui.impl.lobby.comp7.meta_view.pages.weekly_quests_page import WeeklyQuestsPage
 from gui.impl.lobby.comp7.meta_view.pages.yearly_rewards_page import YearlyRewardsPage
 from gui.impl.lobby.comp7.meta_view.pages.yearly_statistics_page import YearlyStatisticsPage
@@ -23,10 +25,10 @@ from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
+from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showComp7WhatsNewScreen
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
-from gui.impl.lobby.comp7.comp7_lobby_sounds import getComp7MetaSoundSpace, playComp7MetaViewTabSound
+from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 _logger = logging.getLogger(__name__)
@@ -34,6 +36,7 @@ _logger = logging.getLogger(__name__)
 class MetaRootView(ViewImpl, IGlobalListener):
     __slots__ = ('__pages', '__tabId')
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __guiLoader = dependency.descriptor(IGuiLoader)
     _COMMON_SOUND_SPACE = getComp7MetaSoundSpace()
 
     def __init__(self, layoutID, *args, **kwargs):
@@ -88,7 +91,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
         page = self.__pages[tabId]
         page.initialize(*args, **kwargs)
         self.viewModel.setPageViewId(page.pageId)
-        playComp7MetaViewTabSound(tabId)
+        playComp7MetaViewTabSound(tabId, self.__tabId)
         self.__tabId = tabId
 
     def _finalize(self):
@@ -104,10 +107,15 @@ class MetaRootView(ViewImpl, IGlobalListener):
                 _logger.error('Wrong tabId: %s', tabId)
         self.__initPages()
         self.__updateTabs()
-        self.switchPage(self.__tabId, *args, **kwargs)
+        page = self.__pages[self.__tabId]
+        page.initialize(*args, **kwargs)
+        self.viewModel.setPageViewId(page.pageId)
         comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
         self.__addListeners()
         return
+
+    def _onLoaded(self, *args, **kwargs):
+        playComp7MetaViewTabSound(self.__tabId)
 
     @property
     def __currentPage(self):
@@ -116,22 +124,30 @@ class MetaRootView(ViewImpl, IGlobalListener):
     def __addListeners(self):
         self.viewModel.onClose += self.__onClose
         self.viewModel.onInfoPageOpen += self.__onInfoPageOpen
+        self.viewModel.onWhatsNewScreenOpen += self.__onWhatsNewScreenOpen
         self.viewModel.sidebar.onSideBarTabChange += self.__onSideBarTabChanged
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onScheduleUpdated
         self.__comp7Controller.onComp7ConfigChanged += self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated += self.__onOfflineStatusUpdated
+        if self.__guiLoader.windowsManager is not None:
+            self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
         self.startGlobalListening()
+        return
 
     def __removeListeners(self):
         self.viewModel.onClose -= self.__onClose
         self.viewModel.onInfoPageOpen -= self.__onInfoPageOpen
+        self.viewModel.onWhatsNewScreenOpen -= self.__onWhatsNewScreenOpen
         self.viewModel.sidebar.onSideBarTabChange -= self.__onSideBarTabChanged
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onScheduleUpdated
         self.__comp7Controller.onComp7ConfigChanged -= self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated -= self.__onOfflineStatusUpdated
+        if self.__guiLoader.windowsManager is not None:
+            self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
         self.stopGlobalListening()
+        return
 
     def __onScheduleUpdated(self):
         comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
@@ -152,6 +168,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
          YearlyRewardsPage(self.viewModel.yearlyRewardsModel, self),
          WeeklyQuestsPage(self.viewModel.weeklyQuestsModel, self),
          LeaderboardPage(self.viewModel.leaderboardModel, self),
+         ShopPage(self.viewModel.shopModel, self),
          YearlyStatisticsPage(self.viewModel.yearlyStatisticsModel, self))
         self.__pages = {p.pageId:p for p in pages}
 
@@ -174,6 +191,15 @@ class MetaRootView(ViewImpl, IGlobalListener):
     def __onClose(self):
         showHangar()
 
+    def __onViewStatusChanged(self, viewID, status):
+        view = self.__guiLoader.windowsManager.getView(viewID)
+        if view and view.layoutID == R.views.lobby.comp7.dialogs.PurchaseDialog():
+            if status == ViewStatus.LOADING:
+                if self.__currentPage.isLoaded:
+                    self.__currentPage.finalize()
+            elif status == ViewStatus.DESTROYING:
+                self.__currentPage.initialize()
+
     @args2params(int)
     def __onSideBarTabChanged(self, tabId):
         if tabId == self.__tabId:
@@ -187,3 +213,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
     def __onInfoPageOpen():
         url = GUI_SETTINGS.lookup(getInfoPageKey(SELECTOR_BATTLE_TYPES.COMP7))
         showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+    @staticmethod
+    def __onWhatsNewScreenOpen():
+        showComp7WhatsNewScreen()

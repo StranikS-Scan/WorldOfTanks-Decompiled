@@ -59,9 +59,10 @@ class RankedYearPositionProvider(object):
         self.__callbackID = None
         if self.__fakePosition is None or not constants.IS_DEVELOPMENT:
             if self.__webController.isAvailable():
-                result = yield self.__webController.sendRequest(RankedYearPositionCtx())
+                ctx = RankedYearPositionCtx()
+                result = yield self.__webController.sendRequest(ctx)
                 if result.isSuccess():
-                    results = RankedYearPositionCtx.getDataObj(result.data).get('results')
+                    results = ctx.getDataObj(result.data).get('results')
                     if results is not None and isinstance(results, dict):
                         self.__yearPosition = results.get('position')
                 else:

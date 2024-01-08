@@ -54,6 +54,9 @@ class StyledMode(CustomizationMode):
     def changeTab(self, tabId, itemCD=None):
         if tabId != CustomizationTabs.STYLES:
             _logger.warning('There is no tabs in styled customization mode')
+        elif itemCD is not None:
+            self._events.onTabChanged(tabId, itemCD)
+        return
 
     def isAutoRentEnabled(self):
         return self.__autoRentEnabled

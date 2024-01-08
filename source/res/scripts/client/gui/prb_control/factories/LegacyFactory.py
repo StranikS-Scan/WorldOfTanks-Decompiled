@@ -8,7 +8,6 @@ from gui.prb_control import prb_getters
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.legacy.ctx import LeaveLegacyCtx
 from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntryPoint, LegacyInitEntity, LegacyIntroEntity
-from gui.prb_control.entities.epic_battle_training.entity import EpicBattleTrainingEntryPoint, EpicBattleTrainingIntroEntryPoint, EpicBattleTrainingEntity, EpicBattleTrainingIntroEntity
 from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionEntryPoint, BattleSessionListEntryPoint, BattleSessionEntity
 from gui.prb_control.entities.training.legacy.entity import TrainingEntryPoint, TrainingIntroEntryPoint, TrainingEntity, TrainingIntroEntity
 from gui.prb_control.items import PlayerDecorator, FunctionalState
@@ -17,16 +16,16 @@ __all__ = ('LegacyFactory',)
 registerLegacyEntryPointByType(PREBATTLE_TYPE.TRAINING, TrainingEntryPoint)
 registerLegacyEntryPointByType(PREBATTLE_TYPE.TOURNAMENT, BattleSessionEntryPoint)
 registerLegacyEntryPointByType(PREBATTLE_TYPE.CLAN, BattleSessionEntryPoint)
-registerLegacyEntryPointByType(PREBATTLE_TYPE.EPIC_TRAINING, EpicBattleTrainingEntryPoint)
 registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.TRAININGS_LIST, TrainingIntroEntryPoint)
 registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, BattleSessionListEntryPoint)
-registerLegacyEntryPoint(PREBATTLE_ACTION_NAME.EPIC_TRAINING_LIST, EpicBattleTrainingIntroEntryPoint)
 registerLegacyEntity(PREBATTLE_TYPE.TRAINING, TrainingEntity)
 registerLegacyEntity(PREBATTLE_TYPE.TOURNAMENT, BattleSessionEntity)
 registerLegacyEntity(PREBATTLE_TYPE.CLAN, BattleSessionEntity)
-registerLegacyEntity(PREBATTLE_TYPE.EPIC_TRAINING, EpicBattleTrainingEntity)
-_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity,
- PREBATTLE_TYPE.EPIC_TRAINING: EpicBattleTrainingIntroEntity}
+_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity}
+
+def extendSupportedIntroByType(items):
+    _SUPPORTED_INTRO_BY_TYPE.update(items)
+
 
 class LegacyFactory(ControlFactory):
 

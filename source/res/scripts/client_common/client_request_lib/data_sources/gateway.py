@@ -637,30 +637,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         post_data.update(meta_info)
         return self._request_data(callback, url, method='POST', post_data=post_data)
 
-    def get_friend_balance(self, callback, spa_id):
-        url = '/friend_service/api/v1/friend_balance/'
-        params = {'friend_spa_id': int(spa_id)}
-        return self._request_data(callback, url, params, method='GET')
-
-    def get_friend_list(self, callback):
-        url = '/friend_service/api/v1/friends/list/'
-        return self._request_data(callback, url, method='GET')
-
-    def put_best_friend(self, callback, spa_id):
-        url = '/friend_service/api/v1/best_friends/set/'
-        data = {'friend_spa_id': int(spa_id)}
-        return self._request_data(callback, url, post_data=data, method='PUT')
-
-    def delete_best_friend(self, callback, spa_id):
-        url = '/friend_service/api/v1/best_friends/delete/'
-        data = {'friend_spa_id': int(spa_id)}
-        return self._request_data(callback, url, post_data=data, method='DELETE')
-
-    def post_gather_friend_ny_resources(self, callback, spa_id):
-        url = '/friend_service/api/v1/best_friends/gather/'
-        data = {'friend_spa_id': int(spa_id)}
-        return self._request_data(callback, url, post_data=data, method='POST')
-
     def get_uilogging_session(self, callback):
         return self._request_data(callback, '/uilogging/session', method='GET')
 
@@ -674,6 +650,19 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_inventory_entitlements_v5(self, callback, entitlementsFilter):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'
         return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
+
+    def get_storefront_products(self, callback, ctx):
+        url = '/shop/api/external/v2/{storefront}/products_with_categories/'.format(storefront=ctx.getStorefront())
+        return self._request_data(callback, url, method='GET')
+
+    def buy_storefront_product(self, callback, ctx):
+        url = '/shop/api/external/v2/{storefront}/products/{product_code}/buy/'.format(storefront=ctx.getStorefront(), product_code=ctx.getProductCode())
+        price = ctx.getExpectedPrice()
+        postData = {'amount': 1,
+         'prices': [{'amount': price.value,
+                     'code': price.currency,
+                     'item_type': 'currency'}]}
+        return self._request_data(callback, url, method='POST', post_data=postData)
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

@@ -4,6 +4,7 @@ from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7BonusModel
+from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointModel
 
 class RewardsState(Enum):
     GUARANTEED = 'guaranteed'
@@ -42,7 +43,7 @@ class YearlyRewardsCardModel(ViewModel):
 
     @staticmethod
     def getSeasonPointsType():
-        return SeasonPointState
+        return SeasonPointModel
 
     def getRewardsState(self):
         return RewardsState(self._getString(2))

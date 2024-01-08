@@ -23,6 +23,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
 from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
+from skeletons.gui.battle_results import IBattleResultsService
 
 class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     _MAX_VISIBLE_AWARDS = 6
@@ -38,6 +39,7 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battlePass = dependency.descriptor(IBattlePassController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __battleResultsService = dependency.descriptor(IBattleResultsService)
 
     def __init__(self, ctx=None):
         super(EpicBattlesAfterBattleView, self).__init__()
@@ -61,6 +63,9 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
     def onNextBtnClick(self):
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.NEXT.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
+        arenaUniqueID = self.__ctx['levelUpInfo'].get('arenaUniqueID')
+        if arenaUniqueID and self.__battleResultsService.areResultsPosted(arenaUniqueID):
+            self.__battleResultsService.notifyBattleResultsPosted(arenaUniqueID, True)
         self.destroy()
 
     def onEscapePress(self):

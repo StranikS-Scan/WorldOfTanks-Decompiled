@@ -2992,6 +2992,10 @@
       <tags>	cannotDetach	</tags>
       <level>	1	</level>
       <price>	450	</price>
+      <unlocks>
+        <turret>	M2D27812	  <cost>	105	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	15.9	</armor_1>
         <armor_3>	15.9	</armor_3>
@@ -3111,12 +3115,6 @@
             <afterShot>	1.4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <vehicle>	A03_M3_Stuart	  <cost>	1350	</cost>
-            </vehicle>
-            <turret>	M2D27812	  <cost>	105	</cost>
-            </turret>
-          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.375 10 0.39097 10 0.396997 6 0.401965 6 0.420179 6 0.430045 10 0.568065 10 0.576359 6 0.594449 6 0.599825 6 0.607778 10 1 10	</maxPitch>
@@ -3773,6 +3771,10 @@
           </camouflage>
         </_20mm_Hispano_Suiza_Birgikt_gun>
         <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
+          <unlocks>
+            <vehicle>	A03_M3_Stuart	  <cost>	1350	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.389791 10 0.398288 10 0.401671 9 0.416667 9 0.430556 10 0.433871 10 0.574639 10 0.583333 9 0.596775 9 0.606409 10 1 10	</maxPitch>

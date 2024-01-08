@@ -6,6 +6,7 @@ import BigWorld
 from account_helpers.AccountSettings import CLAN_PREBATTLE_SORTING_KEY
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.prb_control.entities.battle_session.legacy.ctx import BattleSessionSetPlayerStateCtx
 from shared_utils import safeCancelCallback
 import constants
 import nations
@@ -18,7 +19,7 @@ from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionW
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import formatters, prb_getters
-from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, KickPlayerCtx, SetPlayerStateCtx
+from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, KickPlayerCtx
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PROPERTY_NAME, PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -198,7 +199,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             waitingID = 'prebattle/player_ready'
         else:
             waitingID = 'prebattle/player_not_ready'
-        ctx = SetPlayerStateCtx(value, waitingID=waitingID)
+        ctx = BattleSessionSetPlayerStateCtx(value, waitingID=waitingID)
         result = yield self.prbDispatcher.sendPrbRequest(ctx)
         if result:
             self.as_toggleReadyBtnS(not value)

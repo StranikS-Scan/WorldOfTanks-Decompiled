@@ -1332,6 +1332,8 @@ class PostMortemControlMode(IControlMode):
                 playerPostmortemViewPointDefined = playerVehicle.isPostmortemViewPointDefined
         camTransitionParams = {'cameraTransitionDuration': args.get('transitionDuration', -1),
          'camMatrix': args.get('camMatrix', None)}
+        if self.__isObserverMode and player.vehicle is None and not player.isObserverFPV:
+            player.consistentMatrices.notifyPreBind(player)
         self.__cam.enable(None, False, args.get('postmortemParams'), None, None, camTransitionParams)
         newVehicle = args.get('newVehicleID', None)
         self.__cam.vehicleMProv = player.consistentMatrices.attachedVehicleMatrix if newVehicle is None else BigWorld.entities.get(newVehicle).matrix

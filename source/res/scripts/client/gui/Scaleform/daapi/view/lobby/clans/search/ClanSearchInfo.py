@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.meta.ClanSearchInfoMeta import ClanSearchInfoMeta
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener
-from gui.clans.items import formatField
+from gui.clans.data_wrapper.utils import formatField
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS, MAX_CLAN_MEMBERS_COUNT
 from gui.impl import backport
 from gui.shared import event_dispatcher as shared_events

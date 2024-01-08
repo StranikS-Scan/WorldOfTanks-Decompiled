@@ -34,6 +34,7 @@
     <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
     <CKD_AXL_CN>	34	</CKD_AXL_CN>
     <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
+    <CKD_AXK_56G>	39	</CKD_AXK_56G>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -475,6 +476,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </CKD_AXK2>
+    <CKD_AXK_56G>
+      <userString>	#czech_vehicles:CKD_AXK_56G	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </CKD_AXK_56G>
     <Skoda_16_AH_145>
       <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
       <tags>	diesel	</tags>

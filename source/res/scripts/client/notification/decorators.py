@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/notification/decorators.py
 import typing
 import BigWorld
-from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
+from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -11,23 +11,21 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.locale.INVITES import INVITES
-from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
+from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
-from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType, HangarSpacesSwitcherEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
+from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
-from helpers import dependency
-from helpers import time_utils
+from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
 from messenger import g_settings
@@ -35,15 +33,13 @@ from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from notification.settings import makePathToIcon
+from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -65,17 +61,16 @@ class _NotificationDecorator(object):
         self._isOrderChanged = False
         self._entityID = entityID
         self._entity = entity
-        self._settings = settings
         self._make(entity, settings)
 
     def __repr__(self):
         return '{0:>s}(typeID = {1:n}, entityID = {2:n})'.format(self.__class__.__name__, self.getType(), self.getID())
 
     def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder()) if isinstance(other, _NotificationDecorator) else -1
+        return cmp(self.getOrder(), other.getOrder())
 
     def __eq__(self, other):
-        return isinstance(other, _NotificationDecorator) and self.getType() == other.getType() and self.getID() == other.getID()
+        return self.getType() == other.getType() and self.getID() == other.getID()
 
     def clear(self):
         self._entityID = 0
@@ -122,18 +117,6 @@ class _NotificationDecorator(object):
         result = False
         if self._settings:
             result = self._settings.isNotify
-        return result
-
-    def onlyNCList(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyNCList
-        return result
-
-    def onlyPopUp(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyPopUp
         return result
 
     def showAt(self):
@@ -236,7 +219,7 @@ class MessageDecorator(_NotificationDecorator):
                 self._settings.showAt = _makeShowTime()
         message = formatted.copy() if formatted else {}
         for key in _ICONS_FIELDS:
-            if key in message:
+            if key in formatted:
                 message[key] = makePathToIcon(message[key])
             message[key] = ''
 
@@ -288,7 +271,6 @@ class LockButtonMessageDecorator(MessageDecorator):
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(LockButtonMessageDecorator, self).__init__(entityID, entity, settings, model)
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued += self._onEqueued
         g_playerEvents.onDequeued += self._onDequeued
         g_viewOverrider.onViewOverriden += self._onViewOverriden
@@ -296,7 +278,6 @@ class LockButtonMessageDecorator(MessageDecorator):
     def clear(self):
         super(LockButtonMessageDecorator, self).clear()
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued -= self._onEqueued
         g_playerEvents.onDequeued -= self._onDequeued
         g_viewOverrider.onViewOverriden -= self._onViewOverriden
@@ -364,7 +345,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
         self._updateButtonsState(lock=self._getIsLocked())
 
     def _getLockAliases(self):
-        return (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, R.views.lobby.new_year.MainView()) + super(C11nMessageDecorator, self)._getLockAliases()
+        return (VIEW_ALIAS.HERO_VEHICLE_PREVIEW,) + super(C11nMessageDecorator, self)._getLockAliases()
 
     def _getIsLocked(self):
         isLocked = True
@@ -947,191 +928,6 @@ class MissingEventsDecorator(_NotificationDecorator):
          'auxData': []}
 
 
-class NyMessageButtonDecorator(MessageDecorator, IGlobalListener):
-    _nyController = dependency.descriptor(INewYearController)
-
-    def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(NyMessageButtonDecorator, self).__init__(entityID, entity, settings, model)
-        self.startGlobalListening()
-        self._nyController.onStateChanged += self.__doUpdateButtons
-
-    def clear(self):
-        self.stopGlobalListening()
-        self._nyController.onStateChanged -= self.__doUpdateButtons
-        super(NyMessageButtonDecorator, self).clear()
-
-    def onEnqueued(self, queueType, *args):
-        self.__doUpdateButtons()
-
-    def onDequeued(self, queueType, *args):
-        self.__doUpdateButtons()
-
-    def onUnitFlagsChanged(self, flags, timeLeft):
-        self.__doUpdateButtons()
-
-    def _make(self, formatted=None, settings=None):
-        self._updateEntityButtons()
-        super(NyMessageButtonDecorator, self)._make(formatted, settings)
-
-    def _updateEntityButtons(self):
-        if self._entity is None:
-            return
-        else:
-            buttonsLayout = self._entity.get('buttonsLayout')
-            if not buttonsLayout:
-                return
-            buttonsStates = self._entity.get('buttonsStates')
-            state, tooltip = self._getButtonState()
-            buttonsStates['submit'] = state
-            buttonsLayout[0]['tooltip'] = tooltip
-            return
-
-    def _getButtonState(self):
-        state, tooltip = NOTIFICATION_BUTTON_STATE.DEFAULT, ''
-        bodyId = None
-        if self.prbEntity is not None and self.prbEntity.isInQueue():
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            bodyId = R.strings.system_messages.queue.isInQueue()
-        elif not self._isButtonEnabled():
-            state = NOTIFICATION_BUTTON_STATE.VISIBLE
-            if self._nyController.isSuspended():
-                bodyId = R.strings.ny.notification.suspend()
-            elif self._nyController.isFinished():
-                bodyId = R.strings.ny.notification.finish()
-        if bodyId:
-            tooltip = makeTooltip(body=backport.text(bodyId))
-        return (state, tooltip)
-
-    def _updateButtons(self):
-        if self._model is not None:
-            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
-        return
-
-    def _isButtonEnabled(self):
-        return self._nyController.isEnabled()
-
-    def __doUpdateButtons(self):
-        self._updateEntityButtons()
-        self._updateButtons()
-
-
-class NYDogReminderDecorator(NyMessageButtonDecorator):
-
-    def __init__(self, entityID, model=None):
-        super(NYDogReminderDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_DOG_REMINDER
-
-    def __makeEntity(self):
-        return g_settings.msgTemplates.format('NyDogReminderMessage')
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
-
-
-class NYResourceReminderDecorator(NyMessageButtonDecorator):
-
-    def __init__(self, entityID, model=None, data=None):
-        super(NYResourceReminderDecorator, self).__init__(entityID, self.__makeEntity(data), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_RESOURCE_REMINDER
-
-    def __makeEntity(self, data):
-        return g_settings.msgTemplates.format('NyResourcesReminder', data=data)
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
-
-
-class NYFriendResourceReminderDecorator(NyMessageButtonDecorator):
-
-    def __init__(self, entityID, model=None, data=None):
-        super(NYFriendResourceReminderDecorator, self).__init__(entityID, self.__makeEntity(data), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_FRIEND_RESOURCE_REMINDER
-
-    def __makeEntity(self, data):
-        return g_settings.msgTemplates.format('NyResourcesReminder', data=data)
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
-
-
-class NYNoFriendsReminderDecorator(NyMessageButtonDecorator):
-
-    def __init__(self, entityID, model=None, data=None):
-        super(NYNoFriendsReminderDecorator, self).__init__(entityID, self.__makeEntity(data), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_NO_FRIENDS_REMINDER
-
-    def __makeEntity(self, data):
-        return g_settings.msgTemplates.format('NyResourcesReminder', data=data)
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
-
-
-class NYFriendResourceCollectingAvailableDecorator(NyMessageButtonDecorator):
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_FRIEND_RESOURCE_COLLECTING_AVAILABLE
-
-
-class NYMarketplaceAvailableDecorator(NyMessageButtonDecorator):
-
-    def __init__(self, entityID, model=None):
-        super(NYMarketplaceAvailableDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.INFO
-
-    def getType(self):
-        return NOTIFICATION_TYPE.NY_MARKETPLACE_AVAILABLE
-
-    def __makeEntity(self):
-        return g_settings.msgTemplates.format('newYearMarketplaceAvailable')
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-
-
-class AdventCalendarDoorsAvailableDecorator(MessageDecorator):
-
-    def __init__(self, entityID, model=None, data=None):
-        super(AdventCalendarDoorsAvailableDecorator, self).__init__(entityID, self.__makeEntity(data), self.__makeSettings(), model)
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.ADVENT_CALENDAR_DOORS_AVAILABLE
-
-    def onlyNCList(self):
-        return True
-
-    def __makeEntity(self, data):
-        return g_settings.msgTemplates.format(data.pop('template'), data=data)
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-
-
 class BattlePassSwitchChapterReminderDecorator(MessageDecorator):
 
     def __init__(self, entityID, message):
@@ -1279,7 +1075,7 @@ class ResourceWellStartDecorator(ResourceWellLockButtonDecorator):
         return g_settings.msgTemplates.format('ResourceWellStartSysMessage', ctx=message)
 
     def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.HIGH)
 
 
 class IntegratedAuctionDecorator(MessageDecorator):
@@ -1325,21 +1121,6 @@ class IntegratedAuctionStageFinishDecorator(IntegratedAuctionDecorator):
         text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.text())
         return g_settings.msgTemplates.format('IntegratedAuctionStageFinish', ctx={'title': title,
          'text': text})
-
-
-class PersonalReservesConversionMessageDecorator(MessageDecorator):
-    ENTITY_ID = 0
-
-    def __init__(self):
-        entity = g_settings.msgTemplates.format('PersonalReservesHaveBeenConvertedOffer')
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-        super(PersonalReservesConversionMessageDecorator, self).__init__(self.ENTITY_ID, entity, settings)
-
-    def isShouldCountOnlyOnce(self):
-        return True
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
 
 
 class SeniorityAwardsDecorator(MessageDecorator):

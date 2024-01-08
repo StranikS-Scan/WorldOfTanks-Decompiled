@@ -40,6 +40,61 @@
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/128_last_frontier_v/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	425.388458 -445.648102	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	107.933823 -118.369308	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	15.604248 8.099106	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-63.511585 61.894993	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	480.245514 -157.997955	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	147.698853 -450.767914	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	454.937988 61.385818	</position>
+        </team1>
+        <team2>
+          <position>	-64.667450 -443.679962	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	246.656403 -238.751373	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities></mapActivities>
 </128_last_frontier_v.xml>

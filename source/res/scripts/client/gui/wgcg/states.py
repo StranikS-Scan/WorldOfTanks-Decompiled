@@ -5,6 +5,7 @@ from functools import partial
 import BigWorld
 from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
+from constants import AUTH_TOKEN_REQUEST_TIMEOUT
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
 from gui.clans.settings import LOGIN_STATE
@@ -387,7 +388,7 @@ class AvailableState(_WebState):
         self.__loginState = LOGIN_STATE.LOGGING_IN
         nextLoginState = LOGIN_STATE.LOGGED_OFF
         LOG_DEBUG('Requesting spa token...')
-        response = yield self._tokenRequester.request(allowDelay=True)
+        response = yield self._tokenRequester.request(allowDelay=True, timeout=AUTH_TOKEN_REQUEST_TIMEOUT)
         if response and response.isValid():
             pDbID = getPlayerDatabaseID()
             if response.getDatabaseID() == pDbID:
@@ -403,6 +404,10 @@ class AvailableState(_WebState):
                         self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
                     else:
                         LOG_DEBUG("Response of login to the wgcg doesn't contain data")
+                else:
+                    LOG_WARNING('There is error while logging in to wgcg gate', result)
+            else:
+                LOG_DEBUG('Response spa token for wgcg gate not for current player', response.getDatabaseID(), pDbID)
         else:
             LOG_WARNING('There is error while getting spa token for wgcg gate', response)
         self.__loginState = nextLoginState

@@ -17,14 +17,6 @@ class MapboxProgressionCtx(CommonWebRequestCtx):
     def isCaching(self):
         return False
 
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
-
 
 class MapboxRequestCrewbookCtx(CommonWebRequestCtx):
 
@@ -46,14 +38,6 @@ class MapboxRequestCrewbookCtx(CommonWebRequestCtx):
 
     def isCaching(self):
         return False
-
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
 
 
 class MapboxCompleteSurveyCtx(CommonWebRequestCtx):
@@ -77,14 +61,6 @@ class MapboxCompleteSurveyCtx(CommonWebRequestCtx):
     def isCaching(self):
         return False
 
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None
-
 
 class MapboxRequestAuthorizedURLCtx(CommonWebRequestCtx):
 
@@ -106,11 +82,3 @@ class MapboxRequestAuthorizedURLCtx(CommonWebRequestCtx):
 
     def isCaching(self):
         return False
-
-    @staticmethod
-    def getDataObj(incomeData):
-        return incomeData
-
-    @staticmethod
-    def getDefDataObj():
-        return None

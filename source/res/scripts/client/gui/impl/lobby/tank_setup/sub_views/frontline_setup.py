@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/frontline_setup.py
 import typing
 from BWUtil import AsyncReturn
+from skeletons.account_helpers.settings_core import ISettingsCore
 from wg_async import wg_async, wg_await, await_callback
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
 from gui.impl.lobby.tank_setup.configurations.epic_battle_ability import EpicBattleTabsController, EpicBattleDealPanel
@@ -11,6 +12,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, i18n
 from epic_constants import CATEGORIES_ORDER
+from frontline.gui.impl.gen.view_models.views.lobby.views.info_page_scroll_to_section import InfoPageScrollToSection
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from CurrentVehicle import g_currentVehicle
@@ -58,6 +60,13 @@ SKILL_PARAM_SIGN = {'increaseFactors/crewRolesFactor': PLUS_SIGN,
  'captureSpeedFactor': PLUS_SIGN,
  'captureBlockBonusTime': PLUS_SIGN}
 
+class FLScenarioInfoBtnHintChecker(object):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def check(self, aliasId):
+        return not bool(self.__settingsCore.serverSettings.getOnceOnlyHintsSetting(aliasId))
+
+
 class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _appLoader = dependency.descriptor(IAppLoader)
@@ -92,15 +101,15 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         self.__selectedSlotId = currentSlotID
         self.__isCurrentlyActiveSubView = True
         self.__updateDetails()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=EpicBattleLogKeys.SETUP_VIEW.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
-        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.SETUP_VIEW.value)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN, item=EpicBattleLogKeys.SKILLS_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
+        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.SKILLS_VIEW)
         self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
 
     def finalize(self):
         super(EpicBattleSetupSubView, self).finalize()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE.value, item=EpicBattleLogKeys.SETUP_VIEW.value, parentScreen=EpicBattleLogKeys.HANGAR.value)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE, item=EpicBattleLogKeys.SKILLS_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
         self.__resumeViewWatchedLogger()
-        self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED.value, EpicBattleLogKeys.SETUP_VIEW.value, EpicBattleLogKeys.HANGAR.value, timeLimit=self.__uiEpicBattleLogger.TIME_LIMIT)
+        self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED, EpicBattleLogKeys.SKILLS_VIEW, EpicBattleLogKeys.HANGAR, timeLimit=self.__uiEpicBattleLogger.TIME_LIMIT)
         self.__uiEpicBattleLogger.reset()
 
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):
@@ -123,14 +132,16 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         hasEnoughPoints = self.__epicController.getSkillPoints() >= self.__totalPurchasePrice
         hasItemsToPurchase = self._interactor.hasChanged() and len(currentItems) == len(self.__pendingPurchaseSkillIds)
         if hasItemsToPurchase and hasEnoughPoints:
-            isOk = yield wg_await(self._asyncActionLock.tryAsyncCommand(self.__purchaseSelectedAbilities))
+            isOk, data = yield wg_await(self._asyncActionLock.tryAsyncCommand(self.__purchaseSelectedAbilities))
             if isOk:
                 isOK = yield await_callback(self._onConfirm)(skipDialog=True)
                 if isOK:
                     playSound(TankSetupSoundEvents.ACCEPT)
-            else:
+            elif data.get('rollBack', False):
                 self._interactor.revert()
                 self.update()
+            else:
+                result = False
             if result:
                 yield await_callback(self._interactor.applyQuit)(skipApplyAutoRenewal=skipApplyAutoRenewal)
         else:
@@ -216,6 +227,8 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
             self.__uiEpicBattleLogger.resumeAction(EpicBattleLogActions.VIEW_WATCHED.value)
 
     def __onEpicUpdated(self, diff):
+        if 'isEnabled' in diff and not self.__epicController.isEnabled():
+            return
         if 'abilityPts' in diff:
             pointsAmount = diff['abilityPts']
             self._viewModel.setPointsAmount(pointsAmount)
@@ -237,17 +250,19 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     @wg_async
     def __purchaseSelectedAbilities(self):
         result = True
+        data = {}
         if self.__pendingPurchaseSkillIds:
-            isOk = yield self._interactor.showBuyConfirmDialog(self.__pendingPurchaseSkillIds)
+            dialogResult = yield self._interactor.showBuyConfirmDialog(self.__pendingPurchaseSkillIds)
+            isOk, data = dialogResult.result
             if isOk:
                 result = yield await_callback(self.__onPurchaseConfirmed)(self.__pendingPurchaseSkillIds)
             else:
                 result = False
-        raise AsyncReturn(result)
+        raise AsyncReturn((result, data))
 
     def __showInfoPage(self, *_):
-        showFrontlineInfoWindow()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.INFO_PAGE.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
+        showFrontlineInfoWindow(autoscrollSection=InfoPageScrollToSection.BATTLE_SCENARIOS)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK, item=EpicBattleLogButtons.INFO_PAGE, parentScreen=EpicBattleLogKeys.SETUP_VIEW)
 
     def __setCurrentSlotDetailsLevel(self, params):
         level = params.get('level', 0)
@@ -261,6 +276,8 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         return bool(self._itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED))
 
     def __updateDetails(self):
+        if not self.__epicController.isEnabled():
+            return
         item = self._interactor.getCurrentLayout()[self.__selectedSlotId]
         if not item:
             return

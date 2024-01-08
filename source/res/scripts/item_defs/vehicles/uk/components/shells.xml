@@ -469,6 +469,59 @@
       </damage>
     </armorSpalls>
   </_2pdr_HE_Mk.2B>
+  <_110mm_MVN_AP>
+    <id>	237	</id>
+    <userString>	#gb_vehicles:_110mm_MVN_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	1065	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	110	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_110mm_MVN_AP>
+  <_110mm_MVN_APDS>
+    <id>	238	</id>
+    <userString>	#gb_vehicles:_110mm_MVN_APDS	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	110	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_110mm_MVN_APDS>
+  <_110mm_MVN_HE>
+    <id>	239	</id>
+    <userString>	#gb_vehicles:_110mm_MVN_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	630	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	110	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.90	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_110mm_MVN_HE>
   <_2pdr_APSV_Mk.1>
     <id>	76	</id>
     <userString>	#gb_vehicles:_2pdr_APSV_Mk.1	</userString>
@@ -2496,6 +2549,69 @@
       </damage>
     </armorSpalls>
   </_105mm_HESH_L7>
+  <_105mm_APCR_L7_N>
+    <id>	246	</id>
+    <userString>	#gb_vehicles:_105mm_APCR_L7_N	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APCR_L7_N>
+  <_105mm_HESH_L7_N>
+    <id>	247	</id>
+    <userString>	#gb_vehicles:_105mm_HESH_L7_N	</userString>
+    <icon>	he_modern_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HESH_L7_N>
+  <_105mm_HE_L7_N>
+    <id>	248	</id>
+    <userString>	#gb_vehicles:_105mm_HE_L7_N	</userString>
+    <icon>	he_modern	</icon>
+    <price>	950	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_L7_N>
   <QF_105mm_AP>
     <id>	150	</id>
     <userString>	#gb_vehicles:QF_105mm_AP	</userString>

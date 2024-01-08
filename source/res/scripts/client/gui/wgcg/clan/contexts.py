@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgcg/clan/contexts.py
 from gui.clans import items
+from gui.clans.data_wrapper import stronghold_event
 from gui.clans.settings import SEND_INVITES_COOLDOWN, DECLINE_INVITES_COOLDOWN, ACCEPT_INVITES_COOLDOWN
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgcg.base.contexts import CommonWebRequestCtx, AccountsInfoBaseCtx, PaginatorCtx, TotalInfoCtx
@@ -392,9 +393,6 @@ class GetClanAppsCount(ClanApplicationsCtx):
         incomeData = incomeData or {}
         return incomeData.get('total', None)
 
-    def getDefDataObj(self):
-        return None
-
     def isCaching(self):
         return self.__isCaching
 
@@ -411,9 +409,6 @@ class GetClanInvitesCount(ClanInvitesCtx):
     def getDataObj(self, incomeData):
         incomeData = incomeData or {}
         return incomeData.get('total', None)
-
-    def getDefDataObj(self):
-        return None
 
     def isCaching(self):
         return True
@@ -491,9 +486,6 @@ class GetAccountInvitesCount(AccountInvitesCtx):
         incomeData = incomeData or {}
         return incomeData.get('total', None)
 
-    def getDefDataObj(self):
-        return None
-
     def isCaching(self):
         return True
 
@@ -535,9 +527,6 @@ class GetAccountAppsCount(AccountApplicationsCtx):
     def getDataObj(self, incomeData):
         incomeData = incomeData or {}
         return incomeData.get('total', None)
-
-    def getDefDataObj(self):
-        return None
 
     def isCaching(self):
         return True
@@ -632,10 +621,7 @@ class StrongholdEventClanInfoCtx(CommonWebRequestCtx):
 
     def getDataObj(self, incomeData):
         incomeData = incomeData or {}
-        return makeTupleByDict(items.StrongholdEventClanInfoData, incomeData)
-
-    def getDefDataObj(self):
-        return None
+        return makeTupleByDict(stronghold_event.StrongholdEventClanInfoData, incomeData)
 
     def isAuthorizationRequired(self):
         return True
@@ -649,10 +635,7 @@ class StrongholdEventSettingsCtx(CommonWebRequestCtx):
 
     def getDataObj(self, incomeData):
         incomeData = incomeData or {}
-        return makeTupleByDict(items.StrongholdEventSettingsData, incomeData)
-
-    def getDefDataObj(self):
-        return None
+        return makeTupleByDict(stronghold_event.StrongholdEventSettingsData, incomeData)
 
     def isAuthorizationRequired(self):
         return True

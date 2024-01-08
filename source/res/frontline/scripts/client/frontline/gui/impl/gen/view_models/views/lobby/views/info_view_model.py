@@ -23,11 +23,11 @@ class InfoViewModel(ViewModel):
     def setIsBattlePassAvailable(self, value):
         self._setBool(1, value)
 
-    def getIsFullScreen(self):
-        return self._getBool(2)
+    def getAutoscrollSection(self):
+        return self._getString(2)
 
-    def setIsFullScreen(self, value):
-        self._setBool(2, value)
+    def setAutoscrollSection(self, value):
+        self._setString(2, value)
 
     def getIsRandomReservesModeEnabled(self):
         return self._getBool(3)
@@ -71,7 +71,7 @@ class InfoViewModel(ViewModel):
         super(InfoViewModel, self)._initialize()
         self._addBoolProperty('isNinthLevelEnabled', False)
         self._addBoolProperty('isBattlePassAvailable', False)
-        self._addBoolProperty('isFullScreen', False)
+        self._addStringProperty('autoscrollSection', '')
         self._addBoolProperty('isRandomReservesModeEnabled', False)
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)

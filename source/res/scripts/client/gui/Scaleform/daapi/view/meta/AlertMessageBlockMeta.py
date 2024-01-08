@@ -4,6 +4,9 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class AlertMessageBlockMeta(BaseDAAPIComponent):
 
+    def onBlockClick(self):
+        self._printOverrideError('onBlockClick')
+
     def onButtonClick(self):
         self._printOverrideError('onButtonClick')
 

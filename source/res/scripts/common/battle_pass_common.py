@@ -56,11 +56,13 @@ BATTLE_PASS_RANDOM_QUEST_BONUS_NAME = 'randomQuestToken'
 NON_VEH_CD = 0
 MAX_NON_CHAPTER_POINTS = 1000000
 BATTLE_PASS_TOKEN_LIFETIME = 4320
+HOLIDAY_SEASON_OFFSET = 1000
 BATTLE_PASS_COST_CURRENCIES = {'gold', 'freeXP'}
 BATTLE_PASS_EXTRA_COST_CURRENCIES = {'gold', 'freeXP'}
 BP_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bp'
 BP_HOLIDAY_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bph'
 BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX = '_bp_chain'
+TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX = '_qch'
 
 class BattlePassTankmenSource(object):
     FREE = 'free_progression'
@@ -72,6 +74,7 @@ class BattlePassTankmenSource(object):
      SHOP,
      QUEST_CHAIN)
     PROGRESSION = (FREE, PAID)
+    PURCHASABLE = (SHOP, QUEST_CHAIN)
 
 
 @unique
@@ -331,6 +334,10 @@ class BattlePassConfig(object):
     def vehCDCaps(self):
         return self._season.get('vehCDCaps', {})
 
+    @property
+    def isHoliday(self):
+        return len(self.chapters) == 1
+
     def getRewardTypes(self, chapterID):
         if chapterID not in self.chapters:
             LOG_ERROR('BattlePass wrong chapter={}, exists: {}'.format(chapterID, self.chapters))
@@ -356,8 +363,8 @@ class BattlePassConfig(object):
     def getBattlePassCost(self, chapterID):
         return self.chapters.get(chapterID, {}).get('battlePassCost', {'gold': 0})
 
-    def getSpecialVoiceTankmen(self):
-        return self._season.get('specialVoiceTankmen', {})
+    def getSpecialTankmen(self):
+        return self._season.get('specialTankmen', {})
 
     @staticmethod
     def iterRewardRanges(prevLvl, newLvl, rewardMask):

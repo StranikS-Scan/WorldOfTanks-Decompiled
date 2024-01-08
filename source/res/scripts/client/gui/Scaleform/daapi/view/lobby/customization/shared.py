@@ -3,21 +3,19 @@
 import logging
 from collections import namedtuple, Counter
 import struct
-from itertools import ifilter
 import typing
 import BigWorld
 import Math
 import nations
 from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import REQUEST_COOLDOWN
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES, appliedToFromSlotsIds, C11nId, PurchaseItem, AdditionalPurchaseGroups, isVehicleCanBeCustomized, getAvailableRegions, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, EDITABLE_STYLE_IRREMOVABLE_TYPES
+from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES, appliedToFromSlotsIds, C11nId, PurchaseItem, AdditionalPurchaseGroups, getAvailableRegions, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, EDITABLE_STYLE_IRREMOVABLE_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
@@ -35,7 +33,6 @@ from items.components.c11n_components import getItemSlotType
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags
 from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import first
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -559,24 +556,6 @@ def customizationSlotIdToUid(slotId):
     s = struct.pack('bbh', slotId.areaId, slotId.slotType, slotId.regionIdx)
     uid = struct.unpack('I', s)[0]
     return uid
-
-
-@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
-def getEditableStylesExtraNotificationCounter(styles=None, settingsCore=None):
-    vehicle = g_currentVehicle.item
-    serverSettings = settingsCore.serverSettings
-    if not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):
-        itemsFilter = lambda item: item.isEditable
-    elif not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT):
-        itemsFilter = lambda item: item.isProgressionRequiredCanBeEdited(vehicle.intCD)
-    else:
-        return 0
-    if styles is not None:
-        if any(ifilter(itemsFilter, styles)):
-            return 1
-        return 0
-    else:
-        return 1 if isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE, itemsFilter=itemsFilter) else 0
 
 
 def getEditableStyleOutfitDiffComponent(outfit, baseOutfit):

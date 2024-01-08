@@ -896,14 +896,6 @@ class DIALOGS(object):
     EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL = '#dialogs:editableStyles/confirmReset/checkboxLabel'
     EDITABLESTYLES_CONFIRMRESET_SUBMIT = '#dialogs:editableStyles/confirmReset/submit'
     EDITABLESTYLES_CONFIRMRESET_CANCEL = '#dialogs:editableStyles/confirmReset/cancel'
-    BREAKDECORATIONS_TITLE = '#dialogs:breakDecorations/title'
-    BREAKDECORATIONS_MESSAGE = '#dialogs:breakDecorations/message'
-    BREAKDECORATIONS_SUBMIT = '#dialogs:breakDecorations/submit'
-    BREAKDECORATIONS_CANCEL = '#dialogs:breakDecorations/cancel'
-    NEWYEAR_BUYTOY_TITLE = '#dialogs:newYear/buyToy/title'
-    NEWYEAR_BUYTOY_MESSAGE = '#dialogs:newYear/buyToy/message'
-    NEWYEAR_BUYTOY_SUBMIT = '#dialogs:newYear/buyToy/submit'
-    NEWYEAR_BUYTOY_CANCEL = '#dialogs:newYear/buyToy/cancel'
     CONFIRMEQUIPMENTBUYINSTALL_SUBMIT = '#dialogs:confirmEquipmentBuyInstall/submit'
     EQUIPMENTPURCASE_CONFORMATION_ALL = '#dialogs:equipmentPurcase/conformation/all'
     EQUIPMENTBUYINSTALL_PRICE = '#dialogs:equipmentBuyInstall/price'
@@ -1089,6 +1081,7 @@ class DIALOGS(object):
     RECRUIT_PRICECARD_GOLD_DESCRIPTION = '#dialogs:recruit/priceCard/gold/description'
     RECRUIT_SUBMIT = '#dialogs:recruit/submit'
     RECRUIT_CANCEL = '#dialogs:recruit/cancel'
+    RECRUIT_VOICEOVERTEXT = '#dialogs:recruit/voiceoverText'
     CREWMEMBERTANKCHANGE_TITLE = '#dialogs:crewMemberTankChange/title'
     CREWMEMBERTANKCHANGE_DESC = '#dialogs:crewMemberTankChange/desc'
     CREWMEMBERTANKCHANGE_TRANSFER = '#dialogs:crewMemberTankChange/transfer'
@@ -1125,10 +1118,6 @@ class DIALOGS(object):
     RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
     RESTORETANKMAN_FREE = '#dialogs:restoreTankman/free'
     RESTORETANKMAN_BUTTONS_RECOVER = '#dialogs:restoreTankman/buttons/recover'
-    CONFIRMAPPLYVEHICLEDISCOUNT_TITLE = '#dialogs:confirmApplyVehicleDiscount/title'
-    CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE = '#dialogs:confirmApplyVehicleDiscount/message'
-    CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT = '#dialogs:confirmApplyVehicleDiscount/submit'
-    CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL = '#dialogs:confirmApplyVehicleDiscount/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -2014,14 +2003,6 @@ class DIALOGS(object):
      EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL,
      EDITABLESTYLES_CONFIRMRESET_SUBMIT,
      EDITABLESTYLES_CONFIRMRESET_CANCEL,
-     BREAKDECORATIONS_TITLE,
-     BREAKDECORATIONS_MESSAGE,
-     BREAKDECORATIONS_SUBMIT,
-     BREAKDECORATIONS_CANCEL,
-     NEWYEAR_BUYTOY_TITLE,
-     NEWYEAR_BUYTOY_MESSAGE,
-     NEWYEAR_BUYTOY_SUBMIT,
-     NEWYEAR_BUYTOY_CANCEL,
      CONFIRMEQUIPMENTBUYINSTALL_SUBMIT,
      EQUIPMENTPURCASE_CONFORMATION_ALL,
      EQUIPMENTBUYINSTALL_PRICE,
@@ -2207,6 +2188,7 @@ class DIALOGS(object):
      RECRUIT_PRICECARD_GOLD_DESCRIPTION,
      RECRUIT_SUBMIT,
      RECRUIT_CANCEL,
+     RECRUIT_VOICEOVERTEXT,
      CREWMEMBERTANKCHANGE_TITLE,
      CREWMEMBERTANKCHANGE_DESC,
      CREWMEMBERTANKCHANGE_TRANSFER,
@@ -2242,11 +2224,7 @@ class DIALOGS(object):
      RESTORETANKMAN_DESCRIPTION,
      RESTORETANKMAN_PRICE,
      RESTORETANKMAN_FREE,
-     RESTORETANKMAN_BUTTONS_RECOVER,
-     CONFIRMAPPLYVEHICLEDISCOUNT_TITLE,
-     CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE,
-     CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT,
-     CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL)
+     RESTORETANKMAN_BUTTONS_RECOVER)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

@@ -10,7 +10,6 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.advent_calendar.advent_calendar_progression_reward_item_view_model import ProgressionState
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.formatters import text_styles, moneyWithIcon
@@ -25,7 +24,7 @@ from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IBattleRoyaleController, IAdventCalendarV2Controller
+from skeletons.gui.game_control import IBattleRoyaleController
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -234,7 +233,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel())))
         specialIcon = item.getSpecialIcon()
         blocks.append(formatters.packImageBlockData(img=specialIcon if specialIcon is not None else item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=350 if specialIcon is not None else -1, height=238 if specialIcon is not None else -1))
-        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40, left=25)))
+        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40)))
         descrStr = i18n.makeString(item.getDescription())
         hasDescr = descrStr != EMPTY_STRING
         if hasDescr:
@@ -357,29 +356,6 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
     def _createVehicleBlock(self, innerBlock, vehicle):
         vehName = vehicle.shortUserName
         innerBlock.append(formatters.packTextBlockData(text=text_styles.stats(backport.text(R.strings.battle_royale.commanderTooltip.vehicleDescription(), vehicle=vehName)), padding=formatters.packPadding(top=10, right=-50)))
-
-
-class AdventCalendarNotRecruitedTooltipData(NotRecruitedTooltipData):
-    __adventCalendarV2Controller = dependency.descriptor(IAdventCalendarV2Controller)
-
-    def _packBlocks(self, *args, **kwargs):
-        invID, state, doorsToOpenAmount = args
-        items = super(AdventCalendarNotRecruitedTooltipData, self)._packBlocks(invID)
-        blocks = []
-        lock = backport.image(R.images.gui.maps.icons.adventCalendar.tooltips.lock())
-        checkMark = backport.image(R.images.gui.maps.icons.newYear.common.check())
-        if state == ProgressionState.REWARD_RECEIVED:
-            blocks.append(formatters.packImageTextBlockData(img=checkMark, imgPadding=formatters.packPadding(left=115, top=10), descPadding=formatters.packPadding(top=12, left=-8), desc=text_styles.lightBlue(backport.text(R.strings.advent_calendar.progresssionRewards.tooltip.rewardReceived.title())), txtAlign='right'))
-        elif self.__adventCalendarV2Controller.isInActivePhase():
-            if state == ProgressionState.REWARD_IN_PROGRESS:
-                blocks.append(formatters.packImageTextBlockData(descPadding=formatters.packPadding(top=0, left=10), desc=text_styles.lightGray(text_styles.formatStyledText(backport.ntext(R.strings.advent_calendar.progresssionRewards.tooltip.rewardInProgress.title(), doorsToOpenAmount, count=doorsToOpenAmount)))))
-            elif state == ProgressionState.REWARD_LOCKED:
-                blocks.append(formatters.packImageTextBlockData(img=lock, imgPadding=formatters.packPadding(top=10), descPadding=formatters.packPadding(top=10), desc=text_styles.cream(backport.text(R.strings.advent_calendar.progresssionRewards.tooltip.rewardLocked.title()))))
-        else:
-            blocks.append(formatters.packImageTextBlockData(img=lock, imgPadding=formatters.packPadding(left=100, top=4), title=text_styles.creamBold(backport.text(R.strings.advent_calendar.progresssionRewards.tooltip.rewardExpired.title())), titleAtMiddle=True))
-            blocks.append(formatters.packAlignedTextBlockData(text=text_styles.main(backport.text(R.strings.advent_calendar.progresssionRewards.tooltip.rewardExpired.description())), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        items.append(formatters.packBuildUpBlockData(blocks))
-        return items
 
 
 class TankmanTooltipData(ToolTipData):

@@ -116,10 +116,6 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         assetsPointer = self.__funRandomSettings.assetsPointer
         return R.strings.fun_random.modes.dyn(assetsPointer, R.strings.fun_random.modes.undefined)
 
-    def hasHangarHeaderEntry(self):
-        desiredSubMode = self.subModesHolder.getDesiredSubMode()
-        return self.isFunRandomPrbActive() and desiredSubMode and desiredSubMode.hasHangarHeaderEntry()
-
     def getSettings(self):
         return self.__funRandomSettings
 

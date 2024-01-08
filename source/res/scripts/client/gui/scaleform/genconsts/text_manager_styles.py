@@ -35,7 +35,6 @@ class TEXT_MANAGER_STYLES(object):
     COUNTER_TEXT = 'counterText'
     COUNTER_LABEL_TEXT = 'counterLabelText'
     TUTORIAL_TEXT = 'tutorialText'
-    TUTORIAL_TEXT_BIG = 'tutorialTextBig'
     VEHICLE_STATUS_INFO_TEXT = 'vehicleStatusInfoText'
     VEHICLE_STATUS_CRITICAL_TEXT = 'vehicleStatusCriticalText'
     VEHICLE_STATUS_CRITICAL_TEXT_SMALL = 'vehicleStatusCriticalTextSmall'

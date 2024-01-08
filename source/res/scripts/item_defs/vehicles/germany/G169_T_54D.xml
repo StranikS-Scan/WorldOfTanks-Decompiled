@@ -10,8 +10,8 @@
   <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
-    <backward>	18	</backward>
+    <forward>	40	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.205	</moving>
@@ -69,7 +69,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	19600	</weight>
-    <maxHealth>	1360	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1425,8 +1425,8 @@
       </armor>
       <primaryArmor>	armor_10 armor_3 armor_9	</primaryArmor>
       <weight>	14123	</weight>
-      <maxHealth>	340	</maxHealth>
-      <rotationSpeed>	40	</rotationSpeed>
+      <maxHealth>	320	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -1475,11 +1475,11 @@
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	11.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
             <slot>
@@ -2070,7 +2070,7 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SEM_25_funkgerat>	shared	</SEM_25_funkgerat>
+    <SEM_25_D_funkgerat>	shared	</SEM_25_D_funkgerat>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
@@ -2078,7 +2078,7 @@
       <engines>
         <W-54>
           <smplEnginePower>	580	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </W-54>
       </engines>
       <chassis>

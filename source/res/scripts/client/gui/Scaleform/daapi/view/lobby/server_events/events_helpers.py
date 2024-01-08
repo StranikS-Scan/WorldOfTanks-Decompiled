@@ -323,7 +323,7 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
     def _getBonusDataFromOneOfBonuses(self, pCur=None):
         bonusData = self.event.getRawBonuses()
         trackResult = {}
-        if pCur:
+        if pCur is not None:
             pCurInnerDict = pCur.itervalues().next()
             bonusTracks = pCurInnerDict.get('bonusTracks', [])
             if bonusTracks:

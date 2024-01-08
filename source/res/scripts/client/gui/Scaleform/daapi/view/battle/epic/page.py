@@ -93,7 +93,8 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL,
  BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL,
  BATTLE_VIEW_ALIASES.CALLOUT_PANEL,
- BATTLE_VIEW_ALIASES.PERKS_PANEL}
+ BATTLE_VIEW_ALIASES.PERKS_PANEL,
+ BATTLE_VIEW_ALIASES.EPIC_MODIFICATION_PANEL}
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW,
  BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
@@ -153,7 +154,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if components is None:
             components = _EPIC_BATTLE_CLASSICS_COMPONENTS if self.sessionProvider.isReplayPlaying else _EPIC_BATTLE_EXTENDED_COMPONENTS
         super(EpicBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
-        self.__battleStarted = False
+        self.__currPeriod = None
         self.__epicSoundControl = None
         self.__pageState = PageStates.COUNTDOWN
         self.__topState = PageStates.NONE
@@ -220,7 +221,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         super(EpicBattlePage, self)._populate()
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
-            arena.onPeriodChange += self.__arena_onPeriodChange
             self.__arena_onPeriodChange(arena.period)
         self.__epicSoundControl = EpicBattleSoundController()
         self.__epicSoundControl.init()
@@ -228,9 +228,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         return
 
     def _dispose(self):
-        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
-        if arena is not None:
-            arena.onPeriodChange -= self.__arena_onPeriodChange
         if self.__epicSoundControl is not None:
             self.__epicSoundControl.destroy()
             self.__epicSoundControl = None
@@ -238,8 +235,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         return
 
     def __arena_onPeriodChange(self, period, *args):
-        if self.__battleStarted:
+        if self.__currPeriod == period:
             return
+        self.__currPeriod = period
         if period in (ARENA_PERIOD.WAITING, ARENA_PERIOD.IDLE):
             if self.__pageState != PageStates.COUNTDOWN:
                 self.__pageState = PageStates.COUNTDOWN
@@ -248,7 +246,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             if self.__pageState == PageStates.COUNTDOWN:
                 self.__pageState = PageStates.GAME
                 self._invalidateState()
-            self.__battleStarted = True
 
     def handleEscKey(self, isDown):
         isMapVisible = self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN)
@@ -276,10 +273,13 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if self.__topState == PageStates.LOADING:
             self.__topState = PageStates.NONE
             self._invalidateState()
+        self._blToggling.clear()
         for component in self._external:
             component.active(True)
 
-        self.sessionProvider.shared.hitDirection.setVisible(True)
+        if self.sessionProvider.shared.hitDirection is not None:
+            self.sessionProvider.shared.hitDirection.setVisible(True)
+        return
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
         radialMenu = self.getComponent(BATTLE_VIEW_ALIASES.RADIAL_MENU)
@@ -384,6 +384,10 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             return
         self._invalidateState()
 
+    def _onPostMortemReload(self):
+        self.__onPostmortemDisable()
+        super(EpicBattlePage, self)._onPostMortemReload()
+
     def __onPostmortemDisable(self):
         if not self._isInPostmortem:
             return
@@ -408,19 +412,11 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if self.__topState == PageStates.RADIAL:
             self._toggleRadialMenu(False)
 
-    def reload(self):
-        if self.sessionProvider.isReplayPlaying:
-            self._onPostMortemReload()
-            self.reloadComponents()
-            for component in self._external:
-                component.startPlugins()
-                component.invokeRegisterComponentForReplay()
-
-        else:
-            super(EpicBattlePage, self).reload()
-
     def _startBattleSession(self):
         super(EpicBattlePage, self)._startBattleSession()
+        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPeriodChange += self.__arena_onPeriodChange
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
@@ -432,6 +428,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         return
 
     def _stopBattleSession(self):
+        arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPeriodChange -= self.__arena_onPeriodChange
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
 from account_helpers.settings_core.settings_constants import SESSION_STATS
 from adisp import adisp_process
-from constants import PREBATTLE_TYPE, IS_DEVELOPMENT, QUEUE_TYPE
+from constants import IS_DEVELOPMENT, QUEUE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
 from gui import SystemMessages
@@ -143,6 +143,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramDisabled += self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self._limitedUIController.startObserve(LuiRules.SESSION_STATS, self.__onLuiRuleSessionStatsCompleted)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
         self.as_setInitDataS({'channelsHtmlIcon': _formatIcon('iconChannels'),
@@ -166,6 +167,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramUpdated -= self.__onReferralProgramUpdated
         self._referralCtrl.onReferralProgramDisabled -= self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramEnabled -= self.__onReferralProgramEnabled
+        self._limitedUIController.stopObserve(LuiRules.SESSION_STATS, self.__onLuiRuleSessionStatsCompleted)
         self.stopGlobalListening()
         super(MessengerBar, self)._dispose()
 
@@ -206,7 +208,8 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     def __updateSessionStatsBtn(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
-            isInSupportedMode = dispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
+            queueType = dispatcher.getEntity().getQueueType()
+            isInSupportedMode = queueType in (QUEUE_TYPE.RANDOMS,)
         else:
             isInSupportedMode = False
         isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
@@ -223,6 +226,9 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
         self.__updateSessionStatsHint(btnIsVisible and self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS))
         return
+
+    def __onLuiRuleSessionStatsCompleted(self, *_):
+        self.__updateSessionStatsBtn()
 
     def __getSessionStatsBtnTooltip(self, btnEnabled):
         mainBtn = R.strings.session_stats.tooltip.mainBtn

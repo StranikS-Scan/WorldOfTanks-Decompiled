@@ -85,32 +85,40 @@ class TokenRequester(object):
         yield lambda callback: callback(True)
         requester = self._getRequester()
         if not requester or not callable(requester):
+            _logger.debug('Can not get requester. Request canceled.')
             if callback:
                 callback(None)
             return
         elif self.__cache and self.__lastResponse and self.__lastResponse.isValid():
+            _logger.debug('Getting response <%s> from cache.', self.__lastResponse)
             if callback:
                 callback(self.__lastResponse)
             return
         else:
             delta = self.lastResponseDelta()
             if allowDelay and delta < self.getReqCoolDown():
-                yield wait(self.getReqCoolDown() - delta)
+                delay = self.getReqCoolDown() - delta
+                _logger.debug('Delaying request for <%s> sec.', delay)
+                yield wait(delay)
             if requester != self._getRequester():
-                _logger.warning('Request cancelled because requester has been changed')
+                _logger.warning('Request cancelled because requester has been changed.')
                 if callback:
                     callback(None)
                 return
             self.__callback = callback
             self.__requestID = self.__idsGen.next()
             if timeout:
-                self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
+                self._loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = _getAccountRepository()
             if repository and self.canAllowRequest():
                 repository.onTokenReceived += self._onTokenReceived
+                _logger.debug('Request with id=<%s> sent.', self.__requestID)
                 requester(self.__requestID, self.__tokenType)
-            elif self.__callback:
-                self.__callback(None)
+            elif callable(callback):
+                _logger.debug('Can not process. Request with id=<%s> canceled.', self.__requestID)
+                self.__requestID = 0
+                self.__callback = None
+                callback(None)
             return
 
     def _getRequester(self):
@@ -132,19 +140,20 @@ class TokenRequester(object):
             if self.__callback is not None:
                 callback = self.__callback
                 self.__callback = None
+                _logger.debug('Response <%s> from request <%s>.', self.__lastResponse, requestID)
                 callback(self.__lastResponse)
             self.__lastRequestTime = time.time()
             return
+
+    def _loadTimeout(self, requestID, tokenType, timeout):
+        self.__clearTimeoutCb()
+        self.__timeoutCbID = BigWorld.callback(timeout, partial(self.__onTimeout, requestID, tokenType))
 
     def __clearTimeoutCb(self):
         if self.__timeoutCbID is not None:
             BigWorld.cancelCallback(self.__timeoutCbID)
             self.__timeoutCbID = None
         return
-
-    def __loadTimeout(self, requestID, tokenType, timeout):
-        self.__clearTimeoutCb()
-        self.__timeoutCbID = BigWorld.callback(timeout, partial(self.__onTimeout, requestID, tokenType))
 
     def __onTimeout(self, requestID, tokenType):
         self.__clearTimeoutCb()

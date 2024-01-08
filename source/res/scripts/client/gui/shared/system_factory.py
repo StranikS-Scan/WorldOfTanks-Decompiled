@@ -48,7 +48,6 @@ AMMUNITION_PANEL_VIEW = 44
 VEHICLE_VIEW_STATE = 45
 DYN_OBJ_CACHE = 46
 SHARED_REPO = 47
-OPTIMIZED_VIEWS = 48
 
 class _CollectEventsManager(object):
 
@@ -731,15 +730,3 @@ def registerDynObjCache(queueType, dynCache):
 
 def collectDynObjCache(queueType):
     return __collectEM.handleEvent((DYN_OBJ_CACHE, queueType), ctx={}).get('dynCache')
-
-
-def registerOptimizedViews(optimizedViewsSettings):
-
-    def onCollect(ctx):
-        ctx['optimizedViewsSettings'].update(optimizedViewsSettings)
-
-    __collectEM.addListener(OPTIMIZED_VIEWS, onCollect)
-
-
-def collectOptimizedViews():
-    return __collectEM.handleEvent(OPTIMIZED_VIEWS, ctx={'optimizedViewsSettings': {}})['optimizedViewsSettings']

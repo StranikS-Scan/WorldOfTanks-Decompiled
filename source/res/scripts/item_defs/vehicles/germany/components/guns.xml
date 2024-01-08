@@ -148,6 +148,8 @@
     <_120mm_Delta_1965>	272	</_120mm_Delta_1965>
     <_128mm_KwK_L55_TM>	273	</_128mm_KwK_L55_TM>
     <_105mm_Rh_69_2>	274	</_105mm_Rh_69_2>
+    <_37mm_KwK_L46_f>	275	</_37mm_KwK_L46_f>
+    <_114_mm_n_panssarivaunu_haupitsi_18>	276	</_114_mm_n_panssarivaunu_haupitsi_18>
     <_105mm_panzerkanone_L7A3>	277	</_105mm_panzerkanone_L7A3>
     <_105mm_StuH42_L28Pz_SH>	338	</_105mm_StuH42_L28Pz_SH>
     <_105mm_KwK45_L52_SH>	339	</_105mm_KwK45_L52_SH>
@@ -1209,14 +1211,14 @@
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	40 33	</piercingPower>
+          <piercingPower>	52 45	</piercingPower>
         </_37mm_Pzgr36>
         <_37cm_Pzgr40>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	938	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	74 36	</piercingPower>
+          <piercingPower>	80 45	</piercingPower>
         </_37cm_Pzgr40>
         <_37mm_Sprg.18>
           <defaultPortion>	0	</defaultPortion>
@@ -1227,6 +1229,63 @@
         </_37mm_Sprg.18>
       </shots>
     </_37mm_KwK_L46>
+    <_37mm_KwK_L46_f>
+      <userString>	#germany_vehicles:_37mm_KwK_L46_f	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <impulse>	0.22	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_KwK_L46	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.28571428571429	</reloadTime>
+      <maxAmmo>	42	</maxAmmo>
+      <aimingTime>	1.71428571428571	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	54	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_Pzgr36f>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	40 33	</piercingPower>
+        </_37mm_Pzgr36f>
+        <_37cm_Pzgr40f>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	938	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	74 36	</piercingPower>
+        </_37cm_Pzgr40f>
+        <_37mm_Sprg.18f>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	18 18	</piercingPower>
+        </_37mm_Sprg.18f>
+      </shots>
+    </_37mm_KwK_L46_f>
     <_37mm_KwK_L46_T>
       <userString>	#germany_vehicles:_37mm_KwK_L46	</userString>
       <tags></tags>
@@ -6985,6 +7044,65 @@
         </_105mm_Exp_HE>
       </shots>
     </_105mm_Kanone>
+    <_114_mm_n_panssarivaunu_haupitsi_18>
+      <userString>	#germany_vehicles:_114_mm_n_panssarivaunu_haupitsi_18	</userString>
+      <shortUserString>	#germany_vehicles:_114_mm_n_panssarivaunu_haupitsi_18_short	</shortUserString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	43000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.28	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	5	</aimingTime>
+      <weight>	463	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.46	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.44	</turretRotation>
+        <afterShot>	6.4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_114mm_hkr_42_A_18_24_38_is_32_18_24>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	357	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_114mm_hkr_42_A_18_24_38_is_32_18_24>
+        <_114mm_hkr_42_C_18_24_38_is_32_18_24>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	357	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	125 125	</piercingPower>
+        </_114mm_hkr_42_C_18_24_38_is_32_18_24>
+        <_114mm_akr_32_41_35>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	357	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	57 57	</piercingPower>
+        </_114mm_akr_32_41_35>
+      </shots>
+    </_114_mm_n_panssarivaunu_haupitsi_18>
     <_120mm_Delta_1965>
       <userString>	#germany_vehicles:_120mm_Delta_1965	</userString>
       <tags></tags>

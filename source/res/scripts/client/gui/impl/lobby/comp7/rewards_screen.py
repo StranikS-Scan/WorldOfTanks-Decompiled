@@ -5,18 +5,22 @@ import typing
 from shared_utils import first, findFirst
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from frameworks.wulf.view.array import fillIntsArray, fillViewModelsArray
+from gui.game_control.comp7_shop_controller import ShopControllerStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.rewards_screen_model import Type, Rank, RewardsScreenModel
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
+from gui.impl.gen.view_models.views.lobby.comp7.rewards_screen_model import Type, Rank, RewardsScreenModel, ShopInfoType
 from gui.impl.lobby.comp7 import comp7_shared, comp7_qualification_helpers
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses
-from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7TokensQuestID, parseComp7PeriodicQuestID
 from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
+from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, getRequiredTokensCountToComplete, parseComp7PeriodicQuestID
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.prb_control.entities.comp7 import comp7_prb_helpers
+from gui.shared.event_dispatcher import showComp7MetaRootView
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.game_control import IComp7Controller, IComp7ShopController, IHangarSpaceSwitchController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
@@ -28,6 +32,9 @@ _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class _BaseRewardsView(ViewImpl):
     __slots__ = ('_bonusData',)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+    __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    _comp7ShopController = dependency.descriptor(IComp7ShopController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.comp7.RewardsScreen())
@@ -60,12 +67,7 @@ class _BaseRewardsView(ViewImpl):
         else:
             return None
 
-    def _initialize(self, *args, **kwargs):
-        super(_BaseRewardsView, self)._initialize(*args, **kwargs)
-        self._addListeners()
-
     def _finalize(self):
-        self._removeListeners()
         self._bonusData = None
         super(_BaseRewardsView, self)._finalize()
         return
@@ -79,8 +81,13 @@ class _BaseRewardsView(ViewImpl):
             self._bonusData.append(_BonusData(packedBonus, tooltipData))
 
         self._setModelData()
+        if self._comp7ShopController.getProducts():
+            self._setProductsData()
 
     def _setModelData(self):
+        raise NotImplementedError
+
+    def _setProductsData(self):
         raise NotImplementedError
 
     def _packQuestBonuses(self, quests):
@@ -97,13 +104,31 @@ class _BaseRewardsView(ViewImpl):
         mainRewards = [ bonusModel for bonusModel in bonuses if bonusModel.getName() in _MAIN_REWARDS ]
         return min(len(mainRewards), _MAX_MAIN_REWARDS_COUNT)
 
-    def _addListeners(self):
-        self.viewModel.onClose += self._onClose
-
-    def _removeListeners(self):
-        self.viewModel.onClose -= self._onClose
+    def _getEvents(self):
+        return ((self.viewModel.onClose, self._onClose), (self.viewModel.onOpenShop, self.__onOpenShop), (self._comp7ShopController.onDataUpdated, self.__onShopStatusUpdated))
 
     def _onClose(self):
+        self.destroyWindow()
+
+    def __onShopStatusUpdated(self, status):
+        if status == ShopControllerStatus.DATA_READY:
+            self._setProductsData()
+
+    def __onOpenShop(self):
+        if not self.__comp7Controller.isComp7PrbActive():
+            self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
+            comp7_prb_helpers.selectComp7()
+            return
+        self.__goToShop()
+
+    def __onSpaceUpdated(self):
+        if not self.__comp7Controller.isComp7PrbActive():
+            return
+        self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
+        self.__goToShop()
+
+    def __goToShop(self):
+        showComp7MetaRootView(tabId=MetaRootViews.SHOP)
         self.destroyWindow()
 
 
@@ -132,6 +157,18 @@ class RanksRewardsView(_BaseRewardsView):
             vm.setHasRankInactivity(comp7_shared.hasRankInactivity(self.__division.rank))
             self._setRewards(vm)
 
+    def _setProductsData(self):
+        if self._getType() == Type.RANK:
+            rank = comp7_shared.getRankEnumValue(self.__division)
+            if self._comp7ShopController.hasNewProducts(rank):
+                self.viewModel.setShopInfoType(ShopInfoType.OPEN)
+            elif self._comp7ShopController.hasNewDiscounts(rank):
+                self.viewModel.setShopInfoType(ShopInfoType.DISCOUNT)
+            else:
+                self.viewModel.setShopInfoType(ShopInfoType.NONE)
+        else:
+            self.viewModel.setShopInfoType(ShopInfoType.NONE)
+
     def _onClose(self):
         if self.viewModel.getType() == Type.RANK:
             self.viewModel.setType(Type.RANKREWARDS)
@@ -149,7 +186,7 @@ class TokensRewardsView(_BaseRewardsView):
     def __init__(self, *args, **kwargs):
         super(TokensRewardsView, self).__init__(*args, **kwargs)
         quest = first(kwargs['quests'])
-        self.__tokensCount = parseComp7TokensQuestID(quest.getID())
+        self.__tokensCount = getRequiredTokensCountToComplete(quest.getID())
 
     def _packQuestBonuses(self, quests):
         return packTokensRewardsQuestBonuses(quest=first(quests))
@@ -161,13 +198,15 @@ class TokensRewardsView(_BaseRewardsView):
             vm.setTokensCount(self.__tokensCount)
             self._setRewards(vm)
 
+    def _setProductsData(self, *_):
+        self.viewModel.setShopInfoType(ShopInfoType.NONE)
+
     def _getMainRewardsCount(self):
         return _MAX_MAIN_REWARDS_COUNT
 
 
 class QualificationRewardsView(_BaseRewardsView):
     __slots__ = ('__divisions',)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args, **kwargs):
         super(QualificationRewardsView, self).__init__(*args, **kwargs)
@@ -193,6 +232,12 @@ class QualificationRewardsView(_BaseRewardsView):
             fillIntsArray(rankEnumValues, vm.getRankList())
             self._setRewards(vm)
 
+    def _setProductsData(self, *_):
+        if self.__hasShopProduct():
+            self.viewModel.setShopInfoType(ShopInfoType.OPEN)
+        else:
+            self.viewModel.setShopInfoType(ShopInfoType.NONE)
+
     def _packQuestBonuses(self, quests):
         return packQualificationRewardsQuestBonuses(quests=quests)
 
@@ -203,6 +248,14 @@ class QualificationRewardsView(_BaseRewardsView):
     def __getDivisions(self, quests):
         divisions = [ parseComp7RanksQuestID(quest.getID()) for quest in quests ]
         return sorted(divisions, key=lambda d: d.dvsnID)
+
+    def __hasShopProduct(self):
+        ranks = {comp7_shared.getRankEnumValue(division) for division in self.__divisions}
+        for rank in ranks:
+            if self._comp7ShopController.hasNewProducts(rank):
+                return True
+
+        return False
 
 
 class RanksRewardsScreenWindow(LobbyNotificationWindow):

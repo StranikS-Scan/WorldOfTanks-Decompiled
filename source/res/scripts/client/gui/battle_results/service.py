@@ -196,6 +196,9 @@ class BattleResultsService(IBattleResultsService):
     def __showResults(self, ctx):
         yield self.requestResults(ctx)
 
+    def notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
+        self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI)
+
     def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
         composerObj = self.__composers[arenaUniqueID]
         window = None

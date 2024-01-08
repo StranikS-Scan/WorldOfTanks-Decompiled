@@ -282,6 +282,12 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr), extData=self)
 
     @staticmethod
+    def deferredRespawnVehicle(vehicleObj):
+        if hasattr(vehicleObj, 'respawnCompactDescr') and vehicleObj.respawnCompactDescr:
+            _logger.debug('respawn vehCD is still valid, request reloading of tank resources %s', vehicleObj.id)
+            vehicleObj.respawnVehicle(vehicleObj.id, vehicleObj.respawnCompactDescr)
+
+    @staticmethod
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
         _logger.debug('respawnVehicle(%d)', vID)
         vehicle = BigWorld.entities.get(vID)
@@ -1001,9 +1007,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             progressionCtrl = self.guiSessionProvider.dynamic.progression
             if progressionCtrl is not None:
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
-            if hasattr(self, 'respawnCompactDescr') and self.respawnCompactDescr:
-                _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
-                BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+            BigWorld.callback(0.0, lambda : Vehicle.deferredRespawnVehicle(self))
             self.refreshNationalVoice()
             self.set_quickShellChangerFactor()
             return

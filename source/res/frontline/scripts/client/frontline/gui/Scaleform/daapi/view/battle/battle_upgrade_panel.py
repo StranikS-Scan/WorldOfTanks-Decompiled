@@ -15,6 +15,7 @@ from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+import BattleReplay
 
 class _AttentionEffectPlayer(object):
     __slots__ = ('__viewRef', '__callbackID', '__delayTime', '__isPlaying')
@@ -80,6 +81,7 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
     __FIRST_OFFER_INDEX = 0
     __SECOND_OFFER_INDEX = 1
     __TIME_WAITING_MESSAGE = 1
+    __PROHIBITED_CAMERA_MODE = (CTRL_MODE_NAME.MAP_CASE_EPIC, CTRL_MODE_NAME.MAP_CASE, CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
 
     def __init__(self):
         super(EpicBattleUpgradePanel, self).__init__()
@@ -100,7 +102,7 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
             self.__attentionEffect.playSound(FL_BATTLE_UPGRADE_PANEL_SOUND_EVENTS.ON_SELECT)
             self.as_showSelectAnimS(self.__FIRST_OFFER_INDEX if self.__offer[self.__FIRST_OFFER_INDEX] == itemID else self.__SECOND_OFFER_INDEX)
             self.setVisible(False)
-            BigWorld.player().cell.setupRandomAmmo(itemID)
+            BigWorld.player().cell.setupAmmo(itemID)
             self.__canSelect = False
             self.__offer = []
             if self.__hasInstalledStackReserve() and self.__epicController.isReserveStack(self.__getEquipmentByIntCD(itemID).extraName()):
@@ -116,9 +118,13 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart += self.__onTimeWarpStart
         return
 
     def _dispose(self):
+        if BattleReplay.g_replayEvents.isPlaying:
+            BattleReplay.g_replayEvents.onTimeWarpStart -= self.__onTimeWarpStart
         randomReservesEvents.onShowPanel -= self.__onShowReservePanel
         randomReservesEvents.onSelectedReserve -= self.__selectedReserve
         randomReservesEvents.onUpdate -= self.__onUpdateReservePanel
@@ -134,6 +140,10 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
         self.__attentionEffect = None
         super(EpicBattleUpgradePanel, self)._dispose()
         return
+
+    def __onTimeWarpStart(self):
+        self.__stopPreviousTimer()
+        self.__hidePanel()
 
     def __stopPreviousShowTimer(self):
         if self.__showCooldownID is not None:
@@ -151,11 +161,14 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
                 self.__canSelect = True
 
     def __onCameraChanged(self, cameraName, _=None):
-        if cameraName == CTRL_MODE_NAME.ARCADE and self.__prevCamera:
-            self.__enablePanel()
-        elif cameraName in [CTRL_MODE_NAME.MAP_CASE_EPIC, CTRL_MODE_NAME.MAP_CASE, CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD]:
-            self.__disablePanel()
+        prevCamera = self.__prevCamera
         self.__prevCamera = cameraName
+        if not self.__hasOffer():
+            return
+        if cameraName in self.__PROHIBITED_CAMERA_MODE:
+            self.__disablePanel()
+        elif prevCamera and self.__isQueueEmpty():
+            self.__enablePanel()
 
     def __hidePanel(self, isInGameMessage=False):
         self.__isInGameMessage = isInGameMessage
@@ -179,15 +192,21 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
 
     def __enablePanel(self):
         self.__cooldownID = None
-        self.__canSelect = True
-        self.as_toggleAlertStateS(False)
-        return
+        if self.__prevCamera in self.__PROHIBITED_CAMERA_MODE:
+            return
+        else:
+            self.__canSelect = True
+            self.as_toggleAlertStateS(False)
+            return
 
     def __stopPreviousTimer(self):
         if self.__cooldownID is not None:
             BigWorld.cancelCallback(self.__cooldownID)
             self.__cooldownID = None
         return
+
+    def __isQueueEmpty(self):
+        return self.__cooldownID is None
 
     def __setCooldown(self, cooldownTime, reason):
         if cooldownTime > 0:
@@ -251,6 +270,12 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
     def __onUpdateReservePanel(self, cooldownTime, reason):
         if reason == UpgradeProhibitionReason.COMBATING:
             self.__setCooldown(cooldownTime, reason)
+        elif reason == UpgradeProhibitionReason.DROWNING:
+            self.__stopPreviousTimer()
+            self.__disablePanel()
+        elif reason == UpgradeProhibitionReason.NOT_DROWN:
+            if not self.__canSelect:
+                self.__setCooldown(cooldownTime, reason)
         else:
             self.__canShowNextTime = False
             self.__hidePanel()

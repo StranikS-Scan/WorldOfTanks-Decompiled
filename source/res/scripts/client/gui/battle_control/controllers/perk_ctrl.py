@@ -92,6 +92,8 @@ class PerksController(ViewComponentsController):
             return
         ctrl = self.sessionProvider.shared.vehicleState
         vehicle = ctrl.getControllingVehicle()
+        if not vehicle:
+            return
         for viewCmp in self._viewComponents:
             viewCmp.setPerks(vehicle.perks)
             viewCmp.updatePerks(self._prevPanelState, {})

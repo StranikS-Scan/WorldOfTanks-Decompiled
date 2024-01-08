@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLAN_INVITE_STATES, ACTIVE_INVITE_LIFE_TIME
-from gui.clans.items import isValueAvailable, formatField
+from gui.clans.data_wrapper.utils import formatField, isValueAvailable
 from gui.Scaleform.daapi.view.meta.ClanInvitesViewWithTableMeta import ClanInvitesViewWithTableMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.CLANS import CLANS

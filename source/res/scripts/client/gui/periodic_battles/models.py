@@ -6,6 +6,7 @@ import typing
 from enum import Enum
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.Scaleform.genConsts.ALERTMESSAGE_CONSTANTS import ALERTMESSAGE_CONSTANTS
 from gui.shared.formatters import text_styles
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.functions import makeTooltip
@@ -227,15 +228,17 @@ class AlertData(object):
      PeriodType.ALL_NOT_AVAILABLE,
      PeriodType.STANDALONE_NOT_AVAILABLE)
     _RES_REASON_ROOT = None
-    __slots__ = ('alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible', 'tooltip', 'isSimpleTooltip')
+    __slots__ = ('state', 'alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'additionalText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible', 'tooltip', 'isSimpleTooltip')
 
-    def __init__(self, alertIcon=None, buttonIcon='', buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText='', popoverAlias=None, bgVisible=True, shadowFilterVisible=False, tooltip=None, isSimpleTooltip=False):
+    def __init__(self, state=ALERTMESSAGE_CONSTANTS.ALERT_MESSAGE_STATE_DEFAULT, alertIcon=None, buttonIcon='', buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText='', additionalText='', popoverAlias=None, bgVisible=True, shadowFilterVisible=False, tooltip=None, isSimpleTooltip=False):
+        self.state = state
         self.alertIcon = alertIcon
         self.buttonIcon = buttonIcon
         self.buttonLabel = buttonLabel
         self.buttonVisible = buttonVisible
         self.buttonTooltip = buttonTooltip
         self.statusText = statusText
+        self.additionalText = additionalText
         self.popoverAlias = popoverAlias
         self.bgVisible = bgVisible
         self.shadowFilterVisible = shadowFilterVisible
@@ -260,12 +263,14 @@ class AlertData(object):
         return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonLabel=backport.text(cls._RES_ROOT.button.moreInfo()), buttonVisible=True, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.unsuitableVehicles(), levels=levelsStr)), shadowFilterVisible=True, tooltip=tooltipValue, isSimpleTooltip=tooltip is None)
 
     def asDict(self):
-        return {'alertIcon': self.alertIcon,
+        return {'state': self.state,
+         'alertIcon': self.alertIcon,
          'buttonIcon': self.buttonIcon,
          'buttonLabel': self.buttonLabel,
          'buttonVisible': self.buttonVisible,
          'buttonTooltip': self.buttonTooltip,
          'statusText': self.statusText,
+         'additionalText': self.additionalText,
          'popoverAlias': self.popoverAlias,
          'bgVisible': self.bgVisible,
          'shadowFilterVisible': self.shadowFilterVisible,

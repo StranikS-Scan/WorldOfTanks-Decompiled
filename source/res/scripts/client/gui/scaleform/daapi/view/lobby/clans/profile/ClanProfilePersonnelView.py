@@ -11,7 +11,7 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
-from gui.clans import items
+from gui.clans.data_wrapper.utils import formatField, isValueAvailable
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
 from gui.impl import backport
 from gui.shared.event_dispatcher import showClanInvitesWindow
@@ -77,7 +77,7 @@ def _getAvgStringValue(dataList, key, formatter=None):
     total = 0
     for item in dataList:
         getter = getattr(item, key)
-        if items.isValueAvailable(getter):
+        if isValueAvailable(getter):
             count += 1
             total += getter()
         return (False, clans_fmts.DUMMY_UNAVAILABLE_DATA)
@@ -95,7 +95,7 @@ def _getWeighedAvgStringValue(dataList, key, weightKey, formatter=None):
     for item in dataList:
         valueGetter = getattr(item, key)
         weightGetter = getattr(item, weightKey)
-        if items.isValueAvailable(valueGetter) and items.isValueAvailable(weightGetter):
+        if isValueAvailable(valueGetter) and isValueAvailable(weightGetter):
             weight = weightGetter()
             vals.append(valueGetter())
             weights.append(weight)
@@ -318,13 +318,13 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
             userVO = {'userProps': {'userName': self.__getMemberName(memberData)}}
         return {'dbID': memberDBID,
          'userName': self.__getMemberName(memberData),
-         'post': items.formatField(getter=memberData.getRoleString),
+         'post': formatField(getter=memberData.getRoleString),
          'postIcon': memberData.getRoleIcon(),
-         'personalRating': items.formatField(getter=memberData.getGlobalRating, formatter=backport.getIntegralFormat),
-         'battlesCount': items.formatField(getter=memberData.getBattlesCount, formatter=backport.getIntegralFormat),
-         'wins': items.formatField(getter=memberData.getBattlesPerformanceAvg, formatter=lambda x: backport.getNiceNumberFormat(x) + '%'),
-         'awgExp': items.formatField(getter=memberData.getBattleXpAvg, formatter=backport.getIntegralFormat),
-         'daysInClan': items.formatField(getter=memberData.getDaysInClan, formatter=backport.getIntegralFormat),
+         'personalRating': formatField(getter=memberData.getGlobalRating, formatter=backport.getIntegralFormat),
+         'battlesCount': formatField(getter=memberData.getBattlesCount, formatter=backport.getIntegralFormat),
+         'wins': formatField(getter=memberData.getBattlesPerformanceAvg, formatter=lambda x: backport.getNiceNumberFormat(x) + '%'),
+         'awgExp': formatField(getter=memberData.getBattleXpAvg, formatter=backport.getIntegralFormat),
+         'daysInClan': formatField(getter=memberData.getDaysInClan, formatter=backport.getIntegralFormat),
          'canShowContextMenu': memberDBID != getAccountDatabaseID(),
          'contactItem': userVO}
 
@@ -354,10 +354,10 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         return valueGetter(item)
 
     def __getMemberName(self, memberData):
-        return items.formatField(getter=memberData.getDbID, formatter=self.getUserName)
+        return formatField(getter=memberData.getDbID, formatter=self.getUserName)
 
     def __getMemberRole(self, memberData):
-        return len(_CLAN_MEMBERS_SORT_INDEXES) if not items.isValueAvailable(memberData.getRole) else _CLAN_MEMBERS_SORT_INDEXES.index(memberData.getRole())
+        return len(_CLAN_MEMBERS_SORT_INDEXES) if not isValueAvailable(memberData.getRole) else _CLAN_MEMBERS_SORT_INDEXES.index(memberData.getRole())
 
     def __getMemberRating(self, memberData):
         return memberData.getGlobalRating()

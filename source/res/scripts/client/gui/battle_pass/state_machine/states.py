@@ -156,7 +156,7 @@ class VideoState(State):
             else:
                 _, data, _ = machine.getRewardsData()
                 chapterID = data.get('chapter')
-                if self.__battlePass.isExtraChapter(chapterID):
+                if self.__battlePass.isExtraChapter(chapterID) or self.__battlePass.isHoliday():
                     mediaName = makeChapterMediaName(chapterID)
                     showBPFullscreenVideo(asBPVideoName(mediaName), mediaName, partial(machine.post, StateEvent()))
         return
@@ -261,7 +261,10 @@ class RewardAnyState(State):
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
                 if not self.__battlePass.isDisabled() and not self.__needShowBuy:
-                    showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+                    view = R.views.lobby.battle_pass.ChapterChoiceView()
+                    if self.__battlePass.isHoliday():
+                        view = R.views.lobby.battle_pass.PostProgressionView()
+                    showMissionsBattlePass(view)
             machine.clearManualFlow()
             return
 
@@ -270,7 +273,10 @@ class RewardAnyState(State):
         if machine is not None:
             machine.post(StateEvent())
         if not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
-            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+            view = R.views.lobby.battle_pass.BattlePassProgressionsView()
+            if self.__battlePass.isHoliday() and self.__battlePass.isCompleted():
+                view = R.views.lobby.battle_pass.PostProgressionView()
+            showMissionsBattlePass(view, chapterID)
         return
 
     def __onShowBuy(self):
@@ -279,8 +285,5 @@ class RewardAnyState(State):
         if machine is not None:
             machine.clearSelf()
             machine.post(StateEvent())
-        callBack = None
-        if not self.__battlePass.getCurrentChapterID():
-            callBack = partial(showMissionsBattlePass, R.views.lobby.battle_pass.ChapterChoiceView())
-        showBattlePassBuyWindow({'backCallback': callBack})
+        showBattlePassBuyWindow()
         return

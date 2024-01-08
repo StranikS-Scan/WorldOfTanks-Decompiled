@@ -42,9 +42,6 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ELITE_BONUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleEliteBonusTooltipData(contexts.VehicleEliteBonusContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_HISTORICAL_REFERENCE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleHistoricalReferenceTooltipData(contexts.VehicleHistoricalReferenceContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.SQUAD_BONUS, None, common.SquadBonusTooltipWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_VEHICLE_BONUS, None, common.NYVehicleBonusTooltipWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_AMMUNITION_BONUSES, None, common.NYAmmunitionVehicleBonusTooltipWindowData(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.NY_FILLERS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.NewYearFillers(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS, None, common.VehiclePointsTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED, None, common.BattlePassNotStartedTooltipWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS, None, common.BattlePassInProgressTooltipContentWindowData(contexts.ToolTipContext(None))),
@@ -55,13 +52,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_RESOURCE, None, common.NyResourceTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_RESOURCE_LIST, None, common.NyResourceListTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_RESOURCE_FOR_SHOP, None, common.NyResourceShopTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_RANDOM_RESOURCE, None, common.NyRandomResourceTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_REWARD_KIT_RESTRICTION, None, common.NyRewardKitRestrictionTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_COIN_TOKEN, None, common.NyCoinTokenTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.NY_SACK_RANDOM_REWARD, None, common.NySackRandomRewardTooltipContentWindowData(contexts.ToolTipContext(None))))
+     DataBuilder(TOOLTIPS_CONSTANTS.RESEARCH_BUTTON, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.ResearchButtonTooltipData(contexts.ToolTipContext(None))))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

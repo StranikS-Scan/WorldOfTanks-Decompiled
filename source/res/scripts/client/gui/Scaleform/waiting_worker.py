@@ -12,16 +12,15 @@ from skeletons.gui.app_loader import IWaitingWidget, IAppFactory, IWaitingWorker
 _logger = logging.getLogger(__name__)
 
 class _WaitingTask(object):
-    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart', '__showBg')
+    __slots__ = ('__messageID', '__isBlocking', '__interruptCallbacks', '__isAlwaysOnTop', '__backgroundImage', '__softStart')
 
-    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showBg=True):
+    def __init__(self, messageID, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
         super(_WaitingTask, self).__init__()
         self.__messageID = messageID
         self.__isBlocking = isBlocking
         self.__isAlwaysOnTop = isAlwaysOnTop
         self.__backgroundImage = backgroundImage
         self.__softStart = softStart
-        self.__showBg = showBg
         if interruptCallback is not None:
             self.__interruptCallbacks = [interruptCallback]
         else:
@@ -29,7 +28,7 @@ class _WaitingTask(object):
         return
 
     def __repr__(self):
-        return '_WaitingTask({}): message={}, interruptCallbacks={}, isBlocking={}, isAlwaysOnTop={}, bkImg={}, softStart={}, showBg={}'.format(id(self), self.__messageID, self.__interruptCallbacks, self.__isBlocking, self.__isAlwaysOnTop, self.__backgroundImage, self.__softStart, self.__showBg)
+        return '_WaitingTask({}): message={}, interruptCallbacks={}, isBlocking={}, isAlwaysOnTop={}, bkImg={}, softStart={}'.format(id(self), self.__messageID, self.__interruptCallbacks, self.__isBlocking, self.__isAlwaysOnTop, self.__backgroundImage, self.__softStart)
 
     @property
     def messageID(self):
@@ -42,10 +41,6 @@ class _WaitingTask(object):
     @property
     def isSoftStart(self):
         return self.__softStart
-
-    @property
-    def showBg(self):
-        return self.__showBg
 
     @isBlocking.setter
     def isBlocking(self, flag):
@@ -140,7 +135,7 @@ class WaitingWorker(IWaitingWorker):
     def getSuspendedWaitingTask(self, messageID):
         return findFirst(lambda task: task.messageID == messageID, self.__suspendStack)
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False, showBg=True):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None, softStart=False):
         BigWorld.Screener.setEnabled(False)
         hasAlwaysOnTopWaiting = self._hasAlwaysOnTopWaiting()
         if hasAlwaysOnTopWaiting and isAlwaysOnTop:
@@ -151,7 +146,7 @@ class WaitingWorker(IWaitingWorker):
             if task is not None and isSingle:
                 task.addInterruptCallback(interruptCallback)
             else:
-                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart, showBg)
+                task = self._insertToStack(messageID, interruptCallback, isBlocking, isAlwaysOnTop, hasAlwaysOnTopWaiting, backgroundImage, softStart)
             if not hasAlwaysOnTopWaiting:
                 self._showWaiting(task)
             return
@@ -238,9 +233,9 @@ class WaitingWorker(IWaitingWorker):
         found = findFirst(lambda task: task.isAlwaysOnTop, reversed(self.__waitingStack))
         return found is not None
 
-    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False, showBg=True):
+    def _insertToStack(self, message, interruptCallback, isBlocking, isAlwaysOnTop, insertBeforeTop=False, backgroundImage=None, softStart=False):
         isBlocking = isBlocking or self._hasBlockingWaiting()
-        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart, showBg)
+        newTask = _WaitingTask(message, interruptCallback, isBlocking, isAlwaysOnTop, backgroundImage, softStart)
         if insertBeforeTop:
             self.__waitingStack.insert(-1, newTask)
         else:
@@ -256,7 +251,7 @@ class WaitingWorker(IWaitingWorker):
         if view is not None:
             if task.backgroundImage:
                 view.setBackgroundImage(task.backgroundImage)
-            view.showWaiting(task.messageID, task.isSoftStart, task.showBg)
+            view.showWaiting(task.messageID, task.isSoftStart)
             self.__isShown = True
             if task.isBlocking:
                 view.setCallback(task.interrupt)

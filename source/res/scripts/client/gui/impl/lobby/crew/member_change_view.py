@@ -204,8 +204,14 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self._updateViewModel()
 
     def _onInventoryUpdate(self, invDiff):
-        if GUI_ITEM_TYPE.TANKMAN in invDiff:
-            self.__dataProviders.update()
+        if GUI_ITEM_TYPE.TANKMAN not in invDiff:
+            return
+        self.__dataProviders.update()
+        compDescr = invDiff[GUI_ITEM_TYPE.TANKMAN].get('compDescr')
+        if compDescr:
+            newTankman = self.itemsCache.items.getTankman(next(iter(compDescr)))
+            if newTankman and not newTankman.isInTank and newTankman.vehicleNativeDescr.type.compactDescr == self.__currentVehicle.intCD:
+                self.__equipTankman(newTankman)
 
     def _onWidgetChangeCrewClick(self, _, slotIdx, __):
         self.selectSlot(slotIdx)

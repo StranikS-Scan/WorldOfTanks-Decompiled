@@ -118,6 +118,7 @@
     <Continental_AV-1790-3_M>	142	</Continental_AV-1790-3_M>
     <LVDS_1100_2>	143	</LVDS_1100_2>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
+    <General_Motors_12V71T>	145	</General_Motors_12V71T>
     <Continental_AVI_1790_8RM>	146	</Continental_AVI_1790_8RM>
     <Continental_AVI_1790_8C>	147	</Continental_AVI_1790_8C>
     <Twin_Cadillac_series_44T4E1>	148	</Twin_Cadillac_series_44T4E1>
@@ -1052,8 +1053,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
     </LVDS_1100_2>
     <Continental_AV-1790-5B>
       <userString>	#usa_vehicles:Continental_AV-1790-5B	</userString>
@@ -1860,6 +1861,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </Continental_AVI_1790_8RM>
+    <General_Motors_12V71T>
+      <userString>	#usa_vehicles:General_Motors_12V71T	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1610	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </General_Motors_12V71T>
     <Continental_AOS-895-3>
       <userString>	#usa_vehicles:Continental_AOS-895-3	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOS-895-3_short	</shortUserString>

@@ -8,25 +8,17 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_car
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.event_dispatcher import showFrontlineInfoWindow
+from gui.shared.event_dispatcher import showFrontlineInfoWindow, showHangar
 from gui.shared.formatters import time_formatters
 from gui.shared.formatters.ranges import toRomanRangeString, toRangeString
 from gui.shared.utils import isRomanNumberForbidden
-from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicModeSelectorItem(ModeSelectorLegacyItem):
-    __slots__ = ('_isNew', '_battleType')
     _VIEW_MODEL = ModeSelectorEpicModel
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.EPIC_BATTLE
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-
-    def __init__(self, oldSelectorItem):
-        super(EpicModeSelectorItem, self).__init__(oldSelectorItem)
-        self._battleType = SELECTOR_BATTLE_TYPES.EPIC
-        self._isNew = not selectorUtils.isKnownBattleType(self._battleType)
 
     @property
     def isVisible(self):
@@ -35,20 +27,15 @@ class EpicModeSelectorItem(ModeSelectorLegacyItem):
     @property
     def isSelectable(self):
         from frontline.gui.frontline_helpers import isHangarAvailable
-        return isHangarAvailable() and not self.__epicController.isEpicPrbActive()
-
-    def setBattleTypeAsKnown(self):
-        if self._isNew:
-            selectorUtils.setBattleTypeAsKnown(self._battleType)
-
-    def handleClick(self):
-        self.__epicController.showWelcomeScreenIfNeed()
-        self.__epicController.showProgressionDuringSomeStates(True)
-        self.setBattleTypeAsKnown()
+        return isHangarAvailable() and not self.__epicController.isEpicPrbActive() and self.__epicController.isEnabled()
 
     def handleInfoPageClick(self):
         showFrontlineInfoWindow()
-        self.setBattleTypeAsKnown()
+        self.__epicController.setBattleTypeAsKnown()
+
+    def handleClick(self):
+        showHangar()
+        self.__epicController.showProgressionDuringSomeStates(True)
 
     def _getIsDisabled(self):
         return not self.__epicController.isEnabled()

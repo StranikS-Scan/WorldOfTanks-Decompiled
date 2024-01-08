@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_window.recruit_ic
 class RecruitDialogTemplateViewModel(DialogTemplateViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=2):
+    def __init__(self, properties=10, commands=2):
         super(RecruitDialogTemplateViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -32,8 +32,15 @@ class RecruitDialogTemplateViewModel(DialogTemplateViewModel):
     def setText(self, value):
         self._setString(8, value)
 
+    def getHasVoiceover(self):
+        return self._getBool(9)
+
+    def setHasVoiceover(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(RecruitDialogTemplateViewModel, self)._initialize()
         self._addViewModelProperty('recruitContent', RecruitContentViewModel())
         self._addViewModelProperty('iconModel', RecruitIconViewModel())
         self._addStringProperty('text', '')
+        self._addBoolProperty('hasVoiceover', False)

@@ -10,7 +10,6 @@ from gui.SystemMessages import SM_TYPE, ResultMsg
 from gui.shared.utils import code2str
 from gui.shared.gui_items.processors import plugins as proc_plugs
 from skeletons.gui.shared import IItemsCache
-from gui.shared.money import Currency
 from collections import namedtuple
 _logger = logging.getLogger(__name__)
 
@@ -31,19 +30,6 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
         localKey = '#system_messages:{}'.format(defaultSysMsgKey)
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
-
-
-def makeNYSuccess(sysMsgKey='', msgType=SM_TYPE.Information, auxData=None, *args, **kwargs):
-    return makeSuccess(i18n.makeString('#ny:{}'.format(sysMsgKey), *args, **kwargs), msgType, auxData)
-
-
-def makeCrewSkinCompensationMessage(comp):
-    compMsg = None
-    if comp is not None:
-        amount = comp.price.get(Currency.CREDITS, None)
-        if amount is not None:
-            compMsg = makeI18nSuccess(sysMsgKey='crewSkinsCompensation/success', compensation=amount, type=SM_TYPE.SkinCompensation)
-    return compMsg
 
 
 class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'itemCount'])):

@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
+import itertools
 import logging
 from collections import namedtuple
 import typing
 from enum import Enum
+import nations
 from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, FinalReward
+from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, FinalReward, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
@@ -22,8 +24,9 @@ from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
+from items.tankmen import getNationGroups
 from nations import INDICES
-from shared_utils import first
+from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
@@ -45,9 +48,17 @@ class BattlePassMediaPatterns(str, Enum):
     PART = 'pt'
 
 
-def chaptersIDsComparator(firstID, secondID):
-    order = getChaptersOrder()
-    return cmp(order.get(firstID), order.get(secondID))
+class ChapterType(str, Enum):
+    COMMON = 'common'
+    EXTRA = 'extra'
+    HOLIDAY = 'holiday'
+
+
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def getChapterType(chapterID, battlePass=None):
+    if battlePass.isHoliday():
+        return ChapterType.HOLIDAY
+    return ChapterType.EXTRA if battlePass.isExtraChapter(chapterID) else ChapterType.COMMON
 
 
 def isBattlePassActiveSeason():
@@ -96,13 +107,8 @@ def getIntroSlidesNames():
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def getChaptersOrder(battlePass=None):
-    chapterIDs = [ chapter for chapter in battlePass.getChapterIDs() if not battlePass.isExtraChapter(chapter) ]
-    chapterIDs.sort()
-    extraChapterID = battlePass.getExtraChapterID()
-    if extraChapterID:
-        chapterIDs.append(extraChapterID)
-    return dict(zip(chapterIDs, GUI_SETTINGS.battlePassChaptersOrder))
+def getChaptersNumbers(battlePass=None):
+    return {chapterID:chapterNum for chapterNum, chapterID in enumerate(sorted(battlePass.getChapterIDs()), 1)}
 
 
 def getSupportedArenaBonusTypeFor(queueType, isInUnit):
@@ -146,12 +152,21 @@ def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
     window.load()
 
 
+def getTankmanFirstNationGroup(tankmanGroupName):
+    for nationID in nations.MAP.iterkeys():
+        group = findFirst(lambda nationGroup: nationGroup.name == tankmanGroupName, itertools.chain(getNationGroups(nationID, True).itervalues(), getNationGroups(nationID, False).itervalues()))
+        if group is not None:
+            return group
+
+    return
+
+
 def makeProgressionStyleMediaName(chapterID, styleLevel):
-    return '{}_{}{}_{}{}'.format(BattlePassMediaPatterns.STYLE, BattlePassMediaPatterns.CHAPTER, getChaptersOrder()[chapterID], BattlePassMediaPatterns.LEVEL, styleLevel)
+    return '{}_{}{}_{}{}'.format(BattlePassMediaPatterns.STYLE, BattlePassMediaPatterns.CHAPTER, getChaptersNumbers()[chapterID], BattlePassMediaPatterns.LEVEL, styleLevel)
 
 
 def makeChapterMediaName(chapterID, part=''):
-    mediaName = '{}_{}{}'.format(BattlePassMediaPatterns.MEDIA, BattlePassMediaPatterns.CHAPTER, getChaptersOrder()[chapterID])
+    mediaName = '{}_{}{}'.format(BattlePassMediaPatterns.MEDIA, BattlePassMediaPatterns.CHAPTER, getChaptersNumbers()[chapterID])
     return '{}_{}{}'.format(mediaName, BattlePassMediaPatterns.PART, part) if part else mediaName
 
 
@@ -271,9 +286,34 @@ def getDataByTankman(tankman):
     tankmanName = tankman.getFullUserNameByNation(nation)
     skills = tankman.getAllKnownSkills()
     newSkillCount, _ = tankman.getNewSkillCount(onlyFull=True)
+    groupName = tankman.getGroupName()
     if newSkillCount > 0:
         skills += [SKILLS.TYPE_NEW_SKILL] * (newSkillCount - skills.count(SKILLS.TYPE_NEW_SKILL))
-    return (iconName, tankmanName, skills)
+    return (iconName,
+     tankmanName,
+     skills,
+     groupName)
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getReceivedTankmenCount(groupName, battlePass=None):
+    entitlement = battlePass.getTankmenEntitlements().get(groupName)
+    return entitlement.amount if entitlement is not None else 0
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getTankmenShopPackages(battlePass=None):
+    shopPackages = {}
+    tankmen = battlePass.getSpecialTankmen()
+    for tankman, tankmanInfo in tankmen.iteritems():
+        source = tankmanInfo.get('source')
+        if source == BattlePassTankmenSource.SHOP:
+            shopPackages[tankman] = tankmanInfo.get('availableCount', 0)
+        if source == BattlePassTankmenSource.QUEST_CHAIN:
+            packageName = tankman + TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
+            shopPackages[packageName] = tankmanInfo.get('availableCount', 0)
+
+    return shopPackages
 
 
 def getOfferTokenByGift(tokenID):
@@ -308,10 +348,14 @@ def updateBuyAnimationFlag(chapterID, settingsCore=None, battlePass=None):
 @replace_none_kwargs(battlePass=IBattlePassController)
 def updateBattlePassSettings(data, battlePass=None):
     version = battlePass.getSeasonNum()
-    if data[BattlePassStorageKeys.FLAGS_VERSION] != version:
+    versionStorageKey = BattlePassStorageKeys.FLAGS_VERSION
+    if battlePass.isHoliday():
+        version -= HOLIDAY_SEASON_OFFSET
+        versionStorageKey = BattlePassStorageKeys.FLAGS_VERSION_HOLIDAY
+    if data[versionStorageKey] != version:
         _updateClientSettings()
         _updateServerSettings(data)
-        data[BattlePassStorageKeys.FLAGS_VERSION] = version
+        data[versionStorageKey] = version
         return True
     return False
 

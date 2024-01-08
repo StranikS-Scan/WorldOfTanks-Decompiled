@@ -14,7 +14,6 @@ class EpicBattleLogActions(Enum):
 class EpicBattleLogKeys(Enum):
     ABILITIES_CONFIRM = 'abilities_confirm'
     SETUP_VIEW = 'setup_view'
-    DROP_SKILL_DIALOG_CONFIRM = 'drop_skill_dialog_confirm'
     BUTTON = 'button'
     HANGAR = 'hangar'
     CONTAINER_VIEW = 'container_view'
@@ -42,6 +41,7 @@ class EpicBattleLogButtons(Enum):
     ENTRY_POINT = 'entry_point'
     REWARDS_SELECTION_CONFIRM = 'rewards_selection_confirm'
     REWARDS_SELECTION_CLOSE = 'rewards_selection_close'
+    AWARDS_OK = 'awards_ok'
 
 
 class EpicBattleLogTabs(Enum):

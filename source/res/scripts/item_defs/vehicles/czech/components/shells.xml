@@ -307,6 +307,59 @@
       </damage>
     </armorSpalls>
   </_47mm_Narazovy_vz_36>
+  <_130mm_Prurazny_59-56G>
+    <id>	73	</id>
+    <userString>	#czech_vehicles:_130mm_Prurazny_59-56G	</userString>
+    <icon>	ap	</icon>
+    <price>	1100	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Prurazny_59-56G>
+  <_130mm_Prurazny_59-56G_s_oc_jadrem>
+    <id>	74	</id>
+    <userString>	#czech_vehicles:_130mm_Prurazny_59-56G_s_oc_jadrem	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Prurazny_59-56G_s_oc_jadrem>
+  <_130mm_Narazovy_59-56G>
+    <id>	75	</id>
+    <userString>	#czech_vehicles:_130mm_Narazovy_59-56G	</userString>
+    <icon>	he_modern	</icon>
+    <price>	980	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_130mm_Narazovy_59-56G>
   <_75mm_Prurazny_vz_42>
     <id>	21	</id>
     <userString>	#czech_vehicles:_75mm_Prurazny_vz_42	</userString>
@@ -765,9 +818,9 @@
       </damage>
     </armorSpalls>
   </_100mm_Narazovy_vz_50>
-  <_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss>
+  <_24_mm_Panzer_Granate_Vollgeschoss>
     <id>	67	</id>
-    <userString>	#czech_vehicles:_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss	</userString>
+    <userString>	#czech_vehicles:_24_mm_Panzer_Granate_Vollgeschoss	</userString>
     <icon>	ap	</icon>
     <price>	16	</price>
     <kind>	ARMOR_PIERCING	</kind>
@@ -778,10 +831,10 @@
       <armor>	30	</armor>
       <devices>	27	</devices>
     </damage>
-  </_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss>
-  <_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss_41>
+  </_24_mm_Panzer_Granate_Vollgeschoss>
+  <_24_mm_Panzer_Granate_Vollgeschoss_41>
     <id>	68	</id>
-    <userString>	#czech_vehicles:_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss_41	</userString>
+    <userString>	#czech_vehicles:_24_mm_Panzer_Granate_Vollgeschoss_41	</userString>
     <icon>	ap_premium	</icon>
     <price>	800	</price>
     <improved>	true	</improved>
@@ -793,7 +846,7 @@
       <armor>	30	</armor>
       <devices>	27	</devices>
     </damage>
-  </_24_mm_Pz_G_V_Panzer_Granate_Vollgeschoss_41>
+  </_24_mm_Panzer_Granate_Vollgeschoss_41>
   <_24_mm_St_G_Stahlgranate>
     <id>	69	</id>
     <userString>	#czech_vehicles:_24_mm_St_G_Stahlgranate	</userString>

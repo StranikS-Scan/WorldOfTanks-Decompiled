@@ -53,9 +53,6 @@ class GameInputMgr(GameInputManagerMeta):
         if not self.onEscape:
             self.as_clearKeyHandlerS(_KEY_ESCAPE, _KEY_DOWN)
 
-    def setIgnoredKeyCode(self, keyCode):
-        self.as_setIgnoredKeyCodeS(keyCode)
-
     def _populate(self):
         super(GameInputMgr, self)._populate()
         self._setupChatKeyHandlers()

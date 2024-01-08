@@ -12,8 +12,7 @@ class PromoGetTeaserRequestCtx(CommonWebRequestCtx):
     def isClanSyncRequired(self):
         return False
 
-    @staticmethod
-    def getDataObj(incomeData):
+    def getDataObj(self, incomeData):
         return PromoDataParser.parse(incomeData)
 
     @classmethod

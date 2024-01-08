@@ -4,6 +4,7 @@ import logging
 import BattleReplay
 import GUI
 import WWISE
+from PlayerEvents import g_playerEvents
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins, settings
@@ -175,6 +176,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__callbackDelayer = CallbackDelayer()
         if RoleHelpPlugin.isAvailableToShow():
             self.__toggleFade(True)
+        g_playerEvents.crosshairPanelInitialized()
 
     def _dispose(self):
         self.stopPlugins()

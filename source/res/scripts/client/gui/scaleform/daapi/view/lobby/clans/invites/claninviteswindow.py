@@ -11,7 +11,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters
 from gui.clans.clan_helpers import ClanInvitesPaginator
 from gui.clans.clan_helpers import ClanListener
-from gui.clans.items import formatField
+from gui.clans.data_wrapper.utils import formatField
 from gui.clans.settings import CLAN_INVITE_STATES
 from gui.impl import backport
 from gui.impl.gen import R

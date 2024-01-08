@@ -61,12 +61,6 @@ class HangarMeta(View):
     def as_hideTeaserTimerS(self):
         return self.flashObject.as_hideTeaserTimer() if self._isDAAPIInited() else None
 
-    def as_setRewardKitsVisibleS(self, value):
-        return self.flashObject.as_setRewardKitsVisible(value) if self._isDAAPIInited() else None
-
-    def as_setGiftEntryVisibleS(self, value):
-        return self.flashObject.as_setGiftEntryVisible(value) if self._isDAAPIInited() else None
-
     def as_setPrestigeWidgetVisibleS(self, value):
         return self.flashObject.as_setPrestigeWidgetVisible(value) if self._isDAAPIInited() else None
 

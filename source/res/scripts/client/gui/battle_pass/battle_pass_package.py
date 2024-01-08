@@ -5,7 +5,6 @@ import typing
 from battle_pass_common import BattlePassConsts
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_constants import MIN_LEVEL
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator
 from helpers import dependency
 from helpers.dependency import replace_none_kwargs
 from skeletons.gui.game_control import IBattlePassController
@@ -97,6 +96,9 @@ class BattlePassPackage(object):
     def isCustom(self):
         return self.__battlePass.isCustomChapter(chapterID=self.__chapterID)
 
+    def isHoliday(self):
+        return self.__battlePass.isHoliday()
+
     def getExpireTime(self):
         return self.__battlePass.getChapterExpiration(self.__chapterID)
 
@@ -163,4 +165,4 @@ class PackageAnyLevels(BattlePassPackage):
 
 @replace_none_kwargs(battlePass=IBattlePassController)
 def generatePackages(battlePass=None):
-    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getChapterIDs()), cmp=lambda first, second: chaptersIDsComparator(first[0], second[0])))
+    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getChapterIDs())))

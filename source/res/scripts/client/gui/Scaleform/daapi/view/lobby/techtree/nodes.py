@@ -10,6 +10,9 @@ from helpers.time_utils import getCurrentTimestamp
 from helpers import i18n, dependency
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.server_events import IEventsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.shared.gui_items.vehicle_modules import VehicleModule
 
 class BaseNode(object):
     __slots__ = ('nodeName', 'nodeCD', 'nationID', 'itemTypeID', 'isFound', 'isAnnouncement', 'order')

@@ -17,15 +17,15 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import TANKMAN_BONUS_NAME, chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getRewardTypeBySource, getStyleForChapter, getTankmanInfo, getVehicleInfoForChapter, isCommonBattlePassChapter, isSeasonEndingSoon, updateBuyAnimationFlag
-from gui.battle_pass.sounds import CUSTOM_TASKS_SOUND_SPACE, BattlePassSounds
+from gui.battle_pass.battle_pass_helpers import TANKMAN_BONUS_NAME, fillBattlePassCompoundPrice, getChapterType, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getRewardTypeBySource, getStyleForChapter, getTankmanInfo, getVehicleInfoForChapter, isCommonBattlePassChapter, isSeasonEndingSoon, updateBuyAnimationFlag
+from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.rewards_helper import setRewards
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.pub import ViewImpl
@@ -103,7 +103,8 @@ class BattlePassProgressionsView(ViewImpl):
         self.__startExtraSounds()
 
     def deactivate(self):
-        self.__stopSounds()
+        if not self.__exitSoundsIsPlayed:
+            self.__stopSounds()
         self._unsubscribe()
 
     def setChapter(self, chapterID):
@@ -166,7 +167,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__updateProgressData()
         self.__updateBuyButtonState()
         self.__startExtraSounds()
-        self.__exitSoundsIsPlayed = False
 
     def _onLoaded(self, *args, **kwargs):
         super(BattlePassProgressionsView, self)._onLoaded(*args, **kwargs)
@@ -269,7 +269,7 @@ class BattlePassProgressionsView(ViewImpl):
             character = getTankmanInfo(characterBonus)
             if character is None:
                 return
-            iconName, characterName, skills = getDataByTankman(character)
+            iconName, characterName, skills, groupName = getDataByTankman(character)
             skillsArray = Array()
             for skill in skills:
                 skillsArray.addString(skill)
@@ -278,6 +278,7 @@ class BattlePassProgressionsView(ViewImpl):
             model.setTankman(characterName)
             model.setSkills(skillsArray)
             model.setTooltipId(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED)
+            model.setGroupName(groupName)
             packSpecialTooltipData(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, self.__specialTooltipItems, character.getRecruitID())
             return
 
@@ -354,11 +355,11 @@ class BattlePassProgressionsView(ViewImpl):
         model.setIsBattlePassCompleted(self.__battlePass.isCompleted())
         model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
         model.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
-        model.setIsExtra(self.__battlePass.isExtraChapter(self.__chapterID))
+        model.setChapterType(ChapterType(getChapterType(self.__chapterID)))
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setSeasonText(self.__makeSeasonTimeText())
         model.setHasExtra(self.__battlePass.hasExtra())
-        model.setSpecialVoiceTankmenCount(len(self.__battlePass.getSpecialVoiceTankmen()))
+        model.setSpecialVoiceTankmenCount(len(self.__battlePass.getSpecialTankmen()))
         fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__setExpirations(model)
         if isCommonBattlePassChapter(self.__chapterID):
@@ -617,7 +618,7 @@ class BattlePassProgressionsView(ViewImpl):
         self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = False
 
     def __getDefaultChapterID(self):
-        return self.__battlePass.getCurrentChapterID() or first(sorted(self.__battlePass.getChapterIDs(), cmp=chaptersIDsComparator))
+        return self.__battlePass.getCurrentChapterID() or first(sorted(self.__battlePass.getChapterIDs()))
 
     def __showIntroVideo(self, onStart=False):
         settings = self.__settingsCore.serverSettings
@@ -631,13 +632,13 @@ class BattlePassProgressionsView(ViewImpl):
     def __makeSeasonTimeText(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
             endTimestamp = self.__battlePass.getChapterExpiration(self.__chapterID)
-            endStringRes = _bpRes.progression.season.end.extra
+            endStringRes = _bpRes.progression.season.end.special
         elif self.__battlePass.isSeasonFinished():
             endTimestamp = 0
             endStringRes = _bpRes.commonProgression.body.ended
         else:
             endTimestamp = self.__battlePass.getSeasonFinishTime()
-            endStringRes = _bpRes.progression.season.end.normal
+            endStringRes = _bpRes.progression.season.end.special if self.__battlePass.isHoliday() else _bpRes.progression.season.end.normal
         endTime = time_utils.getTimeStructInLocal(endTimestamp)
         return backport.text(endStringRes(), seasonNum=int2roman(self.__battlePass.getSeasonNum()), endDay=endTime.tm_mday, endMonth=backport.text(R.strings.menu.dateTime.months.num(endTime.tm_mon)()), endTime=formatDate('%H:%M', endTimestamp))
 
@@ -729,14 +730,16 @@ class BattlePassProgressionsView(ViewImpl):
         showBattlePassTankmenVoiceover()
 
     def __stopSounds(self):
-        self.soundManager.playInstantSound(BattlePassSounds.VOICEOVER_STOP)
+        if self.__battlePass.getSpecialTankmen():
+            self.soundManager.playInstantSound(BattlePassSounds.HOLIDAY_VOICEOVER_STOP if self.__battlePass.isHoliday() else BattlePassSounds.VOICEOVER_STOP)
         self.__stopExtraSounds()
         self.__exitSoundsIsPlayed = True
 
     def __startExtraSounds(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            self.soundManager.playInstantSound(CUSTOM_TASKS_SOUND_SPACE.enterEvent)
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
+            self.__exitSoundsIsPlayed = False
 
     def __stopExtraSounds(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            self.soundManager.playInstantSound(CUSTOM_TASKS_SOUND_SPACE.exitEvent)
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_EXIT)

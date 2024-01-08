@@ -19,9 +19,9 @@ class OffersState(Enum):
 
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards', 'onNewYearIntroClosed')
+    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
 
-    def __init__(self, properties=15, commands=8):
+    def __init__(self, properties=13, commands=7):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -110,18 +110,6 @@ class DailyQuestsViewModel(ViewModel):
     def setIsComp7Active(self, value):
         self._setBool(12, value)
 
-    def getIsNewYearAvailable(self):
-        return self._getBool(13)
-
-    def setIsNewYearAvailable(self, value):
-        self._setBool(13, value)
-
-    def getIsNewYearIntroVisible(self):
-        return self._getBool(14)
-
-    def setIsNewYearIntroVisible(self, value):
-        self._setBool(14, value)
-
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
         self._addViewModelProperty('dailyQuests', DailyQuestsModel())
@@ -137,8 +125,6 @@ class DailyQuestsViewModel(ViewModel):
         self._addBoolProperty('premMissionsTabDiscovered', False)
         self._addBoolProperty('isBattlePassActive', False)
         self._addBoolProperty('isComp7Active', False)
-        self._addBoolProperty('isNewYearAvailable', False)
-        self._addBoolProperty('isNewYearIntroVisible', False)
         self.onClose = self._addCommand('onClose')
         self.onReroll = self._addCommand('onReroll')
         self.onTabClick = self._addCommand('onTabClick')
@@ -146,4 +132,3 @@ class DailyQuestsViewModel(ViewModel):
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')
         self.onClaimRewards = self._addCommand('onClaimRewards')
-        self.onNewYearIntroClosed = self._addCommand('onNewYearIntroClosed')

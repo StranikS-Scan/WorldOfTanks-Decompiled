@@ -16,9 +16,6 @@ class LootRendererTypes(ViewModel):
     VEHICLE_COMPENSATION_WITHOUT_ANIMATION = 'VehicleCompensationWithoutAnimationRenderer'
     BLUEPRINT_FINAL_FRAGMENT = 'BlueprintFinalFragmentRenderer'
     CREW_BOOK = 'CrewBookRenderer'
-    NEW_YEAR_FRAGMENTS = 'LootNewYearFragmentsRenderer'
-    NEW_YEAR_FRAGMENTS_COMPENSATION = 'LootNewYearFragmentsCompensationRenderer'
-    NEW_YEAR_TOY = 'LootNewYearToyRenderer'
 
     def __init__(self, properties=0, commands=0):
         super(LootRendererTypes, self).__init__(properties=properties, commands=commands)

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/epic_battle/loggers.py
 from typing import TYPE_CHECKING
-from epic_constants import EPIC_SELECT_BONUS_NAME
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -83,7 +82,7 @@ class EpicBattleTooltipLogger(EpicBattleLogger):
             self._additionalInfo = None
             if self._skipAdditionalInfoTooltips is None or tooltip not in self._skipAdditionalInfoTooltips:
                 if tooltip == TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP:
-                    self._additionalInfo = EPIC_SELECT_BONUS_NAME
+                    self._additionalInfo = args[0]
                 elif args:
                     if tooltip == TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY:
                         self._additionalInfo = args[1]

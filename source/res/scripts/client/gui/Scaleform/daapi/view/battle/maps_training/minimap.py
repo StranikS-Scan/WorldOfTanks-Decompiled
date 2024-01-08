@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/minimap.py
 import BigWorld
 from helpers import isPlayerAvatar
+from account_helpers.settings_core.settings_constants import GAME
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from items.vehicles import getVehicleClassFromVehicleType
-from account_helpers.AccountSettings import AccountSettings
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import MarkerType, LocationMarkerSubType
 from gui import GUI_SETTINGS
@@ -84,7 +84,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
 
     def start(self):
         super(BotAppearNotificationPlugin, self).start()
-        minimapSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings('minimapSize'))
+        minimapSize = settings.clampMinimapSizeIndex(self.settingsCore.getSetting(GAME.MINIMAP_SIZE))
         self._curScale = self._calculateMarkerScale(minimapSize)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:

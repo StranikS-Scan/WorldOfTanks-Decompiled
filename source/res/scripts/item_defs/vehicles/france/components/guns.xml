@@ -96,6 +96,7 @@
     <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <_105mm_D1504_7x7>	503	</_105mm_D1504_7x7>
     <_120mm_SA_46_AC_7x7>	504	</_120mm_SA_46_AC_7x7>
+    <_130mm_45_Model_1935_7x7>	505	</_130mm_45_Model_1935_7x7>
     <Canon_de_105_court_mle_1934S_SH>	10000	</Canon_de_105_court_mle_1934S_SH>
     <Canon_de_75mm_Vo_920_m_s_dualgun_SH>	10001	</Canon_de_75mm_Vo_920_m_s_dualgun_SH>
     <_90mm_F3M_SH>	10002	</_90mm_F3M_SH>
@@ -5164,6 +5165,64 @@
         </_130mm_Common_HE>
       </shots>
     </_130mm_45_Model_1935>
+    <_130mm_45_Model_1935_7x7>
+      <userString>	#france_vehicles:_130mm_45_Model_1935_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	3700	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_Capped_Common_Semi_AP>
+          <defaultPortion>	0.85	</defaultPortion>
+          <speed>	960	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 240	</piercingPower>
+        </_130mm_Capped_Common_Semi_AP>
+        <_130mm_Capped_Common>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	296 283	</piercingPower>
+        </_130mm_Capped_Common>
+        <_130mm_Common_HE>
+          <defaultPortion>	0.15	</defaultPortion>
+          <speed>	840	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_Common_HE>
+      </shots>
+    </_130mm_45_Model_1935_7x7>
     <_155mm_SA_58_AC>
       <userString>	#france_vehicles:_155mm_SA_58_AC	</userString>
       <tags></tags>

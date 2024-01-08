@@ -81,6 +81,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
     def _populate(self):
         super(Comp7BattlePage, self)._populate()
         g_eventBus.addListener(GameEvent.PREBATTLE_INPUT_STATE_LOCKED, self.__onPrebattleInputStateLocked, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
         prebattleCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
         isSelectionConfirmed = False
         if prebattleCtrl is not None:
@@ -97,10 +98,13 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         periodCtrl = self.sessionProvider.shared.arenaPeriod
         arenaPeriod = periodCtrl.getPeriod() if periodCtrl else None
         self.__visibilityManager = _ComponentsVisibilityManager(arenaPeriod, isSelectionConfirmed)
+        if avatar_getter.isObserver():
+            self.as_onVehicleSelectionConfirmedS()
         return
 
     def _dispose(self):
         g_eventBus.removeListener(GameEvent.PREBATTLE_INPUT_STATE_LOCKED, self.__onPrebattleInputStateLocked, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.removeListener(GameEvent.CALLOUT_DISPLAY_EVENT, self.__handleCalloutDisplayEvent, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.__returnCameraDelayer.stopCallback(self.__returnCamera)
         prebattleCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
         if prebattleCtrl is not None:
@@ -141,6 +145,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         super(Comp7BattlePage, self)._switchToPostmortem()
         BigWorld.player().setIsObserver()
         self.__updateComponentsVisibility()
+        self.__processCallout(needShow=False)
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         if self.__visibilityManager is not None:
@@ -152,6 +157,21 @@ class Comp7BattlePage(Comp7BattlePageMeta):
 
     def _onAvatarCtrlModeChanged(self, ctrlMode):
         pass
+
+    def __handleCalloutDisplayEvent(self, event):
+        self.__processCallout(needShow=event.ctx['isDown'])
+
+    def __processCallout(self, needShow):
+        alias = BATTLE_VIEW_ALIASES.CALLOUT_PANEL
+        if needShow:
+            if self._isBattleLoading:
+                self._blToggling.add(alias)
+            elif not self.as_isComponentVisibleS(alias):
+                self._setComponentsVisibility(visible={alias})
+        elif self._isBattleLoading:
+            self._blToggling.discard(alias)
+        elif self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
 
     def __refreshReturnCallback(self):
         currTime = BigWorld.time()
@@ -189,7 +209,7 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         else:
             if vehicle is None:
                 vehicle = ctrl.getCurrentGUIVehicle()
-            if vehicle is not None:
+            if vehicle is not None and not avatar_getter.isObserver():
                 rawData = ctrl.getCurrentVehicleInfo(extendWithDataFromList=True) or {}
                 vehicleRole = vehicle.role
                 vehicleClass = vehicle.type
@@ -236,12 +256,14 @@ class _ComponentsVisibilityManager(object):
          BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL: self.__carouselPredicate,
          BATTLE_VIEW_ALIASES.POINT_OF_INTEREST_NOTIFICATIONS_PANEL: self.__POINotificationsPredicate,
          BATTLE_VIEW_ALIASES.RIBBONS_PANEL: self.__ribbonPanelPredicate,
-         BATTLE_VIEW_ALIASES.PERKS_PANEL: self.__perksPanelPredicate}
+         BATTLE_VIEW_ALIASES.PERKS_PANEL: self.__perksPanelPredicate,
+         BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL: self.__prebattleAmmoPredicate}
         self.__isSelectionConfirmed = isSelectionConfirmed
         self.__arenaPeriod = arenaPeriod
         self.__isBattleLoaded = False
         self.__isFullStatsShown = False
         self.__controllingVehicleID = None
+        self.__isObserver = avatar_getter.isObserver()
         self.__visible, self.__hidden = set(), set()
         self.__needUpdateState = True
         self.__updateState()
@@ -315,7 +337,7 @@ class _ComponentsVisibilityManager(object):
         return self.__arenaPeriod >= ARENA_PERIOD.BATTLE and self.__isBattleLoaded and avatar_getter.getPlayerTeam() == BigWorld.player().arena.vehicles[self.__controllingVehicleID]['team']
 
     def __carouselPredicate(self):
-        return not BattleReplay.g_replayCtrl.isPlaying and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isSelectionConfirmed and not self.__isFullStatsShown
+        return not BattleReplay.g_replayCtrl.isPlaying and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isSelectionConfirmed and not self.__isFullStatsShown and not self.__isObserver
 
     def __POINotificationsPredicate(self):
         return self.__arenaPeriod == ARENA_PERIOD.BATTLE and not self.__isFullStatsShown
@@ -325,3 +347,6 @@ class _ComponentsVisibilityManager(object):
 
     def __controllingOwnVehicle(self):
         return avatar_getter.getPlayerVehicleID() == self.__controllingVehicleID
+
+    def __prebattleAmmoPredicate(self):
+        return not self.__isObserver

@@ -224,11 +224,7 @@ class StatisticsCollector(IStatisticsCollector):
          BigWorld.WindowModeExclusiveFullscreen: 1,
          BigWorld.WindowModeBorderless: 2}
         monitorSettings = monitor_settings.g_monitorSettings
-        resolutionContainer = monitorSettings.currentWindowSize
-        if windowMode == BigWorld.WindowModeExclusiveFullscreen:
-            resolutionContainer = monitorSettings.currentVideoMode
-        elif windowMode == BigWorld.WindowModeBorderless:
-            resolutionContainer = monitorSettings.currentBorderlessSize
+        resolutionContainer = monitorSettings.screenResolution
         data = {'started_at': int(self.gameSession.sessionStartedAt),
          'map': lastArenaTypeID & 65535,
          'mode': lastArenaTypeID >> 16,

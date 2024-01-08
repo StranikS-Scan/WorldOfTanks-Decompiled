@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/shared/tooltips/FLRandomReserve.py
 import BigWorld
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -36,18 +35,18 @@ class FLRandomReserve(BlocksTooltipData):
             return self.__getDisabledBlocks()
         self.itemCD = item.getDescriptor().compactDescr
         equipment = self.__getEquipmentByIntCD(self.itemCD)
-        isStack = self.__epicController.isReserveStack(equipment.extraName())
-        hasRandomBonusCap = self.__epicController.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC_RANDOM_RESERVES)
+        isStacked = self.__epicController.isReserveStack(equipment.extraName()) and item.getQuantity() > 1
+        hasRandomBonusCap = self.__epicController.isRandomBattleReserves()
         index = args[0]
-        width = self._DISABLED_TOOLTIP_MIN_WIDTH if self.__isDisabled(index) else (self._STACK_TOOLTIP_MIN_WIDTH if isStack else self._NO_STACK_TOOLTIP_MIN_WIDTH)
+        width = self._DISABLED_TOOLTIP_MIN_WIDTH if self.__isDisabled(index) else (self._STACK_TOOLTIP_MIN_WIDTH if isStacked else self._NO_STACK_TOOLTIP_MIN_WIDTH)
         self._setWidth(width)
-        if isStack and hasRandomBonusCap:
+        if isStacked and hasRandomBonusCap:
             self._setMargins(5, 5)
         else:
             self._setMargins(-5, -5)
         if self.__isDisabled(index):
             return self.__getDisabledBlocks()
-        items = [formatters.packBuildUpBlockData(blocks=[self.__getTitle(i18n.makeString(equipment.userString)), self.__getSubTitle()] if isStack and hasRandomBonusCap else [self.__getTitle(i18n.makeString(equipment.userString))]), formatters.packBuildUpBlockData(padding=formatters.packPadding(right=20), blocks=[self.__getContent(i18n.makeString(equipment.shortDescription))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if isStack else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE)]
+        items = [formatters.packBuildUpBlockData(blocks=[self.__getTitle(i18n.makeString(equipment.userString)), self.__getSubTitle()] if isStacked and hasRandomBonusCap else [self.__getTitle(i18n.makeString(equipment.userString))]), formatters.packBuildUpBlockData(padding=formatters.packPadding(right=20), blocks=[self.__getContent(i18n.makeString(equipment.shortDescription))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE if isStacked else BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE)]
         if hasRandomBonusCap:
             items.append(formatters.packBuildUpBlockData(blocks=[self.__getFooter(self.itemCD)]))
         return items

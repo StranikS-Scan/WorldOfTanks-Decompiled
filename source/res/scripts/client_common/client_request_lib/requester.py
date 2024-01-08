@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/requester.py
+from functools import wraps
 from client_request_lib.data_sources.staging import StagingDataAccessor
 from client_request_lib.data_sources.fake import FakeDataAccessor
 from client_request_lib.data_sources.gateway import GatewayDataAccessor
@@ -36,6 +37,7 @@ def _in_bigworld(func):
 
 def bigworld_callback_wrapper(func):
 
+    @wraps(func)
     def wrapped(*args, **kwargs):
         new_args = [ _in_bigworld(arg) for arg in args ]
         new_kwargs = {k:_in_bigworld(v) for k, v in kwargs.items()}
@@ -377,28 +379,19 @@ class GiftSystemAccessor(BaseAccessor):
         return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 
 
-class FriendsAccessor(BaseAccessor):
-
-    def get_friend_balance(self, callback, spaId):
-        return self._data_source.get_friend_balance(callback, spaId)
-
-    def get_friend_list(self, callback):
-        return self._data_source.get_friend_list(callback)
-
-    def put_best_friend(self, callback, spaId):
-        return self._data_source.put_best_friend(callback, spaId)
-
-    def delete_best_friend(self, callback, spaId):
-        return self._data_source.delete_best_friend(callback, spaId)
-
-    def post_gather_friend_ny_resources(self, callback, spaId):
-        return self._data_source.post_gather_friend_ny_resources(callback, spaId)
-
-
 class UILoggingAccessor(BaseAccessor):
 
     def get_uilogging_session(self, callback):
         return self._data_source.get_uilogging_session(callback)
+
+
+class WotShopAccessor(BaseAccessor):
+
+    def get_storefront_products(self, callback, storefront):
+        return self._data_source.get_storefront_products(callback, storefront)
+
+    def buy_storefront_product(self, callback, ctx):
+        return self._data_source.buy_storefront_product(callback, ctx)
 
 
 class Requester(object):
@@ -421,8 +414,8 @@ class Requester(object):
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)
-    friends = RequestDescriptor(FriendsAccessor)
     uilogging = RequestDescriptor(UILoggingAccessor)
+    wot_shop = RequestDescriptor(WotShopAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

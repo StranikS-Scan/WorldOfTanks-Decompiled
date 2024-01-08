@@ -137,7 +137,9 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def showRewardHangarNotification(self):
-        return False
+        afterLogin = self.__hangarLoadingController.isHangarLoadedAfterLogin()
+        battlesCount = self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+        return self._config.showRewardNotification and (afterLogin or battlesCount == NEWBIE_REWARD_BATTLES_COUNT)
 
     @property
     def showRewardNotification(self):

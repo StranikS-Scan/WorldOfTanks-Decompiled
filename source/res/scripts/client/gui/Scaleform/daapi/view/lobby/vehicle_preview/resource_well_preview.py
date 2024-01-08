@@ -16,6 +16,7 @@ class ResourceWellVehiclePreview(VehiclePreview):
 
     def __init__(self, ctx):
         self.__numberStyle = ctx.get('numberStyle')
+        self.__isBackClicked = False
         super(ResourceWellVehiclePreview, self).__init__(ctx)
 
     def setBottomPanel(self):
@@ -23,6 +24,7 @@ class ResourceWellVehiclePreview(VehiclePreview):
 
     def _populate(self):
         super(ResourceWellVehiclePreview, self)._populate()
+        self.__resourceWell.startNumberRequesters()
         self.addListener(events.ResourceWellLoadingViewEvent.LOAD, self.__onViewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.ResourceWellLoadingViewEvent.DESTROY, self.__onViewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resourceWell.onEventUpdated += self.__onEventStateUpdated
@@ -30,10 +32,16 @@ class ResourceWellVehiclePreview(VehiclePreview):
         self.soundManager.playInstantSound(SOUNDS.PREVIEW_ENTER)
 
     def _dispose(self):
+        if not self.__isBackClicked:
+            self.__resourceWell.stopNumberRequesters()
         self.removeListener(events.ResourceWellLoadingViewEvent.LOAD, self.__onViewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ResourceWellLoadingViewEvent.DESTROY, self.__onViewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__resourceWell.onEventUpdated -= self.__onEventStateUpdated
         super(ResourceWellVehiclePreview, self)._dispose()
+
+    def _processBackClick(self, ctx=None):
+        self.__isBackClicked = True
+        super(ResourceWellVehiclePreview, self)._processBackClick(ctx)
 
     def _destroy(self):
         if self.soundManager is not None:

@@ -560,7 +560,6 @@ class UserContextMenuInfo(object):
         self.canAddToIgnore = True
         self.canDoDenunciations = True
         self.isFriend = False
-        self.isAnySub = False
         self.isIgnored = False
         self.isTemporaryIgnored = False
         self.isMuted = False
@@ -571,7 +570,6 @@ class UserContextMenuInfo(object):
         self.isCurrentPlayer = False
         if self.user is not None:
             self.isFriend = self.user.isFriend()
-            self.isAnySub = self.user.isAnySub()
             self.isIgnored = self.user.isIgnored()
             self.isTemporaryIgnored = self.user.isTemporaryIgnored()
             self.isMuted = self.user.isMuted()

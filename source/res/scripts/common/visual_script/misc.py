@@ -38,8 +38,8 @@ def makePlanPath(planName):
 
 
 def errorVScript(owner, msg):
-    LOG_ERROR('[VScript]', owner.__class__.__name__, msg)
-    owner._writeLog('%s : %s' % (owner.__class__.__name__, msg))
+    LOG_ERROR('[VScript]', str(owner.planName()), str(owner.blockId()), msg)
+    owner._writeLog('%s:%s : %s' % (owner.planName(), owner.blockId(), msg))
 
 
 def readVisualScriptPlanParams(section, commonParams={}):

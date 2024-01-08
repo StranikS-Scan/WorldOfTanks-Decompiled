@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 from typing import TYPE_CHECKING
 import constants
-from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from shared_utils import CONST_CONTAINER
 from skeletons.festivity_factory import IFestivityFactory
@@ -53,7 +52,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
     from gui.game_control.calendar_controller import CalendarController as _Calendar
-    from gui.game_control.advent_calendar_v2_controller import AdventCalendarV2Controller as _AdventCalendarV2
     from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from skeletons.gui import game_control as _interface
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
@@ -69,17 +67,12 @@ def getGameControllersConfig(manager):
     from gui.game_control.overlay import OverlayController as _OverlayController
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.comp7_controller import Comp7Controller as _Comp7Ctrl
+    from gui.game_control.comp7_shop_controller import Comp7ShopController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
-    from skeletons import new_year as _NYInterface
-    from new_year.celebrity.celebrity_scene_ctrl import CelebritySceneController as _CelebritySceneController
-    from new_year.celebrity.celebrity_controller import CelebrityController as _CelebrityController
-    from new_year.ny_tutorial_controller import NewYearTutorialController
-    from new_year.gift_machine_controller import GiftMachineController as _GiftMachineController
-    from new_year.friend_service_controller import FriendServiceController as _FriendServiceController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
@@ -93,7 +86,6 @@ def getGameControllersConfig(manager):
     from gui.limited_ui.lui_controller import LimitedUIController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
-    from gui.game_control.gf_notifications_controller import GFNotificationsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -136,7 +128,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IPlatoonController, _PlatoonController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
-    _config(_interface.IAdventCalendarV2Controller, _AdventCalendarV2())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
@@ -151,6 +142,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
+    _config(_interface.IComp7ShopController, Comp7ShopController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -166,11 +158,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IWotPlusController, WotPlusController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
-    _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
-    _config(_NYInterface.ICelebrityController, _CelebrityController())
-    _config(_NYInterface.INewYearTutorialController, NewYearTutorialController())
-    _config(_NYInterface.IGiftMachineController, _GiftMachineController())
-    _config(_NYInterface.IFriendServiceController, _FriendServiceController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
     _config(_interface.IEventLootBoxesController, EventLootBoxesController())
@@ -181,6 +168,4 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
-    _config(_interface.IGFNotificationsController, GFNotificationsController())
-    _config(_interface.IGraphicsOptimizationController, GraphicsOptimizationController())
     collectGameControllers(_config)

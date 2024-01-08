@@ -132,7 +132,7 @@ class StoryModeEntity(PreQueueEntity):
 
     def _exitFromQueueUI(self):
         if self._skippedShowGUI:
-            self.storyModeCtrl.goToHangar()
+            self.storyModeCtrl.exitQueue()
         if self._queueWindow is not None:
             self._queueWindow.destroy()
             self._queueWindow = None

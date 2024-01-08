@@ -3,16 +3,15 @@
 from collections import namedtuple
 import logging
 import ResMgr
-import SoundGroups
 import nations
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import AltVoicesSetting
 from helpers import dependency
-from SoundGroups import CREW_GENDER_SWITCHES
+from SoundGroups import CREW_GENDER_SWITCHES, SoundModes, g_instance as soundGroupInst
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
-from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted, isHWCrewCompleted
+from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted, isHWCrewCompleted, isAriaCrewCompleted
 from items.vehicles import VehicleDescr
 from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -31,7 +30,8 @@ _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
 _isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted,
  SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted,
  SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted,
- SPECIAL_VOICE_TAG.HW_CREW: isHWCrewCompleted}
+ SPECIAL_VOICE_TAG.HW_CREW: isHWCrewCompleted,
+ SPECIAL_VOICE_TAG.ARIA_CREW: isAriaCrewCompleted}
 
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -94,14 +94,14 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
                     return
             else:
                 _logger.error('There is not information about vehicle commander to extract correct sound mode')
-            preset = SoundGroups.g_instance.soundModes.currentNationalPreset
+            preset = soundGroupInst.soundModes.currentNationalPreset
             isNationalPreset = preset[1] if preset is not None else False
             if isNationalPreset:
                 commanderSkinID = vehiclePublicInfo.commanderSkinID
                 if self.__setSpecialVoiceByCommanderSkinID(isFemale, commanderSkinID):
                     return
             genderSwitch = CREW_GENDER_SWITCHES.FEMALE if isFemale and isNationalPreset else CREW_GENDER_SWITCHES.DEFAULT
-            SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationID], genderSwitch)
+            soundGroupInst.soundModes.setCurrentNation(nations.NAMES[nationID], genderSwitch)
             return
 
     def __setArenaMusicByStyle(self, vehiclePublicInfo, isPlayerVehicle):
@@ -221,11 +221,17 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         if params.onlyInNational and setting.getSystemModeType() == AltVoicesSetting.SOUND_MODE_TYPE.REGULAR:
             _logger.debug('%s can be used only in national sound mode', params.languageMode)
             return
-        if not SoundGroups.g_instance.soundModes.setMode(params.languageMode):
+        elif setting.getSystemModeType() == AltVoicesSetting.SOUND_MODE_TYPE.REGULAR:
+            soundGroupInst.soundModes.setMode(SoundModes.DEFAULT_MODE_NAME)
+            self.__currentMode = None
+            return
+        elif not soundGroupInst.soundModes.setMode(params.languageMode):
             _logger.warning('Could not set special voice: %s', params.languageMode)
             return
-        self.__currentMode = params
-        SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
+        else:
+            self.__currentMode = params
+            soundGroupInst.setSwitch(CREW_GENDER_SWITCHES.GROUP, params.genderSwitch)
+            return
 
     def __getSpecialModeForCrew(self, tag, vehicleType, crewGroups):
         if tag not in self.__voiceoverSpecialModes:

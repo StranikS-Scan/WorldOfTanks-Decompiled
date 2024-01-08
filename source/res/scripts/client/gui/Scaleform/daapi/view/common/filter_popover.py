@@ -20,7 +20,7 @@ from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME, VEHICLE_ROLES_LABELS_BY_CLASS
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_ROLES_LABELS, VEHICLE_ROLES_LABELS_BY_CLASS
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
@@ -30,7 +30,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_environment import ICarouselEnvironment
 _logger = logging.getLogger(__name__)
@@ -94,9 +93,9 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
          'specials': [ filters[key] for key in mapping[FILTER_SECTION.SPECIALS] ],
          'hidden': [ filters[key] for key in mapping[FILTER_SECTION.HIDDEN] ],
          'progressions': [ filters[key] for key in mapping[FILTER_SECTION.PROGRESSIONS] ],
-         'roles': {vType:[ filters[role] for role in mapping[FILTER_SECTION.ROLES].get(vType, []) ] for vType in mapping[FILTER_SECTION.VEHICLE_TYPES] if vType != VEHICLE_CLASS_NAME.SPG},
+         'roles': {vType:[ filters[role] for role in mapping[FILTER_SECTION.ROLES].get(vType, []) ] for vType in mapping[FILTER_SECTION.VEHICLE_TYPES]},
          'rolesLabel': self.__getRolesLabel(vehType),
-         'rolesSectionVisible': self._withRoles and vehType is not None and vehType is not VEHICLE_CLASS_NAME.SPG}
+         'rolesSectionVisible': self._withRoles and vehType is not None}
 
     def _getInitialVO(self, filters, xpRateMultiplier):
         mapping = self.__mapping
@@ -173,14 +172,13 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
              'selected': isSelected(entry)})
 
         for vType in mapping[FILTER_SECTION.VEHICLE_TYPES]:
-            if vType != VEHICLE_CLASS_NAME.SPG:
-                dataVO['roles'][vType] = [ self.__getRoleVO(entry, filters) for entry in mapping[FILTER_SECTION.ROLES].get(vType, []) if entry is not None ]
+            dataVO['roles'][vType] = [ self.__getRoleVO(entry, filters) for entry in mapping[FILTER_SECTION.ROLES].get(vType, []) if entry is not None ]
 
         if not dataVO['hidden']:
             dataVO['hiddenSectionVisible'] = False
         if not dataVO['specials']:
             dataVO['specialSectionVisible'] = False
-        if self._withRoles and vehType is not None and vehType is not VEHICLE_CLASS_NAME.SPG:
+        if self._withRoles and vehType is not None:
             dataVO['rolesSectionVisible'] = True
         return dataVO
 
@@ -252,7 +250,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     @staticmethod
     def __getRolesLabel(vehType):
         levels = toRomanRangeString(constants.ROLE_LEVELS)
-        return text_styles.standard(_ms(TANK_CAROUSEL_FILTER.getRolesLabel(vehType), levels=levels)) if vehType is not None and vehType != VEHICLE_CLASS_NAME.SPG else ''
+        return text_styles.standard(_ms(TANK_CAROUSEL_FILTER.getRolesLabel(vehType), levels=levels)) if vehType is not None else ''
 
     @staticmethod
     def __getRoleVO(role, filters):
@@ -262,7 +260,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
 
 
 class TankCarouselFilterPopover(VehiclesFilterPopover):
-    _nyController = dependency.descriptor(INewYearController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -287,13 +284,8 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         super(TankCarouselFilterPopover, self)._update(isInitial)
         self._carousel.updateHotFilters()
 
-    def _populate(self):
-        super(TankCarouselFilterPopover, self)._populate()
-        self._nyController.onStateChanged += self.__onNyStateChanged
-
     def _dispose(self):
         self._saveRowCount()
-        self._nyController.onStateChanged -= self.__onNyStateChanged
         super(TankCarouselFilterPopover, self)._dispose()
 
     def _readRowCount(self, _):
@@ -331,9 +323,6 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
          FILTER_KEYS.PREMIUM,
          FILTER_KEYS.ELITE,
          FILTER_KEYS.CRYSTALS]
-
-    def __onNyStateChanged(self):
-        self.destroy()
 
 
 class BattlePassCarouselFilterPopover(TankCarouselFilterPopover):

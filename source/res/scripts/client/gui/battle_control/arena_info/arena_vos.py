@@ -193,7 +193,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isFlamethrowerVehicle', 'hasDualAccuracy', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isFlamethrowerVehicle', 'isAssaultVehicle', 'hasDualAccuracy', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role')
 
     def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -234,6 +234,7 @@ class VehicleTypeInfoVO(object):
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
             self.isDualGunVehicle = vehicleDescr.isDualgunVehicle
             self.isFlamethrowerVehicle = vehicleDescr.isFlamethrower
+            self.isAssaultVehicle = vehicleDescr.isAssaultSPG
             self.hasDualAccuracy = vehicleDescr.hasDualAccuracy
             self.chassisType = vehicleDescr.chassis.chassisType
             self.shortName = vehicleType.shortUserString
@@ -260,6 +261,7 @@ class VehicleTypeInfoVO(object):
             self.shortName = vehicleName
             self.isDualGunVehicle = False
             self.isFlamethrowerVehicle = False
+            self.isAssaultVehicle = False
             self.hasDualAccuracy = False
             self.chassisType = 0
             self.name = vehicleName
@@ -458,6 +460,9 @@ class VehicleArenaInfoVO(object):
 
     def isFlamethrowerVehicle(self):
         return self.vehicleType.isFlamethrowerVehicle
+
+    def isAssaultVehicle(self):
+        return self.vehicleType.isAssaultVehicle
 
     def isActionsDisabled(self):
         return not self.player.avatarSessionID

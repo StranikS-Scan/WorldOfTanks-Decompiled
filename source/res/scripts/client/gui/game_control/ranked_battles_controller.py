@@ -1004,14 +1004,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def __buildDivisions(self):
         divisions = []
-        maxPossibleRank = self.__rankedSettings.accRanks
-        startRanks = sorted([ data['startRank'] for data in self.__rankedSettings.divisions.itervalues() if not data['isLeague'] ])
+        maxPossibleRank = self.getMaxPossibleRank()
+        rankedDivisions = self.__rankedSettings.divisions.itervalues
+        startRanks = sorted([ data['startRank'] for data in rankedDivisions() if not data['isLeague'] and data['startRank'] > 0 ])
         numDivisions = len(startRanks)
         lastDivisionIdx = numDivisions - 1
         rank, _ = self.__itemsCache.items.ranked.accRank
         for i in range(numDivisions):
-            firstRankInDivision = startRanks[i] + 1
-            lastRankInDivision = startRanks[i + 1] if i < lastDivisionIdx else maxPossibleRank
+            firstRankInDivision = startRanks[i]
+            lastRankInDivision = startRanks[i + 1] - 1 if i < lastDivisionIdx else maxPossibleRank
             isFinal = i == lastDivisionIdx
             divisions.append(Division(i, firstRankInDivision, lastRankInDivision, rank, isFinal))
 
@@ -1066,17 +1067,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         currentRank, _ = currentProgress
         maxRank, _ = maxProgress
         lastRank, _ = lastProgress
-        rankState = RankState.UNDEFINED
         if rankID < currentRank:
-            rankState |= RankState.ACQUIRED
+            rankState = RankState.ACQUIRED
             if rankID > lastRank:
                 rankState |= RankState.NEW_FOR_PLAYER
         elif rankID == currentRank:
-            rankState |= RankState.ACQUIRED | RankState.CURRENT
+            rankState = RankState.ACQUIRED | RankState.CURRENT
             if rankID != lastRank:
                 rankState |= RankState.NEW_FOR_PLAYER
         else:
-            rankState |= RankState.NOT_ACQUIRED
+            rankState = RankState.NOT_ACQUIRED
             if rankID <= lastRank:
                 rankState |= RankState.NEW_FOR_PLAYER
         if currentRank < rankID <= maxRank:

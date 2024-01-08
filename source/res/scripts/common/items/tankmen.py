@@ -439,6 +439,10 @@ class TankmanDescr(object):
             if residualXp > 0:
                 return bisectLE(_g_levelXpCosts, residualXp)
 
+    @staticmethod
+    def getRoleLevelFromXp(currentLevel, availableXp):
+        return bisectLE(_g_levelXpCosts, availableXp, lo=currentLevel, hi=MAX_SKILL_LEVEL)
+
     def skillLevel(self, skillName):
         if skillName not in self.skills:
             return None
@@ -1287,12 +1291,7 @@ def validateCrewToLearnCrewBook(crew, vehTypeCompDescr):
                 resultMsg += 'Vehicle has not full crew; '
             resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.FULL_CREW
             continue
-        if tmanDescr.roleLevel < MAX_SKILL_LEVEL:
-            if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL:
-                resultMsg += 'One of crew members has not enough level of specialization; '
-            resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL
-            crewLists[crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.ROLE_LEVEL].append(slotID)
-        if vehicleID != tmanDescr.vehicleTypeID:
+        if vehicles.getVehicleClass(vehTypeCompDescr) != vehicles.getVehicleClass(tmanDescr.vehicleTypeCompDescr):
             if not resultMask & crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION:
                 resultMsg += 'One of crew members has specialization not compatible with current vehicle;'
             resultMask = resultMask | crew_books_constants.CREW_BOOK_PROPERTIES_MASKS.SPECIALIZATION

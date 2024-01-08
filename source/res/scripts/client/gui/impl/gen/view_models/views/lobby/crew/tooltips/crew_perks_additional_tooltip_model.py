@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class CrewPerksAdditionalTooltipModel(ViewModel):
-    __slots__ = ()
+    __slots__ = ('onError',)
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=6, commands=1):
         super(CrewPerksAdditionalTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -52,3 +52,4 @@ class CrewPerksAdditionalTooltipModel(ViewModel):
         self._addStringProperty('description', '')
         self._addStringProperty('info', '')
         self._addStringProperty('animationName', '')
+        self.onError = self._addCommand('onError')

@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
 from account_helpers import AccountSettings
-from frameworks.wulf import ViewSettings, WindowLayer
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.marathon.marathon_reward_view_model import MarathonRewardViewModel
 from gui.impl.lobby.marathon.marathon_reward_sounds import MarathonVideos, onVideoStart, onVideoDone
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import selectVehicleInHangar
 _logger = logging.getLogger(__name__)
@@ -77,8 +77,9 @@ class MarathonRewardView(ViewImpl):
         onVideoDone()
 
 
-class MarathonRewardViewWindow(LobbyNotificationWindow):
+class MarathonRewardViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), layer=WindowLayer.OVERLAY)
+        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, decorator=None)
+        return

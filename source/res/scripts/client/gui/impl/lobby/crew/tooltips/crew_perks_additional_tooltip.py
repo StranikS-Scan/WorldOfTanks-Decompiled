@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/tooltips/crew_perks_additional_tooltip.py
+import logging
 import typing
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
@@ -11,6 +12,7 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import TankmanSkill
+_logger = logging.getLogger(__name__)
 
 class CrewPerksAdditionalTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -23,6 +25,11 @@ class CrewPerksAdditionalTooltip(ViewImpl):
         super(CrewPerksAdditionalTooltip, self).__init__(settings)
         return
 
+    def onError(self, args):
+        errorFilePath = str(args.get('errorFilePath', ''))
+        _logger.error('Reward video error: %s', errorFilePath)
+        self.destroyWindow()
+
     @property
     def viewModel(self):
         return super(CrewPerksAdditionalTooltip, self).getViewModel()
@@ -30,6 +37,9 @@ class CrewPerksAdditionalTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(CrewPerksAdditionalTooltip, self)._onLoading(*args, **kwargs)
         self._fillModel()
+
+    def _getEvents(self):
+        return ((self.viewModel.onError, self.onError),)
 
     def _fillModel(self):
         with self.viewModel.transaction() as vm:

@@ -1,7 +1,7 @@
 <engine_config.xml>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -378,6 +378,9 @@
           <name>	music_interactive_part_12.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_part_13.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -394,12 +397,6 @@
         </bank>
         <bank>
           <name>	field_modernization.bnk	</name>
-        </bank>
-        <bank>
-          <name>	newyear_loading_screen.bnk	</name>
-        </bank>
-        <bank>
-          <name>	newyear_loading_screen.pck	</name>
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -619,6 +616,9 @@
         </bank>
         <bank>
           <name>	gameplay.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

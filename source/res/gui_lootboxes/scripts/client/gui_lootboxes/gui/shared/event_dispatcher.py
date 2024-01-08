@@ -66,3 +66,13 @@ def showRewardScreenWindow(rewards, lootBox=None, parent=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.reward_screen import LootBoxesRewardScreenWindow
     window = LootBoxesRewardScreenWindow(rewards=rewards, lootBox=lootBox, parent=parent)
     window.load()
+
+
+def showUniqueRewardScreenWindow(vehicle):
+    from gui_lootboxes.gui.impl.lobby.gui_lootboxes.lootbox_video_reward_view import LootboxVideoRewardWindow
+    if vehicle is None:
+        _logger.error("Lootbox reward video isn't shown. Vehicle is None")
+    else:
+        window = LootboxVideoRewardWindow(vehicle)
+        window.load()
+    return

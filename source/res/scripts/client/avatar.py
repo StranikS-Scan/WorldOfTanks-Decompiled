@@ -773,12 +773,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if cmdMap.isFired(CommandMapping.CMD_TOGGLE_GUI, key) and isDown and self.__couldToggleGUIVisibility():
                     gui_event_dispatcher.toggleGUIVisibility()
                 if constants.HAS_DEV_RESOURCES and isDown:
-                    if key == Keys.KEY_I and mods == 0:
-                        import Cat
-                        if Cat.Tasks.ScreenInfo.ScreenInfoObject.getVisible():
-                            Cat.Tasks.ScreenInfo.ScreenInfoObject.setVisible(False)
-                        else:
-                            Cat.Tasks.ScreenInfo.ScreenInfoObject.setVisible(True)
+                    if key == Keys.KEY_I and mods == 0 and not isGuiEnabled:
+                        from Cat.Tasks.ScreenInfo import ScreenInfoObject
+                        ScreenInfoObject.setVisible(not ScreenInfoObject.getVisible())
                         return True
                 if cmdMap.isFired(CommandMapping.CMD_INCREMENT_CRUISE_MODE, key) and isDown and self.__isVehicleAlive:
                     if self.__stopUntilFire:
@@ -2545,6 +2542,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 vehicle.drawEdge()
             else:
                 vehicle.removeEdge()
+            if self.target is not None:
+                if flag:
+                    self.target.drawEdge()
+                else:
+                    self.target.removeEdge()
             CombatEquipmentManager.setGUIVisible(self, flag)
             self.inputHandler.setGUIVisible(flag)
             return

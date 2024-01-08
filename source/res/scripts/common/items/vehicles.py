@@ -3167,6 +3167,10 @@ def isFlamethrower(vehTypeCD):
     return hasAnyOfTags(vehTypeCD, (VEHICLE_TAGS.FLAMETHROWER,))
 
 
+def isAssaultSPG(vehTypeCD):
+    return hasAnyOfTags(vehTypeCD, (VEHICLE_TAGS.ASSAULT_SPG,))
+
+
 def _readComponents(xmlPath, reader, nationID, itemTypeID):
     section = ResMgr.openSection(xmlPath)
     if section is None:

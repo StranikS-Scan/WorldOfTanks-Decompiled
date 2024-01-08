@@ -19,34 +19,17 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class NewYearLootBoxes(CONST_CONTAINER):
-    PREMIUM_OLD = 'newYear_premium'
-    SPECIAL_OLD = 'newYear_special'
+    PREMIUM = 'newYear_premium'
+    SPECIAL = 'newYear_special'
     SPECIAL_AUTO = 'newYear_special_auto'
-    COMMON_OLD = 'newYear_usual'
-    NY_24_STANDARD = 'ny_2024_VI'
-    NY_24_NEW_YEAR = 'ny_2024_newyear'
-    NY_24_XMAS = 'ny_2024_christmas'
-    NY_24_EASTERN = 'ny_2024_eastern'
-    NY_24_MAGIC = 'ny_2024_magic'
-    PREMIUM = (PREMIUM_OLD,
-     NY_24_NEW_YEAR,
-     NY_24_XMAS,
-     NY_24_EASTERN,
-     NY_24_MAGIC)
-    COMMON = (COMMON_OLD, NY_24_STANDARD)
-    SPECIAL = (SPECIAL_OLD, SPECIAL_AUTO)
-
-    @classmethod
-    def getIterator(cls):
-        return itertools.chain(cls.PREMIUM, cls.COMMON, cls.SPECIAL)
-
-    @classmethod
-    def ALL(cls):
-        return tuple(cls.getIterator())
+    COMMON = 'newYear_usual'
 
 
 class NewYearCategories(CONST_CONTAINER):
-    NEWYEAR_24 = 'ny_2024'
+    NEWYEAR = 'NewYear'
+    CHRISTMAS = 'Christmas'
+    ORIENTAL = 'Oriental'
+    FAIRYTALE = 'Fairytale'
 
 
 class EventCategories(CONST_CONTAINER):
@@ -81,6 +64,11 @@ LUNAR_NY_LOOT_BOXES_CATEGORIES = 'LunarNY'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 EVENT_LOOT_BOXES_CATEGORY = 'eventLootBoxes'
 REFERRAL_PROGRAM_CATEGORY = 'referralProgram'
+GUI_ORDER_NY = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
+CATEGORIES_GUI_ORDER_NY = (NewYearCategories.NEWYEAR,
+ NewYearCategories.CHRISTMAS,
+ NewYearCategories.ORIENTAL,
+ NewYearCategories.FAIRYTALE)
 _BONUS_GROUPS = {BonusGroup.VEHICLE: ipTypeGroup.VEHICLE,
  BonusGroup.PREMIUM: (ipType.CUSTOM_PREMIUM_PLUS,),
  BonusGroup.CURRENCY: (ipType.CUSTOM_CREDITS,
@@ -189,7 +177,7 @@ class LootBox(GUIItem):
         return self.__weight
 
     def isFree(self):
-        return self.__type in NewYearLootBoxes.COMMON
+        return self.__type == NewYearLootBoxes.COMMON
 
     def isEnabled(self):
         return self.__isEnabled

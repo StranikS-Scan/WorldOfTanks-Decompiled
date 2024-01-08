@@ -9,6 +9,9 @@ from gui.game_loading import loggers
 from gui.game_loading.preferences import GameLoadingPreferences
 from gui.game_loading.settings import GameLoadingSettings
 from gui.game_loading.state_machine.machine import GameLoadingStateMachine
+from helpers import dependency
+from helpers.statistics import HANGAR_LOADING_STATE
+from skeletons.helpers.statistics import IStatisticsCollector
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
 _logger = loggers.getLoaderLogger()
@@ -46,3 +49,8 @@ def step():
             if len(currentFrame) >= 4:
                 _logger.info('[game_loading] %s %s : %s', currentFrame[1], currentFrame[3], currentFrame[2])
     game_loading_bindings.step()
+
+
+def markLoadingScreenResourcesFreed():
+    statsCollector = dependency.instance(IStatisticsCollector)
+    statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.GAMEFACE_UI_LOADING_SCREEN_DESTROYED)

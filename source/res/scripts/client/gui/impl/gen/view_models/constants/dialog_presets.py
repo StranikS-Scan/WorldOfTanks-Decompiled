@@ -10,7 +10,6 @@ class DialogPresets(ViewModel):
     INFO = 'info'
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
     MAPS_BLACKLIST = 'mapsBlacklist'
-    TRANSPARENT_DEFAULT = 'transparentDefault'
     TROPHY_DEVICE_UPGRADE = 'trophyDeviceUpgrade'
     BUY_BATTLE_PASS = 'buyBattlePass'
     CUSTOMIZATION_INSTALL_BOUND = 'customizationInstallBound'

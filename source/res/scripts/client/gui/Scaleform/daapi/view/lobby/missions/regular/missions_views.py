@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
-import typing
 from functools import partial
 import BigWorld
 from adisp import adisp_process
@@ -8,7 +7,6 @@ from wg_async import wg_async, wg_await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
-from gui.gift_system.constants import HubUpdateReason
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -26,9 +24,8 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from gui.server_events import settings, caches
-from gui.server_events.events_dispatcher import hideMissionDetails, showDailyQuests, showMissionsGrouped
+from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium, isDebutBoxesQuest
 from gui.shared import actions
@@ -38,7 +35,7 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage, showDebutBoxes
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController, IFestivityController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -58,9 +55,6 @@ class _GroupedMissionsView(MissionsGroupedViewMeta):
                     blockData['isCollapsed'] = settings.isGroupMinimized(gID)
 
         return
-
-    def onDailyClick(self):
-        pass
 
 
 class MissionsGroupedView(_GroupedMissionsView):
@@ -356,7 +350,6 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 class MissionsCategoriesView(_GroupedMissionsView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    _festivityController = dependency.descriptor(IFestivityController)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -375,20 +368,12 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def onClickButtonDetails(self):
         showTankPremiumAboutPage()
 
-    def onDailyClick(self):
-        showDailyQuests(subTab=DailyTabs.QUESTS)
-
-    def onDebutBoxesClick(self):
-        showMissionsGrouped()
-
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self._festivityController.onStateChanged += self.__festivityStateChanged
 
     def _dispose(self):
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-        self._festivityController.onStateChanged -= self.__festivityStateChanged
         super(MissionsCategoriesView, self)._dispose()
 
     @staticmethod
@@ -398,26 +383,12 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def _getViewQuestFilter(self):
         return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
 
-    def _appendNYBanner(self, quests):
-        if self._festivityController.isEnabled():
-            blockId = QUESTS_ALIASES.MISSIONS_NY_BANNER_VIEW_ALIAS
-            quests.append({'blockId': blockId})
-            return True
-        return False
-
-    def _onGiftHubUpdate(self, reason, extra=None):
-        if reason == HubUpdateReason.SETTINGS:
-            self._filterMissions()
-
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:
             return
         diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)
         if 'enabled' in diffConfig:
             self._onEventsUpdate()
-
-    def __festivityStateChanged(self):
-        self._filterMissions()
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):

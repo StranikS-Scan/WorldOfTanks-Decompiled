@@ -104,10 +104,6 @@ class VideoView(ViewImpl):
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
-            self.viewModel.setCanEscape(kwargs.get('canEscape', True))
-            self.viewModel.onCloseBtnClick += self.__onCloseWindow
-            self.viewModel.onVideoStarted += self.__onVideoStarted
-            self.viewModel.onVideoStopped += self.__onVideoStopped
             g_playerEvents.onAccountBecomeNonPlayer += self.__removeClosedHandle
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
@@ -120,12 +116,15 @@ class VideoView(ViewImpl):
         super(VideoView, self)._initialize(*args, **kwargs)
         self.__hideBack()
 
+    def _getEvents(self):
+        return ((self.viewModel.onCloseBtnClick, self.__onCloseWindow),
+         (self.viewModel.onVideoStarted, self.__onVideoStarted),
+         (self.viewModel.onVideoStopped, self.__onVideoStopped),
+         (self.viewModel.onLoadError, self.__onLoadError))
+
     def _finalize(self):
         Waiting.resume(id(self))
         self.__showBack()
-        self.viewModel.onCloseBtnClick -= self.__onCloseWindow
-        self.viewModel.onVideoStarted -= self.__onVideoStarted
-        self.viewModel.onVideoStopped -= self.__onVideoStopped
         g_playerEvents.onAccountBecomeNonPlayer -= self.__removeClosedHandle
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         if self.__onVideoClosedHandle is not None:
@@ -162,6 +161,9 @@ class VideoView(ViewImpl):
         if self.__isAutoClose:
             self.destroyWindow()
         return
+
+    def __onLoadError(self, _=None):
+        self.__onVideoStopped()
 
     def __onWindowAccessibilityChanged(self, isWindowAccessible):
         if isWindowAccessible:

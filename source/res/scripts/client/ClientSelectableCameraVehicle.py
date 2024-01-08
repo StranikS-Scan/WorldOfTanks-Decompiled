@@ -142,11 +142,12 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         m.translation = Math.Vector3(targetPos)
         self.model.matrix = m
         self.teleport(targetPos, rotateYPR)
-        self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)
+        self.__setFakeShadowModelTransform(targetPos, rotateYPR, shadowModelYOffset)
 
     def _resetVehicleModelTransform(self):
         self.__vehicleTransform = None
         self.teleport(self.__defaultPos, self.__defaultYPR)
+        self.__setFakeShadowModelTransform(self.__defaultPos, self.__defaultYPR)
         return
 
     def _addEdgeDetect(self):
@@ -185,18 +186,27 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
                 shadowMapTexFileName = cfg['shadow_empty_texture_name']
             if shadowMapTexFileName:
                 self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
-            self.__setFakeShadowModelTransform(self.position, self.yaw)
+            self.__setFakeShadowModelTransform(self.position)
             return
 
-    def __setFakeShadowModelTransform(self, position, yaw, shadowModelYOffset=None):
+    def __setFakeShadowModelTransform(self, position, rotateYPR=None, shadowModelYOffset=None):
         if self.__fakeShadowModel is None:
             return
         else:
             if shadowModelYOffset is None:
                 cfg = hangarCFG()
                 shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
-            self.__fakeShadowModel.position = Math.Vector3(position.x, position.y + shadowModelYOffset, position.z)
-            self.__fakeShadowModel.yaw = yaw
+            if rotateYPR is None:
+                rotateYPR = Math.Vector3(self.yaw, self.pitch, self.roll)
+            result = Math.Matrix()
+            result.setTranslate(Math.Vector3(0, shadowModelYOffset, 0))
+            rotation = Math.Matrix()
+            rotation.setRotateYPR(rotateYPR)
+            translation = Math.Matrix()
+            translation.setTranslate(position)
+            result.postMultiply(rotation)
+            result.postMultiply(translation)
+            self.__fakeShadowModel.worldTransform = result
             return
 
     def __restoreTransform(self):

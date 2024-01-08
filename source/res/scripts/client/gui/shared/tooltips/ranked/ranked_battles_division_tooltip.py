@@ -49,17 +49,11 @@ class RankedDivisionTooltip(BlocksTooltipData):
     def _getStatusBlock(division, isLocked, isCompleted):
         statusTitle = text_styles.warning(backport.text(R.strings.ranked_battles.division.tooltip.status.current()))
         statusText = None
-        if division.isQualification():
-            statusTitle = text_styles.warning(backport.text(R.strings.ranked_battles.division.tooltip.status.currentQual()))
         if isLocked:
             statusTitle = text_styles.critical(backport.text(R.strings.ranked_battles.division.tooltip.status.locked()))
             statusText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.status.locked.desc()))
-            if division.isPostQualification():
-                statusText = text_styles.standard(backport.text(R.strings.ranked_battles.division.tooltip.status.locked.descQual()))
         if isCompleted:
             statusTitle = text_styles.statInfo(backport.text(R.strings.ranked_battles.division.tooltip.status.completed()))
-            if division.isQualification():
-                statusTitle = text_styles.statInfo(backport.text(R.strings.ranked_battles.division.tooltip.status.completedQual()))
         return formatters.packImageTextBlockData(title=statusTitle, desc=statusText, txtPadding=formatters.packPadding(left=10))
 
     def _getTitleBlock(self, division):

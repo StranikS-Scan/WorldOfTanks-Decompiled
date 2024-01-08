@@ -1049,6 +1049,65 @@ def _migrateTo115(core, data, initialized):
     AccountSettings.clearArmoryYard()
 
 
+def _migrateTo116(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = False
+
+
+def _migrateTo117(core, data, initialized):
+    data['rankedCarouselFilter1'] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': False,
+     'mediumTank': False,
+     'heavyTank': False,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data['rankedCarouselFilter2'] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'ranked': True,
+     'role_HT_assault': False,
+     'role_HT_break': False,
+     'role_HT_universal': False,
+     'role_HT_support': False,
+     'role_MT_assault': False,
+     'role_MT_universal': False,
+     'role_MT_sniper': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False}
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1503,6 +1562,14 @@ _versions = ((1,
   False),
  (115,
   _migrateTo115,
+  False,
+  False),
+ (116,
+  _migrateTo116,
+  False,
+  False),
+ (117,
+  _migrateTo117,
   False,
   False))
 

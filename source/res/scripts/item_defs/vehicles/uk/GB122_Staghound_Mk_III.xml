@@ -629,7 +629,7 @@
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	7000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	56	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -813,7 +813,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	medium4WheelsMud	</mud>
+        <mud>	medium4WheelsMudSoft	</mud>
       </effects>
       <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
       <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
@@ -904,7 +904,7 @@
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -1088,7 +1088,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	medium4WheelsMud	</mud>
+        <mud>	medium4WheelsMudSoft	</mud>
       </effects>
       <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
       <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
@@ -2436,13 +2436,13 @@
           <axleSteeringAngles>	0 4	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB122_Staghound_Mk_III>
@@ -2452,13 +2452,13 @@
           <axleSteeringAngles>	0 4	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB122_Staghound_Mk_III_2>

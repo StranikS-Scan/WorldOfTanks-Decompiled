@@ -84,7 +84,8 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, _CTRL_MODE.VEHICLES_SELECTION, _CTRL_TYPE.USUAL),
- _CTRL_MODE.SPG_ONLY_ARTY_MODE: (control_modes.OnlyArtyControlMode, 'flamethrowerMode', _CTRL_TYPE.USUAL)}
+ _CTRL_MODE.SPG_ONLY_ARTY_MODE: (control_modes.OnlyArtyControlMode, 'flamethrowerMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.ASSAULT_SPG: (control_modes.AssaultControlMode, 'assaultMode', _CTRL_TYPE.USUAL)}
 OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
  constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
@@ -157,6 +158,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     isATSPG = property(lambda self: self.__isATSPG)
     isDualGun = property(lambda self: self.__isDualGun)
     isFlamethrower = property(lambda self: self.__isFlamethrower)
+    isAssaultSPG = property(lambda self: self.__isAssaultSPG)
     isMagneticAimEnabled = property(lambda self: self.__isMagnetAimEnabled)
     isOnlyArty = property(lambda self: self.__isOnlyArty)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
@@ -237,6 +239,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__isATSPG = False
         self.__isDualGun = False
         self.__isFlamethrower = False
+        self.__isAssaultSPG = False
         self.__isMagnetAimEnabled = False
         self.__isOnlyArty = False
         self.__setupCtrls(sec)
@@ -847,6 +850,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
             self.__isDualGun = veh.typeDescriptor.isDualgunVehicle
             self.__isFlamethrower = veh.typeDescriptor.isFlamethrower
+            self.__isAssaultSPG = veh.typeDescriptor.isAssaultSPG
             self.__isMagnetAimEnabled = bool(magnetAimTags & vehTypeDesc.tags)
             self.__isOnlyArty = 'spgOnlyArtyMode' in vehTypeDesc.tags
             return

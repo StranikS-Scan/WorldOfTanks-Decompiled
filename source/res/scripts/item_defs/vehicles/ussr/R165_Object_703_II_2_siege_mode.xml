@@ -69,6 +69,13 @@
       <undamaged>	vehicles/russian/R165_Object_703_II/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R165_Object_703_II/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R165_Object_703_II/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R165_Object_703_II_2_3dst>
+          <undamaged>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Hull.model	</exploded>
+        </R165_Object_703_II_2_3dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -87,7 +94,7 @@
       <collisionModelServer>	vehicles/russian/R165_Object_703_II/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/russian/R165_Object_703_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <hangarShadowTexture>	vehicles/russian/R165_Object_703_II/Object_703_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/russian/R165_Object_703_II/Object_703_II_2_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
@@ -844,6 +851,24 @@
         <clipAngle>	0.587652	</clipAngle>
         <anchorShift>	1.109018	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_rect1x2	</tags>
+        <compatibleModels>	R165_Object_703_II_2_3dst	</compatibleModels>
+        <position>	0.000232 1.56444 -2.249534	</position>
+        <rotation>	3.08923 -0.002282 -0.000007	</rotation>
+        <scale>	2.219249 0.443851 2.219251	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.313662	</clipAngle>
+        <anchorShift>	0.072402	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -886,6 +911,13 @@
         <undamaged>	vehicles/russian/R165_Object_703_II/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R165_Object_703_II/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R165_Object_703_II/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R165_Object_703_II_2_3dst>
+            <undamaged>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Chassis.model	</exploded>
+          </R165_Object_703_II_2_3dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -945,16 +977,43 @@
               </wheelGroups>
               <hullCollider>
                 <boxCollider>
-                  <row0>	2.053540 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.151785 0.000000	</row1>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.151790 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.309120	</row2>
-                  <row3>	0.000000 1.039312 0.061000	</row3>
+                  <row3>	-0.508965 1.039319 0.062000	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.455060 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.460000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 7.091000	</row2>
-                  <row3>	0.000000 1.404000 0.115628	</row3>
+                  <row0>	1.500000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.429000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.120820	</row2>
+                  <row3>	-1.048959 1.382010 0.115628	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R165_Object_703_II_2_3dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.151790 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.309120	</row2>
+                  <row3>	-0.501655 1.039319 0.062000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.600000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.429000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.120820	</row2>
+                  <row3>	-1.011690 1.337265 0.115628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000002 0.000005	</row0>
+                  <row1>	-0.000001 0.494095 0.400793	</row1>
+                  <row2>	-0.000004 -0.400793 0.494095	</row2>
+                  <row3>	-1.409870 1.294579 3.638932	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000013 -0.000004	</row0>
+                  <row1>	-0.000008 -0.396055 -0.305189	</row1>
+                  <row2>	0.000002 0.185562 -0.240810	</row2>
+                  <row3>	1.407092 1.144675 -3.435158	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -964,14 +1023,14 @@
             <destructionEffect></destructionEffect>
             <physicalParams>
               <renderModelOffset>	-0.025664	</renderModelOffset>
-              <lengthwiseSpringLength>	0.15396	</lengthwiseSpringLength>
+              <lengthwiseSpringLength>	0.147662	</lengthwiseSpringLength>
               <widthwiseSpringLength>	0.605637	</widthwiseSpringLength>
-              <hingeJointStiffness>	1804.681152	</hingeJointStiffness>
-              <torsionStiffnessStep>	7	</torsionStiffnessStep>
+              <hingeJointStiffness>	1933.813354	</hingeJointStiffness>
+              <torsionStiffnessStep>	8	</torsionStiffnessStep>
               <wheelGroups>
                 <wheelGroup>
                   <wheelName>	WD_R4	</wheelName>
-                  <groupRadius>	0.348861	</groupRadius>
+                  <groupRadius>	0.344004	</groupRadius>
                   <groupInnerOffset>	-0.42538	</groupInnerOffset>
                   <groupOuterOffset>	0.32538	</groupOuterOffset>
                 </wheelGroup>
@@ -991,29 +1050,56 @@
                   <wheelName>	WD_R3	</wheelName>
                   <wheelName>	WD_R2	</wheelName>
                   <wheelName>	WD_R1	</wheelName>
-                  <groupRadius>	0.200504	</groupRadius>
+                  <groupRadius>	0.20016	</groupRadius>
                   <groupInnerOffset>	-0.42538	</groupInnerOffset>
                   <groupOuterOffset>	0.32538	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R0	</wheelName>
-                  <groupRadius>	0.280258	</groupRadius>
+                  <groupRadius>	0.279951	</groupRadius>
                   <groupInnerOffset>	-0.42538	</groupInnerOffset>
                   <groupOuterOffset>	0.32538	</groupOuterOffset>
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
                 <boxCollider>
-                  <row0>	2.053540 0.000000 0.000000	</row0>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
                   <row1>	0.000000 1.151790 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.309120	</row2>
-                  <row3>	0.000000 1.039310 0.061000	</row3>
+                  <row3>	0.504103 1.039311 0.062000	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.581708 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.460000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 7.091000	</row2>
-                  <row3>	0.062000 1.404000 0.115628	</row3>
+                  <row0>	1.500000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.429000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.120820	</row2>
+                  <row3>	0.930074 1.381991 0.115628	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R165_Object_703_II_2_3dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.151790 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.309120	</row2>
+                  <row3>	0.504993 1.039311 0.062000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.600000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.429000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.120820	</row2>
+                  <row3>	1.011740 1.337245 0.115628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000002 0.000005	</row0>
+                  <row1>	-0.000001 0.494095 0.400793	</row1>
+                  <row2>	-0.000004 -0.400793 0.494095	</row2>
+                  <row3>	1.409222 1.294554 3.638931	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000013 -0.000004	</row0>
+                  <row1>	-0.000008 -0.396055 -0.305189	</row1>
+                  <row2>	0.000002 0.185562 -0.240810	</row2>
+                  <row3>	-1.402659 1.144697 -3.435160	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1777,6 +1863,13 @@
             <undamaged>	vehicles/russian/R165_Object_703_II/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R165_Object_703_II/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R165_Object_703_II/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <R165_Object_703_II_2_3dst>
+                <undamaged>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Gun_01.model	</exploded>
+              </R165_Object_703_II_2_3dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R165_Object_703_II/collision/Gun_02.model	</collisionModelServer>
@@ -1881,6 +1974,13 @@
         <undamaged>	vehicles/russian/R165_Object_703_II/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R165_Object_703_II/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R165_Object_703_II/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R165_Object_703_II_2_3dst>
+            <undamaged>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R165_Object_703_II/_skins/R165_Object_703_II_2_3dst/crash/lod0/Turret_01.model	</exploded>
+          </R165_Object_703_II_2_3dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R165_Object_703_II/collision/Turret_01.model	</collisionModelServer>

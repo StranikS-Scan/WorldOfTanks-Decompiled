@@ -47,6 +47,14 @@
     <_Type98_V12_x2_1200_BP>	31001	</_Type98_V12_x2_1200_BP>
     <_Type98_V12_x2_1200_Kai_7x7>	31002	</_Type98_V12_x2_1200_Kai_7x7>
     <Kawasaki_Ha_9_IID_test>	31003	</Kawasaki_Ha_9_IID_test>
+    <Mitsubishi_12ZF>	46	</Mitsubishi_12ZF>
+    <Kawasaki_Ha_9_IIC>	47	</Kawasaki_Ha_9_IIC>
+    <Kawasaki_Ha_9_IID>	48	</Kawasaki_Ha_9_IID>
+    <Kawasaki_Ha_60_LB>	50	</Kawasaki_Ha_60_LB>
+    <Kawasaki_Ha_9_I>	51	</Kawasaki_Ha_9_I>
+    <Mitsubishi_12_ZM>	52	</Mitsubishi_12_ZM>
+    <Mitsubishi_12_ZT>	53	</Mitsubishi_12_ZT>
+    <Mitsubishi_MT_1100>	54	</Mitsubishi_MT_1100>
     <Mitsubishi_MT_1100_test>	31004	</Mitsubishi_MT_1100_test>
     <Kawasaki_Ha_60_LB_test>	31005	</Kawasaki_Ha_60_LB_test>
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
@@ -427,6 +435,22 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </_Type98_V12>
+    <Kawasaki_Ha_9_I>
+      <userString>	#japan_vehicles:Kawasaki_Ha_9_I	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	21000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	510	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
+    </Kawasaki_Ha_9_I>
     <_Type98_V12_x2_1100>
       <userString>	#japan_vehicles:_Type98_V12_x2_1100	</userString>
       <tags>	gasoline	</tags>
@@ -575,6 +599,22 @@
       <rpm_min>	346	</rpm_min>
       <rpm_max>	2160	</rpm_max>
     </_Mitsubishi_12HM20WT>
+    <Mitsubishi_12ZF>
+      <userString>	#japan_vehicles:Mitsubishi_12ZF	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	48500	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	670	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	341	</rpm_min>
+      <rpm_max>	2176	</rpm_max>
+    </Mitsubishi_12ZF>
     <_Mitsubishi_12HM21WT>
       <userString>	#japan_vehicles:_Mitsubishi_12HM21WT	</userString>
       <tags>	diesel	</tags>
@@ -759,6 +799,55 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </_Kawasaki_Type_98B>
+    <Mitsubishi_12_ZM>
+      <userString>	#japan_vehicles:Mitsubishi_12_ZM	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	88000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1800	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </Mitsubishi_12_ZM>
+    <Mitsubishi_12_ZT>
+      <userString>	#japan_vehicles:Mitsubishi_12_ZT	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	110000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Mitsubishi_12_ZT>
+    <Mitsubishi_MT_1100>
+      <userString>	#japan_vehicles:Mitsubishi_MT_1100	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	51000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1100	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	226	</rpm_min>
+      <rpm_max>	2520	</rpm_max>
+    </Mitsubishi_MT_1100>
     <Mitsubishi_MT_1100_test>
       <userString>	#japan_vehicles:Mitsubishi_MT_1100	</userString>
       <tags>	diesel	</tags>
@@ -824,6 +913,38 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </_Daimler_Benz_DB_601_AA>
+    <Kawasaki_Ha_9_IIC>
+      <userString>	#japan_vehicles:Kawasaki_Ha_9_IIC	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	510	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Kawasaki_Ha_9_IIC>
+    <Kawasaki_Ha_9_IID>
+      <userString>	#japan_vehicles:Kawasaki_Ha_9_IID	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	28000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	510	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Kawasaki_Ha_9_IID>
     <Kawasaki_Ha_9_IID_test>
       <userString>	#japan_vehicles:Kawasaki_Ha_9_IID	</userString>
       <tags>	gasoline	</tags>
@@ -841,6 +962,22 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Kawasaki_Ha_9_IID_test>
+    <Kawasaki_Ha_60_LB>
+      <userString>	#japan_vehicles:Kawasaki_Ha_60_LB	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	456	</rpm_min>
+      <rpm_max>	2755	</rpm_max>
+    </Kawasaki_Ha_60_LB>
     <Kawasaki_Ha_60_LB_test>
       <userString>	#japan_vehicles:Kawasaki_Ha_60_LB	</userString>
       <tags>	gasoline	</tags>

@@ -15,7 +15,6 @@ from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items import tankmen
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-MIN_ROLE_LEVEL = 100
 MAX_SKILL_VIEW_COUNT = 4
 _g_crewBooksViewedCache = None
 

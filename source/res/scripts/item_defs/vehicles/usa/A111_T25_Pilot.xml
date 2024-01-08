@@ -1838,7 +1838,7 @@
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1878,7 +1878,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	7.8	</reloadTime>
+          <reloadTime>	6.9	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2511,7 +2511,7 @@
     </Turret_1_A111_T25_Pilot>
   </turrets0>
   <engines>
-    <Ford_GAN_T>	shared	</Ford_GAN_T>
+    <Ford_GAN_TA>	shared	</Ford_GAN_TA>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -2522,10 +2522,10 @@
   <physics>
     <detailed>
       <engines>
-        <Ford_GAN_T>
-          <smplEnginePower>	530	</smplEnginePower>
+        <Ford_GAN_TA>
+          <smplEnginePower>	660	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Ford_GAN_T>
+        </Ford_GAN_TA>
       </engines>
       <chassis>
         <Chassis_A111_T25_Pilot>

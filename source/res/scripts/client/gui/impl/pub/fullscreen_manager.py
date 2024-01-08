@@ -60,7 +60,7 @@ class FullscreenManager(IFullscreenManager):
             if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow) and self.__isAllowed(newWindow):
                 windowsToClose.append(window)
 
-        if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow) and not self.__notificationMgr.isExecuting() and self.__requiresPostpone(newWindow):
+        if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow) and not self.__notificationMgr.isExecuting():
             _logger.info('Notification queue postpones by opening window %r', newWindow)
             self.__notificationMgr.postponeActive()
         for window in windowsToClose:
@@ -77,10 +77,6 @@ class FullscreenManager(IFullscreenManager):
     @staticmethod
     def __fullscreenPredicate(window):
         return window.layer == WindowLayer.FULLSCREEN_WINDOW and window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED)
-
-    @classmethod
-    def __requiresPostpone(cls, window):
-        return False if not cls.__isAllowed(window) else True
 
     @staticmethod
     def __isAllowed(window):

@@ -78,7 +78,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         if self._vehicle:
             for _, tman in self._vehicle.crew:
                 if tman and tman.invID == self._tankmanID:
-                    isRetrainAvailable = tman.realRoleLevel.lvl < MAX_ROLE_LEVEL
+                    isRetrainAvailable = tman.isUntrained
                     break
 
         return [self._makeItem(CREW.PERSONAL_FILE, MENU.contextmenu('crewWidgetPersonalFile')),

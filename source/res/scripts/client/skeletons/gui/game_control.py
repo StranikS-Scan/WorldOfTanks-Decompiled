@@ -422,8 +422,6 @@ class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
     onHidden = None
-    onHeroTankChanged = None
-    onHeroTankBought = None
 
     def hasAdventHero(self):
         raise NotImplementedError
@@ -1658,9 +1656,6 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
-    def mustShow(self):
-        raise NotImplementedError
-
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1711,16 +1706,7 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
-    def isPostEvent(self):
-        raise NotImplementedError
-
     def getHangarQuestsFlagData(self):
-        raise NotImplementedError
-
-    def getHangarWidgetLinkage(self):
-        raise NotImplementedError
-
-    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 
@@ -2818,12 +2804,6 @@ class IFunRandomController(IGameController):
         raise NotImplementedError
 
     def isFunRandomPrbActive(self):
-        raise NotImplementedError
-
-    def hasDailyQuestsEntry(self):
-        raise NotImplementedError
-
-    def hasHangarHeaderEntry(self):
         raise NotImplementedError
 
     def getSettings(self):

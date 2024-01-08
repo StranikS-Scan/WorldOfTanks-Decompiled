@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_page.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED
+from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
 from gui.ranked_battles.constants import RankedDossierKeys
@@ -92,7 +93,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         self._selectedItemID = ctx.get('selectedItemID', self._selectedItemID)
         if self._selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID and ctx.get('showedFromWeb', False):
             stateFlags = self.__getShowStateFlags()
-            stateFlags['isRankedWelcomeViewShowed'] = True
+            stateFlags[GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = True
             self.__setShowStateFlags(stateFlags)
 
     def _populate(self):

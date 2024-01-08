@@ -73,8 +73,8 @@ class VehicleDescrCrew(object):
                 equipment.updateCrewSkill(*args)
             skillProcessor(self, *args)
         except:
-            LOG_ERROR('Failed to process skill (arenaUniqueID, vehicleID, skillName, skillData):', self.__getUniqueArenaID(), self.__getVehicleID(), skillName, self._skills[skillName], stack=True)
             LOG_CURRENT_EXCEPTION()
+            LOG_ERROR('Failed to process skill (arenaUniqueID, vehicleID, skillName, skillData):', self.__getUniqueArenaID(), self.__getVehicleID(), skillName, self._skills.get(skillName) or self._extendedSkills.get(skillName), stack=True)
 
         return
 

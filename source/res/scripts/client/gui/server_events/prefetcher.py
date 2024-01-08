@@ -100,9 +100,9 @@ class TokenImagesSubRequester(SubRequester):
     def pickup(self, styleID, size):
         ticket = (styleID, size)
         content = self._storage.get(ticket)
-        if content:
-            return 'img://{}'.format(mapTextureToTheMemory(content))
-        return RES_ICONS.getTokenImage(size, styleID) if styleID in _DEFAULT_TOKENS_STYLES else RES_ICONS.getTokenUndefinedImage(size)
+        if styleID in _DEFAULT_TOKENS_STYLES:
+            return RES_ICONS.getTokenImage(size, styleID)
+        return 'img://{}'.format(mapTextureToTheMemory(content)) if content else None
 
     def _handler(self, ticket, content):
         _, expectedSize = ticket

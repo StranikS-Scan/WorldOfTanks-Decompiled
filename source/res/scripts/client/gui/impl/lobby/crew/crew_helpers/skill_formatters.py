@@ -4,7 +4,7 @@ from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstan
 from items.tankmen import MAX_SKILL_LEVEL
 
 class SkillLvlFormatter(object):
-    NDIG = 2
+    NDIG = 1
     MIN_FRACTION = 0.01
     MAX_FRACTION = MAX_SKILL_LEVEL - MIN_FRACTION
     intSkillLvl = property(lambda self: int(self.__skillLvl), lambda self, value: None)

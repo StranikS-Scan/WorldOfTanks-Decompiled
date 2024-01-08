@@ -350,7 +350,7 @@
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	80	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.1	</vehicleMovement>
         <vehicleRotation>	0.1	</vehicleRotation>
@@ -1340,13 +1340,13 @@
           <axleSteeringAngles>	0 0 6	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.156975	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.108675	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB120_Concept_No_5>

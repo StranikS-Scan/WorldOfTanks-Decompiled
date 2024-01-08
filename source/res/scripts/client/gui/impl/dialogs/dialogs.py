@@ -14,10 +14,8 @@ from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConf
 from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
-from gui.impl.new_year.dialogs.new_year_buy_gift_upgrade_dialog_view import NewYearBuyGiftUpgradeDialogView
 from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus, WindowLayer
-from gui.impl.pub.wait_view_impl import WaitWindowWrapper
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
     from frameworks.wulf import View
@@ -203,11 +201,4 @@ def showDismissTankmanDialog(tankmanId, parentViewKey=None):
 def showRestoreTankmanDialog(tankmanId, vehicleId, slotIdx, parentViewKey=None):
     from gui.impl.lobby.crew.dialogs.restore_tankman_dialog import RestoreTankmanDialog
     result = yield wg_await(showSingleDialog(layoutID=RestoreTankmanDialog.LAYOUT_ID, wrappedViewClass=RestoreTankmanDialog, tankmanId=tankmanId, vehicleId=vehicleId, slotIdx=slotIdx, parentViewKey=parentViewKey))
-    raise AsyncReturn(result)
-
-
-@wg_async
-def showNYGiftUpgradeDialog(parent, level, cost, shortage, tokensCount):
-    dialog = FullScreenDialogWindowWrapper(NewYearBuyGiftUpgradeDialogView(level, cost, shortage, tokensCount), parent)
-    result = yield wg_await(showSimple(dialog))
     raise AsyncReturn(result)

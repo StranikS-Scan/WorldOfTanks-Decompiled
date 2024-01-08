@@ -11,6 +11,7 @@ from items.components import skills_constants
 from soft_exception import SoftException
 
 class SPECIAL_VOICE_TAG(object):
+    ARIA_2023 = 'AriaZhorikSpecialVoice'
     BUFFON = 'buffonSpecialVoice'
     SABATON = 'sabatonSpecialVoice'
     OFFSPRING = 'offspringSpecialVoice'
@@ -26,6 +27,7 @@ class SPECIAL_VOICE_TAG(object):
     WITCHES_CREW = 'witchesSpecialVoice'
     HAND_OF_BLOOD = 'handOfBloodSpecialVoice'
     HW_CREW = 'crewHWvoice'
+    ARIA_CREW = 'ariaCrew'
     BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     BATTLE_OF_BLOGGERS_2021 = ('bb21_ru1_Yusha_specialVoice', 'bb21_ru1_Vspishka_specialVoice', 'bb21_ru2_Amway921_specialVoice', 'bb21_ru2_Korbendailas_specialVoice', 'bb21_ru3_Lebwa_specialVoice', 'bb21_ru3_Inspirer_specialVoice', 'bb21_ru4_Evilgranny_specialVoice', 'bb21_ru4_Nearyou_specialVoice', 'bb21_eu1_Circon_specialVoice', 'bb21_eu2_Dakillzor_specialVoice', 'bb21_eu3_Newmulti2k_specialVoice', 'bb21_eu4_Orzanel_specialVoice', 'bb21_na1_Cabbagemechanic_specialVoice', 'bb21_na2_Tragicloss_specialVoice', 'bb21_na3_Cmdraf_specialVoice', 'bb21_asia1_Mastertortoise_specialVoice', 'bb21_asia2_Summertiger_specialVoice', 'bb21_asia3_Maharlika_specialVoice')
     G_I_JOE_TWITCH_2021 = ('duke_specialVoice', 'cobra_specialVoice')
@@ -37,7 +39,8 @@ class SPECIAL_VOICE_TAG(object):
     BPH_MT_2022 = ('IvanCarevichSpecialVoice', 'VasilisaSpecialVoice', 'KashcheiSpecialVoice', 'BabaYagaSpecialVoice')
     HW_2023 = ('IvanCarevichHWSpecialVoice', 'VasilisaHWSpecialVoice', 'KashcheiHWSpecialVoice', 'BabaYagaHWSpecialVoice', 'KatrinaHWSpecialVoice')
     MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
-    ALL = (BUFFON,
+    ALL = (ARIA_2023,
+     BUFFON,
      SABATON,
      OFFSPRING,
      RACER,
@@ -62,12 +65,14 @@ class SPECIAL_CREW_TAG(object):
     YHA = 'yhaCrew'
     WITCHES_CREW = 'witchesCrew'
     HW_CREW = 'hwCrew'
+    ARIA_CREW = 'ariaCrew'
     ALL = (SABATON,
      OFFSPRING,
      MIHO,
      YHA,
      WITCHES_CREW,
-     HW_CREW)
+     HW_CREW,
+     ARIA_CREW)
 
 
 class GROUP_TAG(object):

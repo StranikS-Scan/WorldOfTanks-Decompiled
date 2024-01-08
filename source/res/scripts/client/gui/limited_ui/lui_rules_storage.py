@@ -48,6 +48,7 @@ class LuiRules(enum.Enum):
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
+    RESOURCE_WELL = 'ResourceWellFlag'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

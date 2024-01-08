@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCounter.py
-import typing
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -11,29 +10,24 @@ class _GroupCounter(object):
 
     def __init__(self):
         super(_GroupCounter, self).__init__()
-        self._notifications = {}
+        self.__notifications = set()
         self.__seenNotifications = set()
 
     def addNotification(self, typeID, entityID, countOnlyOnce):
-        self._notifications[typeID, entityID, countOnlyOnce] = {}
+        self.__notifications.add((typeID, entityID, countOnlyOnce))
 
     def removeNotification(self, typeID, entityID, countOnlyOnce):
-        self._notifications.pop((typeID, entityID, countOnlyOnce), None)
-        return
-
-    def updateNotification(self, typeID, entityID, count, resetCounter, countOnlyOnce=True):
-        self._notifications.update({(typeID, entityID, countOnlyOnce): {'count': count,
-                                             'resetCounter': resetCounter}})
+        self.__notifications.discard((typeID, entityID, countOnlyOnce))
 
     def count(self):
-        return len(self._notifications) - len(self.__seenNotifications)
+        return len(self.__notifications - self.__seenNotifications)
 
     def reset(self):
-        self.__seenNotifications |= {entry for entry in self._notifications if entry[_COUNT_ONLY_ONCE_INDEX]}
+        self.__seenNotifications |= {entry for entry in self.__notifications if entry[_COUNT_ONLY_ONCE_INDEX]}
         self.resetUnreadCount()
 
     def resetUnreadCount(self):
-        self._notifications.clear()
+        self.__notifications.clear()
 
     @classmethod
     def getGroupID(cls):
@@ -99,15 +93,6 @@ class _CounterCollection(object):
 
         else:
             self.__counters[group].removeNotification(typeID, entityID, countOnlyOnce)
-        return self.count()
-
-    def updateNotification(self, group, typeID, entityID, count, resetCounter):
-        if group is None:
-            for counter in self.__counters.itervalues():
-                counter.updateNotification(typeID, entityID, count, resetCounter)
-
-        else:
-            self.__counters[group].updateNotification(typeID, entityID, count, resetCounter)
         return self.count()
 
     def count(self, group=None):

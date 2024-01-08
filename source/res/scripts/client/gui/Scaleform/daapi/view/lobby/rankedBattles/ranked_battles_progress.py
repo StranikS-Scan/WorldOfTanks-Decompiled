@@ -42,11 +42,12 @@ class RankedBattlesProgress(RankedBattlesDivisionProgressMeta, IResetablePage):
         return self.__rankedController.getDivisions()[self.__selectedDivisionIdx]
 
     def __onRankedUpdate(self):
-        if self.__selectedDivisionIdx:
+        if self.__selectedDivisionIdx is not None:
             self.__setDivisionStats()
             self.__setBonusBattlesCount()
             self.__setRankedData()
             self.__setDivisionStatus()
+        return
 
     def __dossierUpdateCallBack(self, *args):
         self.__setDivisionStats()

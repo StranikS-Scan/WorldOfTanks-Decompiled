@@ -8233,6 +8233,73 @@
     <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
   </itemGroup>
   <itemGroup>
+    <name>	23 February 2024	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31086	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/23_February_2024_Decal_1_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/23_February_2024_Decal_1_MT	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31087	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/23_February_2024_Decal_2_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/23_February_2024_Decal_2_MT	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <name>	Aria	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31088	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Aria_Decal_01_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Aria_Decal_01_MT	</userString>
+      <tags>	hiddenInUI formfactor_rect1x2 styleOnly direction_right_to_left	</tags>
+      <scaleFactorId>	3	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31089	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Aria_Decal_02_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Aria_Decal_02_MT	</userString>
+      <tags>	hiddenInUI formfactor_rect1x2 styleOnly direction_right_to_left	</tags>
+      <scaleFactorId>	3	</scaleFactorId>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <projection_decal>
+      <id>	31090	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Aria_decal_signs_logo.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/R165_Object_703_II_2_3dst	</userString>
+      <tags>	formfactor_rect1x2 hiddenInUI	</tags>
+      <vehicleFilter>
+        <include>
+          <vehicles>	ussr:R165_Object_703_II_2	</vehicles>
+        </include>
+      </vehicleFilter>
+      <scaleFactorId>	3	</scaleFactorId>
+      <mirror>	false	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>

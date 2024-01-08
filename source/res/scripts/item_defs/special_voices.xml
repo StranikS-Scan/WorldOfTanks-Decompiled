@@ -375,6 +375,18 @@
       <gender>	male	</gender>
       <languageMode>	commander_mosfilm_Bivaliy	</languageMode>
     </tankman>
+    <tankman>
+      <tag>	AriaZhorikSpecialVoice	</tag>
+      <gender>	male	</gender>
+      <languageMode>	commander_aria_Zhorik	</languageMode>
+    </tankman>
+    <tankman>
+      <tag>	ariaCrew	</tag>
+      <languageMode>	aria_crew	</languageMode>
+      <specialModes>
+        <isFullCrew>	aria_crew	</isFullCrew>
+      </specialModes>
+    </tankman>
   </voiceover>
   <arenaMusic>
     <style>
@@ -401,6 +413,19 @@
         <wwmusicResultWin>	music_sabaton_result_win	</wwmusicResultWin>
         <wwmusicResultDrawn>	music_sabaton_result_drawn	</wwmusicResultDrawn>
         <wwmusicResultDefeat>	music_sabaton_result_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
+    </style>
+    <style>
+      <tag>	ariaArenaMusic	</tag>
+      <wwmusicSetup>
+        <wwmusicLoading>	music_aria_loading_screen	</wwmusicLoading>
+        <wwmusicIntensive>	music_aria_dron_intensive	</wwmusicIntensive>
+        <wwmusicRelaxed>	music_aria_dron_relaxed	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_aria_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_aria_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_aria_result_defeat	</wwmusicResultDefeat>
       </wwmusicSetup>
     </style>
   </arenaMusic>

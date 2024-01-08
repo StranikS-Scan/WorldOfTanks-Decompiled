@@ -46,6 +46,12 @@ class DefaultHangarSpaceConfig(object):
     def discardSpaceIdOverride(self, isPremium):
         del self._spaceIdOverride[isPremium]
 
+    def clear(self):
+        self._visibilityMask = {True: None,
+         False: None}
+        self._spaceIdOverride = {}
+        return
+
 
 class SceneSpaceConfig(object):
 
@@ -140,6 +146,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
 
     def onDisconnected(self):
         self._clear()
+        self._defaultHangarSpaceConfig.clear()
         super(HangarSpaceSwitchController, self).onDisconnected()
 
     def onAvatarBecomePlayer(self):

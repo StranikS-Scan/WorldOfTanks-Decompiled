@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/loot_box/loot_box_bonus_parsers/default_parser.py
-from gui.server_events.bonuses import getNonQuestBonuses
 from gui.impl.lobby.loot_box.loot_box_helper import BonusInfo, OneOfBonusInfo
+from gui.server_events.bonuses import getNonQuestBonuses
 
 def parseAllOfBonusInfoSection(data):
     slots = dict()

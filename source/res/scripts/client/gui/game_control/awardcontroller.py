@@ -9,12 +9,10 @@ from collections import OrderedDict
 from copy import deepcopy
 from functools import partial
 from itertools import chain, ifilter
-from operator import itemgetter
 import ArenaType
 import BigWorld
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from frameworks.wulf import WindowLayer
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 import gui.awards.event_dispatcher as award_events
@@ -35,7 +33,6 @@ from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui import DialogsInterface, SystemMessages
 from gui.DialogsInterface import showPunishmentDialog
-from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -60,34 +57,31 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
-from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus, getAllNonQuestBonuses
-from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showMissionsBattlePass, showPiggyBankRewardWindow, showSubscriptionAwardWindow
+from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
+from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showPiggyBankRewardWindow, showSubscriptionAwardWindow
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showNYLevelUpWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency, i18n
-from items import ITEM_TYPE_INDICES, vehicles as vehicles_core, new_year
+from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
-from new_year.ny_level_helper import parseNYLevelToken
 from shared_utils import first, findFirst
-from new_year.ny_constants import NY_LEVEL_PREFIX
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController, IFestivityController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -96,7 +90,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.system_messages import ISystemMessages
-from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Tuple, Union, Dict, Literal
     from messenger.proto.bw.wrappers import _ServiceChannelData
@@ -480,8 +473,9 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
 
 class SeniorityAwardsWindowHandler(ServiceChannelHandler):
+    itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
     seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, awardCtrl):
         super(SeniorityAwardsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
@@ -554,13 +548,9 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
 class LootBoxByInvoiceHandler(ServiceChannelHandler):
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
-    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self, awardCtrl):
         super(LootBoxByInvoiceHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
-
-    def _needToShowAward(self, ctx):
-        return super(LootBoxByInvoiceHandler, self)._needToShowAward(ctx) and self._festivityController.isEnabled()
 
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
@@ -568,7 +558,7 @@ class LootBoxByInvoiceHandler(ServiceChannelHandler):
         if invoiceData.get('assetType', None) == INVOICE_ASSET.DATA and 'data' in invoiceData and 'tokens' in invoiceData['data']:
             tokensDict = invoiceData['data']['tokens']
             boxes = self.itemsCache.items.tokens.getLootBoxes()
-            for tokenName, tokenData in sorted(tokensDict.iteritems(), key=itemgetter(0)):
+            for tokenName, tokenData in tokensDict.iteritems():
                 count = tokenData.get('count', 0)
                 if count > 0 and tokenName in boxes:
                     lootbox = boxes[tokenName]
@@ -586,19 +576,14 @@ class LootBoxByInvoiceHandler(ServiceChannelHandler):
 
     @classmethod
     def _showWindow(cls, lootBoxes):
-        messages = []
-        savedTypes = set()
         for lootBoxType, lootBoxInfo in lootBoxes.iteritems():
             lootboxesCount = lootBoxInfo.get('count', 0)
-            messages.append(makeHtmlString('html_templates:lobby/system_messages', 'loot_boxes_msg', {'name': lootBoxInfo['userName'],
-             'count': lootboxesCount}))
-            savedTypes.add(lootBoxType)
-            if lootBoxType not in NewYearLootBoxes.ALL():
-                _logger.warning('Got unexpected lootbox')
+            app = cls.appLoader.getApp()
+            view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_HANGAR))
+            if view is not None:
+                showLootboxesAward(lootboxId=lootBoxType, lootboxCount=lootboxesCount, isFree=lootBoxInfo['isFree'])
 
-        if messages:
-            savedData = NewYearLootBoxes.PREMIUM_OLD if len(savedTypes) > 1 else savedTypes.pop()
-            SystemMessages.pushMessage('\n'.join(messages), type=SystemMessages.SM_TYPE.LootBoxes, savedData=savedData)
+        return
 
 
 class PiggyBankOpenHandler(ServiceChannelHandler):
@@ -643,58 +628,6 @@ class RenewableSubscriptionHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         showSubscriptionAwardWindow()
-
-
-class NewYearAtmosphereHandler(ServiceChannelHandler):
-    _bootcampController = dependency.descriptor(IBootcampController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    _FIRST_LEVEL = 1
-
-    def __init__(self, awardCtrl):
-        super(NewYearAtmosphereHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__alreadyGotForBootcamp = []
-
-    def _needToShowAward(self, ctx):
-        if not super(NewYearAtmosphereHandler, self)._needToShowAward(ctx):
-            return False
-        _, message = ctx
-        isNewYearToken = False
-        isNew = True
-        for token in message.data.get('completedQuestIDs', ''):
-            level = parseNYLevelToken(token)
-            if level == self._FIRST_LEVEL:
-                continue
-            if level or token in new_year.g_cache.collectionIDByCollectionRewards:
-                isNewYearToken = True
-                if self._bootcampController.isInBootcampAccount():
-                    self.__alreadyGotForBootcamp.append(token)
-                elif token in self.__alreadyGotForBootcamp:
-                    isNew = False
-                break
-
-        return isNewYearToken and isNew
-
-    def _showAward(self, ctx):
-        data = ctx[1].data
-        completedQuestIDs = data.get('completedQuestIDs', set())
-        levelRewards = {}
-        collectionRewards = {}
-        detailedRewards = data.get('detailedRewards', {})
-        for questID in completedQuestIDs:
-            if questID.startswith(NY_LEVEL_PREFIX) and parseNYLevelToken(questID) != self._FIRST_LEVEL:
-                level = parseNYLevelToken(questID)
-                levelRewards[level] = getAllNonQuestBonuses(detailedRewards.get(questID, {}))
-            if questID in new_year.g_cache.collectionIDByCollectionRewards:
-                collectionStrId = new_year.g_cache.collectionIDByCollectionRewards[questID]
-                collectionRewards[collectionStrId] = getAllNonQuestBonuses(detailedRewards.get(questID, {}))
-
-        if levelRewards or collectionRewards:
-            self.__showWindow({'levelRewards': levelRewards,
-             'collectionRewards': collectionRewards})
-
-    @classmethod
-    def __showWindow(cls, ctx):
-        showNYLevelUpWindow(layer=WindowLayer.TOP_WINDOW, **ctx)
 
 
 class MarkByInvoiceHandler(ServiceChannelHandler):
@@ -1931,5 +1864,4 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  ResourceWellRewardHandler,
  Comp7RewardHandler,
  WinbackQuestHandler,
- CollectionsRewardHandler,
- NewYearAtmosphereHandler))
+ CollectionsRewardHandler))

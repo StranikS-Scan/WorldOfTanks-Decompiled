@@ -17,13 +17,12 @@ class States(Enum):
 class ReturnPlace(IntEnum):
     TO_HANGAR = 0
     TO_SHOP = 1
-    TO_CUSTOM = 2
 
 
 class LootboxesStorageViewModel(ViewModel):
-    __slots__ = ('openLootBoxes', 'onClose', 'buyBox', 'openningFinished', 'onLootboxSelected', 'changeAnimationEnabledSetting', 'showBonusProbabilities')
+    __slots__ = ('openLootBoxes', 'onClose', 'buyBox', 'openningFinished', 'onLootboxSelected', 'changeAnimationEnabledSetting', 'showBonusProbabilities', 'onError')
 
-    def __init__(self, properties=6, commands=7):
+    def __init__(self, properties=6, commands=8):
         super(LootboxesStorageViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLootboxes(self):
@@ -81,3 +80,4 @@ class LootboxesStorageViewModel(ViewModel):
         self.onLootboxSelected = self._addCommand('onLootboxSelected')
         self.changeAnimationEnabledSetting = self._addCommand('changeAnimationEnabledSetting')
         self.showBonusProbabilities = self._addCommand('showBonusProbabilities')
+        self.onError = self._addCommand('onError')

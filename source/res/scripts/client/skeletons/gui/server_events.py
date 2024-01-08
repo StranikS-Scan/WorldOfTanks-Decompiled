@@ -13,7 +13,6 @@ class IEventsCache(object):
     onEventsVisited = None
     onProfileVisited = None
     onPersonalQuestsVisited = None
-    onQuestConditionUpdated = None
 
     def init(self):
         raise NotImplementedError
@@ -51,9 +50,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getQuestByID(self, questID):
-        raise NotImplementedError
-
-    def getCachedQuestByID(self, questID):
         raise NotImplementedError
 
     def getPersonalMissions(self):
@@ -102,9 +98,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getAnnouncedActions(self):
-        raise NotImplementedError
-
-    def getQuestsByIDs(self, qIDs):
         raise NotImplementedError
 
     def getEvents(self, filterFunc=None):

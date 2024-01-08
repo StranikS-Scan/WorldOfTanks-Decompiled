@@ -103,6 +103,8 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             markers = self._createDualAccMarkers()
         elif self._vehicleInfo.isFlamethrowerVehicle():
             markers = self._createFlamethrowerMarkers()
+        elif self._vehicleInfo.isAssaultVehicle():
+            markers = self._createSPGMarkers()
         else:
             markers = self._createDefaultMarkers()
         return markers

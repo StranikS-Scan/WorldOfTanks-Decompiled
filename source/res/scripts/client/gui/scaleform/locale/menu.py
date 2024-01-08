@@ -79,7 +79,6 @@ class MENU(object):
     HANGAR_CREW_RODY_DOG_MOREINFOLABEL = '#menu:hangar/crew/rody/dog/moreInfoLabel'
     HANGAR_CREW_TOOLTIP_NEW_SKILL = '#menu:hangar/crew/tooltip/new_skill'
     HANGAR_CREW_TOOLTIP_DROP_SKILL = '#menu:hangar/crew/tooltip/drop_skill'
-    HANGAR_XPTOTMENCHECKBOX_TITLE = '#menu:hangar/xpToTmenCheckbox/title'
     LOGIN_STATUS_LOGIN_REJECTED_RATE_LIMITED = '#menu:login/status/LOGIN_REJECTED_RATE_LIMITED'
     LOGIN_STATUS_LOGIN_REJECTED_USERS_LIMIT = '#menu:login/status/LOGIN_REJECTED_USERS_LIMIT'
     LOGIN_STATUS_LOGIN_REJECTED_DB_GENERAL_FAILURE = '#menu:login/status/LOGIN_REJECTED_DB_GENERAL_FAILURE'
@@ -254,9 +253,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -1260,7 +1256,6 @@ class MENU(object):
     VEHICLEINFO_COMPAREBTN_TOOLTIP_BODY = '#menu:vehicleInfo/compareBtn/tooltip/body'
     UNLOCKS_UNLOCKBUTTON = '#menu:unlocks/unlockButton'
     UNLOCKS_EXCHANGEBUTTON = '#menu:unlocks/exchangeButton'
-    UNLOCKS_XPTOTMENCHECKBOX = '#menu:unlocks/xpToTmenCheckbox'
     RESEARCH_PREMIUM_BENEFITS_FIRST = '#menu:research/premium/benefits/first'
     RESEARCH_PREMIUM_BENEFITS_SECOND = '#menu:research/premium/benefits/second'
     RESEARCH_PREMIUM_BENEFITS_THIRD = '#menu:research/premium/benefits/third'
@@ -2438,9 +2433,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANK,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,

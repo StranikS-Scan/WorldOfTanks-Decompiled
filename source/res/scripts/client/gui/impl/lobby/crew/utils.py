@@ -3,7 +3,6 @@
 import itertools
 import typing
 from collections import namedtuple
-import Settings
 import SoundGroups
 import nations
 from gui.impl import backport
@@ -27,50 +26,21 @@ class TRAINING_TIPS(CONST_CONTAINER):
     CHOOSE_ANY_CREW_MEMBER = 'chooseAnyCrewMember'
     MAXED_CREW_MEMBERS = 'maxedCrewMembers'
     ENOUGH_EXPERIENCE = 'enoughExperience'
-    NOT_TRAINED_THIS_VEHICLE = 'notTrainedThisVehicle'
-    NOT_FULL_CREW = 'notFullCrew'
-    NOT_FULL_AND_NOT_TRAINED_CREW = 'notFullAndNotTrainedCrew'
+    NOT_SUITABLE_CREW = 'notSuitableCrew'
+    NOT_ALL_CURRENT_CREW = 'notAllCurrentCrew'
     tips = {CHOOSE_ANY_CREW_MEMBER: 1,
      MAXED_CREW_MEMBERS: 2,
      ENOUGH_EXPERIENCE: 3,
-     NOT_TRAINED_THIS_VEHICLE: 11,
-     NOT_FULL_CREW: 12,
-     NOT_FULL_AND_NOT_TRAINED_CREW: 13}
+     NOT_SUITABLE_CREW: 11,
+     NOT_ALL_CURRENT_CREW: 12}
 
 
-def getTip(tipID, tipType):
+def getTip(tipID, tipType, vehName=None):
     tip = InfoTipModel()
     tip.setId(TRAINING_TIPS.tips[tipID])
-    tip.setText(backport.text(R.strings.tooltips.quickTraining.dyn(tipID)()))
+    tip.setText(backport.text(R.strings.tooltips.quickTraining.dyn(tipID)(), vehName=vehName))
     tip.setType(tipType)
     return tip
-
-
-def loadDoNotOpenTips():
-    doNotOpenTips = []
-    userPrefs = Settings.g_instance.userPrefs
-    if userPrefs is None or not userPrefs.has_key(Settings.QUICK_TRANING_TIPS):
-        return doNotOpenTips
-    else:
-        ds = userPrefs[Settings.QUICK_TRANING_TIPS]
-        for key, _ in TRAINING_TIPS.infoTips.items():
-            isDoNotOpenTip = ds.readBool(key, False)
-            if isDoNotOpenTip:
-                doNotOpenTips.append(key)
-
-        return doNotOpenTips
-
-
-def saveDoNotOpenTip(doNotOpenTip):
-    userPrefs = Settings.g_instance.userPrefs
-    if userPrefs is None:
-        return
-    else:
-        if not userPrefs.has_key(Settings.QUICK_TRANING_TIPS):
-            userPrefs.write(Settings.QUICK_TRANING_TIPS, '')
-        ds = userPrefs[Settings.QUICK_TRANING_TIPS]
-        ds.writeBool(doNotOpenTip, True)
-        return
 
 
 def buildPopoverTankFilterCriteria(filters):

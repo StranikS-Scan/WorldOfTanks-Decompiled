@@ -1291,8 +1291,8 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
          SETTINGS_SECTIONS.LIMITED_UI_2: {},
          SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
-         SETTINGS_SECTIONS.ARMORY_YARD: {},
-         'nyStorage': {}}
+         'nyStorage': {},
+         SETTINGS_SECTIONS.ARMORY_YARD: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)

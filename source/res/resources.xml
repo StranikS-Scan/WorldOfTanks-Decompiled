@@ -198,8 +198,6 @@
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
       <module>	editor.cgf_editor.entity_follower	</module>
-      <module>	client.new_year.cgf_components.lobby_customization_components	</module>
-      <module>	client.new_year.cgf_components.ny_rules	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -250,14 +248,7 @@
       <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
       <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
       <path>	vehicles/czech/Cz21_TST/Cz21_TST_animations.prefab	</path>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/NY24_Garland_00_left.prefab	</path>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/NY24_Garland_00_right.prefab	</path>
     </prefabs>
-    <prefabFolders>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/Christmas_tree/Balls	</path>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/Christmas_tree/Floor	</path>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/Christmas_tree/Garland	</path>
-      <path>	content/HangarPrefabs/h03_mt_ny_2024/Christmas_tree/Top	</path>
-    </prefabFolders>
+    <prefabFolders></prefabFolders>
   </cgf>
 </resources.xml>

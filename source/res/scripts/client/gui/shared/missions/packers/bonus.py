@@ -29,7 +29,6 @@ from helpers import dependency, i18n, time_utils
 from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.shared import IItemsCache
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
@@ -173,7 +172,6 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
 
 class TokenBonusUIPacker(BaseBonusUIPacker):
     _eventsCache = dependency.descriptor(IEventsCache)
-    _itemsCache = dependency.descriptor(IItemsCache)
     _RANKED_TOKEN_SOURCE = 'rankedPoint'
     _BATTLE_BONUS_X5_TOKEN_SOURCE = 'bonus_battle_task'
     _CREW_BONUS_X3_TOKEN_SOURCE = 'crew_bonus_x3'
@@ -233,8 +231,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
          CREW_BONUS_X3_TOKEN: cls.__packBonusQuestToken(CREW_BONUS_X3_TOKEN),
          COMPLEX_TOKEN: cls.__packComplexToken,
          YEAR_POINTS_TOKEN: cls.__packRankedToken,
-         GOLD_MISSION: cls.__packGoldMissionToken,
-         constants.LOOTBOX_TOKEN_PREFIX: cls.__packLootboxToken}
+         GOLD_MISSION: cls.__packGoldMissionToken}
 
     @classmethod
     def _packToken(cls, bonusPacker, bonus, *args):
@@ -252,9 +249,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             return CREW_BONUS_X3_TOKEN
         if tokenID.startswith(YEAR_POINTS_TOKEN):
             return YEAR_POINTS_TOKEN
-        if tokenID.split(':')[0].endswith(GOLD_MISSION):
-            return GOLD_MISSION
-        return constants.LOOTBOX_TOKEN_PREFIX if tokenID.startswith(constants.LOOTBOX_TOKEN_PREFIX) else ''
+        return GOLD_MISSION if tokenID.split(':')[0].endswith(GOLD_MISSION) else ''
 
     @classmethod
     def _getTooltipsPackers(cls):
@@ -262,8 +257,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
          CREW_BONUS_X3_TOKEN: cls.__getBonusFactorTooltip(CREW_BONUS_X3_TOKEN),
          COMPLEX_TOKEN: cls.__getComplexToolTip,
          YEAR_POINTS_TOKEN: cls.__getRankedPointToolTip,
-         GOLD_MISSION: cls.__getGoldMissionTooltip,
-         constants.LOOTBOX_TOKEN_PREFIX: cls.__packLootboxToolTip}
+         GOLD_MISSION: cls.__getGoldMissionTooltip}
 
     @classmethod
     def __packComplexToken(cls, model, bonus, complexToken, token):
@@ -305,23 +299,6 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
         return model
 
-    @classmethod
-    def __packLootboxToken(cls, model, bonus, complexToken, token):
-        count = bonus.getCount()
-        lootBoxRes = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
-        if count < 0 or not lootBoxRes.exists():
-            return
-        else:
-            lootBox = cls._itemsCache.items.tokens.getLootBoxByTokenID(token.id)
-            if lootBox is None:
-                return
-            name = lootBox.getIconName()
-            model.setTooltipContentId(str(lootBoxRes()))
-            model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(name)()))
-            model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(name)()))
-            model.setValue(str(count))
-            return model
-
     @staticmethod
     def __getBonusFactorTooltip(name):
 
@@ -347,10 +324,6 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def __getGoldMissionTooltip(cls, complexToken, token):
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[token.id])
-
-    @classmethod
-    def __packLootboxToolTip(cls, complexToken, token):
-        return {'lootBoxID': int(token.id.rsplit(':', 1)[-1])}
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):

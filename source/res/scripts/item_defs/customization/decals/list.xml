@@ -7347,7 +7347,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	MT emblems 25g	</priceGroup>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
     <decal>
       <id>	15929	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_250.dds	</texture>
@@ -13761,6 +13761,20 @@
       <id>	31095	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_ice_2023_Inscription_MT_8.dds	</texture>
       <userString>	#vehicle_customization:inscription/Rush_2023_Ice_08_MT	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	Aria	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <decal>
+      <id>	31112	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Aria_inscription_MT.dds	</texture>
+      <userString>	#vehicle_customization:inscription/Aria_inscription_MT	</userString>
       <mirror>	false	</mirror>
     </decal>
     <type>	INSCRIPTION	</type>

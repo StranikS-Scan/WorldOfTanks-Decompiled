@@ -63,7 +63,6 @@ class _CustomizationEvents(object):
         self.onEditModeEnabled = Event.Event(self._eventsManager)
         self.onPersonalNumberCleared = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
-        self.onCloseWindow = Event.Event(self._eventsManager)
 
     def fini(self):
         self._eventsManager.clear()
@@ -89,7 +88,6 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__carouselItems = None
-        self.__exitCallback = None
         return
 
     @property
@@ -226,14 +224,6 @@ class CustomizationContext(object):
                 self.mode.installItem(intCD, StyledMode.STYLE_SLOT)
             self.changeMode(CustomizationModes.EDITABLE_STYLE, source=source)
             return
-
-    def getExitCallback(self):
-        return self.__exitCallback
-
-    def previewStyle(self, style, exitCallback=None, source=None):
-        self.__exitCallback = exitCallback
-        self.changeMode(CustomizationModes.STYLED, source=source)
-        self.events.onShowStyleInfo(style)
 
     def canEditStyle(self, itemCD):
         if self.__modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):

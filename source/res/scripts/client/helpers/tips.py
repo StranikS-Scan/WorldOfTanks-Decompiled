@@ -27,7 +27,6 @@ _COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 _WINBACK_TIPS_PATTERN = '^(winback\\d+$)'
 _MAPBOX_TIPS_PATTERN = '^(mapbox\\d+)'
 _DEV_MAPS_PATTERN = '^(devMaps\\d+)'
-_NEW_YEAR_TIP_CHANCE = 0.25
 
 class _BattleLoadingTipPriority(object):
     GENERIC = 1

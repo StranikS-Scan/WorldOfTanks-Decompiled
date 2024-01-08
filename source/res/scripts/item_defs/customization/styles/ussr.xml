@@ -317,7 +317,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
-    <priceGroup>	MT 3D styles 6-7-8 levels 4000g	</priceGroup>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R154_T_34E_1943	</vehicles>
@@ -400,7 +400,7 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R159_SU_130PM	</vehicles>
@@ -3119,6 +3119,150 @@
             <item>
               <id>	31006	</id>
               <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R199_SU_122V	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31088	</id>
+      <texture>	gui/maps/vehicles/styles/R199_SU_122V_KL_3Dst.png	</texture>
+      <modelsSet>	R199_SU_122V_KL_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R199_SU_122V_KL_3Dst_MT	</userString>
+      <description>	#vehicle_customization:special_style/R199_SU_122V_KL_3Dst_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R199_SU_122V_KL_3Dst_MT/long	</longDescriptionSpecial>
+      <tags>	progression_required styleSerialNumber	</tags>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	31007	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	31008	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	31007	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	31008	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	31064	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	31007	</id>
+            </item>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	31009	</id>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R165_Object_703_II_2	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31094	</id>
+      <isRent>	false	</isRent>
+      <texture>	gui/maps/vehicles/styles/R165_Object_703_II_2_3Dst.png	</texture>
+      <modelsSet>	R165_Object_703_II_2_3dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R165_Object_703_II_2_3dst	</userString>
+      <description>	#vehicle_customization:main_style/R165_Object_703_II_2_3dst/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/R165_Object_703_II_2_3dst/longDescription	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle ariaArenaMusic	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31090	</id>
+              <tags>	formfactor_rect1x2	</tags>
+              <slotId>	15064	</slotId>
+            </item>
+          </projection_decals>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	31010	</id>
             </item>
           </attachments>
         </outfit>

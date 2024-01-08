@@ -49,8 +49,6 @@ class MessageTemplates(templates.XMLCollection):
             formatted['bgIcon'] = source[bgIconSource]
         else:
             formatted['bgIcon'] = source.get(None, '')
-        if formatted.get('type') == 'nyBoxes' and 'savedData' in formatted:
-            formatted['nyData'] = formatted['savedData']
         return formatted
 
     def priority(self, key):
@@ -72,13 +70,11 @@ class MessageTemplates(templates.XMLCollection):
          'linkage': source.readString('linkage'),
          'timestamp': -1,
          'savedData': None,
-         'nyData': None,
          'bgIcon': self._makeBgIconsData(source['bgIcon']),
          'bgIconSizeAuto': source.readBool('bgIconSizeAuto'),
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],
-         'buttonsStates': {},
          'buttonsLayout': [],
          'buttonsAlign': source.readString('buttonsAlign', 'left'),
          'lifeTime': source.readInt('lifeTime')}

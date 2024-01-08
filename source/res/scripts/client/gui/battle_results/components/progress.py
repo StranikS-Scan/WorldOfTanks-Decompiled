@@ -451,7 +451,6 @@ class Comp7BattlePassProgressBlock(BattlePassProgressBlock):
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
-    itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ()
 
     def getVO(self):

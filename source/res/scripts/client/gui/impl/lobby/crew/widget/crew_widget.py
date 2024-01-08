@@ -287,15 +287,18 @@ class CrewWidget(ViewImpl):
             if possibleSkillsLevels is None:
                 vmSlot.tankman.setPossibleSkillsAmount(0)
                 vmSlot.tankman.setLastPossibleSkillLevel(-1)
+                vmSlot.tankman.setLastPossibleRoleLevel(-1)
                 vmSlot.tankman.setHasPossibleProgress(False)
                 continue
-            currSkillsCount, possibleSkillsCount, currSkillsLvl, possibleLastSkillLevel = possibleSkillsLevels[vmSlot.getSlotIdx()]
-            progressLvl = possibleLastSkillLevel - currSkillsLvl if possibleSkillsCount == currSkillsCount and currSkillsLvl.isSkillLvl and currSkillsLvl < MAX_SKILL_LEVEL else possibleLastSkillLevel
+            currSkillsCount, possibleSkillsCount, currSkillsLvl, possibleLastSkillLevel, currRoleLevel, possibleRoleLevel = possibleSkillsLevels[vmSlot.getSlotIdx()]
+            progressLvl = possibleLastSkillLevel - currSkillsLvl if possibleSkillsCount == currSkillsCount and currSkillsLvl.isSkillLvl and currSkillsLvl < MAX_SKILL_LEVEL and possibleRoleLevel == MAX_SKILL_LEVEL else possibleLastSkillLevel
+            roleProgressLvl = possibleRoleLevel - currRoleLevel
             vmSlot.tankman.setPossibleSkillsAmount(max(possibleSkillsCount - currSkillsCount, 0))
             vmSlot.tankman.setLastPossibleSkillLevel(progressLvl.formattedSkillLvl)
             vmSlot.tankman.setLastSkillLevel(currSkillsLvl.formattedSkillLvl)
             vmSlot.tankman.setLastSkillLevelFull(currSkillsLvl.realSkillLvl)
             vmSlot.tankman.setHasPossibleProgress(possibleSkillsCount > 0 or progressLvl.isSkillLvl)
+            vmSlot.tankman.setLastPossibleRoleLevel(roleProgressLvl.formattedSkillLvl)
 
         return
 
@@ -425,6 +428,7 @@ class CrewWidget(ViewImpl):
         vm.setVehicleName(self.__currentVehicle.shortUserName)
         vm.setVehicleType(self.__currentVehicle.type)
         vm.setIsCrewLocked(self.__currentVehicle.isCrewLocked)
+        vm.setIsAcceleratedTraining(self.__currentVehicle.isPremium or self.__currentVehicle.isElite)
         vm.setNation(self.__currentVehicle.nationName)
 
     def __fillSlotsList(self, vmSlotsList, lessMastered):

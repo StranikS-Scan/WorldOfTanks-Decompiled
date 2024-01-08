@@ -41,7 +41,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	140	</armor_1>
+      <armor_1>	160	</armor_1>
       <armor_2>	155	</armor_2>
       <armor_3>	120	</armor_3>
       <armor_4>	60	</armor_4>
@@ -51,7 +51,7 @@
       <armor_8>	0	</armor_8>
       <armor_9>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
-      <armor_10>	80	</armor_10>
+      <armor_10>	95	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20525	</weight>
@@ -952,8 +952,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -2135,7 +2135,7 @@
           </armor>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	11.2	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2682,7 +2682,7 @@
     <detailed>
       <engines>
         <_V-2-54SC>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+          <smplEnginePower>	860	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_V-2-54SC>
       </engines>

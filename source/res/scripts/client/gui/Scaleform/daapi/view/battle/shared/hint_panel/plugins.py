@@ -156,7 +156,7 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
 
     def __onCrosshairViewChanged(self, viewID):
         haveHintsLeft = self._haveHintsLeft(self.__settings)
-        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE:
+        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.ASSAULT_SPG:
             self.__addHint()
         elif self.__isHintShown:
             self.__removeHint()

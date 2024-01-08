@@ -162,7 +162,6 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
             mvcInstance.getAlertController().onAllAlertsClosed += self.__allAlertsMessageCloseHandler
             g_messengerEvents.onLockPopUpMessages += self.__onLockPopUpMassages
             g_messengerEvents.onUnlockPopUpMessages += self.__onUnlockPopUpMessages
-            g_messengerEvents.onNotificationPopUpViewerStarted()
             self._model.setup()
         else:
             g_playerEvents.onLoadingMilestoneReached += self._onLoadingMilestoneReached

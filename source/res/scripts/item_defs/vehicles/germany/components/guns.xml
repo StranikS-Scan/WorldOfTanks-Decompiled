@@ -162,6 +162,7 @@
     <_128mm_KwK46_L61_7x7>	31002	</_128mm_KwK46_L61_7x7>
     <_75mm_KwK41_L58_conic_C>	31001	</_75mm_KwK41_L58_conic_C>
     <Gun_VK4502P_G>	31004	</Gun_VK4502P_G>
+    <_150mm_Erich_Konzept_I>	31005	</_150mm_Erich_Konzept_I>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -10414,5 +10415,63 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_88mm_PaK_36_L56_NewOnBoarding>
+    <_150mm_Erich_Konzept_I>
+      <userString>	#germany_vehicles:_150mm_Erich_Konzept_I	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	6300	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_150mm_Erich_Konzept_I_Pzgr>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	254 250	</piercingPower>
+        </_150mm_Erich_Konzept_I_Pzgr>
+        <_150mm_Erich_Konzept_I_Gr_HL>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	940	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_150mm_Erich_Konzept_I_Gr_HL>
+        <_150mm_Erich_Konzept_I_Sprgr>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	940	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	76 76	</piercingPower>
+        </_150mm_Erich_Konzept_I_Sprgr>
+      </shots>
+    </_150mm_Erich_Konzept_I>
   </shared>
 </guns.xml>

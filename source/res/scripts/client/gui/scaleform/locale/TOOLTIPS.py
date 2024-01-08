@@ -167,11 +167,9 @@ class TOOLTIPS(object):
     STORAGE_FILTER_NORESULTSBTN = '#tooltips:storage/filter/noResultsBtn'
     HANGAR_CREW_RUDY_DOG = '#tooltips:hangar/crew/rudy/dog/'
     TANKS_CAROUSEL_WOT_PLUS_SLOT = '#tooltips:tanks_carousel/wot_plus_slot'
-    TANKCARUSEL_NEWYEARSLOT = '#tooltips:tankCarusel/newYearSlot'
     BADGEINFO_TITLE = '#tooltips:badgeinfo/title'
     BADGEINFO_TEXT = '#tooltips:badgeinfo/text'
     BADGEPAGE_RANKED_SUFFIXITEM_POSITION = '#tooltips:badgepage/ranked/suffixItem/position'
-    BADGEPAGE_RANKED_SUFFIXITEM_DURATION = '#tooltips:badgepage/ranked/suffixItem/duration'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -794,8 +792,6 @@ class TOOLTIPS(object):
     HANGAR_CREW_FREESKILLS = '#tooltips:hangar/crew/freeSkills'
     HANGAR_CREW_SPECIALTY_SKILLS = '#tooltips:hangar/crew/specialty_skills'
     HANGAR_CREW_XPTOTMEN = '#tooltips:hangar/crew/xpToTmen'
-    HANGAR_XPTOTMENCHECKBOX_HEADER = '#tooltips:hangar/xpToTmenCheckbox/header'
-    HANGAR_XPTOTMENCHECKBOX_BODY = '#tooltips:hangar/xpToTmenCheckbox/body'
     PERSONAL_CASE_SKILLS_DROP_HEADER = '#tooltips:personal_case/skills/drop/header'
     PERSONAL_CASE_SKILLS_DROP_BODY = '#tooltips:personal_case/skills/drop/body'
     PERSONAL_CASE_SKILLS_NEW_HEADER = '#tooltips:personal_case/skills/new/header'
@@ -3658,9 +3654,8 @@ class TOOLTIPS(object):
     QUICKTRAINING_CHOOSEANYCREWMEMBER = '#tooltips:quickTraining/chooseAnyCrewMember'
     QUICKTRAINING_MAXEDCREWMEMBERS = '#tooltips:quickTraining/maxedCrewMembers'
     QUICKTRAINING_ENOUGHEXPERIENCE = '#tooltips:quickTraining/enoughExperience'
-    QUICKTRAINING_NOTTRAINEDTHISVEHICLE = '#tooltips:quickTraining/notTrainedThisVehicle'
-    QUICKTRAINING_NOTFULLCREW = '#tooltips:quickTraining/notFullCrew'
-    QUICKTRAINING_NOTFULLANDNOTTRAINEDCREW = '#tooltips:quickTraining/notFullAndNotTrainedCrew'
+    QUICKTRAINING_NOTSUITABLECREW = '#tooltips:quickTraining/notSuitableCrew'
+    QUICKTRAINING_NOTALLCURRENTCREW = '#tooltips:quickTraining/notAllCurrentCrew'
     PREMIUMVEHICLE_HEADER = '#tooltips:premiumVehicle/header'
     PREMIUMVEHICLE_CAPTION = '#tooltips:premiumVehicle/caption'
     PREMIUMVEHICLE_CONTENT_HEADER = '#tooltips:premiumVehicle/content/header'
@@ -3704,8 +3699,6 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_HW_BABAYAGA_LABEL = '#tooltips:notrecruitedtankman/tankmen_hw_BabaYaga/label'
     NOTRECRUITEDTANKMAN_TANKMEN_HW_KATRINA_DESC = '#tooltips:notrecruitedtankman/tankmen_hw_Katrina/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_HW_KATRINA_LABEL = '#tooltips:notrecruitedtankman/tankmen_hw_Katrina/label'
-    TANKCARUSEL_NEWYEARSLOT_HEADER = '#tooltips:tankCarusel/newYearSlot/header'
-    TANKCARUSEL_NEWYEARSLOT_BODY = '#tooltips:tankCarusel/newYearSlot/body'
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_PROCYON_LABEL = '#tooltips:notrecruitedtankman/ny24_tankmen_procyon/label'
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_PROCYON_DESC = '#tooltips:notrecruitedtankman/ny24_tankmen_procyon/desc'
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_1_LABEL = '#tooltips:notrecruitedtankman/ny24_tankmen_1/label'
@@ -3716,6 +3709,18 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_3_DESC = '#tooltips:notrecruitedtankman/ny24_tankmen_3/desc'
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_LABEL = '#tooltips:notrecruitedtankman/ny24_tankmen_4/label'
     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_DESC = '#tooltips:notrecruitedtankman/ny24_tankmen_4/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_HOLSTININ_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Holstinin/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_HOLSTININ_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Holstinin/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_UDALOV_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Udalov/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_UDALOV_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Udalov/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_POPOV_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Popov/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_POPOV_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Popov/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHORIK_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Zhorik/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHORIK_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Zhorik/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHITNYAKOV_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Zhitnyakov/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHITNYAKOV_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Zhitnyakov/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_DUBININ_LABEL = '#tooltips:notrecruitedtankman/tankmen_Ar_Dubinin/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_AR_DUBININ_DESC = '#tooltips:notrecruitedtankman/tankmen_Ar_Dubinin/desc'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4458,7 +4463,13 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_1_LABEL,
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_2_LABEL,
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_3_LABEL,
-     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_LABEL)
+     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_HOLSTININ_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_UDALOV_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_POPOV_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHORIK_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHITNYAKOV_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_DUBININ_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -4649,7 +4660,13 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_1_DESC,
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_2_DESC,
      NOTRECRUITEDTANKMAN_NY24_TANKMEN_3_DESC,
-     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_DESC)
+     NOTRECRUITEDTANKMAN_NY24_TANKMEN_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_HOLSTININ_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_UDALOV_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_POPOV_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHORIK_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_ZHITNYAKOV_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_AR_DUBININ_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,

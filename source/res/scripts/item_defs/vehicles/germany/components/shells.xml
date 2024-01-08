@@ -3555,6 +3555,60 @@
       </damage>
     </armorSpalls>
   </_150mm_Sprgr>
+  <_150mm_Erich_Konzept_I_Pzgr>
+    <id>	31006	</id>
+    <userString>	#germany_vehicles:_150mm_Erich_Konzept_I_Pzgr	</userString>
+    <icon>	ap	</icon>
+    <price>	1680	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_150mm_Erich_Konzept_I_Pzgr>
+  <_150mm_Erich_Konzept_I_Gr_HL>
+    <id>	31007	</id>
+    <userString>	#germany_vehicles:_150mm_Erich_Konzept_I_Gr_HL	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_150mm_Erich_Konzept_I_Gr_HL>
+  <_150mm_Erich_Konzept_I_Sprgr>
+    <id>	31008	</id>
+    <userString>	#germany_vehicles:_150mm_Erich_Konzept_I_Sprgr	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1140	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152.4	</caliber>
+    <explosionRadius>	3.57	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	950	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.57	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	475	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_150mm_Erich_Konzept_I_Sprgr>
   <_170mm_PaK_K72_PzGr43>
     <id>	90	</id>
     <userString>	#germany_vehicles:_170mm_PaK_K72_PzGr43	</userString>

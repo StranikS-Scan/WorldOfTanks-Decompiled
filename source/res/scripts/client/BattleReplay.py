@@ -504,9 +504,9 @@ class BattleReplay(object):
             if isDown and not isCursorVisible:
                 self.__isMenuShowed = True
                 return False
-        if not player.isForcedGuiControlMode():
+        if not isCursorVisible:
             self.__isMenuShowed = False
-        if self.__isMenuShowed:
+        if self.__isMenuShowed or isCursorVisible:
             return False
         currReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
@@ -517,8 +517,8 @@ class BattleReplay(object):
             if self.isPlaying:
                 self.__replayCtrl.onPutScreenshotMark()
                 return True
-        if key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key):
-            if isDown and not isCursorVisible:
+        if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown:
+            if not isCursorVisible:
                 if self.isServerSideReplay:
                     if self.__arenaPeriod == ARENA_PERIOD.BATTLE:
                         player.switchObserverFPV()
@@ -572,10 +572,8 @@ class BattleReplay(object):
             return True
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
-        suppressCommand = False
-        if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
-            suppressCommand = True
-        elif cmdMap.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET,
+        suppressCommand = cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown
+        if not suppressCommand and cmdMap.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET,
          CommandMapping.CMD_CM_LOCK_TARGET_OFF,
          CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
          CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE,

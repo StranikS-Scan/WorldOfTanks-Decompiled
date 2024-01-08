@@ -6,7 +6,7 @@ from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import AlertData
-from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID, ZERO_DIVISION_ID
+from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from season_common import GameSeason
@@ -136,7 +136,7 @@ class RankProgress(object):
 
 
 class Division(object):
-    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal', '__rankIDs', '__isQualification', '__isPostQualification')
+    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal', '__rankIDs', '__isQualification')
 
     def __eq__(self, other):
         if self.getID() != other.getID() or self.getRanksIDs() != other.getRanksIDs():
@@ -153,8 +153,7 @@ class Division(object):
         self.__currentRank = currentRank
         self.__isFinal = isFinal
         self.__rankIDs = tuple(range(self.firstRank, self.lastRank + 1))
-        self.__isQualification = divisionID == ZERO_DIVISION_ID
-        self.__isPostQualification = divisionID == ZERO_DIVISION_ID + 1
+        self.__isQualification = False
 
     def getID(self):
         return self.__divisionID
@@ -184,9 +183,6 @@ class Division(object):
 
     def isQualification(self):
         return self.__isQualification
-
-    def isPostQualification(self):
-        return self.__isPostQualification
 
     def isFinal(self):
         return self.__isFinal
@@ -261,8 +257,7 @@ class Rank(object):
         return self.__isUnburnable
 
     def isVisualUnburnable(self):
-        isCorner = self.isInitialForNextDivision() or self.isLastInDivision()
-        return not (isCorner or self.isQualification()) and self.isUnburnable()
+        return self.isUnburnable()
 
     def getAchievedStepsCount(self):
         return len(self.getProgress().getAcquiredSteps())

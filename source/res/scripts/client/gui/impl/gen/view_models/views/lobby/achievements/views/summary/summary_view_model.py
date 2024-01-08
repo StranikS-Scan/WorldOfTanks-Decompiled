@@ -14,9 +14,9 @@ class EditState(Enum):
 
 
 class SummaryViewModel(ViewModel):
-    __slots__ = ('onAchievementsSettings',)
+    __slots__ = ('onAchievementsSettings', 'onError')
 
-    def __init__(self, properties=23, commands=1):
+    def __init__(self, properties=23, commands=2):
         super(SummaryViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -193,3 +193,4 @@ class SummaryViewModel(ViewModel):
         self._addStringProperty('lastVisitTime', '')
         self._addBoolProperty('isSuccessfullyEdited', False)
         self.onAchievementsSettings = self._addCommand('onAchievementsSettings')
+        self.onError = self._addCommand('onError')

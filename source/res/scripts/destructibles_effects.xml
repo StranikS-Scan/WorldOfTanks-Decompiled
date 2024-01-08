@@ -2044,42 +2044,6 @@
         </effects>
       </variant1>
     </tree_Birch_Bold_15m_touchdown>
-    <tree_Birch_Dry_2m_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak_small	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Birch_Dry_2m_fall>
-    <tree_Birch_Dry_2m_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_touchdown.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down_small	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Birch_Dry_2m_touchdown>
     <tree_Linden_Town_Dry_16m_fall>
       <variant1>
         <stages>
@@ -4747,25 +4711,6 @@
         </effects>
       </variant1>
     </inf_env414_Pole_Touchdown>
-    <inf_env414_pole_fall_ny_fracture>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env414_pole_fall_ny.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_pole	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env414_pole_fall_ny_fracture>
     <hd_env_101_RoadPoles_01_fall>
       <variant1>
         <stages>
@@ -33112,29 +33057,6 @@
         </effects>
       </variant1>
     </inf_shells_detonation_small_18>
-    <inf_gaf011_fencetile_ny>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf011_fencetile_ny.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	30	</wood_2>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2490	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf011_fencetile_ny>
     <inf_shells_detonation_small_18_hit>
       <variant1>
         <stages>
@@ -34587,6 +34509,16 @@
             <file>	particles/Environment/objects/hd_env_SU_021_Pire_Tile.eff	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <weight>	5837.000000	</weight>
+              <wood_1>	33.000000	</wood_1>
+              <wood_2>	31.000000	</wood_2>
+              <debrisAmount>	66.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_SU_021_Pire_Tile>
@@ -34625,6 +34557,16 @@
             <file>	particles/Environment/objects/hd_env_SU_021_Pire_End_01.eff	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <debrisAmount>	60.000000	</debrisAmount>
+              <weight>	5547.000000	</weight>
+              <wood_2>	50.000000	</wood_2>
+              <wood_1>	39.000000	</wood_1>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_SU_021_Pire_End_01>
@@ -34639,6 +34581,16 @@
             <file>	particles/Environment/objects/hd_env_SU_021_Pire_End_02.eff	</file>
             <force>	1	</force>
           </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <wood_2>	40.000000	</wood_2>
+              <weight>	6070.000000	</weight>
+              <wood_1>	30.000000	</wood_1>
+              <debrisAmount>	57.000000	</debrisAmount>
+            </params>
+          </destructionSound>
         </effects>
       </variant1>
     </hd_env_SU_021_Pire_End_02>
@@ -36533,52 +36485,6 @@
         </effects>
       </variant1>
     </hd_env_SU_1031_Rotunda>
-    <inf_env_deerdestr_ny>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/objects/inf_env_deerdestr_ny.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	55.000000	</debrisAmount>
-              <glass>	55.000000	</glass>
-              <weight>	2000.000000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_deerdestr_ny>
-    <inf_env_balldestr_ny>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/objects/inf_env_balldestr_ny.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	42.000000	</debrisAmount>
-              <weight>	1300.000000	</weight>
-              <glass>	36.000000	</glass>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_balldestr_ny>
   </fragiles>
   <structures>
     <hd_env_AS_001_Aqueduct_01>

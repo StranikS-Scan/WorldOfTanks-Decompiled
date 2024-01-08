@@ -14,10 +14,10 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import frag_correlation_bar
-    from gui.Scaleform.daapi.view.battle.shared import base_stats
     from gui.Scaleform.daapi.view.battle.classic import players_panel
     from gui.Scaleform.daapi.view.battle.ranked import stats_exchange
     from gui.Scaleform.daapi.view.battle.ranked import battle_loading
+    from gui.Scaleform.daapi.view.battle.ranked import full_stats
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.classic import minimap
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
@@ -38,7 +38,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.RankedStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, frag_correlation_bar.FragCorrelationBar, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, base_stats.StatsBase, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, players_panel.PlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.ClassicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),

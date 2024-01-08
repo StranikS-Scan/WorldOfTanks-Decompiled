@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
-import logging
+from battle_pass_common import BattlePassConsts
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
@@ -9,24 +9,21 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
-from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.shared.events import PersonalMissionsEvent
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
-from shared_utils import first
-from battle_pass_common import BattlePassConsts
-_logger = logging.getLogger(__name__)
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
@@ -348,14 +345,17 @@ def showMissionAward(quest, ctx):
         if bonuses:
             lootboxes = getLootboxesFromBonuses(bonuses)
             if lootboxes:
-                for lootboxId, _ in lootboxes.iteritems():
-                    if lootboxId not in NewYearLootBoxes.ALL():
-                        _logger.warning('Got unexpected lootbox')
+                for lootboxId, lootboxInfo in lootboxes.iteritems():
+                    showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
                 missionAward = awards.MissionAward(quest, ctx, handleEvent)
                 if missionAward.getAwards():
                     shared_events.showMissionAwardWindow(missionAward)
+
+
+def showLootboxesAward(lootboxId, lootboxCount, isFree):
+    pass
 
 
 def showPiggyBankRewardWindow(creditsValue, isPremActive):
@@ -418,15 +418,6 @@ def showActions(tab=None, anchor=None):
 @dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
 def goToArmoryYardQuests(armoryYardCtrl=None):
     armoryYardCtrl.goToArmoryYardQuests()
-
-
-@dependency.replace_none_kwargs(debutBoxesCtrl=IDebutBoxesController)
-def showDebutBoxesQuests(debutBoxesCtrl=None):
-    groupId = None
-    if debutBoxesCtrl.isEnabled():
-        groupId = debutBoxesCtrl.getGroupID()
-    showMissionsGrouped(groupID=groupId, anchor=groupId)
-    return
 
 
 def _showMissions(**kwargs):

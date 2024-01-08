@@ -42,11 +42,9 @@ def aggregateSimilarBonuses(bonuses):
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isAllVehiclesObtainedInSlot(slot, itemsCache=None):
     inventoryVehicles = itemsCache.items.inventory.getIventoryVehiclesCDs()
-    restoreVehicles = itemsCache.items.recycleBin.getVehiclesIntCDs()
-    existVehicles = inventoryVehicles + restoreVehicles
     for bonus in slot['bonuses']:
         if bonus.getName() == 'vehicles':
-            if any((i[0].intCD not in existVehicles for i in bonus.getVehicles())):
+            if any((i[0].intCD not in inventoryVehicles for i in bonus.getVehicles())):
                 return False
 
     return True

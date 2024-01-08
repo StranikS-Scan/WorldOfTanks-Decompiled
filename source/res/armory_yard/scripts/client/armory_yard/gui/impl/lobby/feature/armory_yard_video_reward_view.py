@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_video_reward_view.py
+import logging
 import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
@@ -16,6 +17,7 @@ from gui.shared.event_dispatcher import showHangar
 from gui.shared import g_eventBus
 from gui.shared.events import ArmoryYardEvent
 from items.vehicles import getVehicleClassFromVehicleType
+_logger = logging.getLogger(__name__)
 
 class ArmoryYardVideoRewardView(ViewImpl):
     __slots__ = ('__vehicle', '__soundControl')
@@ -57,7 +59,10 @@ class ArmoryYardVideoRewardView(ViewImpl):
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onClose), (self.viewModel.onShowVehicle, self.__onShowVehicle), (self.viewModel.onVideoStarted, self.__onVideoStarted))
+        return ((self.viewModel.onClose, self.__onClose),
+         (self.viewModel.onError, self.__onError),
+         (self.viewModel.onShowVehicle, self.__onShowVehicle),
+         (self.viewModel.onVideoStarted, self.__onVideoStarted))
 
     def __getVideoNameByPreset(self):
         presetIndx = BigWorld.detectGraphicsPresetFromSystemSettings()
@@ -73,6 +78,11 @@ class ArmoryYardVideoRewardView(ViewImpl):
 
     def __onClose(self):
         g_eventBus.handleEvent(ArmoryYardEvent(ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+        self.destroyWindow()
+
+    def __onError(self, args):
+        errorFilePath = str(args.get('errorFilePath', ''))
+        _logger.error('Reward video error: %s', errorFilePath)
         self.destroyWindow()
 
     def __onVideoStarted(self):

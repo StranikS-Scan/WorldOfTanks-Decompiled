@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_skill_
 class CrewWidgetTankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(CrewWidgetTankmanModel, self).__init__(properties=properties, commands=commands)
 
     def getTankmanID(self):
@@ -90,47 +90,59 @@ class CrewWidgetTankmanModel(ViewModel):
     def setLastSkillLevel(self, value):
         self._setReal(11, value)
 
-    def getLastSkillLevelFull(self):
+    def getLastRoleLevel(self):
         return self._getReal(12)
 
-    def setLastSkillLevelFull(self, value):
+    def setLastRoleLevel(self, value):
         self._setReal(12, value)
 
+    def getLastPossibleRoleLevel(self):
+        return self._getReal(13)
+
+    def setLastPossibleRoleLevel(self, value):
+        self._setReal(13, value)
+
+    def getLastSkillLevelFull(self):
+        return self._getReal(14)
+
+    def setLastSkillLevelFull(self, value):
+        self._setReal(14, value)
+
     def getIsLessMastered(self):
-        return self._getBool(13)
-
-    def setIsLessMastered(self, value):
-        self._setBool(13, value)
-
-    def getIsInSkin(self):
-        return self._getBool(14)
-
-    def setIsInSkin(self, value):
-        self._setBool(14, value)
-
-    def getIsFemale(self):
         return self._getBool(15)
 
-    def setIsFemale(self, value):
+    def setIsLessMastered(self, value):
         self._setBool(15, value)
 
-    def getIsUntrained(self):
+    def getIsInSkin(self):
         return self._getBool(16)
 
-    def setIsUntrained(self, value):
+    def setIsInSkin(self, value):
         self._setBool(16, value)
 
-    def getHasWarning(self):
+    def getIsFemale(self):
         return self._getBool(17)
 
-    def setHasWarning(self, value):
+    def setIsFemale(self, value):
         self._setBool(17, value)
 
-    def getIsInteractive(self):
+    def getIsUntrained(self):
         return self._getBool(18)
 
-    def setIsInteractive(self, value):
+    def setIsUntrained(self, value):
         self._setBool(18, value)
+
+    def getHasWarning(self):
+        return self._getBool(19)
+
+    def setHasWarning(self, value):
+        self._setBool(19, value)
+
+    def getIsInteractive(self):
+        return self._getBool(20)
+
+    def setIsInteractive(self, value):
+        self._setBool(20, value)
 
     def _initialize(self):
         super(CrewWidgetTankmanModel, self)._initialize()
@@ -146,6 +158,8 @@ class CrewWidgetTankmanModel(ViewModel):
         self._addRealProperty('lastPossibleSkillLevel', -1)
         self._addBoolProperty('hasPossibleProgress', False)
         self._addRealProperty('lastSkillLevel', 0.0)
+        self._addRealProperty('lastRoleLevel', 0.0)
+        self._addRealProperty('lastPossibleRoleLevel', 0.0)
         self._addRealProperty('lastSkillLevelFull', 0.0)
         self._addBoolProperty('isLessMastered', False)
         self._addBoolProperty('isInSkin', False)

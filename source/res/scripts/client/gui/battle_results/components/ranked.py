@@ -126,37 +126,6 @@ class RankedResultsInfoHelper(RankedInfoHelper):
     def getPlayersNumber(self):
         return len(self.rankedController.getRanksChanges(isLoser=False))
 
-    def getPlayerStandoff(self, team, position, stepChanges, updatedStepChanges):
-        isLoser = self._reusable.common.winnerTeam != team
-        rankChanges = self.rankedController.getRanksChanges(isLoser=isLoser)
-        configStepChanges = rankChanges[position]
-        stepDiff = stepChanges - configStepChanges
-        if stepDiff > 1:
-            return (RANKEDBATTLES_ALIASES.STANDOFF_PLUS_2, configStepChanges)
-        if stepDiff == 1:
-            return (RANKEDBATTLES_ALIASES.STANDOFF_PLUS, configStepChanges)
-        if stepChanges < 0 and updatedStepChanges == 0:
-            return (RANKEDBATTLES_ALIASES.STANDOFF_RPOTECTED, configStepChanges)
-        return (RANKEDBATTLES_ALIASES.STANDOFF_INVISIBLE, configStepChanges) if stepDiff == 0 else (RANKEDBATTLES_ALIASES.STANDOFF_MINUS, configStepChanges)
-
-    def getStandoff(self, xp, xpToCompare, position, isLoser, isTop, lastStandoffInfo=None):
-        rankChanges = self.rankedController.getRanksChanges(isLoser=isLoser)
-        stepsDiff = rankChanges[position]
-        if isTop:
-            return (RANKEDBATTLES_ALIASES.STANDOFF_INVISIBLE, stepsDiff)
-        elif xp == xpToCompare:
-            if lastStandoffInfo is not None:
-                lastStandoff, lastStepDiff = lastStandoffInfo
-                diff = lastStepDiff - stepsDiff
-                if diff == 0:
-                    return (lastStandoff, stepsDiff)
-                if diff > 0:
-                    return (self.__getNextStandoff(lastStandoff, diff), stepsDiff)
-                return (RANKEDBATTLES_ALIASES.STANDOFF_INVISIBLE, stepsDiff)
-            return (RANKEDBATTLES_ALIASES.STANDOFF_PLUS, stepsDiff)
-        else:
-            return (RANKEDBATTLES_ALIASES.STANDOFF_INVISIBLE, stepsDiff)
-
     @classmethod
     def __getStepTypeByDiff(cls, stepDiff):
         if stepDiff == 0:

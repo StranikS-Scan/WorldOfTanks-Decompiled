@@ -7,7 +7,6 @@ import typing
 from account_shared import getCustomizationItem
 from battle_pass_common import NON_VEH_CD
 from dog_tags_common.components_config import componentConfigAdapter
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Dict, Optional
@@ -227,11 +226,6 @@ def __mergeDailyQuestReroll(total, key, value, isLeaf, count, *args):
     total.setdefault(key, set()).update(value)
 
 
-def __mergeNYAnyOf(total, key, value, isLeaf=False, count=1, *args):
-    result = total.setdefault(key, [])
-    result.extend(value if isinstance(value, list) else [value])
-
-
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -273,16 +267,10 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'freePremiumCrew': __mergeFreePremiumCrew,
  'meta': __mergeMeta,
  'dailyQuestReroll': __mergeDailyQuestReroll,
- 'noviceReset': __mergeNoviceReset,
- CurrentNYConstants.TOYS: __mergeItems,
- CurrentNYConstants.TOY_FRAGMENTS: __mergeValue,
- CurrentNYConstants.ANY_OF: __mergeNYAnyOf,
- CurrentNYConstants.FILLERS: __mergeValue}
-BONUS_MERGERS.update({k:__mergeItems for k in PREV_NY_TOYS_COLLECTIONS})
+ 'noviceReset': __mergeNoviceReset}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key),
- CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
+ 'tokens': lambda account, key: account._quests.hasToken(key)}
 RENT_ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._rent.isVehicleRented(account._inventory.getVehicleInvID(key))}
 
 class BonusItemsCache(object):
@@ -418,10 +406,9 @@ class BonusNodeAcceptor(object):
             for itemID, itemData in bonusNode['vehicles'].iteritems():
                 cache.onItemAccepted('vehicles', itemID, bool(itemData.get('rent', None)))
 
-        for itemType in ('tokens', CurrentNYConstants.TOYS):
-            if itemType in bonusNode:
-                for itemID in bonusNode[itemType].iterkeys():
-                    cache.onItemAccepted(itemType, itemID)
+        if 'tokens' in bonusNode:
+            for itemID in bonusNode['tokens'].iterkeys():
+                cache.onItemAccepted('tokens', itemID)
 
         if 'customizations' in bonusNode:
             for customization in bonusNode['customizations']:
@@ -437,11 +424,10 @@ class BonusNodeAcceptor(object):
                 if cache.isItemExists('vehicles', itemID, bool(itemData.get('rent', None))):
                     return True
 
-        for itemType in ('tokens', CurrentNYConstants.TOYS):
-            if itemType in bonusNode:
-                for itemID in bonusNode[itemType].iterkeys():
-                    if cache.isItemExists(itemType, itemID):
-                        return True
+        if 'tokens' in bonusNode:
+            for itemID, itemData in bonusNode['tokens'].iteritems():
+                if cache.isItemExists('tokens', itemID):
+                    return True
 
         if 'customizations' in bonusNode:
             for customization in bonusNode['customizations']:

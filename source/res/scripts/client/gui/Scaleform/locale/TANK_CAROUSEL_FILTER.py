@@ -17,6 +17,7 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_LABEL_ROLES_MEDIUMTANK = '#tank_carousel_filter:popover/label/roles/mediumTank'
     POPOVER_LABEL_ROLES_HEAVYTANK = '#tank_carousel_filter:popover/label/roles/heavyTank'
     POPOVER_LABEL_ROLES_AT_SPG = '#tank_carousel_filter:popover/label/roles/AT-SPG'
+    POPOVER_LABEL_ROLES_SPG = '#tank_carousel_filter:popover/label/roles/SPG'
     POPOVER_LABEL_SEARCHNAMEVEHICLE = '#tank_carousel_filter:popover/label/searchNameVehicle'
     POPOVER_CHECKBOX_PREMIUM = '#tank_carousel_filter:popover/checkbox/premium'
     POPOVER_CHECKBOX_ELITE = '#tank_carousel_filter:popover/checkbox/elite'
@@ -87,7 +88,8 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_LABEL_ROLES_ENUM = (POPOVER_LABEL_ROLES_LIGHTTANK,
      POPOVER_LABEL_ROLES_MEDIUMTANK,
      POPOVER_LABEL_ROLES_HEAVYTANK,
-     POPOVER_LABEL_ROLES_AT_SPG)
+     POPOVER_LABEL_ROLES_AT_SPG,
+     POPOVER_LABEL_ROLES_SPG)
 
     @classmethod
     def getRolesLabel(cls, vehType):

@@ -175,7 +175,7 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
-def getBattleSubTypeWinText(arenaTypeID, teamID, _=False):
+def getBattleSubTypeWinText(arenaTypeID, teamID):
     root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
     description = root.dyn('description')
     if not description:

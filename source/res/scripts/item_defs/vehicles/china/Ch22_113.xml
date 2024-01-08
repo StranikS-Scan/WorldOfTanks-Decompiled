@@ -868,8 +868,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1853,7 +1853,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.8	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.0972222 5 0.111111 7 0.388889 7 0.444444 1 0.555556 1 0.611111 7 0.888889 7 0.902778 5 1 5	</maxPitch>
@@ -2432,7 +2432,7 @@
     </Turret_1_Ch22_113>
   </turrets0>
   <engines>
-    <_V-2-54SC>	shared	</_V-2-54SC>
+    <_V-2-54SCP>	shared	</_V-2-54SCP>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2443,10 +2443,10 @@
   <physics>
     <detailed>
       <engines>
-        <_V-2-54SC>
+        <_V-2-54SCP>
           <smplEnginePower>	792.9609	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_V-2-54SC>
+        </_V-2-54SCP>
       </engines>
       <chassis>
         <Chassis_Ch22_113>

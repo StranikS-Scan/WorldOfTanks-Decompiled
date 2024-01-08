@@ -110,7 +110,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         if historyName not in boxesHistory:
             return 0
         _, limits, _ = boxesHistory[historyName]
-        return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1] or limits[guaranteedFrequencyName][2]
+        return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1]
 
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)

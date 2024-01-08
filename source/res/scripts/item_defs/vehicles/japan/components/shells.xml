@@ -1518,6 +1518,60 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_Type70>
+  <_90mm_M318>
+    <id>	163	</id>
+    <userString>	#japan_vehicles:_90mm_M318	</userString>
+    <icon>	ap	</icon>
+    <price>	480	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_M318>
+  <_90mm_M348>
+    <id>	164	</id>
+    <userString>	#japan_vehicles:_90mm_M348	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_M348>
+  <_90mm_M71B>
+    <id>	165	</id>
+    <userString>	#japan_vehicles:_90mm_M71B	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	120	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_M71B>
   <_105mm_APHE_Type95>
     <id>	63	</id>
     <userString>	#japan_vehicles:_105mm_APHE_Type95	</userString>
@@ -1669,6 +1723,329 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_Type91>
+  <_88mm_Pzgr39_3_L56_test>
+    <id>	31001	</id>
+    <userString>	#japan_vehicles:_88mm_Pzgr39_3_L56	</userString>
+    <icon>	ap	</icon>
+    <price>	240	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr39_3_L56_test>
+  <_88mm_Pzgr.40_3_L56_test>
+    <id>	31002	</id>
+    <userString>	#japan_vehicles:_88mm_Pzgr.40_3_L56	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr.40_3_L56_test>
+  <_88mm_Sprg.18_3_L56_test>
+    <id>	31003	</id>
+    <userString>	#japan_vehicles:_88mm_Sprg.18_3_L56	</userString>
+    <icon>	he_modern	</icon>
+    <price>	180	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.4	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_88mm_Sprg.18_3_L56_test>
+  <_105mm_ap_92_L45>
+    <id>	145	</id>
+    <userString>	#japan_vehicles:_105mm_ap_92_L45	</userString>
+    <icon>	ap	</icon>
+    <price>	490	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_ap_92_L45>
+  <_105mm_HEAT_92_L45>
+    <id>	146	</id>
+    <userString>	#japan_vehicles:_105mm_HEAT_92_L45	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT_92_L45>
+  <_105mm_he_92_L45>
+    <id>	147	</id>
+    <userString>	#japan_vehicles:_105mm_he_92_L45	</userString>
+    <icon>	he_modern	</icon>
+    <price>	420	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_he_92_L45>
+  <_105mm_Type_14_AP_L34>
+    <id>	148	</id>
+    <userString>	#japan_vehicles:_105mm_Type_14_AP_L34	</userString>
+    <icon>	ap	</icon>
+    <price>	420	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	140	</devices>
+    </damage>
+  </_105mm_Type_14_AP_L34>
+  <_105mm_Type_14_HEAT_L34>
+    <id>	149	</id>
+    <userString>	#japan_vehicles:_105mm_Type_14_HEAT_L34	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	140	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_Type_14_HEAT_L34>
+  <_105mm_Type_14_HE_L34>
+    <id>	150	</id>
+    <userString>	#japan_vehicles:_105mm_Type_14_HE_L34	</userString>
+    <icon>	he_modern	</icon>
+    <price>	520	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	2.51	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	140	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.51	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Type_14_HE_L34>
+  <_105mm_AP_M68>
+    <id>	151	</id>
+    <userString>	#japan_vehicles:_105mm_AP_M68	</userString>
+    <icon>	ap	</icon>
+    <price>	1000	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_M68>
+  <_105mm_HEAT_M68>
+    <id>	152	</id>
+    <userString>	#japan_vehicles:_105mm_HEAT_M68	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT_M68>
+  <_105mm_HE_M68>
+    <id>	153	</id>
+    <userString>	#japan_vehicles:_105mm_HE_M68	</userString>
+    <icon>	he_modern	</icon>
+    <price>	680	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_M68>
+  <_120mm_AP_Type_60>
+    <id>	157	</id>
+    <userString>	#japan_vehicles:_120mm_AP_Type_60	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_Type_60>
+  <_120mm_HEAT_Type_60>
+    <id>	158	</id>
+    <userString>	#japan_vehicles:_120mm_HEAT_Type_60	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_Type_60>
+  <_120mm_HE_Type_60>
+    <id>	159	</id>
+    <userString>	#japan_vehicles:_120mm_HE_Type_60	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1200	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_Type_60>
+  <_120mm_AP_Type_71>
+    <id>	160	</id>
+    <userString>	#japan_vehicles:_120mm_AP_Type_71	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_Type_71>
+  <_120mm_HEAT_Type_71>
+    <id>	161	</id>
+    <userString>	#japan_vehicles:_120mm_HEAT_Type_71	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_Type_71>
+  <_120mm_HE_Type_71>
+    <id>	162	</id>
+    <userString>	#japan_vehicles:_120mm_HE_Type_71	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1200	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	540	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	270	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_Type_71>
   <_120mm_AP_Type_71_test>
     <id>	31004	</id>
     <userString>	#japan_vehicles:_120mm_AP_Type_71	</userString>
@@ -1692,7 +2069,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainHollowCharge	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
       <armor>	420	</armor>
       <devices>	165	</devices>
@@ -1831,6 +2208,60 @@
       </damage>
     </armorSpalls>
   </_105mm_HEPT_Type76>
+  <_105mm_AP_Type_92>
+    <id>	130	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Type_92	</userString>
+    <icon>	ap	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_Type_92>
+  <_105mm_HEAT_Type_92>
+    <id>	131	</id>
+    <userString>	#japan_vehicles:_105mm_HEAT_Type_92	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT_Type_92>
+  <_105mm_HE_Type_92B>
+    <id>	132	</id>
+    <userString>	#japan_vehicles:_105mm_HE_Type_92B	</userString>
+    <icon>	he_modern	</icon>
+    <price>	880	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_Type_92B>
   <_105mm_AP_Type_92_test>
     <id>	31007	</id>
     <userString>	#japan_vehicles:_105mm_AP_Type_92	</userString>
@@ -2283,4 +2714,110 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_75mm_AP_Type_3_Ju_Nu>
+    <id>	166	</id>
+    <userString>	#japan_vehicles:_75mm_AP_Type_3_Ju_Nu	</userString>
+    <icon>	ap	</icon>
+    <price>	82	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_AP_Type_3_Ju_Nu>
+  <_75mm_AP_G_Type_3_Ju_Nu>
+    <id>	167	</id>
+    <userString>	#japan_vehicles:_75mm_AP_G_Type_3_Ju_Nu	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_AP_G_Type_3_Ju_Nu>
+  <_75mm_HE_Type_3_Ju_Nu>
+    <id>	168	</id>
+    <userString>	#japan_vehicles:_75mm_HE_Type_3_Ju_Nu	</userString>
+    <icon>	he_modern	</icon>
+    <price>	60	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.16	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	110	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_HE_Type_3_Ju_Nu>
+  <_75mm_AP_Type_1_425>
+    <id>	169	</id>
+    <userString>	#japan_vehicles:_75mm_AP_Type_1_425	</userString>
+    <icon>	ap	</icon>
+    <price>	340	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_AP_Type_1_425>
+  <_75mm_AP_Type_1_TK_425>
+    <id>	170	</id>
+    <userString>	#japan_vehicles:_75mm_AP_Type_1_TK_425	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_AP_Type_1_TK_425>
+  <_75mm_HE_Type_94_425>
+    <id>	171	</id>
+    <userString>	#japan_vehicles:_75mm_HE_Type_94_425	</userString>
+    <icon>	he_modern	</icon>
+    <price>	280	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	140	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_HE_Type_94_425>
 </shells.xml>

@@ -58,17 +58,11 @@ __all__ = ('standard',
  'grandTitleYellow',
  'grandTitleTK',
  'grandTitleRed',
- 'nyVehicleTitle',
- 'nyVehicleSmallTitle',
- 'nyVehicleMain',
- 'nyVehicleSmallMain',
  'textEpic',
  'yellowText',
  'greenText',
  'poiCapturedBoldText',
- 'poiCapturedRegularText',
- 'nyNotEnoughShardsDialogCostBlock',
- 'nyNotEnoughShardsDialogLevel')
+ 'poiCapturedRegularText')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -338,10 +332,6 @@ def tutorial(text):
     return _formatText('tutorialText', text)
 
 
-def tutorialBig(text):
-    return _formatText('tutorialTextBig', text)
-
-
 def playerOnline(text):
     return _formatText('playerOnline', text)
 
@@ -490,34 +480,6 @@ def poiCapturedBoldText(text):
 
 def poiCapturedRegularText(text):
     return _formatText('poiCapturedRegularText', text)
-
-
-def nyVehicleTitle(text):
-    return _formatText('nyVehicleTitle', text)
-
-
-def nyVehicleSmallTitle(text):
-    return _formatText('nyVehicleSmallTitle', text)
-
-
-def nyVehicleMain(text):
-    return _formatText('nyVehicleMain', text)
-
-
-def nyVehicleSmallMain(text):
-    return _formatText('nyVehicleSmallMain', text)
-
-
-def vehicleNameNY(text):
-    return _formatText('vehicleNameNY', text)
-
-
-def nyNotEnoughShardsDialogCostBlock(text):
-    return _formatText('nyNotEnoughShardsDialogCostBlock', text)
-
-
-def nyNotEnoughShardsDialogLevel(text):
-    return _formatText('nyNotEnoughShardsDialogLevel', text)
 
 
 def getRawStyles(names):

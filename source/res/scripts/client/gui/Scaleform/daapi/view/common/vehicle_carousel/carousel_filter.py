@@ -13,8 +13,6 @@ from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAM
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IDebutBoxesController
-from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 
 class FILTER_KEYS(object):
     ELITE = 'elite'
@@ -137,7 +135,6 @@ class CriteriesGroup(object):
 
 
 class CarouselFilter(_CarouselFilter):
-    _nyController = dependency.descriptor(INewYearController)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
@@ -241,7 +238,6 @@ class SessionCarouselFilter(_CarouselFilter):
 
 class BasicCriteriesGroup(CriteriesGroup):
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
-    itemsCache = dependency.descriptor(IItemsCache)
 
     @staticmethod
     def isApplicableFor(vehicle):

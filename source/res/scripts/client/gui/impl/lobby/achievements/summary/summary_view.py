@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/achievements/summary/summary_view.py
+import logging
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ACHIEVEMENTS_VISITED
@@ -46,6 +47,7 @@ _STATISTIC_LIST_ORDER = (KPITypes.DAMAGE,
  KPITypes.DESTROYED,
  KPITypes.ASSISTANCE,
  KPITypes.BLOCKED)
+_logger = logging.getLogger(__name__)
 
 class SummaryView(SubModelPresenter):
     __slots__ = ('__dossier', '__uniqueAwardsCount', '__prevRatingRank', '__prevRatingSubRank', '__userId')
@@ -110,8 +112,15 @@ class SummaryView(SubModelPresenter):
         super(SummaryView, self).finalize()
         return
 
+    def onError(self, args):
+        errorFilePath = str(args.get('errorFilePath', ''))
+        _logger.error('Rating animation error: %s', errorFilePath)
+
     def _getEvents(self):
-        return ((self.viewModel.onAchievementsSettings, self.__onAchievementsSettings), (self.viewModel.otherPlayerInfo.onOpenProfile, self.__openClanStatistic), (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
+        return ((self.viewModel.onAchievementsSettings, self.__onAchievementsSettings),
+         (self.viewModel.onError, self.onError),
+         (self.viewModel.otherPlayerInfo.onOpenProfile, self.__openClanStatistic),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
 
     def _getListeners(self):
         return ((events.Achievements20Event.LAYOUT_CHANGED, self.__onAchievementLayoutChanged, EVENT_BUS_SCOPE.LOBBY), (events.Achievements20Event.CLOSE_EDIT_VIEW, self.__onEditViewClose, EVENT_BUS_SCOPE.LOBBY))

@@ -508,7 +508,7 @@
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.12	</vehicleMovement>
         <vehicleRotation>	0.12	</vehicleRotation>
@@ -864,7 +864,7 @@
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	35	</rotationSpeed>
+      <rotationSpeed>	70	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.1	</vehicleMovement>
         <vehicleRotation>	0.1	</vehicleRotation>
@@ -2586,13 +2586,13 @@
           <axleSteeringAngles>	0 0 5	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB123_GSOR_1006_v7>
@@ -2602,13 +2602,13 @@
           <axleSteeringAngles>	0 0 5	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.15295	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB123_GSOR_1006_v7_2>

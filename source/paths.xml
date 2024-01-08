@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.23.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.23.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.24.0.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.24.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -10,24 +10,18 @@
       <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part2.pkg</Package>
-      <Package type="hd">./res/packages/shared_content_sandbox_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_sandbox_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/shared_content_sandbox_hd-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shaders.pkg</Package>
       <Package type="sd,hd">./res/packages/01_karelia.pkg</Package>
       <Package type="hd">./res/packages/01_karelia_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/01_karelia_fep_ny24.pkg</Package>
-      <Package type="hd">./res/packages/01_karelia_fep_ny24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka.pkg</Package>
       <Package type="hd">./res/packages/02_malinovka_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/02_malinovka_fep_ny24.pkg</Package>
-      <Package type="hd">./res/packages/02_malinovka_fep_ny24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/03_campania_big.pkg</Package>
       <Package type="hd">./res/packages/03_campania_big_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/04_himmelsdorf.pkg</Package>
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
-      <Package type="sd,hd">./res/packages/05_prohorovka_fep_ny24.pkg</Package>
-      <Package type="hd">./res/packages/05_prohorovka_fep_ny24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/07_lakeville.pkg</Package>
@@ -48,8 +42,6 @@
       <Package type="hd">./res/packages/114_czech_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden.pkg</Package>
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/115_sweden_fep_ny24.pkg</Package>
-      <Package type="hd">./res/packages/115_sweden_fep_ny24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
@@ -59,8 +51,7 @@
       <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
       <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
-      <Package type="sd,hd">./res/packages/13_erlenberg_fep_ny24.pkg</Package>
-      <Package type="hd">./res/packages/13_erlenberg_fep_ny24_hd.pkg</Package>
+      <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
@@ -109,7 +100,6 @@
       <Package type="hd">./res/packages/37_caucasus_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/38_mannerheim_line.pkg</Package>
       <Package type="hd">./res/packages/38_mannerheim_line_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/38_mannerheim_line_fep_ny24.pkg</Package>
       <Package type="sd,hd">./res/packages/44_north_america.pkg</Package>
       <Package type="hd">./res/packages/44_north_america_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/45_north_america.pkg</Package>
@@ -132,13 +122,14 @@
       <Package type="hd">./res/packages/95_lost_city_ctf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h00_armory_yard.pkg</Package>
       <Package type="sd,hd">./res/packages/h00_armory_yard_ep2.pkg</Package>
       <Package type="hd">./res/packages/h00_armory_yard_ep2_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h01_victory_day_2023.pkg</Package>
       <Package type="hd">./res/packages/h01_victory_day_2023_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h03_mt_ny_2024.pkg</Package>
-      <Package type="hd">./res/packages/h03_mt_ny_2024_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h06_mt_aria_2024.pkg</Package>
+      <Package type="hd">./res/packages/h06_mt_aria_2024_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h24_23feb.pkg</Package>
+      <Package type="hd">./res/packages/h24_23feb_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>

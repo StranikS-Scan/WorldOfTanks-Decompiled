@@ -13,11 +13,14 @@ from gui.impl.gen.view_models.views.lobby.crystals_promo.condition_model import 
 from gui.impl.gen.view_models.views.lobby.crystals_promo.crystals_promo_view_model import CrystalsPromoViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shop import showIngameShop, Origin
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _DEFAULT_VEHICLE_PRICE = 3000
 _DEFAULT_EQUIPMENT_PRICE = 5000
 _DEFAULT_INSTRUCTION_PRICE = 12
@@ -36,6 +39,7 @@ class CrystalsPromoView(ViewImpl):
     __slots__ = ('__visibility', '__destroyViewObject')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __appLoader = dependency.descriptor(IAppLoader)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, layoutID, visibility=HeaderMenuVisibilityState.ALL):
         settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=CrystalsPromoViewModel())
@@ -59,10 +63,12 @@ class CrystalsPromoView(ViewImpl):
         isFirstOpen = not AccountSettings.getSettings(CRYSTALS_INFO_SHOWN)
         if isFirstOpen:
             AccountSettings.setSettings(CRYSTALS_INFO_SHOWN, True)
+        minEquipmentPrice = self._getMinEquipmentPrice()
+        minInstructionPrice = self._getMinInstructionPrice()
         with self.getViewModel().transaction() as model:
             model.setSelectedTab(1 if isFirstOpen else 0)
-            model.setEquipmentPrice(getIntegralFormat(_DEFAULT_EQUIPMENT_PRICE))
-            model.setInstructionPrice(getIntegralFormat(_DEFAULT_INSTRUCTION_PRICE))
+            model.setEquipmentPrice(getIntegralFormat(minEquipmentPrice))
+            model.setInstructionPrice(getIntegralFormat(minInstructionPrice))
             model.setVehiclePrice(getIntegralFormat(_DEFAULT_VEHICLE_PRICE))
             model.setIsChina(IS_CHINA)
             self.__updateCondition(model)
@@ -78,6 +84,25 @@ class CrystalsPromoView(ViewImpl):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': self.__visibility}), EVENT_BUS_SCOPE.LOBBY)
         super(CrystalsPromoView, self)._finalize()
+
+    def _getMinCrystalPrice(self, itemTypeID=None, criteria=None, defaultValue=0):
+        price = defaultValue
+        getCrystalPrice = lambda item: item.getBuyPrice().price.crystal
+        items = self._itemsCache.items.getItems(itemTypeID, criteria).values()
+        items.sort(key=getCrystalPrice)
+        if items:
+            price = getCrystalPrice(items[0])
+        return price
+
+    def _getMinInstructionPrice(self):
+        itemId = GUI_ITEM_TYPE.BATTLE_BOOSTER
+        criteria = REQ_CRITERIA.CUSTOM(lambda item: item.getBuyPrice().price.crystal)
+        return self._getMinCrystalPrice(itemId, criteria, _DEFAULT_INSTRUCTION_PRICE)
+
+    def _getMinEquipmentPrice(self):
+        itemId = GUI_ITEM_TYPE.OPTIONALDEVICE
+        criteria = REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
+        return self._getMinCrystalPrice(itemId, criteria, _DEFAULT_EQUIPMENT_PRICE)
 
     def __updateCondition(self, model):
         config = self.__lobbyContext.getServerSettings().getCrystalRewardConfig().getRewardInfoData()

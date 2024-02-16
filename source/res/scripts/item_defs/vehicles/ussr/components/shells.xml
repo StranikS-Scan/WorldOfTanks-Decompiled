@@ -5043,31 +5043,32 @@
   <_100mm_UBR-412-DG_703_II_2>
     <id>	31015	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412-DG_703_II_2	</userString>
-    <icon>	ap	</icon>
+    <icon>	ap_cr	</icon>
     <price>	780	</price>
-    <kind>	ARMOR_PIERCING	</kind>
+    <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
   </_100mm_UBR-412-DG_703_II_2>
   <_100mm_UBR-412P-DG_703_II_2>
     <id>	31016	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412P-DG_703_II_2	</userString>
-    <icon>	ap_cr_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_UBR-412P-DG_703_II_2>
   <_100mm_UOF-412-DG_703_II_2>
     <id>	31017	</id>
@@ -5081,14 +5082,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	420	</armor>
+      <armor>	360	</armor>
       <devices>	135	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.76	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	210	</armor>
+        <armor>	180	</armor>
         <devices>	70	</devices>
       </damage>
     </armorSpalls>

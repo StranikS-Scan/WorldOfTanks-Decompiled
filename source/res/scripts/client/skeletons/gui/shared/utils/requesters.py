@@ -564,7 +564,7 @@ class IShopCommonStats(object):
     def berthsPrices(self):
         raise NotImplementedError
 
-    def getTankmanBerthPrice(self, berthsCount):
+    def getTankmanBerthPrice(self, berthsCount, selectedCount=None):
         raise NotImplementedError
 
     @property

@@ -7,10 +7,10 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	48	</forward>
+    <forward>	44	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -110,10 +110,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.91692 1.04106 1.342793	</rayStart>
-        <rayEnd>	0.916317 0.696645 1.139383	</rayEnd>
+        <rayStart>	0.917501 0.898541 1.345575	</rayStart>
+        <rayEnd>	0.916898 0.554126 1.142165	</rayEnd>
         <rayUp>	-0.002553 0.508531 -0.86104	</rayUp>
-        <size>	0.35	</size>
+        <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -1835,7 +1835,7 @@
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	40	</reloadTime>
+          <reloadTime>	46	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -1978,7 +1978,7 @@
       <engines>
         <B_2>
           <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
         </B_2>
       </engines>
       <chassis>
@@ -2011,7 +2011,7 @@
   <hull_aiming>
     <pitch>
       <wheelCorrectionCenterZ>	0	</wheelCorrectionCenterZ>
-      <wheelsCorrectionSpeed>	6.5	</wheelsCorrectionSpeed>
+      <wheelsCorrectionSpeed>	7.5	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
         <pitchMin>	-4	</pitchMin>
         <pitchMax>	7	</pitchMax>

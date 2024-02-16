@@ -8300,6 +8300,27 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	ElusiveAvengers	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <projection_decal>
+      <id>	31091	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/ElusiveAvengers_2024_Decal_01_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/ElusiveAvengers_2024_MT/name	</userString>
+      <description>	#vehicle_customization:projection_decals/ElusiveAvengers_2024_MT/description	</description>
+      <mirror>	true	</mirror>
+      <scaleFactorId>	2	</scaleFactorId>
+      <tags>	direction_left_to_right formfactor_rect1x2	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>

@@ -70,16 +70,27 @@ def useDefaultGunMarkers():
     return not constants.HAS_DEV_RESOURCES or GUI_SETTINGS.useDefaultGunMarkers
 
 
-def createGunMarker(isStrategic):
+def createDefaultGunMarker():
     factory = _GunMarkersDPFactory()
-    if isStrategic:
-        clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider())
-        serverMarker = _SPGGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerSPGProvider())
-        dualAccMarker = _EmptyGunMarkerController(_MARKER_TYPE.UNDEFINED, None)
-    else:
-        clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
-        serverMarker = _DefaultGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerProvider())
-        dualAccMarker = _DualAccMarkerController(_MARKER_TYPE.DUAL_ACC, factory.getDualAccuracyProvider())
+    clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
+    serverMarker = _DefaultGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerProvider())
+    dualAccMarker = _DualAccMarkerController(_MARKER_TYPE.DUAL_ACC, factory.getDualAccuracyProvider())
+    return _GunMarkersDecorator(clientMarker, serverMarker, dualAccMarker)
+
+
+def createStrategicGunMarker():
+    factory = _GunMarkersDPFactory()
+    clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider())
+    serverMarker = _SPGGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerSPGProvider())
+    dualAccMarker = _EmptyGunMarkerController(_MARKER_TYPE.UNDEFINED, None)
+    return _GunMarkersDecorator(clientMarker, serverMarker, dualAccMarker)
+
+
+def createAssaultSpgGunMarker():
+    factory = _GunMarkersDPFactory()
+    clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientAssaultSPGProvider())
+    serverMarker = _SPGGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerAssaultSPGProvider())
+    dualAccMarker = _EmptyGunMarkerController(_MARKER_TYPE.UNDEFINED, None)
     return _GunMarkersDecorator(clientMarker, serverMarker, dualAccMarker)
 
 
@@ -483,6 +494,8 @@ class _GunMarkersDPFactory(object):
     __serverDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     __clientSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     __serverSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+    __clientAssaultSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_ASSAULT_SPG_GUN_MARKER_DATA_PROVIDER)
+    __serverAssaultSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_ASSAULT_SPG_GUN_MARKER_DATA_PROVIDER)
     __dualAccDataProvider = aih_global_binding.bindRW(_BINDING_ID.DUAL_ACC_GUN_MARKER_DATA_PROVIDER)
 
     def getClientProvider(self):
@@ -505,6 +518,16 @@ class _GunMarkersDPFactory(object):
             self.__serverSPGDataProvider = self._makeSPGProvider()
         return self.__serverSPGDataProvider
 
+    def getClientAssaultSPGProvider(self):
+        if self.__clientAssaultSPGDataProvider is None:
+            self.__clientAssaultSPGDataProvider = self._makeAssaultSPGProvider()
+        return self.__clientAssaultSPGDataProvider
+
+    def getServerAssaultSPGProvider(self):
+        if self.__serverAssaultSPGDataProvider is None:
+            self.__serverAssaultSPGDataProvider = self._makeAssaultSPGProvider()
+        return self.__serverAssaultSPGDataProvider
+
     def getDualAccuracyProvider(self):
         if self.__dualAccDataProvider is None:
             self.__dualAccDataProvider = self._makeDefaultProvider()
@@ -520,6 +543,17 @@ class _GunMarkersDPFactory(object):
     @staticmethod
     def _makeSPGProvider():
         dataProvider = GUI.WGSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
+        dataProvider.positionMatrixProvider = Math.MatrixAnimation()
+        dataProvider.maxTime = 7.0
+        dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH
+        dataProvider.sizeScaleRate = aih_constants.SPG_GUN_MARKER_SCALE_RATE
+        dataProvider.sizeConstraint = (aih_constants.SPG_GUN_MARKER_MIN_SIZE, aih_constants.SPG_GUN_MARKER_MAX_SIZE)
+        dataProvider.setRelaxTime(constants.SERVER_TICK_LENGTH)
+        return dataProvider
+
+    @staticmethod
+    def _makeAssaultSPGProvider():
+        dataProvider = GUI.WGAssaultSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
         dataProvider.maxTime = 7.0
         dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH

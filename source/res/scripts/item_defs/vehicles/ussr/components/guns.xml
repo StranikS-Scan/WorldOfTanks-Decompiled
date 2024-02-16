@@ -5040,14 +5040,14 @@
           <speed>	1140	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	225 205	</piercingPower>
+          <piercingPower>	225 193	</piercingPower>
         </_100mm_UBR-412-DG_703_II_2>
         <_100mm_UBR-412P-DG_703_II_2>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1350	</speed>
+          <speed>	820	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	265 250	</piercingPower>
+          <piercingPower>	265 265	</piercingPower>
         </_100mm_UBR-412P-DG_703_II_2>
         <_100mm_UOF-412-DG_703_II_2>
           <defaultPortion>	0.05	</defaultPortion>
@@ -9620,7 +9620,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_large_mb	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
@@ -9644,7 +9644,7 @@
       <shots>
         <_122mm_BR_472UV>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	1240	</speed>
+          <speed>	1040	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	286 264	</piercingPower>

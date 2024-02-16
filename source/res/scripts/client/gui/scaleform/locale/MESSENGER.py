@@ -1123,6 +1123,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_RESOURCEWELL_INTELLIGENCE = '#messenger:serviceChannelMessages/resourceWell/intelligence'
     SERVICECHANNELMESSAGES_RESOURCEWELL_BREAKLINE = '#messenger:serviceChannelMessages/resourceWell/breakLine'
     SERVICECHANNELMESSAGES_RESOURCEWELL_GOLD = '#messenger:serviceChannelMessages/resourceWell/gold'
+    SERVICECHANNELMESSAGES_RESOURCEWELL_PREMIUM_PLUS = '#messenger:serviceChannelMessages/resourceWell/premium_plus'
     SERVICECHANNELMESSAGES_RESOURCEWELL_CREDITS = '#messenger:serviceChannelMessages/resourceWell/credits'
     SERVICECHANNELMESSAGES_RESOURCEWELL_CRYSTAL = '#messenger:serviceChannelMessages/resourceWell/crystal'
     SERVICECHANNELMESSAGES_RESOURCEWELL_FREEXP = '#messenger:serviceChannelMessages/resourceWell/freeXP'

@@ -44,6 +44,7 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         self.__curSense = self._cfg['sensitivity']
         self._aimingSystem = None
         self.__prevTime = 0.0
+        self.__prevAimPoint = Vector3()
         self.__dxdydz = Vector3(0.0, 0.0, 0.0)
         self.__autoUpdatePosition = False
         self.__sourceMatrix = None
@@ -284,6 +285,9 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
                 desiredCollisionDist = collisionDist + copysign(sphereCollisionDist, collisionDistDiff)
             distLerpParam = self.__getDistInterpolationParam(collisionDist, deltaTime)
             newDistance = math_utils.lerp(collisionDist, desiredCollisionDist, distLerpParam)
+            if self.aimingSystem.aimPoint.distSqrTo(self.__prevAimPoint) > 0.010000000000000002:
+                BigWorld.player().positionControl.moveTo(self._aimingSystem.aimPoint)
+                self.__prevAimPoint = self._aimingSystem.aimPoint
             self.__targetMatrix.translation = self._aimingSystem.aimPoint - self.__cameraDirection.scale(newDistance)
             self.__sourceMatrix = math_utils.createRotationMatrix((self.__cameraDirection.yaw, -self.__cameraDirection.pitch, 0))
             self.__cam.source = self.__sourceMatrix

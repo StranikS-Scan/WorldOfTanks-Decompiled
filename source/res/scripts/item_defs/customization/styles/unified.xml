@@ -22019,4 +22019,50 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31093	</id>
+      <texture>	gui/maps/vehicles/styles/ElusiveAvengers_2024_MT.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31067	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31068	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	31113	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:styles/ElusiveAvengers_2024_MT/name	</userString>
+      <description>	#vehicle_customization:styles/ElusiveAvengers_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:styles/ElusiveAvengers_2024_MT/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
 </unified.xml>

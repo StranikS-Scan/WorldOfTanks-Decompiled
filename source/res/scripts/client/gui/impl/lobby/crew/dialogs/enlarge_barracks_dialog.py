@@ -21,6 +21,7 @@ from gui.shared.money import Currency
 from gui.shop import showBuyGoldForBerth
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from items.item_price import getBerthPackCount
 
 class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
     __slots__ = ('__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__isDiscount', '__countPacksBerths', '__pricePacksBerths')
@@ -112,8 +113,9 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
 
     @args2params(int)
     def __onBunksCountChange(self, selectedCount):
-        self.__countPacksBerths = selectedCount / self.__berthsInPack
-        self.__pricePacksBerths = self.__berthPrice * self.__countPacksBerths
+        berths = self.itemsCache.items.stats.tankmenBerthsCount
+        self.__countPacksBerths = getBerthPackCount(self.__berthsInPack, selectedCount)
+        self.__pricePacksBerths = self.itemsCache.items.shop.getTankmanBerthPrice(berths, selectedCount)[0]
         with self.viewModel.transaction() as vm:
             vm.currency.setValue(self.__pricePacksBerths.gold)
             vm.currency.setIsEnough(self.__isEnoughMoney())

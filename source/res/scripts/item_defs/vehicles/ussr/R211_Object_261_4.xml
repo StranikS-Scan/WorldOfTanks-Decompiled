@@ -109,9 +109,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.263743 2.09759 2.76377	</rayStart>
-        <rayEnd>	0.743598 -0.07471 0.761125	</rayEnd>
-        <rayUp>	-0.136003 0.688923 -0.711961	</rayUp>
+        <rayStart>	1.177052 1.735539 2.429995	</rayStart>
+        <rayEnd>	0.830289 0.287341 1.0949	</rayEnd>
+        <rayUp>	-0.136004 0.688923 -0.711961	</rayUp>
         <size>	0.4	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -1803,12 +1803,12 @@
             </armor_13>
             <gun>	55	</gun>
           </armor>
-          <shotDispersionRadius>	1.0	</shotDispersionRadius>
+          <shotDispersionRadius>	0.85	</shotDispersionRadius>
           <reloadTime>	28.5	</reloadTime>
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.5	</turretRotation>
+            <turretRotation>	0.15	</turretRotation>
             <afterShot>	5.0	</afterShot>
             <whileGunDamaged>	3.0	</whileGunDamaged>
           </shotDispersionFactors>

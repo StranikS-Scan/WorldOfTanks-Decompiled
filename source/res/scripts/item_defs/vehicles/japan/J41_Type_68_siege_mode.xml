@@ -1,10 +1,10 @@
 <J41_Type_68_siege_mode.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman	</commander>
+    <commander>	loader	</commander>
     <gunner></gunner>
-    <loader></loader>
     <driver></driver>
+    <radioman></radioman>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_universal	</postProgressionTree>
@@ -2627,7 +2627,7 @@
         <_105mm_M68_L7>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.25000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 0.75000 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3267,7 +3267,7 @@
         <_105mm_M68_L7>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.25000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 0.75000 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3406,7 +3406,7 @@
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.25000 10.00 0.37500 4.00 0.50000 2.00 0.62500 4.00 0.75000 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>

@@ -8,7 +8,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.SystemMessages import SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.resource_well.resource import processLoadingResources, splitResourcesByType, mergeResources
+from gui.resource_well.resource import processLoadingResources, convertResourcesToServerLayout, mergeResources
 from gui.resource_well.resource_well_constants import UNAVAILABLE_REWARD_ERROR
 from gui.shared.event_dispatcher import showResourcesLoadingConfirm, showResourceWellNoSerialVehiclesConfirm
 from gui.shared.gui_items.processors import Processor, plugins
@@ -87,7 +87,7 @@ class ResourceWellPutProcessor(Processor):
 
     def _request(self, callback):
         Waiting.show('putResources')
-        BigWorld.player().resourceWell.putResources(splitResourcesByType(self.__resources), self.__rewardID, lambda code, errStr: self._response(code, callback, errStr=errStr))
+        BigWorld.player().resourceWell.putResources(convertResourcesToServerLayout(self.__resources), self.__rewardID, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
         Waiting.hide('putResources')
@@ -133,7 +133,7 @@ class ResourceWellNoTopVehiclesProcessor(Processor):
     def _request(self, callback):
         Waiting.show('putResources')
         rewardID = self.__resourceWell.getRewardID(isTop=False)
-        BigWorld.player().resourceWell.putResources(splitResourcesByType(self.__resources), rewardID, lambda code, errStr: self._response(code, callback, errStr=errStr))
+        BigWorld.player().resourceWell.putResources(convertResourcesToServerLayout(self.__resources), rewardID, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
         Waiting.hide('putResources')

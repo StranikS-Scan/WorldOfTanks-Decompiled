@@ -5581,4 +5581,26 @@
       <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
     </paint>
   </itemGroup>
+  <itemGroup>
+    <name>	ElusiveAvengers	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31067	</id>
+      <color>	45 21 17 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:repaint/ElusiveAvengers_2024_MT/name	</userString>
+      <description>	#vehicle_customization:repaint/ElusiveAvengers_2024_MT/description	</description>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
 </custom_paints.xml>

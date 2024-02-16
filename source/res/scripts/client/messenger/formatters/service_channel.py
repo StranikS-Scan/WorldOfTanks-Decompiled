@@ -21,7 +21,7 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState, SECONDS_IN_DAY
 from debug_utils import LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
@@ -47,7 +47,7 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
-from gui.resource_well.resource_well_constants import ResourceType
+from gui.resource_well.resource_well_constants import ServerResourceType
 from gui.achievements.achievements_constants import Achievements20SystemMessages
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CompletionTokensBonusFormatter, CREW_BONUS_X3_TOKEN
 from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, SelectableBonus
@@ -5086,10 +5086,12 @@ class ResourceWellOperationFormatter(ServiceChannelFormatter):
 
     def __formatResources(self, resources):
         resourceStrings = []
-        if ResourceType.CURRENCY.value in resources:
-            resourceStrings.extend(self.__formatCurrencies(resources[ResourceType.CURRENCY.value]))
-        if ResourceType.BLUEPRINTS.value in resources:
-            resourceStrings.append(self.__formatBlueprints(resources[ResourceType.BLUEPRINTS.value]))
+        if ServerResourceType.CURRENCY.value in resources:
+            resourceStrings.extend(self.__formatCurrencies(resources[ServerResourceType.CURRENCY.value]))
+        if ServerResourceType.BLUEPRINTS.value in resources:
+            resourceStrings.append(self.__formatBlueprints(resources[ServerResourceType.BLUEPRINTS.value]))
+        if ServerResourceType.ENTITLEMENTS.value in resources:
+            resourceStrings.extend(self.__formatEntitlements(resources[ServerResourceType.ENTITLEMENTS.value]))
         return (backport.text(self.__RESOURCE_WELL_MESSAGES.breakLine()) + self.__BULLET).join(resourceStrings)
 
     def __formatBlueprints(self, blueprintResources):
@@ -5112,6 +5114,17 @@ class ResourceWellOperationFormatter(ServiceChannelFormatter):
     def __formatCurrencies(self, currencyResources):
         currencies = sorted(currencyResources.items(), key=lambda x: x[0], cmp=lambda a, b: cmp(self.__CURRENCY_ORDER.get(a), self.__CURRENCY_ORDER.get(b)))
         return [ backport.text(self.__RESOURCE_WELL_MESSAGES.dyn(name)(), count=self.__formatCurrencyCount(name, count)) for name, count in currencies ]
+
+    def __formatEntitlements(self, entitlementResources):
+        result = []
+        for resourceName, diff in entitlementResources.items():
+            if resourceName == PREMIUM_ENTITLEMENTS.PLUS:
+                days = abs(diff) // SECONDS_IN_DAY
+                daysStr = backport.getIntegralFormat(days)
+                result.append(backport.text(self.__RESOURCE_WELL_MESSAGES.premium_plus(), count=text_styles.crystal(daysStr)))
+            _logger.error(u"ResourceWell: Unknown entitlement '%s'", resourceName)
+
+        return result
 
     def __formatCurrencyCount(self, currencyName, count):
         style = getStyle(currencyName) if currencyName in Currency.ALL else text_styles.crystal

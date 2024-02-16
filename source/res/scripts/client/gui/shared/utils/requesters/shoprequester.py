@@ -220,10 +220,10 @@ class ShopCommonStats(IShopCommonStats):
     def getBattlePassLevelCost(self):
         return Money(**self.getValue('battlePassLevelCost', defaultValue={Currency.GOLD: 250}))
 
-    def getTankmanBerthPrice(self, berthsCount):
+    def getTankmanBerthPrice(self, berthsCount, selectedCount=None):
         prices = self.berthsPrices
-        goldCost = getNextBerthPackPrice(berthsCount, prices)
-        return (Money(gold=goldCost), prices[1])
+        gold = getNextBerthPackPrice(berthsCount, prices, selectedCount)
+        return (Money(gold=gold), prices[1])
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):

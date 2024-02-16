@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/item_price.py
 from goodies.GoodieResources import Gold, Credits
+DEFAULT_ZERO_BERTH = 0
 
 class PRICE_TYPE:
     DEFAULT = (0,)
@@ -38,8 +39,14 @@ def getNextSlotPrice(slots, slotsPrices):
     return slotsPrices[1][addSlotNumber] if addSlotNumber < len(slotsPrices[1]) else slotsPrices[1][-1]
 
 
-def getNextBerthPackPrice(berths, berthsPrices):
-    addPackNumber = (berths - berthsPrices[0]) / berthsPrices[1]
-    if addPackNumber < 0:
-        return 0
-    return berthsPrices[2][addPackNumber] if addPackNumber < len(berthsPrices[2]) else berthsPrices[2][-1]
+def getBerthPackCount(berthsInPack, selectedCount):
+    return selectedCount / berthsInPack
+
+
+def getNextBerthPackPrice(currentBerthsCount, berthsPrices, selectedCount=None):
+    initialBerths, berthsInPack, packsCost = berthsPrices
+    packCost = packsCost[-1]
+    selectedCount = selectedCount if selectedCount is not None else berthsInPack
+    countPacks = getBerthPackCount(berthsInPack, selectedCount)
+    countFreePacks = max((initialBerths - currentBerthsCount) / berthsInPack, DEFAULT_ZERO_BERTH)
+    return max((countPacks - countFreePacks) * packCost, DEFAULT_ZERO_BERTH)

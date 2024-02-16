@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	19450	</weight>
-    <maxHealth>	1500	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -438,8 +438,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1420,7 +1420,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_150mm_Erich_Konzept_I>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_150mm_Erich_Konzept_I>	shared	  <maxAmmo>	24	</maxAmmo>
           <armor>
             <armor_1>	100	</armor_1>
             <armor_2>	70	</armor_2>
@@ -1439,13 +1439,13 @@
           </armor>
           <aimingTime>	3.0	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	19	</reloadTime>
-          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	22	</reloadTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0.00000 12.00 0.29167 12.00 0.36000 10.00 0.40000 6.00 0.60000 6.00 0.64000 10.00 0.70833 12.00 1.00000 12.00	</maxPitch>
@@ -1772,7 +1772,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_huge_mb	</effects>
           <models>
             <undamaged>	vehicles/german/G165_Erich_Konzept_I/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G165_Erich_Konzept_I/crash/lod0/Gun_02.model	</destroyed>

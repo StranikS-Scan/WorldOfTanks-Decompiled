@@ -91,11 +91,19 @@ class _GunMarkersFactory(object):
         else:
             return self._markersInfo.clientSPGMarkerDataProvider if markerType is GUN_MARKER_TYPE.CLIENT else None
 
+    def _getAssaultSPGDataProvider(self, markerType):
+        if markerType is GUN_MARKER_TYPE.SERVER:
+            return self._markersInfo.serverAssaultSPGMarkerDataProvider
+        else:
+            return self._markersInfo.clientAssaultSPGMarkerDataProvider if markerType is GUN_MARKER_TYPE.CLIENT else None
+
 
 class _ControlMarkersFactory(_GunMarkersFactory):
 
     def create(self):
-        if self._vehicleInfo.isSPG():
+        if self._vehicleInfo.isAssaultVehicle():
+            markers = self._createAssaultSPGMarkers()
+        elif self._vehicleInfo.isSPG():
             markers = self._createSPGMarkers()
         elif self._vehicleInfo.isDualGunVehicle():
             markers = self._createDualGunMarkers()
@@ -103,8 +111,6 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             markers = self._createDualAccMarkers()
         elif self._vehicleInfo.isFlamethrowerVehicle():
             markers = self._createFlamethrowerMarkers()
-        elif self._vehicleInfo.isAssaultVehicle():
-            markers = self._createSPGMarkers()
         else:
             markers = self._createDefaultMarkers()
         return markers
@@ -138,6 +144,10 @@ class _ControlMarkersFactory(_GunMarkersFactory):
         markerType = self._getMarkerType()
         return (self._createArcadeMarker(markerType, _CONSTANTS.ARCADE_GUN_MARKER_NAME), self._createSPGMarker(markerType, _CONSTANTS.SPG_GUN_MARKER_NAME))
 
+    def _createAssaultSPGMarkers(self):
+        markerType = self._getMarkerType()
+        return (self._createArcadeMarker(markerType, _CONSTANTS.ARCADE_GUN_MARKER_NAME), self._createAssaultSPGMarker(markerType, _CONSTANTS.SPG_GUN_MARKER_NAME))
+
     def _createArcadeMarker(self, markerType, name):
         dataProvider = self._getMarkerDataProvider(markerType)
         return self._createMarker(DefaultGunMarkerComponent, _VIEW_ID.ARCADE, markerType, dataProvider, name)
@@ -148,6 +158,10 @@ class _ControlMarkersFactory(_GunMarkersFactory):
 
     def _createSPGMarker(self, markerType, name):
         dataProvider = self._getSPGDataProvider(markerType)
+        return self._createMarker(SPGGunMarkerComponent, _VIEW_ID.STRATEGIC, markerType, dataProvider, name)
+
+    def _createAssaultSPGMarker(self, markerType, name):
+        dataProvider = self._getAssaultSPGDataProvider(markerType)
         return self._createMarker(SPGGunMarkerComponent, _VIEW_ID.STRATEGIC, markerType, dataProvider, name)
 
 
@@ -164,6 +178,9 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
 
     def _createSPGMarkers(self):
         return self._createSPGDebugMarkers() if self._useDebugMarkers() else super(_DevControlMarkersFactory, self)._createSPGMarkers()
+
+    def _createAssaultSPGMarkers(self):
+        return self._createAssaultSPGDebugMarkers() if self._useDebugMarkers() else super(_DevControlMarkersFactory, self)._createAssaultSPGMarkers()
 
     def _createDualGunMarkers(self):
         return self._createDualGunDebugMarkers() if self._useDebugMarkers() else super(_DevControlMarkersFactory, self)._createDualGunMarkers()
@@ -185,6 +202,12 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
          self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME),
          self._createSPGMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.SPG_GUN_MARKER_NAME),
          self._createSPGMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_SPG_GUN_MARKER_NAME))
+
+    def _createAssaultSPGDebugMarkers(self):
+        return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.ARCADE_GUN_MARKER_NAME),
+         self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME),
+         self._createAssaultSPGMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.SPG_GUN_MARKER_NAME),
+         self._createAssaultSPGMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_SPG_GUN_MARKER_NAME))
 
 
 class _EquipmentMarkersFactory(_GunMarkersFactory):

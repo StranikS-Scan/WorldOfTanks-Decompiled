@@ -48,9 +48,14 @@ class BattlePassManager(object):
         if BATTLE_PASS_PDATA_KEY in diff:
             synchronizeDicts(diff[BATTLE_PASS_PDATA_KEY], self.__cache.setdefault(BATTLE_PASS_PDATA_KEY, {}))
 
-    @_handleNonPlayerIgnoreState
     def getCache(self, callback=None):
-        self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
+        if self._ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, None)
+            return
+        else:
+            self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
+            return
 
     @_handleNonPlayerIgnoreState
     def activateChapter(self, chapterID, seasonID, callback=None):

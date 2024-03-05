@@ -507,6 +507,44 @@
       </effects>
     </variant1>
   </sandCollisionWheeledHeavy>
+  <sandCosmCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/cosmic_tank_collision_sand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	ev_cosmic_tank_surface_hull_collision_pc ; ev_cosmic_tank_surface_wheel_collision_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_cosmic_tank_surface_hull_collision_npc ; ev_cosmic_tank_surface_wheel_collision_npc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </sandCosmCollisionWheeledLight>
+  <sandCosmCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/cosmic_tank_collision_sand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	ev_cosmic_tank_surface_hull_collision_pc ; ev_cosmic_tank_surface_wheel_collision_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_cosmic_tank_surface_hull_collision_npc ; ev_cosmic_tank_surface_wheel_collision_npc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </sandCosmCollisionWheeledHeavy>
   <snowCollisionWheeledLight>
     <variant1>
       <timeline>
@@ -3351,4 +3389,480 @@
       </effects>
     </variant1>
   </trackDestructionR>
+  <cosm_mediumDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/destruction/cosm_destruction_medium.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumDestruction>
+  <cosm_mediumFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </cosm_mediumFlaming>
+  <cosm_mediumAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumAmmoBayExplosion>
+  <cosm_mediumInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumInstantExplosion>
+  <cosm_mediumAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_burnup_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_burnup_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumAmmoBayBurnOff>
+  <cosm_mediumFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumFuelExplosion>
+  <cosm_mediumCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_crew_death_m_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_crew_death_m_NPC	</wwsoundNPC>
+        </sound>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </cosm_mediumCrewDeath>
+  <cosm_mediumRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <wwsoundPC>	expl_ram_death_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ram_death_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/tank/shots/cosm_shot_null.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumRammingDestruction>
+  <cosm_mediumSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/tank/destruction/cosm_sink_medium.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </cosm_mediumSubmersionDeath>
 </vehicle_effects.xml>

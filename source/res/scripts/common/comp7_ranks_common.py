@@ -5,12 +5,12 @@ from typing import Optional, FrozenSet, Tuple
 from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
+from comp7_common import COMP7_CURRENT_SEASON
 COMP7_MASCOT_ID = 3
-COMP7_SEASON_IDX = 2
 COMP7_RATING_ENTITLEMENT_TMPL = 'comp7_rating_points'
-COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
-COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
-COMP7_ACTIVITY_ENTITLEMENT = 'comp7_activity_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_SEASON_IDX)
+COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_CURRENT_SEASON)
+COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:{}:{}'.format(COMP7_MASCOT_ID, COMP7_CURRENT_SEASON)
+COMP7_ACTIVITY_ENTITLEMENT = 'comp7_activity_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_CURRENT_SEASON)
 COMP7_ENTITLEMENT_EXPIRES = None
 EXTRA_RANK_TAG = 'extra'
 COMP7_UNDEFINED_RANK_ID = 0

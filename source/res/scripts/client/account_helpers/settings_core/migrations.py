@@ -1108,6 +1108,11 @@ def _migrateTo117(core, data, initialized):
      'role_SPG': False}
 
 
+def _migrateTo118(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1570,6 +1575,10 @@ _versions = ((1,
   False),
  (117,
   _migrateTo117,
+  False,
+  False),
+ (118,
+  _migrateTo118,
   False,
   False))
 

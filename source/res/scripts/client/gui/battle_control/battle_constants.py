@@ -276,6 +276,7 @@ class CROSSHAIR_VIEW_ID(object):
     SNIPER = 2
     STRATEGIC = 3
     POSTMORTEM = 4
+    ASSAULT = 5
 
 
 class PROGRESS_CIRCLE_TYPE(object):
@@ -331,7 +332,28 @@ class STRATEGIC_CAMERA_ID(object):
     TRAJECTORY = 2
 
 
-class DestroyTimerViewState(object):
+class ITimerViewState(object):
+    __slots__ = ()
+
+    @classmethod
+    def makeCloseTimerState(cls, code):
+        raise NotImplementedError
+
+    @classmethod
+    def makeCloseAllState(cls):
+        raise NotImplementedError
+
+    def needToShow(self):
+        raise NotImplementedError
+
+    def needToCloseTimer(self):
+        raise NotImplementedError
+
+    def needToCloseAll(self):
+        raise NotImplementedError
+
+
+class DestroyTimerViewState(ITimerViewState):
     __slots__ = ('code', 'totalTime', 'level', 'startTime')
 
     def __init__(self, code, totalTime, level, startTime=None):
@@ -361,7 +383,7 @@ class DestroyTimerViewState(object):
         return '<DestroyTimerViewState code={} totalTime={}, level={}, startTime={}>'.format(self.code, self.totalTime, self.level, self.startTime)
 
 
-class DeathZoneTimerViewState(object):
+class DeathZoneTimerViewState(ITimerViewState):
     __slots__ = ('zoneID', 'isCausingDamage', 'totalTime', 'level', 'finishTime', 'entered')
 
     def __init__(self, zoneID, isCausingDamage, totalTime, level, finishTime, entered=None):

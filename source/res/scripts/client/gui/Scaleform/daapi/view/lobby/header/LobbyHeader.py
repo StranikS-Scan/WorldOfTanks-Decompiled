@@ -1124,9 +1124,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
         isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
+        from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
+        isCosmicEvtAvailable = dependency.instance(ICosmicEventBattleController).isEnabled
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
         winbackAvailable = self.__winbackController.isModeAvailable()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable)
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable or isCosmicEvtAvailable)
 
     def _updatePrebattleControls(self, *_):
         if self._isLobbyHeaderControlsDisabled:
@@ -1202,8 +1204,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             if self.__isFightBtnDisabled and not state.hasLockedState:
                 if isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                     tooltipData = getEventTooltipData()
-                elif g_currentVehicle.isTooHeavy():
-                    tooltipData = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
                 elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                     tooltipData = getEpicBattlesOnlyVehicleTooltipData(result)
                 elif g_currentVehicle.isOnlyForComp7Battles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1231,10 +1231,16 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
                 tooltipData = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED
                 isSpecial = True
+            if self.__isFightBtnDisabled and selected.hasDisabledFightButtonData(result):
+                tooltipData = selected.getDisabledFightButtonTooltip(result)
             self.as_setFightBtnTooltipS(tooltipData, isSpecial)
             if self.hangarSpace.spaceInited or not self.bootcampController.isInBootcamp():
                 self.as_disableFightButtonS(self.__isFightBtnDisabled)
-            self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
+            if self.__isFightBtnDisabled and selected.hasDisabledFightButtonData(result):
+                fightButtonLabel = selected.getDisabledFightButtonLabel(result)
+            else:
+                fightButtonLabel = selected.getFightButtonLabel(state, playerInfo)
+            self.as_setFightButtonS(fightButtonLabel)
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
                 eventEnabled = self.isEventEnabled and not isNewbie
                 self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), self.__SELECTOR_TOOLTIP_TYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR(), self.lobbyContext.getServerSettings().isLegacyModeSelectorEnabled(), hasNew)
@@ -1525,7 +1531,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'epic_config' in diff,
          battleRoyaleStateChanged,
          mapsTrainingStateChanged,
-         eventBattlesStateChanged))
+         eventBattlesStateChanged,
+         'cosmic_event_battles_config' in diff))
         if bootcampStateChanged:
             self._rebootBattleSelector()
         if updateHangarMenuData:

@@ -19,7 +19,9 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.slot_view_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.gui_helpers import detectBonusType
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
+from skeletons.gui.shared import IItemsCache
 _VEHICLES_BONUS_NAME = 'vehicles'
 _SHOW_VEHICLE_ICONS = 'showVehicleIcons'
 SLOT_BONUSES_PROCESSORS = []
@@ -62,6 +64,7 @@ class LootBoxSlot(object):
 class BonusProbabilitiesView(ViewImpl):
     __slots__ = ('__lootBox', '__tooltipData')
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
+    __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
     def __init__(self, layoutID, lootBox):
@@ -88,6 +91,11 @@ class BonusProbabilitiesView(ViewImpl):
             tooltipData = self.getTooltipData(event)
             if tooltipData:
                 return LootBoxesCompensationTooltip(*tooltipData.specialArgs)
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
+            tooltipData = self.getTooltipData(event)
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
         return super(BonusProbabilitiesView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):

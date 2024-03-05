@@ -9,7 +9,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
@@ -43,7 +43,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	300	</armor_1>
+      <armor_1>	250	</armor_1>
       <armor_2>	100	</armor_2>
       <armor_3>	50	</armor_3>
       <armor_4>	35	</armor_4>
@@ -51,7 +51,7 @@
       <armor_6>	120	</armor_6>
       <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	300	</armor_9>
+      <armor_9>	250	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	110	</armor_11>
       <armor_12>	35	</armor_12>
@@ -64,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	48320	</weight>
-    <maxHealth>	1600	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	280	</maxHealth>
       <maxRegenHealth>	190	</maxRegenHealth>
@@ -78,6 +78,13 @@
       <undamaged>	vehicles/japan/J35_Ho_Ri_3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <J35_Ho_Ri_3_3dst_BP13_MT>
+          <undamaged>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Hull.model	</exploded>
+        </J35_Ho_Ri_3_3dst_BP13_MT>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1584,6 +1591,12 @@
         <clipAngle>	0.880519	</clipAngle>
         <anchorShift>	0.1	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1608,14 +1621,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	80000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	75000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1625,11 +1637,18 @@
         <undamaged>	vehicles/japan/J35_Ho_Ri_3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <J35_Ho_Ri_3_3dst_BP13_MT>
+            <undamaged>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Chassis.model	</exploded>
+          </J35_Ho_Ri_3_3dst_BP13_MT>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
+        <textureSet>	usa_04	</textureSet>
         <size>	1 0.8	</size>
       </traces>
       <tracks>
@@ -1710,6 +1729,51 @@
                   <row3>	0.000000 1.487765 3.346887	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	J35_Ho_Ri_3_3dst_BP13_MT	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.700000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.000000	</row2>
+                  <row3>	-0.404025 0.869059 0.128687	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.456419 -0.530737 0.000000	</row0>
+                  <row1>	0.227459 0.195608 0.000000	</row1>
+                  <row2>	-0.000001 -0.000002 8.000000	</row2>
+                  <row3>	1.592059 1.396931 -0.037994	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.000000	</row2>
+                  <row3>	1.085571 1.378161 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000003	</row0>
+                  <row1>	0.000000 0.973034 -0.230661	</row1>
+                  <row2>	0.000001 0.069198 0.291910	</row2>
+                  <row3>	1.078187 1.067930 -3.667778	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000002	</row0>
+                  <row1>	-0.000001 0.924479 0.381233	</row1>
+                  <row2>	-0.000001 -0.114370 0.277343	</row2>
+                  <row3>	1.073730 1.160222 3.995704	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 -0.000002	</row0>
+                  <row1>	0.000000 0.277913 -0.112980	</row1>
+                  <row2>	0.000002 0.112980 0.277913	</row2>
+                  <row3>	1.741974 0.979220 3.561832	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.291195 0.072151	</row1>
+                  <row2>	-0.000001 -0.072151 0.291195	</row2>
+                  <row3>	1.782216 0.984140 -3.412560	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1781,6 +1845,51 @@
                   <row1>	0.000000 0.463712 0.304054	</row1>
                   <row2>	0.000000 -0.435665 0.664432	</row2>
                   <row3>	0.000000 1.487765 3.346887	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	J35_Ho_Ri_3_3dst_BP13_MT	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.700000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.000000	</row2>
+                  <row3>	0.389179 0.868965 0.128689	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.456376 0.530774 0.000000	</row0>
+                  <row1>	-0.227475 0.195590 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.000000	</row2>
+                  <row3>	-1.596320 1.396891 -0.037993	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.000000	</row2>
+                  <row3>	-1.255616 1.378109 0.000001	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 -0.000003	</row0>
+                  <row1>	0.000000 0.973034 -0.230661	</row1>
+                  <row2>	0.000001 0.069198 0.291910	</row2>
+                  <row3>	-1.123547 1.067930 -3.667780	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000002	</row0>
+                  <row1>	-0.000001 0.924479 0.381233	</row1>
+                  <row2>	-0.000001 -0.114370 0.277343	</row2>
+                  <row3>	-1.128007 1.160220 3.995700	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 -0.000002	</row0>
+                  <row1>	0.000000 0.277913 -0.112980	</row1>
+                  <row2>	0.000002 0.112980 0.277913	</row2>
+                  <row3>	-1.730786 0.979218 3.561830	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.291195 0.072151	</row1>
+                  <row2>	-0.000001 -0.072151 0.291195	</row2>
+                  <row3>	-1.729946 0.984139 -3.412559	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -2028,6 +2137,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <J35_Ho_Ri_3_3dst_BP13_MT>
+              <segmentModelLeft>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/track/segment.model	</segmentModelRight>
+            </J35_Ho_Ri_3_3dst_BP13_MT>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2041,6 +2156,11 @@
             <model>	vehicles/japan/J35_Ho_Ri_3/track/segment.model	</model>
             <length>	0.159217	</length>
           </mainSegment>
+          <modelSets>
+            <J35_Ho_Ri_3_3dst_BP13_MT>
+              <mainSegmentModel>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/track/segment.model	</mainSegmentModel>
+            </J35_Ho_Ri_3_3dst_BP13_MT>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.159454	</back>
@@ -2230,6 +2350,11 @@
             <model>	vehicles/japan/J35_Ho_Ri_3/track/segment.model	</model>
             <length>	0.159255	</length>
           </mainSegment>
+          <modelSets>
+            <J35_Ho_Ri_3_3dst_BP13_MT>
+              <mainSegmentModel>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/track/segment.model	</mainSegmentModel>
+            </J35_Ho_Ri_3_3dst_BP13_MT>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.159454	</back>
@@ -2422,7 +2547,7 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	350	</armor_1>
+        <armor_1>	250	</armor_1>
         <armor_2>	35	</armor_2>
         <armor_3>	35	</armor_3>
         <armor_4>	0	</armor_4>
@@ -2444,7 +2569,7 @@
       <guns>
         <_149mm_Gun_Type_97>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -2461,14 +2586,14 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <reloadTime>	15.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -2512,6 +2637,13 @@
             <undamaged>	vehicles/japan/J35_Ho_Ri_3/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <J35_Ho_Ri_3_3dst_BP13_MT>
+                <undamaged>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Gun_02.model	</exploded>
+              </J35_Ho_Ri_3_3dst_BP13_MT>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/japan/J35_Ho_Ri_3/collision/Gun_02.model	</collisionModelServer>
@@ -2528,6 +2660,13 @@
         <undamaged>	vehicles/japan/J35_Ho_Ri_3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <J35_Ho_Ri_3_3dst_BP13_MT>
+            <undamaged>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/japan/J35_Ho_Ri_3/_skins/J35_Ho_Ri_3_3dst_BP13_MT/crash/lod0/Turret_01.model	</exploded>
+          </J35_Ho_Ri_3_3dst_BP13_MT>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J35_Ho_Ri_3/collision/Turret_01.model	</collisionModelServer>

@@ -37,7 +37,6 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         settings = ViewSettings(layoutID)
         settings.model = WhatsNewViewModel()
         super(WhatsNewView, self).__init__(settings)
-        self.__vehicles = [58385, 20817, 9569]
 
     @property
     def viewModel(self):
@@ -58,9 +57,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             self.destroyWindow()
 
     def _finalize(self):
-        self.__vehicles = None
         self.__removeListeners()
-        return
 
     def _onLoading(self, *_, **__):
         self.__addListeners()
@@ -101,7 +98,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     def __setVehicles(self, viewModel):
         vehiclesList = viewModel.getVehicles()
         vehiclesList.clear()
-        for vehicleCD in self.__vehicles:
+        for vehicleCD in self.__comp7Controller.getSeasonVehicles():
             vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
             vehicleModel = VehicleModel()
             fillVehicleModel(vehicleModel, vehicleItem)

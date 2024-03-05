@@ -89,6 +89,10 @@ class RocketAccelerationManager(CGF.ComponentManager):
             plan.stop()
         return
 
+    @onRemovedQuery(RocketAccelerationController)
+    def onProviderRemoved(self, provider):
+        provider.cleanup()
+
 
 if IS_DEVELOPMENT:
 
@@ -117,6 +121,10 @@ if IS_DEVELOPMENT:
             if provider is not None:
                 provider.unsubscribe(callback)
             return
+
+        @onRemovedQuery(RocketAccelerationController)
+        def onProviderRemoved(self, provider):
+            provider.cleanup()
 
         @tickGroup('Simulation', 0.3)
         def update(self):

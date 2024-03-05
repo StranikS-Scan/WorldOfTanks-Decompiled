@@ -3,6 +3,7 @@
 import logging
 from constants import LOOTBOX_TOKEN_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
 from gui.impl.gen import R
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -21,11 +22,13 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip im
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.game_control import IGuiLootBoxesController
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 SECONDARY_REWARDS_PROCESSORS = []
 
 class LootBoxesRewardScreen(ViewImpl):
     __slots__ = ('__rewards', '__tooltipData', '__mainVehicleCd', '__lootbox', '__bonusData')
+    __itemsCache = dependency.descriptor(IItemsCache)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
@@ -52,6 +55,10 @@ class LootBoxesRewardScreen(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         tooltipData = self.getTooltipData(event)
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip() and tooltipData:
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
         if tooltipData and isinstance(tooltipData.tooltip, dict):
             if contentID in tooltipData.tooltip:
                 return tooltipData.tooltip[contentID](*tooltipData.specialArgs)

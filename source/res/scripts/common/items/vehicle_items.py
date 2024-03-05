@@ -145,7 +145,7 @@ class InstallableItem(VehicleItem):
 @add_shallow_copy()
 class Chassis(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'trackPairs', 'bboxManager', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams', 'wheelsArmor', '_chassisType', 'prefabs')
+    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'trackPairs', 'bboxManager', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams', 'wheelsArmor', '_chassisType', 'prefabs')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Chassis, self).__init__(typeID, componentID, componentName, compactDescr, level=level)
@@ -153,7 +153,6 @@ class Chassis(InstallableItem):
         self.topRightCarryingPoint = None
         self.navmeshGirth = component_constants.ZERO_FLOAT
         self.minPlaneNormalY = component_constants.ZERO_FLOAT
-        self.maxLoad = component_constants.ZERO_FLOAT
         self.specificFriction = component_constants.DEFAULT_SPECIFIC_FRICTION
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.rotationSpeedLimit = None

@@ -1,9 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/loot_box/loot_box_helper.py
+import typing
 from collections import namedtuple
+from constants import LOOTBOX_TOKEN_PREFIX
 from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from typing import Optional
 BonusInfo = namedtuple('SlotBonusInfo', ['probabilitiesList',
  'bonusProbability',
  'limitIDs',
@@ -48,3 +52,7 @@ def isAllVehiclesObtainedInSlot(slot, itemsCache=None):
                 return False
 
     return True
+
+
+def getLootBoxIDFromToken(token):
+    return token.split(':')[1] if token.startswith(LOOTBOX_TOKEN_PREFIX) else None

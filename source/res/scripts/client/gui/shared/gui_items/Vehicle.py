@@ -174,6 +174,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     DEBUT_BOXES = 'debutBoxes'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
+    HIDDEN = 'hidden_in_hangar'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -217,7 +218,6 @@ class Vehicle(FittingItem):
         RENTABLE = 'rentable'
         RENTABLE_AGAIN = 'rentableAgain'
         DISABLED = 'disabled'
-        TOO_HEAVY = 'tooHeavy'
         SUBSCRIPTION_SUSPENDED = 'subscription_suspended'
         WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = 'wot_plus_exclusive_vehicle_disabled'
 
@@ -229,7 +229,6 @@ class Vehicle(FittingItem):
      VEHICLE_STATE.UNSUITABLE_TO_UNIT,
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
      VEHICLE_STATE.ROTATION_GROUP_LOCKED,
-     VEHICLE_STATE.TOO_HEAVY,
      VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE,
      VEHICLE_STATE.SUBSCRIPTION_SUSPENDED)
     TRADE_OFF_NOT_READY_STATES = (VEHICLE_STATE.DAMAGED,
@@ -1014,10 +1013,6 @@ class Vehicle(FittingItem):
         return self.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
 
     @property
-    def isTooHeavy(self):
-        return not self.descriptor.isWeightConsistent()
-
-    @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
 
@@ -1150,8 +1145,6 @@ class Vehicle(FittingItem):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 return Vehicle.VEHICLE_STATE.DAMAGED
-            if self.isTooHeavy:
-                return Vehicle.VEHICLE_STATE.TOO_HEAVY
             if not self.isCrewFull:
                 return Vehicle.VEHICLE_STATE.CREW_NOT_FULL
             if not self.isAmmoFull:
@@ -1183,7 +1176,6 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
-         Vehicle.VEHICLE_STATE.TOO_HEAVY,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
@@ -1390,6 +1382,10 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
 
     @property
+    def isHiddenInHangar(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.HIDDEN)
+
+    @property
     def isOnlyForMapsTrainingBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.MAPS_TRAINING)
 
@@ -1460,7 +1456,7 @@ class Vehicle(FittingItem):
             return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull and not self.isTooHeavy and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
 
     @property
@@ -1471,7 +1467,7 @@ class Vehicle(FittingItem):
             return False
         result = not self.hasLockMode()
         if result:
-            result = self.isAlive and self.isCrewFull and not self.isTooHeavy and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
+            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
         return result
 
     @property
@@ -2162,7 +2158,6 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
- Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight()),
  Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_AMMONOTFULL,
  Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT}

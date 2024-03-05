@@ -2,6 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/battle/__init__.py
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.battle.classic import map_info_tip
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.genConsts.BATTLE_CONTEXT_MENU_HANDLER_TYPE import BATTLE_CONTEXT_MENU_HANDLER_TYPE
@@ -55,7 +56,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, battle_timers.PreBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.MAP_INFO_TIP, map_info_tip.MapInfoTip, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

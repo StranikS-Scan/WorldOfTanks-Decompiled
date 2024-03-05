@@ -29,6 +29,10 @@ def getAvailableSkillsNum(tankman):
     return len(tankman.availableSkills(True)) + getLastSkillSequenceNum(tankman) - tankman.newFreeSkillsCount
 
 
+def isAllSkillsLearned(currSkillCount, currSkillLvl, availableSkillsNum):
+    return currSkillCount > availableSkillsNum or currSkillCount == availableSkillsNum and currSkillLvl >= tankmen.MAX_SKILL_LEVEL
+
+
 def getSkillsLevelsForXp(tankman, possibleXp=0):
     tmanDescr = tankman.descriptor
     lastSkillNumber = getLastSkillSequenceNum(tankman)
@@ -40,17 +44,17 @@ def getSkillsLevelsForXp(tankman, possibleXp=0):
             wallet += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.roleLevel, 0)
             currRoleLvl = tmanDescr.getRoleLevelFromXp(tmanDescr.roleLevel, wallet)
             wallet -= tankmen.TankmanDescr.getXpCostForSkillsLevels(tankmen.MAX_SKILL_LEVEL, 0)
-    skillsCountDiff = availableSkillsNum - lastSkillNumber
-    if skillsCountDiff <= 0:
-        _, tmanRolelvlCost = getXpResidualForNextSkillLevel(tankman, 0, currRoleLvl, possibleXp)
-        currRoleLevel = SkillLvlFormatter(currRoleLvl, 0, tmanRolelvlCost)
-        currSkillLevel = SkillLvlFormatter(tankmen.MAX_SKILL_LEVEL, 0, 0)
-        return (lastSkillNumber, currSkillLevel, currRoleLevel)
     if currRoleLvl == tankmen.MAX_SKILL_LEVEL:
         wallet += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.lastSkillLevel if lastSkillNumber else 0, lastSkillNumber)
     currSkillCount = tankmen.TankmanDescr.getSkillsCountFromXp(wallet)
+    currSkillCount = max(currSkillCount, lastSkillNumber)
     currSkillCount = min(currSkillCount, availableSkillsNum)
     currSkillLvl = tankmen.TankmanDescr.getSkillLevelFromXp(currSkillCount, wallet)
+    if isAllSkillsLearned(currSkillCount, currSkillLvl, availableSkillsNum):
+        _, tmanRolelvlCost = getXpResidualForNextSkillLevel(tankman, 0, currRoleLvl, possibleXp)
+        currRoleLevel = SkillLvlFormatter(currRoleLvl, 0, tmanRolelvlCost)
+        currSkillLevel = SkillLvlFormatter(tankmen.MAX_SKILL_LEVEL, 0, 0)
+        return (availableSkillsNum, currSkillLevel, currRoleLevel)
     if currSkillCount > availableSkillsNum or currSkillCount == availableSkillsNum and currSkillLvl >= tankmen.MAX_SKILL_LEVEL:
         currSkillCount = availableSkillsNum
         currSkillLvl = tankmen.MAX_SKILL_LEVEL
@@ -111,7 +115,8 @@ def getAllPossibleSkillsByRoles():
 
 
 def quickEarnTmanSkills(tankman, possibleXp):
-    currCnt, currLvl, currRoleLvl = getSkillsLevelsForXp(tankman)
+    currCnt, _, currRoleLvl = getSkillsLevelsForXp(tankman)
+    _, currLvl = getTmanNewSkillCount(tankman)
     if possibleXp:
         possCnt, possLvl, possRoleLvl = getSkillsLevelsForXp(tankman, possibleXp)
     else:

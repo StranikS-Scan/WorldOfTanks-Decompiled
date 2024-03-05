@@ -36,7 +36,7 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     @property
     def _client_selectorColumn(self):
         from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
-        return (ModeSelectorColumns.COLUMN_3, 40)
+        return (ModeSelectorColumns.COLUMN_2, 40)
 
     @property
     def _client_selectorItemsCreator(self):

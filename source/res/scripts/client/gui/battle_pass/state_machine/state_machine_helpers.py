@@ -21,7 +21,8 @@ def isProgressionComplete(_, battlePass=None):
     isCompleteState = battlePass.getState() == BattlePassState.COMPLETED
     isAllChosen = battlePass.getNotChosenRewardCount() == 0
     isAllChaptersBought = all((battlePass.isBought(chapterID=chapter) for chapter, _ in enumerate(battlePass.getChapterConfig(), BattlePassConsts.MINIMAL_CHAPTER_NUMBER)))
-    return isCompleteState and isAllChosen and isAllChaptersBought
+    isResoureCompleted = battlePass.isResourceCompleted()
+    return isCompleteState and isAllChosen and isAllChaptersBought and isResoureCompleted
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)

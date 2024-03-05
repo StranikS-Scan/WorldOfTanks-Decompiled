@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/package_item.py
-from enum import IntEnum
+from enum import Enum, IntEnum
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 
@@ -9,12 +9,19 @@ class ChapterStates(IntEnum):
     PAUSED = 1
     COMPLETED = 2
     NOTSTARTED = 3
+    DISABLED = 4
 
 
 class PackageType(IntEnum):
     BATTLEPASS = 0
     ANYLEVELS = 1
     SHOPOFFER = 2
+
+
+class ChapterType(Enum):
+    DEFAULT = 'default'
+    MARATHON = 'marathon'
+    RESOURCE = 'resource'
 
 
 class PackageItem(ViewModel):
@@ -79,17 +86,17 @@ class PackageItem(ViewModel):
     def setCurrentLevel(self, value):
         self._setNumber(8, value)
 
-    def getIsExtra(self):
-        return self._getBool(9)
-
-    def setIsExtra(self, value):
-        self._setBool(9, value)
-
     def getExpireTime(self):
-        return self._getNumber(10)
+        return self._getNumber(9)
 
     def setExpireTime(self, value):
-        self._setNumber(10, value)
+        self._setNumber(9, value)
+
+    def getChapterType(self):
+        return ChapterType(self._getString(10))
+
+    def setChapterType(self, value):
+        self._setString(10, value.value)
 
     def _initialize(self):
         super(PackageItem, self)._initialize()
@@ -102,5 +109,5 @@ class PackageItem(ViewModel):
         self._addNumberProperty('chapterID', 0)
         self._addNumberProperty('chapterState')
         self._addNumberProperty('currentLevel', 0)
-        self._addBoolProperty('isExtra', False)
         self._addNumberProperty('expireTime', 0)
+        self._addStringProperty('chapterType')

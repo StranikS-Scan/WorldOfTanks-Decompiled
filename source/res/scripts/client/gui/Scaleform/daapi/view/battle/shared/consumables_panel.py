@@ -247,6 +247,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 body = '\n'.join((body, activeSecondsParamsString))
             if isSharedCooldownConfig:
                 cdSecVal = descriptor.cooldownTime
+            elif descriptor.isActivatable():
+                cdSecVal = item.getTotalCooldownTime()
             else:
                 cdSecVal = item.getTotalTime()
             cooldownSecondsTooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
@@ -874,7 +876,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def __onCrosshairViewChanged(self, viewID):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
-        needClear = viewID not in (CROSSHAIR_VIEW_ID.STRATEGIC,)
+        needClear = viewID not in (CROSSHAIR_VIEW_ID.STRATEGIC, CROSSHAIR_VIEW_ID.ASSAULT)
         if vehicle is not None and needClear:
             vehicleDescriptor = vehicle.typeDescriptor
             for shotDescr in vehicleDescriptor.gun.shots:

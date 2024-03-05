@@ -69,6 +69,7 @@ class CraftmachineController(ICraftmachineController):
         criteria = criteria | REQ_CRITERIA.VEHICLE.LEVEL(MAX_VEHICLE_LEVEL)
         criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN)
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         return criteria
 
     def __vehicleIsAvailableForRestore(self):

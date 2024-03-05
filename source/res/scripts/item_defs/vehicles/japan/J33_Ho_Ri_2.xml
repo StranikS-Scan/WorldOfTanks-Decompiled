@@ -9,10 +9,10 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	30	</forward>
+    <forward>	35	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -53,14 +53,14 @@
       <armor_8>	0	</armor_8>
       <armor_9>	50	</armor_9>
       <armor_10>	155	</armor_10>
-      <armor_11>	175	</armor_11>
-      <armor_12>	250	</armor_12>
-      <armor_13>	230	</armor_13>
+      <armor_11>	140	</armor_11>
+      <armor_12>	200	</armor_12>
+      <armor_13>	200	</armor_13>
       <armor_14>	50	</armor_14>
       <armor_15>	50	</armor_15>
       <armor_16>	40	</armor_16>
       <armor_17>	165	</armor_17>
-      <armor_18>	160	</armor_18>
+      <armor_18>	140	</armor_18>
       <armor_19>	30	</armor_19>
       <armor_20>	40	</armor_20>
       <armor_21>	40	</armor_21>
@@ -75,7 +75,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16000	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1020	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1237,7 +1237,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	10500	</weight>
-      <maxLoad>	42500	</maxLoad>
       <terrainResistance>	1.2 1.4 2.6	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2068,7 +2067,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	10500	</weight>
-      <maxLoad>	44500	</maxLoad>
       <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2898,7 +2896,7 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	270	</armor_1>
+        <armor_1>	200	</armor_1>
         <armor_3>	50	</armor_3>
         <armor_5>	50	</armor_5>
         <armor_6>	50	</armor_6>
@@ -2927,12 +2925,12 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2.4	</aimingTime>
-          <reloadTime>	8.9	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <reloadTime>	8.2	</reloadTime>
           <armor>
-            <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -2946,7 +2944,7 @@
             </armor_9>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.220	</invisibilityFactorAtShot>
           <turretYawLimits>	-11 11	</turretYawLimits>
           <customizationSlots>
@@ -3012,10 +3010,10 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <reloadTime>	11	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	10	</reloadTime>
+          <aimingTime>	2	</aimingTime>
           <armor>
-            <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -3025,7 +3023,7 @@
             </armor_6>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.200	</invisibilityFactorAtShot>
           <turretYawLimits>	-11 11	</turretYawLimits>
           <customizationSlots>
@@ -3147,11 +3145,11 @@
       <engines>
         <_Kawasaki_Type_98B>
           <smplEnginePower>	550	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_Kawasaki_Type_98B>
         <_Daimler_Benz_MB_507>
           <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_Daimler_Benz_MB_507>
       </engines>
       <chassis>

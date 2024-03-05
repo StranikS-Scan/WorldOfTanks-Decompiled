@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_progressions_view_model.py
 from enum import Enum
+from frameworks.wulf import Array
 from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_off_season_view_model import BattlePassOffSeasonViewModel
@@ -15,6 +16,7 @@ class ChapterStates(Enum):
     PAUSED = 'paused'
     COMPLETED = 'completed'
     NOTSTARTED = 'notStarted'
+    DISABLED = 'disabled'
 
 
 class ButtonStates(Enum):
@@ -22,6 +24,12 @@ class ButtonStates(Enum):
     BUY = 'buy'
     LEVEL = 'level'
     ACTIVATE = 'activate'
+
+
+class ChapterType(Enum):
+    DEFAULT = 'default'
+    MARATHON = 'marathon'
+    RESOURCE = 'resource'
 
 
 class BattlePassProgressionsViewModel(CommonViewModel):
@@ -270,17 +278,17 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setIsSeasonEndingSoon(self, value):
         self._setBool(41, value)
 
-    def getIsExtra(self):
-        return self._getBool(42)
+    def getChapterType(self):
+        return ChapterType(self._getString(42))
 
-    def setIsExtra(self, value):
-        self._setBool(42, value)
+    def setChapterType(self, value):
+        self._setString(42, value.value)
 
-    def getHasExtra(self):
-        return self._getBool(43)
+    def getAvailableChapterTypes(self):
+        return self._getArray(43)
 
-    def setHasExtra(self, value):
-        self._setBool(43, value)
+    def setAvailableChapterTypes(self, value):
+        self._setArray(43, value)
 
     def getExpireTime(self):
         return self._getNumber(44)
@@ -328,8 +336,8 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('isStyleTaken', False)
         self._addBoolProperty('isStyleProgressive', False)
         self._addBoolProperty('isSeasonEndingSoon', False)
-        self._addBoolProperty('isExtra', False)
-        self._addBoolProperty('hasExtra', False)
+        self._addStringProperty('chapterType')
+        self._addArrayProperty('availableChapterTypes', Array())
         self._addNumberProperty('expireTime', 0)
         self.onClose = self._addCommand('onClose')
         self.onActionClick = self._addCommand('onActionClick')

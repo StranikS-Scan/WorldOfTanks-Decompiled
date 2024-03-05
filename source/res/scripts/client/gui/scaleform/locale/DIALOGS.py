@@ -899,7 +899,6 @@ class DIALOGS(object):
     ELEMENTTYPE_CHASSIS = '#dialogs:elementType/chassis'
     ELEMENTTYPE_RADIOSTATION = '#dialogs:elementType/radiostation'
     SELLSHELLCONFIRMATION_SUBMIT = '#dialogs:sellShellConfirmation/submit'
-    BUYINSTALLCONFIRMATION_NOTENOUGHWEIGHT = '#dialogs:buyInstallConfirmation/notEnoughWeight'
     EQUIPMENTDESTROY_DEMOUNTOPTIONS_GOLDORDEMOKIT = '#dialogs:equipmentDestroy/DemountOptions/goldOrDemoKit'
     EQUIPMENTDESTROY_DEMOUNTOPTIONS_BONDS = '#dialogs:equipmentDestroy/DemountOptions/bonds'
     DAILYQUESTS_DIALOGINFOCONFIRMREROLL_TITLE = '#dialogs:dailyQuests/dialogInfoConfirmReroll/title'
@@ -1049,7 +1048,7 @@ class DIALOGS(object):
     PERKSREST_PRICECARD_FREE_DESCRIPTION = '#dialogs:perksRest/priceCard/free/description'
     PERKSREST_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksRest/priceCard/credits/description'
     PERKSREST_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksRest/priceCard/gold/description'
-    RETRAIN_TITLE_SINGE = '#dialogs:retrain/title/singe'
+    RETRAIN_TITLE_SINGLE = '#dialogs:retrain/title/single'
     RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
     RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
     RETRAIN_PRICECARD_FREE_DESCRIPTION = '#dialogs:retrain/priceCard/free/description'
@@ -1093,8 +1092,6 @@ class DIALOGS(object):
     SKINAPPLYDIALOG_BUTTON_SUBMIT = '#dialogs:skinApplyDialog/button/submit'
     DISMISSTANKMAN_HEADER = '#dialogs:dismissTankman/header'
     DISMISSTANKMAN_DESCRIPTION_TIME = '#dialogs:dismissTankman/description/time'
-    DISMISSTANKMAN_DESCRIPTION_PERK = '#dialogs:dismissTankman/description/perk'
-    DISMISSTANKMAN_DESCRIPTION_QUALIFICATION = '#dialogs:dismissTankman/description/qualification'
     DISMISSTANKMAN_LIMITED = '#dialogs:dismissTankman/limited'
     DISMISSTANKMAN_NORECOVERY = '#dialogs:dismissTankman/noRecovery'
     DISMISSTANKMAN_BUTTONS_DISMISS = '#dialogs:dismissTankman/buttons/dismiss'
@@ -1991,7 +1988,6 @@ class DIALOGS(object):
      ELEMENTTYPE_CHASSIS,
      ELEMENTTYPE_RADIOSTATION,
      SELLSHELLCONFIRMATION_SUBMIT,
-     BUYINSTALLCONFIRMATION_NOTENOUGHWEIGHT,
      EQUIPMENTDESTROY_DEMOUNTOPTIONS_GOLDORDEMOKIT,
      EQUIPMENTDESTROY_DEMOUNTOPTIONS_BONDS,
      DAILYQUESTS_DIALOGINFOCONFIRMREROLL_TITLE,
@@ -2141,7 +2137,7 @@ class DIALOGS(object):
      PERKSREST_PRICECARD_FREE_DESCRIPTION,
      PERKSREST_PRICECARD_CREDITS_DESCRIPTION,
      PERKSREST_PRICECARD_GOLD_DESCRIPTION,
-     RETRAIN_TITLE_SINGE,
+     RETRAIN_TITLE_SINGLE,
      RETRAIN_TITLE_MASSIVE,
      RETRAIN_WARNING_PREMIUMVEHICLE,
      RETRAIN_PRICECARD_FREE_DESCRIPTION,
@@ -2185,8 +2181,6 @@ class DIALOGS(object):
      SKINAPPLYDIALOG_BUTTON_SUBMIT,
      DISMISSTANKMAN_HEADER,
      DISMISSTANKMAN_DESCRIPTION_TIME,
-     DISMISSTANKMAN_DESCRIPTION_PERK,
-     DISMISSTANKMAN_DESCRIPTION_QUALIFICATION,
      DISMISSTANKMAN_LIMITED,
      DISMISSTANKMAN_NORECOVERY,
      DISMISSTANKMAN_BUTTONS_DISMISS,

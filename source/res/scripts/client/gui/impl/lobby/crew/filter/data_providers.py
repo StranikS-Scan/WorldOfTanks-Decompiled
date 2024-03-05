@@ -12,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model 
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
 from gui.impl.lobby.crew.crew_helpers.sort_helpers import SortHeap
 from gui.impl.lobby.crew.filter import VEHICLE_LOCATION_IN_HANGAR, GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
-from gui.impl.lobby.crew.utils import getDocGroupValues, getRentCriteria
+from gui.impl.lobby.crew.utils import getDocGroupValues
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman, getFullUserName
@@ -217,7 +217,6 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
     def _getInitialFilterCriteria(self):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
-        criteria |= ~getRentCriteria()
         criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         criteria |= ~REQ_CRITERIA.VEHICLE.SECRET
         criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN

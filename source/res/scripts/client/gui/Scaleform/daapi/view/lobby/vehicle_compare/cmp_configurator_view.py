@@ -87,11 +87,6 @@ class _CmpOptDeviceRemover(ModuleProcessor):
         else:
             callback(self._errorHandler(0, reason))
 
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if errStr == 'too heavy':
-            errStr = 'error_too_heavy'
-        return super(_CmpOptDeviceRemover, self)._errorHandler(code, errStr, ctx)
-
     def _getMsgCtx(self):
         return {'name': self.item.userName,
          'kind': self.item.userType,

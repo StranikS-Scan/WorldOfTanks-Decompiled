@@ -37,6 +37,7 @@ class _RentVehiclesDataProvider(StorageCarouselDataProvider):
     def _addCriteria(self):
         criteria = self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         self._addVehicleItemsByCriteria(criteria)
 
     def applyFilter(self, forceApply=False):

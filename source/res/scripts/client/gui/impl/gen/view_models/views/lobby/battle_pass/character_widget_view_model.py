@@ -27,6 +27,10 @@ class CharacterWidgetViewModel(ViewModel):
     def setSkills(self, value):
         self._setArray(2, value)
 
+    @staticmethod
+    def getSkillsType():
+        return unicode
+
     def getTooltipId(self):
         return self._getString(3)
 

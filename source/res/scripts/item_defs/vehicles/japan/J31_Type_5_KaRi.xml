@@ -9,11 +9,11 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	18	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.149	</moving>
@@ -56,7 +56,7 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	220	</armor_1>
+      <armor_1>	190	</armor_1>
       <armor_2>	115	</armor_2>
       <armor_3>	50	</armor_3>
       <armor_4>	50	</armor_4>
@@ -64,19 +64,19 @@
       <armor_6>	40	</armor_6>
       <armor_7>	15	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	300	</armor_9>
+      <armor_9>	200	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	70	</armor_11>
       <armor_12>	25	</armor_12>
       <armor_13>	190	</armor_13>
       <armor_14>	75	</armor_14>
       <armor_15>	100	</armor_15>
-      <armor_16>	75	</armor_16>
+      <armor_16>	70	</armor_16>
       <armor_17>	30	</armor_17>
       <armor_18>	30	</armor_18>
       <armor_19>	30	</armor_19>
       <armor_20>	85	</armor_20>
-      <armor_21>	220	</armor_21>
+      <armor_21>	190	</armor_21>
     </armor>
     <models>
       <undamaged>	vehicles/japan/J31_Type_5_KaRi/normal/lod0/Hull.model	</undamaged>
@@ -1034,7 +1034,6 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <weight>	12000	</weight>
-      <maxLoad>	48900	</maxLoad>
       <terrainResistance>	1.2 1.5 3.0	</terrainResistance>
       <brakeForce>	45030	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1858,14 +1857,14 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	300	</armor_1>
+        <armor_1>	200	</armor_1>
         <armor_2>	30	</armor_2>
         <armor_3>	30	</armor_3>
         <armor_4>	0	</armor_4>
@@ -1883,7 +1882,7 @@
             </armor_4>
             <armor_5>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
             <gun>	45	</gun>
           </armor>
@@ -1894,13 +1893,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.170	</invisibilityFactorAtShot>
           <reloadTime>	13.3	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.31	</shotDispersionRadius>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

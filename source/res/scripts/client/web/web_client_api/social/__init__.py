@@ -4,7 +4,8 @@ import BigWorld
 from gui.clans.clan_cache import g_clanCache
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import isPlayerAccount
-from messenger.m_constants import USER_TAG
+from messenger.m_constants import USER_TAG, PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
 from messenger.storage import storage_getter
 from web.web_client_api import w2capi, w2c, W2CSchema, Field
@@ -37,6 +38,15 @@ class _PlayerStatusSchema(W2CSchema):
     player_id = Field(required=True, type=SPA_ID_TYPES)
 
 
+class _PlayersTagsSchema(W2CSchema):
+    player_ids = Field(required=True, type=list)
+
+
+class _AddFriendSchema(W2CSchema):
+    player_id = Field(required=True, type=SPA_ID_TYPES)
+    name = Field(required=True, type=basestring)
+
+
 @w2capi(name='social', key='action')
 class SocialWebApi(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -47,6 +57,10 @@ class SocialWebApi(object):
 
     @storage_getter('users')
     def usersStorage(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.MIGRATION)
+    def proto(self):
         return None
 
     @w2c(W2CSchema, name='friends_status')
@@ -88,3 +102,28 @@ class SocialWebApi(object):
         return {'fullName': self.lobbyContext.getPlayerFullName(name, clanInfo=clanInfo),
          'userName': name,
          'clanAbbrev': clanAbbrev}
+
+    @w2c(_PlayersTagsSchema, name='get_players_tags')
+    def getPlayersTags(self, cmd, ctx):
+        callback = ctx.get('callback')
+        playerIds = cmd.player_ids
+
+        def playersTags():
+            players = (self.__usersInfoHelper.getContact(playerId) for playerId in playerIds)
+            return {player.getID():list(player.getTags()) for player in players}
+
+        def onNamesReceivedCallback():
+            callback(playersTags())
+            self.__usersInfoHelper.onNamesReceived -= onNamesReceivedCallback
+
+        if any((not bool(self.__usersInfoHelper.getUserName(playerId)) for playerId in playerIds)):
+            self.__usersInfoHelper.onNamesReceived += onNamesReceivedCallback
+            self.__usersInfoHelper.syncUsersInfo()
+        else:
+            return playersTags()
+
+    @w2c(_AddFriendSchema, name='add_friend')
+    def addFriend(self, cmd):
+        playerId = cmd.player_id
+        name = cmd.name
+        return self.proto.contacts.addFriend(playerId, name)

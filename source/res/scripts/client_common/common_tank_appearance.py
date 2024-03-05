@@ -662,7 +662,7 @@ class CommonTankAppearance(ScriptGameObject):
         if self.customEffectManager is not None:
             self.customEffectManager.setWheelsData(self)
         suspensionLodLink = lodStateLink
-        if 'wheeledVehicle' in self.typeDescriptor.type.tags:
+        if self.typeDescriptor.type.isWheeledVehicle:
             wheeledLodCalculator = self.wheelsGameObject.createComponent(Vehicular.LodCalculator, DataLinks.linkMatrixTranslation(self.compoundModel.matrix), True, WHEELED_CHASSIS_PRIORITY_GROUP, isPlayer)
             self.allLodCalculators.append(wheeledLodCalculator)
             suspensionLodLink = wheeledLodCalculator.lodStateLink

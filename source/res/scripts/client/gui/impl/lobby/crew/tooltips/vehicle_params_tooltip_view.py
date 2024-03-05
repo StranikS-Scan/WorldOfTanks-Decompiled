@@ -36,7 +36,8 @@ _BONUS_TYPES_ORDER = {constants.BonusTypes.EXTRA: 6,
  constants.BonusTypes.EQUIPMENT: 3,
  constants.BonusTypes.BATTLE_BOOSTER: 2,
  constants.BonusTypes.PAIR_MODIFICATION: 1,
- constants.BonusTypes.BASE_MODIFICATION: 0}
+ constants.BonusTypes.BASE_MODIFICATION: 0,
+ constants.BonusTypes.BATTLE_MODIFIERS: -1}
 _CREW_TYPES = (constants.BonusTypes.PERK, constants.BonusTypes.SKILL)
 _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'vehicleRamOrExplosionDamageResistance',
@@ -160,10 +161,12 @@ def _getBonusName(bnsType, bnsId, enabled=True, archetype=None):
         bnsR = R.strings.artefacts.dyn(bnsId)
         if bnsR:
             itemStr = backport.text(R.strings.tooltips.vehicleParams.bonus.vehPostProgressionBaseModification.template(), name=backport.text(bnsR.name()))
+    elif bnsType == constants.BonusTypes.BATTLE_MODIFIERS:
+        itemStr = backport.text(R.strings.tooltips.vehicleParams.battle_modifier())
     return itemStr
 
 
-def _getNumNotNullPenaltyTankman(penalties):
+def _getNumNotNullPenalty(penalties):
     nullPenaltyTypes = []
     actualPenalties = []
     for penalty in penalties:
@@ -321,7 +324,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
             diff = pInfo.getParamDiff()
             tooltipSection, archetype = self._getTooltipGroupingForBonus(bnsType, bnsId)
-            if archetype is not None:
+            if archetype is not None and bnsType != constants.BonusTypes.BATTLE_MODIFIERS:
                 installedArchetypes.add(archetype)
             formattedBnsID = _getBonusID(bnsType, bnsId)
             isSituational = isSituationalBonus(formattedBnsID, bnsType, pInfo.name)
@@ -340,7 +343,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                 if isSituational:
                     itemModel.setAsteriskIcon(R.images.gui.maps.icons.tooltip.asterisk_optional())
                 levelIcon = self.__getLevelIcon(bnsId, bnsType, vehPostProgressionBonusLevels)
-                itemModel.setIcon(param_formatter.getBonusIconRes(formattedBnsID, bnsType) if levelIcon is None else levelIcon)
+                itemModel.setIcon(param_formatter.getBonusIconRes(formattedBnsID, bnsType, archetype) if levelIcon is None else levelIcon)
                 appliedOptDeviceBonuses.append(bnsId)
                 result[tooltipSection].append(itemModel)
 
@@ -363,8 +366,9 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                     elif _isUpgradedInstanceOfInstalled(appliedOptDeviceBonuses, device) or _isDowngradedInstanceOfInstalled(appliedOptDeviceBonuses, device):
                         continue
             tooltipSection, archetype = self._getTooltipGroupingForBonus(bnsType, bnsId)
-            if archetype is not None and archetype in installedArchetypes:
-                continue
+            if bnsType != constants.BonusTypes.BATTLE_MODIFIERS:
+                if archetype is not None and archetype in installedArchetypes:
+                    continue
             isInactive = False
             if (bnsId, bnsType) in self._extendedData.inactiveBonuses.keys():
                 isInactive = True
@@ -401,7 +405,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         baseColorScheme = (partial(self._formatValueText, ValueStyleEnum.RED), partial(self._formatValueText, ValueStyleEnum.WHITESPANISH), partial(self._formatValueText, ValueStyleEnum.GREENBRIGHT))
         modelPenalties = model.getPenalties()
         penalties = self._extendedData.penalties
-        actualPenalties, _ = _getNumNotNullPenaltyTankman(penalties)
+        actualPenalties, _ = _getNumNotNullPenalty(penalties)
         penaltiesLen = len(penalties)
         numNotNullPenaltyTankman = len(actualPenalties)
         if penaltiesLen > numNotNullPenaltyTankman:
@@ -441,6 +445,8 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
     def _getTooltipGroupingForBonus(self, bonusType, bonusName):
         if bonusType == constants.BonusTypes.EXTRA:
             return (constants.TTC_TOOLTIP_SECTIONS.EQUIPMENT, None)
+        elif bonusType == constants.BonusTypes.BATTLE_MODIFIERS:
+            return (constants.TTC_TOOLTIP_SECTIONS.BATTLE_MODIFIERS, self._context.getBattleModifiersType())
         else:
             if bonusType == constants.BonusTypes.OPTIONAL_DEVICE:
                 artifact = vehicles.g_cache.getOptionalDeviceByName(bonusName)
@@ -496,11 +502,16 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         for penalty in penalties:
             valueStr = _formatValueChange(self._extendedData.name, penalty.value, baseColorScheme)
             if valueStr:
-                if penalty.vehicleIsNotNative:
-                    template = R.strings.tooltips.vehicleParams.penalty.tankmanDifferentVehicle.template()
+                if penalty.penaltyType == constants.PenaltyTypes.CREW:
+                    if penalty.vehicleIsNotNative:
+                        template = R.strings.tooltips.vehicleParams.penalty.tankmanDifferentVehicle.template()
+                    else:
+                        template = R.strings.tooltips.vehicleParams.penalty.tankmanLevel.template()
+                    penaltyStr = backport.text(template, tankmanType=backport.text(R.strings.item_types.tankman.roles.dyn(penalty.roleName)()))
+                elif penalty.penaltyType == constants.PenaltyTypes.BATTLE_MODIFIERS:
+                    penaltyStr = backport.text(R.strings.tooltips.vehicleParams.penalty.battleModifiers())
                 else:
-                    template = R.strings.tooltips.vehicleParams.penalty.tankmanLevel.template()
-                penaltyStr = backport.text(template, tankmanType=backport.text(R.strings.item_types.tankman.roles.dyn(penalty.roleName)()))
+                    penaltyStr = ''
                 penaltyModel = self.__createPenaltyModel(valueStr, penaltyStr, penalty.roleName)
                 modelPenalties.addViewModel(penaltyModel)
 

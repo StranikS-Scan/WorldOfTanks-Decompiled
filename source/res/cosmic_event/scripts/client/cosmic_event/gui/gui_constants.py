@@ -1,0 +1,61 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/gui_constants.py
+from constants_utils import ConstInjector
+from cosmic_event_common.cosmic_constants import BATTLE_EVENT_TYPE
+from gui.battle_control import battle_constants
+from gui.battle_control.controllers import feedback_events
+from personal_missions_constants import CONDITION_ICON
+from gui.server_events import cond_formatters
+from messenger import m_constants
+
+class FEEDBACK_EVENT_ID(battle_constants.FEEDBACK_EVENT_ID, ConstInjector):
+    COSMIC_KILL = 81
+    COSMIC_ARTIFACT_SCAN = 82
+    COSMIC_RAMMING = 83
+    COSMIC_PICKUP_ABILITY = 84
+    COSMIC_ABILITY_HIT = 85
+    COSMIC_SHOT = 86
+
+
+class SCH_CLIENT_MSG_TYPE(m_constants.SCH_CLIENT_MSG_TYPE, ConstInjector):
+    COSMIC_DAILY = 400
+    COSMIC_EVENT_STATE = 401
+
+
+BATTLE_RESULTS_KEYS = {'cosmicTotalScore': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/SHOT': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/RAMMING': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/KILL': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/PICKUP': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/ABILITY_HIT': CONDITION_ICON.EXPERIENCE,
+ 'cosmicScore/ARTIFACT_SCAN': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/SHOT': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/RAMMING': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/KILL': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/PICKUP': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/ABILITY_HIT': CONDITION_ICON.EXPERIENCE,
+ 'cosmicBattleEvent/ARTIFACT_SCAN': CONDITION_ICON.EXPERIENCE,
+ 'cosmicEquipment/2458107': CONDITION_ICON.EXPERIENCE,
+ 'cosmicEquipment/2458619': CONDITION_ICON.EXPERIENCE,
+ 'cosmicEquipment/2459899': CONDITION_ICON.EXPERIENCE,
+ 'cosmicAbilitiesImpacts/BLACK_HOLE': CONDITION_ICON.EXPERIENCE,
+ 'cosmicAbilitiesImpacts/GRAVITY_FIELD': CONDITION_ICON.EXPERIENCE,
+ 'cosmicAbilitiesImpacts/SNIPER_SHOT': CONDITION_ICON.EXPERIENCE}
+_BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {BATTLE_EVENT_TYPE.COSMIC_KILL: FEEDBACK_EVENT_ID.COSMIC_KILL,
+ BATTLE_EVENT_TYPE.COSMIC_ARTIFACT_SCAN: FEEDBACK_EVENT_ID.COSMIC_ARTIFACT_SCAN,
+ BATTLE_EVENT_TYPE.COSMIC_RAMMING: FEEDBACK_EVENT_ID.COSMIC_RAMMING,
+ BATTLE_EVENT_TYPE.COSMIC_PICKUP_ABILITY: FEEDBACK_EVENT_ID.COSMIC_PICKUP_ABILITY,
+ BATTLE_EVENT_TYPE.COSMIC_ABILITY_HIT: FEEDBACK_EVENT_ID.COSMIC_ABILITY_HIT,
+ BATTLE_EVENT_TYPE.COSMIC_SHOT: FEEDBACK_EVENT_ID.COSMIC_SHOT}
+_PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {FEEDBACK_EVENT_ID.COSMIC_KILL: feedback_events._unpackInteger,
+ FEEDBACK_EVENT_ID.COSMIC_ARTIFACT_SCAN: feedback_events._unpackInteger,
+ FEEDBACK_EVENT_ID.COSMIC_RAMMING: feedback_events._unpackInteger,
+ FEEDBACK_EVENT_ID.COSMIC_PICKUP_ABILITY: feedback_events._unpackInteger,
+ FEEDBACK_EVENT_ID.COSMIC_ABILITY_HIT: feedback_events._unpackInteger,
+ FEEDBACK_EVENT_ID.COSMIC_SHOT: feedback_events._unpackInteger}
+ACHIEVEMENTS_IDS = {'cosmic_event:achievements_1', 'cosmic_event:achievements_2'}
+
+def injectClientConstants():
+    feedback_events._BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT.update(_BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT)
+    feedback_events._PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS.update(_PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS)
+    cond_formatters.BATTLE_RESULTS_KEYS.update(BATTLE_RESULTS_KEYS)

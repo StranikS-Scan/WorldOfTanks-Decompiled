@@ -318,6 +318,8 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = backport.text(R.strings.tooltips.awardItem.freeXP.header())
     elif rawItem.type == ItemPackType.CUSTOM_ANY_COLLECTION_ITEM:
         title = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.header())
+    elif rawItem.type == ItemPackType.CUSTOM_BERTHS:
+        title = backport.text(R.strings.tooltips.awardItem.berths.header())
     else:
         title = rawItem.title or ''
     return title
@@ -366,6 +368,8 @@ def getItemDescription(rawItem, item):
         description = backport.text(R.strings.tooltips.awardItem.freeXP.body())
     elif rawItem.type == ItemPackType.CUSTOM_ANY_COLLECTION_ITEM:
         description = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.body())
+    elif rawItem.type == ItemPackType.CUSTOM_BERTHS:
+        description = backport.text(R.strings.tooltips.awardItem.berths.body())
     else:
         description = rawItem.description or ''
     return description

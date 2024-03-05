@@ -14,6 +14,7 @@ from ProjectileMover import collideDynamicAndStatic
 from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
 from helpers.CallbackDelayer import CallbackDelayer
 MAX_COLLISION_DISTANCE = 3500.0
+MAX_COLLISION_DISTANCE_FROM_SCREEN = 5500.0
 COLLISION_EPS = 0.01
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -50,10 +51,14 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         self.__sourceMatrix = None
         self.__targetMatrix = None
         self.__cameraDirection = Vector3(0.0, 0.0, 0.0)
+        states = self._cfg['states']
         self.__countOfStates = self._cfg['statesCount']
         self.__currentState = self._cfg['initialStateIndex']
-        self.__curDistRange = self._cfg['states'][self.__currentState]['distRange']
+        self.__curDistRange = states[self.__currentState]['distRange']
+        self.__boundaryDistRange = (states[0]['distRange'][0], states[len(states) - 1]['distRange'][-1])
         self.__curPitchAngle = self._cfg['states'][self.__currentState]['angle']
+        self.__minPitchAngle = self._cfg['states'][0]['angle']
+        self.__maxPitchAngle = self._cfg['states'][self.__countOfStates - 1]['angle']
         self.__collisionSphereRadius = self._cfg['collisionSphereRadius']
         self.__prevVehiclePosition = Vector3()
         return
@@ -65,6 +70,28 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
     @staticmethod
     def _createAimingSystem():
         return BigWorld.AssaultAimingSystem()
+
+    def getZoom(self):
+        return 1 - float(self.__currentState) / (self.__countOfStates - 1)
+
+    def __getTargetYawDirection(self, targetPos):
+        position, _, _ = BigWorld.player().gunRotator.getShotParams(targetPos)
+        vehToCamDir = targetPos - position
+        vehToCamDir.normalise()
+        cameraYaw = atan2(vehToCamDir.x, vehToCamDir.z)
+        return cameraYaw
+
+    def getMinStateDirection(self, targetPos):
+        cameraYaw = self.__getTargetYawDirection(targetPos)
+        direction = Vector3()
+        direction.setPitchYaw(self.__minPitchAngle, cameraYaw)
+        return direction
+
+    def getMaxStateDirection(self, targetPos):
+        cameraYaw = self.__getTargetYawDirection(targetPos)
+        direction = Vector3()
+        direction.setPitchYaw(self.__maxPitchAngle, cameraYaw)
+        return direction
 
     def create(self, onChangeControlMode=None):
         super(AssaultCamera, self).create()
@@ -88,6 +115,17 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         return
 
     def setup(self, targetPos):
+        if self.__trySetupCamera(targetPos, self.__currentState):
+            return True
+        for stateIndex in range(self.__countOfStates):
+            if stateIndex != self.__currentState and self.__trySetupCamera(targetPos, stateIndex):
+                return True
+
+        return False
+
+    def __trySetupCamera(self, targetPos, stateIndex):
+        distRange = self._cfg['states'][stateIndex]['distRange']
+        pitchAngle = self._cfg['states'][stateIndex]['angle']
         camTarget = MatrixProduct()
         position, _, _ = BigWorld.player().gunRotator.getShotParams(targetPos)
         vehToCamDir = targetPos - position
@@ -95,18 +133,18 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         cameraYaw = atan2(vehToCamDir.x, vehToCamDir.z)
         self.__cam.target = camTarget
         self.__cam.target.b = self.__targetMatrix
-        self.__sourceMatrix = math_utils.createRotationMatrix((cameraYaw, -self.__curPitchAngle, 0.0))
+        self.__sourceMatrix = math_utils.createRotationMatrix((cameraYaw, -pitchAngle, 0.0))
         self.__cam.source = self.__sourceMatrix
         self.__cam.forceUpdate()
         self.__cameraDirection = self.__cam.direction
         targetPos -= self.__cameraDirection.scale(COLLISION_EPS)
         collisionDist = -1.0
-        collision = collideDynamicAndStatic(targetPos, targetPos - self.__cameraDirection.scale(self.__curDistRange[1] + self.__collisionSphereRadius), (BigWorld.player().playerVehicleID,))
+        collision = collideDynamicAndStatic(targetPos, targetPos - self.__cameraDirection.scale(distRange[1] + self.__collisionSphereRadius), (BigWorld.player().playerVehicleID,), 0, skipGun=True)
         if collision is not None:
             collisionDist = (collision[0] - targetPos).length
         if collisionDist < 0.0:
-            collisionDist = self.__curDistRange[1] + self.__collisionSphereRadius
-        if 0.0 <= collisionDist < self.__curDistRange[0] or collisionDist <= 2.0 * self.__collisionSphereRadius:
+            collisionDist = distRange[1] + self.__collisionSphereRadius
+        if 0.0 <= collisionDist < distRange[0] or collisionDist <= 2.0 * self.__collisionSphereRadius:
             LOG_DEBUG_DEV('AssaultCamera.setup: collisionDist is too small', collisionDist)
             return False
         else:
@@ -121,15 +159,18 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
                 return False
             safeSpherePosition = startSafePos + (endSafePos - startSafePos) * safeSpherePositionAdvance + testCollisionVec
             newTargetPosDist = self.__getCollsionDist(safeSpherePosition)
-            additionalOffset = self.__curDistRange[1] - newTargetPosDist
+            additionalOffset = distRange[1] - newTargetPosDist
             destinationOffset = safeSpherePosition - self.__cameraDirection.scale(additionalOffset)
             sphereCollisionOffset = self._aimingSystem.getSphereCollsionDist(safeSpherePosition, destinationOffset, self.__collisionSphereRadius)
             if sphereCollisionOffset < 0.0:
                 sphereCollisionOffset = additionalOffset
-            if 0.0 <= newTargetPosDist + sphereCollisionOffset < self.__curDistRange[0]:
+            if 0.0 <= newTargetPosDist + sphereCollisionOffset < distRange[0]:
                 LOG_DEBUG_DEV('AssaultCamera.setup: Final sphere is too close to target point', newTargetPosDist + sphereCollisionOffset)
                 return False
             self.__targetMatrix.translation = safeSpherePosition - self.__cameraDirection.scale(sphereCollisionOffset)
+            self.__currentState = stateIndex
+            self.__curDistRang = distRange
+            self.__curPitchAngle = pitchAngle
             return True
 
     def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
@@ -148,9 +189,6 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         self.stopCallback(self.__cameraUpdate)
         return
 
-    def getCurrentCamDist(self):
-        pass
-
     def update(self, dx, dy, dz, updateByKeyboard=False):
         self.__curSense = self._cfg['keySensitivity'] if updateByKeyboard else self._cfg['sensitivity']
         self.__autoUpdatePosition = updateByKeyboard
@@ -166,6 +204,18 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         ds.writeBool('assaultSPG/camera/vertInvert', ucfg['vertInvert'])
         ds.writeFloat('assaultSPG/camera/keySensitivity', ucfg['keySensitivity'])
         ds.writeFloat('assaultSPG/camera/sensitivity', ucfg['sensitivity'])
+
+    def getCamDistRange(self):
+        return self.__boundaryDistRange
+
+    def getCamTransitionDist(self):
+        return self.__boundaryDistRange[-1] / 2
+
+    def getCurrentCamDist(self):
+        return self.__targetMatrix.translation.y
+
+    def getCountOfStates(self):
+        return self.__countOfStates
 
     def __updateTrajectoryDrawer(self):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
@@ -196,31 +246,37 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         desiredPosition = self.__targetMatrix.translation + moveVector + vehicleMoveDiff
         return self._aimingSystem.resolveCameraCollisions(self.__targetMatrix.translation, desiredPosition, self.__collisionSphereRadius)
 
-    def __getShiftCameraDirection(self, startPos, desiredPos, targetPos, shiftCollisionDist):
+    def __getShiftCameraPosition(self, startPos, desiredPos, shiftCollisionDist):
         anglePosDir = desiredPos - startPos
         anglePosDir.normalise()
         newAnglePos = startPos + anglePosDir * shiftCollisionDist
-        newCamDir = targetPos - newAnglePos
-        newCamDir.normalise()
-        return newCamDir
+        return newAnglePos
 
     def __resolveYawShiftCollisions(self, startPos, desiredPos, targetPos):
         shiftCollisionDist = self._aimingSystem.getSphereCollsionDist(startPos, desiredPos, self.__collisionSphereRadius)
         if shiftCollisionDist >= 0.0:
-            newCamDir = self.__getShiftCameraDirection(startPos, desiredPos, targetPos, shiftCollisionDist)
+            newAnglePos = self.__getShiftCameraPosition(startPos, desiredPos, shiftCollisionDist)
+            newCamDir = targetPos - newAnglePos
+            newCamDir.normalise()
             newYaw = math.atan2(newCamDir.x, newCamDir.z)
             self.__cameraDirection.setPitchYaw(self.__cameraDirection.pitch, newYaw)
+            return newAnglePos
+        return desiredPos
 
     def __resolvePitchShiftCollisions(self, startPos, desiredPos, targetPos):
         shiftCollisionDist = self._aimingSystem.getSphereCollsionDist(startPos, desiredPos, self.__collisionSphereRadius)
         if shiftCollisionDist >= 0.0:
-            newCamDir = self.__getShiftCameraDirection(startPos, desiredPos, targetPos, shiftCollisionDist)
+            newAnglePos = self.__getShiftCameraPosition(startPos, desiredPos, shiftCollisionDist)
+            newCamDir = targetPos - newAnglePos
+            newCamDir.normalise()
             newPitch = math.asin(newCamDir.y)
             self.__cameraDirection.setPitchYaw(-newPitch, self.__cameraDirection.yaw)
+            return newAnglePos
+        return desiredPos
 
     def __getCollsionDist(self, startPos):
         endPoint = startPos + self.__cameraDirection.scale(MAX_COLLISION_DISTANCE)
-        collision = collideDynamicAndStatic(startPos, endPoint, (BigWorld.player().playerVehicleID,))
+        collision = collideDynamicAndStatic(startPos, endPoint, (BigWorld.player().playerVehicleID,), 0)
         if collision is not None:
             self._aimingSystem.aimPoint = collision[0]
         collisionDist = (startPos - self._aimingSystem.aimPoint).length
@@ -266,22 +322,23 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
             yaw = math.atan2(vehToCamDir.x, vehToCamDir.z)
             self.__cameraDirection.setPitchYaw(self.__cameraDirection.pitch, yaw)
             newYawPos = self._aimingSystem.planePosition - self.__cameraDirection.scale(distance)
-            self.__resolveYawShiftCollisions(newMovePos, newYawPos, self._aimingSystem.planePosition)
-            self.__targetMatrix.translation = self._aimingSystem.planePosition - self.__cameraDirection.scale(distance)
+            newYawPos = self.__resolveYawShiftCollisions(newMovePos, newYawPos, self._aimingSystem.planePosition)
+            self.__targetMatrix.translation = newYawPos
             collisionDist = self.__getCollsionDist(self.__targetMatrix.translation)
             angleLerpParam = math_utils.clamp(0.0, 1.0, self._cfg['angleInterpolationSpeed'] * deltaTime)
             pitch = -self.__cameraDirection.pitch
             pitch = math_utils.lerp(pitch, -self.__curPitchAngle, angleLerpParam)
             self.__cameraDirection.setPitchYaw(-pitch, self.__cameraDirection.yaw)
-            desiredAnglePos = self._aimingSystem.aimPoint - self.__cameraDirection.scale(collisionDist)
-            self.__resolvePitchShiftCollisions(self.__targetMatrix.translation, desiredAnglePos, self._aimingSystem.aimPoint)
-            self.__targetMatrix.translation = self._aimingSystem.aimPoint - self.__cameraDirection.scale(collisionDist)
+            desiredPitchPos = self._aimingSystem.aimPoint - self.__cameraDirection.scale(collisionDist)
+            desiredPitchPos = self.__resolvePitchShiftCollisions(self.__targetMatrix.translation, desiredPitchPos, self._aimingSystem.aimPoint)
+            self.__targetMatrix.translation = desiredPitchPos
             collisionDist = self.__getCollsionDist(self.__targetMatrix.translation)
             desiredCollisionDist = self.__curDistRange[1]
             collisionDistDiff = desiredCollisionDist - collisionDist
             desiredPos = self.__targetMatrix.translation - self.__cameraDirection.scale(collisionDistDiff)
             sphereCollisionDist = self._aimingSystem.getSphereCollsionDist(self.__targetMatrix.translation, desiredPos, self.__collisionSphereRadius)
             if sphereCollisionDist >= 0.0:
+                sphereCollisionDist -= COLLISION_EPS
                 desiredCollisionDist = collisionDist + copysign(sphereCollisionDist, collisionDistDiff)
             distLerpParam = self.__getDistInterpolationParam(collisionDist, deltaTime)
             newDistance = math_utils.lerp(collisionDist, desiredCollisionDist, distLerpParam)

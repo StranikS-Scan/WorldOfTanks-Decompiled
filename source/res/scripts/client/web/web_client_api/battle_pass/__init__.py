@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/battle_pass/__init__.py
 import logging
-from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from helpers import dependency

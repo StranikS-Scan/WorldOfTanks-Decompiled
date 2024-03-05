@@ -7,6 +7,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewModel
     from frameworks.wulf.tutorial import Tutorial
     from frameworks.wulf.ui_logger import UILogger
+    from frameworks.wulf.markers_manager import MarkersManager
 
 class GuiLoader(IGuiLoader):
     __slots__ = ('__gui',)
@@ -30,6 +31,10 @@ class GuiLoader(IGuiLoader):
     @property
     def tutorial(self):
         return self.__gui.tutorial
+
+    @property
+    def markers(self):
+        return self.__gui.markers
 
     @property
     def uiLogger(self):

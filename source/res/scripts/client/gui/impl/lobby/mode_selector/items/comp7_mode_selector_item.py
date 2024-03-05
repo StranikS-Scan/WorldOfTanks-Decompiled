@@ -36,6 +36,10 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     def createToolTipContent(self, contentID):
         return RankInactivityTooltip() if contentID == R.views.lobby.comp7.tooltips.RankInactivityTooltip() else MainWidgetTooltip()
 
+    @property
+    def isVisible(self):
+        return self.__comp7Controller.isAvailable()
+
     def _onInitializing(self):
         super(Comp7ModeSelectorItem, self)._onInitializing()
         self.__updateComp7Data()

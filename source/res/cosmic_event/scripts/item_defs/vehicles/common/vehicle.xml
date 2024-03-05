@@ -1,0 +1,14 @@
+<vehicle.xml>
+  <extras>
+    <cosmic_event_gravity_field>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_gravity_field>
+    <cosmic_event_rocket_booster>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_rocket_booster>
+    <cosmic_event_black_hole>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_black_hole>
+    <cosmic_event_hook_shot>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_hook_shot>
+    <cosmic_event_shield>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_shield>
+    <cosmic_event_power_shot>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_power_shot>
+    <cosmic_event_overturn>	NoneExtra : cosmic_event_cell.cosmic_vehicle_extras.OverturnCosmicEvent	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <liftOverTimeout>	5.0	</liftOverTimeout>
+      <gameplayFactors></gameplayFactors>
+    </cosmic_event_overturn>
+  </extras>
+</vehicle.xml>

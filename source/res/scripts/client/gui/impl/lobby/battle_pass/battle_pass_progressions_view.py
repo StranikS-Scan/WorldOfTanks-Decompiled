@@ -8,7 +8,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BattlePassConsts, CurrencyBP, FinalReward
-from frameworks.wulf import Array, ViewFlags, ViewSettings, ViewStatus
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassCoinProductsUrl, getBattlePassPointsProductsUrl
@@ -24,7 +24,7 @@ from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ButtonStates, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.pub import ViewImpl
@@ -47,7 +47,8 @@ _bpRes = R.strings.battle_pass
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
  ChapterState.PAUSED: ChapterStates.PAUSED,
- ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
+ ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED,
+ ChapterState.DISABLED: ChapterStates.DISABLED}
 _FREE_POINTS_INDEX = 0
 
 class BattlePassProgressionsView(ViewImpl):
@@ -118,7 +119,7 @@ class BattlePassProgressionsView(ViewImpl):
          (self.viewModel.onAboutClick, self.__onAboutClick),
          (self.viewModel.onClose, self.__onClose),
          (self.viewModel.widget3dStyle.onPreviewClick, self.__onPreviewClick),
-         (self.viewModel.widget3dStyle.onExtraPreviewClick, self.__onExtraPreviewClick),
+         (self.viewModel.widget3dStyle.onMarathonPreviewClick, self.__onMarathonPreviewClick),
          (self.viewModel.onTakeClick, self.__onTakeClick),
          (self.viewModel.onTakeAllClick, self.__onTakeAllClick),
          (self.viewModel.onOpenShopClick, self.__onOpenShopClick),
@@ -137,7 +138,7 @@ class BattlePassProgressionsView(ViewImpl):
          (self.__battlePass.onOffersUpdated, self.__onOffersUpdated),
          (self.__battlePass.onSelectTokenUpdated, self.__onSelectTokenUpdated),
          (self.__battlePass.onChapterChanged, self.__onChapterChanged),
-         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePass.onMarathonChapterExpired, self.__onMarathonChapterExpired),
          (self.__collectionsSystem.onBalanceUpdated, self.__onCollectionsUpdated),
          (self.__collectionsSystem.onServerSettingsChanged, self.__onCollectionsUpdated),
          (self.__wallet.onWalletStatusChanged, self.__updateWalletAvailability),
@@ -189,7 +190,7 @@ class BattlePassProgressionsView(ViewImpl):
             self.__showBuyWindow()
 
     def __onAboutClick(self):
-        self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isExtraChapter(self.__chapterID) else getInfoPageURL())
+        self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isMarathonChapter(self.__chapterID) else getInfoPageURL())
 
     @staticmethod
     def __onClose():
@@ -247,11 +248,13 @@ class BattlePassProgressionsView(ViewImpl):
             fillVehicleInfo(model.widget3dStyle.vehicleInfo, vehicle)
             model.widget3dStyle.setStyleName(style.userName)
             model.widget3dStyle.setStyleId(style.id)
+            if not style.isProgression:
+                model.widget3dStyle.setIntCD(style.intCD)
         _, maxLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
         rewards = self.__battlePass.getSingleAward(self.__chapterID, maxLevel, BattlePassConsts.REWARD_BOTH)
         extraReward = findFirst(lambda b: b.getName() == BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, rewards)
         if extraReward is not None:
-            model.widget3dStyle.setExtraRewardId(extraReward.tokenID)
+            model.widget3dStyle.setMarathonRewardId(extraReward.tokenID)
         return
 
     def __setCharacterWidget(self, model):
@@ -267,13 +270,14 @@ class BattlePassProgressionsView(ViewImpl):
                 self.__clearChapterCharacter(model)
                 return
             iconName, characterName, skills = getDataByTankman(character)
-            skillsArray = Array()
+            skillsArray = model.chapterCharacter.getSkills()
+            skillsArray.clear()
             for skill in skills:
                 skillsArray.addString(skill)
 
+            skillsArray.invalidate()
             model.chapterCharacter.setIcon(iconName)
             model.chapterCharacter.setTankman(characterName)
-            model.chapterCharacter.setSkills(skillsArray)
             model.chapterCharacter.setTooltipId(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED)
             packSpecialTooltipData(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, self.__specialTooltipItems, character.getRecruitID())
             return
@@ -282,7 +286,9 @@ class BattlePassProgressionsView(ViewImpl):
     def __clearChapterCharacter(model):
         model.chapterCharacter.setIcon('')
         model.chapterCharacter.setTankman('')
-        model.chapterCharacter.setSkills(Array())
+        skillsArray = model.chapterCharacter.getSkills()
+        skillsArray.clear()
+        skillsArray.invalidate()
 
     def __resetRewardsInterval(self, model, fromLevel, toLevel, replaceRewards=False):
         startLevel, finalLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
@@ -325,6 +331,12 @@ class BattlePassProgressionsView(ViewImpl):
     def __updateData(self, model=None):
         self.__updateLevelState(model)
         isBattlePassBought = self.__battlePass.isBought(chapterID=self.__chapterID)
+        chapterTypes = model.getAvailableChapterTypes()
+        chapterTypes.clear()
+        for chType in self.__battlePass.getAvailableChapterTypes():
+            chapterTypes.addString(str(chType))
+
+        chapterTypes.invalidate()
         model.setIsBattlePassPurchased(isBattlePassBought)
         model.setIsPaused(self.__battlePass.isPaused())
         model.setChapterState(_CHAPTER_STATES.get(self.__battlePass.getChapterState(self.__chapterID)))
@@ -334,10 +346,9 @@ class BattlePassProgressionsView(ViewImpl):
         model.setIsBattlePassCompleted(self.__battlePass.isCompleted())
         model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
         model.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
-        model.setIsExtra(self.__battlePass.isExtraChapter(self.__chapterID))
+        model.setChapterType(ChapterType(self.__battlePass.getChapterType(self.__chapterID)))
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setSeasonText(self.__makeSeasonTimeText())
-        model.setHasExtra(self.__battlePass.hasExtra())
         fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__setExpirations(model)
         if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
@@ -347,7 +358,7 @@ class BattlePassProgressionsView(ViewImpl):
         self.__updateRewardSelectButton(model=model)
 
     def __setExpirations(self, model):
-        expireTimestamp = self.__battlePass.getChapterRemainingTime(self.__chapterID) if self.__battlePass.isExtraChapter(self.__chapterID) else self.__battlePass.getSeasonTimeLeft()
+        expireTimestamp = self.__battlePass.getChapterRemainingTime(self.__chapterID) if self.__battlePass.isMarathonChapter(self.__chapterID) else self.__battlePass.getSeasonTimeLeft()
         model.setExpireTime(expireTimestamp)
         model.setExpireTimeStr(getFormattedTimeLeft(expireTimestamp))
 
@@ -377,7 +388,7 @@ class BattlePassProgressionsView(ViewImpl):
         previousPotentialLevel = self.__battlePass.getLevelByPoints(self.__chapterID, previousFreePoints)
         previousFreePointsInLevel, _ = self.__battlePass.getProgressionByPoints(self.__chapterID, previousFreePoints, previousPotentialLevel)
         previousPotentialLevel += 1
-        if self.__battlePass.isExtraChapter(self.__chapterID):
+        if self.__battlePass.isMarathonChapter(self.__chapterID):
             freePointsInChapter = 0
             freePointsInLevel = 0
             potentialLevel = 0
@@ -499,7 +510,7 @@ class BattlePassProgressionsView(ViewImpl):
                 self.__showStylePreview(style, vehicleCD)
             return
 
-    def __onExtraPreviewClick(self):
+    def __onMarathonPreviewClick(self):
         style = getStyleForChapter(self.__chapterID, battlePass=self.__battlePass)
         vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
         self.__showStylePreview(style, vehicleCD)
@@ -579,7 +590,7 @@ class BattlePassProgressionsView(ViewImpl):
         self.__updateProgressData()
 
     @staticmethod
-    def __onExtraChapterExpired():
+    def __onMarathonChapterExpired():
         showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 
     @replaceNoneKwargsModel
@@ -616,7 +627,7 @@ class BattlePassProgressionsView(ViewImpl):
         return True
 
     def __makeSeasonTimeText(self):
-        if self.__battlePass.isExtraChapter(self.__chapterID):
+        if self.__battlePass.isMarathonChapter(self.__chapterID):
             endTimestamp = self.__battlePass.getChapterExpiration(self.__chapterID)
             endStringRes = _bpRes.progression.season.end.extra
         elif self.__battlePass.isSeasonFinished():

@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	47	</forward>
@@ -1599,14 +1599,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	39000	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2612,10 +2611,10 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <reloadTime>	11.9	</reloadTime>
-          <aimingTime>	2.8	</aimingTime>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

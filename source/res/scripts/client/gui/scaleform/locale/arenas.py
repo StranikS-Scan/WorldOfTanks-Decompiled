@@ -162,6 +162,8 @@ class ARENAS(object):
     C_14_SIEGFRIED_LINE_NOM_DESCRIPTION = '#arenas:14_siegfried_line_nom/description'
     C_121_LOST_PARADISE_V_NAME = '#arenas:121_lost_paradise_v/name'
     C_121_LOST_PARADISE_V_DESCRIPTION = '#arenas:121_lost_paradise_v/description'
+    C_280_COSMIC_NAME = '#arenas:280_cosmic/name'
+    C_280_COSMIC_DESCRIPTION = '#arenas:280_cosmic/description'
     TYPE_WINBACK_NAME = '#arenas:type/winback/name'
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
@@ -327,6 +329,8 @@ class ARENAS(object):
      C_14_SIEGFRIED_LINE_NOM_DESCRIPTION,
      C_121_LOST_PARADISE_V_NAME,
      C_121_LOST_PARADISE_V_DESCRIPTION,
+     C_280_COSMIC_NAME,
+     C_280_COSMIC_DESCRIPTION,
      TYPE_WINBACK_NAME,
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,

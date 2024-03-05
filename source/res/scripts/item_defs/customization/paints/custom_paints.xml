@@ -4350,7 +4350,8 @@
       <color>	17 17 20 255	</color>
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:repaint/cosm	</userString>
+      <userString>	#vehicle_customization:cosm_paint_1/name	</userString>
+      <description>	#vehicle_customization:cosm_paint_1/description	</description>
     </paint>
     <paint>
       <id>	405	</id>
@@ -4358,7 +4359,8 @@
       <color>	17 17 20 255	</color>
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:repaint/cosm_3	</userString>
+      <userString>	#vehicle_customization:cosm_paint_2/name	</userString>
+      <description>	#vehicle_customization:cosm_paint_2/description	</description>
     </paint>
     <usages>
       <item>
@@ -5582,6 +5584,88 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	Battle Pass 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31068	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <color>	55 58 64 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:ChemicalBurn_Paint_01/name	</userString>
+      <description>	#vehicle_customization:ChemicalBurn_Paint_01/description	</description>
+    </paint>
+    <paint>
+      <id>	31069	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	50 54 64 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.203	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:TamedFlame_Paint_01/name	</userString>
+      <description>	#vehicle_customization:TamedFlame_Paint_01/description	</description>
+    </paint>
+    <paint>
+      <id>	31070	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_03.png	</texture>
+      <color>	98 98 102 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.4	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:TamedFlame_Paint_02/name	</userString>
+      <description>	#vehicle_customization:TamedFlame_Paint_02/description	</description>
+    </paint>
+    <paint>
+      <id>	31071	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_01.png	</texture>
+      <color>	161 123 46 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.2	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:BP13_Paint_01_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP13_Paint_01_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31072	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	73 78 94 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:BP13_Paint_02_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP13_Paint_02_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31073	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <userString>	#vehicle_customization:BPS13_inv270186_Paint_1/name	</userString>
+      <description>	#vehicle_customization:BPS13_inv270186_Paint_1/description	</description>
+      <color>	47 79 84 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	31074	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_color_01.png	</texture>
+      <userString>	#vehicle_customization:BPS13_inv270186_Paint_2/name	</userString>
+      <description>	#vehicle_customization:BPS13_inv270186_Paint_2/description	</description>
+      <color>	112 106 97 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	ElusiveAvengers	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -5601,6 +5685,191 @@
           <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
         </exclude>
       </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Kin_dza_dza	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31075	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.43	</gloss>
+      <metallic>	0.27	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <userString>	#vehicle_customization:Kin_dza_dza_Paint_MT/name	</userString>
+      <description>	#vehicle_customization:Kin_dza_dza_Paint_MT/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Rush ThunderWolf 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31079	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	35 35 35 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_1/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_1/description	</description>
+    </paint>
+    <paint>
+      <id>	31080	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_2/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_2/description	</description>
+    </paint>
+    <paint>
+      <id>	31081	</id>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <color>	56 56 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_3/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_3/description	</description>
+    </paint>
+    <paint>
+      <id>	31082	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	27 27 27 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_4/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_4/description	</description>
+    </paint>
+    <paint>
+      <id>	31083	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	22 22 22 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_5/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_5/description	</description>
+    </paint>
+    <paint>
+      <id>	31084	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_6/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_Paint_6/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	PUB 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31076	</id>
+      <color>	118 158 179 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <season>	winter	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:PUB_2024_Paint_Winter_MT/name	</userString>
+      <description>	#vehicle_customization:PUB_2024_Paint_Winter_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31077	</id>
+      <color>	111 122 58 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <texture>	gui/maps/vehicles/repaints/italy_color_04.png	</texture>
+      <season>	summer	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:PUB_2024_Paint_Summer_MT/name	</userString>
+      <description>	#vehicle_customization:PUB_2024_Paint_Summer_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31078	</id>
+      <color>	145 120 70 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/poland_color_01.png	</texture>
+      <season>	desert	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:PUB_2024_Paint_Desert_MT/name	</userString>
+      <description>	#vehicle_customization:PUB_2024_Paint_Desert_MT/description	</description>
+    </paint>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	Cyberport_2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI styleOnly	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31085	</id>
+      <userString>	#vehicle_customization:Cyberport_2024_Paint_1_MT/name	</userString>
+      <description>	#vehicle_customization:Cyberport_2024_Paint_1_MT/description	</description>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.2	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+    </paint>
+    <paint>
+      <id>	31086	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_15.png	</texture>
+      <userString>	#vehicle_customization:Cyberport_2024_Paint_2_MT/name	</userString>
+      <description>	#vehicle_customization:Cyberport_2024_Paint_2_MT/description	</description>
+      <color>	191 60 0 255	</color>
+      <gloss>	0.65	</gloss>
+      <metallic>	0.15	</metallic>
+    </paint>
+    <paint>
+      <id>	31087	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_05.png	</texture>
+      <userString>	#vehicle_customization:Cyberport_2024_Paint_3_MT/name	</userString>
+      <description>	#vehicle_customization:Cyberport_2024_Paint_3_MT/description	</description>
+      <color>	38 38 38 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.25	</metallic>
+    </paint>
+    <paint>
+      <id>	31088	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_02.png	</texture>
+      <userString>	#vehicle_customization:Cyberport_2024_Paint_4_MT/name	</userString>
+      <description>	#vehicle_customization:Cyberport_2024_Paint_4_MT/description	</description>
+      <color>	115 115 115 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.7	</metallic>
     </paint>
   </itemGroup>
 </custom_paints.xml>

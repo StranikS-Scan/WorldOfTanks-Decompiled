@@ -603,7 +603,7 @@ class ArcadeControlMode(_GunControlMode):
         return True
 
     def onMinimapClicked(self, worldPos):
-        if not self._aih.isSPG:
+        if not self._aih.isSPG or self._aih.isAssaultSPG:
             return False
         self.__activateAlternateMode(worldPos)
         return True
@@ -632,37 +632,48 @@ class ArcadeControlMode(_GunControlMode):
 
     def __getAssaultSpgTargetPos(self):
         pos = None
-        normal = Math.Vector3(0, -1, 0)
+        normal = -math_utils.VectorConstant.Vector3J
         cursorPosition = GUI.mcursor().position
         ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
         ray.normalise()
-        res = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, wpoint, wpoint + ray * 5500, 128, BigWorld.player().playerVehicleID, -1, 0)
+        res = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 0, BigWorld.player().playerVehicleID, -1, 0)
         if res is not None:
             pos = res[0]
             normal = res[6]
-        waterCollisionDist = BigWorld.wg_collideWater(wpoint, wpoint + ray * 5500, False)
+        waterCollisionDist = BigWorld.wg_collideWater(wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, False)
         if waterCollisionDist > -1.0 and (pos is None or waterCollisionDist < (pos - wpoint).length):
             pos = wpoint + ray * waterCollisionDist
-            normal = Math.Vector3(0, 1, 0)
+            normal = math_utils.VectorConstant.Vector3J
+        if pos is not None:
+            rayUp = math_utils.VectorConstant.Vector3J.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
+            farPos = pos + rayUp
+            shotPosition, velocity, gravity = BigWorld.player().gunRotator.getShotParams(farPos, ignoreYawLimits=True)
+            velocityXZ = Math.Vector3(velocity.x, 0.0, velocity.z)
+            distanceXZ = pos - shotPosition
+            distanceXZ.y = 0.0
+            timeToReach = distanceXZ.length / velocityXZ.length
+            resultY = shotPosition.y + velocity.y * timeToReach + gravity.y * timeToReach ** 2 / 2.0
+            if resultY < pos.y:
+                pos = None
         if pos is None:
             pos = self.camera.aimingSystem.getDesiredShotPoint()
-            position, velocity, gravity = BigWorld.player().gunRotator.getShotParams(pos, ignoreYawLimits=True)
-            hitPoint = BigWorld.wg_simulateProjectileTrajectory(position, velocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT, 128, 0)
-            checkWaterDirection = Math.Vector3(0.0, -1.0, 0.0)
+            vehicle = BigWorld.player().getVehicleAttached()
+            hitPoint, projectileDir = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
+            checkWaterDirection = -math_utils.VectorConstant.Vector3J
             if hitPoint is not None:
-                pos = hitPoint[1]
-                projectileDir = hitPoint[2]
+                pos = hitPoint
                 projectileDir.normalise()
                 checkWaterDirection = projectileDir
                 hit = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 128, BigWorld.player().playerVehicleID, -1, 0)
                 if hit is not None:
                     normal = hit[6]
-            p0 = pos + checkWaterDirection.scale(1000.0)
-            p1 = pos - checkWaterDirection.scale(1000.0)
-            waterDist = BigWorld.wg_collideWater(p0, p1, False)
-            if waterDist > 0 and waterDist > (pos - p0).length:
-                pos = p0 - checkWaterDirection.scale(waterDist)
-                normal = Math.Vector3(0, 1, 0)
+            if checkWaterDirection.y < 0.0:
+                p0 = pos + checkWaterDirection.scale(1000.0)
+                p1 = pos - checkWaterDirection.scale(1000.0)
+                waterDist = BigWorld.wg_collideWater(p0, p1, False)
+                if waterDist > 0 and waterDist > (pos - p0).length:
+                    pos = p0 - checkWaterDirection.scale(waterDist)
+                    normal = math_utils.VectorConstant.Vector3J
         return (pos, normal)
 
     def __activateAlternateMode(self, pos=None, bByScroll=False):
@@ -672,7 +683,7 @@ class ArcadeControlMode(_GunControlMode):
         elif self._aih.isAssaultSPG:
             self._cam.update(0, 0, 0, False, False)
             equipmentID = None
-            normal = Math.Vector3(0, -1, 0)
+            normal = -math_utils.VectorConstant.Vector3J
             if BattleReplay.isPlaying():
                 mode = BattleReplay.g_replayCtrl.getControlMode()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
@@ -872,9 +883,20 @@ class _TrajectoryControlMode(_GunControlMode):
     def getCamDist(self):
         return self._cam.getCurrentCamDist()
 
-    def getScaleParams(self):
+    def getZoom(self):
         minV, maxV = self.getCamDistRange()
-        return (minV, self._cam.getCamTransitionDist(), maxV)
+        transition = self._cam.getCamTransitionDist()
+        camDist = self.getCamDist()
+        if camDist <= transition:
+            ratioDist = (camDist - minV) / (transition - minV)
+            value = (1.0 - ratioDist) * 0.5 + 0.5
+        else:
+            ratioDist = (camDist - transition) / (maxV - transition)
+            value = (1.0 - ratioDist) * 0.5
+        return value
+
+    def getZoomSteps(self):
+        pass
 
     def getCamDistRange(self):
         return self._cam.getCamDistRange()
@@ -1084,6 +1106,7 @@ class AssaultControlMode(_TrajectoryControlMode):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _TRAJECTORY_UPDATE_INTERVAL = 0.05
     _MIN_ACCEPT_TARGET_NORMAL = -0.1
+    _VEHICLE_MAX_LENGTH_ERROR = 15.0
 
     def __init__(self, dataSection, avatarInputHandler):
         super(AssaultControlMode, self).__init__(dataSection, avatarInputHandler, CTRL_MODE_NAME.ASSAULT_SPG, AssaultControlMode._TRAJECTORY_UPDATE_INTERVAL)
@@ -1094,12 +1117,19 @@ class AssaultControlMode(_TrajectoryControlMode):
         replayCtrl = BattleReplay.g_replayCtrl
         if not (replayCtrl.isPlaying and replayCtrl.isControllingCamera):
             canEnable = False
-            if args['hitNormal'].y > AssaultControlMode._MIN_ACCEPT_TARGET_NORMAL:
-                canEnable = self._cam.setup(args['preferredPos'])
-            else:
-                LOG_DEBUG('AssaultCamera: aiming on the plane from below!')
+            preferredPos, normal = self.__getVehicleTargetPoint(args['preferredPos'], args['hitNormal'])
+            if normal.y > AssaultControlMode._MIN_ACCEPT_TARGET_NORMAL:
+                canEnable = self._cam.setup(preferredPos)
+            if not canEnable:
+                downCastPos = self.__findDownTargetPosition(preferredPos, normal)
+                canEnable = self._cam.setup(downCastPos)
+            if not canEnable:
+                safePos = self.__generateSafeTargetPoint(preferredPos)
+                if safePos is not None:
+                    canEnable = self._cam.setup(safePos)
             if not canEnable:
                 self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE)
+                LOG_WARNING("Couldn't generate camera with target point", args['preferredPos'])
                 return
         super(AssaultControlMode, self).enable(**args)
         self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
@@ -1107,6 +1137,44 @@ class AssaultControlMode(_TrajectoryControlMode):
         if ammoCtrl is not None:
             ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
         return
+
+    def __getVehicleTargetPoint(self, targetPoint, normal):
+        direction = self._cam.getMinStateDirection(targetPoint)
+        start = targetPoint - direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
+        end = targetPoint + direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
+        result = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, start, end, BigWorld.player().playerVehicleID)
+        vehiclePoint = None
+        if result is not None:
+            vehiclePoint = start + direction.scale(result[0])
+        vehiclePosition = BigWorld.player().getVehicleAttached().position
+        return (targetPoint, normal) if vehiclePoint is None or vehiclePosition.distSqrTo(targetPoint) < vehiclePosition.distSqrTo(vehiclePoint) else (vehiclePoint, result[1])
+
+    def __findDownTargetPosition(self, targetPos, normal):
+        if normal.y <= -AssaultControlMode._MIN_ACCEPT_TARGET_NORMAL:
+            castRayDown = Math.Vector3(0.0, -AssaultCamera.MAX_COLLISION_DISTANCE, 0.0)
+            targetErrorPos = targetPos + normal * AssaultCamera.COLLISION_EPS
+            endPos = targetPos + castRayDown
+            point = collideDynamicAndStatic(targetErrorPos, endPos, (BigWorld.player().playerVehicleID,), 0)
+            if point is not None:
+                return point[0]
+        return targetPos
+
+    def __generateSafeTargetPoint(self, targetPoint):
+        direction = self._cam.getMaxStateDirection(targetPoint)
+        shotPosition, _, _ = BigWorld.player().gunRotator.getShotParams(targetPoint, ignoreYawLimits=True)
+        start = shotPosition
+        end = shotPosition + direction.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
+        point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), 0)
+        return point[0] if point is not None else None
+
+    def getZoomSteps(self):
+        return self._cam.getCountOfStates()
+
+    def getZoom(self):
+        return self._cam.getZoom()
+
+    def onMinimapClicked(self, worldPos):
+        return False
 
     def disable(self):
         super(AssaultControlMode, self).disable()

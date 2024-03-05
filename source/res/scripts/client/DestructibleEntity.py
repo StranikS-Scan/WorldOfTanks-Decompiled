@@ -3,6 +3,7 @@
 import BigWorld
 import destructible_entities
 import Math
+from constants import EdgeColorMode, EdgeDrawMode
 from debug_utils import LOG_ERROR
 from DestructibleStickers import DestructibleStickers
 from Vehicle import SegmentCollisionResultExt
@@ -194,8 +195,8 @@ class DestructibleEntity(BigWorld.Entity):
     def drawEdge(self, forceSimpleEdge=False):
         if not self.model or not self.model.visible:
             return
-        colorMode = 2 if self.isPlayerTeam else 1
-        BigWorld.wgAddEdgeDetectEntity(self, self.__activeStateResource.collisionComponent, colorMode, False, 0, False, False)
+        colorMode = EdgeColorMode.ALLY if self.isPlayerTeam else EdgeColorMode.ENEMY
+        BigWorld.wgAddEdgeDetectEntity(self, self.__activeStateResource.collisionComponent, colorMode, EdgeDrawMode.FULL, False, False)
 
     def removeEdge(self, forceSimpleEdge=False):
         if self.model:

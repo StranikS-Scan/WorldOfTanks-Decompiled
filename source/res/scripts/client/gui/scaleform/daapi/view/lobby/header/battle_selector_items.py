@@ -109,6 +109,15 @@ class _SelectorItem(object):
             label = _R_HEADER_BUTTONS.notReady if playerInfo.isReady else _R_HEADER_BUTTONS.ready
         return backport.text(label())
 
+    def getDisabledFightButtonTooltip(self, result):
+        pass
+
+    def getDisabledFightButtonLabel(self, result):
+        pass
+
+    def hasDisabledFightButtonData(self, result):
+        return False
+
     def isLocked(self):
         return self._isLocked
 

@@ -45,7 +45,7 @@ class ExtraIntroView(ViewImpl):
 
     def _getEvents(self):
         return ((self.viewModel.onClose, self.__onSubmit),
-         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePassController.onMarathonChapterExpired, self.__onMarathonChapterExpired),
          (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged),
          (self.__battlePassController.onSeasonStateChanged, self.__onBattlePassSettingsChanged))
 
@@ -57,7 +57,7 @@ class ExtraIntroView(ViewImpl):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 
     @staticmethod
-    def __onExtraChapterExpired():
+    def __onMarathonChapterExpired():
         showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
 
     def __onBattlePassSettingsChanged(self, *_):

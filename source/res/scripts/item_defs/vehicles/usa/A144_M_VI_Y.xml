@@ -7,10 +7,10 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_universal	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	45	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -762,14 +762,13 @@
         </chassis>
       </unlocks>
       <weight>	11000	</weight>
-      <maxLoad>	46000	</maxLoad>
       <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
       <brakeForce>	46000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -2439,14 +2438,13 @@
       <level>	9	</level>
       <price>	63400	</price>
       <weight>	11000	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	46000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -4816,7 +4814,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	8.8	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -6262,7 +6260,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	8.3	</reloadTime>
+          <reloadTime>	7.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -7670,11 +7668,11 @@
       <engines>
         <Continental_AOSI_1195_5_Y_VI_A>
           <smplEnginePower>	690	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Continental_AOSI_1195_5_Y_VI_A>
         <Continental_AOSI_1195_5_Y_VI_B>
-          <smplEnginePower>	780	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Continental_AOSI_1195_5_Y_VI_B>
       </engines>
       <chassis>

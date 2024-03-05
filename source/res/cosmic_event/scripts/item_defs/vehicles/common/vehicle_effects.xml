@@ -1,0 +1,40 @@
+<vehicle_effects.xml>
+  <cosmicCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_ground.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	ev_cosmic_tank_surface_hull_collision_pc ; ev_cosmic_tank_surface_wheel_collision_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_cosmic_tank_surface_hull_collision_npc ; ev_cosmic_tank_surface_wheel_collision_npc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </cosmicCollisionLight>
+  <cosmicCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_ground.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	ev_cosmic_tank_surface_hull_collision_pc ; ev_cosmic_tank_surface_wheel_collision_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_cosmic_tank_surface_hull_collision_npc ; ev_cosmic_tank_surface_wheel_collision_npc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </cosmicCollisionHeavy>
+</vehicle_effects.xml>

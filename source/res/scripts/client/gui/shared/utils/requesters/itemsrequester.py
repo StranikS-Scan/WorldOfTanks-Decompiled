@@ -287,6 +287,7 @@ class REQ_CRITERIA(object):
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
+        HIDDEN_IN_HANGAR = RequestCriteria(PredicateCondition(lambda item: item.isHiddenInHangar))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
         CLAN_WARS = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForClanWarsBattles))
         FUN_RANDOM = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForFunRandomBattles))

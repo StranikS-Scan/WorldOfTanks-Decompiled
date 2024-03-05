@@ -760,7 +760,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	67500	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1766,7 +1765,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1804,7 +1803,14 @@
             <gun>	55	</gun>
           </armor>
           <shotDispersionRadius>	0.85	</shotDispersionRadius>
-          <reloadTime>	28.5	</reloadTime>
+          <reloadTime>	24.5	</reloadTime>
+          <clip>
+            <count>	2	</count>
+            <rate>	7.5	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	24.5 36.5	</reloadTime>
+          </autoreload>
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <shotDispersionFactors>

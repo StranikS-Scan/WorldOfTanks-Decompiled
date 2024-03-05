@@ -72,6 +72,13 @@
       <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch48_BZ_75_3dst_BP13_MT>
+          <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Hull.model	</exploded>
+        </Ch48_BZ_75_3dst_BP13_MT>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -94,10 +101,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.075 0.416394 2.476414	</rayStart>
-        <rayEnd>	1.058322 0.378496 2.448386	</rayEnd>
-        <rayUp>	-0.535622 0.641683 -0.548955	</rayUp>
-        <size>	0.3	</size>
+        <rayStart>	1.09887 0.399319 2.484559	</rayStart>
+        <rayEnd>	1.082192 0.361421 2.456531	</rayEnd>
+        <rayUp>	-0.535617 0.641695 -0.548946	</rayUp>
+        <size>	0.2	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -845,6 +852,12 @@
         <clipAngle>	0.875614	</clipAngle>
         <anchorShift>	0.11	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -870,7 +883,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12200	</weight>
-      <maxLoad>	65000	</maxLoad>
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -887,6 +899,13 @@
         <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch48_BZ_75_3dst_BP13_MT>
+            <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Chassis.model	</exploded>
+          </Ch48_BZ_75_3dst_BP13_MT>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -980,6 +999,39 @@
                   <row3>	-1.159599 0.623904 0.219265	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch48_BZ_75_3dst_BP13_MT	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	-0.496388 0.870534 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	-1.363290 1.150486 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	-1.913894 0.824126 -0.000001	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000001 -0.000003	</row0>
+                  <row1>	0.000000 0.282921 -0.099777	</row1>
+                  <row2>	0.000001 0.099777 0.282921	</row2>
+                  <row3>	-1.348012 0.941890 -3.546743	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.782319 0.017189 0.166377	</row0>
+                  <row1>	0.000000 0.497353 -0.051383	</row1>
+                  <row2>	-0.062724 0.030148 0.291817	</row2>
+                  <row3>	-1.317291 0.747311 3.816653	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1059,6 +1111,39 @@
                   <row1>	0.000000 0.473616 0.000000	</row1>
                   <row2>	0.000000 0.000000 5.418760	</row2>
                   <row3>	1.160000 0.623904 0.219265	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch48_BZ_75_3dst_BP13_MT	</modelsSet>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	0.407188 0.870525 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.000000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	1.259746 1.150463 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.500000	</row2>
+                  <row3>	1.962982 0.824086 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.800000 -0.000001 -0.000003	</row0>
+                  <row1>	0.000000 0.282921 -0.099777	</row1>
+                  <row2>	0.000001 0.099777 0.282921	</row2>
+                  <row3>	1.423290 0.941861 -3.546739	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.785860 0.000000 -0.149748	</row0>
+                  <row1>	-0.021239 0.486955 -0.111461	</row1>
+                  <row2>	0.054691 0.068080 0.287009	</row2>
+                  <row3>	1.388514 0.747283 3.816650	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1336,6 +1421,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <Ch48_BZ_75_3dst_BP13_MT>
+              <segmentModelLeft>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/track/segment_01.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/track/segment_01.model	</segmentModelRight>
+            </Ch48_BZ_75_3dst_BP13_MT>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1363,6 +1454,11 @@
             <model>	vehicles/chinese/Ch48_BZ_75/track/segment_01.model	</model>
             <length>	0.132463	</length>
           </mainSegment>
+          <modelSets>
+            <Ch48_BZ_75_3dst_BP13_MT>
+              <mainSegmentModel>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/track/segment_01.model	</mainSegmentModel>
+            </Ch48_BZ_75_3dst_BP13_MT>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1595,6 +1691,11 @@
             <model>	vehicles/chinese/Ch48_BZ_75/track/segment_01.model	</model>
             <length>	0.132459	</length>
           </mainSegment>
+          <modelSets>
+            <Ch48_BZ_75_3dst_BP13_MT>
+              <mainSegmentModel>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/track/segment_01.model	</mainSegmentModel>
+            </Ch48_BZ_75_3dst_BP13_MT>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1934,6 +2035,13 @@
             <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Ch48_BZ_75_3dst_BP13_MT>
+                <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Gun_02.model	</exploded>
+              </Ch48_BZ_75_3dst_BP13_MT>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch48_BZ_75/collision/Gun_02.model	</collisionModelServer>
@@ -1950,6 +2058,13 @@
         <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch48_BZ_75_3dst_BP13_MT>
+            <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_3dst_BP13_MT/crash/lod0/Turret_01.model	</exploded>
+          </Ch48_BZ_75_3dst_BP13_MT>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch48_BZ_75/collision/Turret_01.model	</collisionModelServer>

@@ -102,6 +102,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         vehicles = self.__itemsCache.items.getVehicles(requestCriteria).values() or []
         getCurrentModeQuestsForVehicle = self._questController.getCurrentModeQuestsForVehicle
         return any([ bool(getCurrentModeQuestsForVehicle(veh, True)) for veh in vehicles ])

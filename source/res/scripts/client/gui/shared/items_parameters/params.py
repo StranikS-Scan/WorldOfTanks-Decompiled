@@ -11,13 +11,13 @@ from collections import namedtuple, defaultdict
 from math import ceil, floor
 from itertools import izip_longest
 import BigWorld
-from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, HAS_EXPLOSION
+from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, HAS_EXPLOSION, PenaltyTypes
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import Tankman, isSkillLearnt, crewMemberRealSkillLevel
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, isAutoReloadGun, isDualGun, isDualAccuracy
-from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
+from gui.shared.items_parameters import functions, getShellDescriptors, NO_DATA
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell, getRocketAccelerationKpiFactors
 from gui.shared.items_parameters.params_cache import g_paramsCache
@@ -45,9 +45,8 @@ MIN_RELATIVE_VALUE = 1
 EXTRAS_CAMOUFLAGE = 'camouflageExtras'
 MAX_DAMAGED_MODULES_DETECTION_PERK_VAL = -4
 MAX_ART_NOTIFICATION_DELAY_PERK_VAL = -2
-_Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
-_PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
+_PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative, penaltyType')
 MODULES = {ITEM_TYPES.vehicleRadio: lambda vehicleDescr: vehicleDescr.radio,
  ITEM_TYPES.vehicleEngine: lambda vehicleDescr: vehicleDescr.engine,
  ITEM_TYPES.vehicleChassis: lambda vehicleDescr: vehicleDescr.chassis,
@@ -251,8 +250,14 @@ class ChassisParams(WeightedParam):
     itemsCache = dependency.descriptor(IItemsCache)
 
     @property
-    def maxLoad(self):
-        return self._itemDescr.maxLoad / 1000
+    def vehicleGunShotStabilizationChassisMovement(self):
+        movementDispersion = int(round(self._itemDescr.shotDispersionFactors[0] * component_constants.KMH_TO_MS * 100))
+        return 100 - movementDispersion
+
+    @property
+    def vehicleGunShotStabilizationChassisRotation(self):
+        rotationDispersion = int(round(math.radians(self._itemDescr.shotDispersionFactors[1]) * 100))
+        return 100 - rotationDispersion
 
     @property
     def rotationSpeed(self):
@@ -347,7 +352,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def vehicleWeight(self):
-        return _Weight(self._itemDescr.physics['weight'] / 1000, self._itemDescr.miscAttrs['maxWeight'] / 1000)
+        return self._itemDescr.physics['weight'] / 1000
 
     @property
     def enginePower(self):
@@ -361,10 +366,10 @@ class VehicleParams(_ParameterBase):
 
     @property
     def enginePowerPerTon(self):
-        powerPerTon = round(self.enginePower / self.vehicleWeight.current, 2)
+        powerPerTon = round(self.enginePower / self.vehicleWeight, 2)
         if self._itemDescr.hasTurboshaftEngine:
-            return (powerPerTon, round(self.turboshaftEnginePower / self.vehicleWeight.current, 2))
-        return (powerPerTon, round(self.rocketAccelerationEnginePower / self.vehicleWeight.current, 2)) if self._itemDescr.hasRocketAcceleration else (powerPerTon,)
+            return (powerPerTon, round(self.turboshaftEnginePower / self.vehicleWeight, 2))
+        return (powerPerTon, round(self.rocketAccelerationEnginePower / self.vehicleWeight, 2)) if self._itemDescr.hasRocketAcceleration else (powerPerTon,)
 
     @property
     def speedLimits(self):
@@ -591,8 +596,7 @@ class VehicleParams(_ParameterBase):
                 heCorrection = coeffs['alphaDamage']
         gunCorrection = self.__adjustmentCoefficient('guns').get(self._itemDescr.gun.name, {})
         gunCorrection = gunCorrection.get('caliberCorrection', 1)
-        disp = self.shotDispersionAngle
-        value = round(self.avgDamagePerMinute * penetration / sum(disp) / len(disp) * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
+        value = round(self.avgDamagePerMinute * penetration / min(self.shotDispersionAngle) * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -966,7 +970,7 @@ class VehicleParams(_ParameterBase):
 
         roles = vehicle.descriptor.type.crewRoles
         for paramName, penalties in result.items():
-            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in penalties.iteritems() ]
+            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots, PenaltyTypes.CREW) for slotId, value in penalties.iteritems() ]
 
         return {k:v for k, v in result.iteritems() if v}
 
@@ -1025,7 +1029,7 @@ class VehicleParams(_ParameterBase):
     def __getRealSpeedLimit(self):
         enginePower = self._itemDescr.miscAttrs['enginePowerFactor'] * self.__getEnginePhysics()['smplEnginePower']
         rollingFriction = self.__getChassisPhysics()['grounds']['medium']['rollingFriction']
-        return enginePower / self.vehicleWeight.current * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
+        return enginePower / self.vehicleWeight * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
     def __getInvisibilityValues(self, itemDescription):
         camouflageFactor = self.__factors.get('camouflage', 1)
@@ -1443,11 +1447,7 @@ class ShellParams(CompatibleParams):
         return shellDescriptors[0] if shellDescriptors else None
 
 
-class OptionalDeviceParams(WeightedParam):
-
-    @property
-    def weight(self):
-        return _Weight(*getOptionalDeviceWeight(self._itemDescr, self._vehicleDescr)) if self._vehicleDescr is not None else _Weight(*self._getPrecachedInfo().weight)
+class OptionalDeviceParams(CompatibleParams):
 
     @property
     def nations(self):

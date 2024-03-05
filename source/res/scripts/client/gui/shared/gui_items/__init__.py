@@ -296,7 +296,6 @@ class KPI(object):
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
         VEHICLE_CHASSIS_STRENGTH = 'vehicleChassisStrength'
         VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH = 'vehicleAmmoBayEngineFuelStrength'
-        VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
         VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
         VEHICLE_RAM_DAMAGE_RESISTANCE = 'vehicleRamDamageResistance'

@@ -2,12 +2,9 @@
 # Embedded file name: scripts/client/vehicle_systems/components/highlighter.py
 import BigWorld
 from helpers import dependency
+from constants import EdgeColorMode, EdgeDrawMode
 from skeletons.gui.battle_session import IBattleSessionProvider
 from EdgeDrawer import HighlightComponent
-import CGF
-from GenericComponents import DynamicModelComponent
-from GenericComponents import AnimatorComponent
-from cgf_script.managers_registrator import autoregister, onProcessQuery
 import cgf_obsolete_script.py_component
 
 class Highlighter(cgf_obsolete_script.py_component.Component):
@@ -36,6 +33,7 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
         self.__highlightStatus = self.HIGHLIGHT_OFF if enabled else self.HIGHLIGHT_DISABLED
         self.__isPlayersVehicle = False
         self.__collisions = collisions
+        self.__args = (0, EdgeDrawMode.OCCLUDED, True)
         return
 
     @property
@@ -96,50 +94,39 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
             return
         else:
             vehicle = self.__vehicle
-            if self.isOn:
-                BigWorld.wgDelEdgeDetectEntity(vehicle)
-            args = (0,
-             False,
-             1,
-             True)
+            args = self.__args
+            highlightStatus = self.__highlightStatus
             if enable:
-                self.__highlightStatus |= self.HIGHLIGHT_ON
+                highlightStatus |= self.HIGHLIGHT_ON
                 if self.__isPlayersVehicle:
                     if forceSimpleEdge:
-                        self.__highlightStatus |= self.HIGHLIGHT_SIMPLE
-                        args = (0,
-                         False,
-                         0,
-                         False)
+                        highlightStatus |= self.HIGHLIGHT_SIMPLE
+                        args = (0, EdgeDrawMode.FULL, False)
                     else:
-                        args = (0,
-                         False,
-                         1,
-                         True)
+                        args = (0, EdgeDrawMode.OCCLUDED, True)
                 else:
                     arenaDP = self.sessionProvider.getArenaDP()
                     isAllyTeam = arenaDP.isAllyTeam(vehicle.publicInfo['team'])
-                    args = (2,
-                     False,
-                     0,
-                     False) if isAllyTeam else (1,
-                     False,
-                     0,
-                     False)
+                    drawMode = EdgeDrawMode.FULL
+                    if isAllyTeam:
+                        colorMode = EdgeColorMode.ALLY
+                    else:
+                        colorMode = EdgeColorMode.ENEMY
+                    args = (colorMode, drawMode, False)
             else:
                 if self.__isPlayersVehicle and forceSimpleEdge:
-                    self.__highlightStatus &= ~self.HIGHLIGHT_SIMPLE
-                    args = (0,
-                     False,
-                     1,
-                     True)
-                self.__highlightStatus &= ~self.HIGHLIGHT_ON
-            self.__doHighlightOperation(self.__highlightStatus, args)
+                    highlightStatus &= ~self.HIGHLIGHT_SIMPLE
+                    args = (0, EdgeDrawMode.OCCLUDED, True)
+                highlightStatus &= ~self.HIGHLIGHT_ON
+            if highlightStatus != self.__highlightStatus or args != self.__args:
+                self.__doHighlightOperation(highlightStatus, args)
+                self.__highlightStatus = highlightStatus
+                self.__args = args
             return
 
     def __doHighlightOperation(self, status, args):
         if status & self.HIGHLIGHT_ON:
-            BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2], args[3])
+            BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2])
         else:
             BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
         self.__updateHighlightComponent(status, args)
@@ -152,57 +139,5 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
             if highlight is not None:
                 root.removeComponent(highlight)
             if status & self.HIGHLIGHT_ON:
-                root.createComponent(HighlightComponent, args[0], args[1], args[2], args[3], False)
+                root.createComponent(HighlightComponent, args[0], args[1], args[2], False)
         return
-
-    def observeGameObjectForDynamicModels(self, appearance, gameObject):
-        hm = CGF.HierarchyManager(appearance.spaceID)
-        childDynamicModelComponents = hm.findComponentsInHierarchy(gameObject, DynamicModelComponent)
-        for childGO, component in childDynamicModelComponents:
-            childGO.createComponent(EdgeDrawInitializerComponent, self, component)
-
-        childAnimatorComponents = hm.findComponentsInHierarchy(gameObject, AnimatorComponent)
-        for childGO, component in childAnimatorComponents:
-            childGO.createComponent(EdgeDrawInitializerAnimatorComponent, self, component)
-
-
-class EdgeDrawInitializerComponent(object):
-    INITIALIZATION_TIMEOUT_TICKS = 10
-
-    def __init__(self, highlighter, componentToWatch):
-        self.highlighter = highlighter
-        self.component = componentToWatch
-        self.ticksProcessed = 0
-
-    def tryInit(self):
-        self.ticksProcessed += 1
-        if not self.component.isValid():
-            return False
-        if self.highlighter.isOn:
-            forceSimple = self.highlighter.isSimpleEdge
-            self.highlighter.highlight(False)
-            self.highlighter.highlight(True, forceSimple)
-        return True
-
-    def timeoutOccurred(self):
-        return self.ticksProcessed > self.INITIALIZATION_TIMEOUT_TICKS
-
-
-class EdgeDrawInitializerAnimatorComponent(EdgeDrawInitializerComponent):
-    pass
-
-
-@autoregister(presentInAllWorlds=True)
-class EdgeDrawInitializer(CGF.ComponentManager):
-
-    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerComponent, period=0.5)
-    def processEdgeDrawerInitialization(self, gameObject, edgeDrawInitializerComponent):
-        inited = edgeDrawInitializerComponent.tryInit()
-        if inited or edgeDrawInitializerComponent.timeoutOccurred():
-            gameObject.removeComponent(edgeDrawInitializerComponent)
-
-    @onProcessQuery(CGF.GameObject, EdgeDrawInitializerAnimatorComponent, period=0.5)
-    def processEdgeDrawerAnimatorInitialization(self, gameObject, edgeDrawInitializerAnimatorComponent):
-        inited = edgeDrawInitializerAnimatorComponent.tryInit()
-        if inited or edgeDrawInitializerAnimatorComponent.timeoutOccurred():
-            gameObject.removeComponent(edgeDrawInitializerAnimatorComponent)

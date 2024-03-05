@@ -91,8 +91,8 @@ class BattlePassPackage(object):
     def isBought(self):
         return self.__battlePass.isBought(chapterID=self.__chapterID)
 
-    def isExtra(self):
-        return self.__battlePass.isExtraChapter(chapterID=self.__chapterID)
+    def isMarathon(self):
+        return self.__battlePass.isMarathonChapter(chapterID=self.__chapterID)
 
     def getExpireTime(self):
         return self.__battlePass.getChapterExpiration(self.__chapterID)

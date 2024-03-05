@@ -56,7 +56,8 @@ def getBattlePassBonusPacker():
      Currency.BPCOIN: CoinBonusPacker(),
      Currency.CREDITS: currencyBonusUIPacker,
      Currency.CRYSTAL: currencyBonusUIPacker,
-     Currency.GOLD: currencyBonusUIPacker})
+     Currency.GOLD: currencyBonusUIPacker,
+     Currency.EQUIP_COIN: currencyBonusUIPacker})
     return BonusUIPacker(mapping)
 
 
@@ -190,7 +191,7 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
         if iconName == 'style' and customizationItem.modelsSet:
             iconName = 'style_3d'
         bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
-        if not R.images.gui.maps.icons.battlePass.rewards.dyn(bigIcon).exists():
+        if not (R.images.gui.maps.icons.battlePass.rewards.customizations.s232x174.dyn(bigIcon).exists() and R.images.gui.maps.icons.battlePass.rewards.customizations.s296x222.dyn(bigIcon).exists() and R.images.gui.maps.icons.battlePass.rewards.customizations.s400x300.dyn(bigIcon).exists() and R.images.gui.maps.icons.battlePass.rewards.customizations.s600x450.dyn(bigIcon).exists()):
             bigIcon = iconName
         model.setValue(str(data.get('value', '')))
         model.setIcon(iconName)
@@ -402,9 +403,10 @@ class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
         model = super(ExtendedItemBonusUIPacker, cls)._packSingleBonus(bonus, item, count)
         model.setUserName(item.userName)
         model.setItemType(item.itemTypeID)
-        model.setBigIcon(item.name if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER else item.getGUIEmblemID())
+        model.setBigIcon(item.name if item.itemTypeID in (GUI_ITEM_TYPE.BATTLE_BOOSTER, GUI_ITEM_TYPE.OPTIONALDEVICE) else item.getGUIEmblemID())
         if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized:
             model.setOverlayType('{}_{}'.format(ItemHighlightTypes.MODERNIZED, item.level))
+            model.setBigIcon(item.getGUIEmblemID())
         return model
 
     @classmethod

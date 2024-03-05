@@ -1196,7 +1196,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD beast heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </G44_JagdTigerH>
   <G16_PzVIB_Tiger_II_F>
@@ -1845,10 +1845,10 @@
     <description>	#germany_vehicles:G167_Tiger_Maus_120t_descr	</description>
     <shortDescriptionSpecial>	#germany_vehicles:G167_Tiger_Maus_120t_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#germany_vehicles:G167_Tiger_Maus_120t_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD heavyTank1 siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals testTank	</tags>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 siegeMode turboshaftEngine builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user beast special	</tags>
     <level>	9	</level>
   </G167_Tiger_Maus_120t>
   <G165_Erich_Konzept_I>
@@ -1982,4 +1982,18 @@
     <tags>	heavyTank role_HT_universal epic_battles HD beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user private	</tags>
     <level>	7	</level>
   </G04_PzVI_Tiger_I_FL>
+  <G55_E-75_FL>
+    <id>	116	</id>
+    <userString>	#germany_vehicles:E-75_FL	</userString>
+    <shortUserString>	#germany_vehicles:E-75_FL_short	</shortUserString>
+    <description>	#germany_vehicles:E-75_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:E-75_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:E-75_FL_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_universal HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user epic_battles private	</tags>
+    <level>	9	</level>
+  </G55_E-75_FL>
 </list.xml>

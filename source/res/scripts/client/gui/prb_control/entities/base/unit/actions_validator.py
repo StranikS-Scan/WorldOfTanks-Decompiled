@@ -48,8 +48,6 @@ class UnitVehiclesValidator(BaseActionsValidator):
                     if not vehicle.isReadyToPrebattle(checkForRent=self._isCheckForRent()):
                         if vehicle.isBroken:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_BROKEN)
-                        if vehicle.isTooHeavy:
-                            return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_TOO_HEAVY)
                         if not vehicle.isCrewFull:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
                         if vehicle.rentalIsOver:

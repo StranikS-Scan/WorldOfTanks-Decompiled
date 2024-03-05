@@ -430,14 +430,14 @@ class SharedPage(BattlePageMeta):
         self._processCallout(needShow=event.ctx['isDown'])
 
     def __onCrosshairViewChanged(self, viewID):
-        artyShotIndicatorVisible = self.__settingsCore.isReady and viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+        artyShotIndicatorVisible = self.__settingsCore.isReady and viewID in (CROSSHAIR_VIEW_ID.STRATEGIC, CROSSHAIR_VIEW_ID.ASSAULT) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
         self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
 
     def __onSettingsChanged(self, diff):
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if SPGAim.SHOTS_RESULT_INDICATOR in diff and crosshairCtrl is not None:
             viewID = crosshairCtrl.getViewID()
-            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC, CROSSHAIR_VIEW_ID.ASSAULT) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
             self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
         return
 
@@ -446,7 +446,7 @@ class SharedPage(BattlePageMeta):
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             viewID = crosshairCtrl.getViewID()
-            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC,) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
+            artyShotIndicatorVisible = viewID in (CROSSHAIR_VIEW_ID.STRATEGIC, CROSSHAIR_VIEW_ID.ASSAULT) and self.__settingsCore.getSetting(SPGAim.SHOTS_RESULT_INDICATOR)
             self.__setArtyShotIndicatorFlag(artyShotIndicatorVisible)
         return
 

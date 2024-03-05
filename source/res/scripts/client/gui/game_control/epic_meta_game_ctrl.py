@@ -16,7 +16,7 @@ from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showFrontlineContainerWindow
 from gui.shared.utils import SelectorBattleTypesUtils
 from helpers import dependency, i18n, time_utils, int2roman
-from items import vehicles
+from items import vehicles, EQUIPMENT_TYPES
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -419,15 +419,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return self.__itemsCache.items.epicMetaGame
 
     def showWelcomeScreenIfNeed(self):
-        currentSeason = self.getActiveSeason()
-        if currentSeason is not None:
-            seasonId = currentSeason.getSeasonID()
-            from frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
-            if not isWelcomeScreenViewed(seasonId):
-                from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
-                showFrontlineWelcomeWindow()
-                setWelcomeScreenViewed(seasonId)
-                return True
         return False
 
     def getNumAbilitySlots(self, vehicleType):
@@ -690,9 +681,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if self.__isInValidPrebattle():
             eqs = vehicles.g_cache.equipments()
             vehicle = g_currentVehicle.item
-            unlockAbilitiyIds = self.getUnlockedAbilityIds()
+            unlockAbilitiyIds = set(self.getUnlockedAbilityIds())
             for eqDescr in eqs.itervalues():
-                if eqDescr.equipmentType == GUI_ITEM_TYPE.BATTLE_ABILITY:
+                if eqDescr.equipmentType == EQUIPMENT_TYPES.battleAbilities:
                     item = self.__itemsCache.items.getItemByCD(eqDescr.compactDescr)
                     item.isUnlocked = item.innationID in unlockAbilitiyIds
                     if vehicle is not None:

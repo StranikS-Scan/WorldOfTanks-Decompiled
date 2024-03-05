@@ -789,7 +789,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4100	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1822,7 +1821,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_100mm_SA_47	  <cost>	34500	</cost>
+            <gun>	_100mm_SA_47_25t	  <cost>	34500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2234,7 +2233,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_90mm_F3>
-        <_100mm_SA_47>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_100mm_SA_47_25t>	shared	  <maxAmmo>	42	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -11 0.269671 -11 0.333333 -8 0.666667 -8 0.730329 -11 1 -11	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -2651,8 +2650,8 @@
             <density>	117.825 117.458	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_100mm_SA_47>
-        <_105mm_CN_105_57>	shared	  <maxAmmo>	30	</maxAmmo>
+        </_100mm_SA_47_25t>
+        <_105mm_CN_105_57>	shared	  <maxAmmo>	40	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -11 0.269671 -11 0.333333 -8 0.666667 -8 0.730329 -11 1 -11	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -2672,10 +2671,10 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	40	</reloadTime>
+          <reloadTime>	36	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>

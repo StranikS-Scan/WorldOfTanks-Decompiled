@@ -66,7 +66,7 @@ class _IntroVideoManager(object):
 
     @nextTick
     def __showExtraVideoIfNeeded(self):
-        if not self.isExtraVideoShown and self.__battlePass.hasExtra() and isExtraIntroVideoExist():
+        if not self.isExtraVideoShown and self.__battlePass.hasMarathon() and isExtraIntroVideoExist():
             _showOverlayVideo(getExtraIntroVideoURL())
             _setTrueToBPStorage(_EXTRA_VIDEO_SHOWN)
             if not self.__isIntroVideoShown:
@@ -171,7 +171,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         ctrl = self.__battlePass
 
         def isExtraActiveFirstTime():
-            return ctrl.hasExtra() and not self.__introVideoManager.isExtraVideoShown
+            return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown
 
         if not _hasTrueInBPStorage(_INTRO_SHOWN):
             return _R_VIEWS.BattlePassIntroView()

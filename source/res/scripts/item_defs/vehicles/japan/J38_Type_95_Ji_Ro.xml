@@ -9,7 +9,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <speedLimits>
     <forward>	40	</forward>
     <backward>	15	</backward>
@@ -931,7 +931,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
-      <maxLoad>	34000	</maxLoad>
       <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
       <brakeForce>	20100	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1998,7 +1997,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	35000	</maxLoad>
       <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
       <brakeForce>	20100	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3190,7 +3188,7 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.220	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -3317,11 +3315,11 @@
     <detailed>
       <engines>
         <_BMW_IV_Kai_Ni_Ro>
-          <smplEnginePower>	270	</smplEnginePower>
+          <smplEnginePower>	350	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_BMW_IV_Kai_Ni_Ro>
         <_BMW_IV_Kai_San_Ro>
-          <smplEnginePower>	290	</smplEnginePower>
+          <smplEnginePower>	400	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_BMW_IV_Kai_San_Ro>
       </engines>

@@ -1192,17 +1192,20 @@
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>
-    <icon>	ap	</icon>
+    <icon>	he	</icon>
     <price>	1	</price>
     <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	12.7	</caliber>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	autoArmorPiercing	</effects>
     <damage>
-      <armor>	8	</armor>
-      <devices>	17	</devices>
+      <armor>	1	</armor>
+      <devices>	1	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
   </Development_Shell>
   <_130mm_Prurazny_vz_55_GW>
     <id>	31007	</id>
@@ -1257,4 +1260,59 @@
       </damage>
     </armorSpalls>
   </_130mm_Narazovy_vz_55_GW>
+  <_150mm_PlasmaBall>
+    <id>	40000	</id>
+    <userString>	#czech_vehicles:_150mm_PlasmaBall	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	Gravizapa_Default	</effects>
+    <damage>
+      <armor>	10	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_150mm_PlasmaBall>
+  <_150mm_Railgun>
+    <id>	40001	</id>
+    <userString>	#czech_vehicles:_150mm_Railgun	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	Gravizapa_Railgun	</effects>
+    <damage>
+      <armor>	25	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_150mm_Railgun>
+  <_150mm_Power_Shot>
+    <id>	40002	</id>
+    <userString>	#czech_vehicles:_150mm_Railgun	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	Gravizapa_Power_Shot	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	40	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_150mm_Power_Shot>
 </shells.xml>

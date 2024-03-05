@@ -30,6 +30,7 @@ class _RewardType(_Enum):
     DEVICE_MI = 'new_device_mi'
     GUIDE = 'guide'
     TROPHY = 'trophy'
+    BOOK = 'book'
     BATTLE_BOOSTER = 'battleBooster'
     EXP_EQUIPMENTS = 'expequipments'
 
@@ -56,11 +57,16 @@ class _Reward(_Enum):
     TANK_RAMMER = 'TankRammer'
     TURBOCHARGER = 'Turbocharger'
     VENTILATION = 'Ventilation'
+    MODERNIZED_AIM_STABILIZER = 'ModernizedAimDrivesAimingStabilizer1'
+    MODERNIZED_TURBO_CHARGER_ROTATION = 'ModernizedTurbochargerRotationMechanism1'
+    MODERNIZED_EXTRA_HEALTH_RESERVE = 'ModernizedExtraHealthReserveAntifragmentationLining1'
 
 
 _REWARDS_TYPES_ORDER = (_RewardType.TROPHY,
+ _RewardType.EXP_EQUIPMENTS,
  _RewardType.DEVICE_FV,
  _RewardType.DEVICE_MI,
+ _RewardType.BOOK,
  _RewardType.GUIDE,
  _RewardType.BROCHURE,
  _RewardType.BLUEPRINT)
@@ -101,15 +107,7 @@ _REWARDS_ORDER = {_RewardType.TROPHY: (_Reward.AIM_DRIVES,
                               _Reward.ANTI_FRAGMENTATION,
                               _Reward.HEALTH_RESERVE,
                               _Reward.CONFIGURATION),
- _RewardType.EXP_EQUIPMENTS: (_Reward.VENTILATION,
-                              _Reward.TANK_RAMMER,
-                              _Reward.AIM_DRIVES,
-                              _Reward.AIM_STABILIZER,
-                              _Reward.SIGHTS,
-                              _Reward.ROT_MECHANISM,
-                              _Reward.ANTI_FRAGMENTATION,
-                              _Reward.HEALTH_RESERVE,
-                              _Reward.CONFIGURATION)}
+ _RewardType.EXP_EQUIPMENTS: (_Reward.MODERNIZED_AIM_STABILIZER, _Reward.MODERNIZED_TURBO_CHARGER_ROTATION, _Reward.MODERNIZED_EXTRA_HEALTH_RESERVE)}
 _REWARD_NAME_EXTRACTOR = re.compile('(basic|enhanced|improved|trophy)*([a-z]+)(_(\\w+\\d*))*', re.I)
 _REWARD_NATION_EXTRACTOR = re.compile('.*({})'.format('|'.join(GUI_NATIONS)), re.I)
 
@@ -154,9 +152,10 @@ _REWARDS_COMPARATORS = {_RewardType.TROPHY: partial(_compareRewardsByType, _Rewa
  _RewardType.DEVICE_MI: partial(_compareRewardsByType, _RewardType.DEVICE_MI),
  _RewardType.GUIDE: _compareRewardsByNation,
  _RewardType.BROCHURE: _compareRewardsByNation,
+ _RewardType.BOOK: _compareRewardsByNation,
  _RewardType.BLUEPRINT: _compareRewardsByNation,
  _RewardType.BATTLE_BOOSTER: _compareRewardsByArtifactName,
- _RewardType.EXP_EQUIPMENTS: _compareRewardsByArtifactName}
+ _RewardType.EXP_EQUIPMENTS: partial(_compareRewardsByType, _RewardType.EXP_EQUIPMENTS)}
 
 def getRewardTypesComparator():
     return _rewardTypeComparator

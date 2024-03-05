@@ -1386,6 +1386,24 @@
         </effects>
       </variant1>
     </inf_tree_apple_flowers_fall_med>
+    <tree_Live_Apple_16m_Flowers2_fall>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/broadleaves/tree_live_apple_16m_flowers2_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Live_Apple_16m_Flowers2_fall>
     <inf_sunflower_fall>
       <variant1>
         <stages>
@@ -23457,7 +23475,6 @@
               <weight>	7005.000000	</weight>
               <metal_2>	70.000000	</metal_2>
               <metal_1>	66.000000	</metal_1>
-              <stone_2>	27.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>

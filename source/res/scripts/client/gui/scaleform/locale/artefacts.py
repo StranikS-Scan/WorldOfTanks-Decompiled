@@ -782,6 +782,7 @@ class ARTEFACTS(object):
     FORT_AOE_ARTILLERY_LONGDESCR = '#artefacts:fort_aoe_artillery/longDescr'
     COMP7_AOE_HEAL_NAME = '#artefacts:comp7_aoe_heal/name'
     COMP7_AOE_HEAL_DESCR_ACTIVE = '#artefacts:comp7_aoe_heal/descr/active'
+    COMP7_AOE_HEAL_DESCR_DEBUF = '#artefacts:comp7_aoe_heal/descr/debuf'
     COMP7_ALLY_SUPPORT_NAME = '#artefacts:comp7_ally_support/name'
     COMP7_ALLY_SUPPORT_DESCR_ACTIVE = '#artefacts:comp7_ally_support/descr/active'
     COMP7_HUNTER_NAME = '#artefacts:comp7_hunter/name'

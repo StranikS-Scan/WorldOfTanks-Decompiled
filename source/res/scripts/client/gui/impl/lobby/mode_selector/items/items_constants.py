@@ -9,7 +9,7 @@ DEFAULT_PRIORITY = -1
 DEFAULT_MODE_SETTING = 'default'
 COLUMN_SETTINGS = {PREBATTLE_ACTION_NAME.RANDOM: (ModeSelectorColumns.COLUMN_0, -1),
  PREBATTLE_ACTION_NAME.WINBACK: (ModeSelectorColumns.COLUMN_0, -1),
- PREBATTLE_ACTION_NAME.EPIC: (ModeSelectorColumns.COLUMN_1, 10),
+ PREBATTLE_ACTION_NAME.EPIC: (ModeSelectorColumns.COLUMN_1, 20),
  PREBATTLE_ACTION_NAME.COMP7: (ModeSelectorColumns.COLUMN_1, 10),
  PREBATTLE_ACTION_NAME.EVENT_BATTLE: (ModeSelectorColumns.COLUMN_1, 20),
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE: (ModeSelectorColumns.COLUMN_2, 10),
@@ -32,3 +32,5 @@ class ModeSelectorRewardID(Enum):
     STYLE = 'style'
     PROGRESSION_STYLE = 'progressionStyle'
     VEHICLE = 'vehicle'
+    STYLE_2D = 'style2D'
+    PRIZE = 'prize'

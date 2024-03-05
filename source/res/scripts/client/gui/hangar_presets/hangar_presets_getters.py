@@ -18,6 +18,9 @@ class IPresetsGetter(object):
     def getCarouselSettings(self):
         raise NotImplementedError
 
+    def getVehicleParamsSettings(self):
+        raise NotImplementedError
+
 
 class BasePresetsGetter(IPresetsGetter):
     __slots__ = ('_presets',)
@@ -33,6 +36,11 @@ class BasePresetsGetter(IPresetsGetter):
     @ifComponentInPreset(HANGAR_CONSTS.CAROUSEL, defReturn=(None, None))
     def getCarouselSettings(self, preset=None):
         component = preset.visibleComponents[HANGAR_CONSTS.CAROUSEL]
+        return (component.type, component.layout)
+
+    @ifComponentInPreset(HANGAR_CONSTS.VEHICLE_PARAMETERS, defReturn=(None, None))
+    def getVehicleParamsSettings(self, preset=None):
+        component = preset.visibleComponents[HANGAR_CONSTS.VEHICLE_PARAMETERS]
         return (component.type, component.layout)
 
 

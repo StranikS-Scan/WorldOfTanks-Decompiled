@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, BattleMatters
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, BattleMatters
 from adisp import adisp_process
 from armory_yard_constants import State
 from battle_pass_common import FinalReward
@@ -48,6 +48,7 @@ from gui.shared.system_factory import collectAllNotificationsListeners, register
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN, TRADING_CARAVAN_REFILL_EVENT_TYPE
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
@@ -60,7 +61,7 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -1057,9 +1058,9 @@ class BattlePassListener(_NotificationListener):
         self.__checkAndNotify(oldMode, newMode)
         if self.__battlePassController.isEnabled() and newMode == oldMode:
             self.__checkAndNotifyOtherBattleTypes()
-        if self.__battlePassController.hasExtra() and not AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_STARTED) and self.__battlePassController.isActive():
-            AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, True)
-            chapterID = self.__battlePassController.getExtraChapterID()
+        if self.__battlePassController.hasMarathon() and not AccountSettings.getSettings(IS_BATTLE_PASS_MARATHON_STARTED) and self.__battlePassController.isActive():
+            AccountSettings.setSettings(IS_BATTLE_PASS_MARATHON_STARTED, True)
+            chapterID = self.__battlePassController.getMarathonChapterID()
             if chapterID:
                 self.__notifyStartExtra(chapterID)
 
@@ -1079,9 +1080,9 @@ class BattlePassListener(_NotificationListener):
     def __notifyStartExtra(self, chapterID):
         if not self.__luiController.isRuleCompleted(LuiRules.SYS_MSG_COLLECTION_START_BP):
             return
-        header = backport.text(R.strings.system_messages.battlePass.extraStarted.header())
+        header = backport.text(R.strings.system_messages.battlePass.marathonStarted.header())
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
-        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.marathonStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassMarathonStart, messageData={'header': header})
 
     def __notifyFinishExtra(self, chapterID):
         if not self.__luiController.isRuleCompleted(LuiRules.SYS_MSG_COLLECTION_START_BP):
@@ -1092,9 +1093,9 @@ class BattlePassListener(_NotificationListener):
             _logger.warning('There is no text for given chapterID: %d', chapterID)
             return
         chapterName = backport.text(textRes())
-        header = backport.text(R.strings.system_messages.battlePass.extraFinish.header(), name=chapterName)
-        text = backport.text(R.strings.system_messages.battlePass.extraFinish.body(), name=chapterName)
-        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraFinish, messageData={'header': header})
+        header = backport.text(R.strings.system_messages.battlePass.marathonFinish.header(), name=chapterName)
+        text = backport.text(R.strings.system_messages.battlePass.marathonFinish.body(), name=chapterName)
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassMarathonFinish, messageData={'header': header})
 
     def __notifyExtraWillEndSoon(self, chapterID):
         if not self.__luiController.isRuleCompleted(LuiRules.SYS_MSG_COLLECTION_START_BP):
@@ -1105,9 +1106,9 @@ class BattlePassListener(_NotificationListener):
             _logger.warning('There is no text or config for given chapterID: %d', chapterID)
             return
         chapterName = backport.text(textRes())
-        header = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.header(), name=chapterName)
-        text = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.body(), name=chapterName)
-        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraWillEndSoon, messageData={'header': header})
+        header = backport.text(R.strings.system_messages.battlePass.marathonWillEndSoon.header(), name=chapterName)
+        text = backport.text(R.strings.system_messages.battlePass.marathonWillEndSoon.body(), name=chapterName)
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassMarathonWillEndSoon, messageData={'header': header})
 
     def __checkAndNotifyOtherBattleTypes(self):
         supportedTypes = self.__battlePassController.getSupportedArenaBonusTypes()
@@ -1158,10 +1159,8 @@ class BattlePassListener(_NotificationListener):
          'additionalText': '\n'.join(styles)})
 
     def __pushStarted(self):
-        rewardTypes = set((self.__battlePassController.getRewardType(chapterID) for chapterID in self.__battlePassController.getChapterIDs()))
-        for rewardType in rewardTypes:
-            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.dyn(rewardType.value).title(), seasonNum=self.__battlePassController.getSeasonNum()),
-             'additionalText': ''})
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.style.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.style.title(), seasonNum=self.__battlePassController.getSeasonNum()),
+         'additionalText': ''})
 
     def __pushEnabled(self):
         expiryTime = self.__battlePassController.getSeasonFinishTime()
@@ -1741,6 +1740,91 @@ class IntegratedAuctionListener(_NotificationListener):
         return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
 
 
+class TradingCaravanListener(_NotificationListener):
+    __slots__ = ('__startNotifiers',)
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+    __EVENT_TYPE_TO_SETTING = {TRADING_CARAVAN_REFILL_EVENT_TYPE: TRADING_CARAVAN_REFILL_SEEN}
+    __EVENT_TYPE_TO_DECORATOR = {TRADING_CARAVAN_REFILL_EVENT_TYPE: TradingCaravanRefillDecorator}
+    __luiController = dependency.descriptor(ILimitedUIController)
+
+    def __init__(self):
+        self.__startNotifiers = {}
+        super(TradingCaravanListener, self).__init__()
+
+    def start(self, model):
+        result = super(TradingCaravanListener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__clearNotifiers()
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(TradingCaravanListener, self).stop()
+
+    def __clearNotifiers(self):
+        for notifier in self.__startNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__startNotifiers.clear()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType == TRADING_CARAVAN_REFILL_EVENT_TYPE and self.__luiController.isRuleCompleted(LuiRules.SHOP_SALES_ENTRY_POINT):
+                notificationData = json.loads(notification.data)
+                self.__addNotification(notificationData, notification.eventType)
+
+    def __addNotification(self, data, eventType):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            settings = AccountSettings.getNotifications(TRADING_CARAVAN_NOTIFICATIONS)
+            settingName = self.__EVENT_TYPE_TO_SETTING[eventType]
+            notificationID = str(data['id'])
+            if notificationID not in settings[settingName]:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate <= time_utils.getServerUTCTime() < endDate:
+                    decorator = self.__EVENT_TYPE_TO_DECORATOR.get(eventType)
+                    if callable(decorator):
+                        text = backport.text(R.strings.messenger.serviceChannelMessages.tradingCaravan.refill.text())
+                        model.addNotification(decorator(entityID=int(notificationID), message={'text': text}))
+                        self.__setNotificationShown(settings, settingName, notificationID)
+                        self.__removeNotifier(notificationID, eventType)
+                elif startDate > time_utils.getServerUTCTime():
+                    self.__addNotifier(notificationID, eventType, startDate)
+            return
+
+    def __addNotifier(self, notificationID, eventType, startDate):
+        notifiers = self.__startNotifiers
+        if notificationID not in notifiers:
+            notifiers[notificationID] = SimpleNotifier(partial(self.__getTimeToStart, startDate), self.__onNotifierUpdate)
+            notifiers[notificationID].startNotification()
+
+    def __removeNotifier(self, notificationID, eventType):
+        notifiers = self.__startNotifiers
+        if notificationID in notifiers:
+            notifiers[notificationID].stopNotification()
+            notifiers[notificationID].clear()
+            notifiers.pop(notificationID)
+
+    def __onNotifierUpdate(self):
+        self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    def __setNotificationShown(self, settings, settingName, notificationID):
+        settings[settingName].add(notificationID)
+        AccountSettings.setNotifications(TRADING_CARAVAN_NOTIFICATIONS, settings)
+
+
 class CollectionsListener(_NotificationListener, EventsHandler):
     __collections = dependency.descriptor(ICollectionsSystemController)
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
@@ -2222,7 +2306,8 @@ registerNotificationsListeners((ServiceChannelListener,
  ReferralProgramListener,
  WotPlusIntroViewListener,
  Birthday2023Listener,
- BattleMattersTaskReminderListener))
+ BattleMattersTaskReminderListener,
+ TradingCaravanListener))
 
 class NotificationsListeners(_NotificationListener):
 

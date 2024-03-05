@@ -14,6 +14,7 @@ def _validateSection(value, _):
 
 class _OpenStorageSchema(W2CSchema):
     section_id = Field(required=False, type=basestring, validator=_validateSection)
+    sub_tab_id = Field(required=False, type=basestring)
 
 
 class _OpenOfferSchema(W2CSchema):
@@ -26,8 +27,9 @@ class StorageWebApiMixin(object):
     @w2c(_OpenStorageSchema, 'storage')
     def openStorage(self, cmd):
         sectionId = cmd.section_id
+        tabId = cmd.sub_tab_id
         if sectionId is not None:
-            shared_events.showStorage(sectionId)
+            shared_events.showStorage(sectionId, tabId)
         else:
             shared_events.showStorage()
         return

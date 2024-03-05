@@ -85,6 +85,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.achievements20_controller import Achievements20Controller as _Ach20Ctrl
     from gui.limited_ui.lui_controller import LimitedUIController
     from gui.game_control.debut_boxes_controller import DebutBoxesController
+    from gui.game_control.shop_sales_event_controller import ShopSalesEventController as _ShopSalesController
     from gui.game_control.collections_controller import CollectionsSystemController
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
     from gui.game_control.extension_stubs.gui_lootboxes_controller import GuiLootBoxesControllerStub
@@ -172,4 +173,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IHangarGuiController, HangarGuiController())
     _config(_interface.IDebutBoxesController, DebutBoxesController())
     _config(_interface.IGuiLootBoxesController, GuiLootBoxesControllerStub())
+    _config(_interface.IShopSalesEventController, _ShopSalesController())
     collectGameControllers(_config)

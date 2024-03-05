@@ -1,0 +1,229 @@
+<280_cosmic.xml>
+  <name>	#arenas:280_cosmic/name	</name>
+  <description>	#arenas:280_cosmic/description	</description>
+  <geometry>	spaces/280_cosmic	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 400.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	360	</roundLength>
+  <minimap>	spaces/280_cosmic/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_cosmic_music_loading	</wwmusicLoading>
+    <wwmusicIntensive>	music_sand_river_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_sand_river_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_sand_river_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_sand_river_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_sand_river_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ev_cosmic.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_cosmic.pck	</name>
+      </bank>
+      <bank>
+        <name>	ev_cosmic_vo_gameplay.bnk	</name>
+      </bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	eng_v55_pc	</name>
+        <mod>	cosmic_tank_engine_pc	</mod>
+      </event>
+      <event>
+        <name>	eng_v55_npc	</name>
+        <mod>	cosmic_tank_engine_npc	</mod>
+      </event>
+      <event>
+        <name>	wpn_main_PC	</name>
+        <mod>	ev_cosmic_tank_weapon_pc	</mod>
+      </event>
+      <event>
+        <name>	wpn_main_NPC	</name>
+        <mod>	ev_cosmic_tank_weapon_npc	</mod>
+      </event>
+      <event>
+        <name>	vo_ally_killed_by_player	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_commander_killed	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	ev_cosmic_music_respawn	</mod>
+      </event>
+      <event>
+        <name>	expl_enemy_NPC	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_crew_deactivated	</name>
+        <mod>	ev_cosmic_music_respawn	</mod>
+      </event>
+      <event>
+        <name>	expl_ammo_NPC	</name>
+        <mod>	ev_cosmic_explosion_npc	</mod>
+      </event>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	ev_cosmic_ui_start	</mod>
+      </event>
+      <event>
+        <name>	expl_fuel_PC	</name>
+        <mod>	ev_cosmic_explosion_pc	</mod>
+      </event>
+      <event>
+        <name>	music_stinger	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_AP_NPC_PC	</name>
+        <mod>	ev_cosmic_tank_impact_pc	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	expl_fuel_NPC	</name>
+        <mod>	ev_cosmic_explosion_npc	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_not_pierced_by_player	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_HE_NPC_PC	</name>
+        <mod>	ev_cosmic_tank_impact_pc	</mod>
+      </event>
+      <event>
+        <name>	comp_7_ability_ready	</name>
+        <mod>	ev_cosmic_ability_ready	</mod>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_HE_PC_NPC	</name>
+        <mod>	ev_cosmic_tank_impact_npc	</mod>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_HE_NPC_NPC	</name>
+        <mod>	ev_cosmic_tank_impact_npc	</mod>
+      </event>
+      <event>
+        <name>	ui_imp_not_pierce_NPC_PC	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	ui_imp_not_pierce_PC_NPC	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed_by_player	</name>
+        <mod>	ev_cosmic_enemy_killed	</mod>
+      </event>
+      <event>
+        <name>	vo_target_captured	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_unlocked	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <wwambientSound>	ev_cosmic_map_wind	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <maxTeamsInArena>	10	</maxTeamsInArena>
+      <minTeamsInArena>	2	</minTeamsInArena>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <squadTeamNumbers>	1 2 3 4 5 6 7 8 9 10	</squadTeamNumbers>
+      <respawnType>	safe_infinite	</respawnType>
+      <visualScript>
+        <server>
+          <plan>	cosmic_event_artifact_manager	</plan>
+          <plan>	cosmic_event_vehicle_manager	</plan>
+          <plan>	cosmic_event_game_flow	</plan>
+          <plan>	cosmic_event_deathzone	</plan>
+        </server>
+      </visualScript>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-57.810211 106.381859	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-60.297348 -143.375946	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	63.683105 -118.379730	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-14.648317 -15.280113	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	115.433205 118.759415	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <notificationsRemapping>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+          <mod>	ev_cosmic_vehicle_destroyed	</mod>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+          <mod>	ev_cosmic_crew_deactivated	</mod>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+    <maps_training>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-57.810211 106.381859	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-60.297348 -143.375946	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	63.683105 -118.379730	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-14.648317 -15.280113	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	115.433205 118.759415	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </maps_training>
+  </gameplayTypes>
+</280_cosmic.xml>

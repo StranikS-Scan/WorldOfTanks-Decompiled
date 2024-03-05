@@ -23,6 +23,7 @@ from skeletons.gui.shared import IItemsCache
 SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR,
  ARENA_BONUS_TYPE.COMP7,
  ARENA_BONUS_TYPE.EPIC_BATTLE,
+ ARENA_BONUS_TYPE.RANKED,
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
@@ -234,7 +235,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         for specialTanksIntCD in specialTanksIntCDs:
             vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
             pointsDiff = self.__battlePass.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
-            if vehicle is None or pointsDiff.textID == 0:
+            if vehicle is None or pointsDiff.bonus == 0:
                 _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
                 continue
             item = VehicleItemModel()
@@ -247,7 +248,9 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             item.setIsElite(vehicle.isElite)
             gameModeCard.getVehiclesList().addViewModel(item)
 
-        viewModel.getCards().addViewModel(gameModeCard)
+        if gameModeCard.getVehiclesList():
+            viewModel.getCards().addViewModel(gameModeCard)
+            gameModeCard.getVehiclesList().invalidate()
         return
 
     def _getEvents(self):

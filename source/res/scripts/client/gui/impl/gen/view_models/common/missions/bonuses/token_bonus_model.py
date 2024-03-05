@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 class TokenBonusModel(BonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(TokenBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getUserName(self):
@@ -26,8 +26,15 @@ class TokenBonusModel(BonusModel):
     def setIconBig(self, value):
         self._setString(9, value)
 
+    def getIcon(self):
+        return self._getString(10)
+
+    def setIcon(self, value):
+        self._setString(10, value)
+
     def _initialize(self):
         super(TokenBonusModel, self)._initialize()
         self._addStringProperty('userName', '')
         self._addStringProperty('iconSmall', '')
         self._addStringProperty('iconBig', '')
+        self._addStringProperty('icon', '')

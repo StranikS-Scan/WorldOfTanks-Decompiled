@@ -4,11 +4,11 @@ import logging
 import BigWorld
 import typing
 from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
-import aih_constants
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION, ASSAULT_CAMERA_HINT_SECTION
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
+from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG
@@ -16,6 +16,7 @@ from dyn_squad_hint_plugin import DynSquadHintPlugin
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HelpHintContext
+from gui.Scaleform.daapi.view.battle.shared.hint_panel.crosshair_hint_plugin import AbstractCrosshairHintPlugin
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.impl.gen import R
@@ -25,7 +26,7 @@ from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from hint_panel_plugin import HintPanelPlugin, HintData, HintPriority
+from hint_panel_plugin import HintPanelPlugin, HintData, HintPriority, HINT_TIMEOUT
 from items import makeIntCompactDescrByID
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -36,22 +37,16 @@ if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
 _logger = logging.getLogger(__name__)
 _HINT_MIN_VEHICLE_LEVEL = 4
-_HINT_TIMEOUT = 6
 _HINT_COOLDOWN = 4
 _TRAJECTORY_VIEW_HINT_POSITION = (0, 120)
-_TRAJECTORY_VIEW_HINT_CHECK_STATES = (VEHICLE_VIEW_STATE.DESTROY_TIMER,
- VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
- VEHICLE_VIEW_STATE.RECOVERY,
- VEHICLE_VIEW_STATE.PROGRESS_CIRCLE,
- VEHICLE_VIEW_STATE.UNDER_FIRE,
- VEHICLE_VIEW_STATE.FIRE,
- VEHICLE_VIEW_STATE.STUN)
 BEFORE_START_BATTLE_PERIODS = (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.WAITING)
 
 def createPlugins():
     result = {}
     if TrajectoryViewHintPlugin.isSuitable():
         result['trajectoryViewHint'] = TrajectoryViewHintPlugin
+    if AssaultCameraHintPlugin.isSuitable():
+        result['assaultCameraHint'] = AssaultCameraHintPlugin
     if SiegeIndicatorHintPlugin.isSuitable():
         result['siegeIndicatorHint'] = SiegeIndicatorHintPlugin
     if PreBattleHintPlugin.isSuitable():
@@ -80,151 +75,77 @@ class PRBSettings(object):
     HINT_BATTLES_COOLDOWN = 100
 
 
-class TrajectoryViewHintPlugin(HintPanelPlugin):
-    __slots__ = ('__isHintShown', '__isObserver', '__settings', '__callbackDelayer', '__isDestroyTimerDisplaying', '__isDeathZoneTimerDisplaying', '__wasDisplayed', '__isSuitableVehicle')
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+class TrajectoryViewHintPlugin(AbstractCrosshairHintPlugin):
+    __slots__ = ()
     _HINT_DAY_COOLDOWN = 30
     _HINT_BATTLES_COOLDOWN = 10
-
-    def __init__(self, parentObj):
-        super(TrajectoryViewHintPlugin, self).__init__(parentObj)
-        self.__isHintShown = False
-        self.__isDestroyTimerDisplaying = False
-        self.__isDeathZoneTimerDisplaying = False
-        self.__isObserver = False
-        self.__settings = {}
-        self.__wasDisplayed = False
-        self.__callbackDelayer = CallbackDelayer()
-        self.__isSuitableVehicle = False
-
-    @classmethod
-    def isSuitable(cls):
-        return True
+    _SETTINGS_NAME = TRAJECTORY_VIEW_HINT_SECTION
+    _CMD_NAME = CommandMapping.CMD_CM_TRAJECTORY_VIEW
 
     def start(self):
-        arenaDP = self.sessionProvider.getArenaDP()
-        if arenaDP is not None:
-            vInfo = arenaDP.getVehicleInfo()
-            self.__isObserver = vInfo.isObserver()
-            self.__isSuitableVehicle = vInfo.isSPG()
+        super(TrajectoryViewHintPlugin, self).start()
+        self._updateCounterOnStart(self._settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
+
+    def _setup(self, crosshairCtrl, vehicleCtrl):
+        self.__onStrategicCameraChanged(crosshairCtrl.getStrategicCameraID())
+
+    def _addListeners(self):
+        super(TrajectoryViewHintPlugin, self)._addListeners()
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
-            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
             crosshairCtrl.onStrategicCameraChanged += self.__onStrategicCameraChanged
-        vehicleCtrl = self.sessionProvider.shared.vehicleState
-        if vehicleCtrl is not None:
-            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-        self.__settings = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_SECTION)
-        if self.__isSuitableVehicle:
-            self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
-        if crosshairCtrl is not None and vehicleCtrl is not None:
-            self.__setup(crosshairCtrl, vehicleCtrl)
         return
 
-    def stop(self):
-        ctrl = self.sessionProvider.shared.crosshair
-        if ctrl is not None:
-            ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
-            ctrl.onStrategicCameraChanged -= self.__onStrategicCameraChanged
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        self.__callbackDelayer.destroy()
-        if not self.sessionProvider.isReplayPlaying:
-            AccountSettings.setSettings(TRAJECTORY_VIEW_HINT_SECTION, self.__settings)
+    def _removeListeners(self):
+        super(TrajectoryViewHintPlugin, self)._removeListeners()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onStrategicCameraChanged -= self.__onStrategicCameraChanged
         return
-
-    def updateMapping(self):
-        if self.__isHintShown:
-            self.__addHint()
-
-    def setPeriod(self, period):
-        if period is ARENA_PERIOD.BATTLE and self.__isSuitableVehicle:
-            self._updateCounterOnBattle(self.__settings)
-
-    def __setup(self, crosshairCtrl, vehicleCtrl):
-        self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
-        self.__onStrategicCameraChanged(crosshairCtrl.getStrategicCameraID())
-        checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
-         VEHICLE_VIEW_STATE.DESTROY_TIMER,
-         VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
-         VEHICLE_VIEW_STATE.STUN)
-        for stateID in checkStatesIDs:
-            stateValue = vehicleCtrl.getStateValue(stateID)
-            if stateValue:
-                self.__onVehicleStateUpdated(stateID, stateValue)
-
-    def __onCrosshairViewChanged(self, viewID):
-        haveHintsLeft = self._haveHintsLeft(self.__settings)
-        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and haveHintsLeft and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE and self.sessionProvider.shared.crosshair.getCtrlMode() != aih_constants.CTRL_MODE_NAME.ASSAULT_SPG:
-            self.__addHint()
-        elif self.__isHintShown:
-            self.__removeHint()
-
-    def __onStrategicCameraChanged(self, _):
-        cmdMap = CommandMapping.g_instance
-        isUserRequested = cmdMap is not None and cmdMap.isActive(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
-        if isUserRequested:
-            self._updateCounterOnUsed(self.__settings)
-        if isUserRequested and self.__isHintShown:
-            self.__removeHint()
-        return
-
-    def __onVehicleStateUpdated(self, stateID, stateValue):
-        haveHintsLeft = self._haveHintsLeft(self.__settings)
-        if self.__isHintShown or haveHintsLeft and stateID in _TRAJECTORY_VIEW_HINT_CHECK_STATES:
-            if stateID == VEHICLE_VIEW_STATE.DESTROY_TIMER:
-                self.__isDestroyTimerDisplaying = stateValue.needToShow()
-            elif stateID == VEHICLE_VIEW_STATE.DEATHZONE_TIMER:
-                self.__isDeathZoneTimerDisplaying = stateValue.needToShow()
-            if self.__isHintShown and self.__isThereAnyIndicators():
-                self.__removeHint()
-            else:
-                ctrl = self.sessionProvider.shared.crosshair
-                if ctrl is not None:
-                    self.__onCrosshairViewChanged(ctrl.getViewID())
-        return
-
-    def __isThereAnyIndicators(self):
-        if self.__isDestroyTimerDisplaying or self.__isDeathZoneTimerDisplaying:
-            result = True
-        else:
-            ctrl = self.sessionProvider.shared.vehicleState
-            stunInfo = ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN)
-            isVehicleStunned = stunInfo.endTime > 0.0 if stunInfo is not None else False
-            result = ctrl is not None and isVehicleStunned or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE)
-        return result
-
-    def __addHint(self):
-        if self.__isObserver:
-            return
-        if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and not (self.sessionProvider.isReplayPlaying or self.__isThereAnyIndicators()) and not self.__wasDisplayed:
-            self._parentObj.setBtnHint(CommandMapping.CMD_CM_TRAJECTORY_VIEW, self._getHint())
-            self.__isHintShown = True
-            self.__wasDisplayed = True
-            self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
-
-    def __removeHint(self):
-        if self.__isObserver:
-            return
-        if not self.sessionProvider.isReplayPlaying:
-            self._parentObj.removeBtnHint(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
-            self.__isHintShown = False
-            self.__callbackDelayer.stopCallback(self.__onHintTimeOut)
-
-    def __onHintTimeOut(self):
-        self.__removeHint()
 
     def _getHint(self):
         hintTextLeft = ''
-        keyName = getReadableKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
-        key = getVirtualKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
+        keyName = getReadableKey(self._CMD_NAME)
+        key = getVirtualKey(self._CMD_NAME)
         if keyName:
             hintTextLeft = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeLeft())
             hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.alternateModeRight())
         else:
             hintTextRight = backport.text(R.strings.ingame_gui.trajectoryView.hint.noBindingKey())
-        return HintData(key, keyName, hintTextLeft, hintTextRight, _TRAJECTORY_VIEW_HINT_POSITION[0], _TRAJECTORY_VIEW_HINT_POSITION[1], HintPriority.TRAJECTORY, False, None, False)
+        return HintData(key, keyName, hintTextLeft, hintTextRight, offsetX=_TRAJECTORY_VIEW_HINT_POSITION[0], offsetY=_TRAJECTORY_VIEW_HINT_POSITION[1], priority=HintPriority.TRAJECTORY, reducedPanning=False, hintCtx=None, centeredMessage=False)
+
+    def _removeHint(self):
+        super(TrajectoryViewHintPlugin, self)._removeHint()
+        self.stop()
+
+    def _canShowHint(self, viewID):
+        return super(TrajectoryViewHintPlugin, self)._canShowHint(viewID) and GUI_SETTINGS.spgAlternativeAimingCameraEnabled and viewID == CROSSHAIR_VIEW_ID.STRATEGIC and self.sessionProvider.shared.crosshair.getCtrlMode() != CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE
+
+    def __onStrategicCameraChanged(self, _):
+        cmdMap = CommandMapping.g_instance
+        isUserRequested = cmdMap is not None and cmdMap.isActive(self._CMD_NAME)
+        if isUserRequested:
+            self._updateCounterOnUsed(self._settings)
+        if isUserRequested and self._isHintShown:
+            self._removeHint()
+        return
+
+
+class AssaultCameraHintPlugin(AbstractCrosshairHintPlugin):
+    _SETTINGS_NAME = ASSAULT_CAMERA_HINT_SECTION
+    _CMD_NAME = CommandMapping.CMD_CAMERA_ZOOM
+
+    def _canShowHint(self, viewId):
+        return viewId == CROSSHAIR_VIEW_ID.ASSAULT
+
+    def _addHint(self):
+        super(AssaultCameraHintPlugin, self)._addHint()
+        self._updateBattleCounterOnUsed(self._settings)
+
+    def _getHint(self):
+        hintTextLeft = backport.text(R.strings.ingame_gui.camera.hint.press())
+        hintTextRight = backport.text(R.strings.ingame_gui.camera.hint.wheeled())
+        return HintData(getVirtualKey(self._CMD_NAME), getReadableKey(self._CMD_NAME), hintTextLeft, hintTextRight, offsetX=0, offsetY=0, priority=HintPriority.TRAJECTORY, reducedPanning=False, hintCtx=None, centeredMessage=False)
 
 
 class SiegeIndicatorHintPlugin(HintPanelPlugin):
@@ -325,7 +246,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, self._getHint())
             self.__isHintShown = True
             self.__isInDisplayPeriod = False
-            self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+            self.__callbackDelayer.delayCallback(HINT_TIMEOUT, self.__onHintTimeOut)
 
         isInSteadyMode = self.__siegeState not in _SIEGE_STATE.SWITCHING
         haveHintsLeft = self._haveHintsLeft(self.__getSuitableSetting())
@@ -553,7 +474,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
         self.__isHintShown = True
         self.__isInDisplayPeriod = False
-        self.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+        self.delayCallback(HINT_TIMEOUT, self.__onHintTimeOut)
         self._updateCounterOnUsed(self.__settings)
 
     def __hideHint(self):
@@ -712,7 +633,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return False
 
     def __checkHintConditions(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or self.__checkFlameThrowerConditions(typeDescriptor)
+        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or self.__checkFlameThrowerConditions(typeDescriptor)
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
@@ -810,7 +731,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
          CommandMapping.CMD_QUEST_PROGRESS_SHOW,
          CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND,
          CommandMapping.CMD_SHOW_PERSONAL_RESERVES):
-            self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+            self.__callbackDelayer.delayCallback(HINT_TIMEOUT, self.__onHintTimeOut)
         elif self.__callbackDelayer.hasDelayedCallback(self.__onHintTimeOut):
             self.__callbackDelayer.stopCallback(self.__onHintTimeOut)
 
@@ -934,7 +855,7 @@ class RoleHelpPlugin(HintPanelPlugin):
     def __showHint(self):
         self._parentObj.setBtnHint(CommandMapping.CMD_SHOW_HELP, self._getHint())
         self.__settings[self.__vehicleCD][NUM_BATTLES] -= 1
-        self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__hide)
+        self.__callbackDelayer.delayCallback(HINT_TIMEOUT, self.__hide)
         self.__isVisible = True
         self.__isShown = True
         self.__handleRoleToggleEvent(True)
@@ -1006,7 +927,7 @@ class CommanderCameraHintPlugin(HintPanelPlugin, CallbackDelayer):
         if event.ctx.get('btnID') == self.__hintData.get('btnID'):
             self._updateBattleCounterOnUsed(self.__settings)
             self.__canShow = False
-            self.delayCallback(_HINT_TIMEOUT, self.__hideHint)
+            self.delayCallback(HINT_TIMEOUT, self.__hideHint)
 
     def __hideHint(self):
         self._parentObj.removeBtnHint(self.__hintData.get('btnID'))

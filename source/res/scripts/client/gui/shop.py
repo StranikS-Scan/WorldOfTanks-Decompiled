@@ -58,6 +58,8 @@ class Origin(object):
     WITHOUT_NAME = 'without_name'
     HANGAR_TOP_MENU = 'hangar_top_menu'
     HANGAR_BONS_SCREEN = 'hangar_bons_screen'
+    SHOP = 'shop'
+    VEHICLE_PREVIEW = 'vehicle_preview'
 
 
 def _getParams(reason, price, itemId=None):

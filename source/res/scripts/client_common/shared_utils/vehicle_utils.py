@@ -69,22 +69,6 @@ class ModuleDependencies(object):
                     turretsCDs, chassisCDs = self.__getSuitableModulesForGun(moduleId, vehicle)
                     self.__addConflicted(GUI_ITEM_TYPE.TURRET, turretsCDs)
                     self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassisCDs)
-                elif reason == 'too heavy':
-                    chassis = []
-                    for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
-                        itemTypeID = getTypeOfCompactDescr(nodeCD)
-                        if itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-                            chassisCand = self._getModule(nodeCD)
-                            if chassisCand.mayInstall(vehicle) and not chassisCand.isInstalled(vehicle):
-                                chassis.append(nodeCD)
-
-                    if chassis:
-                        self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassis)
-                elif reason == 'too heavy chassis':
-                    for i, stockCD in enumerate(self.__stockModules):
-                        if stockCD is not None and not self._getModule(stockCD).isInstalled(vehicle):
-                            self.__addConflicted(GUI_ITEM_TYPE.VEHICLE_MODULES[i], (stockCD,))
-
                 elif reason == 'need gun':
                     stockGunCD = self.__stockModules[GUI_ITEM_TYPE.VEHICLE_MODULES.index(GUI_ITEM_TYPE.GUN)]
                     if stockGunCD is not None and not self._getModule(stockGunCD).isInstalled(vehicle):
@@ -105,18 +89,11 @@ class ModuleDependencies(object):
         turretsCDs = g_paramsCache.getPrecachedParameters(gunIntCD).getTurretsForVehicle(vehicle.intCD)
         for turretIntCD in turretsCDs:
             suitableTurret = self._getModule(turretIntCD)
-            isFit, reason = suitableTurret.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = [ ch.intCD for ch in self.getSuitableChassis(vehicle) ]
-            currentTurret = vehicle.turret
-            self._installModule(vehicle, suitableTurret)
-            gun = self._getModule(gunIntCD)
-            isFit, reason = gun.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = [ ch.intCD for ch in self.getSuitableChassis(vehicle) ]
-            self._installModule(vehicle, currentTurret)
+            isFit, _ = suitableTurret.mayInstall(vehicle)
+            if isFit:
+                currentTurret = vehicle.turret
+                self._installModule(vehicle, suitableTurret)
+                self._installModule(vehicle, currentTurret)
 
         return (turretsCDs, chassisCDs)
 

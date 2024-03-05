@@ -4,7 +4,7 @@ import logging
 from collections import namedtuple
 import typing
 from shared_utils import first
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_MARATHON_STARTED, LAST_BATTLE_PASS_POINTS_SEEN, IS_BATTLE_PASS_COLLECTION_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
@@ -94,11 +94,11 @@ def isExtraIntroVideoExist():
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def getChaptersOrder(battlePass=None):
-    chapterIDs = [ chapter for chapter in battlePass.getChapterIDs() if not battlePass.isExtraChapter(chapter) ]
+    chapterIDs = [ chapter for chapter in battlePass.getChapterIDs() if not battlePass.isMarathonChapter(chapter) ]
     chapterIDs.sort()
-    extraChapterID = battlePass.getExtraChapterID()
-    if extraChapterID:
-        chapterIDs.append(extraChapterID)
+    marathonChapterID = battlePass.getMarathonChapterID()
+    if marathonChapterID:
+        chapterIDs.append(marathonChapterID)
     return dict(zip(chapterIDs, GUI_SETTINGS.battlePassChaptersOrder))
 
 
@@ -273,7 +273,7 @@ def updateBattlePassSettings(data, battlePass=None):
 
 def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
-    AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, False)
+    AccountSettings.setSettings(IS_BATTLE_PASS_MARATHON_STARTED, False)
     AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, False)
 
 

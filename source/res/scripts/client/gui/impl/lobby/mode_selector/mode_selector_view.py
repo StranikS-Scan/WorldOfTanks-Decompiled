@@ -38,7 +38,7 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController, IWinbackController
+from skeletons.gui.game_control import IBootcampController, IWinbackController, IComp7Controller
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
@@ -85,6 +85,7 @@ class ModeSelectorView(ViewImpl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
     __winbackController = dependency.descriptor(IWinbackController)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
@@ -174,6 +175,8 @@ class ModeSelectorView(ViewImpl):
         self.__lobbyContext.addHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         g_eventBus.addListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         g_eventBus.addListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
+        self.__comp7Controller.onStatusUpdated += self.__refresh
+        self.__comp7Controller.onComp7ConfigChanged += self.__refresh
         self.viewModel.onItemClicked += self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
@@ -208,6 +211,8 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.removeListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
         g_eventBus.removeListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
+        self.__comp7Controller.onStatusUpdated -= self.__refresh
+        self.__comp7Controller.onComp7ConfigChanged -= self.__refresh
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked -= self.__showWidgetsClickHandler
@@ -341,6 +346,12 @@ class ModeSelectorView(ViewImpl):
     def __handleEscape(self):
         if not self.__isClickProcessing:
             self.close()
+
+    def __refresh(self, *_):
+        if self.__comp7Controller.isAvailable():
+            self.__dataProvider.updateItems()
+        else:
+            self.refresh()
 
 
 @adisp.adisp_process

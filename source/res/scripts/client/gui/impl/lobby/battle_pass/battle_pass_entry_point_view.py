@@ -6,7 +6,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
 from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import AnimationState, BPState, BattlePassEntryPointViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_view_model import AnimationState, BPState, BattlePassEntryPointViewModel, ChapterType
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
@@ -30,7 +30,8 @@ class _LastEntryState(object):
     def __init__(self):
         self.isFirstShow = True
         self.isBought = False
-        self.hasExtra = False
+        self.hasMarathon = False
+        self.isResourceAvailable = False
         self.chapterID = 0
         self.level = 0
         self.progress = 0
@@ -38,10 +39,11 @@ class _LastEntryState(object):
         self.rewardsCount = 0
         return
 
-    def update(self, isFirstShow=True, isBought=False, hasExtra=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
+    def update(self, isFirstShow=True, isBought=False, hasMarathon=False, isResourceAvailable=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
         self.isFirstShow = isFirstShow
         self.isBought = isBought
-        self.hasExtra = hasExtra
+        self.hasMarathon = hasMarathon
+        self.isResourceAvailable = isResourceAvailable
         self.chapterID = chapterID
         self.level = level
         self.progress = progress
@@ -120,8 +122,12 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return self.__battlePass.isPaused() or not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType())
 
     @property
-    def hasExtra(self):
-        return self.__battlePass.hasExtra()
+    def hasMarathon(self):
+        return self.__battlePass.hasMarathon()
+
+    @property
+    def isResourceAvailable(self):
+        return self.__battlePass.isResourceChapterAvailable()
 
     @property
     def battlePassState(self):
@@ -155,7 +161,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         pass
 
     def _saveLastState(self, isNotChosenRewardCount):
-        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount)
+        _g_entryLastState.update(False, self.isBought, self.hasMarathon, self.isResourceAvailable, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount)
 
     @staticmethod
     def _onClick():
@@ -168,7 +174,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return ((self.__battlePass.onPointsUpdated, self._updateData),
          (self.__battlePass.onBattlePassIsBought, self._updateData),
          (self.__battlePass.onSeasonStateChanged, self._updateData),
-         (self.__battlePass.onExtraChapterExpired, self._updateData),
+         (self.__battlePass.onMarathonChapterExpired, self._updateData),
          (self.__battlePass.onBattlePassSettingsChange, self._updateData),
          (self.__battlePass.onChapterChanged, self._updateData),
          (g_playerEvents.onClientUpdated, self.__onClientUpdated))
@@ -279,10 +285,16 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         else:
             self.__stopAttentionTimer()
         with self.getViewModel().transaction() as tx:
+            chapterTypes = tx.getAvailableChapterTypes()
+            chapterTypes.clear()
+            for chType in self.__battlePass.getAvailableChapterTypes():
+                chapterTypes.addString(str(chType))
+
+            chapterTypes.invalidate()
             tx.setIsSmall(self.__isSmall)
             tx.setTooltipID(self._getTooltip())
-            tx.setPrevHasExtra(_g_entryLastState.hasExtra)
-            tx.setHasExtra(self.hasExtra)
+            tx.setChapterType(ChapterType.MARATHON if self.hasMarathon else ChapterType.DEFAULT)
+            tx.setIsResourceAvailable(self.isResourceAvailable)
             tx.setPrevLevel(getPresentLevel(_g_entryLastState.level))
             tx.setLevel(getPresentLevel(self.level))
             tx.setChapterID(self.chapterID)

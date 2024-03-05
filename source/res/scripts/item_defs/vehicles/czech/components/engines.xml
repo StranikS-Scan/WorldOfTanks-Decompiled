@@ -36,7 +36,9 @@
     <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
     <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
     <Tatra_T-78>	31002	</Tatra_T-78>
+    <Skoda_AHK_FL>	31003	</Skoda_AHK_FL>
     <Development_Engine>	65000	</Development_Engine>
+    <GravEngine>	40000	</GravEngine>
   </ids>
   <shared>
     <Hanomag_WD_50PS>
@@ -559,6 +561,23 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </Skoda_AHK>
+    <Skoda_AHK_FL>
+      <userString>	#czech_vehicles:Skoda_AHK	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </Skoda_AHK_FL>
     <Praga_AXK>
       <userString>	#czech_vehicles:Praga_AXK	</userString>
       <tags>	diesel	</tags>
@@ -627,6 +646,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2360	</rpm_max>
     </Skoda_16_AH_145_A>
+    <GravEngine>
+      <userString>	#czech_vehicles:GravEngine	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	2000	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	2000	</rpm_min>
+      <rpm_max>	8000	</rpm_max>
+    </GravEngine>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>
@@ -635,14 +671,14 @@
       <price>	1	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	540	</power>
-      <weight>	750	</weight>
-      <maxHealth>	105	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
+      <power>	2200	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	9000	</maxHealth>
+      <maxRegenHealth>	9000	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2072	</rpm_max>
+      <rpm_min>	2000	</rpm_min>
+      <rpm_max>	8000	</rpm_max>
     </Development_Engine>
   </shared>
 </engines.xml>

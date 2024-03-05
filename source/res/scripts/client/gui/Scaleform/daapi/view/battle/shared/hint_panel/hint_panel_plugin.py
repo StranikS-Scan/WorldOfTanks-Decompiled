@@ -6,6 +6,7 @@ from helpers import time_utils
 from account_helpers.AccountSettings import HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
 from gui.shared.utils.plugins import IPlugin
 _HINT_DISPLAY_COUNT_AFTER_RESET = 1
+HINT_TIMEOUT = 6
 
 class HintPriority(object):
     DYN_SQUAD = 1
@@ -56,7 +57,7 @@ class HintPanelPlugin(IPlugin):
         pass
 
     def _getHint(self):
-        return None
+        raise NotImplementedError
 
     @staticmethod
     def _updateCounterOnUsed(settings):

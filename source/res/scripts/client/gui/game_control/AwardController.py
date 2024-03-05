@@ -1397,6 +1397,8 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
     def __onAwardShown(self, chapterID):
         if self.__battlePass.isDisabled() or chapterID is None:
             return
+        elif self.__battlePass.isResourceChapter(chapterID) and self.__battlePass.allRegularChaptersPurchased():
+            return
         else:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
             return

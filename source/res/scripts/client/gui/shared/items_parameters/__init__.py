@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/__init__.py
-import math
 import sys
 from math import ceil
 from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, SHELLS_BURST_COUNT_PROP_NAME
@@ -208,17 +207,3 @@ def getShellDescriptors(shellDescriptor, vehicleDescr):
             descriptors.append(shot)
 
     return descriptors
-
-
-def getOptionalDeviceWeight(itemDescr, vehicleDescr):
-    weight = 0
-    index = None
-    if vehicleDescr is not None:
-        if itemDescr in vehicleDescr.optionalDevices:
-            index = vehicleDescr.optionalDevices.index(itemDescr)
-            vehicleDescr.removeOptionalDevice(index)
-        mods = itemDescr.weightOnVehicle(vehicleDescr)
-        weight = math.ceil(vehicleDescr.physics['weight'] * mods[0] + mods[1])
-        if index is not None:
-            vehicleDescr.installOptionalDevice(itemDescr.compactDescr, index)
-    return (weight, weight)

@@ -75,7 +75,10 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def updateData(self):
         if not self.getFilters().get('compatibleOnly', True) or self._vehicles is None:
-            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)))
+            criteria = REQ_CRITERIA.INVENTORY
+            criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)
+            criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
+            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(criteria))
         else:
             vehicleVOs = self._updateData(self._vehicles)
         if self.__selectedVehicles is not None:

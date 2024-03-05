@@ -20,6 +20,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator, registerBannerEntryPointLUIRule, collectBannerEntryPointLUIRule
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIsActive
+from gui.game_control.shop_sales_event_controller import getShopSalesEntryPointIsActive
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from helpers.time_utils import getTimestampByStrDate
@@ -31,6 +32,7 @@ _SECONDS_BEFORE_UPDATE = 2
 _COUNT_VISIBLE_ENTRY_POINTS = 2
 _ADDITIONAL_SWFS_MAP = {}
 registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
+registerBannerEntryPointValidator(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, getShopSalesEntryPointIsActive)
 registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
@@ -40,6 +42,7 @@ registerBannerEntryPointValidator(HANGAR_ALIASES.BR_ENTRY_POINT, isBattleRoyaleE
 registerBannerEntryPointValidator(HANGAR_ALIASES.COLLECTION_ENTRY_POINT, isCollectionEntryPointAvailable)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.COMP7_ENTRY_POINT, LuiRules.COMP7_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, LuiRules.CRAFT_MACHINE_ENTRY_POINT)
+registerBannerEntryPointLUIRule(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, LuiRules.SHOP_SALES_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, LuiRules.MAPBOX_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, LuiRules.STRONGHOLD_ENTRY_POINT)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.BR_ENTRY_POINT, LuiRules.BR_ENTRY_POINT)

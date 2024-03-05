@@ -21,3 +21,4 @@ class ChapterState(Enum):
     PAUSED = 'paused'
     COMPLETED = 'completed'
     NOT_STARTED = 'notStarted'
+    DISABLED = 'disabled'

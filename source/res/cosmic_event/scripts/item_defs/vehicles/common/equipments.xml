@@ -1,0 +1,165 @@
+<equipments.xml>
+  <cosmic_event_gravity_field>
+    <id>	9601	</id>
+    <userString>	#artefacts:cosmic_event_gravity_field/name	</userString>
+    <icon>	cosmic_event_gravity_field 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventGravityFieldEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/gravity_field_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/gravity_field_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	15	  <exports>	vse tooltip	</exports>
+      </duration>
+      <gravityFactor>	0.5	  <exports>	vse	</exports>
+      </gravityFactor>
+      <radius>	22	  <exports>	vse tooltip	</exports>
+      </radius>
+      <impulsePerSecond>	800	  <exports>	vse	</exports>
+      </impulsePerSecond>
+    </script>
+  </cosmic_event_gravity_field>
+  <cosmic_event_rocket_booster>
+    <id>	9602	</id>
+    <userString>	#artefacts:cosmic_event_rocket_booster/name	</userString>
+    <icon>	cosmic_event_rocket_booster 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventRocketBoosterEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/rocket_booster_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/rocket_booster_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	8	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	2	  <exports>	vse tooltip	</exports>
+      </duration>
+    </script>
+  </cosmic_event_rocket_booster>
+  <cosmic_event_black_hole>
+    <id>	9603	</id>
+    <userString>	#artefacts:cosmic_event_black_hole/name	</userString>
+    <icon>	cosmic_event_black_hole 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventBlackHoleEquipment	  <clientSelector>	cosmic_event.cosmic_control_mode._CosmicArenaBoundStrikeSelector	</clientSelector>
+      <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/black_hole_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/black_hole_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	11	  <exports>	vse tooltip	</exports>
+      </duration>
+      <impulse>	12.0	  <exports>	vse tooltip	</exports>
+      </impulse>
+      <gravityFactor>	0.001	  <exports>	vse	</exports>
+      </gravityFactor>
+      <radius>	60.0	  <exports>	vse	</exports>
+      </radius>
+      <deploymentDelay>	3.0	  <exports>	vse	</exports>
+      </deploymentDelay>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	150	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaColor>	4278255360	</areaColor>
+    </script>
+  </cosmic_event_black_hole>
+  <cosmic_event_hook_shot>
+    <id>	9608	</id>
+    <userString>	#artefacts:cosmic_event_hook_shot/name	</userString>
+    <icon>	cosmic_event_hook_shot 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventHookShotEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/hook_shot_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/hook_shot_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	8	  <exports>	vse	</exports>
+      </duration>
+      <shellID>	10240378	  <exports>	vse	</exports>
+      </shellID>
+      <shotSpeed>	800	  <exports>	vse	</exports>
+      </shotSpeed>
+    </script>
+  </cosmic_event_hook_shot>
+  <cosmic_event_shield>
+    <id>	9604	</id>
+    <userString>	#artefacts:cosmic_event_shield/name	</userString>
+    <icon>	cosmic_event_shield 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventShieldEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/shield_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/shield_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	20	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <duration>	3	  <exports>	vse tooltip	</exports>
+      </duration>
+      <gravityFactor>	100.0	  <exports>	vse	</exports>
+      </gravityFactor>
+    </script>
+  </cosmic_event_shield>
+  <cosmic_event_power_shot>
+    <id>	9609	</id>
+    <userString>	#artefacts:cosmic_event_power_shot/name	</userString>
+    <icon>	cosmic_event_power_shot 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventPowerShotEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/power_shot_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/power_shot_server	</plan>
+        </server>
+      </visualScript>
+      <shellID>	10240634	  <exports>	vse	</exports>
+      </shellID>
+      <shotSpeed>	120	  <exports>	vse	</exports>
+      </shotSpeed>
+    </script>
+  </cosmic_event_power_shot>
+</equipments.xml>

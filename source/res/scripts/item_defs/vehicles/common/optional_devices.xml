@@ -21,8 +21,7 @@
     <incompatibleTags>
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	ImprovedConfiguration	  <weight>	50	</weight>
-      <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
+    <script>	ImprovedConfiguration	  <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
       <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
       <factors>
         <factor>
@@ -93,8 +92,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -131,8 +129,7 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
           <type>	mul	</type>
@@ -199,8 +196,7 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -230,8 +226,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -273,8 +268,7 @@
     <incompatibleTags>
       <installed>	turbocharger	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -328,8 +322,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	ExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -366,10 +359,6 @@
         <value>	1.3	</value>
       </mul>
       <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
         <name>	vehicleChassisFallDamage	</name>
         <value>	0.25	</value>
       </mul>
@@ -398,8 +387,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	RotationMechanisms	  <weight>	200	</weight>
-      <trackRotateSpeedFactor>	1.175 1.175	</trackRotateSpeedFactor>
+    <script>	RotationMechanisms	  <trackRotateSpeedFactor>	1.175 1.175	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.175 1.175	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.175 1.175	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.175 1.175	</trackMoveSpeedFactor>
@@ -448,8 +436,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -484,8 +471,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -523,8 +509,7 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
           <type>	mul	</type>
@@ -566,8 +551,7 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
           <type>	mul	</type>
@@ -605,8 +589,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -648,8 +631,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -687,8 +669,7 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -730,8 +711,7 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -836,8 +816,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableImprovedConfiguration	  <weight>	100	</weight>
-      <upgradeInfo>
+    <script>	UpgradableImprovedConfiguration	  <upgradeInfo>
         <upgradedCompDescr>	27385	</upgradedCompDescr>
         <price>	3000000	</price>
       </upgradeInfo>
@@ -914,8 +893,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradedImprovedConfiguration	  <weight>	100	</weight>
-      <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
+    <script>	UpgradedImprovedConfiguration	  <engineReduceFineFactor>	0.3 0.3	</engineReduceFineFactor>
       <ammoBayReduceFineFactor>	0.3 0.3	</ammoBayReduceFineFactor>
       <factors>
         <factor>
@@ -987,8 +965,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	200	</weight>
-      <upgradeInfo>
+    <script>	UpgradableRotationMechanisms	  <upgradeInfo>
         <upgradedCompDescr>	27897	</upgradedCompDescr>
         <price>	3000000	</price>
       </upgradeInfo>
@@ -1048,8 +1025,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradedRotationMechanisms	  <weight>	200	</weight>
-      <trackRotateSpeedFactor>	1.15 1.15	</trackRotateSpeedFactor>
+    <script>	UpgradedRotationMechanisms	  <trackRotateSpeedFactor>	1.15 1.15	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.15 1.15	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.15 1.15	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.15 1.15	</trackMoveSpeedFactor>
@@ -1107,8 +1083,7 @@
     <incompatibleTags>
       <installed>	improvedSights	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -1152,8 +1127,7 @@
     <incompatibleTags>
       <installed>	improvedSights	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -1184,8 +1158,7 @@
     <incompatibleTags>
       <installed>	additInvisibilityDevice	</installed>
     </incompatibleTags>
-    <script>	UpgradableLowNoiseTracks	  <weight>	100	</weight>
-      <overridableFactors>
+    <script>	UpgradableLowNoiseTracks	  <overridableFactors>
         <invisibilityBonus>	0.06	</invisibilityBonus>
       </overridableFactors>
       <upgradeInfo>
@@ -1230,8 +1203,7 @@
     <incompatibleTags>
       <installed>	additInvisibilityDevice	</installed>
     </incompatibleTags>
-    <script>	UpgradedLowNoiseTracks	  <weight>	100	</weight>
-      <overridableFactors>
+    <script>	UpgradedLowNoiseTracks	  <overridableFactors>
         <invisibilityBonus>	0.09	</invisibilityBonus>
       </overridableFactors>
     </script>
@@ -1279,8 +1251,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -1340,8 +1311,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -1396,8 +1366,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradableExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -1438,10 +1407,6 @@
         <value>	1.15	</value>
       </mul>
       <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
         <name>	vehicleChassisFallDamage	</name>
         <value>	0.5	</value>
       </mul>
@@ -1469,8 +1434,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradedExtraHealthReserve	  <chassisMaxLoadFactor>	1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradedExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -1507,10 +1471,6 @@
         <value>	1.25	</value>
       </mul>
       <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
         <name>	vehicleChassisFallDamage	</name>
         <value>	0.3	</value>
       </mul>
@@ -1539,8 +1499,7 @@
     <incompatibleTags>
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	ImprovedConfiguration	  <weight>	50	</weight>
-      <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
+    <script>	ImprovedConfiguration	  <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
       <ammoBayReduceFineFactor>	0.5 0.35	</ammoBayReduceFineFactor>
       <factors>
         <factor>
@@ -1616,8 +1575,7 @@
     <incompatibleTags>
       <installed>	improvedConfiguration	</installed>
     </incompatibleTags>
-    <script>	ImprovedConfiguration	  <weight>	50	</weight>
-      <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
+    <script>	ImprovedConfiguration	  <engineReduceFineFactor>	0.5 0.35	</engineReduceFineFactor>
       <ammoBayReduceFineFactor>	0.5 0.35	</ammoBayReduceFineFactor>
       <factors>
         <factor>
@@ -1692,8 +1650,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	250	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
           <type>	mul	</type>
@@ -1766,8 +1723,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	500	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
           <type>	mul	</type>
@@ -1840,8 +1796,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	1000	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
           <type>	mul	</type>
@@ -1914,8 +1869,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	1500	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/antifragmentationLiningFactor	</attribute>
           <type>	mul	</type>
@@ -1994,8 +1948,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Stereoscope	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+    <script>	Stereoscope	  <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
     </script>
     <kpi>
@@ -2034,8 +1987,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Stereoscope	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+    <script>	Stereoscope	  <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
     </script>
     <kpi>
@@ -2074,8 +2026,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Stereoscope	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+    <script>	Stereoscope	  <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <circularVisionRadius>	1.25 1.275	</circularVisionRadius>
     </script>
     <kpi>
@@ -2223,8 +2174,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	CamouflageNet	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+    <script>	CamouflageNet	  <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <overridableFactors>
         <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
       </overridableFactors>
@@ -2276,8 +2226,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	CamouflageNet	  <weight>	50	</weight>
-      <activateWhenStillSec>	3.0	</activateWhenStillSec>
+    <script>	CamouflageNet	  <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <overridableFactors>
         <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
       </overridableFactors>
@@ -2327,8 +2276,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -2365,8 +2313,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	150	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -2403,8 +2350,7 @@
     <incompatibleTags>
       <installed>	ventilation	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/crewLevelIncrease	</attribute>
           <type>	add	</type>
@@ -2449,8 +2395,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Grousers	  <weight>	100	</weight>
-      <rotationFactor>	0.869 0.833	</rotationFactor>
+    <script>	Grousers	  <rotationFactor>	0.869 0.833	</rotationFactor>
       <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
     </script>
     <kpi>
@@ -2495,8 +2440,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Grousers	  <weight>	100	</weight>
-      <rotationFactor>	0.869 0.833	</rotationFactor>
+    <script>	Grousers	  <rotationFactor>	0.869 0.833	</rotationFactor>
       <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
     </script>
     <kpi>
@@ -2541,8 +2485,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Grousers	  <weight>	100	</weight>
-      <rotationFactor>	0.869 0.833	</rotationFactor>
+    <script>	Grousers	  <rotationFactor>	0.869 0.833	</rotationFactor>
       <rollingFrictionFactor>	0.909 0.869	</rollingFrictionFactor>
     </script>
     <kpi>
@@ -2579,8 +2522,7 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
           <type>	mul	</type>
@@ -2617,8 +2559,7 @@
     <incompatibleTags>
       <installed>	rammer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	400	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
           <type>	mul	</type>
@@ -2656,8 +2597,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -2695,8 +2635,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -2734,8 +2673,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -2772,8 +2710,7 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -2810,8 +2747,7 @@
     <incompatibleTags>
       <installed>	aimingStabilizer	</installed>
     </incompatibleTags>
-    <script>	StaticOptionalDevice	  <weight>	200	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -2849,8 +2785,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	LowNoiseTracks	  <weight>	100	</weight>
-      <overridableFactors>
+    <script>	LowNoiseTracks	  <overridableFactors>
         <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
       </overridableFactors>
     </script>
@@ -2900,8 +2835,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	LowNoiseTracks	  <weight>	100	</weight>
-      <overridableFactors>
+    <script>	LowNoiseTracks	  <overridableFactors>
         <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
       </overridableFactors>
     </script>
@@ -2951,8 +2885,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	LowNoiseTracks	  <weight>	100	</weight>
-      <overridableFactors>
+    <script>	LowNoiseTracks	  <overridableFactors>
         <invisibilityBonus>	0.06 0.08	</invisibilityBonus>
       </overridableFactors>
     </script>
@@ -3001,8 +2934,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	ExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -3040,11 +2972,6 @@
         <name>	vehicleChassisRepairSpeed	</name>
         <value>	1.15	</value>
         <specValue>	1.2	</specValue>
-      </mul>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-        <specValue>	1.1	</specValue>
       </mul>
       <mul>
         <name>	vehicleChassisFallDamage	</name>
@@ -3074,8 +3001,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	ExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -3113,11 +3039,6 @@
         <name>	vehicleChassisRepairSpeed	</name>
         <value>	1.15	</value>
         <specValue>	1.2	</specValue>
-      </mul>
-      <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-        <specValue>	1.1	</specValue>
       </mul>
       <mul>
         <name>	vehicleChassisFallDamage	</name>
@@ -3147,8 +3068,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	ExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -3188,11 +3108,6 @@
         <specValue>	1.2	</specValue>
       </mul>
       <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-        <specValue>	1.1	</specValue>
-      </mul>
-      <mul>
         <name>	vehicleChassisFallDamage	</name>
         <value>	0.5	</value>
         <specValue>	0.35	</specValue>
@@ -3219,8 +3134,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/increaseEnemySpottingTime	</attribute>
           <type>	add	</type>
@@ -3268,8 +3182,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	RotationMechanisms	  <weight>	200	</weight>
-      <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
+    <script>	RotationMechanisms	  <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.1 1.125	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.1 1.125	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.1 1.125	</trackMoveSpeedFactor>
@@ -3327,8 +3240,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	RotationMechanisms	  <weight>	200	</weight>
-      <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
+    <script>	RotationMechanisms	  <trackRotateSpeedFactor>	1.1 1.125	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.1 1.125	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.1 1.125	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.1 1.125	</trackMoveSpeedFactor>
@@ -3391,8 +3303,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -3455,8 +3366,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -3519,8 +3429,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/enginePowerFactor	</attribute>
           <type>	mul	</type>
@@ -3576,8 +3485,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/demaskFoliageFactor	</attribute>
           <type>	mul	</type>
@@ -3626,8 +3534,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -3666,8 +3573,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	StaticOptionalDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	StaticOptionalDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
           <type>	mul	</type>
@@ -3707,8 +3613,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -3760,8 +3665,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -3813,8 +3717,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -3866,8 +3769,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.05	</trackRotateSpeedFactor>
+    <script>	UpgradableRotationMechanisms	  <trackRotateSpeedFactor>	1.05	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.05	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.05	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.05	</trackMoveSpeedFactor>
@@ -3960,8 +3862,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
+    <script>	UpgradableRotationMechanisms	  <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.06	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.06	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.06	</trackMoveSpeedFactor>
@@ -4054,8 +3955,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradedRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
+    <script>	UpgradedRotationMechanisms	  <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.07	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.07	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.07	</trackMoveSpeedFactor>
@@ -4139,8 +4039,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradableExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -4235,8 +4134,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradableExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -4331,8 +4229,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradedExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradedExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>

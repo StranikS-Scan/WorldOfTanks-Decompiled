@@ -532,6 +532,10 @@ class BaseHangarParamContext(ToolTipContext):
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.BonusExtractor(vehicle, bonuses, paramName)
 
+    @staticmethod
+    def getBattleModifiersType():
+        return None
+
 
 class HangarParamContext(BaseHangarParamContext):
 
@@ -1328,7 +1332,7 @@ class BattlePassGiftTokenContext(ToolTipContext):
             self.__hasOffer = False
             return result
         else:
-            if shortName in ('brochure_gift', 'guide_gift'):
+            if shortName in ('brochure_gift', 'guide_gift', 'book_gift'):
                 gift = first(offer.getAllGifts())
                 if gift is not None:
                     result.append(gift.bonus.displayedItem.getXP())

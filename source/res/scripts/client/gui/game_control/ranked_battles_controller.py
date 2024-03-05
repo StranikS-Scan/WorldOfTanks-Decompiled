@@ -1143,6 +1143,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
         criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
         criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         return criteria
 
     def __showBetweenSeason(self):

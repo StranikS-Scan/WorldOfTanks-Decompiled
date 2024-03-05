@@ -291,7 +291,9 @@ class CrewWidget(ViewImpl):
                 vmSlot.tankman.setHasPossibleProgress(False)
                 continue
             currSkillsCount, possibleSkillsCount, currSkillsLvl, possibleLastSkillLevel, currRoleLevel, possibleRoleLevel = possibleSkillsLevels[vmSlot.getSlotIdx()]
-            progressLvl = possibleLastSkillLevel - currSkillsLvl if possibleSkillsCount == currSkillsCount and currSkillsLvl.isSkillLvl and currSkillsLvl < MAX_SKILL_LEVEL and possibleRoleLevel == MAX_SKILL_LEVEL else possibleLastSkillLevel
+            progressLvl = SkillLvlFormatter()
+            if possibleRoleLevel.intSkillLvl == MAX_SKILL_LEVEL:
+                progressLvl = possibleLastSkillLevel - currSkillsLvl if possibleSkillsCount == currSkillsCount and currSkillsLvl.isSkillLvl and currSkillsLvl < MAX_SKILL_LEVEL else possibleLastSkillLevel
             roleProgressLvl = possibleRoleLevel - currRoleLevel
             vmSlot.tankman.setPossibleSkillsAmount(max(possibleSkillsCount - currSkillsCount, 0))
             vmSlot.tankman.setLastPossibleSkillLevel(progressLvl.formattedSkillLvl)

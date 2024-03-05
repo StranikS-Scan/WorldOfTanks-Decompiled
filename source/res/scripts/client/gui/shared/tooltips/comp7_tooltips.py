@@ -112,7 +112,8 @@ def getCooldown(equipment):
 
 def getRoleSkillDescription(equipment):
     params = {}
-    for k, v in equipment.tooltipParams.iteritems():
+    tooltipParams = equipment.tooltipParams
+    for k, v in tooltipParams.iteritems():
         if isinstance(v, tuple):
             for level, levelValue in enumerate(v):
                 levelKey = '_'.join((k, str(level + 1)))
@@ -123,9 +124,11 @@ def getRoleSkillDescription(equipment):
     description = R.strings.artefacts.dyn(equipment.name).dyn('descr')
     active = description.dyn('active')
     active = backport.text(active(), **params) if active.exists() else ''
+    debuf = description.dyn('debuf')
+    debuf = backport.text(debuf(), **params) if debuf.exists() and tooltipParams.has_key('debuf') else ''
     passive = description.dyn('passive')
     passive = backport.text(passive(), **params) if passive.exists() else ''
-    return (active, passive)
+    return (active + debuf, passive)
 
 
 def getPoIEquipmentDescription(equipment):

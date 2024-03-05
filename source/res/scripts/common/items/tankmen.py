@@ -38,6 +38,7 @@ SKILLS_BY_ROLES_ORDERED = skills_constants.SKILLS_BY_ROLES_ORDERED
 MAX_FREE_SKILLS_SIZE = 16
 NO_SKILL = -1
 MAX_SKILL_LEVEL = 100
+SKILL_LEVEL_TO_BE_RESTORABLE = 1
 MIN_ROLE_LEVEL = 50
 SKILL_LEVELS_PER_RANK = 50
 COMMANDER_ADDITION_RATIO = 10
@@ -683,7 +684,7 @@ class TankmanDescr(object):
 
     def isRestorable(self):
         vehicleTags = self.__vehicleTags
-        return (len(self.skills) > 0 and self.skillLevel(self.skills[0]) == MAX_SKILL_LEVEL or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= _g_totalFirstSkillXpCost) and not ('lockCrew' in vehicleTags and 'unrecoverable' in vehicleTags)
+        return (len(self.skills) > 0 and self.skillLevel(self.skills[0]) >= SKILL_LEVEL_TO_BE_RESTORABLE or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= SKILL_LEVEL_TO_BE_RESTORABLE) and not ('lockCrew' in vehicleTags and 'unrecoverable' in vehicleTags)
 
     def __initFromCompactDescr(self, compactDescr, battleOnly):
         cd = compactDescr

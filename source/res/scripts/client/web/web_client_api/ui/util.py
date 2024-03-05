@@ -200,6 +200,11 @@ class UtilWebApiMixin(object):
         elif itemType == ItemPackType.ITEM_CREW_SKIN:
             _, _, itemId = parseIntCompactDescr(cmd.id)
         else:
+            if itemType == ItemPackType.CUSTOM_LOOTBOX:
+                lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(cmd.id)
+                if lootBox:
+                    self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=lootBox.getUserName(), body=lootBox.getDescriptionText()), 'INFO')
+                return
             itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)

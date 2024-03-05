@@ -180,6 +180,10 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         if self._cooldown:
             self._cooldown.reset(requestType)
 
+    @property
+    def needsCheckVehicleForBattle(self):
+        return True
+
     def _createActionsValidator(self):
         return BaseActionsValidator(self)
 

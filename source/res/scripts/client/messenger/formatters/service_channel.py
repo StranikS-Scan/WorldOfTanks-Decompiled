@@ -21,7 +21,7 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState, SECONDS_IN_DAY
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
 from debug_utils import LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
@@ -47,7 +47,7 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
-from gui.resource_well.resource_well_constants import ServerResourceType
+from gui.resource_well.resource_well_constants import ResourceType
 from gui.achievements.achievements_constants import Achievements20SystemMessages
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CompletionTokensBonusFormatter, CREW_BONUS_X3_TOKEN
 from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, VehiclesBonus, SelectableBonus
@@ -70,6 +70,7 @@ from gui.shared.system_factory import collectTokenQuestsSubFormatters
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
+from gui.battle_pass.battle_pass_constants import ChapterState
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
 from items import ITEM_TYPES as I_T, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core, ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
@@ -4028,6 +4029,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
     __COLLECTION_ITEMS_TEMPLATE = u'CollectionItemsSysMessage'
     __PROGRESSION_BUTTON_TEMPLATE = u'BattlePassRewardWithProgressionButtonMessage'
     __SHOP_BUTTON_TEMPLATE = u'BattlePassRewardWithShopButtonMessage'
+    __RESOURCE_AVAILABLE_TEMPLATE = u'BattlePassResourceChapterAvailableMessage'
     __CURRENCY_TEMPLATE_KEY = u'battlePassCurrency'
 
     @adisp_async
@@ -4036,6 +4038,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         isSynced = yield self._waitForSyncItems()
         resultMessage = MessageData(None, None)
         collectionResultMessage = MessageData(None, None)
+        messageResource = MessageData(None, None)
         if message.data and isSynced:
             data = message.data
             if u'reward' in data and u'ctx' in data:
@@ -4051,7 +4054,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.default())
                 priorityLevel = None
                 savedData = None
-                if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+                if reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.GIFT_CHAPTER):
                     if not rewards:
                         callback([])
                     header, description, priorityLevel, additionalText = self.__makeAfterBattlePassPurchase(ctx)
@@ -4062,12 +4065,12 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
                         header, description, priorityLevel, additionalText = self.__makeAfterLevelsPurchase(ctx)
                     elif reason == BattlePassRewardReason.SELECT_CHAPTER:
-                        if self.__battlePass.isCompleted():
+                        if self.__battlePass.isCompleted() and self.__battlePass.isResourceCompleted():
                             description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
                             template = self.__SHOP_BUTTON_TEMPLATE
                             additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.additionalText())
                         elif self.__battlePass.isFinalLevel(chapterID, newLevel):
-                            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+                            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chapterID)())
                             description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
                             template = self.__PROGRESSION_BUTTON_TEMPLATE
                             savedData = {u'chapterID': chapterID}
@@ -4092,7 +4095,12 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 resultMessage = MessageData(formatted, settings)
                 if collectionEntitlements and self.__collections.isEnabled():
                     collectionResultMessage = self.__makeCollectionMessage(collectionEntitlements, message)
-        callback([resultMessage, collectionResultMessage])
+                if reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS,
+                 BattlePassRewardReason.INVOICE,
+                 BattlePassRewardReason.BATTLE,
+                 BattlePassRewardReason.SELECT_CHAPTER) and self.__battlePass.isFinalLevel(chapterID, newLevel):
+                    messageResource = self.__makeResourceChapterAvailableMessage(chapterID, message)
+        callback([resultMessage, collectionResultMessage, messageResource])
         return
 
     def __makeAfterBattle(self, ctx):
@@ -4101,8 +4109,8 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         additionalText = u''
         chapterID = ctx.get(u'chapter')
         savedData = None
-        if not self.__battlePass.isCompleted():
-            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+        if not (self.__battlePass.isCompleted() and self.__battlePass.isResourceCompleted()):
+            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chapterID)())
             if not self.__battlePass.isFinalLevel(chapterID, newLevel):
                 description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.newLevel.text(), newLevel=text_styles.credits(newLevel), chapter=text_styles.credits(chapterName))
                 priorityLevel = NotificationPriorityLevel.LOW
@@ -4125,16 +4133,17 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         chapterID = ctx.get(u'chapter')
         currentLevel = ctx.get(u'newLevel')
         prevLevel = ctx.get(u'prevLevel')
-        chapter = text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()))
+        chapter = text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chapterID)()))
         header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyProgress())
         levelCount = currentLevel - prevLevel
         if self.__battlePass.isFinalLevel(chapterID, currentLevel):
-            if self.__battlePass.isRegularProgressionCompleted():
+            if self.__battlePass.isCompleted() and self.__battlePass.isResourceCompleted():
                 description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
             else:
                 description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.chapterFinal.text(), chapter=chapter)
         else:
             level = currentLevel + 1
+            chapter = text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()))
             description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyProgress.text(), levelCount=text_styles.credits(levelCount), currentLevel=text_styles.credits(level), chapter=chapter)
         price = self.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelCount
         additionalText = self.__makeCurrencyString(Currency.GOLD, price)
@@ -4147,10 +4156,15 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
     def __makeAfterBattlePassPurchase(self, ctx):
         chapterID = ctx.get(u'chapter')
         priceID = ctx.get(u'priceID')
-        header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP())
+        reason = ctx.get(u'reason')
+        if reason == BattlePassRewardReason.GIFT_CHAPTER:
+            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.questGiftBP())
+        else:
+            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP())
         description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.text())
-        additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.additionalText(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())))
-        additionalText += u'<br/>' + self.__makePriceString(chapterID, priceID)
+        additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.additionalText(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chapterID)())))
+        if reason != BattlePassRewardReason.GIFT_CHAPTER:
+            additionalText += u'<br/>' + self.__makePriceString(chapterID, priceID)
         priorityLevel = NotificationPriorityLevel.LOW
         return (header,
          description,
@@ -4175,6 +4189,17 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
          u'text': text}, data={u'savedData': {u'collectionId': collectionID}})
         return MessageData(formatted, self._getGuiSettings(message, self.__COLLECTION_ITEMS_TEMPLATE, messageType=SYS_MESSAGE_TYPE.collectionsItems.index()))
 
+    def __makeResourceChapterAvailableMessage(self, chapterID, message):
+        resourceChID = self.__battlePass.getResourceChapterID()
+        if not self.__battlePass.isMarathonChapter(chapterID) and self.__battlePass.isResourceChapterAvailable() and self.__battlePass.getChapterState(resourceChID) == ChapterState.NOT_STARTED:
+            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(resourceChID)())
+            textRes = backport.text(R.strings.system_messages.battlePass.recourseChapterUnlock.body(), chapter=chapterName)
+            header = backport.text(R.strings.system_messages.battlePass.recourseChapterUnlock.header(), chapter=chapterName)
+            formatted = g_settings.msgTemplates.format(self.__RESOURCE_AVAILABLE_TEMPLATE, ctx={u'header': header,
+             u'text': textRes})
+            settings = self._getGuiSettings(message, self.__RESOURCE_AVAILABLE_TEMPLATE)
+            return MessageData(formatted, settings)
+
 
 class BattlePassBoughtFormatter(WaitItemsSyncFormatter):
 
@@ -4189,6 +4214,30 @@ class BattlePassBoughtFormatter(WaitItemsSyncFormatter):
             formatted = g_settings.msgTemplates.format(template, ctx={u'header': header})
             settings = self._getGuiSettings(message, template)
             settings.showAt = BigWorld.time()
+            resultMessage = MessageData(formatted, settings)
+        callback([resultMessage])
+        return
+
+
+class BattlePassGiftByOfferFormatter(WaitItemsSyncFormatter):
+    __battlePass = dependency.descriptor(IBattlePassController)
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        resultMessage = MessageData(None, None)
+        if message.data and isSynced and self.__battlePass.isValidChapterID(message.data.get(u'chapter')):
+            data = message.data
+            chId = data.get(u'chapter')
+            header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.questGiftBP())
+            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chId)())
+            text = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithoutRewards.text(), chapter=text_styles.credits(chapterName))
+            template = u'BattlePassDefaultRewardMessage'
+            templateParams = {u'text': text,
+             u'header': header}
+            settings = self._getGuiSettings(message, template, priorityLevel=NotificationPriorityLevel.LOW)
+            formatted = g_settings.msgTemplates.format(template, templateParams)
             resultMessage = MessageData(formatted, settings)
         callback([resultMessage])
         return
@@ -4289,6 +4338,8 @@ class BattlePassSeasonEndFormatter(WaitItemsSyncFormatter):
         item = self.__itemsCache.items.getItemByCD(itemCD)
         if item.isTrophy:
             textRes = R.strings.system_messages.battlePass.seasonEnd.rewards.trophy()
+        elif item.isModernized:
+            textRes = R.strings.system_messages.battlePass.seasonEnd.rewards.expequipment()
         else:
             textRes = R.strings.system_messages.battlePass.seasonEnd.rewards.device()
         text = backport.text(textRes, name=item.userName)
@@ -4542,7 +4593,7 @@ class BattlePassFreePointsUsedFormatter(ServiceChannelFormatter):
             pointsDiff = data.get(u'diffPoints')
             if not (chapterID is None or pointsDiff is None):
                 header = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.freePointsUsed.header())
-                chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+                chapterName = backport.text(R.strings.battle_pass.chapter.fullName.quoted.num(chapterID)())
                 text = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.freePointsUsed.text(), chapter=text_styles.credits(chapterName), points=pointsDiff)
                 formatted = g_settings.msgTemplates.format(self.__template, {u'header': header,
                  u'text': text})
@@ -5086,12 +5137,10 @@ class ResourceWellOperationFormatter(ServiceChannelFormatter):
 
     def __formatResources(self, resources):
         resourceStrings = []
-        if ServerResourceType.CURRENCY.value in resources:
-            resourceStrings.extend(self.__formatCurrencies(resources[ServerResourceType.CURRENCY.value]))
-        if ServerResourceType.BLUEPRINTS.value in resources:
-            resourceStrings.append(self.__formatBlueprints(resources[ServerResourceType.BLUEPRINTS.value]))
-        if ServerResourceType.ENTITLEMENTS.value in resources:
-            resourceStrings.extend(self.__formatEntitlements(resources[ServerResourceType.ENTITLEMENTS.value]))
+        if ResourceType.CURRENCY.value in resources:
+            resourceStrings.extend(self.__formatCurrencies(resources[ResourceType.CURRENCY.value]))
+        if ResourceType.BLUEPRINTS.value in resources:
+            resourceStrings.append(self.__formatBlueprints(resources[ResourceType.BLUEPRINTS.value]))
         return (backport.text(self.__RESOURCE_WELL_MESSAGES.breakLine()) + self.__BULLET).join(resourceStrings)
 
     def __formatBlueprints(self, blueprintResources):
@@ -5114,17 +5163,6 @@ class ResourceWellOperationFormatter(ServiceChannelFormatter):
     def __formatCurrencies(self, currencyResources):
         currencies = sorted(currencyResources.items(), key=lambda x: x[0], cmp=lambda a, b: cmp(self.__CURRENCY_ORDER.get(a), self.__CURRENCY_ORDER.get(b)))
         return [ backport.text(self.__RESOURCE_WELL_MESSAGES.dyn(name)(), count=self.__formatCurrencyCount(name, count)) for name, count in currencies ]
-
-    def __formatEntitlements(self, entitlementResources):
-        result = []
-        for resourceName, diff in entitlementResources.items():
-            if resourceName == PREMIUM_ENTITLEMENTS.PLUS:
-                days = abs(diff) // SECONDS_IN_DAY
-                daysStr = backport.getIntegralFormat(days)
-                result.append(backport.text(self.__RESOURCE_WELL_MESSAGES.premium_plus(), count=text_styles.crystal(daysStr)))
-            _logger.error(u"ResourceWell: Unknown entitlement '%s'", resourceName)
-
-        return result
 
     def __formatCurrencyCount(self, currencyName, count):
         style = getStyle(currencyName) if currencyName in Currency.ALL else text_styles.crystal

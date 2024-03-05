@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 import logging
 import typing
+from battle_modifiers_common import BattleParams
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -26,7 +27,7 @@ from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
 from shared_utils import first, CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBootcampController, IWotPlusController
+from skeletons.gui.game_control import IBootcampController, IWotPlusController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -180,7 +181,7 @@ class ModuleTooltipBlockConstructor(object):
     CALIBER = 'caliber'
     DUAL_ACCURACY_MODULE_PARAM = 'dualAccuracy'
     DEFAULT_PARAM = 'default'
-    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime'),
+    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime', 'vehicleGunShotStabilizationChassisMovement', 'vehicleGunShotStabilizationChassisRotation'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
      GUI_ITEM_TYPE.GUN: ('avgDamageList',
                          'avgPiercingPower',
@@ -267,6 +268,7 @@ class ModuleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def construct(self):
         module = self.module
@@ -293,6 +295,10 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
                 cooldownSeconds = module.descriptor.cooldownSeconds
                 if cooldownSeconds:
+                    if self.__comp7Controller.isBattleModifiersAvailable():
+                        modifiers = self.__comp7Controller.getBattleModifiersObject()
+                        if modifiers is not None:
+                            cooldownSeconds = modifiers(BattleParams.EQUIPMENT_COOLDOWN, cooldownSeconds)
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
                     paramValue = params_formatters.formatParameter(paramName, cooldownSeconds)
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
@@ -918,9 +924,6 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     tooltipHeader, tooltipText = self.__getInstalledVehiclesBlock(installedVehicles, module)
                 else:
                     tooltipHeader = None
-            elif reason == 'too_heavy':
-                titleFormatter = text_styles.critical
-                showAllInstalled = False
         if tooltipHeader is not None or tooltipText is not None:
             if showAllInstalled and len(totalInstalledVehicles) > self.MAX_INSTALLED_LIST_LEN:
                 hiddenVehicleCount = len(totalInstalledVehicles) - self.MAX_INSTALLED_LIST_LEN

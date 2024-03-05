@@ -46,7 +46,7 @@ class FreeXpStepperCalculator(object):
         return self._getTargetFreeXp(targetSkillsLevelsXpCost - lastSkillsLevelsXpCost)
 
     def getLevelDownXpState(self):
-        if self.__possibleRoleLevel != self.__lastRoleLevel and (self.__possibleSkillLevel == 0 or self.__possibleSkillsCount >= self.__availableSkillsCount):
+        if self.__possibleRoleLevel >= self.__lastRoleLevel and (self.__possibleSkillLevel == 0 or self.__possibleSkillsCount >= self.__availableSkillsCount or self.__possibleSkillLevel.intSkillLvl == self.__lastSkillLevel.intSkillLvl and self.__possibleSkillsCount == self.__lastSkillsCount):
             possibleSkillLevel = self.__possibleRoleLevel - 1
             possibleSkillsCount = 0
             targetTmanXp = self.getRoleStepXpCost(possibleSkillsCount, possibleSkillLevel)
@@ -97,7 +97,7 @@ class FreeXpStepperCalculator(object):
 
     def getSkillUpXpState(self):
         isRoleMax = self.__possibleRoleLevel.intSkillLvl == MAX_SKILL_LEVEL
-        if self.__possibleSkillsCount >= self.__availableSkillsCount or self.__possibleSkillsCount == 0 and not isRoleMax:
+        if self.__possibleSkillsCount > self.__availableSkillsCount or self.__possibleSkillsCount == 0 and not isRoleMax:
             if not isRoleMax:
                 before = TankmanDescr.getXpCostForSkillsLevels(self.__possibleRoleLevel.intSkillLvl, 0)
                 after = TankmanDescr.getXpCostForSkillsLevels(MAX_SKILL_LEVEL, 0)

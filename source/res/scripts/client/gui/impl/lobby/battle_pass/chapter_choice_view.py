@@ -5,7 +5,7 @@ import typing
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN, AccountSettings
 from battle_pass_common import CurrencyBP, FinalReward
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, Array
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassCoinProductsUrl, getBattlePassPointsProductsUrl
@@ -18,7 +18,7 @@ from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_choice_view_model import ChapterChoiceViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import ChapterModel, ChapterStates
+from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import ChapterModel, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -31,12 +31,12 @@ from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 if typing.TYPE_CHECKING:
-    from frameworks.wulf import Array
     from gui.shared.gui_items.customization.c11n_items import Style
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
  ChapterState.PAUSED: ChapterStates.PAUSED,
- ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
+ ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED,
+ ChapterState.DISABLED: ChapterStates.DISABLED}
 _FULL_PROGRESS = 100
 
 class ChapterChoiceView(ViewImpl):
@@ -79,7 +79,7 @@ class ChapterChoiceView(ViewImpl):
          (self.viewModel.onClose, self.__close),
          (self.viewModel.collectionEntryPoint.openCollection, self.__openCollection),
          (self.__battlePass.onBattlePassSettingsChange, self.__checkBPState),
-         (self.__battlePass.onExtraChapterExpired, self.__checkBPState),
+         (self.__battlePass.onMarathonChapterExpired, self.__checkBPState),
          (self.__battlePass.onPointsUpdated, self.__onPointsUpdated),
          (self.__battlePass.onSelectTokenUpdated, self.__updateRewardChoice),
          (self.__battlePass.onOffersUpdated, self.__updateRewardChoice),
@@ -114,8 +114,8 @@ class ChapterChoiceView(ViewImpl):
                 self.__fillVehicle(style, model)
             model.setChapterID(chapterID)
             model.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
+            model.setChapterType(ChapterType(self.__battlePass.getChapterType(chapterID)))
             model.setIsBought(self.__battlePass.isBought(chapterID=chapterID))
-            model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
             self.__fillProgression(chapterID, model)
             chapters.addViewModel(model)
 
@@ -192,7 +192,7 @@ class ChapterChoiceView(ViewImpl):
             hideVehiclePreview(back=False)
             style = getStyleForChapter(chapterID, battlePass=self.__battlePass)
             vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
-            if self.__battlePass.isExtraChapter(chapterID) or not style.isProgressive:
+            if self.__battlePass.isMarathonChapter(chapterID) or not style.isProgressive:
                 self.__showStylePreview(style, vehicleCD)
             else:
                 self.__showProgressionStylePreview(style, vehicleCD)

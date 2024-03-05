@@ -943,7 +943,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5750	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	0.9 1.1 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1729,7 +1728,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5750	</weight>
-      <maxLoad>	32000	</maxLoad>
       <terrainResistance>	0.7 0.9 1.8	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3109,7 +3107,7 @@
         </_90mm_F3>
         <Canon_de_90mm_Vo_930_m_s>	shared	  <maxAmmo>	42	</maxAmmo>
           <unlocks>
-            <gun>	_100mm_SA_47	  <cost>	34500	</cost>
+            <gun>	_100mm_SA_47_25t	  <cost>	34500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3647,7 +3645,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </Canon_de_90mm_Vo_930_m_s>
-        <_100mm_SA_47>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_100mm_SA_47_25t>	shared	  <maxAmmo>	42	</maxAmmo>
           <unlocks>
             <vehicle>	F18_Bat_Chatillon25t	  <cost>	200000	</cost>
             </vehicle>
@@ -3675,7 +3673,7 @@
             <rate>	22	</rate>
           </clip>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	45	</reloadTime>
+          <reloadTime>	40	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -4195,7 +4193,7 @@
             <density>	121.541 137.11	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_100mm_SA_47>
+        </_100mm_SA_47_25t>
       </guns>
       <models>
         <undamaged>	vehicles/french/F75_Char_de_25t/normal/lod0/Turret_01.model	</undamaged>

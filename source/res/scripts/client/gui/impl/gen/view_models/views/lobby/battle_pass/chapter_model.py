@@ -9,6 +9,13 @@ class ChapterStates(Enum):
     PAUSED = 'paused'
     COMPLETED = 'completed'
     NOTSTARTED = 'notStarted'
+    DISABLED = 'disabled'
+
+
+class ChapterType(Enum):
+    DEFAULT = 'default'
+    MARATHON = 'marathon'
+    RESOURCE = 'resource'
 
 
 class ChapterModel(ViewModel):
@@ -67,17 +74,17 @@ class ChapterModel(ViewModel):
     def setLevelProgression(self, value):
         self._setNumber(7, value)
 
-    def getIsExtra(self):
-        return self._getBool(8)
-
-    def setIsExtra(self, value):
-        self._setBool(8, value)
-
     def getFinalReward(self):
-        return self._getString(9)
+        return self._getString(8)
 
     def setFinalReward(self, value):
-        self._setString(9, value)
+        self._setString(8, value)
+
+    def getChapterType(self):
+        return ChapterType(self._getString(9))
+
+    def setChapterType(self, value):
+        self._setString(9, value.value)
 
     def _initialize(self):
         super(ChapterModel, self)._initialize()
@@ -89,5 +96,5 @@ class ChapterModel(ViewModel):
         self._addBoolProperty('isVehicleInHangar', False)
         self._addBoolProperty('isBought', False)
         self._addNumberProperty('levelProgression', 0)
-        self._addBoolProperty('isExtra', False)
         self._addStringProperty('finalReward', '')
+        self._addStringProperty('chapterType')

@@ -53,7 +53,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12270	</weight>
-    <maxHealth>	880	</maxHealth>
+    <maxHealth>	980	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -847,7 +847,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	33300	</maxLoad>
       <terrainResistance>	0.9 1 2	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1712,9 +1711,9 @@
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 4 0.555556 4 0.619218 5 1 5	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.38078 7.00 0.44444 4.00 0.55556 4.00 0.61922 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>

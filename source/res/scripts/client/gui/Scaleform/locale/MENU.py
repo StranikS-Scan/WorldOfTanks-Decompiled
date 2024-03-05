@@ -265,7 +265,6 @@ class MENU(object):
     TANKCAROUSEL_STATSSTATUS_UNAVAILABLE = '#menu:tankCarousel/statsStatus/unavailable'
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
     TANKCAROUSEL_VEHICLESTATES_DISABLED = '#menu:tankCarousel/vehicleStates/disabled'
-    TANKCAROUSEL_VEHICLESTATES_TOOHEAVY = '#menu:tankCarousel/vehicleStates/tooHeavy'
     TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE = '#menu:tankCarousel/wotPlusSelectionAvailable'
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
@@ -321,7 +320,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_DISABLED = '#menu:currentVehicleStatus/disabled'
     CURRENTVEHICLESTATUS_LOCKED = '#menu:currentVehicleStatus/locked'
     CURRENTVEHICLESTATUS_CLANLOCKED = '#menu:currentVehicleStatus/clanLocked'
-    CURRENTVEHICLESTATUS_TOOHEAVY = '#menu:currentVehicleStatus/tooHeavy'
     CURRENTVEHICLESTATUS_AMMONOTFULL = '#menu:currentVehicleStatus/ammoNotFull'
     CURRENTVEHICLESTATUS_AMMONOTFULLEVENTS = '#menu:currentVehicleStatus/ammoNotFullEvents'
     CURRENTVEHICLESTATUS_DAMAGED = '#menu:currentVehicleStatus/damaged'
@@ -935,9 +933,6 @@ class MENU(object):
     MODULEFITS_NEED_TURRET = '#menu:moduleFits/need_turret'
     MODULEFITS_NOT_FOR_THIS_VEHICLE_TYPE = '#menu:moduleFits/not_for_this_vehicle_type'
     MODULEFITS_NOT_FOR_CURRENT_VEHICLE = '#menu:moduleFits/not_for_current_vehicle'
-    MODULEFITS_TOO_HEAVY = '#menu:moduleFits/too_heavy'
-    MODULEFITS_TOO_HEAVY_CHASSIS = '#menu:moduleFits/too_heavy_chassis'
-    MODULEFITS_REMOVE_TOO_HEAVY = '#menu:moduleFits/remove_too_heavy'
     MODULEFITS_UNLOCK_ERROR = '#menu:moduleFits/unlock_error'
     MODULEFITS_WRONG_SLOT = '#menu:moduleFits/wrong_slot'
     MODULEFITS_ALREADY_INSTALLED = '#menu:moduleFits/already_installed'
@@ -1103,10 +1098,11 @@ class MENU(object):
     MODULEINFO_ROCKETACCELERATIONENGINE = '#menu:moduleInfo/rocketAccelerationEngine'
     MODULEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:moduleInfo/params/chassisRepairTime'
     MODULEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:moduleInfo/params/chassisRepairTimeYoh'
-    MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
     MODULEINFO_PARAMS_MAXSTEERINGLOCKANGLE = '#menu:moduleInfo/params/maxSteeringLockAngle'
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
     MODULEINFO_PARAMS_AREASQUARE = '#menu:moduleInfo/params/areaSquare'
+    MODULEINFO_PARAMS_VEHICLEGUNSHOTSTABILIZATIONCHASSISMOVEMENT = '#menu:moduleInfo/params/vehicleGunShotStabilizationChassisMovement'
+    MODULEINFO_PARAMS_VEHICLEGUNSHOTSTABILIZATIONCHASSISROTATION = '#menu:moduleInfo/params/vehicleGunShotStabilizationChassisRotation'
     MODULEINFO_PARAMS_FLYDELAYRANGE = '#menu:moduleInfo/params/flyDelayRange'
     MODULEINFO_PARAMS_COMMONDELAY = '#menu:moduleInfo/params/commonDelay'
     MODULEINFO_PARAMS_DURATION = '#menu:moduleInfo/params/duration'
@@ -1755,6 +1751,7 @@ class MENU(object):
     BONUSTYPE_42 = '#menu:bonusType/42'
     BONUSTYPE_43 = '#menu:bonusType/43'
     BONUSTYPE_44 = '#menu:bonusType/44'
+    BONUSTYPE_50 = '#menu:bonusType/50'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2444,7 +2441,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
      TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT,
      TANKCAROUSEL_VEHICLESTATES_DISABLED,
-     TANKCAROUSEL_VEHICLESTATES_TOOHEAVY,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,

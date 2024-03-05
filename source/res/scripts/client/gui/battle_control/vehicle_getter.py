@@ -17,7 +17,7 @@ def hasTurretRotator(vDesc):
 
 
 def isWheeledTech(vDesc):
-    return False if vDesc is None else 'wheeledVehicle' in vDesc.type.tags
+    return False if vDesc is None else vDesc.type.isWheeledVehicle
 
 
 def isTrackWithinTrackTech(vDesc):

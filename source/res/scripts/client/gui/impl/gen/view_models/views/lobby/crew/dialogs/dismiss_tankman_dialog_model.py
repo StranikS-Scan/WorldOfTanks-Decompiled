@@ -4,9 +4,9 @@ from gui.impl.gen.view_models.views.dialogs.dialog_template_view_model import Di
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 
 class DismissTankmanDialogModel(DialogTemplateViewModel):
-    __slots__ = ('onInputChanged',)
+    __slots__ = ()
 
-    def __init__(self, properties=14, commands=3):
+    def __init__(self, properties=14, commands=2):
         super(DismissTankmanDialogModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -71,4 +71,3 @@ class DismissTankmanDialogModel(DialogTemplateViewModel):
         self._addStringProperty('perkName', '')
         self._addNumberProperty('perkLevel', 0)
         self._addNumberProperty('trainingLevel', 0)
-        self.onInputChanged = self._addCommand('onInputChanged')

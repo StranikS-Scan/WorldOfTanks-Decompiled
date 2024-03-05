@@ -412,6 +412,9 @@ class _ActivatableEquipment(_RefillEquipmentItem, _EquipmentItem):
         self.__totalActiveTime = descriptor.activeSeconds
         super(_ActivatableEquipment, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
 
+    def getTotalCooldownTime(self):
+        return self.__totalCooldownTime
+
     def getAnimationType(self):
         return ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_GREEN if self._stage == EQUIPMENT_STAGES.ACTIVE else super(_ActivatableEquipment, self).getAnimationType()
 
@@ -419,8 +422,8 @@ class _ActivatableEquipment(_RefillEquipmentItem, _EquipmentItem):
         super(_ActivatableEquipment, self).update(quantity, stage, timeRemaining, totalTime)
         if stage == EQUIPMENT_STAGES.ACTIVE and self._prevStage != EQUIPMENT_STAGES.ACTIVE:
             totalTime = self.__totalActiveTime
-        elif stage == EQUIPMENT_STAGES.COOLDOWN:
-            totalTime = self.__totalCooldownTime
+        else:
+            self.__totalCooldownTime = totalTime
         self._totalTime = totalTime
 
 

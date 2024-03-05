@@ -27,7 +27,7 @@ from gui.event_boards.settings import expandGroup, isGroupMinimized
 from gui.server_events import settings, caches
 from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
-from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium, isDebutBoxesQuest
+from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium, isDebutBoxesQuest, isCosmicQuest
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -358,7 +358,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
 
     @staticmethod
     def getViewQuestFilter():
-        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID()) or isDebutBoxesQuest(q.getID()))
+        return lambda q: not (isMarathon(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID()) or isDebutBoxesQuest(q.getID()) or isCosmicQuest(q.getID()))
 
     @staticmethod
     def getViewQuestFilterIncludingDailyQuests():

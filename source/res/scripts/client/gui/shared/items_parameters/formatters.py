@@ -54,7 +54,6 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'explosionRadius': MENU.TANK_PARAMS_M,
  'gunYawLimits': MENU.TANK_PARAMS_GRADS,
  'hullArmor': MENU.TANK_PARAMS_FACEFRONTBOARDINMM,
- 'maxLoad': MENU.TANK_PARAMS_T,
  'piercingPower': MENU.TANK_PARAMS_MM,
  'pitchLimits': MENU.TANK_PARAMS_GRADS,
  'radioDistance': MENU.TANK_PARAMS_M,
@@ -119,7 +118,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'increaseHealth': MENU.TANK_PARAMS_VAL,
  'artNotificationDelayFactor': MENU.TANK_PARAMS_S,
  'vehicleOwnSpottingTime': MENU.TANK_PARAMS_S,
- 'damagedModulesDetectionTime': MENU.TANK_PARAMS_S}
+ 'damagedModulesDetectionTime': MENU.TANK_PARAMS_S,
+ 'vehicleGunShotStabilizationChassisMovement': MENU.TANK_PARAMS_PERCENT,
+ 'vehicleGunShotStabilizationChassisRotation': MENU.TANK_PARAMS_PERCENT}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'activeSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
@@ -136,11 +137,12 @@ EXTRACTED_BONUS_SCHEME = (text_styles.error, text_styles.bonusAppliedText, text_
 SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
- ITEM_TYPES.vehicleChassis: ('maxLoad',
-                             'rotationSpeed',
+ ITEM_TYPES.vehicleChassis: ('rotationSpeed',
                              'weight',
                              MAX_STEERING_LOCK_ANGLE,
-                             CHASSIS_REPAIR_TIME),
+                             CHASSIS_REPAIR_TIME,
+                             'vehicleGunShotStabilizationChassisMovement',
+                             'vehicleGunShotStabilizationChassisRotation'),
  ITEM_TYPES.vehicleEngine: ('enginePower',
                             TURBOSHAFT_ENGINE_POWER,
                             ROCKET_ACCELERATION_ENGINE_POWER,
@@ -360,7 +362,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
  'relativeMobility': _integralFormat,
- 'vehicleWeight': _niceListFormat,
+ 'vehicleWeight': _niceFormat,
  'weight': _niceRangeFormat,
  'enginePower': _integralFormat,
  TURBOSHAFT_ENGINE_POWER: _integralFormat,
@@ -372,7 +374,6 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'relativeCamouflage': _integralFormat,
  'circularVisionRadius': _niceListFormat,
  'radioDistance': _niceFormat,
- 'maxLoad': _niceFormat,
  'rotationSpeed': _niceFormat,
  'fireStartingChance': _percentFormat,
  'armor': _listFormat,
@@ -430,7 +431,9 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'maxDamage': _niceFormat,
  'artNotificationDelayFactor': _niceFormat,
  'vehicleOwnSpottingTime': _niceFormat,
- 'damagedModulesDetectionTime': _niceFormat}
+ 'damagedModulesDetectionTime': _niceFormat,
+ 'vehicleGunShotStabilizationChassisMovement': _percentFormat,
+ 'vehicleGunShotStabilizationChassisRotation': _percentFormat}
 
 def _deltaWrapper(fn):
 
@@ -597,6 +600,11 @@ def getBonusIconRes(bonusId, bonusType, archetype=None):
             iconR = R.images.gui.maps.icons.vehPostProgression.actionItems.pairModifications.c_24x24.dyn(mod.imgName, R.invalid)()
         else:
             iconR = R.invalid()
+    elif bonusType == BonusTypes.BATTLE_MODIFIERS:
+        if archetype:
+            iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.dyn(archetype, R.invalid)()
+        else:
+            iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.battleModifiers()
     elif bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer' and bonusId.find('trophy') == -1:
         iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.rammer()
     elif archetype:

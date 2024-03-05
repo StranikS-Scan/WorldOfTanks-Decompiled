@@ -136,6 +136,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_updateScaleWidgetS(self, positionValue):
         return self.flashObject.as_updateScaleWidget(positionValue) if self._isDAAPIInited() else None
 
+    def as_updateScaleStepsS(self, count):
+        return self.flashObject.as_updateScaleSteps(count) if self._isDAAPIInited() else None
+
     def as_setGunMarkersIndicatorsS(self, indicators):
         return self.flashObject.as_setGunMarkersIndicators(indicators) if self._isDAAPIInited() else None
 

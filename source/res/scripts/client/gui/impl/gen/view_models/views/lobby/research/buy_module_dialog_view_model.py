@@ -6,8 +6,6 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 class MountDisabledReason(Enum):
     INVALID = 'invalid'
     NONE = 'none'
-    HEAVY = 'too heavy'
-    HEAVYCHASSIS = 'too heavy chassis'
     NEEDGUN = 'need gun'
     NOTFORVEHICLETYPE = 'not for this vehicle type'
     NOTFORCURRENTVEHICLE = 'not for current vehicle'

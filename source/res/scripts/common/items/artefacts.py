@@ -95,7 +95,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -106,7 +106,6 @@ class Artefact(BasicItem):
         self.showInShop = False
         self._vehWeightFraction = component_constants.ZERO_FLOAT
         self._weight = component_constants.ZERO_FLOAT
-        self._maxWeightChange = component_constants.ZERO_FLOAT
         self._exportParams = {}
         self.__vehicleFilter = None
         self.__artefactFilter = None
@@ -163,10 +162,6 @@ class Artefact(BasicItem):
             self._weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
         else:
             self._weight = 0.0
-        self._maxWeightChange = 0.0
-
-    def weightOnVehicle(self, vehicleDescr):
-        return (self._vehWeightFraction, self._weight, 0.0)
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
         return (True, None) if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibility(vehicleDescr)
@@ -569,21 +564,11 @@ class Equipment(Artefact):
 
 
 class ExtraHealthReserve(StaticOptionalDevice):
-    __slots__ = ('chassisMaxLoadFactor',)
-
-    def weightOnVehicle(self, vehicleDescr):
-        chassis = vehicleDescr.chassis
-        level = self.defineActiveLevel(vehicleDescr)
-        return super(ExtraHealthReserve, self).weightOnVehicle(vehicleDescr) if level is None else (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.chassisMaxLoadFactor.getActiveValue(level) - 1.0))
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         super(ExtraHealthReserve, self).updateVehicleDescrAttrs(vehicleDescr)
         descr = vehicleDescr.chassis
         vehicleDescr.miscAttrs['chassisHealthAfterHysteresisFactor'] = float(descr.maxHealth) / descr.maxRegenHealth
-
-    def _readConfig(self, xmlCtx, section):
-        super(ExtraHealthReserve, self)._readConfig(xmlCtx, section)
-        self.chassisMaxLoadFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'chassisMaxLoadFactor')
 
 
 class Grousers(StaticOptionalDevice):
@@ -600,6 +585,7 @@ class Grousers(StaticOptionalDevice):
             rollingFrictionFactorActiveValue = self.rollingFrictionFactor.getActiveValue(level)
             r = vehicleDescr.physics['terrainResistance']
             vehicleDescr.physics['terrainResistance'] = tuple((ri * rotationFactorActiveValue for ri in r))
+            vehicleDescr.physics['groundRotationFactor'] *= rotationFactorActiveValue
             rff = vehicleDescr.physics['rollingFrictionFactors']
             vehicleDescr.physics['rollingFrictionFactors'] = list((rffi * rollingFrictionFactorActiveValue for rffi in rff))
             return
@@ -2416,7 +2402,10 @@ class Comp7AoeHealEquipment(VisualScriptEquipment):
     @property
     def tooltipParams(self):
         params = super(Comp7AoeHealEquipment, self).tooltipParams
-        params['heal'] = tuple(map(lambda h: h * self.tickInterval * self.duration, self.heal))
+        params['heal'] = tuple(map(lambda h: int(h * self.tickInterval * self.duration), self.heal))
+        if self.secondaryHealDebuff:
+            debuf = 1.0 - self.secondaryHealDebuff / 100.0
+            params['debuf'] = tuple(map(lambda h: int(int(h * debuf) * self.tickInterval * self.duration), self.heal))
         return params
 
     def _readConfig(self, xmlCtx, section):

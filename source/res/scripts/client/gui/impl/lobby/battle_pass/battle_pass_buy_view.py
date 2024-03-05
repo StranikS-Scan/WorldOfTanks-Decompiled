@@ -14,7 +14,7 @@ from gui.battle_pass.battle_pass_package import generatePackages
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, PackageItem, PackageType
+from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import ChapterStates, PackageItem, PackageType, ChapterType
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -32,7 +32,8 @@ WINDOW_IS_NOT_OPENED = -1
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.COMPLETED: ChapterStates.COMPLETED,
  ChapterState.PAUSED: ChapterStates.PAUSED,
- ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
+ ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED,
+ ChapterState.DISABLED: ChapterStates.DISABLED}
 _CURRENCY_PRIORITY = (Currency.GOLD, Currency.FREE_XP)
 
 class BattlePassBuyViewStates(object):
@@ -118,7 +119,7 @@ class BattlePassBuyView(ViewImpl):
          (self.__wallet.onWalletStatusChanged, self.__onWalletChanged),
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged),
          (self.__battlePass.onSeasonStateChanged, self.__onBattlePassSettingsChanged),
-         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired))
+         (self.__battlePass.onMarathonChapterExpired, self.__onMarathonChapterExpired))
 
     def _getListeners(self):
         return ((BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY),)
@@ -230,7 +231,7 @@ class BattlePassBuyView(ViewImpl):
             g_eventBus.addListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
 
     def __isShopOfferAvailable(self):
-        return not any((package.isBought() and not package.isExtra() for package in self.__packages.itervalues()))
+        return not any((package.isBought() and not package.isMarathon() for package in self.__packages.itervalues()))
 
     def __onShopOfferClick(self):
         showShop(getBuyBattlePassUrl())
@@ -249,7 +250,7 @@ class BattlePassBuyView(ViewImpl):
             item.setType(PackageType.BATTLEPASS)
             item.setIsLocked(package.isLocked())
             item.setChapterID(package.getChapterID())
-            item.setIsExtra(package.isExtra())
+            item.setChapterType(ChapterType(self.__battlePass.getChapterType(package.getChapterID())))
             item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
             item.setCurrentLevel(package.getCurrentLevel() + 1)
             item.setExpireTime(self.__battlePass.getChapterRemainingTime(package.getChapterID()))
@@ -264,7 +265,7 @@ class BattlePassBuyView(ViewImpl):
     def __onBattlePassSettingsChanged(self, *_):
         self.__update()
 
-    def __onExtraChapterExpired(self):
+    def __onMarathonChapterExpired(self):
         self.__update()
 
     def __update(self):
@@ -279,7 +280,7 @@ class BattlePassBuyView(ViewImpl):
         if len(ctrl.getChapterIDs()) != self.viewModel.packages.getItemsLength():
             self.__packages = generatePackages(battlePass=ctrl)
             self.__setPackages()
-        isValidState = not self.__packageID or ctrl.isChapterExists(self.__packageID) and (not ctrl.isExtraChapter(self.__packageID) or ctrl.getChapterRemainingTime(self.__packageID) > 0)
+        isValidState = not self.__packageID or ctrl.isChapterExists(self.__packageID) and (not ctrl.isMarathonChapter(self.__packageID) or ctrl.getChapterRemainingTime(self.__packageID) > 0)
         allBought = all((ctrl.isBought(chID) for chID in ctrl.getChapterIDs()))
         if not isValidState or allBought:
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())

@@ -93,3 +93,4 @@ class BATTLE_VIEW_ALIASES(object):
     MAP_INFO_TIP = 'mapInfoTip'
     COMP7_TANK_CAROUSEL = 'comp7BattleTankCarousel'
     COMP7_TANK_CAROUSEL_FILTER_POPOVER = 'comp7TankCarouselFilterPopover'
+    COSMIC_HUD = 'cosmicHud'

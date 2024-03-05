@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+from battle_modifiers_common import BattleModifiers
 from constants import BonusTypes
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
@@ -96,13 +97,20 @@ def _removePostProgressionBaseModifications(vehicle, modificationsName):
     return vehicle
 
 
+def _removeBattleModifiers(vehicle, _):
+    vehicle.descriptor.battleModifiers = BattleModifiers()
+    vehicle.descriptor.rebuildAttrs()
+    return vehicle
+
+
 _VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
  BonusTypes.EXTRA: _removeCamouflageModifier,
  BonusTypes.EQUIPMENT: _removeEquipmentModifier,
  BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
  BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
  BonusTypes.PAIR_MODIFICATION: _removePostProgressionModification,
- BonusTypes.BASE_MODIFICATION: _removePostProgressionBaseModifications}
+ BonusTypes.BASE_MODIFICATION: _removePostProgressionBaseModifications,
+ BonusTypes.BATTLE_MODIFIERS: _removeBattleModifiers}
 _NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier2', BonusTypes.OPTIONAL_DEVICE), ('stereoscope_tier3', BonusTypes.OPTIONAL_DEVICE)),
  'invisibilityStillFactor': (('camouflageNet_tier2', BonusTypes.OPTIONAL_DEVICE), ('camouflageNet_tier3', BonusTypes.OPTIONAL_DEVICE), ('camouflageBattleBooster', BonusTypes.BATTLE_BOOSTER)),
  'chassisRotationSpeed': (('virtuosoBattleBooster', BonusTypes.BATTLE_BOOSTER),),
@@ -177,7 +185,10 @@ class BonusExtractor(object):
         return getParamExtendedData(self.__paramName, valueWithBonus, valueWithoutBonus)
 
     def _getCopyVehicle(self, vehicle):
-        return self.itemsCache.items.getVehicleCopy(vehicle)
+        newVehicle = self.itemsCache.items.getVehicleCopy(vehicle)
+        newVehicle.descriptor.battleModifiers = vehicle.descriptor.battleModifiers
+        newVehicle.descriptor.rebuildAttrs()
+        return newVehicle
 
     def __extractParamValue(self, paramName):
         return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), paramName)

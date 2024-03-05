@@ -110,7 +110,7 @@ def getRadioDistance(vehicleDescr, factors):
 
 
 def getCircularVisionRadius(vehicleDescr, factors):
-    return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
+    return vehicleDescr.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
 
 
 def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):

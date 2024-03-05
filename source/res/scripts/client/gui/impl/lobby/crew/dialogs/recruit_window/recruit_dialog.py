@@ -19,8 +19,8 @@ from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from sound_gui_manager import CommonSoundSpaceSettings
-from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
-from gui.sounds.filters import States, StatesGroup
+from gui.server_events.pm_constants import SOUNDS as PM_SOUNDS, _SOUNDS_PRIORITIES as PM_SOUND_PRIORITIES
+from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
 from uilogging.crew.logging_constants import CrewDialogKeys
 from wg_async import AsyncEvent, wg_await, BrokenPromiseError, AsyncReturn, wg_async
 from gui.shared.gui_items.Tankman import NO_TANKMAN
@@ -65,9 +65,6 @@ class BaseRecruitDialog(BaseCrewDialogTemplateView):
 class TokenRecruitDialog(BaseRecruitDialog):
     __slots__ = ('__tokenName', '__tokenData', '__vehicleSlotToUnpack', '__vehicle')
     _itemsCache = dependency.descriptor(IItemsCache)
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE,
-     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.WOMAN_AWARD_WINDOW, exitEvent='')
-    _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, ctx=None, **kwargs):
         super(TokenRecruitDialog, self).__init__(**kwargs)
@@ -144,7 +141,8 @@ class TokenRecruitDialog(BaseRecruitDialog):
 class QuestRecruitDialog(BaseRecruitDialog):
     __slots__ = ('__mission', '__isFemale', '__vehicleSlotToUnpack', '__vehicle', '__inventoryUpdateEvent')
     _itemsCache = dependency.descriptor(IItemsCache)
-    _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SILENT_SOUND_SPACE
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name=PM_SOUNDS.COMMON_SOUND_SPACE, entranceStates={CREW_SOUNDS.OVERLAY_HANGAR_GENERAL: CREW_SOUNDS.OVERLAY_HANGAR_GENERAL_ON}, exitStates={CREW_SOUNDS.OVERLAY_HANGAR_GENERAL: CREW_SOUNDS.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=PM_SOUND_PRIORITIES, autoStart=True, enterEvent='', exitEvent='', parentSpace=CREW_SOUNDS.COMMON_SOUND_SPACE)
+    _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, ctx=None, **kwargs):
         super(QuestRecruitDialog, self).__init__(**kwargs)
@@ -172,10 +170,6 @@ class QuestRecruitDialog(BaseRecruitDialog):
         if not hasBackground:
             self.viewModel.iconModel.bgIcon.setPath(getIconBackground())
         super(QuestRecruitDialog, self)._onLoading(*args, **kwargs)
-
-    def _onLoaded(self, *args, **kwargs):
-        super(QuestRecruitDialog, self)._onLoaded(*args, **kwargs)
-        self.soundManager.playInstantSound(SOUNDS.WOMAN_AWARD_WINDOW)
 
     def _finalize(self):
         super(QuestRecruitDialog, self)._finalize()

@@ -4,10 +4,9 @@ from base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.dismiss_tankman_dialog_model import DismissTankmanDialogModel
-from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setReplacedTankmanModel, setTmanSkillsModel
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.shared.gui_items.Tankman import Tankman, MAX_ROLE_LEVEL
+from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.items_actions import factory
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IRestoreController
@@ -29,22 +28,12 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
     def viewModel(self):
         return self.getViewModel()
 
-    def _getEvents(self):
-        return ((self.viewModel.onInputChanged, self._onInputChanged),)
-
     def _onLoading(self, *args, **kwargs):
         self.setBackgroundImagePath(R.images.gui.maps.icons.windows.background())
-        self.addButton(ConfirmButton(R.strings.dialogs.dismissTankman.buttons.dismiss(), isDisabled=True))
+        self.addButton(ConfirmButton(R.strings.dialogs.dismissTankman.buttons.dismiss()))
         self.addButton(CancelButton())
         self._updateViewModel()
         super(DismissTankmanDialog, self)._onLoading(*args, **kwargs)
-
-    @args2params(str)
-    def _onInputChanged(self, value):
-        descriptor = self._tankman.descriptor
-        controlNumber = descriptor.lastSkillLevel if self._tankman.skills else descriptor.roleLevel
-        self.getButton(DialogButtons.SUBMIT).isDisabled = value != str(controlNumber)
-        self.setFocusedIndex(0 if value == str(controlNumber) else -1)
 
     def _setResult(self, result):
         if result == DialogButtons.SUBMIT:
@@ -76,4 +65,3 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
                 replacedTmanVeh = self._itemsCache.items.getItemByCD(replacedTman.vehicleNativeDescr.type.compactDescr)
                 setReplacedTankmanModel(vm.replacedTankman, replacedTman, replacedTmanVeh)
         vm.setTrainingLevel(self._tankman.roleLevel)
-        self.getButton(DialogButtons.SUBMIT).isDisabled = self._tankman.roleLevel == MAX_ROLE_LEVEL

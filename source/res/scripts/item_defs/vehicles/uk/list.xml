@@ -195,7 +195,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <tags>	heavyTank role_HT_universal HD special improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </GB13_FV215b>
   <GB60_Covenanter>
@@ -527,7 +527,7 @@
     <description>	#gb_vehicles:GB120_Concept_No_5_descr	</description>
     <level>	10	</level>
     <price>	6100000	</price>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
   </GB120_Concept_No_5>
   <GB123_GSOR_1006_v7>
     <id>	76	</id>
@@ -536,7 +536,7 @@
     <description>	#gb_vehicles:GB123_GSOR_1006_v7_descr	</description>
     <level>	9	</level>
     <price>	3400000	</price>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
   </GB123_GSOR_1006_v7>
   <GB125_Saladin>
     <id>	77	</id>
@@ -545,7 +545,7 @@
     <description>	#gb_vehicles:GB125_Saladin_descr	</description>
     <level>	8	</level>
     <price>	2400000	</price>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
   </GB125_Saladin>
   <GB124_AEC_Armoured_Car>
     <id>	78	</id>
@@ -554,7 +554,7 @@
     <description>	#gb_vehicles:GB124_AEC_Armoured_Car_descr	</description>
     <level>	5	</level>
     <price>	415000	</price>
-    <tags>	mediumTank HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
   </GB124_AEC_Armoured_Car>
   <GB122_Staghound_Mk_III>
     <id>	79	</id>
@@ -563,7 +563,7 @@
     <description>	#gb_vehicles:GB122_Staghound_Mk_III_descr	</description>
     <level>	6	</level>
     <price>	910000	</price>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user aimingStabilizer_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user aimingStabilizer_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
   </GB122_Staghound_Mk_III>
   <GB126_FSV_Scheme_A>
     <id>	80	</id>
@@ -571,7 +571,7 @@
     <shortUserString>	#gb_vehicles:GB126_FSV_Scheme_A_short	</shortUserString>
     <description>	#gb_vehicles:GB126_FSV_Scheme_A_descr	</description>
     <price>	1330000	</price>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user aimingStabilizer_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user aimingStabilizer_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </GB126_FSV_Scheme_A>
   <GB19_Sherman_Firefly_MapsTraining_Dummy_MT_2>
@@ -655,6 +655,19 @@
     <tags>	mediumTank private HD battle_royale lockOutfit lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret	</tags>
     <level>	1	</level>
   </GB107_Cavalier_SH>
+  <GB114_Vickers_MBT_Mk3>
+    <id>	199	</id>
+    <userString>	#gb_vehicles:GB114_Vickers_MBT_Mk3	</userString>
+    <shortUserString>	#gb_vehicles:GB114_Vickers_MBT_Mk3_short	</shortUserString>
+    <description>	#gb_vehicles:GB114_Vickers_MBT_Mk3_desc	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB114_Vickers_MBT_Mk3_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB114_Vickers_MBT_Mk3_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD testTank secret unobservable mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </GB114_Vickers_MBT_Mk3>
   <GB113_Matilda_LVT>
     <id>	200	</id>
     <userString>	#gb_vehicles:GB113_Matilda_LVT	</userString>
@@ -1136,7 +1149,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB121_GSOR_1010_FB>
   <GB86_Centurion_Action_X_7x7>
@@ -1151,4 +1164,17 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals comp7 private secret special cannot_be_sold	</tags>
     <level>	10	</level>
   </GB86_Centurion_Action_X_7x7>
+  <GB110_FV4201_Chieftain_Prototype_B>
+    <id>	83	</id>
+    <userString>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_B	</userString>
+    <shortUserString>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_B_short	</shortUserString>
+    <description>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_B_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_B_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_B_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD role_HT_universal improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit	</tags>
+    <level>	9	</level>
+  </GB110_FV4201_Chieftain_Prototype_B>
 </list.xml>

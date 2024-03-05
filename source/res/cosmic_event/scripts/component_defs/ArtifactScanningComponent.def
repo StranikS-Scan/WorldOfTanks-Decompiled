@@ -1,0 +1,29 @@
+<ArtifactScanningComponent.def>
+  <Properties>
+    <vehiclesInZone>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehiclesInZone>
+    <endLifeTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endLifeTime>
+    <duration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </duration>
+    <isLastOne>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isLastOne>
+    <stage>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stage>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	ArtifactScanningComponent	</DefaultKeyName>
+</ArtifactScanningComponent.def>

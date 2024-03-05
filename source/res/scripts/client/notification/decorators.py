@@ -1076,6 +1076,33 @@ class ResourceWellStartDecorator(ResourceWellLockButtonDecorator):
         return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.HIGH)
 
 
+class TradingCaravanDecorator(MessageDecorator):
+    __OVERLAYS = (WindowLayer.FULLSCREEN_WINDOW, WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW)
+    __gui = dependency.descriptor(IGuiLoader)
+
+    def getGroup(self):
+        return NotificationGroup.INFO
+
+    def _makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=self.__getPriority())
+
+    def __getPriority(self):
+        windows = self.__gui.windowsManager.findWindows(lambda w: w.layer in self.__OVERLAYS)
+        return NotificationPriorityLevel.LOW if windows else NotificationPriorityLevel.MEDIUM
+
+
+class TradingCaravanRefillDecorator(TradingCaravanDecorator):
+
+    def __init__(self, entityID, message):
+        super(TradingCaravanRefillDecorator, self).__init__(entityID, self.__makeEntity(message), self._makeSettings())
+
+    def getType(self):
+        return NOTIFICATION_TYPE.TRADING_CARAVAN_REFILL
+
+    def __makeEntity(self, message):
+        return g_settings.msgTemplates.format('TradingCaravanRefillSysMessage', ctx=message)
+
+
 class IntegratedAuctionDecorator(MessageDecorator):
     __OVERLAYS = (WindowLayer.FULLSCREEN_WINDOW, WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW)
     __gui = dependency.descriptor(IGuiLoader)

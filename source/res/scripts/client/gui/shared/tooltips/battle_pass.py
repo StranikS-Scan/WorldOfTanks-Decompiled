@@ -45,7 +45,7 @@ class BattlePassGiftTokenTooltipData(BlocksTooltipData):
         rOffer = R.strings.tooltips.battlePassOffer
         blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(rOffer.title.dyn(shortName)())))]
         if isOfferEnabled:
-            if shortName in ('brochure_gift', 'guide_gift', 'blueprint_gift'):
+            if shortName in ('brochure_gift', 'guide_gift', 'blueprint_gift', 'book_gift'):
                 blocks.append(formatters.packTextBlockData(text=text_styles.gold(backport.text(rOffer.allNations()))))
                 if shortName == 'blueprint_gift':
                     information = backport.text(rOffer.blueprintInfo())

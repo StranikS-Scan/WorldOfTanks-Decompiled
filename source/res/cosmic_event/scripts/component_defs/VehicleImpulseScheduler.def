@@ -1,0 +1,15 @@
+<VehicleImpulseScheduler.def>
+  <Properties>
+    <impactPoint>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </impactPoint>
+  </Properties>
+  <ClientMethods>
+    <onCollision></onCollision>
+  </ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	vehicleImpulseScheduler	</DefaultKeyName>
+</VehicleImpulseScheduler.def>

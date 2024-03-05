@@ -96,7 +96,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
-from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
+from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULTS
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
@@ -172,7 +172,7 @@ class VehicleDeinitFailureException(SoftException):
 
 
 class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController):
-    __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
+    __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULTS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
     isWaitingForShot = property(lambda self: self.__isWaitingForShot)
@@ -2292,7 +2292,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         currTime = BigWorld.time()
         aimingFactor = aimingStartFactor * math.exp((aimingStartTime - currTime) / aimingTime)
         dualAccFactor = dualAccStartFactor * math.exp((dualAccStartTime - currTime) / aimingTime)
-        self.guiSessionProvider.shared.aimingSounds.updateDispersion(multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, dualAccuracy is not None)
+        if self.guiSessionProvider.shared.aimingSounds:
+            self.guiSessionProvider.shared.aimingSounds.updateDispersion(multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, dualAccuracy is not None)
         if aimingFactor < idealFactor:
             aimingFactor = idealFactor
             self.__aimingInfo[0] = currTime
@@ -2438,6 +2439,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__setIsOnArena(True)
                 battleTime = BigWorld.serverTime() - (self.arena.periodEndTime - self.arena.periodLength)
                 BigWorld.notifyBattleTime(self.spaceID, battleTime)
+            BigWorld.notifyBattleEndTime(self.arena.periodEndTime)
             self.arena.onPeriodChange += self.__onArenaPeriodChange
             self.cell.autoAim(0, False)
             g_playerEvents.onAvatarReady()
@@ -2720,6 +2722,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             else:
                 self.soundNotifications.play('start_battle')
             BigWorld.notifyBattleTime(self.spaceID, 0)
+        BigWorld.notifyBattleEndTime(periodEndTime)
         self.__prevArenaPeriod = period
 
     def __startWaitingForShot(self, makePrediction, shotArgs=None):

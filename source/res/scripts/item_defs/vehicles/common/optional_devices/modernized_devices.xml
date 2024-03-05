@@ -21,8 +21,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -74,8 +73,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradableStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -127,8 +125,7 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
-      <factors>
+    <script>	UpgradedStaticDevice	  <factors>
         <factor>
           <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
           <type>	mul	</type>
@@ -180,8 +177,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.05	</trackRotateSpeedFactor>
+    <script>	UpgradableRotationMechanisms	  <trackRotateSpeedFactor>	1.05	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.05	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.05	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.05	</trackMoveSpeedFactor>
@@ -274,8 +270,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradableRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
+    <script>	UpgradableRotationMechanisms	  <trackRotateSpeedFactor>	1.06	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.06	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.06	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.06	</trackMoveSpeedFactor>
@@ -368,8 +363,7 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	UpgradedRotationMechanisms	  <weight>	100	</weight>
-      <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
+    <script>	UpgradedRotationMechanisms	  <trackRotateSpeedFactor>	1.07	</trackRotateSpeedFactor>
       <wheelRotateSpeedFactor>	1.07	</wheelRotateSpeedFactor>
       <wheelCenterRotationFwdSpeed>	1.07	</wheelCenterRotationFwdSpeed>
       <trackMoveSpeedFactor>	1.07	</trackMoveSpeedFactor>
@@ -453,8 +447,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradableExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -549,8 +542,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradableExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradableExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -645,8 +637,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	UpgradedExtraHealthReserve	  <chassisMaxLoadFactor>	1.0	</chassisMaxLoadFactor>
-      <factors>
+    <script>	UpgradedExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>

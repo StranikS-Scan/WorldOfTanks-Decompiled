@@ -55,6 +55,6 @@ class TestEdgeDrawerComponentManager(CGF.ComponentManager):
 
     def __switchStage(self, prevStage, gameObject):
         if prevStage == _Stage.Empty:
-            gameObject.createComponent(HighlightComponent, self._ALLY_COLOR, False, 0, False, False)
+            gameObject.createComponent(HighlightComponent, self._ALLY_COLOR, 0, False, False)
         elif prevStage == _Stage.Ally:
-            gameObject.createComponent(HighlightComponent, self._ENEMY_COLOR, False, 0, False, False)
+            gameObject.createComponent(HighlightComponent, self._ENEMY_COLOR, 0, False, False)

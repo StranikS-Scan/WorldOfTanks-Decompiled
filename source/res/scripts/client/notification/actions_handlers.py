@@ -5,7 +5,7 @@ import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, EventPhase
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -38,7 +38,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IWinbackController, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IWinbackController, IArmoryYardController, IShopSalesEventController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -942,7 +942,7 @@ class _OpenBPExtraWillEndSoon(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        chapterID = self.__battlePassController.getExtraChapterID()
+        chapterID = self.__battlePassController.getMarathonChapterID()
         if chapterID:
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
 
@@ -1283,6 +1283,33 @@ class _OpenCollectionRewardHandler(NavigationDisabledActionHandler):
         showCollectionAwardsWindow(collectionID, savedData['bonuses'], savedData['isFinal'])
 
 
+class _OpenShopSalesEventMainView(NavigationDisabledActionHandler):
+    __shopSales = dependency.descriptor(IShopSalesEventController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if self.__shopSales.currentEventPhase == EventPhase.IN_PROGRESS:
+            self.__shopSales.openMainView()
+
+
+class _OpenTradingCaravanRefill(_OpenShopSalesEventMainView):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.TRADING_CARAVAN_REFILL
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+
 class _OpenArmoryYardMain(NavigationDisabledActionHandler):
     __ctrl = dependency.descriptor(IArmoryYardController)
 
@@ -1417,6 +1444,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMapboxProgression,
  _OpenMapboxSurvey,
  _OpenDelayedReward,
+ _OpenShopSalesEventMainView,
+ _OpenTradingCaravanRefill,
  _OpenBattlePassPointsShop,
  _OpenChapterChoiceView,
  _OpenEpicBattlesAfterBattleWindow,

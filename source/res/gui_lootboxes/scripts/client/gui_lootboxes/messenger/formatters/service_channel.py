@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/messenger/formatters/service_channel.py
+import typing
 from adisp import adisp_async, adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.loot_box.loot_box_helper import getLootBoxIDFromToken
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import applyAll
 from helpers import time_utils, dependency
@@ -14,6 +16,8 @@ from messenger.formatters.service_channel_helpers import MessageData, getRewards
 from skeletons.gui.shared import IItemsCache
 from gui_lootboxes.gui.bonuses.bonuses_helpers import TOKEN_COMPENSATION_PREFIX
 from gui_lootboxes.gui.bonuses.bonuses_helpers import parseCompenstaionToken
+if typing.TYPE_CHECKING:
+    from typing import List
 
 class LootBoxOpenedFormatter(ServiceChannelFormatter):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -23,6 +27,7 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         allRewards = message.get('rewards')
         boxesData = message.get('boxesData')
+        self.__lootboxesAsRewards = self.__getLootboxesAsReceivedRewards(allRewards)
         header = message.get('header', self.__formHeader(boxesData))
         infoText = message.get('infoText', '')
         receivedRewards, vehicleCompensatedRewards, collectionCompensatedRewards = self.__splitRewards(allRewards)
@@ -40,13 +45,19 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         return [MessageData(formatted, settings)]
 
     def __formHeader(self, boxesData):
-        allCount = sum([ boxesData[boxID] for boxID in boxesData ])
+        allCount = 0
+        for boxID in boxesData:
+            if boxID not in self.__lootboxesAsRewards:
+                allCount += boxesData[boxID]
+
         headerStr = backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBox.header()) if allCount == 1 else backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBoxes.header())
         return headerStr
 
     def __formOpenedBoxesSection(self, boxesData):
         openedBoxes = []
         for boxID, count in boxesData.iteritems():
+            if self.__lootboxesAsRewards and boxID in self.__lootboxesAsRewards:
+                continue
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(boxID)
             if lootBox is not None:
                 openedStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'lootBox', {'name': lootBox.getUserName(),
@@ -68,7 +79,7 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         for token in allRewards.get('tokens', {}).keys():
             if token.startswith(TOKEN_COMPENSATION_PREFIX):
                 collectionCompensatedRewards[token] = allRewards['tokens'][token]
-            if not token.startswith(LOOTBOX_TOKEN_PREFIX):
+            if not token.startswith(LOOTBOX_TOKEN_PREFIX) or allRewards['tokens'][token].get('count', 0) > 0:
                 receivedRewards.setdefault('tokens', {})[token] = allRewards['tokens'][token]
 
         for k, v in allRewards.iteritems():
@@ -113,6 +124,15 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         if collectionsCompensationFmt:
             compensationFmt += collectionsCompensationFmt + self.__SEPARATOR
         return compensationFmt
+
+    def __getLootboxesAsReceivedRewards(self, allRewards):
+        result = []
+        for token in allRewards.get('tokens', {}).keys():
+            lootBoxID = getLootBoxIDFromToken(token)
+            if lootBoxID and allRewards['tokens'][token].get('count', 0) > 0:
+                result.append(lootBoxID)
+
+        return result
 
 
 class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):

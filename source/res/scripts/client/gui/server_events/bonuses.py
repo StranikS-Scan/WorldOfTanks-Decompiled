@@ -826,6 +826,35 @@ class LootBoxTokensBonus(TokensBonus):
 
         return result
 
+    def getWrappedLootBoxesBonusList(self):
+        return self._getWrappedBonusList()
+
+    def _getWrappedBonusList(self):
+        return [{'id': self.__getLootBoxTokenID(),
+          'type': ItemPackType.CUSTOM_LOOTBOX,
+          'value': 1,
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)}}]
+
+    def getIconBySize(self, size):
+        iconName = RES_ICONS.getBonusIcon(size, self.__getLootBoxIconName())
+        if iconName is None:
+            iconName = RES_ICONS.getBonusIcon(size, 'default')
+        return iconName
+
+    def __getLootBoxTokenID(self):
+        for tokenID in self._value.keys():
+            if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
+                return tokenID
+
+    def __getLootBoxIconName(self):
+        for tokenID in self._value.keys():
+            lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
+            if lootBox is not None:
+                return lootBox.getIconName()
+
+        return ''
+
 
 class TmanTemplateTokensBonus(TokensBonus):
 

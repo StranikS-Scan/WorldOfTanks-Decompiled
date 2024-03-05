@@ -1008,7 +1008,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 progressionCtrl.vehicleVisualChangingFinished(self.id)
             if hasattr(self, 'respawnCompactDescr') and self.respawnCompactDescr:
                 _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
-                BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+                vehicleID, respawnCD = self.id, self.respawnCompactDescr
+                BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(vehicleID, respawnCD))
             self.refreshNationalVoice()
             self.set_quickShellChangerFactor()
             return
@@ -1056,12 +1057,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             va = self.appearance
             if va.tracks is not None:
                 va.tracks.setPhysicalDestroyedTracksVisible(show)
-            hm = CGF.HierarchyManager(self.spaceID)
-            components = hm.findComponentsInHierarchy(va.gameObject, GenericComponents.DynamicModelComponent)
-            for _, modelComponent in components:
-                if modelComponent.isValid():
-                    modelComponent.setIsVisible(show)
-
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
         return
@@ -1128,7 +1123,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if not hasattr(self.filter, 'setVehiclePhysics'):
             return
         typeDescr = self.typeDescriptor
-        isWheeled = 'wheeledVehicle' in self.typeDescriptor.type.tags
+        isWheeled = self.typeDescriptor.type.isWheeledVehicle
         physics = BigWorld.WGWheeledPhysics() if isWheeled else BigWorld.WGTankPhysics()
         physics_shared.initVehiclePhysicsClient(physics, typeDescr)
         arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)

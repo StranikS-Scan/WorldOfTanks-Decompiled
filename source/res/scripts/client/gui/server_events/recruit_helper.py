@@ -19,8 +19,8 @@ from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL, getNationGroups
 from nations import NONE_INDEX, INDICES, NAMES as NationNames
 from shared_utils import first, findFirst
 from skeletons.gui.server_events import IEventsCache
-from soft_exception import SoftException
 from .events_helpers import getTankmanRewardQuests
+import logging
 if typing.TYPE_CHECKING:
     from typing import List, Union
 
@@ -369,9 +369,9 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         if roles:
             for role in roles:
                 if skills_constants.SKILL_NAMES[role] not in allowedRoles:
-                    raise SoftException('Requested role (%s) is not in the list of allowed roles (%s)' % (skills_constants.SKILL_NAMES[role], ', '.join(map(str, allowedRoles))))
+                    logging.error('Requested role "%s" is not in the list of allowed roles "%s"', skills_constants.SKILL_NAMES[role], ', '.join(map(str, allowedRoles)))
+                allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
 
-            allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
         super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, skills, freeSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, group, sourceID, isPremium, isFemale, hasNewSkill)
         return
 

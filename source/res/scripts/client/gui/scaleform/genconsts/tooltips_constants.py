@@ -276,6 +276,7 @@ class TOOLTIPS_CONSTANTS(object):
     COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
     COMP7_BATTLE_RESULTS_PRESTIGE_POINTS = 'comp7BattleResultsPrestigePoints'
+    COMP7_VEHICLE_PARAMS_TOOLTIP = 'comp7VehicleParamsTooltip'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'

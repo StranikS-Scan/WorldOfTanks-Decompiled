@@ -7,11 +7,12 @@ from .resource_manager import ResourceManager
 from .windows_system.windows_manager import WindowsManager
 from .tutorial import Tutorial
 from .ui_logger import UILogger
+from .markers_manager import MarkersManager
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewModel
 
 class GuiApplication(object):
-    __slots__ = ('__impl', '__windowsManager', '__resourceManager', '__systemLocale', '__tutorial', '__uiLogger')
+    __slots__ = ('__impl', '__windowsManager', '__resourceManager', '__systemLocale', '__tutorial', '__uiLogger', '__markersManager')
 
     def __init__(self):
         super(GuiApplication, self).__init__()
@@ -20,6 +21,7 @@ class GuiApplication(object):
         self.__resourceManager = None
         self.__systemLocale = None
         self.__tutorial = None
+        self.__markersManager = None
         self.__uiLogger = None
         return
 
@@ -40,6 +42,10 @@ class GuiApplication(object):
         return self.__tutorial
 
     @property
+    def markers(self):
+        return self.__markersManager
+
+    @property
     def uiLogger(self):
         return self.__uiLogger
 
@@ -50,6 +56,7 @@ class GuiApplication(object):
         self.__systemLocale = SystemLocale.create(self.__impl.systemLocale)
         self.__tutorial = Tutorial.create(self.__impl.tutorial, tutorialModel)
         self.__uiLogger = UILogger.create(self.__impl.uiLogger, uiLoggerModel)
+        self.__markersManager = MarkersManager.create(self.__impl.markersManager)
 
     def destroy(self):
         if self.__resourceManager is not None:
@@ -61,6 +68,9 @@ class GuiApplication(object):
         if self.__systemLocale is not None:
             self.__systemLocale.destroy()
             self.__systemLocale = None
+        if self.__markersManager is not None:
+            self.__markersManager.destroy()
+            self.__markersManager = None
         if self.__tutorial is not None:
             self.__tutorial.destroy()
             self.__tutorial = None

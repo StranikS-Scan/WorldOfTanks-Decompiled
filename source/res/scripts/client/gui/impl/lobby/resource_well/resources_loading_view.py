@@ -87,8 +87,7 @@ class ResourcesLoadingView(ViewImpl):
          ('stats.credits', self.__updateCurrencies),
          ('stats.crystal', self.__updateCurrencies),
          ('stats.freeXP', self.__updateCurrencies),
-         ('blueprints', self.__updateBlueprints),
-         ('premium', self.__updatePremiums))
+         ('blueprints', self.__updateBlueprints))
 
     def _getEvents(self):
         return ((self.viewModel.loadResources, self.__loadResources),
@@ -141,9 +140,6 @@ class ResourcesLoadingView(ViewImpl):
 
     def __updateBlueprints(self, *_):
         self.__updateResourceModels(ResourceType.BLUEPRINTS.value)
-
-    def __updatePremiums(self, *_):
-        self.__updateResourceModels(ResourceType.PREMIUMS.value)
 
     def __updateResourceModels(self, resourceType):
         with self.viewModel.transaction() as model:

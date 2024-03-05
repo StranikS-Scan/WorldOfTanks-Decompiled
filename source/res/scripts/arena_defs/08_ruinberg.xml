@@ -27,41 +27,42 @@
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
         <team1>
-          <position1>	-66.399986 306.099945	</position1>
+          <position1>	-66.399994 306.099976	</position1>
         </team1>
+        <team2>
+          <position1>	-83.000000 -290.899994	</position1>
+        </team2>
       </teamBasePositions>
     </ctf>
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	-49 337	</position>
+          <position>	-49.000000 337.000000	</position>
         </team1>
         <team2>
-          <position>	-9 -282	</position>
+          <position>	-9.000000 -282.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-346.377228 -60.446960	</controlPoint>
+      <controlPoint>	-346.377258 -60.446964	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	320.434 334.328	</position>
+          <position>	390.070129 -349.752533	</position>
         </team1>
         <team2>
-          <position>	-336.217 -48.082	</position>
+          <position>	-342.735199 -40.312134	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-66.490181 305.920776	</position1>
-          <position2>	218.213928 -89.148491	</position2>
+          <position1>	-63.945648 -262.439301	</position1>
+          <position2>	195.944229 101.281593	</position2>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault2>
     <bootcamp>
@@ -83,12 +84,12 @@
       <minimap>	spaces/08_ruinberg/mmap_bootcamp.dds	</minimap>
       <runDelay>	10	</runDelay>
       <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
         <team1>
-          <position1>	-66.490181 305.920776	</position1>
+          <position1>	-63.945648 -262.439301	</position1>
         </team1>
+        <team2>
+          <position1>	-83.000000 -290.899994	</position1>
+        </team2>
       </teamBasePositions>
       <visualScript>
         <server>
@@ -101,13 +102,59 @@
     </bootcamp>
     <maps_training>
       <teamBasePositions>
-        <team2>
-          <position1>	-82.999992 -290.899963	</position1>
-        </team2>
         <team1>
-          <position1>	-66.399986 306.099945	</position1>
+          <position1>	-66.399994 306.099976	</position1>
         </team1>
+        <team2>
+          <position1>	-83.000000 -290.899994	</position1>
+        </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-63.550190 330.836884	</position>
+        </team1>
+        <team2>
+          <position>	5.351830 -342.105225	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-368.796112 -40.520699	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	360.496185 33.977219	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	192.687241 143.472198	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	209.421127 -92.144554	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <controlPoint>	-22.860573 16.666328	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </08_ruinberg.xml>

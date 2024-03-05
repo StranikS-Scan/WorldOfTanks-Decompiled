@@ -14,10 +14,16 @@ class RewardReason(Enum):
     DEFAULT = 'defaultReason'
 
 
+class ChapterType(Enum):
+    DEFAULT = 'default'
+    MARATHON = 'marathon'
+    RESOURCE = 'resource'
+
+
 class BattlePassAwardsViewModel(CommonViewModel):
     __slots__ = ('onBuyClick',)
 
-    def __init__(self, properties=15, commands=2):
+    def __init__(self, properties=16, commands=2):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -90,11 +96,21 @@ class BattlePassAwardsViewModel(CommonViewModel):
     def getWideRewardsIDsType():
         return int
 
-    def getIsExtra(self):
-        return self._getBool(14)
+    def getChapterType(self):
+        return ChapterType(self._getString(14))
 
-    def setIsExtra(self, value):
-        self._setBool(14, value)
+    def setChapterType(self, value):
+        self._setString(14, value.value)
+
+    def getAvailableChapterTypes(self):
+        return self._getArray(15)
+
+    def setAvailableChapterTypes(self, value):
+        self._setArray(15, value)
+
+    @staticmethod
+    def getAvailableChapterTypesType():
+        return unicode
 
     def _initialize(self):
         super(BattlePassAwardsViewModel, self)._initialize()
@@ -108,5 +124,6 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addBoolProperty('isNeedToShowOffer', False)
         self._addBoolProperty('seasonStopped', False)
         self._addArrayProperty('wideRewardsIDs', Array())
-        self._addBoolProperty('isExtra', False)
+        self._addStringProperty('chapterType')
+        self._addArrayProperty('availableChapterTypes', Array())
         self.onBuyClick = self._addCommand('onBuyClick')

@@ -17,7 +17,6 @@ class ProgressionState(IntEnum):
 class ResourceType(Enum):
     BLUEPRINTS = 'blueprints'
     CURRENCY = 'currency'
-    PREMIUMS = 'premiums'
 
     @classmethod
     def getMember(cls, value):
@@ -26,9 +25,3 @@ class ResourceType(Enum):
         else:
             _logger.error('%s does not exist in ResourceType values', value)
             return None
-
-
-class ServerResourceType(Enum):
-    BLUEPRINTS = 'blueprints'
-    CURRENCY = 'currency'
-    ENTITLEMENTS = 'entitlement'

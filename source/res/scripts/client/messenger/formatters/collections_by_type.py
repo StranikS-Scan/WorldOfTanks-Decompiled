@@ -78,6 +78,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
  _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
  _SM_TYPE.battlePassBought.index(): _sc.BattlePassBoughtFormatter(),
+ _SM_TYPE.battlePassGiftByOffer.index(): _sc.BattlePassGiftByOfferFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
  _SM_TYPE.battlePassStyleRecieved.index(): _sc.BattlePassStyleReceivedFormatter(),
  _SM_TYPE.battlePassSeasonEnd.index(): _sc.BattlePassSeasonEndFormatter(),
@@ -176,6 +177,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.enhancementsWiped.index(), _sc.EnhancementsWipedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassReward.index(), _sc.BattlePassRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassBought.index(), _sc.BattlePassBoughtFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.battlePassGiftByOffer.index(), _sc.BattlePassGiftByOfferFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassReachedCap.index(), _sc.BattlePassReachedCapFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassStyleRecieved.index(), _sc.BattlePassStyleReceivedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassSeasonEnd.index(), _sc.BattlePassSeasonEndFormatter())

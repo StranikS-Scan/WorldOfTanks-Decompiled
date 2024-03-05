@@ -3192,17 +3192,27 @@ class BonusTypes(object):
     BATTLE_BOOSTER = 'battleBooster'
     PAIR_MODIFICATION = 'postProgressionPairModifications'
     BASE_MODIFICATION = 'postProgressionBaseModifications'
+    BATTLE_MODIFIERS = 'battleModifiers'
     POSSIBLE = (SKILL,
      ROLE,
      EXTRA,
      PERK)
 
 
+class PenaltyTypes(object):
+    CREW = 'crew'
+    BATTLE_MODIFIERS = 'battleModifiers'
+
+
 class TTC_TOOLTIP_SECTIONS(object):
     EQUIPMENT = 'equipment'
     SKILLS = 'skills'
     CREW_MASTERY = 'crew_mastery'
-    ALL = (EQUIPMENT, SKILLS, CREW_MASTERY)
+    BATTLE_MODIFIERS = 'battle_modifiers'
+    ALL = (EQUIPMENT,
+     SKILLS,
+     CREW_MASTERY,
+     BATTLE_MODIFIERS)
 
 
 class GF_RES_PROTOCOL(object):
@@ -3572,6 +3582,16 @@ class ShootImpulseApplicationPoint(object):
 
 RP_POINT = 'rp_point'
 RP_PGB_POINT = 'rp_pgb_point'
+
+class EdgeColorMode(enum.IntEnum):
+    ENEMY = 1
+    ALLY = 2
+
+
+class EdgeDrawMode(enum.IntEnum):
+    FULL = 0
+    OCCLUDED = 1
+
 
 class LootBoxTiers(enum.IntEnum):
     SIMPLE = 1

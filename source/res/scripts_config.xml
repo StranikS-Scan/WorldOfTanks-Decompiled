@@ -1,63 +1,14 @@
 <scripts_config.xml>
   <login>
     <host>
-      <name>	RU1	</name>
-      <short_name>	RU1	</short_name>
-      <url>	login.p1.tanki.su:20014	</url>
-      <url_token>	login2.p1.tanki.su:20014	</url_token>
+      <name>	PT1	</name>
+      <short_name>	PT1	</short_name>
+      <url>	login1-wotrpt.lesta.ru:20015	</url>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	101	</periphery_id>
-    </host>
-    <host>
-      <name>	RU2	</name>
-      <short_name>	RU2	</short_name>
-      <url>	login.p2.tanki.su:20014	</url>
-      <url_token>	login2.p2.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	102	</periphery_id>
-    </host>
-    <host>
-      <name>	RU4	</name>
-      <short_name>	RU4	</short_name>
-      <url>	login.p4.tanki.su:20014	</url>
-      <url_token>	login2.p4.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	104	</periphery_id>
-    </host>
-    <host>
-      <name>	RU6	</name>
-      <short_name>	RU6	</short_name>
-      <url>	login.p6.tanki.su:20014	</url>
-      <url_token>	login2.p6.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	106	</periphery_id>
-    </host>
-    <host>
-      <name>	RU7	</name>
-      <short_name>	RU7	</short_name>
-      <url>	login.p7.tanki.su:20014	</url>
-      <url_token>	login2.p7.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	107	</periphery_id>
-    </host>
-    <host>
-      <name>	RU8	</name>
-      <short_name>	RU8	</short_name>
-      <url>	login.p8.tanki.su:20014	</url>
-      <url_token>	login2.p8.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	108	</periphery_id>
-    </host>
-    <host>
-      <name>	RU9	</name>
-      <short_name>	RU9	</short_name>
-      <url>	login.p9.tanki.su:20014	</url>
-      <url_token>	login2.p9.tanki.su:20014	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	109	</periphery_id>
+      <periphery_id>	11	</periphery_id>
     </host>
   </login>
-  <csisUrl>	http://csis.tanki.su/csis/wotru/	</csisUrl>
+  <csisUrl>	https://csis-apex.lesta.ru/csis/wotrpt	</csisUrl>
   <silhouetteColors>
     <common>
       <self>	0.5 0.5 0.5 1	</self>

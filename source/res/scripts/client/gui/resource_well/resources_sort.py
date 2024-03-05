@@ -8,7 +8,7 @@ _NO_NATION_INDEX = 0
 _NATIONS_ORDER = {name:idx for idx, name in enumerate(GUI_NATIONS, 1)}
 _NATIONS_ORDER[NONE_NATION_NAME] = _NO_NATION_INDEX
 _CURRENCY_ORDER = {name:idx for idx, name in enumerate(Currency.GUI_ALL + (CURRENCIES_CONSTANTS.FREE_XP,))}
-_RESOURCE_TYPE_ORDER = {name:idx for idx, name in enumerate((ResourceType.CURRENCY, ResourceType.BLUEPRINTS, ResourceType.PREMIUMS))}
+_RESOURCE_TYPE_ORDER = {name:idx for idx, name in enumerate((ResourceType.CURRENCY, ResourceType.BLUEPRINTS))}
 
 def _nationComparator(first, second):
     return cmp(_NATIONS_ORDER.get(first.nation), _NATIONS_ORDER.get(second.nation))

@@ -96,7 +96,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         return collisionModels
 
     def _addEdgeDetect(self):
-        BigWorld.wgAddEdgeDetectEntity(self, None, 0, False, self.edgeMode, False)
+        BigWorld.wgAddEdgeDetectEntity(self, None, 0, self.edgeMode, False)
         return
 
     def _delEdgeDetect(self):

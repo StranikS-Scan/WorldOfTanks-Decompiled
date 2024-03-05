@@ -653,7 +653,9 @@ class _DetailedMissionInfo(_MissionInfo):
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)
-        criteria = criteria | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         return (criteria, extraConditions, isQuestForBattleRoyale)
 
     def _getUIDecoration(self):

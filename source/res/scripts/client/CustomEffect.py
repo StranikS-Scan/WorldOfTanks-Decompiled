@@ -542,7 +542,7 @@ class MainCustomSelector(MainSelectorBase):
             model = args[modelName]['model']
             try:
                 node = model.node(nodeName)
-                if node is None and 'wheeledVehicle' in args['vehicleTags']:
+                if node is None and any((i in args['vehicleTags'] for i in ('wheeledVehicle', 'wheeledVehicleWithoutFeatures'))):
                     continue
                 drawOrderBase = args.get('drawOrderBase', 0)
                 self._effectNodes[nodeDesc[0]] = EffectNode(model, nodeName, nodeDesc[2], drawOrderBase + nodeDesc[3], nodeDesc[4])

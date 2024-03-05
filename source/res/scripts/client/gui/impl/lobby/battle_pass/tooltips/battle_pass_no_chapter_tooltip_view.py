@@ -6,6 +6,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_no_ch
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
+from gui.impl import backport
 
 class BattlePassNoChapterTooltipView(ViewImpl):
     __battlePassController = dependency.descriptor(IBattlePassController)
@@ -24,3 +25,5 @@ class BattlePassNoChapterTooltipView(ViewImpl):
         super(BattlePassNoChapterTooltipView, self)._onLoading(*args, **kwargs)
         with self.getViewModel().transaction() as model:
             model.setPoints(self.__battlePassController.getFreePoints())
+            model.setIsResourceActive(self.__battlePassController.isCompleted())
+            model.setChapterName(backport.text(R.strings.battle_pass.chapter.fullName.num(self.__battlePassController.getResourceChapterID())()))

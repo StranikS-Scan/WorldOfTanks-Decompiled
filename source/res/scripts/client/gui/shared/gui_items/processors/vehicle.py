@@ -378,7 +378,10 @@ class VehicleSeller(ItemProcessor):
         sellForGold = self.vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
         if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.__lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not sellForGold:
             timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
-            restoreInfo = backport.text(R.strings.system_messages.vehicle.restoreDuration.dyn(timeKey, R.invalid)(), time=formattedTime)
+            if timeKey == 'inf':
+                restoreInfo = backport.text(R.strings.system_messages.vehicle.restoreDuration.unlimited())
+            else:
+                restoreInfo = backport.text(R.strings.system_messages.vehicle.restoreDuration.dyn(timeKey, R.invalid)(), time=formattedTime)
         additionalMsgs = []
         if self.__hasPairModification:
             additionalMsgs.append(makeAllPairsDiscardMsg(self.vehicle.userName))

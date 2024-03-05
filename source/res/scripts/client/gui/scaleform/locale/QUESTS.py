@@ -850,6 +850,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDRADIO = '#quests:details/dossier/random/damageAssistedRadio'
     DETAILS_DOSSIER_RANDOM_SHOTS = '#quests:details/dossier/random/shots'
     DETAILS_DOSSIER_RANDOM_EXPLOSIONHITSRECEIVED = '#quests:details/dossier/random/explosionHitsReceived'
+    DETAILS_DOSSIER_RANDOM_BATTLESCOUNT = '#quests:details/dossier/random/battlesCount'
     DETAILS_DOSSIER_CLAN_XP = '#quests:details/dossier/clan/xp'
     DETAILS_DOSSIER_CLAN_BATTLESCOUNT = '#quests:details/dossier/clan/battlesCount'
     DETAILS_DOSSIER_CLAN_WINS = '#quests:details/dossier/clan/wins'
@@ -2123,6 +2124,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_RANDOM_SHOTS,
      DETAILS_DOSSIER_RANDOM_EXPLOSIONHITSRECEIVED,
+     DETAILS_DOSSIER_RANDOM_BATTLESCOUNT,
      DETAILS_DOSSIER_CLAN_XP,
      DETAILS_DOSSIER_CLAN_BATTLESCOUNT,
      DETAILS_DOSSIER_CLAN_WINS,

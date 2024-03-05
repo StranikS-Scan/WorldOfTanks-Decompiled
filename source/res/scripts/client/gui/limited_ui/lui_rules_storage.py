@@ -32,6 +32,7 @@ class LuiRules(enum.Enum):
     PROGRESSIVE_ITEMS_REWARD = 'ProgressiveItemsReward'
     DAILY_MISSIONS = 'DailyMissions'
     CRAFT_MACHINE_ENTRY_POINT = 'CraftMachineEntryPoint'
+    SHOP_SALES_ENTRY_POINT = 'ShopSalesEntryPoint'
     MAPBOX_ENTRY_POINT = 'MapboxEntryPoint'
     EPIC_BATTLES_ENTRY_POINT = 'EpicBattlesEntryPoint'
     BATTLE_MISSIONS = 'BattleMissions'
@@ -49,6 +50,7 @@ class LuiRules(enum.Enum):
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
     RESOURCE_WELL = 'ResourceWellFlag'
+    GUI_COSMIC_ENTRY_POINT = 'CosmicEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

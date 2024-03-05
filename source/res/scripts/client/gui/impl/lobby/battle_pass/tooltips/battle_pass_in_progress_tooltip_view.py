@@ -5,7 +5,7 @@ from battle_pass_common import BattlePassConsts
 import constants
 from frameworks.wulf import ViewSettings, Array
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_by_place_model import RewardPointsByPlaceModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.pub import ViewImpl
@@ -67,7 +67,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 model.setBattleType(getPreQueueName(battleType).lower())
                 model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
                 model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
-                model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
+                model.setChapterType(ChapterType(self.__battlePass.getChapterType(chapterID)))
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft())

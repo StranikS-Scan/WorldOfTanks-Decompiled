@@ -162,7 +162,7 @@ class _ControlMarkersFactory(_GunMarkersFactory):
 
     def _createAssaultSPGMarker(self, markerType, name):
         dataProvider = self._getAssaultSPGDataProvider(markerType)
-        return self._createMarker(SPGGunMarkerComponent, _VIEW_ID.STRATEGIC, markerType, dataProvider, name)
+        return self._createMarker(SPGGunMarkerComponent, _VIEW_ID.ASSAULT, markerType, dataProvider, name)
 
 
 class _DevControlMarkersFactory(_ControlMarkersFactory):

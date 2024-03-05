@@ -59,4 +59,5 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         return bool(self._itemsCache.items.getItems(GUI_ITEM_TYPE.VEHICLE, criteria))

@@ -17,7 +17,7 @@ class BattlePassProgress(ViewModel):
     PROGRESSION_IN_PROGRESS = 'progressionInProgress'
     PROGRESSION_COMPLETED = 'progressionCompleted'
 
-    def __init__(self, properties=11, commands=1):
+    def __init__(self, properties=12, commands=1):
         super(BattlePassProgress, self).__init__(properties=properties, commands=commands)
 
     def getCurrentLevel(self):
@@ -68,23 +68,29 @@ class BattlePassProgress(ViewModel):
     def setHasExtra(self, value):
         self._setBool(7, value)
 
+    def getHasResource(self):
+        return self._getBool(8)
+
+    def setHasResource(self, value):
+        self._setBool(8, value)
+
     def getChapterState(self):
-        return ChapterStates(self._getString(8))
+        return ChapterStates(self._getString(9))
 
     def setChapterState(self, value):
-        self._setString(8, value.value)
+        self._setString(9, value.value)
 
     def getIsBattlePassPurchased(self):
-        return self._getBool(9)
+        return self._getBool(10)
 
     def setIsBattlePassPurchased(self, value):
-        self._setBool(9, value)
+        self._setBool(10, value)
 
     def getFreePoints(self):
-        return self._getNumber(10)
+        return self._getNumber(11)
 
     def setFreePoints(self, value):
-        self._setNumber(10, value)
+        self._setNumber(11, value)
 
     def _initialize(self):
         super(BattlePassProgress, self)._initialize()
@@ -96,6 +102,7 @@ class BattlePassProgress(ViewModel):
         self._addStringProperty('battlePassState', '')
         self._addNumberProperty('chapterID', 0)
         self._addBoolProperty('hasExtra', False)
+        self._addBoolProperty('hasResource', False)
         self._addStringProperty('chapterState')
         self._addBoolProperty('isBattlePassPurchased', False)
         self._addNumberProperty('freePoints', 0)

@@ -82,14 +82,22 @@ class ModeSelectorDataProvider(IGlobalListener):
         self.__createItems(self.__getItems())
         self._updateItems()
 
+    def updateItems(self):
+        items = self.__getItems()
+        self.__createItems(items)
+        self.__removeInvisible(items)
+        self._updateItems()
+
     def onPrbEntitySwitched(self):
         items = self.__getItems()
         self.__createItems(items)
+        self.__removeInvisible(items)
+        self._updateItems()
+
+    def __removeInvisible(self, items):
         for nameItem in self._items:
             if not items.get(nameItem) or not items[nameItem].isVisible():
                 self._clearItem(self._items.pop(nameItem))
-
-        self._updateItems()
 
     def _onCardChangeHandler(self, *args, **kwargs):
         self.forceRefresh()

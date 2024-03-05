@@ -4040,6 +4040,36 @@
       <touchdownEffect>	tree_BaldCypress_01_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Live_Oak/Live_Oak_03.srt	</filename>
+      <health>	300	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Olive_03_fall	</fractureEffect>
+      <touchdownEffect>	tree_Olive_03_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Live_Apple/Live_Apple_16m_Flowers2.srt	</filename>
+      <health>	300	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Live_Apple_16m_Flowers2_fall	</fractureEffect>
+      <touchdownEffect>	tree_Apple_8m_Classic_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Maple/Maple_33m.srt	</filename>
+      <health>	300	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Olive_03_fall	</fractureEffect>
+      <touchdownEffect>	tree_Olive_03_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Live_Oak/Live_Oak_02.srt	</filename>
       <health>	300	</health>
       <density>	0.5	</density>
@@ -18172,13 +18202,13 @@
     </entry>
     <entry>
       <filename>	content/Buildings/hd_bld_SU_0043_Canopy/normal/lod0/hd_bld_SU_0043_Canopy.model	</filename>
-      <health>	5	</health>
+      <health>	10	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_bld_SU_101_Canopy	</effect>
       <hitEffect>	none	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
-      <matName>	n_metal0	</matName>
+      <matName>	n_metal1	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>

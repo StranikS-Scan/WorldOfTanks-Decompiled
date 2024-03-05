@@ -154,7 +154,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         if self.__isHighlightable():
             super(ClientSelectableCameraVehicle, self)._addEdgeDetect()
             go = self.__vAppearance.gameObject
-            go.createComponent(HighlightComponent, 0, False, self.edgeMode, False, False)
+            go.createComponent(HighlightComponent, 0, self.edgeMode, False, False)
 
     def _delEdgeDetect(self):
         if self.__isHighlightable():

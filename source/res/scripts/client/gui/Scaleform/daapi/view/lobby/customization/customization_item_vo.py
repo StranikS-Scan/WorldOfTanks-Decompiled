@@ -79,7 +79,7 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         progressionLevel = progressionLevel or -1
         noveltyCounter = 0
     isProgressionRewindEnabled = item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isProgressionRewindEnabled
-    icon = icon or __getIcon(item, progressionLevel)
+    icon = icon or __getIcon(item, progressionLevel) or item.icon
     iconAlpha = _ICON_ALPHA_BY_GUI_ITEM_TYPE.get(item.itemTypeID, 1)
     isLinked = item.isQuestsProgression
     editNoveltyCounter = 0

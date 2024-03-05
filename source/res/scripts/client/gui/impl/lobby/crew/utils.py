@@ -97,9 +97,10 @@ def getRentCriteria():
 
 def getDocGroupValues(tankman, config, listGetter, valueGetter, sortNeeded=True):
     result = []
-    isFemale = tankman.descriptor.isFemale
-    for gIdx, group in config.getGroups(isFemale).iteritems():
-        if not group.notInShop and group.isFemales == isFemale:
+    isPremium = tankman.descriptor.isPremium
+    tankmanGid = tankman.descriptor.gid
+    for gIdx, group in config.getGroups(isPremium).iteritems():
+        if not group.notInShop and tankmanGid == gIdx:
             for dIdx in listGetter(group):
                 result.append(DocumentRecord(dIdx, gIdx, valueGetter(dIdx)))
 

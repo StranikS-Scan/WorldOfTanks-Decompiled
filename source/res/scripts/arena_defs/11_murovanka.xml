@@ -70,6 +70,52 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-33.235714 449.249512	</position>
+        </team1>
+        <team2>
+          <position>	-33.570129 -432.394257	</position>
+        </team2>
+      </teamSpawnPoints>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-395.243744 5.413159	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	167.788849 24.177389	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-95.192665 -195.343323	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-76.324905 219.491440	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <controlPoint>	-282.224457 5.246193	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities></mapActivities>
 </11_murovanka.xml>

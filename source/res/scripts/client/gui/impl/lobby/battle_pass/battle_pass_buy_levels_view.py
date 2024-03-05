@@ -112,7 +112,7 @@ class BattlePassBuyLevelView(ViewImpl):
          (self.__battlePass.onLevelUp, self.__onLevelUp),
          (self.__battlePass.onBattlePassSettingsChange, self.__onSettingsChanged),
          (self.__battlePass.onSeasonStateChanged, self.__onSettingsChanged),
-         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
+         (self.__battlePass.onMarathonChapterExpired, self.__onMarathonChapterExpired),
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
          (self.__wallet.onWalletStatusChanged, self.__onWalletChanged))
 
@@ -202,8 +202,8 @@ class BattlePassBuyLevelView(ViewImpl):
     def __isChapterCompleted(self):
         return self.__package.getChapterState() == ChapterState.COMPLETED
 
-    def __onExtraChapterExpired(self):
-        if self.__battlePass.isExtraChapter(self.__chapterID):
+    def __onMarathonChapterExpired(self):
+        if self.__battlePass.isMarathonChapter(self.__chapterID):
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
             self.destroyWindow()
 

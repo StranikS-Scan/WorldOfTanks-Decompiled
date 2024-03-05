@@ -1,0 +1,44 @@
+<extension.xml>
+  <FeatureName>	cosmic_event	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	CosmicEventPersonality	</Personality>
+  <EditorPersonality>	editor_cosmic_personality	</EditorPersonality>
+  <Components>
+    <StaticComponents>
+      <AccountCosmicEventComponent></AccountCosmicEventComponent>
+      <ArenaCosmicEventComponent></ArenaCosmicEventComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <VehicleCosmicEventComponent></VehicleCosmicEventComponent>
+      <ArenaInfoScoreSystemComponent></ArenaInfoScoreSystemComponent>
+      <ArenaVehicleShieldsController></ArenaVehicleShieldsController>
+      <VehicleImpulseScheduler></VehicleImpulseScheduler>
+      <VehicleSpawnProtection></VehicleSpawnProtection>
+      <ArenaCosmicLootComponent></ArenaCosmicLootComponent>
+      <ArtifactScanningComponent></ArtifactScanningComponent>
+      <VehicleOverrideShotComponent></VehicleOverrideShotComponent>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ClientServerEntities>
+      <CosmicLoot></CosmicLoot>
+      <CosmicPlacement></CosmicPlacement>
+      <ClientSelectableArtifactMachine></ClientSelectableArtifactMachine>
+    </ClientServerEntities>
+    <ServerOnlyEntities>
+      <CosmicEventBattlesMgr></CosmicEventBattlesMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <gui>
+    <paths></paths>
+    <overrideAlias></overrideAlias>
+    <context_menu></context_menu>
+    <handler></handler>
+  </gui>
+  <cgf>
+    <script>
+      <module>	client.cgf_mechanics	</module>
+    </script>
+  </cgf>
+</extension.xml>

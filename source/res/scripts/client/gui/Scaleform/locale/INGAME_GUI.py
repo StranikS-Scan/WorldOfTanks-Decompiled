@@ -695,6 +695,8 @@ class INGAME_GUI(object):
     SIEGEMODE_HINT_WHEELED = '#ingame_gui:siegeMode/hint/wheeled'
     SIEGEMODE_HINT_TURBOSHAFTENGINE = '#ingame_gui:siegeMode/hint/turboshaftEngine'
     SIEGEMODE_HINT_ROCKETACCELERATION = '#ingame_gui:siegeMode/hint/rocketAcceleration'
+    CAMERA_HINT_PRESS = '#ingame_gui:camera/hint/press'
+    CAMERA_HINT_WHEELED = '#ingame_gui:camera/hint/wheeled'
     EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED = '#ingame_gui:efficiencyRibbons/enemySectorCaptured'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED = '#ingame_gui:efficiencyRibbons/destructibleDamaged'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED = '#ingame_gui:efficiencyRibbons/destructibleDestroyed'

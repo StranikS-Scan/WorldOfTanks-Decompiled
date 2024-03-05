@@ -1,7 +1,7 @@
 <engine_config.xml>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -476,10 +476,10 @@
           <name>	comp_7.pck	</name>
         </bank>
         <bank>
-          <name>	ev_fep_hangar.bnk	</name>
+          <name>	fep_hangar.bnk	</name>
         </bank>
         <bank>
-          <name>	ev_fep_hangar.pck	</name>
+          <name>	fep_hangar.pck	</name>
         </bank>
         <bank>
           <name>	ev_lootboxes.bnk	</name>
@@ -494,13 +494,28 @@
           <name>	lootboxes.bnk	</name>
         </bank>
         <bank>
-          <name>	hangar_h02_mt_bday_2023_collections.bnk	</name>
+          <name>	collections.bnk	</name>
         </bank>
         <bank>
           <name>	crew.bnk	</name>
         </bank>
         <bank>
           <name>	style_3D_R123_Kirovets_Svaroshich.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_J35_Ho_Ri_3_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch48_BZ_75_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB120_Concept_No_5_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_battle_royale_hangar.pck	</name>
+        </bank>
+        <bank>
+          <name>	double_eleven_day.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -619,6 +634,15 @@
         </bank>
         <bank>
           <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_J35_Ho_Ri_3_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch48_BZ_75_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB120_Concept_No_5_3dst.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

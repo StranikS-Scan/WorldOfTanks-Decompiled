@@ -39,6 +39,7 @@ class SPECIAL_VOICE_TAG(object):
     BPH_MT_2022 = ('IvanCarevichSpecialVoice', 'VasilisaSpecialVoice', 'KashcheiSpecialVoice', 'BabaYagaSpecialVoice')
     HW_2023 = ('IvanCarevichHWSpecialVoice', 'VasilisaHWSpecialVoice', 'KashcheiHWSpecialVoice', 'BabaYagaHWSpecialVoice', 'KatrinaHWSpecialVoice')
     MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
+    KIN_DZA_DZA_2024 = ('UefSpecialVoice', 'BiSpecialVoice', 'DyadyaVovaSpecialVoice', 'ScripachSpecialVoice')
     ALL = (ARIA_2023,
      BUFFON,
      SABATON,
@@ -55,7 +56,7 @@ class SPECIAL_VOICE_TAG(object):
      WITCHES_CREW,
      HW_CREW,
      CELEBRITY_2023,
-     HAND_OF_BLOOD) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023
+     HAND_OF_BLOOD) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024
 
 
 class SPECIAL_CREW_TAG(object):

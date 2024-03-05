@@ -846,4 +846,43 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch48_BZ_75	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31097	</id>
+      <texture>	gui/maps/vehicles/styles/Ch48_BZ_75_3dst_BP13_MT.png	</texture>
+      <modelsSet>	Ch48_BZ_75_3dst_BP13_MT	</modelsSet>
+      <userString>	#vehicle_customization:Ch48_BZ_75_3dst_BP13_MT/name	</userString>
+      <description>	#vehicle_customization:Ch48_BZ_75_3dst_BP13_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Ch48_BZ_75_3dst_BP13_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <id>	31012	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
 </china.xml>

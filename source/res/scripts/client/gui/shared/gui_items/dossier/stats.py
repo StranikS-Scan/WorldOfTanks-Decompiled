@@ -1774,6 +1774,7 @@ class VehicleDossierStats(_DossierStats):
          self.getEpicRandomStats(),
          self.getComp7Stats(season=1),
          self.getComp7Stats(season=2),
+         self.getComp7Stats(season=3),
          self.getVersusAIStats()))
 
     def getRandomStats(self):

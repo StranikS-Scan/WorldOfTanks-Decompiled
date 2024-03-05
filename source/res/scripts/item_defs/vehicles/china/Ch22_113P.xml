@@ -863,7 +863,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.5	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1837,7 +1836,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_60-122TP>	shared	  <maxAmmo>	34	</maxAmmo>
+        <_122-mm_60-122TP_Premium>	shared	  <maxAmmo>	34	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1924,7 +1923,7 @@
             <density>	101.268 101.796	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_122-mm_60-122TP>
+        </_122-mm_60-122TP_Premium>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Turret_01.model	</undamaged>
@@ -2433,21 +2432,21 @@
     </Turret_1_Ch22_113P>
   </turrets0>
   <engines>
-    <_V-2-54SCP>	shared	</_V-2-54SCP>
+    <_V-2-54SCP_Premium>	shared	</_V-2-54SCP_Premium>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <A-220B_1P>	shared	</A-220B_1P>
+    <A-220B_1P_Premium>	shared	</A-220B_1P_Premium>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <_V-2-54SCP>
+        <_V-2-54SCP_Premium>
           <smplEnginePower>	792.9609	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_V-2-54SCP>
+        </_V-2-54SCP_Premium>
       </engines>
       <chassis>
         <Chassis_Ch22_113P>

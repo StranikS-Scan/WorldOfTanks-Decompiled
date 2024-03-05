@@ -1421,6 +1421,178 @@
         </selector>
       </selector>
     </diesel_strv>
+    <cosmic_rpm>
+      <selector>
+        <type>	union	</type>
+        <constantsGroup>	cosmic_rpm	</constantsGroup>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/cosmic_exhaust/rpm01_Load01.eff	</name>
+            </selector>
+            <selector>
+              <type>	range	</type>
+              <variable>	physicLoad	</variable>
+              <key>	2	</key>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm01_Load01.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm02_Load01.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm03_Load01.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.5	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm01_Load02.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm02_Load02.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm03_Load02.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.9	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm01_Load03.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm02_Load03.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm03_Load03.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.98	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm01_Load04.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm02_Load04.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/exhaust/cosmic_exhaust/rpm03_Load04.eff	</name>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Environment/scenarios/br_nitro_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	effect	</type>
+              <name>	particles/Environment/scenarios/br_nitro_load.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	discrete	</type>
+            <variable>	gearUp	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	0.05	</ttl>
+              <name>	particles/Tank/exhaust/cosmic_exhaust/rpm02_Load04.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	discrete	</type>
+            <variable>	gearUp	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	0.05	</ttl>
+              <name>	particles/Environment/scenarios/br_nitro_gearup.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	discrete	</type>
+            <variable>	engineStart	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	5.2	</ttl>
+              <name>	particles/Tank/exhaust/cosmic_exhaust/start.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	discrete	</type>
+            <variable>	engineStart	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	5.2	</ttl>
+              <name>	particles/Environment/scenarios/br_nitro_start.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </cosmic_rpm>
     <null>
       <selector>
         <type>	union	</type>

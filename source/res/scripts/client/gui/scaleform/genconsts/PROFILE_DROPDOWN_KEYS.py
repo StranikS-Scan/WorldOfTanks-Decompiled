@@ -23,4 +23,5 @@ class PROFILE_DROPDOWN_KEYS(object):
     COMP7_ARCHIVE_GRIFFIN = 'comp7_archive_Griffin'
     COMP7_SEASON_1 = 'comp7_season_1'
     COMP7_SEASON_2 = 'comp7_season_2'
+    COMP7_SEASON_3 = 'comp7_season_3'
     VERSUS_AI = 'versusAI'

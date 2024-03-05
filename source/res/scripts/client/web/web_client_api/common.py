@@ -117,6 +117,8 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_COLLECTION_ENTITLEMENT = 'custom/collectionItem'
     CUSTOM_ANY_COLLECTION_ITEM = 'custom/anyCollectionItem'
     CUSTOM_X3_CREW_BONUS = 'custom/X3_crew'
+    CUSTOM_LOOTBOX = 'custom/lootbox'
+    CUSTOM_BERTHS = 'custom/berths'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'

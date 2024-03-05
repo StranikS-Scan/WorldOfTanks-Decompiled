@@ -116,6 +116,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
         self.__currentCarouselAlias = None
+        self.__currentVehicleParamsAlias = None
         self.__isSpaceReadyForC11n = False
         self.__isVehicleReadyForC11n = False
         self.__isVehicleCameraReadyForC11n = False
@@ -133,7 +134,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     @property
     def paramsPanel(self):
-        return self.getComponent(HANGAR_ALIASES.VEHICLE_PARAMETERS)
+        return self.getComponent(self.__currentVehicleParamsAlias) if self.__currentVehicleParamsAlias is not None else None
 
     @property
     def crewWidget(self):
@@ -369,6 +370,17 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if self.ammoPanel:
             self.ammoPanel.update()
 
+    def __switchParams(self, force=False):
+        prevParamsAlias = self.__currentVehicleParamsAlias
+        newParamsAlias, linkage = self.__hangarComponentsCtrl.getHangarVehicleParamsSettings()
+        newParamsAlias = HANGAR_ALIASES.VEHICLE_PARAMETERS if newParamsAlias is None else newParamsAlias
+        linkage = 'VehicleParametersUI' if linkage is None else linkage
+        if prevParamsAlias != newParamsAlias or force:
+            self.as_setVehicleParamsS(linkage, newParamsAlias)
+            self.__currentVehicleParamsAlias = newParamsAlias
+        self.__updateParams()
+        return
+
     def __updateParams(self):
         if self.paramsPanel:
             self.paramsPanel.update()
@@ -547,6 +559,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_playerEvents.onLoadingMilestoneReached(Milestones.UPDATE_VEHICLE)
         Waiting.show('updateVehicle')
         self.__switchCarousels()
+        self.__switchParams()
         self.__updateState()
         self.__updateAmmoPanel()
         self.__updateParams()
@@ -635,6 +648,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateRankedHeaderComponent()
         self.__updateHeaderEpicWidget()
         self.__switchCarousels()
+        self.__switchParams()
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
         self.__updateComp7ModifiersWidget()
@@ -666,6 +680,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__switchCarousels(force=True)
         if DOG_TAGS_CONFIG in diff:
             self.__updateDogTagsState()
+        if Configs.COMP7_CONFIG.value in diff:
+            self.__switchParams()
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self.__updateState()
 

@@ -18,6 +18,7 @@ from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_view_model
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_minimap_point import MapsTrainingMinimapPoint
 from gui.impl.lobby.maps_training.maps_training_tactical_maps_config import TacticalMapsConfigReader, Scenario, Team, Point
 from gui.impl.lobby.maps_training.scenario_tooltip import ScenarioTooltip
+from gui.impl.lobby.maps_training.map_point_description_tooltip import MapPointDescriptionTooltip
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -85,7 +86,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             scenario = mapConfig.scenarios[int(event.getArgument('scenario'))]
             _, vehicleName = self.__getVehicleForScenario(scenario)
             return ScenarioTooltip(scenario.vehicleType, scenario.team, self.__selectedMap, list(self.__getTargets(scenario)), vehicleName, data[scenario.vehicleType][scenario.team]['completed'], self.__getRewards(geometryID, 'scenarioComplete'))
-        return super(MapsTrainingView, self).createToolTipContent(event=event, contentID=contentID)
+        return MapPointDescriptionTooltip(event=event) if contentID == R.views.lobby.maps_training.MapPointDescriptionTooltip() else super(MapsTrainingView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createToolTip(self, event):
         tooltipId = event.getArgument('tooltipId', '')

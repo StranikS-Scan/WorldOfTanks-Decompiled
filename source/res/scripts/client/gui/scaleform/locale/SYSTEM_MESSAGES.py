@@ -118,11 +118,9 @@ class SYSTEM_MESSAGES(object):
     CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:clientInstallError_not_for_this_vehicle_type'
     CLIENTINSTALLERROR_VEHICLEGUN_NOT_FOR_CURRENT_VEHICLE = '#system_messages:clientInstallError_vehicleGun_not_for_current_vehicle'
     CLIENTINSTALLERROR_WRONG_ITEM_TYPE = '#system_messages:clientInstallError_wrong_item_type'
-    CLIENTINSTALLERROR_TOO_HEAVY = '#system_messages:clientInstallError_too_heavy'
     CLIENTREMOVEERROR_WRONG_NATION = '#system_messages:clientRemoveError_wrong_nation'
     CLIENTREMOVEERROR_NOT_IN_LIST = '#system_messages:clientRemoveError_not_in_list'
     CLIENTREMOVEERROR_WRONG_ITEM_TYPE = '#system_messages:clientRemoveError_wrong_item_type'
-    CLIENTREMOVEERROR_TOO_HEAVY = '#system_messages:clientRemoveError_too_heavy'
     SERVERINSTALLERROR = '#system_messages:serverInstallError'
     SERVERREMOVEERROR = '#system_messages:serverRemoveError'
     BUY_VEHICLE_SLOT_ERROR = '#system_messages:buy_vehicle_slot_error'
@@ -519,6 +517,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_remove/demount_kit_disabled'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
+    VEHICLE_RESTOREDURATION_UNLIMITED = '#system_messages:vehicle/restoreDuration/unlimited'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
     VEHICLE_REPAIR_SUCCESS = '#system_messages:vehicle_repair/success'
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
@@ -561,8 +560,6 @@ class SYSTEM_MESSAGES(object):
     MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE = '#system_messages:module_buy/error_not_for_current_vehicle'
     MODULE_BUY_ERROR_NO_GUN = '#system_messages:module_buy/error_no_gun'
     MODULE_BUY_ERROR_WRONG_ITEM_TYPE = '#system_messages:module_buy/error_wrong_item_type'
-    MODULE_BUY_ERROR_TOO_HEAVY = '#system_messages:module_buy/error_too_heavy'
-    MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_buy/error_too_heavy_chassis'
     MODULE_BUY_ERROR_NEED_TURRET = '#system_messages:module_buy/error_need_turret'
     MODULE_BUY_ERROR_NEED_GUN = '#system_messages:module_buy/error_need_gun'
     MODULE_BUY_ERROR_IS_CURRENT = '#system_messages:module_buy/error_is_current'
@@ -576,7 +573,6 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:artefact_buy/wallet_not_available'
     ARTEFACT_BUY_SERVER_ERROR = '#system_messages:artefact_buy/server_error'
     ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:artefact_buy/server_error_centerDown'
-    ARTEFACT_BUY_ERROR_TOO_HEAVY = '#system_messages:artefact_buy/error_too_heavy'
     ARTEFACT_BUY_VEHICLE_NEED_REPAIR = '#system_messages:artefact_buy/vehicle_need_repair'
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
@@ -595,7 +591,6 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:battleBooster_buy/wallet_not_available'
     BATTLEBOOSTER_BUY_SERVER_ERROR = '#system_messages:battleBooster_buy/server_error'
     BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:battleBooster_buy/server_error_centerDown'
-    BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY = '#system_messages:battleBooster_buy/error_too_heavy'
     BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR = '#system_messages:battleBooster_buy/vehicle_need_repair'
     BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
     BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
@@ -627,8 +622,6 @@ class SYSTEM_MESSAGES(object):
     MODULE_APPLY_ERROR_NOT_FOR_CURRENT_VEHICLE = '#system_messages:module_apply/error_not_for_current_vehicle'
     MODULE_APPLY_ERROR_NO_GUN = '#system_messages:module_apply/error_no_gun'
     MODULE_APPLY_ERROR_WRONG_ITEM_TYPE = '#system_messages:module_apply/error_wrong_item_type'
-    MODULE_APPLY_ERROR_TOO_HEAVY = '#system_messages:module_apply/error_too_heavy'
-    MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_apply/error_too_heavy_chassis'
     MODULE_APPLY_ERROR_NEED_TURRET = '#system_messages:module_apply/error_need_turret'
     MODULE_APPLY_ERROR_NEED_GUN = '#system_messages:module_apply/error_need_gun'
     MODULE_APPLY_ERROR_IS_CURRENT = '#system_messages:module_apply/error_is_current'
@@ -655,8 +648,6 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_DESTROY_VEHICLE_LOCKED = '#system_messages:artefact_destroy/vehicle_locked'
     ARTEFACT_DESTROY_VEHICLE_NEED_REPAIR = '#system_messages:artefact_destroy/vehicle_need_repair'
     ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_apply/error_not_for_this_vehicle_type'
-    ARTEFACT_APPLY_ERROR_TOO_HEAVY = '#system_messages:artefact_apply/error_too_heavy'
-    ARTEFACT_REMOVE_ERROR_TOO_HEAVY = '#system_messages:artefact_remove/error_too_heavy'
     ARTEFACT_UPGRADE_SUCCESS = '#system_messages:artefact_upgrade/success'
     ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED = '#system_messages:artefact_upgrade/success/analogWasDemounted'
     ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
@@ -683,11 +674,9 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_INVALID_VEHICLE = '#system_messages:layout_apply/invalid_vehicle'
     LAYOUT_APPLY_VEHICLE_LOCKED = '#system_messages:layout_apply/vehicle_locked'
     OPTIONALDEVICES_APPLY_ERROR = '#system_messages:optionalDevices_apply/error'
-    OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_apply/error_too_heavy'
     OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:optionalDevices_apply/not_enough_money'
     OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:optionalDevices_apply/wallet_not_available'
     OPTIONALDEVICES_REMOVE_ERROR = '#system_messages:optionalDevices_remove/error'
-    OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_remove/error_too_heavy'
     SHELLS_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:shells_apply/success_money_spent'
     SHELLS_APPLY_ERROR = '#system_messages:shells_apply/error'
     SHELLS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:shells_apply/not_enough_money'
@@ -1232,8 +1221,6 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
     BATTLEPASS_SWITCH_STARTED_STYLE_TITLE = '#system_messages:battlePass/switch_started/style/title'
     BATTLEPASS_SWITCH_STARTED_STYLE_BODY = '#system_messages:battlePass/switch_started/style/body'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE = '#system_messages:battlePass/switch_started/tankman/title'
-    BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY = '#system_messages:battlePass/switch_started/tankman/body'
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
@@ -1249,10 +1236,10 @@ class SYSTEM_MESSAGES(object):
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_REWARDCHOICE_ERROR = '#system_messages:battlePass/rewardChoice/error'
-    BATTLEPASS_EXTRASTARTED_HEADER = '#system_messages:battlePass/extraStarted/header'
-    BATTLEPASS_EXTRASTARTED_BODY = '#system_messages:battlePass/extraStarted/body'
-    BATTLEPASS_EXTRAFINISH_HEADER = '#system_messages:battlePass/extraFinish/header'
-    BATTLEPASS_EXTRAFINISH_BODY = '#system_messages:battlePass/extraFinish/body'
+    BATTLEPASS_MARATHONSTARTED_HEADER = '#system_messages:battlePass/marathonStarted/header'
+    BATTLEPASS_MARATHONSTARTED_BODY = '#system_messages:battlePass/marathonStarted/body'
+    BATTLEPASS_MARATHONFINISH_HEADER = '#system_messages:battlePass/marathonFinish/header'
+    BATTLEPASS_MARATHONFINISH_BODY = '#system_messages:battlePass/marathonFinish/body'
     BATTLEPASS_EXTRAWILLENDSOON_HEADER = '#system_messages:battlePass/extraWillEndSoon/header'
     BATTLEPASS_EXTRAWILLENDSOON_BODY = '#system_messages:battlePass/extraWillEndSoon/body'
     BATTLEPASS_GAMEMODEENABLED_HEADER = '#system_messages:battlePass/gameModeEnabled/header'
@@ -1265,11 +1252,14 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SEASONEND_REWARDS_CREWBOOK = '#system_messages:battlePass/seasonEnd/rewards/crewBook'
     BATTLEPASS_SEASONEND_REWARDS_DEVICE = '#system_messages:battlePass/seasonEnd/rewards/device'
     BATTLEPASS_SEASONEND_REWARDS_TROPHY = '#system_messages:battlePass/seasonEnd/rewards/trophy'
+    BATTLEPASS_SEASONEND_REWARDS_EXPEQUIPMENT = '#system_messages:battlePass/seasonEnd/rewards/expequipment'
     BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS = '#system_messages:battlePass/seasonEnd/rewards/blueprints'
     BATTLEPASS_SWITCHCHAPTER_ERROR = '#system_messages:battlePass/switchChapter/error'
     BATTLEPASS_SWITCHCHAPTER_SUCCESS = '#system_messages:battlePass/switchChapter/success'
     BATTLEPASS_SWITCHCHAPTER_REMINDER = '#system_messages:battlePass/switchChapter/reminder'
     BATTLEPASS_ACTIVATECHAPTER_SUCCESS = '#system_messages:battlePass/activateChapter/success'
+    BATTLEPASS_RECOURSECHAPTERUNLOCK_HEADER = '#system_messages:battlePass/recourseChapterUnlock/header'
+    BATTLEPASS_RECOURSECHAPTERUNLOCK_BODY = '#system_messages:battlePass/recourseChapterUnlock/body'
     COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
     COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
     COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
@@ -1602,11 +1592,9 @@ class SYSTEM_MESSAGES(object):
      CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE,
      CLIENTINSTALLERROR_VEHICLEGUN_NOT_FOR_CURRENT_VEHICLE,
      CLIENTINSTALLERROR_WRONG_ITEM_TYPE,
-     CLIENTINSTALLERROR_TOO_HEAVY,
      CLIENTREMOVEERROR_WRONG_NATION,
      CLIENTREMOVEERROR_NOT_IN_LIST,
      CLIENTREMOVEERROR_WRONG_ITEM_TYPE,
-     CLIENTREMOVEERROR_TOO_HEAVY,
      SERVERINSTALLERROR,
      SERVERREMOVEERROR,
      BUY_VEHICLE_SLOT_ERROR,
@@ -2003,6 +1991,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
+     VEHICLE_RESTOREDURATION_UNLIMITED,
      VEHICLE_RESTORE_FINISHED,
      VEHICLE_REPAIR_SUCCESS,
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
@@ -2045,8 +2034,6 @@ class SYSTEM_MESSAGES(object):
      MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE,
      MODULE_BUY_ERROR_NO_GUN,
      MODULE_BUY_ERROR_WRONG_ITEM_TYPE,
-     MODULE_BUY_ERROR_TOO_HEAVY,
-     MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS,
      MODULE_BUY_ERROR_NEED_TURRET,
      MODULE_BUY_ERROR_NEED_GUN,
      MODULE_BUY_ERROR_IS_CURRENT,
@@ -2060,7 +2047,6 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_WALLET_NOT_AVAILABLE,
      ARTEFACT_BUY_SERVER_ERROR,
      ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN,
-     ARTEFACT_BUY_ERROR_TOO_HEAVY,
      ARTEFACT_BUY_VEHICLE_NEED_REPAIR,
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
@@ -2079,7 +2065,6 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE,
      BATTLEBOOSTER_BUY_SERVER_ERROR,
      BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
-     BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY,
      BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR,
      BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
      BATTLEBOOSTER_BUY_INVALID_VEHICLE,
@@ -2111,8 +2096,6 @@ class SYSTEM_MESSAGES(object):
      MODULE_APPLY_ERROR_NOT_FOR_CURRENT_VEHICLE,
      MODULE_APPLY_ERROR_NO_GUN,
      MODULE_APPLY_ERROR_WRONG_ITEM_TYPE,
-     MODULE_APPLY_ERROR_TOO_HEAVY,
-     MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS,
      MODULE_APPLY_ERROR_NEED_TURRET,
      MODULE_APPLY_ERROR_NEED_GUN,
      MODULE_APPLY_ERROR_IS_CURRENT,
@@ -2139,8 +2122,6 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_DESTROY_VEHICLE_LOCKED,
      ARTEFACT_DESTROY_VEHICLE_NEED_REPAIR,
      ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
-     ARTEFACT_APPLY_ERROR_TOO_HEAVY,
-     ARTEFACT_REMOVE_ERROR_TOO_HEAVY,
      ARTEFACT_UPGRADE_SUCCESS,
      ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED,
      ARTEFACT_UPGRADE_SERVER_ERROR,
@@ -2167,11 +2148,9 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_INVALID_VEHICLE,
      LAYOUT_APPLY_VEHICLE_LOCKED,
      OPTIONALDEVICES_APPLY_ERROR,
-     OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY,
      OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY,
      OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE,
      OPTIONALDEVICES_REMOVE_ERROR,
-     OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY,
      SHELLS_APPLY_SUCCESS_MONEY_SPENT,
      SHELLS_APPLY_ERROR,
      SHELLS_APPLY_NOT_ENOUGH_MONEY,
@@ -2716,8 +2695,6 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
      BATTLEPASS_SWITCH_STARTED_STYLE_TITLE,
      BATTLEPASS_SWITCH_STARTED_STYLE_BODY,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_TITLE,
-     BATTLEPASS_SWITCH_STARTED_TANKMAN_BODY,
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,
@@ -2733,10 +2710,10 @@ class SYSTEM_MESSAGES(object):
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_REWARDCHOICE_ERROR,
-     BATTLEPASS_EXTRASTARTED_HEADER,
-     BATTLEPASS_EXTRASTARTED_BODY,
-     BATTLEPASS_EXTRAFINISH_HEADER,
-     BATTLEPASS_EXTRAFINISH_BODY,
+     BATTLEPASS_MARATHONSTARTED_HEADER,
+     BATTLEPASS_MARATHONSTARTED_BODY,
+     BATTLEPASS_MARATHONFINISH_HEADER,
+     BATTLEPASS_MARATHONFINISH_BODY,
      BATTLEPASS_EXTRAWILLENDSOON_HEADER,
      BATTLEPASS_EXTRAWILLENDSOON_BODY,
      BATTLEPASS_GAMEMODEENABLED_HEADER,
@@ -2749,11 +2726,14 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SEASONEND_REWARDS_CREWBOOK,
      BATTLEPASS_SEASONEND_REWARDS_DEVICE,
      BATTLEPASS_SEASONEND_REWARDS_TROPHY,
+     BATTLEPASS_SEASONEND_REWARDS_EXPEQUIPMENT,
      BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS,
      BATTLEPASS_SWITCHCHAPTER_ERROR,
      BATTLEPASS_SWITCHCHAPTER_SUCCESS,
      BATTLEPASS_SWITCHCHAPTER_REMINDER,
      BATTLEPASS_ACTIVATECHAPTER_SUCCESS,
+     BATTLEPASS_RECOURSECHAPTERUNLOCK_HEADER,
+     BATTLEPASS_RECOURSECHAPTERUNLOCK_BODY,
      COLLECTORVEHICLE_SWITCH_OFF_TITLE,
      COLLECTORVEHICLE_SWITCH_OFF_BODY,
      COLLECTORVEHICLE_SWITCH_ON_TITLE,

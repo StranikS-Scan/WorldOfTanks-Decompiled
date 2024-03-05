@@ -766,7 +766,6 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <weight>	10000	</weight>
-      <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.4 1.6 3.2	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1697,7 +1696,7 @@
   <turrets0>
     <Turret_1_A153_XM66F>
       <userString>	#usa_vehicles:Turret_1_A153_XM66F	</userString>
-      <tags></tags>
+      <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>

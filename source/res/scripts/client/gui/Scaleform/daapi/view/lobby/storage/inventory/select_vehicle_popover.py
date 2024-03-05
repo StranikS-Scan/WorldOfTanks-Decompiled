@@ -75,6 +75,7 @@ class VehicleSelectPopover(VehicleSelectPopoverStorage, VehicleSelectorBase):
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_STORAGE_HIDDEN
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         allVehicles = self._itemsCache.items.getVehicles(criteria)
         vehicles = self._updateData(allVehicles)
         self._vehDP.buildList(vehicles)

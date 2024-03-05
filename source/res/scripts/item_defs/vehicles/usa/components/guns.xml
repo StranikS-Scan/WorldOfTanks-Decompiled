@@ -167,6 +167,7 @@
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
     <_120mm_Gun_M58_7x7>	31001	</_120mm_Gun_M58_7x7>
     <_75mm_Gun_M6_594>	31003	</_75mm_Gun_M6_594>
+    <_105mm_Gun_T141_7x7>	31004	</_105mm_Gun_T141_7x7>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -2770,7 +2771,7 @@
           <speed>	975	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	137 111	</piercingPower>
+          <piercingPower>	148 134	</piercingPower>
         </_76mm_AP_M339>
         <_76mm_HVAP_M319>
           <defaultPortion>	0.0	</defaultPortion>
@@ -4353,7 +4354,7 @@
           <speed>	972	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	160 135	</piercingPower>
+          <piercingPower>	175 160	</piercingPower>
         </_90mm_AP_M77>
         <_90mm_HVAP_M304>
           <defaultPortion>	0.0	</defaultPortion>
@@ -5040,7 +5041,7 @@
           <speed>	1250	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	223 203	</piercingPower>
+          <piercingPower>	236 223	</piercingPower>
         </_90mm_APFSDS_T320>
         <_90mm_HEAT_M431>
           <defaultPortion>	0.0	</defaultPortion>
@@ -5832,7 +5833,7 @@
           <speed>	1223	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	251 231	</piercingPower>
+          <piercingPower>	260 245	</piercingPower>
         </_105mm_AP_T32>
         <_105mm_HEAT_T_T384E3>
           <defaultPortion>	0.0	</defaultPortion>
@@ -6756,14 +6757,14 @@
           <speed>	1472	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	268 248	</piercingPower>
+          <piercingPower>	274 254	</piercingPower>
         </_105mm_HVAPDS_T_T279E2>
         <_105mm_HEAT_T_T298E2>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	315 315	</piercingPower>
+          <piercingPower>	330 330	</piercingPower>
         </_105mm_HEAT_T_T298E2>
         <_105mm_HE_M11A2E>
           <defaultPortion>	0.1	</defaultPortion>
@@ -6774,6 +6775,64 @@
         </_105mm_HE_M11A2E>
       </shots>
     </_105mm_Gun_T141>
+    <_105mm_Gun_T141_7x7>
+      <userString>	#usa_vehicles:_105mm_Gun_T141	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	250000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.16	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	9	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2177	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_HVAPDS_T_T279E2>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1472	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	274 254	</piercingPower>
+        </_105mm_HVAPDS_T_T279E2>
+        <_105mm_HEAT_T_T298E2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mm_HEAT_T_T298E2>
+        <_105mm_HE_M11A2E>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	945	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M11A2E>
+      </shots>
+    </_105mm_Gun_T141_7x7>
     <_110mm_Gun_EXP_7>
       <userString>	#usa_vehicles:_110mm_Gun_EXP_7	</userString>
       <tags></tags>

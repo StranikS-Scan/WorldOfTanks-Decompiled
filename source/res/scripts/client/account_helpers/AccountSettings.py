@@ -23,6 +23,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.collection.collections_constants import COLLECTIONS_UPDATED_ENTRY_SEEN, COLLECTION_RENEW_SEEN, COLLECTION_START_SEEN
 from gui.integrated_auction.constants import AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -142,7 +143,7 @@ LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
 BR_PROGRESSION_POINTS_SEEN = 'brProgressionPointsSeen'
-IS_BATTLE_PASS_EXTRA_STARTED = 'isBattlePassExtraStarted'
+IS_BATTLE_PASS_MARATHON_STARTED = 'isBattlePassMarathonStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 IS_CUSTOMIZATION_INTRO_VIEWED = 'isCustomizationIntroViewed'
@@ -157,6 +158,7 @@ BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
+ASSAULT_CAMERA_HINT_SECTION = 'assaultCameraHint'
 TURBO_SHAFT_ENGINE_MODE_HINT_SECTION = 'turboShaftEngineModeHint'
 ROCKET_ACCELERATION_MODE_HINT_SECTION = 'rocketAccelerationModeHint'
 DYN_SQUAD_HINT_SECTION = 'dynSquadHint'
@@ -221,6 +223,7 @@ RESOURCE_WELL_NOTIFICATIONS = 'resourceWellNotifications'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
+TRADING_CARAVAN_NOTIFICATIONS = 'tradingCaravanNotifications'
 SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
 HAS_LEFT_VERSUS_AI = 'hasLeftVersusAI'
@@ -533,9 +536,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'level_4': False,
                                               'level_5': False,
                                               'level_6': False,
-                                              'level_7': True,
+                                              'level_7': False,
                                               'level_8': False,
-                                              'level_9': False,
+                                              'level_9': True,
                                               'level_10': False},
                EPICBATTLE_CAROUSEL_FILTER_2: {'premium': False,
                                               'elite': False,
@@ -564,11 +567,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_SPG_flame': False,
                                               'role_SPG_assault': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'epicBattleSeason': 0,
-                                                     'level_7': True,
+                                                     'level_9': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_2: {'epicBattleSeason': 0,
-                                                     'level_7': True,
+                                                     'level_9': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
@@ -1134,6 +1137,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TRAJECTORY_VIEW_HINT_SECTION: {HINTS_LEFT: 3,
                                                LAST_DISPLAY_DAY: 0,
                                                NUM_BATTLES: 0},
+                ASSAULT_CAMERA_HINT_SECTION: {HINTS_LEFT: 5,
+                                              LAST_DISPLAY_DAY: 0,
+                                              NUM_BATTLES: 0},
                 DYN_SQUAD_HINT_SECTION: {HINTS_LEFT: 3,
                                          LAST_DISPLAY_DAY: 0,
                                          NUM_BATTLES: 0},
@@ -1182,7 +1188,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED: False,
                 NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: {},
-                IS_BATTLE_PASS_EXTRA_STARTED: False,
+                IS_BATTLE_PASS_MARATHON_STARTED: False,
                 IS_BATTLE_PASS_COLLECTION_SEEN: False,
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
@@ -1288,6 +1294,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      ACHIEVEMENTS_VISITED: False,
                      INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
                                                         AUCTION_FINISH_STAGE_SEEN: set()},
+                     TRADING_CARAVAN_NOTIFICATIONS: {TRADING_CARAVAN_REFILL_SEEN: set()},
                      FUN_RANDOM_NOTIFICATIONS: {FUN_RANDOM_NOTIFICATIONS_FROZEN: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_SUB_MODES: set()},
@@ -1464,7 +1471,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 67
+    version = 68
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1999,8 +2006,8 @@ class AccountSettings(object):
                     keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if LAST_BATTLE_PASS_POINTS_SEEN in keySettings.keys():
                         keySettings.write(LAST_BATTLE_PASS_POINTS_SEEN, _pack({}))
-                    if IS_BATTLE_PASS_EXTRA_STARTED in keySettings.keys():
-                        keySettings.write(IS_BATTLE_PASS_EXTRA_STARTED, _pack(False))
+                    if 'isBattlePassExtraStarted' in keySettings.keys():
+                        keySettings.write('isBattlePassExtraStarted', _pack(False))
 
             if currVersion < 54:
                 for key, section in _filterAccountSection(ads):
@@ -2113,6 +2120,14 @@ class AccountSettings(object):
                         lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
                         lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = False
                         accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
+
+            if currVersion < 68:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if 'isBattlePassExtraStarted' in keySettings.keys():
+                        extraStarted = _unpack(keySettings['isBattlePassExtraStarted'].asString)
+                        keySettings.deleteSection('isBattlePassExtraStarted')
+                        keySettings.write(IS_BATTLE_PASS_MARATHON_STARTED, _pack(extraStarted))
 
             ads.writeInt('version', AccountSettings.version)
         return

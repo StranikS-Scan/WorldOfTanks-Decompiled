@@ -12,7 +12,7 @@ def createComponentSystem(arena, bonusType, arenaType):
         COMPONENT_ASSEMBLER[bonusType].assembleComponents(componentSystem)
     else:
         ClientArenaComponentAssembler._assembleBonusCapsComponents(componentSystem)
-    ClientArenaComponentAssembler._addArenaComponents(componentSystem, getDefaultComponents())
+    ClientArenaComponentAssembler._addArenaComponents(componentSystem, getDefaultComponents(bonusType))
     componentSystem.activate()
     return componentSystem
 

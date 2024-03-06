@@ -41,6 +41,7 @@ class BattlePassSounds(CONST_CONTAINER):
     VIDEO_RESUME = 'bp_video_resume'
     VIDEO_STOP = 'bp_video_stop'
     VOICEOVER_STOP = 'bp_voiceovers_stop'
+    REGULAR_VOICEOVER_STOP = 'bp_regular_voiceovers_stop'
     HOLIDAY_VOICEOVER_STOP = 'bp_holiday_voiceovers_stop'
     HOLIDAY_REWARD_SCREEN = 'bp_holiday_reward_screen'
     SPECIAL_TASKS_ENTER = 'tasks_special_enter'

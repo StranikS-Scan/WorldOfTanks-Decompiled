@@ -8,7 +8,7 @@ from battle_modifiers_ext.modification_cache.modification_cache import Modificat
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH
-from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
 from Math import Vector2
 from debug_utils import LOG_DEBUG
 if TYPE_CHECKING:
@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from items.components.gun_components import GunShot
     from items.components.shell_components import ShellType
     from battle_modifiers_ext.battle_modifiers import BattleModifiers
+    from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
 g_cache = None
 
 class VehicleModifier(object):
@@ -136,6 +137,8 @@ class VehicleModifier(object):
             shot.piercingPower = Vector2(modifiers(BattleParams.PIERCING_POWER_FIRST, piercingPower[0]), modifiers(BattleParams.PIERCING_POWER_LAST, piercingPower[1]))
         if modifiers.haveDomain(ModifierDomain.SHELL_COMPONENTS):
             shot.shell = cls.__modifyShell(shot.shell, modifiers)
+        from helpers_common import computeShotMaxDistance
+        shot.maxDistance = computeShotMaxDistance(shot, modifiers)
         return shot
 
     @classmethod
@@ -146,8 +149,8 @@ class VehicleModifier(object):
                 shell.useAltDamageRandomization = True
                 shell.damageRandomization = modifiers(BattleParams.DAMAGE_RANDOMIZATION, shell.damageRandomization)
             shell.piercingPowerRandomization = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION, shell.piercingPowerRandomization)
-            damage = shell.damage
-            shell.damage = (modifiers(BattleParams.ARMOR_DAMAGE, damage[0]), modifiers(BattleParams.DEVICE_DAMAGE, damage[1]))
+            shell.armorDamage = (modifiers(BattleParams.ARMOR_DAMAGE_FIRST, shell.armorDamage[0]), modifiers(BattleParams.ARMOR_DAMAGE_LAST, shell.armorDamage[1]))
+            shell.deviceDamage = (modifiers(BattleParams.DEVICE_DAMAGE_FIRST, shell.deviceDamage[0]), modifiers(BattleParams.DEVICE_DAMAGE_LAST, shell.deviceDamage[1]))
             effectsIndex = shell.effectsIndex
             shell.effectsIndex = modifiers(BattleParams.SHOT_EFFECTS, effectsIndex)
         if modifiers.haveDomain(ModifierDomain.SHELL_TYPE):
@@ -170,13 +173,13 @@ class VehicleModifier(object):
             armorSpalls = copy.copy(shellType.armorSpalls)
             armorSpalls.radius = modifiers(BattleParams.ARMOR_SPALLS_IMPACT_RADIUS, armorSpalls.radius)
             armorSpalls.damageAbsorptionType = modifiers(BattleParams.ARMOR_SPALLS_DAMAGE_ABSORPTION, armorSpalls.damageAbsorptionType)
-            damages = armorSpalls.damages
-            armorSpalls.damages = (modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE, damages[0]), modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE, damages[1]))
+            armorSpalls.armorDamage = (modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE_FIRST, armorSpalls.armorDamage[0]), modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE_LAST, armorSpalls.armorDamage[1]))
+            armorSpalls.deviceDamage = (modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE_FIRST, armorSpalls.deviceDamage[0]), modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE_LAST, armorSpalls.deviceDamage[1]))
             if BattleParams.ARMOR_SPALLS_CONE_ANGLE in modifiers:
                 initAngle = acos(armorSpalls.coneAngleCos)
                 armorSpalls.coneAngleCos = cos(modifiers(BattleParams.ARMOR_SPALLS_CONE_ANGLE, initAngle))
             shellType.armorSpalls = armorSpalls
-            shellType.maxDamage = max(shellType.maxDamage, armorSpalls.damages[0], armorSpalls.damages[1])
+            shellType.maxDamage = max(shellType.maxDamage, max(armorSpalls.armorDamage), max(armorSpalls.deviceDamage))
         return shellType
 
     @classmethod

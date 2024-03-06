@@ -4,6 +4,10 @@ import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getMapboxFightBtnTooltipData
+from gui.Scaleform.settings import TOOLTIP_TYPES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
@@ -16,6 +20,7 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IMapboxController
@@ -109,6 +114,14 @@ class MapboxSquadEntity(SquadEntity):
 
     def getConfirmDialogMeta(self, ctx):
         return None if not self.__mapboxCtrl.isActive() else super(MapboxSquadEntity, self).getConfirmDialogMeta(ctx)
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getMapboxFightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(MapboxSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
+
+    def getSquadBtnTooltipData(self):
+        header = backport.text(R.strings.platoon.headerButton.tooltips.inMapboxSquad.header())
+        body = backport.text(R.strings.platoon.headerButton.tooltips.inMapboxSquad.body())
+        return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         super(MapboxSquadEntity, self).unit_onUnitVehiclesChanged(dbID, vehicles)

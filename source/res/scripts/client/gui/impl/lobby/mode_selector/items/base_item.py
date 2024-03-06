@@ -21,7 +21,7 @@ from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Type, Union
     from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_model import ModeSelectorCardModel
-    from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import _SelectorItem
+    from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SelectorItem
     from gui.impl.gen_utils import DynAccessor
 _rMode = R.strings.mode_selector.mode
 _INFO_PAGE_KEY_TEMPLATE = 'infoPage%s'

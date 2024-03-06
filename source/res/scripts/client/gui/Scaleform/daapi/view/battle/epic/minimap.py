@@ -3,9 +3,11 @@
 import logging
 import os
 import BigWorld
+import CommandMapping
 import GUI
 import Math
 from account_helpers import AccountSettings
+from account_helpers.settings_core.settings_constants import CONTROLS
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, MarkerType, ReplyState
@@ -21,7 +23,10 @@ from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
+from gui.shared.utils.key_mapping import getScaleformKey
+from helpers import dependency
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from skeletons.account_helpers.settings_core import ISettingsCore
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _EPIC_TEAM_POINTS = settings.CONTAINER_NAME.TEAM_POINTS
@@ -65,6 +70,7 @@ class MINIMAP_SCALE_TYPES(object):
 
 
 class EpicMinimapComponent(EpicMinimapMeta):
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EpicMinimapComponent, self).__init__()
@@ -81,6 +87,12 @@ class EpicMinimapComponent(EpicMinimapMeta):
             mode = self.__maxZoomMode
         self.updateZoomMode(mode)
         self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
+        self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
+        self.__updateMapShortcutLabel()
+
+    def _dispose(self):
+        self.__settingsCore.onSettingsApplied -= self.__onSettingsApplied
+        super(EpicMinimapComponent, self)._dispose()
 
     def setMinimapCenterEntry(self, entryID):
         component = self.getComponent()
@@ -181,6 +193,14 @@ class EpicMinimapComponent(EpicMinimapMeta):
             return _MIN_RANGE_SCALE
         p = (current - minScale) / (maxScale - minScale)
         return (1 - p) * _DOWN_SCALE + p * _UP_SCALE
+
+    def __updateMapShortcutLabel(self):
+        key, _ = CommandMapping.g_instance.getCommandKeys(CommandMapping.CMD_MINIMAP_VISIBLE)
+        self.as_setMapShortcutKeyCodeS(getScaleformKey(key))
+
+    def __onSettingsApplied(self, diff):
+        if CONTROLS.KEYBOARD in diff:
+            self.__updateMapShortcutLabel()
 
 
 class RecoveringVehiclesPlugin(ArenaVehiclesPlugin):

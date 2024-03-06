@@ -24,6 +24,7 @@ from gui.impl.lobby.comp7.meta_view.pages.yearly_statistics_page import YearlySt
 from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showComp7WhatsNewScreen
 from helpers import dependency
@@ -52,6 +53,10 @@ class MetaRootView(ViewImpl, IGlobalListener):
     @property
     def viewModel(self):
         return super(MetaRootView, self).getViewModel()
+
+    @property
+    def tabId(self):
+        return self.__tabId
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -93,6 +98,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.viewModel.setPageViewId(page.pageId)
         playComp7MetaViewTabSound(tabId, self.__tabId)
         self.__tabId = tabId
+        g_eventDispatcher.updateUI()
 
     def _finalize(self):
         self.__removeListeners()

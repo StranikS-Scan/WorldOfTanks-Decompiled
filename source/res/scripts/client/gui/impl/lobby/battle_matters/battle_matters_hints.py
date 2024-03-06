@@ -253,7 +253,7 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
             else:
                 self.startGlobalListening()
             if self._controlOnScene:
-                self._controlIsEnabled = self.__isReadyToFightInRandom()
+                self._controlIsEnabled = self.__isReadyToFightInArena()
                 self.__checkFightBtnHint()
         return
 
@@ -273,7 +273,7 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
         self.__checkFightBtnHint()
 
     def _isReadyToShow(self):
-        return super(FightBtnMultiShowHint, self)._isReadyToShow() and self.canBeShownInFuture() and self.__isReadyToFightInRandom()
+        return super(FightBtnMultiShowHint, self)._isReadyToShow() and self.canBeShownInFuture() and self.__isReadyToFightInArena()
 
     def __isDevBattle(self):
         return IS_DEVELOPMENT and self.prbEntity.getModeFlags() == FUNCTIONAL_FLAG.TRAINING
@@ -298,12 +298,12 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
         else:
             self.stop()
 
-    def __isReadyToFightInRandom(self):
+    def __isReadyToFightInArena(self):
         prbEntity = self.prbEntity
         if prbEntity is not None:
-            isRandom = prbEntity and prbEntity.getEntityFlags() != FUNCTIONAL_FLAG.UNDEFINED and prbEntity.getQueueType() == QUEUE_TYPE.RANDOMS
+            isValidArena = prbEntity and prbEntity.getEntityFlags() != FUNCTIONAL_FLAG.UNDEFINED and prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
             prbDispatcher = self.prbDispatcher
-            if isRandom and prbDispatcher is not None:
+            if isValidArena and prbDispatcher is not None:
                 items = battle_selector_items.getItems()
                 selected = items.update(prbDispatcher.getFunctionalState())
                 return prbEntity.canPlayerDoAction().isValid and not selected.isLocked()

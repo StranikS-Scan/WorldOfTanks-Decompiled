@@ -159,6 +159,10 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
 
+    def getVisibleGameModes(self):
+        modes = self.__getConfig().points
+        return [ mode for mode, modeInfo in modes.iteritems() if modeInfo.get('visible', False) ]
+
     def isCompleted(self):
         return self.getState() == BattlePassState.COMPLETED
 
@@ -205,7 +209,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
             expireTimestamp = self.__getConfig().getChapterExpireTimestamp(chID)
             return not expireTimestamp or time_utils.getServerUTCTime() < expireTimestamp
 
-        return [ chapterID for chapterID in self.__getConfig().getChapterIDs() if isActive(chapterID) ]
+        chapters = self.__getConfig().getChapterIDs()
+        chapters.sort()
+        return [ chapterID for chapterID in chapters if isActive(chapterID) ]
 
     def isExtraChapter(self, chapterID):
         return self.__getConfig().isExtraChapter(chapterID)

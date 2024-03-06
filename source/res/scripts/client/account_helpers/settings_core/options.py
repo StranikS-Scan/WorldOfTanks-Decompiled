@@ -62,6 +62,8 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.battle_hints.newbie_battle_hints_controller import INewbieBattleHintsController
+from skeletons.gui.prebattle_hints.newbie_controller import INewbiePrebattleHintsController
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
 from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
@@ -187,6 +189,15 @@ class SettingAbstract(ISetting):
 
     def isEqual(self, value):
         return self.get() == value
+
+
+class EnablingSettingMixin(object):
+
+    def pack(self):
+        return SettingsExtraData(self._get(), self._getOptions(), {'enabled': self._isEnabled()})._asdict()
+
+    def _isEnabled(self):
+        raise NotImplementedError
 
 
 class SettingsContainer(ISetting):
@@ -1742,6 +1753,24 @@ class BattleLoadingTipSetting(AccountDumpSetting):
     def _getOptions(self):
         settingsKey = '#settings:game/%s/%s'
         return [ settingsKey % (self.key, tType) for tType in self.OPTIONS.TIPS_TYPES ]
+
+
+class NewbiePrebattleHintsSetting(EnablingSettingMixin, StorageSetting):
+
+    def _isEnabled(self):
+        return dependency.instance(INewbiePrebattleHintsController).isEnabled() and not BattleReplay.isPlaying()
+
+    def getDefaultValue(self):
+        return True
+
+
+class NewbieBattleHintsSetting(EnablingSettingMixin, StorageSetting):
+
+    def _isEnabled(self):
+        return dependency.instance(INewbieBattleHintsController).isEnabled() and not BattleReplay.isPlaying()
+
+    def getDefaultValue(self):
+        return True
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):

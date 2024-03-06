@@ -19,6 +19,7 @@ from PlayerEvents import g_playerEvents
 from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY
 from visual_script.misc import ASPECT
 from visual_script.multi_plan_provider import makeMultiPlanProvider, CallableProviderType
+from arena_vscript_config import config as arenaVScriptsConfig
 TeamBaseProvider = namedtuple('TeamBaseProvider', ('points', 'invadersCnt', 'capturingStopped'))
 
 class ClientArena(object):
@@ -296,13 +297,20 @@ class ClientArena(object):
         if vehInfo is not None:
             vehInfo['isAvatarReady'] = True
             self.onAvatarReady(vehicleID)
-        if self.arenaType is not None and self._vsePlans is not None:
-            self._vsePlans.load(self.arenaType.visualScript[ASPECT.CLIENT])
-            self._vsePlans.start()
         return
 
-    def loadVsePlans(self):
-        self._vsePlans.load(self.arenaType.visualScript[ASPECT.CLIENT], autoStart=True)
+    def __getArenaPlans(self):
+        arenaPlans = list(self.arenaType.visualScript[ASPECT.CLIENT])
+        vscriptsConfig = arenaVScriptsConfig.getInstance()
+        if vscriptsConfig:
+            arenaPlans.extend(vscriptsConfig.getPlansForLoader(ASPECT.CLIENT, self.bonusType, self.arenaType.gameplayName))
+        return arenaPlans
+
+    def startVsePlans(self):
+        if self.arenaType is not None and self._vsePlans is not None:
+            self._vsePlans.load(self.__getArenaPlans())
+            self._vsePlans.start()
+        return
 
     def __onBasePointsUpdate(self, argStr):
         team, baseID, points, timeLeft, invadersCnt, capturingStopped = cPickle.loads(argStr)

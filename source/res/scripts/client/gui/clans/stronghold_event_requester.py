@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/clans/stronghold_event_requester.py
 import json
 import logging
+from collections import defaultdict
 import typing
 import Event
 import wg_async
@@ -19,6 +20,7 @@ class FrozenVehiclesConstants(CONST_CONTAINER):
     E_VEHICLE_FREEZE_ALL = 'vehicle_freeze_all'
     E_VEHICLE_UNFREEZE = 'vehicle_unfreeze'
     E_VEHICLE_UNFREEZE_ALL = 'vehicle_unfreeze_all'
+    E_SPARE_PARTS_CHANGED = 'spare_parts_changed'
 
 
 class FrozenVehiclesRequester(object):
@@ -27,7 +29,7 @@ class FrozenVehiclesRequester(object):
 
     def __init__(self):
         super(FrozenVehiclesRequester, self).__init__()
-        self.__cache = dict()
+        self.__cache = self.__defaultCache()
         self.__isStarted = False
         self.__subscription = None
         self.__eventsManager = Event.EventManager()
@@ -50,32 +52,50 @@ class FrozenVehiclesRequester(object):
     def stop(self):
         self.__isStarted = False
         self.__clearSubscription()
-        self.__eventsManager.clear()
-        self.__cache.clear()
+        self.__cache = self.__defaultCache()
 
     def getCache(self):
         return self.__cache
 
+    def getSparePartsBalance(self):
+        return self.__cache['parts_balance']
+
+    def getFrozenVehicles(self, spaID):
+        return self.__cache['frozen_vehicles'].get(spaID, set())
+
+    def getUnfreezePrice(self, vehicleCD):
+        return self.__cache['unfreeze_prices'].get(vehicleCD, -1)
+
     def isCacheEmpty(self):
-        return not bool(self.__cache)
+        return self.__cache == self.__defaultCache()
+
+    def removeFromFrozenVehicle(self, playerSpaID, vehicleCD):
+        currentFrozenVehicles = self.__cache['frozen_vehicles'][playerSpaID]
+        newFrozenVehicles = currentFrozenVehicles - {vehicleCD}
+        self.__cache['frozen_vehicles'][playerSpaID] = newFrozenVehicles
 
     def setInitialDataAndStart(self, data):
-        for playerData in data:
-            if not isinstance(playerData, dict):
-                continue
-            spaID = playerData.get('spa_id')
-            if spaID is None:
-                continue
-            allVehicles = playerData.get('all_vehicles')
-            if allVehicles is not None and allVehicles:
-                self.__cache[spaID] = FrozenVehiclesConstants.ALL_VEHICLES_FROZEN
-                continue
-            self.__cache[spaID] = set([ v.get('vehicle_cd', -1) for v in playerData.get('vehicles', []) ])
+        if not isinstance(data, dict):
+            return
+        else:
+            self.__cache['parts_balance'] = data.get('spare_parts_balance', 0)
+            for playerData in data.get('accounts', []):
+                if not isinstance(playerData, dict):
+                    continue
+                spaID = playerData.get('spa_id')
+                if spaID is None:
+                    continue
+                allVehicles = playerData.get('all_vehicles', False)
+                if allVehicles:
+                    self.__cache['frozen_vehicles'][spaID] = FrozenVehiclesConstants.ALL_VEHICLES_FROZEN
+                else:
+                    self.__cache['frozen_vehicles'][spaID] = set([ v.get('vehicle_cd', -1) for v in playerData.get('vehicles', []) ])
+                self.__cache['unfreeze_prices'].update({v.get('vehicle_cd', -1):v.get('repair_price', 0) for v in playerData.get('vehicles', [])})
 
-        if not self.isCacheEmpty():
-            self.onUpdated(self.__cache.keys())
-        self.start()
-        return
+            if not self.isCacheEmpty():
+                self.onUpdated(self.__cache['frozen_vehicles'].keys())
+            self.start()
+            return
 
     def _onMessage(self, message):
         updatedSpaIDs = []
@@ -84,24 +104,30 @@ class FrozenVehiclesRequester(object):
             event = record.get('event')
             if event is None:
                 continue
+            if event == FrozenVehiclesConstants.E_SPARE_PARTS_CHANGED:
+                self.__cache['parts_balance'] = record.get('new_spare_parts', 0)
+                continue
             spaID = record.get('spa_id')
             if event == FrozenVehiclesConstants.E_VEHICLE_UNFREEZE_ALL and spaID is None:
-                updatedSpaIDs.extend(self.__cache.keys())
-                self.__cache.clear()
+                updatedSpaIDs.extend(self.__cache['frozen_vehicles'].keys())
+                self.__cache['frozen_vehicles'].clear()
                 continue
             if spaID is None:
                 continue
-            vehicleCds = set(record.get('vehicle_cds', []))
-            currentFrozenVehicles = self.__cache.get(spaID, set())
+            vehicleCds = set([ v['cd'] for v in record.get('vehicles', []) ])
+            unfreezePrices = {v.get('cd', -1):v.get('repair_price', 0) for v in record.get('vehicles', [])}
+            currentFrozenVehicles = self.__cache['frozen_vehicles'][spaID]
             if event == FrozenVehiclesConstants.E_VEHICLE_UNFREEZE:
                 newFrozenVehicles = currentFrozenVehicles - vehicleCds
             elif event == FrozenVehiclesConstants.E_VEHICLE_UNFREEZE_ALL:
                 newFrozenVehicles = set()
             elif event == FrozenVehiclesConstants.E_VEHICLE_FREEZE_ALL:
                 newFrozenVehicles = FrozenVehiclesConstants.ALL_VEHICLES_FROZEN
-            else:
+            elif event == FrozenVehiclesConstants.E_VEHICLE_FREEZE:
                 newFrozenVehicles = currentFrozenVehicles | vehicleCds
-            self.__cache[spaID] = newFrozenVehicles
+            self.__cache['frozen_vehicles'][spaID] = newFrozenVehicles
+            if unfreezePrices:
+                self.__cache['unfreeze_prices'].update(unfreezePrices)
             updatedSpaIDs.append(spaID)
 
         if updatedSpaIDs:
@@ -132,3 +158,9 @@ class FrozenVehiclesRequester(object):
     @staticmethod
     def __getChannelName():
         return 'wgshevents_clan_{}'.format(g_clanCache.clanDBID)
+
+    @staticmethod
+    def __defaultCache():
+        return {'parts_balance': 0,
+         'frozen_vehicles': defaultdict(set),
+         'unfreeze_prices': {}}

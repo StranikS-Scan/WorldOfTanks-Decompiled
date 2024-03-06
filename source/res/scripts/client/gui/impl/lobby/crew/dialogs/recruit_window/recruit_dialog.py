@@ -193,7 +193,8 @@ class QuestRecruitDialog(BaseRecruitDialog):
 
     def _setResult(self, result):
         if result == DialogButtons.SUBMIT:
-            if self.__vehicleSlotToUnpack != -1:
+            tmanID = self.__vehicle.getTankmanIDBySlotIdx(self.__vehicleSlotToUnpack) if self.__vehicle else NO_TANKMAN
+            if tmanID != NO_TANKMAN:
                 self._unloadOldTankman()
             else:
                 self._unpackQuestRecruit()

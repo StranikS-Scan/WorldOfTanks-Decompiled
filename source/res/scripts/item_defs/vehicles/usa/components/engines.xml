@@ -122,6 +122,7 @@
     <Continental_AVI_1790_8RM>	146	</Continental_AVI_1790_8RM>
     <Continental_AVI_1790_8C>	147	</Continental_AVI_1790_8C>
     <Twin_Cadillac_series_44T4E1>	148	</Twin_Cadillac_series_44T4E1>
+    <AOI_1195D>	149	</AOI_1195D>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>	60003	</Continental_AV-1790-3A1_IGR>
@@ -1834,14 +1835,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	850	</power>
+      <power>	800	</power>
       <weight>	1349	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	293	</rpm_min>
-      <rpm_max>	2320	</rpm_max>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </Continental_AVI_1790_8P>
     <Continental_AVI_1790_8RM>
       <userString>	#usa_vehicles:Continental_AVI_1790_8RM	</userString>
@@ -1861,6 +1862,23 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </Continental_AVI_1790_8RM>
+    <AOI_1195D>
+      <userString>	#usa_vehicles:AOI_1195D	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1610	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </AOI_1195D>
     <General_Motors_12V71T>
       <userString>	#usa_vehicles:General_Motors_12V71T	</userString>
       <tags>	diesel	</tags>

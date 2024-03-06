@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/story_mode_constants.py
 import enum
+import arena_bonus_type_caps
 import constants
 from constants_utils import ConstInjector
 EXTENSION_NAME = 'story_mode'
@@ -19,6 +20,10 @@ class ARENA_GUI_TYPE(constants.ARENA_GUI_TYPE, ConstInjector):
 
 class ARENA_BONUS_TYPE(constants.ARENA_BONUS_TYPE, ConstInjector):
     STORY_MODE = 100
+
+
+class ARENA_BONUS_TYPE_CAPS(arena_bonus_type_caps.ARENA_BONUS_TYPE_CAPS, ConstInjector):
+    pass
 
 
 class QUEUE_TYPE(constants.QUEUE_TYPE, ConstInjector):

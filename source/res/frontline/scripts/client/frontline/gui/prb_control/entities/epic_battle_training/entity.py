@@ -73,7 +73,6 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
 
     def init(self, clientPrb=None, ctx=None):
         result = super(EpicBattleTrainingIntroEntity, self).init()
-        g_eventDispatcher.loadEpicTrainingList()
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         return result
 
@@ -103,6 +102,9 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
 
     def _createActionsValidator(self):
         return TrainingIntroActionsValidator(self)
+
+    def _goToHangar(self):
+        g_eventDispatcher.loadEpicTrainingList()
 
 
 class EpicBattleTrainingEntity(LegacyEntity):

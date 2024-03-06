@@ -2,8 +2,7 @@
 # Embedded file name: frontline/scripts/client/frontline_personality.py
 from frontline_common.constants import ACCOUNT_DEFAULT_SETTINGS
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
-from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE
-from constants import IS_DEVELOPMENT
+from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, HAS_DEV_RESOURCES
 from constants_utils import AbstractBattleMode
 from frontline.gui.Scaleform import registerFLBattlePackages, registerFLTooltipsBuilders
 from frontline.gui.battle_control.controllers.consumables import registerFLEquipmentController
@@ -56,7 +55,7 @@ def preInit():
 def init():
     AccountSettings.overrideDefaultSettings(KEY_SETTINGS, ACCOUNT_DEFAULT_SETTINGS)
     g_overrideScaleFormViewsConfig.initExtensionLobbyPackages(__name__, LOBBY_EXT_PACKAGES)
-    if IS_DEVELOPMENT:
+    if HAS_DEV_RESOURCES:
         from frontline.gui.development import prb_dev
         prb_dev.prbDevInit()
 
@@ -66,6 +65,6 @@ def start():
 
 
 def fini():
-    if IS_DEVELOPMENT:
+    if HAS_DEV_RESOURCES:
         from frontline.gui.development import prb_dev
         prb_dev.prbDevFini()

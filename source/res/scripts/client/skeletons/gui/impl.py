@@ -31,6 +31,10 @@ class IGuiLoader(object):
     def uiLogger(self):
         raise NotImplementedError
 
+    @property
+    def scale(self):
+        raise NotImplementedError
+
     def init(self, tutorialModel, uiLoggerModel):
         raise NotImplementedError
 

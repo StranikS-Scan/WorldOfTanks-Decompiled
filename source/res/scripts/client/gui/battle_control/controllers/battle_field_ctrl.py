@@ -132,8 +132,6 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
         if not vInfoVO.isAlive():
-            self.__registerDeadVehicle(vInfoVO, arenaDP)
-            self.__updateDeadVehicles()
             vehicleId = vInfoVO.vehicleID
             if vehicleId in self._aliveEnemies:
                 currH, _ = self._aliveEnemies[vehicleId]
@@ -148,6 +146,8 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
                 self.__alliesHealth -= currH
                 del self._aliveAllies[vehicleId]
                 self.__updateVehiclesHealth()
+            self.__registerDeadVehicle(vInfoVO, arenaDP)
+            self.__updateDeadVehicles()
 
     def __initializeVehiclesInfo(self):
         arenaDP = self.__battleCtx.getArenaDP()
@@ -178,10 +178,14 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
                 tList = self._aliveEnemies
                 self.__enemiesHealth += maxHealth
                 self.__totalEnemiesHealth += maxHealth
+                if vInfoVO.vehicleID in self.__deadEnemies:
+                    self.__deadEnemies.remove(vInfoVO.vehicleID)
             else:
                 tList = self._aliveAllies
                 self.__alliesHealth += maxHealth
                 self.__totalAlliesHealth += maxHealth
+                if vInfoVO.vehicleID in self.__deadAllies:
+                    self.__deadAllies.remove(vInfoVO.vehicleID)
             tList[vInfoVO.vehicleID] = [maxHealth, maxHealth]
             self.__updateVehicleHealth(vehicleID=vInfoVO.vehicleID)
             return

@@ -808,6 +808,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 isAttachedVehicle = self.id == attachedVehicle.id
                 if isAttachedVehicle:
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.STUN, self.__cachedStunInfo)
+                    TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.STUN, stunInfo=self.__cachedStunInfo)
                 if not self.isPlayerVehicle:
                     ctrl = self.guiSessionProvider.shared.feedback
                     if ctrl is not None:

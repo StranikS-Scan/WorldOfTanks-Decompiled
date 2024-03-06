@@ -81,7 +81,7 @@ class MapBoxIntro(ViewImpl, IGlobalListener):
         if self.__closeCallback is not None:
             self.__closeCallback()
         elif not self.__mapboxCtrl.isActive():
-            showModeSelectorWindow(False)
+            showModeSelectorWindow()
         else:
             showMissionsMapboxProgression()
         return

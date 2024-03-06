@@ -16,7 +16,6 @@ from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorItem
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
@@ -45,14 +44,15 @@ _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
 _R_BATTLE_MENU = R.strings.menu.headerButtons.battle.menu
 _R_ICONS = R.images.gui.maps.icons
 _R_BR_TOURNAMENT_BUTTON = R.strings.battle_royale.tournament.fightButton
+_HIGHLIGHT_ORANGE_LINKAGE = 'BGAnimOrangeUI'
 
 @total_ordering
-class _SelectorItem(object):
+class SelectorItem(object):
     __slots__ = ('_label', '_data', '_order', '_selectorType', '_isVisible', '_isExtra', '_isSelected', '_isNew', '_isDisabled', '_isLocked')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True, isExtra=False):
-        super(_SelectorItem, self).__init__()
+        super(SelectorItem, self).__init__()
         self._label = label
         self._data = data
         self._order = order
@@ -103,6 +103,13 @@ class _SelectorItem(object):
     def getSpecialBGIcon(self):
         pass
 
+    def getHighlightLinkage(self):
+        return (_HIGHLIGHT_ORANGE_LINKAGE, '', '')
+
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.dyn('squad')())
+
     def getFightButtonLabel(self, state, playerInfo):
         label = _R_HEADER_BUTTONS.battle
         if not playerInfo.isCreator and state.isReadyActionSupported():
@@ -119,7 +126,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
+        return any((state.isInUnit(prbType) for prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES))
 
     def setLocked(self, value):
         self._isLocked = value
@@ -143,8 +150,14 @@ class _SelectorItem(object):
     def isShowNewIndicator(self):
         return self._isNew
 
+    def isShowActiveModeState(self):
+        return False
+
+    def isIgnoreSelectorNewbieRuleInMode(self):
+        return False
+
     def getFormattedLabel(self):
-        return text_styles.middleTitle(self._label)
+        return text_styles.middleTitle(self.getLabel())
 
     def getOrder(self):
         return self._order
@@ -172,7 +185,7 @@ class _SelectorItem(object):
         yield dispatcher.doSelectAction(PrbAction(self.getData()))
 
 
-class _SelectorExtraItem(_SelectorItem):
+class _SelectorExtraItem(SelectorItem):
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_SelectorExtraItem, self).__init__(label, data, order, selectorType, isVisible, isExtra=True)
@@ -193,7 +206,7 @@ class _SelectorExtraItem(_SelectorItem):
         raise NotImplementedError
 
 
-class _MapsTrainingItem(_SelectorItem):
+class _MapsTrainingItem(SelectorItem):
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
     def isRandomBattle(self):
@@ -223,7 +236,7 @@ class _MapsTrainingItem(_SelectorItem):
             self.mapsTrainingController.showMapsTrainingPage()
 
 
-class _DisabledSelectorItem(_SelectorItem):
+class _DisabledSelectorItem(SelectorItem):
 
     def update(self, state):
         pass
@@ -235,7 +248,7 @@ class _DisabledSelectorItem(_SelectorItem):
         _logger.warning('That routine can not be invoked')
 
 
-class _RandomQueueItem(_SelectorItem):
+class _RandomQueueItem(SelectorItem):
     _winbackController = dependency.descriptor(IWinbackController)
 
     def isRandomBattle(self):
@@ -267,6 +280,9 @@ class _WinbackQueueItem(_RandomQueueItem):
     def isInSquad(self, state):
         return False
 
+    def isShowActiveModeState(self):
+        return self._winbackController.isModeAvailable()
+
     def isVisible(self):
         return self._winbackController.isModeAvailable()
 
@@ -279,7 +295,7 @@ class _WinbackQueueItem(_RandomQueueItem):
         self._isVisible = self.isVisible()
 
 
-class _CommandItem(_SelectorItem):
+class _CommandItem(SelectorItem):
 
     def isRandomBattle(self):
         return True
@@ -294,7 +310,7 @@ class _CommandItem(_SelectorItem):
         self._isVisible = isCommandBattleEnabled
 
 
-class _StrongholdsItem(_SelectorItem):
+class _StrongholdsItem(SelectorItem):
 
     def isRandomBattle(self):
         return True
@@ -310,7 +326,7 @@ class _StrongholdsItem(_SelectorItem):
             self._isDisabled = True
 
 
-class _SpecBattleItem(_SelectorItem):
+class _SpecBattleItem(SelectorItem):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
 
@@ -335,7 +351,7 @@ class _SpecBattleItem(_SelectorItem):
             self._isDisabled = areSpecBattlesHidden()
 
 
-class _TrainingItem(_SelectorItem):
+class _TrainingItem(SelectorItem):
 
     def getFightButtonLabel(self, state, playerInfo):
         return backport.text(_R_HEADER_BUTTONS.battle())
@@ -348,7 +364,7 @@ class _TrainingItem(_SelectorItem):
         return
 
 
-class _EpicTrainingItem(_SelectorItem):
+class _EpicTrainingItem(SelectorItem):
 
     def getFightButtonLabel(self, state, playerInfo):
         return backport.text(_R_HEADER_BUTTONS.battle())
@@ -370,11 +386,14 @@ class _EpicTrainingItem(_SelectorItem):
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
 
-class _EventBattlesItem(_SelectorItem):
+class _EventBattlesItem(SelectorItem):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def isRandomBattle(self):
         return True
+
+    def isShowActiveModeState(self):
+        return self.__eventBattlesCtrl.isEnabled()
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
@@ -474,6 +493,9 @@ class _BattleSelectorItems(object):
 
     def hasNew(self):
         return any((item.isShowNewIndicator() and item.isVisible() and not item.isDisabled() for item in self.allItems))
+
+    def hasAnyActiveModeState(self):
+        return any((item.isShowActiveModeState() and item.isVisible() for item in self.allItems))
 
     @property
     def isDemoButtonEnabled(self):
@@ -636,7 +658,7 @@ class _Comp7SquadItem(SpecialSquadItem):
         return backport.image(_R_ICONS.battleTypes.c_40x40.comp7Squad())
 
 
-class _RankedItem(_SelectorItem):
+class _RankedItem(SelectorItem):
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
@@ -645,6 +667,9 @@ class _RankedItem(_SelectorItem):
 
     def isRandomBattle(self):
         return True
+
+    def isShowActiveModeState(self):
+        return self.rankedController.isAvailable()
 
     def getFormattedLabel(self):
         battleTypeName = super(_RankedItem, self).getFormattedLabel()
@@ -701,6 +726,10 @@ class _BattleRoyaleItem(SelectorItem):
 
     def isRandomBattle(self):
         return True
+
+    def isShowActiveModeState(self):
+        _, isBrCycle = self.__battleRoyaleController.getCurrentCycleInfo()
+        return isBrCycle and self.__battleRoyaleController.isEnabled()
 
     def getVO(self):
         vo = super(_BattleRoyaleItem, self).getVO()
@@ -786,6 +815,9 @@ class _MapboxItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
+    def isShowActiveModeState(self):
+        return self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
+
     def getVO(self):
         vo = super(_MapboxItem, self).getVO()
         if self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime():
@@ -830,6 +862,9 @@ class EpicBattleItem(SelectorItem):
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(EpicBattleItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isDisabled = not self.__epicController.isEnabled()
+
+    def isShowActiveModeState(self):
+        return self.__epicController.isEnabled() and self.__epicController.isCurrentCycleActive()
 
     def getFormattedLabel(self):
         battleTypeName = text_styles.middleTitle(self.getLabel())
@@ -901,7 +936,7 @@ class EpicBattleItem(SelectorItem):
         return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
 
 
-class _Comp7Item(_SelectorItem):
+class _Comp7Item(SelectorItem):
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __bootcampController = dependency.descriptor(IBootcampController)
 

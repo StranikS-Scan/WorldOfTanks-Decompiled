@@ -3,7 +3,7 @@
 import itertools
 import logging
 from constants import ARENA_BONUS_TYPE
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import Array, ViewSettings, WindowFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_how_to_earn_points_view_model import BattlePassHowToEarnPointsViewModel
@@ -20,7 +20,11 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.COMP7]
+REVERSE_GAME_MODE_ORDER = (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO,
+ ARENA_BONUS_TYPE.EPIC_BATTLE,
+ ARENA_BONUS_TYPE.COMP7,
+ ARENA_BONUS_TYPE.REGULAR)
+REVERSE_GAME_MODE_ORDER_MAP = {bonusType:idx for idx, bonusType in enumerate(REVERSE_GAME_MODE_ORDER)}
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -47,23 +51,17 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         return self.__createBattleRoyalGameModel() if arenaType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO else self.__createGameModel(arenaType)
 
     def __createGeneralModel(self):
-        with self.viewModel.transaction() as tx:
-            gameModes = tx.getGameModes()
-            if not gameModes:
-                for supportedArenaType in SUPPORTED_ARENA_BONUS_TYPES:
-                    gameModes.addViewModel(self.__getGameMode(supportedArenaType))
+        with self.viewModel.transaction() as model:
+            model.getGameModes().clear()
+            gameModeModels = Array()
+            for arenaType in sorted(self.__battlePass.getVisibleGameModes(), key=REVERSE_GAME_MODE_ORDER_MAP.get, reverse=True):
+                if any((bonusType.value == arenaType for bonusType in ArenaBonusType.__members__.values())):
+                    gameModeModels.addViewModel(self.__getGameMode(arenaType))
+                _logger.error('ArenaBonusType %s is not supported in BattlePassHowToEarnPointsView', arenaType)
 
-            else:
-                for gameMode in gameModes:
-                    arenaBonusType = gameMode.getArenaBonusType()
-                    newMode = self.__getGameMode(arenaBonusType)
-                    gameMode.setTitle(newMode.getTitle())
-                    gameMode.setText(newMode.getText())
-                    gameMode.setTableRows(newMode.getTableRows())
-                    gameMode.setCards(newMode.getCards())
-
-            tx.setSyncInitiator((tx.getSyncInitiator() + 1) % 1000)
-            tx.setChapterID(self.__chapterID)
+            model.setGameModes(gameModeModels)
+            model.setSyncInitiator((model.getSyncInitiator() + 1) % 1000)
+            model.setChapterID(self.__chapterID)
 
     def __createGameModel(self, gameType):
         viewModel = self.__createViewHeader(gameType)
@@ -191,10 +189,11 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         self.__createEpicBattlePointsCard(viewModel)
 
     def __createComp7CardsModel(self, gameType, viewModel):
-        self.__createLimitCard(viewModel)
+        self.__createSpecialVehCard(viewModel, gameType)
         self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
 
     def __createRandomCardsModel(self, gameType, viewModel):
+        self.__createSpecialVehCard(viewModel, gameType)
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 

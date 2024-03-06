@@ -653,6 +653,8 @@ class MENU(object):
     DESCRIPTIONS_VEHICLERADIO = '#menu:descriptions/vehicleRadio'
     DESCRIPTIONS_SHELL = '#menu:descriptions/shell'
     DESCRIPTIONS_SHELLFULL = '#menu:descriptions/shellFull'
+    DESCRIPTIONS_MUTABLEDAMAGESHELL = '#menu:descriptions/mutableDamageShell'
+    DESCRIPTIONS_MUTABLEDAMAGESHELLFULL = '#menu:descriptions/mutableDamageShellFull'
     HEADERBUTTONS_BTNLABEL_PREMIUM = '#menu:headerButtons/btnLabel/premium'
     HEADERBUTTONS_DOLABEL_PREMIUM = '#menu:headerButtons/doLabel/premium'
     HEADERBUTTONS_BTNLABEL_PREMSHOP = '#menu:headerButtons/btnLabel/premShop'
@@ -824,6 +826,9 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_WOTPLUSEXCLUSIVEUNAVAILABLE_BODY = '#menu:headerButtons/fightBtn/tooltip/wotPlusExclusiveUnavailable/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7RATINGCALCULATION_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7RatingCalculation/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7RATINGCALCULATION_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7RatingCalculation/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7VEHLEVEL_DELIMITER = '#menu:headerButtons/fightBtn/tooltip/comp7VehLevel/delimiter'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     HEADERBUTTONS_RATING = '#menu:headerButtons/rating'
     HEADERBUTTONS_PROFILE = '#menu:headerButtons/profile'
@@ -1094,6 +1099,7 @@ class MENU(object):
     MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
     MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
+    MODULEINFO_DAMAGEMUTABLEGUNLABEL = '#menu:moduleInfo/damageMutableGunLabel'
     MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
@@ -1139,7 +1145,10 @@ class MENU(object):
     MODULEINFO_PARAMS_DAMAGE = '#menu:moduleInfo/params/damage'
     MODULEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:moduleInfo/params/avgPiercingPower'
     MODULEINFO_PARAMS_AVGDAMAGELIST = '#menu:moduleInfo/params/avgDamageList'
+    MODULEINFO_PARAMS_MAXAVGMUTABLEDAMAGELIST = '#menu:moduleInfo/params/maxAvgMutableDamageList'
+    MODULEINFO_PARAMS_MINAVGMUTABLEDAMAGELIST = '#menu:moduleInfo/params/minAvgMutableDamageList'
     MODULEINFO_PARAMS_AVGDAMAGE = '#menu:moduleInfo/params/avgDamage'
+    MODULEINFO_PARAMS_AVGMUTABLEDAMAGE = '#menu:moduleInfo/params/avgMutableDamage'
     MODULEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:moduleInfo/params/avgDamagePerMinute'
     MODULEINFO_PARAMS_ARMOR = '#menu:moduleInfo/params/armor'
     MODULEINFO_PARAMS_ROTATIONSPEED = '#menu:moduleInfo/params/rotationSpeed'
@@ -1582,7 +1591,7 @@ class MENU(object):
     CONTEXTMENU_MONEYTRANSFER = '#menu:contextMenu/moneyTransfer'
     CONTEXTMENU_CREATEPRIVATECHANNEL = '#menu:contextMenu/createPrivateChannel'
     CONTEXTMENU_ADDTOFRIENDS = '#menu:contextMenu/addToFriends'
-    CONTEXTMENU_ADDTOFRIENDSAGAIN = '#menu:contextMenu/addToFriendsAgain'
+    CONTEXTMENU_REQUESTFRIENDSHIP = '#menu:contextMenu/requestFriendship'
     CONTEXTMENU_REJECTFRIENDSHIP = '#menu:contextMenu/rejectFriendship'
     CONTEXTMENU_REMOVEFROMFRIENDS = '#menu:contextMenu/removeFromFriends'
     CONTEXTMENU_ADDTOIGNORED = '#menu:contextMenu/addToIgnored'
@@ -1793,6 +1802,18 @@ class MENU(object):
     DATETIME_MONTHS_10 = '#menu:dateTime/months/10'
     DATETIME_MONTHS_11 = '#menu:dateTime/months/11'
     DATETIME_MONTHS_12 = '#menu:dateTime/months/12'
+    DATETIME_MONTHS_FULLSMALL_1 = '#menu:dateTime/months/fullSmall/1'
+    DATETIME_MONTHS_FULLSMALL_2 = '#menu:dateTime/months/fullSmall/2'
+    DATETIME_MONTHS_FULLSMALL_3 = '#menu:dateTime/months/fullSmall/3'
+    DATETIME_MONTHS_FULLSMALL_4 = '#menu:dateTime/months/fullSmall/4'
+    DATETIME_MONTHS_FULLSMALL_5 = '#menu:dateTime/months/fullSmall/5'
+    DATETIME_MONTHS_FULLSMALL_6 = '#menu:dateTime/months/fullSmall/6'
+    DATETIME_MONTHS_FULLSMALL_7 = '#menu:dateTime/months/fullSmall/7'
+    DATETIME_MONTHS_FULLSMALL_8 = '#menu:dateTime/months/fullSmall/8'
+    DATETIME_MONTHS_FULLSMALL_9 = '#menu:dateTime/months/fullSmall/9'
+    DATETIME_MONTHS_FULLSMALL_10 = '#menu:dateTime/months/fullSmall/10'
+    DATETIME_MONTHS_FULLSMALL_11 = '#menu:dateTime/months/fullSmall/11'
+    DATETIME_MONTHS_FULLSMALL_12 = '#menu:dateTime/months/fullSmall/12'
     DATETIME_FROMTOWITHYEAR = '#menu:dateTime/fromToWithYear'
     DATETIME_ORDER = '#menu:dateTime/order'
     DATETIME_UNLIMITED = '#menu:dateTime/unlimited'
@@ -1809,7 +1830,23 @@ class MENU(object):
     DATETIME_MONTHS_SHORT_10 = '#menu:dateTime/months/short/10'
     DATETIME_MONTHS_SHORT_11 = '#menu:dateTime/months/short/11'
     DATETIME_MONTHS_SHORT_12 = '#menu:dateTime/months/short/12'
+    DATETIME_MONTHS_SHORTSMALL_1 = '#menu:dateTime/months/shortSmall/1'
+    DATETIME_MONTHS_SHORTSMALL_2 = '#menu:dateTime/months/shortSmall/2'
+    DATETIME_MONTHS_SHORTSMALL_3 = '#menu:dateTime/months/shortSmall/3'
+    DATETIME_MONTHS_SHORTSMALL_4 = '#menu:dateTime/months/shortSmall/4'
+    DATETIME_MONTHS_SHORTSMALL_5 = '#menu:dateTime/months/shortSmall/5'
+    DATETIME_MONTHS_SHORTSMALL_6 = '#menu:dateTime/months/shortSmall/6'
+    DATETIME_MONTHS_SHORTSMALL_7 = '#menu:dateTime/months/shortSmall/7'
+    DATETIME_MONTHS_SHORTSMALL_8 = '#menu:dateTime/months/shortSmall/8'
+    DATETIME_MONTHS_SHORTSMALL_9 = '#menu:dateTime/months/shortSmall/9'
+    DATETIME_MONTHS_SHORTSMALL_10 = '#menu:dateTime/months/shortSmall/10'
+    DATETIME_MONTHS_SHORTSMALL_11 = '#menu:dateTime/months/shortSmall/11'
+    DATETIME_MONTHS_SHORTSMALL_12 = '#menu:dateTime/months/shortSmall/12'
     DATETIME_SHORTDATEFORMATWITHOUTYEAR = '#menu:dateTime/shortDateFormatWithoutYear'
+    DATERANGE_DASHDIVIDER_FULL = '#menu:dateRange/dashDivider/full'
+    DATERANGE_DASHDIVIDER_SHORT = '#menu:dateRange/dashDivider/short'
+    DATERANGE_TEXTDIVIDER_DATE = '#menu:dateRange/textDivider/date'
+    DATERANGE_TEXTDIVIDER_TIME = '#menu:dateRange/textDivider/time'
     VALIDATION_PUBLICINFO_ABBREV_INVALID = '#menu:validation/publicInfo/abbrev/invalid'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_CN = '#menu:validation/publicInfo/abbrev/invalid/CN'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_KR = '#menu:validation/publicInfo/abbrev/invalid/KR'
@@ -2274,7 +2311,7 @@ class MENU(object):
      CONTEXTMENU_MONEYTRANSFER,
      CONTEXTMENU_CREATEPRIVATECHANNEL,
      CONTEXTMENU_ADDTOFRIENDS,
-     CONTEXTMENU_ADDTOFRIENDSAGAIN,
+     CONTEXTMENU_REQUESTFRIENDSHIP,
      CONTEXTMENU_REJECTFRIENDSHIP,
      CONTEXTMENU_REMOVEFROMFRIENDS,
      CONTEXTMENU_ADDTOIGNORED,
@@ -2484,6 +2521,18 @@ class MENU(object):
      DATETIME_MONTHS_10,
      DATETIME_MONTHS_11,
      DATETIME_MONTHS_12,
+     DATETIME_MONTHS_FULLSMALL_1,
+     DATETIME_MONTHS_FULLSMALL_2,
+     DATETIME_MONTHS_FULLSMALL_3,
+     DATETIME_MONTHS_FULLSMALL_4,
+     DATETIME_MONTHS_FULLSMALL_5,
+     DATETIME_MONTHS_FULLSMALL_6,
+     DATETIME_MONTHS_FULLSMALL_7,
+     DATETIME_MONTHS_FULLSMALL_8,
+     DATETIME_MONTHS_FULLSMALL_9,
+     DATETIME_MONTHS_FULLSMALL_10,
+     DATETIME_MONTHS_FULLSMALL_11,
+     DATETIME_MONTHS_FULLSMALL_12,
      DATETIME_MONTHS_SHORT_1,
      DATETIME_MONTHS_SHORT_2,
      DATETIME_MONTHS_SHORT_3,
@@ -2495,7 +2544,19 @@ class MENU(object):
      DATETIME_MONTHS_SHORT_9,
      DATETIME_MONTHS_SHORT_10,
      DATETIME_MONTHS_SHORT_11,
-     DATETIME_MONTHS_SHORT_12)
+     DATETIME_MONTHS_SHORT_12,
+     DATETIME_MONTHS_SHORTSMALL_1,
+     DATETIME_MONTHS_SHORTSMALL_2,
+     DATETIME_MONTHS_SHORTSMALL_3,
+     DATETIME_MONTHS_SHORTSMALL_4,
+     DATETIME_MONTHS_SHORTSMALL_5,
+     DATETIME_MONTHS_SHORTSMALL_6,
+     DATETIME_MONTHS_SHORTSMALL_7,
+     DATETIME_MONTHS_SHORTSMALL_8,
+     DATETIME_MONTHS_SHORTSMALL_9,
+     DATETIME_MONTHS_SHORTSMALL_10,
+     DATETIME_MONTHS_SHORTSMALL_11,
+     DATETIME_MONTHS_SHORTSMALL_12)
     LEVELS_ENUM = (LEVELS_1,
      LEVELS_2,
      LEVELS_3,

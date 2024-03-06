@@ -42,11 +42,12 @@ class HollowChargeType(ShellType):
 
 
 class HighExplosiveImpactParams(object):
-    __slots__ = ('radius', 'damages', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive')
+    __slots__ = ('radius', 'armorDamage', 'deviceDamage', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive')
 
     def __init__(self):
         self.radius = component_constants.ZERO_FLOAT
-        self.damages = component_constants.EMPTY_TUPLE
+        self.armorDamage = component_constants.ZERO_TUPLE2
+        self.deviceDamage = component_constants.ZERO_TUPLE2
         self.coneAngleCos = None
         self.piercingSpalls = None
         self.damageAbsorptionType = None
@@ -54,7 +55,7 @@ class HighExplosiveImpactParams(object):
         return
 
     def __repr__(self):
-        return 'HighExplosiveImpactParams(radius={}, damages={}, coneAngleCos={}, piersingSpalls={}, damageAbsorption={})'.format(self.radius, self.damages, self.coneAngleCos, self.piercingSpalls, DamageAbsorptionTypeToLabel[self.damageAbsorptionType] if self.damageAbsorptionType else None)
+        return 'HighExplosiveImpactParams(radius={}, armorDamage={}, deviceDamage={}, coneAngleCos={}, piersingSpalls={}, damageAbsorption={})'.format(self.radius, self.armorDamage, self.deviceDamage, self.coneAngleCos, self.piercingSpalls, DamageAbsorptionTypeToLabel[self.damageAbsorptionType] if self.damageAbsorptionType else None)
 
 
 class HighExplosiveType(ShellType):
@@ -80,6 +81,10 @@ class HighExplosiveType(ShellType):
 
     def __repr__(self):
         return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, mechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={}, protectFromDirectHits = {}, protectFromIndirectHits = {}, '.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.mechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor, self.protectFromDirectHits, self.protectFromIndirectHits)
+
+    @property
+    def impacts(self):
+        return (self.blastWave, self.shellFragments, self.armorSpalls)
 
 
 class SmokeType(ShellType):

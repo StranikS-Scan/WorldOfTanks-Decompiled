@@ -19,6 +19,7 @@ from gui.battle_results import RequestEmblemContext, EMBLEM_TYPE
 from gui.battle_results.settings import PROGRESS_ACTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prestige.prestige_helpers import showPrestigeVehicleStats
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
@@ -39,7 +40,7 @@ def _wrapEmblemUrl(emblemUrl):
     return makeHtmlString('html_templates:lobby/battleResult', 'emblemUrl', {'url': emblemUrl})
 
 
-class BattleResultsWindow(BattleResultsMeta):
+class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
@@ -105,9 +106,9 @@ class BattleResultsWindow(BattleResultsMeta):
             return
         if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
             event_dispatcher.showResearchView(itemID)
-            self.onWindowClose()
         elif unlockType in (PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE, PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE):
             event_dispatcher.showPersonalCase(itemID)
+        self.onWindowClose()
 
     def showDogTagWindow(self, itemID):
         if self.__canNavigate():
@@ -124,6 +125,10 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def onAppliedPremiumBonus(self):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
+
+    def onPrbEntitySwitched(self):
+        super(BattleResultsWindow, self).onPrbEntitySwitched()
+        self.__updateVO()
 
     def onShowDetailsPremium(self):
         if self.__canNavigate():
@@ -142,6 +147,7 @@ class BattleResultsWindow(BattleResultsMeta):
          'cache.vehsLock': self.__updateVO})
         self.__gameSession.onPremiumTypeChanged += self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.startGlobalListening()
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
@@ -152,6 +158,8 @@ class BattleResultsWindow(BattleResultsMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.stopGlobalListening()
+        super(BattleResultsWindow, self)._dispose()
 
     def __loadViewHandler(self, event):
         if event.alias == VIEW_ALIAS.BATTLE_QUEUE:

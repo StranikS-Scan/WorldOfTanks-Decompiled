@@ -8,8 +8,7 @@ from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubMod
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorItem
-from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SpecialSquadItem
+from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SelectorItem, SpecialSquadItem
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
@@ -29,6 +28,9 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
     def __init__(self, data, order, selectorType=None, isVisible=True):
         super(_FunRandomItem, self).__init__('', data, order, selectorType, isVisible)
         self._isVisible = self.__getIsVisible()
+
+    def isShowActiveModeState(self):
+        return self._funRandomCtrl.subModesInfo.isAvailable()
 
     def getLabel(self):
         return self.getModeUserName()
@@ -63,10 +65,6 @@ class _FunRandomSquadItem(SpecialSquadItem, FunAssetPacksMixin, FunSubModesWatch
     @property
     def squadIcon(self):
         return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
-
-    @property
-    def tooltip(self):
-        return self._createTooltip()
 
     def getFormattedLabel(self):
         pass

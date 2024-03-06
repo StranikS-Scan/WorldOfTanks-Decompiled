@@ -101,15 +101,15 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         self.__selectedSlotId = currentSlotID
         self.__isCurrentlyActiveSubView = True
         self.__updateDetails()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN, item=EpicBattleLogKeys.SKILLS_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
-        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.SKILLS_VIEW)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN, item=EpicBattleLogKeys.SETUP_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
+        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.SETUP_VIEW)
         self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
 
     def finalize(self):
         super(EpicBattleSetupSubView, self).finalize()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE, item=EpicBattleLogKeys.SKILLS_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
+        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE, item=EpicBattleLogKeys.SETUP_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
         self.__resumeViewWatchedLogger()
-        self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED, EpicBattleLogKeys.SKILLS_VIEW, EpicBattleLogKeys.HANGAR, timeLimit=self.__uiEpicBattleLogger.TIME_LIMIT)
+        self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED, EpicBattleLogKeys.SETUP_VIEW, EpicBattleLogKeys.HANGAR, timeLimit=self.__uiEpicBattleLogger.TIME_LIMIT)
         self.__uiEpicBattleLogger.reset()
 
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):

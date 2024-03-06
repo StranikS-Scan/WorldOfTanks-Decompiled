@@ -586,12 +586,19 @@ def __readBonus_seasonRent(outRent, section):
 
 def __readBonus_rent(bonus, _name, section):
     rent = {}
+    anySectionExist = False
+    if section.has_key('anyExpires'):
+        rent['anyExpires'] = anySectionExist = True
     if section.has_key('time'):
         rent['time'] = section['time'].asFloat
     if section.has_key('battles'):
         rent['battles'] = section['battles'].asInt
     if section.has_key('wins'):
         rent['wins'] = section['wins'].asInt
+    if anySectionExist:
+        for key in ('time', 'battles', 'wins'):
+            rent[key] = rent[key] if key in rent and rent[key] > 0 else float('inf')
+
     if section.has_key('compensation'):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)

@@ -10,16 +10,17 @@ from helpers import dependency
 from skeletons.gui.game_control import ICollectionsSystemController
 
 class CollectionItemTooltipView(ViewImpl):
-    __slots__ = ('__collectionId', '__item')
+    __slots__ = ('__collectionId', '__item', '__isDetailed')
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
-    def __init__(self, itemId, collectionId, *args, **kwargs):
+    def __init__(self, itemId, collectionId, isDetailed, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.collection.tooltips.CollectionItemTooltipView())
         settings.model = CollectionItemTooltipViewModel()
         settings.args = args
         settings.kwargs = kwargs
         self.__collectionId = collectionId
         self.__item = self.__collectionsSystem.getCollectionItem(self.__collectionId, itemId)
+        self.__isDetailed = isDetailed
         super(CollectionItemTooltipView, self).__init__(settings)
 
     @property
@@ -33,6 +34,7 @@ class CollectionItemTooltipView(ViewImpl):
             model.setImagePath(self.__getImage())
             model.setDescription(self.__getDescription())
             model.setIsReceived(self.__collectionsSystem.isItemReceived(self.__collectionId, self.__item.itemId))
+            model.setIsDetailed(self.__isDetailed)
 
     def __getDescription(self):
         itemRes = getCollectionRes(self.__collectionId, collectionsSystem=self.__collectionsSystem).item

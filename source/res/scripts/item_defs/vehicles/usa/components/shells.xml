@@ -4,6 +4,10 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_tray>	ARMOR_PIERCING_TRAY.png 0 0	</ap_tray>
+    <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
+    <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
+    <ap_cr_premium_tray>	ARMOR_PIERCING_CR_PREMIUM_TRAY.png 0 0	</ap_cr_premium_tray>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -1847,6 +1851,59 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_M11A2E>
+  <_105mm_AP_T32M2E5>
+    <id>	216	</id>
+    <userString>	#usa_vehicles:_105mm_AP_T32M2E5	</userString>
+    <icon>	ap	</icon>
+    <price>	1005	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_T32M2E5>
+  <_105mm_APCR_T29E3M2E5>
+    <id>	217	</id>
+    <userString>	#usa_vehicles:_105mm_APCR_T29E3M2E5	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APCR_T29E3M2E5>
+  <_105mm_HE_M11A2E5>
+    <id>	218	</id>
+    <userString>	#usa_vehicles:_105mm_HE_M11A2E5	</userString>
+    <icon>	he_modern	</icon>
+    <price>	765	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_M11A2E5>
   <_105mm_APCR_M392A2>
     <id>	173	</id>
     <userString>	#usa_vehicles:_105mm_APCR_M392A2	</userString>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/offers/offer_gifts_window.py
 import logging
-import random
 from functools import partial
 import ResMgr
 from adisp import adisp_process, adisp_async
@@ -10,16 +9,19 @@ from PlayerEvents import g_playerEvents
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.lobby.offers import getGfImagePath
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.processors.offers import ReceiveOfferGiftProcessor
 from gui.shared.money import Currency
-from helpers import dependency
+from helpers import dependency, time_utils
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen.view_models.views.lobby.offers.gift_model import GiftModel
 from gui.impl.gen.view_models.views.lobby.offers.offer_model import OfferModel
 from gui.impl.pub import ViewImpl
 from shared_utils import awaitNextFrame
+from skeletons.gui.game_control import IExternalLinksController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider, IOffersNovelty
 from skeletons.gui.server_events import IEventsCache
@@ -43,6 +45,7 @@ class OfferGiftsWindow(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _offersProvider = dependency.descriptor(IOffersDataProvider)
     _offersNovelty = dependency.descriptor(IOffersNovelty)
+    _externalBrowser = dependency.descriptor(IExternalLinksController)
 
     def __init__(self, layoutID, offerID, overrideSuccessCallback=None):
         settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=OfferModel())
@@ -65,6 +68,7 @@ class OfferGiftsWindow(ViewImpl):
     def _initialize(self, *args, **kwargs):
         super(OfferGiftsWindow, self)._initialize()
         self._viewModel.onBack += self._onBack
+        self._viewModel.onLearnMore += self._onLearnMore
         g_playerEvents.onAccountBecomeNonPlayer += self._onBecomeNonPlayer
         self._serverSettings.onServerSettingsChange += self._onServerSettingsRecync
         self._itemsCache.onSyncCompleted += self._onItemsCacheResync
@@ -73,6 +77,7 @@ class OfferGiftsWindow(ViewImpl):
     def _finalize(self):
         super(OfferGiftsWindow, self)._finalize()
         self._viewModel.onBack -= self._onBack
+        self._viewModel.onLearnMore -= self._onLearnMore
         g_playerEvents.onAccountBecomeNonPlayer -= self._onBecomeNonPlayer
         self._serverSettings.onServerSettingsChange -= self._onServerSettingsRecync
         self._itemsCache.onSyncCompleted -= self._onItemsCacheResync
@@ -91,9 +96,25 @@ class OfferGiftsWindow(ViewImpl):
                 return
             self._offersNovelty.saveAsSeen(self._offerID)
             with self._viewModel.transaction() as model:
-                model.setKey(random.randint(0, 1000))
-                model.setId(offerItem.id)
                 localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(offerItem.cdnLocFilePath, relative=False))
+                description = localization.readString('description') if localization else ''
+                linkText = localization.readString('linkText') if localization else ''
+                tokenIcon = backport.image(R.images.gui.maps.icons.offers.token())
+                if offerItem.cdnGiftsTokenImgPath:
+                    tokenIcon = getGfImagePath(self._offersProvider.getCdnResourcePath(offerItem.cdnGiftsTokenImgPath))
+                signSmall = backport.image(R.images.gui.maps.icons.offers.sign_small())
+                if offerItem.cdnSignSmallImgPath:
+                    signSmall = getGfImagePath(self._offersProvider.getCdnResourcePath(offerItem.cdnSignSmallImgPath))
+                signBig = backport.image(R.images.gui.maps.icons.offers.sign())
+                if offerItem.cdnSignBigImgPath:
+                    signBig = getGfImagePath(self._offersProvider.getCdnResourcePath(offerItem.cdnSignBigImgPath))
+                model.setId(offerItem.id)
+                model.setDescription(description)
+                model.setLearnMore(linkText)
+                model.setTokensIcon(tokenIcon)
+                model.setSignImageSmall(signSmall)
+                model.setSignImageLarge(signBig)
+                model.setShowPrice(offerItem.showPrice)
                 title = localization.readString('name') if localization else ''
                 model.setName(title)
                 model.setBackground(getGfImagePath(self._offersProvider.getCdnResourcePath(offerItem.cdnGiftsBackgroundPath)))
@@ -114,7 +135,8 @@ class OfferGiftsWindow(ViewImpl):
         if offerItem.showPrice:
             offerModel.setTokens(offerItem.availableTokens)
         offerModel.setClicksCount(offerItem.clicksCount)
-        offerModel.setExpiration(offerItem.expiration)
+        timeLeft = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(offerItem.expiration)))
+        offerModel.setExpiration(timeLeft)
 
     def _generateGifts(self, model):
         giftsContainer = model.gifts.getItems()
@@ -140,7 +162,7 @@ class OfferGiftsWindow(ViewImpl):
                 giftModel.setPrice(price)
             notEnoughTokens = self._offerItem.availableTokens < price
             giftModel.setIsNotEnoughMoney(notEnoughTokens)
-            giftCount = self._offerItem.getGiftAvailabelCount(gift.id)
+            giftCount = self._offerItem.getGiftAvailableCount(gift.id)
             giftDisabled = notEnoughTokens or gift.isDisabled or not giftCount
             giftModel.setIsDisabled(giftDisabled)
             if giftCount > 0:
@@ -148,7 +170,6 @@ class OfferGiftsWindow(ViewImpl):
             giftsContainer.addViewModel(giftModel)
 
         model.gifts.onItemClicked += self._onGiftClicked
-        model.setKey(random.randint(0, 1000))
         giftsContainer.invalidate()
 
     def _getGiftResources(self, gift):
@@ -208,7 +229,7 @@ class OfferGiftsWindow(ViewImpl):
                     gift = self._offerItem.getGift(giftModel.getId())
                     notEnoughTokens = self._offerItem.availableTokens < gift.price
                     giftModel.setIsNotEnoughMoney(notEnoughTokens)
-                    giftCount = self._offerItem.getGiftAvailabelCount(gift.id)
+                    giftCount = self._offerItem.getGiftAvailableCount(gift.id)
                     giftDisabled = notEnoughTokens or gift.isDisabled or not giftCount
                     giftModel.setIsDisabled(giftDisabled)
 
@@ -216,7 +237,7 @@ class OfferGiftsWindow(ViewImpl):
 
     def _onOffersUpdated(self):
         if self._offerItem is None or not self._offerItem.isOfferAvailable:
-            if self._offersProvider.getAvailableOffers(onlyVisible=True):
+            if self._offersProvider.getUnlockedOffers(onlyVisible=True):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 event_dispatcher.showHangar()
@@ -239,3 +260,10 @@ class OfferGiftsWindow(ViewImpl):
     def _onBack(self):
         event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
         self.destroyWindow()
+
+    def _onLearnMore(self):
+        localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(self._offerItem.cdnLocFilePath, relative=False))
+        if localization:
+            url = localization.readString('linkUrl', '')
+            if url:
+                self._externalBrowser.open(url)

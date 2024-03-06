@@ -6,6 +6,7 @@ from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getEventTooltipData
 from gui.prb_control.entities.base.unit.ctx import SetVehicleUnitCtx, SetReadyUnitCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
@@ -56,18 +57,19 @@ class EventBattleSquadEntity(SquadEntity):
     def __init__(self):
         super(EventBattleSquadEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, PREBATTLE_TYPE.EVENT)
         self.storage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
+        self.ctx = None
+        return
 
     def init(self, ctx=None):
+        self.ctx = ctx
         self.storage.release()
-        if ctx is not None:
-            initCtx = ctx.getInitCtx()
-            fromEventSquad = isinstance(initCtx, EventSquadSettingsCtx)
-            if not fromEventSquad or not initCtx.getKeepCurrentView():
-                if self.getPlayerInfo().isReady and self.getFlags().isInQueue():
-                    g_eventDispatcher.loadBattleQueue()
-                else:
-                    g_eventDispatcher.loadHangar()
         return super(EventBattleSquadEntity, self).init(ctx)
+
+    def fini(self, ctx=None, woEvents=False):
+        self.ctx = None
+        if ctx and ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
+            self.storage.suspend()
+        return super(EventBattleSquadEntity, self).fini(ctx, woEvents)
 
     def getQueueType(self):
         return QUEUE_TYPE.EVENT_BATTLES
@@ -95,6 +97,9 @@ class EventBattleSquadEntity(SquadEntity):
         else:
             return super(EventBattleSquadEntity, self).getConfirmDialogMeta(ctx)
 
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getEventTooltipData(), False) if isStateDisabled else super(EventBattleSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
+
     @vehicleAmmoCheck
     def togglePlayerReadyAction(self, launchChain=False):
         notReady = not self.getPlayerInfo().isReady
@@ -117,6 +122,19 @@ class EventBattleSquadEntity(SquadEntity):
             ctx = SetReadyUnitCtx(notReady, waitingID)
             LOG_DEBUG('Unit request', ctx)
             self.setPlayerReady(ctx)
+
+    def _goToHangar(self):
+        if self.ctx is None:
+            return
+        else:
+            initCtx = self.ctx.getInitCtx()
+            fromEventSquad = isinstance(initCtx, EventSquadSettingsCtx)
+            if not fromEventSquad or not initCtx.getKeepCurrentView():
+                if self.getPlayerInfo().isReady and self.getFlags().isInQueue():
+                    g_eventDispatcher.loadBattleQueue()
+                else:
+                    g_eventDispatcher.loadHangar()
+            return
 
     @property
     def _showUnitActionNames(self):

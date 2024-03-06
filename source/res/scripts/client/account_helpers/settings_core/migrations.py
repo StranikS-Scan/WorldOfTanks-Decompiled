@@ -11,6 +11,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
@@ -1187,6 +1188,46 @@ def _migrateTo117(core, data, initialized):
                 clear[section] = clear.get(section, 0) | settingOffset
 
 
+def _migrateTo118(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, 0)
+    clear = data['clear']
+    for bitPosition in (9, 18, 26):
+        settingOffset = 1 << bitPosition
+        if storedValue & settingOffset:
+            clear['uiStorage'] = clear.get('uiStorage', 0) | settingOffset
+
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.UI_STORAGE_2, 0)
+    clear = data['clear']
+    for bitPosition in (0, 8):
+        settingOffset = 1 << bitPosition
+        if storedValue & settingOffset:
+            clear[SETTINGS_SECTIONS.UI_STORAGE_2] = clear.get(SETTINGS_SECTIONS.UI_STORAGE_2, 0) | settingOffset
+
+
+def _migrateTo119(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
+
+
+def _migrateTo120(core, data, initialized):
+    itemsCache = dependency.instance(IItemsCache)
+    lobbyContext = dependency.instance(ILobbyContext)
+    import gui.prebattle_hints.newbie_controller
+    from gui.battle_hints.newbie_battle_hints_controller import NEWBIE_SETTINGS_MAX_BATTLES as BH_NEWBIE_MAX_BATTLES
+    disabled = itemsCache.items.stats.attributes & constants.ACCOUNT_ATTR.NEWBIE_FEATURES_DISABLED
+    battlesCount = itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+    data['gameExtData2'][GAME.NEWBIE_PREBATTLE_HINTS] = not disabled and battlesCount <= gui.prebattle_hints.newbie_controller.IS_NEWBIE_MAX_BATTLES
+    data['gameExtData2'][GAME.NEWBIE_BATTLE_HINTS] = not disabled and battlesCount <= BH_NEWBIE_MAX_BATTLES
+    newbieGroup = itemsCache.items.stats.newbieHintsGroup
+    abConfig = lobbyContext.getServerSettings().abFeatureTestConfig
+    if not disabled and newbieGroup and hasattr(abConfig, 'newbieHints'):
+        properties = abConfig.newbieHints.get(newbieGroup)['properties']
+        for param in [GAME.NEWBIE_PREBATTLE_HINTS, GAME.NEWBIE_BATTLE_HINTS]:
+            if param in properties:
+                data['gameExtData2'][param] = properties[param]
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1649,6 +1690,18 @@ _versions = ((1,
   False),
  (117,
   _migrateTo117,
+  False,
+  False),
+ (118,
+  _migrateTo118,
+  False,
+  False),
+ (119,
+  _migrateTo119,
+  False,
+  False),
+ (120,
+  _migrateTo120,
   False,
   False))
 

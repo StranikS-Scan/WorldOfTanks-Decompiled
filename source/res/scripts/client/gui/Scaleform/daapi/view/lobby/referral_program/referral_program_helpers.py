@@ -2,17 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/referral_program/referral_program_helpers.py
 from gui import GUI_SETTINGS
 from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 RECRUITER_SPA_ID_ATTR = '/wot/game/ref/recruiterSpaId'
 
 def _getUrl(urlName=None):
     return getReferralProgramURL() if urlName is None else getReferralProgramURL() + GUI_SETTINGS.referralProgram.get(urlName)
-
-
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def isReferralProgramEnabled(lobbyContext=None):
-    return lobbyContext and lobbyContext.getServerSettings().isReferralProgramEnabled()
 
 
 def getReferralProgramURL():

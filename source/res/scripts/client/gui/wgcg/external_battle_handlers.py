@@ -34,6 +34,7 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
          WebRequestDataType.STRONGHOLD_LEAVE_MODE: partial(self.__leaveMode, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.STRONGHOLD_SLOT_VEHICLE_FILTERS_UPDATE: partial(self.__getSlotVehicleFilters, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.STRONGHOLD_EVENT_GET_FROZEN_VEHICLES: partial(self.__getFrozenVehicles, ExternalBattleStorageName.STRONGHOLD),
+         WebRequestDataType.STRONGHOLD_EVENT_UNFREEZE_VEHICLE: partial(self.__unfreezeVehicle, ExternalBattleStorageName.STRONGHOLD),
          WebRequestDataType.TOURNAMENT_LEAVE: partial(self.__leave, ExternalBattleStorageName.TOURNAMENT),
          WebRequestDataType.TOURNAMENT_ASSIGN: partial(self.__assign, ExternalBattleStorageName.TOURNAMENT),
          WebRequestDataType.TOURNAMENT_CHANGE_OPENED: partial(self.__changeOpened, ExternalBattleStorageName.TOURNAMENT),
@@ -99,7 +100,19 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
         self._requester.doRequestEx(ctx, callback, (api, 'leave_mode'))
 
     def __updateExternalBattleBase(self, api, ctx, callback, *args, **kwargs):
-        self._requester.doRequestEx(ctx, callback, (api, 'get_wgsh_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getRev())
+
+        def mergeResponsesCallback(firstResponse, secondResponse):
+            if not secondResponse.isSuccess():
+                return callback(secondResponse)
+            firstResponse.mergeData(secondResponse.getData())
+            callback(firstResponse)
+
+        def nextRequestCallback(firstResponse):
+            if not firstResponse.isSuccess():
+                return callback(firstResponse)
+            self._requester.doRequestEx(ctx, partial(mergeResponsesCallback, firstResponse), (api, 'get_wgsh_account_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getRev())
+
+        self._requester.doRequestEx(ctx, nextRequestCallback, (api, 'get_wgsh_common_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getRev())
 
     def __joinBattle(self, api, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, (api, 'join_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
@@ -124,6 +137,9 @@ class BaseExternalBattleUnitRequestHandlers(RequestHandlers):
 
     def __getFrozenVehicles(self, api, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, (api, 'get_event_frozen_vehicles'))
+
+    def __unfreezeVehicle(self, api, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, (api, 'event_unfreeze_vehicle'), *ctx.getRequestArgs())
 
     def __getPeripheryIDStr(self):
         return str(self.connectionMgr.peripheryID)

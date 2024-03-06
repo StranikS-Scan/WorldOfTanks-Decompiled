@@ -67,6 +67,9 @@ class RecentPrbStorage(LocalStorage):
         super(RecentPrbStorage, self).__init__()
         self._queueType = QUEUE_TYPE.UNKNOWN
 
+    def clear(self):
+        self._queueType = QUEUE_TYPE.UNKNOWN
+
     @property
     def queueType(self):
         return self._queueType

@@ -105,7 +105,8 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_EVENT_COIN = 'custom/eventCoin'
     CUSTOM_EVENT_COIN_EXTERNAL = 'custom/event_coin'
     CUSTOM_BPCOIN = 'custom/bpcoin'
-    CUSTOM_EQUIP_COIN = 'custom/equip_coin'
+    CUSTOM_EQUIP_COIN = 'custom/equipCoin'
+    CUSTOM_EQUIP_COIN_EXTERNAL = 'custom/equip_coin'
     CUSTOM_SLOT = 'custom/slot'
     CUSTOM_SEVERAL_SLOTS = 'custom/slots'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
@@ -193,6 +194,8 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_CREDITS,
      ItemPackType.CUSTOM_EVENT_COIN,
      ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL,
+     ItemPackType.CUSTOM_EQUIP_COIN,
+     ItemPackType.CUSTOM_EQUIP_COIN_EXTERNAL,
      ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
      ItemPackType.CUSTOM_SUPPLY_POINT)

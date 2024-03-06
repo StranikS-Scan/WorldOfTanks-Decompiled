@@ -4,6 +4,7 @@ import operator
 from collections import defaultdict
 from enum import Enum
 import nations
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -487,8 +488,8 @@ class VehicleArenaInfoVO(object):
 
     def isChatCommandsDisabled(self, isAlly):
         arena = avatar_getter.getArena()
-        isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
-        if not (self.player.avatarSessionID or isEvent):
+        ignore = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.HIGHLIGHT_BOTS_AS_PLAYERS_IN_BC) if arena else False
+        if not (self.player.avatarSessionID or ignore):
             if isAlly:
                 return True
             if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING, ARENA_GUI_TYPE.EPIC_BATTLE):

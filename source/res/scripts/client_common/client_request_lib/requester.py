@@ -216,6 +216,12 @@ class WgshAccessor(BaseAccessor):
     def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
         return self._data_source.get_wgsh_unit_info(callback, periphery_id, unit_server_id, rev, fields=fields)
 
+    def get_wgsh_common_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        return self._data_source.get_wgsh_common_unit_info(callback, periphery_id, unit_server_id, rev, fields=fields)
+
+    def get_wgsh_account_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        return self._data_source.get_wgsh_account_unit_info(callback, periphery_id, unit_server_id, rev, fields=fields)
+
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
         return self._data_source.set_vehicle(callback, periphery_id, unit_server_id, vehicle_cd, fields=fields)
 
@@ -288,8 +294,11 @@ class WgshAccessor(BaseAccessor):
     def get_event_clan_info(self, callback, fields=None):
         return self._data_source.wgsh_event_clan_info(callback, fields=fields)
 
-    def get_event_frozen_vehicles(self, callback, fields=None):
-        return self._data_source.wgsh_event_get_frozen_vehicles(callback, fields=fields)
+    def get_event_frozen_vehicles(self, callback):
+        return self._data_source.wgsh_event_get_frozen_vehicles(callback)
+
+    def event_unfreeze_vehicle(self, callback, playerSpaID, vehicleCD, price):
+        return self._data_source.wgsh_event_unfreeze_vehicle(callback, playerSpaID, vehicleCD, price)
 
 
 class RblbAccessor(BaseAccessor):

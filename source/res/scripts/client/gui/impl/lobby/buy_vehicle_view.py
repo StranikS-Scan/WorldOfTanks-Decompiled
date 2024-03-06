@@ -436,6 +436,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                 else:
                     event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__returnAlias), {'isBackEvent': True})
                     returnCallback = partial(self.fireEvent, event, scope=EVENT_BUS_SCOPE.LOBBY)
+            elif self.__usePreviousAlias and self.__previousAlias is None and self.__returnAlias == VIEW_ALIAS.LOBBY_STORE and self.__returnCallback:
+                returnCallback = self.__returnCallback
         self.__returnCallback = returnCallback
         return
 

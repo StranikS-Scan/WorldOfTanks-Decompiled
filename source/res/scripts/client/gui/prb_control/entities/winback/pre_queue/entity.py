@@ -4,6 +4,7 @@ import logging
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
+from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
@@ -69,6 +70,20 @@ class WinbackEntity(PreQueueEntity):
         if not invID:
             raise SoftException('Inventory ID of vehicle can not be zero')
         return SpecialModeQueueCtx(self._queueType, invID, waitingID='prebattle/join')
+
+    def forceRandomLeave(self):
+        try:
+            BigWorld.player().dequeueRandom()
+            _logger.debug('Sends force request on dequeuing from the winback battle')
+        except (AttributeError, TypeError):
+            LOG_CURRENT_EXCEPTION()
+
+    def onEnqueued(self, queueType, *args):
+        if queueType != self._queueType and queueType == QUEUE_TYPE.RANDOMS:
+            self.forceRandomLeave()
+            _logger.warning('An error occurred when entering the random mode queue, the queue was canceled')
+            return
+        super(WinbackEntity, self).onEnqueued(queueType, *args)
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

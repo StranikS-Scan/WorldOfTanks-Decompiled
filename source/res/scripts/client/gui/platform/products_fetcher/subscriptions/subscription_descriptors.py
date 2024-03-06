@@ -77,7 +77,7 @@ class PrimeGamingDescriptor(SubscriptionDescriptor):
 
     def hasDepotRewards(self):
         offerID = self.getOfferToken()
-        return offerID and self.__offersProvider.isOfferAvailable(offerID)
+        return offerID and self.__offersProvider.isOfferUnlocked(offerID)
 
     def isRewardsClaimed(self):
         quest = self.getPrimeGamingQuest()
@@ -111,7 +111,7 @@ class PrimeGamingDescriptor(SubscriptionDescriptor):
 
     def getOfferID(self):
         offerToken = self.getOfferToken()
-        return self.__offersProvider.getOfferByToken(offerToken).id if offerToken and self.__offersProvider.isOfferAvailable(offerToken) else None
+        return self.__offersProvider.getOfferByToken(offerToken).id if offerToken and self.__offersProvider.isOfferUnlocked(offerToken) else None
 
     def _onServerSettingsChange(self, *args, **kwargs):
         super(PrimeGamingDescriptor, self)._onServerSettingsChange(args, kwargs)

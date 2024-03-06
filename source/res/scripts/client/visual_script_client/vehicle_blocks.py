@@ -10,7 +10,7 @@ from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
-from constants import IS_VS_EDITOR
+from constants import IS_VS_EDITOR, VEHICLE_CLASSES
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount
     from skeletons.gui.shared import IItemsCache
@@ -200,11 +200,14 @@ class VehicleClass(VehicleClassBase):
                 vehicle = itemsCache.items.getItemByCD(vehId)
             self._outSlot.setValue(next(iter(vehicle.type)))
         else:
-            self._outSlot.setValue('')
+            avatar = BigWorld.player()
+            if avatar:
+                tags = avatar.vehicleTypeDescriptor.type.tags
+                self._outSlot.setValue(next((classTag for classTag in VEHICLE_CLASSES if classTag in tags), ''))
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.CLIENT]
+        return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
 class GunTypeInfo(GunTypeInfoBase):
@@ -374,6 +377,22 @@ class VehicleRadioDistance(VehicleRadioDistanceBase):
 
     def _execute(self):
         self._outSlot.setValue(256.0)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetVehicleTier(Block):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleTier, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._outSlot = self._makeDataOutputSlot('tier', SLOT_TYPE.INT, self._execute)
+
+    def _execute(self):
+        v = self._vehicle.getValue()
+        self._outSlot.setValue(v.typeDescriptor.level)
 
     @classmethod
     def blockAspects(cls):

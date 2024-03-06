@@ -121,6 +121,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.__lastArenaTypeID = 0
         self.__lastArenaTeam = 0
         self.__randomEvents = []
+        self.__blArenaPeriod = 0
 
     def init(self):
         self.connectionMgr.onDisconnected += self.__onClientDisconnected
@@ -186,11 +187,12 @@ class StatisticsCollector(IStatisticsCollector):
                 self.stop()
             return result
 
-    def noteLastArenaData(self, arenaTypeID, arenaUniqueID, arenaTeam, randomEvents):
+    def noteLastArenaData(self, arenaTypeID, arenaUniqueID, arenaTeam, randomEvents, blArenaPeriod):
         self.__lastArenaTypeID = arenaTypeID
         self.__lastArenaUniqueID = arenaUniqueID
         self.__lastArenaTeam = arenaTeam
         self.__randomEvents = randomEvents
+        self.__blArenaPeriod = blArenaPeriod
         if not self.__hangarWasLoadedOnce and not self.bootcampController.isInBootcamp():
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
             self.__sendFullStat = True
@@ -290,7 +292,8 @@ class StatisticsCollector(IStatisticsCollector):
          'cpu_utilization_low_fps': statisticsDict['cpu_utilization_low_fps'],
          'gpu_utilization': statisticsDict['gpu_utilization'],
          'cpu_utilization': statisticsDict['cpu_utilization'],
-         'random_events': len(self.__randomEvents)}
+         'random_events': len(self.__randomEvents),
+         'bl_arena_period': self.__blArenaPeriod}
         BigWorld.wg_reportSessionData(data)
         return data
 

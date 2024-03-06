@@ -3,6 +3,7 @@
 from constants import IS_VS_EDITOR
 from visual_script import ASPECT
 from visual_script.block import Block, Meta, InitParam, buildStrKeysValue
+from visual_script.dictionary_blocks import Dictionary
 from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
@@ -30,28 +31,29 @@ class GameSettingsMeta(Meta):
 
 
 class GetGameSetting(Block, GameSettingsMeta):
-    settingsCore = dependency.descriptor(ISettingsCore) if not IS_VS_EDITOR else None
-    _settingTypes = {'bool': SLOT_TYPE.BOOL,
-     'int': SLOT_TYPE.INT,
-     'str': SLOT_TYPE.STR}
+    _settingTypes = {'bool': (SLOT_TYPE.BOOL, bool, None),
+     'int': (SLOT_TYPE.INT, int, None),
+     'str': (SLOT_TYPE.STR, str, None),
+     'dict': (SLOT_TYPE.DICTIONARY, dict, Dictionary)}
 
     def __init__(self, *args, **kwargs):
         super(GetGameSetting, self).__init__(*args, **kwargs)
         self._name = self._makeDataInputSlot('settingName', SLOT_TYPE.STR)
-        settingType = self._getInitParams()
-        self._value = self._makeDataOutputSlot('value', self._settingTypes[settingType], self._getValue)
+        _settingType = self._getInitParams()
+        self._slotType, self._class, self._convertor = self._settingTypes[_settingType]
+        self._value = self._makeDataOutputSlot('value', self._slotType, self._getValue)
 
     @classmethod
     def initParams(cls):
         return [InitParam('Game Setting Type', SLOT_TYPE.STR, buildStrKeysValue(*cls._settingTypes.keys()), EDITOR_TYPE.STR_KEY_SELECTOR)]
 
     def _getValue(self):
-        value = self.settingsCore.getSetting(self._name.getValue())
-        settingType = self._getInitParams()
-        if value.__class__.__name__ == settingType:
-            self._value.setValue(value)
+        settings = dependency.instance(ISettingsCore)
+        value = settings.getSetting(self._name.getValue())
+        if isinstance(value, self._class):
+            self._value.setValue(self._convertor(value) if self._convertor else value)
         else:
-            errorVScript(self, 'Incorrect type of the game setting value, {} expected '.format(value.__class__.__name__))
+            errorVScript(self, 'Incorrect type of the game setting value, {} expected '.format(self._class))
 
 
 class OnGameSettingsChanged(TunableEventBlock, GameSettingsMeta):

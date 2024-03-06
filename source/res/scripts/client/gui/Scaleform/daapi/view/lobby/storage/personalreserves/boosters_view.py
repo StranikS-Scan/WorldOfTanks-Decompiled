@@ -161,7 +161,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                     additionalInfo = text_styles.alert(backport.text(limitResource()))
                 else:
                     additionalInfo = ''
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=None, additionalInfo=additionalInfo)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL), booster.getShopIcon(), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=None, additionalInfo=additionalInfo, sellBtnLabel=backport.text(R.strings.storage.buttonLabel.activate()))
                 if booster.expiryTime:
                     timeLeft = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(booster.expiryTime)))
                     timeKey, timeLeft = getTimeLeftInfoEx(timeLeft)

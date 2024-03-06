@@ -4,6 +4,10 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_tray>	ARMOR_PIERCING_TRAY.png 0 0	</ap_tray>
+    <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
+    <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
+    <ap_cr_premium_tray>	ARMOR_PIERCING_CR_PREMIUM_TRAY.png 0 0	</ap_cr_premium_tray>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -232,7 +236,7 @@
       <impactRadius>	0.31	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	20	</armor>
+        <armor>	30	</armor>
         <devices>	25	</devices>
       </damage>
     </armorSpalls>

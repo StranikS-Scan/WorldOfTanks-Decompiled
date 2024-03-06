@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/impl/lobby/subscription/wot_plus_tooltip.py
 from typing import TYPE_CHECKING
 from frameworks.wulf import ViewSettings
-from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.constants.date_time_formats import DateTimeFormatsEnum
 from gui.impl.gen.view_models.views.lobby.subscription.wot_plus_tooltip_model import WotPlusTooltipModel
 from gui.impl.pub import ViewImpl
+from gui.shared.formatters.date_time import getRegionalDateTime
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap
 from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
@@ -31,9 +32,9 @@ class WotPlusTooltip(ViewImpl):
     def _onLoading(self):
         super(WotPlusTooltip, self)._onLoading()
         with self.viewModel.transaction() as model:
-            model.setExpirationDate(backport.getShortDateFormat(self._wotPlusCtrl.getExpiryTime()))
+            model.setExpirationDate(getRegionalDateTime(self._wotPlusCtrl.getExpiryTime(), DateTimeFormatsEnum.SHORTDATE))
             if self._wotPlusCtrl.getNextBillingTime():
-                model.setNextCharge(backport.getShortDateFormat(self._wotPlusCtrl.getNextBillingTime()))
+                model.setNextCharge(getRegionalDateTime(self._wotPlusCtrl.getNextBillingTime(), DateTimeFormatsEnum.SHORTDATE))
             model.setState(self._wotPlusCtrl.getState())
             bonuses = self._wotPlusCtrl.getEnabledBonuses()
             bonusList = model.getBonuses()

@@ -272,3 +272,8 @@ def getImageResourceFromPath(path):
 def capitalizeText(text):
     t = text.decode()
     return t[0].upper() + t[1:]
+
+
+def replaceMultiple(string, replacementDict):
+    pattern = re.compile('|'.join(map(re.escape, replacementDict.keys())))
+    return pattern.sub(lambda mo: replacementDict[mo.string[mo.start():mo.end()]], string)

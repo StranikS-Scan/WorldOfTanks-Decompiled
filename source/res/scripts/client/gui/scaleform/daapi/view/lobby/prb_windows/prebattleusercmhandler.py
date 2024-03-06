@@ -5,9 +5,16 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import AppealCMHandler, USER
 from gui.prb_control.entities.base.legacy.ctx import KickPlayerCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.shared.system_factory import registerLobbyContexMenuHandler
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 KICK_FROM_PREBATTLE = 'kickPlayerFromPrebattle'
+
+def kickPlayerFromPrebattle(cm):
+    cm.kickPlayerFromPrebattle(cm.databaseID)
+
+
+registerLobbyContexMenuHandler(KICK_FROM_PREBATTLE, kickPlayerFromPrebattle)
 
 class PrebattleUserCMHandler(AppealCMHandler, ILegacyListener):
 
@@ -29,8 +36,10 @@ class PrebattleUserCMHandler(AppealCMHandler, ILegacyListener):
     def onPlayerRemoved(self, entity, playerInfo):
         self.onContextMenuHide()
 
-    def kickPlayerFromPrebattle(self):
-        self._kickPlayerFromPrebattle(self.databaseID)
+    @adisp_process
+    def kickPlayerFromPrebattle(self, databaseID):
+        playerInfo = self.prbEntity.getPlayerInfoByDbID(databaseID)
+        yield self.prbDispatcher.sendPrbRequest(KickPlayerCtx(playerInfo.accID, 'prebattle/kick'))
 
     def _addMutedInfo(self, options, userCMInfo):
         muted = USER.UNSET_MUTED if userCMInfo.isMuted else USER.SET_MUTED
@@ -44,17 +53,7 @@ class PrebattleUserCMHandler(AppealCMHandler, ILegacyListener):
             options.append(self._makeItem(KICK_FROM_PREBATTLE, MENU.contextmenu(KICK_FROM_PREBATTLE), {'enabled': not disabled}))
         return options
 
-    def _getHandlers(self):
-        handlers = super(PrebattleUserCMHandler, self)._getHandlers()
-        handlers.update({KICK_FROM_PREBATTLE: 'kickPlayerFromPrebattle'})
-        return handlers
-
     def _canKickPlayer(self):
         playerInfo = self.prbEntity.getPlayerInfoByDbID(self.databaseID)
         team = self.prbEntity.getPlayerTeam(playerInfo.accID)
         return self.prbEntity.getPermissions().canKick(team)
-
-    @adisp_process
-    def _kickPlayerFromPrebattle(self, databaseID):
-        playerInfo = self.prbEntity.getPlayerInfoByDbID(databaseID)
-        yield self.prbDispatcher.sendPrbRequest(KickPlayerCtx(playerInfo.accID, 'prebattle/kick'))

@@ -218,12 +218,10 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
 class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
 
     def setRecord(self, result, reusable):
-        avatarInfo = result['personal']['avatar']
         for rec in reusable.personal.getMoneyRecords():
             _, premiumCredits = rec[:2]
             self.credits = premiumCredits.getRecord('credits', 'originalCreditsToDraw')
 
-        self.credits += avatarInfo.get('eventCredits', 0)
         for rec in reusable.personal.getCrystalRecords():
             _, premiumCrystal = rec[:2]
             self.crystal = premiumCrystal.getRecord('crystal')

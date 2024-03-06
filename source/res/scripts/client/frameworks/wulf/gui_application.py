@@ -43,6 +43,10 @@ class GuiApplication(object):
     def uiLogger(self):
         return self.__uiLogger
 
+    @property
+    def scale(self):
+        return self.__impl.scale
+
     def init(self, tutorialModel, uiLoggerModel):
         self.__impl.initialize()
         self.__resourceManager = ResourceManager.create(self.__impl.resourceManager)

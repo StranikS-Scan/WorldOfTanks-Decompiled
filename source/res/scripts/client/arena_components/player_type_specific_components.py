@@ -6,6 +6,7 @@ from advanced_chat_component import AdvancedChatComponent
 from arena_component_system.epic_sector_warning_component import EpicSectorWarningComponent
 from arena_component_system.arena_equipment_component import ArenaEquipmentComponent
 from arena_component_system.overtime_component import OvertimeComponent
+from gui.shared.system_factory import collectAdvancedChatComponent
 
 def getPlayerTypeSpecificComponentsForEpicRandom():
     return {'playerDataComponent': PlayerDataComponent}
@@ -17,6 +18,6 @@ def getPlayerTypeSpecificComponentsForEpicBattle():
      'overtimeComponent': OvertimeComponent}
 
 
-def getDefaultComponents():
+def getDefaultComponents(bonusType):
     return {'arenaEquipmentComponent': ArenaEquipmentComponent,
-     'advancedChatComponent': AdvancedChatComponent}
+     'advancedChatComponent': collectAdvancedChatComponent(bonusType) or AdvancedChatComponent}

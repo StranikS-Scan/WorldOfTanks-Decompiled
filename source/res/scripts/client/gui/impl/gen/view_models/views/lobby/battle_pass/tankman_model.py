@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/tankman_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
 
-class TankmanModel(ViewModel):
-    __slots__ = ()
+class TankmanStates(Enum):
     RECEIVED = 'received'
     FREE = 'free'
     PAID = 'paid'
@@ -12,6 +12,10 @@ class TankmanModel(ViewModel):
     NOT_FULL = 'notFull'
     AVAILABLE_IN_QUEST_CHAIN = 'availableInQuestChain'
     UNAVAILABLE = 'unavailable'
+
+
+class TankmanModel(ViewModel):
+    __slots__ = ()
 
     def __init__(self, properties=8, commands=0):
         super(TankmanModel, self).__init__(properties=properties, commands=commands)
@@ -29,10 +33,10 @@ class TankmanModel(ViewModel):
         self._setString(1, value)
 
     def getState(self):
-        return self._getString(2)
+        return TankmanStates(self._getString(2))
 
     def setState(self, value):
-        self._setString(2, value)
+        self._setString(2, value.value)
 
     def getChapterID(self):
         return self._getNumber(3)
@@ -68,7 +72,7 @@ class TankmanModel(ViewModel):
         super(TankmanModel, self)._initialize()
         self._addStringProperty('fullName', '')
         self._addStringProperty('groupName', '')
-        self._addStringProperty('state', 'unavailable')
+        self._addStringProperty('state')
         self._addNumberProperty('chapterID', 0)
         self._addNumberProperty('progressionLevel', 0)
         self._addNumberProperty('count', 1)

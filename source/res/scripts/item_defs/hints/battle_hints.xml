@@ -1,0 +1,1697 @@
+<battle_hints.xml>
+  <hint>
+    <props>
+      <name>	CaptureBase	</name>
+      <scope>	epic	</scope>
+      <component>	gameMessagesPanel	</component>
+    </props>
+    <text>
+      <template>	testMessage	</template>
+    </text>
+    <lifecycle>
+      <showTime>	0.1	</showTime>
+      <minShowTime>	0.1	</minShowTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	firstNaviMarker	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/moveToWaypoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_first_navi_marker_next_battle	</notify>
+      <notifyNewbie>	vo_mt_first_navi_marker_first_battle	</notifyNewbie>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	5	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	moveToWaypoint	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/moveToWaypoint	</key>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	6	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	firstShootingSpace	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/findPlaceOnShootingPoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_next_combat_marker	</notify>
+      <notifyNewbie>	vo_mt_first_combat_marker	</notifyNewbie>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	moveInShootingSpace	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/findPlaceOnShootingPoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_next_combat_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	10	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	entryCombatMarker	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	goal	</hintType>
+      <priority>	55	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/killEnemies	</key>
+    </text>
+    <sound>
+      <fx>	mt_notification	</fx>
+      <notify>	vo_mt_entry_combat_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	5	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	localBattleGoal	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	goal	</hintType>
+      <priority>	55	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/killEnemies	</key>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	5	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	timeAdded	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	timerGreen	</hintType>
+      <priority>	70	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/shootingPlaceCompletedText	</key>
+      <key2>	#maps_training:hints/shootingPlaceCompleted	</key2>
+    </text>
+    <sound>
+      <fx>	mt_adding_time	</fx>
+      <notify>	vo_mt_adding_time	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	5	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	timeRunsOut	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	timerRed	</hintType>
+      <priority>	60	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/twoMinutesLeft	</key>
+    </text>
+    <sound>
+      <fx>	time_buzzer_01	</fx>
+      <notify>	vo_mt_remaining_time	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	5	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	multipleHits	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <sound>
+      <notify>	vo_mt_multiple_hits	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	targetsNoDamaged	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <sound>
+      <notify>	vo_mt_targets_not_damaged	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	noMarkerWaypoint	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/moveToWaypoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_no_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	leaveMarkerWaypoint	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/moveToWaypoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_leave_active_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	noMarkerShootingPoint	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/findPlaceOnShootingPoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_no_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.maps_training:hintSchema	</clientSchema>
+    <props>
+      <name>	leaveMarkerShootingPoint	</name>
+      <scope>	maps_training	</scope>
+      <component>	mapsTrainingGoals	</component>
+      <hintType>	hint	</hintType>
+      <priority>	51	</priority>
+      <battleTypes>
+        <arenaBonusType>	MAPS_TRAINING	</arenaBonusType>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#maps_training:hints/findPlaceOnShootingPoint	</key>
+    </text>
+    <sound>
+      <notify>	vo_mt_leave_active_marker	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	3	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	15	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	2	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_03	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_03	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_03.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_03	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	15	</waitTime>
+      <minShowTime>	8	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	2	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_04	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_04	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_04.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_04	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_05	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_05	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_05.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_05	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_OTHER_06	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_OTHER_06	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_other_06.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_other_06	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_AIMING_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_AIMING_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_aiming_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_aiming_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_AIMING_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_AIMING_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_aiming_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_aiming_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	9	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_AUTO_AIMING_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_AUTO_AIMING_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_auto_aiming_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_auto_aiming_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_AUTO_AIMING_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_AUTO_AIMING_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_auto_aiming_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_auto_aiming_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_WEAK_SPOTS_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_WEAK_SPOTS_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_weak_spots_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_weak_spots_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_WEAK_SPOTS_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_WEAK_SPOTS_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_weak_spots_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_weak_spots_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	5	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_WEAK_SPOTS_03	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_WEAK_SPOTS_03	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_weak_spots_03.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_weak_spots_03	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	5	</waitTime>
+      <minShowTime>	8	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_WEAK_SPOTS_04	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_WEAK_SPOTS_04	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_weak_spots_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_weak_spots_04	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	8	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	1	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_SNIPER_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_SNIPER_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_sniper_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_SNIPER_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_SNIPER_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_sniper_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	8	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_03	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_03	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_03.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_03	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_04	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_04	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_04.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_04	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	9	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_05	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_05	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_05.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_05	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_06	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_06	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_06.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_06	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_07	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_07	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_07.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_07	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_08	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_08	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_08.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_08	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	9	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_09	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_09	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_09.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_09	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	9	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_CONSUMABLES_10	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_CONSUMABLES_10	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_consumables_10.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_consumables_10	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	8	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	2400	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_01	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_01	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_01	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	9	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_02	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_02	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_02	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_03	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_03	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_03.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_03	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_04	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_04	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_04.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_04	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_05	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_05	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_05.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_05	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	6	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_06	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_06	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_06.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_06	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_07	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_07	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_07.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_07	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_08	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_08	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_08.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_08	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	10800	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+  <hint>
+    <clientSchema>	hints.battle.schemas.newbie:hintSchema	</clientSchema>
+    <props>
+      <name>	PPH_BASE_CAPTURE_09	</name>
+      <scope>	newbie	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	WINBACK	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/PPH_BASE_CAPTURE_09	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_base_capture_09.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_pph_base_capture_09	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+    <history>
+      <modifyPriority>	true	</modifyPriority>
+      <cooldown>	3600	</cooldown>
+      <displayCount>	3	</displayCount>
+    </history>
+  </hint>
+</battle_hints.xml>

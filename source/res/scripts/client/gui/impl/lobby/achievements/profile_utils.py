@@ -4,7 +4,9 @@ from adisp import adisp_process
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES
 from gui.impl import backport
 from gui.impl.backport import getIntegralFormat
+from gui.impl.gen.view_models.constants.date_time_formats import DateTimeFormatsEnum
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.date_time import getRegionalDateTime
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -102,9 +104,9 @@ def getProfileCommonInfo(dossier):
     lastBattleTime = None
     if dossier['total']['lastBattleTime']:
         lbt = dossier['total']['lastBattleTime']
-        lastBattleDate = backport.getLongDateFormat(lbt)
-        lastBattleTime = backport.getShortTimeFormat(lbt)
-    return {'registrationDate': '%s' % backport.getLongDateFormat(dossier['total']['creationTime']),
+        lastBattleDate = getRegionalDateTime(lbt, DateTimeFormatsEnum.FULLDATE)
+        lastBattleTime = getRegionalDateTime(lbt, DateTimeFormatsEnum.SHORTTIME)
+    return {'registrationDate': '%s' % getRegionalDateTime(dossier['total']['creationTime'], DateTimeFormatsEnum.FULLDATE),
      'lastBattleDate': lastBattleDate,
      'lastBattleTime': lastBattleTime}
 

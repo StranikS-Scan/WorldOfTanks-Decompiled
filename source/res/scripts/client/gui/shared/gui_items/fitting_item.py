@@ -19,7 +19,7 @@ from items import vehicles, getTypeInfoByName
 from rent_common import SeasonRentDuration
 from telecom_rentals_common import TELECOM_RENTALS_RENT_KEY
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
-_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented', 'isTelecomRent'))
+_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented', 'isTelecomRent', 'anyExpires'))
 SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
 _BIG_HIGHLIGHT_TYPES_MAP = {SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE_BIG,
  SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG,
@@ -56,7 +56,8 @@ class RentalInfoProvider(_RentalInfoProvider):
         else:
             compensations = MONEY_UNDEFINED
         isTelecomRent = TELECOM_RENTALS_RENT_KEY in additionalData
-        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent, isRented, isTelecomRent)
+        useAnyExpiresRule = additionalData.get('anyExpires', False)
+        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, seasonRent, isRented, isTelecomRent, useAnyExpiresRule)
         return result
 
     def canRentRenewForSeason(self, seasonType):
@@ -107,6 +108,8 @@ class RentalInfoProvider(_RentalInfoProvider):
         return float('inf')
 
     def getExpiryState(self):
+        if self.anyExpires:
+            return self.rentExpiryTime != float('inf') and self.getTimeLeft() <= 0 or (self.battlesLeft <= 0 or (self.winsLeft <= 0 or (not self.getActiveSeasonRent() if self.seasonRent != {} else False)))
         return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0 and not self.getActiveSeasonRent()
 
     def getRentalPeriodInCycles(self):

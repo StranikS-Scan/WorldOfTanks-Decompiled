@@ -262,7 +262,7 @@ class BootcampController(IBootcampController):
             elif isFromLobbyMenu:
                 g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
             elif isFromModeSelector:
-                showModeSelectorWindow(False)
+                showModeSelectorWindow()
 
     def __skipBootcamp(self):
         window = BootcampExitWindow(partial(self.stopBootcamp, not self.isInBootcampAccount()))

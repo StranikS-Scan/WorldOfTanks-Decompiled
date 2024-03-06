@@ -154,7 +154,7 @@ class PlayerSubscriptionRewardWindowView(ViewImpl):
         for bonus in bonuses:
             for tID in bonus.getTokens():
                 if tID.startswith(OFFER_TOKEN_PREFIX):
-                    for offer in self._offersProvider.getAvailableOffers(onlyVisible=True):
+                    for offer in self._offersProvider.getUnlockedOffers(onlyVisible=True):
                         if offer.token == tID:
                             return offer
 

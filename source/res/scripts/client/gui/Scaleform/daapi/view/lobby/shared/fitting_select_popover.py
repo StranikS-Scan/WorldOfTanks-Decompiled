@@ -2,30 +2,30 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import logging
 import typing
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import ModuleParamsExtender, fittingSelectModuleExtenders
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
+from gui.shared import event_dispatcher as shared_events
+from gui.shared.formatters import text_styles, getItemPricesVOWithReason
 from gui.shared.formatters.text_styles import builder as str_builder
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.fitting_item import FittingItem
-from gui.shared.gui_items.vehicle_modules import VehicleModule
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, formatParameter
 from gui.shared.utils import EXTRA_MODULE_INFO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
-from gui.shared.formatters import text_styles, getItemPricesVOWithReason
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.shared import event_dispatcher as shared_events
 from items import getTypeInfoByName
 from items.vehicles import VehicleDescriptor
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.vehicle_modules import VehicleGun, VehicleRadio, VehicleEngine, VehicleTurret, VehicleChassis
 _logger = logging.getLogger(__name__)
 FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.TURRET],
@@ -43,9 +43,11 @@ _TAB_IDS = (_POPOVER_FIRST_TAB_IDX, _POPOVER_SECOND_TAB_IDX)
 
 def _extendByModuleData(targetData, vehicleModule, vehDescr, extenders):
     moduleType = vehicleModule.itemTypeID
+    paramsList = _PARAMS_LISTS[moduleType]
+    if moduleType == GUI_ITEM_TYPE.GUN and vehicleModule.isDamageMutable():
+        paramsList = ('maxAvgMutableDamageList', 'minAvgMutableDamageList', 'avgPiercingPower', 'reloadTime')
     values, names = [], []
     paramsData = params_helper.getParameters(vehicleModule, vehDescr)
-    paramsList = _PARAMS_LISTS[moduleType]
     serverSettings = dependency.instance(ISettingsCore).serverSettings
     for ext in extenders:
         if ext.check(vehicleModule, vehDescr):
@@ -145,7 +147,6 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
     def _populate(self):
         super(CommonFittingSelectPopover, self)._populate()
         self.as_updateS(self._prepareInitialData())
-        self._logicProvider.resetCounters()
 
     def _dispose(self):
         self.__vehicle = None
@@ -240,11 +241,6 @@ class PopoverLogicProvider(object):
         self.__modulesList = None
         self._selectedIdx = -1
         self._tabIndex = 0
-        self._needToResetAutoReload = False
-        self._needToResetDualGun = False
-        self._needToResetTurboshaft = False
-        self._needToResetRocketAcceleration = False
-        self._needToResetDualAccuracy = False
         self.__moduleExtenders = fittingSelectModuleExtenders()
         return
 
@@ -272,32 +268,6 @@ class PopoverLogicProvider(object):
     def dispose(self):
         self._vehicle = None
         return
-
-    def resetCounters(self):
-        if self._needToResetAutoReload:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
-        elif self._needToResetDualGun:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
-        elif self._needToResetTurboshaft:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
-        elif self._needToResetRocketAcceleration:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
-        elif self._needToResetDualAccuracy:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: True})
-
-    def _checkCounters(self, vehicleModule):
-        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
-            if not self._needToResetAutoReload and vehicleModule.isAutoReloadable(self._vehicle.descriptor):
-                self._needToResetAutoReload = True
-            elif not self._needToResetDualGun and vehicleModule.isDualGun(self._vehicle.descriptor):
-                self._needToResetDualGun = True
-            elif not self._needToResetDualAccuracy and vehicleModule.hasDualAccuracy(self._vehicle.descriptor):
-                self._needToResetDualAccuracy = True
-        elif vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
-            if not self._needToResetTurboshaft and vehicleModule.hasTurboshaftEngine():
-                self._needToResetTurboshaft = True
-            if not self._needToResetRocketAcceleration and vehicleModule.hasRocketAcceleration():
-                self._needToResetRocketAcceleration = True
 
     def _buildCommonModuleData(self, module, reason):
         return {'id': module.intCD,
@@ -380,7 +350,6 @@ class _HangarLogicProvider(PopoverLogicProvider):
             installReason = _getInstallReason(vehicleModule, self._vehicle, reason, self._slotIndex)
         else:
             installReason = reason
-        self._checkCounters(vehicleModule)
         moduleData = self._buildCommonModuleData(vehicleModule, installReason)
         moduleData.update({'targetVisible': isBought,
          'showPrice': not isBought,
@@ -410,5 +379,4 @@ class _PreviewLogicProvider(PopoverLogicProvider):
          'disabled': not isFit,
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP})
-        self._checkCounters(vehicleModule)
         return moduleData

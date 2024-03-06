@@ -1,8 +1,16 @@
 <extension_rules.xml>
   <xml_whitelist>
     <rule>
-      <pattern>	.*/item_defs/.*\.xml$	</pattern>
-      <type>	merge	</type>
+      <pattern>	.*/item_defs/arena_vscripts\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/hints/battle_hints\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/customization/.*/list(\.[A-Z]{2})?\.xml$	</pattern>
+      <type>	include	</type>
     </rule>
     <rule>
       <pattern>	.*/item_defs/vehicles/.*/.*\.xml$	</pattern>
@@ -14,6 +22,10 @@
     </rule>
     <rule>
       <pattern>	.*/item_defs/bonus_caps_config\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/[^/]+\.xml$	</pattern>
       <type>	merge	</type>
     </rule>
     <rule>
@@ -41,6 +53,10 @@
       <type>	merge	</type>
     </rule>
     <rule>
+      <pattern>	gui/component_marker_items\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
       <pattern>	.*/development/test_xml/.*/.*\.xml$	</pattern>
       <type>	include	</type>
     </rule>
@@ -51,6 +67,24 @@
     <rule>
       <pattern>	.*/server_xml/personal_reserves_config\.xml$	</pattern>
       <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/server_xml/deathzones_config\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	engine_config\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	soundMgr/*/*	</params>
+    </rule>
+    <rule>
+      <pattern>	scripts/arena_defs/_default_\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	extraSoundRemapping	</params>
+    </rule>
+    <rule>
+      <pattern>	gui/sound_notifications\.xml$	</pattern>
+      <type>	include	</type>
     </rule>
   </xml_whitelist>
 </extension_rules.xml>

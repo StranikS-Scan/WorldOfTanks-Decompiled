@@ -22,7 +22,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.system_factory import registerModeSelectorItem, collectModeSelectorItem
 if typing.TYPE_CHECKING:
-    from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorItem
+    from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SelectorItem
     from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorItem
 _logger = logging.getLogger(__name__)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.RANDOM, RandomModeSelectorItem)

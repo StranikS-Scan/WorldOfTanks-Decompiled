@@ -8,8 +8,10 @@ import account_helpers
 from client_request_lib.exceptions import ResponseCodes
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.Scaleform.settings import TOOLTIP_TYPES
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventBattleModeSettings, getStrongholdEventEnabled
+from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import UnfreezeVehicleDialogMeta
 from gui.clans.clan_helpers import isStrongholdsEnabled, isLeaguesEnabled
 from gui.clans.stronghold_event_requester import FrozenVehiclesRequester, FrozenVehiclesConstants
 from gui.impl import backport
@@ -38,13 +40,15 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters.abstract import Response
-from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx, StrongholdEventGetFrozenVehiclesCtx
+from gui.shared.utils.functions import makeTooltip
+from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx, StrongholdLeaveModeCtx, SlotVehicleFiltersUpdateCtx, StrongholdEventGetFrozenVehiclesCtx, StrongholdEventUnfreezeVehicleCtx
 from helpers import time_utils, dependency
 from UnitBase import UNIT_ERROR, UNIT_ROLE
+from shared_utils import findFirst
 from skeletons.gui.game_control import IGameSessionController
 _CREATION_TIMEOUT = 30
 ERROR_MAX_RETRY_COUNT = 3
-SUCCESS_STATUSES = (200, 201, 403, 409)
+SUCCESS_STATUSES = (200, 201)
 DEFAULT_OK_WEB_REQUEST_ID = 0
 
 class StrongholdDynamicRosterSettings(DynamicRosterSettings):
@@ -157,6 +161,18 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
     def getPermissions(self, dbID=None, unitMgrID=None):
         return StrongholdBrowserPermissions(self.hasLockedState())
 
+    def leave(self, ctx, callback=None):
+        processor = StrongholdUnitRequestProcessor()
+        processor.doRequest(StrongholdLeaveModeCtx(ctx.getID()), 'leave_mode')
+        super(StrongholdBrowserEntity, self).leave(ctx, callback)
+
+    def getSquadBtnTooltipData(self):
+        if self.getPermissions().canCreateSquad():
+            header = backport.text(R.strings.platoon.headerButton.tooltips.squad.header())
+            body = backport.text(R.strings.platoon.headerButton.tooltips.squad.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        return ('', TOOLTIP_TYPES.COMPLEX)
+
     def _loadUnit(self):
         g_eventDispatcher.loadStrongholds()
 
@@ -165,11 +181,6 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
 
     def _showWindow(self):
         g_eventDispatcher.showStrongholdsWindow()
-
-    def leave(self, ctx, callback=None):
-        processor = StrongholdUnitRequestProcessor()
-        processor.doRequest(StrongholdLeaveModeCtx(ctx.getID()), 'leave_mode')
-        super(StrongholdBrowserEntity, self).leave(ctx, callback)
 
 
 class StrongholdEntity(UnitEntity):
@@ -397,6 +408,13 @@ class StrongholdEntity(UnitEntity):
         playerInfo = self.getPlayerInfo()
         self.__isInSlot = playerInfo.isInSlot
         super(StrongholdEntity, self).unit_onUnitMembersListChanged()
+
+    def getSquadBtnTooltipData(self):
+        if self.getPermissions().canCreateSquad():
+            header = backport.text(R.strings.platoon.headerButton.tooltips.squad.header())
+            body = backport.text(R.strings.platoon.headerButton.tooltips.squad.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        return ('', TOOLTIP_TYPES.COMPLEX)
 
     def request(self, ctx, callback=None):
         self.__waitingManager.processRequest(ctx)
@@ -664,7 +682,7 @@ class StrongholdEntity(UnitEntity):
         if self.__eventFrozenVehiclesRequester is not None:
             if spaID is None:
                 spaID = account_helpers.getAccountDatabaseID()
-            return self.__eventFrozenVehiclesRequester.getCache().get(spaID)
+            return self.__eventFrozenVehiclesRequester.getFrozenVehicles(spaID)
         else:
             return
 
@@ -683,6 +701,47 @@ class StrongholdEntity(UnitEntity):
                         return True
 
             return False
+
+    def onUnfreezeVehicleInSlot(self, slotIdx, parent=None):
+        if not self.__isStrongholdEventEnabled():
+            return False
+        else:
+            fullData = self.getUnitFullData()
+            slotInfo = findFirst(lambda s: s.index == slotIdx, fullData.slotsIterator)
+            if slotInfo is None or slotInfo.player is None or slotInfo.vehicle is None:
+                return
+            vehicleCD = slotInfo.vehicle.vehTypeCompDescr
+            vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
+            price = self.__eventFrozenVehiclesRequester.getUnfreezePrice(vehicleCD)
+            self.showDialog(UnfreezeVehicleDialogMeta(slotInfo.player.name, vehicle.shortUserName if vehicle is not None else '', price, self.__eventFrozenVehiclesRequester.getSparePartsBalance()), lambda result: self.__onUnfreezeVehicleDialogCallback(result, slotInfo.player.dbID, vehicleCD, price), parent=parent)
+            return
+
+    def __onUnfreezeVehicleDialogCallback(self, result, playerSpaID, vehicleCD, price):
+        if not result:
+            return
+        ctx = StrongholdEventUnfreezeVehicleCtx(playerSpaID, vehicleCD, price)
+        self._requestsProcessor.doRequest(ctx, 'unfreezeVehicle', callback=partial(self.__unfreezeVehicleRequestCallback, playerSpaID=playerSpaID))
+
+    def __unfreezeVehicleRequestCallback(self, response, playerSpaID):
+        rawData = response.getData()
+        if response.isSuccess():
+            vehicleCD = rawData.get('vehicle_cd')
+            vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.unit.warnings.wgshEvent.vehicleUnfrozen(), vehicleName=vehicle.shortUserName if vehicle is not None else ''), type=SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
+            self.__eventFrozenVehiclesRequester.removeFromFrozenVehicle(playerSpaID, vehicleCD)
+            self.__frozenVehiclesUpdated([playerSpaID])
+            return
+        else:
+            if response.getExtraCode() not in SUCCESS_STATUSES:
+                self.__getEventFrozenVehicles()
+            if isinstance(rawData, dict):
+                resMsg = R.strings.system_messages.unit.error.wgshEvent.dyn(rawData.get('title', ''))
+            else:
+                resMsg = R.strings.system_messages.unit.error.wgshEvent.common
+            if not resMsg.exists():
+                resMsg = R.strings.system_messages.unit.error.wgshEvent.common
+            SystemMessages.pushMessage(backport.text(resMsg()), type=SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
+            return
 
     def _onPlayersMatchingDataUpdated(self, response):
         if not self.__processResponseMessage(response):

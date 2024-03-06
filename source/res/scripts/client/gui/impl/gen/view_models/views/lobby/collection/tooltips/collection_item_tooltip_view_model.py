@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class CollectionItemTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(CollectionItemTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -32,9 +32,16 @@ class CollectionItemTooltipViewModel(ViewModel):
     def setImagePath(self, value):
         self._setString(3, value)
 
+    def getIsDetailed(self):
+        return self._getBool(4)
+
+    def setIsDetailed(self, value):
+        self._setBool(4, value)
+
     def _initialize(self):
         super(CollectionItemTooltipViewModel, self)._initialize()
         self._addStringProperty('name', '')
         self._addStringProperty('description', '')
         self._addBoolProperty('isReceived', False)
         self._addStringProperty('imagePath', '')
+        self._addBoolProperty('isDetailed', False)

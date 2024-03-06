@@ -94,19 +94,22 @@ class WindowSettings(object):
 
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__')
+    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__', '__em')
 
     def __init__(self, settings):
         settings.name = self.getName()
         super(Window, self).__init__(PyObjectWindow(settings.proxy))
-        self.onStatusChanged = Event.Event()
+        self.__em = Event.EventManager()
+        self.onStatusChanged = Event.Event(self.__em)
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus
-        self.onShowingStatusChanged = Event.Event()
+        self.onShowingStatusChanged = Event.Event(self.__em)
         self.__showingStatus = ShowingStatus.HIDDEN
         self.__isShown = False
         self.__isReady = False
         self.__isFocused = False
-        self.onFocusChanged = Event.Event()
+        self.onFocusChanged = Event.Event(self.__em)
+        self.onSizeChanged = Event.Event(self.__em)
+        self.onPositionChanged = Event.Event(self.__em)
         _logger.debug('Creating %r with %r', self, settings)
         return
 
@@ -212,7 +215,7 @@ class Window(PyObjectEntity):
         _logger.debug('Destroying window: %r', self)
         if self.proxy is not None:
             self.proxy.destroy()
-        self.onStatusChanged.clear()
+        self.__em.clear()
         return
 
     def setLayer(self, layerID):
@@ -309,6 +312,14 @@ class Window(PyObjectEntity):
         self.__isFocused = focused
         self._onFocus(focused)
         self.onFocusChanged(focused)
+
+    def _cResized(self, width, height):
+        _logger.debug('Size changed to %d %d for %r', width, height, self)
+        self.onSizeChanged(self.uniqueID, width, height)
+
+    def _cPositionChanged(self, x, y):
+        _logger.debug('Position changed to %d %d for %r', x, y, self)
+        self.onPositionChanged(self.uniqueID, x, y)
 
     def __attachToDecorator(self):
         decorator = self.decorator

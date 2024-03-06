@@ -845,4 +845,101 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch48_BZ_75	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	772	</id>
+      <texture>	gui/maps/vehicles/styles/Ch48_BZ_75_BXI_3DSt.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch48_BZ_75_BXI_3DSt_desc/long	</longDescriptionSpecial>
+      <modelsSet>	Ch48_BZ_75_BXI_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch48_BZ_75_BXI_3DSt	</userString>
+      <tags>	styleProgression	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_01 tank_hull_upgrade_01	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	86	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02 tank_hull_upgrade_02 tank_guns_upgrade_02_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	86	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03 tank_hull_upgrade_03 tank_turret_upgrade_03 tank_guns_upgrade_03_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	86	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04 tank_hull_upgrade_04 tank_turret_upgrade_04 tank_guns_upgrade_04_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	83	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	63	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </china.xml>

@@ -123,13 +123,18 @@ class EventLootBoxSimpleBonusUIPacker(SimpleBonusUIPacker):
 
 
 class EventLootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
+    _3D_STYLE_ICON_NAME = 'style_3d'
 
     @classmethod
     def _packSingleBonus(cls, bonus, item, label):
         model = RewardModel()
         cls._packCommon(bonus, model)
         model.setCount(item.get('value', 0))
-        model.setIconSource(_R_BONUS_ICONS.s600x450.dyn(bonus.getC11nItem(item).itemTypeName)())
+        c11nItem = bonus.getC11nItem(item)
+        iconName = c11nItem.itemTypeName
+        if iconName == 'style' and c11nItem.modelsSet:
+            iconName = cls._3D_STYLE_ICON_NAME
+        model.setIconSource(_R_BONUS_ICONS.s600x450.dyn(iconName)())
         return model
 
 

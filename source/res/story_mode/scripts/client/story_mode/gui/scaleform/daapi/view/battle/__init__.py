@@ -3,7 +3,7 @@
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.battle import shared
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import ClassicStatisticsDataController
-from gui.Scaleform.daapi.view.battle.shared.animated_battle_hint import AnimatedBattleHint
+from gui.Scaleform.daapi.view.battle.shared.battle_hint import DefaultBattleHint
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.daapi.view.battle.shared.damage_log_panel import DamageLogPanel
 from gui.Scaleform.daapi.view.battle.shared.damage_panel import DamagePanel
@@ -17,6 +17,7 @@ from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from story_mode.gui.scaleform.daapi.view.battle.intro_video import IntroVideo
 from story_mode.gui.scaleform.daapi.view.battle.minimap import StoryModeMinimapComponent
+from story_mode.gui.scaleform.daapi.view.battle.penetration_panel import StoryModePenetrationPanel
 from story_mode.gui.scaleform.daapi.view.battle.subtitles import BattleSubtitles
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
@@ -41,7 +42,8 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.INGAME_MENU, StoryModeIngameMenu, 'ingameMenu.swf', WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
      ViewSettings(VIEW_ALIAS.STORY_MODE_INTRO_VIDEO_WINDOW, IntroVideo, getSwfExtensionUrl('story_mode', 'IntroVideo.swf'), WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORY_MODE_SETTINGS_WINDOW, StoryModeSettingsWindow, 'settingsWindow.swf', WindowLayer.TOP_WINDOW, 'storyModeSettingsWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     ComponentSettings(BATTLE_VIEW_ALIASES.ANIMATED_BATTLE_HINT, AnimatedBattleHint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PENETRATION_PANEL, StoryModePenetrationPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.NEWBIE_HINT, DefaultBattleHint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, CustomTextPrebattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.SUBTITLES, BattleSubtitles, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, StoryModelTimersPanel, ScopeTemplates.DEFAULT_SCOPE),

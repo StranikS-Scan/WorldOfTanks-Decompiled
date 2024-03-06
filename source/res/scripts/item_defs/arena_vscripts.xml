@@ -1,0 +1,36 @@
+<arena_vscripts.xml>
+  <visualScript>
+    <battleTypes>
+      <arenaBonusType>	REGULAR	</arenaBonusType>
+      <gameplayNames>	ctf	</gameplayNames>
+    </battleTypes>
+    <battleTypes>
+      <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+      <gameplayNames>	ctf	</gameplayNames>
+    </battleTypes>
+    <battleTypes>
+      <arenaBonusType>	WINBACK	</arenaBonusType>
+      <gameplayNames>	ctf	</gameplayNames>
+    </battleTypes>
+    <client>
+      <plan>
+        <name>	pvp_hints/pvp_hints_aiming	</name>
+      </plan>
+      <plan>
+        <name>	pvp_hints/pvp_hints_basecapture	</name>
+      </plan>
+      <plan>
+        <name>	pvp_hints/pvp_hints_consumables	</name>
+      </plan>
+      <plan>
+        <name>	pvp_hints/pvp_hints_other	</name>
+      </plan>
+      <plan>
+        <name>	pvp_hints/pvp_hints_sniper	</name>
+      </plan>
+      <plan>
+        <name>	pvp_hints/pvp_hints_weakspots	</name>
+      </plan>
+    </client>
+  </visualScript>
+</arena_vscripts.xml>

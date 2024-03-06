@@ -49,7 +49,7 @@ def showFunRandomProgressionWindow(uiLoader=None):
 def showFunRandomModeSubSelectorWindow(uiLoader=None):
     contentResId = R.views.lobby.mode_selector.ModeSelectorView()
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        showModeSelectorWindow(isEventEnabled=False, subSelectorCallback=showFunRandomSubSelector)
+        showModeSelectorWindow(subSelectorCallback=showFunRandomSubSelector)
     else:
         showFunRandomSubSelector()
     return

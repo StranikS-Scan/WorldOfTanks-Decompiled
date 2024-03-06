@@ -479,22 +479,36 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         rewardsData, levels = self.__getQuests()
         if not levels:
             return []
-        startLvl = levels.pop(0)
-        startBonuses = rewardsData[startLvl].getBonuses()
-        self.__addSkillPointsBonus(startBonuses, startLvl)
-        bonusesByLvl = {startLvl: startBonuses}
-        currentLevel, _ = self.getPlayerLevelInfo()
-        mergeSelectable(currentLevel, startLvl, startLvl, startBonuses, bonusesByLvl)
-        result = [[startLvl, startLvl, startBonuses]]
-        for level in levels:
-            endBonus = rewardsData[level].getBonuses()
-            self.__addSkillPointsBonus(endBonus, level)
-            bonusesByLvl.update({level: endBonus})
-            prevStartLvl, prevEndLvl, prevBonus = result[-1]
-            if isBonusesEqual(prevBonus, endBonus):
-                result[-1][1] = level
-            mergeSelectable(currentLevel, prevStartLvl, prevEndLvl, endBonus, bonusesByLvl)
-            result.append([level, level, endBonus])
+        result = []
+        bonusesByLvl = {}
+        startIndex = 0
+        levelsCount = len(levels) - 1
+        currentPlayerLevel, _ = self.getPlayerLevelInfo()
+
+        def getLevelBonuses(level):
+            if level in bonusesByLvl:
+                return bonusesByLvl[level]
+            levelBonuses = rewardsData[level].getBonuses()
+            self.__addSkillPointsBonus(levelBonuses, level)
+            bonusesByLvl.update({level: levelBonuses})
+            return levelBonuses
+
+        while startIndex <= levelsCount:
+            startLevel = levels[startIndex]
+            if startIndex + 1 <= levelsCount:
+                currIndex = startIndex + 1
+            startLevelBonuses = getLevelBonuses(startLevel)
+            while currIndex <= levelsCount:
+                currLevel = levels[currIndex]
+                currLevelBonuses = getLevelBonuses(currLevel)
+                if isBonusesEqual(startLevelBonuses, currLevelBonuses):
+                    currIndex += 1
+                currLevel = levels[currIndex - 1]
+                break
+
+            mergeSelectable(currentPlayerLevel, startLevel, currLevel, startLevelBonuses, bonusesByLvl)
+            result.append([startLevel, currLevel, startLevelBonuses])
+            startIndex = currIndex
 
         return result
 

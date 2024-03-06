@@ -28,20 +28,19 @@ _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
 _BINDING_ID = aih_global_binding.BINDING_ID
 _IS_EXTENDED_GUN_MARKER_ENABLED = True
-_MIN_PIERCING_DIST = 100.0
-_MAX_PIERCING_DIST = 500.0
-_LERP_RANGE_PIERCING_DIST = _MAX_PIERCING_DIST - _MIN_PIERCING_DIST
 _BASE_PIERCING_PERCENT = 100.0
 _ENABLED_MAX_PROJECTION_CHECK = True
 _MAX_PROJECTION_ANGLE = math.radians(60.0)
 _MAX_PROJECTION_ANGLE_COS = math.cos(_MAX_PROJECTION_ANGLE)
 _logger = logging.getLogger(__name__)
 
-def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
-    if dist <= _MIN_PIERCING_DIST:
-        return p100
+def _computePiercingPowerAtDistImpl(dist, maxDist, val1, val2, arg1=constants.PIERCING_POWER_INTERPOLATION_DIST_FIRST, arg2=constants.PIERCING_POWER_INTERPOLATION_DIST_LAST):
+    if dist <= arg1:
+        return val1
+    if arg1 == arg2:
+        return val1
     if dist < maxDist:
-        power = p100 + (p500 - p100) * (dist - _MIN_PIERCING_DIST) / _LERP_RANGE_PIERCING_DIST
+        power = val1 + (val2 - val1) * (dist - arg1) / (arg2 - arg1)
         if power > 0.0:
             return power
         return 0.0
@@ -106,6 +105,7 @@ else:
 
 
 class _StandardShotResult(object):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod
     def getShotResult(cls, hitPoint, collision, _, excludeTeam=0, piercingMultiplier=1):
@@ -122,15 +122,8 @@ class _StandardShotResult(object):
             ppDesc = vDesc.shot.piercingPower
             maxDist = vDesc.shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
-            if dist <= 100.0:
-                piercingPower = ppDesc[0]
-            elif maxDist > dist:
-                p100, p500 = ppDesc
-                piercingPower = p100 + (p500 - p100) * (dist - 100.0) / 400.0
-                if piercingPower < 0.0:
-                    piercingPower = 0.0
-            else:
-                piercingPower = 0.0
+            constantsModification = cls.__sessionProvider.arenaVisitor.modifiers.getConstantsModification()
+            piercingPower = _computePiercingPowerAtDistImpl(dist, maxDist, ppDesc[0] * piercingMultiplier, ppDesc[1] * piercingMultiplier, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_FIRST, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_LAST)
             piercingPercent = 1000.0
             if piercingPower > 0.0:
                 armor = collision.armor
@@ -167,8 +160,8 @@ class _CrosshairShotResults(object):
 
     @classmethod
     def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist, piercingMultiplier):
-        p100, p500 = ppDesc
-        return _computePiercingPowerAtDistImpl(dist, maxDist, p100 * piercingMultiplier, p500 * piercingMultiplier)
+        constantsModification = cls.__sessionProvider.arenaVisitor.modifiers.getConstantsModification()
+        return _computePiercingPowerAtDistImpl(dist, maxDist, ppDesc[0] * piercingMultiplier, ppDesc[1] * piercingMultiplier, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_FIRST, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_LAST)
 
     @classmethod
     def _computePiercingPowerRandomization(cls, shell):

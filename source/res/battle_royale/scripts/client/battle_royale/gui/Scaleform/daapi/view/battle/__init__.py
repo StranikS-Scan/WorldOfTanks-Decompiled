@@ -29,7 +29,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import perks_panel
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
-    from gui.Scaleform.daapi.view.battle.event import battle_hint
+    from gui.Scaleform.daapi.view.battle.shared import battle_hint
     from battle_royale.gui.Scaleform.daapi.view.battle import veh_configurator
     from battle_royale.gui.Scaleform.daapi.view.battle.battle_level_panel import BattleLevelPanel
     import battle_royale.gui.Scaleform.daapi.view.battle.players_panel as battle_royale_players_panel

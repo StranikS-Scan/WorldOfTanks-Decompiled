@@ -28,7 +28,10 @@ def makePositionMP(position):
 
 def getEntityMatrix(entityID):
     try:
-        return BigWorld.entities[entityID].matrix
+        entity = BigWorld.entities.get(entityID)
+        if entity:
+            return entity.matrix
+        return None
     except AttributeError:
         LOG_CURRENT_EXCEPTION()
         return None

@@ -32519,6 +32519,32 @@
         </effects>
       </variant1>
     </inf_fuel_mle008_Canisters1_01_hit>
+    <hd_mle_ASJP_007_Searchlight>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_ASJP_007_Searchlight.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	38.000000	</metal_2>
+              <glass>	17.000000	</glass>
+              <debrisAmount>	46.000000	</debrisAmount>
+              <weight>	5140.000000	</weight>
+              <metal_1>	40.000000	</metal_1>
+              <stone_1>	18.000000	</stone_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_ASJP_007_Searchlight>
     <inf_fuel_mle008_Canisters1_04>
       <variant1>
         <stages>

@@ -2,14 +2,23 @@
   <ClientMethods>
     <showHint>
       <Args>
-        <hingId>	STRING	</hingId>
-        <hingParams>	ARRAY	  <of>	STRING	</of>
-        </hingParams>
+        <hintName>	STRING	</hintName>
+        <hintParams>	ARRAY	  <of>	TUPLE	  <of>	STRING	</of>
+            <size>	2	</size>
+          </of>
+        </hintParams>
+        <immediately>	BOOL	</immediately>
       </Args>
     </showHint>
     <hideHint>
       <Arg>	STRING	</Arg>
     </hideHint>
+    <removeHint>
+      <Args>
+        <hintName>	STRING	</hintName>
+        <hide>	BOOL	</hide>
+      </Args>
+    </removeHint>
   </ClientMethods>
   <Properties></Properties>
   <ofEntity>

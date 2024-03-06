@@ -184,6 +184,9 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_DUAL_GUN if vehicleDescr is not None else GUN_CAN_BE_DUAL_GUN
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def isDamageMutable(self):
+        return self.descriptor.isDamageMutable
+
     def hasDualAccuracy(self, vehicleDescr=None):
         return vehicleDescr is not None and g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr)
 
@@ -227,8 +230,10 @@ class VehicleGun(VehicleModule):
             return backport.image(R.images.gui.maps.icons.modules.autoLoaderGun())
         elif self.isDualGun(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.dualGun())
+        elif self.hasDualAccuracy(vehDescr):
+            return backport.image(R.images.gui.maps.icons.modules.dualAccuracy())
         else:
-            return backport.image(R.images.gui.maps.icons.modules.dualAccuracy()) if self.hasDualAccuracy(vehDescr) else None
+            return backport.image(R.images.gui.maps.icons.modules.damageMutable()) if self.isDamageMutable() else None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
@@ -349,6 +354,9 @@ class Shell(FittingItem):
     def isModernMechanics(self):
         return self.type in (SHELL_TYPES.HIGH_EXPLOSIVE,) and self.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.MODERN
 
+    def isDamageMutable(self):
+        return self.descriptor.isDamageMutable
+
     def _getAltPrice(self, buyPrice, proxy):
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 
@@ -423,3 +431,6 @@ class Shell(FittingItem):
 
     def _sortByType(self, other):
         return SHELL_TYPES_ORDER_INDICES[self.type] - SHELL_TYPES_ORDER_INDICES[other.type]
+
+    def _getShortInfoKey(self):
+        return '#menu:descriptions/mutableDamageShell' if self.isDamageMutable() else super(Shell, self)._getShortInfoKey()

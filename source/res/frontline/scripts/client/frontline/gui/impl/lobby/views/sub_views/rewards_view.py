@@ -105,7 +105,7 @@ class RewardsView(ViewImpl):
 
         self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.REWARDS.value, parentScreen=currentScreen)
-        self.__rewardsSelectionWindow = showEpicRewardsSelectionWindow(_onRewardReceived, _logRewardSelectionClosed, isAutoDestroyWindowsOnReceivedRewards=False)
+        self.__rewardsSelectionWindow = showEpicRewardsSelectionWindow(level=self.__frontlineLevel, onRewardsReceivedCallback=_onRewardReceived, onCloseCallback=_logRewardSelectionClosed, isAutoDestroyWindowsOnReceivedRewards=False)
 
     def __onEpicUpdate(self, diff):
         if 'metaLevel' in diff:

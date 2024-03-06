@@ -831,7 +831,7 @@ class ACCOUNT_ATTR:
     IGR_BASE = 34359738368L
     IGR_PREMIUM = 68719476736L
     SUSPENDED = 137438953472L
-    FORCE_ONBOARDING_DISABLED = 274877906944L
+    NEWBIE_FEATURES_DISABLED = 274877906944L
 
 
 class PREMIUM_TYPE:
@@ -949,6 +949,7 @@ class Configs(enum.Enum):
     PRESTIGE_CONFIG = 'prestige_config'
     STEAM_SHADE_CONFIG = 'steam_shade_config'
     SYSTEM_CHANNELS = 'system_channels'
+    REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1250,8 +1251,12 @@ class ATTACK_REASON(object):
     def getIndex(cls, attackReason):
         return ATTACK_REASON_INDICES[attackReason]
 
+    @classmethod
+    def getValue(cls, index):
+        return ATTACK_REASONS[index]
 
-ATTACK_REASONS = (ATTACK_REASON.SHOT,
+
+ATTACK_REASONS = [ATTACK_REASON.SHOT,
  ATTACK_REASON.FIRE,
  ATTACK_REASON.RAM,
  ATTACK_REASON.WORLD_COLLISION,
@@ -1280,10 +1285,16 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.BRANDER_RAM,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
- ATTACK_REASON.CGF_WORLD)
+ ATTACK_REASON.CGF_WORLD]
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
+BATTLE_FEEDBACK_REASONS_AFTER_DEATH = frozenset((ATTACK_REASON.SHOT,
+ ATTACK_REASON.FIRE,
+ ATTACK_REASON.RAM,
+ ATTACK_REASON.WORLD_COLLISION,
+ ATTACK_REASON.DROWNING,
+ ATTACK_REASON.OVERTURN))
 DEATH_REASON_ALIVE = -1
 
 class REPAIR_TYPE:
@@ -2082,6 +2093,7 @@ class USER_SERVER_SETTINGS:
     CONTOUR = 106
     UI_STORAGE_2 = 109
     SENIORITY_AWARDS = 113
+    REFERRAL_PROGRAM = 114
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -2211,7 +2223,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.UI_STORAGE_2: 'ui storage 2, used for preserving first entry flags etc',
  110: 'Competitive7x7 carousel filter 1',
  111: 'Competitive7x7 carousel filter 2',
- USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings'}
+ USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings',
+ USER_SERVER_SETTINGS.REFERRAL_PROGRAM: 'referral program settings'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2708,18 +2721,10 @@ def getTimeOnArena(arenaUniqueID):
     return int(timestamp() - getArenaStartTime(arenaUniqueID))
 
 
-class PIERCING_POWER(object):
-    PIERCING_POWER_LAW_POINT = 100.0
-    PIERCING_POWER_LAW_DIST = 400.0
-
-    @staticmethod
-    def computePiercingPowerAtDist(piercingPower, dist, maxDist):
-        pFirst, pLast = piercingPower
-        if dist <= PIERCING_POWER.PIERCING_POWER_LAW_POINT:
-            return pFirst
-        return max(0.0, pFirst + (pLast - pFirst) * (dist - PIERCING_POWER.PIERCING_POWER_LAW_POINT) / PIERCING_POWER.PIERCING_POWER_LAW_DIST) if dist < maxDist + 4.0 else 0.0
-
-
+PIERCING_POWER_INTERPOLATION_DIST_FIRST = 50.0
+PIERCING_POWER_INTERPOLATION_DIST_LAST = 500.0
+DAMAGE_INTERPOLATION_DIST_FIRST = 50.0
+DAMAGE_INTERPOLATION_DIST_LAST = 500.0
 EPIC_RANDOM_GROUPS = 3
 EPIC_RANDOM_GAMEPLAY_NAMES = ('ctf30x30', 'domination30x30')
 EPIC_RANDOM_GAMEPLAY_IDS = tuple((ARENA_GAMEPLAY_IDS[name] for name in EPIC_RANDOM_GAMEPLAY_NAMES))
@@ -3416,8 +3421,6 @@ QUESTS_SUPPORTED_EXCLUDE_TAGS = {'collectorVehicle',
  'premium',
  'event_battles'}
 VEHICLE_HEALTH_DECIMALS = 1
-GUARANTEED_RANDOMIZED_DAMAGE = 1.0
-GUARANTEED_RANDOMIZED_PIERCING_POWER = 1.0
 
 class VehicleDirection(object):
     FORWARD = Vector3(0.0, 0.0, 1.0)
@@ -3527,14 +3530,6 @@ class WINBACK_BATTLE_TOKEN_DRAW_REASON(enum.IntEnum):
     SQUAD = 2
 
 
-class MarkerItem(object):
-    DEFAULT = 0
-    COMP7_RECON = 1
-    POLYGONAL_ZONE = 2
-    STATIC_DEATH_ZONE = 3
-    STATIC_DEATH_ZONE_PROXIMITY = 4
-
-
 class DROP_SKILL_OPTIONS(object):
     FREE_DROP_WITH_TOKEN_INDEX = 99
 
@@ -3549,6 +3544,8 @@ class AchievementsLayoutStates(enum.IntEnum):
     AUTO = 0
     MANUAL = 1
 
+
+DEATH_ZONE_MASK_PATTERN = 'deathzone_mask_'
 
 class ShootImpulseApplicationPoint(object):
     VEHICLE_COM = 'vehicleCOM'

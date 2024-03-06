@@ -28,7 +28,8 @@ _StrongholdEventConfig = namedtuple('_StrongholdEventConfig', ['name',
  'event_start_date',
  'visible_end_date',
  'event_end_date',
- 'show_top_medal'])
+ 'show_top_medal',
+ 'unfreeze_vehicle_roles'])
 _StrongholdEventConfig.__new__.__defaults__ = ('',
  [],
  [],
@@ -40,7 +41,8 @@ _StrongholdEventConfig.__new__.__defaults__ = ('',
  0,
  0,
  0,
- False)
+ False,
+ [])
 
 class StrongholdEventConfig(_StrongholdEventConfig, FieldsCheckerMixin):
 
@@ -51,6 +53,10 @@ class StrongholdEventConfig(_StrongholdEventConfig, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('event_end_date',))
     def getEndDate(self):
         return self.event_end_date
+
+    @fmtUnavailableValue(fields=('unfreeze_vehicle_roles',))
+    def getUnfreezeVehicleRoles(self):
+        return self.unfreeze_vehicle_roles
 
 
 _StrongholdEventSettingsData = namedtuple('_StrongholdEventClanInfoData', ['event_config'])

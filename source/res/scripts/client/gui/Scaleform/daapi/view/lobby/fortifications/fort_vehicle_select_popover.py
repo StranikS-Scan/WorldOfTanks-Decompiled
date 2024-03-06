@@ -146,7 +146,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
          'selected': checkSelectedFunc(vehicle),
          'inHangar': False,
          'isMultiSelect': self._isMultiSelect,
-         'isReadyToFight': vehicle.isReadyToFight and not isFrozen,
+         'isReadyToFight': vehicle.isReadyToFight,
          'enabled': vehicle.isReadyToFight,
          'isFrozen': isFrozen,
          'tooltip': makeTooltip('#tooltips:vehicleStatus/%s/header' % vState, '#tooltips:vehicleStatus/body'),

@@ -11,7 +11,7 @@ from collections import namedtuple, defaultdict
 from math import ceil, floor
 from itertools import izip_longest
 import BigWorld
-from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes
+from constants import SHELL_TYPES, BonusTypes
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import KPI
@@ -21,7 +21,7 @@ from gui.shared.items_parameters import functions, getShellDescriptors, getOptio
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell, getRocketAccelerationKpiFactors
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE, MAX_MUTABLE_DAMAGE_PROP_NAME, MIN_MUTABLE_DAMAGE_PROP_NAME
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
@@ -34,6 +34,7 @@ from shared_utils import findFirst, first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from helpers_common import computePiercingPowerAtDist, computeDamageAtDist
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
 _logger = logging.getLogger(__name__)
@@ -445,13 +446,27 @@ class VehicleParams(_ParameterBase):
 
     @property
     def damage(self):
-        avgDamage = self._itemDescr.shot.shell.damage[0]
-        damageRandomization = self._itemDescr.shot.shell.damageRandomization
-        lowerRandomizationFactor = self.damageAndPiercingDistributionLowerBound / 100.0
-        upperRandomizationFactor = self.damageAndPiercingDistributionUpperBound / 100.0
-        lowerBoundRandomization = damageRandomization - lowerRandomizationFactor
-        upperBoundRandomization = damageRandomization + upperRandomizationFactor
-        return (int(floor(avgDamage - avgDamage * lowerBoundRandomization)), int(ceil(avgDamage + avgDamage * upperBoundRandomization)))
+        shell = self._itemDescr.shot.shell
+        return self.__calculateDamageOrPiercingRandom(shell.armorDamage[0], shell.damageRandomization)
+
+    @property
+    def maxMutableDamage(self):
+        shell = self._itemDescr.shot.shell
+        if shell.isDamageMutable:
+            damage = computeDamageAtDist(shell.armorDamage, PIERCING_DISTANCES[0])
+            return self.__calculateDamageOrPiercingRandom(damage, shell.damageRandomization)
+        else:
+            return None
+
+    @property
+    def minMutableDamage(self):
+        shell = self._itemDescr.shot.shell
+        if shell.isDamageMutable:
+            dist = min(self._itemDescr.shot.maxDistance, PIERCING_DISTANCES[1])
+            damage = computeDamageAtDist(shell.armorDamage, dist)
+            return self.__calculateDamageOrPiercingRandom(damage, shell.damageRandomization)
+        else:
+            return None
 
     @property
     def avgDamage(self):
@@ -477,11 +492,28 @@ class VehicleParams(_ParameterBase):
     def piercingPower(self):
         piercingPower = self._itemDescr.shot.piercingPower[0]
         piercingPowerRandomization = self._itemDescr.shot.shell.piercingPowerRandomization
-        lowerRandomizationFactor = self.damageAndPiercingDistributionLowerBound / 100.0
-        upperRandomizationFactor = self.damageAndPiercingDistributionUpperBound / 100.0
-        lowerBoundRandomization = piercingPowerRandomization - lowerRandomizationFactor
-        upperBoundRandomization = piercingPowerRandomization + upperRandomizationFactor
-        return (int(floor(piercingPower - piercingPower * lowerBoundRandomization)), int(ceil(piercingPower + piercingPower * upperBoundRandomization)))
+        return self.__calculateDamageOrPiercingRandom(piercingPower, piercingPowerRandomization)
+
+    @property
+    def maxPiercingPower(self):
+        shell = self._itemDescr.shot.shell
+        if shell.isPiercingDistanceDependent:
+            piercingPower = computePiercingPowerAtDist(self._itemDescr.shot.piercingPower, PIERCING_DISTANCES[0])
+            piercingPowerRandomization = self._itemDescr.shot.shell.piercingPowerRandomization
+            return self.__calculateDamageOrPiercingRandom(piercingPower, piercingPowerRandomization)
+        else:
+            return None
+
+    @property
+    def minPiercingPower(self):
+        shell = self._itemDescr.shot.shell
+        if shell.isPiercingDistanceDependent:
+            dist = min(self._itemDescr.shot.maxDistance, PIERCING_DISTANCES[1])
+            piercingPower = computePiercingPowerAtDist(self._itemDescr.shot.piercingPower, dist)
+            piercingPowerRandomization = self._itemDescr.shot.shell.piercingPowerRandomization
+            return self.__calculateDamageOrPiercingRandom(piercingPower, piercingPowerRandomization)
+        else:
+            return None
 
     @property
     def reloadTime(self):
@@ -605,8 +637,7 @@ class VehicleParams(_ParameterBase):
                 heCorrection = coeffs['alphaDamage']
         gunCorrection = self.__adjustmentCoefficient('guns').get(self._itemDescr.gun.name, {})
         gunCorrection = gunCorrection.get('caliberCorrection', 1)
-        disp = self.shotDispersionAngle
-        value = round(self.avgDamagePerMinute * penetration / sum(disp) / len(disp) * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
+        value = round(self.avgDamagePerMinute * penetration / self.shotDispersionAngle[-1] * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -989,6 +1020,13 @@ class VehicleParams(_ParameterBase):
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor
 
+    def __calculateDamageOrPiercingRandom(self, avgParam, randomization):
+        lowerRandomizationFactor = self.damageAndPiercingDistributionLowerBound / 100.0
+        upperRandomizationFactor = self.damageAndPiercingDistributionUpperBound / 100.0
+        lowerBoundRandomization = randomization - lowerRandomizationFactor
+        upperBoundRandomization = randomization + upperRandomizationFactor
+        return (int(floor(avgParam - avgParam * lowerBoundRandomization)), int(ceil(avgParam + avgParam * upperBoundRandomization)))
+
     def __calcRealChassisRepairTime(self, chassisRepairTime):
         skillName = 'repair'
         argName = 'vehicleRepairSpeed'
@@ -1215,6 +1253,14 @@ class GunParams(WeightedParam):
         return self._getRawParams()[DAMAGE_PROP_NAME]
 
     @property
+    def maxAvgMutableDamageList(self):
+        return self._getRawParams()[MAX_MUTABLE_DAMAGE_PROP_NAME]
+
+    @property
+    def minAvgMutableDamageList(self):
+        return self._getRawParams()[MIN_MUTABLE_DAMAGE_PROP_NAME]
+
+    @property
     def dispertionRadius(self):
         disp = self._getRawParams()[DISPERSION_RADIUS_PROP_NAME][0]
         gun = self.__getVehicleGun()
@@ -1331,7 +1377,7 @@ class GunParams(WeightedParam):
 
     def __getVehicleGun(self):
         if self._vehicleDescr is not None:
-            _, guns = self._vehicleDescr.getComponentsByType(self._itemDescr.itemTypeName)
+            guns = getGunDescriptors(self._itemDescr, self._vehicleDescr)
             return next((obj for obj in guns if obj.compactDescr == self._itemDescr.compactDescr), None)
         else:
             return
@@ -1353,7 +1399,11 @@ class ShellParams(CompatibleParams):
 
     @property
     def avgDamage(self):
-        return self._itemDescr.damage[0]
+        return self._itemDescr.armorDamage[0]
+
+    @property
+    def avgMutableDamage(self):
+        return self._itemDescr.armorDamage if self._itemDescr.isDamageMutable else None
 
     @property
     def avgPiercingPower(self):
@@ -1376,7 +1426,7 @@ class ShellParams(CompatibleParams):
             for distance in PIERCING_DISTANCES:
                 if distance > maxDistance:
                     distance = int(maxDistance)
-                currPiercing = PIERCING_POWER.computePiercingPowerAtDist(shellDescriptor.piercingPower, distance, maxDistance)
+                currPiercing = computePiercingPowerAtDist(shellDescriptor.piercingPower, distance)
                 result.append((distance, currPiercing))
 
             return result

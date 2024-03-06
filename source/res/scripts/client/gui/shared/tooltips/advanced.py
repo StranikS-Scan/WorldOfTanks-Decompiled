@@ -110,13 +110,16 @@ class ComplexAdvanced(BaseAdvancedTooltip):
 
 class HangarShellAdvanced(BaseAdvancedTooltip):
     _MODERN_SUFFIX = '_MODERN'
+    _TRAY = '_TRAY'
 
     def _getBlocksList(self, *args, **kwargs):
-        movie = SHELL_MOVIES.get((self._item.type, self._item.isModernMechanics), None)
+        movie = SHELL_MOVIES.get((self._item.type, self._item.isModernMechanics, self._item.isDamageMutable()), None)
         header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(self._item.type, default=R.invalid)())
         description = self._item.type
         if self._item.isModernMechanics:
             description += self._MODERN_SUFFIX
+        if self._item.isDamageMutable():
+            description += self._TRAY
         return self._packAdvancedBlocks(movie, header, description)
 
 
@@ -315,8 +318,10 @@ TANKMAN_MOVIES = {'commander': 'crewCommander',
  'gunner': 'crewGunner',
  'loader': 'crewLoader',
  'radioman': 'crewRadioOperator'}
-SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False): 'bulletAP',
- (SHELL_TYPES.HOLLOW_CHARGE, False): 'bulletHEAT',
- (SHELL_TYPES.HIGH_EXPLOSIVE, False): 'bulletHE',
- (SHELL_TYPES.ARMOR_PIERCING_CR, False): 'bulletAPCR',
- (SHELL_TYPES.HIGH_EXPLOSIVE, True): 'bulletHEModern'}
+SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False, False): 'bulletAP',
+ (SHELL_TYPES.HOLLOW_CHARGE, False, False): 'bulletHEAT',
+ (SHELL_TYPES.HIGH_EXPLOSIVE, False, False): 'bulletHE',
+ (SHELL_TYPES.ARMOR_PIERCING_CR, False, False): 'bulletAPCR',
+ (SHELL_TYPES.HIGH_EXPLOSIVE, True, False): 'bulletHEModern',
+ (SHELL_TYPES.ARMOR_PIERCING, False, True): 'bulletAPMutable',
+ (SHELL_TYPES.ARMOR_PIERCING_CR, False, True): 'bulletAPCRMutable'}

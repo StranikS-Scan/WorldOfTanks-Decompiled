@@ -12,6 +12,7 @@ from fun_random.gui.prb_control.entities.squad.actions_validator import FunRando
 from fun_random.gui.prb_control.entities.squad.ctx import FunSquadSettingsCtx, FunSquadChangeSubModeCtx
 from fun_random.gui.prb_control.entities.squad.scheduler import FunRandomSquadScheduler
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getFunRandomFightBtnTooltipData
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
@@ -123,6 +124,9 @@ class FunRandomSquadEntity(SquadEntity):
     def getConfirmDialogMeta(self, ctx):
         desiredSubMode = self.__funRandomController.subModesHolder.getDesiredSubMode()
         return None if desiredSubMode is None or not desiredSubMode.isAvailable() else super(FunRandomSquadEntity, self).getConfirmDialogMeta(ctx)
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getFunRandomFightBtnTooltipData(self.canPlayerDoAction(), True), False) if isStateDisabled else super(FunRandomSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
 
     def getCurrentSPGCount(self):
         return self.__restrictedSPGDataProvider.getCurrentVehiclesCount()

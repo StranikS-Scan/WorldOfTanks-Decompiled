@@ -81,7 +81,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     @property
     def __roleEquipments(self):
-        if self.__roleEquipmentsCache is None:
+        if not self.__roleEquipmentsCache:
             self.__roleEquipmentsCache = {}
             equipmentsCache = vehicles.g_cache.equipments()
             roleEquipmentsConfig = self.getModeSettings().roleEquipments
@@ -161,6 +161,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return
 
     def onAccountBecomePlayer(self):
+        settings = self.__lobbyContext.getServerSettings().getSettings()
+        if not settings:
+            return
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
 
     def onAccountBecomeNonPlayer(self):

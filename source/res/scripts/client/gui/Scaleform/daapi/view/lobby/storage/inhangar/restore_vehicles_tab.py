@@ -15,6 +15,8 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
 from adisp import adisp_process
+from gui.impl import backport
+from gui.impl.gen import R
 
 class _RestoreStorageCarouselFilter(StorageCarouselFilter):
 
@@ -51,7 +53,8 @@ class _RestoreVehiclesDataProvider(StorageCarouselDataProvider):
          'description': description,
          'timerText': timerText,
          'timerIcon': timerIcon,
-         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM})
+         'contextMenuId': CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM,
+         'sellButtonLabel': backport.text(R.strings.storage.buttonLabel.restore())})
         return vo
 
 

@@ -200,9 +200,9 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'onMoveRotationSpeedFactor',
  'fireStartingChanceFactor',
  'multShotDispersionFactor',
- 'chassisHealthAfterHysteresisFactor',
+ 'isSetChassisMaxHealthAfterHysteresis',
  'centerRotationFwdSpeedFactor')
-VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = dict(((value, index) for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)))
+VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = {value:index for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)}
 
 class EnhancementItem(object):
     __slots__ = ('name', 'value', 'op')
@@ -431,6 +431,14 @@ class VehicleDescriptor(object):
     role = property(lambda self: self.type.role)
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
     isYawHullAimingAvailable = property(lambda self: self.type.hullAimingParams['yaw']['isAvailable'])
+
+    @property
+    def minHullAimingPitch(self):
+        return self.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
+
+    @property
+    def maxHullAimingPitch(self):
+        return self.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMax']
 
     @property
     def hasBurnout(self):
@@ -1485,7 +1493,7 @@ class VehicleDescriptor(object):
          'onMoveRotationSpeedFactor': 1.0,
          'fireStartingChanceFactor': 1.0,
          'multShotDispersionFactor': 1.0,
-         'chassisHealthAfterHysteresisFactor': 1.0,
+         'isSetChassisMaxHealthAfterHysteresis': False,
          'ammoBayHealthFactor': 1.0,
          'engineHealthFactor': 1.0,
          'chassisHealthFactor': 1.0,
@@ -4471,6 +4479,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     if not v:
         _xml.raiseWrongXml(xmlCtx, 'shots', 'no shots are specified')
     item.shots = tuple(v)
+    item.isDamageMutable = any((shot.shell.isDamageMutable for shot in item.shots))
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
     return
 
@@ -4982,7 +4991,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.type = shellType
     mechanics = intern(_xml.readStringWithDefaultValue(xmlCtx, section, 'mechanics', SHELL_MECHANICS_TYPE.LEGACY))
     isModernHighExplosive = mechanics == SHELL_MECHANICS_TYPE.MODERN
-    shell.damage = (_xml.readPositiveFloat(xmlCtx, section, 'damage/armor'), _xml.readPositiveFloat(xmlCtx, section, 'damage/devices'))
+    shell.armorDamage = shared_readers.readFloatPair(xmlCtx, section, 'damage/armor')
+    shell.isDamageMutable = shell.armorDamage[0] != shell.armorDamage[1]
+    shell.deviceDamage = shared_readers.readFloatPair(xmlCtx, section, 'damage/devices')
     if section.has_key('deviceDamagePossibility/protectFromDirectHits'):
         shellType.protectFromDirectHits = readProtectedModules(xmlCtx, section, 'deviceDamagePossibility/protectFromDirectHits')
     if kind == 'HIGH_EXPLOSIVE' and section.has_key('deviceDamagePossibility/protectFromIndirectHits'):
@@ -5007,7 +5018,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.blastWave = blastWave
             shellType.shellFragments = shellFragments
             shellType.armorSpalls = armorSpalls
-            shellType.maxDamage = max(shellFragments.damages[0], shellFragments.damages[1], armorSpalls.damages[0], armorSpalls.damages[1], blastWave.damages[0], blastWave.damages[1])
+            shellType.maxDamage = max(max(shellFragments.armorDamage), max(shellFragments.deviceDamage), max(armorSpalls.armorDamage), max(armorSpalls.deviceDamage), max(blastWave.armorDamage), max(blastWave.deviceDamage))
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
@@ -6602,8 +6613,17 @@ def _readRocketAccelerationParams(xmlCtx, section):
     else:
         kpi = None
     if IS_CLIENT or IS_UE_EDITOR:
-        effectsCtx, effectsSection = _xml.getSubSectionWithContext(xmlCtx, section, 'effects')
-        effectsPrefab = _xml.readStringOrEmpty(effectsCtx, effectsSection, 'rocketAccelerationPrefab')
+        rocketEffectSection = section['effectsPrefab/rocketAcceleration']
+        if rocketEffectSection:
+            defaultPrefab = _xml.readNonEmptyString(xmlCtx, rocketEffectSection, 'prefab')
+            effectsPrefab = {'default': defaultPrefab}
+            effectsSetsSection = rocketEffectSection['sets']
+            if effectsSetsSection:
+                for k, v in effectsSetsSection.items():
+                    effectsPrefab[k] = _xml.readNonEmptyString(xmlCtx, v, 'prefab')
+
+        else:
+            effectsPrefab = None
     else:
         effectsPrefab = None
     return shared_components.RocketAccelerationParams(deployTime=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'deployTime'), reloadTime=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'reloadTime'), reuseCount=_xml.readInt(rocketCtx, rocketSection, 'reuseCount', minVal=-1), duration=_xml.readNonNegativeFloat(rocketCtx, rocketSection, 'duration'), impulse=impulse, modifiers=modifiers, kpi=kpi, effectsPrefab=effectsPrefab)
@@ -6713,19 +6733,21 @@ def _readImpactParams(xmlCtx, section, paramName):
     params = HighExplosiveImpactParams()
     if subsection is None:
         params.radius = 0.0
-        params.damages = (0.0, 0.0)
+        params.armorDamage = (0.0, 0.0)
+        params.deviceDamage = (0.0, 0.0)
         params.isActive = False
         return params
     else:
         params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
-        params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
+        params.armorDamage = shared_readers.readFloatPair(subXmlCtx, subsection, 'damage/armor')
+        params.deviceDamage = shared_readers.readFloatPair(subXmlCtx, subsection, 'damage/devices')
         if paramName == HighExplosiveImpact.ARMOR_SPALLS:
             params.coneAngleCos = cos(radians(_xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngle')))
             params.piercingSpalls = _xml.readBool(subXmlCtx, subsection, 'piercingSpalls', component_constants.DEFAULT_PIERCING_SPALLS)
         if subsection.has_key('damageAbsorption'):
             label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
             params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
-        params.isActive = params.radius and (params.damages[0] or params.damages[1])
+        params.isActive = params.radius and (any(params.armorDamage) or any(params.deviceDamage))
         return params
 
 

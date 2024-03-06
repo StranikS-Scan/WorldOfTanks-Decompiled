@@ -77,7 +77,7 @@ def _getTooltipByContentIdMap():
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
 class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isEventEnabled', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
+    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
     uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
@@ -88,13 +88,12 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
-    def __init__(self, layoutId, isEventEnabled=False, provider=None, subSelectorCallback=None):
+    def __init__(self, layoutId, provider=None, subSelectorCallback=None):
         super(ModeSelectorView, self).__init__(ViewSettings(layoutId, ViewFlags.LOBBY_TOP_SUB_VIEW, ModeSelectorModel()))
         self.__dataProvider = provider if provider else ModeSelectorDataProvider()
         self.__blur = None
         self.__prevOptimizationEnabled = False
         self.__prevAppBackgroundAlpha = 0.0
-        self.__isEventEnabled = isEventEnabled
         self.__isClickProcessing = False
         self.__isGraphicsRestored = False
         self.__subSelectorCallback = subSelectorCallback
@@ -158,7 +157,7 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
 
     def createPopOverContent(self, event):
         if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover():
-            if self.__winbackController.getWinbackBattlesCountLeft() > 0:
+            if self.__winbackController.isModeAvailable():
                 return WinbackLeaveModePopoverView()
             return RandomBattlePopover()
         return super(ModeSelectorView, self).createPopOverContent(event)

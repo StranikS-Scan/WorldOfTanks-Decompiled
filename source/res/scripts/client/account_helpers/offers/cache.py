@@ -45,12 +45,14 @@ class ExternalCache(BaseExternalCache):
              ''))
             resMap = {'localizations': set(),
              'images': set()}
-            for offer in self._offersProvider.iAvailableOffers():
+            for offer in self._offersProvider.iUnlockedOffers():
                 resMap['localizations'].update({offer.cdnLocFilePath})
                 resMap['images'].update({offer.cdnBannerLogoPath,
                  offer.cdnLogoPath,
                  offer.cdnGiftsBackgroundPath,
-                 offer.cdnGiftsTokenImgPath})
+                 offer.cdnGiftsTokenImgPath,
+                 offer.cdnSignSmallImgPath,
+                 offer.cdnSignBigImgPath})
                 for gift in offer.availableGifts:
                     resMap['localizations'].update({gift.cdnLocFilePath})
                     resMap['images'].update({gift.cdnImagePath, gift.cdnIconPath})

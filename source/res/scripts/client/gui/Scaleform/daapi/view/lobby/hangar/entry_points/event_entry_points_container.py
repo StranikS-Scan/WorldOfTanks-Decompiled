@@ -49,6 +49,7 @@ class _EntryPointData(object):
      'endDate',
      'priority',
      'data',
+     'extension',
      '__isValidData']
 
     def __init__(self, entryData):
@@ -59,6 +60,7 @@ class _EntryPointData(object):
         endDateStr = entryData.get('endDate')
         self.priority = entryData.get('priority')
         priorityIsInt = isinstance(self.priority, int)
+        self.extension = entryData.get('extension', '')
         self.__isValidData = priorityIsInt and self.id is not None and startDateStr is not None and endDateStr is not None
         if self.__isValidData:
             self.startDate = getTimestampByStrDate(startDateStr)
@@ -213,7 +215,8 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
                 if isValidCount and entry.getIsValidDateForCreation() and entry.getIsEnabledByValidator() and self.__luiController.isRuleCompleted(entry.getLUIRule()):
                     count += 1
                     data.append({'entryLinkage': entry.id,
-                     'swfPath': _ADDITIONAL_SWFS_MAP.get(entry.id, '')})
+                     'swfPath': _ADDITIONAL_SWFS_MAP.get(entry.id, ''),
+                     'extension': entry.extension})
 
         self.as_updateEntriesS(data)
 

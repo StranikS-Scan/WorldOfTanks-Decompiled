@@ -48,6 +48,7 @@ class WinbackLeaveModePopoverView(PopOverViewImpl):
 
     def __onClick(self):
         leaveWinbackMode(WINBACK_BATTLE_TOKEN_DRAW_REASON.MANUAL, showConfirmDialog=True, callback=selectRandom)
+        self.destroyWindow()
 
     def __updateBulletSetting(self):
         setWinbackSetting(Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN, True)

@@ -54,14 +54,6 @@ class SteamCompletionController(ISteamCompletionController):
         uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
         return uiStorage.get(UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED)
 
-    @property
-    def abTestGroup(self):
-        return self._itemsCache.items.stats.steamShadeGroup
-
-    def getSteamShadeConfigs(self):
-        serverSettings = self._lobbyContext.getServerSettings()
-        return serverSettings.abFeatureTestConfig.getSteamShadeProperties(self.abTestGroup) if self.abTestGroup and serverSettings.abFeatureTestConfig.steamShade else serverSettings.steamShadeConfig
-
     def onLobbyStarted(self, ctx):
         if not self.__isLobbyInited:
             lockNotificationManager(lock=True)
@@ -111,7 +103,7 @@ class SteamCompletionController(ISteamCompletionController):
         lockNotificationManager(lock=False, releasePostponed=True)
 
     def __canSteamShadeShow(self):
-        steamShadeConfig = self.getSteamShadeConfigs()
+        steamShadeConfig = self._lobbyContext.getServerSettings().steamShadeConfig
         if steamShadeConfig.battlesPlayed < 0 and steamShadeConfig.sessions < 0:
             return False
         battles = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()

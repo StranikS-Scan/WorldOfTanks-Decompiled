@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/pages/shop_page.py
 from functools import partial
+import logging
 import typing
 from shared_utils import findFirst
 from shared_utils import first
@@ -48,6 +49,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
+_logger = logging.getLogger(__name__)
 _PRODUCT_TYPE_ORDER = [ProductTypes.VEHICLE, ProductTypes.STYLE3D, ProductTypes.REWARD]
 if typing.TYPE_CHECKING:
     from typing import Dict
@@ -208,6 +210,7 @@ class ShopPage(PageSubModelPresenter):
     def __updateData(self, *_, **__):
         self.viewModel.setShopState(ShopState.INITIAL)
         if not self.__comp7ShopController.isShopEnabled:
+            _logger.warning('comp7 shop disabled')
             self.__switchToErrorState()
             return
         self.__products = self.__comp7ShopController.getProducts()
@@ -221,6 +224,7 @@ class ShopPage(PageSubModelPresenter):
             self.__products = self.__products or self.__comp7ShopController.getProducts()
             hasDataError = len(self.__products) == 0
             if hasDataError:
+                _logger.warning('no products were found for comp7 shop')
                 self.__switchToErrorState()
                 return
             self.__switchToSuccessState()

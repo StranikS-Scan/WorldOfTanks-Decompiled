@@ -38,18 +38,24 @@ class StaticDeathZoneVisual(DynamicScriptComponent):
         self.entity.onActiveChanged -= self._onEntityActiveChanged
 
     def show(self):
-        self._drawBorders()
+        if self.drawBorder:
+            self._drawBorders()
         StaticDeathZoneVisual.onShowDeathZone(self.entity.zoneId, self)
 
     def hide(self):
-        self._hideBorders()
+        if self.drawBorder:
+            self._hideBorders()
         StaticDeathZoneVisual.onHideDeathZone(self.entity.zoneId)
 
     def getClosestPoint(self, point, _):
-        return self._borders.getClosestPoint(point)
+        closestPoint = self._borders.getClosestPoint(point)
+        return (closestPoint, (point - closestPoint).length)
 
     def getCorners(self):
         return self._borders.rect
+
+    def getDimensions(self):
+        return self.deathzone_size
 
     def _onAvatarReady(self):
         super(StaticDeathZoneVisual, self)._onAvatarReady()
@@ -128,8 +134,8 @@ class _BordersHelper(object):
 
     def getClosestPoint(self, point):
         x = min(max(point[0], self._min.x), self._max.x)
-        y = min(max(point[2], self._max.z), self._min.z)
-        return Vector3(x, point.y, y)
+        z = min(max(point[2], self._max.z), self._min.z)
+        return Vector3(x, point.y, z) if x != point.x or z != point.z else self._max
 
     @property
     def rect(self):

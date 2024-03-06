@@ -476,3 +476,21 @@ class StrongholdEventGetFrozenVehiclesCtx(CommonWebRequestCtx):
 
     def isAuthorizationRequired(self):
         return True
+
+
+class StrongholdEventUnfreezeVehicleCtx(CommonWebRequestCtx):
+
+    def __init__(self, playerSpaID, vehicleCD, price, **kwargs):
+        super(StrongholdEventUnfreezeVehicleCtx, self).__init__(**kwargs)
+        self.__playerSpaID = playerSpaID
+        self.__vehicleCD = vehicleCD
+        self.__price = price
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_EVENT_UNFREEZE_VEHICLE
+
+    def getRequestArgs(self):
+        return (self.__playerSpaID, self.__vehicleCD, self.__price)
+
+    def isAuthorizationRequired(self):
+        return True

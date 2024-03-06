@@ -81,6 +81,9 @@ class BaseLegacyEntity(BasePrbEntity):
     def isGUIProcessed(self):
         return False
 
+    def _goToHangar(self):
+        pass
+
 
 class LegacyIntroEntryPoint(BasePrbEntryPoint):
 

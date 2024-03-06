@@ -855,6 +855,44 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'wgsh', url)
 
+    def get_wgsh_common_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        try:
+            periphery_id = int(periphery_id)
+            unit_server_id = int(unit_server_id)
+        except (TypeError, ValueError):
+            error = exceptions.BadRequest()
+            return callback({'description': error.description}, error.status_code, error.response_code)
+
+        get_params = {'periphery_id': periphery_id,
+         'unit_server_id': unit_server_id,
+         'rev': rev}
+        url = '/unit_api/periphery/units/info/?{get_params}'.format(get_params=urlencode(get_params))
+
+        @preprocess_callback(callback, 'wgsh')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'wgsh', url)
+
+    def get_wgsh_account_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        try:
+            periphery_id = int(periphery_id)
+            unit_server_id = int(unit_server_id)
+        except (TypeError, ValueError):
+            error = exceptions.BadRequest()
+            return callback({'description': error.description}, error.status_code, error.response_code)
+
+        get_params = {'periphery_id': periphery_id,
+         'unit_server_id': unit_server_id,
+         'rev': rev}
+        url = '/unit_api/periphery/units/account_info/?{get_params}'.format(get_params=urlencode(get_params))
+
+        @preprocess_callback(callback, 'wgsh')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'wgsh', url)
+
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
         try:
             periphery_id = int(periphery_id)

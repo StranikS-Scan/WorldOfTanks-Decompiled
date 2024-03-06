@@ -73,8 +73,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setGoldFishEnabledS(self, isEnabled, playAnimation, tooltip, tooltipType):
         return self.flashObject.as_setGoldFishEnabled(isEnabled, playAnimation, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateSquadS(self, isInSquad, tooltip, tooltipType, isEvent, icon, hasPopover, data):
-        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon, hasPopover, data) if self._isDAAPIInited() else None
+    def as_updateSquadS(self, isInSquad, tooltip, tooltipType, isEvent, icon, hasPopover, eventBgLinkage, data):
+        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon, hasPopover, eventBgLinkage, data) if self._isDAAPIInited() else None
 
     def as_nameResponseS(self, data):
         return self.flashObject.as_nameResponse(data) if self._isDAAPIInited() else None
@@ -91,8 +91,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setPremShopDataS(self, iconSrc, premShopText, tooltip, tooltipType):
         return self.flashObject.as_setPremShopData(iconSrc, premShopText, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled, showLegacySelector, hasNew):
-        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled, showLegacySelector, hasNew) if self._isDAAPIInited() else None
+    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventAnimEnabled, eventBgLinkage, showLegacySelector, hasNew):
+        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventAnimEnabled, eventBgLinkage, showLegacySelector, hasNew) if self._isDAAPIInited() else None
 
     def as_setServerS(self, name, tooltip, tooltipType):
         return self.flashObject.as_setServer(name, tooltip, tooltipType) if self._isDAAPIInited() else None
@@ -111,6 +111,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setFightButtonS(self, label):
         return self.flashObject.as_setFightButton(label) if self._isDAAPIInited() else None
+
+    def as_setFightButtonHighlightS(self, linkage):
+        return self.flashObject.as_setFightButtonHighlight(linkage) if self._isDAAPIInited() else None
 
     def as_setCoolDownForReadyS(self, value):
         return self.flashObject.as_setCoolDownForReady(value) if self._isDAAPIInited() else None

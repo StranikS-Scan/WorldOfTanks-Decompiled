@@ -7,6 +7,7 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getRandomTooltipData
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -74,7 +75,6 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingIntroEntity, self).init(clientPrb=clientPrb, ctx=ctx)
-        g_eventDispatcher.loadTrainingList()
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         self.__watcher = BaseVehiclesWatcher()
         self.__watcher.start()
@@ -107,8 +107,14 @@ class TrainingIntroEntity(LegacyIntroEntity):
     def getPermissions(self, pID=None):
         return TrainingIntroPermissions()
 
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getRandomTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(TrainingIntroEntity, self).getFightBtnTooltipData(isStateDisabled)
+
     def _createActionsValidator(self):
         return TrainingIntroActionsValidator(self)
+
+    def _goToHangar(self):
+        g_eventDispatcher.loadTrainingList()
 
 
 class TrainingEntity(LegacyEntity):

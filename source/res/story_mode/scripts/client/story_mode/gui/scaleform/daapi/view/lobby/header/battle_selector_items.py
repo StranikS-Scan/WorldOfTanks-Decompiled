@@ -14,7 +14,7 @@ def addStoryModeType(items):
     items.append(_StoryModeItem(backport.text(R.strings.sm_lobby.headerButtons.battle.types.story_mode()), PREBATTLE_ACTION_NAME.STORY_MODE, 2, SELECTOR_BATTLE_TYPES.STORY_MODE))
 
 
-class _StoryModeItem(battle_selector_items._SelectorItem):
+class _StoryModeItem(battle_selector_items.SelectorItem):
     storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     def select(self):

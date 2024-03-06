@@ -85,5 +85,14 @@ class IOffersDataProvider(object):
     def isOfferAvailable(self, tokenID):
         raise NotImplementedError
 
+    def iUnlockedOffers(self, onlyVisible=True):
+        raise NotImplementedError
+
+    def getUnlockedOffers(self, onlyVisible=True):
+        raise NotImplementedError
+
+    def isOfferUnlocked(self, tokenID):
+        raise NotImplementedError
+
     def getAmountOfGiftsGenerated(self, tokenID, mainTokenCount):
         raise NotImplementedError

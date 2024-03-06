@@ -481,6 +481,9 @@ class _ArenaModifiersVisitor(IArenaVisitor):
     def getShellRicochetCos(self, shellKind):
         return self._shellData[shellKind][1]
 
+    def getConstantsModification(self):
+        return self._modifiers.getConstantsModification()
+
 
 class _ClientArenaVisitor(IClientArenaVisitor):
     __slots__ = ('__weakref__', '_arena', '_canSubscribe', '_gui', '_bonus', '_type', '_extra', '_vehicles', '_modifiers')

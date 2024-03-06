@@ -1856,7 +1856,7 @@
         <_100mm_D54_obr_45_1>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -1881,22 +1881,22 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	9	</reloadTime>
           <clip>
             <count>	3	</count>
-            <rate>	13.95	</rate>
+            <rate>	15	</rate>
           </clip>
           <autoreload>
             <reloadTime>	19 15 8.5	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <shotDispersionFactors>
-            <turretRotation>	0.23	</turretRotation>
-            <afterShot>	4.5	</afterShot>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.1	</aimingTime>
+          <aimingTime>	2.9	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R187_Object_590/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R187_Object_590/crash/lod0/Gun_01.model	</destroyed>

@@ -15,7 +15,10 @@ from gui.Scaleform.framework.entities.sf_window import SFWindow
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
 _logger = logging.getLogger(__name__)
-_LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW, VIEW_ALIAS.AWARD_WINDOW_MODAL, VIEW_ALIAS.ADVENT_CALENDAR)
+_LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW,
+ VIEW_ALIAS.AWARD_WINDOW_MODAL,
+ VIEW_ALIAS.ADVENT_CALENDAR,
+ VIEW_ALIAS.MISSION_AWARD_WINDOW)
 _LOW_PRIORITY_WULF_WINDOWS = (R.views.lobby.offers.OfferBannerWindow(),)
 
 class FullscreenManager(IFullscreenManager):

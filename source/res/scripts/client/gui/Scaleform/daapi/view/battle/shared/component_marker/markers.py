@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/component_marker/markers.py
 import logging
+from chat_commands_consts import INVALID_TARGET_ID
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import World2DMarkerComponent, MinimapMarkerComponent, AnimationSequenceMarkerComponent, DirectionIndicatorMarkerComponent, ComponentBitMask, TerrainMarkerComponent
 from ids_generators import SequenceIDGenerator
 _logger = logging.getLogger(__name__)
@@ -13,14 +14,18 @@ class MarkerBase(object):
      ComponentBitMask.ANIM_SEQUENCE_MARKER: AnimationSequenceMarkerComponent,
      ComponentBitMask.TERRAIN_MARKER: TerrainMarkerComponent}
 
-    def __init__(self, markerData):
+    def __init__(self, config, entity=None, targetID=INVALID_TARGET_ID):
         super(MarkerBase, self).__init__()
         self.__markerID = self._idGen.next()
-        self._isVisible = markerData.get('visible', True)
+        self._isVisible = config.get('visible', True)
         self._blockChangVisibility = not self._isVisible
         self._components = {}
-        self._mask = markerData.get('bitMask', ComponentBitMask.NONE)
-        self.__initComponents(markerData, self._mask)
+        self._mask = config.get('bitMask', ComponentBitMask.NONE)
+        self.__initComponents(config, self._mask, entity, targetID)
+
+    @property
+    def components(self):
+        return self._components
 
     @property
     def mask(self):
@@ -104,24 +109,25 @@ class MarkerBase(object):
         for component in self._components.itervalues():
             component.setMarkerEntity(entity)
 
-    def __initComponents(self, markerData, markerBitMask):
+    def __initComponents(self, config, markerBitMask, entity, targetID):
         for flag in ComponentBitMask.LIST:
             if not flag & markerBitMask:
                 continue
-            componentConfigs = markerData.get(flag, [])
-            for idx, componentConfig in enumerate(componentConfigs):
+            componentConfigs = config.get(flag, [])
+            for componentConfig in componentConfigs:
                 clazz = componentConfig.get('clazz') or self.COMPONENT_CLASS.get(flag)
-                if clazz:
-                    self.addComponent(clazz(idx, markerData))
+                if not clazz:
+                    continue
+                self.addComponent(clazz(componentConfig, config.get('matrixProduct'), entity, targetID, self.isVisible))
 
 
 class AreaMarker(MarkerBase):
 
-    def __init__(self, markerData):
-        super(AreaMarker, self).__init__(markerData)
-        self._disappearingRadius = markerData.get('disappearingRadius', 0.0)
-        self._reverseDisappearing = markerData.get('reverseDisappearing', False)
-        self._areaRadius = markerData.get('areaRadius', 0.0)
+    def __init__(self, config, entity=None, targetID=INVALID_TARGET_ID):
+        super(AreaMarker, self).__init__(config, entity, targetID)
+        self._disappearingRadius = config.get('disappearingRadius', 0.0)
+        self._reverseDisappearing = config.get('reverseDisappearing', False)
+        self._areaRadius = config.get('areaRadius', 0.0)
 
     @property
     def disappearingRadius(self):

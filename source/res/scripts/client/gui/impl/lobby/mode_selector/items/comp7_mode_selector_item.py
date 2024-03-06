@@ -68,7 +68,7 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
             elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))
             else:
-                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd()))
+                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd.dyn(getSeasonNameEnum().value)()))
         return
 
     def __getSeasonTimeLeft(self):

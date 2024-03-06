@@ -434,10 +434,10 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
                 userName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=userName)
         nameStr = text_styles.highTitle(userName)
         typeStr = text_styles.main(vehicleType)
-        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
         icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
         leftOffset = 101
-        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=leftOffset, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
+        description = text_styles.standard(backport.text(R.strings.tooltips.vehicle.level_and_type(), vehicleLevel=text_styles.stats(int2roman(self.vehicle.level)), vehicleType=typeStr))
+        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=description, descPadding=formatters.packPadding(top=7), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-9, txtOffset=leftOffset, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
         if self.vehicle.role != constants.ROLE_TYPE.NOT_DEFINED:
             roleLabel = self.vehicle.roleLabel
             headerBlocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.menu.roleExp.roleLabel()) + ' ' + backport.text(R.strings.menu.roleExp.roleName.dyn(roleLabel)(), groupName=backport.text(R.strings.menu.roleExp.roleGroupName.dyn(roleLabel)()))), padding=formatters.packPadding(top=-9, left=leftOffset, bottom=9)))

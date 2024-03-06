@@ -872,4 +872,101 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz04_T50_51	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	868	</id>
+      <texture>	gui/maps/vehicles/styles/Cz04_T50_51_BXI_3DSt.png	</texture>
+      <modelsSet>	Cz04_T50_51_BXI_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Cz04_T50_51_BXI_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Cz04_T50_51_BXI_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression	</tags>
+      <styleProgressions>
+        <stage>
+          <materials>	tank_upgrade_1 tank_hull_upgrade_1	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	80	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_2 tank_hull_upgrade_2	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	80	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_3 tank_hull_upgrade_3	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	80	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_4 tank_hull_upgrade_4 tank_upgrade_4_skinned	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <attachments>
+                <item>
+                  <slotId>	18000	</slotId>
+                  <id>	85	</id>
+                </item>
+              </attachments>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <insignias>
+            <item>
+              <id>	61	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </czech.xml>

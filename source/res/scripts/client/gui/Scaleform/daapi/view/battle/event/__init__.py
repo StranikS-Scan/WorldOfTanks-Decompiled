@@ -26,7 +26,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
-    from gui.Scaleform.daapi.view.battle.event import battle_hint
+    from gui.Scaleform.daapi.view.battle.shared import battle_hint
     from gui.Scaleform.daapi.view.battle.event import players_panel as event_players_panel
     from gui.Scaleform.daapi.view.battle.event.event_loading_page import EventLoadingPage
     from gui.Scaleform.daapi.view.battle.event import event_point_counter

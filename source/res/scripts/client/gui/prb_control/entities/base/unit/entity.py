@@ -12,6 +12,10 @@ from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE
 from constants import REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getSquadFightBtnTooltipData
+from gui.Scaleform.settings import TOOLTIP_TYPES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prb_getters, settings
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator
@@ -30,6 +34,7 @@ from gui.prb_control.items import unit_items, ValidationResult
 from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import ListenersCollection
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers import time_utils
@@ -123,6 +128,14 @@ class BaseUnitEntity(BasePrbEntity):
 
     def validateLevels(self):
         return ValidationResult()
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getSquadFightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else ('', False)
+
+    def getSquadBtnTooltipData(self):
+        header = backport.text(R.strings.platoon.headerButton.tooltips.inSquad.header())
+        body = backport.text(R.strings.platoon.headerButton.tooltips.inSquad.body())
+        return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
 
 
 class _UnitIntroEntryPoint(BasePrbEntryPoint):
@@ -362,7 +375,6 @@ class _UnitIntroEntity(_UnitEntity):
 
     def init(self, ctx=None):
         super(_UnitIntroEntity, self).init(ctx=ctx)
-        self._loadUnit()
         return FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, ctx=None, woEvents=False):
@@ -406,6 +418,9 @@ class _UnitIntroEntity(_UnitEntity):
 
     def showGUI(self, ctx=None):
         self._showWindow()
+
+    def _goToHangar(self):
+        self._loadUnit()
 
     def _createRosterSettings(self):
         return unit_items.SupportedRosterSettings.last(self._prbType)

@@ -211,7 +211,8 @@ def __getIcon(item, progressionLevel):
         else:
             icon = item.iconByProgressionLevel(progressionLevel)
     else:
-        icon = item.icon
+        useIcon = item.itemTypeID in (GUI_ITEM_TYPE.CAMOUFLAGE, GUI_ITEM_TYPE.PROJECTION_DECAL)
+        icon = item.icon if useIcon else item.iconUrl
     return icon
 
 

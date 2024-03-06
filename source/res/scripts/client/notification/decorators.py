@@ -8,7 +8,6 @@ from frameworks.wulf import WindowLayer
 from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
@@ -24,6 +23,7 @@ from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.system_factory import collectCustomizationHangarDecorator
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
@@ -305,7 +305,7 @@ class LockButtonMessageDecorator(MessageDecorator):
     def _viewLoaded(self, event):
         if event.alias in self._getLockAliases():
             self._updateButtonsState(lock=True)
-        elif VIEW_ALIAS.LOBBY_HANGAR == event.alias:
+        elif VIEW_ALIAS.LOBBY_HANGAR == event.alias or g_viewOverrider.isViewOverriden(VIEW_ALIAS.LOBBY_HANGAR):
             self._updateButtons(event)
 
     def _onViewOverriden(self, alias, *_):
@@ -349,10 +349,13 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
 
     def _getIsLocked(self):
         isLocked = True
-        vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
-            isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
-        return isLocked
+        if any((handler() for handler in collectCustomizationHangarDecorator())):
+            return isLocked
+        else:
+            vehicle = self._getVehicle()
+            if vehicle is not None and vehicle.isCustomizationEnabled():
+                isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
+            return isLocked
 
     def _getVehicle(self):
         vehicle = None

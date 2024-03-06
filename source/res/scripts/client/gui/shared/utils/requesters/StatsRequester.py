@@ -335,12 +335,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('limitedUi', {}).get('ver', 1)
 
     @property
-    def steamShadeGroup(self):
-        return self.getCacheValue('abFeatureTest', {}).get('steamShade')
-
-    @property
     def defaultSettingsGroup(self):
         return self.getCacheValue('abFeatureTest', {}).get('defaultSettings', 'new')
+
+    @property
+    def newbieHintsGroup(self):
+        return self.getCacheValue('abFeatureTest', {}).get('newbieHints')
 
     @adisp_async
     def _requestCache(self, callback):

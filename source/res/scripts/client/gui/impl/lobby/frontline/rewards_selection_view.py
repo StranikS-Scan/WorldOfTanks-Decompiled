@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/frontline/rewards_selection_view.py
+from functools import partial
 from AccountCommands import RES_SUCCESS
 from frameworks.wulf import WindowFlags
 from gui import SystemMessages
@@ -17,22 +18,24 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
 from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 
+def _isValidReward(level, tokenID):
+    tokenLevel = tokenID.split(':')[-1]
+    return not level or int(tokenLevel) <= level
+
+
 class RewardsSelectionView(SelectableRewardBase):
     __slots__ = ('__onRewardsReceivedCallback', '__onCloseCallback', '__onLoadedCallback', '__isViewLoaded', '__uiEpicBattleLogger', '__isAutoDestroyWindowsOnReceivedRewards')
     _helper = EpicSelectableRewardManager
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True):
+    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True, level=0):
         self.__onRewardsReceivedCallback = onRewardsReceivedCallback
         self.__onCloseCallback = onCloseCallback
         self.__onLoadedCallback = onLoadedCallback
         self.__isViewLoaded = False
         self.__isAutoDestroyWindowsOnReceivedRewards = isAutoDestroyWindowsOnReceivedRewards
         self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
-        super(RewardsSelectionView, self).__init__(R.views.lobby.frontline.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(), RewardsSelectionViewModel)
-
-    def _getReceivedRewards(self, rewardName):
-        pass
+        super(RewardsSelectionView, self).__init__(R.views.lobby.frontline.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, level)), RewardsSelectionViewModel)
 
     @property
     def viewModel(self):
@@ -87,6 +90,15 @@ class RewardsSelectionView(SelectableRewardBase):
         if self.__isAutoDestroyWindowsOnReceivedRewards:
             self.destroyWindow()
 
+    def _getReceivedRewards(self, rewardName):
+        pass
+
+    def _iterSelectableBonus(self, cart):
+        for tab in cart.itervalues():
+            for rewardName, reward in tab.iteritems():
+                for bonus in reward[:self._getRewardsInCartCount(rewardName)]:
+                    yield bonus
+
     def __onViewLoaded(self):
         if not self.__isViewLoaded:
             self.__safeCall(self.__onLoadedCallback)
@@ -101,5 +113,5 @@ class RewardsSelectionView(SelectableRewardBase):
 class RewardsSelectionWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True):
-        super(RewardsSelectionWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RewardsSelectionView(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards))
+    def __init__(self, onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True, level=0):
+        super(RewardsSelectionWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RewardsSelectionView(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards, level))

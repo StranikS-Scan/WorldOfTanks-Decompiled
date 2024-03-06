@@ -166,6 +166,12 @@ class PromoController(IPromoController):
         else:
             self.__pendingPromo = _PromoData(url, closeCallback, source)
 
+    @adisp_async
+    @adisp_process
+    def getUrlWithAuthParams(self, url, callback):
+        urlWithAuth = yield self.__addAuthParams(url)
+        callback(urlWithAuth)
+
     def __needToGetTeasersInfo(self):
         return True if self.__battlesFromLastTeaser == 0 else self.__checkIntervalInBattles > 0 and self.__battlesFromLastTeaser % self.__checkIntervalInBattles == 0
 
@@ -338,7 +344,11 @@ class PromoController(IPromoController):
     def __addAuthParams(self, url, callback):
         if not url or not self.__webController:
             callback(url)
+            return
         accessTokenData = yield self.__webController.getAccessTokenData(force=False)
+        if not accessTokenData:
+            callback(url)
+            return
         params = {'access_token': str(accessTokenData.accessToken),
          'spa_id': BigWorld.player().databaseID}
         callback(url_formatters.addParamsToUrlQuery(url, params))

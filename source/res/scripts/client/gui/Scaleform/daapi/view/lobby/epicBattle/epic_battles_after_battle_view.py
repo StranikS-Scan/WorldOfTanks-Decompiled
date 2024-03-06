@@ -100,7 +100,8 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
 
         self.__stopViewWatchedLog()
         self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
-        self.__rewardsSelectionWindow = showEpicRewardsSelectionWindow(onRewardsReceivedCallback=_onRewardReceived, onCloseCallback=_logRewardSelectionClosed, onLoadedCallback=self.destroy, isAutoDestroyWindowsOnReceivedRewards=False)
+        currLvl, _ = self.__epicController.getPlayerLevelInfo()
+        self.__rewardsSelectionWindow = showEpicRewardsSelectionWindow(level=currLvl, onRewardsReceivedCallback=_onRewardReceived, onCloseCallback=_logRewardSelectionClosed, onLoadedCallback=self.destroy, isAutoDestroyWindowsOnReceivedRewards=False)
 
     def onWindowClose(self):
         self.destroy()

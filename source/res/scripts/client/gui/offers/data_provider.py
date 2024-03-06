@@ -179,6 +179,25 @@ class OffersDataProvider(IOffersDataProvider):
 
         return False
 
+    @_ifFeatureDisabled(())
+    @_ifNotSynced(())
+    def iUnlockedOffers(self, onlyVisible=True):
+        for offer in self._ioffers():
+            if offer.isOfferUnlocked:
+                if onlyVisible and not offer.showInGUI:
+                    continue
+                yield offer
+
+    def getUnlockedOffers(self, onlyVisible=True):
+        return list(self.iUnlockedOffers(onlyVisible))
+
+    def isOfferUnlocked(self, tokenID):
+        for offer in self.iUnlockedOffers():
+            if offer.token == tokenID:
+                return True
+
+        return False
+
     def getAmountOfGiftsGenerated(self, tokenID, mainTokenCount):
         offerData = self.getOfferByToken(tokenID)
         if offerData is not None:
@@ -268,5 +287,5 @@ class OffersDataProvider(IOffersDataProvider):
     @_ifNotSynced(())
     def __iAvailableOffersByToken(self, token):
         for offer in self._ioffers():
-            if offer.isOfferAvailable and offer.token == token:
+            if offer.token == token and offer.isOfferAvailable:
                 yield offer

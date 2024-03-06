@@ -181,7 +181,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
 
-    def getMarkerType(self):
+    def getMarkerType(self, markerID=INVALID_MARKER_ID):
         return MarkerType.VEHICLE_MARKER_TYPE
 
     def getTargetIDFromMarkerID(self, markerID):

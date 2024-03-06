@@ -10,8 +10,8 @@ from helpers import dependency
 from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
 from debug_utils import LOG_DEBUG_DEV
-from gui.shared.gui_items.marker_items import MarkerItem
 from shared_utils import nextTick
+from constants import DEATH_ZONE_MASK_PATTERN
 _TIME_TO_STOP_FIRE_ON_LEAVE_ZONE = 5.0
 
 class StaticDeathZone(BigWorld.Entity):
@@ -24,11 +24,22 @@ class StaticDeathZone(BigWorld.Entity):
         self.__functionOnLeaveDeathZone = None
         self._marker = None
         self._onActiveChanged = Event.Event()
+        self.onMaskAdded = Event.Event()
         return
 
     @property
     def visual(self):
         return getattr(self, 'clientVisualComp', None)
+
+    @property
+    def masks(self):
+        masks = []
+        for idx in range(0, self.maskingPolygonsCount):
+            comp = self.dynamicComponents.get(DEATH_ZONE_MASK_PATTERN + str(idx))
+            if comp is not None:
+                masks.append(comp)
+
+        return masks
 
     @property
     def onActiveChanged(self):
@@ -44,6 +55,10 @@ class StaticDeathZone(BigWorld.Entity):
         else:
             g_playerEvents.onAvatarReady += self._onAvatarReady
 
+    def onDynamicComponentCreated(self, component):
+        if component.keyName.startswith(DEATH_ZONE_MASK_PATTERN):
+            self.onMaskAdded(component.udoGuid)
+
     def onLeaveWorld(self):
         self._removeMarker()
         if self.__callbackOnLeaveDeathZone is not None:
@@ -53,13 +68,23 @@ class StaticDeathZone(BigWorld.Entity):
         return
 
     def getClosestPoint(self, pos, searchRadius):
-        return self.position if not self.visual else self.visual.getClosestPoint(pos, searchRadius)
+        if not self.visual:
+            return self.position
+        else:
+            distances = [self.visual.getClosestPoint(pos, searchRadius)]
+            distances.extend([ mask.getClosestPoint(pos, searchRadius) for mask in self.masks ])
+            distances = sorted([ value for value in distances if value is not None ], key=lambda value: value[1])
+            return distances[0][0] if distances else None
 
     def onEntityEnteredInZone(self, entityID):
-        self._marker.onVehicleEnteredZone(entityID)
+        if self._marker is not None:
+            self._marker.onVehicleEnteredZone(entityID)
+        return
 
     def onEntityLeftZone(self, entityID):
-        self._marker.onVehicleLeftZone(entityID)
+        if self._marker is not None:
+            self._marker.onVehicleLeftZone(entityID)
+        return
 
     def onDeathZoneNotification(self, show, entityID, timeToStrike, waveDuration):
         player = BigWorld.player()
@@ -142,6 +167,7 @@ class StaticDeathZone(BigWorld.Entity):
 class _DeathZoneMarkerHandler(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     SEARCH_RADIUS_EXTENSION = 2.0
+    STATIC_DEATH_ZONE_PROXIMITY_MARKER = 'STATIC_DEATH_ZONE_PROXIMITY'
 
     def __init__(self, zone):
         self._zone = zone
@@ -152,7 +178,7 @@ class _DeathZoneMarkerHandler(object):
         areaMarkerCtrl = self.sessionProvider.shared.areaMarker
         if areaMarkerCtrl:
             self._matrix = Math.Matrix()
-            marker = areaMarkerCtrl.createMarker(self._matrix, MarkerItem.STATIC_DEATH_ZONE_PROXIMITY)
+            marker = areaMarkerCtrl.createMarker(self._matrix, self.STATIC_DEATH_ZONE_PROXIMITY_MARKER)
             self._searchRadius = marker.disappearingRadius + self.SEARCH_RADIUS_EXTENSION
             self._markerId = areaMarkerCtrl.addMarker(marker)
             areaMarkerCtrl.onTickUpdate += self._tickUpdate

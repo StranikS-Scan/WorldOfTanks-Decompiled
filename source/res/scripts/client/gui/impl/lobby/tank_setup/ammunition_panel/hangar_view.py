@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/hangar_view.py
 import logging
 from CurrentVehicle import g_currentVehicle
-from skeletons.gui.game_control import ILimitedUIController
-from wg_async import wg_async
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from frameworks.wulf import ViewStatus
+from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionPanelView
 from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -12,6 +12,8 @@ from gui.shared.events import AmmunitionPanelViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import ILimitedUIController
+from wg_async import wg_async
 _logger = logging.getLogger(__name__)
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
@@ -41,6 +43,9 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @wg_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
+        if selectedSection == TankSetupConstants.SHELLS and self.vehItem and self.vehItem.gun.isDamageMutable():
+            if not self._settingsCore.serverSettings.getUIStorage2().get(UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN):
+                self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN: True})
         yield showIntro(selectedSection, self.getParentWindow())
         if self.viewStatus != ViewStatus.LOADED:
             return

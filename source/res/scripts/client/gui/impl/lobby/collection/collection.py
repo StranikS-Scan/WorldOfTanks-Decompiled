@@ -64,7 +64,7 @@ class CollectionView(ViewImpl):
         else:
             if contentID == R.views.lobby.collection.tooltips.CollectionItemTooltipView():
                 if event.hasArgument('itemId'):
-                    return CollectionItemTooltipView(itemId=event.getArgument('itemId'), collectionId=self.__collection.collectionId)
+                    return CollectionItemTooltipView(itemId=event.getArgument('itemId'), collectionId=self.__collection.collectionId, isDetailed=True)
                 tooltipData = self.getTooltipData(event)
                 if tooltipData is not None:
                     return CollectionItemTooltipView(*tooltipData.specialArgs)

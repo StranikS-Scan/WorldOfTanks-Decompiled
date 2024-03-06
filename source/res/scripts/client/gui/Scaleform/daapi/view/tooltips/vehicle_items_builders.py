@@ -21,7 +21,7 @@ def _shellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(intCD, *_):
         item = context.buildItem(intCD)
-        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+        return (item.type, item.isModernMechanics, item.isDamageMutable()) in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 
@@ -30,7 +30,7 @@ def _nationChangeShellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(vehCD, intCD, *_):
         item = context.buildItem(vehCD, intCD)
-        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+        return (item.type, item.isModernMechanics, item.isDamageMutable()) in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 

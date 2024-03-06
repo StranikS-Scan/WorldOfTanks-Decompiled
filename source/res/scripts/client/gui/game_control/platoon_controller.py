@@ -182,6 +182,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         validateDisplaySettings = self.__checkForSettingsModification()
         if validateDisplaySettings:
             self.__validateSystemReq()
+        self.currentPlatoonLayouts = buildCurrentLayouts(self.getPrbEntityType())
         self.__isPlatoonVisualizationEnabled = bool(self.__settingsCore.getSetting(GAME.DISPLAY_PLATOON_MEMBERS))
         self.__startListening()
         self.__cacheAvailableVehicles()

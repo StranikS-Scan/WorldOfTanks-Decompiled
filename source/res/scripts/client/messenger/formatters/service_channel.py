@@ -1438,8 +1438,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     def getGoodiesString(cls, goodies, exclude=None):
         result = []
         boostersStrings = []
+        boostersDebitedStrings = []
         discountsStrings = []
         equipStrings = []
+        equipDebitedStrings = []
         for goodieID, ginfo in goodies.iteritems():
             if exclude is not None and goodieID in exclude:
                 continue
@@ -1447,7 +1449,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 booster = cls.__goodiesCache.getBooster(goodieID)
                 if booster is not None and booster.enabled:
                     if ginfo.get(u'count'):
-                        boostersStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=booster.userName, count=ginfo.get(u'count')))
+                        if ginfo.get(u'count') > 0:
+                            boostersStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=booster.userName, count=ginfo.get(u'count')))
+                        elif ginfo.get(u'count') < 0:
+                            boostersDebitedStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=booster.userName, count=abs(ginfo.get(u'count'))))
                     else:
                         boostersStrings.append(booster.userName)
             if goodieID in cls._itemsCache.items.shop.discounts:
@@ -1458,7 +1463,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 dk = cls.__goodiesCache.getDemountKit(goodieID)
                 if dk and dk.enabled:
                     if ginfo.get(u'count'):
-                        equipStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=dk.userName, count=ginfo.get(u'count')))
+                        if ginfo.get(u'count') > 0:
+                            equipStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=dk.userName, count=ginfo.get(u'count')))
+                        elif ginfo.get(u'count') < 0:
+                            equipDebitedStrings.append(backport.text(R.strings.system_messages.bonuses.booster.value(), name=dk.userName, count=abs(ginfo.get(u'count'))))
                     else:
                         equipStrings.append(dk.userName)
             if goodieID in cls._itemsCache.items.shop.recertificationForms:
@@ -1471,10 +1479,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
         if boostersStrings:
             result.append(g_settings.htmlTemplates.format(u'boostersInvoiceReceived', ctx={u'boosters': u', '.join(boostersStrings)}))
+        if boostersDebitedStrings:
+            result.append(g_settings.htmlTemplates.format(u'boostersDebitedInvoiceReceived', ctx={u'boosters': u', '.join(boostersDebitedStrings)}))
         if discountsStrings:
             result.append(g_settings.htmlTemplates.format(u'discountsInvoiceReceived', ctx={u'discounts': u', '.join(discountsStrings)}))
         if equipStrings:
             result.append(g_settings.htmlTemplates.format(u'equipmentInvoiceReceived', ctx={u'equipment': u', '.join(equipStrings)}))
+        if equipDebitedStrings:
+            result.append(g_settings.htmlTemplates.format(u'equipmentDebitedInvoiceReceived', ctx={u'equipment': u', '.join(equipDebitedStrings)}))
         return u'; '.join(result)
 
     @classmethod
@@ -4160,8 +4172,6 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 rewards = data.get(u'reward')
                 ctx = data.get(u'ctx')
                 reason = ctx.get(u'reason')
-                newLevel = ctx.get(u'newLevel')
-                chapterID = ctx.get(u'chapter')
                 collectionEntitlements = popCollectionEntitlements(rewards)
                 description = u''
                 additionalText = u''
@@ -4173,6 +4183,8 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     if not rewards:
                         callback([])
                     header, description, priorityLevel, additionalText = self.__makeAfterBattlePassPurchase(ctx)
+                if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_WITH_LEVELS:
+                    header, description, priorityLevel, additionalText = self.__makeAfterBattlePassWithLevelsPurchase(ctx)
                 else:
                     if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE:
                         callback([])
@@ -4180,24 +4192,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                     if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
                         header, description, priorityLevel, additionalText = self.__makeAfterLevelsPurchase(ctx)
                     elif reason == BattlePassRewardReason.SELECT_CHAPTER:
-                        if self.__battlePass.isCompleted():
-                            if self.__battlePass.isHoliday():
-                                chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
-                                description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
-                                template = self.__PROGRESSION_BUTTON_TEMPLATE
-                                additionalText = u''
-                            else:
-                                description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
-                                template = self.__SHOP_BUTTON_TEMPLATE
-                                additionalText = backport.text(self.__MESSAGES.battlePassReward.battle.final.additionalText())
-                        elif self.__battlePass.isFinalLevel(chapterID, newLevel):
-                            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
-                            description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
-                            template = self.__PROGRESSION_BUTTON_TEMPLATE
-                            savedData = {u'chapterID': chapterID}
-                        else:
-                            description = backport.text(self.__MESSAGES.battlePassReward.activateChapter.text())
-                        priorityLevel = NotificationPriorityLevel.LOW
+                        description, template, priorityLevel, additionalText, savedData = self.__makeAfterChapterSelect(ctx)
                     elif reason in (BattlePassRewardReason.INVOICE, BattlePassRewardReason.BATTLE):
                         description, template, priorityLevel, additionalText, savedData = self.__makeAfterBattle(ctx)
                 formattedBonuses = BattlePassQuestAchievesFormatter.formatQuestAchieves(rewards, False)
@@ -4225,6 +4220,7 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         savedData = None
         chapterID = ctx.get(u'chapter')
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+        priorityLevel = NotificationPriorityLevel.LOW
         if not self.__battlePass.isCompleted():
             if not self.__battlePass.isFinalLevel(chapterID, newLevel):
                 if self.__battlePass.isHoliday():
@@ -4235,14 +4231,16 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 description = backport.text(self.__MESSAGES.battlePassHReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
             else:
                 description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
+            template = self.__PROGRESSION_BUTTON_TEMPLATE
             savedData = {u'chapterID': chapterID}
-        elif self.__battlePass.isHoliday():
-            description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
         else:
-            description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
+            if self.__battlePass.isHoliday():
+                description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
+                template = self.__PROGRESSION_BUTTON_TEMPLATE
+            else:
+                description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
+                template = self.__SHOP_BUTTON_TEMPLATE
             additionalText = backport.text(self.__MESSAGES.battlePassReward.battle.final.additionalText())
-        template = self.__PROGRESSION_BUTTON_TEMPLATE
-        priorityLevel = NotificationPriorityLevel.LOW
         return (description,
          template,
          priorityLevel,
@@ -4295,8 +4293,58 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
          priorityLevel,
          additionalText)
 
+    def __makeAfterBattlePassWithLevelsPurchase(self, ctx):
+        chapterID = ctx.get(u'chapter')
+        priceID = ctx.get(u'priceID')
+        levelsCount = ctx.get(u'newLevel', 0) - ctx.get(u'prevLevel', 0)
+        header = backport.text(self.__MESSAGES.battlePassReward.header.buyBPWithLevels())
+        description = backport.text(self.__MESSAGES.battlePassReward.buyBPWithLevels.text(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())))
+        priceAmount = self.__getChapterPrice(chapterID, priceID) + self.__getLevelsPrice(levelsCount)
+        additionalText = self.__makeCurrencyString(Currency.GOLD, priceAmount)
+        priorityLevel = NotificationPriorityLevel.LOW
+        return (header,
+         description,
+         priorityLevel,
+         additionalText)
+
+    def __makeAfterChapterSelect(self, ctx):
+        chapterID = ctx.get(u'chapter')
+        newLevel = ctx.get(u'newLevel')
+        additionalText = u''
+        template = self.__REWARD_TEMPLATE
+        savedData = None
+        if self.__battlePass.isCompleted():
+            if self.__battlePass.isHoliday():
+                chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+                description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
+                template = self.__PROGRESSION_BUTTON_TEMPLATE
+                additionalText = u''
+            else:
+                description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
+                template = self.__SHOP_BUTTON_TEMPLATE
+                additionalText = backport.text(self.__MESSAGES.battlePassReward.battle.final.additionalText())
+        elif self.__battlePass.isFinalLevel(chapterID, newLevel):
+            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
+            description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
+            template = self.__PROGRESSION_BUTTON_TEMPLATE
+            savedData = {u'chapterID': chapterID}
+        else:
+            description = backport.text(self.__MESSAGES.battlePassReward.activateChapter.text())
+        priorityLevel = NotificationPriorityLevel.LOW
+        return (description,
+         template,
+         priorityLevel,
+         additionalText,
+         savedData)
+
     def __makePriceString(self, chapterID, priceID):
         return self.__makeCurrencyString(*next(self.__battlePass.getBattlePassCost(chapterID)[priceID].iteritems()))
+
+    def __getChapterPrice(self, chapterID, priceID):
+        return next(self.__battlePass.getBattlePassCost(chapterID)[priceID].itervalues())
+
+    def __getLevelsPrice(self, levelsCount):
+        return self.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelsCount
 
     def __makeCurrencyString(self, currency, amount):
         return g_settings.htmlTemplates.format(self.__CURRENCY_TEMPLATE_KEY, {u'currency': backport.text(self.__MESSAGES.battlePassReward.buy.dyn(currency)()),
@@ -5293,7 +5341,7 @@ class ResourceWellRewardFormatter(WaitItemsSyncFormatter):
         if serialNumber:
             title = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.title(), vehicle=vehicle)
             text = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.text(), vehicle=text_styles.crystal(vehicle))
-            additionalText = backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.additionalText(), serialNumber=serialNumber)
+            additionalText = backport.text(self.__RESOURCE_WELL_MESSAGES.breakLine()) + backport.text(self.__RESOURCE_WELL_MESSAGES.topReward.additionalText(), serialNumber=serialNumber)
         else:
             title = backport.text(self.__RESOURCE_WELL_MESSAGES.regularReward.title(), vehicle=vehicle)
             text = backport.text(self.__RESOURCE_WELL_MESSAGES.regularReward.text(), vehicle=text_styles.crystal(vehicle))

@@ -85,6 +85,8 @@ class CallbackDataNames(object):
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
     ON_TARGET_VEHICLE_CHANGED = 'onTargetVehicleChanged'
     MT_CONFIG_CALLBACK = 'mapsTrainingConfigurationCallback'
+    SHOW_BATTLE_HINT = 'show_battle_hint'
+    HIDE_BATTLE_HINT = 'hide_battle_hint'
 
 
 class SimulatedAoI(object):
@@ -1288,6 +1290,10 @@ def _JSON_Encode(obj):
 
 def isPlaying():
     return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress if g_replayCtrl is not None else False
+
+
+def isRecording():
+    return g_replayCtrl is not None and g_replayCtrl.isRecording
 
 
 def isServerSideReplay():

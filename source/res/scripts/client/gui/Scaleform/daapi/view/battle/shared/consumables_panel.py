@@ -4,22 +4,21 @@ import logging
 import math
 from functools import partial
 from types import NoneType
-from typing import TYPE_CHECKING
 import BigWorld
+from typing import TYPE_CHECKING
 import CommandMapping
-from constants import EQUIPMENT_STAGES, SHELL_TYPES
-from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
-from items import vehicles
+from constants import EQUIPMENT_STAGES, SHELL_TYPES, DAMAGE_INTERPOLATION_DIST_FIRST, DAMAGE_INTERPOLATION_DIST_LAST
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
-from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
+from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, CROSSHAIR_VIEW_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
+from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.impl import backport
@@ -27,9 +26,12 @@ from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.formatters import text_styles
+from gui.shared.items_parameters import NO_DATA
+from gui.shared.items_parameters.params import ShellParams
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from items import vehicles
 from items.artefacts import SharedCooldownConsumableConfigReader
 from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -37,6 +39,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 if TYPE_CHECKING:
     from gui.battle_control.controllers.consumables.equipment_ctrl import _OrderItem, _EquipmentItem
 _logger = logging.getLogger(__name__)
+ASTERISK = '*'
 R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
 NO_AMMO_ICON = 'NO_{}'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
@@ -110,7 +113,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._keys = {}
         self._extraKeys = {}
         self.__currentActivatedSlotIdx = -1
-        self.__equipmentsGlowCallbacks = {}
+        self._equipmentsGlowCallbacks = {}
         if self.sessionProvider.isReplayPlaying:
             self.__reloadTicker = _PythonReloadTicker(self)
         else:
@@ -123,6 +126,14 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     @property
     def isActive(self):
         return self.__isViewActive
+
+    @property
+    def currentActivatedSlotIdx(self):
+        return self.__currentActivatedSlotIdx
+
+    @currentActivatedSlotIdx.setter
+    def currentActivatedSlotIdx(self, value):
+        self.__currentActivatedSlotIdx = value
 
     def onClickedToSlot(self, bwKey, idx):
         self.__handleBWKey(int(bwKey), idx)
@@ -161,7 +172,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._addListeners()
 
     def _dispose(self):
-        self.__clearAllEquipmentGlow()
+        self._clearAllEquipmentGlow()
         self._removeListeners()
         self._keys.clear()
         self._extraKeys.clear()
@@ -194,7 +205,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._resetDelayedReload()
 
     def _resetEquipments(self):
-        self.__clearAllEquipmentGlow()
+        self._clearAllEquipmentGlow()
         self.__resetStorages(self.__equipmentRange, self.__equipmentFullMask, True)
         self.__resetStorages(self.__ordersRange, self.__ordersFullMask, True)
         self.__currentActivatedSlotIdx = -1
@@ -264,14 +275,11 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if snap == self._emptyEquipmentsSlice:
                 self.as_showEquipmentSlotsS(False)
         else:
-            tags = item.getTags()
-            if tags:
-                bwKey, sfKey = self._genKey(idx)
+            bwKey, sfKey = self._generateEquipmentKey(idx, item)
+            if bwKey is not None:
                 handler = self._getKeyHandler(intCD, item.isEntityRequired(), idx)
                 if item.getQuantity() > 0:
                     self._extraKeys[idx] = self._keys[bwKey] = handler
-            else:
-                bwKey, sfKey = (None, None)
             descriptor = item.getDescriptor()
             quantity = item.getQuantity()
             timeRemaining = item.getTimeRemaining()
@@ -314,7 +322,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 self._showEquipmentGlow(idx)
             elif item.becomeReady:
                 self._showEquipmentGlow(idx, glowType)
-            elif idx in self.__equipmentsGlowCallbacks:
+            elif idx in self._equipmentsGlowCallbacks:
                 self.__clearEquipmentGlow(idx)
 
     def _updateActivatedSlot(self, idx, item):
@@ -352,12 +360,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if BigWorld.player().isObserver():
             return
-        if equipmentIndex in self.__equipmentsGlowCallbacks:
-            BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+        if equipmentIndex in self._equipmentsGlowCallbacks:
+            BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
+            del self._equipmentsGlowCallbacks[equipmentIndex]
         else:
             self.as_setGlowS(equipmentIndex, glowID=glowType)
-        self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+        self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
@@ -463,7 +471,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 self.__onSPGShotsIndicatorStateChanged(currentSpgShotsState)
             crosshairCtrl.onSPGShotsIndicatorStateChanged += self.__onSPGShotsIndicatorStateChanged
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
-        CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
+        CommandMapping.g_instance.onMappingChanged += self._onMappingChanged
         g_eventBus.addListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
@@ -475,7 +483,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def _removeListeners(self):
         g_eventBus.removeListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
-        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
+        CommandMapping.g_instance.onMappingChanged -= self._onMappingChanged
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onSPGShotsIndicatorStateChanged -= self.__onSPGShotsIndicatorStateChanged
@@ -519,6 +527,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._mask |= 1 << idx
         return idx
 
+    def _generateEquipmentKey(self, idx, item):
+        return self._genKey(idx) if item.getTags() else (None, None)
+
     def _genKey(self, idx):
         cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
         bwKey = CommandMapping.g_instance.get(cmdMappingKey)
@@ -530,17 +541,43 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
         kind = descriptor.kind
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
-        header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
+        header = backport.text(R.strings.item_types.shell.kinds.dyn(kind)())
         if GUI_SETTINGS.technicalInfo:
-            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=backport.getNiceNumberFormat(descriptor.damage[0]))]
+            vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+            vehicleDescriptor = vehicle.typeDescriptor if vehicle else None
+            shellParams = ShellParams(descriptor, vehicleDescriptor)
+            piercingPowerTable = shellParams.piercingPowerTable
+            isDistanceDependent = piercingPowerTable is not None
+            damageValue = backport.getNiceNumberFormat(shellParams.avgDamage)
+            note = ''
+            showDistanceAsterisk = False
+            footNotes = []
+            if descriptor.isDamageMutable:
+                showDistanceAsterisk = True
+                damageValue = '%s-%s' % (backport.getNiceNumberFormat(shellParams.avgMutableDamage[0]), backport.getNiceNumberFormat(shellParams.avgMutableDamage[1]))
+                note = ASTERISK
+                footNotes.append(ASTERISK + backport.text(R.strings.menu.moduleInfo.params.piercingDistance.footnote(), minDist=int(DAMAGE_INTERPOLATION_DIST_FIRST), maxDist=int(min(vehicleDescriptor.shot.maxDistance, DAMAGE_INTERPOLATION_DIST_LAST))))
+            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=damageValue) + note]
             if piercingPower != 0:
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=backport.getNiceNumberFormat(piercingPower)))
+                value = backport.getNiceNumberFormat(piercingPower)
+                if piercingPowerTable != NO_DATA and isDistanceDependent:
+                    note = ASTERISK
+                    value = '%s-%s' % (backport.getNiceNumberFormat(piercingPowerTable[0][1]), backport.getNiceNumberFormat(piercingPowerTable[-1][1]))
+                    if not showDistanceAsterisk:
+                        footNotes.append(note + backport.text(R.strings.menu.moduleInfo.params.piercingDistance.footnote(), minDist=backport.getNiceNumberFormat(piercingPowerTable[0][0]), maxDist=backport.getNiceNumberFormat(piercingPowerTable[-1][0])))
+                else:
+                    note = ASTERISK if not showDistanceAsterisk else ASTERISK * 2
+                    footNotes.append(note + backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnote()))
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.piercingPower(), value=value) + note)
             params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.shotSpeed(), value=backport.getIntegralFormat(int(round(shotSpeed / projSpeedFactor)))))
             if kind == SHELL_TYPES.HIGH_EXPLOSIVE and descriptor.type.explosionRadius > 0.0:
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(descriptor.type.explosionRadius)))
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), minValue=backport.getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+            for footNote in footNotes:
+                params.append('\n' + footNote)
+
             body = text_styles.concatStylesToMultiLine(*params)
             fmt = TOOLTIP_FORMAT
         else:
@@ -575,7 +612,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
         return
 
-    def __onMappingChanged(self, *args):
+    def _onMappingChanged(self, *args):
         keys = {}
         extraKeys = {}
         slots = []
@@ -743,7 +780,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DESTROYED:
-            self.__clearAllEquipmentGlow()
+            self._clearAllEquipmentGlow()
             return
         elif self._cds.count(None) == self._PANEL_MAX_LENGTH:
             return
@@ -834,17 +871,17 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=False)
 
     def __clearEquipmentGlow(self, equipmentIndex, cancelCallback=True):
-        if equipmentIndex in self.__equipmentsGlowCallbacks:
+        if equipmentIndex in self._equipmentsGlowCallbacks:
             self.as_hideGlowS(equipmentIndex)
             if cancelCallback:
-                BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+                BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
+            del self._equipmentsGlowCallbacks[equipmentIndex]
 
-    def __clearAllEquipmentGlow(self):
-        for equipmentIndex, callbackID in self.__equipmentsGlowCallbacks.items():
+    def _clearAllEquipmentGlow(self):
+        for equipmentIndex, callbackID in self._equipmentsGlowCallbacks.items():
             BigWorld.cancelCallback(callbackID)
             self.as_hideGlowS(equipmentIndex)
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
+            del self._equipmentsGlowCallbacks[equipmentIndex]
 
     def __expandEquipmentSlot(self, index, slots):
         self.as_expandEquipmentSlotS(index, slots)

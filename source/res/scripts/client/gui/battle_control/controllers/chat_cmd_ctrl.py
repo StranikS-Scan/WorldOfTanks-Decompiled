@@ -24,7 +24,7 @@ from helpers import isPlayerAvatar
 from messenger import MessengerEntry
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGETED_VEHICLE_CMD_NAMES
+from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGET_CMD_NAMES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
@@ -43,6 +43,8 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                    DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY},
                   MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
                                                 DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE},
+                  MarkerType.TARGET_POINT_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.MOVE_TO_TARGET_POINT,
+                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.MOVE_TO_TARGET_POINT},
                   MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_OBJECTIVE,
                                                        DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_OBJECTIVE},
                   MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION}},
@@ -50,6 +52,8 @@ TARGET_TYPE_TRANSLATION_MAPPING = {CONTEXTCOMMAND: {MarkerType.VEHICLE_MARKER_TY
                                                     DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY},
                    MarkerType.BASE_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
                                                  DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE},
+                   MarkerType.TARGET_POINT_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.MOVING_TO_TARGET_POINT,
+                                                         DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.MOVING_TO_TARGET_POINT},
                    MarkerType.HEADQUARTER_MARKER_TYPE: {DefaultMarkerSubType.ALLY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.DEFENDING_OBJECTIVE,
                                                         DefaultMarkerSubType.ENEMY_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.ATTACKING_OBJECTIVE},
                    MarkerType.LOCATION_MARKER_TYPE: {INVALID_MARKER_SUBTYPE: BATTLE_CHAT_COMMAND_NAMES.GOING_THERE}},
@@ -110,7 +114,7 @@ def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
 
 
 class ChatCommandsController(IBattleController):
-    __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager', '__chatCommandsEnabled')
+    __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
@@ -258,7 +262,7 @@ class ChatCommandsController(IBattleController):
             self.sendCommandToBase(targetID, action)
         elif action in LOCATION_CMD_NAMES:
             self.sendAdvancedPositionPing(action, isInRadialMenu)
-        elif action in TARGETED_VEHICLE_CMD_NAMES:
+        elif action in TARGET_CMD_NAMES:
             self.sendTargetedCommand(action, targetID, isInRadialMenu)
         elif action in EPIC_GLOBAL_CMD_NAMES:
             self.sendEpicGlobalCommand(action)
@@ -326,12 +330,17 @@ class ChatCommandsController(IBattleController):
             _logger.error('Command not found: %s', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID, isInRadialMenu=False):
-        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False or not self.__arenaDP.getVehicleInfo(targetID).isAlive():
+        if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
-            shellsLeft = self.__ammo.getAllShellsQuantityLeft()
-            time = self.__getReloadTime() if shellsLeft > 0 else -1
-            command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, time)
+        if self.__arenaDP.isVehiclePresented(targetID):
+            if not self.__arenaDP.getVehicleInfo(targetID).isAlive():
+                return
+            if self.__isSPG() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY or self.__isSPGAndInStrategicOrArtyMode() and cmdName == BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY and isInRadialMenu is False:
+                shellsLeft = self.__ammo.getAllShellsQuantityLeft()
+                time = self.__getReloadTime() if shellsLeft > 0 else -1
+                command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, time)
+            else:
+                command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         else:
             command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         if command:

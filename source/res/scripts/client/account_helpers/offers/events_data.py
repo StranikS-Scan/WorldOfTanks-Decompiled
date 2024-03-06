@@ -97,6 +97,14 @@ class OfferEventData(object):
         return self._data.get(CDN_KEY, {}).get('giftTokenImg', '')
 
     @property
+    def cdnSignSmallImgPath(self):
+        return self._data.get(CDN_KEY, {}).get('signSmallImg', '')
+
+    @property
+    def cdnSignBigImgPath(self):
+        return self._data.get(CDN_KEY, {}).get('signBigImg', '')
+
+    @property
     def availableGifts(self):
         received = self._receivedGifts
         if received is None:
@@ -108,7 +116,7 @@ class OfferEventData(object):
         giftsData = self._data.get('gift')
         return OfferGift(giftID, self._data['gift'][giftID]) if giftsData and giftID in giftsData else None
 
-    def getGiftAvailabelCount(self, giftID):
+    def getGiftAvailableCount(self, giftID):
         received = self._receivedGifts
         if received is None:
             return 0
@@ -170,7 +178,11 @@ class OfferEventData(object):
 
     @property
     def isOfferAvailable(self):
-        return self._tokensCache.isTokenAvailable(self.token) and self._tokensCache.isTokenAvailable(self.giftToken) and not self.isOutOfDate and bool(self.availableGiftsCount)
+        return self.isOfferUnlocked and self._tokensCache.isTokenAvailable(self.giftToken)
+
+    @property
+    def isOfferUnlocked(self):
+        return self._tokensCache.isTokenAvailable(self.token) and not self.isOutOfDate and bool(self.availableGiftsCount)
 
     @property
     def isOutOfDate(self):

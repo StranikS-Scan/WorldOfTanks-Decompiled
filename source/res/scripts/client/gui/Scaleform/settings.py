@@ -3,6 +3,13 @@
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from shared_utils import CONST_CONTAINER
 
+class TOOLTIP_TYPES(object):
+    COMPLEX = 'complex'
+    SPECIAL = 'special'
+    WULF = 'wulf'
+    NONE = 'none'
+
+
 class ICONS_SIZES(CONST_CONTAINER):
     X550 = '550x550'
     X320 = '320x320'

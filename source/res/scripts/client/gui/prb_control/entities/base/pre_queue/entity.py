@@ -106,6 +106,9 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         self._requestCtx.clear()
         return super(PreQueueEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
+    def getRequestCtx(self):
+        return self._requestCtx
+
     def getQueueType(self):
         return self._queueType
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_utils.py
 import logging
+from gui.battle_control.battle_constants import BATTLE_CTRL_NAMES
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS, BATTLES_SELECTOR_SQUAD_ITEMS
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS
 from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_QUEUE_TYPE
@@ -109,8 +110,8 @@ def addBattleSelectorSquadItem(prbActionName, prbActionConstructor, personality)
     logging.debug(msg)
 
 
-def addSquadFinder(arenaGuiType, squadFinderClass, personality):
-    registerSquadFinder(arenaGuiType, squadFinderClass)
+def addSquadFinder(arenaGuiType, squadFinderClass, rosterClass, personality):
+    registerSquadFinder(arenaGuiType, squadFinderClass, rosterClass)
     msg = 'arenaGuiType:{arenaGuiType} was added for squad finder. Personality: {p}'.format(arenaGuiType=arenaGuiType, p=personality)
     logging.debug(msg)
 
@@ -159,3 +160,9 @@ def initRequestType(guiConstants, personality):
 
 def initScaleformGuiTypes(guiConstants, personality):
     guiConstants.VIEW_ALIAS.inject(personality)
+
+
+def initBattleCtrlIDs(guiConstants, personality):
+    extraAttrs = guiConstants.BATTLE_CTRL_ID.getExtraAttrs()
+    guiConstants.BATTLE_CTRL_ID.inject(personality)
+    BATTLE_CTRL_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})

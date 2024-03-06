@@ -121,6 +121,9 @@ class StoryModeEntity(PreQueueEntity):
         self._accountComponent.dequeueBattle()
         LOG_DEBUG('Sends request on dequeuing from the Story Mode battles', self._queueType)
 
+    def _goToHangar(self):
+        pass
+
     def _goToQueueUI(self):
         prebattleWindow = getOpenedPrebattleView()
         if prebattleWindow is not None:

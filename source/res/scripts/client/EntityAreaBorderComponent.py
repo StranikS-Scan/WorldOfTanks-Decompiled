@@ -52,6 +52,9 @@ class EntityAreaBorderComponent(DynamicScriptComponent):
             stripesEnabled = arenaBorderCtrl.getDrawType() == self.DRAW_TYPE_NORMAL
             self._border.setMaterialBoolParam(self.STRIPES_ENABLED_MATERIAL_PARAM_NAME, stripesEnabled)
 
+    def getDimensions(self):
+        return self._border.getDimensions() if self._border is not None else (0, 0, 0)
+
     def _onAvatarReady(self):
         super(EntityAreaBorderComponent, self)._onAvatarReady()
         self.settingsCore.onSettingsChanged += self._onSettingsChanged

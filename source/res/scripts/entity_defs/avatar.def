@@ -164,6 +164,12 @@
       <SendLatestOnly>	true	</SendLatestOnly>
       <ExposedForReplay>	true	</ExposedForReplay>
     </ownVehicleAuxPhysicsData>
+    <ownVehicleHullAimingPitchPacked>
+      <Type>	UINT16	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+      <ExposedForReplay>	true	</ExposedForReplay>
+    </ownVehicleHullAimingPitchPacked>
     <ammo>
       <Type>	ARRAY	  <of>	INT32	</of>
       </Type>

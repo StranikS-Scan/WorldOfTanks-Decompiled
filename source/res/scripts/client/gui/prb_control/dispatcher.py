@@ -41,6 +41,8 @@ from skeletons.gui.prb_control import IPrbControlLoader
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from typing import Any
+    from gui.prb_control.entities.base.ctx import PrbAction
+    from gui.prb_control.entities.base.entity import BasePrbEntryPoint
 _logger = logging.getLogger(__name__)
 
 class _PreBattleDispatcher(ListenersCollection):
@@ -91,8 +93,11 @@ class _PreBattleDispatcher(ListenersCollection):
         return self.__factories
 
     def getFunctionalState(self):
-        factory = self.__factories.get(self.__entity.getCtrlType())
-        return factory.createStateEntity(self.__entity) if factory is not None else FunctionalState()
+        if self.__factories is None:
+            return FunctionalState()
+        else:
+            factory = self.__factories.get(self.__entity.getCtrlType())
+            return factory.createStateEntity(self.__entity) if factory is not None else FunctionalState()
 
     @adisp_async
     @adisp_process
@@ -243,7 +248,7 @@ class _PreBattleDispatcher(ListenersCollection):
 
     @adisp_async
     @adisp_process
-    def select(self, entry, callback=None):
+    def select(self, entry, callback=None, transition=None):
         ctx = entry.makeDefCtx()
         ctx.addFlags(entry.getModeFlags() & FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH)
         if not self.__validateJoinOp(ctx):
@@ -259,6 +264,8 @@ class _PreBattleDispatcher(ListenersCollection):
                 if callback is not None:
                     callback(False)
                 return
+            if transition is not None:
+                yield transition
             ctx.setForced(True)
             LOG_DEBUG('Request to select', ctx)
             self.__requestCtx = ctx
@@ -282,12 +289,12 @@ class _PreBattleDispatcher(ListenersCollection):
 
     @adisp_async
     @adisp_process
-    def doSelectAction(self, action, callback=None):
+    def doSelectAction(self, action, callback=None, transition=None):
         selectResult = self.__entity.doSelectAction(action)
         if selectResult.isProcessed:
             result = True
             if selectResult.newEntry is not None:
-                result = yield self.select(selectResult.newEntry)
+                result = yield self.select(selectResult.newEntry, transition=transition)
             if callback is not None:
                 callback(result)
             g_eventDispatcher.dispatchSwitchResult(result)
@@ -297,7 +304,7 @@ class _PreBattleDispatcher(ListenersCollection):
             if entry is not None:
                 if hasattr(entry, 'configure'):
                     entry.configure(action)
-                result = yield self.select(entry)
+                result = yield self.select(entry, transition=transition)
                 if callback is not None:
                     callback(result)
                 g_eventDispatcher.dispatchSwitchResult(result)
@@ -364,8 +371,13 @@ class _PreBattleDispatcher(ListenersCollection):
         isWinbackAvailable = self.winbackCtrl.isModeAvailable()
         needToUpdate = queueType == QUEUE_TYPE.RANDOMS and isWinbackAvailable and not isSquadMode or queueType == QUEUE_TYPE.WINBACK and not isWinbackAvailable
         if needToUpdate:
-            self.__unsetEntity()
-            self.__setDefault()
+            if self.__entity.isInQueue() and not self.isRequestInProcess() and not self.__entity.getRequestCtx().isProcessing():
+                factory = self.__factories.get(self.__entity.getCtrlType())
+                ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.EXIT, entityType=self.__entity.getEntityType())
+                self.__entity.leave(ctx=ctx)
+            else:
+                self.__unsetEntity()
+                self.__setDefault()
 
     def pe_onPrebattleAutoInvitesChanged(self):
         if GUI_SETTINGS.specPrebatlesVisible:

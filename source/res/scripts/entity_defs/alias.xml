@@ -1497,46 +1497,6 @@
       </sessionLimit>
     </Properties>
   </PLAY_LIMITS>
-  <MARKER_DATA>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <markerID>
-        <Type>	OBJECT_ID	</Type>
-      </markerID>
-      <markerType>
-        <Type>	UINT8	</Type>
-      </markerType>
-      <visibility>
-        <Type>	BOOL	</Type>
-      </visibility>
-    </Properties>
-  </MARKER_DATA>
-  <POSITION_DATA>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <position>
-        <Type>	VECTOR3	</Type>
-      </position>
-      <velocity>
-        <Type>	VECTOR3	</Type>
-      </velocity>
-      <ypr>
-        <Type>	VECTOR3	</Type>
-      </ypr>
-    </Properties>
-  </POSITION_DATA>
-  <VEHICLE_MARKER_DATA>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <positionData>
-        <Type>	POSITION_DATA	</Type>
-      </positionData>
-      <markersData>
-        <Type>	ARRAY	  <of>	MARKER_DATA	</of>
-        </Type>
-      </markersData>
-    </Properties>
-  </VEHICLE_MARKER_DATA>
   <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <vehicleId>

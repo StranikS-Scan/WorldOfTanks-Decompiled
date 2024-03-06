@@ -12,12 +12,13 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
+from helpers import i18n, int2roman
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 _STR_PATH = R.strings.menu.headerButtons.fightBtn.tooltip
 
-def getSquadFightBtnTooltipData(state):
+def getSquadFightBtnTooltipData(result):
+    state = result.restriction
     if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
         header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
         body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
@@ -30,7 +31,7 @@ def getSquadFightBtnTooltipData(state):
     elif state in (UNIT_RESTRICTION.SCOUT_IS_FULL, UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN):
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.body())
-    elif state in (UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED):
+    elif state == UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT:
         header = None
         body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
     else:
@@ -111,6 +112,8 @@ def getEpicFightBtnTooltipData(result):
         return ''
     return makeTooltip(header, body)
 
+
+getRoyaleFightBtnTooltipData = getEpicFightBtnTooltipData
 
 def getMapsTrainingTooltipData():
     header = backport.text(R.strings.tooltips.hangar.startBtn.mapsTraining.notReady.header())
@@ -223,7 +226,7 @@ def getFunRandomFightBtnTooltipData(result, isInSquad):
         body = backport.text(resShortCut.funRandomVehLimits.body())
     else:
         if isInSquad:
-            return getSquadFightBtnTooltipData(state)
+            return getSquadFightBtnTooltipData(result)
         return getRandomTooltipData(result)
     return makeTooltip(header, body)
 
@@ -246,6 +249,15 @@ def getComp7FightBtnTooltipData(result):
     elif state == PRE_QUEUE_RESTRICTION.QUALIFICATION_RESULTS_PROCESSING:
         header = backport.text(resShortCut.comp7RatingCalculation.header())
         body = backport.text(resShortCut.comp7RatingCalculation.body())
+    elif state == PRE_QUEUE_RESTRICTION.LIMIT_NO_SUITABLE_VEHICLES:
+        romanLevels = list(map(int2roman, result.ctx['levels']))
+        delimiter = backport.text(resShortCut.comp7VehLevel.delimiter())
+        vehicleLevelsStr = delimiter.join(romanLevels)
+        header = backport.text(resShortCut.comp7VehLevel.header())
+        body = backport.text(resShortCut.comp7VehLevel.body(), levels=vehicleLevelsStr)
+    elif state == PRE_QUEUE_RESTRICTION.SHOP_PAGE_OPENED:
+        header = None
+        body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
     else:
         return ''
     return makeTooltip(header, body)

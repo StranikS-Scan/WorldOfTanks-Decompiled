@@ -34,7 +34,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import timers_panel
-    from gui.Scaleform.daapi.view.battle.event import battle_hint
+    from gui.Scaleform.daapi.view.battle.shared import battle_hint
     from gui.Scaleform.daapi.view.battle.shared.hint_panel.component import BattleHintPanel
     from gui.Scaleform.daapi.view.battle.maps_training.minimap import MapsTrainingMinimapComponent
     from gui.Scaleform.daapi.view.battle.maps_training.game_messages_panel import MapsTrainingGameMessagesPanel

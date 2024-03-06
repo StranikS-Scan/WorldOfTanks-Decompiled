@@ -108,7 +108,7 @@ def packToken(tokenID):
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def needToShowVideo(chapterID, level, battlePass=None):
-    return R.videos.battle_pass.dyn(makeChapterMediaName(chapterID)).exists()
+    return R.videos.battle_pass.dyn(makeChapterMediaName(chapterID)).exists() and battlePass.isFinalLevel(chapterID, level) and (battlePass.isExtraChapter(chapterID) or battlePass.isHoliday())
 
 
 @dependency.replace_none_kwargs(offers=IOffersDataProvider)

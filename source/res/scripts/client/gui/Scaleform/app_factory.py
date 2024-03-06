@@ -3,6 +3,7 @@
 import logging
 import weakref
 import BattleReplay
+import BigWorld
 from constants import ARENA_GUI_TYPE
 from frameworks.wulf import WindowFlags
 from gui import GUI_SETTINGS
@@ -283,6 +284,7 @@ class AS3_AppFactory(IAppFactory):
             return
         battle = self.__apps[_SPACE.SF_BATTLE]
         if battle:
+            BigWorld.player().logBattleLoadingFinished()
             self._toggleBattleLoading(False)
 
     def handleKey(self, appNS, isDown, key, mods):

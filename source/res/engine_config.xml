@@ -1,7 +1,7 @@
 <engine_config.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -33,11 +33,12 @@
     <settings></settings>
     <useLatentOcclusionQueries>	true	</useLatentOcclusionQueries>
     <DRRAutoscaler>
-      <criticalFPS>	15	</criticalFPS>
-      <safeFPSMultiplier>	1.15	</safeFPSMultiplier>
+      <defaultDRRScale>	1.0	</defaultDRRScale>
+      <criticalFPS>	30.0	</criticalFPS>
+      <targetFPS>	60.0	</targetFPS>
       <timeStep>	1.0	</timeStep>
-      <correctionStep>	0.05	</correctionStep>
-      <correctionBigStep>	0.1	</correctionBigStep>
+      <rateOfChange>	0.1	</rateOfChange>
+      <DRRStep>	0.05	</DRRStep>
       <minScale>	0.5	</minScale>
     </DRRAutoscaler>
     <globalVBSize>	12582912	</globalVBSize>
@@ -199,7 +200,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat.wargaming.net	</clientUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
@@ -573,10 +574,19 @@
           <name>	inbattle_communication_npc.bnk	</name>
         </bank>
         <bank>
+          <name>	custom_styles.bnk	</name>
+        </bank>
+        <bank>
+          <name>	custom_styles.pck	</name>
+        </bank>
+        <bank>
           <name>	rocket_accelerator.bnk	</name>
         </bank>
         <bank>
           <name>	rocket_accelerator.pck	</name>
+        </bank>
+        <bank>
+          <name>	newbie_hints_voiceover.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

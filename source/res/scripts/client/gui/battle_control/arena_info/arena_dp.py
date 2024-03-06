@@ -239,6 +239,9 @@ class ArenaDataProvider(IArenaDataProvider):
     def getAttachedVehicleID(self):
         return avatar_getter.getVehicleIDAttached()
 
+    def isVehiclePresented(self, vID):
+        return vID in self.__vInfoVOs
+
     def getVehicleInfo(self, vID=None):
         if vID is None:
             vID = self.getPlayerVehicleID()

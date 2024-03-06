@@ -1102,6 +1102,60 @@
       </damage>
     </armorSpalls>
   </_75mm_Sprgr_34>
+  <_75mm_ODR_mle_1910M>
+    <id>	185	</id>
+    <userString>	#france_vehicles:_75mm_ODR_mle_1910M	</userString>
+    <icon>	ap	</icon>
+    <price>	46	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_ODR_mle_1910M>
+  <_75mm_CC_Brandt>
+    <id>	186	</id>
+    <userString>	#france_vehicles:_75mm_CC_Brandt	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_75mm_CC_Brandt>
+  <_75mm_OE_mle_1915_FN>
+    <id>	187	</id>
+    <userString>	#france_vehicles:_75mm_OE_mle_1915_FN	</userString>
+    <icon>	he_modern	</icon>
+    <price>	38	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_OE_mle_1915_FN>
   <_90mm_Prf1941>
     <id>	34	</id>
     <userString>	#france_vehicles:_90mm_Prf1941	</userString>

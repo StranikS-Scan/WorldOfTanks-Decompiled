@@ -72,6 +72,13 @@
       <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch48_BZ_75_BXI_3DSt>
+          <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Hull.model	</exploded>
+        </Ch48_BZ_75_BXI_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -94,9 +101,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.075 0.416394 2.476414	</rayStart>
-        <rayEnd>	1.058322 0.378496 2.448386	</rayEnd>
-        <rayUp>	-0.535622 0.641683 -0.548955	</rayUp>
+        <rayStart>	1.080995 0.575722 1.900676	</rayStart>
+        <rayEnd>	1.080995 0.525721 1.900667	</rayEnd>
+        <rayUp>	-0.469148 0.000156 -0.883119	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
@@ -845,6 +852,12 @@
         <clipAngle>	0.875614	</clipAngle>
         <anchorShift>	0.11	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -887,6 +900,13 @@
         <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch48_BZ_75_BXI_3DSt>
+            <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
+          </Ch48_BZ_75_BXI_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1336,6 +1356,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <Ch48_BZ_75_BXI_3DSt>
+              <segmentModelLeft>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/track/segment_01.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/track/segment_01.model	</segmentModelRight>
+            </Ch48_BZ_75_BXI_3DSt>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1363,6 +1389,11 @@
             <model>	vehicles/chinese/Ch48_BZ_75/track/segment_01.model	</model>
             <length>	0.132463	</length>
           </mainSegment>
+          <modelSets>
+            <Ch48_BZ_75_BXI_3DSt>
+              <mainSegmentModel>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/track/segment_01.model	</mainSegmentModel>
+            </Ch48_BZ_75_BXI_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1595,6 +1626,11 @@
             <model>	vehicles/chinese/Ch48_BZ_75/track/segment_01.model	</model>
             <length>	0.132459	</length>
           </mainSegment>
+          <modelSets>
+            <Ch48_BZ_75_BXI_3DSt>
+              <mainSegmentModel>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/track/segment_01.model	</mainSegmentModel>
+            </Ch48_BZ_75_BXI_3DSt>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1923,6 +1959,15 @@
               <rayUp>	0.15 0 0	</rayUp>
               <size>	0.75	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 4.57	</rayStart>
+              <rayEnd>	0 0 5.32	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <compatibleModels>	Ch48_BZ_75_BXI_3DSt	</compatibleModels>
+              <size>	0.75	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1934,6 +1979,13 @@
             <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Ch48_BZ_75_BXI_3DSt>
+                <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </Ch48_BZ_75_BXI_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch48_BZ_75/collision/Gun_02.model	</collisionModelServer>
@@ -1950,6 +2002,13 @@
         <undamaged>	vehicles/chinese/Ch48_BZ_75/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch48_BZ_75/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch48_BZ_75_BXI_3DSt>
+            <undamaged>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch48_BZ_75/_skins/Ch48_BZ_75_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </Ch48_BZ_75_BXI_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch48_BZ_75/collision/Turret_01.model	</collisionModelServer>
@@ -2603,8 +2662,17 @@
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
-    <rocketAccelerationPrefab>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</rocketAccelerationPrefab>
   </effects>
+  <effectsPrefab>
+    <rocketAcceleration>
+      <prefab>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</prefab>
+      <sets>
+        <Ch48_BZ_75_BXI_3DSt>
+          <prefab>	particles/Tank/customization/Ch48_BZ_75_BXI_3DSt/Ch48_BZ_75_BXI_3DSt_empty.prefab	</prefab>
+        </Ch48_BZ_75_BXI_3DSt>
+      </sets>
+    </rocketAcceleration>
+  </effectsPrefab>
   <emblems>
     <default>	15505	</default>
     <lodDist>	MEDIUM	</lodDist>

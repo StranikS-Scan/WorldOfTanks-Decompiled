@@ -2,22 +2,22 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/chapter_choice_view_model.py
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.awards_widget_model import AwardsWidgetModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import ChapterModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_view_model import CollectionEntryPointViewModel
 
 class ChapterChoiceViewModel(ViewModel):
-    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'onViewLoaded', 'onClose', 'showTankmen')
+    __slots__ = ('onPreviewClick', 'onChapterSelect', 'onAboutClick', 'onPointsInfoClick', 'onBuyClick', 'onViewLoaded', 'onClose')
 
-    def __init__(self, properties=11, commands=11):
+    def __init__(self, properties=5, commands=7):
         super(ChapterChoiceViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def collectionEntryPoint(self):
+    def awardsWidget(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getCollectionEntryPointType():
-        return CollectionEntryPointViewModel
+    def getAwardsWidgetType():
+        return AwardsWidgetModel
 
     def getChapters(self):
         return self._getArray(1)
@@ -29,81 +29,35 @@ class ChapterChoiceViewModel(ViewModel):
     def getChaptersType():
         return ChapterModel
 
-    def getBpbitCount(self):
+    def getFreePoints(self):
         return self._getNumber(2)
 
-    def setBpbitCount(self, value):
+    def setFreePoints(self, value):
         self._setNumber(2, value)
 
-    def getNotChosenRewardCount(self):
-        return self._getNumber(3)
-
-    def setNotChosenRewardCount(self, value):
-        self._setNumber(3, value)
-
-    def getBpcoinCount(self):
-        return self._getNumber(4)
-
-    def setBpcoinCount(self, value):
-        self._setNumber(4, value)
-
-    def getIsBattlePassCompleted(self):
-        return self._getBool(5)
-
-    def setIsBattlePassCompleted(self, value):
-        self._setBool(5, value)
-
-    def getIsChooseRewardsEnabled(self):
-        return self._getBool(6)
-
-    def setIsChooseRewardsEnabled(self, value):
-        self._setBool(6, value)
-
-    def getFreePoints(self):
-        return self._getNumber(7)
-
-    def setFreePoints(self, value):
-        self._setNumber(7, value)
-
     def getIsCustomSeason(self):
-        return self._getBool(8)
+        return self._getBool(3)
 
     def setIsCustomSeason(self, value):
-        self._setBool(8, value)
-
-    def getSpecialVoiceTankmenCount(self):
-        return self._getNumber(9)
-
-    def setSpecialVoiceTankmenCount(self, value):
-        self._setNumber(9, value)
+        self._setBool(3, value)
 
     def getSeasonNum(self):
-        return self._getNumber(10)
+        return self._getNumber(4)
 
     def setSeasonNum(self, value):
-        self._setNumber(10, value)
+        self._setNumber(4, value)
 
     def _initialize(self):
         super(ChapterChoiceViewModel, self)._initialize()
-        self._addViewModelProperty('collectionEntryPoint', CollectionEntryPointViewModel())
+        self._addViewModelProperty('awardsWidget', AwardsWidgetModel())
         self._addArrayProperty('chapters', Array())
-        self._addNumberProperty('bpbitCount', 0)
-        self._addNumberProperty('notChosenRewardCount', 0)
-        self._addNumberProperty('bpcoinCount', 0)
-        self._addBoolProperty('isBattlePassCompleted', False)
-        self._addBoolProperty('isChooseRewardsEnabled', True)
         self._addNumberProperty('freePoints', 0)
         self._addBoolProperty('isCustomSeason', False)
-        self._addNumberProperty('specialVoiceTankmenCount', 0)
         self._addNumberProperty('seasonNum', 0)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onChapterSelect = self._addCommand('onChapterSelect')
         self.onAboutClick = self._addCommand('onAboutClick')
         self.onPointsInfoClick = self._addCommand('onPointsInfoClick')
         self.onBuyClick = self._addCommand('onBuyClick')
-        self.onBpbitClick = self._addCommand('onBpbitClick')
-        self.onBpcoinClick = self._addCommand('onBpcoinClick')
-        self.onTakeRewardsClick = self._addCommand('onTakeRewardsClick')
         self.onViewLoaded = self._addCommand('onViewLoaded')
         self.onClose = self._addCommand('onClose')
-        self.showTankmen = self._addCommand('showTankmen')

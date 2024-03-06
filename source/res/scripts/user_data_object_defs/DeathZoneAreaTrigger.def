@@ -21,5 +21,17 @@
       <Editable>	True	</Editable>
       <Default>	Default	</Default>
     </DeathZoneType>
+    <MarkerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	STATIC_DEATH_ZONE	</Default>
+    </MarkerStyle>
+    <DrawBorder>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	true	</Default>
+    </DrawBorder>
   </Properties>
 </DeathZoneAreaTrigger.def>

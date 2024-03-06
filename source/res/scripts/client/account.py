@@ -1121,6 +1121,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
         return
 
+    def _doCmdNoArgs(self, cmd, callback):
+        return self.__doCmd('doCmdNoArgs', cmd, callback)
+
     def _doCmdStr(self, cmd, s, callback):
         return self.__doCmd('doCmdStr', cmd, callback, s)
 

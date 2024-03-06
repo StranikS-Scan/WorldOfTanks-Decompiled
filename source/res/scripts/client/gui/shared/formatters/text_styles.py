@@ -458,6 +458,10 @@ def discountText(text):
     return _formatText('discountText', text)
 
 
+def discountSmallText(text):
+    return _formatText('discountSmallText', text)
+
+
 def goldTitle(text):
     return _formatText('goldTitle', text)
 

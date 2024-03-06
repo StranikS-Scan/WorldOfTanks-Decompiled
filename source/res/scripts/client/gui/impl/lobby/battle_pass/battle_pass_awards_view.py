@@ -18,6 +18,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS: RewardReason.BUY_BATTLE_PASS_LEVELS,
+ BattlePassRewardReason.PURCHASE_BATTLE_PASS_WITH_LEVELS: RewardReason.BUY_BATTLE_PASS_WITH_LEVELS,
  BattlePassRewardReason.STYLE_UPGRADE: RewardReason.STYLE_UPGRADE,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE: RewardReason.BUY_MULTIPLE_BATTLE_PASS,
  BattlePassRewardReason.SELECT_REWARD: RewardReason.BUY_BATTLE_PASS_LEVELS}
@@ -100,7 +101,7 @@ class BattlePassAwardsView(ViewImpl):
 
     def _onLoaded(self, data, *args, **kwargs):
         reason = data.get('reason', BattlePassRewardReason.DEFAULT)
-        if reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS):
+        if reason in (BattlePassRewardReason.PURCHASE_BATTLE_PASS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS, BattlePassRewardReason.PURCHASE_BATTLE_PASS_WITH_LEVELS):
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.BUYING_THINGS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _finalize(self):

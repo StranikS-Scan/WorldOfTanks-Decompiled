@@ -4,6 +4,9 @@ import logging
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getRankedFightBtnTooltipData
+from gui.Scaleform.settings import TOOLTIP_TYPES
+from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.ranked.pre_queue.actions_validator import RankedActionsValidator
 from gui.prb_control.entities.ranked.pre_queue.ctx import RankedQueueCtx
@@ -18,6 +21,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.periodic_battles.prb_control.entity import PeriodicEntryPoint
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
@@ -77,6 +81,16 @@ class RankedEntity(PreQueueEntity):
 
     def getPermissions(self, pID=None, **kwargs):
         return RankedPermissions(self.isInQueue())
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getRankedFightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(RankedEntity, self).getFightBtnTooltipData(isStateDisabled)
+
+    def getSquadBtnTooltipData(self):
+        if self.getPermissions().canCreateSquad():
+            header = backport.text(R.strings.platoon.headerButton.tooltips.rankedSquad.header())
+            body = backport.text(R.strings.platoon.headerButton.tooltips.rankedSquad.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        return super(RankedEntity, self).getSquadBtnTooltipData()
 
     def _createActionsValidator(self):
         return RankedActionsValidator(self)

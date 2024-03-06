@@ -10,15 +10,15 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isActive>
-    <deathzone_size>
-      <Type>	VECTOR3	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </deathzone_size>
     <vehiclesUnderFire>
       <Type>	ARRAY	  <of>	VEHICLE_IN_DEATHZONE	</of>
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </vehiclesUnderFire>
+    <maskingPolygonsCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </maskingPolygonsCount>
   </Properties>
   <ClientMethods>
     <onDeathZoneDamage>

@@ -641,7 +641,7 @@ class IPromoController(IGameController):
     def getPromoCount(self):
         raise NotImplementedError
 
-    def showPromo(self, url, handlers=None, source=None):
+    def showPromo(self, url, closeCallback=None, source=None):
         raise NotImplementedError
 
     def setNewTeaserData(self, teaserData):
@@ -657,6 +657,9 @@ class IPromoController(IGameController):
         raise NotImplementedError
 
     def isTeaserOpen(self):
+        raise NotImplementedError
+
+    def getUrlWithAuthParams(self, url):
         raise NotImplementedError
 
 
@@ -1676,9 +1679,16 @@ class ICalendarController(IGameController):
 
 
 class IReferralProgramController(IGameController):
-    onReferralProgramEnabled = None
-    onReferralProgramDisabled = None
+    onReferralStateChanged = None
     onReferralProgramUpdated = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isNewReferralSeason(self):
+        raise NotImplementedError
 
     def isFirstIndication(self):
         raise NotImplementedError
@@ -1871,6 +1881,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def isGameModeEnabled(self, arenaBonusType):
+        raise NotImplementedError
+
+    def getVisibleGameModes(self):
         raise NotImplementedError
 
     def getSupportedArenaBonusTypes(self):
@@ -3427,4 +3440,36 @@ class IHangarGuiController(IGameController):
         raise NotImplementedError
 
     def updateComponentsVisibility(self, preset=None):
+        raise NotImplementedError
+
+
+class IGraphicsOptimizationController(IGameController):
+    onUiVisibilityToggled = None
+    onSettingsChanged = None
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def updateConfig(self, config):
+        raise NotImplementedError
+
+    def registerOptimizationArea(self, x, y, width, height):
+        raise NotImplementedError
+
+    def unregisterOptimizationArea(self, optimizationId):
+        raise NotImplementedError
+
+    def updateOptimizationArea(self, optimizationId, x, y, width, height):
+        raise NotImplementedError
+
+    def switchOptimizationEnabled(self, value):
+        raise NotImplementedError
+
+    def getEnable(self):
+        raise NotImplementedError
+
+    def isOptimizationEnabled(self, alias):
+        raise NotImplementedError
+
+    def isOptimizationAvailable(self, alias):
         raise NotImplementedError

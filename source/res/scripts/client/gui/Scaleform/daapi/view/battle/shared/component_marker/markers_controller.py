@@ -4,6 +4,7 @@ import logging
 from functools import partial
 import BigWorld
 import Event
+from chat_commands_consts import INVALID_TARGET_ID
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.utils.TimeInterval import TimeInterval
@@ -41,9 +42,11 @@ class BaseMarkerController(IArenaVehiclesController):
     def getPluginID(self):
         raise NotImplementedError
 
-    def createMarker(self, matrix, markerType, clazz=AreaMarker, bitMask=0):
-        markerData = MarkerParamsFactory.getMarkerParams(matrix, markerType, bitMask)
-        return clazz(markerData)
+    def createMarker(self, matrix, markerType, targetID=INVALID_TARGET_ID, entity=None, clazz=AreaMarker, visible=None, bitMask=0):
+        config = MarkerParamsFactory.getMarkerParams(matrix, markerType, bitMask)
+        if visible is not None:
+            config.update({'visible': visible})
+        return clazz(config, entity, targetID)
 
     def addMarker(self, marker):
         markerID = marker.markerID
@@ -141,10 +144,6 @@ class BaseMarkerController(IArenaVehiclesController):
         else:
             if self._updateTI:
                 self._updateTI.stop()
-            for markerID in self._markers.iterkeys():
-                if markerID not in self._attachGUIToMarkersCallback:
-                    self._attachGUIToMarkersCallback[markerID] = BigWorld.callback(0.0, partial(self._attachGUIToMarkers, markerID=markerID))
-
             self._updateTI = TimeInterval(self._UPDATE_TICK_LENGTH, self, '_tickUpdate')
             self._updateTI.start()
             return

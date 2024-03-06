@@ -9,8 +9,8 @@
   <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	20	</forward>
-    <backward>	20	</backward>
+    <forward>	10	</forward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.274	</moving>
@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.07	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	9.5	</repairCost>
+  <repairCost>	7.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -61,7 +61,7 @@
       <rightTrack>	20	</rightTrack>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	14210	</weight>
+    <weight>	11255	</weight>
     <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
@@ -1311,12 +1311,12 @@
       </armor>
       <weight>	6000	</weight>
       <maxLoad>	26000	</maxLoad>
-      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
-      <brakeForce>	37000	</brakeForce>
+      <terrainResistance>	0.8 0.9 1.6	</terrainResistance>
+      <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleMovement>	0.40	</vehicleMovement>
         <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
@@ -2163,15 +2163,15 @@
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9.2	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <reloadTime>	9.5	</reloadTime>
+          <aimingTime>	1.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/sweden/S33_Latt_Stridsfordon_120/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S33_Latt_Stridsfordon_120/crash/lod0/Gun_01.model	</destroyed>
@@ -2261,21 +2261,21 @@
     <detailed>
       <engines>
         <Volvo_TD_120V>
-          <smplEnginePower>	380	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplEnginePower>	340	</smplEnginePower>
+          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
         </Volvo_TD_120V>
       </engines>
       <chassis>
         <Chassis_S33_Latt_Stridsfordon_120>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1288	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.09056	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
+from constants import DAMAGE_INTERPOLATION_DIST_LAST, DAMAGE_INTERPOLATION_DIST_FIRST
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -107,7 +108,8 @@ class HeaderBlockConstructor(ShellTooltipBlockConstructor):
         formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
         paramName = ModuleTooltipBlockConstructor.CALIBER
         paramValue = dict(formattedParameters).get(paramName)
-        headerText = formatters.packTitleDescBlock(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(backport.text(R.strings.item_types.shell.kinds.dyn(shell.type)())), params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue)), padding=formatters.packPadding(left=-15), descPadding=formatters.packPadding(top=4), gap=-4)
+        shellKind = backport.text(R.strings.item_types.shell.kinds.dyn(shell.type)())
+        headerText = formatters.packTitleDescBlock(title=text_styles.highTitle(shell.userName), desc=text_styles.concatStylesToMultiLine(text_styles.main(shellKind), params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue)), padding=formatters.packPadding(left=-15), descPadding=formatters.packPadding(top=4), gap=-4)
         headerImage = formatters.packImageBlockData(img=shell.getBonusIcon(size='big'), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(right=30, top=-5, bottom=-5))
         return [headerText, headerImage]
 
@@ -228,14 +230,11 @@ class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
     def construct(self):
         block = []
         if self.configuration.params:
-            top = 8
             bottom = 8
-            topPadding = formatters.packPadding(top=top)
             bottomPadding = formatters.packPadding(bottom=bottom)
             shell = self.shell
             comparator = params_helper.shellComparator(shell, self.configuration.vehicle)
             piercingPowerTable = self._params.pop('piercingPowerTable')
-            isDistanceDependent = piercingPowerTable is not None
             colorScheme = params_formatters.COLORLESS_SCHEME if self.configuration.colorless else params_formatters.BASE_SCHEME
             tableData = []
             if isinstance(piercingPowerTable, list):
@@ -244,26 +243,46 @@ class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
 
             formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
             block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=bottomPadding))
+            showDistanceAsterisk = False
+            footNotes = []
             for paramName, paramValue in formattedParameters:
                 if paramName == ModuleTooltipBlockConstructor.CALIBER:
+                    continue
+                if paramName == 'avgDamage' and shell.isDamageMutable():
                     continue
                 if comparator is not None:
                     paramValue = params_formatters.colorizedFormatParameter(comparator.getExtendedData(paramName), colorScheme)
                 if paramValue is not None:
                     paramUnits = _ms(params_formatters.measureUnitsForParameter(paramName))
                     isPiercingPower = paramName == 'avgPiercingPower'
-                    if isPiercingPower:
-                        if piercingPowerTable != NO_DATA:
-                            paramUnits += _ASTERISK
-                        if tableData and isDistanceDependent:
+                    isDamageMutable = paramName == 'avgMutableDamage'
+                    vehicle = self.configuration.vehicle
+                    if isDamageMutable and vehicle is not None:
+                        showDistanceAsterisk = True
+                        paramUnits += _ASTERISK
+                        minDist = int(DAMAGE_INTERPOLATION_DIST_FIRST)
+                        maxDist = int(min(vehicle.descriptor.shot.maxDistance, DAMAGE_INTERPOLATION_DIST_LAST))
+                        if tableData:
+                            minDist = tableData[0][1]
+                            maxDist = tableData[-1][1]
+                        footNotes.append(_ASTERISK + _ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE, minDist=minDist, maxDist=maxDist))
+                    if isPiercingPower and piercingPowerTable != NO_DATA:
+                        if tableData:
                             paramValue = '%s-%s' % (tableData[0][0], tableData[-1][0])
+                            paramUnits += _ASTERISK
+                            if not showDistanceAsterisk:
+                                footNotes.append(_ASTERISK + _ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE, minDist=tableData[0][1], maxDist=tableData[-1][1]))
+                        else:
+                            asterisks = _ASTERISK if not showDistanceAsterisk else _ASTERISK * 2
+                            paramUnits += asterisks
+                            footNotes.append(asterisks + _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE))
                     block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, paramUnits))
 
-            if piercingPowerTable != NO_DATA:
-                title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
-                if isDistanceDependent and tableData:
-                    title = _ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE, minDist=tableData[0][1], maxDist=tableData[-1][1])
-                block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=topPadding))
+            notePadding = formatters.packPadding(top=8)
+            for title in footNotes:
+                block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=notePadding))
+                notePadding = formatters.packPadding(top=0)
+
         return block
 
     @staticmethod

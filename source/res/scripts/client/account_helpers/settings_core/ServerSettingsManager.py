@@ -5,7 +5,7 @@ from collections import namedtuple
 from itertools import chain
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, ReferralProgram
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -73,32 +73,29 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     SENIORITY_AWARDS_STORAGE = 'SENIORITY_AWARDS_STORAGE'
     LIMITED_UI_PERMANENT_1 = 'LIMITED_UI_PERMANENT_1'
     LIMITED_UI_PERMANENT_2 = 'LIMITED_UI_PERMANENT_2'
+    REFERRAL_PROGRAM = 'REFERRAL_PROGRAM'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2)
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_RELOAD_HIGHLIGHTS_COUNTER = 'auto_reload_highlights_count'
-    AUTO_RELOAD_MARK_IS_SHOWN = 'auto_reload_mark_shown'
     DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
     REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
     DUAL_GUN_HIGHLIGHTS_COUNTER = 'dual_gun_highlights_count'
-    DUAL_GUN_MARK_IS_SHOWN = 'dual_gun_mark_shown'
     DISABLE_EDITABLE_STYLE_REWRITE_WARNING = 'disable_editable_style_rewrite_warning'
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER = 'rocket_acceleration_highlights_count'
-    TURBOSHAFT_MARK_IS_SHOWN = 'turboshaft_mark_shown'
-    ROCKET_ACCELERATION_MARK_IS_SHOWN = 'rocket_acceleration_mark_shown'
     EPIC_BATTLE_ABILITIES_INTRO_SHOWN = 'epic_battle_abilities_intro_shown'
     POST_PROGRESSION_INTRO_SHOWN = 'post_progression_intro_shown'
     VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN = 'veh_preview_post_progression_bullet_shown'
     ACHIEVEMENT_EDIT_VIEW_VISITED = 'achievement_edit_view_visited'
     DUAL_ACCURACY_HIGHLIGHTS_COUNTER = 'dual_accuracy_highlights_count'
-    DUAL_ACCURACY_MARK_IS_SHOWN = 'dual_accuracy_mark_shown'
     STEAM_ADD_EMAIL_OVERLAY_SHOWN = 'steam_add_email_overlay_shown'
     IS_CONFIRM_EMAIL_OVERLAY_ALLOWED = 'is_confirm_email_overlay_allowed'
     LIMITED_UI_ALL_NOVICE_RULES_COMPLETED = 'limited_ui_all_novice_rules_completed'
+    MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN = 'mutable_damage_shell_mark_is_shown'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
@@ -217,7 +214,9 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={GAME.SHOW_ARTY_HIT_ON_MAP: 0,
                                          GAME.GAMEPLAY_ONLY_10_MODE: 1,
                                          GAME.SCROLL_SMOOTHING: 4,
-                                         GAME.GAMEPLAY_DEV_MAPS: 5}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
+                                         GAME.GAMEPLAY_DEV_MAPS: 5,
+                                         GAME.NEWBIE_PREBATTLE_HINTS: 6,
+                                         GAME.NEWBIE_BATTLE_HINTS: 7}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -581,15 +580,12 @@ class ServerSettingsManager(object):
                                     PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: 1,
                                     PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
                                     PM_TUTOR_FIELDS.MULTIPLE_FAL_SHOWN: 8,
-                                    UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: 9,
                                     UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 13,
                                     UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: 14,
                                     PM_TUTOR_FIELDS.PM2_ONE_FAL_SHOWN: 15,
                                     PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
                                     UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17,
-                                    UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: 18,
                                     UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22,
-                                    UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: 26,
                                     UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27,
                                     UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN: 28,
                                     UI_STORAGE_KEYS.POST_PROGRESSION_INTRO_SHOWN: 29,
@@ -598,9 +594,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016),
                                     UI_STORAGE_KEYS.TURBOSHAFT_HIGHLIGHTS_COUNTER: Offset(23, 58720256)}),
-     SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: 0,
+     SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN: 0,
                                       UI_STORAGE_KEYS.ACHIEVEMENT_EDIT_VIEW_VISITED: 4,
-                                      UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: 8,
                                       UI_STORAGE_KEYS.STEAM_ADD_EMAIL_OVERLAY_SHOWN: 9,
                                       UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED: 10}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224)}),
@@ -788,7 +783,8 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)})}
+     SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.REFERRAL_PROGRAM: Section(masks={}, offsets={ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON: Offset(0, 4095)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -977,6 +973,12 @@ class ServerSettingsManager(object):
     def setLimitedUICompleted(self):
         fields = {UI_STORAGE_KEYS.LIMITED_UI_ALL_NOVICE_RULES_COMPLETED: True}
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+
+    def setViewedReferralProgramSeason(self, season):
+        self.setSectionSettings(SETTINGS_SECTIONS.REFERRAL_PROGRAM, {ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON: season})
+
+    def getViewedReferralProgramSeason(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.REFERRAL_PROGRAM, ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON, 0)
 
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)

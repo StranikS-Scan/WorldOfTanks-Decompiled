@@ -179,7 +179,7 @@ class _MultiAwardVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setIcon(vehIconName)
         model.setVehicleLevel(vehicle.level)
         model.setVehicleType(vehicle.type)
-        wasInHangarBeforeRent = gpRentType != RentType.NO_RENT and not vehicle.isRented
+        wasInHangarBeforeRent = gpRentType != RentType.NO_RENT and not vehicle.isRented and vehicle.isInInventory
         model.setIsFromStorage(wasInHangarBeforeRent)
         return model
 

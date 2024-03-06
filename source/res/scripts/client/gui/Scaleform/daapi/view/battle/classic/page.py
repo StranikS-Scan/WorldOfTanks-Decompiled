@@ -17,10 +17,10 @@ class DynamicAliases(CONST_CONTAINER):
     DRONE_MUSIC_PLAYER = 'droneMusicPlayer'
 
 
-class _ClassicComponentsConfig(ComponentsConfig):
+class ClassicComponentsConfig(ComponentsConfig):
 
     def __init__(self):
-        super(_ClassicComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
+        super(ClassicComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
            DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER,
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
@@ -40,7 +40,8 @@ class _ClassicComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL))), viewsConfig=((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
-COMMON_CLASSIC_CONFIG = _ClassicComponentsConfig()
+BATTLE_HINTS_CONFIG = ComponentsConfig(config=((BATTLE_CTRL_ID.BATTLE_HINTS, (BATTLE_VIEW_ALIASES.BATTLE_HINT, BATTLE_VIEW_ALIASES.NEWBIE_HINT)),), viewsConfig=())
+COMMON_CLASSIC_CONFIG = ClassicComponentsConfig() + BATTLE_HINTS_CONFIG
 EXTENDED_CLASSIC_CONFIG = COMMON_CLASSIC_CONFIG + ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.TEAM_BASES, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.FINISH_SOUND_PLAYER,))), viewsConfig=((DynamicAliases.FINISH_SOUND_PLAYER, finish_sound_player.FinishSoundPlayer),))
 
 class ClassicPage(SharedPage):
@@ -57,6 +58,7 @@ class ClassicPage(SharedPage):
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
         radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU
+        newbieHintLinkage = BATTLE_VIEW_ALIASES.NEWBIE_HINT
         radialMenu = self.getComponent(radialMenuLinkage)
         if radialMenu is None:
             return
@@ -66,9 +68,13 @@ class ClassicPage(SharedPage):
             if isShown:
                 radialMenu.show()
                 self.app.enterGuiControlMode(radialMenuLinkage, cursorVisible=False, enableAiming=False)
+                if newbieHintLinkage in self.components:
+                    self._setComponentsVisibility(hidden={newbieHintLinkage})
             else:
                 self.app.leaveGuiControlMode(radialMenuLinkage)
                 radialMenu.hide(allowAction)
+                if newbieHintLinkage in self.components:
+                    self._setComponentsVisibility(visible={newbieHintLinkage})
             return
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):

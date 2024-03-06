@@ -16,12 +16,12 @@ from gui.impl.gen import R
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, int2roman
 from items.components.c11n_constants import UNBOUND_VEH_KEY
+from gui.shared.system_factory import collectCustomizationHangarDecorator
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -93,7 +93,9 @@ class StyleUnlockedView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __updateC11nButton(self, lock=False, model=None):
-        isEnabled = not lock and not currentHangarIsBattleRoyale() and self.__isCustEnabledForActiveVehicle()
+        isEnabled = not lock and self.__isCustEnabledForActiveVehicle()
+        if any((handler() for handler in collectCustomizationHangarDecorator())):
+            isEnabled = False
         if isEnabled:
             tooltipText = ''
         else:

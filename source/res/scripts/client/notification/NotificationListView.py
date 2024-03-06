@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationListView.py
 import typing
+from adisp import adisp_process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
 from gui.Scaleform.genConsts.NOTIFICATIONS_CONSTANTS import NOTIFICATIONS_CONSTANTS
@@ -46,14 +47,8 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         return TimeFormatter.getActualMsgTimeStr(msTime)
 
     def onCheckNewsClick(self):
-        if not self.__promoController.isPromoOpen:
-            self.__promoController.showPromo(self.__winbackController.winbackPromoURL)
-        else:
-            browserView = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.common.BrowserView())
-            if browserView is not None and browserView.browser is not None:
-                browserView.browser.navigate(self.__winbackController.winbackPromoURL)
+        self.__openPromoScreen()
         self.destroy()
-        return
 
     def _populate(self):
         super(NotificationListView, self)._populate()
@@ -164,3 +159,14 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
     def __getListVO(self, notificaton):
         flashId = self._getFlashID(notificaton.getCounterInfo())
         return notificaton.getListVO(flashId)
+
+    @adisp_process
+    def __openPromoScreen(self):
+        urlWithAuth = yield self.__promoController.getUrlWithAuthParams(self.__winbackController.winbackPromoURL)
+        if not self.__promoController.isPromoOpen:
+            self.__promoController.showPromo(urlWithAuth)
+        else:
+            browserView = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.common.BrowserView())
+            if browserView is not None and browserView.browser is not None:
+                browserView.browser.navigate(urlWithAuth)
+        return

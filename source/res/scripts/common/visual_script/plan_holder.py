@@ -19,18 +19,18 @@ class PlanHolder(object):
 
     @property
     def isLoaded(self):
-        return self.loadState is PlanHolder.LOADED
+        return self.loadState == PlanHolder.LOADED
 
     @property
     def isError(self):
-        return self.loadState is PlanHolder.ERROR
+        return self.loadState == PlanHolder.ERROR
 
     @property
     def isLoadCanceled(self):
-        return self.loadState is PlanHolder.LOAD_CANCELED
+        return self.loadState == PlanHolder.LOAD_CANCELED
 
     def load(self, planName, aspect, tags):
-        if self.loadState is PlanHolder.LOADING:
+        if self.loadState == PlanHolder.LOADING:
             if self.plan.load(planName, aspect, tags):
                 self.loadState = PlanHolder.LOADED
             elif self.plan.isLoadCanceled():

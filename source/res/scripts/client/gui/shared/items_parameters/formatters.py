@@ -3,7 +3,7 @@
 import typing
 from collections import namedtuple
 from itertools import chain
-from constants import BonusTypes
+from constants import BonusTypes, DAMAGE_INTERPOLATION_DIST_LAST
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -27,6 +27,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'armor': MENU.TANK_PARAMS_FACEFRONTBOARDINMM,
  'artDelayRange': MENU.TANK_PARAMS_S,
  'avgDamageList': MENU.TANK_PARAMS_VAL,
+ 'maxAvgMutableDamageList': MENU.TANK_PARAMS_VAL,
+ 'minAvgMutableDamageList': MENU.TANK_PARAMS_VAL,
  'gunModuleAvgDamageList': MENU.TANK_PARAMS_VAL,
  'avgPiercingPower': MENU.TANK_PARAMS_MM,
  'bombDamage': MENU.TANK_PARAMS_VAL,
@@ -40,6 +42,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  BURST_COUNT: MENU.TANK_PARAMS_CNT,
  BURST_SIZE: MENU.TANK_PARAMS_CNT,
  'avgDamage': MENU.TANK_PARAMS_VAL,
+ 'avgMutableDamage': MENU.TANK_PARAMS_VAL,
  'avgDamagePerMinute': MENU.TANK_PARAMS_VPM,
  'fireStartingChance': MENU.TANK_PARAMS_PERCENT,
  'maxHealth': MENU.TANK_PARAMS_VAL,
@@ -55,6 +58,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'hullArmor': MENU.TANK_PARAMS_FACEFRONTBOARDINMM,
  'maxLoad': MENU.TANK_PARAMS_T,
  'piercingPower': MENU.TANK_PARAMS_MM,
+ 'maxPiercingPower': MENU.TANK_PARAMS_MM,
+ 'minPiercingPower': MENU.TANK_PARAMS_MM,
  'pitchLimits': MENU.TANK_PARAMS_GRADS,
  'radioDistance': MENU.TANK_PARAMS_M,
  'radarRadius': MENU.TANK_PARAMS_M,
@@ -80,6 +85,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'hullAndChassisWeight': MENU.TANK_PARAMS_KG,
  'caliber': MENU.TANK_PARAMS_MM,
  'damage': MENU.TANK_PARAMS_VAL,
+ 'maxMutableDamage': MENU.TANK_PARAMS_VAL,
+ 'minMutableDamage': MENU.TANK_PARAMS_VAL,
  'turretRotationSpeed': MENU.TANK_PARAMS_GPS,
  'invisibilityStillFactor': MENU.TANK_PARAMS_PERCENT,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
@@ -151,7 +158,7 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                         artefacts.AttackArtilleryFortEquipment: ('maxDamage', 'areaRadius', 'duration', 'commonDelay'),
                         artefacts.FortConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration'),
                         artefacts.ConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration')},
- ITEM_TYPES.shell: ('caliber', 'damage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList'),
+ ITEM_TYPES.shell: ('caliber', 'avgDamage', 'avgMutableDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
                          'shellsCount',
@@ -164,6 +171,8 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                          'chargeTime',
                          'avgPiercingPower',
                          'avgDamageList',
+                         'maxAvgDamageList',
+                         'minAvgDamageList',
                          'stunMinDurationList',
                          'stunMaxDurationList',
                          DISPERSION_RADIUS,
@@ -227,9 +236,15 @@ def formatModuleParamName(paramName, vDescr=None):
     builder = text_styles.builder(delimiter=_NBSP)
     hasBoost = vDescr and vDescr.gun.autoreloadHasBoost
     titleName = getTitleParamName(vDescr, paramName)
-    resource = R.strings.menu.moduleInfo.params.dyn(titleName)
-    paramMsgId = backport.msgid(resource.dyn('boost')() if hasBoost and resource.dyn('boost') else resource())
-    builder.addStyledText(text_styles.main, paramMsgId)
+    if paramName == 'minAvgMutableDamageList':
+        dist = DAMAGE_INTERPOLATION_DIST_LAST
+        if vDescr is not None:
+            dist = int(min(vDescr.shot.maxDistance, DAMAGE_INTERPOLATION_DIST_LAST))
+        textOrMsgId = backport.text(R.strings.menu.moduleInfo.params.dyn(titleName)(), dist=dist)
+    else:
+        resource = R.strings.menu.moduleInfo.params.dyn(titleName)
+        textOrMsgId = backport.msgid(resource.dyn('boost')() if hasBoost and resource.dyn('boost') else resource())
+    builder.addStyledText(text_styles.main, textOrMsgId)
     measureName = getMeasureParamName(vDescr, paramName)
     builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(measureName, ''))
     return builder.render()
@@ -335,7 +350,11 @@ def _getRoundReload(value):
 
 FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
+ 'maxMutableDamage': _niceRangeFormat,
+ 'minMutableDamage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
+ 'maxPiercingPower': _niceRangeFormat,
+ 'minPiercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
  'reloadTimeSecs': _niceListFormat,
  'turretRotationSpeed': _niceListFormat,
@@ -352,6 +371,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'avgDamagePerMinute': _niceFormat,
  'relativeArmor': _integralFormat,
  'avgDamage': _niceFormat,
+ 'avgMutableDamage': _niceRangeFormat,
  'maxHealth': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
@@ -386,6 +406,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'reloadMagazineTime': _niceRangeFormat,
  'avgPiercingPower': _listFormat,
  'avgDamageList': _listFormat,
+ 'maxAvgMutableDamageList': _listFormat,
+ 'minAvgMutableDamageList': _listFormat,
  SHOT_DISPERSION_ANGLE: _niceListFormatWithoutNone,
  DISPERSION_RADIUS: _niceListFormatWithoutNone,
  'invisibilityStillFactor': _niceListFormat,

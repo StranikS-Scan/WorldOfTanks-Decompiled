@@ -28,7 +28,7 @@ class AddMarkerAtPoint(Block, EventPlatformMeta):
     def __init__(self, *args, **kwargs):
         super(AddMarkerAtPoint, self).__init__(*args, **kwargs)
         self._position = self._makeDataInputSlot('Position', SLOT_TYPE.VECTOR3)
-        self._markerType = self._makeDataInputSlot('Type', SLOT_TYPE.INT)
+        self._markerType = self._makeDataInputSlot('Type', SLOT_TYPE.STR)
         self._markerID = self._makeDataOutputSlot('markerID', SLOT_TYPE.INT, self._execute)
 
     @classmethod
@@ -70,7 +70,7 @@ class RemoveMarkerAtPoint(Block, EventPlatformMeta):
                     ctrl.removeMarker(slot.getValue())
 
             else:
-                ctrl.removeAllMarkersAtPoint()
+                ctrl.removeAllMarkers()
         self._out.call()
         return
 

@@ -22,6 +22,9 @@ class MessengerBarMeta(BaseDAAPIComponent):
     def as_setReferralProgramButtonVisibleS(self, value):
         return self.flashObject.as_setReferralProgramButtonVisible(value) if self._isDAAPIInited() else None
 
+    def as_setReferralProgramButtonTooltipS(self, tooltip, isSpecial):
+        return self.flashObject.as_setReferralProgramButtonTooltip(tooltip, isSpecial) if self._isDAAPIInited() else None
+
     def as_setReferralButtonEnabledS(self, value):
         return self.flashObject.as_setReferralButtonEnabled(value) if self._isDAAPIInited() else None
 

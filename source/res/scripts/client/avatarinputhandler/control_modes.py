@@ -760,6 +760,8 @@ class _TrajectoryControlMode(_GunControlMode):
             if pos is None:
                 pos = self._gunMarker.getPosition()
             self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=pos, aimingMode=self._aimingMode, closesDist=False)
+            if TriggersManager.g_manager:
+                TriggersManager.g_manager.fireTriggerInstantly(TRIGGER_TYPE.PLAYER_LEAVE_SPG_MODE)
             return True
         else:
             if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
@@ -958,6 +960,8 @@ class StrategicControlMode(_TrajectoryControlMode):
         super(StrategicControlMode, self).enable(**args)
         AccountSettings.setSettings(LAST_ARTY_CTRL_MODE, CTRL_MODE_NAME.STRATEGIC)
         g_repeatKeyHandlers.add(self.__handleRepeatKeyEvent)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            TriggersManager.g_manager.fireTriggerInstantly(TRIGGER_TYPE.PLAYER_ENTER_SPG_STRATEGIC_MODE)
 
     def disable(self):
         super(StrategicControlMode, self).disable()
@@ -979,6 +983,8 @@ class ArtyControlMode(_TrajectoryControlMode):
         super(ArtyControlMode, self).enable(**args)
         self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
         AccountSettings.setSettings(LAST_ARTY_CTRL_MODE, CTRL_MODE_NAME.ARTY)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            TriggersManager.g_manager.fireTriggerInstantly(TRIGGER_TYPE.PLAYER_ENTER_SPG_SNIPER_MODE)
 
     def disable(self):
         super(ArtyControlMode, self).disable()

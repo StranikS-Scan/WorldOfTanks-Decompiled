@@ -9,10 +9,11 @@ from dict2model import utils
 from dict2model import validate
 from dict2model.exceptions import ValidationError, ValidationErrorMessage, AccessToFieldDeniedError
 if typing.TYPE_CHECKING:
-    from dict2model.types import ValidatorsType, SchemaModelTypes
-    from dict2model.schemas import Schema
+    from dict2model.types import ValidatorsType
+    from dict2model.schemas import Schema, SchemaModelType
 
 class AccessDeniedField(object):
+    __slots__ = ()
 
     def __bool__(self):
         raise AccessToFieldDeniedError('__bool__')
@@ -217,6 +218,16 @@ class Url(String):
         self._deserializedValidators = [validate.URL(relative=self._relative)] + list(self._deserializedValidators)
 
 
+class NonEmptyString(String):
+    __slots__ = ()
+
+    def __init__(self, required=True, default=None, public=True, serializedValidators=None, deserializedValidators=None):
+        super(NonEmptyString, self).__init__(required=required, default=default, public=public, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        validator = [validate.Length(minValue=1)]
+        self._serializedValidators = validator + self._serializedValidators
+        self._deserializedValidators = validator + self._deserializedValidators
+
+
 class Enum(Field):
     __slots__ = ('_enumClass',)
 
@@ -284,6 +295,7 @@ class List(Field):
 
 
 class UniCapList(List):
+    __slots__ = ()
 
     def _convert(self, incoming, onlyPublic, method):
         if not isinstance(incoming, (list, tuple)):

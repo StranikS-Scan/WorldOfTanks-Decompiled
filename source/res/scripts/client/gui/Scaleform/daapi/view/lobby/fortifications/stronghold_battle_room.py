@@ -6,6 +6,7 @@ from adisp import adisp_process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
+from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
 from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
@@ -24,17 +25,17 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans.clan_helpers import getStrongholdChangeModeUrl
 from gui.impl import backport
 from gui.prb_control import settings
+from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import ChangeVehTypesInSlotFilterCtx, ChangeVehiclesInSlotFilterCtx
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
 from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.entities.stronghold.unit.ctx import SetReserveUnitCtx, UnsetReserveUnitCtx
-from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import ChangeVehTypesInSlotFilterCtx, ChangeVehiclesInSlotFilterCtx
 from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.view_helpers import UsersInfoHelper
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, i18n
 from helpers import int2roman
 from helpers import time_utils
@@ -46,7 +47,6 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
-from gui import makeHtmlString
 
 class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -242,6 +242,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def onFiltersChange(self, slotIndex, filters):
         self.__setFilters(slotIndex, filters)
         self._updateMembersData()
+
+    def onUnfrozenVehicleSlotClick(self, slotIndex):
+        self.prbEntity.onUnfreezeVehicleInSlot(slotIndex, parent=self.__proxy)
 
     def _populate(self):
         super(StrongholdBattleRoom, self)._populate()

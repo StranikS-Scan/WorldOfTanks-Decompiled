@@ -14,6 +14,7 @@ from gui.server_events.events_helpers import MISSIONS_STATES
 from helpers import dependency
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
+from gui.shared.system_factory import collectCustomizationHangarDecorator
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
@@ -59,6 +60,8 @@ C11nProgressionLinkBtnParams = namedtuple('C11nProgressionLinkBtnParams', ('isLi
 
 def getC11nProgressionLinkBtnParams(vehicle):
     isLinkEnabled = vehicle.isCustomizationEnabled() if vehicle is not None else False
+    if any((handler() for handler in collectCustomizationHangarDecorator())):
+        isLinkEnabled = False
     linkBtnTooltip = R.strings.tooltips.quests.linkBtn.customizationProgression
     linkBtnTooltip = linkBtnTooltip.enabled() if isLinkEnabled else linkBtnTooltip.disabled()
     return C11nProgressionLinkBtnParams(isLinkEnabled, linkBtnTooltip)

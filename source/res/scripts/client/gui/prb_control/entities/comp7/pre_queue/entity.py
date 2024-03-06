@@ -5,6 +5,10 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getComp7FightBtnTooltipData
+from gui.Scaleform.settings import TOOLTIP_TYPES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
 from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
 from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
@@ -14,10 +18,11 @@ from gui.prb_control.entities.comp7.pre_queue.ctx import Comp7QueueCtx
 from gui.prb_control.entities.comp7.pre_queue.permissions import Comp7Permissions
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS, PRE_QUEUE_RESTRICTION
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.periodic_battles.models import PrimeTimeStatus
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -53,6 +58,7 @@ class Comp7EntryPoint(PreQueueEntryPoint):
 
 
 class Comp7Entity(PreQueueEntity):
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self):
         super(Comp7Entity, self).__init__(FUNCTIONAL_FLAG.COMP7, QUEUE_TYPE.COMP7, PreQueueSubscriber())
@@ -86,6 +92,25 @@ class Comp7Entity(PreQueueEntity):
     def doSelectAction(self, action):
         name = action.actionName
         return SelectResult(True) if name in (PREBATTLE_ACTION_NAME.COMP7,) else super(Comp7Entity, self).doSelectAction(action)
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getComp7FightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(Comp7Entity, self).getFightBtnTooltipData(isStateDisabled)
+
+    def getSquadBtnTooltipData(self):
+        if self.getPermissions().canCreateSquad():
+            header = backport.text(R.strings.platoon.headerButton.tooltips.comp7Squad.header())
+            body = backport.text(R.strings.platoon.headerButton.tooltips.comp7Squad.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        if not self.__comp7Controller.isQualificationSquadAllowed():
+            header = backport.text(R.strings.platoon.headerButton.tooltips.comp7QualificationSquad.header())
+            body = backport.text(R.strings.platoon.headerButton.tooltips.comp7QualificationSquad.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        result = self.canPlayerDoAction()
+        if result.restriction == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
+            header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BanIsSet.header())
+            body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BanIsSet.body())
+            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        return super(Comp7Entity, self).getSquadBtnTooltipData()
 
     def getPermissions(self, *_):
         return Comp7Permissions(self.isInQueue())

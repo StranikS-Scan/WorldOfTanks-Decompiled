@@ -18,9 +18,7 @@ from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
 from gui.Scaleform.framework.managers.event_logging import EventLogManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
-from gui.Scaleform.genConsts.GRAPHICS_OPTIMIZATION_ALIASES import GRAPHICS_OPTIMIZATION_ALIASES
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.Scaleform.managers.GameInputMgr import GameInputMgr
@@ -36,17 +34,6 @@ from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency, uniprof
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
-LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
- VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
- VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
- HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.RANKED_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.ROYALE_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.FUN_RANDOM_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.COMP7_TANK_CAROUSEL: OptimizationSetting(),
- GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 
 class LobbyEntry(AppEntry):
     bootcampCtrl = dependency.descriptor(IBootcampController)
@@ -128,7 +115,7 @@ class LobbyEntry(AppEntry):
         return ScaleformTutorialManager()
 
     def _createGraphicsOptimizationManager(self):
-        return GraphicsOptimizationManager(config=LOBBY_OPTIMIZATION_CONFIG)
+        return GraphicsOptimizationManager()
 
     def _setup(self):
         self.movie.backgroundAlpha = 0.0

@@ -37,6 +37,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.awards.event_dispatcher import showDynamicAward
@@ -1368,6 +1369,7 @@ class BattlePassStyleRecievedHandler(ServiceChannelHandler):
 
 class BattlePassBuyEmptyHandler(ServiceChannelHandler):
     __battlePass = dependency.descriptor(IBattlePassController)
+    __gui = dependency.descriptor(IGuiLoader)
     __MULTIPLE_CHAPTER = 0
 
     def __init__(self, awardCtrl):
@@ -1412,11 +1414,19 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
             return
 
     def __onAwardShown(self, chapterID):
-        if self.__battlePass.isDisabled() or chapterID is None:
+        if self.__battlePass.isDisabled():
             return
         else:
+            if chapterID is None:
+                if self.__isBattlePassOpen():
+                    chapterID = self.__battlePass.getCurrentChapterID()
+                else:
+                    return
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
             return
+
+    def __isBattlePassOpen(self):
+        return self.__gui.windowsManager.findWindows(lambda w: w.content is not None and getattr(w.content, 'alias', None) == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS)
 
 
 class BattlePassCapHandler(ServiceChannelHandler):

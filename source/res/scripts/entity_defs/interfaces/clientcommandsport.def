@@ -1,5 +1,10 @@
 <ClientCommandsPort.def>
   <BaseMethods>
+    <doCmdNoArgs>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
+      <Exposed></Exposed>
+    </doCmdNoArgs>
     <doCmdStr>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>

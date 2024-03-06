@@ -22,7 +22,7 @@ from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isCurrentUserRecruit
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
@@ -37,7 +37,7 @@ from items.customizations import getBootcampOutfit
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
+from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController, IReferralProgramController
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from vehicle_outfit.outfit import Outfit
@@ -89,6 +89,7 @@ class Bootcamp(EventSystemEntity):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
+    referralController = dependency.descriptor(IReferralProgramController)
     bootcampController = dependency.descriptor(IBootcampController)
     demoAccController = dependency.descriptor(IDemoAccCompletionController)
     tutorialLoader = dependency.descriptor(ITutorialLoader)
@@ -639,7 +640,7 @@ class Bootcamp(EventSystemEntity):
         return self.__nationsData.get(self.__nation if nation is None else nation, {})
 
     def isReferralEnabled(self):
-        return isReferralProgramEnabled() and self.__isRecruit
+        return self.referralController.isEnabled and self.__isRecruit
 
     def isMarkerLittlePiercingEnabled(self):
         return self.__context.get('little_pierced', False)

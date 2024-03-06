@@ -140,6 +140,8 @@ class GAME(CONST_CONTAINER):
     SWITCH_SETUPS_IN_LOADING = 'switchEquipment'
     SCROLL_SMOOTHING = 'scrollSmoothing'
     LIMITED_UI_ACTIVE = 'limitedUIActive'
+    NEWBIE_PREBATTLE_HINTS = 'newbiePrebattleHints'
+    NEWBIE_BATTLE_HINTS = 'newbieBattleHints'
 
 
 class SOUND(CONST_CONTAINER):
@@ -495,6 +497,10 @@ class ScorePanelStorageKeys(CONST_CONTAINER):
 
 class SeniorityAwardsStorageKeys(CONST_CONTAINER):
     SENIORITY_AWARDS_ON_PAUSE_NOTIFICATION_SHOWED = 'seniorityAwardsOnPauseShowed'
+
+
+class ReferralProgram(CONST_CONTAINER):
+    VIEWED_REFERRAL_PROGRAM_SEASON = 'viewedReferralProgramSeason'
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0

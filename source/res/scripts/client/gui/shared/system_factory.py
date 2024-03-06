@@ -48,6 +48,13 @@ AMMUNITION_PANEL_VIEW = 44
 VEHICLE_VIEW_STATE = 45
 DYN_OBJ_CACHE = 46
 SHARED_REPO = 47
+CONTEXT_MENU_COMMANDS = 48
+CONTEXT_MENU_OPTION_BUILDER = 49
+ADVANCED_CHAT_COMPONENT = 50
+BATTLE_CHANEL_CONTROLLER = 51
+HIT_DIRECTION_CONTROLLER = 52
+CUSTOMIZATION_HANGAR_AVAILABLE = 53
+OPTIMIZED_VIEWS = 54
 
 class _CollectEventsManager(object):
 
@@ -307,16 +314,16 @@ def collectArenaDescrs(guiType):
     return __collectEM.handleEvent((ARENA_DESCRIPTION, guiType), ctx={}).get('arena_descr_class')
 
 
-def registerSquadFinder(guiType, squadFinderClass):
+def registerSquadFinder(guiType, squadFinderClass, rosterClass):
 
     def onCollect(ctx):
-        ctx['squad_finder_class'] = squadFinderClass
+        ctx['squad_finder_data'] = (squadFinderClass, rosterClass)
 
     __collectEM.addListener((ARENA_SQUAD_FINDER, guiType), onCollect)
 
 
 def collectSquadFinder(guiType):
-    return __collectEM.handleEvent((ARENA_SQUAD_FINDER, guiType), ctx={}).get('squad_finder_class')
+    return __collectEM.handleEvent((ARENA_SQUAD_FINDER, guiType), ctx={}).get('squad_finder_data', (None, None))
 
 
 def registerNotificationsListeners(listenerClasses):
@@ -720,13 +727,98 @@ def collectVehicleViewStates():
     return __collectEM.handleEvent(VEHICLE_VIEW_STATE, ctx={'viewStates': []})['viewStates']
 
 
-def registerDynObjCache(queueType, dynCache):
+def registerDynObjCache(arenaGuiType, dynCache):
 
     def onCollect(ctx):
         ctx['dynCache'] = dynCache
 
-    __collectEM.addListener((DYN_OBJ_CACHE, queueType), onCollect)
+    __collectEM.addListener((DYN_OBJ_CACHE, arenaGuiType), onCollect)
 
 
-def collectDynObjCache(queueType):
-    return __collectEM.handleEvent((DYN_OBJ_CACHE, queueType), ctx={}).get('dynCache')
+def collectDynObjCache(arenaGuiType):
+    return __collectEM.handleEvent((DYN_OBJ_CACHE, arenaGuiType), ctx={}).get('dynCache')
+
+
+def registerLobbyContexMenuHandler(optionID, commandHandler):
+
+    def onCollect(ctx):
+        ctx[optionID] = commandHandler
+
+    __collectEM.addListener((CONTEXT_MENU_COMMANDS, optionID), onCollect)
+
+
+def collectLobbyContexMenuHandler(optionID):
+    return __collectEM.handleEvent((CONTEXT_MENU_COMMANDS, optionID), ctx={}).get(optionID, None)
+
+
+def registerLobbyContexMenuOptionBuilder(optionBuilder):
+
+    def onCollect(ctx):
+        ctx['cmOptionBuilders'].append(optionBuilder)
+
+    __collectEM.addListener(CONTEXT_MENU_OPTION_BUILDER, onCollect)
+
+
+def collectLobbyContexMenuOptionBuilders():
+    return __collectEM.handleEvent(CONTEXT_MENU_OPTION_BUILDER, {'cmOptionBuilders': []})['cmOptionBuilders']
+
+
+def registerAdvancedChatComponent(bonusType, component):
+
+    def onCollect(ctx):
+        ctx[bonusType] = component
+
+    __collectEM.addListener((ADVANCED_CHAT_COMPONENT, bonusType), onCollect)
+
+
+def collectAdvancedChatComponent(bonusType):
+    return __collectEM.handleEvent((ADVANCED_CHAT_COMPONENT, bonusType), ctx={}).get(bonusType, None)
+
+
+def registerBattleChanelController(guiType, battleChanelType, controller):
+
+    def onCollect(ctx):
+        ctx[guiType] = controller
+
+    __collectEM.addListener((BATTLE_CHANEL_CONTROLLER, battleChanelType), onCollect)
+
+
+def collectBattleChanelController(battleChanelType, guiType):
+    return __collectEM.handleEvent((BATTLE_CHANEL_CONTROLLER, battleChanelType), ctx={}).get(guiType, None)
+
+
+def registerHitDirectionController(guiType, hitDirectionType, hitDirectionPlayerType):
+
+    def onCollect(ctx):
+        ctx[guiType] = (hitDirectionType, hitDirectionPlayerType)
+
+    __collectEM.addListener((HIT_DIRECTION_CONTROLLER, guiType), onCollect)
+
+
+def collectHitDirectionController(guiType, defaultHitDirectionType, defaultHitDirectionPlayerType):
+    defaultValue = (defaultHitDirectionType, defaultHitDirectionPlayerType)
+    return __collectEM.handleEvent((HIT_DIRECTION_CONTROLLER, guiType), ctx={}).get(guiType, defaultValue)
+
+
+def registerCustomizationHangarDecorator(handler):
+
+    def onCollect(ctx):
+        ctx['handlers'].append(handler)
+
+    __collectEM.addListener(CUSTOMIZATION_HANGAR_AVAILABLE, onCollect)
+
+
+def collectCustomizationHangarDecorator():
+    return __collectEM.handleEvent(CUSTOMIZATION_HANGAR_AVAILABLE, {'handlers': []})['handlers']
+
+
+def registerOptimizedViews(optimizedViewsSettings):
+
+    def onCollect(ctx):
+        ctx['optimizedViewsSettings'].update(optimizedViewsSettings)
+
+    __collectEM.addListener(OPTIMIZED_VIEWS, onCollect)
+
+
+def collectOptimizedViews():
+    return __collectEM.handleEvent(OPTIMIZED_VIEWS, ctx={'optimizedViewsSettings': {}})['optimizedViewsSettings']

@@ -203,3 +203,6 @@ class CREW_SKINS(object):
     ERMELINDA_NAME = '#crew_skins:ermelinda/Name'
     ERMELINDA_LASTNAME = '#crew_skins:ermelinda/LastName'
     ERMELINDA_DESCR = '#crew_skins:ermelinda/Descr'
+    THAT_DOG_NAME = '#crew_skins:that_dog/Name'
+    THAT_DOG_LASTNAME = '#crew_skins:that_dog/LastName'
+    THAT_DOG_DESCR = '#crew_skins:that_dog/Descr'

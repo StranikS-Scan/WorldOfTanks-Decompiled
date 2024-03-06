@@ -53,7 +53,8 @@ class AvatarChatKeyHandling(object):
         self.__customMatrixProviderGetter = {MarkerType.VEHICLE_MARKER_TYPE: self.__getVehicleMatrixProvider,
          MarkerType.BASE_MARKER_TYPE: self.__getBaseMatrixProvider,
          MarkerType.HEADQUARTER_MARKER_TYPE: self.__getHQMatrixProvider,
-         MarkerType.LOCATION_MARKER_TYPE: self.__getLocationMarkerMatrixProvider}
+         MarkerType.LOCATION_MARKER_TYPE: self.__getLocationMarkerMatrixProvider,
+         MarkerType.TARGET_POINT_MARKER_TYPE: self.__getTargetMatrixProvider}
         self.__isKeyHandlingOn = True
         return
 
@@ -245,6 +246,17 @@ class AvatarChatKeyHandling(object):
         else:
             return
 
+    def __getTargetMatrixProvider(self, cmd, targetID=None):
+        if not (cmd or targetID):
+            return
+        else:
+            if targetID is None:
+                targetID = cmd.getFirstTargetID()
+            if not targetID:
+                return
+            entity = BigWorld.entities.get(targetID)
+            return None if not entity else self.__createMatrix(entity.position)
+
     def __onCommandReceivedCancelReply(self, commandName, cmd):
         if not cmd.isCancelReply():
             return
@@ -332,11 +344,12 @@ class AvatarChatKeyHandling(object):
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, replierID)
             else:
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, targetID)
+            soundPos = matrixProvider.translation if matrixProvider is not None else None
             enableVoice = True
             if replierID != self.playerVehicleID and targetID != self.playerVehicleID:
                 enableVoice = False
             sentByPlayer = True if replierID == self.playerVehicleID else False
-            self.__playSoundNotification(soundNotificationReply, matrixProvider.translation, enableVoice, sentByPlayer)
+            self.__playSoundNotification(soundNotificationReply, soundPos, enableVoice, sentByPlayer)
             return
 
     def __onCommandReceived(self, cmd):

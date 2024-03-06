@@ -454,6 +454,7 @@ class PRE_QUEUE_RESTRICTION(object):
     LIMIT_LEVEL = 'limits/level'
     LIMIT_VEHICLE_TYPE = 'limits/vehicleType'
     LIMIT_VEHICLE_CLASS = 'limits/vehicleClass'
+    LIMIT_NO_SUITABLE_VEHICLES = 'limits/noSuitableVehicles'
     MODE_NO_BATTLES = 'mode/noBattles'
     MODE_NOT_SET = 'mode/notSet'
     MODE_NOT_AVAILABLE = 'mode/notAvailable'
@@ -462,6 +463,7 @@ class PRE_QUEUE_RESTRICTION(object):
     BAN_IS_SET = 'ban/isSet'
     QUALIFICATION_RESULTS_PROCESSING = 'qualification/resultsProcessing'
     QUALIFICATION_CALCULATION_RATING = 'qualification/calculatingRating'
+    SHOP_PAGE_OPENED = 'shopPage/open'
     VEHICLE_LIMITS = (LIMIT_LEVEL, LIMIT_VEHICLE_TYPE, LIMIT_VEHICLE_CLASS)
 
 

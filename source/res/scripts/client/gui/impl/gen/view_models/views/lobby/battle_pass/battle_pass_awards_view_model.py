@@ -10,6 +10,7 @@ class RewardReason(Enum):
     BUY_BATTLE_PASS = 'buyBattlePassReason'
     BUY_BATTLE_PASS_LEVELS = 'buyBattlePassLevelsReason'
     BUY_MULTIPLE_BATTLE_PASS = 'buyMultipleBattlePassReason'
+    BUY_BATTLE_PASS_WITH_LEVELS = 'buyBattlePassWithLevelsReason'
     STYLE_UPGRADE = 'styleUpgradeReason'
     DEFAULT = 'defaultReason'
 

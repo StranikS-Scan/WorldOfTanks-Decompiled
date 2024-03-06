@@ -16,7 +16,7 @@ from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, List, Optional, Tuple
+    from typing import Callable, Dict, List, Optional, Tuple, Generator
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.SystemMessages import ResultMsg
 _logger = logging.getLogger(__name__)
@@ -105,7 +105,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def getSelectableBonuses(cls, condition=None):
-        return [ SelectableBonus({tokenID: cls._packTokenData(token)}) for tokenID, token in cls.__itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID) and (not callable(condition) or condition(tokenID)) ]
+        return [ SelectableBonus({tokenID: cls._packTokenData(token)}) for tokenID, token in cls._iterAvailableTokens() if cls.isFeatureReward(tokenID) and (not callable(condition) or condition(tokenID)) ]
 
     @classmethod
     def getRemainedChoices(cls, bonus):
@@ -143,8 +143,12 @@ class SelectableRewardManager(object):
          'limit': 0}
 
     @classmethod
+    def _iterAvailableTokens(cls):
+        return ((tokenID, token) for tokenID, token in cls.__itemsCache.items.tokens.getTokens().iteritems())
+
+    @classmethod
     def __getFeatureTokens(cls):
-        return {tokenID:token for tokenID, token in cls.__itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID)}
+        return {tokenID:token for tokenID, token in cls._iterAvailableTokens() if cls.isFeatureReward(tokenID)}
 
 
 class BattlePassSelectableRewardManager(SelectableRewardManager):
@@ -167,6 +171,12 @@ class RankedSelectableRewardManager(SelectableRewardManager):
 
 class EpicSelectableRewardManager(SelectableRewardManager):
     _FEATURE = Features.EPIC
+
+    @classmethod
+    def getSelectableBonuses(cls, condition=None):
+        from epic_constants import EPIC_OFFER_TOKEN_PREFIX
+        epicSelectTokensBonuses = (SelectableBonus({tokenID: cls._packTokenData(token)}) for tokenID, token in cls._iterAvailableTokens() if tokenID.startswith(EPIC_OFFER_TOKEN_PREFIX) and cls.isFeatureReward(tokenID) and (not callable(condition) or condition(tokenID)))
+        return [ bonus for bonus in epicSelectTokensBonuses if not cls.getBonusReceivedOptions(bonus) ]
 
     @classmethod
     def getTabTooltipData(cls, selectableBonus):

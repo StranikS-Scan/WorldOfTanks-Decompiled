@@ -130,3 +130,20 @@ class BuyBattlePassLevels(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass levels: %d season %d', self.__levels, self.__seasonID)
         BigWorld.player().shop.buyBattlePassLevels(self.__seasonID, self.__chapterID, self.__levels, lambda resID, code, errStr: self._response(code, callback, errStr))
+
+
+class BuyBattlePassWithLevels(Processor):
+    __battlePass = dependency.descriptor(IBattlePassController)
+
+    def __init__(self, seasonID, chapterID, priceID):
+        super(BuyBattlePassWithLevels, self).__init__()
+        self.__seasonID = seasonID
+        self.__chapterID = chapterID
+        self.__priceID = priceID
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='battlePass_buy/server_error')
+
+    def _request(self, callback):
+        _logger.debug('Make server request to buy battle pass with levels %d for chapter %d', self.__seasonID, self.__chapterID)
+        BigWorld.player().shop.buyBattlePassWithLevels(self.__seasonID, self.__chapterID, self.__priceID, lambda resID, code, errStr: self._response(code, callback, errStr))

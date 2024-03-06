@@ -11,11 +11,12 @@ from dict2model.exceptions import ValidationError, ValidationErrorMessage
 from dict2model.fields import AccessDeniedField
 if typing.TYPE_CHECKING:
     from dict2model.fields import Field
-    from dict2model.types import ValidatorsType, SchemaModelClassesType, SchemaModelTypes
+    from dict2model.types import ValidatorsType, SchemaModelClassesType
 _logger = logging.getLogger(__name__)
+SchemaModelType = typing.TypeVar('SchemaModelType', bound=typing.Union[Model, typing.Dict])
 accessDeniedField = AccessDeniedField()
 
-class Schema(object):
+class Schema(typing.Generic[SchemaModelType]):
     __slots__ = ('_modelClass', '_checkUnknown', '_fields', '_serializedValidators', '_deserializedValidators')
 
     def __init__(self, fields, modelClass=dict, checkUnknown=True, serializedValidators=None, deserializedValidators=None):
@@ -107,6 +108,6 @@ class Schema(object):
         try:
             return self._modelClass(**deserialized)
         except Exception as error:
-            raise ValidationError('Model creation error: {}'.format(error))
+            raise ValidationError('Model: {} creation error: {}'.format(self._modelClass, error))
 
         return

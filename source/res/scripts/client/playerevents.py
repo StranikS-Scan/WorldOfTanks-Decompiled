@@ -81,6 +81,9 @@ class _PlayerEvents(object):
         self.onUpdateSpecBattlesWindow = Event.Event()
         self.onLoadingMilestoneReached = Event.Event()
         self.onConfigModelUpdated = Event.Event()
+        self.onShowBattleHint = Event.SafeEvent()
+        self.onHideBattleHint = Event.SafeEvent()
+        self.onEmptyBattleHintsQueue = Event.SafeEvent()
 
 
 g_playerEvents = _PlayerEvents()

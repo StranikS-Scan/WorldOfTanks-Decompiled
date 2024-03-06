@@ -169,7 +169,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
                     continue
                 targetID = plugin.getTargetIDFromMarkerID(aimedAtMarkerID)
                 if targetID > -1:
-                    return (targetID, plugin.getMarkerType(), plugin.getMarkerSubtype(targetID))
+                    return (targetID, plugin.getMarkerType(aimedAtMarkerID), plugin.getMarkerSubtype(targetID))
 
             return (INVALID_MARKER_ID, MarkerType.INVALID_MARKER_TYPE, INVALID_MARKER_SUBTYPE)
 

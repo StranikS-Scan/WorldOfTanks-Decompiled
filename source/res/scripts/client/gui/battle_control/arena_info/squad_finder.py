@@ -5,6 +5,7 @@ from constants import ARENA_GUI_TYPE
 from gui.battle_control.arena_info import settings
 from soft_exception import SoftException
 from gui.shared.system_factory import registerSquadFinder, collectSquadFinder
+from unit_roster_config import SquadRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, Comp7Roster
 
 class ISquadFinder(object):
     __slots__ = ()
@@ -175,18 +176,18 @@ class ContinuousNumberingFinder(_SquadFinder):
         raise SoftException('Deprecated class method called - code should not be reached')
 
 
-registerSquadFinder(ARENA_GUI_TYPE.RANDOM, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.EPIC_RANDOM, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.EVENT_BATTLES, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.EPIC_BATTLE, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.BATTLE_ROYALE, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.MAPBOX, TeamScopeNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.FALLOUT_MULTITEAM, ContinuousNumberingFinder)
-registerSquadFinder(ARENA_GUI_TYPE.COMP7, Comp7TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.RANDOM, TeamScopeNumberingFinder, SquadRoster)
+registerSquadFinder(ARENA_GUI_TYPE.EPIC_RANDOM, TeamScopeNumberingFinder, SquadRoster)
+registerSquadFinder(ARENA_GUI_TYPE.EVENT_BATTLES, TeamScopeNumberingFinder, EventRoster)
+registerSquadFinder(ARENA_GUI_TYPE.EPIC_BATTLE, TeamScopeNumberingFinder, EpicRoster)
+registerSquadFinder(ARENA_GUI_TYPE.BATTLE_ROYALE, TeamScopeNumberingFinder, BattleRoyaleRoster)
+registerSquadFinder(ARENA_GUI_TYPE.MAPBOX, TeamScopeNumberingFinder, MapBoxRoster)
+registerSquadFinder(ARENA_GUI_TYPE.FALLOUT_MULTITEAM, ContinuousNumberingFinder, SquadRoster)
+registerSquadFinder(ARENA_GUI_TYPE.COMP7, Comp7TeamScopeNumberingFinder, Comp7Roster)
 
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()
     guiVisitor = arenaVisitor.gui
-    squadFinderClass = collectSquadFinder(guiVisitor.guiType)
+    squadFinderClass, _ = collectSquadFinder(guiVisitor.guiType)
     finder = squadFinderClass(teams) if squadFinderClass else EmptySquadFinder()
     return finder

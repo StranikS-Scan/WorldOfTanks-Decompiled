@@ -127,6 +127,10 @@ class AbstractContextMenuHandler(object):
     def app(self):
         return self.__cmProxy.app
 
+    @property
+    def cmProxy(self):
+        return self.__cmProxy
+
     def fini(self):
         self._eManager.clear()
         self.__handlers = None
@@ -140,10 +144,14 @@ class AbstractContextMenuHandler(object):
     def onOptionSelect(self, optionId):
         if optionId in self.__handlers:
             return getattr(self, self.__handlers[optionId])()
-        LOG_WARNING('Unknown context menu option', self, self.__cmProxy, optionId)
+        LOG_WARNING('AbstractContextMenuHandler: unknown context menu option', self, self.__cmProxy, optionId)
 
     def getCMInfo(self):
         pass
+
+    @classmethod
+    def makeItem(cls, optId, optLabel=None, optInitData=None, optSubMenu=None, linkage=None, iconType=''):
+        return cls._makeItem(optId, optLabel=optLabel, optInitData=optInitData, optSubMenu=optSubMenu, linkage=linkage, iconType=iconType)
 
     def _dispatchChanges(self, options):
         if self.__cmProxy is not None:
@@ -180,3 +188,17 @@ class AbstractContextMenuHandler(object):
             if 'visible' not in optInitData or optInitData['visible'] is None:
                 optInitData['visible'] = True
             return optInitData
+
+
+class AbstractContextMenuCollectEventsHandler(AbstractContextMenuHandler):
+    __metaclass__ = ABCMeta
+
+    def onOptionSelect(self, optionId):
+        handler = self._getContexMenuHandler()(optionId)
+        if handler and callable(handler):
+            return handler(self)
+        LOG_WARNING('AbstractContextMenuCollectEventsHandler: unknown context menu option', self, self.cmProxy, optionId)
+
+    @abstractmethod
+    def _getContexMenuHandler(self):
+        raise NotImplementedError

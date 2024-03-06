@@ -1268,7 +1268,7 @@ class BattlePassSwitchChapterReminder(BaseReminderListener):
         self.__luiController.stopObserve(LuiRules.BP_ENTRY, self.__updateBattlePassEntryVisibility)
 
     def __tryNotify(self, *_):
-        isAdding = not (self.__battlePassController.hasActiveChapter() or self.__battlePassController.isCompleted() or self.__battlePassController.isDisabled())
+        isAdding = not (self.__battlePassController.hasActiveChapter() or self.__battlePassController.isCompleted() or self.__battlePassController.isDisabled() or self.__battlePassController.isPaused())
         isAdding &= self.__luiController.isRuleCompleted(LuiRules.BP_ENTRY)
         self._notifyOrRemove(isAdding)
 
@@ -2094,13 +2094,15 @@ class WinbackSelectableRewardReminder(BaseReminderListener):
     def __addListeners(self):
         self.__itemsCache.onSyncCompleted += self.__tryNotify
         self.__winbackController.onStateUpdated += self.__tryNotify
+        self.__winbackController.onConfigUpdated += self.__tryNotify
 
     def __removeListeners(self):
         self.__itemsCache.onSyncCompleted -= self.__tryNotify
         self.__winbackController.onStateUpdated -= self.__tryNotify
+        self.__winbackController.onConfigUpdated -= self.__tryNotify
 
     def __tryNotify(self, *_):
-        isAdding = self.__winbackController.hasWinbackOfferToken() and self.__winbackController.isFinished()
+        isAdding = self.__winbackController.hasWinbackOfferToken() and self.__winbackController.isFinished() and self.__winbackController.winbackConfig.isProgressionEnabled
         self._notifyOrRemove(isAdding)
 
 

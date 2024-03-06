@@ -19,6 +19,6 @@ class MapsTrainingArenaTimeNotificator(IAbstractPeriodView):
         if self.__lastNotifiedTime is None:
             self.__lastNotifiedTime = totalTime
         if not totalTime == _TIME_TO_NOTIFY_BATTLE_END:
-            totalTime < _TIME_TO_NOTIFY_BATTLE_END < self.__lastNotifiedTime and self.sessionProvider.dynamic.battleHints.showHint('timeRunsOut', {'param1': _TIME_TO_NOTIFY_BATTLE_END})
+            totalTime < _TIME_TO_NOTIFY_BATTLE_END < self.__lastNotifiedTime and self.sessionProvider.dynamic.battleHints.showHint('maps_training.timeRunsOut', {'param1': _TIME_TO_NOTIFY_BATTLE_END})
         self.__lastNotifiedTime = totalTime
         return

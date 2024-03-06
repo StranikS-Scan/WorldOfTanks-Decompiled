@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 from typing import TYPE_CHECKING
 import constants
+from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from shared_utils import CONST_CONTAINER
 from skeletons.festivity_factory import IFestivityFactory
@@ -168,4 +169,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
+    _config(_interface.IGraphicsOptimizationController, GraphicsOptimizationController())
     collectGameControllers(_config)

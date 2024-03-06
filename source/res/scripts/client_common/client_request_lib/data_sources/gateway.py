@@ -392,6 +392,22 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data={'rev': rev}, converters={'periphery_id': int,
          'unit_server_id': int})
 
+    def get_wgsh_common_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        url = '/wgsh/v2/periphery/units/info/'
+        get_data = {'rev': rev,
+         'periphery_id': periphery_id,
+         'unit_server_id': unit_server_id}
+        return self._request_data(callback, url, get_data=get_data, converters={'periphery_id': int,
+         'unit_server_id': int})
+
+    def get_wgsh_account_unit_info(self, callback, periphery_id, unit_server_id, rev, fields=None):
+        url = '/wgsh/v2/periphery/units/account_info/'
+        get_data = {'rev': rev,
+         'periphery_id': periphery_id,
+         'unit_server_id': unit_server_id}
+        return self._request_data(callback, url, get_data=get_data, converters={'periphery_id': int,
+         'unit_server_id': int})
+
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/vehicles/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'vehicle_cd': vehicle_cd}
@@ -508,9 +524,15 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgshevents/clan/info'
         return self._request_data(callback, url, method='GET')
 
-    def wgsh_event_get_frozen_vehicles(self, callback, fields=None):
+    def wgsh_event_get_frozen_vehicles(self, callback):
         url = '/wgshevents/frozen_vehicle'
         return self._request_data(callback, url, method='GET')
+
+    def wgsh_event_unfreeze_vehicle(self, callback, playerSpaID, vehicleCD, price):
+        url = '/wgshevents/frozen_vehicle'
+        return self._request_data(callback, url, method='PATCH', post_data={'vehicle_cd': vehicleCD,
+         'repair_price': price,
+         'spa_id': playerSpaID})
 
     def clan_statistics(self, callback, clan_id, fields=None):
         url = '/wgsh/clans/{clan_id}/'.format(clan_id=clan_id)

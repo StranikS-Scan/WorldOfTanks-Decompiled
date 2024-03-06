@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/battle_goals.py
+import typing
 import BigWorld
 from constants import ARENA_PERIOD
-from gui.Scaleform.daapi.view.battle.maps_training.battle_hints_mt import HintType
+from hints.battle.schemas.maps_training import HintType
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
+from gui.battle_control.controllers.battle_hints.queues import BattleHintQueueParams
 from gui.Scaleform.daapi.view.meta.MapsTrainingGoalsMeta import MapsTrainingGoalsMeta
-from gui.battle_control.controllers.battle_hints_ctrl import BattleHintComponent
+from gui.battle_control.controllers.battle_hints.controller import BattleHintComponent
 from helpers import dependency, isPlayerAvatar
 from PlayerEvents import g_playerEvents
 from items import vehicles
@@ -17,6 +19,8 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 import ArenaType
+if typing.TYPE_CHECKING:
+    from hints.battle.schemas.maps_training import MTClientHintModel
 
 class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -24,7 +28,7 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        super(MapsTrainingBattleGoals, self).__init__()
+        super(MapsTrainingBattleGoals, self).__init__(battleHintsQueueParams=BattleHintQueueParams(name='maps_training', withFadeOut=False))
         self.goalsByType = {vehClass:{'vehClass': vehClass,
          'total': 0} for vehClass in VEHICLE_CLASS_TAGS}
         self._loaded = False
@@ -76,21 +80,16 @@ class MapsTrainingBattleGoals(BattleHintComponent, MapsTrainingGoalsMeta, IArena
 
         self.as_updateS(sortedData)
 
-    def _getSoundNotification(self, hint, data):
-        return hint.soundNotificationNewbie if hint.soundNotificationNewbie is not None and not self.settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.MAPS_TRAINING_NEWBIE_HINT, default=False) else hint.soundNotification
-
-    def _showHint(self, hintData):
-        hintType = hintData['hintType']
-        descr = hintData.get('description1')
-        if descr is None:
+    def _showHint(self, model, params):
+        vo = model.createVO(params)
+        message = vo.get('message')
+        if message is None:
             return
         else:
-            if hintType is HintType.GOAL:
-                descr = descr.format(count=hintData['targetsCount'], total=hintData['targetsTotal'])
-            if hintType is HintType.TIMER_GREEN:
-                self.as_showHintS(hintType.value, hintData.get('description2'), descr)
+            if model.props.hintType is HintType.TIMER_GREEN:
+                self.as_showHintS(model.props.hintType.value, vo.get('message2'), message)
             else:
-                self.as_showHintS(hintType.value, descr)
+                self.as_showHintS(model.props.hintType.value, message)
             return
 
     def _hideHint(self):

@@ -92,6 +92,7 @@
     <_100mm_SA_47_58>	111	</_100mm_SA_47_58>
     <_100mm_SA_47_75>	112	</_100mm_SA_47_75>
     <_75mm_SA49>	114	</_75mm_SA49>
+    <_75mm_APX_1897>	115	</_75mm_APX_1897>
     <_120mm_D_1203_A_FL>	501	</_120mm_D_1203_A_FL>
     <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <_105mm_D1504_7x7>	503	</_105mm_D1504_7x7>
@@ -2175,6 +2176,64 @@
         </_75mm_OE_mle_1915>
       </shots>
     </_75mm_APX>
+    <_75mm_APX_1897>
+      <userString>	#france_vehicles:_75mm_APX_1897	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	22360	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.25	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	2.85714285714286	</reloadTime>
+      <maxAmmo>	90	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	461	</weight>
+      <maxHealth>	94	</maxHealth>
+      <maxRegenHealth>	47	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.41142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_ODR_mle_1910M>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	550	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	62 53	</piercingPower>
+        </_75mm_ODR_mle_1910M>
+        <_75mm_CC_Brandt>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	450	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	86 86	</piercingPower>
+        </_75mm_CC_Brandt>
+        <_75mm_OE_mle_1915_FN>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	505	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_OE_mle_1915_FN>
+      </shots>
+    </_75mm_APX_1897>
     <_75mm_Gun_M6B>
       <userString>	#france_vehicles:_75mm_Gun_M6B	</userString>
       <tags></tags>

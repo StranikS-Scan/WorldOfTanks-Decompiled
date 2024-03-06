@@ -1,0 +1,148 @@
+<style_887_bp13_camouflage.xml>
+  <quests>
+    <battleQuest>
+      <id>	bp13_style_887_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/bp13_style_887_2/condition	</key>
+            </description>
+            <originalXP>	2000	</originalXP>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_887_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	bp13_style_887_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <account>
+            <token>
+              <id>	cust_progress_887_1	</id>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </token>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/bp13_style_887_3/condition	</key>
+            </description>
+            <damageDealt>	10000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_887_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	bp13_style_887_4	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <account>
+            <token>
+              <id>	cust_progress_887_1	</id>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </token>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/bp13_style_887_4/condition	</key>
+            </description>
+            <kills>	10	</kills>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_887_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	bp13_style_887_5	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <account>
+            <token>
+              <id>	cust_progress_887_1	</id>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/bp13_style_887_5/condition	</key>
+            </description>
+            <key>	xp	</key>
+            <max>	10	</max>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	20	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_887_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	5	</count>
+          <limit>	5	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_887_bp13_camouflage.xml>

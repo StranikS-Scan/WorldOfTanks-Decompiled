@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/menu.py
+from types import NoneType
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import CustomUserCMHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from helpers import dependency
@@ -10,6 +11,7 @@ from web.web_client_api import WebCommandException, w2c, W2CSchema, Field
 class _UserMenuSchema(W2CSchema):
     spa_id = Field(required=True, type=(int, long, basestring))
     user_name = Field(required=True, type=basestring)
+    clan_abbrev = Field(type=(basestring, NoneType))
     custom_items = Field(type=list, default=[])
     excluded_items = Field(type=list, default=[])
     custom_items_after_end = Field(type=list, default=[])
@@ -22,6 +24,7 @@ class UserMenuWebApiMixin(object):
     def userMenu(self, cmd, ctx):
         context = {'dbID': cmd.spa_id,
          'userName': cmd.user_name,
+         'clanAbbrev': cmd.clan_abbrev,
          'customItems': cmd.custom_items,
          'excludedItems': cmd.excluded_items,
          'customItemsAfterEnd': cmd.custom_items_after_end}

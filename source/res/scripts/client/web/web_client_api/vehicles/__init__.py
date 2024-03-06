@@ -111,7 +111,7 @@ class VehiclesWebApi(W2CSchema, ItemsWebApiMixin):
     def __getAvgDamageShells(vehDescr):
         result = []
         for gunShot in vehDescr.gun.shots:
-            result.append(gunShot.shell.damage[0])
+            result.append(gunShot.shell.armorDamage[0])
 
         return tuple(result)
 
@@ -119,6 +119,6 @@ class VehiclesWebApi(W2CSchema, ItemsWebApiMixin):
     def __getPiercingPowerShells(vehDescr):
         result = []
         for gunShot in vehDescr.gun.shots:
-            result.append(gunShot.piercingPower.x)
+            result.append(gunShot.piercingPower[0])
 
         return tuple(result)

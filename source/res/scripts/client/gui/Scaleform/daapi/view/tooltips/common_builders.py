@@ -52,7 +52,8 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.RESEARCH_BUTTON, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.ResearchButtonTooltipData(contexts.ToolTipContext(None))))
+     DataBuilder(TOOLTIPS_CONSTANTS.RESEARCH_BUTTON, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.ResearchButtonTooltipData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.COLLECTION_ITEM, None, common.CollectionItemTooltipContentWindowData(contexts.ToolTipContext(None))))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

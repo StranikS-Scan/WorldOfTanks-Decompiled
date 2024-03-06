@@ -2490,8 +2490,12 @@
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
-    <rocketAccelerationPrefab>	particles/Tank/rocket_accelerator/Cz35_T56_G_Rocket.prefab	</rocketAccelerationPrefab>
   </effects>
+  <effectsPrefab>
+    <rocketAcceleration>
+      <prefab>	particles/Tank/rocket_accelerator/Cz35_T56_G_Rocket.prefab	</prefab>
+    </rocketAcceleration>
+  </effectsPrefab>
   <emblems>
     <default>	15514	</default>
     <lodDist>	MEDIUM	</lodDist>

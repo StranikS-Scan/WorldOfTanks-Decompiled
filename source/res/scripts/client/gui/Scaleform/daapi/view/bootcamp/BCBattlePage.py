@@ -58,23 +58,23 @@ class BootcampAccountSettings(AccountSettings):
     __SCREEN_HEIGHT = 1080
 
     @staticmethod
-    def _getValue(name, setting, force=False):
+    def _getValue(name, setting, force=False, default=None):
         if name == _BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY and setting == KEY_SETTINGS:
             fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
             if not fds.has_key(name):
                 value = 2 if BigWorld.screenWidth() < BootcampAccountSettings.__SCREEN_WIDTH and BigWorld.screenHeight() < BootcampAccountSettings.__SCREEN_HEIGHT else 3
                 fds.write(name, base64.b64encode(pickle.dumps(value)))
                 return value
-        return AccountSettings._getValue(name, setting, force)
+        return AccountSettings._getValue(name, setting, force, default=default)
 
     @staticmethod
-    def _setValue(name, value, setting, force=False):
+    def _setValue(name, value, setting, force=False, default=None):
         if name == _BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY and setting == KEY_SETTINGS:
             fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
             fds.write(name, base64.b64encode(pickle.dumps(value)))
             AccountSettings.onSettingsChanging(name, value)
         else:
-            AccountSettings._setValue(name, value, setting, force)
+            AccountSettings._setValue(name, value, setting, force, default=default)
 
 
 class BootcampTargetPlugin(common.EntriesPlugin):

@@ -15,10 +15,10 @@ from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.options import VehicleMarkerSetting
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS
 from battleground.location_point_manager import g_locationPointManager, COMMAND_NAME_TO_LOCATION_MARKER_SUBTYPE
-from chat_commands_consts import getUniqueTeamOrControlPointID, INVALID_MARKER_SUBTYPE, INVALID_MARKER_ID, LocationMarkerSubType, MarkerType, DefaultMarkerSubType, INVALID_COMMAND_ID
+from chat_commands_consts import getUniqueTeamOrControlPointID, INVALID_MARKER_SUBTYPE, INVALID_MARKER_ID, LocationMarkerSubType, MarkerType, DefaultMarkerSubType, INVALID_COMMAND_ID, INVALID_TARGET_ID
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
-from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import LocationMarker, BaseMarker, Marker, ReplyStateForMarker
+from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import LocationMarker, BaseMarker, Marker, ReplyStateForMarker, AreaMarker
 from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
@@ -33,8 +33,10 @@ from helpers import dependency
 from helpers import i18n
 from messenger.proto.bw_chat2.battle_chat_cmd import AUTOCOMMIT_COMMAND_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from shared_utils import findFirst, nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from vehicle_systems.stricted_loading import makeCallbackWeak
 _logger = logging.getLogger(__name__)
 _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME = {LocationMarkerSubType.SPG_AIM_AREA_SUBTYPE: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER,
  LocationMarkerSubType.GOING_TO_MARKER_SUBTYPE: settings.MARKER_SYMBOL_NAME.LOCATION_MARKER,
@@ -91,9 +93,9 @@ class MarkerPlugin(IPlugin):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def getTargetIDFromMarkerID(self, markerID):
-        return INVALID_MARKER_ID
+        return INVALID_TARGET_ID
 
-    def getMarkerType(self):
+    def getMarkerType(self, markerID=INVALID_MARKER_ID):
         return MarkerType.INVALID_MARKER_TYPE
 
     def getMarkerSubtype(self, targetID):
@@ -636,7 +638,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         super(AreaStaticMarkerPlugin, self).stop()
         return
 
-    def getMarkerType(self):
+    def getMarkerType(self, markerID=INVALID_MARKER_ID):
         return MarkerType.LOCATION_MARKER_TYPE
 
     def getTargetIDFromMarkerID(self, markerID):
@@ -795,7 +797,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
 
         self._markers.clear()
 
-    def getMarkerType(self):
+    def getMarkerType(self, markerID=INVALID_MARKER_ID):
         return MarkerType.BASE_MARKER_TYPE
 
     def getTargetIDFromMarkerID(self, markerID):
@@ -931,53 +933,152 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         self._checkNextState(marker)
 
 
-class BaseAreaMarkerPlugin(MarkerPlugin):
-    __slots__ = ('__markers',)
+class BaseAreaMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
+    __slots__ = ('__markers', '__clazz')
 
-    def __init__(self, parentObj):
+    def __init__(self, parentObj, clazz=AreaMarker):
         super(BaseAreaMarkerPlugin, self).__init__(parentObj)
+        self.__clazz = clazz
         self.__markers = {}
+        self.__replayMarkersFeedbackStorage = {}
 
     def start(self):
-        self.__markers = {}
         super(BaseAreaMarkerPlugin, self).start()
+        self.__markers = {}
+        self.__replayMarkersFeedbackStorage = {}
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        return
 
     def stop(self):
-        self.__markers = {}
-        super(BaseAreaMarkerPlugin, self).stop()
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        for marker in self.__markers.itervalues():
+            self._destroyMarker(marker.getMarkerID())
 
-    def createMarker(self, uniqueID, matrixProvider, active, symbol=settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER):
+        self.__markers = {}
+        self.__replayMarkersFeedbackStorage = {}
+        super(BaseAreaMarkerPlugin, self).stop()
+        return
+
+    @property
+    def markers(self):
+        return self.__markers
+
+    def getMarkerType(self, markerID=INVALID_MARKER_ID):
+        marker = findFirst(lambda item: item.getMarkerID() == markerID, self.__markers.itervalues())
+        return marker.getBCMarkerType() if marker else MarkerType.INVALID_MARKER_TYPE
+
+    def getMarkerSubtype(self, targetID):
+        marker = findFirst(lambda item: item.getTargetID() == targetID, self.__markers.itervalues())
+        return INVALID_MARKER_SUBTYPE if targetID == INVALID_MARKER_ID or not marker else DefaultMarkerSubType.ALLY_MARKER_SUBTYPE
+
+    def getTargetIDFromMarkerID(self, markerID):
+        marker = findFirst(lambda item: item.getMarkerID() == markerID, self.__markers.itervalues())
+        return marker.getTargetID() if marker else INVALID_MARKER_ID
+
+    def createMarker(self, uniqueID, targetID, symbol, matrixProvider, active, bcMarkerType, guiMarkerType):
         if uniqueID in self.__markers:
             return False
-        markerID = self._createMarkerWithMatrix(symbol, matrixProvider, active=active)
-        self.__markers[uniqueID] = markerID
+        markerID = self._createMarkerWithMatrix(symbol, matrixProvider, active=active, markerType=guiMarkerType)
+        self.__markers[uniqueID] = self.__clazz(markerID, targetID, bcMarkerType)
+        self.__checkReplayFeedback(targetID, bcMarkerType)
         return True
 
     def deleteMarker(self, uniqueID):
-        markerID = self.__markers.pop(uniqueID, None)
-        if markerID is not None:
-            self._destroyMarker(markerID)
+        marker = self.__markers.pop(uniqueID, None)
+        if marker is not None:
+            self._destroyMarker(marker.getMarkerID())
             return True
         else:
             return False
 
-    def setupMarker(self, uniqueID, shape, minDistance, maxDistance, distance, metersString, distanceFieldColor):
-        if uniqueID not in self.__markers:
-            return
-        self._invokeMarker(self.__markers[uniqueID], 'init', shape, minDistance, maxDistance, distance, metersString, distanceFieldColor)
+    def setMarkerSticky(self, uniqueID, isSticky):
+        marker = self.__markers.get(uniqueID)
+        if marker:
+            self._setMarkerSticky(marker.getMarkerID(), isSticky)
+            marker.setIsSticky(isSticky)
+
+    def setMarkerActive(self, uniqueID, active):
+        marker = self.__markers.get(uniqueID)
+        if marker:
+            self._setMarkerActive(marker.getMarkerID(), active)
+            marker.setActive(active)
+
+    def setMarkerReplied(self, uniqueID, isReplied):
+        if uniqueID in self.__markers:
+            self._setMarkerReplied(self.__markers[uniqueID], isReplied)
+
+    def setActiveState(self, uniqueID, state):
+        if uniqueID in self.__markers:
+            self._setActiveState(self.__markers[uniqueID], state)
+
+    def setMarkerRenderInfo(self, uniqueID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
+        if uniqueID in self.__markers:
+            self._setMarkerRenderInfo(self.__markers[uniqueID].getMarkerID(), minScale, offset, innerOffset, cullDistance, boundsMinScale)
+
+    def setMarkerLocationOffset(self, uniqueID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        if uniqueID in self.__markers:
+            self._setMarkerLocationOffset(self.__markers[uniqueID].getMarkerID(), minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
+
+    def setMarkerBoundEnabled(self, uniqueID, isBoundEnabled):
+        if uniqueID in self.__markers:
+            self._setMarkerBoundEnabled(self.__markers[uniqueID].getMarkerID(), isBoundEnabled)
+
+    def setMarkerObjectInFocus(self, uniqueID, isBoundEnabled):
+        if uniqueID in self.__markers:
+            self._setMarkerObjectInFocus(self.__markers[uniqueID].getMarkerID(), isBoundEnabled)
+
+    def invokeMarker(self, uniqueID, methodName, *args):
+        if uniqueID in self.__markers:
+            self._invokeMarker(self.__markers[uniqueID].getMarkerID(), methodName, *args)
 
     def markerSetDistance(self, uniqueID, distance):
         if uniqueID not in self.__markers:
             return
-        self._invokeMarker(self.__markers[uniqueID], 'setDistance', distance)
+        self._invokeMarker(self.__markers[uniqueID].getMarkerID(), 'setDistance', distance)
 
     def setMarkerMatrix(self, uniqueID, matrix):
-        markerID = self.__markers.pop(uniqueID, None)
-        if markerID is None:
+        marker = self.__markers.pop(uniqueID, None)
+        if marker is None:
             return
         else:
-            self._parentObj.setMarkerMatrix(markerID, matrix)
+            self._parentObj.setMarkerMatrix(marker.getMarkerID(), matrix)
             return
+
+    def _getMarkerFromTargetID(self, targetID, markerType):
+        return findFirst(lambda item: item.getTargetID() == targetID and item.getBCMarkerType() == markerType, self.__markers.itervalues())
+
+    def _onReplyFeedbackReceived(self, targetID, replierID, markerType, oldReplyCount, newReplyCount):
+        marker = self._getMarkerFromTargetID(targetID, markerType)
+        if marker is not None:
+            self._setMarkerRepliesAndCheckState(marker, newReplyCount, replierID == avatar_getter.getPlayerVehicleID())
+        elif BattleReplay.g_replayCtrl.isPlaying:
+            self.__replayMarkersFeedbackStorage.setdefault((targetID, markerType), []).append((targetID,
+             replierID,
+             markerType,
+             oldReplyCount,
+             newReplyCount))
+        return
+
+    def __checkReplayFeedback(self, targetID, markerType):
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            return
+        argsStorage = self.__replayMarkersFeedbackStorage.pop((targetID, markerType), [])
+        for args in argsStorage:
+            nextTick(makeCallbackWeak(self._onReplyFeedbackReceived))(*args)
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
+            for marker in self.__markers.values():
+                self._setMarkerBoundEnabled(marker.getMarkerID(), False)
+
+        elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
+            if not self.sessionProvider.getCtx().isPlayerObserver() and avatar_getter.isVehicleAlive():
+                for marker in self.__markers.values():
+                    self._setMarkerBoundEnabled(marker.getMarkerID(), True)
 
 
 class AreaMarkerPlugin(BaseAreaMarkerPlugin):

@@ -1,0 +1,149 @@
+<battle_hints.xml>
+  <hint>
+    <props>
+      <name>	move	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_move	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_tutorial_02.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_ob_vehicle_control	</notify>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	move_turret	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_move_turret	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_tutorial_03.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_ob_tower_and_sight_control	</notify>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	sniper_distance_enter	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_sniper_enter	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_01.swf	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+    <lifecycle>
+      <minShowTime>	1	</minShowTime>
+      <waitTime>	1	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	sniper_distance_exit	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_sniper_on_distance_exit	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_02.swf	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	shot	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_shoot	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_tutorial_01.swf	</image>
+    </visual>
+    <sound>
+      <notify>	vo_ob_aim_at_enemy	</notify>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	sniper_on_distance	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_sniper_enter	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_01.swf	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+    <lifecycle>
+      <minShowTime>	1	</minShowTime>
+      <waitTime>	1	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	advanced_sniper_enter	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_sniper_weak_spots_enter	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_sniper_01.swf	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+    <lifecycle>
+      <minShowTime>	1	</minShowTime>
+      <waitTime>	1	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	advanced_sniper	</name>
+      <scope>	story_mode	</scope>
+      <component>	newbieHint	</component>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:hint_aim_weak_spots	</key>
+    </text>
+    <visual>
+      <image>	animations/newbieHints/pph_weak_spots_01.swf	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+    <lifecycle>
+      <minShowTime>	1	</minShowTime>
+      <waitTime>	1	</waitTime>
+    </lifecycle>
+  </hint>
+</battle_hints.xml>

@@ -70,6 +70,11 @@
           <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</exploded>
         </GB100_Manticore_3DSt_HW_21>
+        <GB100_Manticore_BXI_3DSt>
+          <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Hull.model	</exploded>
+        </GB100_Manticore_BXI_3DSt>
       </sets>
     </models>
     <swinging>
@@ -94,10 +99,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.690894 0.340331 1.93242	</rayStart>
-        <rayEnd>	-0.690894 0.143065 1.89944	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
-        <size>	0.25	</size>
+        <rayStart>	-1.103627 0.432726 1.063551	</rayStart>
+        <rayEnd>	-1.103627 0.23546 1.030571	</rayEnd>
+        <rayUp>	0.261904 0.159142 -0.951882	</rayUp>
+        <size>	0.23	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -602,6 +607,12 @@
         <clipAngle>	1.16565	</clipAngle>
         <anchorShift>	0.081269	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -650,6 +661,11 @@
             <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</exploded>
           </GB100_Manticore_3DSt_HW_21>
+          <GB100_Manticore_BXI_3DSt>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
+          </GB100_Manticore_BXI_3DSt>
         </sets>
       </models>
       <traces>
@@ -678,16 +694,16 @@
               <wheelGroups>
                 <wheelGroup>
                   <wheelName>	W_L4	</wheelName>
-                  <groupRadius>	0.24353	</groupRadius>
+                  <groupRadius>	0.235501	</groupRadius>
                   <groupInnerOffset>	0.226369	</groupInnerOffset>
                   <groupOuterOffset>	-0.126369	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L2	</wheelName>
                   <wheelName>	WD_L1	</wheelName>
-                  <groupRadius>	0.105843	</groupRadius>
-                  <groupInnerOffset>	0.226369	</groupInnerOffset>
-                  <groupOuterOffset>	-0.126369	</groupOuterOffset>
+                  <groupRadius>	0.10784	</groupRadius>
+                  <groupInnerOffset>	0.24337	</groupInnerOffset>
+                  <groupOuterOffset>	-0.17637	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	W_L3	</wheelName>
@@ -761,6 +777,57 @@
                   <row3>	-0.000001 0.285490 -1.241602	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB100_Manticore_BXI_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.893000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.787969 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.398000	</row2>
+                  <row3>	0.000000 0.664000 0.345000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.606000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.310000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.615000	</row2>
+                  <row3>	0.000000 0.969000 0.501000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.059730 0.000012 -0.000014	</row0>
+                  <row1>	0.000001 -0.291027 -0.072825	</row1>
+                  <row2>	-0.000004 0.126190 -0.504292	</row2>
+                  <row3>	0.000000 0.485603 1.580630	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.438690 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.921655	</row2>
+                  <row3>	-0.000003 0.323838 0.533225	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.110345 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299996 0.001616	</row1>
+                  <row2>	0.000000 -0.001859 0.345058	</row2>
+                  <row3>	-0.000001 0.541638 -0.934344	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.492550 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.558677	</row2>
+                  <row3>	-0.000001 0.285490 -1.241602	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.480000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.464000	</row2>
+                  <row3>	-1.455000 0.655000 0.508000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.606000 0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.293248 -0.063291	</row1>
+                  <row2>	0.000000 0.063291 0.293247	</row2>
+                  <row3>	0.000000 0.809000 -1.804000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -787,9 +854,9 @@
                 <wheelGroup>
                   <wheelName>	WD_R2	</wheelName>
                   <wheelName>	WD_R1	</wheelName>
-                  <groupRadius>	0.105843	</groupRadius>
+                  <groupRadius>	0.11384	</groupRadius>
                   <groupInnerOffset>	-0.226369	</groupInnerOffset>
-                  <groupOuterOffset>	0.126369	</groupOuterOffset>
+                  <groupOuterOffset>	0.13637	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R0	</wheelName>
@@ -854,6 +921,57 @@
                   <row3>	-0.000001 0.285490 -1.241602	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB100_Manticore_BXI_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.893000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.787969 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.398000	</row2>
+                  <row3>	0.000000 0.664000 0.345000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.606000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.310000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.615000	</row2>
+                  <row3>	0.000000 0.969000 0.501000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.059728 0.000012 -0.000014	</row0>
+                  <row1>	0.000001 -0.291027 -0.072825	</row1>
+                  <row2>	-0.000004 0.126190 -0.504292	</row2>
+                  <row3>	0.000000 0.485603 1.580631	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.438692 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.921655	</row2>
+                  <row3>	-0.000003 0.323838 0.533225	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.110345 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299996 0.001616	</row1>
+                  <row2>	0.000000 -0.001859 0.345058	</row2>
+                  <row3>	-0.000001 0.541638 -0.934344	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.492550 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.558677	</row2>
+                  <row3>	-0.000001 0.285490 -1.241602	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.480000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.464000	</row2>
+                  <row3>	1.455000 0.655000 0.508000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.606000 0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.293248 -0.063291	</row1>
+                  <row2>	0.000000 0.063291 0.293247	</row2>
+                  <row3>	0.000000 0.809000 -1.804000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
         </trackPair>
@@ -861,9 +979,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	3.130480 0.000000 0.000000	</row0>
+            <row0>	3.562858 0.000000 0.000000	</row0>
             <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 4.352850	</row2>
+            <row2>	0.000000 0.000000 4.707453	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -1025,6 +1143,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <GB100_Manticore_BXI_3DSt>
+              <segmentModelLeft>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/track/segment.model	</segmentModelRight>
+            </GB100_Manticore_BXI_3DSt>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1052,8 +1176,13 @@
             <model>	vehicles/british/GB100_Manticore/track/segment.model	</model>
             <length>	0.082884	</length>
           </mainSegment>
+          <modelSets>
+            <GB100_Manticore_BXI_3DSt>
+              <mainSegmentModel>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/track/segment.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </GB100_Manticore_BXI_3DSt>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-1.78544	</xStart>
@@ -1233,8 +1362,13 @@
             <model>	vehicles/british/GB100_Manticore/track/segment.model	</model>
             <length>	0.082914	</length>
           </mainSegment>
+          <modelSets>
+            <GB100_Manticore_BXI_3DSt>
+              <mainSegmentModel>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/track/segment.model	</mainSegmentModel>
+              <secSegmentModel></secSegmentModel>
+            </GB100_Manticore_BXI_3DSt>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-1.70137	</xStart>
@@ -1514,6 +1648,11 @@
                 <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</exploded>
               </GB100_Manticore_3DSt_HW_21>
+              <GB100_Manticore_BXI_3DSt>
+                <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </GB100_Manticore_BXI_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1941,6 +2080,15 @@
               <rayUp>	0.097444 0 0	</rayUp>
               <size>	0.6	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.02 -0.02 2.6	</rayStart>
+              <rayEnd>	0.02 -0.02 3.16	</rayEnd>
+              <rayUp>	0.15744 0 0	</rayUp>
+              <compatibleModels>	GB100_Manticore_BXI_3DSt	</compatibleModels>
+              <size>	0.56	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1949,6 +2097,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	0.012903 0.012223 0	</shotOffset>
           <camouflage>
             <density>	104.397 106.784	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -1965,6 +2114,11 @@
             <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</exploded>
           </GB100_Manticore_3DSt_HW_21>
+          <GB100_Manticore_BXI_3DSt>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </GB100_Manticore_BXI_3DSt>
         </sets>
       </models>
       <hitTester>

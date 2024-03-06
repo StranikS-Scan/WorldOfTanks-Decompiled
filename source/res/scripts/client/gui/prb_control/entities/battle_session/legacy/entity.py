@@ -82,8 +82,6 @@ class BattleSessionEntity(LegacyEntity):
 
     def init(self, clientPrb=None, ctx=None):
         result = super(BattleSessionEntity, self).init(clientPrb=clientPrb, ctx=ctx)
-        g_eventDispatcher.loadHangar()
-        g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -160,6 +158,10 @@ class BattleSessionEntity(LegacyEntity):
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
         super(BattleSessionEntity, self).prb_onPlayerRosterChanged(pID, prevRoster, roster, actorID)
         g_eventDispatcher.updateUI()
+
+    def _goToHangar(self):
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
 
     @vehicleAmmoCheck
     def _setPlayerReady(self, ctx, callback=None):

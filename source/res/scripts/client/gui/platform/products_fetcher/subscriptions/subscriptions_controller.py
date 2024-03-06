@@ -4,10 +4,11 @@ import logging
 import typing
 from BWUtil import AsyncReturn
 from constants import WOT_PLUS_SUBSCRIPTION_PRODUCT, PRIME_GAMING_SUBSCRIPTION_PRODUCT
+from gui.macroses import getLanguageCode
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.products_fetcher.controller import ProductsFetchController, _PlatformProductListParams
 from gui.platform.products_fetcher.subscriptions.subscription_descriptors import PrimeGamingDescriptor, SubscriptionDescriptor, WotPlusDescriptor
-from helpers import dependency, getClientLanguage
+from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.platform.wgnp_controllers import IWGNPGeneralRequestController
 from wg_async import wg_async, wg_await
@@ -18,7 +19,7 @@ __doc__ = '\nModule takes care of subscription products on platform.\n\nTo recei
 
 class PlatformSubscriptionsParams(_PlatformProductListParams):
     storefront = 'subscriptions_general'
-    language = getClientLanguage()
+    language = getLanguageCode()
     __wgnpCountryController = dependency.descriptor(IWGNPGeneralRequestController)
 
     @wg_async

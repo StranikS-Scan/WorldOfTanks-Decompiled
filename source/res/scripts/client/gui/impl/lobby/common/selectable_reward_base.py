@@ -132,12 +132,16 @@ class SelectableRewardBase(ViewImpl):
     def _processReceivedRewards(self, result):
         pass
 
+    def _iterSelectableBonus(self, cart):
+        for tab in cart.itervalues():
+            for reward in tab.itervalues():
+                for bonus in reward:
+                    yield bonus
+
     def _makeOrder(self):
         order = {}
-        for tab in self.__cart.itervalues():
-            for reward in tab.values():
-                for value in reward:
-                    self.__addItemToOrder(order, value)
+        for bonus in self._iterSelectableBonus(self.__cart):
+            self.__addItemToOrder(order, bonus)
 
         self._helper.chooseRewards(order.values(), self._processReceivedRewards)
 

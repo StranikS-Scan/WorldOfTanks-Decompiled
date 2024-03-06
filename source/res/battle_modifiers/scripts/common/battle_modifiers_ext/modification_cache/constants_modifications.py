@@ -6,8 +6,7 @@ from battle_modifiers_ext.constants_ext import USE_CONSTANTS_CACHE, MAX_CONSTANT
 from battle_modifiers_ext.modification_cache.modification_cache import ModificationCache
 from typing import TYPE_CHECKING, Optional, Union
 if TYPE_CHECKING:
-    from battle_modifiers_ext.battle_modifiers import BattleModifiers
-    from battle_modifiers_common import ModifiersContext
+    from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
 g_cache = None
 
 class ConstantsModification(ConstantsSet):
@@ -18,8 +17,12 @@ class ConstantsModification(ConstantsSet):
             self.__modifyConstants(modifiers)
 
     def __modifyConstants(self, modifiers):
-        self.VEHICLE_CIRCULAR_AOI_RADIUS = modifiers(BattleParams.VEHICLE_AOI_RADIUS, AOI.VEHICLE_CIRCULAR_AOI_RADIUS)
+        self.VEHICLE_CIRCULAR_AOI_RADIUS = modifiers(BattleParams.VEHICLE_AOI_RADIUS, self.VEHICLE_CIRCULAR_AOI_RADIUS)
         self.VEHICLE_CIRCULAR_AOI_RADIUS_HYSTERESIS_MARGIN = self.VEHICLE_CIRCULAR_AOI_RADIUS + AOI.CIRCULAR_AOI_MARGIN
+        self.PIERCING_POWER_INTERPOLATION_DIST_FIRST = modifiers(BattleParams.PIERCING_POWER_INTERPOLATION_DIST_FIRST, self.PIERCING_POWER_INTERPOLATION_DIST_FIRST)
+        self.PIERCING_POWER_INTERPOLATION_DIST_LAST = modifiers(BattleParams.PIERCING_POWER_INTERPOLATION_DIST_LAST, self.PIERCING_POWER_INTERPOLATION_DIST_LAST)
+        self.DAMAGE_INTERPOLATION_DIST_FIRST = modifiers(BattleParams.DAMAGE_INTERPOLATION_DIST_FIRST, self.DAMAGE_INTERPOLATION_DIST_FIRST)
+        self.DAMAGE_INTERPOLATION_DIST_LAST = modifiers(BattleParams.DAMAGE_INTERPOLATION_DIST_LAST, self.DAMAGE_INTERPOLATION_DIST_LAST)
 
 
 class ConstantsModificationCache(ModificationCache):

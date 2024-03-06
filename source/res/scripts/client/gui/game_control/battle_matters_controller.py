@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_matters_controller.py
+import itertools
 import typing
 from enum import Enum
 import BigWorld
@@ -508,5 +509,5 @@ class _BattleMattersProgressWatcher(object):
             self.onBackFromBattle()
 
     def __onEnterInBattle(self):
-        if BigWorld.player().arenaBonusType in ARENA_BONUS_TYPE.RANDOM_RANGE:
+        if BigWorld.player().arenaBonusType in itertools.chain(ARENA_BONUS_TYPE.RANDOM_RANGE, (ARENA_BONUS_TYPE.WINBACK,)):
             AccountSettings.setBattleMattersSetting(BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS, self.getBattlesCountWithoutProgress() + 1)

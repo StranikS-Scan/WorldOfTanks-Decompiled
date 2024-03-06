@@ -23,6 +23,7 @@ from helpers import dependency, uniprof
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.prebattle_hints.controller import IPrebattleHintsController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 _logger = logging.getLogger(__name__)
@@ -85,6 +86,7 @@ class SharedPage(BattlePageMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __prebattleHints = dependency.descriptor(IPrebattleHintsController)
 
     def __init__(self, components=None, external=None):
         super(SharedPage, self).__init__()
@@ -122,6 +124,21 @@ class SharedPage(BattlePageMeta):
             component.startPlugins()
             if self.sessionProvider.isReplayPlaying:
                 component.invokeRegisterComponentForReplay()
+
+    def setComponentsVisibilityWithFade(self, visible=None, hidden=None):
+        viewsToShow = {view for view in visible if view in self.components} if visible else None
+        viewsToHide = {view for view in hidden if view in self.components} if hidden else None
+        if self._fsToggling:
+            if viewsToShow:
+                self._fsToggling.update(viewsToShow)
+            if viewsToHide:
+                self._fsToggling.difference_update(viewsToHide)
+        if viewsToShow:
+            viewsToShow.difference_update(self._fsToggling)
+        if viewsToHide:
+            viewsToHide.difference_update(self._fsToggling)
+        self._setComponentsVisibilityWithFade(visible=viewsToShow, hidden=viewsToHide)
+        return
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='enter')
     def _populate(self):
@@ -198,6 +215,16 @@ class SharedPage(BattlePageMeta):
             self.as_setComponentsVisibilityS(visible, hidden)
         return
 
+    def _setComponentsVisibilityWithFade(self, visible=None, hidden=None):
+        if visible is None:
+            visible = set()
+        if hidden is None:
+            hidden = set()
+        if visible or hidden:
+            _logger.debug('Sets components visibility with fade: visible = %r, hidden = %r', visible, hidden)
+            self.as_setComponentsVisibilityWithFadeS(visible, hidden)
+        return
+
     def _onRegisterFlashComponent(self, viewPy, alias):
         self.sessionProvider.addViewComponent(alias, viewPy)
 
@@ -262,16 +289,18 @@ class SharedPage(BattlePageMeta):
         self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
-        self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
         if self._hasBattleMessenger() and not avatar_getter.isObserverSeesAll():
             self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        visible, additionalToggling = {_ALIASES.BATTLE_LOADING}, set()
+        visible, additionalToggling = set(), set()
         if self.getComponent(_ALIASES.PREBATTLE_AMMUNITION_PANEL) is not None:
             visible.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
             additionalToggling.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
+        if not self.__prebattleHints.isEnabledForCurrentBattleSession():
+            additionalToggling.add(_ALIASES.BATTLE_LOADING)
+            visible.add(_ALIASES.BATTLE_LOADING)
         self._blToggling.difference_update(additionalToggling)
         self._setComponentsVisibility(visible=visible, hidden=self._blToggling)
         self._blToggling.update(additionalToggling)

@@ -425,7 +425,7 @@ class TankmanDescr(object):
             if self.__lastSkillLevel == MAX_SKILL_LEVEL:
                 possiblyLearnedSkillsNumber -= 1
             possiblyLearnedSkillsNumber += self.freeSkillsNumber
-            xp = self.getXpCostForSkillsLevels(self.__lastSkillLevel, possiblyLearnedSkillsNumber)
+            xp += self.getXpCostForSkillsLevels(self.__lastSkillLevel, possiblyLearnedSkillsNumber)
         xp += roleXP
         return xp
 

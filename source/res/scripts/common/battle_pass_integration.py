@@ -47,7 +47,7 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
         checkPointsList(winPoints, '{}/win'.format(self.bonusTypeName))
         checkPointsList(losePoints, '{}/lose'.format(self.bonusTypeName))
         for key, value in points.iteritems():
-            if key != 'win' and key != 'lose' and key != 'enabled':
+            if key not in ('win', 'lose', 'enabled', 'visible'):
                 vehCD = key
                 if not vehicles.g_list.isVehicleExistingByCD(vehCD):
                     raise SoftException('[BattlePass] wrong vehCD={}'.format(vehCD))

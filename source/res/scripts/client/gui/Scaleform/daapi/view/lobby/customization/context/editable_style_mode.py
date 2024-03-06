@@ -268,7 +268,7 @@ class EditableStyleMode(CustomMode):
             emptyComponent = CustomizationOutfit()
             outfit = self._modifiedOutfits[self.season]
             emptyComponent.styleId = outfit.id
-            if outfit.style is not None and outfit.style.isProgression:
+            if outfit.style is not None and outfit.style.isProgressionRewindEnabled:
                 emptyComponent.styleProgressionLevel = outfit.progressionLevel
             if outfit.style is not None and outfit.style.isWithSerialNumber:
                 emptyComponent.serial_number = outfit.serialNumber

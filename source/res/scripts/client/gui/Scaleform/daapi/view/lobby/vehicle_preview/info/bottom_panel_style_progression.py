@@ -108,6 +108,7 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
         g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
         g_currentPreviewVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        self.__unsubscribeEntity()
         self.__ctx = None
         super(ProgressionStylesBuyingPanelView, self)._finalize()
         return
@@ -124,9 +125,7 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
         return
 
     def __onVehicleChangeStarted(self):
-        entity = self.__hangarSpace.getVehicleEntity()
-        if entity and entity.appearance:
-            entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+        self.__unsubscribeEntity()
 
     def __onVehicleChanged(self):
         entity = self.__hangarSpace.getVehicleEntity()
@@ -140,3 +139,8 @@ class ProgressionStylesBuyingPanelView(ViewImpl):
         if self.__styleLevel is not None:
             self.__customizationService.changeStyleProgressionLevelPreview(self.__styleLevel)
         return
+
+    def __unsubscribeEntity(self):
+        entity = self.__hangarSpace.getVehicleEntity()
+        if entity and entity.appearance:
+            entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)

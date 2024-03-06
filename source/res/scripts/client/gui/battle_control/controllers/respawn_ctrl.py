@@ -263,8 +263,9 @@ class RespawnsController(ViewComponentsController):
             timeLeft = max(0, respawnTime - BigWorld.serverTime())
             autoRespawnTime = self.__respawnInfo.autoRespawnTime
             autoTimeLeft = max(0, autoRespawnTime - BigWorld.serverTime())
-            for viewCmp in self._viewComponents:
-                viewCmp.updateTimer([timeLeft, autoTimeLeft], self.__vehicles, self.__cooldowns, self.__limits)
+            if self.__isUiShown:
+                for viewCmp in self._viewComponents:
+                    viewCmp.updateTimer([timeLeft, autoTimeLeft], self.__vehicles, self.__cooldowns, self.__limits)
 
             if timeLeft > 0 or autoTimeLeft > 0:
                 self.__timerCallback = BigWorld.callback(1, self.__startTimer)

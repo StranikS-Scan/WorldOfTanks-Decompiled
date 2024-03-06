@@ -291,12 +291,12 @@ class Stats(object):
         self.__account._doCmdIntStr(AccountCommands.CMD_SET_DOSSIER_FIELD, value, path, proxy)
         return
 
-    def addTokens(self, token, tokenCount=1, callback=None):
+    def addTokens(self, token, tokenCount=1, limit=0, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
         else:
             proxy = None
-        self.__account._doCmdIntStr(AccountCommands.CMD_ADD_TOKENS, tokenCount, token, proxy)
+        self.__account._doCmdInt2Str(AccountCommands.CMD_ADD_TOKENS, tokenCount, limit, token, proxy)
         return
 
     def drawTokens(self, token, callback=None):

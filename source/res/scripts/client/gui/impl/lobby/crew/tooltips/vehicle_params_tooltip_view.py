@@ -2,28 +2,29 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/tooltips/vehicle_params_tooltip_view.py
 import collections
 from functools import partial
-import constants
 from typing import TYPE_CHECKING
+import constants
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from frameworks.wulf import ViewSettings
+from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_tooltip_view_model import VehicleParamsTooltipViewModel
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_category import VehicleParamsCategory
-from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_note import VehicleParamsNote, NoteThemeEnum
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_item import VehicleParamsItem, ValueStyleEnum
+from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_note import VehicleParamsNote, NoteThemeEnum
+from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_tooltip_view_model import VehicleParamsTooltipViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI
-from gui.impl import backport
-from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters import formatters as param_formatter
-from helpers import i18n
-from post_progression_common import ACTION_TYPES
-from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
-from items import perks, vehicles, tankmen, parseIntCompactDescr
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus, CREW_MASTERY_BONUSES
-from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.comparator import PARAM_STATE
+from gui.shared.items_parameters.formatters import isRelativeParameter
+from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
+from gui.shared.items_parameters.params import PIERCING_DISTANCES
+from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
+from helpers import i18n
+from items import perks, vehicles, tankmen, parseIntCompactDescr
+from post_progression_common import ACTION_TYPES
 from shared_utils import first
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 if TYPE_CHECKING:
     from typing import Optional
     from gui.shared.gui_items import Vehicle
@@ -528,15 +529,25 @@ class VehicleAvgParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
     def _fillModel(self, model):
         super(VehicleAvgParamsTooltipView, self)._fillModel(model)
-        rangeParamName = self._AVG_TO_RANGE_PARAMETER_NAME[self._paramName]
-        value = self._context.getComparator().getExtendedData(rangeParamName).value
-        fmtValue = param_formatter.formatParameter(rangeParamName, value)
-        title = backport.text(R.strings.tooltips.tank_params.avgParamComment.dyn(rangeParamName)(), units=i18n.makeString(param_formatter.MEASURE_UNITS.get(rangeParamName)))
+        rangeParamNames = [self._AVG_TO_RANGE_PARAMETER_NAME[self._paramName]]
+        shell = self.vehicle.descriptor.shot.shell
+        if self._paramName == 'avgPiercingPower' and shell.isPiercingDistanceDependent:
+            rangeParamNames = ['maxPiercingPower', 'minPiercingPower']
+        elif self._paramName == 'avgDamage' and shell.isDamageMutable:
+            rangeParamNames = ['maxMutableDamage', 'minMutableDamage']
         categories = model.getCategories()
         category = VehicleParamsCategory()
         items = category.getItems()
-        avgItem = VehicleParamsItem()
-        avgItem.setValue(self._formatValueText(ValueStyleEnum.WHITESPANISH, fmtValue))
-        avgItem.setTitle(title)
-        items.addViewModel(avgItem)
+        for rangeParamName in rangeParamNames:
+            value = self._context.getComparator().getExtendedData(rangeParamName).value
+            fmtValue = param_formatter.formatParameter(rangeParamName, value)
+            args = {'units': i18n.makeString(param_formatter.MEASURE_UNITS.get(rangeParamName))}
+            if rangeParamName in ('minPiercingPower', 'minMutableDamage'):
+                args['distance'] = int(min(self.vehicle.descriptor.shot.maxDistance, PIERCING_DISTANCES[1]))
+            title = backport.text(R.strings.tooltips.tank_params.avgParamComment.dyn(rangeParamName)(), **args)
+            avgItem = VehicleParamsItem()
+            avgItem.setValue(self._formatValueText(ValueStyleEnum.WHITESPANISH, fmtValue))
+            avgItem.setTitle(title)
+            items.addViewModel(avgItem)
+
         categories.addViewModel(category)

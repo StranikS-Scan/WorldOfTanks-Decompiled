@@ -4,6 +4,7 @@ import logging
 from itertools import chain
 from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBattlePassTankmenVoiceover
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -51,3 +52,7 @@ class BattlePassWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_info')
     def handleGetInfo(self, _):
         return formatBattlePassInfo()
+
+    @w2c(W2CSchema, name='finish_bp_purchase')
+    def finishBattlePassPurchase(self, _):
+        g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_FINISH_BATTLE_PASS_PURCHASE), scope=EVENT_BUS_SCOPE.LOBBY)

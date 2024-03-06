@@ -17,7 +17,7 @@ from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, I18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getShopURL, getTelecomRentVehicleUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyCollectibleVehiclesUrl, getClientControlledCloseCtx, getShopURL, getTelecomRentVehicleUrl, getBuyBattlePassUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -45,7 +45,7 @@ from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand, NonPersistentEventNotificationCommand, NotificationEvent
+from gui.impl.pub.notification_commands import WindowNotificationCommand, NonPersistentEventNotificationCommand, NotificationEvent, EventNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
@@ -177,10 +177,8 @@ def showBattleRoyaleResultsInfo(ctx):
     if battleResultView is not None:
         if battleResultView.arenaUniqueID == ctx.get('arenaUniqueID', -1):
             return
-        battleResultView.destroyWindow()
-    view = BrBattleResultsViewInLobby(ctx=ctx)
-    window = LobbyNotificationWindow(content=view)
-    window.load()
+        g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID=contentResId))
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, BrBattleResultsViewInLobby, scope=ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 
@@ -1443,9 +1441,9 @@ def showBattlePassRewardsSelectionWindow(chapterID=0, level=0, onRewardsReceived
     window.load()
 
 
-def showEpicRewardsSelectionWindow(onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True):
+def showEpicRewardsSelectionWindow(onRewardsReceivedCallback=None, onCloseCallback=None, onLoadedCallback=None, isAutoDestroyWindowsOnReceivedRewards=True, level=0):
     from gui.impl.lobby.frontline.rewards_selection_view import RewardsSelectionWindow
-    window = RewardsSelectionWindow(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards)
+    window = RewardsSelectionWindow(onRewardsReceivedCallback, onCloseCallback, onLoadedCallback, isAutoDestroyWindowsOnReceivedRewards, level)
     window.load()
     return window
 
@@ -1717,13 +1715,13 @@ def showContactSupportOverlay(message, isCloseVisible=True, onClose=None):
     wnd.setSubView(ContactSupportOverlayView, message=message, isCloseVisible=isCloseVisible, onClose=onClose)
 
 
-def showModeSelectorWindow(isEventEnabled, provider=None, subSelectorCallback=None):
+def showModeSelectorWindow(provider=None, subSelectorCallback=None):
     from gui.impl.lobby.mode_selector.mode_selector_view import ModeSelectorView
     guiLoader = dependency.instance(IGuiLoader)
     if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.mode_selector.ModeSelectorView()) is not None:
         return
     else:
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.VIEW_SCOPE), isEventEnabled=isEventEnabled, provider=provider, subSelectorCallback=subSelectorCallback), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.VIEW_SCOPE), provider=provider, subSelectorCallback=subSelectorCallback), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
 
@@ -2255,7 +2253,30 @@ def showSteamEmailConfirmRewardsView(rewards=None, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showBattlePassTankmenVoiceover():
-    from gui.impl.lobby.battle_pass.tankmen_voiceover_view import TankmenVoiceoverWindow
-    window = TankmenVoiceoverWindow()
+def showBattlePassTankmenVoiceover(ctx=None):
+    from gui.impl.lobby.battle_pass.custom_tankmen_voiceover_view import CustomTankmenVoiceoverWindow
+    window = CustomTankmenVoiceoverWindow(ctx=ctx)
     window.load()
+
+
+@adisp.adisp_process
+def showBuyBattlePassOverlay(parent=None):
+    url = getBuyBattlePassUrl()
+    if url:
+        url = yield URLMacros().parse(url)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BROWSER_OVERLAY, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPrebattleHintsWindow(hintModel, hintsViewClass=None):
+    from gui.impl.battle.prebattle.prebattle_hints_view import PrebattleHintsWindow, PrebattleHintsView
+    hintsViewClass = hintsViewClass or PrebattleHintsView
+    needToShow = getattr(hintsViewClass, 'needToShow')
+    if not callable(needToShow) or needToShow():
+        window = PrebattleHintsWindow(hintModel, hintsViewClass)
+        window.load()
+
+
+@dependency.replace_none_kwargs(notificationsMgr=INotificationWindowController)
+def showPrebattleHintsConfirmWindow(notificationsMgr=None):
+    from gui.impl.battle.prebattle.prebattle_hints_confirm import showPrebattleHintsConfirm
+    notificationsMgr.append(EventNotificationCommand(NotificationEvent(method=showPrebattleHintsConfirm)))

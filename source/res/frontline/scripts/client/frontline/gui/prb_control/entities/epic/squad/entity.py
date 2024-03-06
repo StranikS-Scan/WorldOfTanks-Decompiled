@@ -5,6 +5,7 @@ from frontline.gui.prb_control.entities.epic.squad.actions_validator import Epic
 import account_helpers
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, VEHICLE_CLASS_INDICES
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getEpicFightBtnTooltipData
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
@@ -69,6 +70,9 @@ class EpicSquadEntity(SquadEntity):
 
     def getQueueType(self):
         return QUEUE_TYPE.EPIC
+
+    def getFightBtnTooltipData(self, isStateDisabled):
+        return (getEpicFightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(EpicSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
 
     @property
     def _showUnitActionNames(self):

@@ -85,6 +85,8 @@ def init(isFullCache=True):
     geometriesSet = set()
     for key, value in rootSection.items():
         isDevelopmentArena = value.readBool('isDevelopment')
+        if value.readBool('isHangar'):
+            continue
         geometryID = value.readInt('id')
         if geometryID in geometriesSet:
             raise SoftException('Geometry ID=%d is not unique' % geometryID)

@@ -79,6 +79,7 @@ from gui.prb_control.formatters import messages
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
+from gui.shared.gui_items.marker_items import DEFAULT_MARKER
 from gun_rotation_shared import decodeGunAngles
 from helpers import bound_effects, dependency, uniprof
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles
@@ -100,6 +101,7 @@ from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
+from helpers_common import unpackHullAimingPitch
 import VOIP
 _logger = logging.getLogger(__name__)
 
@@ -270,6 +272,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__deadOnLoading = False
         self.arena = None
         self.__randomEvents = []
+        self.__blArenaPeriod = 0
         return
 
     @property
@@ -741,7 +744,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         ctrl = self.guiSessionProvider.shared.areaMarker
                         if ctrl:
                             matrix = Math.Matrix(self.vehicle.matrix)
-                            ctrl.addMarker(ctrl.createMarker(matrix, 0))
+                            ctrl.addMarker(ctrl.createMarker(matrix, DEFAULT_MARKER))
                         return True
                     if key == Keys.KEY_U:
                         ctrl = self.guiSessionProvider.shared.areaMarker
@@ -752,7 +755,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         ctrl = self.guiSessionProvider.shared.areaMarker
                         if ctrl:
                             vehicle = BigWorld.entity(self.playerVehicleID)
-                            ctrl.addMarker(ctrl.createMarker(vehicle.matrix, 0))
+                            ctrl.addMarker(ctrl.createMarker(vehicle.matrix, DEFAULT_MARKER))
                         return True
                     if key == Keys.KEY_BACKSLASH:
                         self.base.setDevelopmentFeature(0, 'killEnemyTeam', 0, '')
@@ -941,6 +944,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def set_ownVehicleAuxPhysicsData(self, prev=None):
         self.__onSetOwnVehicleAuxPhysicsData(prev)
+
+    def set_ownVehicleHullAimingPitchPacked(self, _):
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isStarted:
+            vehicle.filter.updateHullAimingPitch(unpackHullAimingPitch(self.ownVehicleHullAimingPitchPacked))
+        return
 
     def targetBlur(self, prevEntity):
         if not prevEntity:
@@ -1138,6 +1147,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onRandomEvent(self, eventName):
         _logger.info('onRandomEvent happened, event name: %s', eventName)
         self.__randomEvents.append(eventName)
+
+    def logBattleLoadingFinished(self):
+        self.__blArenaPeriod = self.guiSessionProvider.arenaVisitor.getArenaPeriod()
+        _logger.info('log battle loading finished, arena period: %s', self.__blArenaPeriod)
 
     def onSwitchViewpoint(self, vehicleID, position):
         LOG_DEBUG('onSwitchViewpoint', vehicleID, position)
@@ -1523,6 +1536,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         for r in results:
             vehicleID = r & 4294967295L
             flags = r >> 32 & 4294967295L
+            TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_HIT, targetId=vehicleID, flags=flags)
             if flags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
                 continue
             if flags & VHF.VEHICLE_KILLED:
@@ -1543,50 +1557,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
         else:
             bestSound = None
+            hitSoundCtrl = self.guiSessionProvider.dynamic.vehicleHitSound
+            if not hitSoundCtrl:
+                _logger.critical('IVehicleHitSound is missing for current battle, add it to allow sounds on hit.')
+                return
             for enemyVehID, flags in enemies.iteritems():
                 if enemyVehID == self.playerVehicleID:
                     continue
                 if flags & VHF.IS_ANY_PIERCING_MASK:
                     self.__fireNonFatalDamageTriggerID = BigWorld.callback(0.5, partial(self.__fireNonFatalDamageTrigger, enemyVehID))
-                sound = None
-                if flags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
-                    if flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                        sound = 'enemy_hp_damaged_by_near_explosion_by_player'
-                    elif flags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
-                elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
-                    if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
-                    elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'
-                    else:
-                        sound = 'enemy_hp_damaged_by_projectile_by_player'
-                elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                    sound = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
-                elif flags & VHF.RICOCHET and not flags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
-                    sound = 'enemy_ricochet_by_player'
-                    if len(enemies) == 1:
-                        TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_RICOCHET, targetId=enemyVehID)
-                elif flags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
-                    if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player'
-                    elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                        sound = 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player'
-                    else:
-                        sound = 'enemy_no_hp_damage_at_attempt_by_player'
-                        if len(enemies) == 1:
-                            TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
-                elif flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player'
-                elif flags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player'
-                else:
-                    if flags & (VHF.ARMOR_WITH_ZERO_DF_NOT_PIERCED_BY_PROJECTILE | VHF.DEVICE_NOT_PIERCED_BY_PROJECTILE) or not flags & VHF.IS_ANY_PIERCING_MASK:
-                        sound = 'enemy_no_piercing_by_player'
-                    else:
-                        sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
-                    if len(enemies) == 1:
-                        TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
+                sound = hitSoundCtrl.getSoundStringFromHitFlags(enemyVehID, flags, len(enemies))
                 if sound is not None:
                     bestSound = getBestShotResultSound(bestSound, sound, enemyVehID)
 
@@ -1684,6 +1664,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if (gunFirePos - refStartPoint).length > 50.0 > (gunFirePos - BigWorld.camera().position).length and replayCtrl.isPlaying:
                         velocity = velocity.length * gunMatrix.applyVector((0, 0, 1))
             self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, shooterID, BigWorld.camera().position)
+            TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.SHOW_TRACER, attackerId=shooterID, isRicochet=isRicochet, startPoint=refStartPoint, velocity=velocity, gravity=gravity, maxShotDist=maxShotDist)
             if isRicochet:
                 self.__projectileMover.hold(shotID)
             return
@@ -1735,6 +1716,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not self.__updateVehicleStatus(vehicleID):
             return
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, True)
+        TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.SIXTH_SENSE)
 
     def battleEventsSummary(self, summary):
         LOG_DEBUG_DEV('Summary of battle events has been received:  data={}'.format(summary))
@@ -2116,7 +2098,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def leaveArena(self):
         _logger.info('Avatar.leaveArena')
         from helpers import statistics
-        self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team, self.__randomEvents)
+        self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team, self.__randomEvents, self.__blArenaPeriod)
         self.statsCollector.needCollectSessionData(True)
         self.statsCollector.noteHangarLoadingState(statistics.HANGAR_LOADING_STATE.CONNECTED, True)
         try:
@@ -2225,6 +2207,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def getOwnVehicleStabilisedMatrix(self):
         observedMatrix = self.getObservedVehicleStabilisedMatrix()
         return observedMatrix if observedMatrix is not None else self.__ownVehicleStabMProv
+
+    def getOwnVehicleHullAimingPitch(self):
+        vehicle = BigWorld.player().getVehicleAttached()
+        return vehicle.filter.hullAimingPitch if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isStarted else 0.0
 
     def getOwnVehicleSpeeds(self, getInstantaneous=False, isAttached=False):
         vehicle = BigWorld.entity(self.playerVehicleID)
@@ -2443,6 +2429,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 BigWorld.notifyBattleTime(self.spaceID, battleTime)
             self.arena.onPeriodChange += self.__onArenaPeriodChange
             self.cell.autoAim(0, False)
+            self.arena.startVsePlans()
             g_playerEvents.onAvatarReady()
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is None:
@@ -2973,6 +2960,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__onCmdResponse[requestID] = callback
             getattr(self.base, doCmdMethod)(requestID, cmd, *args)
             return
+
+    def _doCmdNoArgs(self, cmd, callback):
+        self.__doCmd('doCmdNoArgs', cmd, callback)
 
     def _doCmdStr(self, cmd, s, callback):
         self.__doCmd('doCmdStr', cmd, callback, s)

@@ -13,7 +13,7 @@ class SoundZoneTrigger(BigWorld.UserDataObject):
 
     def __init__(self):
         BigWorld.UserDataObject.__init__(self)
-        self.__gameObject = CGF.GameObject(BigWorld.player().spaceID, 'SoundZoneTrigger')
+        self.__gameObject = CGF.GameObject(BigWorld.player().spaceID or BigWorld.camera().spaceID, 'SoundZoneTrigger')
         self.__gameObject.setStatic(True)
         position = math_utils.createRTMatrix(Math.Vector3(self.direction.z, self.direction.y, self.direction.x), self.position)
         self.__gameObject.createComponent(TransformComponent, position)

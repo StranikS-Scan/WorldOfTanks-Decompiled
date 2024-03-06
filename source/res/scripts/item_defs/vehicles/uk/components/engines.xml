@@ -81,6 +81,7 @@
     <Leyland_L60_No_4_A>	103	</Leyland_L60_No_4_A>
     <Meteorite_Mk_202>	104	</Meteorite_Mk_202>
     <Leyland_1A>	105	</Leyland_1A>
+    <Detroit_Diesel_12V_71T>	106	</Detroit_Diesel_12V_71T>
     <Meteorite_Mk_202_Gonsalo>	107	</Meteorite_Mk_202_Gonsalo>
     <Meadows_HOP_Mod.HH>	108	</Meadows_HOP_Mod.HH>
     <GMC_6V53T>	109	</GMC_6V53T>
@@ -1493,6 +1494,23 @@
       <rpm_min>	389	</rpm_min>
       <rpm_max>	2353	</rpm_max>
     </Meadows_ESTB>
+    <Detroit_Diesel_12V_71T>
+      <userString>	#gb_vehicles:Detroit_Diesel_12V_71T	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	1610	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
+    </Detroit_Diesel_12V_71T>
     <Leyland_L60_No_4>
       <userString>	#gb_vehicles:Leyland_L60_No_4	</userString>
       <tags>	diesel	</tags>
@@ -1594,8 +1612,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
     </MTU_870_N>
     <L50>
       <userString>	#gb_vehicles:L50	</userString>

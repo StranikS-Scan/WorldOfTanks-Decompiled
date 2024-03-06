@@ -75,7 +75,7 @@ _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'poll': ('BgPoll', (288, 110)),
  'offer': ('OfferIconBg', (288, 110)),
  'event': ('EventIconBg', (288, 110)),
- 'referral': ('BgReferral', (288, 167)),
+ 'referral': ('BgReferral', (288, 128)),
  'craftmachine': ('CraftmachineBG', (288, 80)),
  'ClanQuestNotification': ('BgclanQuestNotification', (288, 110))}
 

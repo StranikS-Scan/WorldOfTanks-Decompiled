@@ -52,6 +52,9 @@ class SettingsWindowMeta(AbstractWindowView):
     def openColorSettings(self):
         self._printOverrideError('openColorSettings')
 
+    def restartNewbieBattleHints(self):
+        self._printOverrideError('restartNewbieBattleHints')
+
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 

@@ -124,6 +124,6 @@ class CompareCamouflageBlock(BaseBlock):
         array = Array()
         slot = self._createAmmunitionSlot(0)
         slot.setIsSelected(cmp_helpers.getCmpConfiguratorMainView().isCamouflageSet())
-        slot.setIsLocked(self._vehicle.isOutfitLocked)
+        slot.setIsLocked(self._vehicle.isOutfitLocked or self._vehicle.descriptor.type.hasCustomDefaultCamouflage)
         array.addViewModel(slot)
         return array

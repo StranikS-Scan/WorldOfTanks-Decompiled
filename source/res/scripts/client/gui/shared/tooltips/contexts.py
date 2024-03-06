@@ -16,6 +16,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
+from gui.battle_pass.rewards_sort import getRewardsComparator
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import factories, loadDossier
@@ -1330,7 +1331,9 @@ class BattlePassGiftTokenContext(ToolTipContext):
                 if gift is not None:
                     result.append(gift.bonus.displayedItem.getXP())
             else:
-                for gift in offer.getAllGifts():
+                shortOfferName = offerToken.split(':')[2]
+                gifts = sorted(offer.getAllGifts(), cmp=getRewardsComparator(shortOfferName), key=lambda item: (item.bonus.getLightViewModelData()[0],))
+                for gift in gifts:
                     result.append(gift.title)
 
             return result

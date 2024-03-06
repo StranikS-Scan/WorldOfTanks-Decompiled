@@ -47,6 +47,7 @@ class Mine(EntityGameObject):
 
     def _registerGameObject(self, gameObject):
         self.gameObject.setPosition(self.position)
+        self.gameObject.setIsEnemyMarkerEnabled(True)
         super(Mine, self)._registerGameObject(gameObject)
 
     def __onAvatarReady(self):

@@ -34,8 +34,10 @@ from gui.impl.gen import R
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.battle_hints.newbie_battle_hints_controller import INewbieBattleHintsController
 from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
 from uilogging.limited_ui.loggers import LimitedUILogger
+from uilogging.newbie_hints.loggers import NewbieHintsSettingsUILogger, NewbieHintsSettingsTooltipsUILogger
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
  SETTINGS.SOUNDTITLE,
@@ -74,6 +76,8 @@ class SettingsWindow(SettingsWindowMeta):
         super(SettingsWindow, self).__init__()
         self.__redefinedKeyModeEnabled = ctx.get('redefinedKeyMode', True)
         self.__isBattleSettings = ctx.get('isBattleSettings', False)
+        self.__uiNewbieHintsTooltipLogger = NewbieHintsSettingsTooltipsUILogger()
+        self.__uiNewbieHintsLogger = NewbieHintsSettingsUILogger()
         if 'tabIndex' in ctx and ctx['tabIndex'] is not None:
             _setLastTabIndex(ctx['tabIndex'])
         self.params = SettingsParams()
@@ -154,6 +158,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.anonymizerController.onStateChanged += self.__refreshSettings
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
+        self.__uiNewbieHintsTooltipLogger.initialize()
 
     def _update(self):
         self.as_setDataS(self.__getSettings())
@@ -175,6 +180,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopArtyBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__uiNewbieHintsTooltipLogger.finalize()
         super(SettingsWindow, self)._dispose()
         return
 
@@ -335,6 +341,10 @@ class SettingsWindow(SettingsWindowMeta):
     def openColorSettings(self):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.COLOR_SETTING)), EVENT_BUS_SCOPE.DEFAULT)
 
+    def restartNewbieBattleHints(self):
+        dependency.instance(INewbieBattleHintsController).resetHistory()
+        self.__uiNewbieHintsLogger.resetButtonClicked()
+
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
 
@@ -353,6 +363,7 @@ class SettingsWindow(SettingsWindowMeta):
             self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
         if LIMITED_UI_KEY in diff:
             self.__setLimitedUISettingVisibility()
+        self.__uiNewbieHintsLogger.onSettingsChanged(diff)
         return
 
     def __refreshSettings(self, **_):

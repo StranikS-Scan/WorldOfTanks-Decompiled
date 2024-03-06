@@ -55,6 +55,11 @@ class TriggerListener(TriggersManager.ITriggerListener):
             self.onPlayerShoot(aimingInfo)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED:
             self.onPlayerShotMissed()
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_HIT:
+            targetId = params['targetId']
+            target = BigWorld.entities.get(targetId)
+            flags = params['flags']
+            self.onPlayerShotHit(target, flags)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE:
             self.onPlayerVehicleFireEvent(True)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_TANKMAN_SHOOTED:
@@ -79,6 +84,19 @@ class TriggerListener(TriggersManager.ITriggerListener):
             self.onPlayerEnterTrigger(params['name'], True)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_MOVE:
             self.onPlayerMove(params['moveCommands'])
+        elif triggerType == TriggersManager.TRIGGER_TYPE.SHOW_TRACER:
+            attackerId = params['attackerId']
+            attacker = BigWorld.entities.get(attackerId)
+            isRicochet = params['isRicochet']
+            startPoint = params['startPoint']
+            velocity = params['velocity']
+            gravity = params['gravity']
+            maxShotDist = params['maxShotDist']
+            self.onShowTracer(attacker, isRicochet, startPoint, velocity, gravity, maxShotDist)
+        elif triggerType == TriggersManager.TRIGGER_TYPE.STUN:
+            self.onStunInfoUpdated(params['stunInfo'])
+        elif triggerType == TriggersManager.TRIGGER_TYPE.SIXTH_SENSE:
+            self.onSixthSenceActivated()
         return
 
     def onTriggerDeactivated(self, params):
@@ -94,6 +112,9 @@ class TriggerListener(TriggersManager.ITriggerListener):
         pass
 
     def onPlayerShotMissed(self):
+        pass
+
+    def onPlayerShotHit(self, target, flags):
         pass
 
     def onPlayerDetectEnemy(self, new, lost):
@@ -118,6 +139,15 @@ class TriggerListener(TriggersManager.ITriggerListener):
         pass
 
     def onAutoAim(self, isOn):
+        pass
+
+    def onShowTracer(self, attacker, isRicochet, startPoint, velocity, gravity, maxShotDist):
+        pass
+
+    def onStunInfoUpdated(self, stunInfo):
+        pass
+
+    def onSixthSenceActivated(self):
         pass
 
 

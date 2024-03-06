@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants_utils.py
 import types
+import arena_bonus_type_caps
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
-from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE
+from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from debug_utils import LOG_DEBUG
 from soft_exception import SoftException
@@ -63,6 +64,13 @@ def addArenaBonusTypesFromExtension(extArenaBonusType, personality):
     ARENA_BONUS_MASK.reInit()
 
 
+def addArenaBonusCapsFromExtension(extArenaBonusCaps, personality):
+    extraAttrs = extArenaBonusCaps.getExtraAttrs()
+    extraValues = tuple(extraAttrs.itervalues())
+    extArenaBonusCaps.inject(personality)
+    arena_bonus_type_caps.ALLOWED_ARENA_BONUS_TYPE_CAPS |= frozenset(extraValues)
+
+
 def addQueueTypesFromExtension(extQueueType, personality):
     extraAttrs = extQueueType.getExtraAttrs()
     extraValues = tuple(extraAttrs.itervalues())
@@ -109,6 +117,14 @@ def addClientUnitCmd(extClientUnitCmd, personality):
     extraAttrs = extClientUnitCmd.getExtraAttrs()
     extClientUnitCmd.inject(personality)
     CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
+
+
+def addAttackReasonTypesFromExtension(extAttackReasonType, personality):
+    extraAttrs = extAttackReasonType.getExtraAttrs()
+    extraValues = sorted(extraAttrs.itervalues())
+    extAttackReasonType.inject(personality)
+    ATTACK_REASONS.extend(extraValues)
+    ATTACK_REASON_INDICES.update(dict(((value, index) for index, value in enumerate(ATTACK_REASONS))))
 
 
 def addPrbTypeByUnitMgrRoster(prbType, unitMgrFlag, personality):
@@ -192,8 +208,20 @@ def addVehicleTags(unitMgrFlag, requiredTags, forbiddenTags, newTags, personalit
     LOG_DEBUG(msg)
 
 
+def addBattleResultsConfig(arenaBonusType, config):
+    if config is None:
+        LOG_DEBUG('initBattleResultsConfigFromExtension: config is None')
+        return
+    else:
+        from battle_results import battle_results_constants
+        module = config.__name__
+        battle_results_constants.PATH_TO_CONFIG.update({arenaBonusType: module})
+        return
+
+
 def initCommonTypes(extConstants, personality):
     addArenaGuiTypesFromExtension(extConstants.ARENA_GUI_TYPE, personality)
+    addArenaBonusCapsFromExtension(extConstants.ARENA_BONUS_TYPE_CAPS, personality)
     addArenaBonusTypesFromExtension(extConstants.ARENA_BONUS_TYPE, personality)
     addQueueTypesFromExtension(extConstants.QUEUE_TYPE, personality)
     addPrebattleTypesFromExtension(extConstants.PREBATTLE_TYPE, personality)
@@ -235,6 +263,7 @@ class AbstractBattleMode(object):
     _SEASON_MANAGER_TYPE = None
     _SM_TYPE_BATTLE_RESULT = None
     _SM_TYPES = []
+    _CLIENT_SM_TYPES = []
 
     def __init__(self, personality):
         self._personality = personality
@@ -364,6 +393,26 @@ class AbstractBattleMode(object):
         return []
 
     @property
+    def _client_LobbyContextMenuOptions(self):
+        return tuple()
+
+    @property
+    def _client_DynamicObjectCacheClass(self):
+        return None
+
+    @property
+    def _client_advancedChatComponent(self):
+        return None
+
+    @property
+    def _client_battleChannelController(self):
+        return (None, None)
+
+    @property
+    def _client_attackReasonToCode(self):
+        return {}
+
+    @property
     def _server_canCreateUnitMgr(self):
         return lambda *args, **kwargs: (UNIT_ERROR.OK, '')
 
@@ -399,6 +448,10 @@ class AbstractBattleMode(object):
     @property
     def _client_vehicleViewStates(self):
         return []
+
+    @property
+    def _client_customizationHangarDisabled(self):
+        return lambda *args, **kwargs: True
 
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
@@ -476,7 +529,7 @@ class AbstractBattleMode(object):
         prb_utils.addSupportedUnitEntryByType(self._PREBATTLE_TYPE, self._client_prbSquadEntryPointClass, self._personality)
         prb_utils.addSupportedUnitByType(self._PREBATTLE_TYPE, self._client_prbSquadEntityClass, self._personality)
         prb_utils.addBattleSelectorSquadItem(self._CLIENT_PRB_ACTION_NAME_SQUAD, self._client_selectorSquadItemsCreator, self._personality)
-        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._personality)
+        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._ROSTER_CLASS, self._personality)
         prb_utils.addPrbClientCombinedIds(self._PREBATTLE_TYPE, PREBATTLE_TYPE.UNIT, self._personality)
 
     def registerGameControllers(self):
@@ -492,15 +545,7 @@ class AbstractBattleMode(object):
         registerSharedControllerRepo(self._ARENA_GUI_TYPE, self._client_sharedControllersRepository)
 
     def registerBattleResultsConfig(self):
-        config = self._BATTLE_RESULTS_CONFIG
-        if config is None:
-            LOG_DEBUG('initBattleResultsConfigFromExtension: config is None')
-            return
-        else:
-            from battle_results import battle_results_constants
-            module = config.__name__
-            battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
-            return
+        addBattleResultsConfig(self._ARENA_BONUS_TYPE, self._BATTLE_RESULTS_CONFIG)
 
     def registerClientBattleResultsComposer(self):
         from gui.shared.system_factory import registerBattleResultsComposer
@@ -541,9 +586,23 @@ class AbstractBattleMode(object):
             from gui.Scaleform.required_libraries_config import addBattleRequiredLibraries
             addBattleRequiredLibraries(self._client_battleRequiredLibraries, self._ARENA_GUI_TYPE, self._personality)
 
+    def registerLobbyContextMenuOptions(self):
+        from gui.shared.system_factory import registerLobbyContexMenuOptionBuilder, registerLobbyContexMenuHandler
+        for optionID, builder, handler in self._client_LobbyContextMenuOptions:
+            registerLobbyContexMenuOptionBuilder(builder)
+            registerLobbyContexMenuHandler(optionID, handler)
+
+    def registerDynamicObjectCache(self):
+        from gui.shared.system_factory import registerDynObjCache
+        registerDynObjCache(self._ARENA_GUI_TYPE, self._client_DynamicObjectCacheClass)
+
     def registerSystemMessagesTypes(self):
         from chat_shared import SYS_MESSAGE_TYPE
         SYS_MESSAGE_TYPE.inject(self._SM_TYPES)
+
+    def registerClientSystemMessagesTypes(self):
+        from gui.SystemMessages import SM_TYPE
+        SM_TYPE.inject(self._CLIENT_SM_TYPES)
 
     def registerBattleResultSysMsgType(self):
         from battle_results import ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE
@@ -593,3 +652,19 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerVehicleViewState
         for viewState in self._client_vehicleViewStates:
             registerVehicleViewState(viewState)
+
+    def registerClientAdvancedChatComponent(self):
+        from gui.shared.system_factory import registerAdvancedChatComponent
+        registerAdvancedChatComponent(self._ARENA_BONUS_TYPE, self._client_advancedChatComponent)
+
+    def registerBattleChannelController(self):
+        from gui.shared.system_factory import registerBattleChanelController
+        registerBattleChanelController(self._ARENA_GUI_TYPE, *self._client_battleChannelController)
+
+    def registerCustomizationHangarDecorator(self):
+        from gui.shared.system_factory import registerCustomizationHangarDecorator
+        registerCustomizationHangarDecorator(self._client_customizationHangarDisabled)
+
+    def registerAttackReasonToCode(self):
+        from gui.battle_control.controllers.msgs_ctrl import _ATTACK_REASON_CODE
+        _ATTACK_REASON_CODE.update(self._client_attackReasonToCode)

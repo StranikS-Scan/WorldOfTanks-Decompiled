@@ -5,19 +5,22 @@ import weakref
 import AnimationSequence
 import BigWorld
 import Math
+from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
+from chat_commands_consts import INVALID_TARGET_ID, MarkerType
 from ids_generators import SequenceIDGenerator
 from account_helpers.settings_core import ISettingsCore, settings_constants
 from helpers import dependency
 from shared_utils import BitmaskHelper
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from gui.Scaleform.daapi.view.battle.shared import indicators
-from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
-from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF, _DIRECT_INDICATOR_MC_NAME
+from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import ReplyStateForMarker
+from gui.Scaleform.daapi.view.battle.shared.indicators import _DIRECT_INDICATOR_SWF as SWF, _DIRECT_INDICATOR_MC_NAME as MC_NAME
+from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import MARKER_SYMBOL_NAME, CommonMarkerType
+from gui.impl import backport
+from gui.impl.gen import R
 from debug_utils import LOG_CURRENT_EXCEPTION
 import CombatSelectedArea
 from gui.battle_control import minimap_utils
-from gui.impl import backport
-from gui.impl.gen import R
 
 def _getDirectionIndicator(swf, mcName):
     indicator = None
@@ -36,11 +39,6 @@ class ComponentBitMask(BitmaskHelper):
     DIRECTION_INDICATOR = 4
     ANIM_SEQUENCE_MARKER = 8
     TERRAIN_MARKER = 16
-    ALL = MARKER_2D | MINIMAP_MARKER | DIRECTION_INDICATOR | ANIM_SEQUENCE_MARKER | TERRAIN_MARKER
-    BASE = MARKER_2D | MINIMAP_MARKER | DIRECTION_INDICATOR
-    BASE_SEQ = ANIM_SEQUENCE_MARKER | MINIMAP_MARKER | DIRECTION_INDICATOR
-    BASE_T = BASE | TERRAIN_MARKER
-    BASE_SEQ_T = BASE_SEQ | TERRAIN_MARKER
     LIST = (MARKER_2D,
      MINIMAP_MARKER,
      DIRECTION_INDICATOR,
@@ -48,16 +46,21 @@ class ComponentBitMask(BitmaskHelper):
      TERRAIN_MARKER)
 
 
+COMPONENT_MARKER_TYPE_NAMES = dict([ (k, v) for k, v in ComponentBitMask.__dict__.iteritems() if isinstance(v, int) ])
+COMPONENT_MARKER_TYPE_IDS = dict([ (v, k) for k, v in COMPONENT_MARKER_TYPE_NAMES.iteritems() ])
+
 class _IMarkerComponentBase(object):
+    settingsCore = dependency.descriptor(ISettingsCore)
     _idGen = SequenceIDGenerator()
 
-    def __init__(self, data):
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
         super(_IMarkerComponentBase, self).__init__()
         self._componentID = self._idGen.next()
-        self._initData = data
-        self._matrixProduct = data.get('matrixProduct')
-        self._isVisible = data.get('visible', True)
-        self._entity = None
+        self._config = config
+        self._matrixProduct = matrixProduct
+        self._isVisible = isVisible
+        self._targetID = targetID
+        self._entity = weakref.proxy(entity) if entity else None
         return
 
     @property
@@ -79,6 +82,10 @@ class _IMarkerComponentBase(object):
     @property
     def maskType(self):
         raise NotImplementedError
+
+    @property
+    def bcMarkerType(self):
+        return MarkerType.INVALID_MARKER_TYPE
 
     def update(self, *args, **kwargs):
         pass
@@ -106,28 +113,53 @@ class _IMarkerComponentBase(object):
         matrix.setTranslate(position)
         self.setMarkerMatrix(matrix)
 
+    @classmethod
+    def configReader(cls, section):
+        raise NotImplementedError
+
 
 class World2DMarkerComponent(_IMarkerComponentBase):
+    _METERS_STRING = ' ' + backport.text(R.strings.ingame_gui.marker.meters())
 
-    def __init__(self, idx, data):
-        super(World2DMarkerComponent, self).__init__(data)
-        self.__marker2DData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(World2DMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
         self._gui = lambda : None
         self._isMarkerExists = False
-        self.__displayDistance = self.__marker2DData.get('displayDistance', True)
-        self.__distance = self.__marker2DData.get('distance', 0)
+        self._displayDistance = self._config.get('display_distance', True)
+        self._distance = self._config.get('distance', 0)
+        self._symbol = self._config['symbol']
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'shape': section.readString('shape', 'arrow'),
+         'min_distance': section.readFloat('min_distance', 0.0),
+         'max_distance': section.readFloat('max_distance', 0.0),
+         'distance': section.readFloat('distance', 0.0),
+         'distanceFieldColor': section.readString('distanceFieldColor', 'yellow'),
+         'display_distance': section.readBool('display_distance', True),
+         'symbol': section.readString('symbol', MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER)}
+        return config
 
     @property
     def maskType(self):
         return ComponentBitMask.MARKER_2D
 
+    @property
+    def guiMarkerType(self):
+        return CommonMarkerType.NORMAL
+
+    @property
+    def symbol(self):
+        return self._symbol
+
     def attachGUI(self, guiProvider):
         self._gui = weakref.ref(guiProvider.getMarkers2DPlugin())
-        if self._isVisible:
-            self._createMarker()
+        self.settingsCore.onSettingsChanged += self._onSettingsChanged
+        self._createMarker()
         return self._isMarkerExists
 
     def detachGUI(self):
+        self.settingsCore.onSettingsChanged -= self._onSettingsChanged
         self.clear()
 
     def clear(self):
@@ -139,18 +171,16 @@ class World2DMarkerComponent(_IMarkerComponentBase):
             return
         else:
             self._isVisible = isVisible
-            if self._gui() is None:
+            gui = self._gui()
+            if gui is None:
                 return
-            if self._isVisible:
-                self._createMarker()
-            else:
-                self._deleteMarker()
+            gui.setMarkerActive(self._componentID, self._isVisible)
             return
 
     def update(self, distance, *args, **kwargs):
-        self.__distance = distance
+        self._distance = distance
         gui = self._gui()
-        if not self.__displayDistance:
+        if not self._displayDistance:
             distance = -1
         if self._isVisible and self._isMarkerExists and gui:
             gui.markerSetDistance(self._componentID, distance)
@@ -164,7 +194,9 @@ class World2DMarkerComponent(_IMarkerComponentBase):
     def _createMarker(self):
         gui = self._gui()
         if gui and not self._isMarkerExists:
-            self._isMarkerExists = self.__createMarkerAndSetup(gui, self._componentID)
+            self._isMarkerExists = gui.createMarker(self._componentID, self._targetID, self.symbol, self._matrixProduct, self._isVisible, self.bcMarkerType, self.guiMarkerType)
+            if self._isMarkerExists:
+                self._setupMarker(gui)
 
     def _deleteMarker(self):
         gui = self._gui()
@@ -173,24 +205,178 @@ class World2DMarkerComponent(_IMarkerComponentBase):
         self._isMarkerExists = False
         self._isVisible = False
 
-    def __createMarkerAndSetup(self, gui, objectID):
-        symbol = self.__marker2DData.get('symbol', settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER)
-        if not gui.createMarker(objectID, self._matrixProduct, active=self._isVisible, symbol=symbol):
-            return False
-        gui.setupMarker(objectID, self.__marker2DData.get('shape', 'arrow'), self.__marker2DData.get('min-distance', 0), self.__marker2DData.get('max-distance', 0), self.__distance, self.__marker2DData.get('metersString', backport.text(R.strings.ingame_gui.marker.meters())), self.__marker2DData.get('distanceFieldColor', 'yellow'))
+    def _setupMarker(self, gui):
+        config = self._config
+        gui.invokeMarker(self._componentID, 'init', config['shape'], config['min_distance'], config['max_distance'], self._distance, self._METERS_STRING, config['distanceFieldColor'])
         return True
+
+    def _onSettingsChanged(self, diff):
+        pass
+
+
+class World2DActionMarkerComponent(World2DMarkerComponent):
+    MARKER_CULL_DISTANCE = 1800
+    MARKER_MIN_SCALE = 60.0
+    MARKER_BOUNDS = Math.Vector4(30, 30, 30, 30)
+    MARKER_INNER_BOUNDS = Math.Vector4(17, 17, 18, 18)
+    MARKER_BOUND_MIN_SCALE = Math.Vector2(1.0, 1.0)
+
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(World2DActionMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
+        self._isStickyFromConfig = config.get('is_sticky', True)
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'shape': section.readString('shape', 'targetPoint'),
+         'shapeReplyMe': section.readString('shapeReplyMe', 'targetPointReplyMe'),
+         'shapeHighlight': section.readString('shapeHighlight', 'targetPointHighlight'),
+         'min_distance': section.readFloat('min_distance', 0.0),
+         'max_distance': section.readFloat('max_distance', 0.0),
+         'distance': section.readFloat('distance', 0.0),
+         'distanceFieldColor': section.readString('distanceFieldColor', 'yellow'),
+         'display_distance': section.readBool('display_distance', True),
+         'symbol': section.readString('symbol', MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER),
+         'is_sticky': section.readBool('is_sticky', True),
+         'cull_distance': section.readFloat('cull_distance', cls.MARKER_CULL_DISTANCE),
+         'min_scale': section.readFloat('min_scale', cls.MARKER_MIN_SCALE),
+         'bounds': section.readVector4('bounds', cls.MARKER_BOUNDS),
+         'inner_bounds': section.readVector4('inner_bounds', cls.MARKER_INNER_BOUNDS),
+         'bounds_min_scale': section.readVector2('bounds_min_scale', cls.MARKER_BOUND_MIN_SCALE)}
+        return config
+
+    @property
+    def guiMarkerType(self):
+        return CommonMarkerType.TARGET_POINT
+
+    @property
+    def bcMarkerType(self):
+        return MarkerType.TARGET_POINT_MARKER_TYPE
+
+    @property
+    def symbol(self):
+        return self._symbol or MARKER_SYMBOL_NAME.TARGET_POINT_MARKER
+
+    def _setupMarker(self, gui):
+        config = self._config
+        gui.invokeMarker(self._componentID, 'init', config['shape'], config['shapeReplyMe'], config['shapeHighlight'], config['min_distance'], config['max_distance'], self._distance, self._METERS_STRING, config['distanceFieldColor'])
+        isSticky = config['is_sticky'] & bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_STICKY_MARKERS))
+        gui.setMarkerSticky(self.componentID, isSticky)
+        gui.setActiveState(self._componentID, ReplyStateForMarker.CREATE_STATE)
+        gui.setMarkerRenderInfo(self._componentID, config['min_scale'], config['bounds'], config['inner_bounds'], config['cull_distance'], config['bounds_min_scale'])
+        gui.setMarkerBoundEnabled(self._componentID, True)
+        return True
+
+    def _deleteMarker(self):
+        gui = self._gui()
+        if self._isMarkerExists and gui:
+            gui.setMarkerSticky(self._componentID, False)
+            gui.setActiveState(self._componentID, ReplyStateForMarker.CREATE_STATE)
+            gui.setMarkerReplied(self._componentID, False)
+            gui.setMarkerBoundEnabled(self._componentID, False)
+            gui.deleteMarker(self._componentID)
+        self._isMarkerExists = False
+        self._isVisible = False
+
+    def _onSettingsChanged(self, diff):
+        gui = self._gui()
+        if not gui:
+            return
+        addSettings = {}
+        for item in diff:
+            if item in (BattleCommStorageKeys.SHOW_STICKY_MARKERS,):
+                addSettings[item] = diff[item]
+
+        if not addSettings:
+            return
+        newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self._isStickyFromConfig))
+        gui.setMarkerSticky(self.componentID, newIsSticky & self._isStickyFromConfig)
+
+
+class World2DLocationMarkerComponent(World2DMarkerComponent):
+    CULL_DISTANCE = 1800
+    MIN_SCALE = 50.0
+    BOUNDS = Math.Vector4(30, 30, 90, -15)
+    INNER_BOUNDS = Math.Vector4(15, 15, 70, -35)
+    BOUNDS_MIN_SCALE = Math.Vector2(1.0, 0.8)
+    MIN_Y_OFFSET = 1.2
+    MAX_Y_OFFSET = 3.2
+    DISTANCE_FOR_MIN_Y_OFFSET = 400
+    MAX_Y_BOOST = 1.4
+    BOOST_START = 120
+
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(World2DLocationMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
+        self._isStickyFromConfig = config.get('is_sticky', True)
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'symbol': section.readString('symbol', MARKER_SYMBOL_NAME.LOCATION_MARKER),
+         'cull_distance': section.readFloat('cull_distance', cls.CULL_DISTANCE),
+         'min_scale': section.readFloat('min_scale', cls.MIN_SCALE),
+         'bounds': section.readVector4('bounds', cls.BOUNDS),
+         'inner_bounds': section.readVector4('inner_bounds', cls.INNER_BOUNDS),
+         'bounds_min_scale': section.readVector2('bounds_min_scale', cls.BOUNDS_MIN_SCALE),
+         'is_sticky': section.readBool('is_sticky', True),
+         'min_y_offset': section.readFloat('min_y_offset', cls.MIN_Y_OFFSET),
+         'max_y_offset': section.readFloat('max_y_offset', cls.MAX_Y_OFFSET),
+         'max_y_boost': section.readFloat('max_y_boost', cls.MAX_Y_BOOST),
+         'distance_for_min_y_offset': section.readFloat('distance_for_min_y_offset', cls.DISTANCE_FOR_MIN_Y_OFFSET),
+         'boost_start': section.readFloat('boost_start', cls.BOOST_START)}
+        return config
+
+    @property
+    def guiMarkerType(self):
+        return CommonMarkerType.LOCATION
+
+    @property
+    def bcMarkerType(self):
+        return MarkerType.TARGET_POINT_MARKER_TYPE
+
+    @property
+    def symbol(self):
+        return self._symbol or MARKER_SYMBOL_NAME.LOCATION_MARKER
+
+    def update(self, distance, *args, **kwargs):
+        pass
+
+    def _setupMarker(self, gui):
+        config = self._config
+        isSticky = config['is_sticky'] & bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_STICKY_MARKERS))
+        gui.setMarkerSticky(self._componentID, isSticky)
+        gui.setMarkerRenderInfo(self._componentID, config['min_scale'], config['bounds'], config['inner_bounds'], config['cull_distance'], config['bounds_min_scale'])
+        gui.setMarkerLocationOffset(self._componentID, config['min_y_offset'], config['max_y_offset'], config['distance_for_min_y_offset'], config['max_y_boost'], config['boost_start'])
+
+    def _onSettingsChanged(self, diff):
+        gui = self._gui()
+        if not gui:
+            return
+        addSettings = {}
+        for item in diff:
+            if item in (BattleCommStorageKeys.SHOW_STICKY_MARKERS,):
+                addSettings[item] = diff[item]
+
+        if not addSettings:
+            return
+        newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self._isStickyFromConfig))
+        gui.setMarkerSticky(self.componentID, newIsSticky & self._isStickyFromConfig)
 
 
 class MinimapMarkerComponent(_IMarkerComponentBase):
 
-    def __init__(self, idx, data):
-        super(MinimapMarkerComponent, self).__init__(data)
-        self.__minimapData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(MinimapMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
         self._gui = lambda : None
         self._isMarkerExists = False
-        self._onlyTranslation = self.__minimapData.get('onlyTranslation', False)
+        self._onlyTranslation = self._config.get('onlyTranslation', False)
         self._translationOnlyMP = Math.WGTranslationOnlyMP()
         self._translationOnlyMP.source = self._matrixProduct.a
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'symbol': section.readString('symbol', 'ArtyMarkerMinimapEntry'),
+         'container': section.readString('container', 'personal'),
+         'onlyTranslation': section.readBool('onlyTranslation', False)}
+        return config
 
     @property
     def maskType(self):
@@ -198,8 +384,7 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
 
     def attachGUI(self, guiProvider):
         self._gui = weakref.ref(guiProvider.getMinimapPlugin())
-        if self._isVisible:
-            self._createMarker()
+        self._createMarker()
         return self._isMarkerExists
 
     def detachGUI(self):
@@ -214,19 +399,19 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
             return
         else:
             self._isVisible = isVisible
-            if self._gui() is None:
+            gui = self._gui()
+            if gui is None:
                 return
-            if self._isVisible:
-                self._createMarker()
-            else:
-                self._deleteMarker()
+            gui.setActive(self._componentID, self._isVisible)
             return
 
     def _createMarker(self):
         gui = self._gui()
         if gui and not self._isMarkerExists:
             matrix = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
-            self._isMarkerExists = gui.createMarker(self._componentID, self.__minimapData.get('symbol', ''), self.__minimapData.get('container', ''), matrix=matrix, active=self._isVisible)
+            self._isMarkerExists = gui.createMarker(self._componentID, self._config['symbol'], self._config['container'], matrix=matrix, active=self._isVisible)
+            if self._isMarkerExists:
+                self._setupMarker(gui)
 
     def _deleteMarker(self):
         gui = self._gui()
@@ -248,19 +433,29 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
             mtx = self._translationOnlyMP if self._onlyTranslation else self._matrixProduct.a
             gui.setMatrix(self._componentID, mtx)
 
+    def _setupMarker(self, gui):
+        pass
+
 
 class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
-    settingsCore = dependency.descriptor(ISettingsCore)
+    _DIRECT_INDICATOR_SWF = SWF
+    _DIRECT_INDICATOR_MC_NAME = MC_NAME
 
-    def __init__(self, idx, data):
-        super(DirectionIndicatorMarkerComponent, self).__init__(data)
-        dIndicatorData = data.get(self.maskType)[idx]
-        self.__shapes = dIndicatorData.get('dIndicatorShapes', ('green', 'green'))
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(DirectionIndicatorMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
+        self.__shapes = self._config['dIndicatorShapes']
         self.__indicator = None
         self.__prevPosition = self.positionWithOffset
-        self.__swf = dIndicatorData.get('swf', _DIRECT_INDICATOR_SWF)
-        self.__mcName = dIndicatorData.get('mcName', _DIRECT_INDICATOR_MC_NAME)
+        self.__swf = self._config['swf']
+        self.__mcName = self._config['mcName']
         return
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'dIndicatorShapes': (section.readString('dIndicatorShapes/default', 'green'), section.readString('dIndicatorShapes/colorBlind', 'green')),
+         'swf': section.readString('swf', cls._DIRECT_INDICATOR_SWF),
+         'mcName': section.readString('mcName', cls._DIRECT_INDICATOR_MC_NAME)}
+        return config
 
     @property
     def maskType(self):
@@ -346,16 +541,20 @@ class DirectionIndicatorMarkerComponent(_IMarkerComponentBase):
 
 class AnimationSequenceMarkerComponent(_IMarkerComponentBase):
 
-    def __init__(self, idx, data):
-        super(AnimationSequenceMarkerComponent, self).__init__(data)
-        animSeqData = data.get(self.maskType)[idx]
-        self.__path = animSeqData.get('path', None)
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(AnimationSequenceMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
+        self.__path = self._config['path']
         self.__animator = None
         self.__spaceID = BigWorld.player().spaceID
         if self.__path is not None:
             loader = AnimationSequence.Loader(self.__path, self.__spaceID)
             BigWorld.loadResourceListBG((loader,), makeCallbackWeak(self.__onSequenceLoaded))
         return
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'path': section.readString('path')}
+        return config
 
     @property
     def maskType(self):
@@ -396,21 +595,30 @@ class AnimationSequenceMarkerComponent(_IMarkerComponentBase):
 class TerrainMarkerComponent(_IMarkerComponentBase):
     DEF_SIZE = (10, 10)
     DEF_DIRECTION = Math.Vector3(1.0, 0.0, 0.0)
+    DEF_COLOR = CombatSelectedArea.COLOR_WHITE
 
-    def __init__(self, idx, data):
-        super(TerrainMarkerComponent, self).__init__(data)
-        terrainData = data.get(self.maskType)[idx]
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(TerrainMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
         self.__area = CombatSelectedArea.CombatSelectedArea()
-        self.__direction = terrainData.get('direction', self.DEF_DIRECTION)
-        self.__objDirection = terrainData.get('objDirection', True)
-        path = terrainData.get('path', '')
-        size = terrainData.get('size', self.DEF_SIZE)
-        color = terrainData.get('color', CombatSelectedArea.COLOR_WHITE)
+        self.__direction = self._config['direction']
+        self.__objDirection = self._config['objDirection']
+        path = self._config['path']
+        size = self._config['size']
+        color = self._config['color']
         direction = Math.Matrix(self._matrixProduct.a).applyToAxis(2) if self.__objDirection else self.__direction
         self.__area.setup(self.position, direction, size, path, color, None)
         self.__area.setGUIVisible(self._isVisible)
         self.__prevPosition = self.position
         return
+
+    @classmethod
+    def configReader(cls, section):
+        config = {'path': section.readString('path'),
+         'size': section.readVector2('size', cls.DEF_SIZE),
+         'direction': section.readVector3('direction', cls.DEF_DIRECTION),
+         'objDirection': section.readBool('objDirection', True),
+         'color': int(section.readString('color', '0'), 16) or cls.DEF_COLOR}
+        return config
 
     @property
     def maskType(self):
@@ -439,7 +647,6 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
 
 
 class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
-    settingsCore = dependency.descriptor(ISettingsCore)
 
     class Blending(object):
         NORMAL = 'normal'
@@ -448,13 +655,34 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         SCREEN = 'screen'
         SUBTRACT = 'subtract'
 
-    def __init__(self, idx, data):
-        super(PolygonalZoneMinimapMarkerComponent, self).__init__(idx, data)
+    def __init__(self, config, matrixProduct, entity=None, targetID=INVALID_TARGET_ID, isVisible=True):
+        super(PolygonalZoneMinimapMarkerComponent, self).__init__(config, matrixProduct, entity, targetID, isVisible)
         self._polygon = None
         self._isBorderVisible = False
-        markerData = data.get(self.maskType)[idx]
-        self._properties = markerData['color']
+        self._maskingPolygons = []
+        self._properties = config['color']
         return
+
+    @classmethod
+    def configReader(cls, section):
+        config = super(PolygonalZoneMinimapMarkerComponent, cls).configReader(section)
+        colorSection = section['color']
+        color = {}
+        for colorType in ('default', 'colorBlind'):
+            colorTypeSection = colorSection[colorType]
+            color.update({colorType: {'fillColor': int(colorTypeSection.readString('fillColor', '0'), 16),
+                         'fillAlpha': colorTypeSection.readFloat('fillAlpha'),
+                         'fillBlendMode': colorTypeSection.readString('fillBlendMode', cls.Blending.NORMAL),
+                         'outlineColor': int(colorTypeSection.readString('outlineColor', '0'), 16),
+                         'outlineAlpha': colorTypeSection.readFloat('outlineAlpha'),
+                         'outlineBlendMode': colorTypeSection.readString('outlineBlendMode', cls.Blending.NORMAL),
+                         'lineThickness': colorTypeSection.readFloat('lineThickness'),
+                         'useGradient': colorTypeSection.readBool('useGradient', False),
+                         'gradientColor': int(colorTypeSection.readString('gradientColor', '0'), 16),
+                         'gradientAlpha': colorTypeSection.readFloat('gradientAlpha', 1.0)}})
+
+        config.update({'color': color})
+        return config
 
     @property
     def isVisible(self):
@@ -464,22 +692,19 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         udo = BigWorld.userDataObjects.get(self._entity.clientVisualComp.udoGuid, None)
         return [] if udo is None else udo.minimapMarkerPolygon
 
-    def attachGUI(self, gui):
-        super(PolygonalZoneMinimapMarkerComponent, self).attachGUI(gui)
+    def _setupMarker(self, gui):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        if not self._polygon:
-            polygon = self.getPolygon()
-            if not polygon:
-                return
-            arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
-            xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
-            yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
-            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), list())
-        self._updatePolygon()
+        self._entity.onMaskAdded += self._addMask
+        self._initPolygon()
+        if self._polygon:
+            self._updatePolygon()
 
     def detachGUI(self):
         super(PolygonalZoneMinimapMarkerComponent, self).detachGUI()
+        self._polygon = None
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self._entity.onMaskAdded -= self._addMask
+        return
 
     def update(self, *args, **kwargs):
         super(PolygonalZoneMinimapMarkerComponent, self).update(*args, **kwargs)
@@ -490,15 +715,57 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         if self._isBorderVisible == newIsVisible:
             return
         self._isBorderVisible = newIsVisible
-        gui.setActive(self._componentID, self._isBorderVisible)
-        gui.invoke(self._componentID, 'setVisible', self._isBorderVisible)
+        gui.setActive(self._componentID, self._isBorderVisible and self._isVisible)
+
+    def setVisible(self, isVisible):
+        if self._isVisible == isVisible:
+            return
+        else:
+            self._isVisible = isVisible
+            gui = self._gui()
+            if gui is None:
+                return
+            gui.setActive(self._componentID, self._isBorderVisible and self._isVisible)
+            return
+
+    def _addMask(self, guid):
+        arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
+        xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
+        yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+        udo = BigWorld.userDataObjects.get(guid, None)
+        if udo:
+            delta = udo.position - self.position
+            polygon = sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), list())
+            self._gui().invoke(self._componentID, 'addZoneData', polygon)
+        return
+
+    def _initPolygon(self):
+        polygon = self.getPolygon()
+        if not polygon:
+            return
+        else:
+            arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
+            xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
+            yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), list())
+            for mask in self._entity.masks:
+                udo = BigWorld.userDataObjects.get(mask.udoGuid, None)
+                if udo:
+                    delta = udo.position - self.position
+                    self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), list()))
+
+            return
 
     def _updatePolygon(self):
-        isColorBlind = self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
-        self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(isColorBlind))
-        self._gui().invoke(self._componentID, 'setZoneData', self._polygon)
-        self._gui().invoke(self._componentID, 'setVisible', self._isBorderVisible)
-        self._gui().setActive(self._componentID, self._isBorderVisible)
+        self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(self.__isColorBlind()))
+        self._gui().invoke(self._componentID, 'addZoneData', self._polygon)
+        self._gui().setActive(self._componentID, self._isBorderVisible and self._isVisible)
+        for polygon in self._maskingPolygons:
+            self._gui().invoke(self._componentID, 'addZoneData', polygon)
+
+    def _getGradientSize(self):
+        dimensions = self._entity.clientVisualComp.getDimensions()
+        return max(dimensions.x, dimensions.z) / 2
 
     def __getMarkerProperties(self, isColorBlind):
         props = self._properties['default'] if not isColorBlind else self._properties['colorBlind']
@@ -508,11 +775,18 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
          props['outlineAlpha'],
          props['lineThickness'],
          props['fillBlendMode'],
-         props['outlineBlendMode'])
+         props['outlineBlendMode'],
+         props['useGradient'],
+         props['gradientColor'],
+         props['gradientAlpha'],
+         self._getGradientSize())
+
+    def __isColorBlind(self):
+        return self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
 
     def __onSettingsChanged(self, diff):
         if settings_constants.GRAPHICS.COLOR_BLIND in diff:
-            self._updatePolygon()
+            self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(self.__isColorBlind()))
 
 
 class StaticDeathZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent):

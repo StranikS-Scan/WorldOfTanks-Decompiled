@@ -142,6 +142,7 @@
     <_76mm_Gun_M1A1_RMT>	289	</_76mm_Gun_M1A1_RMT>
     <_120mm_Gun_T123E6C>	290	</_120mm_Gun_T123E6C>
     <_75mm_Gun_T13E1>	291	</_75mm_Gun_T13E1>
+    <_105mm_Gun_T140E5>	292	</_105mm_Gun_T140E5>
     <_76mm_Gun_T185E_IGR>	60001	</_76mm_Gun_T185E_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
     <_120mm_Gun_T53A1_IGR>	60003	</_120mm_Gun_T53A1_IGR>
@@ -5900,7 +5901,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	285 265	</piercingPower>
+          <piercingPower>	285 285	</piercingPower>
         </_105mm_HEAT_T_T298E1>
         <_105mm_HE_M39A2>
           <defaultPortion>	0.05	</defaultPortion>
@@ -6199,6 +6200,64 @@
         </_105mm_HE_M11A2E>
       </shots>
     </_105mm_Gun_T140E3>
+    <_105mm_Gun_T140E5>
+      <userString>	#usa_vehicles:_105mm_Gun_T140E5	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	219000	</price>
+      <impulse>	0.48	</impulse>
+      <notInShop>	true	</notInShop>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	8.8	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	2400	</weight>
+      <maxHealth>	194	</maxHealth>
+      <maxRegenHealth>	97	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_T32M2E5>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	225 205	</piercingPower>
+        </_105mm_AP_T32M2E5>
+        <_105mm_APCR_T29E3M2E5>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1400	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 245	</piercingPower>
+        </_105mm_APCR_T29E3M2E5>
+        <_105mm_HE_M11A2E5>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M11A2E5>
+      </shots>
+    </_105mm_Gun_T140E5>
     <_105mm_Gun_M68>
       <userString>	#usa_vehicles:_105mm_Gun_M68	</userString>
       <tags></tags>

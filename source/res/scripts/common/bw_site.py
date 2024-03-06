@@ -155,7 +155,6 @@ def set_twisted_reactor():
     twisted.internet.selectreactor = BWTwistedReactor
 
 
-@BWUtil.if_only_not_component('process_defs')
 def set_builtin_open_patch():
     BWUtil.monkeyPatchOpen(full_replace=BigWorld.component in ('client', 'bot'))
 

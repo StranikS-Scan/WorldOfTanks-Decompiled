@@ -1,16 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/player_blocks.py
 import weakref
+import typing
 import BigWorld
 from visual_script import ASPECT
+from visual_script.ability_common import Stage
 from visual_script.block import Meta, Block
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript
-from visual_script.slot_types import SLOT_TYPE
+from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
 import items.vehicles as vehicles
-helpers, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
+if typing.TYPE_CHECKING:
+    from Vehicle import StunInfo
+helpers, TriggersManager, gun_marker_ctrl, equipment_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'gui.battle_control.controllers.consumables.equipment_ctrl', 'Avatar')
 
 class PlayerMeta(Meta):
 
@@ -125,6 +129,48 @@ class OnPlayerSnipeMode(TunableEventBlock, PlayerEventMeta, TriggerListener):
 
     @TunableEventBlock.eventProcessor
     def _callOnEnter(self):
+        pass
+
+    @TunableEventBlock.eventProcessor
+    def _callOnExit(self):
+        pass
+
+
+class OnPlayerSPGMode(TunableEventBlock, PlayerEventMeta, TriggerListener):
+    _EVENT_SLOT_NAMES = ['onEnterTopDown', 'onEnterTrajectory', 'onExit']
+
+    def onStartScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.addListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onFinishScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.delListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onTriggerActivated(self, params):
+        triggerType = params.get('type')
+        if triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_ENTER_SPG_STRATEGIC_MODE:
+            self._index = 0
+            self._callOnEnterTopDown()
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_ENTER_SPG_SNIPER_MODE:
+            self._index = 1
+            self._callOnEnterTrajectory()
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_LEAVE_SPG_MODE:
+            self._index = 2
+            self._callOnExit()
+
+    @TunableEventBlock.eventProcessor
+    def _callOnEnterTopDown(self):
+        pass
+
+    @TunableEventBlock.eventProcessor
+    def _callOnEnterTrajectory(self):
         pass
 
     @TunableEventBlock.eventProcessor
@@ -253,6 +299,25 @@ class OnPlayerShotMissed(TunablePlayerVehicleEventBlock, PlayerEventMeta):
     @TunableEventBlock.eventProcessor
     def onPlayerShotMissed(self):
         pass
+
+
+class OnPlayerShotHit(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onHit']
+
+    def __init__(self, *args, **kwargs):
+        super(OnPlayerShotHit, self).__init__(*args, **kwargs)
+        self._target = self._makeDataOutputSlot('target', SLOT_TYPE.VEHICLE, None)
+        self._flags = self._makeDataOutputSlot('hitFlags', SLOT_TYPE.INT, None)
+        return
+
+    @TunableEventBlock.eventProcessor
+    def onPlayerShotHit(self, target, flags):
+        if target is not None:
+            self._target.setValue(weakref.proxy(target))
+        else:
+            self._target.setValue(None)
+        self._flags.setValue(flags)
+        return
 
 
 class OnPlayerAutoAim(TunablePlayerVehicleEventBlock, PlayerEventMeta, TriggerListener):
@@ -455,6 +520,36 @@ class OnPlayerVehicleAreaTrigger(TunablePlayerVehicleEventBlock, PlayerEventMeta
         return 'Trigger value is required' if not self._trigger.hasValue() else super(OnPlayerVehicleAreaTrigger, self).validate()
 
 
+class OnShowTracer(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onShow']
+
+    def __init__(self, *args, **kwargs):
+        super(OnShowTracer, self).__init__(*args, **kwargs)
+        self._attacker = self._makeDataOutputSlot('attacker', SLOT_TYPE.VEHICLE, None)
+        self._isRicochet = self._makeDataOutputSlot('isRicochet', SLOT_TYPE.BOOL, None)
+        self._startPoint = self._makeDataOutputSlot('startPoint', SLOT_TYPE.VECTOR3, None)
+        self._direction = self._makeDataOutputSlot('direction', SLOT_TYPE.VECTOR3, None)
+        self._velocity = self._makeDataOutputSlot('velocity', SLOT_TYPE.FLOAT, None)
+        self._gravity = self._makeDataOutputSlot('gravity', SLOT_TYPE.FLOAT, None)
+        self._maxDist = self._makeDataOutputSlot('maxDist', SLOT_TYPE.FLOAT, None)
+        return
+
+    @TunableEventBlock.eventProcessor
+    def onShowTracer(self, attacker, isRicochet, startPoint, velocity, gravity, maxShotDist):
+        if attacker is not None:
+            self._attacker.setValue(weakref.proxy(attacker))
+        else:
+            self._attacker.setValue(None)
+        self._isRicochet.setValue(bool(isRicochet))
+        self._startPoint.setValue(startPoint)
+        self._velocity.setValue(velocity.length)
+        velocity.normalise()
+        self._direction.setValue(velocity)
+        self._gravity.setValue(gravity)
+        self._maxDist.setValue(maxShotDist)
+        return
+
+
 class GetPlayerGunDispersionAngles(Block, PlayerMeta):
 
     def __init__(self, *args, **kwargs):
@@ -475,3 +570,111 @@ class GetPlayerGunDispersionAngles(Block, PlayerMeta):
         if avatar:
             td = avatar.getVehicleDescriptor()
             self._ideal.setValue(td.gun.shotDispersionAngle)
+
+
+class GetPlayerEquipments(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetPlayerEquipments, self).__init__(*args, **kwargs)
+        self._equipments = self._makeDataOutputSlot('equipments', arrayOf(SLOT_TYPE.STR), self._getEquipments)
+
+    def _getEquipments(self):
+        avatar = self._avatar
+        res = []
+        if avatar:
+            eqs = avatar.guiSessionProvider.shared.equipments.getOrderedEquipmentsLayout()
+            for _, item in eqs:
+                res.append(item.getDescriptor().name)
+
+        self._equipments.setValue(res)
+
+
+class GetPlayerEquipmentState(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetPlayerEquipmentState, self).__init__(*args, **kwargs)
+        self._equipmentName = self._makeDataInputSlot('equipment', SLOT_TYPE.STR)
+        self._equipped = self._makeDataOutputSlot('isEquipped', SLOT_TYPE.BOOL, self._isEquipped)
+        self._availableToUse = self._makeDataOutputSlot('isAvailableToUse', SLOT_TYPE.BOOL, self._isAvailableToUse)
+        self._canActivate = self._makeDataOutputSlot('canBeActivated', SLOT_TYPE.BOOL, self._canBeActivated)
+        self._stage = self._makeDataOutputSlot('stage', Stage.slotType(), self._getStage)
+
+    @property
+    def _equipment(self):
+        avatar = self._avatar
+        if avatar:
+            equipName = self._equipmentName.getValue()
+            eqs = avatar.guiSessionProvider.shared.equipments.getOrderedEquipmentsLayout()
+            for _, item in eqs:
+                if item.getDescriptor().name == equipName:
+                    return item
+
+        return None
+
+    def _isEquipped(self):
+        self._equipped.setValue(self._equipment is not None)
+        return
+
+    def _canBeActivated(self):
+        item = self._equipment
+        if item is not None:
+            result, info = item.canActivate()
+            if isinstance(info, equipment_ctrl.NeedEntitySelection):
+                result = True
+            self._canActivate.setValue(result)
+        return
+
+    def _isAvailableToUse(self):
+        item = self._equipment
+        if item is not None:
+            self._availableToUse.setValue(item.isAvailableToUse)
+        return
+
+    def _getStage(self):
+        item = self._equipment
+        if item is not None:
+            self._stage.setValue(item.getStage())
+        return
+
+
+class OnPlayerVehicleStun(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onStun', 'onStunHealed', 'onStunAutoHeal']
+
+    def __init__(self, *args, **kwargs):
+        super(OnPlayerVehicleStun, self).__init__(*args, **kwargs)
+        self._reset()
+        self._stunDuration = self._makeDataOutputSlot('stunDuration', SLOT_TYPE.FLOAT, None)
+        return
+
+    def _reset(self):
+        self._lastStartTime = 0.0
+        self._lastDuration = 0.0
+
+    def onStunInfoUpdated(self, stunInfo):
+        if stunInfo.duration > 0:
+            self._stunDuration.setValue(stunInfo.duration)
+            self._lastDuration = stunInfo.duration
+            self._lastStartTime = stunInfo.startTime
+            self._index = 0
+            self._callOutput()
+        elif stunInfo.duration == 0.0 and self._lastStartTime != 0.0:
+            self._index = 1 if self._lastStartTime + self._lastDuration > BigWorld.serverTime() else 2
+            self._reset()
+            self._callOutput()
+        elif stunInfo.duration == 0.0 and self._lastStartTime == 0.0:
+            self._reset()
+        else:
+            self._reset()
+            errorVScript(self, 'OnPlayerVehicleStun has got inconsistent stun data.')
+
+    @TunableEventBlock.eventProcessor
+    def _callOutput(self):
+        pass
+
+
+class OnVehicleSixthSenseActivated(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onDetected']
+
+    @TunableEventBlock.eventProcessor
+    def onSixthSenceActivated(self):
+        pass

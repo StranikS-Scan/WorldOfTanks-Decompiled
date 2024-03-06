@@ -128,9 +128,19 @@ def init(scriptConfig, engineConfig, userPreferences):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
+        from dyn_components_groups import DynComponentsGroupsRepo
+        DynComponentsGroupsRepo.init()
+        import hints_common.prebattle.manager
+        hints_common.prebattle.manager.init()
+        from hints.battle import manager as battleHintsModelsMgr
+        battleHintsModelsMgr.init()
+        from arena_vscript_config import config as arenaVScriptsConfig
+        arenaVScriptsConfig.init()
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
+        from gui.shared.gui_items import marker_items
+        marker_items.init()
         if constants.HAS_DEV_RESOURCES:
             import development
             development.init()

@@ -9,8 +9,8 @@
   <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	60	</forward>
-    <backward>	40	</backward>
+    <forward>	50	</forward>
+    <backward>	45	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.274	</moving>
@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.07	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	9.5	</repairCost>
+  <repairCost>	7.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -61,7 +61,7 @@
       <rightTrack>	20	</rightTrack>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	14210	</weight>
+    <weight>	11255	</weight>
     <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
@@ -1311,8 +1311,8 @@
       </armor>
       <weight>	6000	</weight>
       <maxLoad>	26000	</maxLoad>
-      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
-      <brakeForce>	37000	</brakeForce>
+      <terrainResistance>	0.8 0.9 1.6	</terrainResistance>
+      <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
@@ -2162,11 +2162,11 @@
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	9.5	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.40	</shotDispersionRadius>
@@ -2260,21 +2260,21 @@
     <detailed>
       <engines>
         <Volvo_TD_120V>
-          <smplEnginePower>	380	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	340	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Volvo_TD_120V>
       </engines>
       <chassis>
         <Chassis_S33_Latt_Stridsfordon_120>
           <grounds>
             <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
+              <rollingFriction>	0.1288	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

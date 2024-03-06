@@ -112,6 +112,9 @@ class ISharedControllersLocator(object):
 class IDynamicControllersLocator(object):
     __slots__ = ()
 
+    def getControllerByID(self, ctrlID):
+        raise NotImplementedError
+
     @property
     def debug(self):
         raise NotImplementedError
@@ -210,6 +213,10 @@ class IDynamicControllersLocator(object):
 
     @property
     def overrideSettingsController(self):
+        raise NotImplementedError
+
+    @property
+    def vehicleHitSound(self):
         raise NotImplementedError
 
 

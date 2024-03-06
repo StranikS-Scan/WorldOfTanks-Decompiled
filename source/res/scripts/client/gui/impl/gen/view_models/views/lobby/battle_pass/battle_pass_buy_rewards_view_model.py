@@ -14,7 +14,7 @@ class PackageType(IntEnum):
 class BattlePassBuyRewardsViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(BattlePassBuyRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,36 +41,52 @@ class BattlePassBuyRewardsViewModel(ViewModel):
     def getTopPriorityRewardsType():
         return RewardItemModel
 
+    @property
+    def prevTopPriorityRewards(self):
+        return self._getViewModel(3)
+
+    @staticmethod
+    def getPrevTopPriorityRewardsType():
+        return RewardItemModel
+
     def getFromLevel(self):
-        return self._getNumber(3)
-
-    def setFromLevel(self, value):
-        self._setNumber(3, value)
-
-    def getToLevel(self):
         return self._getNumber(4)
 
-    def setToLevel(self, value):
+    def setFromLevel(self, value):
         self._setNumber(4, value)
 
+    def getToLevel(self):
+        return self._getNumber(5)
+
+    def setToLevel(self, value):
+        self._setNumber(5, value)
+
     def getPackageState(self):
-        return PackageType(self._getNumber(5))
+        return PackageType(self._getNumber(6))
 
     def setPackageState(self, value):
-        self._setNumber(5, value.value)
+        self._setNumber(6, value.value)
 
     def getChapterID(self):
-        return self._getNumber(6)
+        return self._getNumber(7)
 
     def setChapterID(self, value):
-        self._setNumber(6, value)
+        self._setNumber(7, value)
+
+    def getIsPurchaseWithLevels(self):
+        return self._getBool(8)
+
+    def setIsPurchaseWithLevels(self, value):
+        self._setBool(8, value)
 
     def _initialize(self):
         super(BattlePassBuyRewardsViewModel, self)._initialize()
         self._addViewModelProperty('nowRewards', UserListModel())
         self._addViewModelProperty('futureRewards', UserListModel())
         self._addViewModelProperty('topPriorityRewards', UserListModel())
+        self._addViewModelProperty('prevTopPriorityRewards', UserListModel())
         self._addNumberProperty('fromLevel', 0)
         self._addNumberProperty('toLevel', 0)
         self._addNumberProperty('packageState')
         self._addNumberProperty('chapterID', 0)
+        self._addBoolProperty('isPurchaseWithLevels', False)

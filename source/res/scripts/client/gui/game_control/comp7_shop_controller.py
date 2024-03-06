@@ -111,6 +111,7 @@ class Comp7ShopController(IComp7ShopController):
         if not self.__isResponseReadyToProcess(response):
             self.__resetCache()
             self.__setStatus(ShopControllerStatus.ERROR)
+            logging.error('Response received, but products were misconfigured: %s', response)
             return
         try:
             self.__processShopResponse(response)

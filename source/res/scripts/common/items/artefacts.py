@@ -588,8 +588,7 @@ class ExtraHealthReserve(StaticOptionalDevice):
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         super(ExtraHealthReserve, self).updateVehicleDescrAttrs(vehicleDescr)
-        descr = vehicleDescr.chassis
-        vehicleDescr.miscAttrs['chassisHealthAfterHysteresisFactor'] = float(descr.maxHealth) / descr.maxRegenHealth
+        vehicleDescr.miscAttrs['isSetChassisMaxHealthAfterHysteresis'] = True
 
     def _readConfig(self, xmlCtx, section):
         super(ExtraHealthReserve, self)._readConfig(xmlCtx, section)
@@ -2670,6 +2669,15 @@ class Comp7MarchEquipment(VisualScriptEquipment):
         self.invisibilityFactor = section.readFloat('invisibilityFactor')
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
         self._exportSlotsToVSE()
+
+
+class DynComponentsGroupEquipment(Equipment):
+    __slots__ = ('durationSeconds', 'dynComponentsGroups')
+
+    def _readConfig(self, xmlCtx, section):
+        super(DynComponentsGroupEquipment, self)._readConfig(xmlCtx, section)
+        self.durationSeconds = _xml.readFloat(xmlCtx, section, 'durationSeconds')
+        self.dynComponentsGroups = frozenset(_xml.readString(xmlCtx, section, 'dynComponentsGroups').split())
 
 
 class PoiRadarEquipment(VisualScriptEquipment):

@@ -29,11 +29,13 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent):
     def init(self):
         if self.__inited or not self.entity or not self.entity.typeDescriptor:
             return
-        self.__effectsPrefab = self.entity.typeDescriptor.type.rocketAccelerationParams.effectsPrefab
         self.__duration = self.entity.typeDescriptor.type.rocketAccelerationParams.duration
         self.__reloadTime = self.entity.typeDescriptor.type.rocketAccelerationParams.reloadTime
         self.__deployTme = self.entity.typeDescriptor.type.rocketAccelerationParams.deployTime
         appearance = self.entity.appearance
+        modelsSet = appearance.outfit.modelsSet
+        outfit = 'default' if not modelsSet else modelsSet
+        self.__effectsPrefab = self.entity.typeDescriptor.type.rocketAccelerationParams.effectsPrefab[outfit]
         loadAppearancePrefab(self.__effectsPrefab, appearance, self.__onLoaded)
         self.__inited = True
 

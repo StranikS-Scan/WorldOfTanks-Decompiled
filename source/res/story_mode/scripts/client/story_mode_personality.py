@@ -5,6 +5,8 @@ from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_DEBUG
+from gui.battle_hints import battle_hints_overlap_controller
+from gui.battle_hints.battle_hints_overlap_controller import HintScope
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initScaleformGuiTypes
 from gui.shared.system_factory import registerScaleformBattlePackages
@@ -12,12 +14,14 @@ from schema_manager import getSchemaManager
 from story_mode.control_modes import StoryModeArcadeControlMode, StoryModeSniperControlMode
 from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
-from story_mode.gui.battle_control.controllers.repository import Repository
+from story_mode.gui.battle_control.controllers.repository import StoryModeRepository
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
+from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode_common import story_mode_constants, battle_mode, injectConsts
 from story_mode_common.configs.story_mode_missions import missionsSchema
 from story_mode_common.configs.story_mode_settings import settingsSchema
+from story_mode_common.story_mode_constants import ARENA_BONUS_TYPE
 
 class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE
@@ -79,7 +83,7 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
 
     @property
     def _client_battleControllersRepository(self):
-        return Repository
+        return StoryModeRepository
 
 
 def preInit():
@@ -92,6 +96,7 @@ def preInit():
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
     OVERWRITE_CTRLS_DESC_MAP[story_mode_constants.ARENA_BONUS_TYPE.STORY_MODE] = {CTRL_MODE_NAME.ARCADE: (StoryModeArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
      CTRL_MODE_NAME.SNIPER: (StoryModeSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
+    battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
     battleMode = ClientStoryModeBattleMode(__name__)
     battleMode.registerClient()
     battleMode.registerClientSelector()

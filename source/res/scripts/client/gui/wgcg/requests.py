@@ -37,6 +37,9 @@ class WgcgRequestResponse(Response):
     def clone(self, data=None):
         return WgcgRequestResponse(self.code, self.txtStr, data or self.data)
 
+    def mergeData(self, data):
+        self.data.update(data)
+
 
 class WgcgRequester(ClientRequestsByIDProcessor):
 

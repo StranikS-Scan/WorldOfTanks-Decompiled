@@ -85,6 +85,11 @@
           <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Hull.model	</exploded>
         </R169_ST_II_3DSt_TIR>
+        <R169_ST_II_BXI_3DSt>
+          <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Hull.model	</exploded>
+        </R169_ST_II_BXI_3DSt>
       </sets>
     </models>
     <swinging>
@@ -109,10 +114,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.477402 0.533869 2.06799	</rayStart>
-        <rayEnd>	0.477402 0.445576 2.02105	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
-        <size>	0.25	</size>
+        <rayStart>	0.463464 0.533869 2.086565	</rayStart>
+        <rayEnd>	0.463464 0.445576 2.039625	</rayEnd>
+        <rayUp>	-0 0.469422 -0.882974	</rayUp>
+        <size>	0.24	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -831,6 +836,12 @@
         <clipAngle>	0.813157	</clipAngle>
         <anchorShift>	0.094613	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -888,6 +899,11 @@
             <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Chassis.model	</exploded>
           </R169_ST_II_3DSt_TIR>
+          <R169_ST_II_BXI_3DSt>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
+          </R169_ST_II_BXI_3DSt>
         </sets>
       </models>
       <traces>
@@ -1024,6 +1040,33 @@
                   <row3>	0.000000 1.302257 3.000921	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R169_ST_II_BXI_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.688000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.129742 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.070000	</row2>
+                  <row3>	0.000000 0.952564 -0.018000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.295000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.532000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.634000	</row2>
+                  <row3>	0.000000 1.292000 -0.110000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.247000 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.383199 -0.276226	</row1>
+                  <row2>	0.000000 0.397283 0.551138	</row2>
+                  <row3>	0.000000 1.094932 -3.491652	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.528000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.300000	</row2>
+                  <row3>	-1.787938 0.857307 -0.425000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1147,6 +1190,33 @@
                   <row3>	0.000000 1.302257 3.000921	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R169_ST_II_BXI_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.716000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.129740 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.097000	</row2>
+                  <row3>	0.000000 0.952564 -0.018000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.295000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.532000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.634000	</row2>
+                  <row3>	0.000000 1.292000 -0.110000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.247000 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.383199 -0.276226	</row1>
+                  <row2>	0.000000 0.397283 0.551138	</row2>
+                  <row3>	0.000000 1.094930 -3.491650	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.528000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.300000	</row2>
+                  <row3>	1.788000 0.857307 -0.425000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
         </trackPair>
@@ -1174,7 +1244,7 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.408858	</radius>
+          <radius>	0.412658	</radius>
           <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <group>
@@ -1195,7 +1265,7 @@
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.408858	</radius>
+          <radius>	0.412658	</radius>
           <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <group>
@@ -1542,6 +1612,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <R169_ST_II_BXI_3DSt>
+              <segmentModelLeft>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/track/segment_01.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/track/segment_01.model	</segmentModelRight>
+            </R169_ST_II_BXI_3DSt>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1569,8 +1645,12 @@
             <model>	vehicles/russian/R169_ST_II/track/segment_01.model	</model>
             <length>	0.16766	</length>
           </mainSegment>
+          <modelSets>
+            <R169_ST_II_BXI_3DSt>
+              <mainSegmentModel>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/track/segment_01.model	</mainSegmentModel>
+            </R169_ST_II_BXI_3DSt>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.33774	</xStart>
@@ -1778,8 +1858,12 @@
             <model>	vehicles/russian/R169_ST_II/track/segment_01.model	</model>
             <length>	0.16761	</length>
           </mainSegment>
+          <modelSets>
+            <R169_ST_II_BXI_3DSt>
+              <mainSegmentModel>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/track/segment_01.model	</mainSegmentModel>
+            </R169_ST_II_BXI_3DSt>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.33864	</xStart>
@@ -2107,6 +2191,11 @@
                 <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
               </R169_ST_II_3DSt_TIR>
+              <R169_ST_II_BXI_3DSt>
+                <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </R169_ST_II_BXI_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2139,7 +2228,7 @@
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.126298 -0 1.21705	</rayStart>
-              <rayEnd>	-0.126298 -0 1.91705	</rayEnd>
+              <rayEnd>	0.00321051 -0.190176 1.20675	</rayEnd>
               <rayUp>	0.134408 0 0	</rayUp>
               <size>	0.7	</size>
             </slot>
@@ -2147,7 +2236,7 @@
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49001	</slotId>
               <rayStart>	0.218453 -0 1.21705	</rayStart>
-              <rayEnd>	0.218453 -0 1.91705	</rayEnd>
+              <rayEnd>	0.00321051 -0.190176 1.20675	</rayEnd>
               <rayUp>	0.134408 0 0	</rayUp>
               <size>	0.7	</size>
             </slot>
@@ -2159,6 +2248,38 @@
             </customizableVehicleAreas>
           </customization>
           <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+          <drivenJoints>
+            <sets>
+              <R169_ST_II_BXI_3DSt>
+                <master>
+                  <node>	Gun	</node>
+                  <table>
+                    <row>	-20	</row>
+                    <row>	0	</row>
+                    <row>	8	</row>
+                  </table>
+                  <slaves>
+                    <slave>
+                      <node>	Joint_01	</node>
+                      <table>
+                        <row>	-14.689	</row>
+                        <row>	0	</row>
+                        <row>	5.339	</row>
+                      </table>
+                    </slave>
+                    <slave>
+                      <node>	Joint_02	</node>
+                      <table>
+                        <row>	17	</row>
+                        <row>	0	</row>
+                        <row>	-10	</row>
+                      </table>
+                    </slave>
+                  </slaves>
+                </master>
+              </R169_ST_II_BXI_3DSt>
+            </sets>
+          </drivenJoints>
           <camouflage>
             <density>	94.4695 94.478	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -2186,6 +2307,11 @@
             <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3DSt_TIR/crash/lod0/Turret_01.model	</exploded>
           </R169_ST_II_3DSt_TIR>
+          <R169_ST_II_BXI_3DSt>
+            <undamaged>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </R169_ST_II_BXI_3DSt>
         </sets>
       </models>
       <hitTester>

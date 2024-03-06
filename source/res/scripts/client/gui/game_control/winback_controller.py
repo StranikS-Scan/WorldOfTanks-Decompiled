@@ -66,7 +66,7 @@ class WinbackController(IWinbackController):
         return self.winbackConfig.isEnabled and self.__hasAccessToken()
 
     def isModeAvailable(self):
-        return self.isEnabled() and self.winbackConfig.isModeEnabled and self.getWinbackBattlesCountLeft() > 0
+        return self.winbackConfig.isEnabled and self.winbackConfig.isModeEnabled and self.__hasModeAccessToken() and self.getWinbackBattlesCountLeft() > 0
 
     def isProgressionAvailable(self):
         return self.winbackConfig.isEnabled and self.winbackConfig.isProgressionEnabled and not self.isFinished()
@@ -143,6 +143,9 @@ class WinbackController(IWinbackController):
 
     def __hasAccessToken(self):
         return self.__itemsCache.items.tokens.isTokenAvailable(self.winbackConfig.winbackAccessToken)
+
+    def __hasModeAccessToken(self):
+        return any((self.__itemsCache.items.tokens.isTokenAvailable(token) for token in self.winbackConfig.winbackModeAccessTokens))
 
     def __hasPromoToken(self):
         return self.__itemsCache.items.tokens.isTokenAvailable(self.winbackConfig.winbackShowPromoToken)

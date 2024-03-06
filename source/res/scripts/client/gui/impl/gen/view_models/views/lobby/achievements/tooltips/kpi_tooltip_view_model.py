@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class KpiTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(KpiTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getKpiType(self):
@@ -32,9 +32,16 @@ class KpiTooltipViewModel(ViewModel):
     def setTankName(self, value):
         self._setString(3, value)
 
+    def getIsPremiumIGR(self):
+        return self._getBool(4)
+
+    def setIsPremiumIGR(self, value):
+        self._setBool(4, value)
+
     def _initialize(self):
         super(KpiTooltipViewModel, self)._initialize()
         self._addStringProperty('kpiType', 'damage')
         self._addStringProperty('avgValue', '')
         self._addStringProperty('maxValue', '')
         self._addStringProperty('tankName', '')
+        self._addBoolProperty('isPremiumIGR', False)

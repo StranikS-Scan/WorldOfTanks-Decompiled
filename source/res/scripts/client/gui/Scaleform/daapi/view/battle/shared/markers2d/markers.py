@@ -4,6 +4,7 @@ from enum import Enum
 import Event
 import GUI
 import Math
+from chat_commands_consts import INVALID_TARGET_ID, MarkerType
 from gun_rotation_shared import getLocalAimPoint
 from vehicle_systems.tankStructure import TankNodeNames
 HIDDEN_VEHICLE_OFFSET = Math.Vector3(0, 5, 0)
@@ -116,6 +117,20 @@ class BaseMarker(Marker):
 
     def getBoundCheckEnabled(self):
         return self._boundCheckEnabled
+
+
+class AreaMarker(Marker):
+
+    def __init__(self, markerID, targetID=INVALID_TARGET_ID, bcMarkerType=MarkerType.INVALID_MARKER_TYPE, active=True):
+        super(AreaMarker, self).__init__(markerID, active)
+        self._targetID = targetID
+        self._bcMarkerType = bcMarkerType
+
+    def getTargetID(self):
+        return self._targetID
+
+    def getBCMarkerType(self):
+        return self._bcMarkerType
 
 
 class VehicleMarker(Marker):

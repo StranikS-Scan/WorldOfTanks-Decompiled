@@ -446,7 +446,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
         return result
 
-    def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
+    def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None, needPlacesWithoutPoints=False):
         winList = self.__getConfig().bonusPointsList(vehCompDesc, isWinner=True, gameMode=gameMode)
         pointsList = list(self.__getConfig().bonusPointsList(vehCompDesc, isWinner=False, gameMode=gameMode))
         pointsList[0] = winList[0]
@@ -459,7 +459,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         for item in pointList:
             points, pointsCount = item
             count += pointsCount
-            if points > 0:
+            if points > 0 or needPlacesWithoutPoints:
                 result.append(BattleRoyaleTopPoints(count, points))
 
         return result

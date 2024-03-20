@@ -30,6 +30,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared.hint_panel import component
     from gui.Scaleform.daapi.view.battle.shared import battle_hint
+    from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import BaseDAAPIComponentMeta
     from battle_royale.gui.Scaleform.daapi.view.battle import veh_configurator
     from battle_royale.gui.Scaleform.daapi.view.battle.battle_level_panel import BattleLevelPanel
     import battle_royale.gui.Scaleform.daapi.view.battle.players_panel as battle_royale_players_panel
@@ -44,9 +45,13 @@ def getViewSettings():
     from battle_royale.gui.Scaleform.daapi.view.battle.timers_panel import TimersPanelPanel
     from battle_royale.gui.Scaleform.daapi.view.battle.winner_congrats import BattleRoyaleWinnerCongrats
     from battle_royale.gui.Scaleform.daapi.view.battle.shared.messages.player_messages import SHPlayerMessages
+    from battle_royale.gui.Scaleform.daapi.view.battle.shamrock_controller import BRShamrockController
     return (ViewSettings(VIEW_ALIAS.BATTLE_ROYALE_PAGE, BattleRoyalePage, 'battleRoyalePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_CONTROLLER, BRShamrockController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_SIDEBAR, BaseDAAPIComponentMeta, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BR_SHAMROCK_COLLECT, BaseDAAPIComponentMeta, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, BattleRoyaleMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),

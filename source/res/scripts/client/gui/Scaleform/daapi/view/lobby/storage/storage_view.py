@@ -134,7 +134,7 @@ class StorageView(LobbySubView, StorageViewMeta):
 
     def __onOffersChanged(self):
         isSectionExist = self.__isSectionExist(STORAGE_CONSTANTS.OFFERS)
-        unlockedOffers = self.__offersProvider.getUnlockedOffers(onlyVisible=True)
+        unlockedOffers = self.__offersProvider.getUnlockedOffers(includeAllOffers=False)
         offersEnabled = self.__lobbyContext.getServerSettings().isOffersEnabled()
         isOffers = unlockedOffers and offersEnabled
         if not isSectionExist and isOffers:
@@ -183,7 +183,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         notActiveSection = []
         if not self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable():
             notActiveSection.append(STORAGE_CONSTANTS.BLUEPRINTS)
-        if not self.__offersProvider.getUnlockedOffers(onlyVisible=True) or not self.__lobbyContext.getServerSettings().isOffersEnabled():
+        if not self.__offersProvider.getUnlockedOffers(includeAllOffers=False) or not self.__lobbyContext.getServerSettings().isOffersEnabled():
             notActiveSection.append(STORAGE_CONSTANTS.OFFERS)
         return [ section for section in getSectionsList() if section['id'] not in notActiveSection ]
 

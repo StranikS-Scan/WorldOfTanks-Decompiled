@@ -5243,6 +5243,51 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	St Patricks Day 2024	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	392	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	71 74 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	393	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	71 74 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	394	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
+      <color>	71 74 74 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_3	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Desert Power	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>

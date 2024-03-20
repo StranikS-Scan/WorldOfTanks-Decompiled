@@ -20343,6 +20343,145 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	896	</id>
+      <texture>	gui/maps/vehicles/styles/st_patricks_day_2024_1.png	</texture>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_1	</userString>
+      <description>	#vehicle_customization:special_style/st_patricks_day_2024_1_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	795	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	959	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <paints>
+            <item>
+              <id>	392	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	897	</id>
+      <texture>	gui/maps/vehicles/styles/st_patricks_day_2024_2.png	</texture>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_2	</userString>
+      <description>	#vehicle_customization:special_style/st_patricks_day_2024_2_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	796	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	959	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <paints>
+            <item>
+              <id>	393	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	898	</id>
+      <texture>	gui/maps/vehicles/styles/st_patricks_day_2024_3.png	</texture>
+      <userString>	#vehicle_customization:special_style/st_patricks_day_2024_3	</userString>
+      <description>	#vehicle_customization:special_style/st_patricks_day_2024_3_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	797	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	959	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <paints>
+            <item>
+              <id>	394	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch24_Type64_SH france:F43_AMC_35_SH germany:G24_VK3002DB_SH poland:Pl17_DS_PZlnz_SH sweden:S14_Ikv_103_SH uk:GB107_Cavalier_SH usa:A72_T25_2_SH ussr:R46_KV-13_SH	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	899	</id>
+      <texture>	gui/maps/vehicles/styles/st_patricks_vehicles_2024.png	</texture>
+      <userString>	#vehicle_customization:special_style/st_patricks_vehicles_2024	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	845	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	styles 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>

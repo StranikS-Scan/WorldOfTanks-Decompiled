@@ -43,6 +43,7 @@ from battle_pass_common import getPresentLevel
 from messenger.storage import storage_getter
 from messenger.formatters.service_channel_helpers import parseTokenBonusCount
 from gui.battle_pass.battle_pass_constants import ChapterState
+from gui.shared.money import Currency
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
@@ -69,11 +70,12 @@ _BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
  BattleRewardItemModel.CRYSTALS,
  BattleRewardItemModel.BATTLE_ROYALE_COIN,
+ BattleRewardItemModel.ST_PATRICK_COIN,
  BattleRewardItemModel.BR_PROGRESSION_TOKEN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
 
 class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType')
+    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__hasStpBonus')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -103,6 +105,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
         self.__arenaBonusType = self.__data[BRSections.COMMON].get('arenaBonusType', 0)
         self.__tooltipsData = {}
         self.__tooltipParametersCreator = self.__getTooltipParametersCreator()
+        self.__hasStpBonus = False
         return
 
     @property
@@ -116,6 +119,8 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
             currencyType = event.getArgument('currencyType')
+            if currencyType == Currency.STPCOIN:
+                return RewardCurrencyTooltipView(currencyType, self.__hasStpBonus)
             return RewardCurrencyTooltipView(currencyType)
         return super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
 
@@ -207,6 +212,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
     def __setPersonalResult(self, personalModel):
         self.__setMapName()
         self.__setCommonInfo()
+        self.__hasStpBonus = self._getBonusStrCoin()
         if not self.__isObserverResult:
             self.__setFinishResult(personalModel)
             self.__setStats(personalModel)
@@ -214,6 +220,9 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
             self.__setBattleRewardsWithPremium(personalModel)
             self.__setCompletedQuests(personalModel)
         self.__setBattlePass(personalModel.battlePassProgress)
+
+    def _getBonusStrCoin(self):
+        return bool(self.__data.get(BRSections.PERSONAL, {}).get('bonusStpCoinFactor', 0))
 
     def __setBattlePass(self, battlePassModel):
         battlePassData = self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]

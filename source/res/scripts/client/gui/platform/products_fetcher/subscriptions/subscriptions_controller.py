@@ -3,6 +3,7 @@
 import logging
 import typing
 from BWUtil import AsyncReturn
+from constants import CURRENT_REALM
 from constants import WOT_PLUS_SUBSCRIPTION_PRODUCT, PRIME_GAMING_SUBSCRIPTION_PRODUCT
 from gui.macroses import getLanguageCode
 from gui.platform.base.statuses.constants import StatusTypes
@@ -24,9 +25,14 @@ class PlatformSubscriptionsParams(_PlatformProductListParams):
 
     @wg_async
     def setCountry(self):
-        status = yield wg_await(self.__wgnpCountryController.getAccountCountry())
-        if status.typeIs(StatusTypes.ADDED):
-            self.country = status.country
+        if self.country:
+            raise AsyncReturn(None)
+        if CURRENT_REALM == 'CN':
+            self.country = 'CN'
+        else:
+            status = yield wg_await(self.__wgnpCountryController.getAccountCountry())
+            if status.typeIs(StatusTypes.ADDED):
+                self.country = status.country
         raise AsyncReturn(None)
         return
 

@@ -181,15 +181,21 @@ class OffersDataProvider(IOffersDataProvider):
 
     @_ifFeatureDisabled(())
     @_ifNotSynced(())
-    def iUnlockedOffers(self, onlyVisible=True):
+    def iUnlockedOffers(self, onlyVisible=True, includeAllOffers=True):
         for offer in self._ioffers():
-            if offer.isOfferUnlocked:
-                if onlyVisible and not offer.showInGUI:
-                    continue
+            if onlyVisible and not offer.showInGUI:
+                continue
+            if includeAllOffers:
+                if offer.isOfferUnlocked:
+                    yield offer
+            if offer.showWhenZeroCurrency:
+                if offer.isOfferUnlocked:
+                    yield offer
+            if offer.isOfferAvailable:
                 yield offer
 
-    def getUnlockedOffers(self, onlyVisible=True):
-        return list(self.iUnlockedOffers(onlyVisible))
+    def getUnlockedOffers(self, onlyVisible=True, includeAllOffers=True):
+        return list(self.iUnlockedOffers(onlyVisible, includeAllOffers))
 
     def isOfferUnlocked(self, tokenID):
         for offer in self.iUnlockedOffers():

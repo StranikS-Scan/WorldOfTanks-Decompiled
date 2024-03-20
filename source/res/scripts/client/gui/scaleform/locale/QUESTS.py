@@ -1268,6 +1268,7 @@ class QUESTS(object):
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
+    BONUSNAME_STPCOIN = '#quests:bonusName/stpcoin'
     BONUSNAME_GOLD_BANK = '#quests:bonusName/gold_bank'
     BONUSNAME_IDLE_CREW_XP = '#quests:bonusName/idle_crew_xp'
     BONUSNAME_EXCLUDED_MAP = '#quests:bonusName/excluded_map'
@@ -1823,6 +1824,7 @@ class QUESTS(object):
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
      BONUSNAME_BRCOIN,
+     BONUSNAME_STPCOIN,
      BONUSNAME_GOLD_BANK,
      BONUSNAME_IDLE_CREW_XP,
      BONUSNAME_EXCLUDED_MAP,

@@ -36,7 +36,7 @@ class BattleRoyaleHangarWidget(BattleRoyaleHangarWidgetMeta):
         if self.__brProgression.isEnabled:
             battle_royale_event_dispatcher.showProgressionView()
         else:
-            self.__battleRoyaleController.openURL()
+            self.__battleRoyaleController.openInfoPageWindow()
 
     def onChangeServerClick(self):
         event_dispatcher.showBattleRoyalePrimeTimeWindow()

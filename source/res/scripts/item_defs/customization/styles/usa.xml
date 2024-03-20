@@ -2566,4 +2566,49 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A140_ASTRON_REX_105mm_SPD	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	913	</id>
+      <texture>	gui/maps/vehicles/styles/A140_ASTRON_REX_105mm_SPD_3DSt.png	</texture>
+      <modelsSet>	A140_ASTRON_REX_105mm_SPD_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A140_ASTRON_REX_105mm_SPD_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A140_ASTRON_REX_105mm_SPD_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	87	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	64	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </usa.xml>

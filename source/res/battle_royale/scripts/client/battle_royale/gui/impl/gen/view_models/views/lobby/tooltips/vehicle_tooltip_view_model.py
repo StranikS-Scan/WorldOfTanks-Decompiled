@@ -6,7 +6,7 @@ from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.rent_price_mode
 class VehicleTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(VehicleTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,6 +53,12 @@ class VehicleTooltipViewModel(ViewModel):
     def setRentTimeLeft(self, value):
         self._setString(6, value)
 
+    def getHasSTPDailyFactor(self):
+        return self._getBool(7)
+
+    def setHasSTPDailyFactor(self, value):
+        self._setBool(7, value)
+
     def _initialize(self):
         super(VehicleTooltipViewModel, self)._initialize()
         self._addViewModelProperty('rentPrice', RentPriceModel())
@@ -62,3 +68,4 @@ class VehicleTooltipViewModel(ViewModel):
         self._addStringProperty('statusLevel', '')
         self._addStringProperty('statusText', '')
         self._addStringProperty('rentTimeLeft', '')
+        self._addBoolProperty('hasSTPDailyFactor', False)

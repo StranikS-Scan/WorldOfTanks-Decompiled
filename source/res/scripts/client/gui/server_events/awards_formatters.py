@@ -114,6 +114,7 @@ TEXT_FORMATTERS = {Currency.CREDITS: text_styles.credits,
  Currency.EVENT_COIN: text_styles.eventCoin,
  Currency.BPCOIN: text_styles.bpcoin,
  Currency.EQUIP_COIN: text_styles.equipCoin,
+ Currency.STPCOIN: text_styles.stpcoin,
  'creditsFactor': _getMultiplierFormatter(text_styles.credits),
  'freeXP': text_styles.expText,
  'freeXPFactor': _getMultiplierFormatter(text_styles.expText),
@@ -1768,6 +1769,10 @@ class BattlePassEpicBonusFormatter(BattlePassBonusFormatter):
 
 
 class CurrenciesBonusFormatter(SimpleBonusFormatter):
+
+    @classmethod
+    def _getLabelFormatter(cls, bonus):
+        return TEXT_FORMATTERS.get(bonus.getCode(), text_styles.stats)
 
     @classmethod
     def _getUserName(cls, bonus):

@@ -9,15 +9,17 @@ from web.web_client_api.ui import CloseWindowWebApi, OpenTabWebApi, ContextMenuW
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
-from web.web_client_api import w2capi, W2CSchema, w2c
+from web.web_client_api import w2capi, W2CSchema, w2c, Field
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.frontline import FrontLineWebApi
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
+from skeletons.gui.app_loader import IAppLoader
 BattleRoyaleSeasonAchievements = namedtuple('BattleRoyaleSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'kill_count', 'top1'))
 
 def createBattleRoyaleWebHanlders():
-    return webApiCollection(FrontLineWebApi, BattleRoyaleWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, QuestsWebApi)
+    return webApiCollection(FrontLineWebApi, BattleRoyaleWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, QuestsWebApi, StPatrickWebApi)
 
 
 @w2capi(name='battle_royale', key='action')
@@ -72,3 +74,17 @@ class BattleRoyaleWebApi(W2CSchema):
 
     def __getSeasons(self):
         return (self.__battleRoyale.getCurrentSeason(), self.__battleRoyale.getNextSeason(), self.__battleRoyale.getPreviousSeason())
+
+
+class _ShowProxyCurrencyTooltipSchema(W2CSchema):
+    x = Field(required=True, type=int)
+    y = Field(required=True, type=int)
+
+
+@w2capi(name='st_patrick', key='action')
+class StPatrickWebApi(W2CSchema):
+
+    @w2c(_ShowProxyCurrencyTooltipSchema, name='show_proxy_currency_tooltip')
+    def showProxyCurrecnyTooltip(self, cmd, ctx):
+        appLoader = dependency.instance(IAppLoader)
+        appLoader.getApp().getToolTipMgr().onCreateWulfTooltip(TC.STPATRICK_PROXY_CURRENCY, [], cmd.x, cmd.y)

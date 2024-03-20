@@ -1860,6 +1860,8 @@ class TOOLTIPS(object):
     AWARDITEM_EVENTCOIN_BODY = '#tooltips:awardItem/eventCoin/body'
     AWARDITEM_BPCOIN_HEADER = '#tooltips:awardItem/bpcoin/header'
     AWARDITEM_BPCOIN_BODY = '#tooltips:awardItem/bpcoin/body'
+    AWARDITEM_STPCOIN_HEADER = '#tooltips:awardItem/stpcoin/header'
+    AWARDITEM_STPCOIN_BODY = '#tooltips:awardItem/stpcoin/body'
     AWARDITEM_EQUIPCOIN_HEADER = '#tooltips:awardItem/equipCoin/header'
     AWARDITEM_EQUIPCOIN_BODY = '#tooltips:awardItem/equipCoin/body'
     AWARDITEM_STEELHUNTERPOINT_HEADER = '#tooltips:awardItem/steelHunterPoint/header'
@@ -3228,6 +3230,7 @@ class TOOLTIPS(object):
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_CHINA = '#tooltips:battle_royale/hangar/vehicle/description/china'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_POLAND = '#tooltips:battle_royale/hangar/vehicle/description/poland'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_SWEDEN = '#tooltips:battle_royale/hangar/vehicle/description/sweden'
+    BATTLE_ROYALE_HANGAR_VEHICLE_SHAMROCK = '#tooltips:battle_royale/hangar/vehicle/shamrock'
     BATTLE_ROYALE_ARTEFACT_LIMIT = '#tooltips:battle_royale/artefact/limit'
     BATTLE_ROYALE_ARTEFACT_SOURCE = '#tooltips:battle_royale/artefact/source'
     BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/high_risk/header'
@@ -3883,6 +3886,7 @@ class TOOLTIPS(object):
      AWARDITEM_GOLD_HEADER,
      AWARDITEM_EVENTCOIN_HEADER,
      AWARDITEM_BPCOIN_HEADER,
+     AWARDITEM_STPCOIN_HEADER,
      AWARDITEM_EQUIPCOIN_HEADER,
      AWARDITEM_STEELHUNTERPOINT_HEADER,
      AWARDITEM_FREEXP_HEADER,
@@ -3960,6 +3964,7 @@ class TOOLTIPS(object):
      AWARDITEM_GOLD_BODY,
      AWARDITEM_EVENTCOIN_BODY,
      AWARDITEM_BPCOIN_BODY,
+     AWARDITEM_STPCOIN_BODY,
      AWARDITEM_EQUIPCOIN_BODY,
      AWARDITEM_STEELHUNTERPOINT_BODY,
      AWARDITEM_FREEXP_BODY,

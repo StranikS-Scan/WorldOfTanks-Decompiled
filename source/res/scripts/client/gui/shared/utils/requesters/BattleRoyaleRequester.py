@@ -27,6 +27,10 @@ class BattleRoyaleRequester(AbstractSyncDataRequester, IBattleRoyaleRequester):
     def topCount(self):
         return self.getCacheValue('BRSoloTop1Count') + self.getCacheValue('BRSquadTop1Count')
 
+    @property
+    def brMultipliedSTPCoinsVehs(self):
+        return self.getCacheValue('brBattleStats', {}).get('brMultipliedSTPCoinsVehs', set())
+
     def getStats(self, arenaBonusType, playerDatabaseID=None):
         return {} if playerDatabaseID else self.getCacheValue('brBattleStats').get(arenaBonusType, {})
 

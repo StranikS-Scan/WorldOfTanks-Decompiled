@@ -5,7 +5,7 @@ from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import Respaw
 from battle_royale.gui.constants import AmmoTypes
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
-from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
+from battle_royale.gui.impl.lobby.tooltips.proxy_currency_tooltip_view import ProxyCurrencyTooltipView
 from battle_royale.gui.impl.lobby.tooltips.rent_icon_tooltip_view import RentIconTooltipView
 from battle_royale.gui.impl.lobby.tooltips.test_drive_info_tooltip_view import TestDriveInfoTooltipView
 from battle_royale.gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepairBattleRoyale
@@ -65,8 +65,8 @@ class HangarBottomPanelView(ViewImpl, IGlobalListener):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.battle_royale.lobby.tooltips.RentIconTooltipView():
             return RentIconTooltipView()
-        if contentID == R.views.battle_royale.lobby.tooltips.BrCoinTooltipView():
-            return BrCoinTooltipView()
+        if contentID == R.views.battle_royale.lobby.tooltips.ProxyCurrencyTooltipView():
+            return ProxyCurrencyTooltipView()
         return TestDriveInfoTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.TestDriveInfoTooltipView() else super(HangarBottomPanelView, self).createToolTipContent(event, contentID)
 
     def createToolTip(self, event):

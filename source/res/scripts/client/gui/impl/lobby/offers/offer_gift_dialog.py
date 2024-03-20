@@ -54,7 +54,7 @@ class OffersDialogWindowMixin(object):
         from gui.shared import event_dispatcher
         offer = self._offersProvider.getOffer(self._offerID)
         if offer is None or not offer.isOfferAvailable:
-            if self._offersProvider.getUnlockedOffers(onlyVisible=True):
+            if self._offersProvider.getUnlockedOffers(includeAllOffers=False):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 event_dispatcher.showHangar()

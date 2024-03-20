@@ -99,7 +99,7 @@ class OffersBannerController(IOffersBannerController):
         return any(self.__iNotSeenOffers())
 
     def __iNotSeenOffers(self):
-        for offer in self._offersProvider.iUnlockedOffers(onlyVisible=True):
+        for offer in self._offersProvider.iUnlockedOffers():
             if offer.showBanner and not self._offersProvider.isBannerSeen(offer.id) and not OfferBannerWindow.isLoaded(offer.id):
                 yield offer
 

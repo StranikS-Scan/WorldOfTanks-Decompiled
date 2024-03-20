@@ -134,7 +134,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
         result = []
         for stageAwards in zip(*self._getStages())[1]:
             bonuses = []
-            for key, value in stageAwards.iteritems():
+            for key, value in stageAwards:
                 bonuses.extend(getNonQuestBonuses(key, value))
 
             result.append({'rewards': bonuses})

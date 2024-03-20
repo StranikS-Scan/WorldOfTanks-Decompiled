@@ -18,3 +18,7 @@ class AccountBattleRoyaleComponent(BigWorld.StaticScriptComponent):
     def setBrCoin(self, amount, callback=None):
         _logger.debug("set battle royale coin amount: '%r'", amount)
         self.entity._doCmdIntStr(brc.CMD_BATTLE_ROYALE_OPERATE_BRCOIN, amount, '', callback)
+
+    def setStpCoin(self, amount, callback=None):
+        _logger.debug("set StPatrick coin amount: '%r'", amount)
+        self.entity._doCmdIntStr(brc.CMD_BATTLE_ROYALE_OPERATE_STPCOIN, amount, '', callback)

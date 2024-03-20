@@ -560,6 +560,8 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         decsBlocks.append(packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.header.buttons.equipCoin.description1()))))
     elif btnType == CURRENCIES_CONSTANTS.BRCOIN:
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=-8)))
+    elif btnType == CURRENCIES_CONSTANTS.STPCOIN:
+        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=-8)))
     else:
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
     tooltipBlocks.append(packBuildUpBlockData(decsBlocks, linkage=descLinkage))

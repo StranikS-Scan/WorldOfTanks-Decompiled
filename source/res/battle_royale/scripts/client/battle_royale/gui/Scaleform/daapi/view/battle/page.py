@@ -209,6 +209,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.__es.subscribeToEvent(g_replayEvents.onTimeWarpStart, self.__onTimeWarpStart)
         self.__brSoundControl = BRBattleSoundController()
         self.__brSoundControl.init()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl:
+            self.__es.subscribeToEvent(crosshairCtrl.onCrosshairViewChanged, self.__onCrosshairViewChanged)
 
     def _onWinScreenReload(self):
         alias = BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS
@@ -258,6 +261,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN})
 
     def _setComponentsVisibility(self, visible=None, hidden=None):
+        if self.__isWinnerScreenShown:
+            return
         if not self.__canShowHUD and visible:
             hasNoHUD = {BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, BATTLE_VIEW_ALIASES.BATTLE_LOADING} & set(visible)
             if not hasNoHUD:
@@ -285,6 +290,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
 
     def _switchToPostmortem(self):
         BigWorld.player().setIsObserver()
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.as_setCrosshairModeS(viewID)
 
     def __onCameraChanged(self, ctrlMode, _=None):
         teamPanelAliases = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.VIDEO)

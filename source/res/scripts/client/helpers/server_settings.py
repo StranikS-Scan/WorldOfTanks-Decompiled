@@ -570,12 +570,15 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'economics',
  'url',
  'respawns',
- 'progressionTokenAward'))):
+ 'progressionTokenAward',
+ 'stpCoinAward',
+ 'dailyBonusSTP'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, stpCoinAward={}, dailyBonusSTP={})
         defaults.update(kwargs)
+        cls.__packStpCoinAwardConfig(defaults)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
@@ -589,6 +592,10 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
+
+    @classmethod
+    def __packStpCoinAwardConfig(cls, data):
+        data['stpCoinAward'] = {int(bonusType):value for bonusType, value in data['stpCoinAward'].iteritems()}
 
 
 class _TelecomConfig(object):

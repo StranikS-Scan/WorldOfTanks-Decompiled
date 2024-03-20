@@ -857,6 +857,10 @@ class IBattleRoyaleRequester(IRequester):
     def testDriveExpired(self):
         raise NotImplementedError
 
+    @property
+    def brMultipliedSTPCoinsVehs(self):
+        raise NotImplementedError
+
     def getStats(self, arenaBonusType, playerDatabaseID=None):
         raise NotImplementedError
 

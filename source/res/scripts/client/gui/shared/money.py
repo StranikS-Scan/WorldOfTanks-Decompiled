@@ -18,6 +18,7 @@ class Currency(CONST_CONTAINER):
     EVENT_COIN = 'eventCoin'
     BPCOIN = 'bpcoin'
     BRCOIN = 'brcoin'
+    STPCOIN = 'stpcoin'
     FREE_XP = 'freeXP'
     EQUIP_COIN = 'equipCoin'
     ALL = (CREDITS,

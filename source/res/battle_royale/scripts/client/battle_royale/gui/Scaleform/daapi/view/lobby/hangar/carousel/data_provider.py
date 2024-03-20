@@ -10,11 +10,12 @@ from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController
+from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController, IBattleRoyaleController
 _UNDEFINED_VEHICLE_TYPE = 'undefined'
 
 class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
     __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
+    __brController = dependency.descriptor(IBattleRoyaleController)
 
     def getVehiclesIntCDs(self):
         vehicledIntCDs = []
@@ -62,6 +63,7 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
              'level': 0,
              'tankType': vehicle.type,
              'xpImgSource': '',
+             'hasShamrockFactor': self.__brController.hasSTPDailyFactor(vehicle),
              'isUseRightBtn': True,
              'isTestDriveEnabled': isTestDriveEnabled,
              'lockBackground': isBgLocked or isRentAvailable,

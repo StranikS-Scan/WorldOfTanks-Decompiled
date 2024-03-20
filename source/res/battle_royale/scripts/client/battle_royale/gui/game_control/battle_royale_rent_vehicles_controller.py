@@ -26,7 +26,7 @@ from items import vehicles
 from gui import SystemMessages
 from gui.impl.dialogs import dialogs
 from battle_royale.gui.impl.dialogs.rentConfirm import RentConfirm
-from battle_royale.gui.constants import BR_COIN
+from battle_royale.gui.constants import STP_COIN, BR_COIN
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -104,6 +104,9 @@ class BattleRoyaleRentVehiclesController(IBattleRoyaleRentVehiclesController):
 
     def getBRCoinBalance(self, default=None):
         return self.__balance.get(BR_COIN, default)
+
+    def getSTPCoinBalance(self, default=None):
+        return self.__balance.get(STP_COIN, default)
 
     @_defaultCurrentVehicle
     def getRentState(self, intCD=None):
@@ -340,10 +343,11 @@ class BattleRoyaleRentVehiclesController(IBattleRoyaleRentVehiclesController):
         self.onPriceInfoUpdated()
 
     def __updateDynamicCurrencies(self, currencies):
-        if BR_COIN not in currencies:
+        if BR_COIN not in currencies and STP_COIN not in currencies:
             return False
         brCoin = currencies.get(BR_COIN, 0)
-        if self.getBRCoinBalance(0) != brCoin:
+        stpCoin = currencies.get(STP_COIN, 0)
+        if self.getBRCoinBalance(0) != brCoin or self.getSTPCoinBalance(0) != stpCoin:
             self.__onBalanceUpdate()
         self.onBalanceUpdated()
 

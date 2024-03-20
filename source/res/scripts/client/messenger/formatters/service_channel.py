@@ -717,6 +717,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     battleResKey = 1 if winnerIfDraw == team else -1
         if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
             ctx[u'brcoin'] = self.__makeBRCoinString(battleResults)
+            ctx[u'stpcoin'] = self.__makeSTPCoinString(battleResults)
             ctx[u'brAwardTokens'] = self.__makeBRProgressionTokenString(battleResults)
             battleResultKeys = self.__BRResultKeys
         elif guiType == ARENA_GUI_TYPE.MAPS_TRAINING:
@@ -937,12 +938,18 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return u'' if not credits_ else g_settings.htmlTemplates.format(u'piggyBank', ctx={u'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
 
     def __makeBRCoinString(self, battleResults):
-        value = battleResults.get(u'brcoin', 0) + self.__getBrCoinsQuestBonus(battleResults)
+        value = battleResults.get(u'brcoin', 0) + self.__getCoinsQuestBonus(battleResults, u'brcoin')
         if value:
             text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
             return g_settings.htmlTemplates.format(u'battleResultBrcoin', ctx={u'brcoin': text})
 
-    def __getBrCoinsQuestBonus(self, battleResults):
+    def __makeSTPCoinString(self, battleResults):
+        value = battleResults.get(u'stpcoin', 0) + self.__getCoinsQuestBonus(battleResults, u'stpcoin')
+        if value:
+            text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleStpCoin(), value=text_styles.stPatrick(value))
+            return g_settings.htmlTemplates.format(u'battleResultStpcoin', ctx={u'stpcoin': text})
+
+    def __getCoinsQuestBonus(self, battleResults, currencyCode=u'brcoin'):
         questBonus = 0
         allQuests = self.__eventsCache.getAllQuests()
         for qID in battleResults.get(u'completedQuestIDs', []):
@@ -950,7 +957,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             if quest is None:
                 continue
             for bonus in quest.getBonuses(u'currencies'):
-                if bonus.getCode() == u'brcoin':
+                if bonus.getCode() == currencyCode:
                     questBonus += bonus.getCount()
 
         return questBonus

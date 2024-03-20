@@ -1,25 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/shared/tooltips/helper.py
-import typing
-from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.leaderboard_reward_tooltip_model import LeaderboardRewardTooltipModel
+from functools import partial
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.reward_points_place_model import RewardPointsPlaceModel
 from frameworks.wulf import Array
 from frameworks.wulf.view.array import fillViewModelsArray, fillStringsArray
 from gui.impl import backport
 from gui.impl.gen import R
-if typing.TYPE_CHECKING:
-    from typing import List
-    from battle_royale.gui.game_control.battle_royale_controller import BattleRoyaleProgressionPoints
+_string = R.strings.battle_royale.tooltip.progression.leaderboardReward
 
-def fillProgressionPointsTableModel(viewModel, progressionPointsList):
+def fillProgressionPointsTableModel(viewModel, progressionPointsList, headerResource=_string):
     gameModes, gameModeLists = progressionPointsList
-    fillStringsArray(map(_getGameModeName, gameModes), viewModel.getBattleTypes())
+    fillStringsArray(map(partial(_getGameModeName, headerResource), gameModes), viewModel.getBattleTypes())
     gameModeColLists = list()
     for points in gameModeLists:
         prevLevel = 1
         gameModeCellList = list()
         for point in points:
-            gameModeCellList.append(_getRowPointsCell(point, prevLevel))
+            gameModeCellList.append(_getRowPointsCell(point, prevLevel, headerResource))
             prevLevel = point.lastInRange + 1
 
         gameModeColLists.append(gameModeCellList)
@@ -34,23 +31,21 @@ def fillProgressionPointsTableModel(viewModel, progressionPointsList):
     battleModesArray.invalidate()
 
 
-_brProgressionTooltip = R.strings.battle_royale.tooltip.progression.leaderboardReward
-
-def _getGameModeName(gameMode):
-    return backport.text(_brProgressionTooltip.battleTypesHeader.num(gameMode)())
+def _getGameModeName(headerResource, gameMode):
+    return backport.text(headerResource.battleTypesHeader.num(gameMode)())
 
 
-def _setRangeLabel(points, prevLevel):
+def _setRangeLabel(points, prevLevel, headerResource):
     numRange = (prevLevel, points.lastInRange)
-    rangeTemplate = _brProgressionTooltip.text.places()
+    rangeTemplate = headerResource.text.places()
     if prevLevel == points.lastInRange:
         numRange = (points.lastInRange,)
-        rangeTemplate = _brProgressionTooltip.text.place()
+        rangeTemplate = headerResource.text.place()
     return backport.text(rangeTemplate, place='-'.join(map(str, numRange)))
 
 
-def _getRowPointsCell(points, prevLevel):
+def _getRowPointsCell(points, prevLevel, headerResource):
     cell = RewardPointsPlaceModel()
-    cell.setPlace(_setRangeLabel(points, prevLevel))
+    cell.setPlace(_setRangeLabel(points, prevLevel, headerResource))
     cell.setPoints(points.points)
     return cell

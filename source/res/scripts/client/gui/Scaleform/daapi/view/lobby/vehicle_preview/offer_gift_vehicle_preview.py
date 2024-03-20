@@ -134,7 +134,7 @@ class OfferGiftVehiclePreview(VehiclePreview):
     def __onOffersUpdated(self):
         offer = self.__offersProvider.getOffer(self._offer.id)
         if offer is None or not offer.isOfferAvailable:
-            if self.__offersProvider.getUnlockedOffers(onlyVisible=True):
+            if self.__offersProvider.getUnlockedOffers(includeAllOffers=False):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 self._customCallbacks.get('offerEndedCb', event_dispatcher.showHangar)()

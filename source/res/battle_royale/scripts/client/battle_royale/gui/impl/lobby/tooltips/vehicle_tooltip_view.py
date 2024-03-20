@@ -9,10 +9,11 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.shared.tooltips.vehicle import StatusBlockConstructor
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController
+from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController, IBattleRoyaleController
 
 class VehicleTooltipView(ViewImpl):
     __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
+    __brController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self, intCD, context):
         settings = ViewSettings(R.views.battle_royale.lobby.tooltips.VehicleTooltipView())
@@ -40,6 +41,7 @@ class VehicleTooltipView(ViewImpl):
         self.__fillPrice(model.rentPrice)
         self.__fillStatus(self.__vehicle, model)
         model.setRentTimeLeft(self.__rentVehiclesController.getFormatedRentTimeLeft(self.__vehicle.intCD))
+        model.setHasSTPDailyFactor(self.__brController.hasSTPDailyFactor(self.__vehicle))
 
     def __fillPrice(self, model):
         testDriveDays = self.__rentVehiclesController.getNextTestDriveDaysTotal(self.__vehicle.intCD)
@@ -55,5 +57,7 @@ class VehicleTooltipView(ViewImpl):
     def __fillStatus(self, vehicle, model):
         statusConfig = self.__context.getStatusConfiguration(vehicle)
         _, __, status = StatusBlockConstructor(vehicle, statusConfig).construct()
-        model.setStatusText(status['header'])
-        model.setStatusLevel(status['level'])
+        if status is not None:
+            model.setStatusText(status['header'])
+            model.setStatusLevel(status['level'])
+        return

@@ -748,7 +748,7 @@ class _BattleRoyaleItem(SelectorItem):
     def _doSelect(self, dispatcher):
         currentSeason = self.__battleRoyaleController.getCurrentSeason()
         if currentSeason is None:
-            self.__battleRoyaleController.openURL()
+            self.__battleRoyaleController.openInfoPageWindow()
             return
         else:
             isActiveCycle = self.__battleRoyaleController.getCurrentCycleInfo()[1]

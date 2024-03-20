@@ -22,7 +22,6 @@ def getViewSettings():
     from commander_cmp import CommanderComponent
     from tech_parameters_cmp import TechParametersComponent
     from hangar_bottom_panel_cmp import HangarBottomPanelComponent
-    from proxy_currency_panel import ProxyCurrencyComponentInject
     from hangar_vehicle_info_view import HangarVehicleModulesConfigurator
     from hangar_vehicle_info_view import HangarVehicleInfo
     from level_up_view import BattleRoyaleLevelUpView
@@ -32,12 +31,11 @@ def getViewSettings():
     return (ViewSettings(BATTLEROYALE_ALIASES.LEVEL_UP, BattleRoyaleLevelUpView, BATTLEROYALE_ALIASES.LEVEL_UP_UI, WindowLayer.OVERLAY, BATTLEROYALE_ALIASES.LEVEL_UP, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW, HangarVehicleInfo, 'battleRoyaleVehInfo.swf', WindowLayer.SUB_VIEW, BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME, BattleRoyalePrimeTimeView, HANGAR_ALIASES.EPIC_PRIME_TIME, WindowLayer.SUB_VIEW, BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, BattleRoyaleBrowserView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, BattleRoyaleBrowserView, 'browserScreen.swf', WindowLayer.TOP_WINDOW, BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.VEH_MODULES_CONFIGURATOR_CMP, HangarVehicleModulesConfigurator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.COMMANDER_COMPONENT, CommanderComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.TECH_PARAMETERS_COMPONENT, TechParametersComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.BOTTOM_PANEL_COMPONENT, HangarBottomPanelComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ComponentSettings(BATTLEROYALE_ALIASES.PROXY_CURRENCY_PANEL_COMPONENT, ProxyCurrencyComponentInject, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ROYALE_TANK_CAROUSEL, RoyaleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BR_ENTRY_POINT, BattleRoyaleEntryPointInject, ScopeTemplates.DEFAULT_SCOPE))
 

@@ -1462,6 +1462,9 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getEndTime(self):
         raise NotImplementedError
 
+    def getStartTime(self):
+        raise NotImplementedError
+
     def fightClick(self):
         raise NotImplementedError
 
@@ -1502,7 +1505,7 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getBrCommanderSkills():
         raise NotImplementedError
 
-    def openURL(self, url=None):
+    def openInfoPageWindow(self, isModeSelector=False):
         raise NotImplementedError
 
     @staticmethod
@@ -1519,6 +1522,12 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getProgressionPointsTableData(self):
+        raise NotImplementedError
+
+    def hasSTPDailyFactor(self, vehicle):
+        raise NotImplementedError
+
+    def getStpCoinsPerPlace(self, place):
         raise NotImplementedError
 
 
@@ -1615,6 +1624,9 @@ class IBattleRoyaleRentVehiclesController(IGameController):
         raise NotImplementedError
 
     def getBRCoinBalance(self, default=None):
+        raise NotImplementedError
+
+    def getSTPCoinBalance(self, default=None):
         raise NotImplementedError
 
     def watchRentVehicles(self, callback, vehIntCDs=None):
@@ -1964,7 +1976,7 @@ class IBattlePassController(IGameController):
     def getPerBattlePoints(self, gameMode=ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
         raise NotImplementedError
 
-    def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
+    def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None, needPlacesWithoutPoints=False):
         raise NotImplementedError
 
     def isSpecialVehicle(self, intCD):

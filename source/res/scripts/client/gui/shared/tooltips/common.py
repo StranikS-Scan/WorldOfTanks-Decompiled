@@ -1277,6 +1277,9 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         elif self._btnType == CURRENCIES_CONSTANTS.BRCOIN:
             brCoin = self.__rentVehiclesController.getBRCoinBalance(0)
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(brCoin))
+        elif self._btnType == CURRENCIES_CONSTANTS.STPCOIN:
+            stpCoin = self.__rentVehiclesController.getSTPCoinBalance(0)
+            valueStr = text_styles.bpcoin(backport.getIntegralFormat(stpCoin))
         elif self._btnType == CURRENCIES_CONSTANTS.EQUIP_COIN:
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(self.itemsCache.items.stats.equipCoin))
         return valueStr

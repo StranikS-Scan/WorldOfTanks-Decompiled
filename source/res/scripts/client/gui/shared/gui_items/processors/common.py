@@ -425,8 +425,7 @@ class UseCrewBookProcessor(GroupedRequestProcessor):
         self.__tmanInvID = tmanInvID
         super(UseCrewBookProcessor, self).__init__(BigWorld.player().inventory.useCrewBook, crewBookCD, crewBookCount, vehInvID, tmanInvID, groupID=groupID, groupSize=groupSize)
 
-    @staticmethod
-    def _makeSuccessData(*args, **kwargs):
+    def _makeSuccessData(self, *args, **kwargs):
         itemsCache = dependency.instance(IItemsCache)
         auxData = []
         for item in iter(kwargs.get('ctx', [])):

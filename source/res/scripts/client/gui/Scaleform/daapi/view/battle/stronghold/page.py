@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/stronghold/page.py
 from gui.Scaleform.daapi.view.battle.classic import ClassicPage
 from gui.Scaleform.daapi.view.battle.shared.crosshair import CrosshairPanelContainer
+from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import KillCamMarkersManager
 from gui.Scaleform.daapi.view.battle.stronghold.manager import StrongholdMarkersManager
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-_STRONGHOLD_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, StrongholdMarkersManager)
+_STRONGHOLD_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, StrongholdMarkersManager, KillCamMarkersManager)
 
 class StrongholdPage(ClassicPage):
 

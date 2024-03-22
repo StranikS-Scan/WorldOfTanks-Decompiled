@@ -3,7 +3,7 @@
 import functools
 import Math
 import nations
-from constants import SHELL_TYPES, ATTACK_REASON, SHELL_MECHANICS_TYPE
+from constants import SHELL_TYPES, ATTACK_REASON, SHELL_MECHANICS_TYPE, INFINITE_SHELL_TAG
 from items import ITEM_TYPES, ITEM_TYPE_NAMES, makeIntCompactDescrByID
 from items.basic_item import BasicItem
 from items.components import chassis_components
@@ -420,6 +420,10 @@ class Shell(BasicItem):
 
     def checkMechanics(self, *mechanics):
         return self.type.mechanics in mechanics
+
+    @property
+    def isInfinite(self):
+        return INFINITE_SHELL_TAG in self.tags
 
 
 _TYPE_ID_TO_CLASS = {ITEM_TYPES.vehicleChassis: Chassis,

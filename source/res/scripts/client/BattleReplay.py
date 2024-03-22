@@ -20,6 +20,7 @@ import Event
 import AreaDestructibles
 import BWReplay
 import TriggersManager
+from AvatarInfo import AvatarInfo
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
@@ -33,7 +34,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 from helpers.styles_perf_toolset import g_reportGenerator
@@ -47,11 +47,10 @@ REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
 MIN_REPLAY_TIME = 1
-_POSTMORTEM_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.DEATH_FREE_CAM, CTRL_MODE_NAME.RESPAWN_DEATH)
-_FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM,
- CTRL_MODE_NAME.VIDEO,
- CTRL_MODE_NAME.CAT,
- CTRL_MODE_NAME.DEATH_FREE_CAM)
+_FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.VIDEO,
+ CTRL_MODE_NAME.DEBUG,
+ CTRL_MODE_NAME.DEATH_FREE_CAM,
+ CTRL_MODE_NAME.KILL_CAM)
 _ARENA_GUI_TYPE_TO_MODE_TAG = {ARENA_GUI_TYPE.COMP7: 'Onslaught',
  ARENA_GUI_TYPE.FUN_RANDOM: 'Arcade'}
 _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
@@ -66,10 +65,6 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
-    BC_MARKERS_ONTRIGGERACTIVATED = 'bootcampMarkers_onTriggerActivated'
-    BC_MARKERS_ONTRIGGERDEACTIVATED = 'bootcampMarkers_onTriggerDeactivated'
-    BC_MARKERS_SHOWMARKER = 'bootcampMarkers_showMarker'
-    BC_MARKERS_HIDEMARKER = 'bootcampMarkers_hideMarker'
     HINT_SHOW = 'hint_show'
     HINT_HIDE = 'hint_hide'
     HINT_COMPLETE = 'hint_complete'
@@ -131,6 +126,11 @@ class SimulatedAoI(object):
             return
 
     def handleAoIEvent(self, witnessID, entityID, hasEnteredAoI):
+        entity = BigWorld.entities.get(entityID)
+        if entity:
+            entityType = type(entity)
+            if entityType is AvatarInfo:
+                hasEnteredAoI = entity.avatarID == BigWorld.player().id
         self.__aoiMapping[witnessID][entityID] = hasEnteredAoI
         isWithheld = self.__withheld.setdefault(entityID, False)
         isCurrentAvatar = self.currentAvatarID == witnessID
@@ -183,6 +183,7 @@ class BattleReplay(object):
     playerVehicleID = property(lambda self: self.__replayCtrl.playerVehicleID)
     isLoading = property(lambda self: self.__replayCtrl.getAutoStartFileName() is not None and self.__replayCtrl.getAutoStartFileName() != '')
     isPaused = property(lambda self: self.__replayCtrl.playbackSpeed == 0)
+    __previousMode = CTRL_MODE_NAME.DEFAULT
     fps = property(lambda self: self.__replayCtrl.fps)
     ping = property(lambda self: self.__replayCtrl.ping)
     compressed = property(lambda self: self.__replayCtrl.isFileCompressed())
@@ -199,7 +200,6 @@ class BattleReplay(object):
         self.__updateGunOnTimeWarp = False
 
     isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -233,6 +233,7 @@ class BattleReplay(object):
         self.__isPlayingPlayList = False
         self.__playList = []
         self.__isFinished = False
+        self.__isFinishAfterKillCamEnds = False
         self.__isMenuShowed = False
         self.__updateGunOnTimeWarp = False
         self.__lastObservedVehicleID = NULL_ENTITY_ID
@@ -247,8 +248,8 @@ class BattleReplay(object):
         self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
         self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
         self.__gunWasLockedBeforePause = False
-        self.__wasVideoBeforeRewind = False
-        self.__videoCameraMatrix = Math.Matrix()
+        self.__ctrlModeBeforeRewind = None
+        self.__cameraMatrixBeforeRewind = Math.Matrix()
         self.__replayDir = './replays'
         self.__replayCtrl.clientVersion = BigWorld.wg_getProductVersion()
         self.__enableTimeWarp = False
@@ -259,6 +260,7 @@ class BattleReplay(object):
         self.replayTimeout = 0
         self.__arenaPeriod = -1
         self.__previousPeriod = -1
+        self.__wasKillCamActived = False
         self.enableAutoRecordingBattles(True)
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
@@ -282,7 +284,6 @@ class BattleReplay(object):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
-        g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged += self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
 
@@ -290,7 +291,6 @@ class BattleReplay(object):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
-        g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged -= self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
 
@@ -317,7 +317,7 @@ class BattleReplay(object):
         self.__replayCtrl.serverAimCallback = None
         self.__replayCtrl = None
         self.__settings = None
-        self.__videoCameraMatrix = None
+        self.__cameraMatrixBeforeRewind = None
         self.__warpTime = -1.0
         self.__arenaPeriod = -1
         return
@@ -426,6 +426,7 @@ class BattleReplay(object):
             if wasPlaying:
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
+                    BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
                     BigWorld.player().onObserverVehicleChanged -= self.__onObserverVehicleChanged
                 if not isOffline and not isDestroyed:
                     self.connectionMgr.onDisconnected += self.__goToNextReplay
@@ -508,6 +509,8 @@ class BattleReplay(object):
             if self.isPlaying:
                 self.__replayCtrl.onPutScreenshotMark()
                 return True
+        controlMode = self.getControlMode()
+        isKillCamActive = self.__isKillCamActive()
         if key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key):
             if isDown and not isCursorVisible:
                 if self.isServerSideReplay:
@@ -516,8 +519,7 @@ class BattleReplay(object):
                     return True
                 if self.isControllingCamera:
                     self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
-                    controlMode = self.getControlMode()
-                    if controlMode in _POSTMORTEM_CTRL_MODES:
+                    if controlMode in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES:
                         self.onControlModeChanged(controlMode)
                     else:
                         self.onControlModeChanged('arcade')
@@ -526,18 +528,16 @@ class BattleReplay(object):
                 else:
                     if not self.__isAllowedSavedCamera():
                         return False
-                    self.__replayCtrl.isControllingCamera = True
-                    self.onControlModeChanged()
-                    self.__showInfoMessage('replaySavedCameraActivated')
+                    self.__gotoBoundMode()
                 return True
         if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             if self.isControllingCamera:
                 return True
-        if key == Keys.KEY_SPACE and isDown and not self.__isFinished:
+        if key == Keys.KEY_SPACE and isDown and not self.__isFinished and not isKillCamActive:
             if self.__playbackSpeedIdx > 0:
                 self.setPlaybackSpeedIdx(0)
             else:
-                self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
+                self.resetPlaybackSpeedIdx()
             return True
         if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
             if self.__playbackSpeedIdx > 0:
@@ -550,7 +550,7 @@ class BattleReplay(object):
         if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
             self.__timeWarp(currReplayTime + fastForwardStep)
             return True
-        if key == Keys.KEY_LEFTARROW:
+        if key == Keys.KEY_LEFTARROW and isDown:
             self.__aoi.reset()
             self.__timeWarp(currReplayTime - fastForwardStep)
             return True
@@ -735,6 +735,13 @@ class BattleReplay(object):
                 g_replayEvents.onPause(isPaused)
             return
 
+    def resetPlaybackSpeedIdx(self, allowResetToZero=False):
+        if self.__savedPlaybackSpeedIdx != 0 or allowResetToZero:
+            playbackSpeedIdx = self.__savedPlaybackSpeedIdx
+        else:
+            playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
+        self.setPlaybackSpeedIdx(playbackSpeedIdx)
+
     def getPlaybackSpeedIdx(self):
         ret = self.__playbackSpeedModifiers.index(self.__replayCtrl.playbackSpeed)
         return self.__playbackSpeedModifiers.index(1.0) if ret == -1 else ret
@@ -743,6 +750,12 @@ class BattleReplay(object):
         self.__replayCtrl.controlMode = value
 
     def getControlMode(self):
+        if self.__wasKillCamActived:
+            return CTRL_MODE_NAME.KILL_CAM
+        recordedControlMode = self.__replayCtrl.controlMode
+        return CTRL_MODE_NAME.POSTMORTEM if recordedControlMode == CTRL_MODE_NAME.KILL_CAM else recordedControlMode
+
+    def getRecordedControlMode(self):
         return self.__replayCtrl.controlMode
 
     def onClientReady(self):
@@ -757,6 +770,7 @@ class BattleReplay(object):
             AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
             if isPlayerAvatar():
                 player.onVehicleEnterWorld += self.__onVehicleEnterWorld
+                player.inputHandler.onCameraChanged += self.__onCameraChanged
                 player.onObserverVehicleChanged += self.__onObserverVehicleChanged
                 if isServerSideReplay():
                     otherVehicles = [ x for x in BigWorld.entities.valuesOfType('Vehicle') if x.id != player.playerVehicleID ]
@@ -806,10 +820,6 @@ class BattleReplay(object):
              'hasMods': self.__replayCtrl.hasMods}
             if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
                 arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
-            if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
-                from bootcamp.Bootcamp import g_bootcamp
-                arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
-                arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
             self.__replayCtrl.recMapName = arenaName
             self.__replayCtrl.recPlayerVehicleName = vehicleName
             self.__replayCtrl.recBattleModeTag = _ARENA_GUI_TYPE_TO_MODE_TAG.get(arena.guiType, '')
@@ -833,56 +843,6 @@ class BattleReplay(object):
     @property
     def isNormalSpeed(self):
         return self.playbackSpeed == 1.0
-
-    def __getBranchAndRevision(self):
-        from wot_svn import svn
-        svnInstance = svn()
-        if not svnInstance.enabled():
-            return ('undefined', 'undefined')
-        else:
-            info = svnInstance.getInfo()
-            if info is None:
-                return ('undefined', 'undefined')
-            rootPath = info.workingCopyRootAbsPath
-            info = svnInstance.getInfo(rootPath)
-            return ('undefined', 'undefined') if info is None else (info.branchURL, info.lastChangedRevision)
-
-    def __logSVNInfo(self):
-        if self.isServerSideReplay:
-            return
-        else:
-            currentBranch, currentRevision = self.__getBranchAndRevision()
-            replayBranch = self.arenaInfo.get('branchURL')
-            if replayBranch is None:
-                replayBranch = 'undefined'
-            replayRevision = self.arenaInfo.get('lastChangedRevision')
-            if replayRevision is None:
-                replayRevision = 'undefined'
-            _logger.info('Current branch: ' + currentBranch)
-            _logger.info('Current revision: ' + str(currentRevision))
-            _logger.info('Replay branch: ' + replayBranch)
-            _logger.info('Replay revision: ' + str(replayRevision))
-            return
-
-    def __showInfoMessages(self):
-        self.__showInfoMessage('replayControlsHelp1')
-        self.__showInfoMessage('replayControlsHelp2')
-        self.__showInfoMessage('replayControlsHelp3')
-
-    def __getArenaVehiclesInfo(self):
-        vehicles = {}
-        for k, v in BigWorld.player().arena.vehicles.iteritems():
-            vehicle = copy.copy(v)
-            vehicle['vehicleType'] = v['vehicleType'].name if v['vehicleType'] is not None else ''
-            del vehicle['accountDBID']
-            del vehicle['prebattleID']
-            del vehicle['clanDBID']
-            del vehicle['isPrebattleCreator']
-            del vehicle['isAvatarReady']
-            del vehicle['outfitCD']
-            vehicles[k] = vehicle
-
-        return vehicles
 
     def loadServerSettings(self):
         if self.isPlaying:
@@ -909,6 +869,9 @@ class BattleReplay(object):
             self.__replayCtrl.onBattleLoadingFinished()
 
     def onReplayFinished(self):
+        if self.__isKillCamActive():
+            self.__isFinishAfterKillCamEnds = True
+            return
         replayTimes = self.__replayCtrl.getReplayTimes() - 1
         if replayTimes > 0:
             self.__replayCtrl.setReplayTimes(replayTimes)
@@ -929,39 +892,43 @@ class BattleReplay(object):
 
     def onControlModeChanged(self, forceControlMode=None):
         player = BigWorld.player()
-        if not self.isPlaying or not isPlayerAvatar():
+        controlMode = self.getControlMode()
+        recordedControlMode = self.getRecordedControlMode() if forceControlMode is None else forceControlMode
+        previousMode = self.__previousMode
+        self.__previousMode = recordedControlMode
+        if controlMode == CTRL_MODE_NAME.KILL_CAM:
+            return
+        elif recordedControlMode == CTRL_MODE_NAME.KILL_CAM:
+            if self.isControllingCamera:
+                self.__replayCtrl.isControllingCamera = False
             return
         else:
+            if previousMode == CTRL_MODE_NAME.KILL_CAM:
+                self.__replayCtrl.isControllingCamera = True
+            if not self.isPlaying or not isPlayerAvatar():
+                return
             entity = BigWorld.entities.get(self.playerVehicleID)
             if (entity is None or not entity.isStarted) and forceControlMode is None:
-                controlMode = self.getControlMode()
                 if controlMode == CTRL_MODE_NAME.SNIPER:
                     return
             if not self.isControllingCamera and forceControlMode is None:
+                if controlMode != CTRL_MODE_NAME.DEATH_FREE_CAM:
+                    return
+            if forceControlMode is None and not self.isControllingCamera and recordedControlMode in _IGNORED_SWITCHING_CTRL_MODES or recordedControlMode == CTRL_MODE_NAME.MAP_CASE_EPIC:
                 return
-            controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
-            if forceControlMode is None and not self.isControllingCamera and controlMode in _IGNORED_SWITCHING_CTRL_MODES or controlMode == CTRL_MODE_NAME.MAP_CASE_EPIC:
-                return
-            if self.__equipmentId is None and controlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
+            elif self.__equipmentId is None and recordedControlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
                 return
             preferredPos = self.getGunRotatorTargetPoint()
-            if controlMode == CTRL_MODE_NAME.MAP_CASE:
+            if recordedControlMode == CTRL_MODE_NAME.MAP_CASE:
                 _, _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
-            player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId, curVehicleID=self.__replayCtrl.playerVehicleID)
+            player.inputHandler.onControlModeChanged(recordedControlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId, curVehicleID=self.__replayCtrl.playerVehicleID)
             return
 
     def onPlayerVehicleIDChanged(self):
         player = BigWorld.player()
-        if self.isPlaying and hasattr(player, 'positionControl'):
+        if self.isPlaying and hasattr(player, 'positionControl') and player.inputHandler.ctrl is not None:
             player.inputHandler.ctrl.selectPlayer(self.__replayCtrl.playerVehicleID)
-
-    def __onAvatarObserverVehicleChanged(self, vehID):
-        if self.isServerSideReplay:
-            self.__isVehicleChanging = True
-            if vehID != BigWorld.player().playerVehicleID:
-                self.__lastObservedVehicleID = vehID
-            self.__aoi.changeVehicle(vehID)
-        self.__isVehicleChanging = False
+        return
 
     def isVehicleChanging(self):
         return self.__isVehicleChanging
@@ -976,7 +943,7 @@ class BattleReplay(object):
         return currTeam == vehTeam
 
     def onPostTickCallback(self):
-        self.__aoi.flush(self.getControlMode())
+        self.__aoi.flush(self.getRecordedControlMode())
         currentTime = self.currentTime
         if currentTime < self.__replayStartTime:
             self.timeWarp(self.__replayStartTime - currentTime)
@@ -988,9 +955,6 @@ class BattleReplay(object):
             return
         if self.isRecording:
             self.__replayCtrl.onAmmoButtonPressed(idx)
-
-    def __onAmmoButtonPressed(self, idx):
-        self.onAmmoSettingChanged(idx)
 
     def onSniperModeChanged(self, enable):
         if self.isPlaying:
@@ -1060,6 +1024,108 @@ class BattleReplay(object):
     def timeWarp(self, time):
         self.__timeWarp(time)
 
+    def setArenaStatisticsStr(self, arenaUniqueStr):
+        self.__replayCtrl.setArenaStatisticsStr(arenaUniqueStr)
+
+    def setDataCallback(self, name, callback):
+        eventHandler = self.__replayCtrl.getCallbackHandler(name)
+        if eventHandler is None:
+            eventHandler = Event.Event()
+            self.__replayCtrl.setDataCallback(name, eventHandler)
+        eventHandler += callback
+        return
+
+    def serializeCallbackData(self, cbkName, data):
+        self.__replayCtrl.serializeCallbackData(cbkName, data)
+
+    def delDataCallback(self, name, callback):
+        eventHandler = self.__replayCtrl.getCallbackHandler(name)
+        if eventHandler is not None:
+            eventHandler -= callback
+        return
+
+    def onRespawnMode(self, enabled):
+        self.__replayCtrl.onRespawnMode(enabled)
+
+    def stopCameraControl(self):
+        self.__gotoUnboundMode()
+
+    def __gotoUnboundMode(self):
+        self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+        controlMode = self.getRecordedControlMode()
+        isDeathMode = controlMode in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES
+        if not isDeathMode and not self.__isKillCamActive():
+            self.onControlModeChanged('arcade')
+        self.__replayCtrl.isControllingCamera = False
+        self.onControlModeChanged(controlMode)
+        self.__showInfoMessage('replayFreeCameraActivated')
+
+    def __gotoBoundMode(self):
+        self.__replayCtrl.isControllingCamera = True
+        self.onControlModeChanged()
+        self.__showInfoMessage('replaySavedCameraActivated')
+
+    def __getBranchAndRevision(self):
+        from wot_svn import svn
+        svnInstance = svn()
+        if not svnInstance.enabled():
+            return ('undefined', 'undefined')
+        else:
+            info = svnInstance.getInfo()
+            if info is None:
+                return ('undefined', 'undefined')
+            rootPath = info.workingCopyRootAbsPath
+            info = svnInstance.getInfo(rootPath)
+            return ('undefined', 'undefined') if info is None else (info.branchURL, info.lastChangedRevision)
+
+    def __logSVNInfo(self):
+        if self.isServerSideReplay:
+            return
+        else:
+            currentBranch, currentRevision = self.__getBranchAndRevision()
+            replayBranch = self.arenaInfo.get('branchURL')
+            if replayBranch is None:
+                replayBranch = 'undefined'
+            replayRevision = self.arenaInfo.get('lastChangedRevision')
+            if replayRevision is None:
+                replayRevision = 'undefined'
+            _logger.info('Current branch: ' + currentBranch)
+            _logger.info('Current revision: ' + str(currentRevision))
+            _logger.info('Replay branch: ' + replayBranch)
+            _logger.info('Replay revision: ' + str(replayRevision))
+            return
+
+    def __showInfoMessages(self):
+        self.__showInfoMessage('replayControlsHelp1')
+        self.__showInfoMessage('replayControlsHelp2')
+        self.__showInfoMessage('replayControlsHelp3')
+
+    def __getArenaVehiclesInfo(self):
+        vehicles = {}
+        for k, v in BigWorld.player().arena.vehicles.iteritems():
+            vehicle = copy.copy(v)
+            vehicle['vehicleType'] = v['vehicleType'].name if v['vehicleType'] is not None else ''
+            del vehicle['accountDBID']
+            del vehicle['prebattleID']
+            del vehicle['clanDBID']
+            del vehicle['isPrebattleCreator']
+            del vehicle['isAvatarReady']
+            del vehicle['outfitCD']
+            vehicles[k] = vehicle
+
+        return vehicles
+
+    def __onAvatarObserverVehicleChanged(self, vehID):
+        if self.isServerSideReplay:
+            self.__isVehicleChanging = True
+            if vehID != BigWorld.player().playerVehicleID:
+                self.__lastObservedVehicleID = vehID
+            self.__aoi.changeVehicle(vehID)
+        self.__isVehicleChanging = False
+
+    def __onAmmoButtonPressed(self, idx):
+        self.onAmmoSettingChanged(idx)
+
     def __showInfoMessage(self, msg, args=None):
         if not self.isTimeWarpInProgress:
             g_replayEvents.onWatcherNotify(msg, args)
@@ -1076,9 +1142,6 @@ class BattleReplay(object):
     def __goToNextReplay(self):
         self.gameplay.postStateEvent(ReplayEventID.REPLAY_NEXT)
         self.connectionMgr.onDisconnected -= self.__goToNextReplay
-
-    def setArenaStatisticsStr(self, arenaUniqueStr):
-        self.__replayCtrl.setArenaStatisticsStr(arenaUniqueStr)
 
     def __onBattleResultsReceived(self, isPlayerVehicle, results):
         if isPlayerVehicle:
@@ -1148,10 +1211,11 @@ class BattleReplay(object):
         if self.__rewind:
             self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
             playerControlModeName = BigWorld.player().inputHandler.ctrlModeName
-            self.__wasVideoBeforeRewind = playerControlModeName == CTRL_MODE_NAME.VIDEO
-            self.__videoCameraMatrix.set(BigWorld.camera().matrix)
+            self.__ctrlModeBeforeRewind = playerControlModeName
+            self.__cameraMatrixBeforeRewind.set(BigWorld.camera().matrix)
             BigWorld.PyGroundEffectManager().stopAll()
             BigWorld.wg_clearDecals()
+            self.__wasKillCamActived = False
         g_replayEvents.onMuteSound(True)
         self.__enableInGameEffects(False)
         if self.__rewind:
@@ -1201,7 +1265,7 @@ class BattleReplay(object):
         if equipmentId != -1:
             self.__equipmentId = equipmentId
             inputHandler.showClientGunMarkers(False)
-            if self.getControlMode() == CTRL_MODE_NAME.MAP_CASE and inputHandler.ctrl.equipmentID != equipmentId:
+            if self.getRecordedControlMode() == CTRL_MODE_NAME.MAP_CASE and inputHandler.ctrl.equipmentID != equipmentId:
                 inputHandler.ctrl.activateEquipment(equipmentId)
         else:
             inputHandler.showClientGunMarkers(True)
@@ -1211,11 +1275,19 @@ class BattleReplay(object):
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:
             if self.__replayCtrl.isControllingCamera:
-                self.onControlModeChanged(self.getControlMode())
+                self.onControlModeChanged(self.getRecordedControlMode())
 
     def __onObserverVehicleChanged(self):
         if self.__replayCtrl.isControllingCamera and not self.__isAllowedSavedCamera():
             self.__replayCtrl.isControllingCamera = False
+
+    def __onCameraChanged(self, controlModeName, currentVehicleId=None):
+        self.__wasKillCamActived = isKillCamActive = controlModeName == CTRL_MODE_NAME.KILL_CAM
+        if self.__isFinishAfterKillCamEnds and not isKillCamActive:
+            self.__isFinishAfterKillCamEnds = False
+            self.onReplayFinished()
+        if self.__previousMode == CTRL_MODE_NAME.KILL_CAM:
+            self.onControlModeChanged()
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         if self.isRecording:
@@ -1226,27 +1298,6 @@ class BattleReplay(object):
         self.__replayCtrl.arenaPeriod = period
         self.__replayCtrl.arenaLength = periodLength
 
-    def __onBootcampAccountMigrationComplete(self):
-        if self.isRecording:
-            self.stop(delete=True)
-
-    def setDataCallback(self, name, callback):
-        eventHandler = self.__replayCtrl.getCallbackHandler(name)
-        if eventHandler is None:
-            eventHandler = Event.Event()
-            self.__replayCtrl.setDataCallback(name, eventHandler)
-        eventHandler += callback
-        return
-
-    def serializeCallbackData(self, cbkName, data):
-        self.__replayCtrl.serializeCallbackData(cbkName, data)
-
-    def delDataCallback(self, name, callback):
-        eventHandler = self.__replayCtrl.getCallbackHandler(name)
-        if eventHandler is not None:
-            eventHandler -= callback
-        return
-
     def __onTimeWarpFinished(self):
         self.__cleanupAfterTimeWarp()
 
@@ -1255,37 +1306,19 @@ class BattleReplay(object):
         self.__enableInGameEffects(0.0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0)
         mute = not 0.0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0
         g_replayEvents.onMuteSound(mute)
-        if self.__wasVideoBeforeRewind:
-            BigWorld.player().inputHandler.onControlModeChanged('video', prevModeName='arcade', camMatrix=self.__videoCameraMatrix)
-            self.__wasVideoBeforeRewind = False
+        if self.__ctrlModeBeforeRewind in (CTRL_MODE_NAME.VIDEO,):
+            BigWorld.player().inputHandler.onControlModeChanged(self.__ctrlModeBeforeRewind, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self.__cameraMatrixBeforeRewind)
+        self.__ctrlModeBeforeRewind = None
         g_replayEvents.onTimeWarpFinish()
-
-    def onRespawnMode(self, enabled):
-        self.__replayCtrl.onRespawnMode(enabled)
+        return
 
     def __isAllowedSavedCamera(self):
-        return BigWorld.player().arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE if BigWorld.player().isObserver() else True
+        if BigWorld.player().isObserver():
+            return BigWorld.player().arenaBonusType not in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
+        return False if self.getRecordedControlMode() == CTRL_MODE_NAME.KILL_CAM else True
 
-
-def _JSON_Encode(obj):
-    if isinstance(obj, dict):
-        newDict = {}
-        for key, value in obj.iteritems():
-            if isinstance(key, tuple):
-                newDict[str(key)] = _JSON_Encode(value)
-            newDict[key] = _JSON_Encode(value)
-
-        return newDict
-    if isinstance(obj, (list,
-     tuple,
-     set,
-     frozenset)):
-        newList = []
-        for value in obj:
-            newList.append(_JSON_Encode(value))
-
-        return newList
-    return obj
+    def __isKillCamActive(self):
+        return self.getControlMode() == CTRL_MODE_NAME.KILL_CAM
 
 
 def isPlaying():
@@ -1310,3 +1343,24 @@ def isFinished():
 
 def getSpaceID():
     return g_replayCtrl.getSpaceID() if g_replayCtrl is not None else BigWorld.player().spaceID
+
+
+def _JSON_Encode(obj):
+    if isinstance(obj, dict):
+        newDict = {}
+        for key, value in obj.iteritems():
+            if isinstance(key, tuple):
+                newDict[str(key)] = _JSON_Encode(value)
+            newDict[key] = _JSON_Encode(value)
+
+        return newDict
+    if isinstance(obj, (list,
+     tuple,
+     set,
+     frozenset)):
+        newList = []
+        for value in obj:
+            newList.append(_JSON_Encode(value))
+
+        return newList
+    return obj

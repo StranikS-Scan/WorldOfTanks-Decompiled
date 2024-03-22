@@ -3,8 +3,6 @@
 import ResMgr
 from constants import CONTENT_TYPE, IS_SANDBOX
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
-from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
 
 def configure_state():
     content_type = ResMgr.activeContentType()
@@ -25,11 +23,7 @@ def _get_config(is_miniclient, is_tutorial, is_sandbox):
         min_vehicle_level = 1
         max_vehicle_level = 10
         if is_miniclient:
-            bootcampController = dependency.instance(IBootcampController)
-            if bootcampController.isInBootcampAccount():
-                max_vehicle_level = 3
-            else:
-                max_vehicle_level = 2
+            max_vehicle_level = 2
             extraCondition = extraCondition and not vehicle_item.isExcludedFromSandbox
         elif is_tutorial:
             max_vehicle_level = 1

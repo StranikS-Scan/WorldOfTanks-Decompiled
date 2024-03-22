@@ -29,7 +29,7 @@ from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from prestige_system.prestige_common import PrestigeConfig
 from ranked_common import SwitchState
-from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION
+from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION, ADDITIONAL_BONUS_SECTION, ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ENABLE_BADGES
 from schema_manager import getSchemaManager
 from shared_utils import makeTupleByDict, updateDict, findFirst
 from soft_exception import SoftException
@@ -570,15 +570,12 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'economics',
  'url',
  'respawns',
- 'progressionTokenAward',
- 'stpCoinAward',
- 'dailyBonusSTP'))):
+ 'progressionTokenAward'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, stpCoinAward={}, dailyBonusSTP={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={})
         defaults.update(kwargs)
-        cls.__packStpCoinAwardConfig(defaults)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
@@ -592,10 +589,6 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
-
-    @classmethod
-    def __packStpCoinAwardConfig(cls, data):
-        data['stpCoinAward'] = {int(bonusType):value for bonusType, value in data['stpCoinAward'].iteritems()}
 
 
 class _TelecomConfig(object):
@@ -1096,6 +1089,7 @@ class _Comp7QualificationConfig(settingsBlock('_Comp7QualificationConfig', ('bat
 
 class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
  'isShopEnabled',
+ 'isTrainingEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
@@ -1109,12 +1103,14 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
  'squadRatingRestriction',
  'squadSizes',
  'createVivoxTeamChannels',
- 'qualification'))):
+ 'qualification',
+ 'maps',
+ 'tournaments'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, isShopEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
+        return dict(isEnabled=False, isShopEnabled=False, isTrainingEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}), maps=set(), tournaments={})
 
     @classmethod
     def _preprocessData(cls, data):
@@ -1179,11 +1175,12 @@ class WinbackConfig(namedtuple('WinbackConfig', ('isEnabled',
  'winbackShowPromoToken',
  'winbackPromoURL',
  'lastQuestEnabler',
- 'winbackStartingQuest'))):
+ 'winbackStartingQuest',
+ 'chainVersions'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isModeEnabled=False, isWhatsNewEnabled=False, isProgressionEnabled=False, tokenQuestPrefix='', offerTokenPrefix='', winbackAccessToken='', winbackModeAccessTokens=[], winbackBattlesCountToken='', winbackShowPromoToken='', winbackPromoURL='', lastQuestEnabler='', winbackStartingQuest='')
+        defaults = dict(isEnabled=False, isModeEnabled=False, isWhatsNewEnabled=False, isProgressionEnabled=False, tokenQuestPrefix='', offerTokenPrefix='', winbackAccessToken='', winbackModeAccessTokens=[], winbackBattlesCountToken='', winbackShowPromoToken='', winbackPromoURL='', lastQuestEnabler='', winbackStartingQuest='', chainVersions=list())
         defaults.update(kwargs)
         return super(WinbackConfig, cls).__new__(cls, **defaults)
 
@@ -1510,17 +1507,17 @@ class ServerSettings(object):
             LOG_DEBUG(Configs.COMP7_CONFIG.value, self.__serverSettings[Configs.COMP7_CONFIG.value])
             self.__comp7Config = makeTupleByDict(Comp7Config, self.__serverSettings[Configs.COMP7_CONFIG.value])
         else:
-            self.__comp7Config = Comp7Config()
+            self.__comp7Config = Comp7Config.defaults()
         if Configs.COMP7_RANKS_CONFIG.value in self.__serverSettings:
             LOG_DEBUG(Configs.COMP7_RANKS_CONFIG.value, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
             self.__comp7RanksConfig = makeTupleByDict(Comp7RanksConfig, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
         else:
-            self.__comp7RanksConfig = Comp7RanksConfig()
+            self.__comp7RanksConfig = Comp7RanksConfig.defaults()
         if Configs.COMP7_REWARDS_CONFIG.value in self.__serverSettings:
             LOG_DEBUG(Configs.COMP7_REWARDS_CONFIG.value, self.__serverSettings[Configs.COMP7_REWARDS_CONFIG.value])
             self.__comp7RewardsConfig = makeTupleByDict(Comp7RewardsConfig, self.__serverSettings[Configs.COMP7_REWARDS_CONFIG.value])
         else:
-            self.__comp7RewardsConfig = Comp7RewardsConfig()
+            self.__comp7RewardsConfig = Comp7RewardsConfig.defaults()
         if Configs.PERSONAL_RESERVES_CONFIG.value in self.__serverSettings:
             self.__personalReservesConfig = makeTupleByDict(PersonalReservesConfig, self.__serverSettings[Configs.PERSONAL_RESERVES_CONFIG.value])
         else:
@@ -1600,7 +1597,7 @@ class ServerSettings(object):
         if 'unit_assembler_config' in serverSettingsDiff:
             self.__updateUnitAssemblerConfig(serverSettingsDiff)
             self.__serverSettings['unit_assembler_config'] = serverSettingsDiff['unit_assembler_config']
-        if 'comp7_config' in serverSettingsDiff:
+        if Configs.COMP7_CONFIG.value in serverSettingsDiff:
             self.__updateComp7(serverSettingsDiff)
         if Configs.COMP7_RANKS_CONFIG.value in serverSettingsDiff:
             self.__updateComp7PrestigeRanks(serverSettingsDiff)
@@ -1948,12 +1945,6 @@ class ServerSettings(object):
     def isBlueprintDataChangedInDiff(self, diff):
         return 'blueprints_config' in diff
 
-    def isBootcampEnabled(self):
-        return self.__getGlobalSetting('isBootcampEnabled', False)
-
-    def getBootcampBonuses(self):
-        return self.__getGlobalSetting('bootcampBonuses', {})
-
     def isMapsTrainingEnabled(self):
         return self.__getGlobalSetting('isMapsTrainingEnabled', False)
 
@@ -2026,6 +2017,15 @@ class ServerSettings(object):
     def isDailyAttendancesEnabled(self):
         return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableDailyAttendances', False)
 
+    def isWotPlusBattleBonusesEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('battleBonuses', {}).get('enabled', False)
+
+    def getWotPlusBattleBonusesConfig(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('battleBonuses', {})
+
+    def isBadgesEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ENABLE_BADGES, False)
+
     def getWotPlusExclusiveVehicleInfo(self):
         return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('exclusiveVehicle', {})
 
@@ -2043,6 +2043,12 @@ class ServerSettings(object):
 
     def getWotPlusProductCode(self):
         return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('subscriptionProductCode', 'subscription_dev')
+
+    def isAdditionalWoTPlusEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ADDITIONAL_BONUS_SECTION, {}).get(ADDITIONAL_BONUS_ENABLED, False)
+
+    def getAdditionalWoTPlusXPCount(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get(ADDITIONAL_BONUS_SECTION, {}).get(ADDITIONAL_BONUS_APPLY_COUNT, 0) or 0
 
     def isTelecomRentalsEnabled(self):
         return self.__getGlobalSetting(TELECOM_RENTALS_CONFIG, {}).get('enabled', True)
@@ -2158,6 +2164,9 @@ class ServerSettings(object):
 
     def isCrewBooksSaleEnabled(self):
         return self.__getGlobalSetting('isCrewBooksSaleEnabled', False)
+
+    def isJunkCrewConversionEnabled(self):
+        return self.__getGlobalSetting('isJunkCrewConversionEnabled', False)
 
     def isTrophyDevicesEnabled(self):
         return self.__getGlobalSetting('isTrophyDevicesEnabled', False)

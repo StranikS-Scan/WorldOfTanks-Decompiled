@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class TankmanInfoModel(ViewModel):
     __slots__ = ('onPlayUniqueVoice', 'onChangeVehicle', 'onRetrain')
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(TankmanInfoModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -55,53 +55,41 @@ class TankmanInfoModel(ViewModel):
     def setRole(self, value):
         self._setString(6, value)
 
-    def getRealRoleLevel(self):
-        return self._getNumber(7)
+    def getSkillsEfficiency(self):
+        return self._getReal(7)
 
-    def setRealRoleLevel(self, value):
-        self._setNumber(7, value)
-
-    def getNativeTankRealRoleLevel(self):
-        return self._getNumber(8)
-
-    def setNativeTankRealRoleLevel(self, value):
-        self._setNumber(8, value)
-
-    def getRoleLevel(self):
-        return self._getNumber(9)
-
-    def setRoleLevel(self, value):
-        self._setNumber(9, value)
+    def setSkillsEfficiency(self, value):
+        self._setReal(7, value)
 
     def getHasRetrainDiscount(self):
-        return self._getBool(10)
+        return self._getBool(8)
 
     def setHasRetrainDiscount(self, value):
-        self._setBool(10, value)
+        self._setBool(8, value)
 
     def getIsInSkin(self):
-        return self._getBool(11)
+        return self._getBool(9)
 
     def setIsInSkin(self, value):
-        self._setBool(11, value)
+        self._setBool(9, value)
 
     def getIsFemale(self):
-        return self._getBool(12)
+        return self._getBool(10)
 
     def setIsFemale(self, value):
-        self._setBool(12, value)
+        self._setBool(10, value)
 
     def getIsCrewLocked(self):
-        return self._getBool(13)
+        return self._getBool(11)
 
     def setIsCrewLocked(self, value):
-        self._setBool(13, value)
+        self._setBool(11, value)
 
     def getHasUniqueSound(self):
-        return self._getBool(14)
+        return self._getBool(12)
 
     def setHasUniqueSound(self, value):
-        self._setBool(14, value)
+        self._setBool(12, value)
 
     def _initialize(self):
         super(TankmanInfoModel, self)._initialize()
@@ -112,9 +100,7 @@ class TankmanInfoModel(ViewModel):
         self._addStringProperty('fullName', '')
         self._addStringProperty('description', '')
         self._addStringProperty('role', '')
-        self._addNumberProperty('realRoleLevel', 0)
-        self._addNumberProperty('nativeTankRealRoleLevel', 0)
-        self._addNumberProperty('roleLevel', 0)
+        self._addRealProperty('skillsEfficiency', 0.0)
         self._addBoolProperty('hasRetrainDiscount', False)
         self._addBoolProperty('isInSkin', False)
         self._addBoolProperty('isFemale', False)

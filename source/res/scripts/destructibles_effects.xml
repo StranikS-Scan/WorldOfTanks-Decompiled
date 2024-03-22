@@ -5020,6 +5020,62 @@
         </effects>
       </variant1>
     </envAM_005_sign>
+    <dc_spacedArmor>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/dc_spacedArmor_1x1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </dc_spacedArmor>
+    <dc_impact_circle>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/DC_impactPointCircle.eff	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </dc_impact_circle>
+    <dc_impact_dot>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/DC_impactPointDot.eff	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </dc_impact_dot>
+    <dc_impact>
+      <variant1>
+        <stages>
+          <base>	10000.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/dc_impact.eff	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </dc_impact>
     <inf_envSU_83_05_Scaffold2>
       <variant1>
         <stages>

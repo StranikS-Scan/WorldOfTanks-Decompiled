@@ -25,6 +25,7 @@ class PrebattleShellsBlock(ShellsBlock):
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(PrebattleShellsBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setShellState(self.__getShellState(slotItem))
+        model.setIsInfinity(slotItem.descriptor.isInfinite)
 
     def __getShellState(self, slotItem):
         if slotItem.count > 0:

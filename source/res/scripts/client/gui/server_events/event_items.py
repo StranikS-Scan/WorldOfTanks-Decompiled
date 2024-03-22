@@ -21,7 +21,7 @@ from gui.server_events.bonuses import compareBonuses, getBonuses
 from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import compareModifiers, getModifierObj
-from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements
+from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements, MapsTrainingPostBattleConditions
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.system_factory import registerQuestBuilders
@@ -261,6 +261,9 @@ class Group(ServerEventAbstract):
     def isRegularQuest(self):
         return events_helpers.isRegularQuest(self.getID())
 
+    def isMapsTrainingQuest(self):
+        return events_helpers.isMapsTraining(self.getID())
+
     def getLinkedAction(self, actions):
         return getLinkedActionID(self.getID(), actions)
 
@@ -289,6 +292,9 @@ class Group(ServerEventAbstract):
                         uniqueTokens.add(key)
 
         return len(uniqueTokens) == 1 and len(uniqueChildren) > 1
+
+    def getUserName(self):
+        return backport.text(R.strings.static_quests.mt_battle_quests.dyn(self.getID()).name()) if self.isMapsTrainingQuest() else getLocalizedData(self._data, 'name')
 
 
 class Quest(ServerEventAbstract):
@@ -494,21 +500,6 @@ class TokenQuest(Quest):
         return self.accountReqs.isAvailable()
 
 
-class BattleMattersTokenQuest(TokenQuest):
-
-    def _checkConditions(self):
-        res = _isBattleMattersQuestAvailable(self)
-        if res is None:
-            res = super(BattleMattersTokenQuest, self)._checkConditions()
-        return res
-
-    def getOrder(self):
-        return getIdxFromQuestID(self.getID())
-
-    def getConditionLbl(self):
-        return _getConditionLbl(self._data)
-
-
 class BattleMattersQuest(Quest):
 
     def _checkConditions(self):
@@ -517,11 +508,38 @@ class BattleMattersQuest(Quest):
             res = super(BattleMattersQuest, self)._checkConditions()
         return res
 
+    def getUserName(self):
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).name())
+
     def getOrder(self):
         return getIdxFromQuestID(self.getID())
 
+    def getDescription(self):
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).description())
+
     def getConditionLbl(self):
-        return _getConditionLbl(self._data)
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).conditions.description())
+
+
+class BattleMattersTokenQuest(TokenQuest):
+
+    def _checkConditions(self):
+        res = _isBattleMattersQuestAvailable(self)
+        if res is None:
+            res = super(BattleMattersTokenQuest, self)._checkConditions()
+        return res
+
+    def getUserName(self):
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).name()) if self.getID().startswith(BATTLE_MATTERS_QUEST_ID) else getLocalizedData(self._data, 'name')
+
+    def getOrder(self):
+        return getIdxFromQuestID(self.getID())
+
+    def getDescription(self):
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).description())
+
+    def getConditionLbl(self):
+        return backport.text(R.strings.static_quests.battle_matters_quests.dyn(self.getID()).conditions.description())
 
 
 def _getConditionLbl(data):
@@ -1292,6 +1310,17 @@ class MotiveQuest(Quest):
         return getLocalizedData(self._data, 'requirements')
 
 
+class MapsTrainingQuest(Quest):
+
+    def __init__(self, qID, data, progress=None):
+        super(MapsTrainingQuest, self).__init__(qID, data, progress)
+        conds = dict(data['conditions'])
+        self.postBattleCond = MapsTrainingPostBattleConditions(conds['postBattle'], self.preBattleCond, self.getID())
+
+    def getUserName(self):
+        return backport.text(R.strings.static_quests.mt_battle_quests.dyn(self.getID()).name())
+
+
 def _getTileIconPath(tileIconID, prefix, state):
     return '../maps/icons/quests/tiles/%s_%s_%s.png' % (tileIconID, prefix, state)
 
@@ -1433,6 +1462,17 @@ class DailyQuestBuilder(IQuestBuilder):
         return DailyQuest(qID, data, progress)
 
 
+class MapsTrainingQuestBuilder(IQuestBuilder):
+
+    @classmethod
+    def isSuitableQuest(cls, questType, qID):
+        return events_helpers.isMapsTrainingQuest(qID)
+
+    @classmethod
+    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
+        return MapsTrainingQuest(qID, data, progress)
+
+
 registerQuestBuilders((PersonalQuestBuilder,
  GroupQuestBuilder,
  MotiveQuestBuilder,
@@ -1442,7 +1482,8 @@ registerQuestBuilders((PersonalQuestBuilder,
  TokenQuestBuilder,
  BattleMattersQuestBuilder,
  PremiumQuestBuilder,
- DailyQuestBuilder))
+ DailyQuestBuilder,
+ MapsTrainingQuestBuilder))
 
 def createQuest(builders, questType, qID, data, progress=None, expiryTime=None):
     for builder in builders:

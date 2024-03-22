@@ -42,7 +42,7 @@ class ResourceLoaded(object):
 
 if typing.TYPE_CHECKING:
     from BattleRoyaleAbilities import HealthRestoreAbilityMappingEntry
-    from items.artefacts import AdaptationHealthRestore
+    from battle_royale_artefacts import AdaptationHealthRestore
     from vehicle_systems.CompoundAppearance import CompoundAppearance
     from typing import Optional, List
 _logger = logging.getLogger(__name__)

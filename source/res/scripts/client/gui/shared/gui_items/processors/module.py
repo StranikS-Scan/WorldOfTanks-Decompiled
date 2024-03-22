@@ -301,6 +301,19 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         return makeSuccess(auxData=additionalMessages)
 
 
+class EquippedModernizedDeviceDestroyProcessor(CommonModuleInstallProcessor):
+
+    def __init__(self, vehicle, item):
+        super(EquippedModernizedDeviceDestroyProcessor, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), install=False)
+
+    def _successHandler(self, code, ctx=None):
+        return ItemDestroyProcessorMessage(self.item).makeSuccessMsg()
+
+    def _request(self, callback):
+        BigWorld.player().inventory.destroyModernizedOptDev(self.vehicle.invID, self.item.intCD, lambda code, ext=None: self._response(code, callback, ctx=ext))
+        return
+
+
 class TurretInstaller(CommonModuleInstallProcessor):
 
     def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
@@ -466,13 +479,6 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         super(BuyAndInstallItemProcessor, self)._response(code, callback, errStr, ctx)
         from gui.Scaleform.Waiting import Waiting
         Waiting.hide('applyModule')
-
-
-class BCBuyAndInstallItemProcessor(BuyAndInstallItemProcessor):
-    _installConfirmatorPluginCls = _storeConfirmatorPluginCls = plugins.BCBuyAndInstallConfirmator
-
-    def _getItemConfirmationData(self, conflictMsg):
-        return {'price': self._getOpPrice().price.get(self._currency)}
 
 
 class ModuleUpgradeProcessor(ModuleProcessor):

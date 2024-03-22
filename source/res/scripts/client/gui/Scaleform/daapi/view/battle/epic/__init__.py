@@ -32,7 +32,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import overviewmap_screen
     from gui.Scaleform.daapi.view.battle.epic import stats_exchange
     from gui.Scaleform.daapi.view.battle.epic import missions_panel
-    from gui.Scaleform.daapi.view.battle.epic import spectator_view
     from gui.Scaleform.daapi.view.battle.epic import reinforcement_panel
     from gui.Scaleform.daapi.view.battle.epic import battle_loading
     from gui.Scaleform.daapi.view.battle.epic import recovery_panel
@@ -67,7 +66,6 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, EpicStatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.EpicFullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RECOVERY_PANEL, recovery_panel.RecoveryPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL, super_platoon_panel.SuperPlatoonPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK, ingame_rank_panel.InGameRankPanel, ScopeTemplates.DEFAULT_SCOPE),

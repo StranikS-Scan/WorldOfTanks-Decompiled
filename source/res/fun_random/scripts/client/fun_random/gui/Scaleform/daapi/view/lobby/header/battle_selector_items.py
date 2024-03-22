@@ -10,8 +10,6 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SelectorItem, SpecialSquadItem
 from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
 
 def addFunRandomBattleType(items):
     items.append(_FunRandomItem(PREBATTLE_ACTION_NAME.FUN_RANDOM, 2, SELECTOR_BATTLE_TYPES.FUN_RANDOM))
@@ -22,7 +20,6 @@ def addFunRandomSquadType(items):
 
 
 class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
-    __bootcampController = dependency.descriptor(IBootcampController)
     _HIDDEN_STATES = (FunSubModesState.UNDEFINED, FunSubModesState.AFTER_SEASON)
 
     def __init__(self, data, order, selectorType=None, isVisible=True):
@@ -51,7 +48,7 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
 
     def __getIsVisible(self):
         subModesState = self._funRandomCtrl.subModesInfo.getSubModesStatus().state
-        return not self.__bootcampController.isInBootcamp() and subModesState not in self._HIDDEN_STATES
+        return subModesState not in self._HIDDEN_STATES
 
 
 class _FunRandomSquadItem(SpecialSquadItem, FunAssetPacksMixin, FunSubModesWatcher):

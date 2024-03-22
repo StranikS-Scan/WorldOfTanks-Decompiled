@@ -78,10 +78,6 @@ class CommonInfo(shared.UnpackedInfo):
         return self.__finishAllPlayersLeft
 
     @property
-    def isMultiTeamMode(self):
-        return self.__arenaVisitor.gui.isMultiTeam()
-
-    @property
     def numDefended(self):
         return self.__numDefended
 

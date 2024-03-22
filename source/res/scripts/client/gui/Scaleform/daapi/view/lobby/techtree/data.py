@@ -22,7 +22,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from shared_utils.vehicle_utils import ModuleDependencies
-from skeletons.gui.game_control import ITradeInController, IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import ITradeInController, ILimitedUIController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -40,7 +40,6 @@ def _checkCollectibleEnabled(state, lobbyContext=None):
 
 class _ItemsData(object):
     tradeIn = dependency.descriptor(ITradeInController)
-    bootcamp = dependency.descriptor(IBootcampController)
     limitedUIController = dependency.descriptor(ILimitedUIController)
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -638,7 +637,7 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
-            if guiItem.buyPrices.itemPrice.isActionPrice() and not self.bootcamp.isInBootcamp():
+            if guiItem.buyPrices.itemPrice.isActionPrice():
                 state |= NODE_STATE_FLAGS.ACTION
         else:
             if not topLevel:

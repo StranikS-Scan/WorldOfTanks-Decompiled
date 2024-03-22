@@ -49,14 +49,14 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         self.__quantityMap = [None] * self._PANEL_MAX_LENGTH
         return
 
-    def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
+    def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings, isInfinite):
         if intCD in self._cds:
             return
         else:
             slotIdx = self.__getNewSlotIdx(self._AMMO_START_IDX, self._AMMO_END_IDX)
             if slotIdx is None:
                 return
-            self._addShellSlot(slotIdx, intCD, descriptor, quantity, gunSettings)
+            self._addShellSlot(slotIdx, intCD, descriptor, quantity, gunSettings, isInfinite)
             self._mask |= 1 << slotIdx
             return
 

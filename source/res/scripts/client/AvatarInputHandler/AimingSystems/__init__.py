@@ -207,7 +207,7 @@ def getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, vehicleID, mi
 @_trackcalls
 def shootInSkyPointHelper():
     vehicle = BigWorld.player().vehicle
-    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.isTurretDetached:
+    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.appearance.isTurretDetached:
         compoundModel = vehicle.appearance.compoundModel
         shotPos = Math.Vector3(compoundModel.node(TankPartNames.GUN).position)
         shotDesc = vehicle.typeDescriptor.shot
@@ -225,7 +225,7 @@ def shootInSkyPoint(startPos, direction):
     start = startPos
     dirFromCam.normalise()
     vehicle = BigWorld.player().vehicle
-    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.isTurretDetached:
+    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.appearance.isTurretDetached:
         compoundModel = vehicle.appearance.compoundModel
         shotPos = Math.Vector3(compoundModel.node(TankPartNames.GUN).position)
         shotDesc = vehicle.typeDescriptor.shot

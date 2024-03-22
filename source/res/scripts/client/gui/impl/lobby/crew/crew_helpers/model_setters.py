@@ -8,8 +8,9 @@ from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstan
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanCardState, TankmanRole, TankmanLocation, TankmanKind
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import isTmanSkillIrrelevant, getTmanNewSkillCount
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIconBackground
+from gui.shared.gui_items.Tankman import SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
 from helpers import dependency, time_utils
-from items.tankmen import MAX_SKILL_LEVEL
+from items.tankmen import MAX_SKILL_LEVEL, MAX_SKILLS_EFFICIENCY
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import ISpecialSoundCtrl
 from skill_formatters import SkillLvlFormatter
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import Tankman
 BARRACK_RECRUIT_BG_DYN = R.images.gui.maps.icons.tankmen.windows.recruits.barracks
 
-def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, requiredRole=None):
+def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None):
     if tman is None:
         return
     else:
@@ -27,14 +28,11 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, require
         tm.setRole(TankmanRole(tdescr.role))
         tm.setFullUserName(tman.getFullUserNameWithSkin())
         tm.setTankmanKind(TankmanKind.TANKMAN)
-        tm.setSpecializationLevel(tdescr.roleLevel)
-        if tdescr.roleLevel < MAX_SKILL_LEVEL:
-            tm.setHasSpecializationLevelPenalty(True)
-        elif compVeh:
-            if compVeh.isWotPlus or requiredRole != tdescr.role:
-                tm.setHasSpecializationLevelPenalty(False)
-            else:
-                tm.setHasSpecializationLevelPenalty(compVeh.compactDescr != tmanNativeVeh.compactDescr and not (compVeh.isPremium and tmanNativeVeh.type == compVeh.type))
+        if compVeh:
+            isTrained = tdescr.isOwnVehicleOrPremium(compVeh)
+            tm.setSkillsEfficiency(tdescr.skillsEfficiency if isTrained else SKILL_EFFICIENCY_UNTRAINED)
+        else:
+            tm.setSkillsEfficiency(tman.currentVehicleSkillsEfficiency)
         tm.setIsInSkin(tman.isInSkin)
         tm.setLocation(TankmanLocation.DISMISSED if tman.isDismissed else (TankmanLocation.INTANK if tman.isInTank else TankmanLocation.INBARRACKS))
         tm.setIsMainActionDisabled(tman.isLockedByVehicle())
@@ -96,15 +94,19 @@ def setTmanSkillsModel(sm, tman, useOnlyFull=False):
     setSkillsToTmanModel(sm, tman, useOnlyFull)
 
 
-def getCrewWidgetTmanSkillModel(tman, skill=None, isFreeSkill=False):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getCrewWidgetTmanSkillModel(tman, skill=None, isFreeSkill=False, itemsCache=None):
     tsm = CrewWidgetTankmanSkillModel()
     if skill is None:
         tsm.setType(SkillType.NEW)
+        tsm.setIcon(CrewConstants.NEW_SKILL)
         return tsm
     else:
         tsm.setName(skill.name)
         tsm.setIcon(skill.extensionLessIconName)
         tsm.setType(SkillType.IRRELEVANT if not isFreeSkill and isTmanSkillIrrelevant(tman, skill) else (SkillType.LEARNED if skill.isMaxLevel else (SkillType.LEARNING if skill.level < MAX_SKILL_LEVEL else SkillType.LEARNED)))
+        hasBoosters = getBattleBooster(itemsCache.items.getVehicle(tman.vehicleInvID), skill.name) is not None
+        tsm.setHasInstruction(hasBoosters)
         return tsm
 
 
@@ -133,7 +135,7 @@ def setRecruitTankmanModel(tm, recruitInfo, specialSoundCtrl=None):
     tm.setTankmanKind(TankmanKind.RECRUIT)
     tm.setHasVoiceover(bool(recruitInfo.getSpecialVoiceTag(specialSoundCtrl)))
     tman = recruitInfo.getFakeTankman()
-    tm.setSpecializationLevel(tman.roleLevel)
+    tm.setSkillsEfficiency(MAX_SKILLS_EFFICIENCY)
     tankmanSkill = recruitInfo.getTankmanSkill()
     skills = tm.getSkills()
     setRecruiteFreeSkillsToTmanModel(skills, tman, tankmanSkill)

@@ -166,7 +166,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         if arena is not None:
             key = 'playerGroup'
             gameModeStats = dict(((vehID, {key: playerGroup}) for vehID, playerGroup in args.iteritems()))
-            arena.onGameModeSpecificStats(False, gameModeStats)
+            arena.updateGameModeSpecificStats(False, gameModeStats)
         self.onPlayerGroupsUpdated(args)
         playerId = avatar_getter.getPlayerVehicleID()
         if playerId is not 0 and playerId in args:
@@ -237,7 +237,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         gameModeStats = dict(((vehID, {'playerGroup': group,
           'physicalSector': sectorID}) for vehID, (sectorID, group) in args.iteritems()))
         self.onPlayerGroupsUpdated(args)
-        arena.onGameModeSpecificStats(False, gameModeStats)
+        arena.updateGameModeSpecificStats(False, gameModeStats)
 
     def __onLivesPerTeamGroupUpdated(self, args):
         if BigWorld.player().arena.period != ARENA_PERIOD.BATTLE:
@@ -269,4 +269,4 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         if not arena:
             return
         gameModeStats = dict(((vehID, {'hasRespawns': hasRespawns}) for vehID in playerList))
-        arena.onGameModeSpecificStats(False, gameModeStats)
+        arena.updateGameModeSpecificStats(False, gameModeStats)

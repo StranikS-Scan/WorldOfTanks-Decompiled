@@ -88,14 +88,16 @@ class SmokeScreen(object):
     def __loadSmokeScreen(self, equipmentID, position, team):
         smokeScreenEquipment = vehicles.g_cache.equipments()[equipmentID]
         player = BigWorld.player()
-        if team is player.followTeamID:
-            effectName = smokeScreenEquipment.smokeEffectNameAlly
-        else:
-            effectName = smokeScreenEquipment.smokeEffectNameEnemy
-        settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/' + effectName)
-        if settingsData is None:
+        if player.isSimulationSceneActive:
             return
         else:
+            if team is player.followTeamID:
+                effectName = smokeScreenEquipment.smokeEffectNameAlly
+            else:
+                effectName = smokeScreenEquipment.smokeEffectNameEnemy
+            settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/' + effectName)
+            if settingsData is None:
+                return
             smokeEffect = effectsFromSection(settingsData)
             player = BigWorld.player()
             if player is None:

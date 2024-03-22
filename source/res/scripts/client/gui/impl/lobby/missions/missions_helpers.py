@@ -2,11 +2,13 @@
 # Embedded file name: scripts/client/gui/impl/lobby/missions/missions_helpers.py
 import typing
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
-    from typing import Iterable
+    from typing import Iterable, Union
     from gui.impl.gen.view_models.common.missions.event_model import EventModel
-    from gui.server_events.event_items import Quest, DailyQuest
+    from gui.server_events.event_items import Quest, DailyQuest, DailyEpicTokenQuest
+    from gui.server_events.conditions import Token
     from frameworks.wulf.view.array import Array
 __all__ = ('needToUpdateQuestsInModel',)
 NUM_OF_COMMON_DAILY_QUESTS = 3
@@ -19,6 +21,10 @@ def areCommonQuestsCompleted(quests):
 def needToUpdateQuestsInModel(quests, questsInModel):
     questIds = [ q.getID() for q in quests ]
     return __hasProgressChanged(questIds) or __hasStatusChanged(questIds) or __hasDifferentQuests(questIds, __questModelsIdGen(questsInModel))
+
+
+def getDailyEpicQuestToken(quest):
+    return first((token for token in quest.accountReqs.getTokens() if token.isDailyQuest()))
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)

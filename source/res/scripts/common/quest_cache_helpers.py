@@ -46,7 +46,7 @@ def readQuestsFromFile(filePath, eventType):
                 questName = makeI18nString(questName.get('key', ''))
             questDescr = questData.get('description', None)
             if questDescr:
-                questDescr = makeI18nString(questDescr['key'])
+                questDescr = makeI18nString(questDescr.get('key', ''))
             yield (questID,
              questName,
              questDescr,

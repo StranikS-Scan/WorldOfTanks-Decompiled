@@ -79,7 +79,7 @@ class GAME(CONST_CONTAINER):
     CHAT_CONTACTS_LIST_ONLY = 'chatContactsListOnly'
     LENS_EFFECT = 'enableOpticalSnpEffect'
     MINIMAP_ALPHA = 'minimapAlpha'
-    ENABLE_POSTMORTEM_DELAY = 'enablePostMortemDelay'
+    POSTMORTEM_MODE = 'postmortemMode'
     REPLAY_ENABLED = 'replayEnabled'
     SNIPER_ZOOM = 'sniperZoom'
     PRE_COMMANDER_CAM = 'preCommanderCam'
@@ -186,6 +186,7 @@ class CONTROLS(CONST_CONTAINER):
     MOUSE_SNIPER_SENS = 'mouseSniperSens'
     MOUSE_STRATEGIC_SENS = 'mouseStrategicSens'
     MOUSE_ASSIST_AIM_SENS = 'mouseAssistAimSens'
+    MOUSE_FREECAM_SENS = 'mouseDeathFreecamSens'
     MOUSE_HORZ_INVERSION = 'mouseHorzInvert'
     MOUSE_VERT_INVERSION = 'mouseVertInvert'
     BACK_DRAFT_INVERSION = 'backDraftInvert'
@@ -317,8 +318,10 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
     COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
+    CREW_5075_WELCOME_SHOWN = 'crew5075WelcomeShown'
     IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
+    CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -359,8 +362,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
     WOTPLUS_HANGAR_HINT = 'WotPlusHangarHint'
-    PERSONAL_RESERVES_HANGAR_HINT = 'PersonalReservesHangarHint'
-    PERSONAL_RESERVES_ACTIVATION_HINT = 'PersonalReservesActivationHint'
     WOTPLUS_PROFILE_HINT = 'WotPlusProfileHint'
     MODE_SELECTOR_WIDGETS_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
     MAPS_TRAINING_NEWBIE_HINT = 'MapsTrainingNewbieHint'
@@ -382,6 +383,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'
     FL_SCENARIO_HINT = 'FrontlineScenariosHint'
     FL_SCENARIO_HINT_SMALL = 'FrontlineScenariosHintSmallSizes'
+    BATTLE_ROYALE_DYNAMIC_PLATOON_SUB_MODE_HINT = 'BattleRoyaleDynamicPlatoonSubModeHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

@@ -87,12 +87,10 @@ class StatusNotificationItem(object):
         self.__updateCallback = None
         return
 
-    def _hide(self):
-        self._setVisible(False)
-
     def _setVisible(self, value):
-        if self._isVisible != value:
-            self._isVisible = value
+        wasVisible = self.isVisible()
+        self._isVisible = value
+        if wasVisible != self.isVisible():
             self._sendUpdate()
 
     def _sendUpdate(self):

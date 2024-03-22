@@ -15,5 +15,4 @@ class BattleRoyaleMinimapComponent(EpicMinimapComponent):
         setup['airdrop'] = plugins.AirDropPlugin
         setup[plugins.VEHICLES_PLUGIN] = plugins.BattleRoyaleVehiclePlugin
         setup['pinging'] = plugins.BattleRoyalMinimapPingPlugin
-        setup['area'] = plugins.BattleRoyalStaticMarkerPlugin
         return setup

@@ -16,6 +16,13 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
     </onCombatEquipmentUsed>
+    <showHittingArea>
+      <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </showHittingArea>
   </ClientMethods>
   <CellMethods></CellMethods>
   <BaseMethods></BaseMethods>

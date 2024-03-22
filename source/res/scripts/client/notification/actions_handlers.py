@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
-import typing
+from functools import partial
 import BigWorld
-from CurrentVehicle import g_currentVehicle
+import typing
 from adisp import adisp_process
-from constants import PREBATTLE_TYPE
+from CurrentVehicle import g_currentVehicle
+from constants import PREBATTLE_TYPE, PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -22,14 +23,15 @@ from gui.customization.constants import CustomizationModeSource, CustomizationMo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
-from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
+from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showCollectionsMainPage, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showPersonalReservesConversion, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
 from gui.shared.utils import decorators
@@ -50,7 +52,6 @@ from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from uilogging.epic_battle.constants import EpicBattleLogActions, EpicBattleLogButtons, EpicBattleLogKeys
 from uilogging.epic_battle.loggers import EpicBattleLogger
-from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
 from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
 from uilogging.wot_plus.loggers import WotPlusNotificationLogger
@@ -1138,15 +1139,21 @@ class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        notificationData = notification.getSavedData() or {}
+        styleID = notificationData.get('styleID')
         if self.__customizationService.getCtx() is None:
-            self.__customizationService.showCustomization(callback=self.__onCustomizationLoaded)
+            self.__customizationService.showCustomization(callback=partial(self.__onCustomizationLoaded, styleID))
         else:
-            self.__onCustomizationLoaded()
+            self.__onCustomizationLoaded(styleID)
         return
 
     @classmethod
-    def __onCustomizationLoaded(cls):
+    def __onCustomizationLoaded(cls, styleID):
         cls.__customizationService.getCtx().changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES)
+        if styleID:
+            style = cls.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
+            cls.__customizationService.getCtx().selectItem(style.intCD)
 
 
 class _OpenIntegratedAuction(NavigationDisabledActionHandler):
@@ -1185,20 +1192,6 @@ class _OpenIntegratedAuctionFinish(_OpenIntegratedAuction):
         pass
 
 
-class _OpenPersonalReservesConversion(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showPersonalReservesConversion()
-
-
 class _OpenPersonalReservesHandler(NavigationDisabledActionHandler):
 
     @classmethod
@@ -1210,9 +1203,7 @@ class _OpenPersonalReservesHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        uiLogger = PersonalReservesActivationScreenFlowLogger()
-        uiLogger.logOpenFromNotification()
-        shared_events.showPersonalReservesPage()
+        shared_events.showBoostersActivation()
 
 
 class _SeniorityAwardsTokensHandler(NavigationDisabledActionHandler):
@@ -1402,7 +1393,7 @@ class _OpenWotPlusIntroView(ActionHandler):
 
     @classmethod
     def getNotType(cls):
-        return NOTIFICATION_TYPE.WOT_PLUS_INTRO
+        return NOTIFICATION_TYPE.MESSAGE
 
     @classmethod
     def getActions(cls):
@@ -1411,22 +1402,6 @@ class _OpenWotPlusIntroView(ActionHandler):
     def handleAction(self, model, entityID, action):
         super(_OpenWotPlusIntroView, self).handleAction(model, entityID, action)
         WotPlusNotificationLogger().logDetailsButtonClickEvent(NotificationAdditionalData.SPECIAL_NOTIFICATION)
-        showWotPlusIntroView()
-
-
-class _OpenWotDailyRewardView(ActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(_OpenWotDailyRewardView, self).handleAction(model, entityID, action)
-        WotPlusNotificationLogger().logDetailsButtonClickEvent(NotificationAdditionalData.RELEASE_NOTIFICATION)
         showWotPlusIntroView()
 
 
@@ -1458,6 +1433,33 @@ class _OpenPrestigeOnboardingWindow(NavigationDisabledActionHandler):
 
     def doAction(self, model, entityID, action):
         showPrestigeOnboardingWindow()
+
+
+class _OpenPunishmentWindowHandler(ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None:
+            penaltyType = savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PENALTY_TYPE]
+            if penaltyType == PENALTY_TYPES.BAN:
+                if savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_BONUS_TYPE] == ARENA_BONUS_TYPE.COMP7:
+                    showComp7BanWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_PENALTY], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_IS_QUALIFICATION], force=True)
+                else:
+                    showBanWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION], force=True)
+            if penaltyType == PENALTY_TYPES.PENALTY:
+                showPenaltyWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PUNISHMENT_REASON], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.IS_AFK_VIOLATION], force=True)
+            if penaltyType == PENALTY_TYPES.WARNING:
+                showWarningWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PUNISHMENT_REASON], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.IS_AFK_VIOLATION], force=True)
+        return
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1512,7 +1514,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenIntegratedAuction,
  _OpenIntegratedAuctionStart,
  _OpenIntegratedAuctionFinish,
- _OpenPersonalReservesConversion,
  _OpenPersonalReservesHandler,
  _SeniorityAwardsTokensHandler,
  _OpenSeniorityAwards,
@@ -1526,13 +1527,13 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenWinbackSelectableRewardViewFromQuest,
  _OpenAchievementsScreen,
  _OpenWotPlusIntroView,
- _OpenWotDailyRewardView,
  _OpenBarracksHandler,
  _OpenComp7ShopHandler,
  _OpenPrestigeVehicleStats,
  _OpenPrestigeOnboardingWindow,
  _OpenSeniorityAwardsVehicleSelection,
- _OpenSeniorityAwardsPersonalVehicleSelection)
+ _OpenSeniorityAwardsPersonalVehicleSelection,
+ _OpenPunishmentWindowHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

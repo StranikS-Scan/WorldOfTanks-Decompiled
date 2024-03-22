@@ -23,7 +23,7 @@ class EpicMessagePanel(BattleHintComponent, GameMessagesPanelMeta):
         super(EpicMessagePanel, self).__init__(battleHintsQueueParams=BattleHintQueueParams(name='epic', withFadeOut=False))
         self.__blockNewMessages = False
 
-    def sendEndGameMessage(self, winningTeam, reason, extraData):
+    def sendEndGameMessage(self, winningTeam, reason):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
         if winningTeam == 0:
             messageType = GAME_MESSAGES_CONSTS.DRAW

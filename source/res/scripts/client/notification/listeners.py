@@ -38,7 +38,6 @@ from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events import settings as settings_records
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import events, g_eventBus
 from gui.shared.formatters import text_styles, time_formatters
@@ -60,11 +59,11 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -119,6 +118,10 @@ class _StateExtractor(object):
     @classmethod
     def getDailyQuestsState(cls):
         return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
+
+    @classmethod
+    def getNDQState(cls):
+        return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('ndqSwitch', False)
 
     @classmethod
     def getCollectorVehicleState(cls):
@@ -330,11 +333,11 @@ class MissingEventsListener(_NotificationListener):
         super(MissingEventsListener, self).stop()
         self.__notificationMgr.onPostponedQueueUpdated -= self.__onQueueUpdated
 
-    def __onQueueUpdated(self, count, isInBootcamp):
+    def __onQueueUpdated(self, count):
         model = self._model()
         if model is not None:
             model.removeNotification(NOTIFICATION_TYPE.MISSING_EVENTS, MissingEventsDecorator.ENTITY_ID)
-            if not isInBootcamp and count > 0:
+            if count > 0:
                 model.addNotification(MissingEventsDecorator(count))
         return
 
@@ -872,7 +875,6 @@ class _WGNCListenersContainer(_NotificationListener):
 
 class ProgressiveRewardListener(_NotificationListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(ProgressiveRewardListener, self).__init__()
@@ -923,7 +925,7 @@ class ProgressiveRewardListener(_NotificationListener):
             if wasVisited:
                 return
             progressiveConfig = self.__lobbyContext.getServerSettings().getProgressiveRewardConfig()
-            if not progressiveConfig.isEnabled or self.__bootcampController.isInBootcamp():
+            if not progressiveConfig.isEnabled:
                 return
             model.addNotification(ProgressiveRewardDecorator())
             return
@@ -969,6 +971,35 @@ class SwitcherListener(_NotificationListener):
             else:
                 msgTitle, msgBody, msgType = msg[_FeatureState.OFF]
                 SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
+
+
+class NDQSwitcherListener(_NotificationListener):
+    slots = ('__currentState',)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(NDQSwitcherListener, self).__init__()
+        self.__currentState = None
+        return
+
+    def start(self, model):
+        super(NDQSwitcherListener, self).start(model)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.__currentState = _StateExtractor.getNDQState()
+        return True
+
+    def stop(self):
+        self.__currentState = None
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(NDQSwitcherListener, self).stop()
+        return
+
+    def __onServerSettingsChange(self, diff):
+        if DAILY_QUESTS_CONFIG in diff:
+            newState = _StateExtractor.getNDQState()
+            if newState != self.__currentState:
+                SystemMessages.pushMessage(backport.text(R.strings.system_messages.newbie_daily_quests.switch_off.body()), type=SystemMessages.SM_TYPE.Warning)
+                self.__currentState = newState
 
 
 class TankPremiumListener(_NotificationListener):
@@ -1346,7 +1377,6 @@ class RecertificationFormStateListener(_NotificationListener):
 
 class RecruitReminderListener(BaseReminderListener):
     __loginManager = dependency.descriptor(ILoginManager)
-    __bootCampController = dependency.descriptor(IBootcampController)
     __eventsCache = dependency.descriptor(IEventsCache)
     __ENTITY_ID = 0
     _INCREASE_LIMIT_LOGIN = 5
@@ -1396,15 +1426,12 @@ class RecruitReminderListener(BaseReminderListener):
         return new.getSavedData().get('count') == prev.getSavedData().get('count')
 
     def __tryNotify(self, _):
-        if self.__bootCampController.isInBootcamp():
-            return
         recruits = getAllRecruitsInfo(sortByExpireTime=True)
         isAdding = len(recruits) > 0
         self._notifyOrRemove(isAdding, recruits=recruits)
 
 
 class EmailConfirmationReminderListener(BaseReminderListener):
-    __bootCampController = dependency.descriptor(IBootcampController)
     __wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
     __steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
     __ENTITY_ID = 0
@@ -1432,10 +1459,10 @@ class EmailConfirmationReminderListener(BaseReminderListener):
 
     @wg_async
     def __tryNotify(self, *args):
-        if self.__bootCampController.isInBootcamp() or not self.__steamRegistrationCtrl.isSteamAccount:
+        if not self.__steamRegistrationCtrl.isSteamAccount:
             return
         status = yield wg_await(self.__wgnpSteamAccCtrl.getEmailStatus())
-        if not self.__bootCampController.isInBootcamp() and status.typeIs(StatusTypes.ADDED):
+        if status.typeIs(StatusTypes.ADDED):
             self._notify()
 
     def __removeNotify(self, status=None):
@@ -2106,53 +2133,7 @@ class WinbackSelectableRewardReminder(BaseReminderListener):
         self._notifyOrRemove(isAdding)
 
 
-class WotPlusIntroViewListener(_NotificationListener):
-    __wotPlusCtrl = dependency.descriptor(IWotPlusController)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    ATTENDANCE_NOTIFICATION_LIMIT = 11
-
-    def start(self, model):
-        result = super(WotPlusIntroViewListener, self).start(model)
-        self.__addListeners()
-        self._updateNotification()
-        return result
-
-    def stop(self):
-        self.__delListeners()
-        super(WotPlusIntroViewListener, self).stop()
-
-    def _updateNotification(self, *_, **__):
-        model = self._model()
-        if self._shouldNotify() and not self._alreadyNotified():
-            model.addNotification(WotPlusIntroViewMessageDecorator())
-        elif not self._shouldNotify() and self._alreadyNotified():
-            model.removeNotification(NOTIFICATION_TYPE.WOT_PLUS_INTRO, WotPlusIntroViewMessageDecorator.ENTITY_ID)
-
-    @staticmethod
-    def _limitReached():
-        with settings_records.wotPlusSettings() as dt:
-            return dt.amountOfDailyAttendance >= WotPlusIntroViewListener.ATTENDANCE_NOTIFICATION_LIMIT
-
-    def _shouldNotify(self):
-        serverSettings = self.__lobbyContext.getServerSettings()
-        return self.__wotPlusCtrl.isWotPlusEnabled() and self.__wotPlusCtrl.isEnabled() and serverSettings.isDailyAttendancesEnabled() and not self._limitReached()
-
-    def _alreadyNotified(self):
-        return self._model().hasNotification(NOTIFICATION_TYPE.WOT_PLUS_INTRO, WotPlusIntroViewMessageDecorator.ENTITY_ID)
-
-    def __addListeners(self):
-        self.__wotPlusCtrl.onDataChanged += self._updateNotification
-        self.__wotPlusCtrl.onAttendanceUpdated += self._updateNotification
-        self.__lobbyContext.getServerSettings().onServerSettingsChange += self._updateNotification
-
-    def __delListeners(self):
-        self.__wotPlusCtrl.onDataChanged -= self._updateNotification
-        self.__wotPlusCtrl.onAttendanceUpdated -= self._updateNotification
-        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._updateNotification
-
-
 class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
-    __bootCampController = dependency.descriptor(IBootcampController)
     __bmCtrl = dependency.descriptor(IBattleMattersController)
     __gameSession = dependency.descriptor(IGameSessionController)
     __TYPE = NOTIFICATION_TYPE.BATTLE_MATTERS_TASK_REMINDER
@@ -2195,17 +2176,14 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         self.__tryNotify()
 
     def __tryNotify(self):
-        if self.__bootCampController.isInBootcamp():
-            return
-        else:
-            isAdding = self.__bmCtrl.progressWatcher.isJustBackFromBattle(reset=True) and self.__bmCtrl.isActive() and self.__bmCtrl.getCurrentQuest() is not None and self.__isLongTimeWithoutProgress() and not self.__isShowedToday()
-            priority = NotificationPriorityLevel.LOW
-            if isAdding:
-                if self.__bmCtrl.progressWatcher.isFirstBattleWithoutProgressInSession(reset=True):
-                    priority = NotificationPriorityLevel.MEDIUM
-                AccountSettings.setBattleMattersSetting(BattleMatters.REMINDER_LAST_DISPLAY_TIME, time_utils.getServerUTCTime())
-            self._notifyOrRemove(isAdding, priority=priority)
-            return
+        isAdding = self.__bmCtrl.progressWatcher.isJustBackFromBattle(reset=True) and self.__bmCtrl.isActive() and self.__bmCtrl.getCurrentQuest() is not None and self.__isLongTimeWithoutProgress() and not self.__isShowedToday()
+        priority = NotificationPriorityLevel.LOW
+        if isAdding:
+            if self.__bmCtrl.progressWatcher.isFirstBattleWithoutProgressInSession(reset=True):
+                priority = NotificationPriorityLevel.MEDIUM
+            AccountSettings.setBattleMattersSetting(BattleMatters.REMINDER_LAST_DISPLAY_TIME, time_utils.getServerUTCTime())
+        self._notifyOrRemove(isAdding, priority=priority)
+        return
 
     def __isLongTimeWithoutProgress(self):
         battlesWithoutProgress = self.__bmCtrl.progressWatcher.getBattlesCountWithoutProgress()
@@ -2297,10 +2275,10 @@ registerNotificationsListeners((ServiceChannelListener,
  EventLootBoxesListener,
  CollectionsListener,
  WinbackSelectableRewardReminder,
- WotPlusIntroViewListener,
  BattleMattersTaskReminderListener,
  PrestigeListener,
- SeniorityAwardsVehicleSelectionListener))
+ SeniorityAwardsVehicleSelectionListener,
+ NDQSwitcherListener))
 
 class NotificationsListeners(_NotificationListener):
 

@@ -44,8 +44,7 @@ class GameMessagesPanel(GameMessagesPanelMeta):
     def onMessageHiding(self, msgType, msgID):
         pass
 
-    def sendEndGameMessage(self, winningTeam, reason, extraData):
-        battleGoalCompleted = extraData.get('battleGoalCompleted', False)
+    def sendEndGameMessage(self, winningTeam, reason):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
         if winningTeam == 0:
             messageType = GAME_MESSAGES_CONSTS.DRAW
@@ -53,12 +52,7 @@ class GameMessagesPanel(GameMessagesPanelMeta):
             messageType = GAME_MESSAGES_CONSTS.WIN
         else:
             messageType = GAME_MESSAGES_CONSTS.DEFEAT
-        titleRes = R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)()
-        isTechnicalWin = battleGoalCompleted and not isWinner
-        if isTechnicalWin:
-            messageType = GAME_MESSAGES_CONSTS.DRAW
-            titleRes = R.strings.bootcamp.resultlabel.complete()
-        endGameMsgData = {'title': toUpper(backport.text(titleRes)),
+        endGameMsgData = {'title': toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)())),
          'subTitle': makeRegularFinishResultLabel(reason, messageType)}
         msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self._addMessage(msg.getDict())

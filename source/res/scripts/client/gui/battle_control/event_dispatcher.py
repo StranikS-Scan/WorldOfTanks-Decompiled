@@ -43,6 +43,10 @@ def changeAmmunitionSetup(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.CHANGE_AMMUNITION_SETUP, _makeKeyCtx(key=key)), scope=_SCOPE)
 
 
+def killHelpView():
+    _killHelpView()
+
+
 def toggleHelp():
     if _killHelpView():
         return
@@ -57,6 +61,10 @@ def toggleHelpDetailed(ctx):
 
 def setMinimapCmd(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_CMD, _makeKeyCtx(key=key)), scope=_SCOPE)
+
+
+def setMinimapVisibleCmd(key, isDown):
+    g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_VISIBLE_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 
 
 def setRadialMenuCmd(key, isDown):

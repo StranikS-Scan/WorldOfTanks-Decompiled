@@ -37,9 +37,10 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, time_utils, dependency
-from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, filterIntCDsByItemType
-from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags, EMPTY_ITEM_ID
+from items import customizations, filterIntCDsByItemType, getTypeInfoByName, getTypeOfCompactDescr, tankmen, vehicles
+from items.components.c11n_constants import CUSTOM_STYLE_POOL_ID, HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, CustomizationType, ItemTags, SeasonType
 from items.customizations import createNationalEmblemComponents
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILLS_EFFICIENCY
 from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
@@ -60,7 +61,7 @@ if typing.TYPE_CHECKING:
     from vehicle_outfit.outfit import Outfit
     from gui.veh_post_progression.models.progression import PostProgressionItem, AvailabilityCheckResult
     from post_progression_common import VehicleState
-    from typing import Dict, Any, List, Tuple
+    from typing import Any, Dict, List, Optional, Tuple
 _logger = logging.getLogger(__name__)
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -493,13 +494,13 @@ class Vehicle(FittingItem):
             tdescr = tankmen.TankmanDescr(compactDescr=tmanInvData['compDescr'])
             brotherhoodSum += tdescr.skillLevel('brotherhood') or 0
             if tdescr.role == Tankman.ROLES.COMMANDER:
-                factor = tdescr.efficiencyOnVehicle(self.descriptor)
-                commanderEffRoleLevel = round(tdescr.roleLevel * factor)
+                commanderEffRoleLevel = float(tdescr.roleLevel)
 
         brotherhoodLevel = brotherhoodSum / (len(crew) * tankmen.MAX_SKILL_LEVEL)
         bonuses['brotherhood'] = brotherhoodLevel * tankmen.getSkillsConfig().getSkill('brotherhood').crewLevelIncrease
-        commanderEffRoleLevel += bonuses['brotherhood'] + bonuses['equipment'] + bonuses['optDevices']
-        bonuses['commander'] += round(commanderEffRoleLevel / tankmen.COMMANDER_ADDITION_RATIO)
+        if commanderEffRoleLevel > 0:
+            commanderEffRoleLevel += bonuses['brotherhood'] + bonuses['equipment'] + bonuses['optDevices']
+            bonuses['commander'] += round(commanderEffRoleLevel / tankmen.COMMANDER_ADDITION_RATIO)
         return
 
     def getTankmanIDBySlotIdx(self, slotIdx):
@@ -1678,13 +1679,21 @@ class Vehicle(FittingItem):
 
         return (skills, skillLevels)
 
-    def makeCrewMaxRolesLevel(self):
+    def getSimilarCrew(self):
         skills, skillLevels = self.__getCrewSkills()
         levelsByIndexes = {}
+        skillsEfficiencyByIndexes = {}
+        nativeVehsByIdxs = {}
         for tankmanIdx, vehTankman in self.crew:
-            levelsByIndexes[tankmanIdx] = 100 if vehTankman else None
+            if vehTankman:
+                levelsByIndexes[tankmanIdx] = tankmen.MAX_SKILL_LEVEL
+                skillsEfficiencyByIndexes[tankmanIdx] = vehTankman.skillsEfficiencyXP
+                nativeVehsByIdxs[tankmanIdx] = self.itemsCache.items.getItemByCD(vehTankman.vehicleNativeDescr.type.compactDescr)
+            levelsByIndexes[tankmanIdx] = None
+            skillsEfficiencyByIndexes[tankmanIdx] = None
+            nativeVehsByIdxs[tankmanIdx] = None
 
-        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes)
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes, skillsEfficiencyByIdxs=skillsEfficiencyByIndexes, nativeVehsByIdxs=nativeVehsByIdxs)
 
     def getPerfectCrew(self):
         skills, skillLevels = self.__getCrewSkills()
@@ -1716,7 +1725,7 @@ class Vehicle(FittingItem):
                 else:
                     skills.insert(0, skillName)
                     lastSkillLevel = tmanDescr.lastSkillLevel
-                skilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
+                skilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
                 crewItems.append((slotIdx, skilledTman))
 
             return sortCrew(crewItems, crewRoles)
@@ -1733,17 +1742,18 @@ class Vehicle(FittingItem):
                 else:
                     lastSkillLevel = tmanDescr.lastSkillLevel
                 skills.remove(skillName)
-                unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
+                unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
                 crewItems.append((slotIdx, unskilledTman))
             crewItems.append((slotIdx, tman))
 
         return sortCrew(crewItems, crewRoles)
 
-    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None):
+    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None, skillsEfficiencyByIdxs=None):
         skillsByIdxs = skillsByIdxs or {}
         skillLevelsByIdxs = skillLevelsByIdxs or {}
         levelByIdxs = levelByIdxs or {}
         nativeVehsByIdxs = nativeVehsByIdxs or {}
+        skillsEfficiencyByIdxs = skillsEfficiencyByIdxs or {}
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         brotherhoodActive = skillsByIdxs and any((BROTHERHOOD_SKILL_NAME in skills for skills in skillsByIdxs.values()))
@@ -1756,7 +1766,7 @@ class Vehicle(FittingItem):
                     nationID, vehicleTypeID = nativeVehicle.descriptor.type.id
                 else:
                     nationID, vehicleTypeID = self.descriptor.type.id
-                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL)), vehicle=self, vehicleSlotIdx=idx)
+                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL), skillsEfficiencyXP=skillsEfficiencyByIdxs.get(idx, MAX_SKILLS_EFFICIENCY_XP)), vehicle=self, vehicleSlotIdx=idx)
                 if brotherhoodActive and activateBrotherhood:
                     tankman.setBrotherhoodActivity(True)
                     tankman.rebuildSkills()
@@ -2185,5 +2195,5 @@ def getBattlesLeft(vehicle):
     return i18n.makeString('#menu:infinitySymbol') if vehicle.isInfiniteRotationGroup else str(vehicle.rotationBattlesLeft)
 
 
-def getRetrainTankmenIds(vehicle):
-    return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and (not tankman.isMaxRoleEfficiency or not tankman.isInNativeTank) ]
+def getLowEfficiencyTankmenIds(vehicle):
+    return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and tankman.currentVehicleSkillsEfficiency < MAX_SKILLS_EFFICIENCY ]

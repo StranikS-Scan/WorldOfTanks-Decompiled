@@ -131,8 +131,4 @@ def getInfluenceZoneType(pointDescr):
 
 
 def getEffectConfig(influenceZoneType, config):
-    if influenceZoneType == _HEAL_OVER_TIME_ZONE_:
-        pointEffect = config.getRepairPointEffect()
-    else:
-        pointEffect = config.getTrapPointEffect()
-    return pointEffect
+    return config.getRepairPointEffect() if influenceZoneType == _HEAL_OVER_TIME_ZONE_ else None

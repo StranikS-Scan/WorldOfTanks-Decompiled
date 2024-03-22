@@ -7,7 +7,7 @@ from gui.impl.dialogs.dialog_template import DialogTemplateView
 from gui.impl.dialogs.dialog_template_button import CancelButton, CheckMoneyButton
 from gui.impl.dialogs.sub_views.content.simple_text_content import SimpleTextContent
 from gui.impl.dialogs.sub_views.footer.single_price_footer import SinglePriceFooter
-from gui.impl.dialogs.sub_views.icon.item_icon import ItemIcon
+from gui.impl.dialogs.sub_views.icon.item_icon import ItemIcons
 from gui.impl.dialogs.sub_views.title.simple_text_title import SimpleTextTitle
 from gui.impl.dialogs.sub_views.top_right.money_balance import MoneyBalance
 from gui.impl.gen import R
@@ -42,7 +42,7 @@ class DemountOptionalDeviceSinglePriceDialog(DialogTemplateView):
         self.setDisplayFlags(DisplayFlags.RESPONSIVEHEADER.value)
         currenciesList = [CurrencyType.EQUIPCOIN] if self.__item.isModernized else None
         self.setSubView(Placeholder.TOP_RIGHT, MoneyBalance(currenciesList=currenciesList))
-        self.setSubView(Placeholder.ICON, ItemIcon(self.__item.intCD))
+        self.setSubView(Placeholder.ICON, ItemIcons([self.__item.intCD]))
         self.setSubView(Placeholder.TITLE, SimpleTextTitle(getDemountDialogTitle(self.__item, self.__forFitting)))
         self.setSubView(Placeholder.CONTENT, SimpleTextContent(rDK.equipmentDemount.confirmation.description))
         self.setSubView(Placeholder.FOOTER, SinglePriceFooter(rDK.equipmentDemountPrice, self.itemPrice, CurrencySize.BIG))

@@ -177,9 +177,10 @@
       <module>	client.gui.hangar_cameras.hangar_camera_flyby	</module>
       <module>	client.cgf_components.hangar_rules	</module>
       <module>	client.points_of_interest.registrars	</module>
-      <module>	client.vehicle_systems.components.debris_crashed_tracks	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
+      <module>	client.vehicle_systems.components.debris_crashed_track_manager	</module>
+      <module>	client.vehicle_systems.components.vehicle_pickup_manager	</module>
       <module>	client.cgf_components.rocket_acceleration_component	</module>
       <module>	client.cgf_components.zone_components	</module>
       <module>	client.cgf_components.on_shot_components	</module>
@@ -196,6 +197,7 @@
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
       <module>	editor.cgf_editor.entity_follower	</module>
+      <module>	client.cgf_components.visual_effect_component_manager	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -220,11 +222,15 @@
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/lightning.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_enemy.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/lightning_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/lightning_enemy.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/death_zones_rules.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/kamikaze_activated.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/corroding_hit.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/traparea_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/traparea_enemy.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch49_BZ_68_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>

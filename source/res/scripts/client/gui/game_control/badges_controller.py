@@ -86,7 +86,7 @@ class BadgesController(IBadgesController, Notifiable):
             if badge.isSelected:
                 if badge.isPrefixLayout() and badge.isAchieved:
                     self.__currentSelectedPrefix = badge
-                elif badge.isSuffixLayout():
+                elif badge.isSuffixLayout() and badge.isAchieved:
                     self.__currentSelectedSuffix = badge
 
         return

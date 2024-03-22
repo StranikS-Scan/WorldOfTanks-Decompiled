@@ -208,7 +208,7 @@ class RewardStyleState(State):
             data = {'reason': BattlePassRewardReason.STYLE_UPGRADE,
              'chapter': chapterID,
              'prevLevel': prevLevel,
-             'callback': partial(machine.post, StateEvent())}
+             'exitCallback': partial(machine.post, StateEvent())}
             styleToken = get3DStyleProgressToken(self.__battlePass.getSeasonID(), chapterID, level)
             rewards = packToken(styleToken)
             machine.clearChapterStyle()
@@ -237,6 +237,7 @@ class RewardAnyState(State):
             if data is None:
                 data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
             data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('reason'))
+            data['exitCallback'] = self.__onAwardExit
             data['showBuyCallback'] = self.__onShowBuy
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
@@ -256,27 +257,40 @@ class RewardAnyState(State):
         if machine is None:
             return
         else:
+            machine.clearManualFlow()
+            self.__needShowBuy = False
+            return
+
+    def __onAwardClose(self, chapterID, reason):
+        if self.__battlePass.isDisabled():
+            return
+        else:
+            view = None
+            if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+                if self.__battlePass.isHoliday() and self.__battlePass.isCompleted():
+                    view = R.views.lobby.battle_pass.PostProgressionView()
+                else:
+                    view = R.views.lobby.battle_pass.BattlePassProgressionsView()
+            else:
+                chapterID = self.__battlePass.getCurrentChapterID()
+                currentLevel = self.__battlePass.getCurrentLevel()
+                if self.__battlePass.isFinalLevel(chapterID, currentLevel) and not self.__needShowBuy:
+                    if not self.__battlePass.isHoliday():
+                        view = R.views.lobby.battle_pass.ChapterChoiceView()
+                    else:
+                        view = R.views.lobby.battle_pass.PostProgressionView()
+            if view is not None:
+                showMissionsBattlePass(view, chapterID)
+            return
+
+    def __onAwardExit(self):
+        machine = self.getMachine()
+        if machine is not None:
+            machine.post(StateEvent())
             chapterID = self.__battlePass.getCurrentChapterID()
             currentLevel = self.__battlePass.getCurrentLevel()
             if self.__battlePass.isFinalLevel(chapterID, currentLevel):
                 machine.clearSelf()
-                if not self.__battlePass.isDisabled() and not self.__needShowBuy:
-                    view = R.views.lobby.battle_pass.ChapterChoiceView()
-                    if self.__battlePass.isHoliday():
-                        view = R.views.lobby.battle_pass.PostProgressionView()
-                    showMissionsBattlePass(view)
-            machine.clearManualFlow()
-            return
-
-    def __onAwardClose(self, chapterID, reason):
-        machine = self.getMachine()
-        if machine is not None:
-            machine.post(StateEvent())
-        if not self.__battlePass.isDisabled() and reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
-            view = R.views.lobby.battle_pass.BattlePassProgressionsView()
-            if self.__battlePass.isHoliday() and self.__battlePass.isCompleted():
-                view = R.views.lobby.battle_pass.PostProgressionView()
-            showMissionsBattlePass(view, chapterID)
         return
 
     def __onShowBuy(self):

@@ -26,13 +26,12 @@ class RecruitNewTankmanPriceList(BasePriceList):
 
     def _fillPrices(self):
         shopRequester = self._itemsCache.items.shop
-        tankmanCost = shopRequester.tankmanCost
-        defaultTankmanCost = shopRequester.defaults.tankmanCost
+        opts = shopRequester.tankman['recruit']['options']
+        optsDef = shopRequester.defaults.tankman['recruit']['options']
         self._priceData = []
-        for idx, cost in enumerate(tankmanCost):
-            defCost = defaultTankmanCost[idx]
-            itemPrice = ItemPrice(price=Money(credits=cost.get(Currency.CREDITS, 0), gold=cost.get(Currency.GOLD, 0)), defPrice=Money(credits=defCost.get(Currency.CREDITS, 0), gold=defCost.get(Currency.GOLD, 0)))
-            self._priceData.append((itemPrice, cost, idx))
+        for idx, (option, optionDef) in enumerate(zip(opts, optsDef)):
+            itemPrice = ItemPrice(price=Money(credits=option.get(Currency.CREDITS, 0), gold=option.get(Currency.GOLD, 0)), defPrice=Money(credits=optionDef.get(Currency.CREDITS, 0), gold=optionDef.get(Currency.GOLD, 0)))
+            self._priceData.append((itemPrice, option, idx))
 
     def _onTankmanChanged(self, _):
         pass

@@ -31,11 +31,6 @@ class LOG_LEVEL:
     RELEASE = 5
 
 
-class LOG_TAGS:
-    BOOTCAMP = '[BOOTCAMP]'
-    STATISTIC = '[STATISTIC]'
-
-
 if CURRENT_REALM == 'DEV':
     _logLevel = LOG_LEVEL.DEV
 elif CURRENT_REALM == 'ST':

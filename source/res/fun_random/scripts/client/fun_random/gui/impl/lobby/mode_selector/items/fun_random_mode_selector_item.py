@@ -79,7 +79,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
         super(FunRandomSelectorItem, self)._onDisposing()
 
     def __getStatusText(self, status):
-        return backport.text(R.strings.fun_random.modeSelector.notStarted()) if not self._bootcamp.isInBootcamp() and status.state in FunSubModesState.BEFORE_STATES else ''
+        return backport.text(R.strings.fun_random.modeSelector.notStarted()) if status.state in FunSubModesState.BEFORE_STATES else ''
 
     def __getTimeLeftText(self, status):
         return getFormattedTimeLeft(time_utils.getTimeDeltaFromNowInLocal(status.rightBorder)) if status.state in FunSubModesState.INNER_STATES else ''

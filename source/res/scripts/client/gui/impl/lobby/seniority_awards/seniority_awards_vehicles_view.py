@@ -159,8 +159,11 @@ class SeniorityRewardVehiclesView(ViewImpl):
              None,
              None,
              None,
+             None,
+             False,
              True,
-             True)) if tooltipId == SeniorityAwardsTooltipConstants.TOOLTIP_VEHICLE_REWARD else None
+             True,
+             False)) if tooltipId == SeniorityAwardsTooltipConstants.TOOLTIP_VEHICLE_REWARD else None
 
     def __updateVehicles(self, vehicles):
         self.__vehicles = getSeniorityAwardsVehicles(vehicles, sortKey=_vehiclesSortOrder)

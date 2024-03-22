@@ -42,7 +42,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.gui_item_economics import ItemPrice
     from gui.shared.gui_items.loot_box import LootBox, EventLootBoxes
     from gui.shared.gui_items.Tankman import TankmanSkill
-    from gui.shared.money import Money, DynamicMoney
+    from gui.shared.money import Money
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
     from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig
     from items.vehicles import VehicleType
@@ -698,14 +698,24 @@ class IAwardController(IGameController):
 
 
 class IBoostersController(IGameController):
-    onBoosterChangeNotify = None
-    onReserveTimerTick = None
+    onPersonalReserveTick = None
+    onBoostersDataUpdate = None
+    onClanReserveTick = None
     onGameModeStatusChange = None
 
     def isGameModeSupported(self, category):
         raise NotImplementedError
 
     def selectRandomBattle(self):
+        raise NotImplementedError
+
+    def shouldShowOnBoardingCardHint(self, boosterID):
+        raise NotImplementedError
+
+    def setCardHintSeenFor(self, boosterID):
+        raise NotImplementedError
+
+    def getExpirableBoosters(self):
         raise NotImplementedError
 
 
@@ -1093,97 +1103,6 @@ class IRankedBattlesController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
 
-class IBootcampController(IGameController):
-
-    @property
-    def replayCtrl(self):
-        raise NotImplementedError
-
-    @property
-    def nationData(self):
-        raise NotImplementedError
-
-    @property
-    def nation(self):
-        raise NotImplementedError
-
-    @property
-    def version(self):
-        raise NotImplementedError
-
-    def getBootcampOutfit(self, vehDescr):
-        raise NotImplementedError
-
-    def isInBootcamp(self):
-        raise NotImplementedError
-
-    def startBootcamp(self, inBattle):
-        raise NotImplementedError
-
-    def stopBootcamp(self, inBattle):
-        raise NotImplementedError
-
-    def getContext(self):
-        raise NotImplementedError
-
-    def hasFinishedBootcampBefore(self):
-        raise NotImplementedError
-
-    def runCount(self):
-        raise NotImplementedError
-
-    def isReferralEnabled(self):
-        raise NotImplementedError
-
-    def needAwarding(self):
-        raise NotImplementedError
-
-    def setAutomaticStart(self, enable):
-        raise NotImplementedError
-
-    def isInBootcampAccount(self):
-        raise NotImplementedError
-
-    def showActionWaitWindow(self):
-        raise NotImplementedError
-
-    def hideActionWaitWindow(self):
-        raise NotImplementedError
-
-    def getLessonNum(self):
-        raise NotImplementedError
-
-    def getAwardVehicles(self):
-        raise NotImplementedError
-
-    def isEnableCriticalDamageIcon(self):
-        raise NotImplementedError
-
-    def getCheckpoint(self):
-        raise NotImplementedError
-
-    def saveCheckpoint(self, checkpoint):
-        raise NotImplementedError
-
-    def changeNation(self, nationIndex):
-        raise NotImplementedError
-
-    def getDisabledSettings(self):
-        raise NotImplementedError
-
-    def showFinalVideo(self, callback):
-        raise NotImplementedError
-
-    def finishBootcamp(self):
-        raise NotImplementedError
-
-    def runBootcamp(self):
-        raise NotImplementedError
-
-    def canRun(self):
-        raise NotImplementedError
-
-
 class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
     onMarathonDataChanged = None
@@ -1446,8 +1365,12 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
 
 class IBattleRoyaleController(IGameController, ISeasonProvider):
     onUpdated = None
+    onBalanceUpdated = None
     onPrimeTimeStatusUpdated = None
     onWidgetUpdate = None
+    onSubModeUpdated = None
+    onBattleRoyaleSpaceLoaded = None
+    onStatusTick = None
     TOKEN_QUEST_ID = ''
 
     def isEnabled(self):
@@ -1480,7 +1403,22 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def isInBattleRoyaleSquad(self):
         raise NotImplementedError
 
+    def isInRandomSquadSubMode(self):
+        raise NotImplementedError
+
     def selectRoyaleBattle(self):
+        raise NotImplementedError
+
+    def getCurrentSubModeID(self):
+        raise NotImplementedError
+
+    def setCurrentSubModeID(self, selectedSubModeID, updateNeeded=True):
+        raise NotImplementedError
+
+    def selectSubModeBattle(self, selectedSubModeID, **kwargs):
+        raise NotImplementedError
+
+    def isSquadButtonEnabled(self):
         raise NotImplementedError
 
     def isGeneralHangarEntryPoint(self):
@@ -1501,11 +1439,11 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getStats(self):
         raise NotImplementedError
 
-    @staticmethod
-    def getBrCommanderSkills():
+    def getBRCoinBalance(self, default=None):
         raise NotImplementedError
 
-    def openInfoPageWindow(self, isModeSelector=False):
+    @staticmethod
+    def getBrCommanderSkills():
         raise NotImplementedError
 
     @staticmethod
@@ -1524,10 +1462,7 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getProgressionPointsTableData(self):
         raise NotImplementedError
 
-    def hasSTPDailyFactor(self, vehicle):
-        raise NotImplementedError
-
-    def getStpCoinsPerPlace(self, place):
+    def openInfoPageWindow(self, isModeSelector=False):
         raise NotImplementedError
 
 
@@ -1578,82 +1513,12 @@ class IBattleRoyaleTournamentController(IGameController):
         raise NotImplementedError
 
 
-class IBattleRoyaleRentVehiclesController(IGameController):
-    onBalanceUpdated = None
-    onPriceInfoUpdated = None
-    onRentInfoUpdated = None
-    onUpdated = None
-
-    def getRentState(self, intCD=None):
-        raise NotImplementedError
-
-    def isRentable(self, intCD=None):
-        raise NotImplementedError
-
-    def getTestDrivePrice(self, intCD=None):
-        raise NotImplementedError
-
-    def getRentPrice(self, intCD=None):
-        raise NotImplementedError
-
-    def getRentDaysLeft(self, intCD=None):
-        raise NotImplementedError
-
-    def getRentTimeLeft(self, intCD=None):
-        raise NotImplementedError
-
-    def getFormatedRentTimeLeft(self, intCD=None, isRoundUp=True):
-        raise NotImplementedError
-
-    def getPendingRentDays(self, intCD=None):
-        raise NotImplementedError
-
-    def getNextTestDriveDaysTotal(self, intCD=None):
-        raise NotImplementedError
-
-    def getNextRentDaysTotal(self, intCD=None):
-        raise NotImplementedError
-
-    def isInTestDriveRent(self, intCD=None):
-        raise NotImplementedError
-
-    def isEnoughMoneyToPurchase(self, intCD=None, state=None):
-        raise NotImplementedError
-
-    def purchaseRent(self, intCD=None):
-        raise NotImplementedError
-
-    def getBRCoinBalance(self, default=None):
-        raise NotImplementedError
-
-    def getSTPCoinBalance(self, default=None):
-        raise NotImplementedError
-
-    def watchRentVehicles(self, callback, vehIntCDs=None):
-        raise NotImplementedError
-
-    def unwatchRentVehicles(self, callback, runWatch=True):
-        raise NotImplementedError
-
-    def setRentUpdateCurrentVehicleCallback(self, callback):
-        raise NotImplementedError
-
-    def clearRentUpdateCurrentVehicleCallback(self, callback):
-        raise NotImplementedError
-
-
 class IManualController(IGameController):
 
     def isActivated(self):
         raise NotImplementedError
 
     def clear(self):
-        raise NotImplementedError
-
-    def getBootcampRunCount(self):
-        raise NotImplementedError
-
-    def runBootcamp(self):
         raise NotImplementedError
 
     def getNewContentCount(self):
@@ -2222,12 +2087,6 @@ class IDemoAccCompletionController(IGameController):
 
     @isInDemoAccRegistration.setter
     def isInDemoAccRegistration(self, value):
-        raise NotImplementedError
-
-    def runDemoAccRegistration(self):
-        raise NotImplementedError
-
-    def updateOverlayState(self, waitingID=None, onComplete=None):
         raise NotImplementedError
 
 
@@ -2981,6 +2840,8 @@ class IComp7Controller(IGameController, ISeasonProvider):
     onSeasonPointsUpdated = None
     onComp7RewardsConfigChanged = None
     onHighestRankAchieved = None
+    onEntitlementsUpdated = None
+    onTournamentBannerStateChanged = None
 
     @property
     def rating(self):
@@ -3026,6 +2887,10 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def qualificationState(self):
         raise NotImplementedError
 
+    @property
+    def isTournamentBannerEnabled(self):
+        raise NotImplementedError
+
     def isEnabled(self):
         raise NotImplementedError
 
@@ -3033,6 +2898,9 @@ class IComp7Controller(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isFrozen(self):
+        raise NotImplementedError
+
+    def isTrainingEnabled(self):
         raise NotImplementedError
 
     def hasActiveSeason(self):
@@ -3120,6 +2988,12 @@ class IComp7Controller(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isEliteForSeason(self, seasonNumber=None):
+        raise NotImplementedError
+
+    def getTournamentBannerAvailability(self):
+        raise NotImplementedError
+
+    def getTournamentBannerData(self):
         raise NotImplementedError
 
 

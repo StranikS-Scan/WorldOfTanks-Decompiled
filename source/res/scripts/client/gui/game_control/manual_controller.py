@@ -8,7 +8,6 @@ from gui.doc_loaders.manual_xml_data_reader import ManualPageTypes
 from helpers import dependency
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IBootcampController
 from gui.app_loader import sf_lobby
 from gui.doc_loaders import manual_xml_data_reader
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
@@ -19,7 +18,6 @@ _logger = logging.getLogger(__name__)
 
 class ManualController(IManualController):
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(ManualController, self).__init__()
@@ -51,12 +49,10 @@ class ManualController(IManualController):
                 chapterFilename = chapter['filePath']
                 chapterTitle = chapter['uiData'].get('label', '')
 
-        currentChapter = manual_xml_data_reader.getChapterData(chapterFilename, self.pageFilter, self.getBootcampRunCount(), chapterTitle)
+        currentChapter = manual_xml_data_reader.getChapterData(chapterFilename, self.pageFilter, chapterTitle)
         return currentChapter
 
     def pageFilter(self, pageType):
-        if pageType == ManualPageTypes.BOOTCAMP_PAGE:
-            return self.__isBootcampEnabled()
         return self.lobbyContext.getServerSettings().isMapsTrainingEnabled() if pageType == ManualPageTypes.MAPS_TRAINING_PAGE else True
 
     def clear(self):
@@ -65,9 +61,6 @@ class ManualController(IManualController):
 
     def isActivated(self):
         return self.lobbyContext.getServerSettings().isManualEnabled()
-
-    def getBootcampRunCount(self):
-        return self.bootcamp.runCount()
 
     def getChapterView(self):
         windowContainer = self.app.containerManager.getContainer(WindowLayer.TOP_SUB_VIEW)
@@ -100,10 +93,6 @@ class ManualController(IManualController):
     def isChapterViewOnScreen(self):
         return self._isChapterViewOnScreen
 
-    def runBootcamp(self):
-        _logger.debug('ManualChapterView. Requested bootcamp start.')
-        self.bootcamp.runBootcamp()
-
     def showChapterView(self, chapterIndex=0, pageIndex=0):
         self._isChapterViewOnScreen = True
         chapterView = self.getChapterView()
@@ -124,9 +113,6 @@ class ManualController(IManualController):
         if self.__chapters is None:
             self.__chapters = manual_xml_data_reader.getChapters(self.pageFilter)
         return self.__chapters
-
-    def __isBootcampEnabled(self):
-        return self.lobbyContext.getServerSettings().isBootcampEnabled()
 
     def __onChapterClosed(self, _):
         self._isChapterViewOnScreen = False

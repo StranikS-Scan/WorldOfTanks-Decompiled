@@ -14,13 +14,11 @@ _CHAPTERS_LIST_XML = 'chapters_list.xml'
 
 class ManualPageTypes(object):
     HINTS_PAGE = 'hints_page'
-    BOOTCAMP_PAGE = 'bootcamp_page'
     MAPS_TRAINING_PAGE = 'maps_training_page'
     VIDEO_PAGE = 'video_page'
 
 
 _MANUAL_LESSON_TEMPLATES = {ManualPageTypes.HINTS_PAGE: MANUAL_TEMPLATES.HINTS,
- ManualPageTypes.BOOTCAMP_PAGE: MANUAL_TEMPLATES.BOOTCAMP,
  ManualPageTypes.MAPS_TRAINING_PAGE: MANUAL_TEMPLATES.MAPS_TRAINING,
  ManualPageTypes.VIDEO_PAGE: MANUAL_TEMPLATES.VIDEO}
 
@@ -41,11 +39,11 @@ def getChaptersIndexesList(filterFunction):
     return [ chapter['uiData']['index'] for chapter in chaptersData ]
 
 
-def getChapterData(chapterFileName, filterFunction, bootcampRunCount, chapterTitle=''):
+def getChapterData(chapterFileName, filterFunction, chapterTitle=''):
     _logger.debug('ManualXMLDataReader: requested chapter data: %s', chapterFileName)
     chapterPath = _CHAPTERS_DATA_PATH + chapterFileName
     with resource_helper.root_generator(chapterPath) as ctx, root:
-        chapter = __readChapter(ctx, root, filterFunction, bootcampRunCount, chapterTitle)
+        chapter = __readChapter(ctx, root, filterFunction, chapterTitle)
     return chapter
 
 
@@ -53,7 +51,7 @@ def __isNew(lessonCtx, lessonSection):
     return bool(__getCustomSectionValue(lessonCtx, lessonSection, 'new', safe=True))
 
 
-def __readChapter(ctx, root, filterFunction, bootcampRunCount, chapterTitle=''):
+def __readChapter(ctx, root, filterFunction, chapterTitle=''):
     pages = []
     details = []
     index = 0
@@ -73,9 +71,6 @@ def __readChapter(ctx, root, filterFunction, bootcampRunCount, chapterTitle=''):
         contentRendererLinkage = ''
         if template == ManualPageTypes.MAPS_TRAINING_PAGE:
             contentRendererData = {'text': backport.text(R.strings.maps_training.manualPage.button())}
-            contentRendererLinkage = _MANUAL_LESSON_TEMPLATES.get(template)
-        elif template == ManualPageTypes.BOOTCAMP_PAGE:
-            contentRendererData = __getBootcampRendererData(bootcampRunCount)
             contentRendererLinkage = _MANUAL_LESSON_TEMPLATES.get(template)
         elif template == ManualPageTypes.VIDEO_PAGE:
             contentRendererData = __getVideoRendererData(lessonCtx, lessonSection)
@@ -174,14 +169,6 @@ def __getVideoRendererData(lessonCtx, lessonSection):
         preview = ''
     return {'previewImage': preview,
      'videoUrl': video}
-
-
-def __getBootcampRendererData(bootcampRunCount):
-    if bootcampRunCount == 0:
-        bootcampText = translation('#bootcamp:request/bootcamp/start')
-    else:
-        bootcampText = translation('#bootcamp:request/bootcamp/return')
-    return {'text': bootcampText}
 
 
 def __getHintsRendererData(lessonCtx, lessonSection):

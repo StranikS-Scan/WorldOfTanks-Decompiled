@@ -7,12 +7,10 @@ from Event import Event
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.account_completion.common.field_email_model import FieldEmailModel
-from gui.impl.gen.view_models.views.lobby.account_completion.common.field_password_model import FieldPasswordModel
 from gui.impl.lobby.account_completion.common import errors
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.account_completion.common.base_field_model import BaseFieldModel
 _EMAIL_PATTERN = re.compile('^[a-z0-9_-]+(\\.[a-z0-9_-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,4}$', re.I)
-_PASSWORD_PATTERN = re.compile('^[\\x21-\\x7e]+$', re.I)
 
 class BaseFieldPresenter(object):
     __metaclass__ = ABCMeta
@@ -103,58 +101,6 @@ class EmailPresenter(BaseFieldPresenter):
             self.viewModel.setErrorMessage(errors.emailIsTooShort())
         elif not _EMAIL_PATTERN.match(self._value):
             self.viewModel.setErrorMessage(errors.emailIsInvalid())
-
-
-class PasswordPresenter(BaseFieldPresenter):
-    __slots__ = ('onPasswordVisibilityChanged', '_isPasswordVisible', '_wasPasswordVisibilityChanged')
-
-    def __init__(self, viewModel):
-        super(PasswordPresenter, self).__init__(viewModel)
-        self.onPasswordVisibilityChanged = Event()
-        self._isPasswordVisible = False
-        self._wasPasswordVisibilityChanged = False
-        viewModel.setName(R.strings.dialogs.accountCompletion.password.fieldName())
-        viewModel.setIsPasswordVisible(self._isPasswordVisible)
-        viewModel.onEyeClicked += self._eyeClickHandler
-
-    def dispose(self):
-        self.viewModel.onEyeClicked -= self._eyeClickHandler
-        super(PasswordPresenter, self).dispose()
-
-    @property
-    def viewModel(self):
-        return self._viewModel
-
-    @property
-    def isPasswordVisible(self):
-        return self._isPasswordVisible
-
-    @property
-    def wasPasswordVisibilityChanged(self):
-        return self._wasPasswordVisibilityChanged
-
-    def clear(self):
-        self._isPasswordVisible = False
-        self._wasPasswordVisibilityChanged = False
-        super(PasswordPresenter, self).clear()
-
-    def _validateChangedValue(self):
-        if self.value and not _PASSWORD_PATTERN.match(self.value):
-            self.viewModel.setErrorMessage(errors.passwordIsInvalid())
-        elif len(self.value) > FieldPasswordModel.PASSWORD_LEN_MAX:
-            self.viewModel.setErrorMessage(errors.passwordIsTooLong())
-        else:
-            self.viewModel.setErrorMessage('')
-
-    def _validateValueWhenFocusChanged(self):
-        if len(self._value) < FieldPasswordModel.PASSWORD_LEN_MIN:
-            self.viewModel.setErrorMessage(errors.passwordIsTooShort())
-
-    def _eyeClickHandler(self):
-        self._wasPasswordVisibilityChanged = True
-        self._isPasswordVisible = not self._isPasswordVisible
-        self.viewModel.setIsPasswordVisible(self._isPasswordVisible)
-        self.onPasswordVisibilityChanged()
 
 
 class CodePresenter(BaseFieldPresenter):

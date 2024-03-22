@@ -10,7 +10,7 @@ class AwardsViewModel(ViewModel):
     CLOSE_REASON_CANCEL = 'cancel'
     CLOSE_REASON_CONFIRM = 'confirm'
 
-    def __init__(self, properties=6, commands=2):
+    def __init__(self, properties=8, commands=2):
         super(AwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,11 +47,23 @@ class AwardsViewModel(ViewModel):
     def setSubTitle(self, value):
         self._setResource(4, value)
 
-    def getButtonTitle(self):
+    def getUnderTitle(self):
         return self._getResource(5)
 
-    def setButtonTitle(self, value):
+    def setUnderTitle(self, value):
         self._setResource(5, value)
+
+    def getBottomNote(self):
+        return self._getResource(6)
+
+    def setBottomNote(self, value):
+        self._setResource(6, value)
+
+    def getButtonTitle(self):
+        return self._getResource(7)
+
+    def setButtonTitle(self, value):
+        self._setResource(7, value)
 
     def _initialize(self):
         super(AwardsViewModel, self)._initialize()
@@ -60,6 +72,8 @@ class AwardsViewModel(ViewModel):
         self._addResourceProperty('background', R.invalid())
         self._addResourceProperty('title', R.invalid())
         self._addResourceProperty('subTitle', R.invalid())
+        self._addResourceProperty('underTitle', R.invalid())
+        self._addResourceProperty('bottomNote', R.invalid())
         self._addResourceProperty('buttonTitle', R.invalid())
         self.onAnimationEnded = self._addCommand('onAnimationEnded')
         self.onClose = self._addCommand('onClose')

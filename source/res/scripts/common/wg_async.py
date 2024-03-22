@@ -7,7 +7,7 @@ from soft_exception import SoftException
 import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps, partial
-from constants import IS_DEVELOPMENT, IS_CLIENT
+from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV
 
 def wg_async(func):
@@ -253,14 +253,14 @@ class _Future(object):
 
     def set_timeout(self, timeout):
         if not self.__result_set:
-            if IS_CLIENT:
+            if IS_CLIENT or IS_BOT:
                 self.__timerID = BigWorld.callback(timeout, self.__expire)
             else:
                 self.__timerID = BigWorld.addTimer(self.__expire, timeout)
 
     def __cancel_timeout(self):
         if self.__timerID is not None:
-            if IS_CLIENT:
+            if IS_CLIENT or IS_BOT:
                 from shared_utils import safeCancelCallback
                 safeCancelCallback(self.__timerID)
             else:

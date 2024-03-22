@@ -6,7 +6,6 @@ from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ACHIEVEMENTS_INFO, ACHIEVEMENTS_WTR_RANKS, ACHIEVEMENTS_WTR_INFO, ACHIEVEMENTS_WTR_PREV_POINTS, ACHIEVEMENTS_WTR_PREV_RANK, ACHIEVEMENTS_WTR_PREV_SUB_RANK, ACHIEVEMENTS_RATING_CALCULATED_STATUS, ACHIEVEMENTS_MEDAL_ADDED_STATUS, ACHIEVEMENTS_EDITING_ENABLED_STATUS, ACHIEVEMENTS_RATING_CHANGED_STATUS, ACHIEVEMENTS_FIRST_ENTRY_STATUS, ACHIEVEMENTS_MEDAL_COUNT_INFO, PREV_ACHIEVEMENTS_NAME_LIST, ACHIEVEMENTS_WTR_PREV_POINTS_NOTIFICATION, ACHIEVEMENTS_INITIAL_BATTLE_COUNT, ACHIEVEMENTS_MAX_WTR_POINTS
 from achievements20.WTRStageChecker import WTRStageChecker
-from bootcamp.Bootcamp import g_bootcamp
 from constants import Configs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.achievements.achievements_constants import Achievements20SystemMessages
@@ -14,7 +13,7 @@ from gui.impl.lobby.achievements.notifications_utils import NotificationsRulePro
 from gui.impl.lobby.achievements.profile_utils import isWTREnabled, getStagesOfWTR, getNormalizedValue
 from helpers import dependency, server_settings
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from skeletons.gui.game_control import IAchievements20Controller, IBootcampController
+from skeletons.gui.game_control import IAchievements20Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -47,8 +46,6 @@ class Achievements20Controller(IAchievements20Controller):
         return
 
     def onLobbyStarted(self, ctx):
-        if g_bootcamp.isRunning():
-            return
         self.__accSettings.start()
         if not self.__newSessionStarted and self.getFirstEntryStatus() != FLAG_STATUS.VISITED:
             self.setFirstEntryStatus(FLAG_STATUS.UNSET)
@@ -234,7 +231,6 @@ class Achievements20Controller(IAchievements20Controller):
 
 class Achievements20SettingsManager(object):
     __slots__ = ('__settings',)
-    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         self.__settings = dict()
@@ -244,8 +240,7 @@ class Achievements20SettingsManager(object):
 
     def stop(self):
         if self.__settings:
-            if not self.__bootcampController.isInBootcamp():
-                AccountSettings.setSettings(ACHIEVEMENTS_INFO, self.__settings)
+            AccountSettings.setSettings(ACHIEVEMENTS_INFO, self.__settings)
             self.__settings.clear()
 
     def getFirstEntryStatus(self):

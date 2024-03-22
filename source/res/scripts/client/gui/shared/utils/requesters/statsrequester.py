@@ -114,6 +114,15 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return max(maxCount - self.getCacheValue('applyAdditionalXPCount', maxCount), 0)
 
     @property
+    def applyAdditionalWoTPlusXPCount(self):
+        maxCount = self.lobbyContext.getServerSettings().getAdditionalWoTPlusXPCount()
+        return max(maxCount - self.getCacheValue('applyAdditionalWoTPlusXPCount', maxCount), 0)
+
+    @property
+    def dailyAppliedAdditionalXP(self):
+        return self.dummySessionStats.get('totalDailyAppliedAdditionalXP', 0)
+
+    @property
     def multipliedRankedVehicles(self):
         return self.getCacheValue('multipliedRankedBattlesVehs', set())
 
@@ -293,10 +302,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('comp7', {})
 
     @property
-    def tutorialsCompleted(self):
-        return self.getCacheValue('tutorialsCompleted', 0)
-
-    @property
     def oldVehInvIDs(self):
         return self.getCacheValue('oldVehInvIDs', ())
 
@@ -333,10 +338,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def luiVersion(self):
         return self.getCacheValue('limitedUi', {}).get('ver', 1)
-
-    @property
-    def defaultSettingsGroup(self):
-        return self.getCacheValue('abFeatureTest', {}).get('defaultSettings', 'new')
 
     @property
     def newbieHintsGroup(self):

@@ -60,4 +60,4 @@ class ArenaInfoComp7Component(DynamicScriptComponent):
              Comp7Keys.IS_QUAL_ACTIVE: rank['isQualActive']}
 
         if stats:
-            arena.onGameModeSpecificStats(isStatic=True, stats=stats)
+            arena.updateGameModeSpecificStats(isStatic=True, stats=stats)

@@ -41,7 +41,7 @@ class TabsId(object):
 TABS = OrderedDict([(TabsId.PERSONAL_FILE, PersonalFileView), (TabsId.PERSONAL_DATA, PersonalDataView), (TabsId.SERVICE_RECORD, ServiceRecordView)])
 
 class TankmanContainerView(BaseCrewView):
-    __slots__ = ('_tankmanInvID', 'vehicleID', '_activeTab', '_createdTabs', '_previousViewID', 'paramsView', 'onTabChanged')
+    __slots__ = ('_tankmanInvID', 'vehicleID', '_activeTab', '_createdTabs', 'paramsView', 'onTabChanged')
     itemsCache = dependency.descriptor(IItemsCache)
     gui = dependency.descriptor(IGuiLoader)
 
@@ -50,7 +50,6 @@ class TankmanContainerView(BaseCrewView):
         super(TankmanContainerView, self).__init__(settings)
         tankmanInvID = kwargs.get('tankmanInvID', NO_TANKMAN)
         currentViewID = kwargs.get('currentViewID', None)
-        self._previousViewID = kwargs.get('previousViewID', None)
         self._activeTab = currentViewID if currentViewID in TabsId.ALL else TabsId.DEFAULT
         self._tankmanInvID = tankmanInvID
         self.vehicleID = self.itemsCache.items.getTankman(tankmanInvID).vehicleInvID

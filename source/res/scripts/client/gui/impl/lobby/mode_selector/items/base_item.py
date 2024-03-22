@@ -16,7 +16,7 @@ from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
 from helpers import dependency, i18n, time_utils
-from skeletons.gui.game_control import IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import ILimitedUIController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Type, Union
@@ -43,7 +43,6 @@ class ModeSelectorItem(object):
     __slots__ = ('_viewModel', '_initialized', '_priority', '_preferredColumn')
     _VIEW_MODEL = None
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.DEFAULT
-    _bootcamp = dependency.descriptor(IBootcampController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
@@ -84,7 +83,7 @@ class ModeSelectorItem(object):
 
     @property
     def disabledTooltipText(self):
-        return backport.text(R.strings.tooltips.mode_selector.unavailable.bootcamp()) if self._bootcamp.isInBootcamp() else self._getDisabledTooltipText()
+        return self._getDisabledTooltipText()
 
     def getFactory(self):
 
@@ -129,12 +128,11 @@ class ModeSelectorItem(object):
         return GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)) is not None
 
     def _isNewLabelVisible(self):
-        isInBootcamp = self._bootcamp.isInBootcamp()
         isNewbie = not self.__limitedUIController.isRuleCompleted(LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT)
-        return self._getIsNew() and not isInBootcamp and not isNewbie
+        return self._getIsNew() and not isNewbie
 
     def _isDisabled(self):
-        return self._getIsDisabled() or self._bootcamp.isInBootcamp()
+        return self._getIsDisabled()
 
     def _onDisposing(self):
         pass

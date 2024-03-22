@@ -6,10 +6,9 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IBootcampController
 from tutorial.logger import LOG_ERROR
 from tutorial.data.conditions import CONDITION_STATE
-__all__ = ('getUnlockedItems', 'getItemByIntCD', 'getVehicleByIntCD', 'getItemStateGetter', 'getAttribute')
+__all__ = ('getUnlockedItems', 'getItemByIntCD', 'getVehicleByIntCD', 'getItemStateGetter')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getUnlockedItems(itemsCache=None):
@@ -30,36 +29,6 @@ def getVehicleByIntCD(intCD):
         LOG_ERROR('IntCD of vehicle is invalid', intCD)
         vehicle = None
     return vehicle
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _getTankmanID(vehicleCD, tankmanRole, itemsCache=None):
-    if itemsCache is None:
-        return
-    else:
-        vehicle = getVehicleByIntCD(vehicleCD)
-        if vehicle is not None and vehicle.invID != -1:
-            for _, tman in vehicle.crew:
-                if tman.isInTank and tman.vehicleInvID != vehicle.invID:
-                    continue
-                if tman.descriptor.role == tankmanRole:
-                    return tman.invID
-
-        return
-
-
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
-def _getBootcampNationID(bootcampCtrl=None):
-    return None if bootcampCtrl is None else bootcampCtrl.nation
-
-
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController)
-def _getBootcampNationDataField(fieldName, bootcampCtrl=None):
-    if bootcampCtrl is None:
-        return
-    else:
-        nationData = bootcampCtrl.nationData
-        return None if nationData is None else nationData.get(fieldName, None)
 
 
 def _isItemSelected(intCD):
@@ -195,21 +164,3 @@ def getItemStateGetter(state):
     else:
         getter = None
     return getter
-
-
-_AVAILABLE_ATTRIBUTES = {'TankmanID': _getTankmanID,
- 'BootcampNationID': _getBootcampNationID,
- 'BootcampNationDataField': _getBootcampNationDataField}
-
-def getAttribute(name, *args):
-    if name in _AVAILABLE_ATTRIBUTES:
-        try:
-            result = _AVAILABLE_ATTRIBUTES[name](*args)
-        except Exception as e:
-            LOG_ERROR('Can not get game attribute', name, e.message)
-            result = None
-
-    else:
-        LOG_ERROR('Game attribute is not found', name)
-        result = None
-    return result

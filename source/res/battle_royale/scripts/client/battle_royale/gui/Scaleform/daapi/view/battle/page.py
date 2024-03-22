@@ -72,6 +72,7 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
            _DynamicAliases.MINEFIELD_MSG_PUBLISHER)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,)),
+         (BATTLE_CTRL_ID.CALLOUT, (BATTLE_VIEW_ALIASES.CALLOUT_PANEL,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
          (BATTLE_CTRL_ID.RADAR_CTRL, (BATTLE_VIEW_ALIASES.RADAR_BUTTON, _DynamicAliases.RADAR_SOUND_PLAYER)),
          (BATTLE_CTRL_ID.SPAWN_CTRL, (BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN,
@@ -154,26 +155,28 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self._switchToPostmortem()
 
     @property
-    def isPostmortemTispVisible(self):
-        if avatar_getter.isObserverSeesAll():
-            return False
+    def isPostmortemTipsVisible(self):
         bonusType = BigWorld.player().arenaBonusType
         isTournament = bonusType in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
         vehicleCountCtrl = self.sessionProvider.dynamic.vehicleCount
         arenaDP = self.sessionProvider.getArenaDP()
-        if vehicleCountCtrl and vehicleCountCtrl.getTeamCount() <= 1 and arenaDP.getVehicleInfo().isAlive() or isTournament:
+        if vehicleCountCtrl and vehicleCountCtrl.getTeamCount() <= 1 and arenaDP.getVehicleInfo().isAlive():
             return False
-        if not (self._canShowPostmortemTips() and not self.__isFullStatsShown and not self.__isWinnerScreenShown and BigWorld.player().isFollowWinner()):
+        if not (self._canShowPostmortemTips() and not self.__isFullStatsShown and not self.__isWinnerScreenShown and (BigWorld.player().isFollowWinner() or isTournament)):
             return False
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         if componentSystem and componentSystem.battleRoyaleComponent:
-            playerTeam = self.sessionProvider.getArenaDP().getVehicleInfo().team
+            observedVehicleID = BigWorld.player().getObservedVehicleID()
+            observedVehicleTeam = self.sessionProvider.getArenaDP().getVehicleInfo(observedVehicleID).team
             defeatedTeams = set(componentSystem.battleRoyaleComponent.defeatedTeams)
-            return playerTeam in defeatedTeams
+            return observedVehicleTeam in defeatedTeams
         return False
 
+    def _canShowPostmortemTips(self):
+        return True
+
     def _updatePostmortemTips(self):
-        self.as_setPostmortemTipsVisibleS(self.isPostmortemTispVisible)
+        self.as_onPostmortemActiveS(self.isPostmortemTipsVisible)
 
     def _onDefeatedTeamsUpdated(self, *_):
         self._updatePostmortemTips()
@@ -197,21 +200,33 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self._updatePostmortemTips()
             return
 
+    def _toggleRadialMenu(self, isShown, allowAction=True):
+        radialMenuLinkage = BATTLE_VIEW_ALIASES.RADIAL_MENU
+        radialMenu = self.getComponent(radialMenuLinkage)
+        if radialMenu is None:
+            return
+        else:
+            componentsVisibility = self.as_getComponentsVisibilityS()
+            if BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN in componentsVisibility or self._fullStatsAlias and self._fullStatsAlias in componentsVisibility or self.__isWinnerScreenShown:
+                return
+            if isShown:
+                radialMenu.show()
+                self.app.enterGuiControlMode(radialMenuLinkage, cursorVisible=False, enableAiming=False)
+            else:
+                self.app.leaveGuiControlMode(radialMenuLinkage)
+                radialMenu.hide(allowAction)
+            return
+
     def _populate(self):
         super(BattleRoyalePage, self)._populate()
         progressionWindowCtrl = self.__getProgressionWindowCtrl()
         if progressionWindowCtrl:
             self.__es.subscribeToEvent(progressionWindowCtrl.onTriggered, self.__onConfWindowTriggered)
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(BattleRoyalePlayerFullNameFormatter())
-        if avatar_getter.isObserverSeesAll():
-            self.__es.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
         if self.sessionProvider.isReplayPlaying:
             self.__es.subscribeToEvent(g_replayEvents.onTimeWarpStart, self.__onTimeWarpStart)
         self.__brSoundControl = BRBattleSoundController()
         self.__brSoundControl.init()
-        crosshairCtrl = self.sessionProvider.shared.crosshair
-        if crosshairCtrl:
-            self.__es.subscribeToEvent(crosshairCtrl.onCrosshairViewChanged, self.__onCrosshairViewChanged)
 
     def _onWinScreenReload(self):
         alias = BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS
@@ -240,6 +255,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         if spawnCtrl and self not in spawnCtrl.viewComponents:
             spawnCtrl.addRuntimeView(self)
             self._battleSessionES.addCallbackOnUnsubscribe(lambda : spawnCtrl.removeRuntimeView(self))
+        if avatar_getter.isObserverSeesAll():
+            self._battleSessionES.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -259,6 +276,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         super(BattleRoyalePage, self)._onBattleLoadingFinish()
         if not self.__canShowHUD and not BigWorld.player().observerSeesAll():
             self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN})
+        if BigWorld.player().isObserver() and arenaPeriod != ARENA_PERIOD.BATTLE:
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL})
 
     def _setComponentsVisibility(self, visible=None, hidden=None):
         if self.__isWinnerScreenShown:
@@ -289,12 +308,20 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return
 
     def _switchToPostmortem(self):
+        self.__hideRadialMenu()
+        if self._hasCalloutPanel() and self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.CALLOUT_PANEL):
+            self._processCallout(needShow=False)
         BigWorld.player().setIsObserver()
 
-    def __onCrosshairViewChanged(self, viewID):
-        self.as_setCrosshairModeS(viewID)
+    def _getComponentsVideoModeSwitching(self, ctrlMode):
+        components = super(BattleRoyalePage, self)._getComponentsVideoModeSwitching(ctrlMode)
+        if not self.__panelsIsVisible:
+            components.discard(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
+        return components
 
     def __onCameraChanged(self, ctrlMode, _=None):
+        if self.__isFullStatsShown:
+            return
         teamPanelAliases = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.VIDEO)
         if ctrlMode in teamPanelAliases:
             args = {'hidden': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL},
@@ -302,7 +329,12 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         else:
             args = {'hidden': {BATTLE_VIEW_ALIASES.PLAYERS_PANEL},
              'visible': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL}}
-        args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO else 'visible'].add(BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL)
+        hideInVideoModeAliases = {BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL,
+         BATTLE_VIEW_ALIASES.BR_RESPAWN_MESSAGE_PANEL,
+         BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES,
+         BATTLE_VIEW_ALIASES.RADAR_BUTTON}
+        args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO else 'visible'].update(hideInVideoModeAliases)
+        args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO or not self.isPostmortemTipsVisible else 'visible'].add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
         self._setComponentsVisibility(**args)
 
     def __onConfWindowTriggered(self, isOpened):
@@ -318,24 +350,36 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return progression.getWindowCtrl() if progression else None
 
     def __onVehicleStateUpdated(self, state, value):
+        damageScreenVisible = None
         if state == VEHICLE_VIEW_STATE.DEATHZONE_TIMER and value.level is None:
             vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
             isAlive = vehicle is not None and vehicle.isAlive()
-            self.as_updateDamageScreenS(value.isCausingDamage and isAlive)
+            damageScreenVisible = value.isCausingDamage and isAlive
         elif state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
-            self.as_updateDamageScreenS(False)
+            damageScreenVisible = False
+        isObserver = BigWorld.player().isObserver()
+        notInBattle = self.sessionProvider.shared.arenaPeriod.getPeriod() != ARENA_PERIOD.BATTLE
         vehicle = BigWorld.player().getVehicleAttached()
-        if vehicle is None or not vehicle.isAlive() and BigWorld.player().isObserver():
+        if vehicle is None or (not vehicle.isAlive() or notInBattle) and isObserver:
+            damageScreenVisible = False
             if self.__panelsIsVisible:
-                self._setComponentsVisibility(hidden=self.__PANELS_FOR_SHOW_HIDE)
+                if self.__isFullStatsShown:
+                    self._fsToggling.difference_update(self.__PANELS_FOR_SHOW_HIDE)
+                else:
+                    self._setComponentsVisibility(hidden=self.__PANELS_FOR_SHOW_HIDE)
                 self.__panelsIsVisible = False
         elif not self.__panelsIsVisible:
-            self._setComponentsVisibility(visible=self.__PANELS_FOR_SHOW_HIDE)
+            if not self.__isFullStatsShown:
+                self._setComponentsVisibility(visible=self.__PANELS_FOR_SHOW_HIDE)
+            else:
+                self._fsToggling.update(self.__PANELS_FOR_SHOW_HIDE)
             self.__panelsIsVisible = True
         if vehicle and not vehicle.isAlive():
             if avatar_getter.isBecomeObserverAfterDeath() and BigWorld.player().isObserverBothTeams:
                 self._setComponentsVisibility(visible=[BATTLE_VIEW_ALIASES.PLAYERS_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL])
                 BigWorld.player().setIsObserver()
+        if damageScreenVisible is not None:
+            self.as_updateDamageScreenS(damageScreenVisible)
         return
 
     def __onGunSettingsSet(self, _):
@@ -348,11 +392,13 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                     self._fsToggling.remove(dualGunAlias)
 
     def __onShowDeathScreen(self):
+        self.__hideRadialMenu()
         if self.as_isComponentVisibleS(self._fullStatsAlias):
             self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=[BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE])
             self._fsToggling.add(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE)
 
     def __onWinnerScreen(self, *_):
+        self.__hideRadialMenu()
         if not BigWorld.player().userSeesWorld():
             self.__es.subscribeToEvent(PlayerEvents.g_playerEvents.crosshairPanelInitialized, self.__onWinnerScreen)
             return
@@ -367,3 +413,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
 
     def __onTimeWarpStart(self):
         self._onWinScreenReload()
+
+    def __hideRadialMenu(self):
+        ctrl = self.sessionProvider.shared.calloutCtrl
+        if ctrl is not None and ctrl.isRadialMenuOpened():
+            self._toggleRadialMenu(False)
+        return

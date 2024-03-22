@@ -41,6 +41,97 @@ class InfluenceZoneMultiVisualizer(object):
     rotateFromCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Rotate from center')
 
 
+class ZonePrefabLoader(object):
+    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    ALLY_MARKER_POSTFIX = 'Ally'
+    ENEMY_MARKER_POSTFIX = 'Enemy'
+
+    def __init__(self, influenceZone, go):
+        self.influenceZone = influenceZone
+        self.go = go
+        self.equipment = vehicles.g_cache.equipments()[influenceZone.equipmentID]
+        self.__prefabGO = None
+        self.__loadedPrefabPath = None
+        return
+
+    def activate(self):
+        path = self.__getPrefabPath(self.equipment, self.influenceZone.team)
+        self.__loadGameObject(path)
+        self.__guiSessionProvider.onUpdateObservedVehicleData += self.__onUpdateObservedVehicleData
+
+    def deactivate(self):
+        self.__guiSessionProvider.onUpdateObservedVehicleData -= self.__onUpdateObservedVehicleData
+        self.__removeGameObject()
+
+    def __multipositionSpawn(self, go, multivisualizer, influenceZone, equipment, radius):
+        for zonePosition in influenceZone.zonesPosition:
+            localPosition = zonePosition - influenceZone.position
+            if multivisualizer.rotateFromCenter:
+                transform = math_utils.createRTMatrix((localPosition.yaw, 0, 0), localPosition)
+            else:
+                transform = math_utils.createTranslationMatrix(localPosition)
+
+            def postloadSetup(go):
+                areaVisualizer = go.findComponentByType(AreaAbilityVisualizer)
+                if areaVisualizer is not None:
+                    areaVisualizer.radius = equipment.zoneRadius
+                eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
+                eqComponent.setupEquipment(equipment)
+                return
+
+            CGF.loadGameObjectIntoHierarchy(multivisualizer.influencePrefab, go, transform, postloadSetup)
+
+    def __onUpdateObservedVehicleData(self, *args):
+        if not self.equipment.usagePrefabEnemy or self.equipment.usagePrefab == self.equipment.usagePrefabEnemy:
+            return
+        path = self.__getPrefabPath(self.equipment, self.influenceZone.team)
+        if path != self.__loadedPrefabPath:
+            self.__removeGameObject()
+            self.__loadGameObject(path)
+
+    def __getPrefabPath(self, equipment, zoneTeamID):
+        prefabPath = equipment.usagePrefab
+        if equipment.usagePrefabEnemy and not self.__guiSessionProvider.getArenaDP().isAllyTeam(zoneTeamID):
+            prefabPath = equipment.usagePrefabEnemy
+        return prefabPath
+
+    def __loadGameObject(self, prefabPath):
+
+        def postloadSetup(go):
+            self.__prefabGO = go
+            eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
+            eqComponent.setupEquipment(self.equipment)
+            transformComponent = go.findComponentByType(GenericComponents.TransformComponent)
+            multiVisualizer = go.findComponentByType(InfluenceZoneMultiVisualizer)
+            if transformComponent and not multiVisualizer:
+                zoneFloat = 0.1
+                transformComponent.transform = math_utils.createSRTMatrix((self.equipment.radius, 1.0, self.equipment.radius), (0.0, 0.0, 0.0), (0.0, zoneFloat, 0.0))
+            if multiVisualizer is not None:
+                self.__multipositionSpawn(go, multiVisualizer, self.influenceZone, self.equipment, self.equipment.influenceZone.radius)
+            markerComponent = go.findComponentByType(CombatMarker)
+            if markerComponent is not None:
+                postfix = self.ENEMY_MARKER_POSTFIX
+                if self.__guiSessionProvider.getArenaDP().isAllyTeam(self.influenceZone.team):
+                    postfix = self.ALLY_MARKER_POSTFIX
+                markerComponent.shape += postfix
+                markerComponent.disappearanceRadius = self.equipment.radius + self.equipment.influenceZone.radius
+            terrainAreaComponent = go.findComponentByType(InfluenceZoneTerrainArea)
+            if terrainAreaComponent is not None:
+                terrainAreaComponent.dropOffset = self.influenceZone.dropOffset
+            return
+
+        self.__loadedPrefabPath = prefabPath
+        CGF.loadGameObjectIntoHierarchy(prefabPath, self.go, Math.Vector3(0, 0, 0), postloadSetup)
+        self.__guiSessionProvider.onUpdateObservedVehicleData += self.__onUpdateObservedVehicleData
+
+    def __removeGameObject(self):
+        go = self.__prefabGO
+        if go is not None and go.isValid():
+            CGF.removeGameObject(self.__prefabGO)
+        self.__prefabGO = None
+        return
+
+
 @registerComponent
 class InfluenceZoneTerrainArea(object):
     editorTitle = 'Influence Zone Terrain Area'
@@ -64,7 +155,7 @@ class InfluenceZoneEquipmentComponent(object):
     zonesCount = ComponentProperty(type=CGFMetaTypes.INT, value=0, editorName='Zones Count')
     zoneRadius = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0, editorName='Zone Radius')
 
-    def __int__(self):
+    def __init__(self):
         self.equipment = None
         return
 
@@ -77,9 +168,8 @@ class InfluenceZoneEquipmentComponent(object):
 
 @bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class InfluenceZoneVisualizationManager(CGF.ComponentManager):
-    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
-    ALLY_MARKER_POSTFIX = 'Ally'
-    ENEMY_MARKER_POSTFIX = 'Enemy'
+    CUT_OFF_ANGLE = math.radians(60)
+    CUT_OFF_DISTANCE = 100
 
     @onAddedQuery(InfluenceZone, CGF.GameObject)
     def onInfluenceZoneSpawn(self, influenceZone, go):
@@ -88,47 +178,7 @@ class InfluenceZoneVisualizationManager(CGF.ComponentManager):
         if not equipment.usagePrefab:
             go.createComponent(DynamicObjectsCacheLoader, self.spaceID, influenceZone.equipmentID, influenceZone.zonesPosition, influenceZone.team)
             return
-
-        def postloadSetup(go):
-            eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
-            eqComponent.setupEquipment(equipment)
-            multiVisualizer = go.findComponentByType(InfluenceZoneMultiVisualizer)
-            if multiVisualizer is not None:
-                self.__multipositionSpawn(go, multiVisualizer, influenceZone, equipment, equipment.influenceZone.radius)
-            markerComponent = go.findComponentByType(CombatMarker)
-            if markerComponent is not None:
-                postfix = self.ENEMY_MARKER_POSTFIX
-                if self.__guiSessionProvider.getArenaDP().isAllyTeam(influenceZone.team):
-                    postfix = self.ALLY_MARKER_POSTFIX
-                markerComponent.shape += postfix
-                markerComponent.disappearanceRadius = equipment.radius + equipment.influenceZone.radius
-            terrainAreaComponent = go.findComponentByType(InfluenceZoneTerrainArea)
-            if terrainAreaComponent is not None:
-                terrainAreaComponent.dropOffset = influenceZone.dropOffset
-            return
-
-        CGF.loadGameObjectIntoHierarchy(equipment.usagePrefab, go, Math.Vector3(0, 0, 0), postloadSetup)
-
-    def __multipositionSpawn(self, go, multivisualizer, influenceZone, equipment, radius):
-        for zonePosition in influenceZone.zonesPosition:
-            localPosition = zonePosition - influenceZone.position
-            if multivisualizer.rotateFromCenter:
-                transform = math_utils.createRTMatrix((localPosition.yaw, 0, 0), localPosition)
-            else:
-                transform = math_utils.createTranslationMatrix(localPosition)
-
-            def postloadSetup(go):
-                areaVisualizer = go.findComponentByType(AreaAbilityVisualizer)
-                if areaVisualizer is not None:
-                    areaVisualizer.radius = equipment.zoneRadius
-                eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
-                eqComponent.setupEquipment(equipment)
-                return
-
-            CGF.loadGameObjectIntoHierarchy(multivisualizer.influencePrefab, go, transform, postloadSetup)
-
-    CUT_OFF_ANGLE = math.radians(60)
-    CUT_OFF_DISTANCE = 100
+        go.createComponent(ZonePrefabLoader, influenceZone, go)
 
     @onAddedQuery(GenericComponents.TransformComponent, InfluenceZoneEquipmentComponent, InfluenceZoneTerrainArea)
     def terrainAreaInit(self, transform, influenceZoneEquipment, terrainArea):

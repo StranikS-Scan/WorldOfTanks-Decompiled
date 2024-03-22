@@ -7,7 +7,7 @@ from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
 
 class VehicleSelfBuffComponent(VehicleAbilityBaseComponent):
-    __EQUIPMENT_NAME = BattleRoyaleEquipments.SELF_BUFF
+    EQUIPMENT_NAME = BattleRoyaleEquipments.SELF_BUFF
     __TIMER_VIEW_ID = VEHICLE_VIEW_STATE.INSPIRE
     __MARKER_ID = BATTLE_MARKER_STATES.INSPIRING_STATE
 

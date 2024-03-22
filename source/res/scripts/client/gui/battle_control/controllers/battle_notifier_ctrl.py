@@ -38,7 +38,7 @@ class BattleNotifierController(ViewComponentsController):
         channel.onChatMessageReceived -= self.__onChatMessage
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
 
-    def __onRoundFinished(self, winningTeam, reason, extraData):
+    def __onRoundFinished(self, winningTeam, reason):
         self.__enabled = False
 
     def __onChatMessage(self, clientID, message):

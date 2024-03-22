@@ -292,7 +292,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.as_buildDataS(self.__stateData)
 
     def __getRadialMenuState(self, targetID, targetMarkerType, targetMarkerSubtype, replyState, replyToAction):
-        if targetMarkerType in _MARKERS_TYPE_TO_SUBTYPE_MAP and targetMarkerSubtype in _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType]:
+        if targetMarkerType == MarkerType.NON_INTERACTIVE:
+            viewState = RADIAL_MENU_CONSTS.TARGET_STATE_EMPTY
+        elif targetMarkerType in _MARKERS_TYPE_TO_SUBTYPE_MAP and targetMarkerSubtype in _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType]:
             viewState = _MARKERS_TYPE_TO_SUBTYPE_MAP[targetMarkerType][targetMarkerSubtype]
         else:
             _logger.warning("Marker subtype name '%s' is not defined for '%s'.", targetMarkerSubtype, targetMarkerType)

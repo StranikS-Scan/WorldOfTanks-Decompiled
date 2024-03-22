@@ -164,7 +164,6 @@
     <_105mm_Gun_M68_7x7>	503	</_105mm_Gun_M68_7x7>
     <_76mm_Gun_M32_late_FL>	504	</_76mm_Gun_M32_late_FL>
     <_155mm_AT_Gun_T7E2_7x7>	505	</_155mm_AT_Gun_T7E2_7x7>
-    <_75mm_Gun_M3_L37_bootcamp>	64004	</_75mm_Gun_M3_L37_bootcamp>
     <_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>	18	</_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>
     <_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>	26	</_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
@@ -1333,64 +1332,6 @@
         </_75mm_M48>
       </shots>
     </_75mm_Gun_M3_L37>
-    <_75mm_Gun_M3_L37_bootcamp>
-      <userString>	#usa_vehicles:_75mm_Gun_M3_L37	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	30000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.36	</amplitude>
-        <recoilEffect>	medium	</recoilEffect>
-      </recoil>
-      <effects>	shot_medium	</effects>
-      <reloadEffect>	reload50_75	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	40.25	</rotationSpeed>
-      <reloadTime>	3.80571428571429	</reloadTime>
-      <maxAmmo>	46	</maxAmmo>
-      <aimingTime>	2.05714285714286	</aimingTime>
-      <weight>	1437	</weight>
-      <maxHealth>	114	</maxHealth>
-      <maxRegenHealth>	57	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_75mm_M61_bootcamp>
-          <defaultPortion>	0.8	</defaultPortion>
-          <speed>	619	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	92 80	</piercingPower>
-        </_75mm_M61_bootcamp>
-        <_75mm_M72_bootcamp>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	820	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	127 97	</piercingPower>
-        </_75mm_M72_bootcamp>
-        <_75mm_M48_bootcamp>
-          <defaultPortion>	0.2	</defaultPortion>
-          <speed>	619	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
-        </_75mm_M48_bootcamp>
-      </shots>
-    </_75mm_Gun_M3_L37_bootcamp>
     <_75mm_Gun_M3_L37L>
       <userString>	#usa_vehicles:_75mm_Gun_M3_L37L	</userString>
       <tags></tags>

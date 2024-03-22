@@ -55,7 +55,7 @@ class PlayerSubscriptionRewardWindowView(ViewImpl):
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = int(event.getArgument('tooltipId'))
-            window = BackportTooltipWindow(self._tooltips[tooltipId], self.getParentWindow()) if tooltipId is not None and tooltipId in self._tooltips else None
+            window = BackportTooltipWindow(self._tooltips[tooltipId], self.getParentWindow(), event=event) if tooltipId is not None and tooltipId in self._tooltips else None
             if window is not None:
                 window.load()
             return window

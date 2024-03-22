@@ -34,9 +34,6 @@ class ClientGoodies(object):
         if 'cache' in diff:
             clanReservesDiff = diff['cache'].get('activeOrders', {})
             synchronizeDicts(clanReservesDiff, self.__cache.setdefault('clanReserves', {}))
-        pr2ConversionResult = diff.get('pr2_conversion')
-        if pr2ConversionResult is not None:
-            self.__cache['pr2_conversion'] = pr2ConversionResult
         return
 
     def getCache(self, callback=None):

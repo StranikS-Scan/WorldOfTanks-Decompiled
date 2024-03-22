@@ -17,11 +17,10 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, client_anonymizer, ClientBattleRoyale
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import client_epic_meta_game, tokens
 from account_helpers import client_ranked, ClientBadges
-from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.achievements20 import Achievements20
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.dog_tags import DogTags
@@ -38,12 +37,9 @@ from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
 from account_shared import NotificationItem, readClientServerVersion
-from adisp import adisp_process
-from bootcamp.Bootcamp import g_bootcamp
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT, ENABLE_FREE_PREMIUM_CREW
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
-from gui.Scaleform.Waiting import Waiting
 from gui.clans.clan_cache import g_clanCache
 from gui.prb_control import prbEntityProperty
 from gui.wgnc import g_wgncProvider
@@ -52,7 +48,6 @@ from helpers import uniprof
 from items import tankmen
 from messenger import MessengerEntry
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
@@ -577,12 +572,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             if self.isLongDisconnectedFromCenter != isLongDisconnectedFromCenter:
                 self.isLongDisconnectedFromCenter = isLongDisconnectedFromCenter
                 events.onCenterIsLongDisconnected(isLongDisconnectedFromCenter)
-        g_bootcamp.setBootcampParams({'completed': ctx.get('bootcampCompletedCount', 0),
-         'runCount': ctx.get('bootcampRunCount', 0),
-         'needAwarding': ctx.get('bootcampNeedAwarding', False)})
-        currentVehInvID = ctx.get('currentVehInvID', 0)
-        if currentVehInvID > 0:
-            AccountSettings.setFavorites(CURRENT_VEHICLE, currentVehInvID)
         events.isPlayerEntityChanging = False
         if ctx.get('skipShowGUI', False):
             events.onAccountShowGUISkipped(ctx)
@@ -707,41 +696,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANDOMS)
 
-    def onEntityCheckOutEnqueued(self, queueNumber):
-        Waiting.hide('login')
-        events.onEntityCheckOutEnqueued(self.base.cancelEntityCheckOut)
-
-    @adisp_process
-    def onBootcampAccountMigrationComplete(self):
-        events.onBootcampAccountMigrationComplete()
-        settingsCore = dependency.instance(ISettingsCore)
-        yield settingsCore.serverSettings.settingsCache.update()
-        settingsCore.serverSettings.applySettings()
-
-    def chooseBootcampStart(self, isInProgress):
-        events.onBootcampStartChoice(isInProgress)
-
-    def startBootcampCmd(self):
-        if events.isPlayerEntityChanging:
-            return
-        if g_bootcamp.isRunning():
-            return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_REQUEST_BOOTCAMP_START, 0, 0, 0)
-
-    def quitBootcampCmd(self):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_REQUEST_BOOTCAMP_QUIT, 0, 0, 0)
-
-    def enqueueBootcamp(self, lessonId):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOOTCAMP, lessonId, 0, 0)
-
-    def dequeueBootcamp(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOOTCAMP, 0, 0, 0)
-
     def enqueueEventBattles(self, vehInvID):
         if not events.isPlayerEntityChanging:
             self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.EVENT_BATTLES, vehInvID])
@@ -758,14 +712,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueRanked(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.RANKED)
-
-    def enqueueBattleRoyale(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BATTLE_ROYALE, vehInvID, 0, 0)
-
-    def dequeueBattleRoyale(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
 
     def enqueueMapbox(self, vehInvID):
         if not events.isPlayerEntityChanging:
@@ -1121,6 +1067,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
         return
 
+    def doActions(self, doActionsData):
+        from gui.shared.gui_items.items_actions import factory
+        groupSize = len(doActionsData)
+        groupID = int(BigWorld.serverTime())
+        while doActionsData:
+            factory.doAction(*(doActionsData.pop(0) + (groupID, groupSize)))
+
     def _doCmdNoArgs(self, cmd, callback):
         return self.__doCmd('doCmdNoArgs', cmd, callback)
 
@@ -1204,12 +1157,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self._synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
             self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
-            synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
+            if ENABLE_FREE_PREMIUM_CREW:
+                synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
-                    if g_bootcamp.isRunning():
-                        continue
                     events.onVehicleBecomeElite(vehTypeCompDescr)
 
                 for vehInvID, lockReason in diff.get('cache', {}).get('vehsLock', {}).iteritems():

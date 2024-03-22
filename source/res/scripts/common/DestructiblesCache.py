@@ -280,7 +280,7 @@ class DestructiblesCache():
             else:
                 raise SoftException("Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename')))
 
-    def _getEffect(self, effectName, effectCategory, needLogErrors=True):
+    def getEffect(self, effectName, effectCategory, needLogErrors=True):
         if not effectName:
             if needLogErrors:
                 LOG_WARNING('Failed to read %s name in %s' % (effectName, effectCategory))

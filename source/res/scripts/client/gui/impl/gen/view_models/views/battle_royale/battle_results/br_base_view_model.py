@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/battle_royale/battle_results/br_base_view_model.py
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.leaderboard.leaderboard_model import LeaderboardModel
-from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
+from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import PlayerBattleTypeStatusModel
 
 class BrBaseViewModel(ViewModel):
     __slots__ = ()
@@ -19,14 +19,14 @@ class BrBaseViewModel(ViewModel):
         return LeaderboardModel
 
     @property
-    def playerVehicleStatus(self):
+    def playerBattleTypeStatus(self):
         return self._getViewModel(1)
 
     @staticmethod
-    def getPlayerVehicleStatusType():
-        return PlayerVehicleStatusModel
+    def getPlayerBattleTypeStatusType():
+        return PlayerBattleTypeStatusModel
 
     def _initialize(self):
         super(BrBaseViewModel, self)._initialize()
         self._addViewModelProperty('leaderboardModel', LeaderboardModel())
-        self._addViewModelProperty('playerVehicleStatus', PlayerVehicleStatusModel())
+        self._addViewModelProperty('playerBattleTypeStatus', PlayerBattleTypeStatusModel())

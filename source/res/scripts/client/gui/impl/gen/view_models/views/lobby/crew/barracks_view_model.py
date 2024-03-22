@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 class BarracksViewModel(ViewModel):
     __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar')
 
-    def __init__(self, properties=6, commands=9):
+    def __init__(self, properties=7, commands=9):
         super(BarracksViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,11 +47,17 @@ class BarracksViewModel(ViewModel):
     def setIsBerthsOnSale(self, value):
         self._setBool(4, value)
 
-    def getHasFilters(self):
+    def getIsConversionBannerVisible(self):
         return self._getBool(5)
 
-    def setHasFilters(self, value):
+    def setIsConversionBannerVisible(self, value):
         self._setBool(5, value)
+
+    def getHasFilters(self):
+        return self._getBool(6)
+
+    def setHasFilters(self, value):
+        self._setBool(6, value)
 
     def _initialize(self):
         super(BarracksViewModel, self)._initialize()
@@ -60,6 +66,7 @@ class BarracksViewModel(ViewModel):
         self._addNumberProperty('itemsOffset', 0)
         self._addArrayProperty('tankmanList', Array())
         self._addBoolProperty('isBerthsOnSale', False)
+        self._addBoolProperty('isConversionBannerVisible', False)
         self._addBoolProperty('hasFilters', False)
         self.onResetFilters = self._addCommand('onResetFilters')
         self.onBuyBerth = self._addCommand('onBuyBerth')

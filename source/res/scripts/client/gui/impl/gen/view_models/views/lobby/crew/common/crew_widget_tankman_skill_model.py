@@ -14,7 +14,7 @@ class SkillType(Enum):
 class CrewWidgetTankmanSkillModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(CrewWidgetTankmanSkillModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -35,8 +35,15 @@ class CrewWidgetTankmanSkillModel(ViewModel):
     def setType(self, value):
         self._setString(2, value.value)
 
+    def getHasInstruction(self):
+        return self._getBool(3)
+
+    def setHasInstruction(self, value):
+        self._setBool(3, value)
+
     def _initialize(self):
         super(CrewWidgetTankmanSkillModel, self)._initialize()
         self._addStringProperty('name', '')
         self._addStringProperty('icon', '')
         self._addStringProperty('type')
+        self._addBoolProperty('hasInstruction', False)

@@ -8,7 +8,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getRoleText
 from gui.shared.items_parameters import formatters as params_formatters
-from gui.shared.tooltips import formatters
+from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from gui.shared.utils.functions import stripColorTagDescrTags
@@ -133,17 +133,17 @@ def getPoIEquipmentDescription(equipment):
     return backport.text(description(), **equipment.tooltipParams)
 
 
-class BattleResultsPrestigePointsTooltip(BlocksTooltipData):
+class BattleResultsRatingPointsTooltip(BlocksTooltipData):
 
     def __init__(self, ctx):
-        super(BattleResultsPrestigePointsTooltip, self).__init__(ctx, None)
+        super(BattleResultsRatingPointsTooltip, self).__init__(ctx, None)
         self._setContentMargin(top=14, left=20, bottom=10, right=20)
         self._setMargins(afterBlock=10)
         self._setWidth(350)
         return
 
     def _packBlocks(self, *args):
-        items = super(BattleResultsPrestigePointsTooltip, self)._packBlocks()
+        items = super(BattleResultsRatingPointsTooltip, self)._packBlocks()
         items.append(self.__packHeaderBlock())
         items.append(self.__packDescriptionBlock())
         return items
@@ -157,23 +157,67 @@ class BattleResultsPrestigePointsTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(blocks=blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
-class BattleResultsTournamentPrestigePointsTooltip(BlocksTooltipData):
+class BattleResultsTournamentRatingPointsTooltip(BlocksTooltipData):
 
     def __init__(self, ctx):
-        super(BattleResultsTournamentPrestigePointsTooltip, self).__init__(ctx, None)
+        super(BattleResultsTournamentRatingPointsTooltip, self).__init__(ctx, None)
         self._setContentMargin(top=14, left=20, bottom=10, right=20)
         self._setMargins(afterBlock=10)
         self._setWidth(350)
         return
 
     def _packBlocks(self, *args):
-        items = super(BattleResultsTournamentPrestigePointsTooltip, self)._packBlocks()
+        items = super(BattleResultsTournamentRatingPointsTooltip, self)._packBlocks()
         items.append(self.__packHeaderBlock())
         return items
 
     def __packHeaderBlock(self):
         blocks = [formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.comp7.battleResult.personal.tooltip.title()))), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.comp7.tournament.battleResult.personal.tooltip.descr())))]
         return formatters.packBuildUpBlockData(blocks=blocks)
+
+
+class BattleResultsTrainingRatingPointsTooltip(BlocksTooltipData):
+
+    def __init__(self, ctx):
+        super(BattleResultsTrainingRatingPointsTooltip, self).__init__(ctx, None)
+        self._setContentMargin(top=14, left=20, bottom=10, right=20)
+        self._setMargins(afterBlock=10)
+        self._setWidth(350)
+        return
+
+    def _packBlocks(self, *args):
+        items = super(BattleResultsTrainingRatingPointsTooltip, self)._packBlocks()
+        items.append(self.__packHeaderBlock())
+        return items
+
+    def __packHeaderBlock(self):
+        blocks = [formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.comp7.battleResult.personal.tooltip.title()))), formatters.packTextBlockData(text_styles.main(backport.text(R.strings.comp7.training.battleResult.personal.tooltip.descr())))]
+        return formatters.packBuildUpBlockData(blocks=blocks)
+
+
+class Comp7SelectableRewardTooltip(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(Comp7SelectableRewardTooltip, self).__init__(context, TOOLTIP_TYPE.COMP7_SELECTABLE_REWARD)
+        self._setContentMargin(top=20, bottom=20, right=20)
+        self._setMargins(10, 15)
+        self._setWidth(370)
+
+    def _packBlocks(self, *args, **kwargs):
+        self._items = super(Comp7SelectableRewardTooltip, self)._packBlocks(*args, **kwargs)
+        self._items.append(self.__packImageBlock())
+        self._items.append(self.__packRewardsBlock())
+        return self._items
+
+    @staticmethod
+    def __packImageBlock():
+        return formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.comp7.icons.deluxe_gift()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+
+    @staticmethod
+    def __packRewardsBlock():
+        texts = R.strings.comp7.yearRewards.tooltip.selectableReward
+        blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(texts.title())), padding={'bottom': 10}), formatters.packTextBlockData(text=text_styles.main(backport.text(texts.list())))]
+        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
 def getRoleEquipmentTooltipParts(equipment):

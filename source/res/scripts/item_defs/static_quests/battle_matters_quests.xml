@@ -1,0 +1,1845 @@
+<battle_matters_quests.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	battle_matters_cohorts_check	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <or>
+              <and>
+                <or>
+                  <token>
+                    <id>	linkedset_unfinished	</id>
+                    <greaterOrEqual>	1	</greaterOrEqual>
+                  </token>
+                  <lastLogout>
+                    <relativeToUTC>
+                      <lessOrEqual>	11.06.2018 00:01	</lessOrEqual>
+                    </relativeToUTC>
+                  </lastLogout>
+                </or>
+                <totalBattles>
+                  <lessOrEqual>	200	</lessOrEqual>
+                </totalBattles>
+              </and>
+              <totalBattles>
+                <lessOrEqual>	0	</lessOrEqual>
+              </totalBattles>
+            </or>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	battle_matters_1_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	battle_matters_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <delayed>	true	</delayed>
+      <id>	battle_matters_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_1_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_enter_arena	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	5000	</credits>
+        <premium_plus>	3	</premium_plus>
+        <gold>	500	</gold>
+        <token>
+          <id>	battle_matters_2_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <freePremiumCrew>
+          <vehLevel>	4	</vehLevel>
+        </freePremiumCrew>
+        <freePremiumCrew>
+          <vehLevel>	5	</vehLevel>
+        </freePremiumCrew>
+        <freePremiumCrew>
+          <vehLevel>	6	</vehLevel>
+        </freePremiumCrew>
+        <freePremiumCrew>
+          <vehLevel>	7	</vehLevel>
+        </freePremiumCrew>
+        <freePremiumCrew>
+          <vehLevel>	8	</vehLevel>
+        </freePremiumCrew>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_2_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_unlock_module	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	action_equip_module	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	5000	</credits>
+        <token>
+          <id>	battle_matters_3_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_3	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <hasReceivedMultipliedXP>	false	</hasReceivedMultipliedXP>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_3_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <postBattle>
+          <win></win>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	5000	</credits>
+        <freeXP>	500	</freeXP>
+        <token>
+          <id>	battle_matters_4_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_4_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_unlock_module_free_xp	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	5000	</credits>
+        <freeXP>	1000	</freeXP>
+        <token>
+          <id>	battle_matters_5_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_5	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <unregularAmmo></unregularAmmo>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_5_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	10000	</credits>
+        <token>
+          <id>	battle_matters_6_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_6_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_sell_module	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	10000	</credits>
+        <token>
+          <id>	battle_matters_7_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_7	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	3 4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_7_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <credits>	25000	</credits>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	251	  <count>	5	</count>
+        </item>
+        <item>	763	  <count>	5	</count>
+        </item>
+        <item>	1275	  <count>	5	</count>
+        </item>
+        <token>
+          <id>	battle_matters_8_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_8	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <or>
+              <and>
+                <vehicleDescr>
+                  <levels>	3	</levels>
+                </vehicleDescr>
+                <consumables>
+                  <equipmentCount>
+                    <greaterOrEqual>	2	</greaterOrEqual>
+                  </equipmentCount>
+                </consumables>
+              </and>
+              <and>
+                <vehicleDescr>
+                  <levels>	4 5 6 7 8 9 10	</levels>
+                </vehicleDescr>
+                <consumables>
+                  <equipmentCount>
+                    <greaterOrEqual>	3	</greaterOrEqual>
+                  </equipmentCount>
+                </consumables>
+              </and>
+            </or>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_8_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	3	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	10000	</credits>
+        <item>	251	  <count>	3	</count>
+        </item>
+        <item>	763	  <count>	3	</count>
+        </item>
+        <item>	1275	  <count>	3	</count>
+        </item>
+        <item>	23545	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	battle_matters_9_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_9	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	3 4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <installedModules>
+                <optionalDeviceCount>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </optionalDeviceCount>
+              </installedModules>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_9_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	3	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <slots>	1	</slots>
+        <berths>	16	</berths>
+        <item>	21497	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	battle_matters_10_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_10_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	4	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_4	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	decal	</custType>
+            <id>	15945	</id>
+          </item>
+        </customizations>
+        <credits>	35000	</credits>
+        <freeXP>	1200	</freeXP>
+        <token>
+          <id>	battle_matters_11_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	intermediate_battle_matters_10_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	intermediate_battle_matters_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	intermediate_battle_matters_10_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	18169	  <count>	1	</count>
+        </item>
+        <goodie>
+          <id>	12852	</id>
+          <count>	5	</count>
+        </goodie>
+        <premium_plus>	1	</premium_plus>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_11	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <or>
+                <correspondedCamouflage>
+                  <hideInGui></hideInGui>
+                </correspondedCamouflage>
+                <correspondedDecal>
+                  <hideInGui></hideInGui>
+                </correspondedDecal>
+                <correspondedPaint>
+                  <hideInGui></hideInGui>
+                </correspondedPaint>
+                <correspondedStyle>
+                  <hideInGui></hideInGui>
+                </correspondedStyle>
+                <correspondedModification>
+                  <hideInGui></hideInGui>
+                </correspondedModification>
+                <correspondedProjectionDecal>
+                  <hideInGui></hideInGui>
+                </correspondedProjectionDecal>
+                <correspondedPersonalNumber>
+                  <hideInGui></hideInGui>
+                </correspondedPersonalNumber>
+              </or>
+              <vehicleDescr>
+                <levels>	4 5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_11_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	3	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	battle_matters_12_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_12_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_add_tankman_skill	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <item>	251	  <count>	5	</count>
+        </item>
+        <item>	763	  <count>	5	</count>
+        </item>
+        <item>	1275	  <count>	5	</count>
+        </item>
+        <token>
+          <id>	battle_matters_13_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_13	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	4 5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_13_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <credits>	150000	</credits>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	175000	</credits>
+        <token>
+          <id>	battle_matters_14_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_14	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_14_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	5	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_5	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <freeXP>	4000	</freeXP>
+        <item>	23801	  <count>	1	</count>
+        </item>
+        <item>	20985	  <count>	1	</count>
+        </item>
+        <slots>	1	</slots>
+        <token>
+          <id>	battle_matters_15_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_15	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <installedModules>
+                <optionalDeviceCount>
+                  <greaterOrEqual>	3	</greaterOrEqual>
+                </optionalDeviceCount>
+              </installedModules>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_15_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	battle_matters_16_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_16	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_16_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <mapsTraining>
+                <scenariosCompleted>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                  <difficulty>	1	</difficulty>
+                </scenariosCompleted>
+              </mapsTraining>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <item>	251	  <count>	3	</count>
+        </item>
+        <item>	763	  <count>	3	</count>
+        </item>
+        <item>	1275	  <count>	3	</count>
+        </item>
+        <token>
+          <id>	battle_matters_17_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_17	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_17_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <mapsTraining>
+                <mapsCompleted>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                  <difficulty>	2	</difficulty>
+                </mapsCompleted>
+              </mapsTraining>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <goodie>
+          <id>	121000	</id>
+          <count>	3	</count>
+        </goodie>
+        <goodie>
+          <id>	121004	</id>
+          <count>	3	</count>
+        </goodie>
+        <goodie>
+          <id>	121002	</id>
+          <count>	3	</count>
+        </goodie>
+        <token>
+          <id>	battle_matters_18_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_18	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	5 6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <goodies>
+                <goodiesCount>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </goodiesCount>
+              </goodies>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_18_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	battle_bonus_x5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	6	</count>
+        </token>
+        <token>
+          <id>	battle_matters_19_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_19	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	5 6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_19_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	10	</max>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	6	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+        <token>
+          <id>	battle_matters_20_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_20	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_20_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	6	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_6	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <freeXP>	6000	</freeXP>
+        <slots>	1	</slots>
+        <premium_plus>	1	</premium_plus>
+        <goodie>
+          <id>	12852	</id>
+          <count>	5	</count>
+        </goodie>
+        <token>
+          <id>	battle_matters_21_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	intermediate_battle_matters_20_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	intermediate_battle_matters_20	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	intermediate_battle_matters_20_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	offer:battle_matters:vehicle:20	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_21	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_21_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <token>
+                  <id>	has_completed_pm1	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	has_completed_pm2	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	15646	  <count>	2	</count>
+        </item>
+        <token>
+          <id>	battle_matters_22_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_22	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_22_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	action_learn_crew_book_universal	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <item>	28411	  <count>	15	</count>
+        </item>
+        <token>
+          <id>	battle_matters_23_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_23	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <correspondedEquipment>
+                <tags>	crewSkillBattleBooster	</tags>
+              </correspondedEquipment>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_23_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <item>	28155	  <count>	3	</count>
+        </item>
+        <item>	29179	  <count>	3	</count>
+        </item>
+        <item>	28411	  <count>	3	</count>
+        </item>
+        <item>	28923	  <count>	3	</count>
+        </item>
+        <token>
+          <id>	battle_matters_24_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <entitlement>
+          <id>	battle_matters_rent_tiger	</id>
+        </entitlement>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	compensation_battle_matters_23	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	compensation_battle_matters_23_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	battle_matters_23_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <item>	28155	  <count>	3	</count>
+        </item>
+        <item>	29179	  <count>	3	</count>
+        </item>
+        <item>	28411	  <count>	3	</count>
+        </item>
+        <item>	28923	  <count>	3	</count>
+        </item>
+        <token>
+          <id>	battle_matters_24_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <entitlement>
+          <id>	battle_matters_rent_tiger	</id>
+        </entitlement>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_24	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_24_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	battle_matters_24_done	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <goodie>
+          <id>	12852	</id>
+          <count>	6	</count>
+        </goodie>
+        <token>
+          <id>	battle_matters_25_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_25	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <premium>	true	</premium>
+              <special>	false	</special>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_25_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	27131	  <count>	15	</count>
+        </item>
+        <token>
+          <id>	battle_matters_26_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	battle_matters_tiger_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_26	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	6 7 8 9 10	</levels>
+              </vehicleDescr>
+              <correspondedEquipment>
+                <tags>	equipmentBattleBooster	</tags>
+                <ignoreBoostersCompatibility></ignoreBoostersCompatibility>
+              </correspondedEquipment>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_26_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	battle_bonus_x5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	15	</count>
+        </token>
+        <token>
+          <id>	battle_matters_27_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_27	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	6 7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_27_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	10	</max>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	15	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	800000	</credits>
+        <token>
+          <id>	battle_matters_28_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_28	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_28_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	7	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_7	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <freeXP>	12000	</freeXP>
+        <item>	507	  <count>	15	</count>
+        </item>
+        <item>	1019	  <count>	15	</count>
+        </item>
+        <item>	1531	  <count>	15	</count>
+        </item>
+        <goodie>
+          <id>	12852	</id>
+          <count>	5	</count>
+        </goodie>
+        <token>
+          <id>	battle_matters_29_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <id>	battle_matters_29	</id>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <and>
+              <vehicleDescr>
+                <levels>	7 8 9 10	</levels>
+              </vehicleDescr>
+              <consumables>
+                <equipment>	autoExtinguishers	</equipment>
+                <equipment>	largeMedkit	</equipment>
+                <equipment>	largeRepairkit	</equipment>
+              </consumables>
+            </and>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_29_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <blueprint>
+          <compDescr>	65523	</compDescr>
+          <count>	10	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65282	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65298	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65314	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65330	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65346	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65362	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65378	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65394	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65410	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65426	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <blueprint>
+          <compDescr>	65442	</compDescr>
+          <count>	3	</count>
+        </blueprint>
+        <token>
+          <id>	battle_matters_30_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_30	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_30_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <token>
+                  <id>	action_convert_fragments_to	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <dossier>
+                  <record>	achievements:mechanicEngineer	</record>
+                  <equal>	1	</equal>
+                </dossier>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <item>	27131	  <count>	25	</count>
+        </item>
+        <token>
+          <id>	battle_bonus_x5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	20	</count>
+        </token>
+        <token>
+          <id>	battle_matters_31_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	intermediate_battle_matters_30_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	intermediate_battle_matters_30	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	intermediate_battle_matters_30_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <premium_plus>	14	</premium_plus>
+      </bonus>
+    </tokenQuest>
+    <battleQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_31	</id>
+      <showPostBattleStat>	True	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	1 24 44 46	</bonusTypes>
+          </battle>
+          <vehicle>
+            <vehicleDescr>
+              <levels>	7 8 9 10	</levels>
+            </vehicleDescr>
+          </vehicle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_31_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	10	</max>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <count>	20	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	1500000	</credits>
+        <token>
+          <id>	battle_matters_32_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </battleQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	battle_matters_32	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_32_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <or>
+                <vehiclesUnlockedAndOwned>
+                  <levels>	8	</levels>
+                  <excludeTags>	collectorVehicle	</excludeTags>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </vehiclesUnlockedAndOwned>
+                <token>
+                  <id>	action_buy_unlock_tree_vehicle_8	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+        <freeXP>	20000	</freeXP>
+        <item>	24057	  <count>	2	</count>
+        </item>
+        <item>	22009	  <count>	2	</count>
+        </item>
+        <goodie>
+          <id>	12852	</id>
+          <count>	50	</count>
+        </goodie>
+        <token>
+          <id>	intermediate_battle_matters_32_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	battle_matters_update_offer_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+        <token>
+          <id>	battle_matters_complete	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	intermediate_battle_matters_32	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	intermediate_battle_matters_32_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <vehicle>	ussr:R165_Object_703_II	  <rent>
+            <time>	14	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+        </vehicle>
+        <vehicle>	poland:Pl19_CS_52_LIS	  <rent>
+            <time>	14	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+        </vehicle>
+        <vehicle>	usa:A122_TS-5	  <rent>
+            <time>	14	</time>
+          </rent>
+          <crewLvl>	100	</crewLvl>
+        </vehicle>
+        <token>
+          <id>	battle_matters_tier8_unlock	</id>
+          <expires>	01.02.2050 00:00	</expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	hidden_battle_matters_update_offer	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
+              <token>
+                <id>	battle_matters_update_offer_unlock	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	offer:battle_matters:vehicle:20	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	offer:battle_matters:vehicle:20_gift	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	offer:battle_matters:vehicle:20	</id>
+          <expires>
+            <after>	4320	</after>
+          </expires>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	ndq_pass_init	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <totalBattles>
+                <lessOrEqual>	0	</lessOrEqual>
+              </totalBattles>
+              <accountPrimaryTypes>	1 10	</accountPrimaryTypes>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	ndq_pass	</id>
+          <expires>	01.02.2050 00:00	</expires>
+          <count>	6	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</battle_matters_quests.xml>

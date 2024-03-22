@@ -11,7 +11,6 @@ from gui.prb_control.entities.winback.pre_queue.entity import WinbackEntryPoint,
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
-from gui.prb_control.entities.bootcamp.pre_queue.entity import BootcampEntity, BootcampEntryPoint
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
 from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
@@ -23,7 +22,6 @@ from gui.prb_control.storages import prequeue_storage_getter, storage_getter, RE
 __all__ = ('PreQueueFactory',)
 registerQueueEntity(QUEUE_TYPE.RANDOMS, RandomEntity)
 registerQueueEntity(QUEUE_TYPE.RANKED, RankedEntity)
-registerQueueEntity(QUEUE_TYPE.BOOTCAMP, BootcampEntity)
 registerQueueEntity(QUEUE_TYPE.MAPBOX, MapboxEntity)
 registerQueueEntity(QUEUE_TYPE.MAPS_TRAINING, MapsTrainingEntity)
 registerQueueEntity(QUEUE_TYPE.EVENT_BATTLES, EventBattleEntity)
@@ -31,7 +29,6 @@ registerQueueEntity(QUEUE_TYPE.COMP7, Comp7Entity)
 registerQueueEntity(QUEUE_TYPE.WINBACK, WinbackEntity)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANDOM, RandomEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANKED, RankedEntryPoint)
-registerEntryPoint(PREBATTLE_ACTION_NAME.BOOTCAMP, BootcampEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX, MapboxEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
@@ -83,9 +80,7 @@ class PreQueueFactory(ControlFactory):
         return collectQueueEntity(queueType)
 
     def __createDefaultEntity(self):
-        if prb_getters.isInBootcampAccount():
-            return BootcampEntity()
-        elif self.rankedStorage.isModeSelected():
+        if self.rankedStorage.isModeSelected():
             return RankedEntity()
         elif self.frontlineStorage.isModeSelected():
             return self.__createByQueueType(QUEUE_TYPE.EPIC)

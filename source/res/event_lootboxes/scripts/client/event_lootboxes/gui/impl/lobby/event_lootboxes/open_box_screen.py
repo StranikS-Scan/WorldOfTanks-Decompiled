@@ -68,7 +68,7 @@ class EventLootBoxesOpenBoxScreen(ViewImpl):
             if tooltipData is None:
                 _logger.warning('Tooltip data not found. tooltipId=%s, tooltipData=%s', tooltipId, self.__tooltipData)
                 return
-            window = BackportTooltipWindow(tooltipData, self.getParentWindow())
+            window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event)
             window.load()
             return window
         else:

@@ -5,16 +5,17 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl.dialogs import dialogs
+from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.utils import decorators
 from helpers import dependency
+from items.tankmen import MAX_SKILLS_EFFICIENCY
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewMetricsLoggerWithParent
 from uilogging.crew.logging_constants import CrewViewKeys, CrewTankmanContextMenuKeys, LAYOUT_ID_TO_ITEM
 CM_RETRAIN_COLOR = 13347959
-MAX_ROLE_LEVEL = 100
 
 class CREW(object):
     PERSONAL_FILE = 'personalFile'
@@ -49,7 +50,8 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.QUICK_TRAINING)
 
     def retrain(self):
-        dialogs.showRetrainDialog([self._tankmanID], self._vehicle.intCD)
+        tankman = self.itemsCache.items.getTankman(self._tankmanID)
+        dialogs.showRetrainSingleDialog(self._tankmanID, self._vehicle.intCD, targetSlotIdx=tankman.vehicleSlotIdx, parentViewKey=self._parentViewKey)
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.RETRAIN)
 
     def changeCrewMember(self):
@@ -78,17 +80,20 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         if self._vehicle:
             for _, tman in self._vehicle.crew:
                 if tman and tman.invID == self._tankmanID:
-                    isRetrainAvailable = tman.realRoleLevel.lvl < MAX_ROLE_LEVEL
+                    isRetrainAvailable = tman.currentVehicleSkillsEfficiency < MAX_SKILLS_EFFICIENCY
                     break
 
+        isNotInQuickTraining = self._previousViewID != R.views.lobby.crew.QuickTrainingView()
         return [self._makeItem(CREW.PERSONAL_FILE, MENU.contextmenu('crewWidgetPersonalFile')),
          self._makeItem(CREW.RETRAIN, MENU.contextmenu('crewWidgetRetrain'), {'visible': isRetrainAvailable,
           'textColor': CM_RETRAIN_COLOR}),
          self._makeItem(CREW.QUICK_TRAINING, MENU.contextmenu('crewWidgetQuickTraining')),
          self._makeItem(CREW.CHANGE_CREW_MEMBER, MENU.contextmenu('crewWidgetChangeCrewMember'), {'enabled': self._vehicle and isNotLocked}),
          self._makeItem(CREW.CHANGE_SPECIALIZATION, MENU.contextmenu('crewWidgetChangeSpecialization'), {'enabled': isNotLocked}),
-         self._makeItem(CREW.SEND_TO_BARRACKS, MENU.contextmenu('crewWidgetSendToToBarracks'), {'enabled': self._vehicle and isNotLocked}),
-         self._makeItem(CREW.DISMISS, MENU.contextmenu('crewWidgetDismiss'), {'enabled': isNotLocked})]
+         self._makeItem(CREW.SEND_TO_BARRACKS, MENU.contextmenu('crewWidgetSendToToBarracks'), {'visible': isNotInQuickTraining,
+          'enabled': self._vehicle and isNotLocked}),
+         self._makeItem(CREW.DISMISS, MENU.contextmenu('crewWidgetDismiss'), {'visible': isNotInQuickTraining,
+          'enabled': isNotLocked})]
 
     def _initFlashValues(self, ctx):
         self._slotIdx = int(ctx.slotIdx)

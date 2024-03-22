@@ -8,6 +8,7 @@ import BigWorld
 import motivation_quests
 import customization_quests
 import nations
+import static_quests
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async, adisp_process
@@ -815,6 +816,10 @@ class EventsCache(IEventsCache):
         c11nQuests = customization_quests.g_cust_cache.values()
         for questDescr in c11nQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questClientData))
+
+        staticQuests = static_quests.g_staticCache.getAllQuests() or []
+        for questDescr in staticQuests:
+            yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData))
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

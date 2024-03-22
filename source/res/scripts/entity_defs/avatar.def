@@ -251,7 +251,20 @@
       <Type>	BATTLE_GOODIES_LIST	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
       <ExposedForReplay>	true	</ExposedForReplay>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </goodiesSnapshot>
+    <fairplayState>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </fairplayState>
+    <needCheckPenalties>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </needCheckPenalties>
+    <shouldSendKillcamSimulationData>
+      <Type>	BOOL	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </shouldSendKillcamSimulationData>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -310,10 +323,6 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
     </onSwitchViewpoint>
-    <onBootcampEvent>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
-      </Arg>
-    </onBootcampEvent>
     <updateVehicleSetting>
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	OBJECT_ID	</Arg>
@@ -408,8 +417,6 @@
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
     </onRoundFinished>
     <onKickedFromArena>
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
@@ -511,6 +518,7 @@
     </handleScriptEventFromServer>
     <setUpdatedGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </setUpdatedGoodiesSnapshot>
     <onRandomEvent>
       <Arg>	STRING	</Arg>
@@ -662,6 +670,10 @@
       <Arg>	BOOL	</Arg>
     </setServerMarker>
     <logLag></logLag>
+    <setSendKillCamSimulationData>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	BOOL	</Arg>
+    </setSendKillCamSimulationData>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
@@ -722,16 +734,11 @@
     <updateArena>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
-      <Arg>	ARRAY	  <of>	DISCLOSE_EVENT	</of>
-      </Arg>
     </updateArena>
-    <updateArenaVehicleListAddedUpdated>
-      <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	CLIENT_VEHICLE_PUBLIC_INFO	</of>
-      </Arg>
+    <processDisclosures>
       <Arg>	ARRAY	  <of>	DISCLOSE_EVENT	</of>
       </Arg>
-    </updateArenaVehicleListAddedUpdated>
+    </processDisclosures>
     <vehicle_teleport>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
@@ -751,7 +758,6 @@
     <onRoundFinished>
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
     </onRoundFinished>
     <leaveDisconnected></leaveDisconnected>
     <setDevelopmentFeature>

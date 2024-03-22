@@ -9,7 +9,7 @@
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	50	</forward>
-    <backward>	13	</backward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.146	</moving>
@@ -1136,8 +1136,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.13	</vehicleMovement>
+        <vehicleRotation>	0.13	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -2087,10 +2087,10 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	38	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
@@ -2205,7 +2205,7 @@
     <detailed>
       <engines>
         <Saurer_1000_7x7>
-          <smplEnginePower>	1057.281	</smplEnginePower>
+          <smplEnginePower>	1250	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Saurer_1000_7x7>
       </engines>
@@ -2222,6 +2222,7 @@
               <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_F64_AMX_50Fosh_B_7x7>
       </chassis>
     </detailed>

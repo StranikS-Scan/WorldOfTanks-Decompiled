@@ -36,7 +36,6 @@ class SteamAddEmailOverlayView(BaseCredentialsOverlayView):
 
     def _onLoading(self, *args, **kwargs):
         super(SteamAddEmailOverlayView, self)._onLoading(*args, **kwargs)
-        self.viewModel.setIsPasswordInputVisible(False)
         self.__accountCompletionCtrl.setAddEmailOverlayShown()
 
     def _validateInput(self):

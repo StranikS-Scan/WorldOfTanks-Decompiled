@@ -22,7 +22,6 @@ from helpers import dependency, server_settings
 from shared_utils import first
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -43,7 +42,6 @@ class BattleMattersController(IBattleMattersController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __connMgr = dependency.descriptor(IConnectionManager)
     __battleMattersSelectableRewardMgr = BattleMattersSelectableRewardManager
-    __bootcampController = dependency.descriptor(IBootcampController)
     __slots__ = ('_em', 'onStateChanged', 'onFinish', '_isEnabled', '_prevFinishStateFlag', '_isPaused', '_isAvailable', '__delayedRewardOfferCurrencyToken', '__delayedRewardOfferVisibilityToken', '__isWaitingToken', '__savedRewards', '__hasDelayedRewards', '__finishState', '__hintHelper', '__progressWatcher')
 
     def __init__(self):
@@ -290,7 +288,7 @@ class BattleMattersController(IBattleMattersController):
         return self.__itemsCache.items.tokens.getToken(_BATTLE_MATTERS_UNLOCK_TOKEN) is not None
 
     def _getIsEnabled(self):
-        isEnabled = self.__getConfig().isEnabled and not self.__bootcampController.isInBootcamp()
+        isEnabled = self.__getConfig().isEnabled
         return isEnabled and (self._isAvailable or self.__eventsCache.waitForSync or not self.__itemsCache.isSynced())
 
     def _onSyncCompleted(self):

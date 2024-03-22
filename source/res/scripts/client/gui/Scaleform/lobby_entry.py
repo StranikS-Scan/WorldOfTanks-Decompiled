@@ -31,12 +31,10 @@ from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
-from helpers import dependency, uniprof
+from helpers import uniprof
 from skeletons.gui.app_loader import GuiGlobalSpaceID
-from skeletons.gui.game_control import IBootcampController
 
 class LobbyEntry(AppEntry):
-    bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self, appNS, ctrlModeFlags):
         super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)

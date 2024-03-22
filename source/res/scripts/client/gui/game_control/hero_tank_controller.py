@@ -11,7 +11,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.game_control.calendar_controller import CalendarOfferType
 from helpers import dependency
-from skeletons.gui.game_control import IHeroTankController, IBootcampController, ICalendarController
+from skeletons.gui.game_control import IHeroTankController, ICalendarController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
@@ -27,7 +27,6 @@ _HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
 class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bootcampController = dependency.descriptor(IBootcampController)
     calendarController = dependency.descriptor(ICalendarController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
@@ -64,7 +63,7 @@ class HeroTankController(IHeroTankController):
         self._eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
 
     def isEnabled(self):
-        return self.__isEnabled and not self.bootcampController.isInBootcamp()
+        return self.__isEnabled
 
     def hasAdventHero(self):
         return self.__actionInfo is not None and self.__actionInfo.isEnabled

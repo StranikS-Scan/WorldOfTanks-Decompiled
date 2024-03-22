@@ -306,6 +306,9 @@ class LegacyEntity(_LegacyEntity):
     def getLimits(self):
         return self._limits
 
+    def setLimits(self, limits):
+        self._limits = limits
+
     def getPermissions(self, pID=None):
         clazz = self._permClass
         rosterKey = self.getRosterKey(pID=pID)

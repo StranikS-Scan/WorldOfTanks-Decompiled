@@ -1,15 +1,15 @@
 <germany.xml>
-  <germany:G02_Hummel54>	ussr	</germany:G02_Hummel54>
-  <germany:G02_Hummel47>	germany	</germany:G02_Hummel47>
-  <germany:G02_Hummel53>	usa	</germany:G02_Hummel53>
-  <germany:G02_Hummel44>	china	</germany:G02_Hummel44>
-  <germany:G02_Hummel46>	france	</germany:G02_Hummel46>
-  <germany:G02_Hummel52>	uk	</germany:G02_Hummel52>
-  <germany:G02_Hummel49>	japan	</germany:G02_Hummel49>
-  <germany:G02_Hummel45>	czech	</germany:G02_Hummel45>
-  <germany:G02_Hummel51>	sweden	</germany:G02_Hummel51>
-  <germany:G02_Hummel50>	poland	</germany:G02_Hummel50>
-  <germany:G02_Hummel48>	italy	</germany:G02_Hummel48>
+  <germany:G02_Hummel55>	ussr	</germany:G02_Hummel55>
+  <germany:G02_Hummel48>	germany	</germany:G02_Hummel48>
+  <germany:G02_Hummel54>	usa	</germany:G02_Hummel54>
+  <germany:G02_Hummel45>	china	</germany:G02_Hummel45>
+  <germany:G02_Hummel47>	france	</germany:G02_Hummel47>
+  <germany:G02_Hummel53>	uk	</germany:G02_Hummel53>
+  <germany:G02_Hummel50>	japan	</germany:G02_Hummel50>
+  <germany:G02_Hummel46>	czech	</germany:G02_Hummel46>
+  <germany:G02_Hummel52>	sweden	</germany:G02_Hummel52>
+  <germany:G02_Hummel51>	poland	</germany:G02_Hummel51>
+  <germany:G02_Hummel49>	italy	</germany:G02_Hummel49>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	summer	</season>
@@ -117,6 +117,7 @@
         <G40_Nashorn>	8.6 8.6 0.82 0.6	</G40_Nashorn>
         <G41_DickerMax>	5.7 5.7 0.14 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.3	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.6 2.6 0.34 0.18	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.4 2.4 0.6 0.000000	</G44_JagdTiger>
@@ -157,7 +158,6 @@
         <G78_Panther_M10>	2.6 2.7 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.9 2.7 0.46 0.43	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.6 1.6 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.6 2.6 0.34 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.8 1.8 0.11 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -302,6 +302,7 @@
         <G40_Nashorn>	6.9 6.9 0.5 0.26	</G40_Nashorn>
         <G41_DickerMax>	4.8 4.8 0.38 0.000000	</G41_DickerMax>
         <G42_Maus>	4.7 4.7 0.2 0.3	</G42_Maus>
+        <G42_Maus_7x7>	4.7 4.7 0.2 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	4.7 4.7 0.2 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.9 2.9 0.14 0.02	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.4 2.4 0.05 0.11	</G44_JagdTiger>
@@ -342,7 +343,6 @@
         <G78_Panther_M10>	2.2 2.2 0.26 0.2	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3 3.7 0.76 0.12	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.8 1.8 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.9 4 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.97 0.28	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.8 1.8 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.7 1.7 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -488,6 +488,7 @@
         <G40_Nashorn>	9.3 9.3 0.76 0.69	</G40_Nashorn>
         <G41_DickerMax>	5.7 5.7 0.32 0.48	</G41_DickerMax>
         <G42_Maus>	4.1 4.1 0.000000 0.3	</G42_Maus>
+        <G42_Maus_7x7>	4.1 4.1 0.000000 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	4.1 4.1 0.000000 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3.4 3.4 0.12 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.7 2.7 0.48 0.82	</G44_JagdTiger>
@@ -528,7 +529,6 @@
         <G78_Panther_M10>	2.8 3.1 0.06 0.13	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3.7 4.7 1 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2 2 1.2 0.24	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	4.2 4.3 0.64 0.24	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.7 4 0.42 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.3 2.3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.3 2.3 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -674,6 +674,7 @@
         <G40_Nashorn>	7.9 7.9 0.34 0.35	</G40_Nashorn>
         <G41_DickerMax>	4.9 4.9 0.000000 0.4	</G41_DickerMax>
         <G42_Maus>	3.4 3.4 0.22 0.96	</G42_Maus>
+        <G42_Maus_7x7>	3.4 3.4 0.22 0.96	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.4 3.4 0.22 0.96	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.1 2.1 0.58 0.22	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.2 2.2 0.17 0.6	</G44_JagdTiger>
@@ -713,7 +714,6 @@
         <G78_Panther_M10>	2.1 2.1 0.04 0.14	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3.6 3.7 0.34 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.4 1.4 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.6 2.6 0.36 0.36	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.2 1.2 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.8 1.8 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -857,6 +857,7 @@
         <G40_Nashorn>	9.7 9.7 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	6.7 6.7 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	6.4 6.4 0.4 0.22	</G42_Maus>
+        <G42_Maus_7x7>	6.4 6.4 0.4 0.22	</G42_Maus_7x7>
         <G42_Maus_IGR>	6.4 6.4 0.4 0.22	</G42_Maus_IGR>
         <G43_Sturer_Emil>	4.9 4.9 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.9 2.9 0.000000 0.000000	</G44_JagdTiger>
@@ -897,7 +898,6 @@
         <G78_Panther_M10>	4.8 4.8 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	5.5 5.5 0.26 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.9 2.9 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	7 7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	7 7 0.2 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.3 2.3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.5 2.5 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -1042,6 +1042,7 @@
         <G40_Nashorn>	10.5 10.5 0.67 0.16	</G40_Nashorn>
         <G41_DickerMax>	6.5 6.5 0.5 0.56	</G41_DickerMax>
         <G42_Maus>	3.4 3.4 0.6 1.4	</G42_Maus>
+        <G42_Maus_7x7>	3.4 3.4 0.6 1.4	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.4 3.4 0.6 1.4	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3 3 0.28 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.6 2.6 0.6 0.62	</G44_JagdTiger>
@@ -1082,7 +1083,6 @@
         <G78_Panther_M10>	2.6 2.6 0.1 0.3	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	4.3 4.4 0.28 0.04	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.9 1.9 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	5 5 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.6 3.6 0.06 0.36	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.6 1.6 0.44 0.54	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.2 2.2 0.000000 2.9	</G83_Pz_IV_AusfA>
@@ -1240,6 +1240,7 @@
         <G40_Nashorn>	9 9 0.62 0.82	</G40_Nashorn>
         <G41_DickerMax>	5.9 5.9 0.57 0.000000	</G41_DickerMax>
         <G42_Maus>	3.7 3.7 0.4 0.1	</G42_Maus>
+        <G42_Maus_7x7>	3.7 3.7 0.4 0.1	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.7 3.7 0.4 0.1	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3.4 3.4 0.08 0.18	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.4 2.4 0.4 0.000000	</G44_JagdTiger>
@@ -1280,7 +1281,6 @@
         <G78_Panther_M10>	3.3 3.3 0.6 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	4.8 4.9 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.6 2.6 0.000000 0.1	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	5 5 0.000000 0.1	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	5 5 0.68 0.16	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.8 1.8 0.38 0.64	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.5 2.5 0.14 0.04	</G83_Pz_IV_AusfA>
@@ -1426,6 +1426,7 @@
         <G40_Nashorn>	5.1 5.1 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	4 4 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.2 2.2 0.1 0.1	</G42_Maus>
+        <G42_Maus_7x7>	2.2 2.2 0.1 0.1	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.2 2.2 0.1 0.1	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.7 1.7 0.15 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.5 1.5 0.38 0.000000	</G44_JagdTiger>
@@ -1466,7 +1467,6 @@
         <G78_Panther_M10>	2.2 2.2 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.5 2.2 0.44 0.4	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.1 1.1 1.7 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.6 3.2 0.86 0.62	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.7 1.7 0.1 0.08	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.8 1.8 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -1606,6 +1606,7 @@
         <G40_Nashorn>	5.6 5.6 0.2 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.2 3.2 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.9 2.9 0.3 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	2.9 2.9 0.3 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.9 2.9 0.3 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.9 2.9 0.3 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.2 0.000000	</G44_JagdTiger>
@@ -1671,7 +1672,7 @@
         <germany:G05_StuG_40_AusfG4>	1.8 1.8 0.61 0.2	</germany:G05_StuG_40_AusfG4>
         <germany:G05_StuG_40_AusfG5>	1.63 1.63 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.63 1.63 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
-        <germany:G02_Hummel21>	2.4 2.4 0.6 0.2	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.4 2.4 0.6 0.2	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -1789,6 +1790,7 @@
         <G40_Nashorn>	6.9 6.9 0.64 0.32	</G40_Nashorn>
         <G41_DickerMax>	4.5 4.5 0.06 0.48	</G41_DickerMax>
         <G42_Maus>	3 3 0.34 0.8	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.34 0.8	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.34 0.8	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2 2 0.21 0.4	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.2 2.2 0.54 0.000000	</G44_JagdTiger>
@@ -1829,7 +1831,6 @@
         <G78_Panther_M10>	1.8 1.8 0.26 0.12	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3 2.7 0.71 0.44	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.6 1.6 1.2 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.5 2.5 0.28 0.1	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.9 1.9 0.14 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -1962,6 +1963,7 @@
         <G40_Nashorn>	3.1 3.2 0.28 0.09	</G40_Nashorn>
         <G41_DickerMax>	2.8 2.9 0.000000 0.3	</G41_DickerMax>
         <G42_Maus>	3 3 0.37 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.37 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.37 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3 3.1 0.21 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	3.2 3.1 0.39 0.000000	</G44_JagdTiger>
@@ -2001,7 +2003,6 @@
         <G78_Panther_M10>	4.3 4.1 0.000000 0.4	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3.1 2.8 0.21 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	5 5 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	5.6 5.6 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	3 3 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -2140,6 +2141,7 @@
         <G40_Nashorn>	5.6 5.6 0.2 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.2 3.2 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.9 2.9 0.3 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	2.9 2.9 0.3 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.9 2.9 0.3 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.9 2.9 0.3 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.2 0.000000	</G44_JagdTiger>
@@ -2205,7 +2207,7 @@
         <germany:G05_StuG_40_AusfG4>	1.8 1.8 0.000000 0.2	</germany:G05_StuG_40_AusfG4>
         <germany:G05_StuG_40_AusfG5>	1.32 1.32 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.32 1.32 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
-        <germany:G02_Hummel21>	2.4 2.4 0.6 0.2	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.4 2.4 0.6 0.2	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -2334,6 +2336,7 @@
         <G40_Nashorn>	6.8 6.8 0.1 0.14	</G40_Nashorn>
         <G41_DickerMax>	4.5 4.5 0.000000 0.51	</G41_DickerMax>
         <G42_Maus>	3 3 0.3 0.3	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.3 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.3 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3.3 3.3 0.49 0.7	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.8 2.8 0.29 0.08	</G44_JagdTiger>
@@ -2374,7 +2377,6 @@
         <G78_Panther_M10>	2.7 2.7 0.05 0.24	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3.4 4.7 0.91 0.07	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.8 1.8 0.22 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	5 5 0.22 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	4.5 4.6 0.92 0.6	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2 2 0.1 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.3 1.3 0.22 0.1	</G83_Pz_IV_AusfA>
@@ -2519,6 +2521,7 @@
         <G40_Nashorn>	7.8 7.8 0.2 0.21	</G40_Nashorn>
         <G41_DickerMax>	6 6 0.14 0.000000	</G41_DickerMax>
         <G42_Maus>	4.4 4.4 0.000000 0.2	</G42_Maus>
+        <G42_Maus_7x7>	4.4 4.4 0.000000 0.2	</G42_Maus_7x7>
         <G42_Maus_IGR>	4.4 4.4 0.000000 0.2	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3 3 0.12 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.4 2.4 0.000000 0.6	</G44_JagdTiger>
@@ -2559,7 +2562,6 @@
         <G78_Panther_M10>	3.8 3.8 0.19 0.18	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	4.4 4.3 0.81 0.18	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.9 1.9 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	5 5 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	4.4 4.4 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.4 2.4 0.06 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -2714,6 +2716,7 @@
         <G40_Nashorn>	7.5 7.5 0.32 0.000000	</G40_Nashorn>
         <G41_DickerMax>	5.4 5.4 0.37 0.98	</G41_DickerMax>
         <G42_Maus>	3 3 0.5 0.86	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.5 0.86	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.5 0.86	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2 2 0.38 0.33	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.8 1.8 0.52 0.94	</G44_JagdTiger>
@@ -2754,7 +2757,6 @@
         <G78_Panther_M10>	2.6 2.6 0.46 0.61	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	4.3 3.2 0.28 0.87	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.4 1.4 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.15 0.1	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.2 2.2 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -2896,6 +2898,7 @@
         <G40_Nashorn>	5.2 5.2 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.4 3.4 0.28 0.34	</G41_DickerMax>
         <G42_Maus>	3 3 0.2 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.2 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.2 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.8 1.8 0.2 2	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.5 1.5 0.08 0.1	</G44_JagdTiger>
@@ -2936,7 +2939,6 @@
         <G78_Panther_M10>	2.6 2.6 0.14 0.14	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.7 2.8 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.5 1.5 3 0.08	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.08	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.34 0.6	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.5 1.5 0.42 0.16	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.3 1.3 0.000000 4.3	</G83_Pz_IV_AusfA>
@@ -3080,6 +3082,7 @@
         <G40_Nashorn>	10.7 10.7 0.7 0.52	</G40_Nashorn>
         <G41_DickerMax>	6.5 6.5 0.17 0.1	</G41_DickerMax>
         <G42_Maus>	6.2 6.2 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	6.2 6.2 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	6.2 6.2 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	4.6 4.6 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	3.3 3.3 0.000000 0.06	</G44_JagdTiger>
@@ -3120,7 +3123,6 @@
         <G78_Panther_M10>	4.1 4.1 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	5.5 5.4 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.9 2.9 4.9 2.2	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	7 7 0.42 0.4	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	6.6 7 0.34 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.3 2.3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.5 2.5 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -3263,6 +3265,7 @@
         <G40_Nashorn>	5.6 5.6 0.2 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.2 3.2 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.9 2.9 0.3 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	2.9 2.9 0.3 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.9 2.9 0.3 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.1 2.1 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.2 0.000000	</G44_JagdTiger>
@@ -3328,7 +3331,7 @@
         <germany:G05_StuG_40_AusfG4>	1.8 1.8 0.000000 0.2	</germany:G05_StuG_40_AusfG4>
         <germany:G05_StuG_40_AusfG5>	1.5 1.5 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.5 1.5 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
-        <germany:G02_Hummel21>	2.4 2.4 0.6 0.2	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.4 2.4 0.6 0.2	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -3440,6 +3443,7 @@
         <G40_Nashorn>	9 9 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	7 7 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.7 1.7 0.15 0.5	</G43_Sturer_Emil>
         <G44_JagdTiger>	3 3 0.000000 0.000000	</G44_JagdTiger>
@@ -3480,7 +3484,6 @@
         <G78_Panther_M10>	2.1 2.1 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.2 3 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.7 1.7 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.8 2.8 0.06 0.16	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	3 3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -3621,6 +3624,7 @@
         <G40_Nashorn>	10.2 10.2 0.2 0.000000	</G40_Nashorn>
         <G41_DickerMax>	7 7 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.7 1.7 0.15 0.5	</G43_Sturer_Emil>
         <G44_JagdTiger>	3 3 0.000000 0.000000	</G44_JagdTiger>
@@ -3661,7 +3665,6 @@
         <G78_Panther_M10>	2.1 2.1 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.7 3 0.16 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.7 1.7 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.6 2.6 0.08 0.18	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	3.1 3.1 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -3801,6 +3804,7 @@
         <G40_Nashorn>	9.8 9.8 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	7 7 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.7 1.7 0.15 0.5	</G43_Sturer_Emil>
         <G44_JagdTiger>	3 3 0.000000 0.000000	</G44_JagdTiger>
@@ -3841,7 +3845,6 @@
         <G78_Panther_M10>	2.1 2.1 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.6 2.5 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.7 1.7 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.8 2.8 0.04 0.24	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	3 3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -3982,6 +3985,7 @@
         <G40_Nashorn>	10.4 10.4 0.18 0.000000	</G40_Nashorn>
         <G41_DickerMax>	7 7 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.7 1.7 0.15 0.5	</G43_Sturer_Emil>
         <G44_JagdTiger>	3 3 0.000000 0.000000	</G44_JagdTiger>
@@ -4022,7 +4026,6 @@
         <G78_Panther_M10>	3.2 3.2 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	2.4 2.7 0.2 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.7 1.7 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.8 2.8 0.12 0.28	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	3 3 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -4168,6 +4171,7 @@
         <G40_Nashorn>	9.7 9.7 0.26 0.42	</G40_Nashorn>
         <G41_DickerMax>	6.8 6.8 0.36 0.000000	</G41_DickerMax>
         <G42_Maus>	4 4 0.4 0.3	</G42_Maus>
+        <G42_Maus_7x7>	4 4 0.4 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	4 4 0.4 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3.1 3.1 0.36 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	3.9 3.9 0.38 0.27	</G44_JagdTiger>
@@ -4207,7 +4211,6 @@
         <G77_PzIV_Schmalturm>	7.4 7.4 0.16 0.49	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	5.3 5.3 0.22 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.8 1.8 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	4.7 4.7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	4.9 4.8 0.51 0.84	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.2 2.2 0.7 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.7 2.7 0.000000 4.6	</G83_Pz_IV_AusfA>
@@ -4237,7 +4240,7 @@
         <germany:G05_StuG_40_AusfG5>	2.57 2.57 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.57 1.57 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	5.5 5.4 0.000000 0.000000	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2.8 2.8 0.42 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.8 2.8 0.42 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -4351,6 +4354,7 @@
         <G40_Nashorn>	6.7 6.7 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	4.6 4.6 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.4 2.4 0.28 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	2.4 2.4 0.28 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.4 2.4 0.28 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.5 2.5 0.2 0.4	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.6 1.6 0.000000 0.000000	</G44_JagdTiger>
@@ -4390,7 +4394,6 @@
         <G78_Panther_M10>	1.5 1.5 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3 3 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.1 2.1 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.16 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.6 1.6 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.8 1.8 0.000000 7.8	</G83_Pz_IV_AusfA>
@@ -4535,6 +4538,7 @@
         <G40_Nashorn>	7.4 7.4 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	4.6 4.6 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	2.6 2.6 0.24 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	2.6 2.6 0.24 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.6 2.6 0.24 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.6 2.6 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.8 1.8 0.28 0.2	</G44_JagdTiger>
@@ -4575,7 +4579,6 @@
         <G78_Panther_M10>	2.2 2.2 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	3 3 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.2 1.2 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.5 0.44	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.8 1.8 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.5 1.5 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -4719,6 +4722,7 @@
         <G40_Nashorn>	8.5 8.5 0.000000 0.000000	</G40_Nashorn>
         <G41_DickerMax>	5.1 5.1 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3 3 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3 3 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.6 2.6 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.2 2.2 0.000000 0.000000	</G44_JagdTiger>
@@ -4759,7 +4763,6 @@
         <G78_Panther_M10>	2.8 2.8 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	5 5 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.6 1.6 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3 3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.2 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.6 1.6 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.7 1.7 0.000000 0.000000	</G83_Pz_IV_AusfA>
@@ -4938,6 +4941,7 @@
         <G40_Nashorn>	8.6 8.6 0.000000 0.78	</G40_Nashorn>
         <G41_DickerMax>	5.6 5.6 1 1	</G41_DickerMax>
         <G42_Maus>	2.5 2.5 0.000000 0.47	</G42_Maus>
+        <G42_Maus_7x7>	2.5 2.5 0.000000 0.47	</G42_Maus_7x7>
         <G42_Maus_IGR>	2.5 2.5 0.000000 0.47	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.8 1.8 0.38 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.5 2.5 0.84 0.000000	</G44_JagdTiger>
@@ -4977,7 +4981,6 @@
         <G77_PzIV_Schmalturm>	3.7 3.7 0.000000 0.000000	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	4.4 4.3 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.6 1.6 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.4 3.5 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.8 3.8 0.38 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.6 1.6 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.25 0.000000	</G83_Pz_IV_AusfA>
@@ -5007,7 +5010,7 @@
         <germany:G05_StuG_40_AusfG5>	1.83 1.83 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.83 1.83 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	3.8 3.5 0.000000 0.12	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2 2 0.15 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2 2 0.15 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5125,6 +5128,7 @@
         <G40_Nashorn>	10.1 10.1 0.69 0.000000	</G40_Nashorn>
         <G41_DickerMax>	5.9 5.9 0.66 0.52	</G41_DickerMax>
         <G42_Maus>	4.4 4.4 0.56 0.24	</G42_Maus>
+        <G42_Maus_7x7>	4.4 4.4 0.56 0.24	</G42_Maus_7x7>
         <G42_Maus_IGR>	4.4 4.4 0.56 0.24	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3.7 3.7 0.95 0.73	</G43_Sturer_Emil>
         <G44_JagdTiger>	3.1 3.1 0.96 1	</G44_JagdTiger>
@@ -5164,7 +5168,6 @@
         <G77_PzIV_Schmalturm>	4.5 4.5 0.1 0.000000	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	4.1 4.1 0.12 0.52	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.2 2.2 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.8 3.8 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.8 3.8 0.7 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2 2 0.36 0.24	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.5 2.5 0.16 0.76	</G83_Pz_IV_AusfA>
@@ -5194,7 +5197,7 @@
         <germany:G05_StuG_40_AusfG5>	1.83 1.83 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.83 1.83 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	4.9 4.9 0.42 0.12	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2.9 2.9 0.35 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.9 2.9 0.35 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5310,6 +5313,7 @@
         <G40_Nashorn>	5.5 5.5 0.21 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.5 3.5 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3.1 3.1 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3.1 3.1 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.1 3.1 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2 2 0.000000 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.15 0.25	</G44_JagdTiger>
@@ -5349,7 +5353,6 @@
         <G77_PzIV_Schmalturm>	3.2 3.2 0.000000 0.52	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	3.4 3.3 0.47 0.46	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.5 1.5 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.1 2.7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.04 2.8 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.22 1.22 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.6 1.6 0.000000 6.2	</G83_Pz_IV_AusfA>
@@ -5378,7 +5381,7 @@
         <germany:G05_StuG_40_AusfG5>	1.25 1.25 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.25 1.25 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	3.5 3.5 0.000000 0.000000	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2 2 0.21 0.11	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2 2 0.21 0.11	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5493,6 +5496,7 @@
         <G40_Nashorn>	4.5 4.5 1 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3 3 0.57 0.000000	</G41_DickerMax>
         <G42_Maus>	3.1 3.1 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3.1 3.1 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.1 3.1 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.3 2.3 0.8 0.5	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.4 1.4 0.000000 0.000000	</G44_JagdTiger>
@@ -5532,7 +5536,6 @@
         <G77_PzIV_Schmalturm>	3.9 3.9 0.32 0.000000	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	2.9 3 0.08 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.4 1.4 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	2.3 2.3 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.5 2.5 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2 2 0.25 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.2 1.2 5.7 5.4	</G83_Pz_IV_AusfA>
@@ -5561,7 +5564,7 @@
         <germany:G05_StuG_40_AusfG5>	0.92 0.92 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	0.92 0.92 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	2.3 2.3 0.47 0.000000	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2.3 2.3 0.26 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.3 2.3 0.26 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5678,6 +5681,7 @@
         <G40_Nashorn>	5.5 5.5 0.21 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.5 3.5 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3.1 3.1 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3.1 3.1 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.1 3.1 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2 2 0.000000 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.15 0.25	</G44_JagdTiger>
@@ -5717,7 +5721,6 @@
         <G77_PzIV_Schmalturm>	3.2 3.2 0.000000 0.52	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	3.4 3.3 0.47 0.46	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.5 1.5 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.1 2.7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.04 2.8 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.22 1.22 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.6 1.6 0.000000 6.2	</G83_Pz_IV_AusfA>
@@ -5746,7 +5749,7 @@
         <germany:G05_StuG_40_AusfG5>	1.19 1.19 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.19 1.19 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	3.5 3.5 0.000000 0.000000	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2 2 0.21 0.11	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2 2 0.21 0.11	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5858,6 +5861,7 @@
         <G40_Nashorn>	5 5 0.38 0.49	</G40_Nashorn>
         <G41_DickerMax>	3 3 0.47 0.33	</G41_DickerMax>
         <G42_Maus>	3 3 2.5 1.3	</G42_Maus>
+        <G42_Maus_7x7>	3 3 2.5 1.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	3 3 2.5 1.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.2 2.2 0.19 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.3 1.3 0.14 0.37	</G44_JagdTiger>
@@ -5896,7 +5900,6 @@
         <G77_PzIV_Schmalturm>	2.3 2.3 0.1 0.000000	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	2.2 2.2 0.53 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.1 1.1 0.1 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	2.6 2.6 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	2.1 2.1 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.4 1.4 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.000000 3.4	</G83_Pz_IV_AusfA>
@@ -5925,7 +5928,7 @@
         <germany:G05_StuG_40_AusfG5>	0.98 0.98 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	0.98 0.98 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	2.1 2.1 0.000000 0.36	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	1.9 1.9 0.36 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	1.9 1.9 0.36 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6043,6 +6046,7 @@
         <G40_Nashorn>	10.4 10.4 0.24 0.12	</G40_Nashorn>
         <G41_DickerMax>	7 7 0.3 0.94	</G41_DickerMax>
         <G42_Maus>	7.2 7.2 0.26 0.61	</G42_Maus>
+        <G42_Maus_7x7>	7.2 7.2 0.26 0.61	</G42_Maus_7x7>
         <G42_Maus_IGR>	7.2 7.2 0.26 0.61	</G42_Maus_IGR>
         <G43_Sturer_Emil>	5.5 5.5 0.44 0.06	</G43_Sturer_Emil>
         <G44_JagdTiger>	4.6 4.6 0.84 0.000000	</G44_JagdTiger>
@@ -6082,7 +6086,6 @@
         <G77_PzIV_Schmalturm>	7.8 7.8 0.76 0.000000	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	7.4 7.4 0.22 0.5	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	2.8 2.8 0.08 0.64	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	6.4 6.4 0.08 0.64	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	5.4 5.4 0.44 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	3.2 3.2 0.48 0.63	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2 2 0.02 0.54	</G83_Pz_IV_AusfA>
@@ -6112,7 +6115,7 @@
         <germany:G05_StuG_40_AusfG5>	2.61 2.61 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	2.61 2.61 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	6.8 6.8 0.48 0.8	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	4 4 0.52 0.98	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	4 4 0.52 0.98	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6228,6 +6231,7 @@
         <G40_Nashorn>	5.5 5.5 0.21 0.000000	</G40_Nashorn>
         <G41_DickerMax>	3.5 3.5 0.000000 0.000000	</G41_DickerMax>
         <G42_Maus>	3.1 3.1 0.000000 0.000000	</G42_Maus>
+        <G42_Maus_7x7>	3.1 3.1 0.000000 0.000000	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.1 3.1 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2 2 0.000000 0.1	</G43_Sturer_Emil>
         <G44_JagdTiger>	2 2 0.15 0.25	</G44_JagdTiger>
@@ -6267,7 +6271,6 @@
         <G77_PzIV_Schmalturm>	3.2 3.2 0.000000 0.52	</G77_PzIV_Schmalturm>
         <G79_Pz_IV_AusfGH>	3.4 3.3 0.47 0.46	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.5 1.5 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	3.1 2.7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.04 2.8 0.000000 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.22 1.22 0.000000 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.6 1.6 0.000000 6.2	</G83_Pz_IV_AusfA>
@@ -6293,7 +6296,7 @@
         <germany:G05_StuG_40_AusfG2>	1.86 1.86 0.000000 0.000000	</germany:G05_StuG_40_AusfG2>
         <germany:G05_StuG_40_AusfG4>	1.6 1.6 0.000000 0.000000	</germany:G05_StuG_40_AusfG4>
         <germany:G06_PzII3>	3.5 3.5 0.000000 0.000000	</germany:G06_PzII3>
-        <germany:G02_Hummel21>	2 2 0.21 0.11	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2 2 0.21 0.11	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6618,6 +6621,7 @@
         <G40_Nashorn>	3.5 3.5 2.4 1.8	</G40_Nashorn>
         <G41_DickerMax>	2.8 2.8 0.1 0.000000	</G41_DickerMax>
         <G42_Maus>	1.7 1.7 0.5 0.3	</G42_Maus>
+        <G42_Maus_7x7>	1.7 1.7 0.5 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	1.7 1.7 0.5 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.2 1.2 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.7 1.7 0.000000 0.2	</G44_JagdTiger>
@@ -6678,7 +6682,7 @@
         <germany:G04_PzVI_Tiger_IA9>	3.36 3.36 0.000000 0.000000	</germany:G04_PzVI_Tiger_IA9>
         <germany:G05_StuG_40_AusfG2>	1.86 1.86 0.000000 0.000000	</germany:G05_StuG_40_AusfG2>
         <germany:G05_StuG_40_AusfG4>	1.5 1.5 0.9 0.000000	</germany:G05_StuG_40_AusfG4>
-        <germany:G02_Hummel21>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6786,6 +6790,7 @@
         <G40_Nashorn>	3.5 3.5 2.4 1.8	</G40_Nashorn>
         <G41_DickerMax>	2.8 2.8 0.1 0.000000	</G41_DickerMax>
         <G42_Maus>	1.7 1.7 0.5 0.3	</G42_Maus>
+        <G42_Maus_7x7>	1.7 1.7 0.5 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	1.7 1.7 0.5 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.2 1.2 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.7 1.7 0.000000 0.2	</G44_JagdTiger>
@@ -6850,7 +6855,7 @@
         <germany:G05_StuG_40_AusfG4>	1.5 1.5 0.9 0.000000	</germany:G05_StuG_40_AusfG4>
         <germany:G05_StuG_40_AusfG5>	1.32 1.32 0.000000 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.32 1.32 0.000000 0.000000	</germany:G05_StuG_40_AusfG6>
-        <germany:G02_Hummel21>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6958,6 +6963,7 @@
         <G40_Nashorn>	3.5 3.5 2.4 1.8	</G40_Nashorn>
         <G41_DickerMax>	2.8 2.8 0.1 0.000000	</G41_DickerMax>
         <G42_Maus>	1.7 1.7 0.5 0.3	</G42_Maus>
+        <G42_Maus_7x7>	1.7 1.7 0.5 0.3	</G42_Maus_7x7>
         <G42_Maus_IGR>	1.7 1.7 0.5 0.3	</G42_Maus_IGR>
         <G43_Sturer_Emil>	1.2 1.2 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	1.7 1.7 0.000000 0.2	</G44_JagdTiger>
@@ -7018,7 +7024,7 @@
         <germany:G04_PzVI_Tiger_IA9>	3.64 3.64 0.000000 0.000000	</germany:G04_PzVI_Tiger_IA9>
         <germany:G05_StuG_40_AusfG2>	1.93 1.93 0.000000 0.000000	</germany:G05_StuG_40_AusfG2>
         <germany:G05_StuG_40_AusfG4>	1.5 1.5 0.9 0.000000	</germany:G05_StuG_40_AusfG4>
-        <germany:G02_Hummel21>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel22>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7257,62 +7263,63 @@
         <germany:G08_Pz38t5>	6 6 1.95 2.15	</germany:G08_Pz38t5>
         <germany:G08_Pz38t6>	5.28 5.28 1.24 1.64	</germany:G08_Pz38t6>
         <germany:G08_Pz38t7>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t7>
-        <germany:G08_Pz38t8>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t8>
-        <germany:G08_Pz38t9>	2 2 2.62 0.75	</germany:G08_Pz38t9>
-        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G08_Pz38t8>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t8>
+        <germany:G08_Pz38t9>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t9>
         <germany:G09_Hetzer0>	2 2 2.62 0.75	</germany:G09_Hetzer0>
-        <germany:G09_Hetzer2>	5 5 0.92 1.31	</germany:G09_Hetzer2>
-        <germany:G09_Hetzer3>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer3>
-        <germany:G09_Hetzer4>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer4>
-        <germany:G09_Hetzer5>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer5>
-        <germany:G09_Hetzer6>	2 2 0.82 0.81	</germany:G09_Hetzer6>
-        <germany:G09_Hetzer7>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer7>
+        <germany:G09_Hetzer2>	2 2 2.62 0.75	</germany:G09_Hetzer2>
+        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G09_Hetzer3>	5 5 0.92 1.31	</germany:G09_Hetzer3>
+        <germany:G09_Hetzer4>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer4>
+        <germany:G09_Hetzer5>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer5>
+        <germany:G09_Hetzer6>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer6>
+        <germany:G09_Hetzer7>	2 2 0.82 0.81	</germany:G09_Hetzer7>
         <germany:G09_Hetzer8>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer8>
-        <germany:G09_Hetzer9>	3.75 3.75 1.65 1.82	</germany:G09_Hetzer9>
-        <germany:G02_Hummel00>	2.5 2.5 2.05 1.37	</germany:G02_Hummel00>
-        <germany:G02_Hummel01>	2.6 2.6 2.99 1.95	</germany:G02_Hummel01>
+        <germany:G09_Hetzer9>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer9>
+        <germany:G02_Hummel00>	3.75 3.75 1.65 1.82	</germany:G02_Hummel00>
+        <germany:G02_Hummel01>	2.5 2.5 2.05 1.37	</germany:G02_Hummel01>
         <germany:G02_Hummel02>	2.6 2.6 2.99 1.95	</germany:G02_Hummel02>
-        <germany:G02_Hummel03>	4 4 1 1.88	</germany:G02_Hummel03>
-        <germany:G02_Hummel04>	3.18 3.18 1.64 1.25	</germany:G02_Hummel04>
-        <germany:G02_Hummel05>	3 3 4.76 1.91	</germany:G02_Hummel05>
-        <germany:G02_Hummel06>	1.6 1.6 3.54 0.51	</germany:G02_Hummel06>
+        <germany:G02_Hummel03>	2.6 2.6 2.99 1.95	</germany:G02_Hummel03>
+        <germany:G02_Hummel04>	4 4 1 1.88	</germany:G02_Hummel04>
+        <germany:G02_Hummel05>	3.18 3.18 1.64 1.25	</germany:G02_Hummel05>
+        <germany:G02_Hummel06>	3 3 4.76 1.91	</germany:G02_Hummel06>
         <germany:G02_Hummel07>	1.6 1.6 3.54 0.51	</germany:G02_Hummel07>
-        <germany:G02_Hummel08>	3.95 3.95 4.77 2.1	</germany:G02_Hummel08>
-        <germany:G02_Hummel09>	2.35 2.35 6.53 1.59	</germany:G02_Hummel09>
-        <germany:G02_Hummel10>	2.6 2.6 1.71 2.14	</germany:G02_Hummel10>
-        <germany:G02_Hummel11>	3.78 3.78 1.73 0.9	</germany:G02_Hummel11>
-        <germany:G02_Hummel12>	1.8 1.8 2.26 3.63	</germany:G02_Hummel12>
-        <germany:G02_Hummel13>	1.4 1.4 2.17 2.69	</germany:G02_Hummel13>
-        <germany:G02_Hummel14>	1.2 1.2 3.8 3.03	</germany:G02_Hummel14>
-        <germany:G02_Hummel15>	2.9 2.9 2.62 1.03	</germany:G02_Hummel15>
-        <germany:G02_Hummel16>	2.17 2.17 3.22 0.99	</germany:G02_Hummel16>
-        <germany:G02_Hummel17>	2.1 2.1 2.15 1.5	</germany:G02_Hummel17>
+        <germany:G02_Hummel08>	1.6 1.6 3.54 0.51	</germany:G02_Hummel08>
+        <germany:G02_Hummel09>	3.95 3.95 4.77 2.1	</germany:G02_Hummel09>
+        <germany:G02_Hummel10>	2.35 2.35 6.53 1.59	</germany:G02_Hummel10>
+        <germany:G02_Hummel11>	2.6 2.6 1.71 2.14	</germany:G02_Hummel11>
+        <germany:G02_Hummel12>	3.78 3.78 1.73 0.9	</germany:G02_Hummel12>
+        <germany:G02_Hummel13>	1.8 1.8 2.26 3.63	</germany:G02_Hummel13>
+        <germany:G02_Hummel14>	1.4 1.4 2.17 2.69	</germany:G02_Hummel14>
+        <germany:G02_Hummel15>	1.2 1.2 3.8 3.03	</germany:G02_Hummel15>
+        <germany:G02_Hummel16>	2.9 2.9 2.62 1.03	</germany:G02_Hummel16>
+        <germany:G02_Hummel17>	2.17 2.17 3.22 0.99	</germany:G02_Hummel17>
         <germany:G02_Hummel18>	2.1 2.1 2.15 1.5	</germany:G02_Hummel18>
-        <germany:G02_Hummel19>	2.4 2.4 0.14 2.08	</germany:G02_Hummel19>
-        <germany:G02_Hummel20>	3.7 3.7 1.31 2.21	</germany:G02_Hummel20>
-        <germany:G02_Hummel21>	2.1 2.1 2.15 1.5	</germany:G02_Hummel21>
-        <germany:G02_Hummel22>	1.4 1.4 4.1 0.6	</germany:G02_Hummel22>
-        <germany:G02_Hummel23>	2.8 2.8 0.51 1.11	</germany:G02_Hummel23>
-        <germany:G02_Hummel24>	2.3 2.3 1.31 1.25	</germany:G02_Hummel24>
-        <germany:G02_Hummel25>	2 2 7.22 7.35	</germany:G02_Hummel25>
-        <germany:G02_Hummel26>	1.8 1.8 0.36 0.96	</germany:G02_Hummel26>
-        <germany:G02_Hummel27>	1.8 1.8 0.31 0.92	</germany:G02_Hummel27>
-        <germany:G02_Hummel28>	4.4 4.4 1.28 0.57	</germany:G02_Hummel28>
-        <germany:G02_Hummel29>	4.8 4.8 1.79 1.42	</germany:G02_Hummel29>
-        <germany:G02_Hummel30>	1.8 1.8 2.26 1.21	</germany:G02_Hummel30>
-        <germany:G02_Hummel31>	3.1 3.1 0.63 0.76	</germany:G02_Hummel31>
+        <germany:G02_Hummel19>	2.1 2.1 2.15 1.5	</germany:G02_Hummel19>
+        <germany:G02_Hummel20>	2.4 2.4 0.14 2.08	</germany:G02_Hummel20>
+        <germany:G02_Hummel21>	3.7 3.7 1.31 2.21	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.1 2.1 2.15 1.5	</germany:G02_Hummel22>
+        <germany:G02_Hummel23>	1.4 1.4 4.1 0.6	</germany:G02_Hummel23>
+        <germany:G02_Hummel24>	2.8 2.8 0.51 1.11	</germany:G02_Hummel24>
+        <germany:G02_Hummel25>	2.3 2.3 1.31 1.25	</germany:G02_Hummel25>
+        <germany:G02_Hummel26>	2 2 7.22 7.35	</germany:G02_Hummel26>
+        <germany:G02_Hummel27>	1.8 1.8 0.36 0.96	</germany:G02_Hummel27>
+        <germany:G02_Hummel28>	1.8 1.8 0.31 0.92	</germany:G02_Hummel28>
+        <germany:G02_Hummel29>	4.4 4.4 1.28 0.57	</germany:G02_Hummel29>
+        <germany:G02_Hummel30>	4.8 4.8 1.79 1.42	</germany:G02_Hummel30>
+        <germany:G02_Hummel31>	1.8 1.8 2.26 1.21	</germany:G02_Hummel31>
         <germany:G02_Hummel32>	3.1 3.1 0.63 0.76	</germany:G02_Hummel32>
-        <germany:G02_Hummel33>	2.2 2.2 1.91 1.36	</germany:G02_Hummel33>
-        <germany:G02_Hummel34>	3 3 1.24 0.82	</germany:G02_Hummel34>
-        <germany:G02_Hummel35>	3 3 0.14 1.23	</germany:G02_Hummel35>
-        <germany:G02_Hummel36>	4 4 0.11 1.42	</germany:G02_Hummel36>
-        <germany:G02_Hummel37>	5.8 5.8 1.84 1.43	</germany:G02_Hummel37>
-        <germany:G02_Hummel38>	2 2 2.87 0.96	</germany:G02_Hummel38>
-        <germany:G02_Hummel39>	1.9 1.9 1.16 1.87	</germany:G02_Hummel39>
-        <germany:G02_Hummel40>	6 6 0.91 1.8	</germany:G02_Hummel40>
-        <germany:G02_Hummel41>	3 3 0.06 1.43	</germany:G02_Hummel41>
+        <germany:G02_Hummel33>	3.1 3.1 0.63 0.76	</germany:G02_Hummel33>
+        <germany:G02_Hummel34>	2.2 2.2 1.91 1.36	</germany:G02_Hummel34>
+        <germany:G02_Hummel35>	3 3 1.24 0.82	</germany:G02_Hummel35>
+        <germany:G02_Hummel36>	3 3 0.14 1.23	</germany:G02_Hummel36>
+        <germany:G02_Hummel37>	4 4 0.11 1.42	</germany:G02_Hummel37>
+        <germany:G02_Hummel38>	5.8 5.8 1.84 1.43	</germany:G02_Hummel38>
+        <germany:G02_Hummel39>	2 2 2.87 0.96	</germany:G02_Hummel39>
+        <germany:G02_Hummel40>	1.9 1.9 1.16 1.87	</germany:G02_Hummel40>
+        <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
-        <germany:G02_Hummel43>	3.4 3.4 1.68 3.18	</germany:G02_Hummel43>
+        <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7440,62 +7447,63 @@
         <germany:G08_Pz38t5>	6 6 1.95 2.15	</germany:G08_Pz38t5>
         <germany:G08_Pz38t6>	5.28 5.28 1.24 1.64	</germany:G08_Pz38t6>
         <germany:G08_Pz38t7>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t7>
-        <germany:G08_Pz38t8>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t8>
-        <germany:G08_Pz38t9>	2 2 2.62 0.75	</germany:G08_Pz38t9>
-        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G08_Pz38t8>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t8>
+        <germany:G08_Pz38t9>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t9>
         <germany:G09_Hetzer0>	2 2 2.62 0.75	</germany:G09_Hetzer0>
-        <germany:G09_Hetzer2>	5 5 0.92 1.31	</germany:G09_Hetzer2>
-        <germany:G09_Hetzer3>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer3>
-        <germany:G09_Hetzer4>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer4>
-        <germany:G09_Hetzer5>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer5>
-        <germany:G09_Hetzer6>	2 2 0.82 0.81	</germany:G09_Hetzer6>
-        <germany:G09_Hetzer7>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer7>
+        <germany:G09_Hetzer2>	2 2 2.62 0.75	</germany:G09_Hetzer2>
+        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G09_Hetzer3>	5 5 0.92 1.31	</germany:G09_Hetzer3>
+        <germany:G09_Hetzer4>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer4>
+        <germany:G09_Hetzer5>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer5>
+        <germany:G09_Hetzer6>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer6>
+        <germany:G09_Hetzer7>	2 2 0.82 0.81	</germany:G09_Hetzer7>
         <germany:G09_Hetzer8>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer8>
-        <germany:G09_Hetzer9>	3.75 3.75 1.65 1.82	</germany:G09_Hetzer9>
-        <germany:G02_Hummel00>	2.5 2.5 2.05 1.37	</germany:G02_Hummel00>
-        <germany:G02_Hummel01>	2.6 2.6 2.99 1.95	</germany:G02_Hummel01>
+        <germany:G09_Hetzer9>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer9>
+        <germany:G02_Hummel00>	3.75 3.75 1.65 1.82	</germany:G02_Hummel00>
+        <germany:G02_Hummel01>	2.5 2.5 2.05 1.37	</germany:G02_Hummel01>
         <germany:G02_Hummel02>	2.6 2.6 2.99 1.95	</germany:G02_Hummel02>
-        <germany:G02_Hummel03>	4 4 1 1.88	</germany:G02_Hummel03>
-        <germany:G02_Hummel04>	3.18 3.18 1.64 1.25	</germany:G02_Hummel04>
-        <germany:G02_Hummel05>	3 3 4.76 1.91	</germany:G02_Hummel05>
-        <germany:G02_Hummel06>	1.6 1.6 3.54 0.51	</germany:G02_Hummel06>
+        <germany:G02_Hummel03>	2.6 2.6 2.99 1.95	</germany:G02_Hummel03>
+        <germany:G02_Hummel04>	4 4 1 1.88	</germany:G02_Hummel04>
+        <germany:G02_Hummel05>	3.18 3.18 1.64 1.25	</germany:G02_Hummel05>
+        <germany:G02_Hummel06>	3 3 4.76 1.91	</germany:G02_Hummel06>
         <germany:G02_Hummel07>	1.6 1.6 3.54 0.51	</germany:G02_Hummel07>
-        <germany:G02_Hummel08>	3.95 3.95 4.77 2.1	</germany:G02_Hummel08>
-        <germany:G02_Hummel09>	2.35 2.35 6.53 1.59	</germany:G02_Hummel09>
-        <germany:G02_Hummel10>	2.6 2.6 1.71 2.14	</germany:G02_Hummel10>
-        <germany:G02_Hummel11>	3.78 3.78 1.73 0.9	</germany:G02_Hummel11>
-        <germany:G02_Hummel12>	1.8 1.8 2.26 3.63	</germany:G02_Hummel12>
-        <germany:G02_Hummel13>	1.4 1.4 2.17 2.69	</germany:G02_Hummel13>
-        <germany:G02_Hummel14>	1.2 1.2 3.8 3.03	</germany:G02_Hummel14>
-        <germany:G02_Hummel15>	2.9 2.9 2.62 1.03	</germany:G02_Hummel15>
-        <germany:G02_Hummel16>	2.17 2.17 3.22 0.99	</germany:G02_Hummel16>
-        <germany:G02_Hummel17>	2.1 2.1 2.15 1.5	</germany:G02_Hummel17>
+        <germany:G02_Hummel08>	1.6 1.6 3.54 0.51	</germany:G02_Hummel08>
+        <germany:G02_Hummel09>	3.95 3.95 4.77 2.1	</germany:G02_Hummel09>
+        <germany:G02_Hummel10>	2.35 2.35 6.53 1.59	</germany:G02_Hummel10>
+        <germany:G02_Hummel11>	2.6 2.6 1.71 2.14	</germany:G02_Hummel11>
+        <germany:G02_Hummel12>	3.78 3.78 1.73 0.9	</germany:G02_Hummel12>
+        <germany:G02_Hummel13>	1.8 1.8 2.26 3.63	</germany:G02_Hummel13>
+        <germany:G02_Hummel14>	1.4 1.4 2.17 2.69	</germany:G02_Hummel14>
+        <germany:G02_Hummel15>	1.2 1.2 3.8 3.03	</germany:G02_Hummel15>
+        <germany:G02_Hummel16>	2.9 2.9 2.62 1.03	</germany:G02_Hummel16>
+        <germany:G02_Hummel17>	2.17 2.17 3.22 0.99	</germany:G02_Hummel17>
         <germany:G02_Hummel18>	2.1 2.1 2.15 1.5	</germany:G02_Hummel18>
-        <germany:G02_Hummel19>	2.4 2.4 0.14 2.08	</germany:G02_Hummel19>
-        <germany:G02_Hummel20>	3.7 3.7 1.31 2.21	</germany:G02_Hummel20>
-        <germany:G02_Hummel21>	2.1 2.1 2.15 1.5	</germany:G02_Hummel21>
-        <germany:G02_Hummel22>	1.4 1.4 4.1 0.6	</germany:G02_Hummel22>
-        <germany:G02_Hummel23>	2.8 2.8 0.51 1.11	</germany:G02_Hummel23>
-        <germany:G02_Hummel24>	2.3 2.3 1.31 1.25	</germany:G02_Hummel24>
-        <germany:G02_Hummel25>	2 2 7.22 7.35	</germany:G02_Hummel25>
-        <germany:G02_Hummel26>	1.8 1.8 0.36 0.96	</germany:G02_Hummel26>
-        <germany:G02_Hummel27>	1.8 1.8 0.31 0.92	</germany:G02_Hummel27>
-        <germany:G02_Hummel28>	4.4 4.4 1.28 0.57	</germany:G02_Hummel28>
-        <germany:G02_Hummel29>	4.8 4.8 1.79 1.42	</germany:G02_Hummel29>
-        <germany:G02_Hummel30>	1.8 1.8 2.26 1.21	</germany:G02_Hummel30>
-        <germany:G02_Hummel31>	3.1 3.1 0.63 0.76	</germany:G02_Hummel31>
+        <germany:G02_Hummel19>	2.1 2.1 2.15 1.5	</germany:G02_Hummel19>
+        <germany:G02_Hummel20>	2.4 2.4 0.14 2.08	</germany:G02_Hummel20>
+        <germany:G02_Hummel21>	3.7 3.7 1.31 2.21	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.1 2.1 2.15 1.5	</germany:G02_Hummel22>
+        <germany:G02_Hummel23>	1.4 1.4 4.1 0.6	</germany:G02_Hummel23>
+        <germany:G02_Hummel24>	2.8 2.8 0.51 1.11	</germany:G02_Hummel24>
+        <germany:G02_Hummel25>	2.3 2.3 1.31 1.25	</germany:G02_Hummel25>
+        <germany:G02_Hummel26>	2 2 7.22 7.35	</germany:G02_Hummel26>
+        <germany:G02_Hummel27>	1.8 1.8 0.36 0.96	</germany:G02_Hummel27>
+        <germany:G02_Hummel28>	1.8 1.8 0.31 0.92	</germany:G02_Hummel28>
+        <germany:G02_Hummel29>	4.4 4.4 1.28 0.57	</germany:G02_Hummel29>
+        <germany:G02_Hummel30>	4.8 4.8 1.79 1.42	</germany:G02_Hummel30>
+        <germany:G02_Hummel31>	1.8 1.8 2.26 1.21	</germany:G02_Hummel31>
         <germany:G02_Hummel32>	3.1 3.1 0.63 0.76	</germany:G02_Hummel32>
-        <germany:G02_Hummel33>	2.2 2.2 1.91 1.36	</germany:G02_Hummel33>
-        <germany:G02_Hummel34>	3 3 1.24 0.82	</germany:G02_Hummel34>
-        <germany:G02_Hummel35>	3 3 0.14 1.23	</germany:G02_Hummel35>
-        <germany:G02_Hummel36>	4 4 0.11 1.42	</germany:G02_Hummel36>
-        <germany:G02_Hummel37>	5.8 5.8 1.84 1.43	</germany:G02_Hummel37>
-        <germany:G02_Hummel38>	2 2 2.87 0.96	</germany:G02_Hummel38>
-        <germany:G02_Hummel39>	1.9 1.9 1.16 1.87	</germany:G02_Hummel39>
-        <germany:G02_Hummel40>	6 6 0.91 1.8	</germany:G02_Hummel40>
-        <germany:G02_Hummel41>	3 3 0.06 1.43	</germany:G02_Hummel41>
+        <germany:G02_Hummel33>	3.1 3.1 0.63 0.76	</germany:G02_Hummel33>
+        <germany:G02_Hummel34>	2.2 2.2 1.91 1.36	</germany:G02_Hummel34>
+        <germany:G02_Hummel35>	3 3 1.24 0.82	</germany:G02_Hummel35>
+        <germany:G02_Hummel36>	3 3 0.14 1.23	</germany:G02_Hummel36>
+        <germany:G02_Hummel37>	4 4 0.11 1.42	</germany:G02_Hummel37>
+        <germany:G02_Hummel38>	5.8 5.8 1.84 1.43	</germany:G02_Hummel38>
+        <germany:G02_Hummel39>	2 2 2.87 0.96	</germany:G02_Hummel39>
+        <germany:G02_Hummel40>	1.9 1.9 1.16 1.87	</germany:G02_Hummel40>
+        <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
-        <germany:G02_Hummel43>	3.4 3.4 1.68 3.18	</germany:G02_Hummel43>
+        <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7623,62 +7631,63 @@
         <germany:G08_Pz38t5>	6 6 1.95 2.15	</germany:G08_Pz38t5>
         <germany:G08_Pz38t6>	5.28 5.28 1.24 1.64	</germany:G08_Pz38t6>
         <germany:G08_Pz38t7>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t7>
-        <germany:G08_Pz38t8>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t8>
-        <germany:G08_Pz38t9>	2 2 2.62 0.75	</germany:G08_Pz38t9>
-        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G08_Pz38t8>	3.63 3.63 0.36 0.98	</germany:G08_Pz38t8>
+        <germany:G08_Pz38t9>	2.24 2.24 0.88 1.4	</germany:G08_Pz38t9>
         <germany:G09_Hetzer0>	2 2 2.62 0.75	</germany:G09_Hetzer0>
-        <germany:G09_Hetzer2>	5 5 0.92 1.31	</germany:G09_Hetzer2>
-        <germany:G09_Hetzer3>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer3>
-        <germany:G09_Hetzer4>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer4>
-        <germany:G09_Hetzer5>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer5>
-        <germany:G09_Hetzer6>	2 2 0.82 0.81	</germany:G09_Hetzer6>
-        <germany:G09_Hetzer7>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer7>
+        <germany:G09_Hetzer2>	2 2 2.62 0.75	</germany:G09_Hetzer2>
+        <germany:G09_Hetzer1>	2 2 2.62 0.75	</germany:G09_Hetzer1>
+        <germany:G09_Hetzer3>	5 5 0.92 1.31	</germany:G09_Hetzer3>
+        <germany:G09_Hetzer4>	2.2 2.2 0.58 0.29	</germany:G09_Hetzer4>
+        <germany:G09_Hetzer5>	4.22 4.22 5.92 5.25	</germany:G09_Hetzer5>
+        <germany:G09_Hetzer6>	2.3 2.3 0.31 1.68	</germany:G09_Hetzer6>
+        <germany:G09_Hetzer7>	2 2 0.82 0.81	</germany:G09_Hetzer7>
         <germany:G09_Hetzer8>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer8>
-        <germany:G09_Hetzer9>	3.75 3.75 1.65 1.82	</germany:G09_Hetzer9>
-        <germany:G02_Hummel00>	2.5 2.5 2.05 1.37	</germany:G02_Hummel00>
-        <germany:G02_Hummel01>	2.6 2.6 2.99 1.95	</germany:G02_Hummel01>
+        <germany:G09_Hetzer9>	2.5 2.5 1.74 1.7	</germany:G09_Hetzer9>
+        <germany:G02_Hummel00>	3.75 3.75 1.65 1.82	</germany:G02_Hummel00>
+        <germany:G02_Hummel01>	2.5 2.5 2.05 1.37	</germany:G02_Hummel01>
         <germany:G02_Hummel02>	2.6 2.6 2.99 1.95	</germany:G02_Hummel02>
-        <germany:G02_Hummel03>	4 4 1 1.88	</germany:G02_Hummel03>
-        <germany:G02_Hummel04>	3.18 3.18 1.64 1.25	</germany:G02_Hummel04>
-        <germany:G02_Hummel05>	3 3 4.76 1.91	</germany:G02_Hummel05>
-        <germany:G02_Hummel06>	1.6 1.6 3.54 0.51	</germany:G02_Hummel06>
+        <germany:G02_Hummel03>	2.6 2.6 2.99 1.95	</germany:G02_Hummel03>
+        <germany:G02_Hummel04>	4 4 1 1.88	</germany:G02_Hummel04>
+        <germany:G02_Hummel05>	3.18 3.18 1.64 1.25	</germany:G02_Hummel05>
+        <germany:G02_Hummel06>	3 3 4.76 1.91	</germany:G02_Hummel06>
         <germany:G02_Hummel07>	1.6 1.6 3.54 0.51	</germany:G02_Hummel07>
-        <germany:G02_Hummel08>	3.95 3.95 4.77 2.1	</germany:G02_Hummel08>
-        <germany:G02_Hummel09>	2.35 2.35 6.53 1.59	</germany:G02_Hummel09>
-        <germany:G02_Hummel10>	2.6 2.6 1.71 2.14	</germany:G02_Hummel10>
-        <germany:G02_Hummel11>	3.78 3.78 1.73 0.9	</germany:G02_Hummel11>
-        <germany:G02_Hummel12>	1.8 1.8 2.26 3.63	</germany:G02_Hummel12>
-        <germany:G02_Hummel13>	1.4 1.4 2.17 2.69	</germany:G02_Hummel13>
-        <germany:G02_Hummel14>	1.2 1.2 3.8 3.03	</germany:G02_Hummel14>
-        <germany:G02_Hummel15>	2.9 2.9 2.62 1.03	</germany:G02_Hummel15>
-        <germany:G02_Hummel16>	2.17 2.17 3.22 0.99	</germany:G02_Hummel16>
-        <germany:G02_Hummel17>	2.1 2.1 2.15 1.5	</germany:G02_Hummel17>
+        <germany:G02_Hummel08>	1.6 1.6 3.54 0.51	</germany:G02_Hummel08>
+        <germany:G02_Hummel09>	3.95 3.95 4.77 2.1	</germany:G02_Hummel09>
+        <germany:G02_Hummel10>	2.35 2.35 6.53 1.59	</germany:G02_Hummel10>
+        <germany:G02_Hummel11>	2.6 2.6 1.71 2.14	</germany:G02_Hummel11>
+        <germany:G02_Hummel12>	3.78 3.78 1.73 0.9	</germany:G02_Hummel12>
+        <germany:G02_Hummel13>	1.8 1.8 2.26 3.63	</germany:G02_Hummel13>
+        <germany:G02_Hummel14>	1.4 1.4 2.17 2.69	</germany:G02_Hummel14>
+        <germany:G02_Hummel15>	1.2 1.2 3.8 3.03	</germany:G02_Hummel15>
+        <germany:G02_Hummel16>	2.9 2.9 2.62 1.03	</germany:G02_Hummel16>
+        <germany:G02_Hummel17>	2.17 2.17 3.22 0.99	</germany:G02_Hummel17>
         <germany:G02_Hummel18>	2.1 2.1 2.15 1.5	</germany:G02_Hummel18>
-        <germany:G02_Hummel19>	2.4 2.4 0.14 2.08	</germany:G02_Hummel19>
-        <germany:G02_Hummel20>	3.7 3.7 1.31 2.21	</germany:G02_Hummel20>
-        <germany:G02_Hummel21>	2.1 2.1 2.15 1.5	</germany:G02_Hummel21>
-        <germany:G02_Hummel22>	1.4 1.4 4.1 0.6	</germany:G02_Hummel22>
-        <germany:G02_Hummel23>	2.8 2.8 0.51 1.11	</germany:G02_Hummel23>
-        <germany:G02_Hummel24>	2.3 2.3 1.31 1.25	</germany:G02_Hummel24>
-        <germany:G02_Hummel25>	2 2 7.22 7.35	</germany:G02_Hummel25>
-        <germany:G02_Hummel26>	1.8 1.8 0.36 0.96	</germany:G02_Hummel26>
-        <germany:G02_Hummel27>	1.8 1.8 0.31 0.92	</germany:G02_Hummel27>
-        <germany:G02_Hummel28>	4.4 4.4 1.28 0.57	</germany:G02_Hummel28>
-        <germany:G02_Hummel29>	4.8 4.8 1.79 1.42	</germany:G02_Hummel29>
-        <germany:G02_Hummel30>	1.8 1.8 2.26 1.21	</germany:G02_Hummel30>
-        <germany:G02_Hummel31>	3.1 3.1 0.63 0.76	</germany:G02_Hummel31>
+        <germany:G02_Hummel19>	2.1 2.1 2.15 1.5	</germany:G02_Hummel19>
+        <germany:G02_Hummel20>	2.4 2.4 0.14 2.08	</germany:G02_Hummel20>
+        <germany:G02_Hummel21>	3.7 3.7 1.31 2.21	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	2.1 2.1 2.15 1.5	</germany:G02_Hummel22>
+        <germany:G02_Hummel23>	1.4 1.4 4.1 0.6	</germany:G02_Hummel23>
+        <germany:G02_Hummel24>	2.8 2.8 0.51 1.11	</germany:G02_Hummel24>
+        <germany:G02_Hummel25>	2.3 2.3 1.31 1.25	</germany:G02_Hummel25>
+        <germany:G02_Hummel26>	2 2 7.22 7.35	</germany:G02_Hummel26>
+        <germany:G02_Hummel27>	1.8 1.8 0.36 0.96	</germany:G02_Hummel27>
+        <germany:G02_Hummel28>	1.8 1.8 0.31 0.92	</germany:G02_Hummel28>
+        <germany:G02_Hummel29>	4.4 4.4 1.28 0.57	</germany:G02_Hummel29>
+        <germany:G02_Hummel30>	4.8 4.8 1.79 1.42	</germany:G02_Hummel30>
+        <germany:G02_Hummel31>	1.8 1.8 2.26 1.21	</germany:G02_Hummel31>
         <germany:G02_Hummel32>	3.1 3.1 0.63 0.76	</germany:G02_Hummel32>
-        <germany:G02_Hummel33>	2.2 2.2 1.91 1.36	</germany:G02_Hummel33>
-        <germany:G02_Hummel34>	3 3 1.24 0.82	</germany:G02_Hummel34>
-        <germany:G02_Hummel35>	3 3 0.14 1.23	</germany:G02_Hummel35>
-        <germany:G02_Hummel36>	4 4 0.11 1.42	</germany:G02_Hummel36>
-        <germany:G02_Hummel37>	5.8 5.8 1.84 1.43	</germany:G02_Hummel37>
-        <germany:G02_Hummel38>	2 2 2.87 0.96	</germany:G02_Hummel38>
-        <germany:G02_Hummel39>	1.9 1.9 1.16 1.87	</germany:G02_Hummel39>
-        <germany:G02_Hummel40>	6 6 0.91 1.8	</germany:G02_Hummel40>
-        <germany:G02_Hummel41>	3 3 0.06 1.43	</germany:G02_Hummel41>
+        <germany:G02_Hummel33>	3.1 3.1 0.63 0.76	</germany:G02_Hummel33>
+        <germany:G02_Hummel34>	2.2 2.2 1.91 1.36	</germany:G02_Hummel34>
+        <germany:G02_Hummel35>	3 3 1.24 0.82	</germany:G02_Hummel35>
+        <germany:G02_Hummel36>	3 3 0.14 1.23	</germany:G02_Hummel36>
+        <germany:G02_Hummel37>	4 4 0.11 1.42	</germany:G02_Hummel37>
+        <germany:G02_Hummel38>	5.8 5.8 1.84 1.43	</germany:G02_Hummel38>
+        <germany:G02_Hummel39>	2 2 2.87 0.96	</germany:G02_Hummel39>
+        <germany:G02_Hummel40>	1.9 1.9 1.16 1.87	</germany:G02_Hummel40>
+        <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
-        <germany:G02_Hummel43>	3.4 3.4 1.68 3.18	</germany:G02_Hummel43>
+        <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7798,6 +7807,7 @@
         <G40_Nashorn>	6 6 0.3 0.41	</G40_Nashorn>
         <G41_DickerMax>	3.8 3.8 0.000000 0.12	</G41_DickerMax>
         <G42_Maus>	4 4 0.4 0.22	</G42_Maus>
+        <G42_Maus_7x7>	4 4 0.4 0.22	</G42_Maus_7x7>
         <G42_Maus_IGR>	6.4 6.4 0.4 0.22	</G42_Maus_IGR>
         <G43_Sturer_Emil>	2.2 2.2 0.000000 0.26	</G43_Sturer_Emil>
         <G44_JagdTiger>	2.2 2.2 0.000000 0.000000	</G44_JagdTiger>
@@ -7838,7 +7848,6 @@
         <G78_Panther_M10>	2.2 2.2 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	5.5 5.5 0.26 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.3 1.3 0.21 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	7 7 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3 3 0.2 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.1 1.1 0.1 0.22	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	1.6 1.6 0.000000 -0.07	</G83_Pz_IV_AusfA>
@@ -7990,6 +7999,7 @@
         <G40_Nashorn>	13 13 0.67 0.16	</G40_Nashorn>
         <G41_DickerMax>	8.2 8.2 0.5 0.56	</G41_DickerMax>
         <G42_Maus>	9 9 0.6 1.4	</G42_Maus>
+        <G42_Maus_7x7>	9 9 0.6 1.4	</G42_Maus_7x7>
         <G42_Maus_IGR>	3.4 3.4 0.6 1.4	</G42_Maus_IGR>
         <G43_Sturer_Emil>	5 5 0.69 0.12	</G43_Sturer_Emil>
         <G44_JagdTiger>	5 5 0.000000 0.000000	</G44_JagdTiger>
@@ -8030,7 +8040,6 @@
         <G78_Panther_M10>	5 5 0.1 0.3	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	4.3 4.4 0.28 0.04	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	3.1 3.1 0.000000 0.000000	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	5 5 0.000000 0.000000	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	7 7 0.06 0.36	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	2.5 2.5 0.44 0.54	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	3.5 3.5 0.000000 2.9	</G83_Pz_IV_AusfA>
@@ -8184,6 +8193,7 @@
         <G40_Nashorn>	8.3 8.3 0.63 0.52	</G40_Nashorn>
         <G41_DickerMax>	5 5 0.17 0.1	</G41_DickerMax>
         <G42_Maus>	4.7 4.7 0.3 0.01	</G42_Maus>
+        <G42_Maus_7x7>	4.7 4.7 0.3 0.01	</G42_Maus_7x7>
         <G42_Maus_IGR>	6.2 6.2 0.000000 0.000000	</G42_Maus_IGR>
         <G43_Sturer_Emil>	3 3 0.000000 0.000000	</G43_Sturer_Emil>
         <G44_JagdTiger>	3 3 0.000000 0.000000	</G44_JagdTiger>
@@ -8224,7 +8234,6 @@
         <G78_Panther_M10>	2.3 2.3 0.000000 0.000000	</G78_Panther_M10>
         <G79_Pz_IV_AusfGH>	5.5 5.4 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G80_Pz_IV_AusfD>	1.4 1.4 5.21 2.2	</G80_Pz_IV_AusfD>
-        <G80_Pz_IV_AusfD_bootcamp>	7 7 0.42 0.4	</G80_Pz_IV_AusfD_bootcamp>
         <G81_Pz_IV_AusfH>	3.2 3.2 0.34 0.000000	</G81_Pz_IV_AusfH>
         <G82_Pz_II_AusfG>	1.8 1.8 0.24 0.000000	</G82_Pz_II_AusfG>
         <G83_Pz_IV_AusfA>	2.3 2.3 0.37 0.14	</G83_Pz_IV_AusfA>
@@ -8448,7 +8457,7 @@
         <GUN>	1.0	</GUN>
       </rotation>
       <tiling>
-        <germany:G02_Hummel31>	1 1 1 1	</germany:G02_Hummel31>
+        <germany:G02_Hummel32>	1 1 1 1	</germany:G02_Hummel32>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -8531,7 +8540,7 @@
         <GUN>	0.174533	</GUN>
       </rotation>
       <tiling>
-        <germany:G02_Hummel23>	2.8 2.8 0.51 1.11	</germany:G02_Hummel23>
+        <germany:G02_Hummel24>	2.8 2.8 0.51 1.11	</germany:G02_Hummel24>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>

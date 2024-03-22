@@ -162,6 +162,16 @@
       <runDelayDev>	45	</runDelayDev>
       <maxPlayersInTeam>	7	</maxPlayersInTeam>
     </COMP7>
+    <TOURNAMENT_COMP7>
+      <runDelay>	45	</runDelay>
+      <runDelayDev>	45	</runDelayDev>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+    </TOURNAMENT_COMP7>
+    <TRAINING_COMP7>
+      <runDelay>	45	</runDelay>
+      <runDelayDev>	45	</runDelayDev>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+    </TRAINING_COMP7>
     <BATTLE_ROYALE_SOLO>
       <runDelay>	30	</runDelay>
       <runDelayDev>	15	</runDelayDev>
@@ -178,11 +188,6 @@
       <runDelay>	30	</runDelay>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
-    <TOURNAMENT_COMP7>
-      <runDelay>	45	</runDelay>
-      <runDelayDev>	45	</runDelayDev>
-      <maxPlayersInTeam>	7	</maxPlayersInTeam>
-    </TOURNAMENT_COMP7>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -220,11 +225,6 @@
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
     </assault2>
-    <bootcamp>
-      <roundLength>	900	</roundLength>
-      <battleEndWarningDuration>	5	</battleEndWarningDuration>
-      <battleEndingSoonTime>	60	</battleEndingSoonTime>
-    </bootcamp>
     <epic>
       <stopVehiclesAtArenaFreeze>	True	</stopVehiclesAtArenaFreeze>
       <addGameTimePerDestructible>	0	</addGameTimePerDestructible>

@@ -53,7 +53,7 @@ class _BaseProductPacker(object):
         return productModel
 
     def _setProductSpecificData(self, item, productModel):
-        raise NotImplementedError
+        pass
 
     def __getState(self, item):
         if item.isInInventory:
@@ -125,9 +125,6 @@ class _OptionalDevicePacker(_BaseProductPacker):
     @property
     def _productType(self):
         return ProductTypes.REWARD
-
-    def _setProductSpecificData(self, item, productModel):
-        pass
 
 
 def getComp7ProductModel(itemCD, price):

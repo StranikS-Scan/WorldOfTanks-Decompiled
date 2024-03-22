@@ -26,6 +26,7 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
     __appLoader = dependency.descriptor(IAppLoader)
     __clansCtrl = dependency.descriptor(IWebController)
     CLAN_NEWS_ALIAS = 'clanNews'
+    DEPRECATED_ALIASES = ('wgcq_hangar_bubble',)
 
     def __init__(self):
         super(ClanNotificationController, self).__init__()
@@ -43,6 +44,9 @@ class ClanNotificationController(GameWindowController, IClanNotificationControll
     @MethodsRules.delayable('onLobbyInited')
     def setCounters(self, alias, count, isIncrement=False):
         if not self.__enabled:
+            return
+        if alias in self.DEPRECATED_ALIASES:
+            _logger.info('Received a deprecated alias = %s for the clan counter.', alias)
             return
         counters = self.getCounters()
         if isIncrement:

@@ -23,7 +23,6 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from shared_utils import AlwaysValidObject
 from skeletons.gui.app_loader import IAppFactory
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
@@ -57,7 +56,6 @@ class EmptyAppFactory(AlwaysValidObject, IAppFactory):
 
 class AS3_AppFactory(IAppFactory):
     __slots__ = ('__apps', '__packages', '__importer', '__waiting', '__ctrlModeFlags', '__weakref__', '__gui')
-    bootcampCtrl = dependency.descriptor(IBootcampController)
     __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
@@ -254,8 +252,6 @@ class AS3_AppFactory(IAppFactory):
          'guiControlsLobbyDynamic2.swf',
          'popovers.swf',
          'iconLibrary.swf']
-        if self.bootcampCtrl.isInBootcamp():
-            libs.extend(['BCGuiControlsLobbyBattle.swf', 'BCGuiControlsLobby.swf'])
         app.as_loadLibrariesS(libs)
         mainWindow = self.getMainWindow()
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY, parent=mainWindow)), EVENT_BUS_SCOPE.LOBBY)

@@ -22,7 +22,7 @@ from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIs
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from helpers.time_utils import getTimestampByStrDate
-from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import IEventsNotificationsController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
@@ -105,7 +105,6 @@ class _EntryPointData(object):
 class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlobalListener):
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __bootcamp = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __luiController = dependency.descriptor(ILimitedUIController)
     __slots__ = ['__entries', '__serverSettings']
@@ -204,7 +203,7 @@ class EventEntryPointsContainer(EventEntryPointsContainerMeta, Notifiable, IGlob
 
     def __updateEntries(self):
         data = []
-        if not self.__bootcamp.isInBootcamp() and self._isQueueEnabled():
+        if self._isQueueEnabled():
             count = 0
             priorities = [ item.priority for item in self.__entries.itervalues() ]
             if len(priorities) > len(set(priorities)):

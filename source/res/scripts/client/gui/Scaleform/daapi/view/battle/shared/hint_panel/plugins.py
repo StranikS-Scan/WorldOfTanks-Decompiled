@@ -8,7 +8,6 @@ import CommandMapping
 from Event import EventsSubscriber
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG
@@ -27,7 +26,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from hint_panel_plugin import HintPanelPlugin, HintData, HintPriority
 from items import makeIntCompactDescrByID
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import ISettingsCore, IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.goodies import IBoostersStateProvider
 from skeletons.gui.lobby_context import ILobbyContext
@@ -59,6 +58,8 @@ def createPlugins():
         result['radarHint'] = RadarHintPlugin
     if DynSquadHintPlugin.isSuitable():
         result['dynSquadHints'] = DynSquadHintPlugin
+    if DeathCamHintPlugin.isSuitable():
+        result['deathCamHint'] = DeathCamHintPlugin
     if RoleHelpPlugin.isSuitable():
         result['prebattleRoleHint'] = RoleHelpPlugin
     if CommanderCameraHintPlugin.isSuitable():
@@ -764,9 +765,9 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
-        settingsCore = dependency.instance(ISettingsCore)
-        battleCommunicationIsEnabled = bool(settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__battleComHintSettings) and self.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.BOOTCAMP and battleCommunicationIsEnabled
+        battleCommunications = dependency.instance(IBattleCommunicationsSettings)
+        battleCommunicationIsEnabled = bool(battleCommunications.isEnabled)
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__battleComHintSettings) and battleCommunicationIsEnabled
 
     def __canDisplayPersonalReservesActivationHint(self):
         battleBoostersCache = dependency.instance(IBoostersStateProvider)
@@ -825,6 +826,37 @@ class PreBattleHintPlugin(HintPanelPlugin):
             self.__hintInQueue = None
         self.__questHintSettings = self._updateCounterOnUsed(self.__questHintSettings)
         return
+
+
+class DeathCamHintPlugin(HintPanelPlugin):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, parentObj):
+        super(DeathCamHintPlugin, self).__init__(parentObj)
+        self.spectatorCtrl = self.sessionProvider.shared.spectator
+
+    @classmethod
+    def isSuitable(cls):
+        return cls.sessionProvider.shared.spectator is not None
+
+    def _getHint(self):
+        keyName = getReadableKey(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE)
+        pressText = backport.text(R.strings.death_cam.hints.follow_pt1())
+        hintText = backport.text(R.strings.death_cam.hints.follow_pt2())
+        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.HELP)
+
+    def __showHint(self):
+        self._parentObj.setBtnHint(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, self._getHint())
+
+    def __handleDeathFreeCamState(self, vehicleID):
+        if vehicleID is not None:
+            self.__showHint()
+        else:
+            self.__hideHint()
+        return
+
+    def __hideHint(self):
+        self._parentObj.removeBtnHint(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE)
 
 
 class RoleHelpPlugin(HintPanelPlugin):

@@ -33,7 +33,13 @@ class ISpawnListener(object):
     def updateCloseTime(self, timeLeft, state):
         pass
 
+    def componentChanged(self):
+        pass
+
     def updateRespawnTime(self, timeLeft):
+        pass
+
+    def updateTeammateRespawnTime(self, timeLeft):
         pass
 
     def updateBlockToRessurecTime(self, blockTime):
@@ -58,6 +64,7 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__cdState = COUNTDOWN_STATE.WAIT
         self.__notifier = self.__createNotifier()
         self.notificationManager = weakref.ref(notificationManager)
+        self.__livesLeft = 0
         return
 
     def getControllerID(self):
@@ -124,15 +131,24 @@ class SpawnController(ViewComponentsController, ISpawnController):
 
             return
 
+    def componentChanged(self):
+        for viewComponent in self._viewComponents:
+            viewComponent.componentChanged()
+
     def updateRespawnTimer(self, respawnTime):
         for viewComponent in self._viewComponents:
             viewComponent.updateRespawnTime(respawnTime)
+
+    def updateTeammateRespawnTime(self, teammateRespawnTime):
+        for viewComponent in self._viewComponents:
+            viewComponent.updateTeammateRespawnTime(teammateRespawnTime)
 
     def updateBlockToRessurecTimer(self, blockTime):
         for viewComponent in self._viewComponents:
             viewComponent.updateBlockToRessurecTime(blockTime)
 
     def updateLives(self, lives, prev):
+        self.__livesLeft = lives
         for viewComponent in self._viewComponents:
             viewComponent.updateLives(lives, prev)
 
@@ -165,6 +181,10 @@ class SpawnController(ViewComponentsController, ISpawnController):
     @property
     def viewComponents(self):
         return self._viewComponents
+
+    @property
+    def lives(self):
+        return self.__livesLeft
 
     @sf_battle
     def _app(self):

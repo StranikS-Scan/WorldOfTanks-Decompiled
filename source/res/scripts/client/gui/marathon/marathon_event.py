@@ -19,7 +19,6 @@ from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from helpers.time_utils import ONE_DAY
 from items.writers.c11n_writers import natsorted
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -31,7 +30,6 @@ _logger = logging.getLogger(__name__)
 
 class MarathonEvent(object):
     _eventsCache = dependency.descriptor(IEventsCache)
-    _bootcamp = dependency.descriptor(IBootcampController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _itemsCache = dependency.descriptor(IItemsCache)
 
@@ -132,7 +130,7 @@ class MarathonEvent(object):
         return self._resource.getHangarFlag()
 
     def isEnabled(self):
-        return self._data.isEnabled and not self._bootcamp.isInBootcamp()
+        return self._data.isEnabled
 
     def isAvailable(self):
         return self._data.isAvailable

@@ -111,16 +111,23 @@ class WinbackVehicleBonus(SimpleBonus):
         if rentName == RentType.TIME.value:
             rentValue = getServerUTCTime() + rentValue * ONE_DAY
         rentSeason = None
+        rentCycle = None
+        isSeniority = False
         specialArgs = (vehicleCD,
          crewLevel,
          rentValue if rentName == RentType.TIME.value else 0,
          rentValue if rentName == RentType.BATTLES.value else 0,
          rentValue if rentName == RentType.WINS.value else 0,
          rentSeason,
+         rentCycle,
+         isSeniority,
          crewLevel > 0,
          self._getVehData(vehicleCD).get('slot', 0) > 0,
-         bool(self._getVehData(vehicleCD).get('unlockModules', [])))
+         bool(self.getUnlockModules(vehicleCD)))
         return backport.createTooltipData(isSpecial=True, specialArgs=specialArgs, specialAlias=TOOLTIPS_CONSTANTS.EXTENDED_AWARD_VEHICLE)
+
+    def getUnlockModules(self, vehicleCD):
+        return self._getVehData(vehicleCD).get('unlockModules', [])
 
     def _createVehicleTooltip(self, vehicleCD):
         return self._getRentTooltip(vehicleCD)
@@ -167,6 +174,8 @@ class WinbackVehicleDiscountBonus(WinbackVehicleBonus):
          None,
          None,
          None,
+         None,
+         False,
          False,
          False,
          False,

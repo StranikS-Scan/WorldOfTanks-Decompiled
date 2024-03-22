@@ -7,7 +7,8 @@ import BattleReplay
 import BigWorld
 import Math
 import constants
-from AvatarInputHandler import aih_global_binding
+from aih_constants import CTRL_MODE_NAME
+from AvatarInputHandler import aih_global_binding, AvatarInputHandler
 from AvatarInputHandler.aih_global_binding import BINDING_ID
 from BattleReplay import CallbackDataNames
 from Math import Matrix
@@ -27,7 +28,7 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.doc_loaders import GuiColorsLoader
 from gui.shared import g_eventBus
-from gui.shared.events import GameEvent
+from gui.shared.events import GameEvent, DeathCamEvent
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
 from helpers import i18n
@@ -101,6 +102,9 @@ class MarkerPlugin(IPlugin):
     def getMarkerSubtype(self, targetID):
         return INVALID_MARKER_SUBTYPE
 
+    def invokeMarker(self, markerID, function, *args):
+        self._invokeMarker(markerID, function, *args)
+
     def _createMarkerWithPosition(self, symbol, position, active=True, markerType=CommonMarkerType.NORMAL):
         matrixProvider = Matrix()
         matrixProvider.translation = position
@@ -144,16 +148,42 @@ class MarkerPlugin(IPlugin):
 
 class ControlModePlugin(MarkerPlugin):
     _aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def start(self):
+        super(ControlModePlugin, self).start()
         aih_global_binding.subscribe(BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         self.__onAimOffsetChanged(self._aimOffset)
+        handler = avatar_getter.getInputHandler()
+        if handler is not None and isinstance(handler, AvatarInputHandler):
+            handler.onCameraChanged += self.__onCameraChanged
+        if self.guiSessionProvider.shared.killCamCtrl:
+            self.guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged += self.__onKillCamModeStateChanged
+        return
 
     def stop(self):
         aih_global_binding.unsubscribe(BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
+        if self.guiSessionProvider.shared.killCamCtrl:
+            self.guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamModeStateChanged
+        handler = avatar_getter.getInputHandler()
+        if handler is not None and isinstance(handler, AvatarInputHandler):
+            handler.onCameraChanged -= self.__onCameraChanged
+        self._parentObj.setVisible(True)
+        super(ControlModePlugin, self).stop()
+        return
 
     def __onAimOffsetChanged(self, offset):
         self._parentObj.setActiveCameraAimOffset(offset)
+
+    def __onCameraChanged(self, ctrlMode, currentVehicleId=None):
+        self.__updatePivotForMarkers(ctrlMode)
+
+    def __updatePivotForMarkers(self, ctrlMode):
+        isPivotAtCamera = ctrlMode == CTRL_MODE_NAME.DEATH_FREE_CAM
+        self._parentObj.setIsPivotAtCameraForMarkers(isPivotAtCamera)
+
+    def __onKillCamModeStateChanged(self, state, _):
+        self._parentObj.setVisible(state in (DeathCamEvent.State.INACTIVE, DeathCamEvent.State.FINISHED))
 
 
 class SettingsPlugin(MarkerPlugin):
@@ -791,6 +821,10 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         super(TeamsOrControlsPointsPlugin, self).stop()
         return
 
+    def setAllMarkersActive(self, value):
+        for targetID in self._markers:
+            self._setMarkerActive(self._markers[targetID].getMarkerID(), value)
+
     def __removeExistingMarkers(self):
         for markerKey in self._markers.iterkeys():
             self._destroyMarker(self._markers[markerKey].getMarkerID())
@@ -962,6 +996,10 @@ class BaseAreaMarkerPlugin(MarkerPlugin, ChatCommunicationComponent):
         self.__replayMarkersFeedbackStorage = {}
         super(BaseAreaMarkerPlugin, self).stop()
         return
+
+    def setAllMarkersActive(self, value):
+        for markerID in self.__markers:
+            self._setMarkerActive(markerID, value)
 
     @property
     def markers(self):

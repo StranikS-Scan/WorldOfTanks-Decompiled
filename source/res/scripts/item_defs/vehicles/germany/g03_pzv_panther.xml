@@ -1670,18 +1670,26 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>
@@ -1726,7 +1734,7 @@
           <segmentsPlaneOffset>	-1.36878	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.154226	</back>
+              <back>	0.151226	</back>
               <top>	0.148903	</top>
               <front>	0.142975	</front>
               <bottom>	0.122147	</bottom>
@@ -1912,7 +1920,7 @@
           <segmentsPlaneOffset>	1.36878	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.154226	</back>
+              <back>	0.151226	</back>
               <top>	0.148903	</top>
               <front>	0.142975	</front>
               <bottom>	0.122147	</bottom>
@@ -2514,18 +2522,26 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>
@@ -2570,7 +2586,7 @@
           <segmentsPlaneOffset>	-1.36878	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.154226	</back>
+              <back>	0.151226	</back>
               <top>	0.148903	</top>
               <front>	0.142975	</front>
               <bottom>	0.122147	</bottom>
@@ -2756,7 +2772,7 @@
           <segmentsPlaneOffset>	1.36878	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.154226	</back>
+              <back>	0.151226	</back>
               <top>	0.148903	</top>
               <front>	0.142975	</front>
               <bottom>	0.122147	</bottom>

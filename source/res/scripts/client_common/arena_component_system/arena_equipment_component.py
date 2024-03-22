@@ -224,19 +224,21 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         return
 
     def __updateExposedToEffect(self, vehicleID, senderKey, startTime, endTime, inactivationStartTime, inactivationEndTime, primary, equipmentID, effect, isInfluenceZone, inactivationSource):
-        exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
-        if startTime is None:
-            if exposedVehicleData is not None:
-                exposedVehicleData.startTime = exposedVehicleData.endTime = exposedVehicleData.inactivationStartTime = exposedVehicleData.inactivationEndTime = 0
-                providingVehicleData = effect.providingVehicles.get(vehicleID, None)
-                if providingVehicleData is not None:
-                    exposedVehicleData.destroy()
-                    del effect.exposedVehicles[vehicleID]
-                else:
-                    self.__checkAffectComponent(vehicleID, RepairAffectComponent, isInfluenceZone)
-                    self.__restartEffectData(exposedVehicleData, effect, isSource=False, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+        if effect is None:
             return
         else:
+            exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
+            if startTime is None:
+                if exposedVehicleData is not None:
+                    exposedVehicleData.startTime = exposedVehicleData.endTime = exposedVehicleData.inactivationStartTime = exposedVehicleData.inactivationEndTime = 0
+                    providingVehicleData = effect.providingVehicles.get(vehicleID, None)
+                    if providingVehicleData is not None:
+                        exposedVehicleData.destroy()
+                        del effect.exposedVehicles[vehicleID]
+                    else:
+                        self.__checkAffectComponent(vehicleID, RepairAffectComponent, isInfluenceZone)
+                        self.__restartEffectData(exposedVehicleData, effect, isSource=False, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+                return
             if exposedVehicleData is None:
                 effect.exposedVehicles[vehicleID] = exposedVehicleData = EffectData(vehicleID=vehicleID, startTime=startTime, endTime=endTime, visualSettings=effect.visualSettings, inactivationStartTime=inactivationStartTime, inactivationEndTime=inactivationEndTime, primary=primary, senderKey=senderKey, equipmentID=equipmentID, inactivationSource=inactivationSource)
             else:
@@ -274,13 +276,15 @@ class ArenaEquipmentComponent(ClientArenaComponent, CallbackDelayer):
         return
 
     def _updateEffectSource(self, vehicleID, startTime, endTime, inactivationDelay, effectSourceRadius, effect, equipmentID=None):
-        providingVehicleData = effect.providingVehicles.get(vehicleID, None)
-        if startTime is None:
-            if providingVehicleData is not None:
-                providingVehicleData.startTime = providingVehicleData.endTime = providingVehicleData.inactivationStartTime = providingVehicleData.inactivationEndTime = 0
-                self.__restartEffectData(providingVehicleData, effect, isSource=True, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+        if effect is None:
             return
         else:
+            providingVehicleData = effect.providingVehicles.get(vehicleID, None)
+            if startTime is None:
+                if providingVehicleData is not None:
+                    providingVehicleData.startTime = providingVehicleData.endTime = providingVehicleData.inactivationStartTime = providingVehicleData.inactivationEndTime = 0
+                    self.__restartEffectData(providingVehicleData, effect, isSource=True, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+                return
             exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
             if exposedVehicleData is not None:
                 exposedVehicleData.cancelCallback()

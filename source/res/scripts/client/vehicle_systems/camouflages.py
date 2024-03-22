@@ -199,14 +199,14 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
         return CustomizationOutfit()
 
 
-def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
+def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId, isPlayerVehicle):
     vehicleCD = vehicleDescriptor.makeCompactDescr()
     outfitComponent = getOutfitComponent(outfitCD, vehicleDescriptor)
     outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
     player = BigWorld.player()
     if player is not None and hasattr(player, 'customizationDisplayType'):
         localPlayerWantsHistoricallyAccurate = player.customizationDisplayType < outfit.customizationDisplayType()
-        isLocalVehicle = player.playerVehicleID != vehicleId
+        isLocalVehicle = not isPlayerVehicle
     else:
         localPlayerWantsHistoricallyAccurate = False
         isLocalVehicle = False

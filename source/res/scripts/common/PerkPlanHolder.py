@@ -107,6 +107,9 @@ class PCPlanHolder(object):
                 del self._plans[index]
                 break
 
+    def checkIsAllPlansLoaded(self):
+        return self._checkIsAllPlansLoaded()
+
     def _getContextEventsScheme(self):
         events = defaultdict(list)
         for plan in self._plans:

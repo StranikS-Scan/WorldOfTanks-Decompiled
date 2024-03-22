@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.battle.maps_training.loading_page import MapsTrain
 from gui.Scaleform.daapi.view.battle.maps_training.page import MapsTrainingPage
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle import shared
-from gui.Scaleform.daapi.view.battle.shared import ingame_menu
+from gui.Scaleform.daapi.view.battle.shared import ingame_menu, spectator_view
 from gui.Scaleform.daapi.view.battle.shared import damage_log_panel
 from gui.Scaleform.daapi.view.battle.shared import damage_panel
 from gui.Scaleform.daapi.view.battle.shared import debug_panel
@@ -24,6 +24,8 @@ from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
 from gui.Scaleform.daapi.view.battle.shared import callout_panel
 from gui.Scaleform.daapi.view.battle.shared import battle_notifier
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.daapi.view.battle.shared import death_cam_ui
+from gui.Scaleform.daapi.view.battle.shared import postmortem_info_panel
 
 def getContextMenuHandlers():
     return tuple()
@@ -54,6 +56,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, damage_info_panel.DamageInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, indicators.SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SPECTATOR_VIEW, spectator_view.SpectatorView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, indicators.SiegeModeIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, indicators.RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CALLOUT_PANEL, callout_panel.CalloutPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -69,7 +72,9 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, MapsTrainingGameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_HINT, battle_hint.BattleHint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.MAPS_TRAINING_GOALS, MapsTrainingBattleGoals, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.MAPS_TRAINING_GOALS, MapsTrainingBattleGoals, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.DEATH_CAM_HUD, death_cam_ui.DeathCamUI, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, postmortem_info_panel.PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

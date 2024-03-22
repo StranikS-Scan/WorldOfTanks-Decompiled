@@ -11,7 +11,7 @@ from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBootcampController, IGameSessionController
+from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from uilogging.helpers import getClientPeripheryID
@@ -101,7 +101,6 @@ class StatisticsCollector(IStatisticsCollector):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    bootcampController = dependency.descriptor(IBootcampController)
     gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self):
@@ -155,6 +154,7 @@ class StatisticsCollector(IStatisticsCollector):
 
     def needCollectSystemData(self, value):
         self.__needCollectSystemData = value
+        self.__sendFullStat = self.__sendFullStat and value
 
     def needCollectSessionData(self, value):
         self.__needCollectSessionData = value
@@ -193,7 +193,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.__lastArenaTeam = arenaTeam
         self.__randomEvents = randomEvents
         self.__blArenaPeriod = blArenaPeriod
-        if not self.__hangarWasLoadedOnce and not self.bootcampController.isInBootcamp():
+        if not self.__hangarWasLoadedOnce:
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
             self.__sendFullStat = True
 

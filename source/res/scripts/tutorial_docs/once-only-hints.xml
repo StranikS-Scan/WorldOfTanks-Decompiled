@@ -318,48 +318,6 @@
         </condition-and>
       </condition>
     </hint>
-    <hint>	PersonalReservesHangarHint	  <item-id>	ReservesButton	</item-id>
-      <text>	_(#personal_reserves:hangarEntry/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
-    <hint>	PersonalReservesActivationHint	  <item-id>	PersonalReservesGroup	</item-id>
-      <text>	_(#personal_reserves:activation/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
     <hint>	HangarManualHint	  <item-id>	LobbyMenuBnt	</item-id>
       <text>	_(#manual:manual_update/hint)	</text>
       <arrow>
@@ -387,12 +345,6 @@
       <text></text>
       <condition>
         <global-active>	_LobbyMenuItemManual	</global-active>
-      </condition>
-    </hint>
-    <hint>	LobbyMenuBootcampHint	  <item-id>	LobbyMenuBootcampItem	</item-id>
-      <text></text>
-      <condition>
-        <global-active>	_LobbyMenuItemBootcamp	</global-active>
       </condition>
     </hint>
     <hint>	DogTagProfileHint	  <item-id>	DogTagsWidget	</item-id>
@@ -868,6 +820,22 @@
           <arguments>	FrontlineScenariosHint	</arguments>
         </class-condition>
       </condition>
+    </hint>
+    <hint>	BattleRoyaleDynamicPlatoonSubModeHint	  <item-id>	BattleRoyaleDynamicPlatoonHint	</item-id>
+      <text>	_(#battle_royale:battleTypeSelector/tab/hint)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
   </hints>
 </once-only-hints.xml>

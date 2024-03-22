@@ -7,7 +7,6 @@ import Keys
 from Event import EventManager, Event
 from debug_utils import LOG_WARNING
 from gui import InputHandler
-from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
 from soft_exception import SoftException
 CM_BUY_COLOR = 13347959
@@ -22,8 +21,6 @@ def registerHandlers(*handlers):
         handlerType, handler = item[:2]
         if handlerType in _handlers:
             raise SoftException('Type of handler {} already exists'.format(handlerType))
-        if isinstance(handler, BootcampComponentOverride):
-            handler = handler()
         if not inspect.isclass(handler) or AbstractContextMenuHandler not in inspect.getmro(handler):
             raise SoftException('Handler {} is invalid'.format(handler))
         _handlers[handlerType] = handler

@@ -8,8 +8,8 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.base_crew_view_model import BaseCrewViewModel
-from gui.impl.pub import ViewImpl
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
+from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showPersonalCase, showChangeCrewMember
@@ -26,18 +26,19 @@ class BaseCrewSoundView(ViewImpl):
     _COMMON_SOUND_SPACE = CREW_SOUND_SPACE
 
 
-class BaseCrewSubView(ViewImpl):
+class BaseCrewSubView(BaseCrewSoundView):
     __slots__ = ()
     _COMMON_SOUND_SPACE = CREW_SOUND_OVERLAY_SPACE
 
 
 class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
-    __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_currentViewKey', '_uiLogger')
+    __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_currentViewKey', '_previousViewID', '_uiLogger')
 
     def __init__(self, settings, parentViewKey=None):
         self._isHangar = bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'alias', None) == VIEW_ALIAS.LOBBY_HANGAR))
         self._crewWidget = None
         self._currentViewID = settings.kwargs.get('currentViewID', settings.layoutID)
+        self._previousViewID = settings.kwargs.get('previousViewID')
         self._currentViewKey = None
         self._uiLogger = CrewBringToFrontViewLogger(self, settings.layoutID, parentViewKey if parentViewKey else LAYOUT_ID_TO_ITEM.get(settings.kwargs.get('previousViewID')))
         super(BaseCrewView, self).__init__(settings)
@@ -45,6 +46,10 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
 
     def onBringToFront(self, otherWindow):
         self._uiLogger.onBringToFront(otherWindow)
+
+    @property
+    def isPersonalFileOpened(self):
+        return self.gui.windowsManager.getViewByLayoutID(R.views.lobby.crew.TankmanContainerView()) is not None
 
     @property
     def crewWidget(self):
@@ -213,6 +218,8 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
             tankmanID = tankman.invID
         else:
             tankmanID, _ = self._findWidgetSlotNextIdx(NO_TANKMAN, slotIDX)
+        if tankmanID == NO_TANKMAN and self.crew:
+            tankmanID = next((item[1].invID for item in self.crew if item and item[1]), NO_TANKMAN)
         self.destroyWindow()
         showPersonalCase(tankmanID, previousViewID=self._currentViewID)
 

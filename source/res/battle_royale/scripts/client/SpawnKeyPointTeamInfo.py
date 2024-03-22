@@ -12,6 +12,8 @@ class SpawnKeyPointTeamInfo(SpawnKeyPointTeamInfoBase, DynamicScriptComponent):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _onAvatarReady(self):
+        if BigWorld.player().isObserver():
+            return
         if self.placed:
             return
         self.onReceiveTeamSpawnKeyPoints += self.__onReceiveTeamSpawnKeyPoints

@@ -24,11 +24,11 @@ def _convertMoneyToTuple(money):
 
 
 class SinglePrice(ViewImpl):
-    __slots__ = ('__text', '__price', '__size', '__currencyTypeClass')
+    __slots__ = ('__text', '__price', '__size', '__currencyTypeClass', '__showDiscountValue')
     LAYOUT_DYN_ACCESSOR = R.views.dialogs.sub_views.common.SinglePrice
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, text, price, size=CurrencySize.SMALL, layoutID=None, currencyTypeClass=CurrencyType):
+    def __init__(self, text, price, size=CurrencySize.SMALL, layoutID=None, currencyTypeClass=CurrencyType, showDiscountValue=True):
         settings = ViewSettings(layoutID or self.LAYOUT_DYN_ACCESSOR())
         settings.model = SinglePriceViewModel()
         super(SinglePrice, self).__init__(settings)
@@ -36,6 +36,7 @@ class SinglePrice(ViewImpl):
         self.__price = price
         self.__size = size
         self.__currencyTypeClass = currencyTypeClass
+        self.__showDiscountValue = showDiscountValue
 
     @property
     def viewModel(self):
@@ -95,5 +96,6 @@ class SinglePrice(ViewImpl):
             cost.setSize(self.__size)
             cost.setValue(int(self.__price.price.get(currency)))
             cost.setIsDiscount(isDiscount)
-            cost.setDiscountValue(self.__price.getActionPrc())
+            if self.__showDiscountValue:
+                cost.setDiscountValue(self.__price.getActionPrc())
             cost.setIsEnough(not isEnough)

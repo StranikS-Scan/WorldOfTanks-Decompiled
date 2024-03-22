@@ -17,7 +17,6 @@ from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
 from constants import IS_EDITOR, CollisionFlags
 import Projectiles
-from vehicle_extras_battle_royale import AfterburningBattleRoyale
 
 def reload():
     modNames = (reload.__module__,)

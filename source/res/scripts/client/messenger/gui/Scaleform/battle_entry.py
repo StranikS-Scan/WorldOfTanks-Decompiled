@@ -3,6 +3,7 @@
 import weakref
 import BigWorld
 import Keys
+from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
@@ -113,7 +114,12 @@ class BattleEntry(IGUIEntry):
         isFocused = self.isFocused()
         if not isFocused and BigWorld.isKeyDown(Keys.KEY_TAB):
             return False
-        if event.isKeyDown() and not event.isAltDown() and key in (Keys.KEY_RETURN, Keys.KEY_NUMPADENTER):
+        player = BigWorld.player()
+        currentMode = ''
+        if player is not None and player.inputHandler is not None:
+            inputHandler = player.inputHandler
+            currentMode = inputHandler.ctrlModeName
+        if event.isKeyDown() and not event.isAltDown() and key in (Keys.KEY_RETURN, Keys.KEY_NUMPADENTER) and currentMode != CTRL_MODE_NAME.KILL_CAM:
             return self.__handleEnterPressed()
         if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             self.__handleCTRLPressed(key == Keys.KEY_LCONTROL, event.isKeyDown())
@@ -124,7 +130,8 @@ class BattleEntry(IGUIEntry):
                 elif key == Keys.KEY_TAB:
                     self.__setNextReceiver()
             return event.key != Keys.KEY_SYSRQ
-        return False
+        else:
+            return False
 
     def isFocused(self):
         view = self.__view()

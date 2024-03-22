@@ -2,39 +2,39 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import logging
 from itertools import chain
-import BigWorld
 import AccountCommands
-from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
+import BigWorld
 from AccountCommands import VEHICLE_SETTINGS_FLAG
-from gui.impl import backport
-from gui.impl.gen import R
-from nation_change.nation_change_helpers import getMainVehicleInNationGroup, hasNationGroup, getNationGroupID
-from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
-from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
-from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMsg, makeAllPairsDiscardMsg
-from items import EQUIPMENT_TYPES
-from items.components.c11n_constants import SeasonType
 from adisp import adisp_process, adisp_async
+from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import formatPrice, text_styles, getStyle, getBWFormatter
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getCrewCount
-from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
-from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
-from gui.shared.utils.requesters.recycle_bin_requester import VehicleRestoreInfo
-from helpers import time_utils, dependency
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
+from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
+from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
+from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.requesters.recycle_bin_requester import VehicleRestoreInfo
+from gui.veh_post_progression.messages import makeVehiclePostProgressionUnlockMsg, makeAllPairsDiscardMsg
+from helpers import time_utils, dependency
 from helpers.i18n import makeString
+from items import EQUIPMENT_TYPES
+from items.components.c11n_constants import SeasonType
+from nation_change.nation_change_helpers import getMainVehicleInNationGroup, hasNationGroup, getNationGroupID
+from rent_common import parseRentID
 from skeletons.gui.game_control import IRestoreController, ITradeInController, IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from rent_common import parseRentID
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _SEASON_RENT_DURATION_KEY = {RentType.SEASON_RENT: 'season',
@@ -333,7 +333,6 @@ class VehicleSeller(ItemProcessor):
         self.boosters = boosters
         self.itemsForDemountKit = itemsForDemountKit
         self.itemsFreeToDemount = itemsForFreeDemount
-        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
         self.__compensationAmount = ItemPrice(Money(), Money())
@@ -352,7 +351,6 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.VehicleSellValidator(vehicle),
          proc_plugs.MoneyValidator(self.spendMoney - self.gainMoney),
          proc_plugs.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
-         proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
          proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
          proc_plugs.BattleBoosterValidator(boosters),
          proc_plugs.DismountForDemountKitValidator(vehicle, itemsForDemountKit),
@@ -395,7 +393,13 @@ class VehicleSeller(ItemProcessor):
             msgCtx['restoreInfo'] = restoreInfo
         sysMsgR = R.strings.system_messages.dyn('vehicle_remove' if self.isRemovedAfterRent else 'vehicle_sell', R.invalid)
         if sysMsgR:
-            sysMsgR = sysMsgR.dyn('success_dismantling' if self.isDismantlingForMoney else 'success', R.invalid)
+            if self.isDismantlingForMoney:
+                sysMsgR = sysMsgR.success_dismantling
+            elif self.isRemovedAfterRent:
+                gainCurrencies = [ c for c in Currency.ALL if self.gainMoney.get(c) ]
+                sysMsgR = sysMsgR.success.dyn('default' if gainCurrencies else 'zero_cost', R.invalid)
+            else:
+                sysMsgR = sysMsgR.success
         if self.isRemovedAfterRent:
             smType = SM_TYPE.Remove
         elif sellForGold:
@@ -736,9 +740,11 @@ class OptDevicesInstaller(Processor):
         self.addPlugins((proc_plugs.VehicleValidator(self._vehicle), proc_plugs.MoneyValidator(self.__price, byCurrencyError=False), proc_plugs.OptionalDevicesInstallValidator(self._vehicle)))
 
     def _request(self, callback):
-        BigWorld.player().inventory.equipOptDevsSequence(self._vehicle.invID, self.__devices, lambda code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().inventory.equipOptDevsSequence(self._vehicle.invID, self.__devices, lambda code, errStr, ctx: self._response(code, callback, errStr=errStr, ctx=None))
 
     def _errorHandler(self, code, errStr='', ctx=None):
+        if ctx is not None and isinstance(ctx, dict) and ctx.get('exception_message'):
+            errStr = ctx.get('exception_message')
         return OptDevicesApplyProcessorMessage().makeErrorMsg(errStr)
 
     def _successHandler(self, code, ctx=None):

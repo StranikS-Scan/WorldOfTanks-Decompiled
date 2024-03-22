@@ -41,7 +41,6 @@ from player_ranks import getSettings as getRankSettings
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -125,7 +124,6 @@ class _FrontLineSounds(object):
 
 
 class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGameController, IGlobalListener):
-    bootcampController = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)

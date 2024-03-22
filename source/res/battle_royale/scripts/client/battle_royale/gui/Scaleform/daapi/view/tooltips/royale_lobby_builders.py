@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/tooltips/royale_lobby_builders.py
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.respawn_tooltip import RespawnTooltipData
-from battle_royale.gui.impl.lobby.tooltips.shop_tooltip_view import ShopTooltipView
-from battle_royale.gui.impl.lobby.tooltips.proxy_currency_tooltip_view import ProxyCurrencyTooltipView
+from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
 from battle_royale.gui.impl.lobby.tooltips.vehicle_tooltip_view import VehicleTooltipView
-from battle_royale.gui.shared.tooltips import contexts as brContexts
 from frameworks.wulf import WindowLayer
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips import BattleProgressionTooltipData, EquipmentsTooltipData
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.perf_attention_tooltip import PerfAttentionSimpleTooltip, PerfAttentionAdvancedTooltip
@@ -30,10 +28,9 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, PerfAttentionAdvancedTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleSelectorTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_COMPLETED_QUESTS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleQuestsTooltip(contexts.QuestsBoosterContext())),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE, None, VehiclePointsTooltipContentWindowData(brContexts.BattleRoyaleCarouselContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE, None, VehiclePointsTooltipContentWindowData(contexts.InventoryContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_CALENDAR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleCalendarExtendedTooltip(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PROXY_CURRENCY, None, ShopTooltipViewTooltipWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.STPATRICK_PROXY_CURRENCY, None, ProxyCurrencyTooltipContentWindowData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PROXY_CURRENCY, None, BrCoinTooltipViewTooltipWindowData(contexts.ToolTipContext(None))))
 
 
 class _BattleRoyaleHangarVehInfoContext(contexts.HangarContext):
@@ -69,19 +66,10 @@ class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
         return DecoratedTooltipWindow(VehicleTooltipView(intCD, self.context), useDecorator=False)
 
 
-class ShopTooltipViewTooltipWindowData(ToolTipBaseData):
+class BrCoinTooltipViewTooltipWindowData(ToolTipBaseData):
 
     def __init__(self, context):
-        super(ShopTooltipViewTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PROXY_CURRENCY)
+        super(BrCoinTooltipViewTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PROXY_CURRENCY)
 
     def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(ShopTooltipView(), useDecorator=False)
-
-
-class ProxyCurrencyTooltipContentWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(ProxyCurrencyTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.STPATRICK_PROXY_CURRENCY)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(ProxyCurrencyTooltipView(), useDecorator=False)
+        return DecoratedTooltipWindow(BrCoinTooltipView(), useDecorator=False)

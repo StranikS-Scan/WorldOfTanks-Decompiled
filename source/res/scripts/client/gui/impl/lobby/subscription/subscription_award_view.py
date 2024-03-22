@@ -15,7 +15,9 @@ from gui.server_events.bonuses import WoTPlusBonus
 from gui.shared.event_dispatcher import showWotPlusInfoPage
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap
 from helpers import dependency
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.system_messages import ISystemMessages
 from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, WotPlusKeys
 from uilogging.wot_plus.loggers import WotPlusRewardTooltipLogger, WotPlusRewardScreenLogger
 if TYPE_CHECKING:
@@ -42,6 +44,7 @@ class LoggedBackportTooltipWindow(BackportTooltipWindow):
 
 class SubscriptionAwardView(ViewImpl):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    _systemMessages = dependency.descriptor(ISystemMessages)
     __slots__ = ('__tooltips', '__bonuses', '_wotPlusUILogger')
 
     def __init__(self, layoutID, *args, **kwargs):
@@ -68,6 +71,7 @@ class SubscriptionAwardView(ViewImpl):
         self._wotPlusUILogger.logCloseEvent()
         self.viewModel.onCloseButtonClick -= self._onClose
         self.viewModel.onInfoButtonClick -= self._onInfo
+        self._sendNotificationsOnClose()
         self._soundsOnClose()
 
     def _getBonuses(self):
@@ -98,6 +102,10 @@ class SubscriptionAwardView(ViewImpl):
 
     def _onClose(self):
         self.destroyWindow()
+
+    def _sendNotificationsOnClose(self):
+        self._systemMessages.proto.serviceChannel.pushClientMessage({'expiryTime': self._wotPlusCtrl.getExpiryTime()}, SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIPTION_UNLOCKED)
+        self._wotPlusCtrl.processSwitchNotifications()
 
     def _onInfo(self):
         showWotPlusInfoPage(WotPlusInfoPageSource.REWARD_SCREEN, useCustomSoundSpace=True)

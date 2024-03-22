@@ -1,10 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/ammunition_setup_view.py
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionSetupViewMeta import AmmunitionSetupViewMeta
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -56,8 +53,6 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
         self.destroy()
 
     def onEscapePress(self):
-        if self.__isBCMessageOpen():
-            return
         g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
 
     def __onAmmunitionSetupViewResized(self, event):
@@ -80,8 +75,3 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
 
     def __onChangeView(self, _):
         self.destroy()
-
-    def __isBCMessageOpen(self):
-        app = self._appLoader.getApp()
-        container = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
-        return container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW}) is not None

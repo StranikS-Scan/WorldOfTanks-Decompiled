@@ -32,7 +32,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, IWinbackController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -717,7 +717,6 @@ class _RankedItem(SelectorItem):
 
 class _BattleRoyaleItem(SelectorItem):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_BattleRoyaleItem, self).__init__(label, data, order, selectorType, isVisible)
@@ -800,12 +799,11 @@ class _BattleRoyaleItem(SelectorItem):
 
     def __getIsVisible(self):
         season = self.__battleRoyaleController.getCurrentSeason() or self.__battleRoyaleController.getNextSeason()
-        return season is not None and not self.__bootcampController.isInBootcamp()
+        return season is not None
 
 
 class _MapboxItem(SelectorItem):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
-    __bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_MapboxItem, self).__init__(label, data, order, selectorType, isVisible)
@@ -853,7 +851,7 @@ class _MapboxItem(SelectorItem):
 
     def __getIsVisible(self):
         hasActualSeason = (self.__mapboxCtrl.getCurrentSeason() or self.__mapboxCtrl.getNextSeason()) is not None
-        return not self.__bootcampController.isInBootcamp() and self.__mapboxCtrl.isEnabled() and hasActualSeason
+        return self.__mapboxCtrl.isEnabled() and hasActualSeason
 
 
 class EpicBattleItem(SelectorItem):
@@ -938,7 +936,6 @@ class EpicBattleItem(SelectorItem):
 
 class _Comp7Item(SelectorItem):
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __bootcampController = dependency.descriptor(IBootcampController)
 
     def isInSquad(self, state):
         return state.isInUnit(PREBATTLE_TYPE.COMP7)
@@ -961,7 +958,7 @@ class _Comp7Item(SelectorItem):
 
     def _update(self, state):
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.COMP7)
-        self._isVisible = self.__comp7Controller.isEnabled() and not self.__bootcampController.isInBootcamp()
+        self._isVisible = self.__comp7Controller.isEnabled()
         self._isDisabled = state.hasLockedState or self.__comp7Controller.isFrozen()
 
     @classmethod

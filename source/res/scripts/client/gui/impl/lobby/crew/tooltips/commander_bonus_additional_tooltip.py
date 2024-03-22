@@ -5,16 +5,22 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
 from gui.impl.pub import ViewImpl
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 from items.components.skills_constants import SkillTypeName
 ANIMATION_NAME = 'skillCommanderBonus'
+DEF_COMMANDER_BONUS = 10
 
 class CommanderBonusAdditionalTooltip(ViewImpl):
-    __slots__ = ()
+    _itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('_tankman',)
 
-    def __init__(self):
+    def __init__(self, tankmanId):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksAdditionalTooltip())
         settings.model = CrewPerksAdditionalTooltipModel()
+        self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
         super(CommanderBonusAdditionalTooltip, self).__init__(settings)
+        return
 
     @property
     def viewModel(self):
@@ -29,6 +35,8 @@ class CommanderBonusAdditionalTooltip(ViewImpl):
             vm.setIcon(backport.image(R.images.gui.maps.icons.tankmen.skills.big.commander_bonus()))
             vm.setTitle(backport.text(R.strings.tooltips.commanderBonus.name()))
             vm.setSkillType(SkillTypeName.COMMANDER_SPECIAL)
-            vm.setDescription(backport.text(R.strings.tooltips.commanderBonus.alt.description()))
+            commanderBonus = int(self._tankman.vehicleBonuses.get('commander', 10) if self._tankman else DEF_COMMANDER_BONUS)
+            commBonusDesc = backport.text(R.strings.tooltips.commanderBonus.alt.description(), commBonus=str(commanderBonus))
+            vm.setDescription(commBonusDesc)
             vm.setAnimationName(ANIMATION_NAME)
             vm.setInfo(backport.text(R.strings.tooltips.commanderBonus.alt.info()))

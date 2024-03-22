@@ -1,14 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wot_plus_controller.py
 import logging
-import BigWorld
 import typing
+from enum import Enum
 import AccountCommands
+import BigWorld
 import constants
 from Event import Event
-from PlayerEvents import g_playerEvents
-from bootcamp.Bootcamp import g_bootcamp
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
+from items.vehicles import getItemByCompactDescr
+from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
+from renewable_subscription_common.settings_constants import RS_PDATA_KEY, IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState, RS_ENABLED
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
+from wg_async import wg_async, wg_await
+from wotdecorators import condition
+from PlayerEvents import g_playerEvents
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer
 from gui.impl import backport
@@ -17,23 +23,16 @@ from gui.platform.products_fetcher.user_subscriptions.controller import Subscrip
 from gui.platform.products_fetcher.user_subscriptions.user_subscription import UserSubscription, SUBSCRIPTION_CANCEL_STATUSES, SubscriptionRequestPlatform
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.bonuses import GoldBank, IdleCrewXP, ExcludedMap, FreeEquipmentDemounting, WoTPlusExclusiveVehicle, AttendanceReward, SimpleBonus
+from gui.server_events.bonuses import GoldBank, IdleCrewXP, ExcludedMap, FreeEquipmentDemounting, WoTPlusExclusiveVehicle, AttendanceReward, SimpleBonus, WotPlusBattleBonuses, WotPlusBadges, WotPlusAdditionalBonuses
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
-from items.vehicles import getItemByCompactDescr
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from messenger.proto.bw.wrappers import ServiceChannelMessage
-from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
-from renewable_subscription_common.settings_constants import RS_PDATA_KEY, IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState, RS_ENABLED
-from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IWotPlusController, ISteamCompletionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
-from wg_async import wg_async, wg_await
-from wotdecorators import condition
 if typing.TYPE_CHECKING:
     from typing import Dict, Optional, Callable, Any, List
     from gui.shared.gui_items import ItemsCollection
@@ -45,37 +44,23 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _SECONDS_IN_DAY = 86400
 
-class _INotificationStrategy(object):
-    _systemMessages = dependency.descriptor(ISystemMessages)
+class NotificationTypeTemplate(Enum):
+    PASSIVE_XP = ('PassiveXpEnabledMessage', 'PassiveXpDisabledMessage')
+    GOLD_RESERVES = ('GoldReserveEnabledMessage', 'GoldReserveDisabledMessage')
+    DAILY_ATTENDACES = ('DailyAttendancesEnabledMessage', 'DailyAttendancesDisabledMessage')
+    FREE_DEMOUNT = ('WotPlusFreeDemountUnlockMessage', 'WotPlusFreeDemountExpireMessage')
+    EXCLUDED_MAPS = ('BonusExcludedMapAvailable', 'BonusExcludedMapUnavailable')
+    BATTLE_BONUSES = ('BattleBonusesEnabledMessage', 'BattleBonusesDisabledMessage')
+    BADGE = ('BadgeEnabledMessage', 'BadgeDisabledMessage')
+    ADDITIONAL_XP = ('AdditionalXpEnabledMessage', 'AdditionalXpDisabledMessage')
 
-    def notifyClient(self, lastSeenStatus, currentStatus, enableMsgId, disableMsgId, data=None):
-        raise NotImplementedError
+    @property
+    def getEnable(self):
+        return self.value[0]
 
-
-class _LoginNotificationStrategy(_INotificationStrategy):
-
-    def notifyClient(self, lastSeenStatus, currentStatus, enableMsgId, disableMsgId, data=None):
-        if data is None:
-            data = ServiceChannelMessage()
-        if lastSeenStatus != currentStatus:
-            if not currentStatus:
-                self._systemMessages.proto.serviceChannel.pushClientMessage(data, disableMsgId)
-            else:
-                self._systemMessages.proto.serviceChannel.pushClientMessage(data, enableMsgId)
-        return
-
-
-class _SessionNotificationStrategy(_INotificationStrategy):
-
-    def notifyClient(self, lastSeenStatus, currentStatus, enableMsgId, disableMsgId, data=None):
-        if data is None:
-            data = {}
-        if lastSeenStatus != currentStatus:
-            if not currentStatus:
-                self._systemMessages.proto.serviceChannel.pushClientMessage(data, disableMsgId)
-            else:
-                self._systemMessages.proto.serviceChannel.pushClientMessage(data, enableMsgId)
-        return
+    @property
+    def getDisable(self):
+        return self.value[1]
 
 
 class WotPlusController(IWotPlusController):
@@ -88,9 +73,9 @@ class WotPlusController(IWotPlusController):
 
     def __init__(self):
         super(WotPlusController, self).__init__()
-        self._validSessionStarted = False
         self._cache = {}
         self._account = None
+        self._message = None
         self._state = WotPlusState.INACTIVE
         self._hasSteamSubscription = False
         self.onDataChanged = Event()
@@ -108,7 +93,6 @@ class WotPlusController(IWotPlusController):
     def onLobbyStarted(self, ctx):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self.processSwitchNotifications()
-        self._validSessionStarted = False if g_bootcamp.isRunning() else True
         self._resolveSubscriptionAndSteamState()
 
     def onAccountBecomePlayer(self):
@@ -120,7 +104,6 @@ class WotPlusController(IWotPlusController):
         return
 
     def onDisconnected(self):
-        self._validSessionStarted = False
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
 
     def selectIdleCrewXPVehicle(self, vehicleInvID, successCallback=None, errorCallback=None):
@@ -212,6 +195,12 @@ class WotPlusController(IWotPlusController):
             enabledBonuses.append(FreeEquipmentDemounting())
         if serverSettings.isDailyAttendancesEnabled():
             enabledBonuses.append(AttendanceReward())
+        if serverSettings.isWotPlusBattleBonusesEnabled():
+            enabledBonuses.append(WotPlusBattleBonuses())
+        if serverSettings.isAdditionalWoTPlusEnabled():
+            enabledBonuses.append(WotPlusAdditionalBonuses())
+        if serverSettings.isBadgesEnabled():
+            enabledBonuses.append(WotPlusBadges())
         return enabledBonuses
 
     @ifAccount
@@ -267,8 +256,6 @@ class WotPlusController(IWotPlusController):
         return composer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
 
     def processSwitchNotifications(self):
-        if g_bootcamp.isRunning():
-            return
         serverSettings = self._lobbyContext.getServerSettings()
         isWotPlusEnabled = self.isWotPlusEnabled()
         isGoldReserveEnabled = serverSettings.isRenewableSubGoldReserveEnabled()
@@ -276,27 +263,43 @@ class WotPlusController(IWotPlusController):
         isFreeDemountingEnabled = serverSettings.isFreeEquipmentDemountingEnabled()
         isExcludedMapEnabled = serverSettings.isWotPlusExcludedMapEnabled()
         isDailyAttendancesEnabled = serverSettings.isDailyAttendancesEnabled()
+        isBattleBonusesEnabled = serverSettings.isWotPlusBattleBonusesEnabled()
+        isBadgesEnabled = serverSettings.isBadgesEnabled()
+        isAdditionalXPEnabled = serverSettings.isAdditionalWoTPlusEnabled()
         with settings.wotPlusSettings() as dt:
             dt.setWotPlusEnabledState(isWotPlusEnabled)
             hasSubscription = self.isEnabled()
             if not isWotPlusEnabled and not hasSubscription:
                 return
-            strategy = self._getStrategy()
+            if hasSubscription and (isAdditionalXPEnabled or isBadgesEnabled or isBattleBonusesEnabled) and not dt.isOnboardingShown:
+                self._systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIBERS_ONBOARDING)
+                dt.setOnboardingShown(True)
             if hasSubscription and not dt.isFirstTime:
                 if not isWotPlusEnabled:
                     self._systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.WOTPLUS_FEATURE_DISABLED)
                 else:
-                    strategy.notifyClient(dt.isGoldReserveEnabled, isGoldReserveEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED)
-                    strategy.notifyClient(dt.isPassiveXpEnabled, isPassiveXpEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED)
-                    strategy.notifyClient(dt.isFreeDemountingEnabled, isFreeDemountingEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_DISABLED)
-                    strategy.notifyClient(dt.isExcludedMapEnabled, isExcludedMapEnabled, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_ENABLED, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED)
-                    strategy.notifyClient(dt.isDailyAttendancesEnabled, isDailyAttendancesEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED)
+                    self._notifyClient(dt.isGoldReserveEnabled, isGoldReserveEnabled, NotificationTypeTemplate.GOLD_RESERVES)
+                    self._notifyClient(dt.isPassiveXpEnabled, isPassiveXpEnabled, NotificationTypeTemplate.PASSIVE_XP)
+                    self._notifyClient(dt.isFreeDemountingEnabled, isFreeDemountingEnabled, NotificationTypeTemplate.FREE_DEMOUNT)
+                    self._notifyClient(dt.isExcludedMapEnabled, isExcludedMapEnabled, NotificationTypeTemplate.EXCLUDED_MAPS)
+                    self._notifyClient(dt.isDailyAttendancesEnabled, isDailyAttendancesEnabled, NotificationTypeTemplate.DAILY_ATTENDACES)
+                    self._notifyClient(dt.isBattleBonusesEnabled, isBattleBonusesEnabled, NotificationTypeTemplate.BATTLE_BONUSES)
+                    self._notifyClient(dt.isBadgesEnabled, isBadgesEnabled, NotificationTypeTemplate.BADGE)
+                    self._notifyClient(dt.isAdditionalXPEnabled, isAdditionalXPEnabled, NotificationTypeTemplate.ADDITIONAL_XP)
             dt.setIsFirstTime(not hasSubscription)
             dt.setGoldReserveEnabledState(isGoldReserveEnabled)
             dt.setPassiveXpState(isPassiveXpEnabled)
             dt.setFreeDemountingState(isFreeDemountingEnabled)
             dt.setExcludedMapState(isExcludedMapEnabled)
             dt.setDailyAttendancesState(isDailyAttendancesEnabled)
+            dt.setBattleBonusesState(isBattleBonusesEnabled)
+            dt.setBadgesEnabled(isBadgesEnabled)
+            dt.setAdditionalXPEnabled(isAdditionalXPEnabled)
+
+    def _notifyClient(self, lastSeenStatus, currentStatus, notifications):
+        if lastSeenStatus != currentStatus:
+            notification = notifications.getEnable if currentStatus else notifications.getDisable
+            self._systemMessages.proto.serviceChannel.pushClientMessage(notification, SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH)
 
     @wg_async
     def _resolveSubscriptionAndSteamState(self, clearCache=False):
@@ -329,9 +332,6 @@ class WotPlusController(IWotPlusController):
             synchronizeDicts(itemDiff, self._cache)
             yield wg_await(self._resolveSubscriptionAndSteamState(clearCache=RS_ENABLED in itemDiff))
             self.onDataChanged(itemDiff)
-
-    def _getStrategy(self):
-        return _SessionNotificationStrategy() if self._validSessionStarted else _LoginNotificationStrategy()
 
     def _onServerSettingsChange(self, diff):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:

@@ -4,6 +4,7 @@ import time
 import calendar
 import datetime
 import XmlConfigReader
+import helpers_common
 from debug_utils import LOG_WARNING
 from goodie_constants import GOODIE_VARIETY
 from . import goodie_helpers
@@ -106,7 +107,11 @@ def _readGoodies(reader, subsectionName):
             autostart = bool(packet.readInt('autostart', 0))
             notInShop = bool(packet.readInt('notInShop', 1))
             counter = packet.readInt('counter', 1)
-            lifetime = XmlConfigReader.parseDuration(packet.readString('lifetime', '0'))
+            expireAfter = helpers_common.parseDuration(packet.readString('expireAfter', '0'))
+            if expireAfter == 0:
+                expireAfter = None
+            roundToEndOfGameDay = packet.readBool('roundToEndOfGameDay', True)
+            lifetime = helpers_common.parseDuration(packet.readString('lifetime', '0'))
             if lifetime == 0:
                 lifetime = None
             useby = packet.readString('useby', '')
@@ -126,7 +131,9 @@ def _readGoodies(reader, subsectionName):
              counter,
              autostart,
              condition,
-             resource)
+             resource,
+             expireAfter,
+             roundToEndOfGameDay)
             if price is not None:
                 goodies['prices'][uid] = price
             if notInShop or price is None:

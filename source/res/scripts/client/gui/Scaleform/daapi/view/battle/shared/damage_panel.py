@@ -298,12 +298,9 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
     def _getConcurrentStatusManager(self):
         return ConcurrentStatusManager
 
-    def _canShowRepairTimes(self):
-        return not self.sessionProvider.arenaVisitor.gui.isBootcampBattle()
-
     def _updateRepairTimesState(self):
         timesVisible = self.settingsCore.getSetting(settings_constants.GAME.ENABLE_REPAIR_TIMER)
-        self.as_setRepairTimesVisibleS(timesVisible and self._canShowRepairTimes())
+        self.as_setRepairTimesVisibleS(timesVisible)
 
     def __onSettingsChanged(self, diff):
         if settings_constants.GAME.ENABLE_REPAIR_TIMER in diff:

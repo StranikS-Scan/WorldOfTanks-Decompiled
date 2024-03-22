@@ -29,7 +29,7 @@ class RespawnDeathMode(IControlMode):
         return
 
     def create(self):
-        self.__cam.create(None, True)
+        self.__cam.create(onChangeControlMode=None, postmortemMode=True, smartPointCalculator=False)
         return
 
     def destroy(self):
@@ -39,12 +39,15 @@ class RespawnDeathMode(IControlMode):
         return
 
     def enable(self, **args):
-        BattleReplay.g_replayCtrl.onRespawnMode(True)
+        replayCtrl = BattleReplay.g_replayCtrl
+        replayCtrl.onRespawnMode(True)
         SoundGroups.g_instance.changePlayMode(0)
         self.__cam.enable(None, False, args.get('postmortemParams'))
         self.__cam.reinitMatrix()
         player = BigWorld.player()
         self.__curVehicleID = player.playerVehicleID
+        if replayCtrl.isRecording:
+            replayCtrl.setPlayerVehicleID(self.__curVehicleID)
         ctrl = self.guiSessionProvider.dynamic.respawn
         if hasattr(ctrl, 'showUiAllowed'):
             ctrl.showUiAllowed = True

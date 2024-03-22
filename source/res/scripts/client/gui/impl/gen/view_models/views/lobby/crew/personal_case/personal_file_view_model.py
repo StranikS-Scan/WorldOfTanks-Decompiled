@@ -8,8 +8,10 @@ from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_grou
 
 class SkillsState(Enum):
     LEARNAVAILABLE = 'available'
+    REDUCED = 'reduced'
     TRAINING = 'training'
-    ACHIEVE = 'achieve'
+    DISABLED = 'disabled'
+    LOCKED = 'locked'
     ZEROSKILLS = 'zeroSkills'
     ALLSKILLS = 'allSkills'
 
@@ -17,7 +19,7 @@ class SkillsState(Enum):
 class PersonalFileViewModel(ViewModel):
     __slots__ = ('onIncrease', 'onReset', 'onHoverSkill', 'onLeaveSkill', 'onClickSkill')
 
-    def __init__(self, properties=11, commands=5):
+    def __init__(self, properties=12, commands=5):
         super(PersonalFileViewModel, self).__init__(properties=properties, commands=commands)
 
     def getSkillsState(self):
@@ -98,6 +100,12 @@ class PersonalFileViewModel(ViewModel):
     def getCommonSkillsType():
         return TankmanSkillModel
 
+    def getSkillsEfficiency(self):
+        return self._getReal(11)
+
+    def setSkillsEfficiency(self, value):
+        self._setReal(11, value)
+
     def _initialize(self):
         super(PersonalFileViewModel, self)._initialize()
         self._addStringProperty('skillsState')
@@ -111,6 +119,7 @@ class PersonalFileViewModel(ViewModel):
         self._addArrayProperty('relevantGroupedSkills', Array())
         self._addArrayProperty('irrelevantGroupedSkills', Array())
         self._addArrayProperty('commonSkills', Array())
+        self._addRealProperty('skillsEfficiency', 0.0)
         self.onIncrease = self._addCommand('onIncrease')
         self.onReset = self._addCommand('onReset')
         self.onHoverSkill = self._addCommand('onHoverSkill')

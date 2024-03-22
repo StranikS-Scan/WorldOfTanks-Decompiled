@@ -17,6 +17,11 @@
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </defeatedTeams>
+    <isRespawnTimeFinished>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isRespawnTimeFinished>
   </Properties>
   <DefaultKeyName>	abilityNotifierComponent	</DefaultKeyName>
 </ArenaInfoAbilityNotifier.def>

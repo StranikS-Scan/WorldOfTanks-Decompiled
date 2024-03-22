@@ -303,7 +303,7 @@ class ReplayRewindObserver(AppLoaderObserver):
         if app is not None:
             topWindowContainer = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
             if topWindowContainer is not None:
-                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'}) or topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'bootcampSimpleDialog'})
+                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'})
                 if pyView is not None:
                     topWindowContainer.removeView(pyView)
                     pyView.destroy()

@@ -434,6 +434,46 @@
     <tooltipSection>	equipment	</tooltipSection>
     <archetype>	improvedRotationMechanism	</archetype>
   </deluxeImprovedRotationMechanism>
+  <deluxeImprovedSights>
+    <id>	120	</id>
+    <userString>	#artefacts:deluxeImprovedSights/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeImprovedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeImprovedSights/long_special	</longDescriptionSpecial>
+    <icon>	improvedSights	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <tags>	improvedSights deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	StaticOptionalDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.91 0.91	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.91	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+    <archetype>	improvedSights	</archetype>
+  </deluxeImprovedSights>
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>

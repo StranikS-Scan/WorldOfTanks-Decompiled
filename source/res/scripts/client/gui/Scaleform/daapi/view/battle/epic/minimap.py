@@ -296,7 +296,7 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
 
     def _getPostmortemCenterEntry(self):
         iah = avatar_getter.getInputHandler()
-        if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
+        if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM or not self._ctrlVehicleID or self._ctrlVehicleID != self._getPlayerVehicleID():
             newEntryID = self._getViewPointID()
         else:
             newEntryID = self._getDeadPointID()

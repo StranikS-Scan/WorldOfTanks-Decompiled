@@ -7,11 +7,9 @@ from Math import Matrix, Vector3
 import BattleReplay
 import CommandMapping
 import Flock
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battleground.location_point_manager import g_locationPointManager
-from bootcamp.Bootcamp import g_bootcamp
 from chat_commands_consts import getBaseTeamAndIDFromUniqueID, BATTLE_CHAT_COMMAND_NAMES, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, _PERSONAL_MESSAGE_MUTE_DURATION, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES
+from constants import ARENA_BONUS_TYPE
 from gui import GUI_CTRL_MODE_FLAG
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
@@ -21,7 +19,7 @@ from messenger.m_constants import MESSENGER_COMMAND_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
+from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
 _TARGET_ID_IS_ENEMY_VEHICLE = {BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY, BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY}
 _CHAT_COMMAND_DEFINING_SOS_REPLY = {BATTLE_CHAT_COMMAND_NAMES.HELPME}
@@ -39,8 +37,7 @@ CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider,
 _logger = logging.getLogger(__name__)
 
 class AvatarChatKeyHandling(object):
-    settingsCore = dependency.descriptor(ISettingsCore)
-    settingsCache = dependency.descriptor(ISettingsCache)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
 
     def __init__(self):
         self.__isEnabled = None
@@ -62,22 +59,18 @@ class AvatarChatKeyHandling(object):
         self.__isKeyHandlingOn = value
 
     def onBecomePlayer(self):
-        if g_bootcamp.isRunning() or self.__isBattleRoyale():
+        if self.__isBattleRoyaleSolo():
             return
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        if not self.settingsCache.settings.isSynced():
-            self.settingsCache.onSyncCompleted += self.__onSettingsReady
-        else:
-            self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        self.battleCommunications.onChanged += self.__onBattleCommunicationChanged
+        self.__isEnabled = self.battleCommunications.isEnabled
         if not self.__isEnabled:
             return
         self.__activateHandling()
 
     def onBecomeNonPlayer(self):
-        if g_bootcamp.isRunning() or self.__isBattleRoyale():
+        if self.__isBattleRoyaleSolo():
             return
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
+        self.battleCommunications.onChanged -= self.__onBattleCommunicationChanged
         if not self.__isEnabled:
             return
         self.__deactivateHandling()
@@ -106,8 +99,8 @@ class AvatarChatKeyHandling(object):
         else:
             return calloutCtrl.handleCalloutAndRadialMenuKeyPress(key, isDown)
 
-    def __isBattleRoyale(self):
-        return ARENA_BONUS_TYPE_CAPS.checkAny(self.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+    def __isBattleRoyaleSolo(self):
+        return self.guiSessionProvider.arenaVisitor.getArenaBonusType() in (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO)
 
     def __activateHandling(self):
         ctrl = self.guiSessionProvider.shared.feedback
@@ -124,9 +117,9 @@ class AvatarChatKeyHandling(object):
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
         self.__callbackDelayer.destroy()
 
-    def __onSettingsChanged(self, diff):
+    def __onBattleCommunicationChanged(self):
         _logger.debug('Settings has changed, checking the battle communication.')
-        isEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+        isEnabled = self.battleCommunications.isEnabled
         if isEnabled is None or isEnabled == self.__isEnabled:
             return
         else:
@@ -466,16 +459,6 @@ class AvatarChatKeyHandling(object):
             if prevFxState != playEffect:
                 self.__switchSoundFXTo(prevFxState)
             return
-
-    def __onSettingsReady(self):
-        _logger.debug('Settings are synced, checking the IBC.')
-        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
-        if self.__isEnabled is None:
-            self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
-            if not self.__isEnabled:
-                return
-            self.__activateHandling()
-        return
 
     def __isEpicBattleOverviewMapScreenVisible(self):
         arenaVisitor = self.sessionProvider.arenaVisitor

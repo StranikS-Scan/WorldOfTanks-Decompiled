@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/telecom_rentals_controller.py
 import BigWorld
-from bootcamp.Bootcamp import g_bootcamp
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
@@ -33,8 +32,6 @@ class TelecomRentalsNotificationController(ITelecomRentalsNotificationController
         g_clientUpdateManager.removeObjectCallbacks(self, True)
 
     def processSwitchNotifications(self):
-        if g_bootcamp.isRunning():
-            return
         serverSettings = self._lobbyContext.getServerSettings()
         isEnabled = serverSettings.isTelecomRentalsEnabled()
         with settings.telecomRentalsSettings() as dt:

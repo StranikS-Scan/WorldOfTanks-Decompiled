@@ -231,7 +231,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.as_resetS(resetIDXs)
         return
 
-    def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings):
+    def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings, isInfinite):
         self._cds[idx] = intCD
         keyCode, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
@@ -240,7 +240,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         iconName = icon.split('.png')[0]
         shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
         noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
-        self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText)
+        self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText, isInfinite)
 
     def _updateEquipmentSlotTooltipText(self, idx, item):
         toolTip = self._buildEquipmentSlotTooltipText(item)
@@ -367,9 +367,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             self.as_setGlowS(equipmentIndex, glowID=glowType)
         self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
-    def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
+    def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings, isInfinite):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
-        self._addShellSlot(idx, intCD, descriptor, quantity, gunSettings)
+        self._addShellSlot(idx, intCD, descriptor, quantity, gunSettings, isInfinite)
 
     def _onShellsUpdated(self, intCD, quantity, *args):
         if intCD in self._cds:

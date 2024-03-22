@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from contextlib import contextmanager
-from account_helpers.AccountSettings import DOG_TAGS, WOT_PLUS, TELECOM_RENTALS
+from account_helpers.AccountSettings import DOG_TAGS, WOT_PLUS, TELECOM_RENTALS, PERSONAL_RESERVES
 from gui.shared import utils
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -49,8 +49,8 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, **_):
-        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance)
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, **_):
+        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown)
 
     def setIsFirstTime(self, isFirstTime):
         self.update(isFirstTime=isFirstTime)
@@ -79,9 +79,43 @@ class _WotPlusSettings(utils.SettingRootRecord):
     def increaseDailyAttendance(self):
         self.setAmountOfDailyAttendance(self.get('amountOfDailyAttendance', 0) + 1)
 
+    def setBattleBonusesState(self, isEnabled):
+        self.update(isBattleBonusesEnabled=isEnabled)
+
+    def setBadgesEnabled(self, isEnabled):
+        self.update(isBadgesEnabled=isEnabled)
+
+    def setAdditionalXPEnabled(self, isEnabled):
+        self.update(isAdditionalXPEnabled=isEnabled)
+
+    def setOnboardingShown(self, onboardingShown=True):
+        self.update(isOnboardingShown=onboardingShown)
+
     @classmethod
     def _getSettingName(cls):
         return WOT_PLUS
+
+
+class _PersonalReservesSettings(utils.SettingRootRecord):
+
+    def __init__(self, isFirstTimeNotificationShown=False, isIntroPageShown=False, boosterCardHintsSeen=None, **_):
+        super(_PersonalReservesSettings, self).__init__(isFirstTimeNotificationShown=isFirstTimeNotificationShown, isIntroPageShown=isIntroPageShown, boosterCardHintsSeen=boosterCardHintsSeen or set())
+
+    def setIsFirstTimeNotificationShown(self, isFirstTimeNotificationShown):
+        self.update(isFirstTimeNotificationShown=isFirstTimeNotificationShown)
+
+    def setIsIntroPageShown(self, isIntroPageShown):
+        self.update(isIntroPageShown=isIntroPageShown)
+
+    def addBoosterToCardHintsSeen(self, boosterID):
+        self['boosterCardHintsSeen'].add(boosterID)
+
+    def clearCardHintsSeen(self):
+        self.update(boosterCardHintsSeen=set())
+
+    @classmethod
+    def _getSettingName(cls):
+        return PERSONAL_RESERVES
 
 
 class _TelecomRentalsSettings(utils.SettingRootRecord):
@@ -271,5 +305,16 @@ def getTelecomRentalsSettings():
 @contextmanager
 def telecomRentalsSettings():
     s = getTelecomRentalsSettings()
+    yield s
+    s.save()
+
+
+def getPersonalReservesSettings():
+    return _PersonalReservesSettings.load()
+
+
+@contextmanager
+def personalReservesSettings():
+    s = getPersonalReservesSettings()
     yield s
     s.save()

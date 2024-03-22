@@ -60,6 +60,7 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
          'tooltip': bonus.tooltip,
          'isSpecial': bonus.isSpecial,
          'specialAlias': bonus.specialAlias,
+         'isWulfTooltip': bonus.isWulfTooltip,
          'specialArgs': bonus.specialArgs,
          'hasCompensation': bonus.isCompensation,
          'hasAnimation': False,

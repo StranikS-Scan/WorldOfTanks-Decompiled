@@ -9,12 +9,12 @@ from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from adisp import adisp_async, adisp_process
 from constants import IS_EDITOR
-from gui import DialogsInterface, makeHtmlString
+from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.daapi.view.dialogs import CheckBoxDialogMeta, DIALOG_BUTTON_ID, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, I18nConfirmDialogMeta, I18nInfoDialogMeta, IconDialogMeta, IconPriceDialogMeta, PMConfirmationDialogMeta
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.SystemMessages import SM_TYPE
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
@@ -53,6 +53,10 @@ def makeSuccess(**kwargs):
 
 def makeError(msg='', **kwargs):
     return PluginResult(False, msg, kwargs)
+
+
+def showWarning(text, type=SM_TYPE.Warning):
+    SystemMessages.pushMessage(text=text, type=type)
 
 
 def _wrapHtmlMessage(message):
@@ -362,12 +366,18 @@ class VehicleSellsLeftValidator(SyncValidator):
 
 class BarracksSlotsValidator(SyncValidator):
 
-    def __init__(self, berthsNeeded=1, isEnabled=True):
+    def __init__(self, berthsNeeded=1, isEnabled=True, addWarning=False):
         super(BarracksSlotsValidator, self).__init__(isEnabled)
         self.berthsNeeded = berthsNeeded
+        self.addWarning = addWarning
 
     def _validate(self):
-        return makeError('not_enough_space') if 0 < self.berthsNeeded > self.itemsCache.items.freeTankmenBerthsCount() else makeSuccess()
+        if 0 < self.berthsNeeded > self.itemsCache.items.freeTankmenBerthsCount():
+            if self.addWarning:
+                showWarning(text='', type=SM_TYPE.NotEnoughBerthWarning)
+            else:
+                return makeError('not_enough_space')
+        return makeSuccess()
 
 
 class FreeTankmanValidator(SyncValidator):
@@ -474,35 +484,6 @@ class BuyAndInstallConfirmator(ModuleBuyerConfirmator):
         itemTypeIdx = self.item.itemTypeID
         installedModule = self.itemsCache.items.getItemByCD(self.ctx['installedModuleCD'])
         return partial(showBuyModuleDialog, self.item, installedModule, self.ctx['currency'], self.ctx['installReason']) if itemTypeIdx in GUI_ITEM_TYPE.VEHICLE_MODULES else None
-
-
-class BCBuyAndInstallConfirmator(BuyAndInstallConfirmator):
-    _dialogsInterfaceMethod = staticmethod(DialogsInterface.showBCConfirmationDialog)
-    _BOOTCAM_LABELS_PATH = '../maps/icons/bootcamp/lines'
-    _VEHICLE_COMPONENTS_LABLES = {'vehicleChassis': 'bcChassis.png',
-     'vehicleTurret': 'bcTurret.png',
-     'vehicleGun': 'bcGun.png',
-     'vehicleRadio': 'bcRadio.png',
-     'vehicleWheels': 'bcWheels.png',
-     'vehicleEngine': 'bcEngine.png'}
-
-    def _gfMakeMeta(self):
-        return None
-
-    @staticmethod
-    def getPath(itemTypeName):
-        dataStr = ''
-        if itemTypeName in BCBuyAndInstallConfirmator._VEHICLE_COMPONENTS_LABLES:
-            dataStr = '/'.join((BCBuyAndInstallConfirmator._BOOTCAM_LABELS_PATH, BCBuyAndInstallConfirmator._VEHICLE_COMPONENTS_LABLES[itemTypeName]))
-        return dataStr
-
-    def _makeMeta(self):
-        dialogData = {'label': backport.text(R.strings.bootcamp.message.confirmBuyAndInstall.module.title()).format(self.item.longUserName),
-         'labelExecute': backport.text(R.strings.bootcamp.message.confirmBuyAndInstall.module.buttonLabel()),
-         'icon': BCBuyAndInstallConfirmator.getPath(self.item.itemTypeName),
-         'costValue': self.ctx['price'],
-         'isBuy': True}
-        return dialogs.BCConfirmDialogMeta(dialogData)
 
 
 class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):

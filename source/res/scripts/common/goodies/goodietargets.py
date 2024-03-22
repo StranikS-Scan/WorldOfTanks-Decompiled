@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieTargets.py
 from abc import ABCMeta
+from typing import TypeVar
 
 class GoodieTarget(object):
     __metaclass__ = ABCMeta
@@ -91,3 +92,6 @@ class DemountOptionalDevice(HangarTarget):
 
 class DropSkill(GoodieTarget):
     pass
+
+
+GoodieTargetType = TypeVar('GoodieTargetType', bound=GoodieTarget)

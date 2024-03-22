@@ -20,6 +20,13 @@ class HighlightComponent(object):
     color = ComponentProperty(type=CGFMetaTypes.VECTOR4, editorName='Color', value=(0, 0, 0, 1), annotations={'colorPicker': {'255Range': False,
                      'useAlpha': True}})
     groupName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Group name')
+    drawerMode = ComponentProperty(type=CGFMetaTypes.INT, value=3, editorName='drawerMode')
+    colorIndex = ComponentProperty(type=CGFMetaTypes.INT, value=4, editorName='colorIndex')
+
+    def __init__(self):
+        super(HighlightComponent, self).__init__()
+        self.callbackID = None
+        return
 
 
 class HighlightManager(CGF.ComponentManager):

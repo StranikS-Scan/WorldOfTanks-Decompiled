@@ -35,6 +35,7 @@ class WGNC_DATA_PROXY_TYPE(object):
     INTEGRATED_AUCTION_RATE_ERROR = 256
     INTEGRATED_AUCTION_RATE_LOST = 257
     INTEGRATED_AUCTION_RATE_BELOW_COMPETITIVE = 258
+    CLAN_SUPPLY_QUEST_UPDATE = 259
 
 
 WGNC_POP_UP_PRIORITIES = ('low', 'medium', 'high')
@@ -77,7 +78,8 @@ _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'event': ('EventIconBg', (288, 110)),
  'referral': ('BgReferral', (288, 128)),
  'craftmachine': ('CraftmachineBG', (288, 80)),
- 'ClanQuestNotification': ('BgclanQuestNotification', (288, 110))}
+ 'ClanQuestNotification': ('BgclanQuestNotification', (288, 110)),
+ 'clansupply': ('ClanSupplyQuestBG', (288, 132))}
 
 def convertToLocalBG(icon):
     result = ('', (0, 0))

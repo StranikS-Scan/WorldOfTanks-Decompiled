@@ -20,3 +20,4 @@ STYLE_PREVIEW_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.PREVIEW_SOUND_S
  Sounds.HANGAR_PLACE_STATE: Sounds.HANGAR_PLACE_GARAGE}, exitStates={Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
 VEHICLE_PREVIEW_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.PREVIEW_SOUND_SPACE, entranceStates={Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_ON,
  Sounds.HANGAR_PLACE_STATE: Sounds.HANGAR_PLACE_GARAGE}, exitStates={Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+COMMON_VEHICLE_PREVIEW_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.PREVIEW_SOUND_SPACE, entranceStates={Sounds.HANGAR_PLACE_STATE: Sounds.HANGAR_PLACE_GARAGE}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)

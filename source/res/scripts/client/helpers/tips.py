@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/tips.py
+import typing
 import logging
 import random
 import re
 from collections import namedtuple
 import nations
 from account_helpers import AccountSettings
+from account_helpers.AccountSettings import ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON
 from account_helpers.AccountSettings import WATCHED_PRE_BATTLE_TIPS_SECTION
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE, IS_DEVELOPMENT
 from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
 from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
@@ -15,7 +17,9 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.system_factory import registerBattleTipCriteria, registerBattleTipsCriteria, collectBattleTipsCriteria
 from helpers import dependency
 from realm import CURRENT_REALM
-from skeletons.gui.game_control import IRankedBattlesController, IVehiclePostProgressionController
+from skeletons.gui.game_control import IBattleRoyaleController, IRankedBattlesController, IVehiclePostProgressionController
+if typing.TYPE_CHECKING:
+    from typing import Optional
 _logger = logging.getLogger(__name__)
 _RANDOM_TIPS_PATTERN = '^(tip\\d+)'
 _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
@@ -156,7 +160,7 @@ class BattleRoyaleTipsCriteria(TipsCriteria):
         self._arenaVisitor = arenaVisitor
 
     def find(self):
-        foundTip = self._findRandomTip()
+        foundTip = self.__getSquadTip() or self._findRandomTip()
         if foundTip is not None:
             foundTip.markWatched()
             tipData = foundTip.getData()
@@ -174,6 +178,20 @@ class BattleRoyaleTipsCriteria(TipsCriteria):
     def _getArenaGuiType(self):
         return ARENA_GUI_TYPE.BATTLE_ROYALE
 
+    @dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
+    def __getSquadTip(self, battleRoyaleController=None):
+        if not battleRoyaleController.isInRandomSquadSubMode():
+            return
+        curSeason = battleRoyaleController.getCurrentSeason()
+        if not curSeason:
+            return
+        curSeasonID = curSeason.getSeasonID()
+        squadTipShownForSeasonID = AccountSettings.getSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON)
+        if curSeasonID == squadTipShownForSeasonID:
+            return
+        AccountSettings.setSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON, curSeasonID)
+        return _buildBattleLoadingTip('battleRoyale6', R.strings.tips.battleRoyale6())
+
 
 class _MapboxTipsCriteria(TipsCriteria):
 
@@ -184,19 +202,40 @@ class _MapboxTipsCriteria(TipsCriteria):
         return ARENA_GUI_TYPE.MAPBOX
 
 
+class ExactTipsCriteria(TipsCriteria):
+    __slots__ = ('_exactTip',)
+
+    def __init__(self, _exactTipPattern):
+        self._exactTip = readTips(_exactTipPattern)
+        super(ExactTipsCriteria, self).__init__()
+
+    def find(self):
+        return self._exactTip[0].getData() if self._exactTip else TipData(R.invalid(), R.invalid(), R.invalid())
+
+
 registerBattleTipCriteria(ARENA_GUI_TYPE.EVENT_BATTLES, _EventTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.RANKED, _RankedTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.COMP7, _Comp7TipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7TipsCriteria)
+registerBattleTipCriteria(ARENA_GUI_TYPE.TRAINING_COMP7, _Comp7TipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.WINBACK, _WinbackTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.MAPBOX, _MapboxTipsCriteria)
 registerBattleTipsCriteria(ARENA_GUI_TYPE.EPIC_RANGE, _EpicBattleTipsCriteria)
 registerBattleTipsCriteria((ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING), _EpicRandomTipsCriteria)
 
 def getTipsCriteria(arenaVisitor):
+    if IS_DEVELOPMENT:
+        exactTipID = getattr(getTipsCriteria, 'exactTipID', None)
+        if exactTipID:
+            return ExactTipsCriteria('^(' + exactTipID + ')')
     criteriaCls = collectBattleTipsCriteria(arenaVisitor.gui.guiType)
     return _getRandomTipsCriteria(arenaVisitor) if criteriaCls is None else criteriaCls(arenaVisitor)
+
+
+def showExactTip(exactTipID):
+    getTipsCriteria.exactTipID = exactTipID if exactTipID else None
+    return
 
 
 def readTips(pattern):

@@ -2,8 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 import BigWorld
 import constants
-from PlayerEvents import g_playerEvents as events
-from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN, LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN
+from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN
 from account_helpers.counter_settings import getCountNewSettings
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -11,15 +10,13 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from wg_async import wg_async, wg_await
-from gui import DialogsInterface, SystemMessages
+from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
-from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.dialogs import dialogs
-from gui.impl.lobby.account_completion.curtain.curtain_view import CurtainWindow
 from gui.prb_control import prbEntityProperty
 from gui.shared import event_dispatcher, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
@@ -27,7 +24,6 @@ from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, getShortClientVersion, dependency, getFullClientVersion
 from skeletons.gameplay import IGameplayLogic
-from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.game_control import IPromoController
 from skeletons.gui.impl import IGuiLoader
@@ -41,16 +37,13 @@ def _getVersionMessage():
 class LobbyMenu(LobbyMenuMeta):
     __sound_env__ = LobbySubViewEnv
     promo = dependency.descriptor(IPromoController)
-    bootcamp = dependency.descriptor(IBootcampController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     gameplay = dependency.descriptor(IGameplayLogic)
     manualController = dependency.descriptor(IManualController)
     gui = dependency.descriptor(IGuiLoader)
-    demoAccController = dependency.descriptor(IDemoAccCompletionController)
 
     def __init__(self, *args, **kwargs):
         super(LobbyMenu, self).__init__(*args, **kwargs)
-        self.__bootcampBtnIsVisible = True
         self.__manualBtnIsVisible = True
         self.__postBtnIsVisible = True
 
@@ -99,13 +92,6 @@ class LobbyMenu(LobbyMenuMeta):
     def onCounterNeedUpdate(self):
         self.__updateNewSettingsCount()
 
-    def bootcampClick(self):
-        if not self.bootcamp.canRun() and not self.bootcamp.isInBootcamp():
-            SystemMessages.pushI18nMessage('#system_messages:prebattle/bootcamp/inOtherQueue', type=SystemMessages.SM_TYPE.Warning)
-            self.destroy()
-        else:
-            self.bootcamp.runBootcamp()
-
     def manualClick(self):
         if self.manualController.isActivated():
             view = self.manualController.getView()
@@ -121,11 +107,7 @@ class LobbyMenu(LobbyMenuMeta):
     def _populate(self):
         super(LobbyMenu, self)._populate()
         self.__addListeners()
-        isDemoAccountWithOpenedCurtain = self.__getIsDemoAccountWithOpenedCurtain()
-        self.__updateUIState(isDemoAccountWithOpenedCurtain)
-        self.__updateBootcampBtn(isDemoAccountWithOpenedCurtain)
-        if isDemoAccountWithOpenedCurtain:
-            self.as_showManualButtonS(False)
+        self.__updateUIState()
         self.as_setVersionMessageS(text_styles.main(getFullClientVersion()))
         self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
         self.__updateVersionState()
@@ -141,33 +123,11 @@ class LobbyMenu(LobbyMenuMeta):
         if globalStorage.getValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL):
             globalStorage.setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_MANUAL, False)
             AccountSettings.setManualData(LOBBY_MENU_MANUAL_TRIGGER_SHOWN, True)
-        if globalStorage.getValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP):
-            globalStorage.setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP, False)
-            AccountSettings.setManualData(LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN, True)
         self.__removeListeners()
         super(LobbyMenu, self)._dispose()
 
-    def __getIsDemoAccountWithOpenedCurtain(self):
-        return self.demoAccController.isDemoAccount and CurtainWindow.isOpened()
-
-    def __updateBootcampBtn(self, isDemoAccountWithOpenedCurtain):
-        enabledOnServer = self.lobbyContext.getServerSettings().isBootcampEnabled()
-        isInBootcamp = self.bootcamp.isInBootcamp()
-        disabledBySPAFlag = BigWorld.player().spaFlags.getFlag(constants.SPA_ATTRS.BOOTCAMP_DISABLED)
-        isPlayerEntityChanging = events.isPlayerEntityChanging
-        isVisible = (enabledOnServer or isInBootcamp) and not disabledBySPAFlag and not isPlayerEntityChanging and not isDemoAccountWithOpenedCurtain
-        if self.__bootcampBtnIsVisible != isVisible:
-            self.as_showBootcampButtonS(isVisible)
-            self.__bootcampBtnIsVisible = isVisible
-        if isVisible:
-            self.__updateBootcampBtnContent(enabledOnServer)
-            triggerIsShown = AccountSettings.getManualData(LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN)
-            if not triggerIsShown and not self.bootcamp.hasFinishedBootcampBefore() and not isInBootcamp:
-                getTutorialGlobalStorage().setValue(GLOBAL_FLAG.LOBBY_MENU_ITEM_BOOTCAMP, True)
-
     def __updateManualBtn(self):
-        isVisible = self.manualController.isActivated() and not self.bootcamp.isInBootcamp() and not self.__isInQueue()
-        isVisible = isVisible and not self.__getIsDemoAccountWithOpenedCurtain()
+        isVisible = self.manualController.isActivated() and not self.__isInQueue()
         if self.__manualBtnIsVisible != isVisible:
             self.as_showManualButtonS(isVisible)
             self.__manualBtnIsVisible = isVisible
@@ -177,24 +137,9 @@ class LobbyMenu(LobbyMenuMeta):
     def __updateVersionState(self):
         self.as_showVersionS(not self.__isInQueue())
 
-    def __updateBootcampBtnContent(self, enabledOnServer):
-        bootcampIcon = RES_ICONS.MAPS_ICONS_BOOTCAMP_MENU_MENUBOOTCAMPICON
-        bootcampIconSource = icons.makeImageTag(bootcampIcon, 24, 24, -6, 0)
-        label = None
-        if self.bootcamp.isInBootcamp():
-            label = BOOTCAMP.REQUEST_BOOTCAMP_FINISH
-        elif enabledOnServer:
-            runCount = self.bootcamp.runCount()
-            label = BOOTCAMP.REQUEST_BOOTCAMP_RETURN if runCount > 0 else BOOTCAMP.REQUEST_BOOTCAMP_START
-        if label is not None:
-            self.as_setBootcampButtonLabelS(label, bootcampIconSource)
-        return
-
-    def __updateUIState(self, isDemoAccountWithOpenedCurtain):
+    def __updateUIState(self):
         state = MENU_CONSTANTS.STATE_SHOW_ALL
-        if self.bootcamp.isInBootcamp() or isDemoAccountWithOpenedCurtain:
-            state = MENU_CONSTANTS.STATE_HIDE_ALL
-        elif constants.IS_CHINA:
+        if constants.IS_CHINA:
             state = MENU_CONSTANTS.STATE_SHOW_SERVER_NAME
         elif not constants.IS_SHOW_SERVER_STATS:
             state = MENU_CONSTANTS.STATE_HIDE_SERVER_STATS_ITEM
@@ -214,9 +159,8 @@ class LobbyMenu(LobbyMenuMeta):
             return
         toShow, toHide = [], []
         counts = {'settingsBtn': getCountNewSettings(),
-         'postBtn': self.promo.getPromoCount()}
-        if not self.bootcamp.isInBootcamp():
-            counts['manualBtn'] = self.manualController.getNewContentCount()
+         'postBtn': self.promo.getPromoCount(),
+         'manualBtn': self.manualController.getNewContentCount()}
         for componentID, count in counts.iteritems():
             if count > 0:
                 toShow.append({'componentId': componentID,
@@ -243,7 +187,7 @@ class LobbyMenu(LobbyMenuMeta):
             self.__updatePostButton()
 
     def __updatePostButton(self):
-        isVisible = self.promo.isActive() and not self.__isInQueue() and not self.__getIsDemoAccountWithOpenedCurtain()
+        isVisible = self.promo.isActive() and not self.__isInQueue()
         if self.__postBtnIsVisible != isVisible:
             self.as_setPostButtonVisibleS(isVisible)
             self.__postBtnIsVisible = isVisible

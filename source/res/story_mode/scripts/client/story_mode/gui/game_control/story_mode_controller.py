@@ -16,6 +16,7 @@ from gui import app_loader
 from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.framework.view_overrider import OverrideData
 from gui.battle_results import RequestResultsContext
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl.gen import R
 from gui.prb_control import prbEntityProperty, prbDispatcherProperty
 from gui.prb_control.dispatcher import g_prbLoader
@@ -32,6 +33,7 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.web import IWebController
+from skeletons.helpers.statistics import IStatisticsCollector
 from skeletons.ui_logging import IUILoggingCore
 from story_mode.gui.battle_control.arena_info.player_format import StoryModeNameFormatter
 from story_mode.gui.fade_in_out import UseStoryModeFading
@@ -44,6 +46,7 @@ from story_mode_common.configs.story_mode_missions import missionsSchema, Missio
 from story_mode_common.configs.story_mode_settings import settingsSchema, SettingsModel
 from story_mode_common.story_mode_constants import LOGGER_NAME, QUEUE_TYPE, SM_CONGRATULATIONS_MESSAGE, STORY_MODE_GAME_PARAMS_KEY
 from story_mode_common.story_mode_constants import UNDEFINED_MISSION_ID, FIRST_MISSION_ID, ARENA_BONUS_TYPE, STORY_MODE_PDATA_KEY, PROGRESS_PDATA_KEY
+from uilogging.performance.battle.loggers import BattleMetricsLogger
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
     from gui.Scaleform.battle_entry import BattleEntry
@@ -63,6 +66,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     _battleResults = dependency.descriptor(IBattleResultsService)
     _webController = dependency.descriptor(IWebController)
     _uiLoggerCore = dependency.descriptor(IUILoggingCore)
+    _statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
         self.__wasOnboardingSkipped = False
@@ -295,6 +299,15 @@ class StoryModeController(IStoryModeController, IGlobalListener):
                 self._uiLoggerCore.send()
                 if lastArenaUniqueID:
                     self.__showBattleResults(lastArenaUniqueID)
+                    resultVO = self._battleResults.getResultsVO(lastArenaUniqueID)
+                    if resultVO['isForceOnboarding'] and self.isEnabled():
+                        missionId = resultVO['missionId']
+                        lastMissionId = self.missions.onboardingLastMissionId
+                        if missionId != lastMissionId or resultVO['finishResult'] != PLAYER_TEAM_RESULT.WIN:
+                            self._statsCollector.needCollectSystemData(False)
+                            statisticsLogger = BattleMetricsLogger()
+                            statisticsLogger.initialize()
+                            statisticsLogger.log()
                 else:
                     self.__isOnboarding = True
                     self.goToQueue()

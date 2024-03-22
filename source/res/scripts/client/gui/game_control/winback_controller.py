@@ -19,6 +19,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional
     from helpers.server_settings import WinbackConfig
+DEFAULT_CHAIN_VERSION = ''
 
 class _WinbackState(Enum):
     NOT_STARTED = 0
@@ -36,6 +37,8 @@ class WinbackController(IWinbackController):
         super(WinbackController, self).__init__()
         self.onConfigUpdated = Event.Event()
         self.onStateUpdated = Event.Event()
+        self.chainVersion = None
+        self.__questsChain = dict()
         self.__state = None
         return
 
@@ -45,7 +48,8 @@ class WinbackController(IWinbackController):
 
     @property
     def winbackQuests(self):
-        return self.__eventsCache.getAllQuests(self.isWinbackQuest)
+        self.__updateQuestsChain()
+        return self.__questsChain
 
     @property
     def winbackPromoURL(self):
@@ -121,16 +125,43 @@ class WinbackController(IWinbackController):
     def getWinbackBattlesCountLeft(self):
         return self.__itemsCache.items.tokens.getTokenCount(self.__getWinbackBattlesCountToken())
 
+    def onDisconnected(self):
+        super(WinbackController, self).onDisconnected()
+        self.chainVersion = None
+        self.__questsChain = dict()
+        self.__state = None
+        return
+
+    def getPossibleQuestsNames(self):
+        winbackQuestPrefix = self.winbackConfig.tokenQuestPrefix
+        winbackQuestTemplate = '{}{}{}_'
+        possibleQuestsNames = dict()
+        possibleQuestsNames['dNormalQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, DEFAULT_CHAIN_VERSION, WinbackQuestTypes.NORMAL.value)
+        possibleQuestsNames['dCompensationQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, DEFAULT_CHAIN_VERSION, WinbackQuestTypes.COMPENSATION.value)
+        possibleQuestsNames['cNormalQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, self.chainVersion, WinbackQuestTypes.NORMAL.value)
+        possibleQuestsNames['cCompensationQuestsBody'] = winbackQuestTemplate.format(winbackQuestPrefix, self.chainVersion, WinbackQuestTypes.COMPENSATION.value)
+        return possibleQuestsNames
+
     def isPromoEnabled(self):
         return self.isEnabled() and self.winbackConfig.isWhatsNewEnabled and self.__hasPromoToken()
+
+    def __getConfigWinbackChains(self):
+        return self.winbackConfig.chainVersions
+
+    def __getWinbackChainToken(self):
+        for chainVersion in self.__getConfigWinbackChains():
+            if self.__itemsCache.items.tokens.getToken(chainVersion) is not None:
+                return chainVersion
+
+        return DEFAULT_CHAIN_VERSION
 
     def __getWinbackBattlesCountToken(self):
         return self.winbackConfig.winbackBattlesCountToken
 
     def __addListeners(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsUpdate
-        self.__itemsCache.onSyncCompleted += self.__updateState
         self.__eventsCache.onSyncCompleted += self.__updateState
+        self.__itemsCache.onSyncCompleted += self.__updateState
 
     def __clearListeners(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsUpdate
@@ -150,6 +181,32 @@ class WinbackController(IWinbackController):
     def __hasPromoToken(self):
         return self.__itemsCache.items.tokens.isTokenAvailable(self.winbackConfig.winbackShowPromoToken)
 
+    def __updateQuestsChain(self):
+
+        def isActualQuest(quest):
+            if quest is None or not self.winbackConfig.isEnabled:
+                return False
+            else:
+                questId = quest if isinstance(quest, str) else quest.getID()
+                return questId in self.__questsChain
+
+        self.__questsChain = self.__eventsCache.getAllQuests(filterFunc=isActualQuest)
+
+    def __initQuestsChain(self):
+        if self.winbackConfig.isEnabled and self.winbackConfig.isProgressionEnabled and self.__state == _WinbackState.IN_PROGRESS:
+            actualChainVersion = self.__getWinbackChainToken()
+            if self.chainVersion == actualChainVersion:
+                return
+            self.chainVersion = actualChainVersion
+            allWinbackQuests = self.__eventsCache.getAllQuests(self.isWinbackQuest)
+            questChainChekpoints = {str(self.getQuestIdx(questID)) for questID in allWinbackQuests}
+            questNames = self.getPossibleQuestsNames()
+            actualQuestsByType = {chekpoint:{WinbackQuestTypes.NORMAL: allWinbackQuests.get(questNames['cNormalQuestsBody'] + chekpoint, allWinbackQuests.get(questNames['dNormalQuestsBody'] + chekpoint)),
+             WinbackQuestTypes.COMPENSATION: allWinbackQuests.get(questNames['cCompensationQuestsBody'] + chekpoint, allWinbackQuests.get(questNames['dCompensationQuestsBody'] + chekpoint))} for chekpoint in questChainChekpoints}
+            self.__questsChain = {quest.getID():quest for questGroup in actualQuestsByType.values() for quest in questGroup.values() if quest}
+        else:
+            self.__questsChain = {}
+
     def __updateState(self, *_):
         if self.isFinished():
             newState = _WinbackState.FINISHED
@@ -159,6 +216,7 @@ class WinbackController(IWinbackController):
             newState = _WinbackState.NOT_STARTED
         if newState != self.__state:
             self.__state = newState
+            self.__initQuestsChain()
             self.__updateWinbackSettings()
             self.onStateUpdated()
 

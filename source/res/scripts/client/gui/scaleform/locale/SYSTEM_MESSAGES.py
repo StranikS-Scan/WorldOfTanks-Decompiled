@@ -72,6 +72,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_KICK_REASON_CREATOR_LEFT = '#system_messages:prebattle/kick/reason/CREATOR_LEFT'
     PREBATTLE_KICK_REASON_PLAYERKICK = '#system_messages:prebattle/kick/reason/PLAYERKICK'
     PREBATTLE_KICK_REASON_TIMEOUT = '#system_messages:prebattle/kick/reason/TIMEOUT'
+    PREBATTLE_KICK_REASON_MODE_DISABLED = '#system_messages:prebattle/kick/reason/MODE_DISABLED'
     SESSION_TRACKER_KICK = '#system_messages:session_tracker_kick'
     PREBATTLE_VEHICLEINVALID_LIMITS_LEVEL = '#system_messages:prebattle/vehicleInvalid/limits/level'
     PREBATTLE_VEHICLEINVALID_LIMITS_CLASSLEVEL = '#system_messages:prebattle/vehicleInvalid/limits/classLevel'
@@ -96,7 +97,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_TEAMINVALID_LIMITS_LEVEL = '#system_messages:prebattle/teamInvalid/limits/level'
     PREBATTLE_TEAMINVALID_OBSERVERS = '#system_messages:prebattle/teamInvalid/observers'
     PREBATTLE_HASLOCKEDSTATE = '#system_messages:prebattle/hasLockedState'
-    PREBATTLE_BOOTCAMP_INOTHERQUEUE = '#system_messages:prebattle/bootcamp/inOtherQueue'
     PREBATTLE_INVITES_SENDINVITE_NAME = '#system_messages:prebattle/invites/sendInvite/name'
     PREBATTLE_INVITES_SENDINVITE = '#system_messages:prebattle/invites/sendInvite'
     ARENA_START_ERRORS_KICK_ARENA_CREATION_FAILURE = '#system_messages:arena_start_errors/kick/ARENA_CREATION_FAILURE'
@@ -384,6 +384,7 @@ class SYSTEM_MESSAGES(object):
     RETRAINING_TANKMAN_VEHICLE_LOCKED = '#system_messages:retraining_tankman/vehicle_locked'
     RETRAINING_TANKMAN_INVALID_OPERATION = '#system_messages:retraining_tankman/invalid_operation'
     RETRAINING_TANKMAN_FORBIDDEN = '#system_messages:retraining_tankman/FORBIDDEN'
+    RETRAINING_CHANGE_TANKMAN_ROLE_SUCCESS = '#system_messages:retraining_change_tankman_role/success'
     RETRAINING_CREW_SUCCESS = '#system_messages:retraining_crew/success'
     RETRAINING_CREW_FINANCIAL_SUCCESS_FREE = '#system_messages:retraining_crew/financial_success_free'
     RETRAINING_CREW_FINANCIAL_SUCCESS_CREDITS = '#system_messages:retraining_crew/financial_success_credits'
@@ -413,9 +414,6 @@ class SYSTEM_MESSAGES(object):
     DROP_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:drop_tankman_skill/invalid_vehicle'
     DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:drop_tankman_skill/vehicle_need_repair'
     DROP_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:drop_tankman_skill/vehicle_locked'
-    CHANGE_TANKMAN_ROLE_SUCCESS = '#system_messages:change_tankman_role/success'
-    CHANGE_TANKMAN_ROLE_SUCCESS_AND_VEHICLE_RETRAINED = '#system_messages:change_tankman_role/success_and_vehicle_retrained'
-    CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS = '#system_messages:change_tankman_role/financial_success'
     CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN = '#system_messages:change_tankman_role/slot_is_taken'
     CHANGE_TANKMAN_ROLE_NO_VEHICLE = '#system_messages:change_tankman_role/no_vehicle'
     CHANGE_TANKMAN_ROLE_SERVER_ERROR = '#system_messages:change_tankman_role/server_error'
@@ -502,7 +500,8 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE = '#system_messages:vehicle_trade_in/not_enough_space'
     VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_trade_in/wallet_not_available'
     VEHICLE_TRADE_IN_SUCCESS = '#system_messages:vehicle_trade_in/success'
-    VEHICLE_REMOVE_SUCCESS = '#system_messages:vehicle_remove/success'
+    VEHICLE_REMOVE_SUCCESS_DEFAULT = '#system_messages:vehicle_remove/success/default'
+    VEHICLE_REMOVE_SUCCESS_ZERO_COST = '#system_messages:vehicle_remove/success/zero_cost'
     VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success_dismantling'
     VEHICLE_REMOVE_SERVER_ERROR = '#system_messages:vehicle_remove/server_error'
     VEHICLE_REMOVE_INVALID_VEHICLE = '#system_messages:vehicle_remove/invalid_vehicle'
@@ -1227,6 +1226,7 @@ class SYSTEM_MESSAGES(object):
     DEMOUNTKIT_FAILED_SWITCHEDOFF = '#system_messages:demountKit_failed/switchedOff'
     DAILY_QUESTS_SWITCH_OFF_TITLE = '#system_messages:daily_quests/switch_off/title'
     DAILY_QUESTS_SWITCH_OFF_BODY = '#system_messages:daily_quests/switch_off/body'
+    NEWBIE_DAILY_QUESTS_SWITCH_OFF_BODY = '#system_messages:newbie_daily_quests/switch_off/body'
     DAILY_QUESTS_SWITCH_ON_TITLE = '#system_messages:daily_quests/switch_on/title'
     DAILY_QUESTS_SWITCH_ON_BODY = '#system_messages:daily_quests/switch_on/body'
     DAILY_QUESTS_REROLL_SUCCESS = '#system_messages:daily_quests/reroll/success'
@@ -1369,6 +1369,10 @@ class SYSTEM_MESSAGES(object):
     LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
     SENIORITYAWARDS_SWITCH_PAUSE_ON_BODY = '#system_messages:seniorityAwards/switch_pause_on/body'
     SENIORITYAWARDS_SWITCH_PAUSE_OFF_BODY = '#system_messages:seniorityAwards/switch_pause_off/body'
+    CONVERSION_TITLE = '#system_messages:conversion/title'
+    CONVERSION_HEADER = '#system_messages:conversion/header'
+    CONVERSION_ERROR = '#system_messages:conversion/error'
+    CONVERSION_SUCCESS = '#system_messages:conversion/success'
     UNIT_WARNINGS_WGSHEVENT_VEHICLEUNFROZEN = '#system_messages:unit/warnings/wgshEvent/vehicleUnfrozen'
     UNIT_ERROR_WGSHEVENT_ACCOUNTNOTINCLAN = '#system_messages:unit/error/wgshEvent/AccountNotInClan'
     UNIT_ERROR_WGSHEVENT_ACCOUNTDOESNOTHAVEPERMISSIONS = '#system_messages:unit/error/wgshEvent/AccountDoesNotHavePermissions'
@@ -1572,6 +1576,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_KICK_REASON_CREATOR_LEFT,
      PREBATTLE_KICK_REASON_PLAYERKICK,
      PREBATTLE_KICK_REASON_TIMEOUT,
+     PREBATTLE_KICK_REASON_MODE_DISABLED,
      SESSION_TRACKER_KICK,
      PREBATTLE_VEHICLEINVALID_LIMITS_LEVEL,
      PREBATTLE_VEHICLEINVALID_LIMITS_CLASSLEVEL,
@@ -1596,7 +1601,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_TEAMINVALID_LIMITS_LEVEL,
      PREBATTLE_TEAMINVALID_OBSERVERS,
      PREBATTLE_HASLOCKEDSTATE,
-     PREBATTLE_BOOTCAMP_INOTHERQUEUE,
      PREBATTLE_INVITES_SENDINVITE_NAME,
      PREBATTLE_INVITES_SENDINVITE,
      ARENA_START_ERRORS_KICK_ARENA_CREATION_FAILURE,
@@ -1884,6 +1888,7 @@ class SYSTEM_MESSAGES(object):
      RETRAINING_TANKMAN_VEHICLE_LOCKED,
      RETRAINING_TANKMAN_INVALID_OPERATION,
      RETRAINING_TANKMAN_FORBIDDEN,
+     RETRAINING_CHANGE_TANKMAN_ROLE_SUCCESS,
      RETRAINING_CREW_SUCCESS,
      RETRAINING_CREW_FINANCIAL_SUCCESS_FREE,
      RETRAINING_CREW_FINANCIAL_SUCCESS_CREDITS,
@@ -1913,9 +1918,6 @@ class SYSTEM_MESSAGES(object):
      DROP_TANKMAN_SKILL_INVALID_VEHICLE,
      DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      DROP_TANKMAN_SKILL_VEHICLE_LOCKED,
-     CHANGE_TANKMAN_ROLE_SUCCESS,
-     CHANGE_TANKMAN_ROLE_SUCCESS_AND_VEHICLE_RETRAINED,
-     CHANGE_TANKMAN_ROLE_FINANCIAL_SUCCESS,
      CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN,
      CHANGE_TANKMAN_ROLE_NO_VEHICLE,
      CHANGE_TANKMAN_ROLE_SERVER_ERROR,
@@ -2002,7 +2004,8 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE,
      VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE,
      VEHICLE_TRADE_IN_SUCCESS,
-     VEHICLE_REMOVE_SUCCESS,
+     VEHICLE_REMOVE_SUCCESS_DEFAULT,
+     VEHICLE_REMOVE_SUCCESS_ZERO_COST,
      VEHICLE_REMOVE_SUCCESS_DISMANTLING,
      VEHICLE_REMOVE_SERVER_ERROR,
      VEHICLE_REMOVE_INVALID_VEHICLE,
@@ -2727,6 +2730,7 @@ class SYSTEM_MESSAGES(object):
      DEMOUNTKIT_FAILED_SWITCHEDOFF,
      DAILY_QUESTS_SWITCH_OFF_TITLE,
      DAILY_QUESTS_SWITCH_OFF_BODY,
+     NEWBIE_DAILY_QUESTS_SWITCH_OFF_BODY,
      DAILY_QUESTS_SWITCH_ON_TITLE,
      DAILY_QUESTS_SWITCH_ON_BODY,
      DAILY_QUESTS_REROLL_SUCCESS,
@@ -2869,6 +2873,10 @@ class SYSTEM_MESSAGES(object):
      LIMITEDUI_SWITCHOFF,
      SENIORITYAWARDS_SWITCH_PAUSE_ON_BODY,
      SENIORITYAWARDS_SWITCH_PAUSE_OFF_BODY,
+     CONVERSION_TITLE,
+     CONVERSION_HEADER,
+     CONVERSION_ERROR,
+     CONVERSION_SUCCESS,
      UNIT_WARNINGS_WGSHEVENT_VEHICLEUNFROZEN,
      UNIT_ERROR_WGSHEVENT_ACCOUNTNOTINCLAN,
      UNIT_ERROR_WGSHEVENT_ACCOUNTDOESNOTHAVEPERMISSIONS,

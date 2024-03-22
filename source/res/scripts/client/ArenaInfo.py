@@ -28,7 +28,9 @@ class ArenaInfo(BigWorld.Entity, BWEntitiyComponentTracker):
         for comp in ARENA_INFO_COMPONENTS:
             comp.onEnterWorld(self)
 
-        BigWorld.player().arena.registerArenaInfo(self)
+        arena = BigWorld.player().arena
+        if arena:
+            arena.registerArenaInfo(self)
 
     def onLeaveWorld(self):
         for comp in ARENA_INFO_COMPONENTS:

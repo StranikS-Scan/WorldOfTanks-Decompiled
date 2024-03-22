@@ -2,8 +2,11 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/comp7_bonus_packer.py
 import logging
 import typing
+from shared_utils import findFirst
+from constants import OFFER_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
 from gui.impl.gen import R
@@ -11,13 +14,14 @@ from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7Bo
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
 from gui.impl.lobby.comp7.comp7_bonus_helpers import BonusTypes, getBonusType, splitDossierBonuses
 from gui.impl.lobby.comp7.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
-from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses, C11nProgressTokenBonus, COMP7_TOKEN_WEEKLY_REWARD_NAME
+from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses, C11nProgressTokenBonus, COMP7_TOKEN_WEEKLY_REWARD_NAME, getVehicleCrewReward, VehiclesBonus
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import DossierBonusUIPacker, DogTagComponentsUIPacker, BonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, SimpleBonusUIPacker, CustomizationBonusUIPacker, VehiclesBonusUIPacker, TokenBonusUIPacker
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.money import Currency
 from helpers import dependency
+from items import tankmen
+from items.tankmen import getNationConfig
 from skeletons.gui.customization import ICustomizationService
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
@@ -51,6 +55,7 @@ _QUALIFICATION_REWARDS_BONUSES_ORDER = (BonusTypes.STYLE_PROGRESS,
  BonusTypes.STYLE,
  BonusTypes.RENT_VEHICLE)
 _YEARLY_REWARDS_BONUSES_ORDER = (BonusTypes.STYLE_PROGRESS,
+ BonusTypes.RENT_VEHICLE,
  BonusTypes.BADGE_SUFFIX,
  BonusTypes.BADGE,
  BonusTypes.STYLE,
@@ -62,9 +67,11 @@ def getComp7BonusPacker():
      'dogTagComponents': Comp7DogTagUIPacker(),
      'customizations': Comp7CustomizationBonusUIPacker(),
      'vehicles': Comp7VehicleBonusUIPacker(),
+     'tankmen': Comp7TankmenBonusUIPacker(),
+     'battleToken': Comp7TokenUIPacker(),
      Currency.CRYSTAL: Comp7CrystalBonusPacker(),
      C11nProgressTokenBonus.BONUS_NAME: Comp7StyleProgressBonusUIPacker(),
-     COMP7_TOKEN_WEEKLY_REWARD_NAME: Comp7TokenRewardBonusUIPacker()})
+     COMP7_TOKEN_WEEKLY_REWARD_NAME: Comp7TokenWeeklyRewardUIPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -145,7 +152,7 @@ class Comp7StyleProgressBonusUIPacker(BaseBonusUIPacker):
         branchID = bonus.getBranchID()
         progressLevel = bonus.getProgressLevel()
         camo = getComp7ProgressionStyleCamouflage(styleID, branchID, progressLevel)
-        tooltipData = TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=camo.intCD))
+        tooltipData = TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=camo.intCD, skipQuestValidation=True))
         return [tooltipData]
 
     @classmethod
@@ -185,8 +192,46 @@ class Comp7VehicleBonusUIPacker(VehiclesBonusUIPacker):
     def _getLabel(cls, vehicle):
         return vehicle.shortUserName
 
+    @classmethod
+    def _packTooltip(cls, bonus, vehicle, vehInfo):
+        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_VEHICLE, specialArgs=(vehicle.intCD,))
 
-class Comp7TokenRewardBonusUIPacker(TokenBonusUIPacker):
+
+class Comp7TankmenBonusUIPacker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tankmanData in bonus.getValue():
+            result.append(cls._packSingleBonus(tankmanData))
+
+        return result
+
+    @classmethod
+    def _packSingleBonus(cls, bonus):
+        tankmanData = tankmen.TankmanDescr(compactDescr=bonus)
+        model = Comp7BonusModel()
+        model.setName('tankman')
+        model.setGroupName(cls.__getTankmanGroupName(tankmanData))
+        return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tankmanData in bonus.getValue():
+            tankman = tankmen.TankmanDescr(compactDescr=tankmanData)
+            tooltipData.append(createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SPECIAL_TANKMAN, specialArgs=(tankman, cls.__getTankmanGroupName(tankman))))
+
+        return tooltipData
+
+    @classmethod
+    def __getTankmanGroupName(cls, tankmanData):
+        premiumGroups = getNationConfig(tankmanData.nationID).premiumGroups
+        tankmanGroup = findFirst(lambda group: group.groupID == tankmanData.gid, premiumGroups.itervalues())
+        return tankmanGroup.name
+
+
+class Comp7TokenWeeklyRewardUIPacker(TokenBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
@@ -202,6 +247,36 @@ class Comp7TokenRewardBonusUIPacker(TokenBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         return [createTooltipData(bonus.getTooltip())]
+
+
+class Comp7TokenUIPacker(TokenBonusUIPacker):
+    _OFFER_TOKEN = 'offer'
+
+    @classmethod
+    def _getTokenBonusType(cls, tokenID, complexToken):
+        return cls._OFFER_TOKEN if tokenID.startswith(OFFER_TOKEN_PREFIX) else super(Comp7TokenUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
+
+    @classmethod
+    def _getTokenBonusPackers(cls):
+        packers = super(Comp7TokenUIPacker, cls)._getTokenBonusPackers()
+        packers[cls._OFFER_TOKEN] = cls.__packOffer
+        return packers
+
+    @classmethod
+    def _getTooltipsPackers(cls):
+        packers = super(Comp7TokenUIPacker, cls)._getTooltipsPackers()
+        packers[cls._OFFER_TOKEN] = cls.__getOfferTooltip
+        return packers
+
+    @classmethod
+    def __packOffer(cls, model, *_):
+        model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.small.deluxe_gift()))
+        model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.big.deluxe_gift()))
+        return model
+
+    @classmethod
+    def __getOfferTooltip(cls, *_):
+        return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.COMP7_SELECTABLE_REWARD)
 
 
 def packQuestBonuses(bonuses, bonusPacker, order=None):
@@ -250,7 +325,12 @@ def packYearlyRewardsBonuses(bonuses):
     for key, value in bonuses.iteritems():
         bonusObjects.extend(getNonQuestBonuses(key, value))
 
-    return packQuestBonuses(bonusObjects, bonusPacker=getComp7BonusPacker(), order=_YEARLY_REWARDS_BONUSES_ORDER)
+    for bonus in bonusObjects:
+        if bonus.getName() == VehiclesBonus.VEHICLES_BONUS:
+            bonusObjects.append(getVehicleCrewReward(bonus))
+
+    result = packQuestBonuses(bonusObjects, bonusPacker=getComp7BonusPacker(), order=_YEARLY_REWARDS_BONUSES_ORDER)
+    return result
 
 
 def _getSortKey(order):

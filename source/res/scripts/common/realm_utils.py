@@ -2,11 +2,21 @@
 # Embedded file name: scripts/common/realm_utils.py
 import string
 import ResMgr as rmgr
-from constants import CURRENT_REALM, IS_CLIENT, IS_EDITOR
+from constants import CURRENT_REALM, IS_CLIENT, IS_EDITOR, REALMS
 
 def getRealmFilePath(filepath):
     parts = filepath.split('.')
     return string.join(parts[:-1] + [CURRENT_REALM] + parts[-1:], '.')
+
+
+def isFileWithRealm(fileName):
+    parts = fileName.split('.')
+    return len(parts) > 2 and parts[-2] in REALMS
+
+
+def isFileWithCurrentRealm(fileName):
+    parts = fileName.split('.')
+    return len(parts) > 2 and parts[-2] == CURRENT_REALM
 
 
 class ResMgr(object):

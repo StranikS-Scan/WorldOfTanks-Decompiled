@@ -9,11 +9,11 @@ from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDIC
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
-from gui.Scaleform.daapi.view.meta.RocketAcceleratorIndicatorMeta import RocketAcceleratorIndicatorMeta
-from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
+from gui.Scaleform.daapi.view.meta.RocketAcceleratorIndicatorMeta import RocketAcceleratorIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
+from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
 from gui.Scaleform.genConsts.ROCKET_ACCELERATOR_INDICATOR import ROCKET_ACCELERATOR_INDICATOR
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
@@ -23,12 +23,12 @@ from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, HitType
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.crits_mask_parser import critsParserGenerator
 from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
 from helpers import i18n
-from gui.impl import backport
-from gui.impl.gen import R
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -180,11 +180,12 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
 
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
+        hitData = markerData.hitData
         vo.update({'circleStr': self._getCircleBackground(markerData),
          'tankTypeStr': self._getTankType(markerData),
-         'tankName': markerData.hitData.getAttackerVehicleName(),
+         'tankName': hitData.getAttackerVehicleName(),
          'damageValue': self._getDamageLabel(markerData),
-         'isFriendlyFire': markerData.hitData.isFriendlyFire()})
+         'isFriendlyFire': hitData.isFriendlyFire()})
         return vo
 
     def _getBackground(self, markerData):
@@ -604,7 +605,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__resetDevices()
         self.__updateDevicesView()
         hasSiegeMode = vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode)
-        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack):
+        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack) and vehicle.isPlayerVehicle:
             uiType = self.__getUIType(vTypeDesc)
             self.as_setSiegeModeTypeS(uiType)
             self._devices = self.__createDevicesMap(vTypeDesc)
@@ -1132,7 +1133,7 @@ class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
     def __onVehicleControlling(self, vehicle):
         self.__updater.removeRocketCmp()
         self.__isEnabled = False
-        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration:
+        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration and vehicle.isPlayerVehicle:
             rocketCmp = vehicle.dynamicComponents.get('rocketAccelerationController', None)
             if rocketCmp is not None:
                 self.__updater.setRocketCmp(rocketCmp)

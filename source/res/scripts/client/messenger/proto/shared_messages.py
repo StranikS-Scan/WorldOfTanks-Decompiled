@@ -6,6 +6,7 @@ class ACTION_MESSAGE_TYPE(object):
     PLAYER = 0
     WARNING = 1
     ERROR = 2
+    FAIRPLAY_WARNING = 3
 
 
 class ClientActionMessage(IChatMessage):
@@ -23,3 +24,13 @@ class ClientActionMessage(IChatMessage):
 
     def getType(self):
         return self.__type
+
+
+class ClientActionTemplateMessage(ClientActionMessage):
+
+    def __init__(self, tempalteKey, type_=ACTION_MESSAGE_TYPE.PLAYER):
+        super(ClientActionTemplateMessage, self).__init__(type_=type_)
+        self._tempalteKey = tempalteKey
+
+    def getTemplateKey(self):
+        return self._tempalteKey

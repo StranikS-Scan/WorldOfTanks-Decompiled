@@ -4,37 +4,42 @@ import logging
 import weakref
 import BattleReplay
 import GUI
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, INVALID_MARKER_ID
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.map_zones.markers2d import MapZonesPlugin
-from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
+from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import MarkersManagerEvent
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency, isPlayerAvatar
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+from helpers.CallbackDelayer import CallbackDelayer
 _logger = logging.getLogger(__name__)
 _STICKY_MARKER_RADIUS_SCALE = 0.7
 
-class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager):
+class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager, CallbackDelayer):
     MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
-    settingsCore = dependency.descriptor(ISettingsCore)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     setablePluginsDict = {'area': plugins.AreaStaticMarkerPlugin,
      'teamAndControlPoints': plugins.TeamsOrControlsPointsPlugin}
 
-    def __init__(self):
-        super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, self.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
+    def __init__(self, settings=None):
+        if settings is None:
+            settings = ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, self.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK)
+        super(MarkersManager, self).__init__(settings)
         self.__plugins = None
         self.__canvas = None
         self.__ids = set()
@@ -42,13 +47,13 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__isStickyEnabled = False
         self.__showBaseMarkers = False
         self.__showLocationMarkers = False
+        CallbackDelayer.__init__(self)
         return
 
     @property
     def _isMarkerHoveringEnabled(self):
         sessionProvider = dependency.instance(IBattleSessionProvider)
-        arenaVisitor = sessionProvider.arenaVisitor
-        return self.__isIBCEnabled and not (arenaVisitor.gui.isBootcampBattle() or sessionProvider.getCtx().isPlayerObserver() or arenaVisitor.gui.isBattleRoyale())
+        return self.__isIBCEnabled and not sessionProvider.getCtx().isPlayerObserver()
 
     def setScaleProps(self, minScale=40, maxScale=100, defScale=100, speed=3.0):
         self.__canvas.scaleProperties = (minScale,
@@ -132,6 +137,9 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def setActiveCameraAimOffset(self, aimOffset):
         self.__canvas.activeCameraAimOffset = aimOffset
 
+    def setIsPivotAtCameraForMarkers(self, isPivotAtCamera):
+        self.__canvas.setIsPivotAtCamera(isPivotAtCamera)
+
     def getPlugin(self, name):
         return self.__plugins.getPlugin(name) if self.__plugins is not None else None
 
@@ -182,16 +190,17 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
 
     def _populate(self):
         super(MarkersManager, self)._populate()
-        self.__isIBCEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
-        self.__isStickyEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_STICKY_MARKERS))
-        self.__showBaseMarkers = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_BASE_MARKERS))
-        self.__showLocationMarkers = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_LOCATION_MARKERS))
-        self.settingsCore.onSettingsChanged += self.__onSettingsChange
+        self.__isIBCEnabled = bool(self.battleCommunications.isEnabled)
+        self.__isStickyEnabled = bool(self.battleCommunications.showStickyMarkers)
+        self.__showBaseMarkers = bool(self.battleCommunications.showBaseMarkers)
+        self.__showLocationMarkers = bool(self.battleCommunications.showLocationMarkers)
+        self.battleCommunications.onChanged += self.__onBattleCommunicationSettingsChanged
         self.startPlugins()
 
     def _dispose(self):
+        CallbackDelayer.destroy(self)
         self.stopPlugins()
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChange
+        self.battleCommunications.onChanged -= self.__onBattleCommunicationSettingsChanged
         super(MarkersManager, self)._dispose()
 
     def _createCanvas(self, arenaVisitor):
@@ -228,6 +237,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__canvas.stickyMarkerRadiusScale = _STICKY_MARKER_RADIUS_SCALE
         self.__canvasProxy = weakref.ref(self.__canvas)
         self.component.addChild(self.__canvas, 'vehicleMarkersCanvas')
+        self.__canvas.setMetersLocalization(' ' + backport.text(R.strings.ingame_gui.marker.meters()))
 
     def __removeCanvas(self):
         if self.__canvas is not None:
@@ -238,6 +248,14 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
 
     def __setMarkerDuration(self):
         self.as_setMarkerDurationS(GUI_SETTINGS.markerHitSplashDuration)
+
+    def onMarkerBeingHovered(self, isHovered):
+        self.delayCallback(0.0, self.__markerWasHovered, isHovered)
+
+    def __markerWasHovered(self, isHovered):
+        targetID, _, _ = self.getCurrentlyAimedAtMarkerIDAndType()
+        if self.guiSessionProvider.shared.spectator:
+            self.guiSessionProvider.shared.spectator.markerWasHovered(isHovered, targetID)
 
     def __createPlugins(self, arenaVisitor):
         setup = self._setupPlugins(arenaVisitor)
@@ -252,21 +270,11 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             self.__plugins.fini()
         return
 
-    def __onSettingsChange(self, diff):
-        addSettings = {}
-        for item in diff:
-            if item in (BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION,
-             BattleCommStorageKeys.SHOW_STICKY_MARKERS,
-             BattleCommStorageKeys.SHOW_BASE_MARKERS,
-             BattleCommStorageKeys.SHOW_LOCATION_MARKERS):
-                addSettings[item] = diff[item]
-
-        if not addSettings:
-            return
-        newIBCEnabled = bool(addSettings.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION, self.__isIBCEnabled))
-        newShowBaseMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_BASE_MARKERS, self.__showBaseMarkers))
-        newIsSticky = bool(addSettings.get(BattleCommStorageKeys.SHOW_STICKY_MARKERS, self.__isStickyEnabled))
-        new3DMarkers = bool(addSettings.get(BattleCommStorageKeys.SHOW_LOCATION_MARKERS, self.__showLocationMarkers))
+    def __onBattleCommunicationSettingsChanged(self):
+        newIBCEnabled = bool(self.battleCommunications.isEnabled)
+        newShowBaseMarkers = bool(self.battleCommunications.showBaseMarkers)
+        newIsSticky = bool(self.battleCommunications.showStickyMarkers)
+        new3DMarkers = bool(self.battleCommunications.showLocationMarkers)
         if newIBCEnabled != self.__isIBCEnabled:
             self.__isIBCEnabled = newIBCEnabled
             self.__canvas.enableMarkerHovering = self._isMarkerHoveringEnabled
@@ -292,3 +300,14 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             plugin.start()
         elif plugin:
             plugin.stop()
+
+
+class KillCamMarkersManager(MarkersManager):
+
+    def __init__(self):
+        super(KillCamMarkersManager, self).__init__(settings=ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, self.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
+
+    def _setupPlugins(self, arenaVisitor):
+        super(KillCamMarkersManager, self)._setupPlugins(arenaVisitor)
+        setup = {'settings': plugins.SettingsPlugin}
+        return setup

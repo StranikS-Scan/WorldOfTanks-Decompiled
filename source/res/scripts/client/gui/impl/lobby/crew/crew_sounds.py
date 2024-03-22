@@ -17,6 +17,15 @@ class SOUNDS(CONST_CONTAINER):
     CREW_TIPS_NOTIFICATION = 'crew_notification_tips'
     CREW_TIPS_ERROR = 'crew_notification_error_tips'
     CREW_BOOKS_ENTRANCE = 'crew_page_whoosh'
+    CREW_RESET_PERK_SELECTION = 'crew_reset_perks_no_card_selection'
+    CREW_RESET_PERK_NO_LOSS = 'crew_reset_perks'
+    CREW_RESET_PERK_XP_LOSS = 'crew_reset_perks_percent_down'
+    CREW_RESET_PERK_HUGE_LOSS = 'crew_reset_perks_break'
+    CREW_PERK_UPGRADE = 'crew_perks_upgrade'
+    CREW_CHANGE_ROLE = 'crew_change_qualification'
+    CREW_RECRUIT_IN = 'crew_tank_recruit_fadein'
+    CREW_RECRUIT_OUT = 'crew_tank_recruit_fadeout'
+    CONVERSION_AWARD = 'gui_reward_screen_general'
 
 
 CREW_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_BARRAKS}, exitStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_HANGAR}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='hangar_crew_enter', exitEvent='hangar_crew_exit')

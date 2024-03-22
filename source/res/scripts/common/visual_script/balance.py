@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/visual_script/balance.py
 import BigWorld
 import sys
+import os
 from block import Meta, Block, InitParam, buildStrKeysValue
 from slot_types import SLOT_TYPE, arrayOf
 from type import VScriptStruct, VScriptStructField
@@ -17,18 +18,12 @@ class VsePaths(object):
 
     def __enter__(self):
         if constants.IS_VS_EDITOR:
-            self.prevArenaPath = constants.ARENA_TYPE_XML_PATH
-            self.prevItemDefPath = constants.ITEM_DEFS_PATH
-            self.prevTypeXMLType = iv._VEHICLE_TYPE_XML_PATH
-            constants.ARENA_TYPE_XML_PATH = '../../../res/wot/scripts/arena_defs/'
-            constants.ITEM_DEFS_PATH = '../../../res/wot/scripts/item_defs/'
-            iv._VEHICLE_TYPE_XML_PATH = constants.ITEM_DEFS_PATH + 'vehicles/'
+            self.cwd = os.getcwd()
+            os.chdir(self.cwd + '/../../../../res/wot/')
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if constants.IS_VS_EDITOR:
-            constants.ARENA_TYPE_XML_PATH = self.prevArenaPath
-            constants.ITEM_DEFS_PATH = self.prevItemDefPath
-            iv._VEHICLE_TYPE_XML_PATH = self.prevTypeXMLType
+            os.chdir(self.cwd)
 
 
 def cache():
@@ -50,12 +45,8 @@ def getVehicleList(naton):
 def eqDataSection(eqName):
     global _dataSection
     if not _dataSection:
-        if constants.IS_CELLAPP or constants.IS_CLIENT:
-            xmlPath = constants.ITEM_DEFS_PATH
-        else:
-            xmlPath = '../../../res/wot/scripts/item_defs/'
-        xmlPath += 'vehicles/common/equipments.xml'
-        _dataSection = ResMgr.openSection(xmlPath)
+        with VsePaths():
+            _dataSection = ResMgr.openSection(constants.ITEM_DEFS_PATH + 'vehicles/common/equipments.xml')
     ds = ResMgr.DataSection(eqName)
     ds.copy(_dataSection[eqName])
     return ds
@@ -203,7 +194,7 @@ class EquipmentParams(Block, EquipmentMeta):
 
     @classmethod
     def initParams(cls):
-        return [InitParam('EquipmentName', SLOT_TYPE.STR, buildStrKeysValue('large_repairkit_battle_royale', 'regenerationKit', 'arcade_minefield_battle_royale', 'healPoint', 'selfBuff', 'trappoint', 'afterburning_battle_royale', 'repairpoint', 'arcade_bomber_battle_royale', 'spawn_kamikaze', 'arcade_smoke_battle_royale_with_damage', 'berserker', 'fireCircle', 'adaptationHealthRestore', 'corrodingShot', 'clingBrander', 'thunderStrike', 'shotPassion'), EDITOR_TYPE.STR_KEY_SELECTOR)]
+        return [InitParam('EquipmentName', SLOT_TYPE.STR, buildStrKeysValue('large_repairkit_battle_royale', 'regenerationKit', 'arcade_minefield_battle_royale', 'healPoint', 'selfBuff', 'trappoint', 'afterburning_battle_royale', 'repairpoint', 'arcade_bomber_battle_royale', 'spawn_kamikaze', 'arcade_smoke_battle_royale_with_damage', 'berserker', 'fireCircle', 'adaptationHealthRestore', 'corrodingShot', 'clingBrander', 'thunderStrike', 'shotPassion', 'arcade_bomber_with_own_damage'), EDITOR_TYPE.STR_KEY_SELECTOR)]
 
     def _execute(self):
         self._writeLog('_execute {}'.format(self._params.getValue()))

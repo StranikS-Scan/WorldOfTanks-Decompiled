@@ -88,6 +88,11 @@ class BadgesPage(BadgesPageMeta):
         lastSelectedSuffixBadgeID = AccountSettings.getSettings(LAST_SELECTED_SUFFIX_BADGE_ID)
         selectedItemIdx = None
         lastSelectedItemIdx = None
+        suffixesVO = {'checkboxLabel': backport.text(R.strings.badge.badgesPage.header.suffixSetting.label()),
+         'checkboxTooltip': makeTooltip(TOOLTIPS.BADGEINFO_TITLE, TOOLTIPS.BADGEINFO_TEXT),
+         'checkboxSelected': self.badgesController.getSuffix() is not None,
+         'selectedItemIdx': 0,
+         'items': []}
         if self.__badgesCollector.getSuffixAchievedBadges():
             for i, badge in enumerate(self.__badgesCollector.getSuffixAchievedBadges()):
                 self.__deselectNotSelectedBadge(badge)
@@ -102,11 +107,9 @@ class BadgesPage(BadgesPageMeta):
                 AccountSettings.setSettings(LAST_SELECTED_SUFFIX_BADGE_ID, self.badgesController.getSuffix().badgeID)
             elif lastSelectedItemIdx is not None:
                 self.__selectedItemIdx = lastSelectedItemIdx
-            self.as_setBadgeSuffixS({'checkboxLabel': backport.text(R.strings.badge.badgesPage.header.suffixSetting.label()),
-             'checkboxTooltip': makeTooltip(TOOLTIPS.BADGEINFO_TITLE, TOOLTIPS.BADGEINFO_TEXT),
-             'checkboxSelected': self.badgesController.getSuffix() is not None,
-             'selectedItemIdx': self.__selectedItemIdx,
-             'items': suffixBadgesVO})
+            suffixesVO['selectedItemIdx'] = self.__selectedItemIdx
+            suffixesVO['items'] = suffixBadgesVO
+        self.as_setBadgeSuffixS(suffixesVO)
         return
 
     def __deselectNotSelectedBadge(self, badge):
@@ -129,6 +132,10 @@ class BadgesPage(BadgesPageMeta):
             self.__deselectNotSelectedBadge(badge)
             receivedBadgesVO.append(makeBadgeVO(badge))
 
+        for badge in self.__badgesCollector.getNotReceivedSuffixBadges():
+            self.__deselectNotSelectedBadge(badge)
+            notReceivedBadgesVO.append(makeBadgeVO(badge))
+
         for badge in self.__badgesCollector.getNotReceivedPrefixBadges():
             self.__deselectNotSelectedBadge(badge)
             notReceivedBadgesVO.append(makeBadgeVO(badge))
@@ -148,6 +155,9 @@ class BadgesPage(BadgesPageMeta):
         self.as_setNotReceivedBadgesS({'title': text_styles.highTitle(BADGE.BADGESPAGE_BODY_UNCOLLECTED_TITLE),
          'badgesData': notReceivedBadgesVO})
         return
+
+    def __onWotPlusUpdate(self, *_):
+        self.__updateBadges()
 
     def __selectBadges(self):
         badges = []

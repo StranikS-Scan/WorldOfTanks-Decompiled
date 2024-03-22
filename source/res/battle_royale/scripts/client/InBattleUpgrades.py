@@ -2,7 +2,6 @@
 # Embedded file name: battle_royale/scripts/client/InBattleUpgrades.py
 import BigWorld
 from aih_constants import CTRL_MODE_NAME
-from debug_utils import LOG_NOTE
 from wotdecorators import noexcept
 
 class UpgradeInProgressComponent(object):
@@ -54,7 +53,6 @@ class InBattleUpgrades(BigWorld.DynamicScriptComponent):
         pass
 
     def set_upgradeReadinessTime(self, prev):
-        LOG_NOTE('Vehicle upgrade readiness time changed')
         vehicle = self.entity
         ctrl = vehicle.guiSessionProvider.dynamic.progression
         if ctrl is not None and vehicle.id == BigWorld.player().playerVehicleID:

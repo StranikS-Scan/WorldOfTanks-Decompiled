@@ -6,6 +6,7 @@ if typing.TYPE_CHECKING:
     from tutorial.data.client_triggers import ClientTriggers
     from tutorial.gui import IGuiImpl
     from tutorial.core import Tutorial
+    from tutorial.hints_manager import HintsManager
     from typing import Optional, Dict
     ComponentID = str
 
@@ -18,22 +19,6 @@ class IGuiController(object):
         raise NotImplementedError
 
     def fini(self):
-        raise NotImplementedError
-
-    @property
-    def lastHangarMenuButtonsOverride(self):
-        raise NotImplementedError
-
-    @property
-    def lastHeaderMenuButtonsOverride(self):
-        raise NotImplementedError
-
-    @property
-    def hangarHeaderEnabled(self):
-        raise NotImplementedError
-
-    @property
-    def lastBattleSelectorHintOverride(self):
         raise NotImplementedError
 
     def setHintsWithClientTriggers(self, clientTriggers):
@@ -72,25 +57,7 @@ class IGuiController(object):
     def stopComponentAnimation(self, componentID, animType):
         raise NotImplementedError
 
-    def showBootcampHint(self, componentID):
-        raise NotImplementedError
-
-    def hideBootcampHint(self, componentID):
-        raise NotImplementedError
-
     def setupViewContextHints(self, viewTutorialID, hintsData, hintsArgs=None):
-        raise NotImplementedError
-
-    def overrideHangarMenuButtons(self, buttonsList=None):
-        raise NotImplementedError
-
-    def overrideHeaderMenuButtons(self, buttonsList=None):
-        raise NotImplementedError
-
-    def setHangarHeaderEnabled(self, enabled):
-        raise NotImplementedError
-
-    def overrideBattleSelectorHint(self, overrideType=None):
         raise NotImplementedError
 
     def clear(self):
@@ -107,6 +74,10 @@ class ITutorialLoader(object):
 
     @property
     def tutorial(self):
+        raise NotImplementedError
+
+    @property
+    def hintsManager(self):
         raise NotImplementedError
 
     @property

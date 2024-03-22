@@ -10,7 +10,7 @@ from web.web_client_api.mapbox import MapboxWebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
-from web.web_client_api.battle_royale import BattleRoyaleWebApi, StPatrickWebApi
+from web.web_client_api.battle_royale import BattleRoyaleWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -43,8 +43,7 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  ClansWebApi,
  RankedBattlesWebApi,
  BattleRoyaleWebApi,
- UILoggingWebApi,
- StPatrickWebApi)
+ UILoggingWebApi)
 
 def createWebHandlers(replaces=None):
     handlers = webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

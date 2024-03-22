@@ -6,7 +6,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.goodies.goodie_items import Booster, ClanReservePresenter
 from gui.impl.backport import image, text
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PREMIUM_BOOSTER_IDS
-from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import getTotalBoostersByResourceAndPremium
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import getTotalBoostersByResourceAndPremium
 from gui.impl.gen import R
 from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles as _ts
@@ -76,7 +76,7 @@ class BoosterTooltipData(BlocksTooltipData):
             activateInfo = formatters.packTitleDescBlock(title=_ts.middleTitle(text(R.strings.tooltips.boostersWindow.booster.activateInfo.title())), desc=_ts.main(text(R.strings.tooltips.boostersWindow.booster.activateInfo.description())))
             blocks.append(activateInfo)
         if stats.dueDate:
-            if booster.expiryTime:
+            if booster.useby:
                 dueDateStr = text(R.strings.tooltips.boostersWindow.booster.dueDate.value(), date=booster.getExpiryDate())
             else:
                 dueDateStr = text(R.strings.tooltips.boostersWindow.boostersWindow.boostersTableRenderer.undefineTime())

@@ -26,7 +26,7 @@ from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
 from shared_utils import first, CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBootcampController, IWotPlusController
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -77,7 +77,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(ModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
         self.item = None
-        self._setContentMargin(top=0, left=0, bottom=_DEFAULT_PADDING, right=_DEFAULT_PADDING)
+        self._setContentMargin(top=0, left=0, bottom=_DEFAULT_PADDING, right=0)
         self._setMargins(10, 15)
         self._setWidth(_TOOLTIP_WIDTH)
         return
@@ -95,7 +95,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         leftPadding = _DEFAULT_PADDING
         rightPadding = _DEFAULT_PADDING
         topPadding = _DEFAULT_PADDING
-        priceValueWidth = 97
+        priceValueWidth = 160
         blockTopPadding = -4
         textGap = -2
         itemTypeID = module.itemTypeID
@@ -384,14 +384,13 @@ class ModuleHeaderBlockConstructor(ModuleTooltipBlockConstructor):
 
 
 class PriceBlockConstructor(ModuleTooltipBlockConstructor):
-    bootcamp = dependency.descriptor(IBootcampController)
     wotPlusController = dependency.descriptor(IWotPlusController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, module, configuration, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
-        self._priceLeftPadding = 67
+        self._priceLeftPadding = 69
 
     def construct(self):
         block = []
@@ -447,7 +446,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     currency = itemPrice.getCurrency()
                     value = itemPrice.price.getSignValue(currency)
                     defValue = itemPrice.defPrice.getSignValue(currency)
-                    actionPercent = itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0
+                    actionPercent = itemPrice.getActionPrc()
                     if isEqOrDev or showNeeded:
                         needValue = value - money.getSignValue(currency)
                         if needValue <= 0:
@@ -460,7 +459,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                         leftActionPadding = 81 + self.leftPadding
                     if showDelimiter:
                         block.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.vehicle.textDelimiter.c_or())), padding=formatters.packPadding(left=leftActionPadding)))
-                    block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue, defValue if defValue > 0 else None, actionPercent, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
+                    block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue, defValue if defValue > 0 else None, actionPercent, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, gap=0))
                     showDelimiter = True
 
             if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isUpgradable:
@@ -480,13 +479,13 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     nextLevel = module.level + 1
                     levelText = backport.text(R.strings.tooltips.level.num(nextLevel)())
                     forcedText = backport.text(R.strings.tooltips.moduleFits.upgradable.modernized.price(), level=levelText)
-                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, percent=itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, percent=itemPrice.getActionPrc(), valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
             isComplexDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable
             if isComplexDevice and not self.configuration.isAwardWindow:
                 removalPrice = module.getRemovalPrice(self.itemsCache.items)
                 removalPriceCurrency = removalPrice.getCurrency()
                 value = removalPrice.price.getSignValue(removalPriceCurrency)
-                removalActionPercent = removalPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0
+                removalActionPercent = removalPrice.getActionPrc()
                 defValue = removalPrice.defPrice.getSignValue(removalPriceCurrency)
                 needValue = value - money.getSignValue(removalPriceCurrency)
                 wotPlusStatus = self.wotPlusController.isEnabled()
@@ -499,7 +498,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 if module.isModernized:
                     levelText = backport.text(R.strings.tooltips.level.num(module.level)())
                     forcedText = backport.text(R.strings.tooltips.moduleFits.not_removable.dismantling.level.price(), level=levelText)
-                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=119, gap=13, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled, forcedText=forcedText))
+                block.append(makeRemovalPriceBlock(value, CURRENCY_SETTINGS.getRemovalSetting(removalPriceCurrency), needValue, defValue if defValue > 0 else None, removalActionPercent, valueWidth=182 if module.isModernized else 180, gap=13 if module.isModernized else 15, leftPadding=self._priceLeftPadding, isDeluxe=module.isDeluxe, canUseDemountKit=module.canUseDemountKit, wotPlusStatus=wotPlusStatus, isFreeToDemount=isFreeToDemount, isFreeDeluxeEnabled=isFreeDeluxeEnabled, isFreeDemountEnabled=isFreeDemountEnabled, forcedText=forcedText))
                 isModernized = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isModernized
                 if isModernized:
                     itemPrice = module.getDeconstructPrice(self.itemsCache.items)
@@ -513,16 +512,15 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                         forcedText = ' '.join((backport.text(R.strings.tooltips.moduleFits.deconstruct.modernized.price(), level=levelText), text_styles.standard(backport.text(R.strings.tooltips.moduleFits.deconstruct.modernized.description()))))
                     block.append(makePriceBlock(value, CURRENCY_SETTINGS.getDeconstracutSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14, forcedText=forcedText))
             if sellPrice and module.sellPrices:
-                block.append(makePriceBlock(module.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.sellPrices.itemPrice.defPrice.credits, percent=module.sellPrices.itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0, valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
+                block.append(makePriceBlock(module.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.sellPrices.itemPrice.defPrice.credits, percent=module.sellPrices.itemPrice.getActionPrc(), valueWidth=self._valueWidth, leftPadding=self._priceLeftPadding, iconRightOffset=14))
             return block
 
 
 class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
-    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, module, configuration, leftPadding, rightPadding):
         super(InventoryBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
-        self._inventoryPadding = formatters.packPadding(left=84)
+        self._inventoryPadding = formatters.packPadding(left=147)
         self._inInventoryBlockData = {'icon': backport.image(R.images.gui.maps.icons.library.storage_icon()),
          'text': backport.text(R.strings.tooltips.vehicle.inventoryCount())}
         self._onVehicleBlockData = {'icon': backport.image(R.images.gui.maps.icons.customization.installed_on_tank_icon()),
@@ -570,7 +568,7 @@ class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
 
     @staticmethod
     def _getInventoryBlock(count, blockData, padding):
-        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(blockData['text']), value=text_styles.stats(count), icon=blockData['icon'], padding=padding, titleWidth=300, titlePadding=formatters.packPadding(left=15), iconPadding=formatters.packPadding(left=-2))
+        return formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(blockData['text']), value=text_styles.stats(count), icon=blockData['icon'], padding=padding, titlePadding=formatters.packPadding(left=14), titleWidth=200)
 
     def _getDemountCount(self):
         priceText, discountText = self._getDemountPriceText()
@@ -844,7 +842,7 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
             currentModuleIndex = moduleKpiIterator.getCurrentIndex()
             firstFormatter = first(moduleKpiIterator.getKPIs())
             columnsCount = firstFormatter.getColumnsCount()
-            paddingLeft = -8 + 40 * (3 - columnsCount)
+            paddingLeft = 124 - 49 * (columnsCount - 1)
             lastIndex = columnsCount - 1
             if firstFormatter.isHeaderShown():
                 headerList = []
@@ -853,16 +851,16 @@ class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):
                     resID = R.images.gui.maps.icons.tooltip.equipment.dyn(iconName)()
                     headerList.append(formatters.packImageBlockData(backport.image(resID), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT))
 
-                headerPadding = formatters.packPadding(top=6 if hasEffectDescr else 0, left=paddingLeft + 24, bottom=-6)
-                block.append(formatters.packBuildUpBlockData(headerList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=headerPadding, gap=24))
+                headerPadding = formatters.packPadding(top=6 if hasEffectDescr else 0, left=paddingLeft + 34, bottom=-6)
+                block.append(formatters.packBuildUpBlockData(headerList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=headerPadding, gap=31))
             for kpiFormatter in moduleKpiIterator.getKPIs():
                 descKpi = kpiFormatter.getDescription()
                 kpiList = []
                 for index, value in enumerate(kpiFormatter.getValues()):
                     textStyle = text_styles.bonusAppliedText if index == currentModuleIndex else text_styles.standard
                     if index == lastIndex:
-                        kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), textStyle(value), blockWidth=320, valueWidth=40, gap=15))
-                    kpiList.append(formatters.packAlignedTextBlockData(textStyle(value), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=40))
+                        kpiList.append(formatters.packTextParameterBlockData(text_styles.main(descKpi), textStyle(value), blockWidth=295, valueWidth=48, gap=20))
+                    kpiList.append(formatters.packAlignedTextBlockData(textStyle(value), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, blockWidth=48))
 
                 block.append(formatters.packBuildUpBlockData(kpiList, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(left=paddingLeft, bottom=-6)))
 

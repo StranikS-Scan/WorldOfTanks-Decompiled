@@ -2,15 +2,21 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/markers2d/plugins.py
 import logging
 from collections import defaultdict
+import BattleReplay
+from AvatarInputHandler import aih_global_binding
+from aih_constants import CTRL_MODE_NAME
+from arena_bonus_type_caps import ARENA_BONUS_TYPE
+from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin
+from items.battle_royale import isSpawnedBot, isHunterBot
 import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import settings
 from battle_royale.gui.Scaleform.daapi.view.battle.shared.utils import getVehicleLevel
+from cgf_components.zone_components import avatar_getter
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import VehicleMarkerPlugin
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE
 from helpers import dependency
-from items.battle_royale import isSpawnedBot, isHunterBot
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STATE, BATTLE_MARKER_STATES.THUNDER_STRIKE_STATE),
@@ -24,6 +30,16 @@ _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STAT
  (BATTLE_MARKER_STATES.INSPIRING_STATE,),
  (BATTLE_MARKER_STATES.INSPIRED_STATE,))
 _MARKERS_WITH_TIMER = (BATTLE_MARKER_STATES.INSPIRING_STATE, BATTLE_MARKER_STATES.HEALING_STATE)
+_SQUAD_COLOR_MAP = [1,
+ 2,
+ 4,
+ 5,
+ 7,
+ 8,
+ 9,
+ 11,
+ 13,
+ 14]
 
 class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -156,6 +172,18 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         else:
             self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
 
+    def _getGuiPropsName(self, vInfo, guiProps):
+        arenaBonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
+        isBot = vInfo.team == 21
+        if guiProps.isFriend:
+            entryName = 'ally' if isSpawnedBot(vInfo.vehicleType.tags) else 'squadman'
+        else:
+            entryName = 'enemy'
+        if avatar_getter.isVehiclesColorized() and not isBot:
+            team = _SQUAD_COLOR_MAP[vInfo.team - 1] if arenaBonusType == ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD and len(_SQUAD_COLOR_MAP) >= vInfo.team else vInfo.team
+            entryName = 'team{}'.format(team)
+        return entryName
+
     def __statusInActive(self, vehicleID, statusID):
         for status, _ in self.__markersStatesExtended[vehicleID]:
             if status == statusID:
@@ -225,3 +253,54 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
 
     def __showStunMarker(self, vehicleID, handle, stunInfo):
         self._updateStatusMarkerState(vehicleID, True, handle, BATTLE_MARKER_STATES.STUN_STATE, stunInfo.duration, False, False)
+
+
+class BRVehicleMarkerTargetPlugin(VehicleMarkerTargetPlugin):
+    __slots__ = ('__isVideoMode',)
+
+    def __init__(self, parentObj, clazz=markers.VehicleTargetMarker):
+        super(BRVehicleMarkerTargetPlugin, self).__init__(parentObj, clazz)
+        self.__isVideoMode = False
+
+    def start(self):
+        super(BRVehicleMarkerTargetPlugin, self).start()
+        aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
+
+    def stop(self):
+        super(BRVehicleMarkerTargetPlugin, self).stop()
+        aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
+
+    def _onAvatarCtrlModeChanged(self, ctrlMode):
+        if ctrlMode == CTRL_MODE_NAME.VIDEO:
+            self.__isVideoMode = True
+            self._hideAllMarkers(clearVehicleID=False)
+        else:
+            self.__isVideoMode = False
+            self._addMarker(self._vehicleID)
+
+    def _addMarker(self, vehicleID):
+        if self._vehicleID is not None:
+            self._hideAllMarkers()
+        if vehicleID is not None and not self.__isVideoMode:
+            self._onVehicleMarkerAdded(vehicleID)
+        return
+
+
+class BRVehicleMarkerTargetPluginReplayPlaying(BRVehicleMarkerTargetPlugin):
+    __slots__ = ()
+
+    def __init__(self, parentObj):
+        super(BRVehicleMarkerTargetPluginReplayPlaying, self).__init__(parentObj)
+        if BattleReplay.g_replayCtrl.isPlaying:
+            BattleReplay.g_replayCtrl.setDataCallback(BattleReplay.CallbackDataNames.SHOW_AUTO_AIM_MARKER, self._addMarker)
+            BattleReplay.g_replayCtrl.setDataCallback(BattleReplay.CallbackDataNames.HIDE_AUTO_AIM_MARKER, self._hideVehicleMarker)
+            BattleReplay.g_replayCtrl.setDataCallback(BattleReplay.CallbackDataNames.ON_TARGET_VEHICLE_CHANGED, self._handleAutoAimMarker)
+
+
+class BRVehicleMarkerTargetPluginReplayRecording(BRVehicleMarkerTargetPlugin):
+    __slots__ = ()
+
+    def _handleAutoAimMarker(self, event):
+        super(BRVehicleMarkerTargetPluginReplayRecording, self)._handleAutoAimMarker(event)
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.serializeCallbackData(BattleReplay.CallbackDataNames.ON_TARGET_VEHICLE_CHANGED, (event,))

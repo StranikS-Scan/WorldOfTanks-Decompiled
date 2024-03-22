@@ -82,10 +82,7 @@ class StatsComposer(IStatsComposer):
         event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
     def _registerTabs(self, reusable):
-        if reusable.common.isMultiTeamMode:
-            self._block.addNextComponent(templates.MULTI_TEAM_TABS_BLOCK.clone())
-        else:
-            self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
+        self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
 
     @staticmethod
     def _getBattlePassBlock():
@@ -180,34 +177,6 @@ class BattleRoyaleStatsComposer(IStatsComposer):
         event_dispatcher.showBattleRoyaleResultsView({'arenaUniqueID': arenaUniqueID})
 
 
-class BootcampStatsComposer(IStatsComposer):
-    __slots__ = ('_block',)
-
-    def __init__(self, _):
-        super(BootcampStatsComposer, self).__init__()
-        self._block = templates.BOOTCAMP_RESULTS_BLOCK.clone()
-
-    def clear(self):
-        self._block.clear()
-
-    def setResults(self, results, reusable):
-        self._block.setRecord(results, reusable)
-
-    def getVO(self):
-        return self._block.getVO()
-
-    def popAnimation(self):
-        return None
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
-
-
 class MapsTrainingStatsComposer(IStatsComposer):
     _fromNotifications = set()
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
@@ -264,6 +233,18 @@ class TournamentComp7StatsComposer(StatsComposer):
         return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
+class TrainingComp7StatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(TrainingComp7StatsComposer, self).__init__(reusable, templates.TRAINING_COMP7_COMMON_STATS_BLOCK.clone(), templates.TRAINING_COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
+        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
+
+    @staticmethod
+    def _getBattlePassBlock():
+        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     composer = collectBattleResultsComposer(bonusType)
@@ -280,7 +261,7 @@ registerBattleResultsComposer(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsCompose
 for bt in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
     registerBattleResultsComposer(bt, BattleRoyaleStatsComposer)
 
-registerBattleResultsComposer(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
+registerBattleResultsComposer(ARENA_BONUS_TYPE.TRAINING_COMP7, TrainingComp7StatsComposer)

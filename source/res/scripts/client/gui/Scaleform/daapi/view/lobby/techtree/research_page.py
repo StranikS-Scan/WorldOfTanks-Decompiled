@@ -22,7 +22,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
+from gui.impl.lobby.hangar.buy_vehicle_view import VehicleBuyActionTypes
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
@@ -42,7 +42,7 @@ from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
-from skeletons.gui.game_control import IBootcampController, ITradeInController
+from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from tutorial.control.context import GLOBAL_FLAG
@@ -143,7 +143,6 @@ _BANNER_GETTERS = {States.RESTORE: _getRestoreBannerStr,
 
 class Research(ResearchMeta):
     __tradeIn = dependency.descriptor(ITradeInController)
-    __bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         super(Research, self).__init__(ResearchItemsData(dumpers.ResearchItemsObjDumper()))
@@ -394,10 +393,6 @@ class Research(ResearchMeta):
         isNationChangeAvailable = root.isNationChangeAvailable
         isShownNationChangeTooltip = tankHasNationGroup and not isNationChangeAvailable
         tankName = root.userName
-        if self.__bootcamp.isInBootcamp():
-            awardVehicles = self.__bootcamp.getAwardVehicles()
-            if root.intCD in awardVehicles:
-                tankName = backport.text(R.strings.bootcamp.award.options.tankTitle()).format(title=tankName)
         result = {'vehicleTitle': {'intCD': self._data.getRootCD(),
                           'tankTierStr': text_styles.grandTitle(tankTier),
                           'tankNameStr': text_styles.grandTitle(tankName),
@@ -408,7 +403,7 @@ class Research(ResearchMeta):
                           'statusStr': self.__getRootStatusStr(root),
                           'roleText': getRoleTextWithIcon(root.role, root.roleLabel)},
          'vehicleButton': {'shopIconPath': getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
-                           'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
+                           'compareBtnVisible': True,
                            'compareBtnEnabled': comparisonState,
                            'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),
                            'compareBtnTooltip': comparisonTooltip,

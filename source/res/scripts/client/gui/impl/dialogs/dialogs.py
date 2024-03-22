@@ -18,7 +18,6 @@ from skeletons.gui.impl import IGuiLoader
 from frameworks.wulf import WindowStatus, WindowLayer
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
-    from frameworks.wulf import View
 
 @wg_async
 def show(dialog):
@@ -135,23 +134,16 @@ def showPerksDropDialog(tankmanId):
 
 
 @wg_async
-def showCrewMemberTankChangeDialog(tankmanId, vehicleCurrent=None, vehicleNew=None, parentViewKey=None):
-    from gui.impl.lobby.crew.dialogs.crew_member_tank_change_dialog import CrewMemberTankChangeDialog
-    result = yield wg_await(showSingleDialog(layoutID=CrewMemberTankChangeDialog.LAYOUT_ID, wrappedViewClass=CrewMemberTankChangeDialog, tankmanId=tankmanId, vehicleCurrent=vehicleCurrent, vehicleNew=vehicleNew, parentViewKey=parentViewKey))
+def showRetrainMassiveDialog(tankmenIds, vehicleCD):
+    from gui.impl.lobby.crew.dialogs.retrain_massive_dialog import RetrainMassiveDialog
+    result = yield wg_await(showSingleDialog(layoutID=RetrainMassiveDialog.LAYOUT_ID, wrappedViewClass=RetrainMassiveDialog, tankmenIds=tankmenIds, vehicleCD=vehicleCD))
     raise AsyncReturn(result)
 
 
 @wg_async
-def showCrewMemberRoleChangeDialog(tankmanId, vehicleCurrent=None, vehicleNew=None, role=None, parentViewKey=None):
-    from gui.impl.lobby.crew.dialogs.crew_member_role_change_dialog import CrewMemberRoleChangeDialog
-    result = yield wg_await(showSingleDialog(layoutID=CrewMemberRoleChangeDialog.LAYOUT_ID, wrappedViewClass=CrewMemberRoleChangeDialog, tankmanId=tankmanId, vehicleCurrent=vehicleCurrent, vehicleNew=vehicleNew, role=role, parentViewKey=parentViewKey))
-    raise AsyncReturn(result)
-
-
-@wg_async
-def showRetrainDialog(tankmenIds, vehicleCD):
-    from gui.impl.lobby.crew.dialogs.retrain_dialog import RetrainDialog
-    result = yield wg_await(showSingleDialog(layoutID=RetrainDialog.LAYOUT_ID, wrappedViewClass=RetrainDialog, tankmenIds=tankmenIds, vehicleCD=vehicleCD))
+def showRetrainSingleDialog(tankmanId, vehicleCD, targetRole=None, targetSlotIdx=None, isChangeRoleVisible=False, beforeActions=None, parentViewKey=None):
+    from gui.impl.lobby.crew.dialogs.retrain_single_dialog import RetrainSingleDialog
+    result = yield wg_await(showSingleDialog(layoutID=RetrainSingleDialog.LAYOUT_ID, wrappedViewClass=RetrainSingleDialog, tankmanId=tankmanId, vehicleCD=vehicleCD, targetRole=targetRole, targetSlotIdx=targetSlotIdx, isChangeRoleVisible=isChangeRoleVisible, beforeActions=beforeActions, parentViewKey=parentViewKey))
     raise AsyncReturn(result)
 
 

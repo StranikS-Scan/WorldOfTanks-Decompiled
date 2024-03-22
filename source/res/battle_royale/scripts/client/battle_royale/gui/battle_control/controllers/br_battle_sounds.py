@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/br_battle_sounds.py
 import logging
 import BigWorld
+import SoundGroups
 import WWISE
 from constants import ATTACK_REASON
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getEquipmentById, getSmokeDataByPredicate
@@ -10,6 +11,8 @@ from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersController, VehicleStateSoundPlayer, BaseEfficiencySoundPlayer, EquipmentComponentSoundPlayer
 from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from helpers import dependency
+from helpers.time_utils import ONE_MINUTE
+from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import RespawnAbility
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, TIMER_VIEW_STATE, COUNTDOWN_STATE
 from helpers.CallbackDelayer import CallbackDelayer
@@ -21,8 +24,10 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, isItemVehicleHull
 from constants import ARENA_PERIOD
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from constants import EQUIPMENT_STAGES
+from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
+from Math import Matrix
 from battle_royale.gui.constants import BattleRoyaleEquipments, BattleRoyaleComponents
 from battle_royale.gui.battle_control.controllers.progression_ctrl import IProgressionListener
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
@@ -74,6 +79,12 @@ class BREvents(object):
      2: 'BR_enemy_remained_platoon_02',
      1: 'BR_enemy_remained_platoon_01'}
     ENEMY_KILLED = 'BR_enemy_killed'
+    REBORN = 'BR_reborn'
+    CHARGE_REVIVAL = 'BR_charge_revival'
+    PLATOON_REVIVAL_POSSIBLE_SOON = 'BR_platoon_revival_possible_soon'
+    PLATOON_REVIVAL_POSSIBLE = 'BR_platoon_revival_possible'
+    REVIVAL_EXPIRE_SOON = 'BR_revival_expire_soon'
+    REVIVAL_IMPOSSIBLE = 'BR_revival_impossible'
     BATTLE_STARTED = 'BR_start_battle'
     BATTLE_WIN = 'BR_win'
     BATTLE_DEFEAT = 'BR_defeat'
@@ -110,6 +121,9 @@ class BREvents(object):
     KAMIKAZE_DETECTED = 'BR_brander_detected'
     MINEFIELD_ACTIVATION = 'BR_perk_minefield_activation'
     MINEFIELD_HIT_TARGET = 'BR_perk_minefield_hits_target'
+    MINEFIELD_TIMER = 'BR_perk_minefield_timer'
+    MINEFIELD_TIMER_STOP = 'BR_perk_minefield_timer_stop'
+    MINEFIELD_TIMER_RTPC = 'RTPC_ext_minefield_timer'
     BR_SMOKE_DAMGE_AREA_ENTER = 'BR_smoke_damge_affects'
     BR_SMOKE_DAMGE_AREA_EXIT = 'BR_smoke_damage_affects_off'
     BR_FIRE_CIRCLE_ENTERED = 'BR_perk_fire_circle_affect'
@@ -136,6 +150,12 @@ class BREvents(object):
         if BattleReplay.g_replayCtrl.isPlaying and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         WWISE.WW_eventGlobalPos(eventName, pos)
+
+    @staticmethod
+    def getSoundObject(name, pos):
+        mPos = Matrix()
+        mPos.translation = pos
+        return SoundGroups.g_instance.WWgetSoundObject(name, mPos)
 
 
 class BRStates(object):
@@ -189,7 +209,8 @@ class BRBattleSoundController(SoundPlayersController):
          _HealingRepairSoundPlayer(),
          _DamagingSmokeAreaSoundPlayer(),
          ClingBranderSoundPlayer(),
-         ShotPassionSoundPlayer())
+         ShotPassionSoundPlayer(),
+         RevivalSoundPlayer())
 
 
 class RadarSoundPlayer(IRadarListener):
@@ -237,6 +258,120 @@ class ClingBranderSoundPlayer(object):
         playerVeh = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
         if targetVeh is not None and playerVeh is not None and targetVeh.masterVehID == playerVeh.id and targetVeh.typeDescriptor.name == self.__CLING_BRANDER_VEH_NAME:
             BREvents.playSound(BREvents.BR_CLING_BRANDER_DESTROYED)
+        return
+
+
+class RevivalSoundPlayer(CallbackDelayer):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __REVIVAL_IMPOSSIBLE_LIVES_AMOUNT = -1
+
+    def __init__(self):
+        self.__isAlive = None
+        self.__lives = None
+        self.__respawnTimestampSent = None
+        super(RevivalSoundPlayer, self).__init__()
+        return
+
+    def init(self):
+        self.__sessionProvider.onBattleSessionStop += self._unsubscribe
+        self.__sessionProvider.onBattleSessionStart += self._subscribe
+        self._subscribe()
+
+    def destroy(self):
+        self._unsubscribe()
+        self.__sessionProvider.onBattleSessionStart -= self._subscribe
+        self.__sessionProvider.onBattleSessionStop -= self._unsubscribe
+        super(RevivalSoundPlayer, self).destroy()
+
+    def _subscribe(self):
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onVehicleKilled += self.__onVehicleKilled
+            arena.onPeriodChange += self.__onPeriodChange
+        vehicleCountCtrl = self.__sessionProvider.dynamic.vehicleCount
+        if vehicleCountCtrl is not None:
+            vehicleCountCtrl.onVehicleAliveChanged += self.__onPlayerVehicleAliveChanged
+            vehicleCountCtrl.onVehicleLivesChanged += self.__onLivesChanged
+        return
+
+    def _unsubscribe(self):
+        vehicleCountCtrl = self.__sessionProvider.dynamic.vehicleCount
+        if vehicleCountCtrl is not None:
+            vehicleCountCtrl.onVehicleLivesChanged -= self.__onLivesChanged
+            vehicleCountCtrl.onVehicleAliveChanged -= self.__onPlayerVehicleAliveChanged
+        arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPeriodChange -= self.__onPeriodChange
+            arena.onVehicleKilled -= self.__onVehicleKilled
+        self.__respawnTimestampSent = False
+        return
+
+    def __onPlayerVehicleAliveChanged(self, isAlive):
+        if self.__isRevivalPossible and not self.__isAlive and isAlive:
+            BREvents.playSound(BREvents.REBORN)
+        self.__isAlive = isAlive
+
+    def __onLivesChanged(self, lives):
+        if self.__isRevivalPossible and lives > self.__lives:
+            BREvents.playSound(BREvents.CHARGE_REVIVAL)
+        self.__lives = lives
+
+    def __onPeriodChange(self, period, endTime, length, additionalInfo):
+        if not self.__respawnTimestampSent and period == ARENA_PERIOD.BATTLE:
+            respawnPeriod = RespawnAbility().soloRespawnPeriod if not self.__isSquad else RespawnAbility().platoonRespawnPeriod
+            secondsLeft = max(respawnPeriod - self.__getTimeGoneFromStart(endTime, length), 0)
+            self.__respawnTimestampSent = True
+            timeToNotification = max(secondsLeft - ONE_MINUTE, 0)
+            self.delayCallback(secondsLeft, self.__revivalImpossible)
+            if timeToNotification:
+                self.delayCallback(timeToNotification, self.__revivalExpiresSoon)
+
+    @staticmethod
+    def __getTimeGoneFromStart(endTime, length):
+        startTime = endTime - length
+        return BigWorld.serverTime() - startTime
+
+    def __revivalExpiresSoon(self):
+        BREvents.playSound(BREvents.REVIVAL_EXPIRE_SOON)
+
+    def __revivalImpossible(self):
+        BREvents.playSound(BREvents.REVIVAL_IMPOSSIBLE)
+
+    def __onVehicleKilled(self, targetID, attackerID, equipmentID, reason, numVehiclesAffected):
+        targetVeh = BigWorld.entity(targetID)
+        if targetVeh is not None:
+            playerVeh = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
+            if self.__isSquad and self.__isRevivalPossible and self.__sessionProvider.getArenaDP().isAlly(targetID):
+                if playerVeh is not None and targetVeh.id == playerVeh.id:
+                    ally = self.__getAlly()
+                    if ally is not None and ally.isAlive():
+                        BREvents.playSound(BREvents.PLATOON_REVIVAL_POSSIBLE_SOON)
+                elif self.__isAlive and not self.__isSummonedVehicle(targetVeh):
+                    BREvents.playSound(BREvents.PLATOON_REVIVAL_POSSIBLE)
+        return
+
+    @property
+    def __isSquad(self):
+        return self.__sessionProvider.arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
+
+    @property
+    def __isRevivalPossible(self):
+        return self.__lives > self.__REVIVAL_IMPOSSIBLE_LIVES_AMOUNT
+
+    @staticmethod
+    def __isSummonedVehicle(veh):
+        return veh.masterVehID != 0
+
+    def __getAlly(self):
+        selfVehID = self.__sessionProvider.shared.vehicleState.getControllingVehicleID()
+        arenaDP = self.__sessionProvider.getArenaDP()
+        collection = vos_collections.AllyItemsCollection().ids(arenaDP)
+        for vehID in collection:
+            if vehID != selfVehID:
+                veh = BigWorld.entity(vehID)
+                if veh is not None and not self.__isSummonedVehicle(veh):
+                    return veh
+
         return
 
 

@@ -4,12 +4,14 @@ import BigWorld
 import Math
 import constants
 import TriggersManager
+import helpers
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
 import items
 from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
+from aih_constants import CTRL_MODE_NAME
 
 def ownVehicleGunShotPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
@@ -27,6 +29,7 @@ class ProjectileMover(object):
 
     def __init__(self):
         self.__projectiles = dict()
+        self.__isPaused = False
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
         self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end)[1], self.__killProjectile, self.__deleteProjectile)
         if self.__ballistics is not None:
@@ -52,13 +55,13 @@ class ProjectileMover(object):
 
     def add(self, shotID, effectsDescr, gravity, refStartPoint, refVelocity, startPoint, maxDistance, attackerID=0, tracerCameraPos=Math.Vector3(0, 0, 0)):
         import BattleReplay
-        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+        if BattleReplay.g_replayCtrl.isTimeWarpInProgress or self.__isPaused:
             return
         else:
             if startPoint.distTo(refStartPoint) > ProjectileMover.__START_POINT_MAX_DIFF:
                 startPoint = refStartPoint
             artID = effectsDescr.get('artilleryID')
-            if artID is not None:
+            if artID is not None and not helpers.isShowingKillCam():
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
@@ -102,7 +105,7 @@ class ProjectileMover(object):
             return
 
     def explode(self, shotID, effectsDescr, effectMaterial, endPoint, velocityDir):
-        if effectsDescr.has_key('artilleryID'):
+        if effectsDescr.has_key('artilleryID') or self.__isPaused:
             return
         else:
             proj = self.__projectiles.get(shotID)
@@ -135,6 +138,16 @@ class ProjectileMover(object):
             self.__ballistics.setVariableBallisticsParams(spaceID)
         self.__debugDrawer = TrajectoryDrawer(spaceID)
 
+    def setPause(self, isPause):
+        if isPause == self.__isPaused:
+            return
+        self.__isPaused = isPause
+        if not self.__isPaused:
+            return
+        shotIDs = self.__projectiles.keys()
+        for shotID in shotIDs:
+            self.__delProjectile(shotID)
+
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
         isOwnShot = proj['autoScaleProjectile']
@@ -142,25 +155,28 @@ class ProjectileMover(object):
         FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, proj, velocityDir):
-        effectTypeStr = proj.get('effectMaterial', '') + 'Hit'
-        p0 = Math.Vector3(position.x, 1000, position.z)
-        p1 = Math.Vector3(position.x, -1000, position.z)
-        waterDist = BigWorld.wg_collideWater(p0, p1, False)
-        if waterDist > 0:
-            waterY = p0.y - waterDist
-            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p0, p1, 128)
-            staticY = testRes.closestPoint.y if testRes is not None else waterY
-            if staticY < waterY and position.y - waterY <= 0.1:
-                shallowWaterDepth, rippleDiameter = proj['effectsDescr']['waterParams']
-                if waterY - staticY < shallowWaterDepth:
-                    effectTypeStr = 'shallowWaterHit'
-                else:
-                    effectTypeStr = 'deepWaterHit'
-                position = Math.Vector3(position.x, waterY, position.z)
-                self.__addWaterRipples(position, rippleDiameter, 5)
-        keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
-        BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
-        return
+        if self.__isPaused:
+            return
+        else:
+            effectTypeStr = proj.get('effectMaterial', '') + 'Hit'
+            p0 = Math.Vector3(position.x, 1000, position.z)
+            p1 = Math.Vector3(position.x, -1000, position.z)
+            waterDist = BigWorld.wg_collideWater(p0, p1, False)
+            if waterDist > 0:
+                waterY = p0.y - waterDist
+                testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p0, p1, 128)
+                staticY = testRes.closestPoint.y if testRes is not None else waterY
+                if staticY < waterY and position.y - waterY <= 0.1:
+                    shallowWaterDepth, rippleDiameter = proj['effectsDescr']['waterParams']
+                    if waterY - staticY < shallowWaterDepth:
+                        effectTypeStr = 'shallowWaterHit'
+                    else:
+                        effectTypeStr = 'deepWaterHit'
+                    position = Math.Vector3(position.x, waterY, position.z)
+                    self.__addWaterRipples(position, rippleDiameter, 5)
+            keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
+            BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
+            return
 
     def __killProjectile(self, shotID, position, impactVelDir, deathType, explode):
         proj = self.__projectiles.get(shotID)
@@ -170,7 +186,7 @@ class ProjectileMover(object):
             effectsDescr = proj['effectsDescr']
             projEffects = effectsDescr['projectile'][2]
             projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
-            if proj['showExplosion'] and explode:
+            if proj['showExplosion'] and explode and not helpers.isShowingKillCam():
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
 
@@ -211,8 +227,8 @@ class ProjectileMover(object):
             BigWorld.player().delModel(proj['model'])
             return
 
-    def __onCameraChanged(self, cameraName, currentVehicleId=None):
-        self.__ballistics.setBallisticsAutoScale(cameraName != 'sniper')
+    def __onCameraChanged(self, controlModeName, currentVehicleId=None):
+        self.__ballistics.setBallisticsAutoScale(controlModeName != CTRL_MODE_NAME.SNIPER)
 
 
 class EntityCollisionData(object):

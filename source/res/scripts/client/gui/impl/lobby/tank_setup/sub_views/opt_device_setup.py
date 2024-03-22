@@ -6,11 +6,12 @@ from wg_async import wg_async, wg_await
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.configurations.opt_device import OptDeviceTabsController, OptDeviceSelectedFilters, getOptDeviceTabByItem, OptDeviceIntroductionController, OptDeviceTabs
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
-from helpers import dependency
-from skeletons.gui.shared import IItemsCache
 
 class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
-    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def update(self, fullUpdate=False):
+        self._interactor.updateAmmunitionPanelChangedItems()
+        super(OptDeviceSetupSubView, self).update(fullUpdate)
 
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         if fullUpdate:

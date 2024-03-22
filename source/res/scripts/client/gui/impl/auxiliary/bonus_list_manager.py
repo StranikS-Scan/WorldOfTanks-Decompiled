@@ -34,7 +34,7 @@ class BonusListManager(object):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipData = self.__getBackportTooltipData(event)
             if tooltipData is not None:
-                return BackportTooltipWindow(tooltipData, parentWindow)
+                return BackportTooltipWindow(tooltipData, parentWindow, event)
             return
         else:
             return

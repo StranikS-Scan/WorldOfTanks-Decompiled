@@ -555,7 +555,7 @@ class VehPriceActionInfo(ActionInfo):
          'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
         block = []
         paramsDict = params_helper.getParameters(vehicle)
-        comparator = params_helper.idealCrewComparator(vehicle)
+        comparator = params_helper.similarCrewComparator(vehicle)
         for paramName in _params.get(vehicle.type, 'default'):
             if paramName in paramsDict:
                 paramInfo = comparator.getExtendedData(paramName)

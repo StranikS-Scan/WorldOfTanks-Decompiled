@@ -523,6 +523,9 @@
       <mapsInDevelopment>
         <Type>	BOOL	</Type>
       </mapsInDevelopment>
+      <postmortemMode>
+        <Type>	UINT8	</Type>
+      </postmortemMode>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -1480,6 +1483,9 @@
       <prestigeGradeMarkID>
         <Type>	INT32	</Type>
       </prestigeGradeMarkID>
+      <teamPanelMode>
+        <Type>	UINT8	</Type>
+      </teamPanelMode>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1629,6 +1635,203 @@
       </dispersion>
     </Properties>
   </GUN_MARKER>
+  <KILL_CAM_ATTACKER_SPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <rotation>
+        <Type>	VECTOR3	</Type>
+      </rotation>
+      <gunAngles>
+        <Type>	VECTOR2	</Type>
+      </gunAngles>
+      <velocity>
+        <Type>	VECTOR3	</Type>
+      </velocity>
+      <angVelocity>
+        <Type>	VECTOR3	</Type>
+      </angVelocity>
+    </Properties>
+  </KILL_CAM_ATTACKER_SPOTTED>
+  <KILL_CAM_ATTACKER_UNSPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <health>
+        <Type>	UINT16	</Type>
+      </health>
+      <vehicleType>
+        <Type>	STRING	</Type>
+      </vehicleType>
+    </Properties>
+  </KILL_CAM_ATTACKER_UNSPOTTED>
+  <KILL_CAM_ATTACKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <attackerID>
+        <Type>	OBJECT_ID	</Type>
+      </attackerID>
+      <spottedData>
+        <Type>	KILL_CAM_ATTACKER_SPOTTED	</Type>
+      </spottedData>
+      <unspottedData>
+        <Type>	KILL_CAM_ATTACKER_UNSPOTTED	</Type>
+      </unspottedData>
+    </Properties>
+  </KILL_CAM_ATTACKER>
+  <KILL_CAM_VICTIM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <currentPos>
+        <Type>	VECTOR3	</Type>
+      </currentPos>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <rotation>
+        <Type>	VECTOR3	</Type>
+      </rotation>
+      <health>
+        <Type>	UINT16	</Type>
+      </health>
+      <relativeArmor>
+        <Type>	FLOAT	</Type>
+      </relativeArmor>
+      <victimIsNotSpotted>
+        <Type>	BOOL	</Type>
+      </victimIsNotSpotted>
+      <siegeState>
+        <Type>	UINT16	</Type>
+      </siegeState>
+      <damageStickers>
+        <Type>	ARRAY	  <of>	UINT64	</of>
+        </Type>
+      </damageStickers>
+      <causeOfDeath>
+        <Type>	STRING	</Type>
+      </causeOfDeath>
+    </Properties>
+  </KILL_CAM_VICTIM>
+  <KILL_CAM_PROJECTILE_UNSPOTTED>	FIXED_DICT	  <Properties>
+      <shotID>
+        <Type>	SHOT_ID	</Type>
+      </shotID>
+      <origin>
+        <Type>	VECTOR3	</Type>
+      </origin>
+      <gravity>
+        <Type>	FLOAT	</Type>
+      </gravity>
+      <impactPoint>
+        <Type>	VECTOR3	</Type>
+      </impactPoint>
+      <isExplosion>
+        <Type>	BOOL	</Type>
+      </isExplosion>
+      <explosionRadius>
+        <Type>	FLOAT	</Type>
+      </explosionRadius>
+      <nominalArmor>
+        <Type>	FLOAT	</Type>
+      </nominalArmor>
+      <angleGain>
+        <Type>	FLOAT	</Type>
+      </angleGain>
+      <hitAngleCos>
+        <Type>	FLOAT	</Type>
+      </hitAngleCos>
+      <triNormal>
+        <Type>	VECTOR3	</Type>
+      </triNormal>
+      <hasProjectilePierced>
+        <Type>	BOOL	</Type>
+      </hasProjectilePierced>
+      <ricochetCount>
+        <Type>	UINT16	</Type>
+      </ricochetCount>
+      <ricochetPoint>
+        <Type>	VECTOR3	</Type>
+      </ricochetPoint>
+      <effectiveShellDamage>
+        <Type>	INT16	</Type>
+      </effectiveShellDamage>
+      <damageRandomizationFactor>
+        <Type>	FLOAT	</Type>
+      </damageRandomizationFactor>
+      <is2CaliberRuleActive>
+        <Type>	BOOL	</Type>
+      </is2CaliberRuleActive>
+      <is3CaliberRuleActive>
+        <Type>	BOOL	</Type>
+      </is3CaliberRuleActive>
+      <impactType>
+        <Type>	UINT16	</Type>
+      </impactType>
+      <maxPenetrationAngle>
+        <Type>	FLOAT	</Type>
+      </maxPenetrationAngle>
+      <armorProtectionHE>
+        <Type>	FLOAT	</Type>
+      </armorProtectionHE>
+      <spallLinerProtectionHE>
+        <Type>	FLOAT	</Type>
+      </spallLinerProtectionHE>
+      <velocity>
+        <Type>	VECTOR3	</Type>
+      </velocity>
+      <shellCompDescr>
+        <Type>	INT32	</Type>
+      </shellCompDescr>
+      <segments>
+        <Type>	ARRAY	  <of>	UINT64	</of>
+        </Type>
+      </segments>
+      <piercingPower>
+        <Type>	FLOAT	</Type>
+      </piercingPower>
+      <nominalPiercingPower>
+        <Type>	FLOAT	</Type>
+      </nominalPiercingPower>
+      <shellDamageBurstHE>
+        <Type>	FLOAT	</Type>
+      </shellDamageBurstHE>
+      <distanceLossHE>
+        <Type>	FLOAT	</Type>
+      </distanceLossHE>
+    </Properties>
+  </KILL_CAM_PROJECTILE_UNSPOTTED>
+  <KILL_CAM_PROJECTILE_SPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <distanceOfShot>
+        <Type>	FLOAT	</Type>
+      </distanceOfShot>
+      <damageDistanceModifier>
+        <Type>	FLOAT	</Type>
+      </damageDistanceModifier>
+    </Properties>
+  </KILL_CAM_PROJECTILE_SPOTTED>
+  <KILL_CAM_PROJECTILE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <unspottedData>
+        <Type>	KILL_CAM_PROJECTILE_UNSPOTTED	</Type>
+      </unspottedData>
+      <spottedData>
+        <Type>	KILL_CAM_PROJECTILE_SPOTTED	</Type>
+      </spottedData>
+    </Properties>
+  </KILL_CAM_PROJECTILE>
+  <KILL_CAM_DATA>	FIXED_DICT	  <Properties>
+      <attacker>
+        <Type>	KILL_CAM_ATTACKER	</Type>
+      </attacker>
+      <victim>
+        <Type>	KILL_CAM_VICTIM	</Type>
+      </victim>
+      <projectile>
+        <Type>	KILL_CAM_PROJECTILE	</Type>
+      </projectile>
+      <statusCode>
+        <Type>	UINT8	</Type>
+      </statusCode>
+    </Properties>
+  </KILL_CAM_DATA>
   <VEHICLE_HIT_DIRECTION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <hitDirYaw>
@@ -1975,6 +2178,9 @@
       <count>
         <Type>	UINT16	</Type>
       </count>
+      <expirations>
+        <Type>	PYTHON	</Type>
+      </expirations>
     </Properties>
   </GOODIE_STATE_INFO>
   <BATTLE_GOODIE_RECORD>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -2176,4 +2382,152 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
+  <DEATH_INFO>	FIXED_DICT	  <AllowNone>	True	</AllowNone>
+    <Properties>
+      <victimID>
+        <Type>	OBJECT_ID	</Type>
+      </victimID>
+      <killerID>
+        <Type>	OBJECT_ID	</Type>
+      </killerID>
+      <reasonID>
+        <Type>	INT8	</Type>
+      </reasonID>
+      <equipmentID>
+        <Type>	INT16	</Type>
+      </equipmentID>
+      <numVehiclesAffected>
+        <Type>	INT16	</Type>
+      </numVehiclesAffected>
+    </Properties>
+  </DEATH_INFO>
+  <VEHICLES_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <isAlive>
+        <Type>	BOOL	</Type>
+      </isAlive>
+      <outfitCD>
+        <Type>	STRING	</Type>
+      </outfitCD>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <fakeName>
+        <Type>	STRING	</Type>
+      </fakeName>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <team>
+        <Type>	INT8	</Type>
+      </team>
+      <isAvatarReady>
+        <Type>	BOOL	</Type>
+      </isAvatarReady>
+      <isTeamKiller>
+        <Type>	BOOL	</Type>
+      </isTeamKiller>
+      <accountDBID>
+        <Type>	UINT64	</Type>
+      </accountDBID>
+      <clanAbbrev>
+        <Type>	STRING	</Type>
+      </clanAbbrev>
+      <clanDBID>
+        <Type>	DB_ID	</Type>
+      </clanDBID>
+      <prebattleID>
+        <Type>	OBJECT_ID	</Type>
+      </prebattleID>
+      <isPrebattleCreator>
+        <Type>	BOOL	</Type>
+      </isPrebattleCreator>
+      <forbidInBattleInvitations>
+        <Type>	BOOL	</Type>
+      </forbidInBattleInvitations>
+      <igrType>
+        <Type>	INT8	</Type>
+      </igrType>
+      <avatarSessionID>
+        <Type>	STRING	</Type>
+      </avatarSessionID>
+      <overriddenBadge>
+        <Type>	INT8	</Type>
+      </overriddenBadge>
+      <customRoleSlotTypeId>
+        <Type>	INT8	</Type>
+      </customRoleSlotTypeId>
+      <botDisplayStatus>
+        <Type>	INT8	</Type>
+      </botDisplayStatus>
+      <maxHealth>
+        <Type>	INT16	</Type>
+      </maxHealth>
+      <prestigeLevel>
+        <Type>	INT32	</Type>
+      </prestigeLevel>
+      <prestigeGradeMarkID>
+        <Type>	INT32	</Type>
+      </prestigeGradeMarkID>
+      <vehPostProgression>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </vehPostProgression>
+      <personalMissionIDs>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </personalMissionIDs>
+      <personalMissionInfo>
+        <Type>	PYTHON	</Type>
+      </personalMissionInfo>
+      <events>
+        <Type>	PYTHON	</Type>
+      </events>
+      <badges>
+        <Type>	PYTHON	</Type>
+      </badges>
+      <ranked>
+        <Type>	TUPLE	  <of>	UINT16	</of>
+        </Type>
+      </ranked>
+      <deathInfo>
+        <Type>	DEATH_INFO	</Type>
+      </deathInfo>
+      <__generation>
+        <Type>	UINT32	</Type>
+      </__generation>
+    </Properties>
+  </VEHICLES_INFO>
+  <PVE_MINIMAP_DATA>	FIXED_DICT	  <Properties>
+      <minimapBorders>
+        <Type>	TUPLE	  <of>	VECTOR2	</of>
+          <size>	2	</size>
+        </Type>
+      </minimapBorders>
+      <zoomLevel>
+        <Type>	FLOAT	  <Default>	1.0	</Default>
+        </Type>
+      </zoomLevel>
+    </Properties>
+  </PVE_MINIMAP_DATA>
+  <PVE_TARGET_MARKER>	FIXED_DICT	  <Properties>
+      <settingId>
+        <Type>	INT16	</Type>
+      </settingId>
+      <targetId>
+        <Type>	INT32	</Type>
+      </targetId>
+      <visibleStyle>
+        <Type>	STRING	</Type>
+      </visibleStyle>
+      <invisibleStyle>
+        <Type>	STRING	</Type>
+      </invisibleStyle>
+      <lastVisiblePosition>
+        <Type>	VECTOR3	</Type>
+      </lastVisiblePosition>
+    </Properties>
+  </PVE_TARGET_MARKER>
 </alias.xml>

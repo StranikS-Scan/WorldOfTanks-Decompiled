@@ -194,12 +194,12 @@ class ClientHangarSpace(object):
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.turretAndGunAngles.init()
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
-        camera = BigWorld.CursorCamera()
+        camera = BigWorld.FreeCamera()
         camera.spaceID = self.__spaceId
         cameraMatrix = Math.Matrix()
         cameraMatrix.setTranslate(_CFG['v_start_pos'])
-        camera.target = cameraMatrix
-        camera.forceUpdate()
+        cameraMatrix.invert()
+        camera.set(cameraMatrix)
         BigWorld.camera(camera)
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         BigWorld.wg_enableGUIBackground(True, False)

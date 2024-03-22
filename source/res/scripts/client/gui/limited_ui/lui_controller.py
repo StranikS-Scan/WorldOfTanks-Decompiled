@@ -19,7 +19,7 @@ from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ILimitedUIController, IBootcampController
+from skeletons.gui.game_control import ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -92,7 +92,6 @@ class _LimitedUIConditionsService(object):
 
 class LimitedUIController(ILimitedUIController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __bootcampController = dependency.descriptor(IBootcampController)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __systemMessages = dependency.descriptor(ISystemMessages)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -121,8 +120,6 @@ class LimitedUIController(ILimitedUIController):
 
     def onAccountBecomePlayer(self):
         super(LimitedUIController, self).onAccountBecomePlayer()
-        if self.__bootcampController.isInBootcamp():
-            return
         self.__initialize()
 
     def onAccountBecomeNonPlayer(self):
@@ -258,7 +255,7 @@ class LimitedUIController(ILimitedUIController):
             self.onVersionUpdated()
 
     def __updateStatus(self):
-        isEnableState = self.hasConfig and self.__luiConfig.enabled and self.__rules.hasRules() and not self.__bootcampController.isInBootcamp()
+        isEnableState = self.hasConfig and self.__luiConfig.enabled and self.__rules.hasRules()
         changeState = self.__isEnabled != isEnableState
         if changeState:
             self.__isEnabled = isEnableState
@@ -381,7 +378,7 @@ class LimitedUIController(ILimitedUIController):
         return
 
     def __tryNotifyStateChanged(self):
-        if self.__bootcampController.isInBootcamp() or self.version <= 0 or not self.__rules.hasRulesByTypes(LuiRuleTypes.NOVICE) or self.__isRulesForNoviceCompleted():
+        if self.version <= 0 or not self.__rules.hasRulesByTypes(LuiRuleTypes.NOVICE) or self.__isRulesForNoviceCompleted():
             return
         else:
             isLuiConfigEnabled = self.__luiConfig.enabled

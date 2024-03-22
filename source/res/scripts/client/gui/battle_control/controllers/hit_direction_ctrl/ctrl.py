@@ -87,11 +87,12 @@ class HitDirectionController(IViewComponentsController):
             uiComponent.clear()
 
     def addHit(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
-        atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
-        atackerVehType = atackerVehInfo.vehicleType
-        isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
+        attackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
+        isAlly = self.__arenaDP.isAllyTeam(attackerVehInfo.team)
         playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
+        classTag = attackerVehInfo.getDisplayedClassTag()
+        attackerVehName = attackerVehInfo.getDisplayedName()
+        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=attackerVehName, isBlocked=isBlocked, attackerVehClassTag=classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
         return self.__uiHitComponents[HitType.HIT_DAMAGE].pull.addHit(hitData)
 
     def addArtyHitPrediction(self, yaw):

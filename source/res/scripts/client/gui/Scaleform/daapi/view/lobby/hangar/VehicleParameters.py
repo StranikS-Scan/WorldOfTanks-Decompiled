@@ -272,7 +272,7 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
             self._buildSimplifiedList()
 
     def _getComparator(self):
-        return params_helper.idealCrewComparator(self._cache.item)
+        return params_helper.similarCrewComparator(self._cache.item)
 
     def _getDiffComparator(self):
         return None

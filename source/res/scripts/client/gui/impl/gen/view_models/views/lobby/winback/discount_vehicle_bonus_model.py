@@ -5,38 +5,38 @@ from gui.impl.gen.view_models.views.lobby.winback.vehicle_bonus_model import Veh
 class DiscountVehicleBonusModel(VehicleBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=23, commands=0):
         super(DiscountVehicleBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getOldPrice(self):
-        return self._getNumber(17)
-
-    def setOldPrice(self, value):
-        self._setNumber(17, value)
-
-    def getNewPrice(self):
         return self._getNumber(18)
 
-    def setNewPrice(self, value):
+    def setOldPrice(self, value):
         self._setNumber(18, value)
 
-    def getOldExp(self):
+    def getNewPrice(self):
         return self._getNumber(19)
 
-    def setOldExp(self, value):
+    def setNewPrice(self, value):
         self._setNumber(19, value)
 
-    def getNewExp(self):
+    def getOldExp(self):
         return self._getNumber(20)
 
-    def setNewExp(self, value):
+    def setOldExp(self, value):
         self._setNumber(20, value)
 
+    def getNewExp(self):
+        return self._getNumber(21)
+
+    def setNewExp(self, value):
+        self._setNumber(21, value)
+
     def getIsSelected(self):
-        return self._getBool(21)
+        return self._getBool(22)
 
     def setIsSelected(self, value):
-        self._setBool(21, value)
+        self._setBool(22, value)
 
     def _initialize(self):
         super(DiscountVehicleBonusModel, self)._initialize()

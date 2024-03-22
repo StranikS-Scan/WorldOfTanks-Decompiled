@@ -321,7 +321,28 @@ def _getSpawnedBotMsgData(vehicleID, battleSessionProvider=None):
         return None
 
 
-class BattleRoyaleBattleMessagesController(BattleMessagesController):
+class _BRBattleMessagesMixin(object):
+    _battleCtx = None
+
+    def _getEntityType(self, avatar, entityID):
+        if entityID == avatar.playerVehicleID:
+            return _ENTITY_TYPE.SELF
+        if self._battleCtx.isEnemy(entityID) or self._battleCtx.isAlly(entityID) and self._playerChangedTeam():
+            return _ENTITY_TYPE.ENEMY
+        return _ENTITY_TYPE.ALLY if self._battleCtx.isAlly(entityID) else _ENTITY_TYPE.UNKNOWN
+
+    def _playerChangedTeam(self):
+        if 'observer' in BigWorld.player().vehicleTypeDescriptor.type.tags:
+            return False
+        arenaDP = self._battleCtx.getArenaDP()
+        if not arenaDP:
+            return False
+        allyTeam = arenaDP.getAllyTeams()[0]
+        currentTeam = BigWorld.player().team
+        return allyTeam != currentTeam
+
+
+class BattleRoyaleBattleMessagesController(_BRBattleMessagesMixin, BattleMessagesController):
 
     def showAllyHitMessage(self, vehicleID=None):
         spawnBotData = _getSpawnedBotMsgData(vehicleID)
@@ -336,19 +357,8 @@ class BattleRoyaleBattleMessagesController(BattleMessagesController):
         equipmentID = 0
         super(BattleRoyaleBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
-    def _getEntityType(self, avatar, entityID):
-        if entityID == avatar.playerVehicleID:
-            return _ENTITY_TYPE.SELF
-        if self._battleCtx.isEnemy(entityID) or self._battleCtx.isAlly(entityID) and self.__playerChangedTeam():
-            return _ENTITY_TYPE.ENEMY
-        return _ENTITY_TYPE.ALLY if self._battleCtx.isAlly(entityID) else _ENTITY_TYPE.UNKNOWN
 
-    def __playerChangedTeam(self):
-        arenaDP = self._battleCtx.getArenaDP()
-        return False if not arenaDP else arenaDP.getAllyTeams()[0] != BigWorld.player().team
-
-
-class BattleRoyaleBattleMessagesPlayer(BattleMessagesPlayer):
+class BattleRoyaleBattleMessagesPlayer(_BRBattleMessagesMixin, BattleMessagesPlayer):
 
     def showAllyHitMessage(self, vehicleID=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:

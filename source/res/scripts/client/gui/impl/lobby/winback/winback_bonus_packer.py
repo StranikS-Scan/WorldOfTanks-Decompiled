@@ -226,13 +226,15 @@ class WinbackVehiclesBonusUIPacker(BaseBonusUIPacker):
 
     @staticmethod
     def _packVehicleModel(vehicle, bonus, model):
-        model.setName(bonus.getName())
+        bonusName = bonus.getName()
+        model.setName(bonusName)
         model.setVehicleName(getNationLessName(vehicle.name))
         model.setUserName(vehicle.shortUserName)
         model.setVehicleLvl(vehicle.level)
         model.setVehicleType(vehicle.type)
         model.setIsElite(vehicle.isElite)
         model.setNation(vehicle.nationName)
+        model.setIsFromStorage((bonusName == RewardName.VEHICLE_FOR_RENT or not bonus.getUnlockModules(vehicle.intCD)) and not vehicle.isRented and vehicle.isInInventory)
 
     @staticmethod
     def _packRentData(vehicle, bonus, model):

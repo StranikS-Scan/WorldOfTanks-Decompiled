@@ -45,6 +45,53 @@
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/14_siegfried_line/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-54.727997 6.604112	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	271.515869 198.314255	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	277.063171 -114.491798	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	383.321808 48.453674	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	174.036896 -255.266205	</position>
+        </team1>
+        <team2>
+          <position>	130.876190 278.051514	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	160.632385 12.196177	</controlPoint>
+    </comp7>
     <domination>
       <teamSpawnPoints>
         <team1>

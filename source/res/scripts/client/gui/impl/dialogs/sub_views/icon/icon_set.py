@@ -1,42 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/sub_views/icon/icon_set.py
+import logging
 import typing
-from gui.impl.gen import R
-from gui.impl.gen.view_models.views.dialogs.sub_views.icon_set_view_model import IconSetViewModel, IconPositionLogicEnum
-from gui.impl.gen.view_models.views.dialogs.sub_views.icon_view_model import IconViewModel
-from gui.impl.gen_utils import INVALID_RES_ID
-from gui.impl.pub import ViewImpl
-from frameworks.wulf import ViewSettings
+from gui.impl.dialogs.sub_views.common import IconSetData
+from gui.impl.dialogs.sub_views.icon.multiple_icons_set import MultipleIconsSet
+from gui.impl.gen.view_models.views.dialogs.sub_views.multiple_icons_set_view_model import IconPositionLogicEnum
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Optional
-    from frameworks.wulf import Array
+_logger = logging.getLogger(__name__)
 
-def _addIconResIdsToViewModelArray(source, target):
-    if source:
-        for resID in source:
-            if resID != INVALID_RES_ID:
-                iconVM = IconViewModel()
-                iconVM.setPath(resID)
-                target.addViewModel(iconVM)
-
-
-class IconSet(ViewImpl):
+class IconSet(MultipleIconsSet):
     __slots__ = ()
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, iconResID, backgroundResIDList=None, overlayResIDList=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
-        settings = ViewSettings(layoutID or R.views.dialogs.sub_views.icon.IconSet())
-        settings.model = IconSetViewModel()
-        settings.kwargs = {'iconResID': iconResID,
-         'backgroundResIDList': backgroundResIDList,
-         'overlayResIDList': overlayResIDList,
-         'iconPositionLogic': iconPositionLogic}
-        super(IconSet, self).__init__(settings)
-
-    def _onLoading(self, iconResID, backgroundResIDList, overlayResIDList, iconPositionLogic, *args, **kwargs):
-        super(IconSet, self)._onLoading(*args, **kwargs)
-        viewModel = self.getViewModel()
-        viewModel.setIconPositionLogic(iconPositionLogic)
-        if iconResID != INVALID_RES_ID:
-            viewModel.icon.setPath(iconResID)
-        _addIconResIdsToViewModelArray(backgroundResIDList, viewModel.getBackgrounds())
-        _addIconResIdsToViewModelArray(overlayResIDList, viewModel.getOverlays())
+        iconsRes = [IconSetData(iconResID, None, None)]
+        super(IconSet, self).__init__(iconsRes, backgroundResIDList, overlayResIDList, layoutID, iconPositionLogic)
+        return

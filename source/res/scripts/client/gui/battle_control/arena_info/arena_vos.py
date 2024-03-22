@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_vos.py
 import operator
 from collections import defaultdict
+import typing
 from enum import Enum
 import nations
+from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE, BOT_DISPLAY_STATUS, BOT_DISPLAY_CLASS_NAMES
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
@@ -13,6 +14,8 @@ from gui.battle_control.arena_info import settings
 from gui.battle_control.arena_info.settings import VehicleSpottedStatus
 from gui.battle_control.dog_tag_composer import layoutComposer
 from gui.doc_loaders.badges_loader import getSelectedByLayout
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from helpers import dependency, i18n
@@ -27,6 +30,19 @@ _DEFAULT_PHYSICAL_SECTOR = 1
 _DEFAULT_HAS_RESPAWNS = True
 _DEFAULT_ROLE_SKILL_LEVEL = 0
 _DEFAULT_PLAYER_DIVISION = 0
+_BOT_NAME_PLACE_HOLDER = '{0} ({1})'
+_BOT_SUFFIX_BY_STATUS = {BOT_DISPLAY_STATUS.ELITE: R.strings.ingame_gui.bot.elite,
+ BOT_DISPLAY_STATUS.BOSS: R.strings.ingame_gui.bot.boss}
+_BOT_CLASS_NAME_BY_STATUS = {BOT_DISPLAY_STATUS.ELITE: {VEHICLE_CLASS_NAME.LIGHT_TANK: BOT_DISPLAY_CLASS_NAMES.LIGHT_TANK_ELITE,
+                            VEHICLE_CLASS_NAME.MEDIUM_TANK: BOT_DISPLAY_CLASS_NAMES.MEDIUM_TANK_ELITE,
+                            VEHICLE_CLASS_NAME.HEAVY_TANK: BOT_DISPLAY_CLASS_NAMES.HEAVY_TANK_ELITE,
+                            VEHICLE_CLASS_NAME.SPG: BOT_DISPLAY_CLASS_NAMES.SPG_ELITE,
+                            VEHICLE_CLASS_NAME.AT_SPG: BOT_DISPLAY_CLASS_NAMES.AT_SPG_ELITE},
+ BOT_DISPLAY_STATUS.BOSS: {VEHICLE_CLASS_NAME.LIGHT_TANK: BOT_DISPLAY_CLASS_NAMES.BOSS,
+                           VEHICLE_CLASS_NAME.MEDIUM_TANK: BOT_DISPLAY_CLASS_NAMES.BOSS,
+                           VEHICLE_CLASS_NAME.HEAVY_TANK: BOT_DISPLAY_CLASS_NAMES.BOSS,
+                           VEHICLE_CLASS_NAME.SPG: BOT_DISPLAY_CLASS_NAMES.BOSS,
+                           VEHICLE_CLASS_NAME.AT_SPG: BOT_DISPLAY_CLASS_NAMES.BOSS}}
 
 class EPIC_RANDOM_KEYS(object):
     PLAYER_GROUP = 'playerGroup'
@@ -105,7 +121,8 @@ GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys,
  ARENA_GUI_TYPE.COMP7: Comp7Keys,
- ARENA_GUI_TYPE.TOURNAMENT_COMP7: TournamentComp7Keys}
+ ARENA_GUI_TYPE.TOURNAMENT_COMP7: TournamentComp7Keys,
+ ARENA_GUI_TYPE.TRAINING_COMP7: Comp7Keys}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')
@@ -172,6 +189,10 @@ class PlayerInfoVO(object):
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
+
+    @property
+    def isBot(self):
+        return not self.avatarSessionID
 
     def update(self, invalidate=_INVALIDATE_OP.NONE, name=None, accountDBID=0, avatarSessionID='', clanAbbrev='', isPrebattleCreator=False, igrType=IGR_TYPE.NONE, forbidInBattleInvitations=False, fakeName='', **kwargs):
         if name != self.name:
@@ -294,9 +315,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID', 'teamPanelMode', 'botDisplayStatus')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, prestigeLevel=None, prestigeGradeMarkID=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, prestigeLevel=None, prestigeGradeMarkID=None, teamPanelMode=None, botDisplayStatus=BOT_DISPLAY_STATUS.REGULAR, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -318,6 +339,8 @@ class VehicleArenaInfoVO(object):
         self.dogTag = None
         self.prestigeLevel = prestigeLevel
         self.prestigeGradeMarkID = prestigeGradeMarkID
+        self.teamPanelMode = teamPanelMode
+        self.botDisplayStatus = botDisplayStatus
         return
 
     def __repr__(self):
@@ -487,14 +510,20 @@ class VehicleArenaInfoVO(object):
         return self.vehicleID == avatar_getter.getPlayerVehicleID()
 
     def isChatCommandsDisabled(self, isAlly):
-        arena = avatar_getter.getArena()
-        ignore = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.HIGHLIGHT_BOTS_AS_PLAYERS_IN_BC) if arena else False
-        if not (self.player.avatarSessionID or ignore):
-            if isAlly:
-                return True
-            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING, ARENA_GUI_TYPE.EPIC_BATTLE):
-                return True
-        return False
+        if self.player.isBot and self.botDisplayStatus != BOT_DISPLAY_STATUS.REGULAR:
+            return False
+        else:
+            arena = avatar_getter.getArena()
+            ignore = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.HIGHLIGHT_BOTS_AS_PLAYERS_IN_BC) if arena else False
+            if not (self.player.avatarSessionID or ignore):
+                if isAlly:
+                    return True
+                if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM,
+                 ARENA_GUI_TYPE.TRAINING,
+                 ARENA_GUI_TYPE.EPIC_BATTLE,
+                 ARENA_GUI_TYPE.BATTLE_ROYALE):
+                    return True
+            return False
 
     def hasDualAccuracy(self):
         return self.vehicleType.hasDualAccuracy
@@ -512,6 +541,23 @@ class VehicleArenaInfoVO(object):
         else:
             igrLabel = ''
         return igrLabel
+
+    def getDisplayedName(self, name=None):
+        if name is None:
+            name = self.vehicleType.shortNameWithPrefix
+        return self._applyBotName(name) if self.player.isBot else name
+
+    def getDisplayedClassTag(self):
+        defaultClassTag = self.vehicleType.getClassName()
+        return self._applyBotDisplayStatus(defaultClassTag) if self.player.isBot else defaultClassTag
+
+    def _applyBotName(self, name):
+        rSuffix = _BOT_SUFFIX_BY_STATUS.get(self.botDisplayStatus)
+        return _BOT_NAME_PLACE_HOLDER.format(name, backport.text(rSuffix())) if rSuffix is not None else name
+
+    def _applyBotDisplayStatus(self, classTag):
+        botClassTag = _BOT_CLASS_NAME_BY_STATUS.get(self.botDisplayStatus, {}).get(classTag)
+        return botClassTag.value if botClassTag is not None else classTag
 
     @staticmethod
     def __getVehicleStatus(isAlive=None, isAvatarReady=None, stopRespawn=False):

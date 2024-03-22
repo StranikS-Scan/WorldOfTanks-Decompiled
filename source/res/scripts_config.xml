@@ -183,37 +183,21 @@
   </camouflage>
   <login>
     <host>
-      <name>	WOT EU1	</name>
-      <short_name>	EU1	</short_name>
-      <url>	login.p1.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p1.worldoftanks.eu:20016	</url_token>
+      <name>	WOT CT1	</name>
+      <short_name>	CT1	</short_name>
+      <url>	login-ct-p1.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p1.worldoftanks.net:20015	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	201	</periphery_id>
+      <periphery_id>	11	</periphery_id>
     </host>
     <host>
-      <name>	WOT EU2	</name>
-      <short_name>	EU2	</short_name>
-      <url>	login.p2.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p2.worldoftanks.eu:20016	</url_token>
+      <name>	WOT CT2	</name>
+      <short_name>	CT2	</short_name>
+      <url>	login-ct-p2.worldoftanks.net:20015	</url>
+      <url_token>	login2-ct-p2.worldoftanks.net:20015	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	202	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT EU3	</name>
-      <short_name>	EU3	</short_name>
-      <url>	login.p3.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p3.worldoftanks.eu:20016	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	203	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT EU4	</name>
-      <short_name>	EU4	</short_name>
-      <url>	login.p4.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p4.worldoftanks.eu:20016	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	204	</periphery_id>
+      <periphery_id>	12	</periphery_id>
     </host>
   </login>
-  <csisUrl>	http://csis.worldoftanks.eu/csis/woteu/	</csisUrl>
+  <csisUrl>	http://csis-ct.worldoftanks.net/csis/wotct/	</csisUrl>
 </scripts_config.xml>

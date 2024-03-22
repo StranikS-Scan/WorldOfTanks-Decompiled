@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client_common/ClientArena.py
 import cPickle
 import zlib
+import weakref
 from collections import namedtuple, defaultdict
 import ArenaType
 import BigWorld
@@ -11,7 +12,7 @@ import Math
 import arena_component_system.client_arena_component_assembler as assembler
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battle_modifiers_common import BattleModifiers, EXT_DATA_MODIFIERS_KEY
-from constants import ARENA_PERIOD, ARENA_UPDATE
+from constants import ARENA_PERIOD, ARENA_UPDATE, ATTACK_REASON
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from helpers.bots import preprocessBotName
 from items import vehicles
@@ -20,21 +21,59 @@ from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY
 from visual_script.misc import ASPECT
 from visual_script.multi_plan_provider import makeMultiPlanProvider, CallableProviderType
 from arena_vscript_config import config as arenaVScriptsConfig
+from wg_async import wg_async, wg_await, AsyncEvent, AsyncScope, BrokenPromiseError
 TeamBaseProvider = namedtuple('TeamBaseProvider', ('points', 'invadersCnt', 'capturingStopped'))
+
+class _ArenaVehiclesAwaiter(AsyncEvent):
+
+    def __init__(self, scope, arena, vehIDs):
+        state = not vehIDs or all((v in arena.vehicles for v in vehIDs))
+        super(_ArenaVehiclesAwaiter, self).__init__(state, scope)
+        self._ids = set(vehIDs)
+        self._arenaRef = weakref.ref(arena)
+        if not state:
+            arena.onNewVehicleListReceived += self._onNewVehicleListReceived
+            arena.onVehicleAdded += self._onVehicleAdded
+
+    def destroy(self):
+        super(_ArenaVehiclesAwaiter, self).destroy()
+        self._unsubscribe()
+
+    def set(self):
+        super(_ArenaVehiclesAwaiter, self).set()
+        self._unsubscribe()
+
+    def _unsubscribe(self):
+        arena = self._arenaRef()
+        if arena:
+            arena.onNewVehicleListReceived -= self._onNewVehicleListReceived
+            arena.onVehicleAdded -= self._onVehicleAdded
+
+    def _onNewVehicleListReceived(self):
+        if self.is_set():
+            return
+        arena = self._arenaRef()
+        if arena:
+            for vID in arena.vehicles:
+                self._onVehicleAdded(vID)
+                if self.is_set():
+                    return
+
+    def _onVehicleAdded(self, vehID):
+        if self.is_set():
+            return
+        self._ids.discard(vehID)
+        if not self._ids:
+            self.set()
+
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.SETTINGS: '_ClientArena__onArenaSettingsUpdate',
-     ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
-     ARENA_UPDATE.VEHICLE_ADDED: '_ClientArena__onVehicleAddedUpdate',
      ARENA_UPDATE.PERIOD: '_ClientArena__onPeriodInfoUpdate',
      ARENA_UPDATE.STATISTICS: '_ClientArena__onStatisticsUpdate',
      ARENA_UPDATE.VEHICLE_STATISTICS: '_ClientArena__onVehicleStatisticsUpdate',
-     ARENA_UPDATE.VEHICLE_KILLED: '_ClientArena__onVehicleKilled',
-     ARENA_UPDATE.AVATAR_READY: '_ClientArena__onAvatarReady',
      ARENA_UPDATE.BASE_POINTS: '_ClientArena__onBasePointsUpdate',
      ARENA_UPDATE.BASE_CAPTURED: '_ClientArena__onBaseCaptured',
-     ARENA_UPDATE.TEAM_KILLER: '_ClientArena__onTeamKiller',
-     ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate',
      ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed',
      ARENA_UPDATE.FLAG_TEAMS: '_ClientArena__onFlagTeamsReceived',
      ARENA_UPDATE.FLAG_STATE_CHANGED: '_ClientArena__onFlagStateChanged',
@@ -43,11 +82,10 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
-     ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
      ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived',
-     ARENA_UPDATE.VEHICLE_DESCR: '_ClientArena__onVehicleDescrUpdate'}
+     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
     DEFAULT_ARENA_WORLD_ID = -1
+    VEHICLES_AWAIT_TIMEOUT = 5.0
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, spaceID):
         self.__vehicles = {}
@@ -63,6 +101,7 @@ class ClientArena(object):
         self.__isFogOfWarEnabled = False
         self.__hasFogOfWarHiddenVehicles = False
         self.__arenaInfo = None
+        self.__arenaObserverInfo = None
         self.__teamInfo = None
         self.__settings = {}
         self.__eventManager = Event.EventManager()
@@ -109,6 +148,7 @@ class ClientArena(object):
             spaceID = self.DEFAULT_ARENA_WORLD_ID
         self.gameSpace = CGF.World(spaceID)
         self.componentSystem = assembler.createComponentSystem(self, self.bonusType, self.arenaType)
+        self._awaitVehiclesScope = AsyncScope()
         return
 
     settings = property(lambda self: self.__settings)
@@ -125,6 +165,7 @@ class ClientArena(object):
     hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)) or ARENA_BONUS_TYPE_CAPS.checkAny(self.bonusType, ARENA_BONUS_TYPE_CAPS.SSR))
     teamBasesData = property(lambda self: self.__teamBasesData)
     arenaInfo = property(lambda self: self.__arenaInfo)
+    arenaObserverInfo = property(lambda self: self.__arenaObserverInfo)
     teamInfo = property(lambda self: self.__teamInfo)
 
     def destroy(self):
@@ -132,6 +173,8 @@ class ClientArena(object):
         assembler.destroyComponentSystem(self.componentSystem)
         self._vsePlans.destroy()
         self._vsePlans = None
+        self._awaitVehiclesScope.destroy()
+        self._awaitVehiclesScope = None
         return
 
     def update(self, updateType, argStr):
@@ -182,6 +225,13 @@ class ClientArena(object):
         self.__arenaInfo = None
         return
 
+    def registerArenaObserverInfo(self, arenaObserverInfo):
+        self.__arenaObserverInfo = arenaObserverInfo
+
+    def unregisterArenaObserverInfo(self, arenaObserverInfo):
+        self.__arenaObserverInfo = None
+        return
+
     def registerTeamInfo(self, teamInfo):
         if self.__teamInfo is not None:
             self.onTeamInfoUnregistered(self.__teamInfo)
@@ -212,42 +262,6 @@ class ClientArena(object):
         self.__settings = arenaSettings
         self.onArenaSettingsReceived()
 
-    def __onVehicleListUpdate(self, argStr):
-        vehiclesList = cPickle.loads(zlib.decompress(argStr))
-        LOG_DEBUG_DEV('__onVehicleListUpdate', vehiclesList)
-        vehs = self.__vehicles
-        vehs.clear()
-        for infoAsTuple in vehiclesList:
-            vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-            vehs[vehID] = self.__preprocessVehicleInfo(info)
-
-        self.__rebuildIndexToId()
-        self.onNewVehicleListReceived()
-
-    def __onVehicleAddedUpdate(self, argStr):
-        infoAsTuple = cPickle.loads(zlib.decompress(argStr))
-        LOG_DEBUG_DEV('__onVehicleAddedUpdate', infoAsTuple)
-        vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
-        self.__rebuildIndexToId()
-        self.onVehicleAdded(vehID)
-
-    def __onVehicleUpdatedUpdate(self, argStr):
-        infoAsTuple = cPickle.loads(zlib.decompress(argStr))
-        vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-        self.__vehicles[vehID] = self.__preprocessVehicleInfo(info)
-        self.onVehicleUpdated(vehID)
-
-    def __onVehicleDescrUpdate(self, argStr):
-        vehID, compactDescr, maxHealth = cPickle.loads(argStr)
-        info = self.__vehicles[vehID]
-        extVehicleTypeData = {EXT_DATA_PROGRESSION_KEY: info['vehPostProgression'],
-         EXT_DATA_SLOT_KEY: info['customRoleSlotTypeId'],
-         EXT_DATA_MODIFIERS_KEY: self.battleModifiers}
-        self.__vehicles[vehID]['vehicleType'] = self.__getVehicleType(compactDescr, extVehicleTypeData)
-        self.__vehicles[vehID]['maxHealth'] = maxHealth
-        self.onVehicleUpdated(vehID)
-
     def __onPeriodInfoUpdate(self, argStr):
         self.__periodInfo = cPickle.loads(zlib.decompress(argStr))
         self.onPeriodChange(*self.__periodInfo)
@@ -269,35 +283,25 @@ class ClientArena(object):
         status = cPickle.loads(argStr)
         self.onRadarInfoReceived(status)
 
+    @wg_async
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}
+        awaitVehicles = []
         statList = cPickle.loads(zlib.decompress(argStr))
         for s in statList:
             vehicleID, stats = self.__vehicleStatisticsAsDict(s)
+            awaitVehicles.append(vehicleID)
             self.__statistics[vehicleID] = stats
 
+        yield self.awaitVehiclesAdded(awaitVehicles)
         self.onNewStatisticsReceived()
 
+    @wg_async
     def __onVehicleStatisticsUpdate(self, argStr):
         vehicleID, stats = self.__vehicleStatisticsAsDict(cPickle.loads(zlib.decompress(argStr)))
+        yield self.awaitVehiclesAdded([vehicleID])
         self.__statistics[vehicleID] = stats
         self.onVehicleStatisticsUpdate(vehicleID)
-
-    def __onVehicleKilled(self, argStr):
-        victimID, killerID, equipmentID, reason, numVehiclesAffected = cPickle.loads(argStr)
-        vehInfo = self.__vehicles.get(victimID, None)
-        if vehInfo is not None:
-            vehInfo['isAlive'] = False
-            self.onVehicleKilled(victimID, killerID, equipmentID, reason, numVehiclesAffected)
-        return
-
-    def __onAvatarReady(self, argStr):
-        vehicleID = cPickle.loads(argStr)
-        vehInfo = self.__vehicles.get(vehicleID, None)
-        if vehInfo is not None:
-            vehInfo['isAvatarReady'] = True
-            self.onAvatarReady(vehicleID)
-        return
 
     def __getArenaPlans(self):
         arenaPlans = list(self.arenaType.visualScript[ASPECT.CLIENT])
@@ -324,25 +328,9 @@ class ClientArena(object):
         team, baseID = cPickle.loads(argStr)
         self.onTeamBaseCaptured(team, baseID)
 
-    def __onTeamKiller(self, argStr):
-        vehicleID, value = cPickle.loads(argStr)
-        vehInfo = self.__vehicles.get(vehicleID, None)
-        if vehInfo is not None:
-            vehInfo['isTeamKiller'] = value
-            self.onTeamKiller(vehicleID, value)
-        return
-
     def __onCombatEquipmentUsed(self, argStr):
         shooterID, equipmentID = cPickle.loads(argStr)
         self.onCombatEquipmentUsed(shooterID, equipmentID)
-
-    def __onVehicleRecovered(self, argStr):
-        vehID = cPickle.loads(argStr)
-        vehInfo = self.__vehicles.get(vehID, None)
-        if vehInfo is not None and vehID != BigWorld.player().playerVehicleID:
-            vehInfo['isAlive'] = False
-            self.onVehicleRecovered(vehID)
-        return
 
     def __onFlagTeamsReceived(self, argStr):
         pass
@@ -368,44 +356,6 @@ class ClientArena(object):
         vehs = self.__vehicles
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
-    def __vehicleInfoAsDict(self, info):
-        extVehicleTypeData = {EXT_DATA_PROGRESSION_KEY: info[25],
-         EXT_DATA_SLOT_KEY: info[26],
-         EXT_DATA_MODIFIERS_KEY: self.battleModifiers}
-        infoAsDict = {'vehicleType': self.__getVehicleType(info[1], extVehicleTypeData),
-         'name': info[2],
-         'team': info[3],
-         'isAlive': info[4],
-         'isAvatarReady': info[5],
-         'isTeamKiller': info[6],
-         'accountDBID': info[7],
-         'clanAbbrev': info[8],
-         'clanDBID': info[9],
-         'prebattleID': int(info[10]),
-         'isPrebattleCreator': bool(info[11]),
-         'forbidInBattleInvitations': bool(info[12]),
-         'events': info[13],
-         'igrType': info[14],
-         'personalMissionIDs': info[15],
-         'personalMissionInfo': info[16],
-         'ranked': info[17],
-         'outfitCD': info[18],
-         'avatarSessionID': info[19],
-         'wtr': int(info[20]),
-         'fakeName': info[21],
-         'badges': info[22],
-         'overriddenBadge': info[23],
-         'maxHealth': info[24],
-         'vehPostProgression': info[25],
-         'customRoleSlotTypeId': info[26],
-         'botDisplayStatus': info[27],
-         'prestigeLevel': info[28],
-         'prestigeGradeMarkID': info[29]}
-        return (info[0], infoAsDict)
-
-    def __getVehicleType(self, compactDescr, extData):
-        return None if compactDescr is None else vehicles.VehicleDescr(compactDescr=compactDescr, extData=extData)
-
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
 
@@ -422,10 +372,78 @@ class ClientArena(object):
     def getVseContextInstance(self, contextName):
         pass
 
-    def __preprocessVehicleInfo(self, info):
-        if not info['avatarSessionID']:
+    def __preprocessVehicleInfo(self, vehID, info):
+        if 'avatarSessionID' in info and not info['avatarSessionID']:
             info['name'] = preprocessBotName(info['name'], self.bonusType)
+        if 'compDescr' in info:
+            info['vehicleType'] = self.getVehicleType(self.__vehicles.get(vehID, info), info.pop('compDescr'))
+        if 'personalMissionIDs' in info:
+            info['personalMissionIDs'] = list(info['personalMissionIDs'])
+        if 'vehPostProgression' in info:
+            info['vehPostProgression'] = list(info['vehPostProgression'])
+        if 'deathInfo' in info:
+            info['deathInfo'] = dict(info['deathInfo']) if info['deathInfo'] is not None else None
+        if 'name' in info:
+            info['name'] = info['name'] if info['name'] is not None else ''
+        if 'fakeName' in info:
+            info['fakeName'] = info['fakeName'] if info['fakeName'] is not None else ''
         return info
+
+    def getVehicleType(self, vehInfo, compDescr):
+        extVehicleTypeData = {EXT_DATA_PROGRESSION_KEY: vehInfo['vehPostProgression'],
+         EXT_DATA_SLOT_KEY: vehInfo['customRoleSlotTypeId'],
+         EXT_DATA_MODIFIERS_KEY: self.battleModifiers}
+        return None if not compDescr else vehicles.VehicleDescr(compactDescr=compDescr, extData=extVehicleTypeData)
+
+    def updateVehicleInfo(self, vehID, vehInfo):
+        newVehInfo = self.__preprocessVehicleInfo(vehID, vehInfo)
+        sharedKeys = set(vehInfo.keys()) & set(self.__vehicles[vehID])
+        self.__vehicles[vehID].update({key:newVehInfo[key] for key in sharedKeys})
+
+    def updateVehiclesList(self, vehInfoList):
+        self.vehicles.clear()
+        for vehInfo in vehInfoList:
+            self.addVehInfo(vehInfo, False)
+
+        self.onNewVehicleListReceived()
+
+    def addVehInfo(self, vehInfo, notify=True):
+        vehInfo = dict(vehInfo)
+        vehID = vehInfo.pop('vehicleID')
+        self.__vehicles[vehID] = self.__preprocessVehicleInfo(vehID, vehInfo)
+        self.__rebuildIndexToId()
+        if notify:
+            self.onVehicleAdded(vehID)
+
+    def updateVehicleIsAlive(self, vehID, compDescr, isPlayerVehicle):
+        vehInfo = self.__vehicles[vehID]
+        if vehInfo['isAlive']:
+            self.onVehicleUpdated(vehID)
+        else:
+            deathInfo = vehInfo['deathInfo']
+            reasonID = deathInfo['reasonID']
+            self.onVehicleKilled(deathInfo['victimID'], deathInfo['killerID'], deathInfo['equipmentID'], reasonID, deathInfo['numVehiclesAffected'])
+            if reasonID == ATTACK_REASON.getIndex(ATTACK_REASON.RECOVERY) and not isPlayerVehicle:
+                self.onVehicleRecovered(vehID)
+
+    def updateVehicleIsTeamKiller(self, vehID):
+        vehInfo = self.__vehicles[vehID]
+        self.onTeamKiller(vehID, vehInfo['isTeamKiller'])
+
+    def updateVehicleIsAvatarReady(self, vehID):
+        self.onAvatarReady(vehID)
+
+    @wg_async
+    def updateGameModeSpecificStats(self, isStatic, stats):
+        yield self.awaitVehiclesAdded(stats.keys())
+        self.onGameModeSpecificStats(isStatic, stats)
+
+    @wg_async
+    def awaitVehiclesAdded(self, vehIDs):
+        try:
+            yield wg_await(_ArenaVehiclesAwaiter(self._awaitVehiclesScope, self, vehIDs).wait(), self.VEHICLES_AWAIT_TIMEOUT)
+        except BrokenPromiseError:
+            pass
 
 
 def _convertToList(vec4):

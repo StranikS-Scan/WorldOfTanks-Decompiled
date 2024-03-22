@@ -6,7 +6,6 @@ from functools import partial
 from enum import Enum
 import BigWorld
 from PlayerEvents import g_playerEvents
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_component_system.client_arena_component_system import ClientArenaComponent
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import ReplyState, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, BATTLE_CHAT_COMMAND_NAMES, _DEFAULT_ACTIVE_COMMAND_TIME, _DEFAULT_SPG_AREA_COMMAND_TIME, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
@@ -21,7 +20,7 @@ from messenger.proto.bw_chat2.chat_handlers import g_mutedMessages
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES, messageArgs
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
-from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
+from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 from shared_utils import first
 EMPTY_STATE = ''
@@ -58,8 +57,7 @@ class MarkerInFocus(namedtuple('MarkerInFocus', ('commandID', 'targetID', 'marke
 
 class AdvancedChatComponent(ClientArenaComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    settingsCore = dependency.descriptor(ISettingsCore)
-    settingsCache = dependency.descriptor(ISettingsCache)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
 
     def __init__(self, componentSystem):
         super(AdvancedChatComponent, self).__init__(componentSystem)
@@ -73,13 +71,8 @@ class AdvancedChatComponent(ClientArenaComponent):
 
     def activate(self):
         super(AdvancedChatComponent, self).activate()
-        if self.settingsCore:
-            self.settingsCore.onSettingsChanged += self._onSettingsChanged
-        if self.settingsCache:
-            if not self.settingsCache.settings.isSynced():
-                self.settingsCache.onSyncCompleted += self._onSettingsReady
-            else:
-                self._isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        self.battleCommunications.onChanged += self._onBattleCommunicationsSettingsChanged
+        self._isEnabled = self.battleCommunications.isEnabled
         player = BigWorld.player()
         if player is None:
             return
@@ -100,8 +93,7 @@ class AdvancedChatComponent(ClientArenaComponent):
 
     def deactivate(self):
         super(AdvancedChatComponent, self).deactivate()
-        if self.settingsCore:
-            self.settingsCore.onSettingsChanged -= self._onSettingsChanged
+        self.battleCommunications.onChanged -= self._onBattleCommunicationsSettingsChanged
         if self._isEnabled:
             self._removeEventListenersAndClear()
         feedbackCtrl = self.sessionProvider.shared.feedback
@@ -110,7 +102,7 @@ class AdvancedChatComponent(ClientArenaComponent):
 
     def _onAvatarReady(self):
         g_playerEvents.onAvatarReady -= self._onAvatarReady
-        self._isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        self._isEnabled = bool(self.battleCommunications.isEnabled)
         if self._isEnabled:
             self._addEventListeners()
 
@@ -282,9 +274,9 @@ class AdvancedChatComponent(ClientArenaComponent):
             isOneShot = False
             isPlayerSender = senderVehID == playerVehID
             if typeOfUpdate == ChatCommandChange.CHAT_CMD_WAS_REMOVED:
-                if playerVehID in commandData.owners or playerVehID == cmdTargetID or self.__isLastPrebattleMarkerOwner(cmdMarkerType, cmdID, commandData) or not self._isAliveVehicle(senderVehID):
+                if playerVehID in commandData.owners or playerVehID == cmdTargetID or self._isLastPrebattleMarkerOwner(cmdMarkerType, cmdID, commandData) or not self._isAliveVehicle(senderVehID):
                     chatStats = {senderVehID: (EMPTY_STATE, EMPTY_CHAT_CMD_FLAG)}
-                    if self.__isPrebattleWaypoint(cmdMarkerType, cmdID):
+                    if self._isPrebattleWaypoint(cmdMarkerType, cmdID):
                         if senderVehID in commandData.owners:
                             vehID = senderVehID
                         elif len(commandData.owners) == 1:
@@ -385,8 +377,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl:
             feedbackCtrl.onVehicleMarkerRemoved += self._onVehicleMarkerRemoved
-        if self.settingsCore:
-            self.settingsCore.onSettingsChanged += self._onSettingsChanged
+        self.battleCommunications.onChanged += self._onBattleCommunicationsSettingsChanged
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self._onVehicleStateUpdated
@@ -396,8 +387,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl:
             feedbackCtrl.onVehicleMarkerRemoved -= self._onVehicleMarkerRemoved
-        if self.settingsCore:
-            self.settingsCore.onSettingsChanged -= self._onSettingsChanged
+        self.battleCommunications.onChanged -= self._onBattleCommunicationsSettingsChanged
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
@@ -818,8 +808,8 @@ class AdvancedChatComponent(ClientArenaComponent):
                 self._removeReplyContributionFromPlayer(vehicleID, MarkerType.INVALID_MARKER_TYPE, -1)
             return
 
-    def _onSettingsChanged(self, diff):
-        battleCommunicationEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+    def _onBattleCommunicationsSettingsChanged(self):
+        battleCommunicationEnabled = self.battleCommunications.isEnabled
         if battleCommunicationEnabled is None:
             return
         else:
@@ -904,20 +894,10 @@ class AdvancedChatComponent(ClientArenaComponent):
             self._tryRemovingCommandFromMarker(removeCommandID, removeCommandTargetID)
             return
 
-    def _onSettingsReady(self):
-        _logger.debug('Settings are synced, checking the IBC.')
-        if self._isEnabled is None:
-            self._isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
-            if not self._isEnabled:
-                return
-            self._addEventListeners()
-        self.settingsCache.onSyncCompleted -= self._onSettingsReady
-        return
-
     @classmethod
-    def __isLastPrebattleMarkerOwner(cls, cmdMarkerType, cmdID, commandData):
-        return cls.__isPrebattleWaypoint(cmdMarkerType, cmdID) and len(commandData.owners) == 1
+    def _isLastPrebattleMarkerOwner(cls, cmdMarkerType, cmdID, commandData):
+        return cls._isPrebattleWaypoint(cmdMarkerType, cmdID) and len(commandData.owners) == 1
 
     @staticmethod
-    def __isPrebattleWaypoint(cmdMarkerType, cmdID):
+    def _isPrebattleWaypoint(cmdMarkerType, cmdID):
         return cmdMarkerType == MarkerType.LOCATION_MARKER_TYPE and cmdID == BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT].id

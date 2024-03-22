@@ -11,7 +11,7 @@ from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
+from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from account_helpers import AccountSettings
@@ -19,7 +19,6 @@ from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
     _itemsCache = dependency.descriptor(IItemsCache)
-    _bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchItemContextMenuHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
@@ -27,7 +26,6 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
          MODULE.BUY_AND_EQUIP: 'buyModule',
          MODULE.EQUIP: 'equipModule',
          MODULE.SELL: 'sellModule'})
-        self.__skipConfirm = self._bootcampController.isInBootcamp()
 
     def showModuleInfo(self):
         vehicle = self._itemsCache.items.getItemByCD(self._rootCD)
@@ -38,10 +36,10 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         vehicle = self._itemsCache.items.getItemByCD(self._rootCD)
         unlockIdx, xpCost, required = vehicle.getUnlockDescrByIntCD(self._nodeCD)
         unlockProps = UnlockProps(self._rootCD, unlockIdx, xpCost, required, 0, xpCost)
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps, skipConfirm=self.__skipConfirm)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps)
 
     def buyModule(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_AND_SELL_ITEM, self._nodeCD, self._rootCD, skipConfirm=self.__skipConfirm)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_AND_SELL_ITEM, self._nodeCD, self._rootCD)
 
     def equipModule(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.INSTALL_ITEM, self._nodeCD, self._rootCD)

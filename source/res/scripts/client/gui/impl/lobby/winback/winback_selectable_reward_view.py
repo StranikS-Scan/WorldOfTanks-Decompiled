@@ -134,7 +134,7 @@ class WinbackSelectableRewardView(ViewImpl):
         if tooltipId is not None:
             tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData and isinstance(tooltipData, TooltipData):
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow())
+                window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event)
                 window.load()
         else:
             window = super(WinbackSelectableRewardView, self).createToolTip(event)

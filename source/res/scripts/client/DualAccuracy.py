@@ -39,6 +39,8 @@ class DualAccuracy(BigWorld.DynamicScriptComponent):
             self.__updateDualAccuracyState()
 
     def onDestroy(self):
+        if self.entity.isDestroyed or not self.entity.inWorld:
+            return
         self.entity.onAppearanceReady -= self.__onAppearanceReady
         self.__appearanceInited = False
         self.__eManager.clear()

@@ -116,7 +116,6 @@
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
-    <Maybach_HL_230_bootcamp>	1002	</Maybach_HL_230_bootcamp>
   </ids>
   <shared>
     <Somua_S-40>
@@ -1098,14 +1097,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	1250	</power>
       <weight>	750	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </Saurer_1000>
     <Saurer_1000_7x7>
       <userString>	#france_vehicles:Saurer_1000	</userString>
@@ -1115,14 +1114,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	1250	</power>
       <weight>	750	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </Saurer_1000_7x7>
     <Saurer_F155>
       <userString>	#france_vehicles:Saurer_F155	</userString>
@@ -2039,22 +2038,5 @@
       <rpm_max>	2149	</rpm_max>
       <notInShop>	True	</notInShop>
     </_6F11SRY_MapsTraining_Dummy_SPG_2>
-    <Maybach_HL_230_bootcamp>
-      <userString>	#france_vehicles:Maybach_HL_230	</userString>
-      <tags>	gasoline	</tags>
-      <level>	6	</level>
-      <price>	26000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	575	</power>
-      <weight>	700	</weight>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	265	</rpm_min>
-      <rpm_max>	2951	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </Maybach_HL_230_bootcamp>
   </shared>
 </engines.xml>

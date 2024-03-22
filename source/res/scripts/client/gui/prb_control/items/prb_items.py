@@ -109,7 +109,7 @@ PlayersStateStats = namedtuple('PlayersStateStats', ('notReadyCount', 'haveInBat
 class PrbPropsInfo(object):
     __slots__ = ('wins', 'battlesCount', 'createTime', 'teamsPositions')
 
-    def __init__(self, wins=None, battlesCount=0, createTime=None, teamsPositions=None):
+    def __init__(self, wins=None, battlesCount=0, createTime=None, teamsPositions=None, **kwargs):
         super(PrbPropsInfo, self).__init__()
         self.wins = wins or [0, 0, 0]
         self.battlesCount = battlesCount
@@ -120,7 +120,7 @@ class PrbPropsInfo(object):
         return '%d:%d' % (self.wins[1], self.wins[2])
 
     def __repr__(self):
-        return 'PrbPropsInfo(wins = {0!r:s}, battlesCount = {1:n}, createTime = {2:n}'.format(self.wins, self.battlesCount, self.createTime)
+        return 'PrbPropsInfo(wins = {0!r:s}, battlesCount = {1:n}, createTime = {2:n})'.format(self.wins, self.battlesCount, self.createTime)
 
 
 def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):

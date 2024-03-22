@@ -143,8 +143,10 @@ class DIALOGS(object):
     XPTOTMENCHECKBOX_SUBMIT = '#dialogs:xpToTmenCheckbox/submit'
     XPTOTMENCHECKBOX_CANCEL = '#dialogs:xpToTmenCheckbox/cancel'
     IDLECREWBONUS_TITLE = '#dialogs:idleCrewBonus/title'
-    IDLECREWBONUS_MESSAGE_REMOVETYPE = '#dialogs:idleCrewBonus/message/removeType'
+    IDLECREWBONUS_MESSAGE_REMOVETYPEFROM = '#dialogs:idleCrewBonus/message/removeTypeFrom'
+    IDLECREWBONUS_MESSAGE_REMOVETYPETO = '#dialogs:idleCrewBonus/message/removeTypeTo'
     IDLECREWBONUS_MESSAGE_REMOVENAME = '#dialogs:idleCrewBonus/message/removeName'
+    IDLECREWBONUS_MESSAGE_DOT = '#dialogs:idleCrewBonus/message/dot'
     IDLECREWBONUS_MESSAGE_CREWWARNING = '#dialogs:idleCrewBonus/message/crewWarning'
     IDLECREWBONUS_MESSAGE_CREWINCOMPLETE = '#dialogs:idleCrewBonus/message/crewIncomplete'
     IDLECREWBONUS_MESSAGE_CREWUNSUITABLE = '#dialogs:idleCrewBonus/message/crewUnsuitable'
@@ -536,9 +538,6 @@ class DIALOGS(object):
     UPDATENEEDED_MESSAGE = '#dialogs:updateNeeded/message'
     UPDATENEEDED_SUBMIT = '#dialogs:updateNeeded/submit'
     UPDATENEEDED_CANCEL = '#dialogs:updateNeeded/cancel'
-    DEMOACCOUNTBOOTCAMPFAILURE_TITLE = '#dialogs:demoAccountBootcampFailure/title'
-    DEMOACCOUNTBOOTCAMPFAILURE_MESSAGE = '#dialogs:demoAccountBootcampFailure/message'
-    DEMOACCOUNTBOOTCAMPFAILURE_CANCEL = '#dialogs:demoAccountBootcampFailure/cancel'
     STEAMSTARTNEEDED_TITLE = '#dialogs:steamStartNeeded/title'
     STEAMSTARTNEEDED_MESSAGE = '#dialogs:steamStartNeeded/message'
     STEAMSTARTNEEDED_CANCEL = '#dialogs:steamStartNeeded/cancel'
@@ -550,17 +549,24 @@ class DIALOGS(object):
     REPLAYSTOPPED_MESSAGE = '#dialogs:replayStopped/message'
     REPLAYSTOPPED_SUBMIT = '#dialogs:replayStopped/submit'
     REPLAYSTOPPED_CANCEL = '#dialogs:replayStopped/cancel'
-    PUNISHMENTWINDOW_TITLE = '#dialogs:punishmentWindow/title'
-    PUNISHMENTWINDOW_MSGTITLE_WARNING = '#dialogs:punishmentWindow/msgTitle/warning'
-    PUNISHMENTWINDOW_MSGTITLE_PENALTY = '#dialogs:punishmentWindow/msgTitle/penalty'
+    PUNISHMENTWINDOW_HEADER_WARNING = '#dialogs:punishmentWindow/header/warning'
+    PUNISHMENTWINDOW_HEADER_PENALTY = '#dialogs:punishmentWindow/header/penalty'
+    PUNISHMENTWINDOW_HEADER_BAN = '#dialogs:punishmentWindow/header/ban'
     PUNISHMENTWINDOW_MESSAGE_WARNING = '#dialogs:punishmentWindow/message/warning'
     PUNISHMENTWINDOW_MESSAGE_PENALTY = '#dialogs:punishmentWindow/message/penalty'
-    PUNISHMENTWINDOW_MESSAGE_EXTRA_PENALTY = '#dialogs:punishmentWindow/message/extra/penalty'
+    PUNISHMENTWINDOW_MESSAGE_BAN = '#dialogs:punishmentWindow/message/ban'
+    PUNISHMENTWINDOW_MESSAGE_BAN_COMP7_QUALIFICATION = '#dialogs:punishmentWindow/message/ban/comp7/qualification'
+    PUNISHMENTWINDOW_MESSAGE_BAN_COMP7 = '#dialogs:punishmentWindow/message/ban/comp7'
+    PUNISHMENTWINDOW_INFO = '#dialogs:punishmentWindow/info'
     PUNISHMENTWINDOW_CANCEL = '#dialogs:punishmentWindow/cancel'
     PUNISHMENTWINDOW_REASON_DESERTER = '#dialogs:punishmentWindow/reason/deserter'
-    PUNISHMENTWINDOW_REASON_EPIC_DESERTER = '#dialogs:punishmentWindow/reason/epic_deserter'
     PUNISHMENTWINDOW_REASON_SUICIDE = '#dialogs:punishmentWindow/reason/suicide'
     PUNISHMENTWINDOW_REASON_AFK = '#dialogs:punishmentWindow/reason/afk'
+    PUNISHMENTWINDOW_REASON_MIXED = '#dialogs:punishmentWindow/reason/mixed'
+    PUNISHMENTWINDOW_TIME_DAYS = '#dialogs:punishmentWindow/time/days'
+    PUNISHMENTWINDOW_TIME_HOURS = '#dialogs:punishmentWindow/time/hours'
+    PUNISHMENTWINDOW_TIME_MIN = '#dialogs:punishmentWindow/time/min'
+    PUNISHMENTWINDOW_TIME_LESSMIN = '#dialogs:punishmentWindow/time/lessMin'
     REMOVEINCOMPATIBLEEQS_TITLE = '#dialogs:removeIncompatibleEqs/title'
     REMOVEINCOMPATIBLEEQS_MESSAGE = '#dialogs:removeIncompatibleEqs/message'
     REMOVEINCOMPATIBLEEQS_MESSAGE_REASON = '#dialogs:removeIncompatibleEqs/message/reason'
@@ -623,6 +629,10 @@ class DIALOGS(object):
     SQUAD_GOTOANOTHER_MESSAGE = '#dialogs:squad/goToAnother/message'
     SQUAD_GOTOANOTHER_SUBMIT = '#dialogs:squad/goToAnother/submit'
     SQUAD_GOTOANOTHER_CANCEL = '#dialogs:squad/goToAnother/cancel'
+    SQUAD_GOTOANOTHERSUBMODE_TITLE = '#dialogs:squad/goToAnotherSubMode/title'
+    SQUAD_GOTOANOTHERSUBMODE_MESSAGE = '#dialogs:squad/goToAnotherSubMode/message'
+    SQUAD_GOTOANOTHERSUBMODE_SUBMIT = '#dialogs:squad/goToAnotherSubMode/submit'
+    SQUAD_GOTOANOTHERSUBMODE_CANCEL = '#dialogs:squad/goToAnotherSubMode/cancel'
     RALLY_LEAVE_TITLE = '#dialogs:rally/leave/title'
     RALLY_LEAVE_MESSAGE = '#dialogs:rally/leave/message'
     RALLY_LEAVE_SUBMIT = '#dialogs:rally/leave/submit'
@@ -834,31 +844,6 @@ class DIALOGS(object):
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE = '#dialogs:confirmBattleBoosterBuyAndInstall/title'
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterBuyAndInstall/submit'
     CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL = '#dialogs:confirmBattleBoosterBuyAndInstall/cancel'
-    BOOTCAMP_PREMIUMTYPE_BASIC = '#dialogs:bootcamp/premiumType/basic'
-    BOOTCAMP_PREMIUMTYPE_PLUS = '#dialogs:bootcamp/premiumType/plus'
-    BOOTCAMP_SKIP_TITLE = '#dialogs:bootcamp/skip/title'
-    BOOTCAMP_SKIP_LABEL = '#dialogs:bootcamp/skip/label'
-    BOOTCAMP_SKIP_MESSAGE = '#dialogs:bootcamp/skip/message'
-    BOOTCAMP_SKIP_SUBMIT = '#dialogs:bootcamp/skip/submit'
-    BOOTCAMP_SKIP_CANCEL = '#dialogs:bootcamp/skip/cancel'
-    BOOTCAMP_SKIP_REFERRAL_TITLE = '#dialogs:bootcamp/skip/referral/title'
-    BOOTCAMP_SKIP_REFERRAL_LABEL = '#dialogs:bootcamp/skip/referral/label'
-    BOOTCAMP_SKIP_REFERRAL_MESSAGE = '#dialogs:bootcamp/skip/referral/message'
-    BOOTCAMP_SKIP_REFERRAL_SUBMIT = '#dialogs:bootcamp/skip/referral/submit'
-    BOOTCAMP_SKIP_REFERRAL_CANCEL = '#dialogs:bootcamp/skip/referral/cancel'
-    BOOTCAMP_START_TITLE = '#dialogs:bootcamp/start/title'
-    BOOTCAMP_START_LABEL = '#dialogs:bootcamp/start/label'
-    BOOTCAMP_START_MESSAGE = '#dialogs:bootcamp/start/message'
-    BOOTCAMP_START_SUBMIT = '#dialogs:bootcamp/start/submit'
-    BOOTCAMP_START_CANCEL = '#dialogs:bootcamp/start/cancel'
-    BOOTCAMP_RETRY_TITLE = '#dialogs:bootcamp/retry/title'
-    BOOTCAMP_RETRY_LABEL = '#dialogs:bootcamp/retry/label'
-    BOOTCAMP_RETRY_MESSAGE = '#dialogs:bootcamp/retry/message'
-    BOOTCAMP_RETRY_SUBMIT = '#dialogs:bootcamp/retry/submit'
-    BOOTCAMP_RETRY_CANCEL = '#dialogs:bootcamp/retry/cancel'
-    BOOTCAMPCENTERUNAVAILABLE_TITLE = '#dialogs:bootcampCenterUnavailable/title'
-    BOOTCAMPCENTERUNAVAILABLE_MESSAGE = '#dialogs:bootcampCenterUnavailable/message'
-    BOOTCAMPCENTERUNAVAILABLE_CANCEL = '#dialogs:bootcampCenterUnavailable/cancel'
     HOF_EXCLUDERATING_TITLE = '#dialogs:hof/excludeRating/title'
     HOF_EXCLUDERATING_MESSAGE = '#dialogs:hof/excludeRating/message'
     HOF_EXCLUDERATING_SUBMIT = '#dialogs:hof/excludeRating/submit'
@@ -939,23 +924,18 @@ class DIALOGS(object):
     ACCOUNTCOMPLETION_CANCEL = '#dialogs:accountCompletion/cancel'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED = '#dialogs:accountCompletion/warningServerUnavailableTimed'
     ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE = '#dialogs:accountCompletion/warningServerUnavailable'
-    ACCOUNTCOMPLETION_WARNINGSOMETHINGWENTWRONG = '#dialogs:accountCompletion/warningSomethingWentWrong'
     ACCOUNTCOMPLETION_ERRORISWRONG = '#dialogs:accountCompletion/errorIsWrong'
     ACCOUNTCOMPLETION_EMAILFORBIDDEN = '#dialogs:accountCompletion/emailForbidden'
     ACCOUNTCOMPLETION_EMAILPROVIDERBANNED = '#dialogs:accountCompletion/emailProviderBanned'
     ACCOUNTCOMPLETION_EMAILRESTRICTEDBYCOUNTRYHEADER = '#dialogs:accountCompletion/emailRestrictedByCountryHeader'
     ACCOUNTCOMPLETION_EMAILRESTRICTEDBYCOUNTRY = '#dialogs:accountCompletion/emailRestrictedByCountry'
     ACCOUNTCOMPLETION_EMAILALREADYTAKEN = '#dialogs:accountCompletion/emailAlreadyTaken'
-    ACCOUNTCOMPLETION_LOGINALREADYTAKEN = '#dialogs:accountCompletion/loginAlreadyTaken'
     ACCOUNTCOMPLETION_ACCOUNTALREADYHASEMAIL = '#dialogs:accountCompletion/accountAlreadyHasEmail'
     ACCOUNTCOMPLETION_EMAILISTOOSHORT = '#dialogs:accountCompletion/emailIsTooShort'
     ACCOUNTCOMPLETION_EMAILISTOOLONG = '#dialogs:accountCompletion/emailIsTooLong'
-    ACCOUNTCOMPLETION_TOOMANYREQUESTS = '#dialogs:accountCompletion/tooManyRequests'
     ACCOUNTCOMPLETION_REWARDSTITLE = '#dialogs:accountCompletion/rewardsTitle'
-    ACCOUNTCOMPLETION_REGISTRATIONREWARDSTITLE = '#dialogs:accountCompletion/registrationRewardsTitle'
     ACCOUNTCOMPLETION_EMAIL_FIELDNAME = '#dialogs:accountCompletion/email/fieldName'
     ACCOUNTCOMPLETION_EMAIL_FIELDPLACEHOLDER = '#dialogs:accountCompletion/email/fieldPlaceholder'
-    ACCOUNTCOMPLETION_PASSWORD_FIELDNAME = '#dialogs:accountCompletion/password/fieldName'
     ACCOUNTCOMPLETION_EMAIL_TITLE = '#dialogs:accountCompletion/email/title'
     ACCOUNTCOMPLETION_EMAIL_SUBTITLE = '#dialogs:accountCompletion/email/subTitle'
     ACCOUNTCOMPLETION_EMAIL_FULLACCESS_TITLE = '#dialogs:accountCompletion/email/fullAccess/title'
@@ -974,58 +954,10 @@ class DIALOGS(object):
     ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT = '#dialogs:accountCompletion/emailOverlay/error/codeAlreadySent'
     ACCOUNTCOMPLETION_EMAILOVERLAY_ALREADYCONFIRMED_TITLE = '#dialogs:accountCompletion/emailOverlay/alreadyConfirmed/title'
     ACCOUNTCOMPLETION_EMAILOVERLAY_ALREADYCONFIRMED_SUBTITLE = '#dialogs:accountCompletion/emailOverlay/alreadyConfirmed/subTitle'
-    ACCOUNTCOMPLETION_CREDENTIALS_TITLE = '#dialogs:accountCompletion/credentials/title'
-    ACCOUNTCOMPLETION_CREDENTIALS_SUBTITLE = '#dialogs:accountCompletion/credentials/subTitle'
-    ACCOUNTCOMPLETION_BADPASSWORD = '#dialogs:accountCompletion/badPassword'
-    ACCOUNTCOMPLETION_PASSWORDISTOOSHORT = '#dialogs:accountCompletion/passwordIsTooShort'
-    ACCOUNTCOMPLETION_PASSWORDISTOOLONG = '#dialogs:accountCompletion/passwordIsTooLong'
-    ACCOUNTCOMPLETION_PASSWORDISWEAK = '#dialogs:accountCompletion/passwordIsWeak'
-    ACCOUNTCOMPLETION_DEMOCOMPLETE_TITLE = '#dialogs:accountCompletion/demoComplete/title'
-    ACCOUNTCOMPLETION_DEMOCOMPLETE_DESCRIPTION = '#dialogs:accountCompletion/demoComplete/description'
-    ACCOUNTCOMPLETION_DEMOCOMPLETE_BUTTON = '#dialogs:accountCompletion/demoComplete/button'
-    ACCOUNTCOMPLETION_ERROR_NOTAVAILABLE = '#dialogs:accountCompletion/error/notAvailable'
-    ACCOUNTCOMPLETION_ERROR_BUTTON_TRYAGAIN = '#dialogs:accountCompletion/error/button/tryAgain'
-    ACCOUNTCOMPLETION_ERROR_TRYAGAINTIMERMESSAGE = '#dialogs:accountCompletion/error/tryAgainTimerMessage'
-    ACCOUNTCOMPLETION_ERROR_BUTTON_CONTINUE = '#dialogs:accountCompletion/error/button/continue'
-    ACCOUNTCOMPLETION_ERROR_RENAMINGNOTAVAILABLE = '#dialogs:accountCompletion/error/renamingNotAvailable'
-    ACCOUNTCOMPLETION_WAITING_CONFIRMATION = '#dialogs:accountCompletion/waiting/confirmation'
     ACCOUNTCOMPLETION_WAITING_QUEUE = '#dialogs:accountCompletion/waiting/queue'
-    ACCOUNTCOMPLETION_CONTACTSUPPORT = '#dialogs:accountCompletion/contactSupport'
-    ACCOUNTCOMPLETION_ERROR_SOMETHINGWENTWRONG = '#dialogs:accountCompletion/error/somethingWentWrong'
-    ACCOUNTCOMPLETION_ERROR_RENAMINGMALFUNCTION = '#dialogs:accountCompletion/error/renamingMalfunction'
-    ACCOUNTCOMPLETION_SPA_PASSWORDISWEAK = '#dialogs:accountCompletion/spa/passwordIsWeak'
-    ACCOUNTCOMPLETION_LEAVESQUAD_TITLE = '#dialogs:accountCompletion/leaveSquad/title'
-    ACCOUNTCOMPLETION_LEAVESQUAD_MESSAGE = '#dialogs:accountCompletion/leaveSquad/message'
-    ACCOUNTCOMPLETION_LEAVESQUAD_SUBMIT = '#dialogs:accountCompletion/leaveSquad/submit'
-    ACCOUNTCOMPLETION_LEAVESQUAD_CANCEL = '#dialogs:accountCompletion/leaveSquad/cancel'
-    ACCOUNTCOMPLETION_RENAMING_SKIP_TITLE = '#dialogs:accountCompletion/renaming/skip/title'
-    ACCOUNTCOMPLETION_RENAMING_SKIP_MESSAGE = '#dialogs:accountCompletion/renaming/skip/message'
-    ACCOUNTCOMPLETION_RENAMING_SKIP_SUBMIT = '#dialogs:accountCompletion/renaming/skip/submit'
-    ACCOUNTCOMPLETION_RENAMING_SKIP_CANCEL = '#dialogs:accountCompletion/renaming/skip/cancel'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_TITLE = '#dialogs:accountCompletion/renamingOverlay/title'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_SUBTITLE = '#dialogs:accountCompletion/renamingOverlay/subTitle'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_BUTTON = '#dialogs:accountCompletion/renamingOverlay/button'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_FIELDNAME = '#dialogs:accountCompletion/renamingOverlay/fieldName'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEFORBIDDEN = '#dialogs:accountCompletion/renamingOverlay/nameForbidden'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEFORBIDDENPICKVARIANT = '#dialogs:accountCompletion/renamingOverlay/nameForbiddenPickVariant'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETAKEN = '#dialogs:accountCompletion/renamingOverlay/nameTaken'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETAKENPICKVARIANT = '#dialogs:accountCompletion/renamingOverlay/nameTakenPickVariant'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEINVALID = '#dialogs:accountCompletion/renamingOverlay/nameInvalid'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETOOSHORT = '#dialogs:accountCompletion/renamingOverlay/nameTooShort'
-    ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETOOLONG = '#dialogs:accountCompletion/renamingOverlay/nameToolong'
-    ACCOUNTCOMPLETION_RENAMINGCOMPLETEOVERLAY_TITLE = '#dialogs:accountCompletion/renamingCompleteOverlay/title'
-    ACCOUNTCOMPLETION_RENAMINGCOMPLETEOVERLAY_SUBTITLE = '#dialogs:accountCompletion/renamingCompleteOverlay/subTitle'
     DIALOGTEMPLATES_CONFIRM = '#dialogs:dialogTemplates/confirm'
     DIALOGTEMPLATES_CANCEL = '#dialogs:dialogTemplates/cancel'
     DIALOGTEMPLATES_OK = '#dialogs:dialogTemplates/ok'
-    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_BUTTON = '#dialogs:battleRoyale/confirmRent/testDrive/Button'
-    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_TITLE = '#dialogs:battleRoyale/confirmRent/testDrive/Title'
-    BATTLEROYALE_CONFIRMRENT_TESTDRIVE_DESCRIPTION = '#dialogs:battleRoyale/confirmRent/testDrive/Description'
-    BATTLEROYALE_CONFIRMRENT_RENT_BUTTON = '#dialogs:battleRoyale/confirmRent/rent/Button'
-    BATTLEROYALE_CONFIRMRENT_RENT_TITLE = '#dialogs:battleRoyale/confirmRent/rent/Title'
-    BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION = '#dialogs:battleRoyale/confirmRent/rent/Description'
-    BATTLEROYALE_CONFIRMRENT_RENTPRICE = '#dialogs:battleRoyale/confirmRent/rentPrice'
-    BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON = '#dialogs:battleRoyale/confirmRent/eventEndsSoon'
     FREESKILLSLEARNING_TITLE_LEARNING = '#dialogs:freeSkillsLearning/title/learning'
     FREESKILLSLEARNING_TITLE_RELEARNING = '#dialogs:freeSkillsLearning/title/relearning'
     FREESKILLSLEARNING_MESSAGE = '#dialogs:freeSkillsLearning/message'
@@ -1037,10 +969,6 @@ class DIALOGS(object):
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
     COMP7_DESERTER_SUBMIT = '#dialogs:comp7/deserter/submit'
     COMP7_DESERTER_CANCEL = '#dialogs:comp7/deserter/cancel'
-    COMP7_PUNISHMENTWINDOW_TITLE = '#dialogs:comp7/punishmentWindow/title'
-    COMP7_PUNISHMENTWINDOW_MSGTITLE = '#dialogs:comp7/punishmentWindow/msgTitle'
-    COMP7_PUNISHMENTWINDOW_MESSAGE = '#dialogs:comp7/punishmentWindow/message'
-    COMP7_PUNISHMENTWINDOW_CANCEL = '#dialogs:comp7/punishmentWindow/cancel'
     EQUIPMENTUPGRADE_CONFIRMBUTTON = '#dialogs:equipmentUpgrade/confirmButton'
     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON = '#dialogs:equipmentUpgrade/getMoreCurrencyButton'
     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY = '#dialogs:equipmentUpgrade/getMoreCurrencyButtonTooltip/body'
@@ -1053,46 +981,49 @@ class DIALOGS(object):
     PRICECARD_GOLD_TITLE = '#dialogs:priceCard/gold/title'
     PRICECARD_RECERTIFICATION_TITLE = '#dialogs:priceCard/recertification/title'
     PRICECARD_PRICE_FREE = '#dialogs:priceCard/price/free'
-    PERKSREST_TITLE = '#dialogs:perksRest/title'
-    PERKSREST_FREE_DESCRIPTION = '#dialogs:perksRest/free/description'
-    PERKSREST_BEFORE = '#dialogs:perksRest/before'
-    PERKSREST_AFTER = '#dialogs:perksRest/after'
-    PERKSREST_NONEWPERKS = '#dialogs:perksRest/noNewPerks'
-    PERKSREST_SUBMIT = '#dialogs:perksRest/submit'
-    PERKSREST_CANCEL = '#dialogs:perksRest/cancel'
-    PERKSREST_PRICECARD_FREE_DESCRIPTION = '#dialogs:perksRest/priceCard/free/description'
-    PERKSREST_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksRest/priceCard/credits/description'
-    PERKSREST_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksRest/priceCard/gold/description'
-    RETRAIN_TITLE_SINGE = '#dialogs:retrain/title/singe'
-    RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
+    PERKSRESET_TITLE = '#dialogs:perksReset/title'
+    PERKSRESET_FREE_DESCRIPTION = '#dialogs:perksReset/free/description'
+    PERKSRESET_BEFORE = '#dialogs:perksReset/before'
+    PERKSRESET_AFTER = '#dialogs:perksReset/after'
+    PERKSRESET_NONEWPERKS = '#dialogs:perksReset/noNewPerks'
+    PERKSRESET_SUBMIT = '#dialogs:perksReset/submit'
+    PERKSRESET_CANCEL = '#dialogs:perksReset/cancel'
+    PERKSRESET_PRICECARD_XPLOOSE = '#dialogs:perksReset/priceCard/xpLoose'
+    PERKSRESET_PRICECARD_FREE_TITLE = '#dialogs:perksReset/priceCard/free/title'
+    PERKSRESET_PRICECARD_CREDITS_TITLE = '#dialogs:perksReset/priceCard/credits/title'
+    PERKSRESET_PRICECARD_GOLD_TITLE = '#dialogs:perksReset/priceCard/gold/title'
+    PERKSRESET_PRICECARD_FREE_DESCRIPTION = '#dialogs:perksReset/priceCard/free/description'
+    PERKSRESET_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksReset/priceCard/credits/description'
+    PERKSRESET_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksReset/priceCard/gold/description'
+    PERKSRESET_LOSTSKILL_TOOLTIP_DESCRIPTION = '#dialogs:perksReset/lostSkill/tooltip/description'
+    RETRAIN_TITLE_SINGLE_SIMPLE = '#dialogs:retrain/title/single/simple'
+    RETRAIN_TITLE_SINGLE_COMPLEX = '#dialogs:retrain/title/single/complex'
     RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
+    RETRAIN_WARNING_IRRELEVANTPERK = '#dialogs:retrain/warning/irrelevantPerk'
+    RETRAIN_WARNING_IRRELEVANTPERKANDPREM = '#dialogs:retrain/warning/irrelevantPerkAndPrem'
+    RETRAIN_PRICECARD_FREE_TITLE = '#dialogs:retrain/priceCard/free/title'
+    RETRAIN_PRICECARD_CREDITS_TITLE = '#dialogs:retrain/priceCard/credits/title'
+    RETRAIN_PRICECARD_GOLD_TITLE = '#dialogs:retrain/priceCard/gold/title'
     RETRAIN_PRICECARD_FREE_DESCRIPTION = '#dialogs:retrain/priceCard/free/description'
     RETRAIN_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:retrain/priceCard/credits/description'
     RETRAIN_PRICECARD_GOLD_DESCRIPTION = '#dialogs:retrain/priceCard/gold/description'
+    RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
     RETRAIN_MASSIVE_TANKMENCOUNT = '#dialogs:retrain/massive/tankmenCount'
-    RETRAIN_SINGLE_CHECKBOXLABEL = '#dialogs:retrain/single/checkBoxLabel'
+    RETRAIN_CHANGEROLE = '#dialogs:retrain/changeRole'
     RETRAIN_PRICE = '#dialogs:retrain/price'
     RETRAIN_SUBMIT = '#dialogs:retrain/submit'
     RETRAIN_CANCEL = '#dialogs:retrain/cancel'
     RECRUIT_TITLE = '#dialogs:recruit/title'
     RECRUIT_WARNING_PREMIUMVEHICLE = '#dialogs:recruit/warning/premiumVehicle'
+    RECRUIT_PRICECARD_FREE_TITLE = '#dialogs:recruit/priceCard/free/title'
+    RECRUIT_PRICECARD_CREDITS_TITLE = '#dialogs:recruit/priceCard/credits/title'
+    RECRUIT_PRICECARD_GOLD_TITLE = '#dialogs:recruit/priceCard/gold/title'
     RECRUIT_PRICECARD_FREE_DESCRIPTION = '#dialogs:recruit/priceCard/free/description'
     RECRUIT_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:recruit/priceCard/credits/description'
     RECRUIT_PRICECARD_GOLD_DESCRIPTION = '#dialogs:recruit/priceCard/gold/description'
     RECRUIT_SUBMIT = '#dialogs:recruit/submit'
     RECRUIT_CANCEL = '#dialogs:recruit/cancel'
     RECRUIT_VOICEOVERTEXT = '#dialogs:recruit/voiceoverText'
-    CREWMEMBERTANKCHANGE_TITLE = '#dialogs:crewMemberTankChange/title'
-    CREWMEMBERTANKCHANGE_DESC = '#dialogs:crewMemberTankChange/desc'
-    CREWMEMBERTANKCHANGE_TRANSFER = '#dialogs:crewMemberTankChange/transfer'
-    CREWMEMBERROLECHANGE_TITLE_SIMPLE = '#dialogs:crewMemberRoleChange/title/simple'
-    CREWMEMBERROLECHANGE_TITLE_EXTENDED = '#dialogs:crewMemberRoleChange/title/extended'
-    CREWMEMBERROLECHANGE_BULLET = '#dialogs:crewMemberRoleChange/bullet'
-    CREWMEMBERROLECHANGE_DESC_SIMPLE = '#dialogs:crewMemberRoleChange/desc/simple'
-    CREWMEMBERROLECHANGE_DESC_WRONGSPECIALIZATION = '#dialogs:crewMemberRoleChange/desc/wrongSpecialization'
-    CREWMEMBERROLECHANGE_DESC_PREMIUM = '#dialogs:crewMemberRoleChange/desc/premium'
-    CREWMEMBERROLECHANGE_PRICE = '#dialogs:crewMemberRoleChange/price'
-    CREWMEMBERROLECHANGE_CHANGE = '#dialogs:crewMemberRoleChange/change'
     RUDYINFO_TITLE = '#dialogs:rudyInfo/title'
     RUDYINFO_MESSAGE = '#dialogs:rudyInfo/message'
     RUDYINFO_SUBMIT = '#dialogs:rudyInfo/submit'
@@ -1258,8 +1189,10 @@ class DIALOGS(object):
      XPTOTMENCHECKBOX_SUBMIT,
      XPTOTMENCHECKBOX_CANCEL,
      IDLECREWBONUS_TITLE,
-     IDLECREWBONUS_MESSAGE_REMOVETYPE,
+     IDLECREWBONUS_MESSAGE_REMOVETYPEFROM,
+     IDLECREWBONUS_MESSAGE_REMOVETYPETO,
      IDLECREWBONUS_MESSAGE_REMOVENAME,
+     IDLECREWBONUS_MESSAGE_DOT,
      IDLECREWBONUS_MESSAGE_CREWWARNING,
      IDLECREWBONUS_MESSAGE_CREWINCOMPLETE,
      IDLECREWBONUS_MESSAGE_CREWUNSUITABLE,
@@ -1651,9 +1584,6 @@ class DIALOGS(object):
      UPDATENEEDED_MESSAGE,
      UPDATENEEDED_SUBMIT,
      UPDATENEEDED_CANCEL,
-     DEMOACCOUNTBOOTCAMPFAILURE_TITLE,
-     DEMOACCOUNTBOOTCAMPFAILURE_MESSAGE,
-     DEMOACCOUNTBOOTCAMPFAILURE_CANCEL,
      STEAMSTARTNEEDED_TITLE,
      STEAMSTARTNEEDED_MESSAGE,
      STEAMSTARTNEEDED_CANCEL,
@@ -1665,17 +1595,24 @@ class DIALOGS(object):
      REPLAYSTOPPED_MESSAGE,
      REPLAYSTOPPED_SUBMIT,
      REPLAYSTOPPED_CANCEL,
-     PUNISHMENTWINDOW_TITLE,
-     PUNISHMENTWINDOW_MSGTITLE_WARNING,
-     PUNISHMENTWINDOW_MSGTITLE_PENALTY,
+     PUNISHMENTWINDOW_HEADER_WARNING,
+     PUNISHMENTWINDOW_HEADER_PENALTY,
+     PUNISHMENTWINDOW_HEADER_BAN,
      PUNISHMENTWINDOW_MESSAGE_WARNING,
      PUNISHMENTWINDOW_MESSAGE_PENALTY,
-     PUNISHMENTWINDOW_MESSAGE_EXTRA_PENALTY,
+     PUNISHMENTWINDOW_MESSAGE_BAN,
+     PUNISHMENTWINDOW_MESSAGE_BAN_COMP7_QUALIFICATION,
+     PUNISHMENTWINDOW_MESSAGE_BAN_COMP7,
+     PUNISHMENTWINDOW_INFO,
      PUNISHMENTWINDOW_CANCEL,
      PUNISHMENTWINDOW_REASON_DESERTER,
-     PUNISHMENTWINDOW_REASON_EPIC_DESERTER,
      PUNISHMENTWINDOW_REASON_SUICIDE,
      PUNISHMENTWINDOW_REASON_AFK,
+     PUNISHMENTWINDOW_REASON_MIXED,
+     PUNISHMENTWINDOW_TIME_DAYS,
+     PUNISHMENTWINDOW_TIME_HOURS,
+     PUNISHMENTWINDOW_TIME_MIN,
+     PUNISHMENTWINDOW_TIME_LESSMIN,
      REMOVEINCOMPATIBLEEQS_TITLE,
      REMOVEINCOMPATIBLEEQS_MESSAGE,
      REMOVEINCOMPATIBLEEQS_MESSAGE_REASON,
@@ -1738,6 +1675,10 @@ class DIALOGS(object):
      SQUAD_GOTOANOTHER_MESSAGE,
      SQUAD_GOTOANOTHER_SUBMIT,
      SQUAD_GOTOANOTHER_CANCEL,
+     SQUAD_GOTOANOTHERSUBMODE_TITLE,
+     SQUAD_GOTOANOTHERSUBMODE_MESSAGE,
+     SQUAD_GOTOANOTHERSUBMODE_SUBMIT,
+     SQUAD_GOTOANOTHERSUBMODE_CANCEL,
      RALLY_LEAVE_TITLE,
      RALLY_LEAVE_MESSAGE,
      RALLY_LEAVE_SUBMIT,
@@ -1949,31 +1890,6 @@ class DIALOGS(object):
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE,
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT,
      CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL,
-     BOOTCAMP_PREMIUMTYPE_BASIC,
-     BOOTCAMP_PREMIUMTYPE_PLUS,
-     BOOTCAMP_SKIP_TITLE,
-     BOOTCAMP_SKIP_LABEL,
-     BOOTCAMP_SKIP_MESSAGE,
-     BOOTCAMP_SKIP_SUBMIT,
-     BOOTCAMP_SKIP_CANCEL,
-     BOOTCAMP_SKIP_REFERRAL_TITLE,
-     BOOTCAMP_SKIP_REFERRAL_LABEL,
-     BOOTCAMP_SKIP_REFERRAL_MESSAGE,
-     BOOTCAMP_SKIP_REFERRAL_SUBMIT,
-     BOOTCAMP_SKIP_REFERRAL_CANCEL,
-     BOOTCAMP_START_TITLE,
-     BOOTCAMP_START_LABEL,
-     BOOTCAMP_START_MESSAGE,
-     BOOTCAMP_START_SUBMIT,
-     BOOTCAMP_START_CANCEL,
-     BOOTCAMP_RETRY_TITLE,
-     BOOTCAMP_RETRY_LABEL,
-     BOOTCAMP_RETRY_MESSAGE,
-     BOOTCAMP_RETRY_SUBMIT,
-     BOOTCAMP_RETRY_CANCEL,
-     BOOTCAMPCENTERUNAVAILABLE_TITLE,
-     BOOTCAMPCENTERUNAVAILABLE_MESSAGE,
-     BOOTCAMPCENTERUNAVAILABLE_CANCEL,
      HOF_EXCLUDERATING_TITLE,
      HOF_EXCLUDERATING_MESSAGE,
      HOF_EXCLUDERATING_SUBMIT,
@@ -2054,23 +1970,18 @@ class DIALOGS(object):
      ACCOUNTCOMPLETION_CANCEL,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLETIMED,
      ACCOUNTCOMPLETION_WARNINGSERVERUNAVAILABLE,
-     ACCOUNTCOMPLETION_WARNINGSOMETHINGWENTWRONG,
      ACCOUNTCOMPLETION_ERRORISWRONG,
      ACCOUNTCOMPLETION_EMAILFORBIDDEN,
      ACCOUNTCOMPLETION_EMAILPROVIDERBANNED,
      ACCOUNTCOMPLETION_EMAILRESTRICTEDBYCOUNTRYHEADER,
      ACCOUNTCOMPLETION_EMAILRESTRICTEDBYCOUNTRY,
      ACCOUNTCOMPLETION_EMAILALREADYTAKEN,
-     ACCOUNTCOMPLETION_LOGINALREADYTAKEN,
      ACCOUNTCOMPLETION_ACCOUNTALREADYHASEMAIL,
      ACCOUNTCOMPLETION_EMAILISTOOSHORT,
      ACCOUNTCOMPLETION_EMAILISTOOLONG,
-     ACCOUNTCOMPLETION_TOOMANYREQUESTS,
      ACCOUNTCOMPLETION_REWARDSTITLE,
-     ACCOUNTCOMPLETION_REGISTRATIONREWARDSTITLE,
      ACCOUNTCOMPLETION_EMAIL_FIELDNAME,
      ACCOUNTCOMPLETION_EMAIL_FIELDPLACEHOLDER,
-     ACCOUNTCOMPLETION_PASSWORD_FIELDNAME,
      ACCOUNTCOMPLETION_EMAIL_TITLE,
      ACCOUNTCOMPLETION_EMAIL_SUBTITLE,
      ACCOUNTCOMPLETION_EMAIL_FULLACCESS_TITLE,
@@ -2089,58 +2000,10 @@ class DIALOGS(object):
      ACCOUNTCOMPLETION_EMAILOVERLAY_ERROR_CODEALREADYSENT,
      ACCOUNTCOMPLETION_EMAILOVERLAY_ALREADYCONFIRMED_TITLE,
      ACCOUNTCOMPLETION_EMAILOVERLAY_ALREADYCONFIRMED_SUBTITLE,
-     ACCOUNTCOMPLETION_CREDENTIALS_TITLE,
-     ACCOUNTCOMPLETION_CREDENTIALS_SUBTITLE,
-     ACCOUNTCOMPLETION_BADPASSWORD,
-     ACCOUNTCOMPLETION_PASSWORDISTOOSHORT,
-     ACCOUNTCOMPLETION_PASSWORDISTOOLONG,
-     ACCOUNTCOMPLETION_PASSWORDISWEAK,
-     ACCOUNTCOMPLETION_DEMOCOMPLETE_TITLE,
-     ACCOUNTCOMPLETION_DEMOCOMPLETE_DESCRIPTION,
-     ACCOUNTCOMPLETION_DEMOCOMPLETE_BUTTON,
-     ACCOUNTCOMPLETION_ERROR_NOTAVAILABLE,
-     ACCOUNTCOMPLETION_ERROR_BUTTON_TRYAGAIN,
-     ACCOUNTCOMPLETION_ERROR_TRYAGAINTIMERMESSAGE,
-     ACCOUNTCOMPLETION_ERROR_BUTTON_CONTINUE,
-     ACCOUNTCOMPLETION_ERROR_RENAMINGNOTAVAILABLE,
-     ACCOUNTCOMPLETION_WAITING_CONFIRMATION,
      ACCOUNTCOMPLETION_WAITING_QUEUE,
-     ACCOUNTCOMPLETION_CONTACTSUPPORT,
-     ACCOUNTCOMPLETION_ERROR_SOMETHINGWENTWRONG,
-     ACCOUNTCOMPLETION_ERROR_RENAMINGMALFUNCTION,
-     ACCOUNTCOMPLETION_SPA_PASSWORDISWEAK,
-     ACCOUNTCOMPLETION_LEAVESQUAD_TITLE,
-     ACCOUNTCOMPLETION_LEAVESQUAD_MESSAGE,
-     ACCOUNTCOMPLETION_LEAVESQUAD_SUBMIT,
-     ACCOUNTCOMPLETION_LEAVESQUAD_CANCEL,
-     ACCOUNTCOMPLETION_RENAMING_SKIP_TITLE,
-     ACCOUNTCOMPLETION_RENAMING_SKIP_MESSAGE,
-     ACCOUNTCOMPLETION_RENAMING_SKIP_SUBMIT,
-     ACCOUNTCOMPLETION_RENAMING_SKIP_CANCEL,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_TITLE,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_SUBTITLE,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_BUTTON,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_FIELDNAME,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEFORBIDDEN,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEFORBIDDENPICKVARIANT,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETAKEN,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETAKENPICKVARIANT,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMEINVALID,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETOOSHORT,
-     ACCOUNTCOMPLETION_RENAMINGOVERLAY_NAMETOOLONG,
-     ACCOUNTCOMPLETION_RENAMINGCOMPLETEOVERLAY_TITLE,
-     ACCOUNTCOMPLETION_RENAMINGCOMPLETEOVERLAY_SUBTITLE,
      DIALOGTEMPLATES_CONFIRM,
      DIALOGTEMPLATES_CANCEL,
      DIALOGTEMPLATES_OK,
-     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_BUTTON,
-     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_TITLE,
-     BATTLEROYALE_CONFIRMRENT_TESTDRIVE_DESCRIPTION,
-     BATTLEROYALE_CONFIRMRENT_RENT_BUTTON,
-     BATTLEROYALE_CONFIRMRENT_RENT_TITLE,
-     BATTLEROYALE_CONFIRMRENT_RENT_DESCRIPTION,
-     BATTLEROYALE_CONFIRMRENT_RENTPRICE,
-     BATTLEROYALE_CONFIRMRENT_EVENTENDSSOON,
      FREESKILLSLEARNING_TITLE_LEARNING,
      FREESKILLSLEARNING_TITLE_RELEARNING,
      FREESKILLSLEARNING_MESSAGE,
@@ -2152,10 +2015,6 @@ class DIALOGS(object):
      COMP7_DESERTER_MESSAGE,
      COMP7_DESERTER_SUBMIT,
      COMP7_DESERTER_CANCEL,
-     COMP7_PUNISHMENTWINDOW_TITLE,
-     COMP7_PUNISHMENTWINDOW_MSGTITLE,
-     COMP7_PUNISHMENTWINDOW_MESSAGE,
-     COMP7_PUNISHMENTWINDOW_CANCEL,
      EQUIPMENTUPGRADE_CONFIRMBUTTON,
      EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON,
      EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY,
@@ -2168,46 +2027,49 @@ class DIALOGS(object):
      PRICECARD_GOLD_TITLE,
      PRICECARD_RECERTIFICATION_TITLE,
      PRICECARD_PRICE_FREE,
-     PERKSREST_TITLE,
-     PERKSREST_FREE_DESCRIPTION,
-     PERKSREST_BEFORE,
-     PERKSREST_AFTER,
-     PERKSREST_NONEWPERKS,
-     PERKSREST_SUBMIT,
-     PERKSREST_CANCEL,
-     PERKSREST_PRICECARD_FREE_DESCRIPTION,
-     PERKSREST_PRICECARD_CREDITS_DESCRIPTION,
-     PERKSREST_PRICECARD_GOLD_DESCRIPTION,
-     RETRAIN_TITLE_SINGE,
-     RETRAIN_TITLE_MASSIVE,
+     PERKSRESET_TITLE,
+     PERKSRESET_FREE_DESCRIPTION,
+     PERKSRESET_BEFORE,
+     PERKSRESET_AFTER,
+     PERKSRESET_NONEWPERKS,
+     PERKSRESET_SUBMIT,
+     PERKSRESET_CANCEL,
+     PERKSRESET_PRICECARD_XPLOOSE,
+     PERKSRESET_PRICECARD_FREE_TITLE,
+     PERKSRESET_PRICECARD_CREDITS_TITLE,
+     PERKSRESET_PRICECARD_GOLD_TITLE,
+     PERKSRESET_PRICECARD_FREE_DESCRIPTION,
+     PERKSRESET_PRICECARD_CREDITS_DESCRIPTION,
+     PERKSRESET_PRICECARD_GOLD_DESCRIPTION,
+     PERKSRESET_LOSTSKILL_TOOLTIP_DESCRIPTION,
+     RETRAIN_TITLE_SINGLE_SIMPLE,
+     RETRAIN_TITLE_SINGLE_COMPLEX,
      RETRAIN_WARNING_PREMIUMVEHICLE,
+     RETRAIN_WARNING_IRRELEVANTPERK,
+     RETRAIN_WARNING_IRRELEVANTPERKANDPREM,
+     RETRAIN_PRICECARD_FREE_TITLE,
+     RETRAIN_PRICECARD_CREDITS_TITLE,
+     RETRAIN_PRICECARD_GOLD_TITLE,
      RETRAIN_PRICECARD_FREE_DESCRIPTION,
      RETRAIN_PRICECARD_CREDITS_DESCRIPTION,
      RETRAIN_PRICECARD_GOLD_DESCRIPTION,
+     RETRAIN_TITLE_MASSIVE,
      RETRAIN_MASSIVE_TANKMENCOUNT,
-     RETRAIN_SINGLE_CHECKBOXLABEL,
+     RETRAIN_CHANGEROLE,
      RETRAIN_PRICE,
      RETRAIN_SUBMIT,
      RETRAIN_CANCEL,
      RECRUIT_TITLE,
      RECRUIT_WARNING_PREMIUMVEHICLE,
+     RECRUIT_PRICECARD_FREE_TITLE,
+     RECRUIT_PRICECARD_CREDITS_TITLE,
+     RECRUIT_PRICECARD_GOLD_TITLE,
      RECRUIT_PRICECARD_FREE_DESCRIPTION,
      RECRUIT_PRICECARD_CREDITS_DESCRIPTION,
      RECRUIT_PRICECARD_GOLD_DESCRIPTION,
      RECRUIT_SUBMIT,
      RECRUIT_CANCEL,
      RECRUIT_VOICEOVERTEXT,
-     CREWMEMBERTANKCHANGE_TITLE,
-     CREWMEMBERTANKCHANGE_DESC,
-     CREWMEMBERTANKCHANGE_TRANSFER,
-     CREWMEMBERROLECHANGE_TITLE_SIMPLE,
-     CREWMEMBERROLECHANGE_TITLE_EXTENDED,
-     CREWMEMBERROLECHANGE_BULLET,
-     CREWMEMBERROLECHANGE_DESC_SIMPLE,
-     CREWMEMBERROLECHANGE_DESC_WRONGSPECIALIZATION,
-     CREWMEMBERROLECHANGE_DESC_PREMIUM,
-     CREWMEMBERROLECHANGE_PRICE,
-     CREWMEMBERROLECHANGE_CHANGE,
      RUDYINFO_TITLE,
      RUDYINFO_MESSAGE,
      RUDYINFO_SUBMIT,

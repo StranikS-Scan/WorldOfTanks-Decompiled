@@ -25,7 +25,6 @@ class _FragBarViewState(BitmaskHelper):
 GuiTypeViewStateBehaviour = namedtuple('GuiTypeViewStateBehaviour', ('allowHPBar', 'allowHPVal', 'allowDiff', 'allowTierGrp', 'allowVehIcons'))
 _DEFAULT_GUI_TYPE = GuiTypeViewStateBehaviour(True, True, True, True, True)
 _GUI_TYPE_VIEW_STATE_BEHAVIOUR = {ARENA_GUI_TYPE.TRAINING: GuiTypeViewStateBehaviour(True, True, True, IS_DEVELOPMENT, True),
- ARENA_GUI_TYPE.BOOTCAMP: GuiTypeViewStateBehaviour(True, True, True, False, True),
  ARENA_GUI_TYPE.EPIC_RANDOM: GuiTypeViewStateBehaviour(True, True, True, False, False),
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: GuiTypeViewStateBehaviour(True, True, True, False, False)}
 

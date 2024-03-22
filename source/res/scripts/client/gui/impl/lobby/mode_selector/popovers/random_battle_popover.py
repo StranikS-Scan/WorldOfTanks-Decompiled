@@ -72,7 +72,7 @@ class RandomBattlePopover(PopOverViewImpl):
             settingsList = model.getSettingsList()
             settingsList.clear()
             for itemType, itemLocale in _subLocaleBySettingID.iteritems():
-                if itemType != GAME.GAMEPLAY_DEV_MAPS or self.lobbyContext.getServerSettings().isMapsInDevelopmentEnabled():
+                if (itemType != GAME.GAMEPLAY_DEV_MAPS or self.lobbyContext.getServerSettings().isMapsInDevelopmentEnabled()) and (itemType != GAME.GAMEPLAY_EPIC_STANDARD or self.lobbyContext.getServerSettings().isEpicRandomEnabled()):
                     settingsList.addViewModel(self._createItem(itemType, titlesR.dyn(itemLocale)(), tooltipsR.dyn(itemLocale), enabled=itemType != _GAMEPLAY_STANDARD))
 
             settingsList.invalidate()

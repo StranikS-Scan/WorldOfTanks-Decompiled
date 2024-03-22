@@ -9,11 +9,9 @@ SELL_MULTIPLE = 'sellMultipleItems'
 BUY_VEHICLE = 'vehBuyAction'
 BUY_MODULE = 'moduleBuyAction'
 UNLOCK_ITEM = 'unlockAction'
-BC_UNLOCK_ITEM = 'bcUnlockAction'
 INSTALL_ITEM = 'installItemAction'
 BUY_AND_INSTALL_ITEM = 'buyAndInstallItemAction'
 BUY_AND_INSTALL_AND_SELL_ITEM = 'BuyAndInstallWithOptionalSellItemAction'
-BC_BUY_AND_INSTALL_ITEM = 'bcBuyAndInstallItemAction'
 VEHICLE_AUTO_FILL_LAYOUT = 'vehicleAutoFillLayoutAction'
 BUY_BERTHS = 'buyBerths'
 BUY_VEHICLE_SLOT = 'buyVehClot'
@@ -30,6 +28,7 @@ EQUIP_TANKMAN = 'equipTankman'
 CHANGE_TANKMAN_PASSPORT = 'changeTankmanPassport'
 DISMISS_TANKMAN = 'dismissTankman'
 RESTORE_TANKMAN = 'restoreTankman'
+CONVERT_JUNK_TANKMEN = 'convertJunkTankmen'
 CHANGE_NATION = 'changeNation'
 INSTALL_BATTLE_ABILITIES = 'installBattleAbilities'
 FRONTLINE_INSTALL_RESERVES = 'frontlineInstallReserves'
@@ -51,12 +50,10 @@ SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY = 'switchPrebattleAmmoPanelAvailability
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
- BC_UNLOCK_ITEM: actions.BCUnlockItemAction,
  BUY_MODULE: actions.ModuleBuyAction,
  BUY_VEHICLE: actions.VehicleBuyAction,
  INSTALL_ITEM: actions.InstallItemAction,
  BUY_AND_INSTALL_AND_SELL_ITEM: actions.BuyAndInstallWithOptionalSellItemAction,
- BC_BUY_AND_INSTALL_ITEM: actions.BCBuyAndInstallItemAction,
  VEHICLE_AUTO_FILL_LAYOUT: actions.VehicleAutoFillLayoutAction,
  BUY_BERTHS: actions.BuyBerthsAction,
  BUY_VEHICLE_SLOT: actions.BuyVehicleSlotAction,
@@ -73,6 +70,7 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  CHANGE_TANKMAN_PASSPORT: actions.TankmanChangePassportAction,
  DISMISS_TANKMAN: actions.TankmanDismissAction,
  RESTORE_TANKMAN: actions.TankmanRestoreAction,
+ CONVERT_JUNK_TANKMEN: actions.ConvertJunkTankmenAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
  INSTALL_BATTLE_ABILITIES: actions.InstallBattleAbilities,
  FRONTLINE_INSTALL_RESERVES: actions.FrontlineInstallReserves,

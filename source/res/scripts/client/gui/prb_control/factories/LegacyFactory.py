@@ -63,7 +63,6 @@ class LegacyFactory(ControlFactory):
             if prb_getters.isPrebattleSettingsReceived(prebattle=clientPrb):
                 prbSettings = prb_getters.getPrebattleSettings(prebattle=clientPrb)
                 prbType = prb_getters.getPrebattleType(settings=prbSettings)
-                clazz = None
                 clazz = collectLegacyEntity(prbType)
                 if clazz:
                     return clazz(prbSettings)

@@ -355,7 +355,7 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.TOURNAMENT
         if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING):
             bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
-        if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP, ARENA_BONUS_TYPE.RANDOM_NP2):
+        if bonusType in (ARENA_BONUS_TYPE.RANDOM_NP2,):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES

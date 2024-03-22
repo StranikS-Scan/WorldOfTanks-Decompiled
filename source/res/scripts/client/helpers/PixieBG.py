@@ -45,16 +45,19 @@ class PixieBG(object):
         self.__callback = None
         self.__data = None
         if self.pixie is not None:
+            self.pixie.forceKill()
             self.pixie.clear()
             self.pixie = None
         self.name = None
         return
 
-    def destroy(self):
+    def destroy(self, forceKill=False):
         self.__loader = None
         self.__callback = None
         self.__data = None
         if self.pixie is not None:
+            if forceKill:
+                self.pixie.forceKill()
             self.pixie.clear()
             self.pixie = None
         self.name = None

@@ -7,9 +7,6 @@ class ClassicFullStatsMeta(TabbedFullStatsComponent):
     def onSelectQuest(self, questID):
         self._printOverrideError('onSelectQuest')
 
-    def onPersonalReservesTabViewed(self, visible):
-        self._printOverrideError('onPersonalReservesTabViewed')
-
     def as_questProgressPerformS(self, data):
         return self.flashObject.as_questProgressPerform(data) if self._isDAAPIInited() else None
 

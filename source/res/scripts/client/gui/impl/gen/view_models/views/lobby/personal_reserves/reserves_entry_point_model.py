@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.personal_reserves.disabled_category im
 class ReservesEntryPointModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(ReservesEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     def getReserves(self):
@@ -55,6 +55,12 @@ class ReservesEntryPointModel(ViewModel):
     def getDisabledCategoriesType():
         return DisabledCategory
 
+    def getExpiringReserveWillExpireSoon(self):
+        return self._getBool(6)
+
+    def setExpiringReserveWillExpireSoon(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(ReservesEntryPointModel, self)._initialize()
         self._addArrayProperty('reserves', Array())
@@ -63,3 +69,4 @@ class ReservesEntryPointModel(ViewModel):
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isClanMember', False)
         self._addArrayProperty('disabledCategories', Array())
+        self._addBoolProperty('expiringReserveWillExpireSoon', False)

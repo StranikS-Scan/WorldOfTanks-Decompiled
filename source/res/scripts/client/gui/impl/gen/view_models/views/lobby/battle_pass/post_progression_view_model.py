@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/post_progression_view_model.py
 from enum import IntEnum
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.awards_widget_model import AwardsWidgetModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import BattlePassBuyRewardsViewModel
 
 class ChapterStates(IntEnum):
@@ -19,7 +20,7 @@ class PostProgressionViewModel(ViewModel):
     SELECTABLE_REWARDS_STATE = 'selectableRewardsState'
     FINAL_STATE = 'finalState'
 
-    def __init__(self, properties=9, commands=8):
+    def __init__(self, properties=10, commands=8):
         super(PostProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -30,57 +31,66 @@ class PostProgressionViewModel(ViewModel):
     def getRewardsType():
         return BattlePassBuyRewardsViewModel
 
+    @property
+    def awardsWidget(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getAwardsWidgetType():
+        return AwardsWidgetModel
+
     def getState(self):
-        return self._getString(1)
+        return self._getString(2)
 
     def setState(self, value):
-        self._setString(1, value)
+        self._setString(2, value)
 
     def getNotChosenRewardCount(self):
-        return self._getNumber(2)
+        return self._getNumber(3)
 
     def setNotChosenRewardCount(self, value):
-        self._setNumber(2, value)
+        self._setNumber(3, value)
 
     def getIsChooseRewardsEnabled(self):
-        return self._getBool(3)
-
-    def setIsChooseRewardsEnabled(self, value):
-        self._setBool(3, value)
-
-    def getIsSpecialVoiceTankmen(self):
         return self._getBool(4)
 
-    def setIsSpecialVoiceTankmen(self, value):
+    def setIsChooseRewardsEnabled(self, value):
         self._setBool(4, value)
 
+    def getIsSpecialVoiceTankmen(self):
+        return self._getBool(5)
+
+    def setIsSpecialVoiceTankmen(self, value):
+        self._setBool(5, value)
+
     def getChapterID(self):
-        return self._getNumber(5)
-
-    def setChapterID(self, value):
-        self._setNumber(5, value)
-
-    def getCurrentLevel(self):
         return self._getNumber(6)
 
-    def setCurrentLevel(self, value):
+    def setChapterID(self, value):
         self._setNumber(6, value)
 
+    def getCurrentLevel(self):
+        return self._getNumber(7)
+
+    def setCurrentLevel(self, value):
+        self._setNumber(7, value)
+
     def getChapterState(self):
-        return ChapterStates(self._getNumber(7))
+        return ChapterStates(self._getNumber(8))
 
     def setChapterState(self, value):
-        self._setNumber(7, value.value)
+        self._setNumber(8, value.value)
 
     def getIsSeasonEndingSoon(self):
-        return self._getBool(8)
+        return self._getBool(9)
 
     def setIsSeasonEndingSoon(self, value):
-        self._setBool(8, value)
+        self._setBool(9, value)
 
     def _initialize(self):
         super(PostProgressionViewModel, self)._initialize()
         self._addViewModelProperty('rewards', BattlePassBuyRewardsViewModel())
+        self._addViewModelProperty('awardsWidget', AwardsWidgetModel())
         self._addStringProperty('state', 'buyState')
         self._addNumberProperty('notChosenRewardCount', 0)
         self._addBoolProperty('isChooseRewardsEnabled', True)

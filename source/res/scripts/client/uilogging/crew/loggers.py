@@ -21,9 +21,10 @@ _NAV_BUTTON = '{parentScreen}_{item}_button'
 
 class CrewMetricsLogger(MetricsLogger):
     __slots__ = ()
+    _FEATURE = FEATURE
 
     def __init__(self):
-        super(CrewMetricsLogger, self).__init__(FEATURE)
+        super(CrewMetricsLogger, self).__init__(self._FEATURE)
 
     @ifUILoggingEnabled()
     def logClick(self, item, parentScreen=None, info=None):

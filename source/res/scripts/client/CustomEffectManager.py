@@ -65,6 +65,7 @@ class CustomEffectManager(Component):
         self.__createChassisCenterNodes()
         self.__wheelsData = None
         self.__variableArgs['Nitro'] = 0
+        self.__selectorsEnabled = True
         PixieCache.incref()
         return
 
@@ -112,6 +113,8 @@ class CustomEffectManager(Component):
         return
 
     def enable(self, enable, settingsFlags=EffectSettings.SETTING_DUST):
+        if self.__selectorsEnabled is False and enable is True:
+            return
         for effectSelector in self.__selectors:
             if effectSelector.settingsFlags() == settingsFlags:
                 if enable:
@@ -124,14 +127,21 @@ class CustomEffectManager(Component):
 
     def activate(self):
         super(CustomEffectManager, self).activate()
-        for effectSelector in self.__selectors:
-            effectSelector.start()
+        if self.__selectorsEnabled is True:
+            for effectSelector in self.__selectors:
+                effectSelector.start()
 
     def deactivate(self):
         for effectSelector in self.__selectors:
             effectSelector.stop()
 
         super(CustomEffectManager, self).deactivate()
+
+    def enableSelectors(self):
+        self.__selectorsEnabled = True
+
+    def disableSelectors(self):
+        self.__selectorsEnabled = False
 
     def __createChassisCenterNodes(self):
         compoundModel = self.__appearance.compoundModel
@@ -167,7 +177,7 @@ class CustomEffectManager(Component):
         self.__variableArgs['engineLoad'] = self.__engineState.mode
         self.__variableArgs['engineState'] = self.__engineState.engineState
         engineStart = self.__engineState.starting
-        self.__variableArgs['engineStart'] = engineStart and not self.__variableArgs.get('__engineStarted', False)
+        self.__variableArgs['engineStart'] = engineStart and not self.__variableArgs.get('__engineStarted', False) and not appearance.isIgnoreEngineStart()
         if engineStart or not isPC and rpm:
             self.__variableArgs['__engineStarted'] = True
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad

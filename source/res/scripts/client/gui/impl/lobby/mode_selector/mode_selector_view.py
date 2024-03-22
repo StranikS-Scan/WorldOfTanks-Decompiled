@@ -14,7 +14,6 @@ from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_model import ModeSelectorModel
-from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_window_states import ModeSelectorWindowStates
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
@@ -38,11 +37,9 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController, IWinbackController
+from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
-from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from wg_async import wg_await, await_callback, wg_async, BrokenPromiseError, forwardAsFuture
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
@@ -78,10 +75,8 @@ registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
 class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
     __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
-    uiBootcampLogger = BootcampLogger(BC_LOG_KEYS.MS_WINDOW)
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
-    __bootcamp = dependency.descriptor(IBootcampController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
     __winbackController = dependency.descriptor(IWinbackController)
@@ -196,12 +191,10 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         if self.__subSelectorCallback is not None:
             self.__subSelectorCallback(parent=self.getParentWindow())
             self.__subSelectorCallback = None
-        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
         self.inputManager.removeEscapeListener(self.__handleEscape)
         return
 
     def _finalize(self):
-        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.CLOSED)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
         g_eventBus.removeListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
@@ -245,8 +238,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         vm.setIsMapSelectionVisible(self.__dataProvider.isDemonstrator)
         vm.setIsMapSelectionEnabled(self.__dataProvider.isDemoButtonEnabled)
         vm.setAreWidgetsVisible(ModeSelectorView._areWidgetsVisible)
-        if self.__bootcamp.isInBootcamp():
-            vm.setState(ModeSelectorWindowStates.BOOTCAMP)
         cards = vm.getCardList()
         cards.clear()
         for item in self.__dataProvider.itemList:
@@ -306,7 +297,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         self.viewModel.setAreWidgetsVisible(ModeSelectorView._areWidgetsVisible)
 
     def __infoClickHandler(self, event):
-        self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.INFO_PAGE_ICON_CLICKED)
         index = int(event.get('index'))
         modeSelectorItem = self.__dataProvider.getItemByIndex(index)
         if modeSelectorItem is None:

@@ -416,7 +416,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updatePersonalStatusS(added, removed)
 
     def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.PLAYER_INFO:
+        if state == VEHICLE_VIEW_STATE.PLAYER_INFO or state == VEHICLE_VIEW_STATE.SWITCHING and value != 0:
             arenaDP = self._battleCtx.getArenaDP()
             previousID = self._personalInfo.changeSelected(value)
             self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(previousID), arenaDP)

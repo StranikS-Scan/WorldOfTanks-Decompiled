@@ -83,6 +83,8 @@ class BattleGameInputMgr(object):
             if not self.__consumers:
                 avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)
             return True
+        if self.__ctrlModeName == CTRL_MODE_NAME.KILL_CAM:
+            return False
         if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
             if isEventBattle:
                 event_dispatcher.toggleEventStats(isDown)

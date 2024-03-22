@@ -47,6 +47,9 @@ class DebugGizmo(object):
     def attachTo(self, model):
         self.motor.signal = model.matrix
 
+    def attachToMatrix(self, matrix):
+        self.motor.signal = matrix
+
     def attachToPosition(self, pos):
         self.model.motors = ()
         self.model.position = pos

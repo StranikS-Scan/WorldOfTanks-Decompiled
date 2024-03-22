@@ -53,7 +53,7 @@ class _BaseRewardsView(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             if tooltipId is not None:
                 bonusData = self._bonusData[int(tooltipId)]
-                window = BackportTooltipWindow(bonusData.tooltip, self.getParentWindow())
+                window = BackportTooltipWindow(bonusData.tooltip, self.getParentWindow(), event)
                 window.load()
                 return window
         return super(_BaseRewardsView, self).createToolTip(event)

@@ -15,7 +15,6 @@ from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getInfoPageU
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
-from gui.impl.auxiliary.rewards_helper import setRewards
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_choice_view_model import ChapterChoiceViewModel
@@ -104,6 +103,8 @@ class ChapterChoiceView(ViewImpl):
             self.__updateChapters(model.getChapters())
             model.setIsCustomSeason(self.__battlePass.isCustomSeason())
             model.setSeasonNum(self.__battlePass.getSeasonNum())
+            model.awardsWidget.setIsBpBitEnabled(not self.__battlePass.isHoliday())
+            model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
             model.awardsWidget.setHasExtra(self.__battlePass.hasExtra())
             model.awardsWidget.setIsBattlePassCompleted(self.__battlePass.isCompleted())
             model.awardsWidget.setIsSpecialVoiceTankmenEnabled(len(self.__battlePass.getSpecialTankmen()) > 1)
@@ -118,7 +119,6 @@ class ChapterChoiceView(ViewImpl):
                 model.setStyleName(style.userName)
                 self.__fillVehicle(style, model)
             model.setChapterID(chapterID)
-            setRewards(model, chapterID)
             model.setIsBought(self.__battlePass.isBought(chapterID=chapterID))
             model.setIsExtra(self.__battlePass.isExtraChapter(chapterID))
             self.__fillProgression(chapterID, model)

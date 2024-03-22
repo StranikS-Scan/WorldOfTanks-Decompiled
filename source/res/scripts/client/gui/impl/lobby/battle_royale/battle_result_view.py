@@ -3,6 +3,7 @@
 import typing
 from collections import OrderedDict
 import SoundGroups
+from arena_bonus_type_caps import ARENA_BONUS_TYPE
 from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from frameworks.wulf import ViewFlags, ViewSettings
@@ -19,20 +20,21 @@ from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.row_m
 from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.battle_pass_progress import BattlePassProgress
 from gui.impl.pub import ViewImpl
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
-from gui.shared import event_dispatcher
+from gui.shared import event_dispatcher, EVENT_BUS_SCOPE
+from gui.shared.events import BattleRoyalePlatoonEvent
 from gui.shared.lock_overlays import lockNotificationManager
 from gui.server_events.battle_royale_formatters import BRSections
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController, IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 from shared_utils import first
 from soft_exception import SoftException
 from gui.sounds.ambients import BattleResultsEnv
 from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
-from constants import ATTACK_REASON_INDICES, ATTACK_REASON, DEATH_REASON_ALIVE
+from battle_royale.gui.constants import BattleRoyaleSubMode
 from gui.server_events import events_dispatcher
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
@@ -43,26 +45,11 @@ from battle_pass_common import getPresentLevel
 from messenger.storage import storage_getter
 from messenger.formatters.service_channel_helpers import parseTokenBonusCount
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.shared.money import Currency
+from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import BattleType
+from gui.prb_control.entities.base.listener import IPrbListener
 if typing.TYPE_CHECKING:
-    from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
+    from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import PlayerBattleTypeStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
-
-def _getAttackReason(vehicleState, hasKiller, killerIsBot):
-    if vehicleState == DEATH_REASON_ALIVE:
-        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.alive()
-    elif vehicleState == ATTACK_REASON_INDICES[ATTACK_REASON.DEATH_ZONE]:
-        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByZone()
-    elif hasKiller:
-        if killerIsBot:
-            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByBot()
-        else:
-            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
-    else:
-        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.other()
-    return reason
-
-
 _THE_BEST_PLACE = 1
 _BR_POINTS_ICON = R.images.gui.maps.icons.battleRoyale.battleResult.leaderboard.br_selector_16()
 _BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
@@ -70,18 +57,20 @@ _BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
  BattleRewardItemModel.CRYSTALS,
  BattleRewardItemModel.BATTLE_ROYALE_COIN,
- BattleRewardItemModel.ST_PATRICK_COIN,
  BattleRewardItemModel.BR_PROGRESSION_TOKEN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
+_TOURNAMENT_ARENA_BONUS_TYPES = (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
+_INVALID_PREBATTLE_ID = 0
 
-class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__hasStpBonus')
+class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
+    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__ally', '__squadCreatedByInvite')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __brProgressionController = dependency.descriptor(IBRProgressionOnTokensController)
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -105,7 +94,8 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
         self.__arenaBonusType = self.__data[BRSections.COMMON].get('arenaBonusType', 0)
         self.__tooltipsData = {}
         self.__tooltipParametersCreator = self.__getTooltipParametersCreator()
-        self.__hasStpBonus = False
+        self.__ally = {}
+        self.__squadCreatedByInvite = False
         return
 
     @property
@@ -119,8 +109,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
             currencyType = event.getArgument('currencyType')
-            if currencyType == Currency.STPCOIN:
-                return RewardCurrencyTooltipView(currencyType, self.__hasStpBonus)
             return RewardCurrencyTooltipView(currencyType)
         return super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
 
@@ -156,8 +144,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
 
     def _initialize(self, *args, **kwargs):
         super(BrBattleResultsViewInLobby, self)._initialize(*args, **kwargs)
-        self.viewModel.personalResults.battlePassProgress.onSubmitClick += self.__onBattlePassClick
-        self.__brController.onUpdated += self.__updateBattlePass
         BREvents.playSound(BREvents.BATTLE_SUMMARY_SHOW)
         self.suspendLobbyHeader(self.uniqueID)
         event_dispatcher.hideSquadWindow()
@@ -169,8 +155,8 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
         self.__tooltipsData = None
         self.__tooltipParametersCreator = None
         self.__data = None
-        self.__brController.onUpdated -= self.__updateBattlePass
-        self.viewModel.personalResults.battlePassProgress.onSubmitClick -= self.__onBattlePassClick
+        self.__ally = None
+        self.__squadCreatedByInvite = False
         self.resumeLobbyHeader(self.uniqueID)
         super(BrBattleResultsViewInLobby, self)._finalize()
         return
@@ -178,9 +164,18 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
     def _onLoading(self, *args, **kwargs):
         super(BrBattleResultsViewInLobby, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
-            self.__setPlayerVehicleStatus(model.playerVehicleStatus)
+            self.__setPlayerBattleTypeStatus(model.playerBattleTypeStatus)
             self.__setPersonalResult(model.personalResults)
             self.__setLeaderboard(model.leaderboardLobbyModel)
+
+    def _getEvents(self):
+        return ((self.viewModel.personalResults.battlePassProgress.onSubmitClick, self.__onBattlePassClick),
+         (self.viewModel.playerBattleTypeStatus.onInviteToPlatoon, self.__onInviteToPlatoonClick),
+         (self.__brController.onUpdated, self.__updateBattlePass),
+         (self.__platoonCtrl.onMembersUpdate, self.__updateSquadState))
+
+    def _getListeners(self):
+        return ((BattleRoyalePlatoonEvent.LEAVED_PLATOON, self.__onLeavedPlatoon, EVENT_BUS_SCOPE.LOBBY),)
 
     @storage_getter('users')
     def usersStorage(self):
@@ -195,24 +190,48 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
         self.__setBattleRewards(self.viewModel.personalResults)
         self.__setBattleRewardsWithPremium(self.viewModel.personalResults)
 
-    def __setPlayerVehicleStatus(self, statusModel):
+    def __updateSquadState(self):
+        if not self.__squadCreatedByInvite or not self.__isCommander():
+            if self.__brController.isInBattleRoyaleSquad():
+                if all([ slot.get('player') is not None for slot in self.__platoonCtrl.getPlatoonSlotsData() ]):
+                    self.__setIsPlatoonWindowOpen(True)
+                    return
+            self.__setIsPlatoonWindowOpen(False)
+        return
+
+    def __onInviteToPlatoonClick(self):
+        self.__brController.selectSubModeBattle(BattleRoyaleSubMode.SQUAD_MODE_ID, accountsToInvite=(self.__ally.get('databaseID', 0),))
+        self.__squadCreatedByInvite = True
+        self.__setIsPlatoonWindowOpen(True)
+
+    def __onLeavedPlatoon(self, *_):
+        if self.__squadCreatedByInvite or not self.__isCommander():
+            self.__squadCreatedByInvite = False
+            self.__setIsPlatoonWindowOpen(False)
+
+    def __setPlayerBattleTypeStatus(self, statusModel):
         commonInfo = self.__data.get(BRSections.COMMON)
         if commonInfo is None:
             raise SoftException('There is no vehicle status info in battle results')
-        statusInfo = commonInfo['vehicleStatus']
-        self.__setUserName(statusModel.user, commonInfo)
-        if not self.__isObserverResult:
-            killerInfo = statusInfo['killer']
-            hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
-            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller, killerInfo.get('isBot', False)))
-            if hasKiller:
-                self.__setUserName(statusModel.killer, killerInfo)
+        leaderboard = self.__data.get(BRSections.LEADERBOARD)
+        if leaderboard is None:
+            raise SoftException("There is no players' table in battle results")
+        if self.__isSquadMode():
+            for vehicle in leaderboard:
+                if vehicle['place'] == commonInfo['playerPlace'] and not vehicle['isPersonal']:
+                    self.__ally = vehicle
+                    break
+
+            self.__setUserName(statusModel.user, self.__ally)
+            statusModel.setBattleType(BattleType.PLATOON if self.__ally.get('prebattleID', 0) != _INVALID_PREBATTLE_ID or self.__isTournament() else BattleType.RANDOMPLATOON)
+        else:
+            statusModel.setBattleType(BattleType.SOLO)
+        self.__updateSquadState()
         return
 
     def __setPersonalResult(self, personalModel):
         self.__setMapName()
         self.__setCommonInfo()
-        self.__hasStpBonus = self._getBonusStrCoin()
         if not self.__isObserverResult:
             self.__setFinishResult(personalModel)
             self.__setStats(personalModel)
@@ -220,9 +239,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
             self.__setBattleRewardsWithPremium(personalModel)
             self.__setCompletedQuests(personalModel)
         self.__setBattlePass(personalModel.battlePassProgress)
-
-    def _getBonusStrCoin(self):
-        return bool(self.__data.get(BRSections.PERSONAL, {}).get('bonusStpCoinFactor', 0))
 
     def __setBattlePass(self, battlePassModel):
         battlePassData = self.__data[BRSections.PERSONAL][BRSections.BATTLE_PASS]
@@ -380,6 +396,10 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
 
         rewardList.invalidate()
 
+    def __setIsPlatoonWindowOpen(self, isOpen):
+        with self.viewModel.transaction() as model:
+            model.playerBattleTypeStatus.setIsPlatoonWindowOpen(isOpen)
+
     def __getBrProgressionTokenCount(self):
         total = 0
         rewardsSection = self.__data.get(BRSections.PERSONAL, {}).get(BRSections.REWARDS, {})
@@ -469,3 +489,9 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility):
         model.setDatabaseID(info.get('databaseID', 0))
         model.setClanAbbrev(info.get('clanAbbrev', info.get('userClanAbbrev', '')))
         model.setHiddenUserName(info.get('hiddenName', ''))
+
+    def __isCommander(self):
+        return self.prbEntity is not None and self.prbEntity.isCommander()
+
+    def __isTournament(self):
+        return self.__arenaBonusType in _TOURNAMENT_ARENA_BONUS_TYPES

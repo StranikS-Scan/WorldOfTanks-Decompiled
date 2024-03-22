@@ -35,7 +35,7 @@ class ChapterType(Enum):
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'showTankmen', 'onChapterChoice', 'onViewLoaded')
 
-    def __init__(self, properties=41, commands=13):
+    def __init__(self, properties=42, commands=13):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -282,6 +282,12 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setSeasonNum(self, value):
         self._setNumber(40, value)
 
+    def getSpecialVoiceTankmenCount(self):
+        return self._getNumber(41)
+
+    def setSpecialVoiceTankmenCount(self, value):
+        self._setNumber(41, value)
+
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
         self._addViewModelProperty('offSeason', BattlePassOffSeasonViewModel())
@@ -321,6 +327,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addNumberProperty('expireTime', 0)
         self._addNumberProperty('timeLeft', 0)
         self._addNumberProperty('seasonNum', 0)
+        self._addNumberProperty('specialVoiceTankmenCount', 0)
         self.onClose = self._addCommand('onClose')
         self.onActionClick = self._addCommand('onActionClick')
         self.onTakeClick = self._addCommand('onTakeClick')

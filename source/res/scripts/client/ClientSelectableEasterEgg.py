@@ -8,18 +8,15 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from helpers import dependency
-from skeletons.gui.game_control import IBootcampController
 from helpers import getClientLanguage
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class ClientSelectableEasterEgg(ClientSelectableObject):
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(ClientSelectableEasterEgg, self).__init__()
         self.__animator = None
-        if self.bootcampController.isInBootcamp() or not GUI_SETTINGS.easterEgg.enabled:
+        if not GUI_SETTINGS.easterEgg.enabled:
             self.setEnable(False)
         return
 

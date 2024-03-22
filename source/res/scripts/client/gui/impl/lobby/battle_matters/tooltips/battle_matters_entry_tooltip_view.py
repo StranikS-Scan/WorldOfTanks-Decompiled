@@ -38,8 +38,6 @@ class BattleMattersEntryTooltipView(ViewImpl):
             if isWithToken and self.__battleMattersController.isFinished():
                 tx.setEndDate(self.__itemsCache.items.tokens.getTokenInfo(self.__battleMattersController.getDelayedRewardCurrencyToken())[0])
             if currentQuest is not None:
-                tx.setTitle(currentQuest.getUserName())
-                tx.setCondition(currentQuest.getConditionLbl())
                 currentProgress, maxProgress = self.__battleMattersController.getQuestProgress(currentQuest)
                 tx.setCurrentProgress(currentProgress)
                 tx.setMaxProgress(maxProgress)

@@ -1,79 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
-import math
 from typing import List, Optional
 import nations
 from gui import makeHtmlString
-from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Tankman import getFullUserName, getSpecialIconPath, getSkillBigIconPath, Tankman
+from gui.shared.tooltips import ToolTipDataField, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
-from gui.shared.formatters import text_styles, moneyWithIcon
-from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.gui_items.Vehicle import Vehicle
-from helpers import dependency
-from helpers import i18n
-from helpers import time_utils
+from helpers import dependency, i18n, time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
-from shared_utils import findFirst
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
+from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IBattleRoyaleController
-TANKMAN_DISMISSED = 'dismissed'
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
-
-class TankmanRoleLevelField(ToolTipDataField):
-
-    def _getValue(self):
-        tankman = self._tooltip.item
-        return tankman.realRoleLevel.lvl if tankman else 0
-
-
-class TankmanRoleBonusesField(ToolTipDataField):
-
-    class BONUSES(object):
-        COMMANDER = 0
-        BROTHERHOOD = 1
-        EQUIPMENTS = 2
-        DEVICES = 3
-        PENALTY = 4
-
-    def __init__(self, context, name, ids):
-        super(TankmanRoleBonusesField, self).__init__(context, name)
-        self.__ids = ids
-
-    def _getValue(self):
-        tankman = self._tooltip.item
-        result = 0
-        if tankman:
-            bonuses = tankman.realRoleLevel.bonuses
-            for idx in self.__ids:
-                result += int(math.ceil(float(bonuses[idx])))
-
-        return result
-
-
-class TankmanCurrentVehicleAttrField(ToolTipAttrField):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def _getItem(self):
-        tankman = self._tooltip.item
-        return self.itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman and tankman.isInTank else None
-
-
-class TankmanNativeVehicleAttrField(ToolTipAttrField):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def _getItem(self):
-        tankman = self._tooltip.item
-        return self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-
 
 class TankmanSkillListField(ToolTipDataField):
 
@@ -131,92 +77,6 @@ class BattleRoyaleTankmanSkillListField(TankmanSkillListField):
         pass
 
 
-class TankmanNewFreeSkillCountField(ToolTipDataField):
-
-    def _getValue(self):
-        tankman = self._tooltip.item
-        return tankman.newFreeSkillsCount if not tankman.isDismissed else 0
-
-
-class TankmanNewSkillCountField(ToolTipDataField):
-
-    def _getValue(self):
-        tankman = self._tooltip.item
-        return tankman.newSkillCount[0] if not tankman.isDismissed else 0
-
-
-def formatRecoveryLeftValue(secondsLeft):
-    closestUnit = findFirst(lambda (k, v): v < secondsLeft, _TIME_FORMAT_UNITS)
-    if closestUnit is not None:
-        name, factor = closestUnit
-        timeLeft = int(math.ceil(float(secondsLeft) / factor))
-        return makeString(TOOLTIPS.template_all_short(name), value=timeLeft)
-    else:
-        return makeString(TOOLTIPS.TEMPLATE_TIME_LESSTHENMINUTE)
-
-
-def getRecoveryStatusText(restoreInfo):
-    price, timeLeft = restoreInfo
-    if not price:
-        itemsCache = dependency.instance(IItemsCache)
-        restoreConfig = itemsCache.items.shop.tankmenRestoreConfig
-        duration = restoreConfig.billableDuration - restoreConfig.freeDuration
-        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), freeLeftValue=formatRecoveryLeftValue(timeLeft - duration), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=formatRecoveryLeftValue(duration))
-    else:
-        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_GOLD_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), price=moneyWithIcon(price))
-    return text_styles.main(text)
-
-
-class TankmanStatusField(ToolTipDataField):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def _getValue(self):
-        header = ''
-        text = ''
-        statusTemplate = '#tooltips:tankman/status/%s'
-        tankman = self._tooltip.item
-        vehicle = None
-        if tankman.isInTank:
-            vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-        nativeVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-        if tankman.isDismissed:
-            return {'header': text_styles.warning(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_HEADER),
-             'text': getRecoveryStatusText(getTankmenRestoreInfo(tankman)),
-             'level': TANKMAN_DISMISSED}
-        else:
-            inactiveRoles = []
-            if tankman.isInTank:
-                for skill in tankman.skills:
-                    if not skill.isEnable:
-                        role = self.__getRoleBySkill(skill)
-                        if role not in inactiveRoles:
-                            inactiveRoles.append(role)
-
-            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
-                if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
-                    header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
-                    text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
-                else:
-                    header = makeString(statusTemplate % 'wrongVehicle/header') % {'vehicle': vehicle.shortUserName}
-                    text = makeString(statusTemplate % 'wrongVehicle/text')
-            elif inactiveRoles:
-
-                def roleFormat(role):
-                    return makeString(statusTemplate % 'inactiveSkillsRoleFormat') % makeString(getSkillsConfig().getSkill(role).userString)
-
-                header = makeString(statusTemplate % 'inactiveSkills/header')
-                text = makeString(statusTemplate % 'inactiveSkills/text') % {'skills': ', '.join([ roleFormat(role) for role in inactiveRoles ])}
-            return {'header': header,
-             'text': text,
-             'level': Vehicle.VEHICLE_STATE_LEVEL.WARNING}
-            return
-
-    def __getRoleBySkill(self, skill):
-        for role, skills in SKILLS_BY_ROLES.iteritems():
-            if skill.name in skills:
-                return role
-
-
 class NotRecruitedTooltipData(BlocksTooltipData):
 
     def __init__(self, ctx):
@@ -260,6 +120,43 @@ class NotRecruitedTooltipData(BlocksTooltipData):
             blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.premiumVehicleName(expireDateStr), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-60, bottom=-18), iconYOffset=3))
         items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-5)))
         return items
+
+
+class SpecialTankmanTooltipData(BlocksTooltipData):
+    __slots__ = ()
+
+    def __init__(self, ctx):
+        super(SpecialTankmanTooltipData, self).__init__(ctx, TOOLTIP_TYPE.SPECIAL_TANKMAN)
+        self._setWidth(440)
+
+    def _packBlocks(self, tankmanData, groupName, *args, **kwargs):
+        items = super(SpecialTankmanTooltipData, self)._packBlocks()
+        blocks = list()
+        fullName = getFullUserName(tankmanData.nationID, tankmanData.firstNameID, tankmanData.lastNameID)
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(fullName), desc=text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventLabel(groupName))))
+        blocks.append(formatters.packImageBlockData(img=getSpecialIconPath(tankmanData.nationID, tankmanData.iconID), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.getNotRecruitedTankmanEventDesc(groupName)), useHtml=True, padding=formatters.packPadding(top=18)))
+        freeSkills = tankmanData.freeSkills
+        if freeSkills:
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_FREESKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillBigIconPath(skill)) for skill in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+        skillNum = self.__getNewSkillCount(tankmanData.freeXP)
+        icon = backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill())
+        if skillNum:
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(icon) for _ in range(skillNum) ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+        items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-5)))
+        return items
+
+    def __getNewSkillCount(self, freeXP):
+        skillNum = 0
+        skillsCost = 0
+        while skillsCost <= freeXP:
+            skillNum += 1
+            skillsCost += sum((TankmanDescr.levelUpXpCost(level, skillNum) for level in xrange(0, MAX_SKILL_LEVEL)))
+
+        return skillNum - 1
 
 
 class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
@@ -356,31 +253,3 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
     def _createVehicleBlock(self, innerBlock, vehicle):
         vehName = vehicle.shortUserName
         innerBlock.append(formatters.packTextBlockData(text=text_styles.stats(backport.text(R.strings.battle_royale.commanderTooltip.vehicleDescription(), vehicle=vehName)), padding=formatters.packPadding(top=10, right=-50)))
-
-
-class TankmanTooltipData(ToolTipData):
-
-    def __init__(self, context):
-        super(TankmanTooltipData, self).__init__(context, TOOLTIP_TYPE.TANKMAN)
-        self.fields = (ToolTipAttrField(self, 'name', 'fullUserName'),
-         ToolTipAttrField(self, 'rank', 'rankUserName'),
-         ToolTipAttrField(self, 'role', 'roleUserName'),
-         ToolTipAttrField(self, 'roleLevel'),
-         ToolTipAttrField(self, 'isInTank'),
-         ToolTipAttrField(self, 'iconRole'),
-         ToolTipAttrField(self, 'nation', 'nationID'),
-         TankmanRoleLevelField(self, 'efficiencyRoleLevel'),
-         TankmanRoleBonusesField(self, 'addition', [TankmanRoleBonusesField.BONUSES.COMMANDER,
-          TankmanRoleBonusesField.BONUSES.EQUIPMENTS,
-          TankmanRoleBonusesField.BONUSES.DEVICES,
-          TankmanRoleBonusesField.BONUSES.BROTHERHOOD]),
-         TankmanRoleBonusesField(self, 'penalty', [TankmanRoleBonusesField.BONUSES.PENALTY]),
-         TankmanNativeVehicleAttrField(self, 'vehicleType', 'type'),
-         TankmanNativeVehicleAttrField(self, 'vehicleName', 'shortUserName'),
-         TankmanCurrentVehicleAttrField(self, 'currentVehicleType', 'type'),
-         TankmanCurrentVehicleAttrField(self, 'currentVehicleName', 'shortUserName'),
-         TankmanSkillListField(self, 'skills'),
-         TankmanNewSkillCountField(self, 'newSkillsCount'),
-         TankmanCurrentVehicleAttrField(self, 'vehicleContour', 'iconContour'),
-         TankmanCurrentVehicleAttrField(self, 'isCurrentVehiclePremium', 'isPremium'),
-         TankmanStatusField(self, 'status'))

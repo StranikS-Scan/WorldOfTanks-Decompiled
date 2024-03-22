@@ -35,6 +35,9 @@ class IPlugin(object):
     def parentObj(self):
         return self._parentObj
 
+    def setAllMarkersActive(self, value):
+        pass
+
 
 class PluginsCollection(IPlugin):
     __slots__ = ('__plugins',)

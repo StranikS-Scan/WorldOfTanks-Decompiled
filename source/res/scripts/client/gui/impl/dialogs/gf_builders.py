@@ -9,11 +9,12 @@ from gui.impl.dialogs.dialog_template_button import ButtonPresenter, CancelButto
 from gui.impl.dialogs.dialog_template_utils import toString
 from gui.impl.dialogs.sub_views.content.simple_text_content import SimpleTextContent
 from gui.impl.dialogs.sub_views.icon.icon_set import IconSet
+from gui.impl.dialogs.sub_views.icon.item_icon import ItemIcons
 from gui.impl.dialogs.sub_views.title.simple_text_title import SimpleTextTitle
 from gui.impl.dialogs.sub_views.top_right.money_balance import MoneyBalance
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
-from gui.impl.gen.view_models.views.dialogs.sub_views.icon_set_view_model import IconPositionLogicEnum
+from gui.impl.gen.view_models.views.dialogs.sub_views.multiple_icons_set_view_model import IconPositionLogicEnum
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
 from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
@@ -231,26 +232,36 @@ class AcceleratedCrewTrainingDialogBuilder(ConfirmCancelDialogBuilder):
 
 
 class PassiveXPDialogBuilder(ConfirmCancelDialogBuilder):
-    __slots__ = ('__descriptionMsg', '__icon')
+    __slots__ = ('__descriptionMsg', '__iconFrom', '__iconTo', '__vehsCD')
 
     def __init__(self, uniqueID=None):
         super(PassiveXPDialogBuilder, self).__init__(uniqueID)
-        self.setIcon(R.images.gui.maps.uiKit.dialogs.icons.intensive_crew())
         self.__descriptionMsg = None
-        self.__icon = None
+        self.__iconFrom = None
+        self.__iconTo = None
+        self.__vehsCD = None
         return
 
     def setDescriptionMsg(self, text):
         self.__descriptionMsg = text
 
-    def setMessageIcon(self, icon):
-        self.__icon = icon
+    def setMessageIconFrom(self, icon):
+        self.__iconFrom = icon
+
+    def setMessageIconTo(self, icon):
+        self.__iconTo = icon
+
+    def setVehiclesCD(self, vehsCD):
+        self.__vehsCD = vehsCD
 
     def _extendTemplate(self, template):
         super(PassiveXPDialogBuilder, self)._extendTemplate(template)
-        if self.__descriptionMsg and self.__icon:
-            image = ImageSubstitution(self.__icon(), 'typeIcon', 3, -5, -5, -5)
-            template.setSubView(DefaultDialogPlaceHolders.CONTENT, SimpleTextContent(self.__descriptionMsg, imageSubstitutions=[image]))
+        if self.__descriptionMsg and self.__iconFrom:
+            imageFrom = ImageSubstitution(self.__iconFrom(), 'typeIconFrom', -1, -5, -5, -5)
+            imageTo = ImageSubstitution(self.__iconTo(), 'typeIconTo', -1, -5, -5, -5)
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, SimpleTextContent(self.__descriptionMsg, imageSubstitutions=[imageFrom, imageTo]))
+        if self.__vehsCD:
+            template.setSubView(DefaultDialogPlaceHolders.ICON, ItemIcons(self.__vehsCD, True))
 
 
 class WarningDialogBuilder(ConfirmCancelDialogBuilder):

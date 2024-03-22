@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/subscription/wot_plus_intro_view.py
-from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SHOWN_WOT_PLUS_INTRO
+from account_helpers import AccountSettings
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
 from gui.Scaleform.daapi.view.lobby.wot_plus.sound_constants import WOT_PLUS_INTRO_SOUND_SPACE
@@ -13,12 +13,14 @@ from gui.shared.event_dispatcher import showWotPlusInfoPage
 from gui.shared.events import ViewEventType, LoadViewEvent
 from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.wot_plus.loggers import WotPlusAttendanceRewardScreenLogger
 from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
 
 class WotPlusIntroView(ViewImpl, EventSystemEntity):
     _COMMON_SOUND_SPACE = WOT_PLUS_INTRO_SOUND_SPACE
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ('_wotPlusLogger',)
 
     def __init__(self, layoutID):
@@ -36,6 +38,7 @@ class WotPlusIntroView(ViewImpl, EventSystemEntity):
         self.viewModel.onClose += self._onClose
         self.viewModel.onAffirmative += self._onClose
         self.viewModel.onInfo += self._onInfo
+        self._lobbyContext.onServerSettingsChanged += self.onServerSettingsChanged
         self.addListener(ViewEventType.LOAD_VIEW, self.__onLobbyViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.setSettings(SHOWN_WOT_PLUS_INTRO, True)
         self._wotPlusCtrl.onIntroShown()
@@ -45,8 +48,25 @@ class WotPlusIntroView(ViewImpl, EventSystemEntity):
         self.viewModel.onClose -= self._onClose
         self.viewModel.onAffirmative -= self._onClose
         self.viewModel.onInfo -= self._onInfo
+        self._lobbyContext.onServerSettingsChanged -= self.onServerSettingsChanged
         self.removeListener(ViewEventType.LOAD_VIEW, self.__onLobbyViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         self._wotPlusLogger.onViewFinalize()
+
+    def _onLoading(self, *args, **kwargs):
+        super(WotPlusIntroView, self)._onLoading(*args, **kwargs)
+        self._fillModel()
+
+    def _fillModel(self):
+        serverSettings = self._lobbyContext.getServerSettings()
+        with self.viewModel.transaction() as model:
+            model.setBattleBonusEnabled(serverSettings.isWotPlusBattleBonusesEnabled())
+            model.setBattleBonusEarnings(serverSettings.getWotPlusBattleBonusesConfig().get('creditsFactor', 0.0) * 100)
+            model.setAdditionalWoTPlusEnabled(serverSettings.isAdditionalWoTPlusEnabled())
+            model.setAdditionalWoTPlusMaxApplications(serverSettings.getAdditionalWoTPlusXPCount())
+            model.setBadgesEnabled(serverSettings.isBadgesEnabled())
+
+    def onServerSettingsChanged(self, *_, **__):
+        self._fillModel()
 
     def _onClose(self):
         self._wotPlusLogger.logCloseEvent()

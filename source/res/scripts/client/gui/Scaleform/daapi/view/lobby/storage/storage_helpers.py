@@ -8,7 +8,6 @@ import typing
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
-from goodies.goodie_constants import GOODIE_STATE
 from gui import g_htmlTemplates
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -97,7 +96,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonIcon=None, actionButtonTooltip=None, active=GOODIE_STATE.INACTIVE, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=(), sellBtnLabel=None):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', actionButtonIcon=None, actionButtonTooltip=None, upgradable=False, upgradeButtonIcon=None, upgradeButtonTooltip='', extraParams=(), specializations=(), sellBtnLabel=None):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -112,7 +111,6 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'additionalInfo': additionalInfo,
      'actionButtonIcon': actionButtonIcon,
      'actionButtonTooltip': actionButtonTooltip,
-     'active': active == GOODIE_STATE.ACTIVE,
      'upgradable': upgradable,
      'upgradeButtonIcon': upgradeButtonIcon,
      'upgradeButtonTooltip': upgradeButtonTooltip,

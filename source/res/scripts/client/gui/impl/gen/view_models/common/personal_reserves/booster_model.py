@@ -16,10 +16,21 @@ class ReserveState(IntEnum):
     USED = 2
 
 
+class ReserveKind(Enum):
+    GOLD = 'booster_gold'
+    CREDITS = 'booster_credits'
+    XP = 'booster_xp'
+    CREWXP = 'booster_crew_xp'
+    FREEXP = 'booster_free_xp'
+    FL_XP = 'booster_fl_xp'
+    FREEXPCREWXP = 'booster_free_xp_and_crew_xp'
+    FREEXPMAINXP = 'booster_free_xp_and_crew_xp'
+
+
 class BoosterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(BoosterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -90,11 +101,47 @@ class BoosterModel(ViewModel):
     def setIconId(self, value):
         self._setString(10, value)
 
-    def getExpiryTime(self):
+    def getNextExpirationAmount(self):
         return self._getNumber(11)
 
-    def setExpiryTime(self, value):
+    def setNextExpirationAmount(self, value):
         self._setNumber(11, value)
+
+    def getNextExpirationTime(self):
+        return self._getNumber(12)
+
+    def setNextExpirationTime(self, value):
+        self._setNumber(12, value)
+
+    def getWillExpireAfter(self):
+        return self._getNumber(13)
+
+    def setWillExpireAfter(self, value):
+        self._setNumber(13, value)
+
+    def getInDepotExpirableAmount(self):
+        return self._getNumber(14)
+
+    def setInDepotExpirableAmount(self, value):
+        self._setNumber(14, value)
+
+    def getReserveKind(self):
+        return ReserveKind(self._getString(15))
+
+    def setReserveKind(self, value):
+        self._setString(15, value.value)
+
+    def getIsNew(self):
+        return self._getBool(16)
+
+    def setIsNew(self, value):
+        self._setBool(16, value)
+
+    def getIsExpiringSoon(self):
+        return self._getBool(17)
+
+    def setIsExpiringSoon(self, value):
+        self._setBool(17, value)
 
     def _initialize(self):
         super(BoosterModel, self)._initialize()
@@ -109,4 +156,10 @@ class BoosterModel(ViewModel):
         self._addBoolProperty('isPremium', False)
         self._addNumberProperty('state')
         self._addStringProperty('iconId', '')
-        self._addNumberProperty('expiryTime', 0)
+        self._addNumberProperty('nextExpirationAmount', 0)
+        self._addNumberProperty('nextExpirationTime', 0)
+        self._addNumberProperty('willExpireAfter', 0)
+        self._addNumberProperty('inDepotExpirableAmount', 0)
+        self._addStringProperty('reserveKind')
+        self._addBoolProperty('isNew', False)
+        self._addBoolProperty('isExpiringSoon', False)

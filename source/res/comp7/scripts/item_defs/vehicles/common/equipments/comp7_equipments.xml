@@ -45,7 +45,7 @@
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	4 7.5 11.0	  <exports>	vse tooltip	</exports>
+      <crewBuff>	4 7 10	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_ally_support>
@@ -237,9 +237,9 @@
       </cooldownSeconds>
       <duration>	10 20 30	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerFactor>	1.30	  <exports>	vse	</exports>
+      <enginePowerFactor>	1.35	  <exports>	vse	</exports>
       </enginePowerFactor>
-      <stunDurationFactor>	0.25	  <exports>	vse	</exports>
+      <stunDurationFactor>	0.4	  <exports>	vse	</exports>
       </stunDurationFactor>
       <repairBuff>	30	  <exports>	vse tooltip	</exports>
       </repairBuff>
@@ -295,7 +295,7 @@
       </dispersionFactor>
       <damageDistance>	250	  <exports>	vse tooltip	</exports>
       </damageDistance>
-      <damageFactors>	1.11 1.23 1.35	  <exports>	vse tooltip	</exports>
+      <damageFactors>	1.25 1.35 1.45	  <exports>	vse tooltip	</exports>
       </damageFactors>
     </script>
   </comp7_sniper>
@@ -315,11 +315,11 @@
       </visualScript>
       <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	6	  <exports>	vse tooltip	</exports>
+      <duration>	7	  <exports>	vse tooltip	</exports>
       </duration>
       <healDuration>	10	  <exports>	vse tooltip	</exports>
       </healDuration>
-      <baseHeal>	75	  <exports>	vse tooltip	</exports>
+      <baseHeal>	100	  <exports>	vse tooltip	</exports>
       </baseHeal>
       <extraHealFactor>	0.35 0.6 0.85	  <exports>	vse	</exports>
       </extraHealFactor>
@@ -345,7 +345,7 @@
           <plan>	comp7Abilities/recon_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15 20 25	  <exports>	vse tooltip	</exports>
       </duration>
@@ -374,7 +374,7 @@
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <visionFactor>	1.03 1.075 1.115	  <exports>	vse	</exports>
+      <visionFactor>	1.15 1.2 1.25	  <exports>	vse	</exports>
       </visionFactor>
     </script>
   </comp7_aggressive_detection>

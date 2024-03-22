@@ -55,14 +55,13 @@ def _listToBitmask(flagNamesList, flagsEnum):
 
 
 class _ItemConfig(object):
-    __slots__ = ('__view', '__path', '__padding', '__anim', '__bootcampHint', '__effectBuilders')
+    __slots__ = ('__view', '__path', '__padding', '__anim', '__effectBuilders')
 
-    def __init__(self, view='', path='', padding=None, anim=None, bootcampHint=None, effectBuilders=None):
+    def __init__(self, view='', path='', padding=None, anim=None, effectBuilders=None):
         self.__view = view
         self.__path = path
         self.__padding = self._defaultPadding()
         self.__anim = self._defaultAnimConfig()
-        self.__bootcampHint = self._defaultBootcampHintConfig()
         self.__effectBuilders = effectBuilders.copy() if effectBuilders is not None else {}
         if padding is not None:
             self.__padding.update(padding)
@@ -70,8 +69,6 @@ class _ItemConfig(object):
             if 'tween' in anim and 'flags' in anim['tween']:
                 anim['tween']['flags'] = _listToBitmask(anim['tween']['flags'], TWEEN_EFFECT_TYPES)
             self.__anim.update(anim)
-        if bootcampHint is not None:
-            self.__bootcampHint.update(bootcampHint)
         return
 
     @property
@@ -89,10 +86,6 @@ class _ItemConfig(object):
     @property
     def anim(self):
         return self.__anim
-
-    @property
-    def bootcampHint(self):
-        return self.__bootcampHint
 
     @property
     def effectBuilders(self):
@@ -116,12 +109,6 @@ class _ItemConfig(object):
                      'y': 0,
                      'width': 100,
                      'height': 100}}
-
-    @staticmethod
-    def _defaultBootcampHintConfig():
-        return {'padding': _ItemConfig._defaultPadding(),
-         'hideBorder': False,
-         'customLinkage': ''}
 
 
 _SceneConfig = namedtuple('_SceneConfig', ('sceneID', 'event'))

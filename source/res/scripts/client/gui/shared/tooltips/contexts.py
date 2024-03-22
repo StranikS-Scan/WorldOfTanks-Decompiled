@@ -292,11 +292,11 @@ class ExtendedAwardContext(AwardContext):
         self._showUnlockPrice = showUnlockPrice
         self._isAwardWindow = isAwardWindow
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, showCrew=False, showVehicleSlot=False, allModulesAvailable=False):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False, showCrew=False, showVehicleSlot=False, allModulesAvailable=False):
         self._showCrew = showCrew
         self._showVehicleSlot = showVehicleSlot
         self._allModulesAvailable = allModulesAvailable
-        return super(ExtendedAwardContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason)
+        return super(ExtendedAwardContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason, rentCycle, isSeniority)
 
     def getParams(self):
         params = super(ExtendedAwardContext, self).getParams()
@@ -336,12 +336,12 @@ class WinbackDiscountContext(ExtendedAwardContext):
         self._showDiscount = True
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, showCrew=False, showVehicleSlot=False, allModulesAvailable=False, blueprintsFragmentsCount=0, customPrice=None, hideStatus=True, showDiscount=True):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False, showCrew=False, showVehicleSlot=False, allModulesAvailable=False, blueprintsFragmentsCount=0, customPrice=None, hideStatus=True, showDiscount=True):
         self._blueprintsFragmentsCount = blueprintsFragmentsCount
         self._customPrice = customPrice
         self._hideStatus = hideStatus
         self._showDiscount = showDiscount
-        return super(WinbackDiscountContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason, showCrew, showVehicleSlot, allModulesAvailable)
+        return super(WinbackDiscountContext, self).buildItem(intCD, tmanCrewLevel, rentExpiryTime, rentBattles, rentWins, rentSeason, rentCycle, isSeniority, showCrew, showVehicleSlot, allModulesAvailable)
 
     def getParams(self):
         params = super(WinbackDiscountContext, self).getParams()
@@ -522,7 +522,7 @@ class BaseHangarParamContext(ToolTipContext):
         self.showTitleValue = showTitleValue
 
     def getComparator(self):
-        return params_helper.idealCrewComparator(g_currentVehicle.item)
+        return params_helper.similarCrewComparator(g_currentVehicle.item)
 
     def buildItem(self, *args, **kwargs):
         return None
@@ -574,7 +574,7 @@ class TankSetupParamContext(HangarParamContext):
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
-        return params_helper.idealCrewComparator(g_tankSetupVehicle.item)
+        return params_helper.similarCrewComparator(g_tankSetupVehicle.item)
 
     def buildItem(self, *args, **kwargs):
         return g_tankSetupVehicle.item

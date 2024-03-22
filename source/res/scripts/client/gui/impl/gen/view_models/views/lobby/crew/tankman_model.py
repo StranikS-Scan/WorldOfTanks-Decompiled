@@ -42,7 +42,7 @@ class TankmanInfo(Enum):
 class TankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=23, commands=0):
+    def __init__(self, properties=22, commands=0):
         super(TankmanModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -115,81 +115,75 @@ class TankmanModel(ViewModel):
     def setFullUserName(self, value):
         self._setString(10, value)
 
-    def getSpecializationLevel(self):
-        return self._getNumber(11)
-
-    def setSpecializationLevel(self, value):
-        self._setNumber(11, value)
-
     def getHasRolePenalty(self):
-        return self._getBool(12)
+        return self._getBool(11)
 
     def setHasRolePenalty(self, value):
-        self._setBool(12, value)
-
-    def getHasSpecializationLevelPenalty(self):
-        return self._getBool(13)
-
-    def setHasSpecializationLevelPenalty(self, value):
-        self._setBool(13, value)
+        self._setBool(11, value)
 
     def getIsInSkin(self):
-        return self._getBool(14)
+        return self._getBool(12)
 
     def setIsInSkin(self, value):
-        self._setBool(14, value)
+        self._setBool(12, value)
 
     def getSkills(self):
-        return self._getArray(15)
+        return self._getArray(13)
 
     def setSkills(self, value):
-        self._setArray(15, value)
+        self._setArray(13, value)
 
     @staticmethod
     def getSkillsType():
         return CrewWidgetTankmanSkillModel
 
     def getLastSkillLevel(self):
-        return self._getNumber(16)
+        return self._getNumber(14)
 
     def setLastSkillLevel(self, value):
-        self._setNumber(16, value)
+        self._setNumber(14, value)
 
     def getRecruitGlowImage(self):
-        return self._getResource(17)
+        return self._getResource(15)
 
     def setRecruitGlowImage(self, value):
-        self._setResource(17, value)
+        self._setResource(15, value)
 
     def getIsMainActionDisabled(self):
-        return self._getBool(18)
+        return self._getBool(16)
 
     def setIsMainActionDisabled(self, value):
-        self._setBool(18, value)
+        self._setBool(16, value)
 
     def getTimeToDismiss(self):
-        return self._getNumber(19)
+        return self._getNumber(17)
 
     def setTimeToDismiss(self, value):
-        self._setNumber(19, value)
+        self._setNumber(17, value)
 
     def getHasVoiceover(self):
-        return self._getBool(20)
+        return self._getBool(18)
 
     def setHasVoiceover(self, value):
-        self._setBool(20, value)
+        self._setBool(18, value)
 
     def getDisableIcon(self):
-        return self._getResource(21)
+        return self._getResource(19)
 
     def setDisableIcon(self, value):
-        self._setResource(21, value)
+        self._setResource(19, value)
 
     def getDisableReason(self):
-        return self._getResource(22)
+        return self._getResource(20)
 
     def setDisableReason(self, value):
-        self._setResource(22, value)
+        self._setResource(20, value)
+
+    def getSkillsEfficiency(self):
+        return self._getReal(21)
+
+    def setSkillsEfficiency(self, value):
+        self._setReal(21, value)
 
     def _initialize(self):
         super(TankmanModel, self)._initialize()
@@ -204,9 +198,7 @@ class TankmanModel(ViewModel):
         self._addStringProperty('cardState')
         self._addStringProperty('location', TankmanLocation.INBARRACKS.value)
         self._addStringProperty('fullUserName', '')
-        self._addNumberProperty('specializationLevel', 0)
         self._addBoolProperty('hasRolePenalty', False)
-        self._addBoolProperty('hasSpecializationLevelPenalty', False)
         self._addBoolProperty('isInSkin', False)
         self._addArrayProperty('skills', Array())
         self._addNumberProperty('lastSkillLevel', 0)
@@ -216,3 +208,4 @@ class TankmanModel(ViewModel):
         self._addBoolProperty('hasVoiceover', False)
         self._addResourceProperty('disableIcon', R.invalid())
         self._addResourceProperty('disableReason', R.invalid())
+        self._addRealProperty('skillsEfficiency', 0.0)

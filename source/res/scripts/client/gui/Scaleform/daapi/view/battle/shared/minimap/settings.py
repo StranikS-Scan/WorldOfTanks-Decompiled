@@ -28,7 +28,6 @@ class ENTRY_SYMBOL_NAME(object):
     ALLY_TEAM_SPAWN = 'AllyTeamSpawnEntry'
     ENEMY_TEAM_SPAWN = 'EnemyTeamSpawnEntry'
     CONTROL_POINT = 'ControlPointEntry'
-    BOOTCAMP_TARGET = 'BootcampTargetEntry'
     ARTILLERY_ENTRY = 'ArtilleryEntry'
     ARTILLERY_YELLOW_ENTRY = 'ArtilleryYellowEntry'
     AOE_ARTILLERY_ENTRY = 'AOEArtilleryMinimapEntry'

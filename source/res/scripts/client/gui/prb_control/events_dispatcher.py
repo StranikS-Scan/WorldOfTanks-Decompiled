@@ -139,12 +139,6 @@ class EventDispatcher(object):
     def loadRankedUnreachable(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)
 
-    def loadBootcampQueue(self):
-        self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)))
-
-    def unloadBootcampQueue(self):
-        self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CLOSE)))
-
     def removeTrainingFromCarousel(self, isList=True, closeWindow=True):
         clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
         clientID = channel_num_gen.getClientID4SpecialWindow(clientType)

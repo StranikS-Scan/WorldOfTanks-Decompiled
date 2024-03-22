@@ -1,0 +1,14 @@
+<LimitedVisibilityEntity.def>
+  <Parent>	EmptyEntity	</Parent>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </team>
+    <vehicleIDs>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </vehicleIDs>
+  </Properties>
+</LimitedVisibilityEntity.def>

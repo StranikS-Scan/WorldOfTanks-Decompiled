@@ -308,7 +308,7 @@ class _BaseRecruitInfo(object):
         vehType = vehicles.VehicleDescr(typeID=(0, 0)).type
         skills = self._getSkillsForDescr()
         freeSkills = self._getFreeSkillsForDescr()
-        tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], self._roleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=self._lastSkillLevel))
+        tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0]), vehType.id[1], vehType.crewRoles[0][0], self._roleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=self._lastSkillLevel))
         tmanDescr.addXP(self._freeXP)
         return tmanDescr
 

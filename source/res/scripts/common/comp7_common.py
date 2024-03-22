@@ -8,6 +8,7 @@ __COMP7_MASKOT_ID = '3'
 SEASONS_IN_YEAR = 3
 __COMP7_QUALIFICATION_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}:qualification'
 __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_ranks_65'
+__COMP7_RENT_VEHICLES_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_rent_vehicles'
 __COMP7_TOKEN_PREFIX_TEMPLATE = 'comp7_{maskot}_{season}'
 __COMP7_WEEKLY_REWARD_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}_weekly_rewards_token'
 __COMP7_SEASON_POINT_ASSET_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
@@ -34,6 +35,10 @@ def seasonPointsAssetBySeasonNumber(seasonNumber):
 
 def qualificationQuestIDBySeasonNumber(seasonNumber):
     return __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
+def rentVehiclesQuestIDBySeasonNumber(seasonNumber):
+    return __COMP7_RENT_VEHICLES_QUEST_ID_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def tokenPrefixBySeasonNumber(seasonNumber):

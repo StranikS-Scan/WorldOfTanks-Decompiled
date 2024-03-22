@@ -149,9 +149,9 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
             applyStyles = vehicle is not None
             replaceText, boostText = self.__getSkillTexts(skillLearnt, replaceText, boostText, applyStyles)
             block.append(formatters.packImageTextBlockData(title=replaceText, img=backport.image(R.images.gui.maps.icons.buttons.checkmark()) if not skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
-            block.append(formatters.packImageTextBlockData(title=skillNotLearntText % skillName, txtOffset=20))
+            block.append(formatters.packImageTextBlockData(title=skillNotLearntText.format(boosterName=skillName), txtOffset=20))
             block.append(formatters.packImageTextBlockData(title=boostText, img=backport.image(R.images.gui.maps.icons.buttons.checkmark()) if skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
-            block.append(formatters.packImageTextBlockData(title=skillLearntText % skillName, txtOffset=20))
+            block.append(formatters.packImageTextBlockData(title=skillLearntText.format(boosterName=skillName), txtOffset=20))
         else:
             kpi = first(module.getKpi(self.configuration.vehicle))
             if kpi:

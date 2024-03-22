@@ -228,8 +228,8 @@ class ConcealmentBonus(object):
 
 class Customization(FittingItem):
     __slots__ = ('_boundVehicles', '_bonus', '_installedVehicles', '__noveltyData', '__progressingData', '__installedCount', '__boundInventoryCount', '__fullInventoryCount', '__fullCount', '__questProgressInfo')
-    _service = dependency.descriptor(ICustomizationService)
     eventsCache = dependency.descriptor(IEventsCache)
+    _service = dependency.descriptor(ICustomizationService)
 
     def __init__(self, intCompactDescr, proxy=None):
         super(Customization, self).__init__(intCompactDescr, proxy)

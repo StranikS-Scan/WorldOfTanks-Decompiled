@@ -30,7 +30,6 @@ class LoadingTypes(str, EnumWithValues):
 class MilestonesTypes(str, EnumWithValues):
     CONNECTION = 'connection'
     STANDARD = 'standard'
-    BOOTCAMP = 'bootcamp'
 
 
 @enum.unique
@@ -50,7 +49,6 @@ class Milestones(str, EnumWithValues):
     HANGAR_READY = 'hangarReady'
     LOAD_CONTENT = 'loadContent'
     SYNCHRONIZE = 'synchronize'
-    BOOTCAMP_ENQUEUED = 'bootcampEnqueued'
     ONBOARDING_ENQUEUED = 'onboardingEnqueued'
 
 

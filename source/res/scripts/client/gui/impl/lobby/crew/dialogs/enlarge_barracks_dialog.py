@@ -51,11 +51,7 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
             return False
         doActions = []
         doActions.append((factory.BUY_BERTHS, self.__pricePacksBerths, self.__countPacksBerths))
-        groupSize = len(doActions)
-        groupID = int(BigWorld.serverTime())
-        while doActions:
-            factory.doAction(*(doActions.pop(0) + (groupID, groupSize)))
-
+        BigWorld.player().doActions(doActions)
         return True
 
     def _getEvents(self):

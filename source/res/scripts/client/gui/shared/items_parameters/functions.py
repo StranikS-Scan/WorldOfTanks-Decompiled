@@ -107,7 +107,7 @@ def kpiFromCrewSkills(vehicle):
         if tankman is None:
             continue
         for skill in tankman.skills:
-            level = crewMemberRealSkillLevel(vehicle, skill.name, skill.roleType)
+            level = crewMemberRealSkillLevel(vehicle, skill.name)
             if level != tankmen.NO_SKILL:
                 skills[skill.name] = level
 

@@ -4,11 +4,11 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class BattleRoyaleTeamPanelMeta(BaseDAAPIComponent):
 
-    def as_setInitDataS(self, title, names, clans):
-        return self.flashObject.as_setInitData(title, names, clans) if self._isDAAPIInited() else None
+    def as_setInitDataS(self, title, names, clans, playerTeamIndex):
+        return self.flashObject.as_setInitData(title, names, clans, playerTeamIndex) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateS(self, index, alive, ready, hpPercent, fragsCount, vehicleLevel, icon):
-        return self.flashObject.as_setPlayerState(index, alive, ready, hpPercent, fragsCount, vehicleLevel, icon) if self._isDAAPIInited() else None
+    def as_setPlayerStateS(self, index, accountDBID, vID, teamIndex, alive, ready, hpPercent, fragsCount, vehicleLevel, icon):
+        return self.flashObject.as_setPlayerState(index, accountDBID, vID, teamIndex, alive, ready, hpPercent, fragsCount, vehicleLevel, icon) if self._isDAAPIInited() else None
 
     def as_setPlayerStatusS(self, index, alive, ready, isRespawning=False):
         return self.flashObject.as_setPlayerStatus(index, alive, ready, isRespawning) if self._isDAAPIInited() else None

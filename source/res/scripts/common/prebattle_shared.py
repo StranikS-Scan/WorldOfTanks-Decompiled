@@ -106,9 +106,10 @@ def isTeamValid(accountsInfo, limits):
         else:
             vehLevel = accInfo['vehLevel']
             vehTypeCompDescr = accInfo['vehTypeCompDescr']
-        if not minLevel <= vehLevel <= maxLevel:
-            return (False, 'limits/level')
         vehTags = vehicles.getVehicleType(vehTypeCompDescr).tags
+        observer = isObserver(accInfo.get('vehCompDescr'))
+        if not observer and not minLevel <= vehLevel <= maxLevel:
+            return (False, 'limits/level')
         if tagsLimits is not None:
             isValid, tagSet = tagsLimits
             for tag in tagSet:
@@ -118,7 +119,7 @@ def isTeamValid(accountsInfo, limits):
                     return (False, 'limits/tags')
 
         count += 1
-        observerCount += int('observer' in vehTags)
+        observerCount += int(observer)
         totalLevel += vehLevel
         vehs[vehTypeCompDescr] = vehs.get(vehTypeCompDescr, 0) + 1
 

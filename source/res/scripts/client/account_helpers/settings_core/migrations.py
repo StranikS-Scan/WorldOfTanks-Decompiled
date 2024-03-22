@@ -134,7 +134,7 @@ def _migrateTo4(core, data, initialized):
 
 
 def _migrateTo5(core, data, initialized):
-    data['gameData'][GAME.ENABLE_POSTMORTEM_DELAY] = True
+    data['gameData'][GAME.POSTMORTEM_MODE] = True
 
 
 def _migrateTo6(core, data, initialized):
@@ -773,9 +773,7 @@ def _migrateTo88(core, data, initialized):
 def _migrateTo89(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.settings_core.settings_constants import CONTOUR
-    itemsCache = dependency.instance(IItemsCache)
-    newbieGroup = itemsCache.items.stats.defaultSettingsGroup
-    if newbieGroup != 'new' or not initialized:
+    if not initialized:
         data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.ENHANCED_CONTOUR] = False
         data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_PENETRABLE_ZONE] = 0
         data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_IMPENETRABLE_ZONE] = 0
@@ -1030,9 +1028,7 @@ def _migrateTo115(core, data, initialized):
 
 
 def _migrateTo116(core, data, initialized):
-    itemsCache = dependency.instance(IItemsCache)
-    newbieGroup = itemsCache.items.stats.defaultSettingsGroup
-    if newbieGroup == 'new' and initialized:
+    if initialized:
         newbiesConfigs = {'gameData': {GAME.REPLAY_ENABLED: 1,
                       GAME.SNIPER_MODE_STABILIZATION: True,
                       GAME.SHOW_VEH_MODELS_ON_MAP: 2},
@@ -1226,6 +1222,47 @@ def _migrateTo120(core, data, initialized):
         for param in [GAME.NEWBIE_PREBATTLE_HINTS, GAME.NEWBIE_BATTLE_HINTS]:
             if param in properties:
                 data['gameExtData2'][param] = properties[param]
+
+
+def _migrateTo121(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    gameData = data['gameData']
+    gameExtData2 = data['gameExtData2']
+    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    gameExtData2[GAME.ENABLE_SERVER_AIM] = __migrateMaskValue(currentVal, 1, 8)
+    if GAME.ENABLE_SERVER_AIM in gameData:
+        gameData.pop(GAME.ENABLE_SERVER_AIM)
+    if initialized:
+        defaultValue = core.options.getSetting(GAME.POSTMORTEM_MODE).getNoviceValue()
+    else:
+        defaultValue = core.options.getSetting(GAME.POSTMORTEM_MODE).getDefaultValue()
+    gameData[GAME.POSTMORTEM_MODE] = defaultValue
+
+
+def _migrateTo122(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_5075_WELCOME_SHOWN] = False
+
+
+def _migrateTo123(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN] = False
+
+
+def _migrateTo124(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
+
+
+def _migrateTo125(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, 0)
+    clear = data['clear']
+    for bitPosition in (27, 28):
+        settingOffset = 1 << bitPosition
+        if storedValue & settingOffset:
+            clear['onceOnlyHints2'] = clear.get('onceOnlyHints2', 0) | settingOffset
 
 
 _versions = ((1,
@@ -1702,6 +1739,26 @@ _versions = ((1,
   False),
  (120,
   _migrateTo120,
+  False,
+  False),
+ (121,
+  _migrateTo121,
+  False,
+  False),
+ (122,
+  _migrateTo122,
+  False,
+  False),
+ (123,
+  _migrateTo123,
+  False,
+  False),
+ (124,
+  _migrateTo124,
+  False,
+  False),
+ (125,
+  _migrateTo125,
   False,
   False))
 

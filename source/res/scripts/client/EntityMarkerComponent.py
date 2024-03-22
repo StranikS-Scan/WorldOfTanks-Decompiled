@@ -13,6 +13,7 @@ class EntityMarkerComponent(DynamicScriptComponent):
 
     def __init__(self):
         super(EntityMarkerComponent, self).__init__()
+        self._isReconnect = not self._isAvatarReady
         self.markerID = None
         return
 
@@ -34,10 +35,13 @@ class EntityMarkerComponent(DynamicScriptComponent):
 
     def _onAvatarReady(self):
         super(EntityMarkerComponent, self)._onAvatarReady()
+        self.__createMarker(isReconnect=self._isReconnect)
+
+    def __createMarker(self, isReconnect=False):
         ctrl = self.sessionProvider.shared.areaMarker
         if ctrl:
-            marker = ctrl.createMarker(self.entity.matrix, self.style, targetID=self.bcTargetID, entity=self.entity, visible=self.visible)
-            self.markerID = ctrl.addMarker(marker)
+            marker = ctrl.createMarker(matrix=self.entity.matrix, markerType=self.style, targetID=self.bcTargetID, entity=self.entity, visible=self.visible)
+            self.markerID = ctrl.addMarker(marker, isReconnect=isReconnect)
 
     def __clearBattleCommunication(self):
         ctrl = self.sessionProvider.shared.areaMarker

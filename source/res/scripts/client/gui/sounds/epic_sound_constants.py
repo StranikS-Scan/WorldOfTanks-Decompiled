@@ -37,8 +37,6 @@ class EPIC_SOUND(object):
     BF_EB_ENTER_CLOSED_ZONE = 'eb_enter_closed_zone'
     BF_EB_ENTER_PROTECTION_ZONE = 'eb_enter_landing_zone'
     BF_EB_AIR_STRIKE_WARNING = 'eb_airstrike_warning_defender'
-    BF_EB_LEFT_CLICK_TO_FOLLOW = 'eb_left_click_to_follow'
-    BF_EB_SPECTATOR_MODE_FOLLOW_TANK = 'eb_follow_tank'
     BF_EB_LANDING_ZONE_PROTECTION = 'eb_closed_zone_artillery_fire'
     BF_EB_CLOSED_ZONE_ARTILLERY = 'eb_closed_zone_artillery_fire'
     BF_EB_RECOVERY_REQUESTED = 'eb_recovery_requested'

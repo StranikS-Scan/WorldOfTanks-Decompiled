@@ -20,14 +20,13 @@ from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
 from helpers import dependency, int2roman
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage',)
-    __bootcampCtrl = dependency.descriptor(IBootcampController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __service = dependency.descriptor(ICustomizationService)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
@@ -123,7 +122,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
-        if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp() and self.__limitedUIController.isRuleCompleted(LuiRules.C11N_BTN_BUBBLE):
+        if vehicle.isCustomizationEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.C11N_BTN_BUBBLE):
             availableItemTypes = getItemTypesAvailableForVehicle()
             itemsFilter = lambda item: self.__filterAvailableCustomizations(item, vehicle)
             counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes, itemFilter=itemsFilter)

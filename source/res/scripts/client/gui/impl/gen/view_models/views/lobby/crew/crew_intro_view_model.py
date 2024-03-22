@@ -1,7 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/crew_intro_view_model.py
+from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+
+class CloseReason(Enum):
+    ESC = 'esc'
+    CLOSE = 'close'
+    AFFIRMATIVE = 'affirmative'
+
 
 class CrewIntroViewModel(ViewModel):
     __slots__ = ('onClose',)

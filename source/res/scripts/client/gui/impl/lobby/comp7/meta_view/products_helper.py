@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/products_helper.py
 import typing
+from account_helpers.AccountSettings import AccountSettings, COMP7_UI_SECTION, COMP7_SHOP_SEEN_PRODUCTS
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId
 from gui.impl.gen.view_models.views.lobby.comp7.base_product_model import BaseProductModel, ProductTypes, ProductState
@@ -65,6 +66,27 @@ def getVehicleCDAndStyle(cd, c11nService=None):
     return (getStylePreviewVehicle(style), style)
 
 
+def getSeenProducts():
+    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+    return settings.get(COMP7_SHOP_SEEN_PRODUCTS, [])
+
+
+def addSeenProduct(product):
+    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+    settings.setdefault(COMP7_SHOP_SEEN_PRODUCTS, []).append(product)
+    AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
+
+
+def hasUnseenProduct(products):
+    seenProducts = getSeenProducts()
+    for product in products.itervalues():
+        cd, _ = _getProductTypeData(product)
+        if cd not in seenProducts:
+            return True
+
+    return False
+
+
 def _getProductTypeData(product):
     for cd, entitlementType in product.entitlements.iteritems():
         itemType = getItemType(getCDFromId(entitlementType, cd))
@@ -86,11 +108,11 @@ def _setGenericData(model, productCD, productType, product, itemsCache=None):
     isEnoughMoney = playerMoney >= productPrice
     purchaseAllowed = product.purchasable and product.limitsPurchaseAllowed
     model.setId(productCD)
+    model.setIsNew(productCD not in getSeenProducts())
     model.setType(productType)
     model.setRank(product.rank)
     model.setLimitedQuantity(product.limitedQuantity)
     model.setState(_getProductState(productCD, purchaseAllowed, not product.limitsPurchaseAllowed))
-    model.setIsNew(False)
     model.setDescription(product.description)
     model.price.setName(product.currencyName)
     model.price.setValue(product.originalPrice)

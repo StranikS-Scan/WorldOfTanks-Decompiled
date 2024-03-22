@@ -206,7 +206,6 @@ class PERSONAL_MISSIONS(object):
     TANKWOMANTOOLTIPDATA_DESC_TITLE = '#personal_missions:tankwomanTooltipData/desc/title'
     TANKWOMANTOOLTIPDATA_DESC_BODY = '#personal_missions:tankwomanTooltipData/desc/body'
     TANKWOMANTOOLTIPDATA_ADVANTAGES_TITLE = '#personal_missions:tankwomanTooltipData/advantages/title'
-    TANKWOMANTOOLTIPDATA_ADVANTAGES_NATION = '#personal_missions:tankwomanTooltipData/advantages/nation'
     TANKWOMANTOOLTIPDATA_ADVANTAGES_BROTHERHOOD = '#personal_missions:tankwomanTooltipData/advantages/brotherhood'
     TANKWOMANTOOLTIPDATA_ADVANTAGES_NEWPERK = '#personal_missions:tankwomanTooltipData/advantages/newPerk'
     TANKMODULETOOLTIPDATA_STATUS_NOTOBTAINED = '#personal_missions:tankmoduleTooltipData/status/notObtained'

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class ActionPriceModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(ActionPriceModel, self).__init__(properties=properties, commands=commands)
 
     def getType(self):
@@ -116,12 +116,6 @@ class ActionPriceModel(ViewModel):
     def setShowOldValue(self, value):
         self._setBool(17, value)
 
-    def getIsBootcamp(self):
-        return self._getBool(18)
-
-    def setIsBootcamp(self, value):
-        self._setBool(18, value)
-
     def _initialize(self):
         super(ActionPriceModel, self)._initialize()
         self._addStringProperty('type', 'gold')
@@ -142,4 +136,3 @@ class ActionPriceModel(ViewModel):
         self._addNumberProperty('oldCrystal', 0)
         self._addBoolProperty('isBuying', True)
         self._addBoolProperty('showOldValue', False)
-        self._addBoolProperty('isBootcamp', False)

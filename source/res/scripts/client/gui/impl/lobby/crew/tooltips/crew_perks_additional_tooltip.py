@@ -5,7 +5,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Tankman import getTankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill, SKILL_EFFICIENCY_UNTRAINED
 from gui.shared.tooltips.advanced import SKILL_MOVIES
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -14,12 +14,13 @@ if typing.TYPE_CHECKING:
 
 class CrewPerksAdditionalTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_skill',)
+    __slots__ = ('_skill', '_tankman')
 
     def __init__(self, skillName=None, tankmanId=None):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksAdditionalTooltip())
         settings.model = CrewPerksAdditionalTooltipModel()
-        self._skill = getTankmanSkill(skillName, tankman=self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None)
+        self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
+        self._skill = getTankmanSkill(skillName, tankman=self._tankman)
         super(CrewPerksAdditionalTooltip, self).__init__(settings)
         return
 
@@ -41,4 +42,7 @@ class CrewPerksAdditionalTooltip(ViewImpl):
             movieName = SKILL_MOVIES.get(self._skill.name, None)
             if movieName:
                 vm.setAnimationName(movieName)
+            isDisabled = self._tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED if self._tankman else False
+            vm.setIsDisabled(isDisabled)
+            vm.setIsIrrelevant(self._tankman and not self._skill.isEnable)
         return

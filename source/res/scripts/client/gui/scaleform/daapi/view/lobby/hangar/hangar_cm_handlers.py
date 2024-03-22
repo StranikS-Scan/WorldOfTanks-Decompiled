@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeIn
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
 from gui.Scaleform.locale.MENU import MENU
-from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
+from gui.impl.lobby.hangar.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE

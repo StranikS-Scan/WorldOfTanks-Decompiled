@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/interfaces.py
 import typing
+from typing import Tuple
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
@@ -14,6 +15,8 @@ if typing.TYPE_CHECKING:
     from points_of_interest.components import PoiStateComponent
     from cgf_components.zone_components import ZoneMarker, ZoneUINotification
     from UIComponents import MinimapChangerComponent
+    from pve_battle_hud import WidgetType
+    from gui.battle_control.controllers.vse_hud_settings_ctrl.vse_hud_settings_ctrl import SettingsTypes, ItemSettingsTypes
 
 class IArenaController(IBattleController):
     __slots__ = ('__weakref__',)
@@ -172,6 +175,9 @@ class IBattleFieldController(IArenaVehiclesController):
         pass
 
     def stopVehicleVisual(self, vehicleID):
+        pass
+
+    def getAliveVehicles(self):
         pass
 
 
@@ -485,6 +491,29 @@ class IComp7VOIPController(IArenaLoadController):
         raise NotImplementedError
 
 
+class IBRVOIPController(IArenaLoadController):
+    __slots__ = ()
+
+    @property
+    def isVoipSupported(self):
+        raise NotImplementedError
+
+    @property
+    def isVoipEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isJoined(self):
+        raise NotImplementedError
+
+    @property
+    def isTeamVoipEnabled(self):
+        raise NotImplementedError
+
+    def toggleChannelConnection(self):
+        raise NotImplementedError
+
+
 class IMapZonesController(IBattleController):
     onMarkerToZoneAdded = None
     onMarkerFromZoneRemoved = None
@@ -544,4 +573,22 @@ class IAimingSoundsCtrl(IBattleController):
         pass
 
     def updateDispersion(self, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
+        raise NotImplementedError
+
+
+class IVSEHUDSettingsController(IBattleController):
+    __slots__ = ()
+    onSettingsChanged = None
+    onItemSettingsChanged = None
+
+    def setSettings(self, settingsID, settings):
+        raise NotImplementedError
+
+    def getSettings(self, settingsID):
+        raise NotImplementedError
+
+    def setItemSettings(self, settingsID, itemID, settings):
+        raise NotImplementedError
+
+    def getItemSettings(self, settingsID, itemID):
         raise NotImplementedError

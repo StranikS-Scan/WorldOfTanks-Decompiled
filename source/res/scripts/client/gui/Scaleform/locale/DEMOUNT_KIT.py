@@ -12,6 +12,7 @@ class DEMOUNT_KIT(object):
     EQUIPMENTINSTALL_DEMOUNTNOKITOR = '#demount_kit:equipmentInstall/demountNoKitOr'
     EQUIPMENTINSTALL_DEMOUNTWITHKIT = '#demount_kit:equipmentInstall/demountWithKit'
     EQUIPMENTINSTALL_DEMOUNT = '#demount_kit:equipmentInstall/demount'
+    EQUIPMENTDEMOUNT_WOTPLUS = '#demount_kit:equipmentDemount/wotPlus'
     EQUIPMENTDEMOUNT_OPTIONFREE = '#demount_kit:equipmentDemount/optionFree'
     EQUIPMENTDEMOUNT_CONFIRMATION_TITLE = '#demount_kit:equipmentDemount/confirmation/title'
     EQUIPMENTDEMOUNT_CONFIRMATIONFORFITTING_TITLE = '#demount_kit:equipmentDemount/confirmationForFitting/title'

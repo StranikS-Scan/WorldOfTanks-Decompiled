@@ -179,6 +179,7 @@ class BATTLE_PASS(object):
     PROGRESSION_EXTRACHAPTERWIDGET_STYLEREMARK = '#battle_pass:progression/extraChapterWidget/styleRemark'
     PROGRESSION_FOOTER_MULTICURRENCYTOOLTIP = '#battle_pass:progression/footer/multicurrencyTooltip'
     PROGRESSION_EXTRACHAPTERWIDGET_COMMANDER = '#battle_pass:progression/extraChapterWidget/commander'
+    PROGRESSION_EXTRACHAPTERWIDGET_TANKMAN = '#battle_pass:progression/extraChapterWidget/tankman'
     PROGRESSION_EXTRACHAPTERWIDGET_COMMANDERVOICES = '#battle_pass:progression/extraChapterWidget/commanderVoices'
     PROGRESSION_EXTRACHAPTERWIDGET_TANK = '#battle_pass:progression/extraChapterWidget/tank'
     PROGRESSION_EXTRACHAPTERWIDGET_TANKNAME = '#battle_pass:progression/extraChapterWidget/tankName'

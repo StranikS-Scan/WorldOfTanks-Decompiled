@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/goodie_items.py
 import time
+from functools import partial
 import weakref
 import typing
 import BigWorld
 import nations
 from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE, BoosterCategory
-from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
+from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE, GoodieExpirationData
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -33,7 +33,7 @@ if typing.TYPE_CHECKING:
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
     from gui.shared.money import Money
     from skeletons.gui.goodies import IGoodiesCache
-    from typing import Any, Callable, Tuple, List, Union
+    from typing import Any, Callable, Tuple, List, Union, Dict, Optional
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -55,11 +55,11 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
 _BOOSTER_TYPE_TEXT = {v:k for k, v in GOODIE_TEXT_TO_RESOURCE.iteritems()}
 BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.FL_XP: 0,
  GOODIE_RESOURCE_TYPE.XP: 1,
- GOODIE_RESOURCE_TYPE.CREW_XP: 2,
- GOODIE_RESOURCE_TYPE.FREE_XP: 3,
- GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: 4,
- GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: 5,
- GOODIE_RESOURCE_TYPE.CREDITS: 6,
+ GOODIE_RESOURCE_TYPE.CREDITS: 2,
+ GOODIE_RESOURCE_TYPE.CREW_XP: 3,
+ GOODIE_RESOURCE_TYPE.FREE_XP: 4,
+ GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP: 5,
+ GOODIE_RESOURCE_TYPE.FREE_XP_MAIN_XP: 6,
  GOODIE_RESOURCE_TYPE.GOLD: 7}
 GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
  GOODIE_RESOURCE_TYPE.FREE_XP: KPI.Name.GAME_FREE_XP,
@@ -85,8 +85,8 @@ def getBoosterGuiType(boosterType):
     return _BOOSTER_TYPE_NAMES[boosterType]
 
 
-def getFullNameForBoosterIcon(boosterType, isPremium=False):
-    return '{}{}'.format(getBoosterGuiType(boosterType), '_premium' if isPremium else '')
+def getFullNameForBoosterIcon(boosterType, isPremium=False, isExpirable=False):
+    return '{}{}{}'.format(getBoosterGuiType(boosterType), '_premium' if isPremium else '', '_expirable' if isExpirable else '')
 
 
 class _Goodie(object):
@@ -125,8 +125,41 @@ class _Goodie(object):
         return self.__getDescrAttribute('counter', 0)
 
     @property
-    def expiryTime(self):
+    def nextExpiryTime(self):
+        expirationTimes = self.expirations.keys()
+        return min(expirationTimes) if expirationTimes else 0
+
+    @property
+    def isExpirable(self):
+        return bool(self.__getDescrAttribute('expireAfter', None) or self.useby)
+
+    @property
+    def expireAfter(self):
+        return self.__getDescrAttribute('expireAfter', None)
+
+    @property
+    def useby(self):
         return self.__getDescrAttribute('useby', 0)
+
+    @property
+    def expirations(self):
+        useby = self.__getDescrAttribute('useby', 0)
+        usebyFunc = partial(min, useby) if useby > 0 else (lambda value: value)
+        expirations = {}
+        expirableCount = 0
+        for expirationDate, count in self.__getStateAttribute('expirations', {}).iteritems():
+            key = usebyFunc(expirationDate)
+            if key not in expirations:
+                expirations[key] = 0
+            expirations[key] += count
+            expirableCount += count
+
+        remaining = self.count - expirableCount
+        if remaining and useby > 0:
+            if useby not in expirations:
+                expirations[useby] = 0
+            expirations[useby] += remaining
+        return {timestamp:GoodieExpirationData(self, timestamp, amount) for timestamp, amount in expirations.iteritems()}
 
     @property
     def effectTime(self):
@@ -158,6 +191,25 @@ class _Goodie(object):
     @property
     def description(self):
         raise NotImplementedError
+
+    def getTimeLeftToNextExpiry(self):
+        nextExpiry = self.nextExpiryTime
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextExpiry)) if nextExpiry else 0
+
+    def getExpiringAmount(self):
+        expireAmount = 0
+        for _, _, amount in self.expirations.itervalues():
+            expireAmount += amount
+
+        return expireAmount
+
+    def getAmountExpiringBy(self, expiryTime):
+        expireAmount = 0
+        for _, timestamp, amount in self.expirations.itervalues():
+            if timestamp <= expiryTime:
+                expireAmount += amount
+
+        return expireAmount
 
     def __getStateAttribute(self, attributeName, default=None):
         if self._stateProvider:
@@ -308,7 +360,7 @@ class BoosterUICommon(_Goodie):
         return formatter(value) if formatter is not None else value
 
     def getFullNameForResource(self):
-        return getFullNameForBoosterIcon(self.boosterType, self.getIsPremium())
+        return getFullNameForBoosterIcon(self.boosterType, self.getIsPremium(), self.isExpirable)
 
     def getIsAttainable(self):
         return True
@@ -373,15 +425,15 @@ class Booster(BoosterUICommon):
 
     @property
     def shortDescriptionSpecial(self):
-        return _ms(TOOLTIPS.BOOSTERSWINDOW_BOOSTER_SHORTDESCRIPTIONSPECIAL)
+        return backport.text(R.strings.tooltips.boostersWindow.booster.shortDescriptionSpecial())
 
     @property
     def longDescriptionSpecial(self):
-        return _ms(TOOLTIPS.BOOSTERSWINDOW_BOOSTER_LONGDESCRIPTIONSPECIAL)
+        return backport.text(R.strings.tooltips.boostersWindow.booster.longDescriptionSpecialExpirable()) if self.isExpirable else backport.text(R.strings.tooltips.boostersWindow.booster.longDescriptionSpecial())
 
     @property
     def isHidden(self):
-        return self._stateProvider.isBoosterHidden(self.boosterID) if self._stateProvider else False
+        return self._stateProvider.isBoosterHiddenInShop(self.boosterID) if self._stateProvider else False
 
     @property
     def kpi(self):
@@ -415,10 +467,10 @@ class Booster(BoosterUICommon):
         return backport.image(resID) if resID != -1 else ''
 
     def getExpiryDate(self):
-        return backport.getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
+        return backport.getLongDateFormat(self.useby) if self.useby is not None else ''
 
     def getExpiryDateStr(self):
-        if self.expiryTime:
+        if self.useby:
             text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME, tillTime=self.getExpiryDate())
         else:
             text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME)
@@ -485,7 +537,8 @@ class Booster(BoosterUICommon):
             stateStr = 'Activated'
         elif self.state == GOODIE_STATE.USED:
             stateStr = 'Used'
-        return 'Booster(id={} ({}), state={}, count={})'.format(self.boosterID, self.getTypeAsString(), stateStr, self.count)
+        expirations = {expiration.timestamp:expiration.amount for expiration in self.expirations.itervalues()}
+        return 'Booster(id={} ({}), state={}, count={}, expirations={})'.format(self.boosterID, self.getTypeAsString(), stateStr, self.count, expirations)
 
 
 class ClanReservePresenter(BoosterUICommon):

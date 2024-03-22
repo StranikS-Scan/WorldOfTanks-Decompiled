@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/chapter_model.py
 from enum import Enum
-from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 
@@ -15,7 +14,7 @@ class ChapterStates(Enum):
 class ChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(ChapterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -74,26 +73,6 @@ class ChapterModel(ViewModel):
     def setIsExtra(self, value):
         self._setBool(8, value)
 
-    def getFreeFinalRewards(self):
-        return self._getArray(9)
-
-    def setFreeFinalRewards(self, value):
-        self._setArray(9, value)
-
-    @staticmethod
-    def getFreeFinalRewardsType():
-        return unicode
-
-    def getPaidFinalRewards(self):
-        return self._getArray(10)
-
-    def setPaidFinalRewards(self, value):
-        self._setArray(10, value)
-
-    @staticmethod
-    def getPaidFinalRewardsType():
-        return unicode
-
     def _initialize(self):
         super(ChapterModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -105,5 +84,3 @@ class ChapterModel(ViewModel):
         self._addBoolProperty('isBought', False)
         self._addNumberProperty('levelProgression', 0)
         self._addBoolProperty('isExtra', False)
-        self._addArrayProperty('freeFinalRewards', Array())
-        self._addArrayProperty('paidFinalRewards', Array())

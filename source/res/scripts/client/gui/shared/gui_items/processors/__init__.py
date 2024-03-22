@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 import logging
 import typing
+from collections import namedtuple
+import BigWorld
+from adisp import adisp_process, adisp_async
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.SystemMessages import SM_TYPE, ResultMsg
+from gui.shared.gui_items.processors import plugins as proc_plugs
+from gui.shared.utils import code2str
 from helpers import dependency
 from helpers import i18n
-from adisp import adisp_process, adisp_async
-from gui.SystemMessages import SM_TYPE, ResultMsg
-from gui.shared.utils import code2str
-from gui.shared.gui_items.processors import plugins as proc_plugs
 from skeletons.gui.shared import IItemsCache
-from collections import namedtuple
 _logger = logging.getLogger(__name__)
 
 def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None, msgData=None, msgPriority=None):
@@ -153,7 +154,7 @@ class GroupedRequestProcessor(Processor):
         super(GroupedRequestProcessor, self).__init__(plugins=kwargs.get('plugins'))
         self.__request = request
         self.__params = args
-        self.__groupID = kwargs.get('groupID', 0)
+        self.__groupID = kwargs.get('groupID') or int(BigWorld.serverTime())
         self.__groupSize = kwargs.get('groupSize', 1)
 
     def _request(self, callback):

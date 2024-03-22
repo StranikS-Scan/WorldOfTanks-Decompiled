@@ -23,6 +23,7 @@ class ProviderNames(CONST_CONTAINER):
     STRONGHOLD = 'STRONGHOLD'
     MISSIONS = 'MISSIONS'
     STRONGHOLD_EVENT = 'STRONGHOLD_EVENT'
+    CLAN_SUPPLY = 'CLAN_SUPPLY'
 
 
 class ClanInfo(namedtuple('ClanInfo', ['clanName',
@@ -61,7 +62,11 @@ class _ClanCache(object):
         from gui.clans.cache_providers.stronghold_provider import ClientStrongholdProvider
         from gui.clans.cache_providers.missions_provider import ClientMissionsProvider
         from gui.clans.cache_providers.stronghold_event_provider import StrongholdEventProvider
-        for name, clazz, args in ((ProviderNames.STRONGHOLD, ClientStrongholdProvider, ()), (ProviderNames.MISSIONS, ClientMissionsProvider, ()), (ProviderNames.STRONGHOLD_EVENT, StrongholdEventProvider, (self,))):
+        from gui.clans.cache_providers.clan_supply_provider import ClanSupplyProvider
+        for name, clazz, args in ((ProviderNames.STRONGHOLD, ClientStrongholdProvider, ()),
+         (ProviderNames.MISSIONS, ClientMissionsProvider, ()),
+         (ProviderNames.STRONGHOLD_EVENT, StrongholdEventProvider, (self,)),
+         (ProviderNames.CLAN_SUPPLY, ClanSupplyProvider, ())):
             self.__registerProvider(name, clazz, args)
 
     def fini(self):
@@ -116,7 +121,7 @@ class _ClanCache(object):
 
     @property
     def clanName(self):
-        return passCensor(html.escape(self.clanInfo[0]))
+        return passCensor(self.clanInfo[0])
 
     @property
     def clanAbbrev(self):
@@ -163,6 +168,10 @@ class _ClanCache(object):
     @property
     def strongholdEventProvider(self):
         return self.__providers.get(ProviderNames.STRONGHOLD_EVENT)
+
+    @property
+    def clanSupplyProvider(self):
+        return self.__providers.get(ProviderNames.CLAN_SUPPLY)
 
     @adisp_async
     @adisp_process

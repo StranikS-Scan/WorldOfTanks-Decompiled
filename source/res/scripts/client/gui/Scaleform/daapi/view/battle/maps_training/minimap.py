@@ -59,8 +59,10 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         self._curScale = 1.0
         self.__localGoals = set()
         self.__callbacksIDs = {}
+        self.__delayedVehicleMarkers = {}
 
     def stop(self):
+        self.__delayedVehicleMarkers.clear()
         while self.__callbacksIDs:
             _, callbackID = self.__callbacksIDs.popitem()
             if callbackID is not None:
@@ -78,6 +80,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         if isPlayerAvatar():
             arena = BigWorld.player().arena
             if arena is not None:
+                arena.onVehicleAdded -= self.__onArenaVehicleAdded
                 arena.onVehicleKilled -= self.__onArenaVehicleKilled
         super(BotAppearNotificationPlugin, self).stop()
         return
@@ -97,6 +100,7 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         if isPlayerAvatar():
             arena = BigWorld.player().arena
             if arena is not None:
+                arena.onVehicleAdded += self.__onArenaVehicleAdded
                 arena.onVehicleKilled += self.__onArenaVehicleKilled
         return
 
@@ -106,9 +110,13 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
     def __addSpottedVehicleStaticMarker(self, areaID, creatorID, position, locationMarkerSubtype, markerText='', numberOfReplies=0, isTargetForPlayer=False):
         if locationMarkerSubtype not in _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME:
             return
+        vehicleID = int(markerText) if markerText else 0
+        if vehicleID not in BigWorld.player().arena.vehicles:
+            self.__delayedVehicleMarkers[vehicleID] = makeCallbackWeak(self.__addSpottedVehicleStaticMarker, areaID, creatorID, position, locationMarkerSubtype, markerText, numberOfReplies, isTargetForPlayer)
+            return
         matrix = minimap_utils.makePositionAndScaleMatrix(position, (self._curScale, 1.0, self._curScale))
         model = self._addEntryEx(areaID, _LOCATION_SUBTYPE_TO_FLASH_SYMBOL_NAME[locationMarkerSubtype], _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=True)
-        model.setOwnVehicleID(int(markerText) if markerText else 0)
+        model.setOwnVehicleID(vehicleID)
         vehInfo = self._arenaVisitor.vehicles.getVehicleInfo(model.getOwnVehicleID())
         classTag = getVehicleClassFromVehicleType(vehInfo['vehicleType'].type)
         guiProps = PLAYER_GUI_PROPS.enemy
@@ -153,6 +161,12 @@ class BotAppearNotificationPlugin(common.EntriesPlugin):
         for targetID, model in self._entries.iteritems():
             model.setGoalForPlayer(model.getOwnVehicleID() in self.__localGoals)
             self.__updateVehInfo(targetID, True)
+
+    def __onArenaVehicleAdded(self, vehID):
+        callback = self.__delayedVehicleMarkers.pop(vehID, None)
+        if callback is not None:
+            callback()
+        return
 
     def __onArenaVehicleKilled(self, victimID, attackerID, equipmentID, reason, numVehiclesAffected):
         for targetID, model in self._entries.iteritems():

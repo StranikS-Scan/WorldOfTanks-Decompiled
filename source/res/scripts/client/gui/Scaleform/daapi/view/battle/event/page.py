@@ -6,6 +6,7 @@ from debug_utils import LOG_DEBUG
 from adisp import adisp_process
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import WindowLayer
+from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import KillCamMarkersManager
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -23,7 +24,7 @@ EVENT_CONFIG = ComponentsConfig(config=((BATTLE_CTRL_ID.BATTLE_HINTS, (BATTLE_VI
  (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.MINIMAP,)),
  (BATTLE_CTRL_ID.PERKS, (BATTLE_VIEW_ALIASES.PERKS_PANEL,))), viewsConfig=())
 _TUTORIAL_PAGES = ('eventHint1', 'eventHint2')
-_EVENT_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, EventMarkersManager)
+_EVENT_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, EventMarkersManager, KillCamMarkersManager)
 
 class EventBattlePage(ClassicPage):
 
@@ -111,8 +112,7 @@ class EventBattlePage(ClassicPage):
             return
 
     def _onBattleLoadingStart(self):
-        data = {'autoStart': False,
-         'tutorialPages': _TUTORIAL_PAGES}
+        data = {'tutorialPages': _TUTORIAL_PAGES}
         self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EVENT_LOADING), ctx=data), EVENT_BUS_SCOPE.BATTLE)
         super(EventBattlePage, self)._onBattleLoadingStart()
 

@@ -3,15 +3,22 @@
 import collections
 from typing import TYPE_CHECKING
 from WeakMethod import WeakMethod
-from debug_utils import LOG_WARNING
-from goodie_constants import GOODIE_STATE, MAX_ACTIVE_BOOSTERS, GOODIE_NOTIFICATION_TYPE
+from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
+from goodie_constants import GOODIE_STATE, MAX_ACTIVE_BOOSTERS, ACTION_REASON_ID
 from soft_exception import SoftException
 from GoodieResources import GoodieResource
 from GoodieTargets import GoodieTarget
+from Goodie import decrementExpirationsInOrder, mergeExpirationsInto
 if TYPE_CHECKING:
-    from typing import Type, Dict, Optional, Callable
+    from goodies.GoodieConditions import GoodieConditionType
+    from goodies.GoodieTargets import GoodieTargetType
+    from goodies.GoodieResources import GoodieResourceType
+    from goodies.GoodieValue import GoodieValueType
+    from typing import Type, Dict, Optional, Callable, Union, Tuple, Set, Iterator, List
     from goodies.Goodie import Goodie
     from goodies.GoodieDefinition import GoodieDefinition
+    UpdateCallback = Callable[[Goodie, int, int], None]
+    RemoveCallback = Callable[[int, int, int], None]
 
 class GoodieException(SoftException):
     pass
@@ -101,48 +108,31 @@ class Goodies(object):
             self._removeCallback = None
         return
 
-    def __updateCallback(self, goodie, notificationType=GOODIE_NOTIFICATION_TYPE.EMPTY):
+    def __updateCallback(self, goodie, reasonID, amountDelta):
         if self._updateCallback is not None:
             callbackRef = self._updateCallback()
             if callbackRef:
-                callbackRef(goodie, notificationType)
+                callbackRef(goodie, reasonID, amountDelta)
         return
 
-    def __removeCallback(self, goodieID):
+    def __removeCallback(self, goodieID, reasonID, amountDelta):
         if self._removeCallback is not None:
             callbackRef = self._removeCallback()
             if callbackRef:
-                callbackRef(goodieID)
+                callbackRef(goodieID, reasonID, amountDelta)
         return
 
-    def __append(self, goodieDefinition, state=None, expiration=None, counter=None, notificationType=GOODIE_NOTIFICATION_TYPE.EMPTY):
-        goodie = goodieDefinition.createGoodie(state, expiration, counter)
+    def __append(self, goodieDefinition, reasonID, state=None, finishTime=None, counter=None, expirations=None):
+        goodie = goodieDefinition.createGoodie(state, finishTime, counter, expirations)
         if goodie is None:
             return
         else:
             self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie, notificationType)
+            self.__updateCallback(goodie, reasonID, goodie.counter)
             return
 
-    def __erase(self, goodieID):
-        goodie = self.actualGoodies.get(goodieID, None)
-        if goodie is None:
-            return
-        else:
-            del self.actualGoodies[goodieID]
-            self.__removeCallback(goodieID)
-            return
-
-    def __updateCounter(self, goodieDefinition, counter, state=None, notificationType=GOODIE_NOTIFICATION_TYPE.REMOVED):
-        goodie = goodieDefinition.createGoodie(counter=counter, state=state)
-        if goodie is None:
-            return
-        else:
-            self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie, notificationType)
-            return
-
-    def __update(self, goodieID):
+    def __expire(self, goodieID):
+        LOG_DEBUG_DEV('[GOODIE] __expire goodie {} '.format(goodieID))
         goodieDefinition = self.definedGoodies.get(goodieID, None)
         if goodieDefinition is None:
             return
@@ -150,9 +140,64 @@ class Goodies(object):
             goodie = self.actualGoodies.get(goodieID, None)
             if goodie is None:
                 return
-            if goodieDefinition.isActivatable() and goodie.isActive() and not goodie.isExpired():
+            if not goodieDefinition.isExpirable():
                 return
-            self.remove(goodieID, goodie, goodieDefinition)
+            expiredTimestamps, newExpirations = goodie.splitExpirations()
+            if not expiredTimestamps:
+                return
+            if goodie.isActive():
+                closestExpiration = min(expiredTimestamps.iterkeys())
+                newExpirations[closestExpiration] = 1
+            newCounter = sum(newExpirations.itervalues())
+            if newCounter == goodie.counter:
+                return
+            if newCounter <= 0:
+                self.__erase(goodieID, ACTION_REASON_ID.EXPIRATION_HAS_PASSED)
+            else:
+                self.__updateActual(goodieDefinition, newState=goodie.state, newFinishTime=goodie.finishTime, newCounter=newCounter, newExpirations=newExpirations, reasonID=ACTION_REASON_ID.EXPIRATION_HAS_PASSED)
+            return
+
+    def __erase(self, goodieID, reasonID):
+        LOG_DEBUG_DEV('[GOODIE] __erase goodie {}, reason id {} '.format(goodieID, reasonID))
+        goodie = self.actualGoodies.get(goodieID, None)
+        if goodie is None:
+            return
+        else:
+            goodieAmount = goodie.counter
+            del self.actualGoodies[goodieID]
+            self.__removeCallback(goodieID, reasonID, -goodieAmount)
+            return
+
+    def __updateActual(self, goodieDefinition, newState, newFinishTime, newCounter, newExpirations, reasonID):
+        goodie = goodieDefinition.createGoodie(state=newState, finishTime=newFinishTime, counter=newCounter, expirations=newExpirations)
+        if goodie is None:
+            return
+        else:
+            amountDelta = newCounter
+            prevGoodie = self.actualGoodies.get(goodieDefinition.uid, None)
+            if prevGoodie is not None:
+                amountDelta -= prevGoodie.counter
+            self.actualGoodies[goodieDefinition.uid] = goodie
+            self.__updateCallback(goodie, reasonID, amountDelta)
+            return
+
+    def __decrement(self, goodieID, amount, reasonID, skipActive):
+        LOG_DEBUG_DEV('[GOODIE] __decrement goodie {}, amount {}, reason id {} '.format(goodieID, amount, reasonID))
+        goodieDefinition = self.definedGoodies.get(goodieID, None)
+        if goodieDefinition is None:
+            return
+        else:
+            goodie = self.actualGoodies.get(goodieID, None)
+            if goodie is None:
+                return
+            if skipActive and goodieDefinition.isActivatable() and goodie.isActive() and not goodie.isEffectFinished():
+                return
+            newCounter = goodie.counter - amount
+            if newCounter <= 0:
+                self.__erase(goodieID, reasonID)
+            else:
+                newExpirations = decrementExpirationsInOrder(amount, goodie.expirations)
+                self.__updateActual(goodieDefinition, newState=None, newFinishTime=None, newCounter=newCounter, newExpirations=newExpirations, reasonID=reasonID)
             return
 
     def __checkDuplicateResources(self, allResourcesByType, affectedResource):
@@ -209,26 +254,35 @@ class Goodies(object):
 
         return False
 
-    def load(self, goodieID, state, expiration, counter):
+    def load(self, goodieID, state, finishTime, counter, expirations):
         try:
             goodieDefinition = self.definedGoodies[goodieID]
         except KeyError:
             raise GoodieException('Goodie is not found', goodieID)
 
         if not goodieDefinition.enabled:
-            self.__updateCallback(goodieDefinition.createDisabledGoodie(counter), GOODIE_NOTIFICATION_TYPE.DISABLED)
+            self.__updateCallback(goodieDefinition.createDisabledGoodie(counter, expirations), ACTION_REASON_ID.GOODIE_DISABLED, counter)
         else:
-            self.__append(goodieDefinition, state, expiration, counter, GOODIE_NOTIFICATION_TYPE.ENABLED)
+            self.__append(goodieDefinition, ACTION_REASON_ID.GOODIE_ENABLED, state, finishTime, counter, expirations)
 
-    def extend(self, goodieID, state, expiration, counter):
+    def extend(self, goodieID, state, counter, expiryTime):
         goodieDefinition = self.definedGoodies[goodieID]
+        if goodieDefinition.isExpirable():
+            if not expiryTime:
+                LOG_WARNING('Cannot add expirable reserve without a positive expirationTime.')
+                return
+            expirations = {expiryTime: counter}
+        else:
+            expirations = {}
+        finishTime = 0
         goodie = self.actualGoodies.get(goodieID, None)
         if goodie is not None:
             counter += goodie.counter
+            mergeExpirationsInto(goodie.expirations, expirations)
             if goodie.state == GOODIE_STATE.ACTIVE:
                 state = GOODIE_STATE.ACTIVE
-                expiration = goodie.expiration
-        self.__append(goodieDefinition, state, expiration, counter)
+                finishTime = goodie.finishTime
+        self.__append(goodieDefinition, ACTION_REASON_ID.EXTERNAL, state, finishTime, counter, expirations)
         return
 
     def test(self, target, resources, returnDeltas=False, applyToZero=False):
@@ -237,7 +291,7 @@ class Goodies(object):
     def apply(self, target, resources, returnDeltas=False, applyToZero=False):
         toUpdate = self.__show(target, resources, returnDeltas, applyToZero)
         for goodieID in toUpdate:
-            self.__update(goodieID)
+            self.__decrement(goodieID, 1, ACTION_REASON_ID.APPLYING, True)
 
         return toUpdate
 
@@ -247,29 +301,33 @@ class Goodies(object):
             if defined.uid in self.actualGoodies:
                 continue
             if defined.condition is not None and defined.condition.check(condition):
-                self.__append(defined)
+                self.__append(defined, ACTION_REASON_ID.UNKNOWN)
                 result.append(defined.uid)
 
         return result
 
     def expire(self):
-        toUpdate = []
-        toRemove = []
+        toWithdraw = []
+        toExpire = []
+        toErase = []
         for goodieID, goodie in self.actualGoodies.iteritems():
             defined = self.definedGoodies[goodieID]
-            if defined.isTimeLimited():
-                if defined.isExpired():
-                    toRemove.append(goodieID)
-                elif goodie.isActive() and goodie.isExpired():
-                    toUpdate.append(goodieID)
+            if defined.isTimeLimited() or goodie.isExpirable():
+                if goodie.isActive() and goodie.isEffectFinished():
+                    toWithdraw.append(goodieID)
+                elif goodie.isExpired():
+                    toExpire.append(goodieID)
+                elif defined.isPastUseBy():
+                    toErase.append(goodieID)
 
-        for goodieID in toUpdate:
-            self.__update(goodieID)
+        for goodieID in toWithdraw:
+            self.__decrement(goodieID, 1, ACTION_REASON_ID.END_OF_EFFECT, True)
 
-        for goodieID in toRemove:
-            self.__erase(goodieID)
+        for goodieID in toExpire:
+            self.__expire(goodieID)
 
-        return len(toRemove) != 0 or len(toUpdate) != 0
+        for goodieID in toErase:
+            self.__erase(goodieID, ACTION_REASON_ID.USE_BY_HAS_PASSED)
 
     def activeGoodiesCount(self):
         result = 0
@@ -295,47 +353,31 @@ class Goodies(object):
             oldGoodieID = self.actualGoodies.checkResource(goodieID)
             if oldGoodieID is not None:
                 if self.actualGoodies.compareByResource(oldGoodieID, goodieID):
-                    self.remove(oldGoodieID)
+                    self.__decrement(oldGoodieID, 1, ACTION_REASON_ID.END_OF_EFFECT, False)
                 else:
                     LOG_WARNING("Couldn't activate goodie(id={}) because replacing is forbidden!".format(goodieID))
                     return
             if self.activeGoodiesCount() >= MAX_ACTIVE_BOOSTERS:
                 LOG_WARNING("Couldn't activate goodie(id={}) because limit of activated boosters is reached!".format(goodieID))
                 return
-            goodie = defined.createGoodie(state=GOODIE_STATE.ACTIVE, counter=goodie.counter)
+            goodie = defined.createGoodie(state=GOODIE_STATE.ACTIVE, counter=goodie.counter, expirations=goodie.expirations)
             self.actualGoodies[goodieID] = goodie
-            self.__updateCallback(goodie)
+            self.__updateCallback(goodie, ACTION_REASON_ID.ACTIVATION, 0)
             return goodie
 
     def deactivateAll(self):
         active_goodies = [ (goodieID, goodie) for goodieID, goodie in self.actualGoodies.iteritems() if goodie.isActive() ]
         for goodieID, goodie in active_goodies:
             defined = self.definedGoodies[goodieID]
-            self.__updateCounter(defined, goodie.counter, GOODIE_STATE.INACTIVE, GOODIE_NOTIFICATION_TYPE.DISABLED)
+            self.__updateActual(defined, newState=GOODIE_STATE.INACTIVE, newFinishTime=None, newCounter=goodie.counter, newExpirations=goodie.expirations, reasonID=ACTION_REASON_ID.DEACTIVATION)
+
+        return
 
     def activeIds(self):
         return set(self.__resourceIndex.itervalues())
 
     def erase(self, goodieID):
-        goodie = self.actualGoodies.get(goodieID, None)
-        if goodie is None:
-            return
-        else:
-            self.__erase(goodieID)
-            return
+        self.__erase(goodieID, ACTION_REASON_ID.EXTERNAL)
 
-    def remove(self, goodieID, goodie=None, goodieDefinition=None, count=1):
-        if goodie is None:
-            goodie = self.actualGoodies.get(goodieID, None)
-            if goodie is None:
-                return
-        if goodieDefinition is None:
-            goodieDefinition = self.definedGoodies.get(goodieID, None)
-            if goodieDefinition is None:
-                return
-        counter = goodie.counter - count
-        if counter <= 0:
-            self.__erase(goodieID)
-        else:
-            self.__updateCounter(goodieDefinition, counter)
-        return
+    def remove(self, goodieID, count):
+        self.__decrement(goodieID, count, ACTION_REASON_ID.EXTERNAL, False)

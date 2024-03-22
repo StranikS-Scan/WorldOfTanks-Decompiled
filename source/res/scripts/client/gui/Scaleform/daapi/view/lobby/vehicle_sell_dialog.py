@@ -16,7 +16,6 @@ from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, getRoleTextWithLabel
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getCrewCount
 from gui.shared.gui_items.processors import plugins
 from gui.shared.gui_items.processors.vehicle import VehicleSeller, getCustomizationItemSellCountForVehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -348,7 +347,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'stats.crystal': self.__onSetCrystalHandler,
          'stats.equipCoin': self.__onSetEquipCoinHandler,
          'stats.vehicleSellsLeft': self.__onSellLimitUpdate,
-         'stats.tankmenBerthsCount': self.__onBerthsCountUpdate,
          'goodies': self.__onSetGoodiesHandler})
         self.__itemsCache.onSyncCompleted += self.__shopResyncHandler
 
@@ -371,9 +369,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __onSellLimitUpdate(self, *_):
         self.__updateSubmitButton()
 
-    def __onBerthsCountUpdate(self, *_):
-        self.__updateSubmitButton()
-
     def __onSetGoodiesHandler(self, goodies):
         demountKitGold = self.__goodiesCache.getDemountKit(currency=Currency.GOLD)
         if demountKitGold is not None and demountKitGold.enabled and demountKitGold.goodieID in goodies:
@@ -391,11 +386,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         shortage = expenses.getShortage(self.__accountMoney)
         shortage[Currency.GOLD] = 0
         shortage[_WP_CURRENCY] = 0
-        nationGroupVehs = self.__vehicle.getAllNationGroupVehs(self.__itemsCache.items)
-        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
-        crewValid = True
-        if not self.__isCrewDismissal:
-            crewValid = plugins.BarracksSlotsValidator(barracksBerthsNeeded).validate().success
         isInLimit = True
         if not (self.__vehicle.isRented and self.__vehicle.rentalIsOver):
             isInLimit = plugins.VehicleSellsLeftValidator(self.__vehicle).validate().success
@@ -404,8 +394,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         formattedItems = []
         if not shortage.isEmpty():
             formattedItems.append(backport.text(acceptButtonTooltip.notEnoughCurrency.body()))
-        if not crewValid:
-            formattedItems.append(backport.text(acceptButtonTooltip.notEnoughTankmenBerths.body()))
         if not isInLimit:
             formattedItems.append(backport.text(acceptButtonTooltip.vehicleSellLimit.body()))
         warningMessage = '{}\n'.format(backport.text(R.strings.common.common.dot())).join(formattedItems) + backport.text(R.strings.common.common.dot())
@@ -416,8 +404,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             header = backport.text(acceptButtonTooltip.controlNumberValid.header())
             body = backport.text(acceptButtonTooltip.controlNumberValid.body())
             tooltip = makeTooltip(header, body)
-        self.as_enableButtonS(controlNumberValid and shortage.isEmpty() and crewValid and isInLimit, tooltip)
-        self.as_setSellEnabledS(shortage.isEmpty() and crewValid and isInLimit, str(warningMessage))
+        self.as_enableButtonS(controlNumberValid and shortage.isEmpty() and isInLimit, tooltip)
+        self.as_setSellEnabledS(shortage.isEmpty() and isInLimit, str(warningMessage))
 
     def __getControlQuestion(self, usingGold=False):
         if usingGold:

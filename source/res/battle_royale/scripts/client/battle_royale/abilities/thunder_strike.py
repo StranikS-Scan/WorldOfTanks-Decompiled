@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/thunder_strike.py
-import functools
 import CGF
 import Math
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
@@ -31,40 +30,88 @@ class ThunderStrikeVisualizer(object):
 
 
 @bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
-class ThunderStrikeManager(CGF.ComponentManager, CallbackDelayer):
-    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def __init__(self):
-        super(ThunderStrikeManager, self).__init__()
-        CallbackDelayer.__init__(self)
-
-    def deactivate(self):
-        CallbackDelayer.destroy(self)
+class ThunderStrikeManager(CGF.ComponentManager):
 
     @onAddedQuery(ThunderStrike, GenericComponents.TransformComponent, CGF.GameObject)
     def visualizeThunderStrike(self, thunderStrike, transform, go):
-        equipment = vehicles.g_cache.equipments()[thunderStrike.equipmentID]
-        delay = thunderStrike.delayEndTime - BigWorld.serverTime()
-        vehicle = BigWorld.player().getVehicleAttached()
-        if vehicle and thunderStrike.attackerID == vehicle.id:
-            self.__showGuiMarker(equipment, transform.worldPosition, delay)
-        self.delayCallback(delay, functools.partial(self.__launch, go, thunderStrike, equipment))
+        go.createComponent(ThunderStrikeLoader, thunderStrike, transform, go)
 
-    def __launch(self, gameObject, thunderStrikeEntity, equipment):
 
-        def postloadSetup(go):
-            go.addComponent(equipment)
-            thunderStrikeEntity.onHit += functools.partial(self.__processHit, go)
+class ThunderStrikeLoader(CallbackDelayer):
+    __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-        CGF.loadGameObjectIntoHierarchy(equipment.usagePrefab, gameObject, Math.Vector3(0, 0, 0), postloadSetup)
-
-    def __showGuiMarker(self, equipment, position, delay):
-        ctrl = self.__guiSessionProvider.shared.equipments
-        if ctrl is not None:
-            ctrl.showMarker(equipment, position, (0, 0, 0), delay)
+    def __init__(self, thunderStrike, transform, go):
+        CallbackDelayer.__init__(self)
+        self.__thunderStrikeEntity = thunderStrike
+        self.__transform = transform
+        self.__go = go
+        self.equipment = vehicles.g_cache.equipments()[self.__thunderStrikeEntity.equipmentID]
+        self.__prefabGO = None
+        self.__loadedEffectIsAlly = None
         return
 
-    def __processHit(self, visualizerGo):
-        visualizer = visualizerGo.findComponentByType(ThunderStrikeVisualizer)
+    def activate(self):
+        vehicle = BigWorld.player().getVehicleAttached()
+        delay = self.__thunderStrikeEntity.delayEndTime - BigWorld.serverTime()
+        if vehicle and self.__thunderStrikeEntity.attackerID == vehicle.id:
+            self.__showGuiMarker(delay)
+        self.delayCallback(delay, self.__launch)
+        self.__guiSessionProvider.onUpdateObservedVehicleData += self.__onUpdateObservedVehicleData
+
+    def deactivate(self):
+        CallbackDelayer.destroy(self)
+        if self.__thunderStrikeEntity and hasattr(self.__thunderStrikeEntity, 'onHit'):
+            self.__thunderStrikeEntity.onHit -= self.__processHit
+        self.__removePrefab()
+        self.__guiSessionProvider.onUpdateObservedVehicleData -= self.__onUpdateObservedVehicleData
+
+    def __launch(self):
+        usagePrefab = self.equipment.usagePrefab
+        self.__loadedEffectIsAlly = True
+        if self.equipment.usagePrefabEnemy and self.equipment.usagePrefab != self.equipment.usagePrefabEnemy:
+            if not self.__isAttackerAlly():
+                usagePrefab = self.equipment.usagePrefabEnemy
+                self.__loadedEffectIsAlly = False
+        CGF.loadGameObjectIntoHierarchy(usagePrefab, self.__go, Math.Vector3(0, 0, 0), self.__onPrefabLoaded)
+
+    def __showGuiMarker(self, delay):
+        ctrl = self.__guiSessionProvider.shared.equipments
+        if ctrl is not None:
+            ctrl.showMarker(self.equipment, self.__transform.worldPosition, (0, 0, 0), delay)
+        return
+
+    def __isAttackerAlly(self):
+        attackerID = self.__thunderStrikeEntity.attackerID
+        vehicle = BigWorld.entity(attackerID)
+        if vehicle is None:
+            return False
+        else:
+            arenaDP = self.__guiSessionProvider.getArenaDP()
+            result = arenaDP.isAllyTeam(vehicle.publicInfo['team'])
+            return result
+
+    def __onPrefabLoaded(self, prefabGO):
+        self.__prefabGO = prefabGO
+        prefabGO.addComponent(self.equipment)
+        self.__thunderStrikeEntity.onHit += self.__processHit
+
+    def __processHit(self):
+        if not self.__prefabGO:
+            return
+        visualizer = self.__prefabGO.findComponentByType(ThunderStrikeVisualizer)
         if visualizer.strikePrefab:
-            CGF.loadGameObjectIntoHierarchy(visualizer.strikePrefab, visualizerGo, Math.Vector3(0, 0, 0))
+            CGF.loadGameObjectIntoHierarchy(visualizer.strikePrefab, self.__prefabGO, Math.Vector3(0, 0, 0))
+
+    def __removePrefab(self):
+        if self.__prefabGO is not None:
+            CGF.removeGameObject(self.__prefabGO)
+            self.__prefabGO = None
+        return
+
+    def __onUpdateObservedVehicleData(self, *args):
+        if not self.equipment.usagePrefabEnemy or self.equipment.usagePrefab == self.equipment.usagePrefabEnemy:
+            return
+        if self.__loadedEffectIsAlly == self.__isAttackerAlly():
+            return
+        self.deactivate()
+        self.activate()

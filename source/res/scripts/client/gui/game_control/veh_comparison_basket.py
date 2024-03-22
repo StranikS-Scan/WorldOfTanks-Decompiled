@@ -19,7 +19,7 @@ from items import ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from items.vehicles import VehicleDescr
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from post_progression_common import VehicleState
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
+from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -234,14 +234,12 @@ class _VehCompareData(object):
     def setCrewData(self, crewLvl, skills):
         if crewLvl not in CrewTypes.ALL:
             raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
-        self.__crewLvl = crewLvl
         self.__crewSkills = skills
 
-    def setInventoryCrewData(self, crewLvl, value):
+    def setInventoryCrewData(self, crewLvl, skills):
         if crewLvl not in CrewTypes.ALL:
             raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
-        self.__inventoryCrewSkills = value
-        self.__inventoryCrewLvl = crewLvl
+        self.__inventoryCrewSkills = skills
 
     def setVehicleStrCD(self, strCD):
         self.__strCD = strCD
@@ -420,7 +418,6 @@ class _VehCompareData(object):
 class VehComparisonBasket(IVehicleComparisonBasket):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(VehComparisonBasket, self).__init__()
@@ -439,7 +436,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.__vehicles = []
 
     def onLobbyStarted(self, ctx):
-        self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled() and not self.bootcampController.isInBootcamp()
+        self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled()
         diff = {GUI_ITEM_TYPE.VEHICLE: [ vehicle.getVehicleCD() for vehicle in self.__vehicles ]}
         self.__onCacheResync(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
 

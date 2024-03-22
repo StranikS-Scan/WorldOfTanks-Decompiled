@@ -34,6 +34,10 @@ class ArenaInfoAbilityNotifier(DynamicScriptComponent, CallbackDelayer):
         self.__showGuiMarker(equipment, position, delay)
         self.delayCallback(delay, functools.partial(self.__launch, equipment, position, duration))
 
+    @property
+    def battleRoyaleComponent(self):
+        return self.__guiSessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent
+
     def __showGuiMarker(self, equipment, position, delay):
         ctrl = self.__guiSessionProvider.shared.equipments
         if ctrl is not None:
@@ -54,4 +58,8 @@ class ArenaInfoAbilityNotifier(DynamicScriptComponent, CallbackDelayer):
         g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def set_defeatedTeams(self, _prev):
-        self.__guiSessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent.setDefeatedTeams(self.defeatedTeams)
+        self.battleRoyaleComponent.setDefeatedTeams(self.defeatedTeams)
+
+    def set_isRespawnTimeFinished(self, prev):
+        if self.isRespawnTimeFinished:
+            self.battleRoyaleComponent.setOnRespawnTimeFinished()

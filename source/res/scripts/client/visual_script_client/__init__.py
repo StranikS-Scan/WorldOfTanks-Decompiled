@@ -28,6 +28,7 @@ def registerForGeneral():
     import battle_hud_block
     import bitmask_blocks
     import cgf_blocks
+    import pve_battle_hud_blocks
     import battle_hints_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
@@ -41,7 +42,9 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(bitmask_blocks)
     g_blockRegistrar.regBlocksFromModule(cgf_blocks)
     g_blockRegistrar.regBlocksFromModule(battle_hints_blocks)
+    g_blockRegistrar.regType(player_blocks.PlayerControlMode)
     g_blockRegistrar.regBlocksFromModule(camera_blocks)
+    g_blockRegistrar.regBlocksFromModule(pve_battle_hud_blocks)
     g_blockRegistrar.regContext(EntityContextClient)
     g_blockRegistrar.regContext(VehicleContextClient)
 

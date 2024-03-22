@@ -47,15 +47,6 @@ def getTimeLeftInfo(timeLeft, timeStyle=None):
         return (RentDurationKeys.HOURS, formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
 
 
-def getTimeLeftInfoEx(timeLeft, timeStyle=None):
-    if timeLeft > 0 and timeLeft != float('inf'):
-        if timeLeft > time_utils.ONE_DAY:
-            return (RentDurationKeys.DAYS, formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
-        if timeLeft > time_utils.ONE_HOUR:
-            return (RentDurationKeys.HOURS, formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
-    return (RentDurationKeys.MINUTES, formatTime(timeLeft, time_utils.ONE_MINUTE, timeStyle))
-
-
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):
     if ctx is None:
         ctx = {}

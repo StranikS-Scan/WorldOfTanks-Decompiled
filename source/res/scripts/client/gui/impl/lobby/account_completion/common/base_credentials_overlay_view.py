@@ -7,14 +7,14 @@ from gui.impl.gen.view_models.views.lobby.account_completion.add_credentials_mod
 from gui.impl.gen.view_models.views.lobby.account_completion.tooltips.tooltip_constants import TooltipConstants
 from gui.impl.lobby.account_completion.common import errors
 from gui.impl.lobby.account_completion.common.base_wgnp_overlay_view import BaseWGNPOverlayView
-from gui.impl.lobby.account_completion.common.field_presenters import EmailPresenter, PasswordPresenter
+from gui.impl.lobby.account_completion.common.field_presenters import EmailPresenter
 from gui.impl.lobby.account_completion.utils.common import fillRewards, DISABLE_BUTTON_TIME
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 _WARNING_TIMEOUT = DISABLE_BUTTON_TIME
 
 class BaseCredentialsOverlayView(BaseWGNPOverlayView):
-    __slots__ = ('_email', '_password', '_tooltipItems')
+    __slots__ = ('_email', '_tooltipItems')
     _REWARDS_TITLE = R.invalid()
     _eventsCache = dependency.descriptor(IEventsCache)
     _LAYOUT_DYN_ACCESSOR = R.views.lobby.account_completion.AddCredentialsView
@@ -23,7 +23,6 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
     def __init__(self):
         super(BaseCredentialsOverlayView, self).__init__()
         self._email = EmailPresenter(self.viewModel.email)
-        self._password = PasswordPresenter(self.viewModel.password)
         self._tooltipItems = {}
 
     @property
@@ -47,22 +46,17 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
     def activate(self, initialEmail='', emailError='', *args, **kwargs):
         super(BaseCredentialsOverlayView, self).activate(*args, **kwargs)
         self._eventsCache.onSyncCompleted += self._onSyncCompleted
-        self._password.onValueChanged += self._inputValueChangeHandler
-        self._password.onFocusLost += self._inputFocusLostHandler
         self._email.onValueChanged += self._inputValueChangeHandler
         self._email.onFocusLost += self._inputFocusLostHandler
         with self.viewModel.transaction() as model:
             self._email.clear()
-            self._password.clear()
             self._email.setValue(initialEmail)
             if emailError:
-                model.password.setErrorMessage(emailError)
+                model.email.setErrorMessage(emailError)
         self._updateConfirmButtonAvailability()
 
     def deactivate(self):
         self._eventsCache.onSyncCompleted -= self._onSyncCompleted
-        self._password.onValueChanged -= self._inputValueChangeHandler
-        self._password.onFocusLost -= self._inputFocusLostHandler
         self._email.onValueChanged -= self._inputValueChangeHandler
         self._email.onFocusLost -= self._inputFocusLostHandler
         super(BaseCredentialsOverlayView, self).deactivate()
@@ -75,7 +69,6 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
 
     def _doFinalize(self):
         self._email.dispose()
-        self._password.dispose()
         self._tooltipItems = None
         super(BaseCredentialsOverlayView, self)._doFinalize()
         return
@@ -90,10 +83,7 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
 
     def _updateConfirmButtonAvailability(self):
         haveTimedWarning = self.viewModel.getWarningCountdown() and self.viewModel.getWarningText()
-        isPasswordVisible = self.viewModel.getIsPasswordInputVisible()
-        anyFieldIsEmpty = not self._email.value or isPasswordVisible and not self._password.value
-        anyFieldIsInvalid = not self._email.isValid or not self._password.isValid
-        self.viewModel.setIsConfirmEnabled(not haveTimedWarning and not anyFieldIsEmpty and not anyFieldIsInvalid)
+        self.viewModel.setIsConfirmEnabled(not haveTimedWarning and bool(self._email.value) and self._email.isValid)
 
     def _fillRewards(self, model):
         self._tooltipItems.clear()
@@ -106,16 +96,10 @@ class BaseCredentialsOverlayView(BaseWGNPOverlayView):
     def _handleError(self, response):
         with self.viewModel.transaction() as model:
             emailErrorMessage = self._getEmailErrorMessage(response)
-            passwordErrorMessage = self._getPasswordErrorMessage(response)
-            if not emailErrorMessage and not passwordErrorMessage:
+            if not emailErrorMessage:
                 self._setWarning(errors.serverUnavailableTimed(), _WARNING_TIMEOUT)
             model.email.setErrorMessage(emailErrorMessage)
             model.email.setValue(self._email.value)
-            model.password.setErrorMessage(passwordErrorMessage)
-            model.password.setValue(self._password.value)
 
     def _getEmailErrorMessage(self, response):
-        pass
-
-    def _getPasswordErrorMessage(self, response):
         pass

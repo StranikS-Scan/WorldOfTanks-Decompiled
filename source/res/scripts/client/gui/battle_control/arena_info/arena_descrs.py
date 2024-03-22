@@ -258,17 +258,6 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
         return self._decorated.getSelectedQuestInfo()
 
 
-class BootcampBattleDescription(ArenaWithLabelDescription):
-    __slots__ = ()
-
-    def getWinString(self, isInBattle=True):
-        lessonId = self._visitor.getArenaExtraData().get('lessonId', 0)
-        return i18n.makeString('#arenas:type/{}/description{}'.format(functions.getArenaSubTypeName(self._visitor.type.getID()), lessonId))
-
-    def getScreenIcon(self):
-        return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
-
-
 class BattleRoyaleDescription(ArenaWithLabelDescription):
     __slots__ = ()
 
@@ -321,7 +310,6 @@ registerArenaDescrs(ARENA_GUI_TYPE.RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.TRAINING, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING, ArenaWithBasesDescription)
-registerArenaDescrs(ARENA_GUI_TYPE.BOOTCAMP, BootcampBattleDescription)
 for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
     registerArenaDescrs(guiType, EpicBattlesDescription)
 
@@ -329,6 +317,7 @@ registerArenaDescrs(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.MAPBOX, MapboxArenaDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.COMP7, Comp7BattlesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7BattlesDescription)
+registerArenaDescrs(ARENA_GUI_TYPE.TRAINING_COMP7, Comp7BattlesDescription)
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui

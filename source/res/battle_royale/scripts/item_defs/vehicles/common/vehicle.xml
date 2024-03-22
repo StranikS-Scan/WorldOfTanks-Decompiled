@@ -1,0 +1,35 @@
+<vehicle.xml>
+  <extras>
+    <regenerationKit>	NoneExtra : vehicle_extras_battle_royale.RegenerationKit	</regenerationKit>
+    <large_repairkit_battle_royale>	NoneExtra : vehicle_extras_battle_royale.RepairkitBattleRoyale	</large_repairkit_battle_royale>
+    <lift_over_battle_royale>	NoneExtra : LiftOver	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <liftOverTimeout>	5.0	</liftOverTimeout>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </lift_over_battle_royale>
+    <afterburning_battle_royale>	vehicle_extras_battle_royale.AfterburningBattleRoyale : vehicle_extras_battle_royale.AfterburningBattleRoyale	</afterburning_battle_royale>
+    <trappoint>	NoneExtra : vehicle_extras_battle_royale.TrapPoint	</trappoint>
+    <repairpoint>	NoneExtra : vehicle_extras_battle_royale.TrapPoint	</repairpoint>
+    <fireCircle>	NoneExtra : vehicle_extras_battle_royale.FireCircle	</fireCircle>
+    <corrodingShot>	NoneExtra : vehicle_extras_battle_royale.CorrodingShot	</corrodingShot>
+    <adaptationHealthRestore>	NoneExtra : vehicle_extras_battle_royale.AdaptationHealthRestore	</adaptationHealthRestore>
+    <shotPassion>	NoneExtra : vehicle_extras_battle_royale.ShotPassion	</shotPassion>
+    <selfBuff>	NoneExtra : vehicle_extras_battle_royale.SelfBuff	</selfBuff>
+    <berserker>	NoneExtra : vehicle_extras_battle_royale.Berserker	</berserker>
+    <healPoint>	NoneExtra : vehicle_extras_battle_royale.HealPoint	</healPoint>
+    <arcade_minefield_battle_royale>	NoneExtra : vehicle_extras_battle_royale.MineField	</arcade_minefield_battle_royale>
+    <arcade_bomber_battle_royale>	NoneExtra : vehicle_extras_battle_royale.Bomber	</arcade_bomber_battle_royale>
+    <arcade_bomber_with_own_damage_battle_royale>	NoneExtra : vehicle_extras_battle_royale.BomberWithOwnDamage	</arcade_bomber_with_own_damage_battle_royale>
+    <spawn_kamikaze>	NoneExtra : vehicle_extras_battle_royale.SpawnBot	</spawn_kamikaze>
+    <clingBrander>	NoneExtra : vehicle_extras_battle_royale.SpawnBot	</clingBrander>
+    <thunderStrike>	NoneExtra : vehicle_extras_battle_royale.ThunderStrike	</thunderStrike>
+    <arcade_smoke_battle_royale>	NoneExtra : vehicle_extras_battle_royale.Smoke	</arcade_smoke_battle_royale>
+    <arcade_smoke_battle_royale_with_damage>	NoneExtra : vehicle_extras_battle_royale.Smoke	</arcade_smoke_battle_royale_with_damage>
+  </extras>
+</vehicle.xml>

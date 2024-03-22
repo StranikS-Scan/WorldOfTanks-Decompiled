@@ -60,7 +60,7 @@ class WeeklyQuestsPage(PageSubModelPresenter):
             if tooltipId is None:
                 return
             bonusData = self.__bonusData[tooltipId]
-            window = backport.BackportTooltipWindow(bonusData.tooltip, self.parentView.getParentWindow())
+            window = backport.BackportTooltipWindow(bonusData.tooltip, self.parentView.getParentWindow(), event)
             window.load()
             return window
         else:

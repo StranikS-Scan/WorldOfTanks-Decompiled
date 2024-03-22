@@ -3,12 +3,14 @@
 import weakref
 import typing
 import BigWorld
+from aih_constants import CTRL_MODES
 from visual_script import ASPECT
 from visual_script.ability_common import Stage
-from visual_script.block import Meta, Block
+from visual_script.block import Meta, Block, InitParam, buildStrKeysValue
 from visual_script.dependency import dependencyImporter
-from visual_script.misc import errorVScript
+from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
+from visual_script.type import VScriptEnum
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
 import items.vehicles as vehicles
@@ -176,6 +178,118 @@ class OnPlayerSPGMode(TunableEventBlock, PlayerEventMeta, TriggerListener):
     @TunableEventBlock.eventProcessor
     def _callOnExit(self):
         pass
+
+
+class OnPlayerControlModeChange(TunableEventBlock, PlayerEventMeta, TriggerListener):
+    _EVENT_SLOT_NAMES = ['OnEnter', 'OnExit']
+    __CTRL_MODE_ANY = 'Any mode'
+
+    def __init__(self, *args, **kwargs):
+        super(OnPlayerControlModeChange, self).__init__(*args, **kwargs)
+        self._controlMode = self._getInitParams()
+        self._previousMode = self._makeDataOutputSlot('previous mode', PlayerControlMode.slotType(), None)
+        self._currentMode = self._makeDataOutputSlot('current mode', PlayerControlMode.slotType(), None)
+        return
+
+    @classmethod
+    def initParams(cls):
+        allModes = [OnPlayerControlModeChange.__CTRL_MODE_ANY] + list(CTRL_MODES)
+        return [InitParam('ControlMode', SLOT_TYPE.STR, buildStrKeysValue(*allModes), EDITOR_TYPE.STR_KEY_SELECTOR)]
+
+    def captionText(self):
+        return 'On Change Control Mode (' + self._controlMode.upper() + ')'
+
+    def onStartScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.addListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onFinishScript(self):
+        manager = TriggersManager.g_manager
+        if manager:
+            manager.delListener(self)
+        else:
+            errorVScript(self, 'TriggersManager.g_manager is None')
+
+    def onTriggerActivated(self, params):
+        triggerType = params.get('type')
+        if triggerType is not TriggersManager.TRIGGER_TYPE.CTRL_MODE_CHANGE:
+            return
+        isAnyMode = self._controlMode == OnPlayerControlModeChange.__CTRL_MODE_ANY
+        previousMode = params.get('previousMode')
+        currentMode = params.get('currentMode')
+        if isAnyMode or previousMode == self._controlMode:
+            self._index = 1
+            self._callOnExit(previousMode, currentMode)
+        if isAnyMode or currentMode == self._controlMode:
+            self._index = 0
+            self._callOnEnter(previousMode, currentMode)
+
+    @TunableEventBlock.eventProcessor
+    def _callOnExit(self, previousMode, currentMode):
+        self.__setOutputValues(previousMode, currentMode)
+
+    @TunableEventBlock.eventProcessor
+    def _callOnEnter(self, previousMode, currentMode):
+        self.__setOutputValues(previousMode, currentMode)
+
+    def __setOutputValues(self, previousMode, currentMode):
+        previousModeIndex = PlayerControlMode.nameToIndex(previousMode)
+        self._previousMode.setValue(previousModeIndex)
+        currentModeIndex = PlayerControlMode.nameToIndex(currentMode)
+        self._currentMode.setValue(currentModeIndex)
+
+
+class IsControlModeActive(Block, PlayerEventMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(IsControlModeActive, self).__init__(*args, **kwargs)
+        self._controlMode = self._makeDataInputSlot('control mode', PlayerControlMode.slotType())
+        self._active = self._makeDataOutputSlot('active', SLOT_TYPE.BOOL, self.__execute)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def __execute(self):
+        player = BigWorld.player()
+        aih = player.inputHandler if player else None
+        if not aih:
+            errorVScript(self, 'Cannot get players input handler')
+            return
+        else:
+            controlMode = self._controlMode.getValue()
+            self._active.setValue(controlMode == PlayerControlMode.nameToIndex(aih.ctrlModeName))
+            return
+
+
+class PlayerControlMode(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return CTRL_MODES
+
+    @classmethod
+    def nameToIndex(cls, ctrlModeName):
+        return cls.vs_enum().index(ctrlModeName)
+
+    @classmethod
+    def _vs_collectEnumEntries(cls):
+        entriesData = {}
+        for name in cls.vs_enum():
+            entriesData[name] = cls.vs_enum().index(name)
+
+        return entriesData
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
 
 
 class OnGunMarkerPenetrationStateChanged(TunableEventBlock, PlayerEventMeta):
@@ -451,21 +565,6 @@ class OnPlayerVehicleTankmanEvent(TunablePlayerVehicleEventBlock, PlayerEventMet
     @TunableEventBlock.eventProcessor
     def _callOutput(self, tankman):
         self._tankman.setValue(tankman)
-
-
-class OnBootcampPlayerVehicleDetected(TunablePlayerVehicleEventBlock, PlayerEventMeta):
-    _EVENT_SLOT_NAMES = ['onDetected', 'onLost']
-
-    def onPlayerDetected(self, isDetected):
-        if isDetected:
-            self._index = 0
-        else:
-            self._index = 1
-        self._callOutput()
-
-    @TunableEventBlock.eventProcessor
-    def _callOutput(self):
-        pass
 
 
 class OnPlayerVehicleDeviceCrit(TunablePlayerVehicleEventBlock, PlayerEventMeta):

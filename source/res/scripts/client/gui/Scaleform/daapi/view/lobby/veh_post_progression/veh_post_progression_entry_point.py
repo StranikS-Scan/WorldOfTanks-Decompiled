@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/veh_post_progression/veh_post_progression_entry_point.py
 import typing
-from bootcamp.Bootcamp import g_bootcamp
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BECOME_ELITE_VEHICLES_WATCHED
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
@@ -85,7 +84,7 @@ class VehPostProgressionEntryPoint(EventSystemEntity):
 
     def __getPostProgressionData(self):
         vehicle = self._vehicle
-        if not vehicle or not vehicle.isPostProgressionExists or g_bootcamp.isRunning():
+        if not vehicle or not vehicle.isPostProgressionExists:
             return {'state': POSTPROGRESSION_CONSTS.RESEARCH_STATE_HIDDEN}
         eliteProgress = vehicle.getEliteStatusProgress()
         self._modulesToUnlock = eliteProgress.toUnlock

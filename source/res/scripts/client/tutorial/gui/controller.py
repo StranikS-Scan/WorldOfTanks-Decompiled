@@ -18,11 +18,8 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _Event = events.TutorialEvent
 _TRIGGER_TYPES = TUTORIAL_TRIGGER_TYPES
-_EFFECT_COMPLETE_EVENTS = {_EFFECT_TYPES.TWEEN: _Event.ON_ANIMATION_COMPLETE,
- _EFFECT_TYPES.CLIP: _Event.ON_ANIMATION_COMPLETE}
 _COMPONENT_PROPERTY_EFFECTS = {_EFFECT_TYPES.DISPLAY: ('visible',),
- _EFFECT_TYPES.ENABLED: ('enabled',),
- _EFFECT_TYPES.LAYOUT: ('layout',)}
+ _EFFECT_TYPES.ENABLED: ('enabled',)}
 _R_VIEWS_PREFIX = 'R.views.'
 
 def _isRView(path):
@@ -69,7 +66,7 @@ class _ComponentViewBinding(object):
 
 
 class GuiController(IGuiController):
-    __slots__ = ('__guiImpls', '_isEnabled', '_componentViewBindings', '_components', '_componentProps', '_pendingComponentAnimations', '__hintsWithClientTriggers', '_config', '__hangarMenuButtonsOverride', '__headerMenuButtonsOverride', '__hangarHeaderEnabled', '__battleSelectorHintOverride', '__onComponentFoundHandlers', '__descriptions')
+    __slots__ = ('__guiImpls', '_isEnabled', '_componentViewBindings', '_components', '_componentProps', '_pendingComponentAnimations', '__hintsWithClientTriggers', '_config', '__onComponentFoundHandlers', '__descriptions')
 
     def __init__(self):
         super(GuiController, self).__init__()
@@ -83,27 +80,7 @@ class GuiController(IGuiController):
         self.__hintsWithClientTriggers = None
         self.__onComponentFoundHandlers = {}
         self.__descriptions = []
-        self.__hangarMenuButtonsOverride = None
-        self.__headerMenuButtonsOverride = None
-        self.__hangarHeaderEnabled = True
-        self.__battleSelectorHintOverride = None
         return
-
-    @property
-    def lastHangarMenuButtonsOverride(self):
-        return self.__hangarMenuButtonsOverride
-
-    @property
-    def lastHeaderMenuButtonsOverride(self):
-        return self.__headerMenuButtonsOverride
-
-    @property
-    def hangarHeaderEnabled(self):
-        return self.__hangarHeaderEnabled
-
-    @property
-    def lastBattleSelectorHintOverride(self):
-        return self.__battleSelectorHintOverride
 
     def setHintsWithClientTriggers(self, clientTriggers):
         self.__hintsWithClientTriggers = clientTriggers
@@ -209,26 +186,6 @@ class GuiController(IGuiController):
                         _logger.error('last deferred playComponentAnimation call had a different type: %r, %r, %r', componentID, animType, deferredAnimType)
             return
 
-    def showBootcampHint(self, componentID):
-        if not self._validate(componentID):
-            return False
-        if componentID not in self._components:
-            _logger.error('showBootcampHint - target component is not on scene!: %r', componentID)
-            return False
-        params = self._config.getItem(componentID).bootcampHint
-        _logger.debug('showBootcampHint: %r, %r', componentID, params)
-        self.__doShowEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT, params)
-        return True
-
-    def hideBootcampHint(self, componentID):
-        if not self._validate(componentID):
-            return
-        if componentID not in self._components:
-            _logger.error("hideBootcampHint: can't find component %s", componentID)
-            return
-        _logger.debug('hideBootcampHint: %r', componentID)
-        self.__doHideEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT)
-
     def setupViewContextHints(self, viewTutorialID, hintsData, hintsArgs=None):
         hintsDataCopy = hintsData.copy()
         for hint in hintsDataCopy.get('hints', []):
@@ -237,40 +194,16 @@ class GuiController(IGuiController):
                 hint['args'] = hintArgs
 
         builder = hintsDataCopy.pop('builderLnk', '')
-        effectType = _EFFECT_TYPES.DEFAULT_OVERLAY
+        effectType = _EFFECT_TYPES.OVERLAY
         for gui in self.__guiImpls:
             gui.showEffect('', viewTutorialID, effectType, hintsDataCopy, builder)
 
         return
 
-    def overrideHangarMenuButtons(self, buttonsList=None):
-        if buttonsList != self.__hangarMenuButtonsOverride:
-            self.__hangarMenuButtonsOverride = buttonsList
-            g_eventBus.handleEvent(_Event(_Event.OVERRIDE_HANGAR_MENU_BUTTONS, targetID=buttonsList), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def overrideHeaderMenuButtons(self, buttonsList=None):
-        if buttonsList != self.__headerMenuButtonsOverride:
-            self.__headerMenuButtonsOverride = buttonsList
-            g_eventBus.handleEvent(_Event(_Event.OVERRIDE_HEADER_MENU_BUTTONS, targetID=buttonsList), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def setHangarHeaderEnabled(self, enabled):
-        if enabled != self.__hangarHeaderEnabled:
-            self.__hangarHeaderEnabled = enabled
-            g_eventBus.handleEvent(_Event(_Event.SET_HANGAR_HEADER_ENABLED, targetID=enabled), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def overrideBattleSelectorHint(self, overrideType=None):
-        if overrideType != self.__battleSelectorHintOverride:
-            self.__battleSelectorHintOverride = overrideType
-            g_eventBus.handleEvent(_Event(_Event.OVERRIDE_BATTLE_SELECTOR_HINT, targetID=overrideType), scope=EVENT_BUS_SCOPE.LOBBY)
-
     def clear(self):
         _logger.debug('clear')
         self._isEnabled = False
         self._config = None
-        self.__hangarMenuButtonsOverride = None
-        self.__headerMenuButtonsOverride = None
-        self.__hangarHeaderEnabled = True
-        self.__battleSelectorHintOverride = None
         self.__hintsWithClientTriggers = None
         self._components.clear()
         self._componentProps.clear()
@@ -368,10 +301,6 @@ class GuiController(IGuiController):
 
     def __onEffectCompleted(self, componentID, effectType):
         _logger.debug('onEffectCompleted: %r, %r', componentID, effectType)
-        eventType = _EFFECT_COMPLETE_EVENTS.get(effectType, None)
-        if eventType is not None:
-            g_eventBus.handleEvent(_Event(eventType, targetID=componentID, settingsID=effectType), scope=EVENT_BUS_SCOPE.GLOBAL)
-        return
 
     def __tryToSetupGui(self):
         if not any([ not api.isInited() for api in self.__guiImpls ]):

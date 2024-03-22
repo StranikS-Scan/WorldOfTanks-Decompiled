@@ -3,29 +3,23 @@
 import typing
 from base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui import SystemMessages
-from gui.customization.shared import getPurchaseGoldForCredits, getPurchaseMoneyState, MoneyForPurchase
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
-from gui.impl.dialogs.sub_views.top_right.money_balance import MoneyBalance
 from gui.impl.gen.resources import R
-from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_new_tankman_dialog_model import RecruitNewTankmanDialogModel
-from gui.impl.lobby.crew.dialogs.price_cards_content.recruit_new_tankman_price_list import RecruitNewTankmanPriceList
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.shared import event_dispatcher
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.processors.tankman import TankmanRecruitAndEquip, TankmanRecruit
 from gui.shared.utils import decorators
-from gui.shop import showBuyGoldForCrew
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
-    from gui.shared.gui_items.gui_item_economics import ItemPrice
 _LOC = R.strings.dialogs.recruit
+_FREE_INDEX = 0
 
 class RecruitNewTankmanDialog(BaseCrewDialogTemplateView):
-    __slots__ = ('_vehicle', '_slotIdx', '_priceListContent', '_putInTank')
+    __slots__ = ('_vehicle', '_slotIdx', '_putInTank')
     LAYOUT_ID = R.views.lobby.crew.dialogs.RecruitNewTankmanDialog()
     VIEW_MODEL = RecruitNewTankmanDialogModel
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -34,7 +28,6 @@ class RecruitNewTankmanDialog(BaseCrewDialogTemplateView):
         self._vehicle = self._itemsCache.items.getItemByCD(vehicleCD)
         self._slotIdx = slotIdx
         self._putInTank = putInTank
-        self._priceListContent = RecruitNewTankmanPriceList()
         super(RecruitNewTankmanDialog, self).__init__()
 
     @property
@@ -44,23 +37,12 @@ class RecruitNewTankmanDialog(BaseCrewDialogTemplateView):
     def _getCallbacks(self):
         return (('inventory.1.compDescr', self._onVehiclesInventoryUpdate),)
 
-    def _getEvents(self):
-        return ((self._priceListContent.onPriceChange, self._onPriceChange),)
-
     def _onLoading(self, *args, **kwargs):
         self.setBackgroundImagePath(R.images.gui.maps.icons.windows.background())
-        self.setSubView(DefaultDialogPlaceHolders.TOP_RIGHT, MoneyBalance())
-        self.setChildView(self._priceListContent.layoutID, self._priceListContent)
-        self.addButton(ConfirmButton(_LOC.submit(), isDisabled=True))
+        self.addButton(ConfirmButton(_LOC.submit()))
         self.addButton(CancelButton(_LOC.cancel()))
         self._updateViewModel()
         super(RecruitNewTankmanDialog, self)._onLoading(*args, **kwargs)
-
-    def _onPriceChange(self, index=None):
-        submitBtn = self.getButton(DialogButtons.SUBMIT)
-        if submitBtn is not None:
-            submitBtn.isDisabled = index is None
-        return
 
     def _onVehiclesInventoryUpdate(self, diff):
         if self._vehicle.invID in diff and diff[self._vehicle.invID] is None:
@@ -75,6 +57,8 @@ class RecruitNewTankmanDialog(BaseCrewDialogTemplateView):
         if self._vehicle:
             vm.setVehicleName(self._vehicle.descriptor.type.shortUserString)
             vm.setIsPremium(self._vehicle.isPremium)
+            vm.setVehicleType(self._vehicle.type)
+            vm.setVehicleLevel(self._vehicle.level)
             roles = self._vehicle.descriptor.type.crewRoles[self._slotIdx]
             vm.setRole(roles[0])
 
@@ -85,16 +69,7 @@ class RecruitNewTankmanDialog(BaseCrewDialogTemplateView):
         super(RecruitNewTankmanDialog, self)._setResult(result)
 
     def _recruitTankman(self):
-        itemPrice, _, operationKey = self._priceListContent.selectedPriceData
-        purchaseMoneyState = getPurchaseMoneyState(itemPrice.price)
-        if purchaseMoneyState is MoneyForPurchase.NOT_ENOUGH:
-            showBuyGoldForCrew(itemPrice.price.gold)
-            return False
-        if purchaseMoneyState is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
-            purchaseGold = getPurchaseGoldForCredits(itemPrice.price)
-            event_dispatcher.showExchangeCurrencyWindowModal(currencyValue=purchaseGold)
-            return False
-        self._processRecruit(operationKey)
+        self._processRecruit(_FREE_INDEX)
         return True
 
     def _processRecruit(self, operationKey):

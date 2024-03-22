@@ -7,6 +7,7 @@ import Event
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
 from gui.battle_control import arena_visitor
@@ -175,17 +176,18 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isMapsTraining():
+        if self.__isReplayPlaying or self.__arenaVisitor.gui.isTrainingBattle() or self.__arenaVisitor.gui.isMapsTraining() or self.__arenaVisitor.gui.isComp7Training():
+            return BattleExitResult(False, None)
+        else:
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
             else:
-                isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
+                player = BigWorld.player()
+                hasLiftOver = ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER) if player else False
+                isDeserter = avatar_getter.isVehicleAlive() and (not avatar_getter.isVehicleOverturned() or hasLiftOver)
             return BattleExitResult(isDeserter, vInfo.player)
-        else:
-            return BattleExitResult(False, None)
-            return None
 
     def exit(self):
         if self.__arenaVisitor.gui.isMapsTraining():

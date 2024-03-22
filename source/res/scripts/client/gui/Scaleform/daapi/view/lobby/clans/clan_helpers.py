@@ -28,3 +28,8 @@ def getStrongholdEventUrl(lobbyContext=None):
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getStrongholdEventBattleModeSettings(lobbyContext=None):
     return lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.STRONGHOLD_EVENT_BATTLE_MODE, ('', 0))
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getClanSupplyEnabled(lobbyContext=None):
+    return lobbyContext.getServerSettings().getClansConfig().get(ClansConfig.CLAN_SUPPLY_ENABLED, False)

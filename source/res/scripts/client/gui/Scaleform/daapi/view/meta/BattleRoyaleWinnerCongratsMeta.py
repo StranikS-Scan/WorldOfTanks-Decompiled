@@ -4,8 +4,5 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class BattleRoyaleWinnerCongratsMeta(BaseDAAPIComponent):
 
-    def onBecomeVisible(self):
-        self._printOverrideError('onBecomeVisible')
-
-    def as_setStpCoinsS(self, initial, factor=1, placeBonus=0):
-        return self.flashObject.as_setStpCoins(initial, factor, placeBonus) if self._isDAAPIInited() else None
+    def playWinSound(self):
+        self._printOverrideError('playWinSound')

@@ -178,6 +178,7 @@ class ElementTooltip(BlocksTooltipData):
         self._appliedCount = 0
         self._progressionLevel = 0
         self._showOnlyProgressBlock = False
+        self.__skipQuestValidation = False
         self.__ctx = None
         self.__vehicle = None
         return
@@ -199,6 +200,7 @@ class ElementTooltip(BlocksTooltipData):
         statsConfig.inventoryCount = showInventoryBlock
         self._progressionLevel = config.level
         self._showOnlyProgressBlock = config.showOnlyProgressBlock
+        self.__skipQuestValidation = config.skipQuestValidation
         return self._packItemBlocks(statsConfig)
 
     def _packItemBlocks(self, statsConfig):
@@ -327,7 +329,7 @@ class ElementTooltip(BlocksTooltipData):
                     blocks.append(formatters.packImageTextBlockData(desc=text_styles.bonusAppliedText(backport.text(rStatus.completed(), level=int2roman(level))), img=backport.image(R.images.gui.maps.icons.library.ConfirmIcon_1()), imgPadding=formatters.packPadding(top=2)))
                 else:
                     isAvailable = tokenCount == self._item.descriptor.requiredTokenCount - 1
-                    isValid = not self._item.isUnlockingExpired()
+                    isValid = self.__skipQuestValidation or not self._item.isUnlockingExpired()
                     if not isValid or not isAvailable:
                         unavailableBlocks = []
                         unavailableBlocks.append(formatters.packImageTextBlockData(desc=text_styles.error(backport.text(rStatus.unavailable())), img=backport.image(R.images.gui.maps.icons.library.CancelIcon_1()), imgPadding=formatters.packPadding(top=2)))
@@ -373,48 +375,49 @@ class ElementTooltip(BlocksTooltipData):
             isLevelCompleted = False
             progressPercents = []
             isAvailable = tokenCount == self._item.descriptor.requiredTokenCount - 1
-            delimitersToPost = len(quests) - 1
-            for quest in quests:
-                vehCond = getDefaultVehicleCondFormatter().format(quest.vehicleReqs, quest)
-                postBattleCond = getDefaultPostBattleCondFormatter().format(quest.postBattleCond, quest)
-                bonusCond = getDefaultMissionsBonusConditionsFormatter().format(quest.bonusCond, quest)
-                isCompleted = quest is not None and quest.isCompleted() or tokenCount >= self._item.descriptor.requiredTokenCount
-                isLevelCompleted = isLevelCompleted or isCompleted
-                battleCountCondition = quest.bonusCond.getConditions().find('battles')
-                battlesCount = None
-                hasBattleConditions = False
-                if battleCountCondition is not None:
-                    battlesCount = first(BattlesCountFormatter(bool(postBattleCond)).format(battleCountCondition, quest))
-                for orItem in postBattleCond:
-                    progress = 0
-                    andItems = orItem + first(vehCond, []) + first(bonusCond, [])
-                    for andItem in andItems:
-                        descrData = andItem.descrData
-                        if andItem.conditionData:
-                            description = andItem.conditionData.get('data', {}).get('description')
-                        elif descrData and first(descrData.args):
-                            description = CARD_FIELDS_FORMATTERS[descrData.formatterID](*descrData.args)
-                        else:
-                            description = ''
-                            _logger.error('Description is not provided for questID: %d', 0)
-                        current = int(andItem.current or 0 if battlesCount is None else battlesCount.current)
-                        total = int(andItem.total or 1 if battlesCount is None else battlesCount.total)
-                        progress += int(round(current * 100.0 / total))
-                        blocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
-                        hasBattleConditions = True
+            if quests:
+                delimitersToPost = len(quests) - 1
+                for quest in quests:
+                    vehCond = getDefaultVehicleCondFormatter().format(quest.vehicleReqs, quest)
+                    postBattleCond = getDefaultPostBattleCondFormatter().format(quest.postBattleCond, quest)
+                    bonusCond = getDefaultMissionsBonusConditionsFormatter().format(quest.bonusCond, quest)
+                    isCompleted = quest is not None and quest.isCompleted() or tokenCount >= self._item.descriptor.requiredTokenCount
+                    isLevelCompleted = isLevelCompleted or isCompleted
+                    battleCountCondition = quest.bonusCond.getConditions().find('battles')
+                    battlesCount = None
+                    hasBattleConditions = False
+                    if battleCountCondition is not None:
+                        battlesCount = first(BattlesCountFormatter(bool(postBattleCond)).format(battleCountCondition, quest))
+                    for orItem in postBattleCond:
+                        progress = 0
+                        andItems = orItem + first(vehCond, []) + first(bonusCond, [])
+                        for andItem in andItems:
+                            descrData = andItem.descrData
+                            if andItem.conditionData:
+                                description = andItem.conditionData.get('data', {}).get('description')
+                            elif descrData and first(descrData.args):
+                                description = CARD_FIELDS_FORMATTERS[descrData.formatterID](*descrData.args)
+                            else:
+                                description = ''
+                                _logger.error('Description is not provided for questID: %d', 0)
+                            current = int(andItem.current or 0 if battlesCount is None else battlesCount.current)
+                            total = int(andItem.total or 1 if battlesCount is None else battlesCount.total)
+                            progress += int(round(current * 100.0 / total))
+                            blocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
+                            hasBattleConditions = True
 
-                    if andItems:
-                        progress /= len(andItems)
-                    progressPercents.append(progress)
+                        if andItems:
+                            progress /= len(andItems)
+                        progressPercents.append(progress)
 
-                if quest.accountReqs.getTokens() and not hasBattleConditions:
-                    blocks.append(formatCondition(quest, isCompleted, isAvailable, 0, 1, quest.getDescription()))
-                if delimitersToPost:
-                    blocks.append(formatters.packQuestOrConditionBlockData(padding=formatters.packPadding(bottom=-22, right=17)))
-                    delimitersToPost -= 1
+                    if quest.accountReqs.getTokens() and not hasBattleConditions:
+                        blocks.append(formatCondition(quest, isCompleted, isAvailable, 0, 1, quest.getDescription()))
+                    if delimitersToPost:
+                        blocks.append(formatters.packQuestOrConditionBlockData(padding=formatters.packPadding(bottom=-22, right=17)))
+                        delimitersToPost -= 1
 
-            if not isLevelCompleted and isAvailable:
-                blocks.append(formatters.packQuestProgressBlockData(max(progressPercents), padding=formatters.packPadding(left=-19, top=13, bottom=-35)))
+                if not isLevelCompleted and isAvailable:
+                    blocks.append(formatters.packQuestProgressBlockData(max(progressPercents), padding=formatters.packPadding(left=-19, top=13, bottom=-35)))
             return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-8))
 
     def _packCharacteristicsBlock(self):

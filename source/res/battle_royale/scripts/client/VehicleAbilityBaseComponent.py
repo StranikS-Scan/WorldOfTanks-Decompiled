@@ -72,7 +72,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
     def _canUpdateTimer(self):
         modeName = self._avatar.inputHandler.ctrlModeName
-        return True if self.entity.id == self._avatar.inputHandler.ctrl.curVehicleID and modeName != 'video' else False
+        return True if self.__entityIDMatches() and modeName != 'video' else False
 
     def _updateMarker(self, data, isHide=False):
         if self._markerID is None:
@@ -82,7 +82,7 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
                 self.__pushToPostponeCall(self._updateMarker, (data, isHide))
             else:
                 modeName = self._avatar.inputHandler.ctrlModeName
-                if self.entity.id != self._avatar.inputHandler.ctrl.curVehicleID or isHide or modeName == 'video':
+                if not self.__entityIDMatches() or isHide or modeName == 'video':
                     self._guiFeedback.onVehicleFeedbackReceived(FEEDBACK_EVENT_ID.VEHICLE_CUSTOM_MARKER, self.entity.id, data)
             return
 
@@ -118,6 +118,9 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
         else:
             self._updateVisuals()
             return
+
+    def __entityIDMatches(self):
+        return self.entity.id == self._avatar.inputHandler.ctrl.curVehicleID or self._avatar.isObserverFPV and self.entity.id == self._avatar.observedVehicleID
 
     def __onSwitchingViewPoint(self):
         self.__isSwitching = True

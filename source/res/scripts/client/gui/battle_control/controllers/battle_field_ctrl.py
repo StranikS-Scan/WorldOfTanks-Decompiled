@@ -10,7 +10,7 @@ from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOP
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
 if typing.TYPE_CHECKING:
-    from typing import Dict, Iterator, List
+    from typing import Dict, Iterator, List, Tuple
     from Math import Vector3
     from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
 _logger = logging.getLogger(__name__)
@@ -148,6 +148,9 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
                 self.__updateVehiclesHealth()
             self.__registerDeadVehicle(vInfoVO, arenaDP)
             self.__updateDeadVehicles()
+
+    def getAliveVehicles(self):
+        return (self._aliveAllies, self._aliveEnemies)
 
     def __initializeVehiclesInfo(self):
         arenaDP = self.__battleCtx.getArenaDP()

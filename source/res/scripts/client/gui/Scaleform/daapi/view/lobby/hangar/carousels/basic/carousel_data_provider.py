@@ -229,31 +229,3 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         hasTelecomRentalsActive = self._telecomRentals.isActive()
         isRentalEnabled = self._serverSettings.isTelecomRentalsEnabled()
         return hasTelecomRentalsActive and isRentalEnabled
-
-
-class BCCarouselDataProvider(CarouselDataProvider):
-
-    @property
-    def collection(self):
-        return self._vehicleItems
-
-    def updateSupplies(self):
-        pass
-
-    def _buildVehicleItems(self):
-        super(BCCarouselDataProvider, self)._buildVehicleItems()
-        for vehicleItem in self._vehicleItems:
-            vehicleItem['infoText'] = ''
-            vehicleItem['smallInfoText'] = ''
-
-    def setShowStats(self, showVehicleStats):
-        pass
-
-    def selectVehicle(self, idx):
-        self._selectedIdx = idx
-        realIdx = self._filteredIndices[idx]
-        return self._vehicles[realIdx].invID
-
-    def _buildVehicle(self, vehicle):
-        vehicle.dailyXPFactor = 1
-        return super(BCCarouselDataProvider, self)._buildVehicle(vehicle)

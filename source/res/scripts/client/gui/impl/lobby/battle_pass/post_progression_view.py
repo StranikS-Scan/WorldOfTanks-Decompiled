@@ -71,7 +71,9 @@ class PostProgressionView(ViewImpl):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__close),
+        return ((self.viewModel.awardsWidget.onTakeRewardsClick, self.__takeAllRewards),
+         (self.viewModel.awardsWidget.showTankmen, self.__showTankmen),
+         (self.viewModel.onClose, self.__close),
          (self.viewModel.showRewards, self.__showRewards),
          (self.viewModel.onTakeRewardsClick, self.__takeAllRewards),
          (self.viewModel.showTankmen, self.__showTankmen),
@@ -89,7 +91,9 @@ class PostProgressionView(ViewImpl):
         self.__setChapter()
         self.__updateDetailRewards()
         with self.viewModel.transaction() as model:
-            model.setIsSpecialVoiceTankmen(not len(self.__battlePass.getSpecialTankmen()) < 2)
+            model.awardsWidget.setIsBpBitEnabled(not self.__battlePass.isHoliday())
+            model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
+            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(not len(self.__battlePass.getSpecialTankmen()) < 2)
             model.setIsSeasonEndingSoon(isSeasonEndingSoon())
             self.__updateRewardChoice(model=model)
 
@@ -116,8 +120,8 @@ class PostProgressionView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __updateRewardChoice(self, model=None):
-        model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
-        model.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
+        model.awardsWidget.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
+        model.awardsWidget.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
 
     def __updateDetailRewards(self):
         fromLevel = 1

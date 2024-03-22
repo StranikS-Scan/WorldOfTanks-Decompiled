@@ -6,6 +6,9 @@ from collections import namedtuple
 _EXTENSIONS_RELATIVE_DIR = '../wot_ext'
 _EXTENSIONS_ABS_DIR = 'res/wot_ext'
 _EXTENSION_PATH_TEMPLATE = '{root}/{extension}/{path}'
+_SETTINGS_FORMATTER = '@({})'
+_EXT_FORMATTER_ARGUMENT = 'EXTENSION'
+_EXT_FORMATTER = _SETTINGS_FORMATTER.format(_EXT_FORMATTER_ARGUMENT)
 _EXTENSION_IMPORT_PATHS = ['',
  'scripts',
  'scripts/base',
@@ -49,6 +52,17 @@ class ExtensionsManager(object):
                 extensions[extension.name] = extension
 
         return extensions
+
+    def getExtensionPath(self, path):
+        if _EXT_FORMATTER not in path:
+            return [path]
+        pathList = []
+        for ext in self.activeExtensions:
+            extPath = path.replace(_EXT_FORMATTER, ext.dirName)
+            if ResMgr.isDir(extPath) or ResMgr.isFile(extPath):
+                pathList.append(extPath)
+
+        return pathList
 
     @staticmethod
     def _readExtension(root):

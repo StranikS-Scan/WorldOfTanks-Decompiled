@@ -131,11 +131,11 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def __doLeaveArena(self):
         self.as_setVisibilityS(False)
         exitResult = self._getExitResult()
-        if exitResult.isDeserter:
+        if BattleReplay.isPlaying():
+            result = yield wg_await(showLeaverReplayWindow())
+        elif exitResult.isDeserter:
             isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
             result = yield wg_await(self._showLeaverAliveWindow(isPlayerIGR))
-        elif BattleReplay.isPlaying():
-            result = yield wg_await(showLeaverReplayWindow())
         else:
             result = yield wg_await(showExitWindow())
         if result:

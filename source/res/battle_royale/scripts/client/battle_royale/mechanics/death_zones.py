@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/mechanics/death_zones.py
+from collections import namedtuple
 import CGF
 import Math
 import BigWorld
@@ -22,6 +23,14 @@ _INVISIBLE_LEFT = 2
 _INVISIBLE_UP = 4
 _INVISIBLE_DOWN = 8
 _UPDATE_PERIOD = 0.1
+DeathZoneWallParameters = namedtuple('DeathZoneWallParameters', ['enableCenter',
+ 'maxAlpha',
+ 'centerAlpha',
+ 'wallHeight',
+ 'centerHeight',
+ 'color',
+ 'groundLineHeight',
+ 'groundLineAlpha'])
 
 class DeathZoneUpdaterManager(CGF.ComponentManager):
 
@@ -36,11 +45,7 @@ class DeathZoneDrawManager(CGF.ComponentManager):
 
     def __init__(self, args):
         super(DeathZoneDrawManager, self).__init__(args)
-        maxAlpha, height, activeColor, waitingColor = args
-        self._maxAlpha = maxAlpha
-        self._height = height
-        self._activeColor = activeColor
-        self._waitingColor = waitingColor
+        self.activeWall, self.waitingWall = args
         self.__hashedBoundingBox = None
         return
 
@@ -67,17 +72,23 @@ class DeathZoneDrawManager(CGF.ComponentManager):
     def _drawZones(self, zoneID, deathZones):
         x, y = idxFrom(zoneID)
         state = deathZones.activeZones[zoneID]
-        color = self._activeColor if state == ZONE_STATE.CRITICAL else self._waitingColor
+        wall = self.activeWall if state == ZONE_STATE.CRITICAL else self.waitingWall
         position = self._cornerPosition + Math.Vector3(x * self._zoneSizeX, 0, y * self._zoneSizeY)
         position += self._zonePositionOffset
         spaceID = self.spaceID
         BigWorld.ArenaBorderHelper.setBorderBounds(spaceID, zoneID, position, self._zoneScale)
         BigWorld.ArenaBorderHelper.setBorderVisible(spaceID, zoneID, state != ZONE_STATE.SAVE)
-        BigWorld.ArenaBorderHelper.setBorderColor(spaceID, zoneID, color)
-        BigWorld.ArenaBorderHelper.setBorderMaxAlpha(spaceID, zoneID, self._maxAlpha)
-        BigWorld.ArenaBorderHelper.setBorderHeight(spaceID, zoneID, self._height)
+        BigWorld.ArenaBorderHelper.setBorderColor(spaceID, zoneID, wall.color)
+        BigWorld.ArenaBorderHelper.setBorderMaxAlpha(spaceID, zoneID, wall.maxAlpha)
+        BigWorld.ArenaBorderHelper.setBorderHeight(spaceID, zoneID, wall.wallHeight)
         BigWorld.ArenaBorderHelper.setBordersDistanceFadeEnabled(spaceID, False)
         BigWorld.ArenaBorderHelper.setOutsideShift(spaceID, zoneID, 0)
+        BigWorld.ArenaBorderHelper.setGroundLineHeight(spaceID, zoneID, wall.groundLineHeight)
+        BigWorld.ArenaBorderHelper.setGroundLineAlpha(spaceID, zoneID, wall.groundLineAlpha)
+        if wall.enableCenter:
+            BigWorld.ArenaBorderHelper.enableCenterPoint(spaceID, zoneID, True)
+            BigWorld.ArenaBorderHelper.setCenterHeight(spaceID, zoneID, wall.centerHeight)
+            BigWorld.ArenaBorderHelper.setCenterAlpha(spaceID, zoneID, wall.centerAlpha)
         visibilityMask = self._setBoundsVisibility(x, y, state, deathZones)
         BigWorld.ArenaBorderHelper.setBorderMask(spaceID, zoneID, visibilityMask)
         deathZones.visibilityMskZones[zoneID] = visibilityMask
@@ -122,17 +133,26 @@ class DeathZonesRule(Rule):
     category = 'Steel Hunter'
     editorTitle = 'Death Zones Mechanics Rule'
     domain = CGF.DomainOption.DomainAll
-    maxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Max Alpha')
-    height = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Height')
+    activeEnableCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=True, editorName='Active Enable Center Point')
+    activeMaxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Max Alpha')
+    activeCentarAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.35, editorName='Active Center Alpha')
+    activeWallHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=32.0, editorName='Active Wall Height')
+    activeCenterHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Active Center Height')
+    activeGroundLineHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Active Ground Line Height')
+    activeGroundLineAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName=' Active Ground Line Alpha')
     activeColor = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(0.8, 0.0, 0.0, 0.0), editorName='Active color')
+    waitingEnableCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Waiting Enable Center Point')
+    waitingMaxAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Waiting Max Alpha')
+    waitingCentarAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=0.5, editorName='Waiting Center Alpha')
+    waitingWallHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Wall Height')
+    waitingCenterHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Center Height')
+    waitingGroundLineHeight = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Ground Line Height')
+    waitingGroundLineAlpha = ComponentProperty(type=CGFMetaTypes.FLOAT, value=16.0, editorName='Waiting Ground Line Alpha')
     waitingColor = ComponentProperty(type=CGFMetaTypes.VECTOR4, value=Math.Vector4(1.0, 0.6, 0.0, 0.0), editorName='Waiting Color')
 
     @registerManager(DeathZoneDrawManager)
     def registerDeathZonesDrawManager(self):
-        return (self.maxAlpha,
-         self.height,
-         self.activeColor,
-         self.waitingColor)
+        return (DeathZoneWallParameters(self.activeEnableCenter, self.activeMaxAlpha, self.activeCentarAlpha, self.activeWallHeight, self.activeCenterHeight, self.activeColor, self.activeGroundLineHeight, self.activeGroundLineAlpha), DeathZoneWallParameters(self.waitingEnableCenter, self.waitingMaxAlpha, self.waitingCentarAlpha, self.waitingWallHeight, self.waitingCenterHeight, self.waitingColor, self.waitingGroundLineHeight, self.waitingGroundLineAlpha))
 
     @registerManager(DeathZoneUpdaterManager)
     def registerDeathZoneUpdaterManager(self):

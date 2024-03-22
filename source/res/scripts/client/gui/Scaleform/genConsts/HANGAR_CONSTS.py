@@ -15,5 +15,6 @@ class HANGAR_CONSTS(object):
     ALERT_MESSAGE = 'alertMessage'
     CAROUSEL = 'carousel'
     COMP7_MODIFIERS = 'comp7Modifiers'
+    COMP7_TOURNAMENT_BANNER = 'comp7TournamentBanner'
     MINI_CLIENT = 'miniClient'
     BR_PANELS = 'battleRoyalePanels'

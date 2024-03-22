@@ -11,6 +11,7 @@ class COMMON(object):
     COMMON_OPEN_QUOTES = '#common:common/open_quotes'
     COMMON_CLOSE_QUOTES = '#common:common/close_quotes'
     COMMON_DOT = '#common:common/dot'
+    COMMON_BULLET = '#common:common/bullet'
     COMMON_NBSP = '#common:common/nbsp'
     CLANTAG = '#common:clanTag'
     MULTIPLIER = '#common:multiplier'

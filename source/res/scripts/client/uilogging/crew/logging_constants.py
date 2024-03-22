@@ -21,10 +21,10 @@ class CrewViewKeys(Enum):
     MEMBER_CHANGE = 'member_change_view'
     QUICK_TRAINING = 'quick_training_view'
     TANK_CHANGE = 'tank_change_view'
+    WELCOME = 'welcome_view'
 
 
 class CrewDialogKeys(Enum):
-    ROLE_CHANGE = 'role_change_dialog'
     TANK_CHANGE = 'tank_change_dialog'
     DISMISS_TANKMAN = 'dismiss_tankman_dialog'
     DOCUMENT_CHANGE = 'document_change_dialog'
@@ -34,6 +34,7 @@ class CrewDialogKeys(Enum):
     SKIN_APPLY = 'skin_apply_dialog'
     CONFIRM_SKILLS_LEARN = 'confirm_skills_learn_dialog'
     FREE_SKILL_CONFIRMATION = 'free_skill_confirmation_dialog'
+    RETRAIN_SINGLE = 'retrain_single_dialog'
 
 
 class CrewWidgetKeys(Enum):
@@ -44,7 +45,6 @@ class CrewWidgetKeys(Enum):
     CHANGE_TANKMAN_BUTTON = 'crew_widget_change_tankman_button'
     SLOT_CONTEXT_MENU = 'crew_widget_slot_context_menu'
     TANKMAN_TOOLTIP = 'crew_widget_tankman_tooltip'
-    MSTL_TOOLTIP = 'crew_widget_mstl_tooltip'
     CHANGE_BUTTON_TOOLTIP = 'crew_widget_change_button_tooltip'
 
 
@@ -67,7 +67,6 @@ class CrewPersonalFileKeys(Enum):
     CHANGE_SPECIALIZATION_BUTTON = 'personal_file_view_change_specialization_button'
     RETRAIN_BUTTON = 'personal_file_view_retrain_button'
     PREMIUM_TOOLTIP = 'personal_file_view_premium_tooltip'
-    MSTL_TOOLTIP = 'personal_file_view_mstl_tooltip'
     MATRIX_SKILL_TOOLTIP = 'personal_file_view_matrix_skill_tooltip'
     MATRIX_SKILL = 'personal_file_view_matrix_skill'
     MATRIX_INCREASE_BUTTON = 'personal_file_view_matrix_increase_button'
@@ -120,17 +119,13 @@ class CrewNavigationButtons(Enum):
     TO_GARAGE = 'to_garage'
     TO_BARRACKS = 'to_barracks'
     SUBMIT = 'submit'
+    AFFIRMATIVE = 'affirmative'
     CANCEL = 'cancel'
 
 
 class CrewMemberAdditionalInfo(Enum):
     RECRUIT = '0'
     TANKMAN = '1'
-
-
-class CrewRoleChangeDialogAdditionalInfo(Enum):
-    ONLY_ROLE = '0'
-    ROLE_AND_TANK = '1'
 
 
 class TooltipAdditionalInfo(Enum):

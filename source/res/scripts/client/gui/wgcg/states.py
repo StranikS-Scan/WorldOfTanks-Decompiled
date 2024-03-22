@@ -20,7 +20,6 @@ from helpers import getClientLanguage
 from helpers import time_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 _PING_BACK_OFF_MIN_DELAY = 60
 _PING_BACK_OFF_MAX_DELAY = 1200
@@ -42,7 +41,6 @@ _RELOGIN_CODES = (401,)
 class _State(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
-    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, webCtrl, stateID):
         self.__stateID = stateID
@@ -381,7 +379,7 @@ class AvailableState(_WebState):
     @adisp_async
     @adisp_process
     def __doLogin(self, callback):
-        if not LOGIN_STATE.canDoLogin(self.__loginState) or self.bootcamp.isInBootcamp():
+        if not LOGIN_STATE.canDoLogin(self.__loginState):
             callback(self.isLoggedOn())
             return
         LOG_DEBUG('Wgcg gate login processing...')

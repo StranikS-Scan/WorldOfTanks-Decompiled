@@ -138,6 +138,8 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         if self.slotIndex not in updatedTankInfoDict:
             return
         tankInfo = updatedTankInfoDict[self.slotIndex]
+        if self.__tankInfo == tankInfo:
+            return
         _logger.debug('Updating platoon tank: slot: %s, tankInfo: %s', self.slotIndex, str(tankInfo))
         self.__tankInfo = tankInfo
         self._setVisible(True)

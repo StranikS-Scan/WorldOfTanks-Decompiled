@@ -204,45 +204,6 @@ class I18nConfirmDialogMeta(I18nDialogMeta):
         super(I18nConfirmDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
 
 
-class DemoAccountBootcampFailureMeta(I18nInfoDialogMeta):
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_BUTTON_DLG
-
-
-class BCConfirmDialogMeta(IDialogMeta):
-
-    def __init__(self, meta=None):
-        self.__meta = meta
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_SIMPLE_DLG
-
-    def getViewScopeType(self):
-        return ScopeTemplates.DEFAULT_SCOPE
-
-    def getLabelExecute(self):
-        return self.__meta.get('labelExecute', '')
-
-    def getIcon(self):
-        return self.__meta.get('icon', '')
-
-    def getCostValue(self):
-        return self.__meta.get('costValue', 0)
-
-    def getLabel(self):
-        return self.__meta.get('label', '')
-
-    def getIsBuy(self):
-        return self.__meta.get('isBuy', False)
-
-    def getIsTraining(self):
-        return self.__meta.get('isTraining', False)
-
-    def getMessage(self):
-        return self.__meta.get('message', '')
-
-
 class IconDialogMeta(I18nConfirmDialogMeta):
 
     def getEventType(self):
@@ -357,25 +318,6 @@ class TimerConfirmDialogMeta(I18nConfirmDialogMeta):
     def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, timer=0):
         super(TimerConfirmDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._timer = timer
-
-
-class I18PunishmentDialogMeta(I18nInfoDialogMeta):
-
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.VIEW_SCOPE):
-        super(I18PunishmentDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, scope)
-        self.__penaltyType = messageCtx.get('penaltyType')
-
-    def getMessage(self):
-        msg = self._makeString('%s/message/%s' % (self._key, self.__penaltyType), self._messageCtx)
-        if self.__penaltyType == 'penalty':
-            msg = msg + makeHtmlString('html_templates:lobby/battle_results', 'penalty_extra_msg')
-        return msg
-
-    def getMsgTitle(self):
-        return self._makeString('%s/msgTitle/%s' % (self._key, self.__penaltyType), {})
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_PUNISHMENT_DIALOG
 
 
 class CheckBoxDialogMeta(I18nConfirmDialogMeta):

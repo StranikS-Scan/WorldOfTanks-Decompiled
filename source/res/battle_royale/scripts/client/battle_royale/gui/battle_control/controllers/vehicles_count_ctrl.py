@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/vehicles_count_ctrl.py
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR, LOG_WARNING
+from Event import Event
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.arena_info.interfaces import IVehicleCountController
 from helpers import dependency
@@ -41,6 +42,8 @@ class VehicleCountController(IVehicleCountController):
         self.__isAlive = True
         self.__attachedVehicleID = None
         self.__isSquadMode = None
+        self.onVehicleAliveChanged = Event()
+        self.onVehicleLivesChanged = Event()
         return
 
     def getControllerID(self):
@@ -86,6 +89,7 @@ class VehicleCountController(IVehicleCountController):
             view.setPlayerVehicleAlive(self.__isAlive)
 
         self.__updateData()
+        self.onVehicleAliveChanged(self.__isAlive)
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
         if self.__updateVehicleInfo(vInfoVO, arenaDP):
@@ -94,6 +98,8 @@ class VehicleCountController(IVehicleCountController):
             self.__isAlive = vInfoVO.isAlive()
             for view in self._viewComponents:
                 view.setPlayerVehicleAlive(self.__isAlive)
+
+            self.onVehicleAliveChanged(self.__isAlive)
 
     def updateVehiclesStats(self, updated, arenaDP):
         for _, vStats in updated:
@@ -116,6 +122,8 @@ class VehicleCountController(IVehicleCountController):
         for view in self._viewComponents:
             view.setLives(lives)
 
+        self.onVehicleLivesChanged(lives)
+
     def _onDefeatedTeamsUpdated(self, *args):
         self.invalidateVehiclesInfo(self.__sessionProvider.getArenaDP())
 
@@ -127,6 +135,8 @@ class VehicleCountController(IVehicleCountController):
             self.__isAlive = arenaDP.getVehicleInfo().isAlive()
             for view in self._viewComponents:
                 view.setPlayerVehicleAlive(self.__isAlive)
+
+            self.onVehicleAliveChanged(self.__isAlive)
 
     def invalidateVehiclesStats(self, arenaDP):
         self.__updateFrags(arenaDP)

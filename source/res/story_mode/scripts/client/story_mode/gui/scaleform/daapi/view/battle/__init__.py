@@ -10,8 +10,11 @@ from gui.Scaleform.daapi.view.battle.shared.damage_panel import DamagePanel
 from gui.Scaleform.daapi.view.battle.shared.debug_panel import DebugPanel
 from gui.Scaleform.daapi.view.battle.shared.indicators import SixthSenseIndicator
 from gui.Scaleform.daapi.view.battle.shared.messages import VehicleMessages, VehicleErrorMessages, PlayerMessages
-from gui.Scaleform.daapi.view.battle.shared.postmortem_panel import PostmortemPanel
-from gui.Scaleform.daapi.view.battle.shared.prebattle_timers.custom_text_timer import CustomTextPrebattleTimer
+from gui.Scaleform.daapi.view.battle.shared import death_cam_ui
+from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
+from gui.Scaleform.daapi.view.battle.shared import postmortem_info_panel
+from gui.Scaleform.daapi.view.battle.shared import spectator_view
+from gui.Scaleform.daapi.view.battle.pve_base.pve_prebattle_timer import PvePrebattleTimer
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, getSwfExtensionUrl, ComponentSettings, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -44,7 +47,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.STORY_MODE_SETTINGS_WINDOW, StoryModeSettingsWindow, 'settingsWindow.swf', WindowLayer.TOP_WINDOW, 'storyModeSettingsWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ComponentSettings(BATTLE_VIEW_ALIASES.PENETRATION_PANEL, StoryModePenetrationPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.NEWBIE_HINT, DefaultBattleHint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, CustomTextPrebattleTimer, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, PvePrebattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.SUBTITLES, BattleSubtitles, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, StoryModelTimersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER, StoryModeTimer, ScopeTemplates.DEFAULT_SCOPE),
@@ -55,7 +58,10 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, DamageLogPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.DEATH_CAM_HUD, death_cam_ui.DeathCamUI, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SPECTATOR_VIEW, spectator_view.SpectatorView, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, postmortem_info_panel.PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, VehicleMessages, None, WindowLayer.UNDEFINED, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, VehicleErrorMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),

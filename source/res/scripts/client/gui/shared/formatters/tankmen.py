@@ -36,8 +36,6 @@ def getItemPricesViewModel(statsMoney, *itemPrices, **kwargs):
                     actionPriceModel.setPrice(backport.getIntegralFormat(currencyValue))
                     defPrice = backport.getIntegralFormat(itemPrice.defPrice.get(currency, 0))
                     actionPriceModel.setDefPrice(defPrice)
-                    if 'isBootcamp' in kwargs:
-                        actionPriceModel.setIsBootcamp(kwargs.get('isBootcamp'))
                     priceModels.append(actionPriceModel)
 
         else:

@@ -5,7 +5,7 @@ import BigWorld
 from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IGoodiesRequester
-GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count')
+GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count expirations')
 
 class _ClanReserveInfo(namedtuple('_ClanReserveInfo', 'finishTime value duration')):
     __slots__ = ()
@@ -24,20 +24,16 @@ class GoodiesRequester(AbstractSyncDataRequester, IGoodiesRequester):
     def goodies(self):
         return self.getCacheValue('goodies', {})
 
-    @property
-    def pr2ConversionResult(self):
-        return self.getCacheValue('pr2_conversion', tuple())
-
     def getActiveClanReserves(self):
         return self.getCacheValue('clanReserves', {})
 
-    def _preprocessValidData(self, data):
-        data = dict(data)
-        goodies = data.get('goodies', {})
-        data['goodies'] = {gID:GoodieVariable(*data) for gID, data in goodies.iteritems()}
+    def _preprocessValidData(self, syncData):
+        processed = dict(syncData)
+        goodies = syncData.get('goodies', {})
+        processed['goodies'] = {gID:GoodieVariable(status, finishTime, count, expirations) for gID, (status, finishTime, count, expirations) in goodies.iteritems()}
         clanReserves = {}
-        for crID, crData in data.get('clanReserves', {}).iteritems():
+        for crID, crData in syncData.get('clanReserves', {}).iteritems():
             clanReserves[crID] = _ClanReserveInfo(crData['timeExpiration'], crData['factors'], crData['duration'])
 
-        data['clanReserves'] = clanReserves
-        return data
+        processed['clanReserves'] = clanReserves
+        return processed

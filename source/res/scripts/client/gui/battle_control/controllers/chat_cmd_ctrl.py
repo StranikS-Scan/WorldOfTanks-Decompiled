@@ -10,7 +10,6 @@ import Math
 import Vehicle
 from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.cameras import getWorldRayAndPoint
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
@@ -25,7 +24,7 @@ from messenger import MessengerEntry
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGET_CMD_NAMES
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 CONTEXTCOMMAND = 'CONTEXTCOMMAND'
@@ -116,7 +115,7 @@ def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
 class ChatCommandsController(IBattleController):
     __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    settingsCore = dependency.descriptor(ISettingsCore)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, setup, feedback, ammo):
@@ -136,7 +135,7 @@ class ChatCommandsController(IBattleController):
         return BATTLE_CTRL_ID.CHAT_COMMANDS
 
     def startControl(self):
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.battleCommunications.onChanged += self.__onBattleCommunicationChanged
         g_eventBus.addListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
 
     def stopControl(self):
@@ -144,7 +143,7 @@ class ChatCommandsController(IBattleController):
         self.__feedback = None
         self.__ammo = None
         self.__markersManager = None
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.battleCommunications.onChanged -= self.__onBattleCommunicationChanged
         g_eventBus.removeListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
         return
 
@@ -377,8 +376,8 @@ class ChatCommandsController(IBattleController):
         if controller:
             controller.sendCommand(command)
 
-    def __onSettingsChanged(self, diff):
-        enableBattleCommunication = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+    def __onBattleCommunicationChanged(self):
+        enableBattleCommunication = self.battleCommunications.isEnabled
         if enableBattleCommunication is None:
             return
         else:
@@ -420,5 +419,6 @@ class ChatCommandsController(IBattleController):
         return False
 
     def __onMarkersManagerMarkersCreated(self, event):
+        g_eventBus.removeListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
         self.__markersManager = event.getMarkersManager()
-        self.__isEnabled = bool(self.settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION))
+        self.__isEnabled = bool(self.battleCommunications.isEnabled)

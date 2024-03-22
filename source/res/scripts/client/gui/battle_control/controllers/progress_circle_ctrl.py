@@ -121,7 +121,7 @@ class StepRepairPlugin(ProgressTimerPlugin):
 
         else:
             LOG_ERROR('Expected StepRepairPointComponent not present!')
-        specCtrl = self._sessionProvider.dynamic.spectator
+        specCtrl = self._sessionProvider.shared.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
         return
@@ -132,7 +132,7 @@ class StepRepairPlugin(ProgressTimerPlugin):
         stepRepairPointComponent = getattr(componentSystem, 'stepRepairPointComponent', None)
         if stepRepairPointComponent is not None:
             stepRepairPointComponent.onStepRepairPointPlayerAction -= self._action
-        specCtrl = self._sessionProvider.dynamic.spectator
+        specCtrl = self._sessionProvider.shared.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
         return

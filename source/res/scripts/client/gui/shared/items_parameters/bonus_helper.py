@@ -163,6 +163,7 @@ class BonusExtractor(object):
         self.__removeCamouflage = False
 
     def getBonusInfo(self):
+        self.__reorderDevices(self.__bonuses)
         for bnsId, bnsGroup in self.__bonuses:
             yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
 
@@ -182,6 +183,16 @@ class BonusExtractor(object):
 
     def __extractParamValue(self, paramName):
         return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), paramName)
+
+    @staticmethod
+    def __reorderDevices(devices):
+        invisDevice = [ item[0].find('additionalInvisibilityDevice') != -1 for item in devices ]
+        camoNet = [ item[0].find('camouflageNet') != -1 for item in devices ]
+        if any(invisDevice) and any(camoNet):
+            invisDeviceIndex = invisDevice.index(True)
+            camoNetIndex = camoNet.index(True)
+            if invisDeviceIndex < camoNetIndex:
+                devices[invisDeviceIndex], devices[camoNetIndex] = devices[camoNetIndex], devices[invisDeviceIndex]
 
 
 class TankSetupBonusExtractor(BonusExtractor):

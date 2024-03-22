@@ -18,7 +18,6 @@ from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabW
 from web.web_client_api.frontline import FrontLineWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
 from web.web_client_api.uilogging import UILoggingWebApi
-from web.web_client_api.battle_royale import StPatrickWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 
@@ -36,4 +35,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, SeniorityAwardsWebApi, StPatrickWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, SeniorityAwardsWebApi)

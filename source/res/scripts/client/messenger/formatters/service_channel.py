@@ -23,7 +23,7 @@ from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
 from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
 from comp7_common import Comp7QuestType
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATIONS, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA
 from debug_utils import LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
@@ -31,6 +31,7 @@ from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from epic_constants import EPIC_BATTLE_LEVEL_IMAGE_INDEX
+from fairplay_violation_types import FairplayViolations
 from goodies.goodie_constants import GOODIE_VARIETY
 from gui import GUI_NATIONS, GUI_SETTINGS
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
@@ -54,7 +55,7 @@ from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualific
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.resource_well.resource_well_constants import ResourceType
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN, CompletionTokensBonusFormatter
-from gui.server_events.bonuses import DEFAULT_CREW_LVL, EntitlementBonus, MetaBonus, SelectableBonus, VehiclesBonus, getMergedBonusesFromDicts
+from gui.server_events.bonuses import EntitlementBonus, MetaBonus, SelectableBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
@@ -73,6 +74,7 @@ from gui.shared.system_factory import collectTokenQuestsSubFormatters
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
+from gui.shared.system_factory import collectModeNameKwargsByBonusType
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
 from items import ITEM_TYPES as I_T, ITEM_TYPE_NAMES, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
@@ -87,6 +89,7 @@ from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel_helpers import EOL, MessageData, getCustomizationItem, getCustomizationItemData, getRewardsForQuests, mergeRewards, popCollectionEntitlements, parseTokenBonusCount
 from nations import NAMES
 from shared_utils import BoundMethodWeakref, first
+from fairplay_violation_types import getPenaltyTypeAndViolationName, getFairplayViolationLocale, FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, ICollectionsSystemController, IEpicBattleMetaGameController, IFunRandomController, IMapboxController, IRankedBattlesController, IResourceWellController, IWinbackController, IComp7Controller
 from skeletons.gui.goodies import IGoodiesCache
@@ -96,7 +99,7 @@ from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Any, Dict, List, Tuple, Callable, Optional
+    from typing import Any, Dict, List, Tuple, Callable, Optional, Union
     from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
     from messenger.proto.bw.wrappers import ServiceChannelMessage
@@ -384,7 +387,31 @@ class SimpleFormatter(ServiceChannelFormatter):
         return None
 
     def getConvertedDateTime(self, dTime):
-        return TimeFormatter.getShortDatetimeFormat(time_utils.makeLocalServerTime(dTime))
+        return TimeFormatter.getShortDatetimeFormat(time_utils.makeLocalServerTime(dTime) or 0)
+
+
+class GeneralFormatter(SimpleFormatter):
+
+    def getCtx(self, message, *args):
+        ctx = {}
+        title = self.getTitle(message, *args)
+        text = self.getText(message, *args)
+        values = self.getValues(message, *args) or {}
+        if title:
+            ctx[u'title'] = title
+        if text:
+            ctx[u'text'] = text
+        ctx.update(values)
+        return ctx
+
+    def getTitle(self, message, *args):
+        return None
+
+    def getText(self, message, *args):
+        return None
+
+    def getValues(self, message, *args):
+        return None
 
 
 class ExclusiveVehicleWotPlusFormatter(ServiceChannelFormatter):
@@ -596,6 +623,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyaleProgressionCtrl = dependency.descriptor(IBRProgressionOnTokensController)
     __eventsCache = dependency.descriptor(IEventsCache)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
     _battleResultKeys = {-1: u'battleDefeatResult',
      0: u'battleDrawGameResult',
      1: u'battleVictoryResult'}
@@ -653,12 +681,62 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     messages.append(MessageData(reward, settings))
 
                 messages.append(MessageData(formatted, settings))
+                text, data = self.__getFairplayData(message)
+                if text is not None and data is not None:
+                    formatter = ClientSysMessageFormatter()
+                    for fairplayMessage in formatter.format(text, data):
+                        messages.append(fairplayMessage)
+
                 callback(messages)
             else:
                 callback([MessageData(None, None)])
         else:
             callback([MessageData(None, None)])
         return
+
+    @staticmethod
+    def __getFairplayData(message):
+        arenaTypeID = message.data.get(u'arenaTypeID', 0)
+        if arenaTypeID > 0 and arenaTypeID in ArenaType.g_cache:
+            arenaType = ArenaType.g_cache[arenaTypeID]
+        else:
+            arenaType = None
+        arenaCreateTime = message.data.get(u'arenaCreateTime', None)
+        fairplayViolations = message.data.get(u'fairplayViolations', None)
+        bonusType = message.data.get(u'bonusType')
+        arenaGuiType = message.data.get(u'guiType')
+        if not arenaCreateTime or not arenaType or bonusType in FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES or fairplayViolations is None or fairplayViolations[:2] == (0, 0):
+            return (None, None)
+        else:
+            restriction = message.data.get(u'restriction', None)
+            banDuration = restriction[1] if restriction else 0
+            extraData = restriction[2] if restriction else {}
+            arenaTimeStr = TimeFormatter.getActualMsgTimeStr(arenaCreateTime)
+            penaltyType, violationName, isAFKPenalty = getPenaltyTypeAndViolationName(fairplayViolations, banDuration)
+            punishmentReason = backport.text(getFairplayViolationLocale(violationName))
+            banDurationStr = getTillTimeByResource(banDuration, R.strings.dialogs.punishmentWindow.time, removeLeadingZeros=True)
+            comp7Penalty = extraData.get(u'penalty', 0)
+            comp7IsQualActive = extraData.get(u'qualActive', False)
+            savedData = {FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_BONUS_TYPE: bonusType,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PENALTY_TYPE: penaltyType,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID: arenaTypeID,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME: arenaTimeStr,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PUNISHMENT_REASON: punishmentReason,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION: banDurationStr,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.IS_AFK_VIOLATION: isAFKPenalty,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_PENALTY: comp7Penalty,
+             FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_IS_QUALIFICATION: comp7IsQualActive}
+            banExpires = extraData.get(u'expiryTime', 0)
+            kwargs = collectModeNameKwargsByBonusType(bonusType) or {}
+            battleTypeDescr = backport.text(R.strings.menu.loading.battleTypes.num(arenaGuiType)(), **kwargs)
+            banExpiryDate = backport.getShortDateFormat(banExpires)
+            banExpiryTime = backport.getShortTimeFormat(banExpires)
+            text = backport.text(R.strings.messenger.serviceChannelMessages.fairplayViolation.text.dyn(penaltyType.value)(), reason=punishmentReason, mode=battleTypeDescr, date=backport.text(R.strings.messenger.serviceChannelMessages.fairplayViolation.banDueDate(), date=banExpiryDate, time=banExpiryTime))
+            messageData = {u'title': backport.text(R.strings.messenger.serviceChannelMessages.fairplayViolation.title.dyn(penaltyType.value)())}
+            return (text, [SM_TYPE.FairplayViolation.name(),
+              NotificationPriorityLevel.MEDIUM,
+              messageData,
+              savedData])
 
     def _prepareFormatData(self, message):
         battleResults = message.data
@@ -717,7 +795,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     battleResKey = 1 if winnerIfDraw == team else -1
         if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
             ctx[u'brcoin'] = self.__makeBRCoinString(battleResults)
-            ctx[u'stpcoin'] = self.__makeSTPCoinString(battleResults)
             ctx[u'brAwardTokens'] = self.__makeBRProgressionTokenString(battleResults)
             battleResultKeys = self.__BRResultKeys
         elif guiType == ARENA_GUI_TYPE.MAPS_TRAINING:
@@ -726,7 +803,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             battleResultKeys = self.__MTResultKeys
         elif guiType == ARENA_GUI_TYPE.COMP7:
             isQualificationBattle = battleResults.get(u'comp7QualActive', False)
-            if isQualificationBattle:
+            isQualificationActive = self.__comp7Controller.isQualificationActive()
+            if isQualificationBattle or isQualificationActive:
                 battleResultKeys = self.__COMP7QualificationResultsKeys
             else:
                 battleResultKeys = self.__COMP7SeasonResultsKeys
@@ -938,18 +1016,12 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return u'' if not credits_ else g_settings.htmlTemplates.format(u'piggyBank', ctx={u'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
 
     def __makeBRCoinString(self, battleResults):
-        value = battleResults.get(u'brcoin', 0) + self.__getCoinsQuestBonus(battleResults, u'brcoin')
+        value = battleResults.get(u'brcoin', 0) + self.__getBrCoinsQuestBonus(battleResults)
         if value:
             text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
             return g_settings.htmlTemplates.format(u'battleResultBrcoin', ctx={u'brcoin': text})
 
-    def __makeSTPCoinString(self, battleResults):
-        value = battleResults.get(u'stpcoin', 0) + self.__getCoinsQuestBonus(battleResults, u'stpcoin')
-        if value:
-            text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleStpCoin(), value=text_styles.stPatrick(value))
-            return g_settings.htmlTemplates.format(u'battleResultStpcoin', ctx={u'stpcoin': text})
-
-    def __getCoinsQuestBonus(self, battleResults, currencyCode=u'brcoin'):
+    def __getBrCoinsQuestBonus(self, battleResults):
         questBonus = 0
         allQuests = self.__eventsCache.getAllQuests()
         for qID in battleResults.get(u'completedQuestIDs', []):
@@ -957,7 +1029,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             if quest is None:
                 continue
             for bonus in quest.getBonuses(u'currencies'):
-                if bonus.getCode() == currencyCode:
+                if bonus.getCode() == u'brcoin':
                     questBonus += bonus.getCount()
 
         return questBonus
@@ -1425,7 +1497,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     tankman = tmanData
                 else:
                     tankman = Tankman(tmanData)
-                tmanUserStrings.append(u'{0:s} {1:s} ({2:s}, {3:s}, {4:d}%)'.format(tankman.rankUserName, tankman.lastUserName, tankman.roleUserName, getUserName(tankman.vehicleNativeDescr.type), tankman.roleLevel))
+                tmanUserStrings.append(u'{0:s} {1:s} ({2:s}, {3:s})'.format(tankman.rankUserName, tankman.lastUserName, tankman.roleUserName, getUserName(tankman.vehicleNativeDescr.type)))
             except Exception:
                 _logger.error(u'Wrong tankman data: %s', tmanData)
                 _logger.exception(u'getTankmenString catch exception')
@@ -1649,9 +1721,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
          u'op': self.__getFinOperationString(assetType, amount)})
 
     def _formatPurchase(self, assetType, data):
+        tags = data.get(u'tags', ())
         if u'customFormatting' in data.get(u'tags', ()):
             return None
         else:
+            if u'clansupply.map_product_elite' in tags:
+                dataEx = data.get(u'data', {})
+                compensation = data.get(u'compensation', {})
+                dataEx.update(compensation)
             operations = self._composeOperations(data)
             if not operations:
                 return None
@@ -1958,13 +2035,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 if rentTypeName is not None and rentLeftCount > 0:
                     rentLeftStr = backport.text(R.strings.tooltips.quests.awards.vehicleRent.rentLeft.dyn(rentTypeName)(), count=rentLeftCount)
                     vInfo.append(rentLeftStr)
-            crewLevel = VehiclesBonus.getTmanRoleLevel(vehData)
-            if crewLevel is not None and crewLevel > DEFAULT_CREW_LVL:
-                if u'crewInBarracks' in vehData and vehData[u'crewInBarracks']:
-                    crewWithLevelString = backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.crewWithLvlDroppedToBarracks(), crewLevel)
-                else:
-                    crewWithLevelString = backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.crewOnVehicle(), crewLevel)
-                vInfo.append(crewWithLevelString)
             if u'unlockModules' in vehData:
                 vInfo.append(backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.unlockedModules()))
         return u'; '.join(vInfo)
@@ -2349,15 +2419,20 @@ class PrebattleKickFormatter(PrebattleFormatter):
         kickReason = data.get(u'kickReason')
         if prbType > 0 and kickReason > 0:
             ctx = {}
-            resID = R.strings.system_messages.prebattle.kick.type.unknown()
-            if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
-                resID = R.strings.system_messages.prebattle.kick.type.squad()
-            ctx[u'type'] = backport.text(resID)
             kickName = KICK_REASON_NAMES[kickReason]
             resID = R.strings.system_messages.prebattle.kick.reason.dyn(kickName)()
             ctx[u'reason'] = backport.text(resID)
-            formatted = g_settings.msgTemplates.format(u'prebattleKick', ctx=ctx)
-            result = [MessageData(formatted, self._getGuiSettings(message, u'prebattleKick'))]
+            if kickReason == KICK_REASON.MODE_DISABLED:
+                key = u'prebattleKickModeDisabled'
+            else:
+                if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
+                    resID = R.strings.system_messages.prebattle.kick.type.squad()
+                else:
+                    resID = R.strings.system_messages.prebattle.kick.type.unknown()
+                ctx[u'type'] = backport.text(resID)
+                key = u'prebattleKick'
+            formatted = g_settings.msgTemplates.format(key, ctx=ctx)
+            result = [MessageData(formatted, self._getGuiSettings(message, key))]
         return result
 
 
@@ -2646,98 +2721,6 @@ class ActionNotificationFormatter(ClientSysMessageFormatter):
             formatted = g_settings.msgTemplates.format(templateKey, ctx={u'text': data}, data={u'icon': message.get(u'type', u'')})
             result = [MessageData(formatted, self._getGuiSettings(args, templateKey))]
         return result
-
-
-class BootcampResultsFormatter(WaitItemsSyncFormatter):
-
-    def isNotify(self):
-        return True
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        _logger.debug(u'message data: %s', message)
-        isSynced = yield self._waitForSyncItems()
-        formatted, settings = (None, None)
-        if isSynced:
-            text = []
-            results = message.data
-            if results:
-                text.append(self.__formatAwards(results))
-            else:
-                text.append(backport.text(R.strings.messenger.serviceChannelMessages.bootcamp.no_awards()))
-            settings = self._getGuiSettings(message, u'bootcampResults')
-            formatted = g_settings.msgTemplates.format(u'bootcampResults', {u'text': u'<br/>'.join(text)}, data={u'timestamp': _getTimeStamp(message)})
-        callback([MessageData(formatted, settings)])
-        return None
-
-    def __formatAwards(self, results):
-        awards = backport.text(R.strings.messenger.serviceChannelMessages.bootcamp.awards()) + u'<br/>'
-        awards += self.__getAssetString(results, INVOICE_ASSET.GOLD, u'gold')
-        awards += self.__getAssetString(results, INVOICE_ASSET.PREMIUM, u'premium')
-        awards += self.__getAssetString(results, INVOICE_ASSET.CREDITS, u'credits')
-        awards += self.__getAssetString(results, INVOICE_ASSET.FREE_XP, u'freeXP')
-        tankPremiumDays = results.get(PREMIUM_ENTITLEMENTS.PLUS, 0)
-        if tankPremiumDays:
-            awards += u'<br/>' + g_settings.htmlTemplates.format(u'tankPremiumAccruedInvoiceReceived', {u'amount': backport.getIntegralFormat(abs(tankPremiumDays))})
-
-        def sortVehsByLvl(vehCD):
-            veh = self._itemsCache.items.getItemByCD(vehCD)
-            return veh.level
-
-        vehicles = results.get(u'vehicles', {})
-        vehicleCDs = sorted(vehicles.keys(), key=sortVehsByLvl)
-        vehiclesNames = []
-        devicesAndCrew = u''
-        for vehCD in vehicleCDs:
-            vehData = vehicles[vehCD]
-            vehicle = self._itemsCache.items.getItemByCD(vehCD)
-            if vehicle:
-                if vehData.get(u'devices', None):
-                    devicesAndCrew += self.__formatDevicesAndCrew(vehicle.userName, vehData)
-                else:
-                    vehiclesNames.append(vehicle.userName)
-
-        awards += u'<br/>'
-        if vehiclesNames:
-            awards += g_settings.htmlTemplates.format(u'vehiclesAccruedInvoiceReceived', ctx={u'vehicles': u', '.join(vehiclesNames)}) + u'<br/>'
-        slots = results.get(u'slots', 0)
-        if slots:
-            awards += u'<br/>' + g_settings.htmlTemplates.format(u'slotsAccruedInvoiceReceived', {u'amount': backport.getIntegralFormat(abs(slots))})
-        if devicesAndCrew:
-            awards += devicesAndCrew
-        return awards
-
-    @staticmethod
-    def __formatDevicesAndCrew(vehName, vehData):
-        devices = vehData.get(u'devices', [])
-        name = u'<br/><br/><b>' + vehName + u'</b>: <br/>'
-        message = u''
-        if devices:
-            message += name
-            message += backport.text(R.strings.messenger.serviceChannelMessages.bootcamp.devices())
-            itemsNames = []
-            for intCD, count in devices:
-                itemDescr = vehicles_core.getItemByCompactDescr(intCD)
-                if itemDescr.i18n.userString != u'':
-                    itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=itemDescr.i18n.userString, count=backport.getIntegralFormat(count)))
-
-            if itemsNames:
-                message += u'<br/>' + u', '.join(itemsNames) + u'<br/>'
-        crewInBarracks = vehData.get(u'crewInBarracks', False)
-        if crewInBarracks:
-            message += backport.text(R.strings.messenger.serviceChannelMessages.bootcamp.crew())
-        return message
-
-    @staticmethod
-    def __getAssetString(results, assetType, amountType):
-        amount = results.get(amountType, 0)
-        if amount:
-            templateKeys = {INVOICE_ASSET.GOLD: u'goldAccruedInvoiceReceived',
-             INVOICE_ASSET.CREDITS: u'creditsAccruedInvoiceReceived',
-             INVOICE_ASSET.PREMIUM: u'premiumAccruedInvoiceReceived',
-             INVOICE_ASSET.FREE_XP: u'freeXpAccruedInvoiceReceived'}
-            return u'<br/>' + g_settings.htmlTemplates.format(templateKeys[assetType], ctx={u'amount': backport.getIntegralFormat(abs(amount))})
 
 
 class QuestAchievesFormatter(object):
@@ -3453,8 +3436,7 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     _VARIETY_TO_TEMPLATE = {}
 
-    @staticmethod
-    def getBoosterAdditionalParams(message):
+    def getBoosterAdditionalParams(self, message):
         obtainedValue = message.data.get(u'obtainedValues', {})
         resourceRows = []
         for bonusTypeName, value in obtainedValue.iteritems():
@@ -3486,7 +3468,7 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
             if goodie:
                 templateName = self._getTemplateName(goodieDescr.variety)
                 if templateName:
-                    ctx = {u'boosterName': goodie.userName}
+                    ctx = self.getContext(goodie)
                     if additionalParams:
                         ctx.update(additionalParams)
                     formatted = g_settings.msgTemplates.format(templateName, ctx=ctx)
@@ -3497,6 +3479,10 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
             callback([MessageData(None, None)])
         return
 
+    def getContext(self, goodie):
+        ctx = {u'boosterName': goodie.userName}
+        return ctx
+
     def canBeEmpty(self):
         return True
 
@@ -3505,7 +3491,34 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
 
 
 class GoodyRemovedFormatter(_GoodyFormatter):
-    _VARIETY_TO_TEMPLATE = {GOODIE_VARIETY.BOOSTER: u'boosterExpired'}
+    _VARIETY_TO_TEMPLATE = {GOODIE_VARIETY.BOOSTER: u'boosterEnded'}
+
+
+class GoodiesExpiredFormatter(WaitItemsSyncFormatter):
+
+    @classmethod
+    def _buildCtx(cls, message):
+        count = message.data.get(u'expiredCount', 0)
+        boosterCountInfo = g_settings.htmlTemplates.format(u'boosterExpiredCount', ctx={u'boosterCount': html.escape(str(count))})
+        return {u'boosterExpiredCount': boosterCountInfo}
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        yield lambda callback: callback(True)
+        isSynced = yield self._waitForSyncItems()
+        if message.data and isSynced:
+            templateName = u'boosterExpired'
+            ctx = self._buildCtx(message)
+            formatted = g_settings.msgTemplates.format(templateName, ctx=ctx)
+            callback([MessageData(formatted, self._getGuiSettings(message, templateName))])
+            return
+        else:
+            callback([MessageData(None, None)])
+            return
+
+    def canBeEmpty(self):
+        return True
 
 
 class GoodyDisabledFormatter(_GoodyFormatter):
@@ -5465,16 +5478,16 @@ class FairplayFormatter(ServiceChannelFormatter):
             if isStarted:
                 header, text = self.__getBanStartedMessage(reason, extraData, resrType)
             else:
-                header, text = self.__getBanStoppedMessage(reason, extraData, resrType)
+                header, text = self.__getBanStoppedMessage(extraData, resrType)
             if not header and not text:
                 return [MessageData(None, None)]
             formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'text': text,
              u'header': header})
-            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, NotificationPriorityLevel.MEDIUM))]
 
     @staticmethod
     def __isComp7DeserterBan(reason, extraData):
-        return ARENA_BONUS_TYPE.COMP7 in extraData.get(u'bonusTypes', []) and FAIRPLAY_VIOLATIONS.COMP7_DESERTER in reason
+        return ARENA_BONUS_TYPE.COMP7 in extraData.get(u'bonusTypes', []) and FairplayViolations.COMP7_DESERTER in reason
 
     def __getBanStartedMessage(self, reason, extraData, resrType):
         header, text = (None, None)
@@ -5486,12 +5499,12 @@ class FairplayFormatter(ServiceChannelFormatter):
                 text = backport.text(R.strings.comp7.battleResult.message.deserterQualification() if isQualification else R.strings.comp7.battleResult.message.deserter(), penalty=penalty)
         return (header, text)
 
-    def __getBanStoppedMessage(self, reason, extraData, resrType):
+    def __getBanStoppedMessage(self, extraData, resrType):
         header, text = (None, None)
         if resrType == RESTRICTION_TYPE.ARENA_BAN:
-            if self.__isComp7DeserterBan(reason, extraData):
-                header = backport.text(R.strings.comp7.system_messages.temporaryBan.end.title())
-                text = backport.text(R.strings.comp7.system_messages.temporaryBan.end.body())
+            arenaType = ArenaType.g_cache[extraData.get(u'arenaTypeID', 0)]
+            header = backport.text(R.strings.messenger.serviceChannelMessages.fairplayViolation.title.banRemoved())
+            text = backport.text(R.strings.messenger.serviceChannelMessages.fairplayViolation.text.banRemoved(), mode=backport.text(R.strings.arenas.type.dyn(arenaType.gameplayName).name()))
         return (header, text)
 
 
@@ -5527,14 +5540,6 @@ class IntegratedAuctionLostRateFormatter(ServiceChannelFormatter):
     def __getCurrencyStyle(self, currencyCode):
         currencyName = self.__WGM_CURRENCY_TO_NAME.get(currencyCode, currencyCode)
         return self.__CURRENCY_TO_STYLE.get(currencyName, getStyle(currencyName))
-
-
-class PersonalReservesHaveBeenConvertedFormatter(ServiceChannelFormatter):
-    __TEMPLATE = u'PersonalReservesHaveBeenConverted'
-
-    def format(self, message, *args):
-        formatted = g_settings.msgTemplates.format(self.__TEMPLATE)
-        return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
 
 
 class CollectionsItemsFormatter(ServiceChannelFormatter):

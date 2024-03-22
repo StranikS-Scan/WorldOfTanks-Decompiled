@@ -1,0 +1,144 @@
+<mt_battle_quests.xml>
+  <quests>
+    <group>
+      <enabled>	true	</enabled>
+      <id>	MTBattleQuestsGroup	</id>
+      <priority>	200	</priority>
+      <groupContent>	mt_battle_quest_0
+				mt_battle_quest_1
+				mt_battle_quest_2	</groupContent>
+    </group>
+    <battleQuest>
+      <id>	mt_battle_quest_0	</id>
+      <priority>	3	</priority>
+      <enabled>	true	</enabled>
+      <showCongrats>	true	</showCongrats>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <dossier>
+                <record>	a15x15:battlesCount	</record>
+                <lessOrEqual>	500	</lessOrEqual>
+              </dossier>
+            </and>
+          </account>
+          <battle>
+            <bonusTypes>	38	</bonusTypes>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	mt_progressImproved	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_battle_quest_1	</id>
+      <priority>	2	</priority>
+      <enabled>	true	</enabled>
+      <showCongrats>	true	</showCongrats>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <dossier>
+                <record>	a15x15:battlesCount	</record>
+                <lessOrEqual>	500	</lessOrEqual>
+              </dossier>
+            </and>
+          </account>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	06_ensk
+								07_lakeville
+								08_ruinberg
+								10_hills
+								35_steppes
+								38_mannerheim_line	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+        <freeXP>	500	</freeXP>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	mt_battle_quest_2	</id>
+      <priority>	1	</priority>
+      <enabled>	true	</enabled>
+      <showCongrats>	true	</showCongrats>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <dossier>
+                <record>	a15x15:battlesCount	</record>
+                <lessOrEqual>	500	</lessOrEqual>
+              </dossier>
+            </and>
+          </account>
+          <battle>
+            <and>
+              <bonusTypes>	38	</bonusTypes>
+              <geometryNames>	01_karelia
+								02_malinovka
+								03_campania_big
+								05_prohorovka
+								17_munchen
+								28_desert
+								29_el_hallouf
+								37_caucasus
+								83_kharkiv	</geometryNames>
+            </and>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	mt_mapComplete	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <freeXP>	1000	</freeXP>
+      </bonus>
+    </battleQuest>
+  </quests>
+</mt_battle_quests.xml>

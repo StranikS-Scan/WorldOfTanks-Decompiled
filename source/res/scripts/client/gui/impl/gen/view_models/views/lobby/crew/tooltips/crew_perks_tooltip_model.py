@@ -12,10 +12,16 @@ class PerkType(Enum):
     COMMANDERSPECIAL = 'commanderSpecial'
 
 
+class BoosterType(Enum):
+    NONE = 'none'
+    ORDINARY = 'ordinary'
+    EXTRA = 'extra'
+
+
 class CrewPerksTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(CrewPerksTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -72,15 +78,33 @@ class CrewPerksTooltipModel(ViewModel):
     def setDescription(self, value):
         self._setString(8, value)
 
+    def getDescriptionKwargs(self):
+        return self._getString(9)
+
+    def setDescriptionKwargs(self, value):
+        self._setString(9, value)
+
     def getBoosters(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setBoosters(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getBoostersType():
         return CrewPerksTooltipBoosterModel
+
+    def getEfficiency(self):
+        return self._getReal(11)
+
+    def setEfficiency(self, value):
+        self._setReal(11, value)
+
+    def getBoosterType(self):
+        return BoosterType(self._getString(12))
+
+    def setBoosterType(self, value):
+        self._setString(12, value.value)
 
     def _initialize(self):
         super(CrewPerksTooltipModel, self)._initialize()
@@ -93,4 +117,7 @@ class CrewPerksTooltipModel(ViewModel):
         self._addBoolProperty('isZeroPerk', False)
         self._addBoolProperty('isIrrelevant', False)
         self._addStringProperty('description', '')
+        self._addStringProperty('descriptionKwargs', '')
         self._addArrayProperty('boosters', Array())
+        self._addRealProperty('efficiency', 0.0)
+        self._addStringProperty('boosterType', BoosterType.NONE.value)

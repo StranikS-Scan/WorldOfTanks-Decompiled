@@ -60,14 +60,14 @@ class TeamInfoComp7Component(DynamicScriptComponent):
         if not arena:
             return
         gameModeStats = {vID:{Comp7Keys.ROLE_SKILL_LEVEL: level} for vID, level in self.roleSkillLevels.iteritems()}
-        arena.onGameModeSpecificStats(isStatic=True, stats=gameModeStats)
+        arena.updateGameModeSpecificStats(isStatic=True, stats=gameModeStats)
 
     def __invalidateTeamVivoxChannel(self):
         arena = avatar_getter.getArena()
         if not arena:
             return
         gameModeStats = {vID:{Comp7Keys.VOIP_CONNECTED: bool(connected)} for vID, connected in self.teamVivoxChannel.iteritems()}
-        arena.onGameModeSpecificStats(isStatic=True, stats=gameModeStats)
+        arena.updateGameModeSpecificStats(isStatic=True, stats=gameModeStats)
 
     def __updateVoipConnection(self):
         voipManager = VOIP.getVOIPManager()

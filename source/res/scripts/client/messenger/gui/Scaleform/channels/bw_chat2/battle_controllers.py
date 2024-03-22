@@ -106,7 +106,7 @@ class TeamChannelController(_ChannelController):
         hasAnyTeammates = arenaDP.getAlliesVehiclesNumber() > 1
         isObserver = arenaDP.isPlayerObserver()
         isBattleRoyale = arenaVisitor.gui.isBattleRoyale()
-        return result and (hasAnyTeammates or isObserver) and not isBattleRoyale
+        return result and (hasAnyTeammates or isObserver) and (not isBattleRoyale or arenaDP.getVehicleInfo().squadIndex == 0)
 
     def _formatCommand(self, command):
         isCurrent = False

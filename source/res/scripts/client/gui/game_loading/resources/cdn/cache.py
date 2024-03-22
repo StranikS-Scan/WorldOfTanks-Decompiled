@@ -12,7 +12,6 @@ from gui.game_loading.resources.cdn.consts import CDN_CACHE_SYNC_TIMEOUT, DOWNLO
 from gui.game_loading.resources.cdn.models import LocalSlideModel, CdnCacheParamsModel
 from gui.game_loading.resources.cdn.config import createConfigModel
 from PlayerEvents import g_playerEvents as playerEvents
-from bootcamp.BootCampEvents import g_bootcampEvents as bootcampPlayerEvents
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from web.cache.web_cache import BaseExternalCache, BaseExternalCacheManager, createManifestRecord, CachePrefetchResult
@@ -184,9 +183,7 @@ class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
 
     def onConnected(self):
         playerEvents.onAccountBecomeNonPlayer += self.stopSync
-        bootcampPlayerEvents.onBootcampBecomeNonPlayer += self.stopSync
         playerEvents.onAccountShowGUI += self._tryToDownload
-        bootcampPlayerEvents.onAccountShowGUI += self._tryToDownload
         self._itemsCache = dependency.instance(IItemsCache)
         self._itemsCache.onSyncCompleted += self._onItemsCacheUpdated
         self._lobbyCtx = dependency.instance(ILobbyContext)
@@ -199,9 +196,7 @@ class GameLoadingCdnCacheMgr(BaseExternalCacheManager):
         self._downloadResult = None
         self._cacheParams.reset()
         playerEvents.onAccountShowGUI -= self._tryToDownload
-        bootcampPlayerEvents.onAccountShowGUI -= self._tryToDownload
         playerEvents.onAccountBecomeNonPlayer -= self.stopSync
-        bootcampPlayerEvents.onBootcampBecomeNonPlayer -= self.stopSync
         if self._itemsCache:
             self._itemsCache.onSyncCompleted -= self._onItemsCacheUpdated
         self._itemsCache = None

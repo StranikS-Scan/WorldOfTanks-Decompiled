@@ -10,13 +10,13 @@ from skeletons.gui.game_control import IBattleRoyaleController
 from web.web_client_api import w2c, W2CSchema
 
 class OpenBattleRoyaleHangarMixin(object):
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     @w2c(W2CSchema, 'battle_royale_hangar')
     def selectBRMode(self, _):
         result = False
         dispatcher = g_prbLoader.getDispatcher()
-        if dispatcher is not None and self.__battleRoyaleController.isEnabled():
+        if dispatcher is not None and self.battleRoyaleController.isEnabled():
             isPrbActive = dispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BATTLE_ROYALE)
             if not isPrbActive:
                 actionName = PREBATTLE_ACTION_NAME.BATTLE_ROYALE

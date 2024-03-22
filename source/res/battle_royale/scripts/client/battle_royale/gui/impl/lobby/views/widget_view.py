@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/widget_view.py
-from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget_view_model import WidgetViewModel, BattleStatus
+from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget_view_model import WidgetViewModel, BattleStatus, Animation
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from battle_royale.gui.impl.lobby.tooltips.widget_tooltip_view import WidgetTooltipView
 from frameworks.wulf import ViewSettings, ViewFlags
@@ -22,6 +22,9 @@ class WidgetView(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         return WidgetTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.WidgetTooltipView() else super(WidgetView, self).createToolTipContent(event, contentID)
+
+    def playStartAnimation(self):
+        self.viewModel.setAnimation(Animation.BLINK)
 
     @property
     def viewModel(self):

@@ -8,6 +8,7 @@ from gui.shared.gui_items.Tankman import Tankman
 from items import tankmen
 from items.components.skills_constants import SKILLS_BY_ROLES, UNLEARNABLE_SKILLS
 from skill_formatters import SkillLvlFormatter
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP
 
 def isTmanSkillIrrelevant(tankman, skill):
     return not any([ skill.name in SKILLS_BY_ROLES.get(role) for role in tankman.roles() ])
@@ -100,14 +101,19 @@ def getAllPossibleSkillsByRoles():
 
 def quickEarnTmanSkills(tankman, possibleXp):
     currCnt, currLvl = getSkillsLevelsForXp(tankman)
-    if possibleXp:
-        possCnt, possLvl = getSkillsLevelsForXp(tankman, possibleXp)
+    currPossibleXp = possibleXp - (tankmen.MAX_SKILLS_EFFICIENCY_XP - tankman.skillsEfficiencyXP)
+    if currPossibleXp > 0:
+        possSkillEff = tankmen.MAX_SKILLS_EFFICIENCY
+        possCnt, possLvl = getSkillsLevelsForXp(tankman, currPossibleXp)
     else:
+        possSkillEff = float(tankman.skillsEfficiencyXP + possibleXp) / tankmen.MAX_SKILLS_EFFICIENCY_XP
         possCnt, possLvl = CrewConstants.DONT_SHOW_LEVEL, SkillLvlFormatter()
-    return (currCnt,
-     possCnt,
-     currLvl,
-     possLvl)
+    if tankman.currentVehicleSkillsEfficiency < 0 or not possibleXp:
+        possSkillEff = CrewConstants.DONT_SHOW_LEVEL
+    return ((currCnt,
+      possCnt,
+      currLvl,
+      possLvl), possSkillEff)
 
 
 def quickEarnCrewSkills(crew, selectedTankmanID, personalXP, commonXP):
@@ -115,9 +121,14 @@ def quickEarnCrewSkills(crew, selectedTankmanID, personalXP, commonXP):
       CrewConstants.DONT_SHOW_LEVEL,
       SkillLvlFormatter(),
       SkillLvlFormatter())] * len(crew)
+    res2 = [CrewConstants.DONT_SHOW_LEVEL] * len(crew)
     for slotIdx, tankman in crew:
         if tankman is None:
             continue
-        res[slotIdx] = quickEarnTmanSkills(tankman, commonXP + personalXP if tankman.invID == selectedTankmanID else commonXP)
+        res[slotIdx], res2[slotIdx] = quickEarnTmanSkills(tankman, commonXP + personalXP if tankman.invID == selectedTankmanID else commonXP)
 
-    return res
+    return (res, res2)
+
+
+def isCheckEffTankman(tankman):
+    return tankman and tankman.skillsEfficiencyXP == MAX_SKILLS_EFFICIENCY_XP

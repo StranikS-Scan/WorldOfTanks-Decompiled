@@ -23,7 +23,13 @@ class Array(PyObjectEntity, typing.Iterable[T]):
         return self.proxy.getSize()
 
     def __getitem__(self, index):
-        return (self.proxy.getValue(i) for i in xrange(index.start or 0, index.stop or len(self), index.step or 1)) if isinstance(index, slice) else self.proxy.getValue(index)
+        if isinstance(index, slice):
+            return (self.proxy.getValue(i) for i in xrange(index.start or 0, index.stop or len(self), index.step or 1))
+        if index < 0:
+            if abs(index) > self.proxy.getSize():
+                raise IndexError('Array index %d out of range'.format(index))
+            index = len(self) + index
+        return self.proxy.getValue(index)
 
     def __iter__(self):
         for index in xrange(0, self.proxy.getSize()):

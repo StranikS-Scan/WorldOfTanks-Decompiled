@@ -81,7 +81,7 @@ class AvatarRecoveryMechanic(object):
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.RECOVERY, (False, 0, None))
                 self.guiSessionProvider.shared.feedback.setVehicleRecoveryState(self.playerVehicleID, activated, state, timerDuration, endOfTimer)
             if state == RM_STATE.RECOVERING_RESPAWNING and BigWorld.player().vehicle.isPlayerVehicle:
-                self.inputHandler.activatePostmortem(True)
+                self.inputHandler.activatePostmortem()
             return
 
     def getLastRecoveryArgs(self):

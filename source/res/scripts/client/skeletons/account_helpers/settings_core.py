@@ -127,3 +127,37 @@ class ISettingsCore(object):
 
     def unsetOverrideSettings(self):
         raise NotImplementedError
+
+
+class IBattleCommunicationsSettings(object):
+    onChanged = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def showStickyMarkers(self):
+        raise NotImplementedError
+
+    @property
+    def showInPlayerList(self):
+        raise NotImplementedError
+
+    @property
+    def showCalloutMessages(self):
+        raise NotImplementedError
+
+    @property
+    def showLocationMarkers(self):
+        raise NotImplementedError
+
+    @property
+    def showBaseMarkers(self):
+        raise NotImplementedError
+
+    def init(self):
+        raise NotImplementedError
+
+    def fini(self):
+        raise NotImplementedError

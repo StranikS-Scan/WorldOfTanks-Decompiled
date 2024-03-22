@@ -14,10 +14,10 @@
     <backward>	22	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.181	</moving>
-    <still>	0.241	</still>
+    <moving>	0.206	</moving>
+    <still>	0.275	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.362	</firePenalty>
+    <firePenalty>	0.413	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -66,7 +66,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22095	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -508,13 +508,13 @@
       </armor>
       <weight>	8800	</weight>
       <maxLoad>	46000	</maxLoad>
-      <terrainResistance>	1.4 1.6 3.2	</terrainResistance>
+      <terrainResistance>	0.9 1.1 1.9	</terrainResistance>
       <brakeForce>	43000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1452,7 +1452,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1481,17 +1481,17 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	8.7	</reloadTime>
           <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0.00000 -20.00 1.00000 -20.00	</minPitch>
             <maxPitch>	0.00000 10.00 0.25000 10.00 0.31944 0.00 0.50000 0.00 0.68056 0.00 0.75000 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -2097,13 +2097,13 @@
         <Chassis_A155_AAT60>
           <grounds>
             <soft>
-              <rollingFriction>	0.2576	</rollingFriction>
+              <rollingFriction>	0.169	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1046	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0886	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

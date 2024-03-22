@@ -19,8 +19,8 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
     def as_setPlayerInfoS(self, playerInfo):
         return self.flashObject.as_setPlayerInfo(playerInfo) if self._isDAAPIInited() else None
 
-    def as_showKillerDogTagS(self, data):
-        return self.flashObject.as_showKillerDogTag(data) if self._isDAAPIInited() else None
+    def as_showKillerDogTagS(self, data, fadeOut):
+        return self.flashObject.as_showKillerDogTag(data, fadeOut) if self._isDAAPIInited() else None
 
     def as_showVictimDogTagS(self, data):
         return self.flashObject.as_showVictimDogTag(data) if self._isDAAPIInited() else None
@@ -30,3 +30,21 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_hideComponentsS(self):
         return self.flashObject.as_hideComponents() if self._isDAAPIInited() else None
+
+    def as_handleAsReplayS(self):
+        return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None
+
+    def as_togglePostmortemInfoPanelS(self, isVisible):
+        return self.flashObject.as_togglePostmortemInfoPanel(isVisible) if self._isDAAPIInited() else None
+
+    def as_movePostmortemPanelUpS(self):
+        return self.flashObject.as_movePostmortemPanelUp() if self._isDAAPIInited() else None
+
+    def as_resetPostmortemPositionS(self):
+        return self.flashObject.as_resetPostmortemPosition() if self._isDAAPIInited() else None
+
+    def as_fadePostmortemPanelOutS(self):
+        return self.flashObject.as_fadePostmortemPanelOut() if self._isDAAPIInited() else None
+
+    def as_setInDeathCamS(self, isInDeathCam):
+        return self.flashObject.as_setInDeathCam(isInDeathCam) if self._isDAAPIInited() else None

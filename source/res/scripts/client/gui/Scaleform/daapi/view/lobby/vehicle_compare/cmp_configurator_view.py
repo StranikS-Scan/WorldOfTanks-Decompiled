@@ -108,60 +108,6 @@ class _ConfigFittingSlotVO(FittingSlotVO):
         self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
 
 
-class _DefaultSkillCompletenessChecker(object):
-
-    def isCompleted(self, levels, crew):
-        for lvl in levels:
-            if lvl < tankmen.MAX_SKILL_LEVEL:
-                return False
-
-        return True
-
-
-class _FullCrewSkillsCompletenessChecker(_DefaultSkillCompletenessChecker):
-
-    def isCompleted(self, levels, crew):
-        isAllSkillsAre100 = super(_FullCrewSkillsCompletenessChecker, self).isCompleted(levels, crew)
-        return len(levels) == len(crew) if isAllSkillsAre100 else False
-
-
-class _CurrentCrewMonitor(object):
-    _DEF_SKILL_CHECKER = _DefaultSkillCompletenessChecker()
-    _FULL_CREW_SKILL_CHECKER = _FullCrewSkillsCompletenessChecker()
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, container):
-        super(_CurrentCrewMonitor, self).__init__()
-        self.__container = container
-        self.__increasedTo100Skills = set()
-        skillsCheckerStorage = defaultdict(lambda : self._DEF_SKILL_CHECKER)
-        skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[0]] = self._FULL_CREW_SKILL_CHECKER
-        skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[1]] = self._FULL_CREW_SKILL_CHECKER
-        skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[2]] = self._FULL_CREW_SKILL_CHECKER
-        vehicleCrew = self.itemsCache.items.getItemByCD(self.__container.getCurrentVehicle().intCD).crew
-        levelsBySkills = defaultdict(list)
-        for _, tankman in vehicleCrew:
-            if tankman is not None:
-                for skill in tankman.skills:
-                    if skill.name in PARAMS_AFFECTED_TANKMEN_SKILLS:
-                        levelsBySkills[skill.name].append(skill.level)
-
-        for skillName, levels in levelsBySkills.iteritems():
-            if not skillsCheckerStorage[skillName].isCompleted(levels, vehicleCrew):
-                self.__increasedTo100Skills.add(skillName)
-
-        return
-
-    def isIncreasedSkillsSelected(self):
-        if self.__container.getCurrentCrewSkillLevel() != CrewTypes.CURRENT:
-            return False
-        return True if self.__container.getCurrentCrewSkills().intersection(self.__increasedTo100Skills) else False
-
-    def dispose(self):
-        self.__container = None
-        return
-
-
 class _CrewSkillsManager(object):
 
     def __init__(self, vehicle, crewSkillLevel, selectedSkills):
@@ -210,10 +156,9 @@ class _CrewSkillsManager(object):
         if self.__crewSkillLevel != newSkillsLevel:
             self.__crewSkillLevel = newSkillsLevel
             skillsByRoles = {}
-            if self.__crewSkillLevel == CrewTypes.SKILL_100 or self.__crewSkillLevel == CrewTypes.CURRENT:
-                affectedTankmens = self.__getAffectedTankmen(self.__selectedSkills)
-                for idx, role in affectedTankmens:
-                    skillsByRoles[idx] = self.__skillsByRoles[role].intersection(self.__selectedSkills)
+            affectedTankmens = self.__getAffectedTankmen(self.__selectedSkills)
+            for idx, role in affectedTankmens:
+                skillsByRoles[idx] = self.__skillsByRoles[role].intersection(self.__selectedSkills)
 
             if self.__crewSkillLevel == CrewTypes.CURRENT:
                 levelsByIndexes, nativeVehiclesByIndexes = cmp_helpers.getVehCrewInfo(self.__vehicle.intCD)
@@ -283,7 +228,6 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         self.__ammoInject = None
         super(VehicleCompareConfiguratorView, self).__init__()
         self.__slotsVoData = [None] * (_SLOT_DATA_INDEXES[-1][-1] + 1)
-        self.__currentCrewMonitor = None
         return
 
     def onCloseView(self):
@@ -312,12 +256,9 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
 
     def onCrewSkillUpdated(self):
         self.__updateParametersView()
-        self.__updateCrewAttentionIcon()
 
     def onCrewLevelUpdated(self, newLvl):
         self.__updateParametersView()
-        self.__updateCrewSelectionAvailability(newLvl)
-        self.__updateCrewAttentionIcon()
 
     def onPostProgressionUpdated(self):
         self.__ammoInject.update()
@@ -334,8 +275,6 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         self.__parametersView.init(self._container.getCurrentVehicle())
         self.__updateSlotsData(VEHICLE_FITTING_SLOTS)
         self.as_setTopModulesSelectedS(self._container.isTopModulesSelected())
-        self.__updateCrewLvl()
-        self.__updateCrewAttentionIcon()
         self.__ammoInject.update()
         self.__progressionInject.update()
 
@@ -398,9 +337,6 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
     def skillSelect(self, skillType, slotIndex, selected):
         self._container.selectCrewSkill(skillType, selected)
 
-    def changeCrewLevel(self, crewLevelId):
-        self._container.selectCrewLevel(crewLevelId)
-
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehicleCompareConfiguratorView, self)._onRegisterFlashComponent(viewPy, alias)
         if isinstance(viewPy, VehicleCompareParameters):
@@ -413,12 +349,8 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
     def _init(self):
         super(VehicleCompareConfiguratorView, self)._init()
         currentVehicle = self._container.getCurrentVehicle()
-        enableCamo = bool(cmp_helpers.getSuitableCamouflage(currentVehicle))
         topModulesFromStock = self._container.isTopModulesFromStock()
         enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
-        isInInventory = self._container.getBasketVehCmpData().isInInventory()
-        if isInInventory:
-            self.__currentCrewMonitor = _CurrentCrewMonitor(self._container)
         self.as_setInitDataS({'title': _ms(VEH_COMPARE.VEHCONF_HEADER, vehName=currentVehicle.userName),
          'resetBtnLabel': VEH_COMPARE.VEHCONF_RESETBTNLABEL,
          'cancelBtnLabel': VEH_COMPARE.VEHCONF_CANCELBTNLABEL,
@@ -426,25 +358,19 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
          'resetBtnTooltip': VEH_COMPARE.VEHCONF_RESETBTNLABEL_TOOLTIP,
          'cancelBtnTooltip': VEH_COMPARE.VEHCONF_CANCELBTNLABEL_TOOLTIP,
          'applyBtnTooltip': VEH_COMPARE.VEHCONF_COMPAREBTNLABEL_TOOLTIP,
-         'crewLevels': self.__getCrewLevels(isInInventory),
-         'enableTopModules': enableTopModules,
-         'enableCamo': enableCamo})
+         'enableTopModules': enableTopModules})
         self.as_setIsPostProgressionEnabledS(currentVehicle.isPostProgressionExists)
-        self.__updateCrewLvl()
         if currentVehicle.descriptor.type.hasCustomDefaultCamouflage:
             self.as_disableCamoS()
         self.__updateControlBtns()
         topModulesSelected = topModulesFromStock or self._container.isTopModulesSelected()
         self.as_setTopModulesSelectedS(topModulesSelected)
-        self.__updateCrewAttentionIcon()
         self.__updateSkillsData()
         self.__updateSlotsData(VEHICLE_FITTING_SLOTS)
         initialVehicle, _ = self._container.getInitialVehicleData()
         self.__parametersView.init(currentVehicle, initialVehicle)
 
     def _dispose(self):
-        if self.__currentCrewMonitor:
-            self.__currentCrewMonitor.dispose()
         self.__parametersView = None
         self.__progressionInject = None
         self.__ammoInject = None
@@ -469,9 +395,6 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
             self.__updateControlBtns()
         return
 
-    def __updateCrewSelectionAvailability(self, newLvl):
-        self.as_setSkillsBlockedS(newLvl != CrewTypes.SKILL_100 and newLvl != CrewTypes.CURRENT)
-
     def __updateControlBtns(self):
         self.as_setResetEnabledS(self._container.isDifferentWithInitialBasketVeh())
         self.as_setApplyEnabledS(self._container.isCurrentVehicleModified())
@@ -482,7 +405,7 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         for skillType in PARAMS_AFFECTED_TANKMEN_SKILLS:
             roles = list(ROLES_BY_SKILLS[skillType])
             role = roles[0] if len(roles) == 1 else COMMON_ROLE
-            skillLevel = Tankman.crewMemberRealSkillLevel(vehicle, skillType, role)
+            skillLevel = Tankman.crewMemberRealSkillLevel(vehicle, skillType)
             skills.append({'icon': Tankman.getSkillBigIconPath(skillType),
              'skillType': skillType,
              'skillRole': role,
@@ -492,32 +415,8 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         skills.sort(key=lambda item: SKILLS_ORDER.index(item['skillRole']))
         self.as_setSkillsS(skills)
 
-    @staticmethod
-    def __getCrewLevels(isInHangar):
-        items = [{'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL100,
-          'id': CrewTypes.SKILL_100,
-          'showAlert': False,
-          'tooltip': None}, {'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL75,
-          'id': CrewTypes.SKILL_75}, {'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL50,
-          'id': CrewTypes.SKILL_50}]
-        if isInHangar:
-            items.append({'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_CURRENT,
-             'id': CrewTypes.CURRENT})
-        return items
-
-    def __updateCrewLvl(self):
-        crewLevel = self._container.getCurrentCrewSkillLevel()
-        self.as_setCrewLevelIndexS(CrewTypes.ALL.index(crewLevel))
-        self.__updateCrewSelectionAvailability(crewLevel)
-
     def __updateShellSlots(self):
         self.__ammoInject.updateShells()
-
-    def __updateCrewAttentionIcon(self):
-        isVisible = False
-        if self.__currentCrewMonitor:
-            isVisible = self.__currentCrewMonitor.isIncreasedSkillsSelected()
-        self.as_setCrewAttentionIconVisibleS(isVisible)
 
 
 class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMainMeta):
@@ -764,11 +663,6 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
                 self.__notifyViews('onCrewSkillUpdated')
         else:
             LOG_WARNING('Attempt to apply the same value for {} = {}'.format(skillType, selected))
-
-    def selectCrewLevel(self, crewLevelId):
-        if self.__crewSkillsManager.changeCrewSkillLevel(crewLevelId):
-            self.__recalculateCrewBonuses()
-            self.__notifyViews('onCrewLevelUpdated', crewLevelId)
 
     def closeView(self, forcedBackAliace=None):
         if self.__canClose():

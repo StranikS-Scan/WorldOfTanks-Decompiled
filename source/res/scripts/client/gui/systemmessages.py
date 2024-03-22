@@ -90,7 +90,9 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'CollectionsDisabled',
  'CollectionsEnabled',
  'SimpleGift',
- 'NotEnoughBerthError'])
+ 'NotEnoughBerthError',
+ 'FairplayViolation',
+ 'NotEnoughBerthWarning'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,

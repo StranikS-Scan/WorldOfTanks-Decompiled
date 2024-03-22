@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleFireCircleEffectComponent.py
+from typing import TYPE_CHECKING
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
 from items import vehicles
-from items.artefacts import FireCircle
 from shared_utils import first
+if TYPE_CHECKING:
+    from battle_royale_artefacts import FireCircle
 
 class VehicleFireCircleEffectComponent(VehicleAbilityBaseComponent):
     __CLASS_NAME = 'VehicleFireCircleEffectComponent'

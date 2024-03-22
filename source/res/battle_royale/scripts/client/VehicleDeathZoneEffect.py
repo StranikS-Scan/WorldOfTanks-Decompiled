@@ -18,6 +18,11 @@ class VehicleDeathZoneEffect(DynamicScriptComponent):
     def set_state(self, _=None):
         totalTime = self.getTotalTime()
         finishTime = self.warningFinishTime if self.state == ZONE_STATE.WARNING else totalTime + BigWorld.serverTime()
+        if self.state == ZONE_STATE.CRITICAL:
+            if self.damageTime and self.damageTime <= BigWorld.serverTime():
+                self.onDamaged()
+                return
+            totalTime = BigWorld.player().arena.arenaInfo.deathZones.vehicleLifetimeInDeathZone
         value = DeathZoneTimerViewState(DEATH_ZONES.STATIC, False, totalTime, BrTimerViewState.fromZone(self.state), finishTime)
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE_TIMER, value)
 

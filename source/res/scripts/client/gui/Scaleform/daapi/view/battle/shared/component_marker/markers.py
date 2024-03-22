@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/component_marker/markers.py
 import logging
 from chat_commands_consts import INVALID_TARGET_ID
-from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import World2DMarkerComponent, MinimapMarkerComponent, AnimationSequenceMarkerComponent, DirectionIndicatorMarkerComponent, ComponentBitMask, TerrainMarkerComponent
+from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import World2DMarkerComponent, MinimapMarkerComponent, AnimationSequenceMarkerComponent, DirectionIndicatorMarkerComponent, ComponentBitMask, TerrainMarkerComponent, FullscreenMapComponent
 from ids_generators import SequenceIDGenerator
 _logger = logging.getLogger(__name__)
 
@@ -12,7 +12,8 @@ class MarkerBase(object):
      ComponentBitMask.MINIMAP_MARKER: MinimapMarkerComponent,
      ComponentBitMask.DIRECTION_INDICATOR: DirectionIndicatorMarkerComponent,
      ComponentBitMask.ANIM_SEQUENCE_MARKER: AnimationSequenceMarkerComponent,
-     ComponentBitMask.TERRAIN_MARKER: TerrainMarkerComponent}
+     ComponentBitMask.TERRAIN_MARKER: TerrainMarkerComponent,
+     ComponentBitMask.FULLSCREEN_MAP_MARKER: FullscreenMapComponent}
 
     def __init__(self, config, entity=None, targetID=INVALID_TARGET_ID):
         super(MarkerBase, self).__init__()
@@ -52,6 +53,9 @@ class MarkerBase(object):
 
     def hasMinimap(self):
         return self.mask & ComponentBitMask.MINIMAP_MARKER
+
+    def hasFullscreenMap(self):
+        return self.mask & ComponentBitMask.FULLSCREEN_MAP_MARKER
 
     def getMarkerPosition(self):
         for component in self._components.itervalues():
@@ -93,9 +97,9 @@ class MarkerBase(object):
         for component in self._components.itervalues():
             component.setVisible(self.isVisible)
 
-    def attachGUI(self, guiProvider):
+    def attachGUI(self, guiProvider, **kwargs):
         for component in self._components.itervalues():
-            component.attachGUI(guiProvider)
+            component.attachGUI(guiProvider, **kwargs)
 
     def detachGUI(self):
         for component in self._components.itervalues():

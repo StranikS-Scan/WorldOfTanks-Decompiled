@@ -6,6 +6,10 @@
     <VehicleInBattleSwitch></VehicleInBattleSwitch>
     <TeamInfoInBattleVehicleSwitch></TeamInfoInBattleVehicleSwitch>
     <ArenaTriggerSystemComponent></ArenaTriggerSystemComponent>
+    <ArenaVehiclesInfoSyncComponent></ArenaVehiclesInfoSyncComponent>
+    <ArenaFairplayComponent></ArenaFairplayComponent>
+    <ArenaFairplayKafkaLoggingComponent></ArenaFairplayKafkaLoggingComponent>
+    <AccountFairplayComponent></AccountFairplayComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -21,6 +25,7 @@
     <BattleHintsComponent></BattleHintsComponent>
     <Fire></Fire>
     <RocketAccelerationController></RocketAccelerationController>
+    <KillCamDataComponent></KillCamDataComponent>
     <RocketAcceleration></RocketAcceleration>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
@@ -50,6 +55,9 @@
     <VehicleRespawnComponent></VehicleRespawnComponent>
     <VehicleLivesComponent></VehicleLivesComponent>
     <TeamInfoLivesComponent></TeamInfoLivesComponent>
+    <PveHudWidgetsStateComponent></PveHudWidgetsStateComponent>
+    <PveMinimapController></PveMinimapController>
+    <TargetMarkersComponent></TargetMarkersComponent>
     <EntityMarkerComponent></EntityMarkerComponent>
     <EntityAreaBorderComponent></EntityAreaBorderComponent>
     <EntityPolygonalTriggerComponent></EntityPolygonalTriggerComponent>
@@ -57,5 +65,9 @@
     <EntityVisualScriptRunner></EntityVisualScriptRunner>
     <SequenceNetworkSync></SequenceNetworkSync>
     <DualAccuracy></DualAccuracy>
+    <ArenaVehiclesInfo></ArenaVehiclesInfo>
+    <AvatarVehiclesInfo></AvatarVehiclesInfo>
+    <FairplayVehicleBattleStatsComponent></FairplayVehicleBattleStatsComponent>
+    <AvatarFairplayMessageComponent></AvatarFairplayMessageComponent>
   </DynamicComponents>
 </components.xml>

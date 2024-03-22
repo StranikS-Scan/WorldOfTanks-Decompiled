@@ -24,7 +24,6 @@ from cgf_components.arena_camera_manager import ArenaCameraManager
 from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE, ATTACK_REASON_INDICES, ATTACK_REASON, SPT_MATKIND
 from debug_utils import LOG_DEBUG_DEV
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from visual_script.misc import ASPECT
 from Event import Event
 from gui.battle_control import vehicle_getter, avatar_getter
@@ -149,7 +148,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if self.__wheelsSteeringFilter is not None:
             return [ steeringFilter.output(BigWorld.time()) for steeringFilter in self.__wheelsSteeringFilter ]
         else:
-            return
+            return []
 
     @property
     def wheelsSteeringFilters(self):
@@ -253,8 +252,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         ctrl = self.guiSessionProvider.dynamic.appearanceCache
         if ctrl is not None:
             appearance = ctrl.getAppearance(self.id, newInfo, None, strCD, False)
-            if BONUS_CAPS.checkAny(BigWorld.player().arenaBonusType, 'EPIC') and self.isAlive() and appearance and not appearance.isAlive:
-                forceReloading = True
+            if appearance:
+                isAppearanceAlive = not appearance.isDestroyed
+                forceReloading = forceReloading or isAppearanceAlive != self.isAlive()
             if forceReloading:
                 oldStrCD = oldTypeDescriptor.makeCompactDescr() if oldTypeDescriptor is not None else None
                 appearance = ctrl.reloadAppearance(self.id, newInfo, self.__onAppearanceReady, strCD, oldStrCD)
@@ -329,8 +329,6 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__prevHealth = self.maxHealth
         self.resetProperties()
         self.onAppearanceReady()
-        if hasattr(self, 'rocketAccelerationController'):
-            self.rocketAccelerationController.init()
 
     def __onVehicleInfoAdded(self, vehID):
         if self.id != vehID:
@@ -715,7 +713,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def onVehiclePickup(self):
-        self.entityGameObject.createComponent(VehiclePickupComponent, self.appearance, self.entityGameObject)
+        self.entityGameObject.createComponent(VehiclePickupComponent, self.appearance)
         attachedVehicle = BigWorld.player().getVehicleAttached()
         if attachedVehicle is None or self.id != attachedVehicle.id:
             return

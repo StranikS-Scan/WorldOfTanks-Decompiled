@@ -61,7 +61,7 @@ class EpicScorePanel(EpicScorePanelMeta):
             ctrl.onNearestObjectiveChanged += self.__onNearestObjectiveChanged
             ctrl.onObjectiveBattleStarted += self.__onHQBattleStarted
         self.__currentMission = ctrl.getCurrentMission()
-        ctrl = self.sessionProvider.dynamic.spectator
+        ctrl = self.sessionProvider.shared.spectator
         if ctrl is not None:
             ctrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
             pmctrl = self.sessionProvider.shared.vehicleState
@@ -123,7 +123,7 @@ class EpicScorePanel(EpicScorePanelMeta):
             ctrl.onPlayerMissionReset -= self.__onPlayerMissionReset
             ctrl.onNearestObjectiveChanged -= self.__onNearestObjectiveChanged
             ctrl.onObjectiveBattleStarted -= self.__onHQBattleStarted
-        ctrl = self.sessionProvider.dynamic.spectator
+        ctrl = self.sessionProvider.shared.spectator
         if ctrl is not None:
             ctrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
         ctrl = self.sessionProvider.dynamic.respawn

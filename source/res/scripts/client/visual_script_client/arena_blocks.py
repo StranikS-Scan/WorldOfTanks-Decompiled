@@ -334,7 +334,7 @@ class OnBattleRoundFinished(Block, ArenaMeta):
     def onFinishScript(self):
         g_playerEvents.onRoundFinished -= self._onRoundFinished
 
-    def _onRoundFinished(self, winnerTeam, reason, extraData):
+    def _onRoundFinished(self, winnerTeam, reason):
         self._winner.setValue(winnerTeam)
         self._reason.setValue(reason)
         self._out.call()
@@ -419,39 +419,6 @@ class GetDataFromStorage(GetDataFromStorageBase):
     def _exec(self):
         self.arena = BigWorld.player().arena
         super(GetDataFromStorage, self)._exec()
-
-
-class SetPrebattleCountdownTimerText(Block, ArenaMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(SetPrebattleCountdownTimerText, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._execute)
-        self._out = self._makeEventOutputSlot('out')
-        self._header = self._makeDataInputSlot('header', SLOT_TYPE.STR)
-        self._subheader = self._makeDataInputSlot('subheader', SLOT_TYPE.STR)
-        self._battleStartMessage = self._makeDataInputSlot('battleStartMessage', SLOT_TYPE.STR)
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-    def validate(self):
-        if not self._header.hasValue():
-            return 'header value is required.'
-        return 'battleStartMessage value is required.' if not self._battleStartMessage.hasValue() else super(SetPrebattleCountdownTimerText, self).validate()
-
-    def _execute(self):
-        from gui.Scaleform.daapi.view.battle.shared.prebattle_timers.custom_text_timer import setTimerSettings
-        if helpers.isPlayerAvatar():
-            header = self._header.getValue()
-            battleStartMessage = self._battleStartMessage.getValue()
-            subheader = None
-            if self._subheader.hasValue():
-                subheader = self._subheader.getValue()
-            setTimerSettings(header, battleStartMessage, subheader)
-        else:
-            errorVScript(self, 'BigWorld.player is not player avatar.')
-        return
 
 
 class CollideSegment(Block, ArenaMeta):

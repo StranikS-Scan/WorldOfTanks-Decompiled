@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.comp7.tooltips.comp7_calendar_day_extended_t
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.builders import DataBuilder
-from gui.shared.tooltips.comp7_tooltips import RoleSkillLobbyTooltipData, BattleResultsPrestigePointsTooltip, BattleResultsTournamentPrestigePointsTooltip
+from gui.shared.tooltips.comp7_tooltips import RoleSkillLobbyTooltipData, BattleResultsRatingPointsTooltip, BattleResultsTournamentRatingPointsTooltip, BattleResultsTrainingRatingPointsTooltip, Comp7SelectableRewardTooltip
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
@@ -15,5 +15,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.COMP7_CALENDAR_DAY_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, Comp7CalendarDayTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.COMP7_CALENDAR_DAY_EXTENDED_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, Comp7CalendarDayExtendedTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.COMP7_ROLE_SKILL_LOBBY_TOOLTIP, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RoleSkillLobbyTooltipData(contexts.Comp7RoleSkillLobbyContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_PRESTIGE_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleResultsPrestigePointsTooltip(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.TOURNAMENT_COMP7_BATTLE_RESULTS_PRESTIGE_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleResultsTournamentPrestigePointsTooltip(contexts.ToolTipContext(None))))
+     DataBuilder(TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_RATING_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleResultsRatingPointsTooltip(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.TOURNAMENT_COMP7_BATTLE_RESULTS_RATING_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleResultsTournamentRatingPointsTooltip(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleResultsTrainingRatingPointsTooltip(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.COMP7_SELECTABLE_REWARD, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, Comp7SelectableRewardTooltip(contexts.ToolTipContext(None))))

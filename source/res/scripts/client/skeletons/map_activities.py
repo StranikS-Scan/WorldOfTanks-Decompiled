@@ -13,3 +13,6 @@ class IMapActivities(object):
 
     def generateOfflineActivities(self, spacePath, usePossibility=True):
         raise NotImplementedError
+
+    def setPauseVisuals(self, isPause):
+        raise NotImplementedError

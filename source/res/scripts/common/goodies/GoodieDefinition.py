@@ -6,14 +6,21 @@ from Goodie import Goodie
 from goodie_constants import GOODIE_VARIETY, GOODIE_STATE
 from soft_exception import SoftException
 if TYPE_CHECKING:
-    from typing import Optional
-    from goodies.GoodieConditions import Condition
-    from goodies.GoodieResources import GoodieResource
-    from goodies.GoodieTargets import GoodieTarget
-    from goodies.GoodieValue import GoodieValue
+    from typing import Optional, Dict
+    from goodies.GoodieConditions import GoodieConditionType
+    from goodies.GoodieTargets import GoodieTargetType
+    from goodies.GoodieValue import GoodieValueType
+    from goodies.GoodieResources import GoodieResourceType
 
 class OverLimitException(SoftException):
     pass
+
+
+class ExpirationCountException(SoftException):
+
+    def __init__(self, state):
+        msg = 'The number of expirations does not match the total number of goodies. {}'.format(state)
+        super(ExpirationCountException, self).__init__(msg)
 
 
 class GoodieDefinition(object):
@@ -27,9 +34,11 @@ class GoodieDefinition(object):
      'autostart',
      'resource',
      'value',
-     'condition']
+     'condition',
+     'expireAfter',
+     'roundToEndOfGameDay']
 
-    def __init__(self, uid, variety, target, enabled, lifetime, useby, counter, autostart, resource, value, condition):
+    def __init__(self, uid, variety, target, enabled, lifetime, useby, counter, autostart, resource, value, condition, expireAfter, roundToEndOfGameDay):
         self.uid = uid
         self.variety = variety
         self.target = target
@@ -41,9 +50,17 @@ class GoodieDefinition(object):
         self.resource = resource
         self.value = value
         self.condition = condition
+        self.expireAfter = expireAfter
+        self.roundToEndOfGameDay = roundToEndOfGameDay
+
+    def __repr__(self):
+        return '{}, {}, {}, {}, {}, {}, {}, {}'.format(self.uid, self.enabled, self.lifetime, self.useby, self.counter, self.resource, self.value, self.expireAfter, self.roundToEndOfGameDay)
 
     def isActivatable(self):
         return self.lifetime is not None
+
+    def isExpirable(self):
+        return bool(self.expireAfter)
 
     def isTimeLimited(self):
         return self.lifetime is not None or self.useby is not None
@@ -51,7 +68,7 @@ class GoodieDefinition(object):
     def isCountable(self):
         return self.counter != 0
 
-    def isExpired(self):
+    def isPastUseBy(self):
         if self.useby is not None and self.useby < time.time():
             return True
         else:
@@ -84,29 +101,35 @@ class GoodieDefinition(object):
         else:
             return resource.__class__(self.value.delta(resource.value)) if resource.__class__ == self.resource else None
 
-    def createGoodie(self, state=None, expiration=None, counter=None):
+    def createGoodie(self, state=None, finishTime=None, counter=None, expirations=None):
         if not self.enabled:
             return
         else:
+            if self.expireAfter is not None:
+                if expirations is None or sum(expirations.itervalues()) != counter:
+                    raise ExpirationCountException((state,
+                     finishTime,
+                     counter,
+                     expirations))
             if state is None:
                 if self.autostart:
                     state = GOODIE_STATE.ACTIVE
                 else:
                     state = GOODIE_STATE.INACTIVE
             if self.isTimeLimited():
-                if expiration is None:
+                if finishTime is None:
                     if state == GOODIE_STATE.ACTIVE:
                         if self.useby is None:
-                            expiration = time.time() + self.lifetime
+                            finishTime = time.time() + self.lifetime
                         else:
-                            expiration = min(time.time() + self.lifetime, self.useby)
+                            finishTime = min(time.time() + self.lifetime, self.useby)
                     else:
-                        expiration = 0
+                        finishTime = 0
             else:
-                expiration = 0
+                finishTime = 0
             if counter is None:
                 counter = self.counter
-            return Goodie(self.uid, state, expiration, counter)
+            return Goodie(self.uid, state, finishTime, counter, expirations)
 
-    def createDisabledGoodie(self, counter):
-        return Goodie(self.uid, GOODIE_STATE.INACTIVE, 0, counter)
+    def createDisabledGoodie(self, counter, expirations):
+        return Goodie(self.uid, GOODIE_STATE.INACTIVE, 0, counter, expirations)

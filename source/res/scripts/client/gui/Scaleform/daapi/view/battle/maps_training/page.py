@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/maps_training/page.py
 import WWISE
+from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import KillCamMarkersManager
 from shared_utils import CONST_CONTAINER
 from gui.Scaleform.daapi.view.battle.classic.page import ClassicPage
 from gui.Scaleform.daapi.view.battle.shared import drone_music_player, finish_sound_player
@@ -35,7 +36,7 @@ MAPS_TRAINING_CONFIG = ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (B
  (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer),
  (DynamicAliases.FINISH_SOUND_PLAYER, finish_sound_player.FinishSoundPlayer),
  (DynamicAliases.TIME_NOTIFIER, arena_time_notificator.MapsTrainingArenaTimeNotificator)))
-_MAPS_TRAINING_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, markers2d.MapsTrainingMarkersManager)
+_MAPS_TRAINING_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, markers2d.MapsTrainingMarkersManager, KillCamMarkersManager)
 
 class MapsTrainingPage(ClassicPage):
 

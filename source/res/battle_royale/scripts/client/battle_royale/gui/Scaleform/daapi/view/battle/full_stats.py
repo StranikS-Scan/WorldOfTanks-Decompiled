@@ -82,9 +82,9 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
 
     def __getMinimapItems(self):
         fullStatsIcons = R.strings.battle_royale.fullStats.icons
-        return [self.__getMinimapItem('shamrock_loot', backport.text(fullStatsIcons.shamrocks.description()), 'add'),
+        return [self.__getMinimapItem('tab_corpse_loot', backport.text(fullStatsIcons.corpseLoot.description()), 'add'),
+         self.__getMinimapItem('tab_loot', backport.text(fullStatsIcons.defaultLoot.description()), 'add'),
          self.__getMinimapItem('tab_improved_loot', backport.text(fullStatsIcons.extendedLoot.description()), 'add'),
-         self.__getMinimapItem('tab_corpse_loot', backport.text(fullStatsIcons.corpseLoot.description()), 'add'),
          self.__getMinimapItem('airdrop_loot', backport.text(fullStatsIcons.airDrop.description()), 'add'),
          self.__getMinimapItem('deathzone_info_warning', backport.text(R.strings.battle_royale.fullStats.deathZone.warning.description())),
          self.__getMinimapItem('deathzone_info_closed', backport.text(R.strings.battle_royale.fullStats.deathZone.closed.description()))]

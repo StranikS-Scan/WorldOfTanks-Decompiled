@@ -8,6 +8,7 @@ from skeletons.vehicle_appearance_cache import IAppearanceCache
 from helpers import dependency
 from soft_exception import SoftException
 from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
+from wg_async import wg_async
 _logger = logging.getLogger(__name__)
 
 class DefaultAppearanceCacheController(IAppearanceCacheController):
@@ -55,9 +56,11 @@ class DefaultAppearanceCacheController(IAppearanceCacheController):
         return self._appearanceCache.getAppearance(vId, vInfo, callback, strCD, needLoad)
 
     def reloadAppearance(self, vId, vInfo, callback=None, strCD=None, oldStrCD=None):
-        oldAppearance = self._appearanceCache.removeAppearance(vId, oldStrCD)
-        if oldAppearance is not None:
-            oldAppearance.destroy()
+        for vehStrCD in (strCD, oldStrCD):
+            oldAppearance = self._appearanceCache.removeAppearance(vId, vehStrCD)
+            if oldAppearance is not None:
+                oldAppearance.destroy()
+
         return self._appearanceCache.getAppearance(vId, vInfo, callback, strCD)
 
     def _addListeners(self):
@@ -99,16 +102,19 @@ class DefaultAppearanceCacheController(IAppearanceCacheController):
     def invalidateVehiclesInfo(self, arenaDP):
         self._precache(self._arena.vehicles)
 
+    @wg_async
     def _onPlayerGroupsUpdated(self, vIds):
-        if not self._arena.vehicles:
+        if not self._arena:
             return
         else:
             playerVehicleId = getattr(BigWorld.player(), 'playerVehicleID', 0)
             if playerVehicleId <= 0:
                 return
+            yield self._arena.awaitVehiclesAdded(vIds.keys())
             groupIDs = None
             if playerVehicleId in vIds:
-                vehicleInfos = self._arena.vehicles
+                vehicleInfos = self._arena.vehicles.copy()
+                vehicleInfos.pop(playerVehicleId, None)
             else:
                 vehicleInfos = {vId:self._arena.vehicles[vId] for vId in vIds}
                 groupIDs = vIds

@@ -25,6 +25,17 @@
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </spawnTime>
+    <respawnState>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </respawnState>
+    <isLeaveAllowed>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <Default>	0	</Default>
+    </isLeaveAllowed>
   </Properties>
   <ofEntity>
     <Vehicle></Vehicle>

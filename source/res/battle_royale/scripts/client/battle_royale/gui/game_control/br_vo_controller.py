@@ -6,8 +6,7 @@ import nations
 from constants import CURRENT_REALM, IS_CHINA
 from gui.battle_control import avatar_getter
 from items import vehicles
-from helpers import dependency, isPlayerAvatar
-from skeletons.gui.game_control import IBootcampController
+from helpers import isPlayerAvatar
 _RU_REALMS = ('DEV', 'QA', 'RU')
 _SWITCH_RU = 'SWITCH_ext_BR_vo_language'
 _SWITCH_RU_ON = 'SWITCH_ext_BR_vo_language_RU'
@@ -24,7 +23,6 @@ _SWITCH_CHAR_FOR_NATIONS = {'ussr': 'SWITCH_ext_BR_vo_char_RU',
  'poland': 'SWITCH_ext_BR_vo_char_PL'}
 
 class BRVoiceOverController(object):
-    __bcc = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(BRVoiceOverController, self).__init__()
@@ -45,16 +43,13 @@ class BRVoiceOverController(object):
         self.__isActive = False
 
     def onAvatarBecomePlayer(self):
-        if self.__bcc.isInBootcampAccount() or self.__bcc.isInBootcamp():
-            return
+        avatar = BigWorld.player()
+        playerVehicle = avatar.getVehicleAttached()
+        if playerVehicle is not None:
+            self.__updateBattleSwitches(playerVehicle)
         else:
-            avatar = BigWorld.player()
-            playerVehicle = avatar.getVehicleAttached()
-            if playerVehicle is not None:
-                self.__updateBattleSwitches(playerVehicle)
-            else:
-                avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
-            return
+            avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
+        return
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == avatar_getter.getVehicleIDAttached():

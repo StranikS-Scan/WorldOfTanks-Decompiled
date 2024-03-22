@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.crew.training_book_model import Traini
 class QuickTrainingViewModel(BaseCrewViewModel):
     __slots__ = ('onLearn', 'onCancel', 'onBuyBook', 'onTipClose', 'onCardMouseLeave', 'onFreeXpMouseEnter', 'onFreeXpSelected', 'onFreeXpUpdated', 'onFreeXpManualInput', 'onBookMouseEnter', 'onBookSelected')
 
-    def __init__(self, properties=9, commands=15):
+    def __init__(self, properties=10, commands=15):
         super(QuickTrainingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -67,6 +67,12 @@ class QuickTrainingViewModel(BaseCrewViewModel):
     def getTipsType():
         return InfoTipModel
 
+    def getIsConversionBannerVisible(self):
+        return self._getBool(9)
+
+    def setIsConversionBannerVisible(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(QuickTrainingViewModel, self)._initialize()
         self._addViewModelProperty('freeXpData', FreeXpBookModel())
@@ -76,6 +82,7 @@ class QuickTrainingViewModel(BaseCrewViewModel):
         self._addStringProperty('tankmanName', '')
         self._addArrayProperty('booksList', Array())
         self._addArrayProperty('tips', Array())
+        self._addBoolProperty('isConversionBannerVisible', True)
         self.onLearn = self._addCommand('onLearn')
         self.onCancel = self._addCommand('onCancel')
         self.onBuyBook = self._addCommand('onBuyBook')

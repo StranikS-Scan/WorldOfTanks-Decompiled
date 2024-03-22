@@ -72,8 +72,8 @@ class NationChangeScreen(ViewImpl):
                 return
             if tooltipId == TOOLTIPS_CONSTANTS.TANKMAN:
                 toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
-                args = (self.getParentWindow(), int(event.getArgument('intCD')))
-                toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.TANKMAN, args, event.mouse.positionX, event.mouse.positionY)
+                args = (int(event.getArgument('intCD')),)
+                toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.TANKMAN, args, event.mouse.positionX, event.mouse.positionY, self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.TANKMAN
             tooltipData = self.__getBackportTooltipData(event)
             window = BackportTooltipWindow(tooltipData, self.getParentWindow())

@@ -28,10 +28,10 @@ class StrongholdEventProvider(BaseProvider):
         self._requestData(_DataNames.SETTINGS)
 
     def getSettings(self):
-        return self._getData(_DataNames.SETTINGS)
+        return self._getData(_DataNames.SETTINGS).data
 
     def getClanPrimeTime(self):
-        return self._getData(_DataNames.PRIME_TIME)
+        return self._getData(_DataNames.PRIME_TIME).data
 
     def isRunning(self):
         settings = self.getSettings()

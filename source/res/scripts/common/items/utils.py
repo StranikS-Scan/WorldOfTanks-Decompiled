@@ -341,13 +341,17 @@ def getDifferVehiclePartNames(newVehDescr, oldVehDescr):
 def commanderTutorXpBonusFactorForCrew(crew, ammo, vehCompDescr):
     tutorLevel = component_constants.ZERO_FLOAT
     brotherhoodSum = 0.0
+    vehDescriptor = VehicleDescriptor(compactDescr=vehCompDescr)
     for t in crew:
         if t.role == 'commander':
             tutorLevel = t.skillLevel('commander_tutor')
             if not tutorLevel:
                 return component_constants.ZERO_FLOAT
+            if not t.isOwnVehicleOrPremium(vehDescriptor.type):
+                return component_constants.ZERO_FLOAT
+            tutorLevel *= t.skillsEfficiency
         tmanBrotherhoodLevel = t.skillLevel('brotherhood') or 0
-        brotherhoodSum += tmanBrotherhoodLevel
+        brotherhoodSum += tmanBrotherhoodLevel * t.skillsEfficiency
 
     brotherhoodLevel = brotherhoodSum / (len(crew) * MAX_SKILL_LEVEL)
     skillsConfig = getSkillsConfig()
@@ -362,7 +366,6 @@ def commanderTutorXpBonusFactorForCrew(crew, ammo, vehCompDescr):
         if itemTypeIdx == ITEM_TYPES.optionalDevice:
             obj = cache.optionalDevices()[itemIdx]
             if isinstance(obj, StaticOptionalDevice):
-                vehDescriptor = VehicleDescriptor(compactDescr=vehCompDescr)
                 optionalDevCrewLevelIncrease += obj.getFactorValue(vehDescriptor, 'miscAttrs/crewLevelIncrease')
                 optDev.add(obj)
 

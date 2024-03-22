@@ -17,6 +17,7 @@ from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSOUNDS import AUTOLOADERBOOSTVIE
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.plugins import RoleHelpPlugin
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
+from gui.impl import backport
 from gui.shared.events import GameEvent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils.plugins import PluginsCollection
@@ -54,6 +55,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__zoomFactor = 0.0
         self.__scale = 1.0
         self.__distance = 0
+        self.__damage = 0
         self.__hasAmmo = True
         self.__callbackDelayer = None
         self.__isFaded = False
@@ -111,6 +113,15 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def clearDistance(self, immediate=True):
         self.__distance = 0
         self.as_clearDistanceS(immediate)
+
+    def setMutableDamage(self, damage):
+        if damage != self.__damage:
+            self.__damage = damage
+            self.as_setAverageDamageS(str(backport.getIntegralFormat(damage)))
+
+    def clearMutableDamage(self, immediate=True):
+        self.__damage = 0
+        self.as_clearAverageDamageS(immediate)
 
     def setHasAmmo(self, hasAmmo):
         if self.__hasAmmo != hasAmmo:

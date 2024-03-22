@@ -19,7 +19,6 @@ import WebBrowser
 import constants
 import services_config
 from MemoryCriticalController import g_critMemHandler
-from bootcamp.Bootcamp import g_bootcamp
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from gui import onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
 from gui.shared import personality as gui_personality
@@ -61,6 +60,8 @@ def init(scriptConfig, engineConfig, userPreferences):
         python_macroses.init()
         import arena_bonus_type_caps
         arena_bonus_type_caps.init()
+        import fairplay_violation_types
+        fairplay_violation_types.init()
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
             from development_features import initDevBonusTypes
@@ -79,7 +80,6 @@ def init(scriptConfig, engineConfig, userPreferences):
         import BattleReplay
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
         g_replayCtrl.registerWotReplayFileExtension()
-        g_bootcamp.replayCallbackSubscribe()
         import nation_change
         nation_change.init()
         gameLoading.step()
@@ -104,6 +104,8 @@ def init(scriptConfig, engineConfig, userPreferences):
         motivation_quests.init()
         import customization_quests
         customization_quests.init()
+        import static_quests
+        static_quests.init()
         import game_params_configs
         game_params_configs.init()
         BigWorld.worldDrawEnabled(False)
@@ -160,67 +162,16 @@ def start():
         gameLoading.getLoader().idl()
         LOG_DEBUG('OfflineMode')
         return
-    elif LightingGenerationMode.onStartup():
+    if LightingGenerationMode.onStartup():
         gameLoading.getLoader().idl()
         LOG_DEBUG('LightingGenerationMode')
         return
-    else:
-        ServiceLocator.connectionMgr.onConnected += onConnected
-        ServiceLocator.connectionMgr.onDisconnected += onDisconnected
-        if len(sys.argv) > 2:
-            if sys.argv[1] == 'scriptedTest':
-                try:
-                    scriptName = sys.argv[2]
-                    if scriptName[-3:] == '.py':
-                        scriptName = scriptName[:-3]
-                    try:
-                        __import__(scriptName)
-                    except ImportError:
-                        try:
-                            __import__('tests.' + scriptName)
-                        except ImportError:
-                            __import__('Cat.' + scriptName)
-
-                    ServiceLocator.gameplay.start()
-                except Exception:
-                    LOG_CURRENT_EXCEPTION()
-                    BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
-                    BigWorld.quit()
-
-            elif sys.argv[1] == 'offlineTest':
-                try:
-                    from Cat.Tasks.TestArena2 import TestArena2Object
-                    LOG_DEBUG(sys.argv)
-                    LOG_DEBUG('starting offline test: %s', sys.argv[2])
-                    if len(sys.argv) > 3:
-                        TestArena2Object.startOffline(sys.argv[2], sys.argv[3])
-                    else:
-                        TestArena2Object.startOffline(sys.argv[2])
-                except Exception:
-                    LOG_DEBUG('Game start FAILED with:')
-                    LOG_CURRENT_EXCEPTION()
-
-            elif sys.argv[1] == 'hangarOverride':
-                try:
-                    LOG_DEBUG(sys.argv)
-                    from Tests.auto.HangarOverride import HangarOverride
-                    HangarOverride.setHangar('spaces/' + sys.argv[2])
-                    if len(sys.argv) > 3 and sys.argv[3] is not None:
-                        LOG_DEBUG('Setting default client inactivity timeout: %s' % sys.argv[3])
-                        constants.CLIENT_INACTIVITY_TIMEOUT = int(sys.argv[3])
-                except Exception:
-                    LOG_DEBUG('Game start FAILED with:')
-                    LOG_CURRENT_EXCEPTION()
-
-                ServiceLocator.gameplay.start()
-            else:
-                ServiceLocator.gameplay.start()
-        else:
-            ServiceLocator.gameplay.start()
-        BigWorld.loginEntered()
-        if not g_replayCtrl.isPlaying:
-            WebBrowser.initExternalCache()
-        return
+    ServiceLocator.connectionMgr.onConnected += onConnected
+    ServiceLocator.connectionMgr.onDisconnected += onDisconnected
+    ServiceLocator.gameplay.start()
+    BigWorld.loginEntered()
+    if not g_replayCtrl.isPlaying:
+        WebBrowser.initExternalCache()
 
 
 def abort():
@@ -235,9 +186,6 @@ def fini():
     BigWorld.wg_setScreenshotNotifyCallback(None)
     g_critMemHandler.restore()
     g_critMemHandler.destroy()
-    if constants.IS_CAT_LOADED:
-        import Cat
-        Cat.fini()
     MusicControllerWWISE.destroy()
     if RSSDownloader.g_downloader is not None:
         RSSDownloader.g_downloader.destroy()
@@ -366,8 +314,6 @@ def handleKeyEvent(event):
         return True
     else:
         isDown, key, mods, isRepeat = convertKeyEvent(event)
-        if g_bootcamp.isRunning():
-            g_bootcamp.handleKeyEvent(event)
         if WebBrowser.g_mgr.handleKeyEvent(event):
             return True
         if g_replayCtrl.isPlaying:
@@ -376,17 +322,9 @@ def handleKeyEvent(event):
         if isRepeat:
             if onRepeatKeyEvent(event):
                 return True
-        if constants.IS_CAT_LOADED:
-            import Cat
-            if Cat.handleKeyEventBeforeGUI(isDown, key, mods, event):
-                return True
         if not isRepeat:
             InputHandler.g_instance.handleKeyEvent(event)
             if not guiHandled and GUI.handleKeyEvent(event):
-                return True
-        if constants.IS_CAT_LOADED:
-            import Cat
-            if Cat.handleKeyEventAfterGUI(isDown, key, mods, event):
                 return True
         if not isRepeat:
             if MessengerEntry.g_instance.gui.handleKey(event):
@@ -414,10 +352,6 @@ def handleMouseEvent(event):
         return True
     else:
         dx, dy, dz, _ = convertMouseEvent(event)
-        if constants.IS_CAT_LOADED:
-            import Cat
-            if Cat.handleMouseEvent(dx, dy, dz):
-                return True
         if g_replayCtrl.isPlaying:
             if g_replayCtrl.handleMouseEvent(dx, dy, dz):
                 return True
@@ -511,10 +445,9 @@ def checkBotNet():
     botArg = 'botExecute'
     if botArg not in sys.argv:
         return
-    LOG_DEBUG('Init Bot-net ClientBot')
     sys.path.append('test_libs')
     from path_manager import g_pathManager
     g_pathManager.setPathes()
     from test_player import g_testPlayer
-    rpycPort = int(sys.argv[sys.argv.index(botArg) + 1])
-    g_testPlayer.initTestPlayer(rpycPort)
+    port = int(sys.argv[sys.argv.index(botArg) + 1])
+    g_testPlayer.initTestPlayer(port)

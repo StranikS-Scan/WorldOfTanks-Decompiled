@@ -60,7 +60,7 @@ class EpicFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
         if self._arenaPeriod == ARENA_PERIOD.BATTLE and self._arenaTotalTime == _BATTLE_END_SOUND_TIME:
             self.__timeIsOver = True
 
-    def __onEpicRoundFinished(self, winnerTeam, reason, extraData):
+    def __onEpicRoundFinished(self, winnerTeam, reason):
         delay = _EPIC_SOUND_NOTIFICATION_DELAY.get(reason, 0)
         self.__notificationDelayCB = BigWorld.callback(delay, partial(self._playSoundNotification, winnerTeam, reason))
         if reason == FINISH_REASON.TIMEOUT or self.__timeIsOver:

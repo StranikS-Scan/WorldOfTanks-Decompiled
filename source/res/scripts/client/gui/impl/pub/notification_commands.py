@@ -48,7 +48,7 @@ class WindowNotificationCommand(NotificationCommand):
         self.__window = window
 
     def __eq__(self, other):
-        return self.__window == other
+        return False if not isinstance(other, WindowNotificationCommand) else self.__window == other.getWindow()
 
     def init(self):
         pass
@@ -71,7 +71,7 @@ class EventNotificationCommand(NotificationCommand):
         self.__event = event
 
     def __eq__(self, other):
-        return self.__event == other
+        return False if not isinstance(other, EventNotificationCommand) else self.__event == other.getEvent()
 
     def init(self):
         pass
@@ -84,6 +84,9 @@ class EventNotificationCommand(NotificationCommand):
 
     def getWindow(self):
         return None
+
+    def getEvent(self):
+        return self.__event
 
 
 class NonPersistentEventNotificationCommand(EventNotificationCommand):

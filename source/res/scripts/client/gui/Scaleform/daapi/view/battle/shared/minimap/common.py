@@ -91,6 +91,9 @@ class SimplePlugin(IPlugin):
     def _isInVideoMode(self):
         return self._ctrlMode in (CTRL_MODE_NAME.VIDEO, CTRL_MODE_NAME.DEATH_FREE_CAM)
 
+    def _isInFreeCamMode(self):
+        return self._ctrlMode in CTRL_MODE_NAME.DEATH_FREE_CAM
+
     def _isInRespawnDeath(self):
         return self._ctrlMode == CTRL_MODE_NAME.RESPAWN_DEATH
 

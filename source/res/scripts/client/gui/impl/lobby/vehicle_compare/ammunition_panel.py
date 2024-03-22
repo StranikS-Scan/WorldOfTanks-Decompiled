@@ -9,7 +9,7 @@ from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
-from gui.impl.gen.view_models.views.lobby.tank_setup.vehicle_compare_ammunition_panel_model import VehicleCompareAmmunitionPanelModel
+from gui.impl.gen.view_models.views.lobby.tank_setup.ammunition_panel_view_model import AmmunitionPanelViewModel
 from gui.impl.lobby.tank_setup.backports.tooltips import getSlotSpecTooltipData
 from gui.impl.lobby.tank_setup.tank_setup_helper import setLastSlotAction, NONE_ID
 from gui.impl.lobby.vehicle_compare.panel import CompareAmmunitionPanel
@@ -24,7 +24,7 @@ class CompareAmmunitionPanelView(ViewImpl):
     def __init__(self):
         settings = ViewSettings(R.views.lobby.tanksetup.VehicleCompareAmmunitionPanel())
         settings.flags = ViewFlags.VIEW
-        settings.model = VehicleCompareAmmunitionPanelModel()
+        settings.model = AmmunitionPanelViewModel()
         super(CompareAmmunitionPanelView, self).__init__(settings)
 
     @property
@@ -75,7 +75,7 @@ class CompareAmmunitionPanelView(ViewImpl):
         self.viewModel.ammunitionPanel.onSectionSelect += self.__onPanelSectionSelected
         self.viewModel.ammunitionPanel.onSpecializationSelect += self.__onSpecializationSelect
         self.viewModel.ammunitionPanel.onDragDropSwap += self.__onDragDropSwap
-        self.viewModel.onClose += self.__onClose
+        self.viewModel.onEscKeyDown += self.__onEscKeyDown
         self.__vehItem.onSlotAction += self.__onSlotAction
 
     def __removeListeners(self):
@@ -83,7 +83,7 @@ class CompareAmmunitionPanelView(ViewImpl):
         self.viewModel.ammunitionPanel.onSectionSelect -= self.__onPanelSectionSelected
         self.viewModel.ammunitionPanel.onSpecializationSelect -= self.__onSpecializationSelect
         self.viewModel.ammunitionPanel.onDragDropSwap -= self.__onDragDropSwap
-        self.viewModel.onClose -= self.__onClose
+        self.viewModel.onEscKeyDown -= self.__onEscKeyDown
         self.__vehItem.onSlotAction -= self.__onSlotAction
 
     def __onPanelSlotClear(self, args):
@@ -110,7 +110,7 @@ class CompareAmmunitionPanelView(ViewImpl):
             showCompareAmmunitionSelectorView(**args)
 
     @staticmethod
-    def __onClose():
+    def __onEscKeyDown():
         cmp_helpers.getCmpConfiguratorMainView().closeView()
 
     def __onSlotAction(self, *args, **kwargs):

@@ -8,7 +8,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.customization.shared import getPurchaseGoldForCredits, getPurchaseMoneyState, MoneyForPurchase
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
-from gui.impl.dialogs.dialogs import showCrewMemberRoleChangeDialog
+from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.sub_views.footer.simple_text_footer import SimpleTextFooter
 from gui.impl.dialogs.sub_views.footer.single_price_footer import SinglePriceFooter
 from gui.impl.dialogs.sub_views.top_right.money_balance import MoneyBalance
@@ -20,7 +20,6 @@ from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setT
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.Tankman import Tankman, NO_SLOT
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import MONEY_UNDEFINED
@@ -28,7 +27,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.logging_constants import CrewDialogKeys
-from wg_async import wg_async, wg_await
 
 class RestoreTankmanDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_tankman', '_vehicle', '_vehicleSlotIdx')
@@ -108,35 +106,20 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
         self.__restoreTankman()
         return True
 
-    @wg_async
     def __restoreTankman(self):
         isTransfer = self._vehicle and self._vehicleSlotIdx != NO_SLOT
+        berthsNeeded = 0 if isTransfer else 1
+        doActions = [(factory.RESTORE_TANKMAN, self._tankman.invID, berthsNeeded)]
         if isTransfer:
             requiredRole = self._vehicle.descriptor.type.crewRoles[self._vehicleSlotIdx][0]
             if requiredRole != self._tankman.role:
-                result = yield wg_await(showCrewMemberRoleChangeDialog(self._tankman.invID, None, self._vehicle, requiredRole))
-                if not result.result:
-                    isTransfer = False
-        vehTankman = self.getTmanInVehBySlot(self._vehicle, self._vehicleSlotIdx)
-        doActions = [(factory.RESTORE_TANKMAN, self._tankman.invID, int(not isTransfer or vehTankman is not None))]
-        if isTransfer:
-            requiredRole = self._vehicle.descriptor.type.crewRoles[self._vehicleSlotIdx][0]
-            if requiredRole != self._tankman.role:
-                doActions.append((factory.CHANGE_ROLE_TANKMAN,
-                 self._tankman.invID,
-                 requiredRole,
-                 self._vehicle.intCD,
-                 self._vehicleSlotIdx))
+                dialogs.showRetrainSingleDialog(self._tankman.invID, self._vehicle.intCD, targetSlotIdx=self._vehicleSlotIdx, beforeActions=doActions)
+                return
             doActions.append((factory.EQUIP_TANKMAN,
              self._tankman.invID,
              self._vehicle.invID,
              self._vehicleSlotIdx))
-        groupSize = len(doActions)
-        groupID = int(BigWorld.serverTime())
-        while doActions:
-            factory.doAction(*(doActions.pop(0) + (groupID, groupSize)))
-
-        return
+        BigWorld.player().doActions(doActions)
 
     def __onTankmenBufferUpdated(self):
         self._updateViewModel()
@@ -148,13 +131,3 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
             state = getPurchaseMoneyState(price)
             isBtnDisabled = state is MoneyForPurchase.NOT_ENOUGH
         self.getButton(DialogButtons.SUBMIT).isDisabled = isBtnDisabled
-
-    @staticmethod
-    def getTmanInVehBySlot(vehicle, requiredSlotIdx):
-        if vehicle and vehicle.isInInventory:
-            slotIdx, vehTankman = vehicle.crew[requiredSlotIdx]
-            if requiredSlotIdx != slotIdx:
-                vehTankman = vehicle.crew[slotIdx][1]
-            return vehTankman
-        else:
-            return None

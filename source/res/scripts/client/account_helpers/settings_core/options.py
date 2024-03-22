@@ -12,6 +12,7 @@ import weakref
 from collections import namedtuple, OrderedDict
 from operator import itemgetter
 import logging
+import AvatarInputHandler.control_modes
 from aih_constants import CTRL_MODE_NAME
 import GUI
 from AvatarInputHandler.cameras import FovExtended
@@ -39,13 +40,13 @@ import CommandMapping
 from helpers import i18n
 from Event import Event
 from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
-from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera, DualGunCamera
-from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
+from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera, DualGunCamera, kill_cam_camera, free_camera
+from AvatarInputHandler.control_modes import SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
-from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT, GAME
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
@@ -586,13 +587,28 @@ class PreferencesSetting(SettingAbstract):
         pass
 
 
-class PostMortemDelaySetting(StorageDumpSetting):
+class PostMortemModeSetting(StorageDumpSetting):
+
+    class OPTIONS(Enum):
+        ANALYSIS = 'analysis'
+        SIMPLE = 'simple'
+        ENEMY = 'enemy'
+        SELF = 'self'
+
+    POST_MORTEM_MODES = (OPTIONS.ANALYSIS,
+     OPTIONS.SIMPLE,
+     OPTIONS.ENEMY,
+     OPTIONS.SELF)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, cType.value) for cType in self.POST_MORTEM_MODES ]
 
     def getDefaultValue(self):
-        return PostMortemControlMode.getIsPostmortemDelayEnabled()
+        return self.POST_MORTEM_MODES.index(self.OPTIONS.ANALYSIS)
 
-    def setSystemValue(self, value):
-        PostMortemControlMode.setIsPostmortemDelayEnabled(value)
+    def getNoviceValue(self):
+        return self.POST_MORTEM_MODES.index(self.OPTIONS.SIMPLE)
 
 
 class PlayersPanelSetting(StorageDumpSetting):
@@ -608,45 +624,21 @@ class PlayersPanelSetting(StorageDumpSetting):
 
 class PlayersPanelStateSetting(AccountDumpSetting):
     itemsCache = dependency.descriptor(IItemsCache)
-    DEFAULT_NEWBIES_STATE = 3
-    DEFAULT_STATE = 2
-
-    def __init__(self, settingName, key, subKey=None):
-        super(PlayersPanelStateSetting, self).__init__(settingName, key, subKey)
-        self.newbieGroup = None
-        return
+    DEFAULT_STATE = 3
 
     def getDefaultValue(self):
-        if self.newbieGroup is None:
-            self.newbieGroup = self.itemsCache.items.stats.defaultSettingsGroup
-        return self.DEFAULT_NEWBIES_STATE if self.newbieGroup == 'new' else self.DEFAULT_STATE
+        return self.DEFAULT_STATE
 
 
 class MinimapSizeSetting(AccountDumpSetting):
-    itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
-    DEFAULT_MINIMAP_SIZE = 1
-    DEFAULT_MAPS_TRAINING_SIZE = 3
     MINIMAP_SIZE_INDEX = OrderedDict([(1300, 4),
      (1050, 3),
      (900, 2),
      (0, 1)])
     MINIMAP_SIZE_INDEX_WITH_SCALE = OrderedDict([(1050, 3), (900, 2), (0, 1)])
 
-    def __init__(self, settingName, key, subKey=None):
-        super(MinimapSizeSetting, self).__init__(settingName, key, subKey=None)
-        self.newbieGroup = None
-        return
-
     def getDefaultValue(self):
-        if self.newbieGroup is None:
-            self.newbieGroup = self.itemsCache.items.stats.defaultSettingsGroup
-        if self.newbieGroup == 'new':
-            return self.__defineNewbiesSizeIndex()
-        else:
-            return self.DEFAULT_MAPS_TRAINING_SIZE if self.key == GAME.TRAINING_MINIMAP_SIZE else self.DEFAULT_MINIMAP_SIZE
-
-    def __defineNewbiesSizeIndex(self):
         currentWindowHeight = g_monitorSettings.screenResolution.height
         scale = self.settingsCore.interfaceScale.getScaleByIndex(0)
         minimapSizeStorage = self.MINIMAP_SIZE_INDEX if scale < 2 else self.MINIMAP_SIZE_INDEX_WITH_SCALE
@@ -1504,24 +1496,11 @@ class SPGAimSetting(StorageDumpSetting):
 class _BaseAimContourSetting(StorageDumpSetting):
     _RES_ROOT = None
     _OPTIONS_NUMBER = None
-    __itemsCache = dependency.descriptor(IItemsCache)
     _LOW_QUALITY_PRESETS = ('LOW', 'MIN')
-    _NEWBIE_DEFAULT_VALUE = None
-
-    def __init__(self, settingName, storage, isPreview=False):
-        self._newbieGroup = None
-        super(_BaseAimContourSetting, self).__init__(settingName, storage, isPreview)
-        return
+    _DEFAULT_VALUE = None
 
     def getDefaultValue(self):
-        return AccountSettings.getSettingsDefault('contour').get(self.settingName, None)
-
-    def _get(self):
-        if self._newbieGroup is None:
-            self._newbieGroup = self.__itemsCache.items.stats.defaultSettingsGroup
-            if self._newbieGroup == 'new' and self._isHighQualityPreset():
-                self._default = self._NEWBIE_DEFAULT_VALUE
-        return super(_BaseAimContourSetting, self)._get()
+        return self._DEFAULT_VALUE if self._isHighQualityPreset() else AccountSettings.getSettingsDefault('contour').get(self.settingName, None)
 
     def setSystemValue(self, value):
         raise NotImplementedError
@@ -1544,7 +1523,7 @@ class _BaseAimContourSetting(StorageDumpSetting):
 class ContourSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contour
     _OPTIONS_NUMBER = 2
-    _NEWBIE_DEFAULT_VALUE = 1
+    _DEFAULT_VALUE = 1
 
     def setSystemValue(self, value):
         BigWorld.enableEdgeDrawerVisual(not value)
@@ -1561,7 +1540,7 @@ class ContourSetting(_BaseAimContourSetting):
 class ContourPenetratableZoneSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contourPenetrableZone
     _OPTIONS_NUMBER = 3
-    _NEWBIE_DEFAULT_VALUE = 2
+    _DEFAULT_VALUE = 2
 
     def setSystemValue(self, value):
         BigWorld.setEdgeDrawerPenetratableZoneOverlay(value)
@@ -1570,7 +1549,7 @@ class ContourPenetratableZoneSetting(_BaseAimContourSetting):
 class ContourImpenetratableZoneSetting(_BaseAimContourSetting):
     _RES_ROOT = R.strings.settings.cursor.contourImpenetrableZone
     _OPTIONS_NUMBER = 3
-    _NEWBIE_DEFAULT_VALUE = 1
+    _DEFAULT_VALUE = 1
 
     def setSystemValue(self, value):
         BigWorld.setEdgeDrawerImpenetratableZoneOverlay(value)
@@ -1805,7 +1784,9 @@ class MouseSetting(ControlSetting):
      CTRL_MODE_NAME.SNIPER: (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
      CTRL_MODE_NAME.STRATEGIC: (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera'),
      CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera'),
-     CTRL_MODE_NAME.DUAL_GUN: (DualGunCamera.getCameraAsSettingsHolder, 'dualGunMode/camera')}
+     CTRL_MODE_NAME.DUAL_GUN: (DualGunCamera.getCameraAsSettingsHolder, 'dualGunMode/camera'),
+     CTRL_MODE_NAME.KILL_CAM: (kill_cam_camera.getCameraAsSettingsHolder, 'killCamMode/camera'),
+     CTRL_MODE_NAME.DEATH_FREE_CAM: (free_camera.getCameraAsSettingsHolder, 'freeVideoMode/camera')}
 
     def __init__(self, mode, setting, default, isPreview=False, masterSwitch=''):
         super(MouseSetting, self).__init__(isPreview)

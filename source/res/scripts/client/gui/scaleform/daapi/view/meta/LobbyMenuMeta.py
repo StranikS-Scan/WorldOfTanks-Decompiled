@@ -25,9 +25,6 @@ class LobbyMenuMeta(View):
     def onCounterNeedUpdate(self):
         self._printOverrideError('onCounterNeedUpdate')
 
-    def bootcampClick(self):
-        self._printOverrideError('bootcampClick')
-
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 
@@ -46,17 +43,11 @@ class LobbyMenuMeta(View):
     def as_removeCounterS(self, counters):
         return self.flashObject.as_removeCounter(counters) if self._isDAAPIInited() else None
 
-    def as_setBootcampButtonLabelS(self, label, icon):
-        return self.flashObject.as_setBootcampButtonLabel(label, icon) if self._isDAAPIInited() else None
-
     def as_setPostButtonIconsS(self, iconClose, iconOpen):
         return self.flashObject.as_setPostButtonIcons(iconClose, iconOpen) if self._isDAAPIInited() else None
 
     def as_setPostButtonVisibleS(self, isVisible):
         return self.flashObject.as_setPostButtonVisible(isVisible) if self._isDAAPIInited() else None
-
-    def as_showBootcampButtonS(self, value):
-        return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None
 
     def as_showManualButtonS(self, value):
         return self.flashObject.as_showManualButton(value) if self._isDAAPIInited() else None

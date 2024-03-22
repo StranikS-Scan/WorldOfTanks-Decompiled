@@ -36,7 +36,7 @@ class OfferRewardWindow(ViewImpl):
     def createToolTip(self, event):
         if not self._gift.fromCdn:
             if self._tooltipData is not None:
-                window = BackportTooltipWindow(self._tooltipData, self.getParentWindow())
+                window = BackportTooltipWindow(self._tooltipData, self.getParentWindow(), event=event)
                 window.load()
                 return window
         return super(OfferRewardWindow, self).createToolTip(event)
@@ -77,7 +77,7 @@ class OfferRewardWindow(ViewImpl):
                 formattedBonus = shared_utils.first(formattedBonuses)
                 if formattedBonus is not None:
                     icon = getGfImagePath(formattedBonus.get('imgSource')) or ''
-                    self._tooltipData = TooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None))
+                    self._tooltipData = TooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None), isWulfTooltip=formattedBonus.get('isWulfTooltip', False))
                 model.setCount(self._gift.giftCount)
                 model.setHightlightType(self._gift.highlight)
             model.setName(title)

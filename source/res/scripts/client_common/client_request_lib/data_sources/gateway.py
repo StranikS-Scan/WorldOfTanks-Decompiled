@@ -69,7 +69,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                     except zlib.error:
                         pass
 
-                    data = json.loads(data)
+                    data = json.loads(data) if data else {}
                 except Exception as error:
                     LOG_ERROR('Can not process request response. Exception occured: %s' % type(error).__name__, str(error))
                     data = None
@@ -685,6 +685,31 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                      'code': price.currency,
                      'item_type': 'currency'}]}
         return self._request_data(callback, url, method='POST', post_data=postData)
+
+    def get_clan_supply_quests(self, callback):
+        url = '/clansupply/client/clansupply/quests'
+        return self._request_data(callback, url, method='GET')
+
+    def post_clan_supply_quests(self, callback):
+        url = '/clansupply/client/clansupply/quests'
+        return self._request_data(callback, url, method='POST')
+
+    def claim_quest_rewards(self, callback):
+        url = '/clansupply/client/clansupply/claim_rewards'
+        return self._request_data(callback, url, method='POST')
+
+    def get_progression_settings(self, callback):
+        url = '/clansupply/client/campaign_map/settings'
+        return self._request_data(callback, url, method='GET')
+
+    def get_progression_progress(self, callback):
+        url = '/clansupply/client/campaign_map/progress'
+        return self._request_data(callback, url, method='GET')
+
+    def purchase_progression_stage(self, callback, region_number, expected_price):
+        url = '/clansupply/client/campaign_map/purchase'
+        return self._request_data(callback, url, method='POST', post_data={'region_number': region_number,
+         'expected_price': expected_price})
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

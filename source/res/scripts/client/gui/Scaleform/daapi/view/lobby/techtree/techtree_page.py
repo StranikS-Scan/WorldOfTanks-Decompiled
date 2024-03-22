@@ -32,13 +32,12 @@ from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBootcampController, ILimitedUIController
+from skeletons.gui.game_control import ILimitedUIController
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1
 
 class TechTree(TechTreeMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __bootcampController = dependency.descriptor(IBootcampController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, ctx=None):
@@ -303,7 +302,7 @@ class TechTree(TechTreeMeta):
 
     def __setVehicleCollectorState(self):
         isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()
-        self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()) and not self.__bootcampController.isInBootcamp())
+        self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()))
 
     def __onSettingsChanged(self):
         self.as_setAvailableNationsS(g_techTreeDP.getNationsMenuDataProvider())

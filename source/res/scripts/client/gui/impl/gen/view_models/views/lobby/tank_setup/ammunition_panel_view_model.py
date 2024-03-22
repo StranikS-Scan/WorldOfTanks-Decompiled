@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_action_model imp
 class AmmunitionPanelViewModel(ViewModel):
     __slots__ = ('onEscKeyDown',)
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=6, commands=1):
         super(AmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,12 +53,6 @@ class AmmunitionPanelViewModel(ViewModel):
     def setIsReady(self, value):
         self._setBool(5, value)
 
-    def getIsBootcamp(self):
-        return self._getBool(6)
-
-    def setIsBootcamp(self, value):
-        self._setBool(6, value)
-
     def _initialize(self):
         super(AmmunitionPanelViewModel, self)._initialize()
         self._addViewModelProperty('ammunitionPanel', AmmunitionPanelModel())
@@ -67,5 +61,4 @@ class AmmunitionPanelViewModel(ViewModel):
         self._addBoolProperty('isMaintenanceEnabled', True)
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isReady', False)
-        self._addBoolProperty('isBootcamp', False)
         self.onEscKeyDown = self._addCommand('onEscKeyDown')

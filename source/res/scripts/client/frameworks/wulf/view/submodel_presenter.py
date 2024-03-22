@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/submodel_presenter.py
 import typing
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_eventBus
+from helpers.events_handler import EventsHandler
 if typing.TYPE_CHECKING:
-    from Event import Event
+    from typing import Optional
     from frameworks.wulf import View, ViewEvent, Window
 
-class SubModelPresenter(object):
+class SubModelPresenter(EventsHandler):
     __slots__ = ('__viewModel', '__isLoaded', '__parentView')
 
     def __init__(self, viewModel, parentView):
@@ -30,12 +29,12 @@ class SubModelPresenter(object):
         return self.__viewModel
 
     def initialize(self, *args, **kwargs):
-        self.__subscribe()
+        self._subscribe()
         self.__isLoaded = True
 
     def finalize(self):
         self.__isLoaded = False
-        self.__unsubscribe()
+        self._unsubscribe()
 
     def clear(self):
         self.__viewModel = None
@@ -58,29 +57,3 @@ class SubModelPresenter(object):
 
     def createContextMenu(self, event):
         return None
-
-    def _getEvents(self):
-        pass
-
-    def _getListeners(self):
-        return tuple()
-
-    def _getCallbacks(self):
-        return tuple()
-
-    def __subscribe(self):
-        g_clientUpdateManager.addCallbacks(dict(self._getCallbacks()))
-        for eventBusArgs in self._getListeners():
-            g_eventBus.addListener(*eventBusArgs)
-
-        for event, handler in self._getEvents():
-            event += handler
-
-    def __unsubscribe(self):
-        for event, handler in self._getEvents():
-            event -= handler
-
-        for eventBusArgs in reversed(self._getListeners()):
-            g_eventBus.removeListener(*eventBusArgs[:3])
-
-        g_clientUpdateManager.removeObjectCallbacks(self)

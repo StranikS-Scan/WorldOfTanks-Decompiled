@@ -10,16 +10,21 @@ _FUNCTIONAL_FLAG = prb_settings.FUNCTIONAL_FLAG
 
 @ReprInjector.withParent(('__arenaTypeID', 'arenaTypeID'), ('__roundLen', 'roundLen'))
 class TrainingSettingsCtx(TeamSettingsCtx):
-    __slots__ = ('__arenaTypeID', '__roundLen')
+    __slots__ = ('__arenaTypeID', '__roundLen', '__isDevBattle')
 
-    def __init__(self, waitingID='', isOpened=True, comment='', isRequestToCreate=True, arenaTypeID=0, roundLen=900, flags=_FUNCTIONAL_FLAG.UNDEFINED):
+    def __init__(self, waitingID='', isOpened=True, comment='', isRequestToCreate=True, arenaTypeID=0, roundLen=900, flags=_FUNCTIONAL_FLAG.UNDEFINED, isDevBattle=False):
         super(TrainingSettingsCtx, self).__init__(PREBATTLE_TYPE.TRAINING, waitingID=waitingID, isOpened=isOpened, comment=comment, isRequestToCreate=isRequestToCreate, flags=flags)
         self.__arenaTypeID = arenaTypeID
         self.__roundLen = int(roundLen)
+        self.__isDevBattle = isDevBattle
 
     @classmethod
     def fetch(cls, settings):
-        return TrainingSettingsCtx(isOpened=settings['isOpened'], comment=settings['comment'], isRequestToCreate=False, arenaTypeID=settings['arenaTypeID'], roundLen=settings['roundLength'])
+        return TrainingSettingsCtx(isOpened=settings['isOpened'], comment=settings['comment'], isRequestToCreate=False, arenaTypeID=settings['arenaTypeID'], roundLen=settings['roundLength'], isDevBattle=settings['extraData'].get('isDevBattle', False))
+
+    @property
+    def isDevBattle(self):
+        return self.__isDevBattle
 
     def getArenaTypeID(self):
         return self.__arenaTypeID
@@ -84,3 +89,13 @@ class SetPlayerObserverStateCtx(SetPlayerStateCtx):
 
     def isObserver(self):
         return self.__isObserver
+
+
+class ChangeArenaGuiCtx(LegacyRequestCtx):
+    __slots__ = ()
+
+    def __init__(self, waitingID=''):
+        super(ChangeArenaGuiCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.CHANGE_ARENA_GUI

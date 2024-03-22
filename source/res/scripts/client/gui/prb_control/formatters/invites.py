@@ -168,7 +168,7 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return _formatInvite(_PrbInvitePart.TITLE, (self._getTitle(invite), creatorName), True)
 
     def getWarning(self, invite):
-        warning = backport.text(_R_INVITES.warning.dyn(invite.warning)())
+        warning = backport.text(_R_INVITES.warning.dyn(invite.warning)()) if invite.warning else ''
         return _formatInvite(_PrbInvitePart.WARNING, (warning,))
 
     def getComment(self, invite):
@@ -184,7 +184,8 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return _formatInvite(_PrbInvitePart.NOTE, (note,))
 
     def getState(self, invite):
-        state = backport.text(_R_INVITES.state.dyn(getPrbInviteStateName(invite.getState()))())
+        inviteState = invite.getState()
+        state = backport.text(_R_INVITES.state.dyn(getPrbInviteStateName(inviteState))()) if inviteState else ''
         return _formatInvite(_PrbInvitePart.STATE, (state,))
 
     def getText(self, invite):

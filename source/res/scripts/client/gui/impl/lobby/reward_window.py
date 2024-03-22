@@ -14,12 +14,12 @@ from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRenderer
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_reward_view_model import SubscriptionRewardViewModel
 from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
+from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyView
 from gui.impl.lobby.player_subscriptions.player_subscriptions_reward_window_view import PlayerSubscriptionRewardWindowView
 from gui.impl.pub import ViewImpl, WindowImpl, WindowView
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
 from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus, getNonQuestBonuses
-from gui.shared.event_dispatcher import showClanQuestWindow
 from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
 from helpers import dependency
@@ -71,7 +71,7 @@ class BaseRewardWindowContent(ViewImpl):
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = int(event.getArgument('tooltipId'))
-            window = BackportTooltipWindow(self.__items[tooltipId], self.getParentWindow()) if tooltipId is not None and tooltipId in self.__items else None
+            window = BackportTooltipWindow(self.__items[tooltipId], self.getParentWindow(), event) if tooltipId is not None and tooltipId in self.__items else None
             if window is not None:
                 window.load()
             return window
@@ -114,7 +114,7 @@ class BaseRewardWindowContent(ViewImpl):
             self._setShowRewards(tx)
 
     def _initTooltip(self, bonus, index):
-        self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
+        self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None), isWulfTooltip=bonus.get('isWulfTooltip', False))
         return
 
     def _setShowRewards(self, tx):
@@ -288,7 +288,7 @@ class DynamicRewardWindowContent(BaseRewardWindowContent):
         self.destroyWindow()
 
     def handleGoToButton(self):
-        showClanQuestWindow()
+        showClanSupplyView(tabId=1)
         self.destroyWindow()
 
     def _getBonuses(self):

@@ -42,6 +42,7 @@ class ServiceRecordView(IPersonalTab, BasePersonalCaseView):
         self.tankmanID = tankmanID
         self.__dossier = self.itemsCache.items.getTankmanDossier(self.tankmanID)
         self.tankmanInfo.setTankmanId(tankmanID)
+        self.tankmanInfo.setParentViewKey(CrewViewKeys.SERVICE_RECORD)
         self.__fillModel()
 
     def createToolTipContent(self, event, contentID):
@@ -58,7 +59,7 @@ class ServiceRecordView(IPersonalTab, BasePersonalCaseView):
     def _onLoading(self, *args, **kwargs):
         super(ServiceRecordView, self)._onLoading(*args, **kwargs)
         if not self.tankmanInfo:
-            self.getParentView().setChildView(TankmanInfo.LAYOUT_DYN_ACCESSOR(), TankmanInfo(self.tankmanID))
+            self.getParentView().setChildView(TankmanInfo.LAYOUT_DYN_ACCESSOR(), TankmanInfo(self.tankmanID, parentViewKey=CrewViewKeys.SERVICE_RECORD))
         self.__fillModel()
 
     def _getEvents(self):

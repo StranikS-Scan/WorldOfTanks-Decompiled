@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_vie
 class AwardsWidgetModel(ViewModel):
     __slots__ = ('onBpbitClick', 'onBpcoinClick', 'onTakeRewardsClick', 'showTankmen')
 
-    def __init__(self, properties=8, commands=4):
+    def __init__(self, properties=10, commands=4):
         super(AwardsWidgetModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -59,6 +59,18 @@ class AwardsWidgetModel(ViewModel):
     def setIsSpecialVoiceTankmenEnabled(self, value):
         self._setBool(7, value)
 
+    def getIsBpBitEnabled(self):
+        return self._getBool(8)
+
+    def setIsBpBitEnabled(self, value):
+        self._setBool(8, value)
+
+    def getIsBpCoinEnabled(self):
+        return self._getBool(9)
+
+    def setIsBpCoinEnabled(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(AwardsWidgetModel, self)._initialize()
         self._addViewModelProperty('collectionEntryPoint', CollectionEntryPointViewModel())
@@ -69,6 +81,8 @@ class AwardsWidgetModel(ViewModel):
         self._addBoolProperty('isChooseRewardsEnabled', True)
         self._addBoolProperty('hasExtra', False)
         self._addBoolProperty('isSpecialVoiceTankmenEnabled', False)
+        self._addBoolProperty('isBpBitEnabled', False)
+        self._addBoolProperty('isBpCoinEnabled', False)
         self.onBpbitClick = self._addCommand('onBpbitClick')
         self.onBpcoinClick = self._addCommand('onBpcoinClick')
         self.onTakeRewardsClick = self._addCommand('onTakeRewardsClick')

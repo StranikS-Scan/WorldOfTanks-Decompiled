@@ -46,7 +46,7 @@ class HintsManager(object):
             self._gui.onEnabledChanged += self.__onItemEnabledChanged
             self._gui.onUpdateTutorialHints += self.__onUpdateTutorialHints
             self._gui.onImportantHintShowing += self.__onImportantHintShowing
-            GlobalStorage.onSetValue += self.__onConditionFlagChanged
+            GlobalStorage.onSetValue += self.__onGlobalConditionValueChanged
             self.__startSettingsListening()
             self._gui.loadConfig(self._data.getGuiFilePath())
             self._gui.init()
@@ -64,7 +64,7 @@ class HintsManager(object):
             self._gui.fini()
         self._gui = None
         self.__hintsWithClientTriggers = None
-        GlobalStorage.onSetValue -= self.__onConditionFlagChanged
+        GlobalStorage.onSetValue -= self.__onGlobalConditionValueChanged
         self.__stopSettingsListening()
         return
 
@@ -201,36 +201,33 @@ class HintsManager(object):
                 self.stop()
                 return
 
-    def __onConditionFlagChanged(self, flag, value):
-        changedFlagHints = set()
+    def __onGlobalConditionValueChanged(self, conditionId, value):
+        filteredHints = set()
         for itemID, hints in self._data.getHints().iteritems():
             for hint in hints:
-                conditions = hint['conditions']
-                if conditions is not None:
-                    for condition in conditions:
-                        if condition.getID() == flag:
-                            changedFlagHints.add((itemID, condition.isPositiveState()))
-                            break
+                condition = self.__filterConditions(hint.get('conditions'), self.__filterByConditionId, conditionId)
+                if condition is not None:
+                    filteredHints.add((itemID, condition.isPositiveState()))
 
-        for changedFlagHint, isPositiveState in changedFlagHints:
+        for itemID, isPositiveState in filteredHints:
             if value:
                 if isPositiveState:
-                    self.__onItemFound(changedFlagHint, silent=True)
+                    self.__onItemFound(itemID, silent=True)
                 else:
-                    self.__onItemLost(changedFlagHint)
+                    self.__onItemLost(itemID)
             if isPositiveState:
-                self.__onItemLost(changedFlagHint)
-            self.__onItemFound(changedFlagHint, silent=True)
+                self.__onItemLost(itemID)
+            self.__onItemFound(itemID, silent=True)
 
         return
 
-    def __onUpdateTutorialHints(self, targetID, state, arguments=''):
+    def __onUpdateTutorialHints(self, conditionId, state, arguments=''):
         filteredHints = []
         for itemID, hints in self._data.getHints().iteritems():
             for hint in hints:
-                if self.__filterHintByConditions(hint.get('conditions'), self.__limitedUIFilter, targetID, arguments):
+                condition = self.__filterConditions(hint.get('conditions'), self.__filterByLimitedUIRule, conditionId, arguments)
+                if condition is not None:
                     filteredHints.append((itemID, hint))
-                    break
 
         for itemID, hint in filteredHints:
             if state:
@@ -238,17 +235,18 @@ class HintsManager(object):
             if not self.__checkConditions(hint):
                 self.__onItemLost(itemID)
 
-    def __filterHintByConditions(self, conditions, filterFunction, *args):
-        if conditions is None:
-            return False
-        else:
-            for condition in conditions:
-                if condition.getID() is None:
-                    return self.__filterHintByConditions(condition.getConditionList(), filterFunction, *args)
-                if filterFunction(condition, *args):
-                    return True
+        return
 
-            return False
+    @staticmethod
+    def __filterConditions(conditions, filterFunction, *args):
+        if conditions is None:
+            return
+        else:
+            for condition in conditions.getUnwrappedConditions():
+                if filterFunction(condition, *args):
+                    return condition
+
+            return
 
     def __onImportantHintShowing(self, state):
         if state is False:
@@ -259,5 +257,9 @@ class HintsManager(object):
             self.__onItemFound(self.__postponedHints.pop(), silent=True)
 
     @staticmethod
-    def __limitedUIFilter(condition, targetID, arguments=''):
-        return True if condition.getID() == targetID and (not arguments or condition.getArguments() == arguments) else False
+    def __filterByLimitedUIRule(condition, conditionId, arguments=''):
+        return condition.getID() == conditionId and (not arguments or condition.getArguments() == arguments)
+
+    @staticmethod
+    def __filterByConditionId(condition, conditionId):
+        return condition.getID() == conditionId

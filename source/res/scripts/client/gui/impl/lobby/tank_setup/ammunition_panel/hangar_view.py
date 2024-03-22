@@ -12,13 +12,11 @@ from gui.shared.events import AmmunitionPanelViewEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ILimitedUIController
 from wg_async import wg_async
 _logger = logging.getLogger(__name__)
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
-    _limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():

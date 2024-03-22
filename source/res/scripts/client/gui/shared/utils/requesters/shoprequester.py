@@ -18,6 +18,8 @@ from post_progression_common import CUSTOM_ROLE_SLOT_CHANGE_PRICE
 from post_progression_prices_common import getPostProgressionPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 from gui.shared.gui_items.gui_item_economics import ItemPrice
+if typing.TYPE_CHECKING:
+    from typing import Tuple, Dict, Any
 _logger = logging.getLogger(__name__)
 _DEFAULT_EXCHANGE_RATE = 400
 _DEFAULT_CRYSTAL_EXCHANGE_RATE = 200
@@ -34,8 +36,8 @@ _DEFAULT_SLOT_PRICE = (0, ([Currency.CREDITS, 300],))
 class _NamedGoodieData(GoodieData):
 
     @staticmethod
-    def __new__(cls, variety, target, enabled, lifetime, useby, counter, autostart, condition, resource):
-        return GoodieData.__new__(cls, variety, _TargetData(*target) if target else None, enabled, lifetime, useby, counter, autostart, _ConditionData(*condition) if condition else None, _ResourceData(*resource) if resource else None)
+    def __new__(cls, variety, target, enabled, lifetime, useby, counter, autostart, condition, resource, expireAfter, roundToEndOfGameDay):
+        return GoodieData.__new__(cls, variety, _TargetData(*target) if target else None, enabled, lifetime, useby, counter, autostart, _ConditionData(*condition) if condition else None, _ResourceData(*resource) if resource else None, expireAfter if expireAfter else None, roundToEndOfGameDay if roundToEndOfGameDay else True)
 
     def getTargetValue(self):
         return int(self.target.targetValue.split('_')[1]) if self.target.targetType == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM else self.target.targetValue
@@ -237,6 +239,10 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def changeRoleCost(self):
         return self.getValue('changeRoleCost', 600)
+
+    @property
+    def tankman(self):
+        return self.getValue('tankman', {})
 
     @property
     def freeXPConversion(self):
@@ -702,6 +708,10 @@ class DefaultShopRequester(ShopCommonStats):
     @property
     def changeRoleCost(self):
         return self.getValue('changeRoleCost', self.__proxy.changeRoleCost)
+
+    @property
+    def tankman(self):
+        return self.getValue('tankman', self.__proxy.tankman)
 
     @property
     def freeXPConversion(self):

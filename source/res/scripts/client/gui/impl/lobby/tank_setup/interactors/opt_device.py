@@ -42,21 +42,6 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         vehicle.optDevices.dynSlotType = self.getItem().optDevices.dynSlotType
         return vehicle
 
-    def getChangedList(self):
-        setOfPrevLayout = set((item.intCD for item in self.getInstalledLayout() if item is not None))
-        currentItems = []
-        vehicle = self.getItem()
-        for slotID, item in enumerate(self.getCurrentLayout()):
-            if item and item.intCD not in setOfPrevLayout:
-                if self.__canInstall(item, vehicle):
-                    currentItems.append(item)
-                else:
-                    self.setItemInCurrentLayout(slotID, None)
-                    self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION, slotID=slotID)
-                    self.itemUpdated()
-
-        return currentItems
-
     def setItemInCurrentLayout(self, slotID, item):
         self.getCurrentLayout()[slotID] = item
         if item is not None:
@@ -199,6 +184,18 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         changedList = self.getChangedList()
         result = yield wg_await(showTankSetupExitConfirmDialog(items=changedList, vehicle=self.getItem(), fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not changedList else None))
         raise AsyncReturn(result)
+        return
+
+    def updateAmmunitionPanelChangedItems(self):
+        setOfPrevLayout = set((item.intCD for item in self.getInstalledLayout() if item is not None))
+        vehicle = self.getItem()
+        for slotID, item in enumerate(self.getCurrentLayout()):
+            if item and item.intCD not in setOfPrevLayout and not self.getInstalledLayout()[slotID]:
+                if not self.__canInstall(item, vehicle):
+                    self.setItemInCurrentLayout(slotID, None)
+                    self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION, slotID=slotID)
+                    self.itemUpdated()
+
         return
 
     def __canInstall(self, item, vehicle):

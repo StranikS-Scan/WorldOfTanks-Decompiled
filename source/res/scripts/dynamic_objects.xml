@@ -331,6 +331,15 @@
       <cutOffYDistance>	5.	</cutOffYDistance>
     </ally>
   </battleRoyaleHealpoint>
+  <deathCamHEImpact>
+    <ally>
+      <visual>	content/Interface/CheckPoint/dc_HE_impactCircle.model	</visual>
+      <color>	0xffffffff	</color>
+      <enableAccurateCollision>	True	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.2	</overTerrainHeight>
+    </ally>
+  </deathCamHEImpact>
   <lootTypes>
     <item>	&gt;	  <name>	lootBase	</name>
       <id>	1	</id>
@@ -346,46 +355,16 @@
     </item>
   </lootTypes>
   <lootBase>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox01.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_end.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_end.seq	</path>
-    </pickupEffect>
+    <prefab>	content/CGFPrefabs/steel_hunter/loot_area.prefab	</prefab>
+    <prefabPickup>	content/CGFPrefabs/steel_hunter/loot_area_end.prefab	</prefabPickup>
   </lootBase>
   <lootImproved>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox02.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot_upgraded.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_upgraded.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_upgraded_end.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_upgraded_end.seq	</path>
-    </pickupEffect>
+    <prefab>	content/CGFPrefabs/steel_hunter/loot_area_upgraded.prefab	</prefab>
+    <prefabPickup>	content/CGFPrefabs/steel_hunter/loot_area_upgraded_end.prefab	</prefabPickup>
   </lootImproved>
   <lootAir>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox03.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_airdrop.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_airdrop.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_airdrop_end.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_airdrop_end.seq	</path>
-    </pickupEffect>
+    <prefab>	content/CGFPrefabs/steel_hunter/loot_area_airdrop.prefab	</prefab>
+    <prefabPickup>	content/CGFPrefabs/steel_hunter/loot_area_airdrop_end.prefab	</prefabPickup>
   </lootAir>
   <dropPlane>
     <model>	content/MilitaryEnvironment/hd_mle_UNI_AN12/normal/lod0/hd_mle_UNI_AN12.model	</model>
@@ -397,48 +376,23 @@
     <dropAnimation>	content/MilitaryEnvironment/hd_mle_UNI_Drop_Platform/animation/hd_mle_UNI_Drop_Platform_B.ssm	</dropAnimation>
   </airDrop>
   <lootCorpse>
-    <model>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-      <overTerrainHeight>	3.00	</overTerrainHeight>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot_corpse.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_corpse.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_corpse_end.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_corpse_end.seq	</path>
-    </pickupEffect>
+    <prefab>	content/CGFPrefabs/steel_hunter/loot_area_corpse.prefab	</prefab>
+    <prefabPickup>	content/CGFPrefabs/steel_hunter/loot_area_corpse_end.prefab	</prefabPickup>
+    <overTerrainHeight>	3.00	</overTerrainHeight>
   </lootCorpse>
   <TrapPoint>
-    <enemy>
-      <effect>
-        <path_fwd>	particles/eff_sequence/br_traparea_fwd.seq	</path_fwd>
-        <path>	particles/eff_sequence/br_traparea.seq	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 10.0 0.0	</offset>
-      </effect>
-      <vehicleEffect>
-        <path_fwd>	particles/Environment/Scenarios/br_trapdamage.eff	</path_fwd>
-        <path>	particles/Environment/Scenarios/br_trapdamage.eff	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 0.0 0.0	</offset>
-      </vehicleEffect>
-    </enemy>
-    <ally>
-      <effect>
-        <path_fwd>	particles/eff_sequence/br_traparea_friendly_fwd.seq	</path_fwd>
-        <path>	particles/eff_sequence/br_traparea_friendly.seq	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 10.0 0.0	</offset>
-      </effect>
-    </ally>
+    <vehicleEffect>
+      <path_fwd>	particles/Environment/Battle_Royal/Trap_Area/br_trapdamage.eff	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Trap_Area/br_trapdamage.eff	</path>
+      <rate>	10.0	</rate>
+      <offset>	0.0 0.0 0.0	</offset>
+    </vehicleEffect>
   </TrapPoint>
   <RepairPoint>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_enemy.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/RepairArea_2/br_repairarea_2_enemy.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/RepairArea_2/br_repairarea_2_enemy.seq	</path>
         <rate>	10.0	</rate>
         <scaleRatio>	1.5	</scaleRatio>
         <offset>	0.0 10.0 0.0	</offset>
@@ -446,8 +400,8 @@
     </enemy>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_friendly.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_repairarea_2/br_repairarea_2_friendly.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/RepairArea_2/br_repairarea_2_friendly.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/RepairArea_2/br_repairarea_2_friendly.seq	</path>
         <rate>	10.0	</rate>
         <scaleRatio>	1.5	</scaleRatio>
         <offset>	0.0 10.0 0.0	</offset>
@@ -456,8 +410,8 @@
   </RepairPoint>
   <VehicleUpgrade>
     <effect>
-      <path>	particles/Environment/scenarios/br_module_change.eff	</path>
-      <path_fwd>	particles/Environment/scenarios/br_module_change.eff	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Vehicle_Upgrade/br_module_change.eff	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Vehicle_Upgrade/br_module_change.eff	</path_fwd>
       <rate>	10.0	</rate>
       <offset>	0.0 0.0 0.0	</offset>
     </effect>
@@ -465,13 +419,10 @@
   <VehicleRespawn>
     <prefab>	content/CGFPrefabs/steel_hunter/respawn_effect.prefab	</prefab>
   </VehicleRespawn>
-  <StPatrickLootEffect>
-    <prefab>	content/CGFPrefabs/steel_hunter/stpatrick_loot_clover.prefab	</prefab>
-  </StPatrickLootEffect>
   <KamikazeActivated>
     <effect>
-      <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_glow.ssm	</path>
-      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_glow.ssm	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_glow.ssm	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_glow.ssm	</path_fwd>
       <rate>	10.0	</rate>
       <offset>	0.0 0.0 0.0	</offset>
     </effect>
@@ -479,16 +430,16 @@
   <BotDeliveryArea>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_enemy.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Bot_delivery_area/br_bot_delivery_area_enemy.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Bot_delivery_area/br_bot_delivery_area_enemy.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
     </enemy>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_friendly.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_bot_delivery_area/br_bot_delivery_area_friendly.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Bot_delivery_area/br_bot_delivery_area_friendly.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Bot_delivery_area/br_bot_delivery_area_friendly.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
@@ -497,16 +448,16 @@
   <BotDeliveryEffect>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_drop.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_drop.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
     </enemy>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_kamikadze/br_kamikadze_drop.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_drop.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Kamikadze/br_kamikadze_drop.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
@@ -515,16 +466,16 @@
   <BotClingDeliveryEffect>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_clingebot/br_clingebot_drop.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_clingebot/br_clingebot_drop.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Clingebot/br_clingebot_drop.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Clingebot/br_clingebot_drop.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
     </enemy>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_clingebot/br_clingebot_drop.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_clingebot/br_clingebot_drop.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Clingebot/br_clingebot_drop.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Clingebot/br_clingebot_drop.seq	</path>
         <rate>	10.0	</rate>
         <offset>	0.0 0.0 0.0	</offset>
       </effect>
@@ -532,8 +483,8 @@
   </BotClingDeliveryEffect>
   <minesPlantEffect>
     <effect>
-      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_plant.seq	</path_fwd>
-      <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_plant.seq	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_plant.seq	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Minefield/mines_plant.seq	</path>
     </effect>
   </minesPlantEffect>
   <epicMinesDecalEffect>
@@ -590,28 +541,28 @@
   <minesIdleEffect>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_friendly.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_friendly.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_idle_friendly.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Minefield/mines_idle_friendly.seq	</path>
       </effect>
     </ally>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_idle_enemy.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_idle_enemy.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Minefield/mines_idle_enemy.seq	</path>
       </effect>
     </enemy>
   </minesIdleEffect>
   <epicMinesIdleEffect>
     <ally>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_allies.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_allies.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Minefield/mines_allies.seq	</path>
       </effect>
     </ally>
     <enemy>
       <effect>
-        <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path_fwd>
-        <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_enemy.seq	</path>
+        <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_enemy.seq	</path_fwd>
+        <path>	particles/Environment/Battle_Royal/Minefield/mines_enemy.seq	</path>
       </effect>
     </enemy>
   </epicMinesIdleEffect>
@@ -739,35 +690,61 @@
   </epicMinesBlowUpEffect>
   <minesDestroyEffect>
     <effect>
-      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_destroy.seq	</path_fwd>
-      <path>	particles/content_deferred/GFX_models/gameplay/br_mine_filed/mines_destroy.seq	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Minefield/mines_destroy.seq	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Minefield/mines_destroy.seq	</path>
     </effect>
   </minesDestroyEffect>
   <berserkerHullEffect>
     <effect>
-      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_hull.ssm	</path_fwd>
-      <path>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_hull.ssm	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Berserk/br_berserk_hull.ssm	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Berserk/br_berserk_hull.ssm	</path>
     </effect>
   </berserkerHullEffect>
   <berserkerTurretEffect>
     <effect>
-      <path_fwd>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_turret.ssm	</path_fwd>
-      <path>	particles/content_deferred/GFX_models/gameplay/br_berserk/br_berserk_turret.ssm	</path>
+      <path_fwd>	particles/Environment/Battle_Royal/Berserk/br_berserk_turret.ssm	</path_fwd>
+      <path>	particles/Environment/Battle_Royal/Berserk/br_berserk_turret.ssm	</path>
     </effect>
   </berserkerTurretEffect>
-  <berserkerTransformPath>	particles/content_deferred/GFX_models/gameplay/br_berserk/transform.xml	</berserkerTransformPath>
+  <berserkerTransformPath>	particles/Environment/Battle_Royal/Berserk/transform.xml	</berserkerTransformPath>
+  <killingShotFullImpactZone>
+    <effects>
+      <model>
+        <name>	content/Interface/CheckPoint/dc_HE_impactSphere_full.model	</name>
+      </model>
+    </effects>
+  </killingShotFullImpactZone>
   <mapsTrainingBotsLazer>
     <effect>
       <path>	particles/eff_sequence/maps_training_laser_e_staticBright_1.seq	</path>
     </effect>
   </mapsTrainingBotsLazer>
   <battleRoyaleStubs>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Gun.seq	</path>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Gun.seq	</path>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Gun.seq	</path>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_03_Gun.seq	</path>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_04_Gun.seq	</path>
-    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_05_Gun.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_03_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_03_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_03_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_03_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_04_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_04_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_04_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_04_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_05_Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_05_Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_05_Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_05_Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_Final_Gun.seq	</path>
     <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_00_Turret.seq	</path>
     <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_01_Turret.seq	</path>
     <path>	particles/Environment/Battle_Royal/Shot_Passion/Stage_02_Turret.seq	</path>
@@ -795,7 +772,41 @@
     <path>	particles/Environment/Battle_Royal/Heal/Turret_03_start.seq	</path>
     <path>	particles/Environment/Battle_Royal/Heal/Turret_03_cycle.seq	</path>
     <path>	particles/Environment/Battle_Royal/Heal/Turret_03_end.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Concentration/Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Concentration/Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Concentration/Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/Concentration/Gun_long.seq	</path>
+    <path>	particles/Environment/Battle_Royal/CorrodedHit/Gun_short.seq	</path>
+    <path>	particles/Environment/Battle_Royal/CorrodedHit/Gun_med.seq	</path>
+    <path>	particles/Environment/Battle_Royal/CorrodedHit/Gun_med_02.seq	</path>
+    <path>	particles/Environment/Battle_Royal/CorrodedHit/Gun_long.seq	</path>
   </battleRoyaleStubs>
+  <killCameraVisualEffects>
+    <emptyGO>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/EmptyGO.prefab	</path>
+    </emptyGO>
+    <cone>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/HitCone.prefab	</path>
+    </cone>
+    <impactPoint>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/ImpactPoint.prefab	</path>
+    </impactPoint>
+    <spacedArmorLinePoint>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/SpacedArmorPoint.prefab	</path>
+    </spacedArmorLinePoint>
+    <explosionSphere>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/ExplosionSphere.prefab	</path>
+    </explosionSphere>
+    <spacedArmorImpactPoint>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/SpacedArmorImpactPoint.prefab	</path>
+    </spacedArmorImpactPoint>
+    <trajectoryRed>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/RedTrajectoryLine.prefab	</path>
+    </trajectoryRed>
+    <trajectoryGradient>
+      <path>	content/CGFPrefabs/Battle/Kill_Camera/GradientTrajectoryLine.prefab	</path>
+    </trajectoryGradient>
+  </killCameraVisualEffects>
   <pointOfInterest>
     <prefab>
       <path>	content/CGFPrefabs/Battle/points_of_interest/poi.prefab	</path>
@@ -812,6 +823,10 @@
     <prefab>
       <path>	content/CGFPrefabs/Battle/points_of_interest/poi_04.prefab	</path>
       <radiusRange>	10 13	</radiusRange>
+    </prefab>
+    <prefab>
+      <path>	content/CGFPrefabs/Battle/points_of_interest/poi_05.prefab	</path>
+      <radiusRange>	6 10	</radiusRange>
     </prefab>
   </pointOfInterest>
   <aoeHeal>

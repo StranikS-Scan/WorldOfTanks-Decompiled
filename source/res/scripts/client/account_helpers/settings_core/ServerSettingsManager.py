@@ -176,14 +176,13 @@ class ServerSettingsManager(object):
                               GAME.PLAYERS_PANELS_SHOW_LEVELS: 4,
                               GAME.SHOW_DAMAGE_ICON: 5,
                               GAME.DYNAMIC_CAMERA: 6,
-                              GAME.ENABLE_POSTMORTEM_DELAY: 7,
-                              GAME.ENABLE_SERVER_AIM: 8,
                               GAME.SHOW_VEHICLES_COUNTER: 9,
                               GAME.SHOW_VECTOR_ON_MAP: 10,
                               GAME.SHOW_SECTOR_ON_MAP: 11,
                               GAME.RECEIVE_FRIENDSHIP_REQUEST: 12,
                               GAME.SNIPER_MODE_STABILIZATION: 13,
-                              GAME.DISABLE_BATTLE_CHAT: 28}, offsets={GAME.REPLAY_ENABLED: Offset(14, 3 << 14),
+                              GAME.DISABLE_BATTLE_CHAT: 28}, offsets={GAME.POSTMORTEM_MODE: Offset(7, 3 << 7),
+                              GAME.REPLAY_ENABLED: Offset(14, 3 << 14),
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),
                               GAME.MINIMAP_ALPHA: Offset(20, 267386880),
                               GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 3 << 29)}),
@@ -216,7 +215,8 @@ class ServerSettingsManager(object):
                                          GAME.SCROLL_SMOOTHING: 4,
                                          GAME.GAMEPLAY_DEV_MAPS: 5,
                                          GAME.NEWBIE_PREBATTLE_HINTS: 6,
-                                         GAME.NEWBIE_BATTLE_HINTS: 7}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
+                                         GAME.NEWBIE_BATTLE_HINTS: 7,
+                                         GAME.ENABLE_SERVER_AIM: 8}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -464,6 +464,8 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
+                                            GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: 4,
+                                            GuiSettingsBehavior.CREW_5075_WELCOME_SHOWN: 21,
                                             GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN: 22,
                                             GuiSettingsBehavior.PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN: 23,
                                             GuiSettingsBehavior.CREW_22_WELCOME_SHOWN: 24,
@@ -537,10 +539,9 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
                                            OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
                                            OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
-                                           OnceOnlyHints.PERSONAL_RESERVES_HANGAR_HINT: 27,
-                                           OnceOnlyHints.PERSONAL_RESERVES_ACTIVATION_HINT: 28,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 29,
-                                           OnceOnlyHints.SUMMARY_CUSTOMIZATION_BUTTON_HINT: 30}, offsets={}),
+                                           OnceOnlyHints.SUMMARY_CUSTOMIZATION_BUTTON_HINT: 30,
+                                           OnceOnlyHints.BATTLE_ROYALE_DYNAMIC_PLATOON_SUB_MODE_HINT: 31}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -1292,7 +1293,7 @@ class ServerSettingsManager(object):
             settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, onceOnlyHints) ^ clearOnceOnlyHints
         onceOnlyHints2 = data.get('onceOnlyHints2', {})
         clearOnceOnlyHints2 = clear.get('onceOnlyHints2', 0)
-        if onceOnlyHints or clearOnceOnlyHints:
+        if onceOnlyHints2 or clearOnceOnlyHints2:
             settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, onceOnlyHints2) ^ clearOnceOnlyHints2
         uiStorage = data.get('uiStorage', {})
         clearUIStorage = clear.get('uiStorage', 0)

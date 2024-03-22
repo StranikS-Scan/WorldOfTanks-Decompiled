@@ -17,7 +17,7 @@ from gui.impl.lobby.crew.tankman_info import TankmanInfo
 from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableTooltip
 from gui.shared import event_dispatcher
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getTankmanSkill, TankmanSkill, NO_TANKMAN, MAX_ROLE_LEVEL
+from gui.shared.gui_items.Tankman import getTankmanSkill, TankmanSkill, NO_TANKMAN, SKILL_EFFICIENCY_UNTRAINED
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.gui_items.processors.tankman import TankmanAddSkill, TankmanLearnFreeSkill
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -63,9 +63,8 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
                  self.tankmanID,
                  None,
                  False,
-                 True,
-                 self.getParentWindow()]
-                self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
+                 True]
+                self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(PersonalFileView, self).createToolTip(event)
 
@@ -78,12 +77,13 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
         self.tankmanID = tankmanID
         self.__fillModel()
         self.tankmanInfo.setTankmanId(tankmanID)
+        self.tankmanInfo.setParentViewKey(CrewViewKeys.PERSONAL_FILE)
 
     def _onLoading(self, *args, **kwargs):
         super(PersonalFileView, self)._onLoading(*args, **kwargs)
         self.__uiTooltipLogger.initialize()
         if not self.tankmanInfo:
-            self.getParentView().setChildView(TankmanInfo.LAYOUT_DYN_ACCESSOR(), TankmanInfo(self.tankmanID, isUiLoggingDisabled=False))
+            self.getParentView().setChildView(TankmanInfo.LAYOUT_DYN_ACCESSOR(), TankmanInfo(self.tankmanID, isUiLoggingDisabled=False, parentViewKey=CrewViewKeys.PERSONAL_FILE))
         self.__fillModel()
 
     def _finalize(self):
@@ -103,9 +103,12 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.__fillModel()
             return
-        if self.tankmanID in diff.get(GUI_ITEM_TYPE.TANKMAN, {}):
-            if self.itemsCache.items.getTankman(self.tankmanID):
-                self.__fillModel()
+        else:
+            if self.tankmanID in diff.get(GUI_ITEM_TYPE.TANKMAN, {}):
+                if self.itemsCache.items.getTankman(self.tankmanID):
+                    self.__fillModel()
+                    self.getParentView().updateTTCWithSkillName(None)
+            return
 
     @property
     def __resetDisabled(self):
@@ -119,16 +122,25 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
     def __setSkillLearningStatus(self, vm):
         selectAvailableSkillsCount = 0
         newSkillCnt, _ = getTmanNewSkillCount(self.tankman)
-        if self.tankman.newFreeSkillsCount > 0:
+        freeNewSkillCnt = self.tankman.newFreeSkillsCount
+        if self.tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED:
+            state = SkillsState.DISABLED
+            skillsCount = freeNewSkillCnt + newSkillCnt
+            if skillsCount > 0:
+                state = SkillsState.LOCKED
+                selectAvailableSkillsCount = skillsCount
+            vm.setSkillsState(state)
+        elif not self.tankman.isMaxSkillEfficiency:
+            vm.setSkillsState(SkillsState.REDUCED)
+            selectAvailableSkillsCount = freeNewSkillCnt + newSkillCnt
+        elif freeNewSkillCnt > 0:
             vm.setSkillsState(SkillsState.ZEROSKILLS)
-            selectAvailableSkillsCount = self.tankman.newFreeSkillsCount
+            selectAvailableSkillsCount = freeNewSkillCnt
         elif newSkillCnt > 0:
             vm.setSkillsState(SkillsState.LEARNAVAILABLE)
             selectAvailableSkillsCount = newSkillCnt
         elif self.tankman.allSkillsLearned():
             vm.setSkillsState(SkillsState.ALLSKILLS)
-        elif self.tankman.roleLevel < MAX_ROLE_LEVEL:
-            vm.setSkillsState(SkillsState.ACHIEVE)
         else:
             vm.setSkillsState(SkillsState.TRAINING)
         vm.setSelectAvailableSkillsCount(selectAvailableSkillsCount)
@@ -172,6 +184,7 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
         self.tankman = self.itemsCache.items.getTankman(self.tankmanID)
         with self.viewModel.transaction() as vm:
             vm.setIsFemale(self.tankman.isFemale)
+            vm.setSkillsEfficiency(self.tankman.currentVehicleSkillsEfficiency)
             vm.setHasIncreaseDiscount(self.__hasIncreaseDiscount())
             vm.setHasDropSkillDiscount(self.__hasDropSkillDiscount())
             vm.setIsTankmanInVehicle(self.tankman.vehicleDescr is not None)
@@ -213,10 +226,17 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
     def __onClickSkill(self, args):
         skillId = args.get('skillId')
         skillsState = self.viewModel.getSkillsState()
+        newSkillCnt, _ = getTmanNewSkillCount(self.tankman)
         skill = getTankmanSkill(skillId, tankman=self.tankman)
-        if skillsState == SkillsState.LEARNAVAILABLE or skillsState == SkillsState.ZEROSKILLS:
+        if skillsState in [SkillsState.LEARNAVAILABLE, SkillsState.ZEROSKILLS, SkillsState.REDUCED]:
             self.uiLogger.logClick(CrewPersonalFileKeys.MATRIX_SKILL)
-        if skillsState == SkillsState.LEARNAVAILABLE:
+        if self.tankman.newFreeSkillsCount and (skillsState == SkillsState.ZEROSKILLS or skillsState == SkillsState.REDUCED):
+            result = yield wg_await(showFreeSkillConfirmationDialog(skill=skill))
+            if not result.busy:
+                isOk, _ = result.result
+                if isOk:
+                    self.__onLearnFreeSkill(skill, self.tankman)
+        elif newSkillCnt and (skillsState == SkillsState.LEARNAVAILABLE or skillsState == SkillsState.REDUCED):
             newSkillCnt, newSkillLvl = getTmanNewSkillCount(self.tankman)
             level = tankmen.MAX_SKILL_LEVEL if newSkillCnt > 1 else newSkillLvl.intSkillLvl
             result = yield wg_await(showLearnPerkConfirmationDialog(skill, int(level)))
@@ -224,12 +244,6 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
                 isOk, _ = result.result
                 if isOk:
                     self.__onLearnSkill(skill, self.tankman)
-        elif skillsState == SkillsState.ZEROSKILLS:
-            result = yield wg_await(showFreeSkillConfirmationDialog(skill=skill))
-            if not result.busy:
-                isOk, _ = result.result
-                if isOk:
-                    self.__onLearnFreeSkill(skill, self.tankman)
 
     @decorators.adisp_process('studying')
     def __onLearnSkill(self, skill, tankman):

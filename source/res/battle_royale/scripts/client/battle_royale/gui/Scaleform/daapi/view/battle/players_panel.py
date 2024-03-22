@@ -2,17 +2,17 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/players_panel.py
 import logging
 from functools import partial
+from sys import maxint
 import BigWorld
 import typing
 from battle_royale.gui.Scaleform.daapi.view.battle.respawn_message_panel import RESPAWNING_TIMER_DELAY
 from battle_royale.gui.Scaleform.daapi.view.battle.shared.utils import getVehicleLevel
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from PlayerEvents import g_playerEvents
-from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.meta.BattleRoyaleTeamPanelMeta import BattleRoyaleTeamPanelMeta
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.avatar_getter import isVehicleAlive
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.battle_field_ctrl import IBattleFieldListener
 from gui.clans.formatters import getClanAbbrevString
 from gui.impl import backport
@@ -35,9 +35,13 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
         self.__vehicleIDs = []
         self.__selectedByVehicleIds = set()
         self.__spawnPointsViewActive = False
-        self.__isRespawning = False
+        self.__isRespawning = {}
         self.__respawningDelayCallbackID = None
         return
+
+    @property
+    def selfVehicleIndex(self):
+        return len(self.__vehicleIDs) - 1
 
     def showSpawnPoints(self):
         self.__spawnPointsViewActive = True
@@ -78,23 +82,29 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
             self.__respawningDelayCallbackID = None
         return
 
-    def updateRespawnTime(self, timeLeft):
-        if not isVehicleAlive() and not self.__isRespawning or not self.__sessionProvider.arenaVisitor.bonus.isSquadSupported():
+    def updateTeammateRespawnTime(self, teamtimeLeft):
+        self.updateRespawnTime(teamtimeLeft, selfVehicle=False)
+
+    def updateRespawnTime(self, timeLeft, selfVehicle=True):
+        if not self.__sessionProvider.arenaVisitor.bonus.isSquadSupported():
             return
         if self.__respawningDelayCallbackID:
             self.__clearDelayCallback()
-        self.__respawningDelayCallbackID = BigWorld.callback(RESPAWNING_TIMER_DELAY, partial(self.updateRespawningStatus, timeLeft))
+        self.__respawningDelayCallbackID = BigWorld.callback(RESPAWNING_TIMER_DELAY, partial(self.updateRespawningStatus, timeLeft, selfVehicle))
 
-    def updateRespawningStatus(self, timeLeft):
+    def updateRespawningStatus(self, timeLeft, selfVehicle):
         self.__respawningDelayCallbackID = None
         if not self.__vehicleIDs:
             _logger.warning('PlayersPanel vehicleIDs empty')
             return
         else:
             arenaDP = self.__sessionProvider.getArenaDP()
-            vehicleID = self.__vehicleIDs[0]
+            index = self.selfVehicleIndex if selfVehicle else self.selfVehicleIndex - 1
+            if index < 0:
+                return
+            vehicleID = self.__vehicleIDs[index]
             vInfoVO = arenaDP.getVehicleInfo(vehicleID)
-            self.__isRespawning = bool(timeLeft)
+            self.__isRespawning[index] = bool(timeLeft)
             self.__updateVehicleStatus(vInfoVO)
             return
 
@@ -109,19 +119,19 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
             self.__init()
             self.__sessionProvider.addArenaCtrl(self)
             g_playerEvents.onTeamChanged += self.__onPlayerTeamChanged
-        ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleControlling += self.__onVehicleControlling
+            ctrl = self.__sessionProvider.shared.vehicleState
+            if ctrl is not None:
+                ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         return
 
     def _dispose(self):
-        if self.__sessionProvider.arenaVisitor.bonus == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD:
+        if self.__sessionProvider.arenaVisitor.bonus.isSquadSupported():
             self.__sessionProvider.removeArenaCtrl(self)
             self.__vehicleIDs = None
             g_playerEvents.onTeamChanged -= self.__onPlayerTeamChanged
-        ctrl = self.__sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleControlling -= self.__onVehicleControlling
+            ctrl = self.__sessionProvider.shared.vehicleState
+            if ctrl is not None:
+                ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         super(PlayersPanel, self)._dispose()
         return
 
@@ -136,18 +146,20 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
         self.__vehicleIDs = []
         arenaDP = self.__sessionProvider.getArenaDP()
         collection = vos_collections.AllyItemsCollection().ids(arenaDP)
+        playerVehId = BigWorld.player().observedVehicleID or arenaDP.getPlayerVehicleID()
+        collection.sort(key=lambda vId: vId if playerVehId != vId else maxint)
         names = []
         clans = []
         for vId in collection:
             vInfoVO = arenaDP.getVehicleInfo(vId)
-            playerVehId = BigWorld.player().observedVehicleID or arenaDP.getPlayerVehicleID()
-            if not vInfoVO.isObserver() and playerVehId != vId and not isSpawnedBot(vInfoVO.vehicleType.tags):
+            if not vInfoVO.isObserver() and not isSpawnedBot(vInfoVO.vehicleType.tags):
                 self.__vehicleIDs.append(vId)
                 names.append(vInfoVO.player.name)
                 clanAbbrev = getClanAbbrevString(vInfoVO.player.clanAbbrev) if vInfoVO.player.clanAbbrev else None
                 clans.append(clanAbbrev)
 
-        self.as_setInitDataS(backport.text(R.strings.battle_royale.playersPanel.title()), names, clans)
+        playerTeam = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID()).team
+        self.as_setInitDataS(backport.text(R.strings.battle_royale.playersPanel.title()), names, clans, playerTeam)
         return
 
     def __initSquadState(self):
@@ -164,7 +176,7 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
                     hpPercent = self._HEALTH_PERCENT * health / maxHealth
                 else:
                     hpPercent = self._HEALTH_PERCENT
-            self.as_setPlayerStateS(index, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), hpPercent, self.__getFrags(vStatsVO.frags), int2roman(level), getTypeVPanelIconPath(vInfoVO.vehicleType.classTag))
+            self.as_setPlayerStateS(index, vInfoVO.player.accountDBID, vId, vInfoVO.team, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), hpPercent, self.__getFrags(vStatsVO.frags), int2roman(level), getTypeVPanelIconPath(vInfoVO.vehicleType.classTag))
 
         return
 
@@ -177,10 +189,11 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
     def __updateVehicleStatus(self, vInfoVO):
         if vInfoVO.vehicleID in self.__vehicleIDs:
             index = self.__vehicleIDs.index(vInfoVO.vehicleID)
+            isRespawning = self.__isRespawning.get(index, False)
             if not vInfoVO.isAlive():
                 self.as_setPlayerHPS(index, 0)
-            _logger.debug('updateRespawnTime as_setPlayerStatusS %s %s %s %s', index, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), self.__isRespawning)
-            self.as_setPlayerStatusS(index, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), self.__isRespawning)
+            _logger.debug('updateRespawnTime as_setPlayerStatusS %s %s %s %s', index, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), isRespawning)
+            self.as_setPlayerStatusS(index, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), isRespawning)
 
     def __isVehOpacityMax(self, vInfoVO):
         return vInfoVO.isReady() and not (self.__spawnPointsViewActive and vInfoVO.vehicleID not in self.__selectedByVehicleIds)
@@ -189,6 +202,6 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
     def __getFrags(frags):
         return frags if frags != 0 else ''
 
-    def __onVehicleControlling(self, vehicle):
-        if vehicle:
+    def __onVehicleStateUpdated(self, state, value):
+        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
             self.__init()

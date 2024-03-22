@@ -309,3 +309,10 @@ _ROMAN_FORBIDDEN_LANGUAGES = {'ko', 'no'}
 
 def isRomanNumberForbidden():
     return bool(_ROMAN_FORBIDDEN_LANGUAGES.intersection((backport.text(R.strings.settings.LANGUAGE_CODE()),)))
+
+
+def showAFKWarningInWindowsBar():
+    try:
+        BigWorld.WGWindowsNotifier.onAFKWarning()
+    except AttributeError:
+        LOG_CURRENT_EXCEPTION()

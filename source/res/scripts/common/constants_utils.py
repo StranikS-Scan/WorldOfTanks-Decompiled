@@ -264,6 +264,7 @@ class AbstractBattleMode(object):
     _SM_TYPE_BATTLE_RESULT = None
     _SM_TYPES = []
     _CLIENT_SM_TYPES = []
+    _FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT = None
 
     def __init__(self, personality):
         self._personality = personality
@@ -668,3 +669,7 @@ class AbstractBattleMode(object):
     def registerAttackReasonToCode(self):
         from gui.battle_control.controllers.msgs_ctrl import _ATTACK_REASON_CODE
         _ATTACK_REASON_CODE.update(self._client_attackReasonToCode)
+
+    def registerFairplayVehicleBattleStats(self):
+        from server_constants_utils import addFairplayVehicleBattleStats
+        addFairplayVehicleBattleStats(self._ARENA_GUI_TYPE, self._FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT, self._personality)

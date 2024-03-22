@@ -35,7 +35,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IManualController, IBootcampController
+from skeletons.gui.game_control import IManualController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -117,7 +117,6 @@ class BattleMattersMainView(ViewImpl):
     __slots__ = ('__tooltips', '__questCardsDescriptions', '__currentQuestIdx', '__compensationQuestsStatus')
     __appLoader = dependency.descriptor(IAppLoader)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
-    __bootcampController = dependency.descriptor(IBootcampController)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __manualController = dependency.descriptor(IManualController)
@@ -173,7 +172,6 @@ class BattleMattersMainView(ViewImpl):
 
     def _getEvents(self):
         return ((self.viewModel.onShowManual, self.__onShowManual),
-         (self.viewModel.onRunBootcamp, self.__onRunBootcamp),
          (self.viewModel.onShowMainReward, self.__onShowMainReward),
          (self.viewModel.onShowManualForQuest, self.__onShowManualForQuest),
          (self.viewModel.onShowAnimForQuest, self.__onAnimForQuest),
@@ -247,8 +245,6 @@ class BattleMattersMainView(ViewImpl):
             regularQuests = self.__battleMattersController.getRegularBattleMattersQuests()
             self.__updateQuests(model, regularQuests)
             self.__updateQuestProgress(model.questProgress, regularQuests)
-            model.setBootcampIsAvailable(self.__bootcampController.canRun())
-            model.setIsBootcampCompleted(self.__bootcampController.hasFinishedBootcampBefore())
 
     def __updateCompensationQuestStatus(self):
         self.__compensationQuestsStatus = {q.getOrder():q.isCompleted() for q in self.__battleMattersController.getCompensationBattleMattersQuests()}
@@ -303,9 +299,6 @@ class BattleMattersMainView(ViewImpl):
         questModel = QuestViewModel()
         idx = quest.getOrder()
         questModel.setNumber(idx)
-        questModel.setTitle(quest.getUserName())
-        questModel.setDescription(quest.getDescription())
-        questModel.setCondition(quest.getConditionLbl())
         questState = State.UNAVAILABLE
         currentQuestIdx = currentQuest.getOrder() if currentQuest else None
         if self.__isRegularQuestCompleted(quest) and (currentQuestIdx is None or idx < currentQuestIdx):
@@ -330,10 +323,6 @@ class BattleMattersMainView(ViewImpl):
 
     def __onShowManual(self):
         self.__manualController.show(backCallback=showBattleMatters)
-
-    def __onRunBootcamp(self):
-        if self.__bootcampController.canRun():
-            self.__bootcampController.runBootcamp()
 
     def __onShowManualForQuest(self, args):
         questID = args.get(BattleMattersMainViewModel.ARG_QUEST_ID)

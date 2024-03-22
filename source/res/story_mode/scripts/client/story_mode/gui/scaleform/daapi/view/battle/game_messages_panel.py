@@ -8,7 +8,7 @@ from gui.impl.gen import R
 
 class StoreModeGameMessagesPanel(GameMessagesPanel):
 
-    def sendEndGameMessage(self, winningTeam, reason, extraData):
+    def sendEndGameMessage(self, winningTeam, reason):
         messageType = GAME_MESSAGES_CONSTS.WIN if avatar_getter.getPlayerTeam() == winningTeam else GAME_MESSAGES_CONSTS.DRAW
         rReason = R.strings.sm_battle.battleResult.reason
         endGameMsgData = {'title': backport.text(R.strings.sm_battle.battleResult.resultLabel.dyn(messageType)()),

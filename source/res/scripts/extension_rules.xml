@@ -17,12 +17,20 @@
       <type>	merge	</type>
     </rule>
     <rule>
+      <pattern>	.*/item_defs/static_quests/.*\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
       <pattern>	.*/item_defs/vehicles/.*/components/.*\.xml$	</pattern>
       <type>	merge	</type>
     </rule>
     <rule>
       <pattern>	.*/item_defs/bonus_caps_config\.xml$	</pattern>
       <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/fairplay_violation_types\.xml$	</pattern>
+      <type>	include	</type>
     </rule>
     <rule>
       <pattern>	.*/item_defs/[^/]+\.xml$	</pattern>
@@ -43,6 +51,10 @@
     <rule>
       <pattern>	gui/messenger\.xml$	</pattern>
       <type>	merge	</type>
+    </rule>
+    <rule>
+      <pattern>	gui/gui_settings\.xml$	</pattern>
+      <type>	include	</type>
     </rule>
     <rule>
       <pattern>	gui/hangars\.xml$	</pattern>
@@ -85,6 +97,11 @@
     <rule>
       <pattern>	gui/sound_notifications\.xml$	</pattern>
       <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/server_xml/fairplay\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	newbieBattles/arenaBonusTypes violations	</params>
     </rule>
   </xml_whitelist>
 </extension_rules.xml>

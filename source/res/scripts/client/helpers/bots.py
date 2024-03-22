@@ -5,14 +5,17 @@ import i18n
 from constants import ARENA_BONUS_TYPE
 from constants import LocalizableBotName, BotNamingType, IS_DEVELOPMENT
 from items import tankmen, vehicles
+from helpers import getLanguageCode
 _NAME_FORMAT_CREW_WINBACK = u'{0}_{1}'
 _NAME_FORMAT_CREW = ':{0} {1}:'
 _DEV_PREFIX_FORMAT_CREW = '{0}_{1}_{2} '
 _DEV_PREFIX_FORMAT_VEHICLE = '[{0}] '
 _DEV_PREFIX_FORMAT_CUSTOM = '[{0}] '
+_WINBACK_ENGLISH_CREW_CODES = ('ru', 'be', 'uk', 'kk')
 
 def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
     namingType, args = LocalizableBotName.parse(name)
+    languageCode = getLanguageCode()
     if namingType == BotNamingType.CREW_MEMBER:
         nationID, firstNameID, lastNameID = args
         nationConfig = tankmen.getNationConfig(nationID)
@@ -21,6 +24,9 @@ def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
         if IS_DEVELOPMENT:
             name = _DEV_PREFIX_FORMAT_CREW.format(nationID, firstNameID, lastNameID) + name
         elif arenaBonusType == ARENA_BONUS_TYPE.WINBACK:
+            if languageCode in _WINBACK_ENGLISH_CREW_CODES and nationID == 0:
+                firstName = i18n.convert(i18n.makeString('#ussr_crew_en:names/rusn{}'.format(firstNameID)))
+                lastName = i18n.convert(i18n.makeString('#ussr_crew_en:names/rus{}'.format(lastNameID)))
             name = _removeSpecialSymbols(_NAME_FORMAT_CREW_WINBACK.format(firstName, lastName))
         else:
             name = _NAME_FORMAT_CREW.format(firstName, lastName)

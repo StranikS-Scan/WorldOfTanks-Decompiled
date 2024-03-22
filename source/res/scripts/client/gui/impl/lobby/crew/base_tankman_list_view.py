@@ -65,8 +65,8 @@ class BaseTankmanListView(BaseCrewSoundView):
             tooltipId = event.getArgument('tooltipId', None)
             if tooltipId == TooltipConstants.TANKMAN:
                 toolTipMgr = self.appLoader.getApp().getToolTipMgr()
-                args = (self.getParentWindow(), event.getArgument('targetId'))
-                toolTipMgr.onCreateWulfTooltip(TooltipConstants.TANKMAN, args, event.mouse.positionX, event.mouse.positionY)
+                args = (event.getArgument('targetId'),)
+                toolTipMgr.onCreateWulfTooltip(TooltipConstants.TANKMAN, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TooltipConstants.TANKMAN
         return super(BaseTankmanListView, self).createToolTip(event)
 

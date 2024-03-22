@@ -1,0 +1,27 @@
+<PveHudWidgetsStateComponent.def>
+  <ClientMethods>
+    <initState>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </initState>
+    <changeState>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </changeState>
+    <updateState>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateState>
+  </ClientMethods>
+  <Properties>
+    <settings>
+      <Type>	ARRAY	  <of>	PYTHON	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </settings>
+  </Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+</PveHudWidgetsStateComponent.def>

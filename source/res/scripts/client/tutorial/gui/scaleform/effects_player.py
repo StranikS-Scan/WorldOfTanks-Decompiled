@@ -3,15 +3,9 @@
 import logging
 from collections import defaultdict
 from helpers import dependency
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from skeletons.gui.impl import IGuiLoader
 from skeletons.tutorial import ITutorialLoader
 from tutorial.data.events import GuiEventType
-from shared_utils import first
-from tutorial.gui.Scaleform.pop_ups import TutorialWulfWindow
 _logger = logging.getLogger(__name__)
 
 class GUIEffectScope(object):
@@ -64,165 +58,6 @@ class ApplicationEffect(GUIEffect):
 
     def _getTutorialLayout(self):
         return self.__tutorialLoader.gui
-
-
-class ComponentEffect(GUIEffect):
-    __slots__ = ('_component',)
-
-    def __init__(self):
-        super(ComponentEffect, self).__init__()
-        self._component = None
-        return
-
-    def clear(self):
-        self._component = None
-        super(ComponentEffect, self).clear()
-        return
-
-    def setComponent(self, component):
-        self._component = component
-
-    def play(self, effectData):
-        if self._component is not None:
-            return self._doPlay(effectData)
-        else:
-            _logger.error('Component still is not found to play effect %r', self)
-            return False
-
-    def _doPlay(self, effectData):
-        raise NotImplementedError
-
-
-class ShowDialogEffect(ApplicationEffect):
-    __slots__ = ('_aliasMap', '_gameFaceMap', '_dialogID', '_layoutID')
-    uiLoader = dependency.descriptor(IGuiLoader)
-
-    def __init__(self, aliasMap, gameFaceMap):
-        super(ShowDialogEffect, self).__init__()
-        self._aliasMap = aliasMap
-        self._gameFaceMap = gameFaceMap
-        self._dialogID = None
-        self._layoutID = None
-        return
-
-    def clear(self):
-        self._dialogID = None
-        self._layoutID = None
-        super(ShowDialogEffect, self).clear()
-        return
-
-    def play(self, effectData):
-        effectData = effectData[0]
-        result = False
-        if 'type' in effectData and 'dialogID' in effectData:
-            dialogType = effectData['type']
-            dialogID = effectData['dialogID']
-            if dialogID == self._dialogID:
-                _logger.error('Dialog is displayed %r', effectData['dialogID'])
-                return False
-            if dialogType in self._aliasMap:
-                alias = self._aliasMap[dialogType]
-                self._dialogID = dialogID
-                self._layoutID = None
-                self._app.loadView(SFViewLoadParams(alias, dialogID), effectData)
-                result = True
-            elif dialogType in self._gameFaceMap:
-                self._dialogID = dialogID
-                viewClass = self._gameFaceMap[dialogType]
-                window = TutorialWulfWindow(viewClass(), effectData)
-                window.load()
-                self._layoutID = window.getLayoutID()
-                result = True
-            else:
-                _logger.error('Alias of dialog not found. effectData: %r, aliasMap: %r', effectData, self._aliasMap)
-        else:
-            _logger.error('Type or id of dialog not found %r', effectData)
-        return result
-
-    def stop(self, effectID=None, effectSubType=None):
-        isForceStop = effectID is None
-        if not isForceStop and effectID != self._dialogID:
-            _logger.error('Dialog is not opened %r', effectID)
-            return
-        else:
-            effectID = self._dialogID
-            layoutID = self._layoutID
-            self._dialogID = None
-            self._layoutID = None
-            if layoutID is not None:
-                view = self.uiLoader.windowsManager.getViewByLayoutID(layoutID)
-                if view is not None:
-                    view.destroyWindow()
-                return
-            container = self._getContainer(WindowLayer.TOP_WINDOW)
-            if container is not None:
-                dialog = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})
-                if dialog is not None:
-                    dialog.destroy()
-            return
-
-    def isStillRunning(self, effectID=None, effectSubType=None):
-        if effectID is not None:
-            result = self._dialogID == effectID
-        else:
-            result = self._dialogID is not None
-        return result
-
-
-class ShowWindowEffect(ApplicationEffect):
-    __slots__ = ('_aliasMap', '_windowIDs')
-
-    def __init__(self, aliasMap):
-        super(ShowWindowEffect, self).__init__()
-        self._aliasMap = aliasMap
-        self._windowIDs = set()
-
-    def clear(self):
-        self._windowIDs.clear()
-        super(ShowWindowEffect, self).clear()
-
-    def play(self, effectData):
-        windowID, windowType, content = effectData
-        result = False
-        if windowType in self._aliasMap:
-            alias = self._aliasMap[windowType]
-            self._windowIDs.add(windowID)
-            self._app.loadView(SFViewLoadParams(alias, windowID), content)
-            result = True
-        else:
-            _logger.error('Alias of window not found %r %r', windowType, self._aliasMap)
-        return result
-
-    def stop(self, effectID=None, effectSubType=None):
-        isForceStop = effectID is None
-        if not isForceStop:
-            if effectID not in self._windowIDs:
-                _logger.error('Window is not opened %r', effectID)
-                return
-            effectIDs = {effectID}
-        else:
-            effectIDs = self._windowIDs.copy()
-        container = self._getContainer(WindowLayer.WINDOW)
-        if container is None:
-            container = self._getContainer(WindowLayer.OVERLAY)
-        if container is not None:
-            getView = container.getView
-            for eID in effectIDs:
-                window = getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: eID})
-                if window is not None:
-                    window.destroy()
-                    self._windowIDs.remove(eID)
-                if not isForceStop:
-                    _logger.error('Window is not opened %r', eID)
-
-        return
-
-    def isStillRunning(self, effectID=None, effectSubType=None):
-        if effectID is not None:
-            result = effectID in self._windowIDs
-        else:
-            result = len(self._windowIDs)
-        return result
 
 
 _GUI_EVENT_TO_TRIGGER_TYPE = {GuiEventType.CLICK: TUTORIAL_TRIGGER_TYPES.CLICK_TYPE,
@@ -310,33 +145,6 @@ class ShowOnceOnlyHint(ShowChainHint):
         return
 
 
-class UpdateContentEffect(ApplicationEffect):
-    __slots__ = ()
-
-    def play(self, effectData):
-        effectData = effectData[0]
-        result = False
-        effectID = None
-        layer = None
-        if 'dialogID' in effectData:
-            effectID = effectData['dialogID']
-            layer = WindowLayer.TOP_WINDOW
-        if effectID is not None:
-            container = self._getContainer(layer)
-            if container is not None:
-                view = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: effectID})
-                if view is not None:
-                    if hasattr(view, 'as_updateContentS'):
-                        view.as_updateContentS(effectData)
-                        result = True
-                    else:
-                        _logger.error('View %r is invalid', view)
-                else:
-                    _logger.debug('View is not on scene. effectID: %r', effectID)
-                    result = True
-        return result
-
-
 class SetCriteriaEffect(ApplicationEffect):
     __slots__ = ()
 
@@ -345,21 +153,6 @@ class SetCriteriaEffect(ApplicationEffect):
         layout = self._getTutorialLayout()
         if layout is not None:
             layout.setCriteria(itemID, value)
-            return True
-        else:
-            return False
-
-
-class SetViewCriteriaEffect(ApplicationEffect):
-    __slots__ = ()
-
-    def play(self, effectData):
-        itemIDs, value = effectData
-        layout = self._getTutorialLayout()
-        if layout is not None:
-            for itemID in itemIDs:
-                layout.setViewCriteria(itemID, value)
-
             return True
         else:
             return False
@@ -427,69 +220,6 @@ class SetTriggerEffect(ApplicationEffect):
                         del self._triggersByItem[itemID]
             else:
                 _logger.error('Cannot find trigger type. itemID: %r, actionType: %r', itemID, actionType)
-        return
-
-
-class SetItemPropsEffect(ApplicationEffect):
-    __slots__ = ()
-
-    def play(self, effectData):
-        itemID, props = effectData
-        layout = self._getTutorialLayout()
-        return False if layout is None else layout.setComponentProps(itemID, props)
-
-
-class PlayAnimationEffect(ApplicationEffect):
-    __slots__ = ('_activeEffects',)
-
-    def __init__(self):
-        super(PlayAnimationEffect, self).__init__()
-        self._activeEffects = {}
-
-    def isStillRunning(self, effectID=None, effectSubType=None):
-        return first(self._iterEffects(effectID, effectSubType)) is not None
-
-    def play(self, effectData):
-        itemID, animID = effectData
-        if itemID in self._activeEffects:
-            _logger.error('Another animation is already playing on item %r. ' + 'Multiple animations on one item are not supported.', itemID)
-            return False
-        layout = self._getTutorialLayout()
-        if layout is None:
-            return False
-        elif layout.playComponentAnimation(itemID, animID):
-            self._activeEffects[itemID] = animID
-            return True
-        else:
-            return False
-
-    def stop(self, effectID=None, effectSubType=None):
-        layout = self._getTutorialLayout()
-        if layout is None:
-            return
-        else:
-            for itemID, animID in self._iterEffects(effectID, effectSubType):
-                layout.stopComponentAnimation(itemID, animID)
-                del self._activeEffects[itemID]
-
-            return
-
-    def cancel(self, scopeType, scopeName):
-        if scopeType == GUIEffectScope.COMPONENT:
-            self.stop(scopeName)
-
-    def _iterEffects(self, effectID, effectSubType):
-        itemID, animID = effectID, effectSubType
-        if itemID is None:
-            items = self._activeEffects.items()
-        elif itemID in self._activeEffects:
-            items = ((itemID, self._activeEffects[itemID]),)
-        else:
-            items = ()
-        for _itemID, _animID in items:
-            if animID in (_animID, None):
-                yield (_itemID, _animID)
-
         return
 
 

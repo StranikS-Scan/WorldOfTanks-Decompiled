@@ -15,7 +15,6 @@ from gui.server_events import IEventsCache
 from gui.server_events.battle_royale_formatters import SOLO_ITEMS_ORDER, SQUAD_ITEMS_ORDER, StatsItemType
 from gui.server_events.events_helpers import isBattleRoyale
 from gui.shared.utils.functions import replaceHyphenToUnderscore
-from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBattleRoyaleController
@@ -117,20 +116,6 @@ class BattleRoyaleIsPremiumBlock(base.StatsItem):
         return reusable.isPostBattlePremium or reusable.isPostBattlePremiumPlus
 
 
-class BattleRoyaleBonusStpCoinFactorBlock(base.StatsBlock):
-    __slots__ = ('bonusStpCoinFactor',)
-
-    def __init__(self, meta=None, field='', *path):
-        super(BattleRoyaleBonusStpCoinFactorBlock, self).__init__(meta, field, *path)
-        self.bonusStpCoinFactor = 0
-
-    def setRecord(self, result, reusable):
-        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
-        info = result['personal'][vehicleCD]
-        stpCoinInfo = info['currencies'].get(Currency.STPCOIN, {})
-        self.bonusStpCoinFactor = stpCoinInfo.get('bonusStpCoinFactor', 0)
-
-
 class BattleRoyaleVehicleStatusBlock(base.StatsBlock):
     __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('killer', 'vehicleState', 'isSelfDestroyer')
@@ -180,16 +165,8 @@ class _BRCoinReplayRecords(records.ReplayRecords):
         self._addRecord(ValueReplay.FACTOR, 'appliedPremiumFactor100', results['appliedPremiumFactor100'], 0)
 
 
-class _STPCoinReplayRecords(records.ReplayRecords):
-    __slots__ = ()
-
-    def __init__(self, replay, results):
-        super(_STPCoinReplayRecords, self).__init__(replay, 'count')
-        self._addRecord(ValueReplay.FACTOR, 'bonusStpCoinFactor', results['bonusStpCoinFactor'], 0)
-
-
 class BattleRoyaleFinancialBlock(base.StatsBlock):
-    __slots__ = ('credits', 'xp', 'crystal', 'brcoin', 'stpcoin')
+    __slots__ = ('credits', 'xp', 'crystal', 'brcoin')
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, meta=None, field='', *path):
@@ -198,7 +175,6 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         self.xp = 0
         self.crystal = 0
         self.brcoin = 0
-        self.stpcoin = 0
 
     def setRecord(self, result, reusable):
         avatarInfo = result['personal']['avatar']
@@ -206,15 +182,14 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         self.xp = avatarInfo['xp']
         self.crystal = avatarInfo['crystal']
         self.brcoin = self._getBrCoins(result, reusable, isPremium=False)
-        self.stpcoin = self._getStpCoins(result, reusable)
 
     def _getBrCoins(self, result, reusable, isPremium):
-        questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.BRCOIN)
+        questBonus = self.__getBrCoinsQuestBonus(reusable.personal.getQuestsProgress())
         vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
         info = result['personal'][vehicleCD]
         for code, data in info['currencies'].iteritems():
-            if code == Currency.BRCOIN:
-                meta = battleResultsConfig['allResults'].meta('currencies').meta(code)
+            if code == 'brcoin':
+                meta = battleResultsConfig['allResults'].meta('currencies').meta('brcoin')
                 replayConnector = ValueReplayConnector(data, meta)
                 replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
                 if not isPremium:
@@ -225,20 +200,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
 
         return questBonus
 
-    def _getStpCoins(self, result, reusable):
-        questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.STPCOIN)
-        vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
-        info = result['personal'][vehicleCD]
-        for code, data in info['currencies'].iteritems():
-            if code == Currency.STPCOIN:
-                meta = battleResultsConfig['allResults'].meta('currencies').meta(code)
-                replayConnector = ValueReplayConnector(data, meta)
-                replay = ValueReplay(replayConnector, recordName='count', replay=data['replay'])
-                return _STPCoinReplayRecords(replay, data).getRecord('count') + questBonus
-
-        return questBonus
-
-    def __getCoinsQuestBonus(self, questProgress, currencyCode=Currency.BRCOIN):
+    def __getBrCoinsQuestBonus(self, questProgress):
         questBonus = 0
         allQuests = self.__eventsCache.getAllQuests()
         for qID, qProgress in questProgress.iteritems():
@@ -247,7 +209,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
                 if quest is None:
                     continue
                 for bonus in quest.getBonuses('currencies'):
-                    if bonus.getCode() == currencyCode:
+                    if bonus.getCode() == 'brcoin':
                         questBonus += bonus.getCount()
 
         return questBonus
@@ -269,7 +231,6 @@ class BattleRoyaleFinancialPremBlock(BattleRoyaleFinancialBlock):
             self.xp = premiumXP.getRecord('xpToShow')
 
         self.brcoin = self._getBrCoins(result, reusable, isPremium=True)
-        self.stpcoin = self._getStpCoins(result, reusable)
 
 
 class BattleRoyaleStatsItemBlock(base.StatsBlock):
@@ -468,7 +429,7 @@ class BattlePassBlock(base.StatsBlock):
 
 
 class BattleRoyalePlayerBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName', 'achievedLevel', 'kills', 'damage', 'vehicleName', 'vehicleType', 'databaseID')
+    __slots__ = ('isPersonal', 'userName', 'clanAbbrev', 'place', 'isPersonalSquad', 'squadIdx', 'hiddenName', 'achievedLevel', 'kills', 'damage', 'vehicleName', 'vehicleType', 'databaseID', 'prebattleID')
 
     def __init__(self, meta=None, field='', *path):
         super(BattleRoyalePlayerBlock, self).__init__(meta, field, *path)
@@ -485,6 +446,7 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.vehicleName = ''
         self.vehicleType = ''
         self.databaseID = 0
+        self.prebattleID = 0
 
     def setRecord(self, vehicleSummarizeInfo, reusable):
         player = vehicleSummarizeInfo.player
@@ -513,7 +475,7 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
         allPlayers = reusable.getAllPlayersIterator(result, sortKey=sort_keys.placeSortKey)
         personalInfo = reusable.getPlayerInfo()
         personalDBID = personalInfo.dbID
-        team = personalInfo.team if personalInfo.squadIndex else 0
+        team = personalInfo.team if reusable.isSquadSupported else 0
         for item in allPlayers:
             if item.vehicle is not None and item.vehicle.isObserver:
                 continue
@@ -530,6 +492,7 @@ class BattleRoyaleTeamStatsBlock(base.StatsBlock):
             block.vehicleName = item.vehicle.shortUserName
             block.vehicleType = item.vehicle.type
             block.databaseID = item.player.dbID
+            block.prebattleID = item.player.prebattleID
             block.setRecord(item, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
 

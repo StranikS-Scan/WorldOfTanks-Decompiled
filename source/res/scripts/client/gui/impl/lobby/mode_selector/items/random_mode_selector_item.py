@@ -20,8 +20,6 @@ class RandomModeSelectorItem(ModeSelectorLegacyItem):
     def _onInitializing(self):
         super(RandomModeSelectorItem, self)._onInitializing()
         self.setPopoverState(False)
-        if self._bootcamp.isInBootcamp():
-            self.viewModel.setIsDisabled(False)
         g_eventBus.addListener(ModeSelectorPopoverEvent.NAME, self.randomBattlePopoverStatusChangeCallback)
         self._addReward(ModeSelectorRewardID.CREDITS)
         self._addReward(ModeSelectorRewardID.EXPERIENCE)

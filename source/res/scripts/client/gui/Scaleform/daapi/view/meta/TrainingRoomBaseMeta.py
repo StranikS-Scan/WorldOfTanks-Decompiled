@@ -58,8 +58,8 @@ class TrainingRoomBaseMeta(View):
     def as_updateCommentS(self, commentStr):
         return self.flashObject.as_updateComment(commentStr) if self._isDAAPIInited() else None
 
-    def as_updateMapS(self, arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco):
-        return self.flashObject.as_updateMap(arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco) if self._isDAAPIInited() else None
+    def as_updateMapS(self, arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco, alertText, isObserverModeEnabled):
+        return self.flashObject.as_updateMap(arenaTypeID, maxPlayersCount, arenaName, title, arenaSubType, descriptionStr, battleTypeIco, alertText, isObserverModeEnabled) if self._isDAAPIInited() else None
 
     def as_updateTimeoutS(self, roundLenString):
         return self.flashObject.as_updateTimeout(roundLenString) if self._isDAAPIInited() else None
@@ -78,9 +78,6 @@ class TrainingRoomBaseMeta(View):
 
     def as_setArenaVoipChannelsS(self, arenaVoipChannels):
         return self.flashObject.as_setArenaVoipChannels(arenaVoipChannels) if self._isDAAPIInited() else None
-
-    def as_disableStartButtonS(self, value):
-        return self.flashObject.as_disableStartButton(value) if self._isDAAPIInited() else None
 
     def as_disableControlsS(self, value):
         return self.flashObject.as_disableControls(value) if self._isDAAPIInited() else None
@@ -117,3 +114,6 @@ class TrainingRoomBaseMeta(View):
 
     def as_enabledCloseButtonS(self, value):
         return self.flashObject.as_enabledCloseButton(value) if self._isDAAPIInited() else None
+
+    def as_setStartButtonStateS(self, enabled, tooltip=None):
+        return self.flashObject.as_setStartButtonState(enabled, tooltip) if self._isDAAPIInited() else None

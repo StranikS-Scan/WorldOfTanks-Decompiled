@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_skill_
 class CrewWidgetTankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(CrewWidgetTankmanModel, self).__init__(properties=properties, commands=commands)
 
     def getTankmanID(self):
@@ -28,117 +28,109 @@ class CrewWidgetTankmanModel(ViewModel):
     def setIcon(self, value):
         self._setString(2, value)
 
-    def getSpecializationLevel(self):
-        return self._getNumber(3)
-
-    def setSpecializationLevel(self, value):
-        self._setNumber(3, value)
-
-    def getBaseSpecializationLevel(self):
-        return self._getNumber(4)
-
-    def setBaseSpecializationLevel(self, value):
-        self._setNumber(4, value)
-
     def getRoles(self):
-        return self._getArray(5)
+        return self._getArray(3)
 
     def setRoles(self, value):
-        self._setArray(5, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getRolesType():
         return unicode
 
     def getSkills(self):
-        return self._getArray(6)
+        return self._getArray(4)
 
     def setSkills(self, value):
-        self._setArray(6, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getSkillsType():
         return CrewWidgetTankmanSkillModel
 
     def getNewSkillsAmount(self):
-        return self._getNumber(7)
+        return self._getNumber(5)
 
     def setNewSkillsAmount(self, value):
-        self._setNumber(7, value)
+        self._setNumber(5, value)
 
     def getPossibleSkillsAmount(self):
-        return self._getNumber(8)
+        return self._getNumber(6)
 
     def setPossibleSkillsAmount(self, value):
-        self._setNumber(8, value)
+        self._setNumber(6, value)
 
     def getLastPossibleSkillLevel(self):
-        return self._getReal(9)
+        return self._getReal(7)
 
     def setLastPossibleSkillLevel(self, value):
-        self._setReal(9, value)
+        self._setReal(7, value)
 
     def getHasPossibleProgress(self):
-        return self._getBool(10)
+        return self._getBool(8)
 
     def setHasPossibleProgress(self, value):
-        self._setBool(10, value)
+        self._setBool(8, value)
 
     def getLastSkillLevel(self):
-        return self._getReal(11)
+        return self._getReal(9)
 
     def setLastSkillLevel(self, value):
-        self._setReal(11, value)
+        self._setReal(9, value)
 
     def getLastSkillLevelFull(self):
-        return self._getReal(12)
+        return self._getReal(10)
 
     def setLastSkillLevelFull(self, value):
-        self._setReal(12, value)
+        self._setReal(10, value)
 
     def getIsLessMastered(self):
-        return self._getBool(13)
+        return self._getBool(11)
 
     def setIsLessMastered(self, value):
-        self._setBool(13, value)
+        self._setBool(11, value)
 
     def getIsInSkin(self):
-        return self._getBool(14)
+        return self._getBool(12)
 
     def setIsInSkin(self, value):
-        self._setBool(14, value)
+        self._setBool(12, value)
 
     def getIsFemale(self):
-        return self._getBool(15)
+        return self._getBool(13)
 
     def setIsFemale(self, value):
-        self._setBool(15, value)
-
-    def getIsUntrained(self):
-        return self._getBool(16)
-
-    def setIsUntrained(self, value):
-        self._setBool(16, value)
+        self._setBool(13, value)
 
     def getHasWarning(self):
-        return self._getBool(17)
+        return self._getBool(14)
 
     def setHasWarning(self, value):
-        self._setBool(17, value)
+        self._setBool(14, value)
 
     def getIsInteractive(self):
-        return self._getBool(18)
+        return self._getBool(15)
 
     def setIsInteractive(self, value):
-        self._setBool(18, value)
+        self._setBool(15, value)
+
+    def getSkillsEfficiency(self):
+        return self._getReal(16)
+
+    def setSkillsEfficiency(self, value):
+        self._setReal(16, value)
+
+    def getPossibleSkillsEfficiency(self):
+        return self._getReal(17)
+
+    def setPossibleSkillsEfficiency(self, value):
+        self._setReal(17, value)
 
     def _initialize(self):
         super(CrewWidgetTankmanModel, self)._initialize()
         self._addNumberProperty('tankmanID', 0)
         self._addStringProperty('fullName', '')
         self._addStringProperty('icon', '')
-        self._addNumberProperty('specializationLevel', 0)
-        self._addNumberProperty('baseSpecializationLevel', 0)
         self._addArrayProperty('roles', Array())
         self._addArrayProperty('skills', Array())
         self._addNumberProperty('newSkillsAmount', 0)
@@ -150,6 +142,7 @@ class CrewWidgetTankmanModel(ViewModel):
         self._addBoolProperty('isLessMastered', False)
         self._addBoolProperty('isInSkin', False)
         self._addBoolProperty('isFemale', False)
-        self._addBoolProperty('isUntrained', False)
         self._addBoolProperty('hasWarning', False)
         self._addBoolProperty('isInteractive', False)
+        self._addRealProperty('skillsEfficiency', 0.0)
+        self._addRealProperty('possibleSkillsEfficiency', -1)

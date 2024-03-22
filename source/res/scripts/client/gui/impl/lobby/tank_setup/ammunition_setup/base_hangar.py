@@ -277,6 +277,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._closeWindow()
                 return
             isRentalChange = self._vehItem.getItem().rentalIsOver != g_currentVehicle.isDisabledInRent()
+            self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
             if self._vehItem.getItem().setupLayouts != g_currentVehicle.item.setupLayouts or isRentalChange:
                 needRecreateVehicle = isRentalChange
                 if not isRentalChange:
@@ -304,7 +305,6 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._vehItem.getItem().settings = g_currentVehicle.item.settings
                 self._vehItem.getItem().optDevices.dynSlotType = g_currentVehicle.item.optDevices.dynSlotType
                 self._tankSetup.update(fullUpdate=True)
-            self._tankSetup.currentVehicleUpdated(g_currentVehicle.item)
             self._updateAmmunitionPanel()
             return
 

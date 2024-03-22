@@ -180,16 +180,15 @@ def getCompatibles(item, vehicleDescr=None):
     return get(item, vehicleDescr).get('compatible')
 
 
-def idealCrewComparator(vehicle):
+def similarCrewComparator(vehicle):
     vehicleParamsObject = params.VehicleParams(vehicle)
     vehicleParams = vehicleParamsObject.getParamsDict()
     bonuses = vehicleParamsObject.getBonuses(vehicle)
-    penalties = vehicleParamsObject.getPenalties(vehicle)
     compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicle)
-    idealCrewVehicle = copy.copy(vehicle)
-    idealCrewVehicle.crew = vehicle.getPerfectCrew()
-    perfectVehicleParams = params.VehicleParams(idealCrewVehicle).getParamsDict()
-    return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses, penalties)
+    similarCrewVehicle = copy.copy(vehicle)
+    similarCrewVehicle.crew = vehicle.getSimilarCrew()
+    perfectVehicleParams = params.VehicleParams(similarCrewVehicle).getParamsDict()
+    return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses)
 
 
 def itemOnVehicleComparator(vehicle, item):
@@ -228,9 +227,9 @@ def itemOnVehicleComparator(vehicle, item):
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
-def skillOnIdealCrewComparator(vehicle, skillName=None):
+def skillOnSimilarCrewComparator(vehicle, skillName=None):
     vehicleWithIdealCrew = copy.copy(vehicle)
-    vehicleWithIdealCrew.crew = vehicle.makeCrewMaxRolesLevel()
+    vehicleWithIdealCrew.crew = vehicle.getSimilarCrew()
     vehicleParamsObject = params.VehicleParams(vehicleWithIdealCrew)
     vehicleParams = vehicleParamsObject.getParamsDict()
     bonuses = vehicleParamsObject.getBonuses(vehicleWithIdealCrew)

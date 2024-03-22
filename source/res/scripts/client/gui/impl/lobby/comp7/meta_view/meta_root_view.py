@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/meta_root_view.py
 import logging
 import typing
+from shared_utils import findFirst
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.game_control.comp7_shop_controller import ShopControllerStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
@@ -21,6 +23,7 @@ from gui.impl.lobby.comp7.meta_view.pages.shop_page import ShopPage
 from gui.impl.lobby.comp7.meta_view.pages.weekly_quests_page import WeeklyQuestsPage
 from gui.impl.lobby.comp7.meta_view.pages.yearly_rewards_page import YearlyRewardsPage
 from gui.impl.lobby.comp7.meta_view.pages.yearly_statistics_page import YearlyStatisticsPage
+from gui.impl.lobby.comp7.meta_view.products_helper import hasUnseenProduct
 from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
@@ -28,15 +31,16 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showComp7WhatsNewScreen
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.game_control import IComp7Controller, IComp7ShopController
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 _logger = logging.getLogger(__name__)
 
 class MetaRootView(ViewImpl, IGlobalListener):
-    __slots__ = ('__pages', '__tabId')
+    __slots__ = ('__pages', '__tabId', '__products')
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __comp7ShopController = dependency.descriptor(IComp7ShopController)
     __guiLoader = dependency.descriptor(IGuiLoader)
     _COMMON_SOUND_SPACE = getComp7MetaSoundSpace()
 
@@ -49,6 +53,8 @@ class MetaRootView(ViewImpl, IGlobalListener):
         super(MetaRootView, self).__init__(settings)
         self.__pages = {}
         self.__tabId = MetaRootViews.PROGRESSION
+        self.__products = None
+        return
 
     @property
     def viewModel(self):
@@ -100,9 +106,18 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.__tabId = tabId
         g_eventDispatcher.updateUI()
 
+    def updateTabNotifications(self):
+        shopTab = findFirst(lambda tab: tab.getId() == MetaRootViews.SHOP, self.viewModel.sidebar.getItems())
+        if self.__products:
+            shopTab.setHasNotification(hasUnseenProduct(self.__products))
+        else:
+            shopTab.setHasNotification(False)
+
     def _finalize(self):
         self.__removeListeners()
         self.__clearPages()
+        self.__products = None
+        return
 
     def _onLoading(self, *args, **kwargs):
         tabId = kwargs.pop('tabId', None)
@@ -113,6 +128,8 @@ class MetaRootView(ViewImpl, IGlobalListener):
                 _logger.error('Wrong tabId: %s', tabId)
         self.__initPages()
         self.__updateTabs()
+        self.__products = self.__comp7ShopController.getProducts()
+        self.updateTabNotifications()
         page = self.__pages[self.__tabId]
         page.initialize(*args, **kwargs)
         self.viewModel.setPageViewId(page.pageId)
@@ -136,6 +153,8 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.__comp7Controller.onComp7ConfigChanged += self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated += self.__onOfflineStatusUpdated
+        self.__comp7ShopController.onShopStateChanged += self.__onShopStateChanged
+        self.__comp7ShopController.onDataUpdated += self.__onShopDataUpdated
         if self.__guiLoader.windowsManager is not None:
             self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
         self.startGlobalListening()
@@ -150,10 +169,21 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.__comp7Controller.onComp7ConfigChanged -= self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated -= self.__onOfflineStatusUpdated
+        self.__comp7ShopController.onShopStateChanged -= self.__onShopStateChanged
+        self.__comp7ShopController.onDataUpdated -= self.__onShopDataUpdated
         if self.__guiLoader.windowsManager is not None:
             self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
         self.stopGlobalListening()
         return
+
+    def __onShopDataUpdated(self, status):
+        if status == ShopControllerStatus.DATA_READY:
+            self.__products = self.__comp7ShopController.getProducts()
+            self.updateTabNotifications()
+
+    def __onShopStateChanged(self):
+        self.__products = self.__comp7ShopController.getProducts()
+        self.updateTabNotifications()
 
     def __onScheduleUpdated(self):
         comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)

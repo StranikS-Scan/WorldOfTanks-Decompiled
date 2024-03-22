@@ -268,3 +268,4 @@ def registerBREquipmentsItems():
     registerEquipmentItem('clingBrander', _BotSpawner, _BRReplaySpawnBot)
     registerEquipmentItem('thunderStrike', _ThunderStrike, _BRReplayThunderStrike)
     registerEquipmentItem('shotPassion', _ShotPassion, _ReplayItem)
+    registerEquipmentItem('arcade_bomber_with_own_damage_battle_royale', _ArcadeBomber, _BRReplayBomber)

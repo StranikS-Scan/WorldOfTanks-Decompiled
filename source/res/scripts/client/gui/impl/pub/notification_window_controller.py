@@ -5,7 +5,6 @@ import typing
 import BigWorld
 import Event
 from PlayerEvents import g_playerEvents
-from bootcamp.BootCampEvents import g_bootcampEvents
 from frameworks.wulf import WindowStatus, WindowLayer
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.prb_control.entities.listener import IGlobalListener
@@ -13,7 +12,6 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from helpers import dependency
 from skeletons.gameplay import IGameplayLogic
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
@@ -21,10 +19,9 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class NotificationWindowController(INotificationWindowController, IGlobalListener):
-    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isInBootcamp', '__isLobbyLoaded', '__locks', '__isExecuting')
+    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isLobbyLoaded', '__locks', '__isExecuting')
     __gui = dependency.descriptor(IGuiLoader)
     __gameplay = dependency.descriptor(IGameplayLogic)
-    __bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(NotificationWindowController, self).__init__()
@@ -37,7 +34,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__processAfterWaiting = False
         self.__isLobbyLoaded = False
         self.__accountID = 0
-        self.__isInBootcamp = False
         self.__isExecuting = False
         self.onPostponedQueueUpdated = Event.Event()
         return
@@ -50,8 +46,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__gui.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
         g_eventBus.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
-        g_bootcampEvents.onBootcampStarted += self.__onEnterBootcamp
-        g_bootcampEvents.onBootcampFinished += self.__onExitBootcamp
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
 
     def fini(self):
@@ -61,8 +55,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         g_eventBus.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__showWaiting, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(LobbySimpleEvent.WAITING_HIDDEN, self.__hideWaiting, EVENT_BUS_SCOPE.LOBBY)
         self.onPostponedQueueUpdated.clear()
-        g_bootcampEvents.onBootcampStarted -= self.__onEnterBootcamp
-        g_bootcampEvents.onBootcampFinished -= self.__onExitBootcamp
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
 
     def __onAccountShowGUI(self, ctx):
@@ -74,7 +66,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
     def onLobbyInited(self, event):
         self.startGlobalListening()
         self.__isLobbyLoaded = True
-        self.__isInBootcamp = self.__bootcamp.isInBootcamp()
         self.__updateEnabled()
         self.__notifyWithPostponedQueueCount()
         if self.isEnabled():
@@ -150,7 +141,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__notifyWithPostponedQueueCount()
 
     def isEnabled(self):
-        return False if not self.__isLobbyLoaded or self.__isInBootcamp or self.prbDispatcher is None else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+        return False if not self.__isLobbyLoaded or self.prbDispatcher is None else not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
 
     def isExecuting(self):
         return self.__isExecuting
@@ -189,16 +180,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             elif self.__isLobbyLoaded:
                 self.postponeActive()
 
-    def __onEnterBootcamp(self):
-        self.__isInBootcamp = True
-        self.__updateEnabled()
-        self.__notifyWithPostponedQueueCount()
-
-    def __onExitBootcamp(self):
-        self.__isInBootcamp = False
-        self.__updateEnabled()
-        self.__notifyWithPostponedQueueCount()
-
     def __updateEnabled(self):
         if not self.isEnabled() and not self.__locks:
             self.postponeActive()
@@ -207,7 +188,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
             self.__processAfterWaiting = False
 
     def __notifyWithPostponedQueueCount(self):
-        self.onPostponedQueueUpdated(self.postponedCount, self.__isInBootcamp)
+        self.onPostponedQueueUpdated(self.postponedCount)
 
     def __onWindowStatusChanged(self, uniqueID, newState):
         window = self.__gui.windowsManager.getWindow(uniqueID)

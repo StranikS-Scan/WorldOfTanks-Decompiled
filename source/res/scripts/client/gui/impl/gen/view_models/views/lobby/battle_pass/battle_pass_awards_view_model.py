@@ -16,9 +16,9 @@ class RewardReason(Enum):
 
 
 class BattlePassAwardsViewModel(CommonViewModel):
-    __slots__ = ('onBuyClick',)
+    __slots__ = ('onBuyClick', 'onClose')
 
-    def __init__(self, properties=15, commands=2):
+    def __init__(self, properties=15, commands=3):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -111,3 +111,4 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addArrayProperty('wideRewardsIDs', Array())
         self._addBoolProperty('isExtra', False)
         self.onBuyClick = self._addCommand('onBuyClick')
+        self.onClose = self._addCommand('onClose')

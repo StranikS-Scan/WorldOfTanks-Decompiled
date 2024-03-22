@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/account_shared.py
 import collections
 import re
+from constants import FairplayViolationType
 from items import vehicles, ITEM_TYPES
-from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
+from fairplay_violation_types import getViolationsByMask, FairplayViolations
 from items.components.c11n_constants import CustomizationType
 from debug_utils import *
 from typing import Union, Tuple
@@ -90,9 +91,12 @@ def getFairPlayViolationName(violationsMask):
     if violationsMask == 0:
         return None
     else:
-        for name in FAIRPLAY_VIOLATIONS_NAMES:
-            if violationsMask & FAIRPLAY_VIOLATIONS_MASKS[name] != 0:
-                return name
+        violationNamesByMask = getViolationsByMask(violationsMask)
+        for vType in FairplayViolationType.PRIORITY:
+            violationsByRule = FairplayViolations.getViolationsByType(vType)
+            for violation in violationNamesByMask:
+                if violation in violationsByRule:
+                    return violation
 
         return None
 

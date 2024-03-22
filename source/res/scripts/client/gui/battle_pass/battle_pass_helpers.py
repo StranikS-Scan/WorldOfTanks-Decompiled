@@ -195,10 +195,12 @@ def getAllFinalRewards(chapterID, battlePass=None):
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
-def getRewardTypeBySource(reward, chapter, battlePass=None):
+def getRewardSourceByType(reward, chapter, battlePass=None):
     freeRewards = battlePass.getRewardTypes(chapter).get(BattlePassConsts.REWARD_FREE)
     paidRewards = battlePass.getRewardTypes(chapter).get(BattlePassConsts.REWARD_PAID)
     if reward in freeRewards:
+        if reward in paidRewards:
+            return BattlePassConsts.REWARD_BOTH
         return BattlePassConsts.REWARD_FREE
     else:
         return BattlePassConsts.REWARD_PAID if reward in paidRewards else None
@@ -211,7 +213,8 @@ def getStyleForChapter(chapter, battlePass=None, c11nService=None):
         _logger.error('Invalid chapterID: %s', chapter)
         return None
     else:
-        return c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, stylesConfig[chapter])
+        styleID = stylesConfig[chapter]
+        return c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID) if styleID is not None else None
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)

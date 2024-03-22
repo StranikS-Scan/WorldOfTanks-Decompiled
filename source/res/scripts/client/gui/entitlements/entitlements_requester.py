@@ -36,8 +36,9 @@ class EntitlementsRequester(object):
 
     def __onRequestDone(self, ctx):
         request = self.__findRequest(ctx)
-        request.clear()
-        self.__requests.remove(request)
+        if request:
+            request.clear()
+            self.__requests.remove(request)
 
     def __findRequest(self, ctx):
         for request in self.__requests:

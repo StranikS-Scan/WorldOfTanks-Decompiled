@@ -8,10 +8,15 @@ class BattleStatus(Enum):
     COMPLETED = 'completed'
 
 
+class Animation(Enum):
+    NONE = 'none'
+    BLINK = 'blink'
+
+
 class WidgetViewModel(ViewModel):
     __slots__ = ('onWrapperInitialized',)
 
-    def __init__(self, properties=3, commands=1):
+    def __init__(self, properties=4, commands=1):
         super(WidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBattleStatus(self):
@@ -20,21 +25,28 @@ class WidgetViewModel(ViewModel):
     def setBattleStatus(self, value):
         self._setString(0, value.value)
 
+    def getAnimation(self):
+        return Animation(self._getString(1))
+
+    def setAnimation(self, value):
+        self._setString(1, value.value)
+
     def getCurrentProgression(self):
-        return self._getNumber(1)
+        return self._getNumber(2)
 
     def setCurrentProgression(self, value):
-        self._setNumber(1, value)
+        self._setNumber(2, value)
 
     def getIsAlertMode(self):
-        return self._getBool(2)
+        return self._getBool(3)
 
     def setIsAlertMode(self, value):
-        self._setBool(2, value)
+        self._setBool(3, value)
 
     def _initialize(self):
         super(WidgetViewModel, self)._initialize()
         self._addStringProperty('battleStatus')
+        self._addStringProperty('animation', Animation.NONE.value)
         self._addNumberProperty('currentProgression', 0)
         self._addBoolProperty('isAlertMode', False)
         self.onWrapperInitialized = self._addCommand('onWrapperInitialized')

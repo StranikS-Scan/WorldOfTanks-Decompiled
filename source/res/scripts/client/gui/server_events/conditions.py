@@ -10,6 +10,8 @@ from constants import ATTACK_REASON, ATTACK_REASONS
 from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.server_events import formatters, events_constants
 from gui.server_events.formatters import getUniqueBonusTypes
 from gui.shared.system_factory import collectModeNameKwargsByBonusType
@@ -990,6 +992,16 @@ class Win(_Condition, _Negatable):
 
     def getValue(self):
         return self._isWin
+
+
+class StaticMapsTrainingWin(Win):
+
+    def __init__(self, path, data, questID):
+        super(StaticMapsTrainingWin, self).__init__(path, data)
+        self.questID = questID
+
+    def getCustomDescription(self):
+        return backport.text(R.strings.static_quests.mt_battle_quests.dyn(self.questID).conditions.postBattle.description())
 
 
 class Survive(_Condition, _Negatable):

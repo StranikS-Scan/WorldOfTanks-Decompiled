@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_how_to_earn_points_view.py
-import itertools
 import logging
+import itertools
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import Array, ViewSettings, WindowFlags
 from gui.impl import backport

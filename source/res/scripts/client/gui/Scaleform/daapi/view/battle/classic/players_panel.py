@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/players_panel.py
 from account_helpers.settings_core.options import VehicleHPInPlayersPanelSetting
-from account_helpers.settings_core.settings_constants import GAME, BattleCommStorageKeys
+from account_helpers.settings_core.settings_constants import GAME
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.daapi.view.meta.PlayersPanelMeta import PlayersPanelMeta
@@ -11,7 +11,7 @@ from gui.battle_control.controllers.battle_field_ctrl import IBattleFieldListene
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import ISettingsCore, IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 _PLAYERS_PANEL_STATE_RANGE = (PLAYERS_PANEL_STATE.HIDDEN,
  PLAYERS_PANEL_STATE.SHORT,
@@ -46,6 +46,7 @@ class PlayerPanelStateSetting(object):
 class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
 
     def __init__(self):
         super(PlayersPanel, self).__init__()
@@ -83,16 +84,18 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
         self.addListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.settingsCore:
             self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-            isChatVisible = bool(self.settingsCore.getSetting(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST))
-            self.as_setChatCommandsVisibilityS(isChatVisible)
             playersHPBarsVisibilitySetting = self.settingsCore.getSetting(GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL)
             self.as_setPanelHPBarVisibilityStateS(convertSettingToFeatures(playersHPBarsVisibilitySetting))
+        self.battleCommunications.onChanged += self.__onBattleCommunicationSettingsChanged
+        isChatVisible = bool(self.battleCommunications.showInPlayerList)
+        self.as_setChatCommandsVisibilityS(isChatVisible)
 
     def _dispose(self):
         self.removeListener(events.GameEvent.NEXT_PLAYERS_PANEL_MODE, self._handleNextMode, EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.settingsCore:
             self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.battleCommunications.onChanged -= self.__onBattleCommunicationSettingsChanged
         super(PlayersPanel, self)._dispose()
 
     def _handleNextMode(self, _):
@@ -108,10 +111,13 @@ class PlayersPanel(IBattleFieldListener, PlayersPanelMeta, IAbstractPeriodView):
         self.as_setOverrideExInfoS(event.ctx['isDown'])
 
     def __onSettingsChanged(self, diff):
-        playersPanelCommEnabled = diff.get(BattleCommStorageKeys.SHOW_COM_IN_PLAYER_LIST)
-        if playersPanelCommEnabled is not None:
-            self.as_setChatCommandsVisibilityS(bool(playersPanelCommEnabled))
         playersHPBarsVisibleState = diff.get(GAME.SHOW_VEHICLE_HP_IN_PLAYERS_PANEL)
         if playersHPBarsVisibleState is not None:
             self.as_setPanelHPBarVisibilityStateS(convertSettingToFeatures(playersHPBarsVisibleState))
+        return
+
+    def __onBattleCommunicationSettingsChanged(self):
+        playersPanelCommEnabled = self.battleCommunications.showInPlayerList
+        if playersPanelCommEnabled is not None:
+            self.as_setChatCommandsVisibilityS(playersPanelCommEnabled)
         return

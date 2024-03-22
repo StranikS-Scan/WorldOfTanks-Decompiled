@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleAdaptationHealthRestoreComponent.py
+from typing import TYPE_CHECKING
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
-from items.artefacts import AdaptationHealthRestore
 from items import vehicles
 from battle_royale.gui.constants import BattleRoyaleEquipments
+if TYPE_CHECKING:
+    from battle_royale_artefacts import AdaptationHealthRestore
 
 class VehicleAdaptationHealthRestoreComponent(VehicleAbilityBaseComponent):
     __TIMER_VIEW_ID = VEHICLE_VIEW_STATE.ADAPTATION_HEALTH_RESTORE

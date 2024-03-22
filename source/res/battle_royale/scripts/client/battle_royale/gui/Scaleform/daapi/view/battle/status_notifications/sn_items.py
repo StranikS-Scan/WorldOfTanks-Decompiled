@@ -257,8 +257,9 @@ class DamagingCorrodingShotSN(_BRLocalizationProvider, sn_items.SmokeSN):
     def _update(self, data):
         duration = data.get('duration', 0)
         if duration > 0.0:
+            endTime = data.get('endTime', 0.0)
             self._setVisible(True)
-            self._updateTimeParams(duration, 0.0)
+            self._updateTimeParams(duration, endTime)
             self._sendUpdate()
         else:
             self._setVisible(False)
@@ -300,8 +301,9 @@ class ThunderStrikeSN(_BRLocalizationProvider, sn_items.SmokeSN):
     def _update(self, value):
         duration = value.get('duration', 0.0)
         if duration > 0.0:
+            endTime = value.get('endTime', 0.0)
             self._setVisible(True)
-            self._updateTimeParams(duration, 0.0)
+            self._updateTimeParams(duration, endTime)
             self._sendUpdate()
         else:
             self._setVisible(False)

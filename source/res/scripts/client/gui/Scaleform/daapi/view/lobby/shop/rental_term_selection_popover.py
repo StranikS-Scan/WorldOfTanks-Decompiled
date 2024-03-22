@@ -4,6 +4,8 @@ import constants
 from constants import RentType, GameSeasonType
 from rent_common import parseRentID, isWithinMaxRentTime, SeasonRentDuration
 from soft_exception import SoftException
+from gui.impl import backport
+from gui.impl.gen.resources import R
 from gui.Scaleform.daapi.view.meta.RentalTermSelectionPopoverMeta import RentalTermSelectionPopoverMeta
 from gui.Scaleform.locale.STORE import STORE
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -49,7 +51,7 @@ class RentalTermSelectionPopover(RentalTermSelectionPopoverMeta):
         if isRestoreAvailable:
             enabled = isRestoreAvailable or not (constants.IS_CHINA and vehicle.rentalIsActive)
             rentalTermSlots.append({'itemId': -1,
-             'label': i18n.makeString(STORE.BUYVEHICLEWINDOW_RESTORE),
+             'label': backport.text(R.strings.hangar.buyVehicleWindow.restore()),
              'price': getItemPricesVO(ItemPrice(vehicle.restorePrice, vehicle.restorePrice)),
              'enabled': enabled,
              'selected': self.__selectedRentID <= _NOT_RENT_IDX,

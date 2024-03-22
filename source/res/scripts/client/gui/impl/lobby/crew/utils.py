@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/utils.py
 import itertools
 import typing
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import Settings
 import SoundGroups
 import nations
+from gui import GUI_NATIONS_ORDER_INDEX
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.common.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model import ToggleGroupType
 from gui.impl.gen.view_models.views.lobby.crew.common.info_tip_model import InfoTipModel
 from gui.impl.gen.view_models.views.lobby.crew.popovers.filter_popover_view_model import VehicleSortColumn
@@ -15,10 +17,13 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocat
 from gui.impl.lobby.crew.filter import GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, VEHICLE_TAGS
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import strcmp
+from helpers import strcmp, i18n, dependency
+from items.components.crew_books_constants import CREW_BOOK_RARITY
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.utils.requesters import RequestCriteria
+    from gui.shared.gui_items.crew_book import CrewBook
     from typing import Dict, Set
 VEHICLE_TAGS_FILTER = (VEHICLE_TAGS.PREMIUM_IGR, VEHICLE_TAGS.WOT_PLUS)
 DocumentRecord = namedtuple('DocumentRecord', ['id', 'group', 'value'])
@@ -30,18 +35,33 @@ class TRAINING_TIPS(CONST_CONTAINER):
     NOT_TRAINED_THIS_VEHICLE = 'notTrainedThisVehicle'
     NOT_FULL_CREW = 'notFullCrew'
     NOT_FULL_AND_NOT_TRAINED_CREW = 'notFullAndNotTrainedCrew'
+    LOW_PE_CREW = 'LowPECrew'
+    LOW_PE_NOT_FULL_CREW = 'LowPENotFullCrew'
+    LOW_PE_NOT_TRAINED_CREW = 'LowPENotTrainedCrew'
+    LOW_PE_NOT_TRAINED_NOT_FULL = 'LowPENotTrainedNotFullCrew'
+    LOW_PE_TIPS_PERSONAL = 'LowPEtipsPersonal'
     tips = {CHOOSE_ANY_CREW_MEMBER: 1,
      MAXED_CREW_MEMBERS: 2,
      ENOUGH_EXPERIENCE: 3,
      NOT_TRAINED_THIS_VEHICLE: 11,
      NOT_FULL_CREW: 12,
-     NOT_FULL_AND_NOT_TRAINED_CREW: 13}
+     NOT_FULL_AND_NOT_TRAINED_CREW: 13,
+     LOW_PE_CREW: 14,
+     LOW_PE_NOT_FULL_CREW: 15,
+     LOW_PE_NOT_TRAINED_CREW: 16,
+     LOW_PE_NOT_TRAINED_NOT_FULL: 17,
+     LOW_PE_TIPS_PERSONAL: 18}
 
 
-def getTip(tipID, tipType):
+def setTextFormatter(tipID, forPlaceHolders):
+    text = backport.text(R.strings.tooltips.quickTraining.dyn(tipID)())
+    return i18n.makeString(text, **forPlaceHolders) if forPlaceHolders else text
+
+
+def getTip(tipID, tipType, **forPlaceHolders):
     tip = InfoTipModel()
     tip.setId(TRAINING_TIPS.tips[tipID])
-    tip.setText(backport.text(R.strings.tooltips.quickTraining.dyn(tipID)()))
+    tip.setText(setTextFormatter(tipID, forPlaceHolders))
     tip.setType(tipType)
     return tip
 
@@ -164,4 +184,35 @@ def playRecruitVoiceover(voiceoverParams):
 
 
 def discountPercent(value, defaultValue):
-    return int(100 * (1 - float(value) / defaultValue))
+    return int(100 * (1 - float(value) / defaultValue)) if defaultValue else 0
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packJunkmanCompensationData(books, rewardsArray, tooltipData, itemsCache=None):
+    bookTypeOrder = [CREW_BOOK_RARITY.CREW_EPIC, CREW_BOOK_RARITY.CREW_RARE, CREW_BOOK_RARITY.CREW_COMMON]
+    booksDataByType = defaultdict(lambda : {'amount': 0,
+     'books': []})
+    for key, value in books.iteritems():
+        book = itemsCache.items.getItemByCD(key)
+        if book is None:
+            continue
+        typeData = booksDataByType[book.getBookType()]
+        typeData['amount'] += value
+        typeData['books'].append((book, value))
+
+    for key in bookTypeOrder:
+        if key not in booksDataByType:
+            continue
+        value = booksDataByType[key]
+        tooltipData[key] = sorted(value['books'], cmp=lambda item, other: cmp(GUI_NATIONS_ORDER_INDEX.get(item[0].getNation()), GUI_NATIONS_ORDER_INDEX.get(other[0].getNation())))
+        reward = RewardItemModel()
+        reward.setIcon(key + '_pack')
+        reward.setValue(str(value['amount']))
+        reward.setName('crewBooks')
+        reward.setType('crewBooks')
+        reward.setLabel(backport.text(R.strings.crew_books.items.dyn(key).noNationUppercaseName()))
+        reward.setTooltipId(key)
+        reward.setTooltipContentId(str(R.views.lobby.crew.tooltips.ConversionTooltip()))
+        rewardsArray.addViewModel(reward)
+
+    return

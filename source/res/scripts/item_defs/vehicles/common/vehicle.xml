@@ -132,7 +132,6 @@
     <largeMedkit>	NoneExtra : Repairkit	</largeMedkit>
     <smallRepairkit>	NoneExtra : Repairkit	</smallRepairkit>
     <largeRepairkit>	NoneExtra : Repairkit	</largeRepairkit>
-    <regenerationKit>	NoneExtra : RegenerationKit	</regenerationKit>
     <lendLeaseOil>	NoneExtra : Fuel	</lendLeaseOil>
     <gasoline100>	NoneExtra : Fuel	</gasoline100>
     <gasoline105>	NoneExtra : Fuel	</gasoline105>
@@ -303,7 +302,6 @@
       <deviceUserString>	#ingame_gui:tankmen/loader	</deviceUserString>
     </loader2Health>
     <siegeMode>	NoneExtra : SiegeMode	</siegeMode>
-    <tuner>	NoneExtra: Tuner	</tuner>
     <builtinRepairkit>	NoneExtra : Repairkit	</builtinRepairkit>
     <dualShoot>	ShowShootingMultiGun : DualGunShoot	</dualShoot>
     <charger>	NoneExtra : DualGunCharger	</charger>
@@ -313,35 +311,6 @@
       <beamLength>	10.0	</beamLength>
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
-    <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
-    <lift_over_battle_royale>	NoneExtra : LiftOver	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
-      <liftOverTimeout>	5.0	</liftOverTimeout>
-      <gameplayFactors>
-        <reloadTime>	2.0	</reloadTime>
-        <turretRotationSpeed>	0.5	</turretRotationSpeed>
-        <gunRotationSpeed>	0.5	</gunRotationSpeed>
-        <aimingTime>	2.0	</aimingTime>
-        <shotDispersion>	2.0	</shotDispersion>
-        <visionRadius>	0.5	</visionRadius>
-      </gameplayFactors>
-    </lift_over_battle_royale>
-    <afterburning_battle_royale>	AfterburningBattleRoyale : AfterburningBattleRoyale	</afterburning_battle_royale>
-    <trappoint>	NoneExtra : TrapPoint	</trappoint>
-    <repairpoint>	NoneExtra : TrapPoint	</repairpoint>
-    <fireCircle>	NoneExtra : FireCircle	</fireCircle>
-    <corrodingShot>	NoneExtra : CorrodingShot	</corrodingShot>
-    <adaptationHealthRestore>	NoneExtra : AdaptationHealthRestore	</adaptationHealthRestore>
-    <shotPassion>	NoneExtra : ShotPassion	</shotPassion>
-    <selfBuff>	NoneExtra : SelfBuff	</selfBuff>
-    <berserker>	NoneExtra : Berserker	</berserker>
-    <healPoint>	NoneExtra : HealPoint	</healPoint>
-    <arcade_minefield_battle_royale>	NoneExtra : MineField	</arcade_minefield_battle_royale>
-    <arcade_bomber_battle_royale>	NoneExtra : Bomber	</arcade_bomber_battle_royale>
-    <spawn_kamikaze>	NoneExtra : SpawnBot	</spawn_kamikaze>
-    <clingBrander>	NoneExtra : SpawnBot	</clingBrander>
-    <thunderStrike>	NoneExtra : ThunderStrike	</thunderStrike>
-    <arcade_smoke_battle_royale>	NoneExtra : Smoke	</arcade_smoke_battle_royale>
-    <arcade_smoke_battle_royale_with_damage>	NoneExtra : Smoke	</arcade_smoke_battle_royale_with_damage>
     <comp7_aoe_heal>	NoneExtra : VisualScriptEquipmentExtra	</comp7_aoe_heal>
     <comp7_ally_support>	NoneExtra : VisualScriptEquipmentExtra	</comp7_ally_support>
     <comp7_juggernaut>	NoneExtra : VisualScriptEquipmentExtra	</comp7_juggernaut>

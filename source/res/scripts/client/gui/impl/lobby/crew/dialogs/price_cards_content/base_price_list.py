@@ -11,15 +11,25 @@ from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_list_model import P
 from gui.impl.pub import ViewImpl
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
+from helpers_common import getRetrainCost, isAllRetrainOperationFree
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
+    from skeletons.gui.shared.utils.requesters import IShopRequester
+    from gui.shared.gui_items.Vehicle import Vehicle
+GOLD_OPERATION = 2
+
+def _convertMoneyToTuple(money):
+    return (money.credits, money.gold, money.crystal)
+
 
 class BasePriceList(ViewImpl):
-    __slots__ = ('_selectedCardIndex', '_priceData', 'onPriceChange')
+    __slots__ = ('_selectedCardIndex', '_priceData', 'onPriceChange', '_retrainCost')
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, settings):
+        shopRequester = self._itemsCache.items.shop
+        self._retrainCost = getRetrainCost(shopRequester.tankmanCost, shopRequester.tankman['retrain']['options'])
         self._selectedCardIndex = None
         self._priceData = []
         self._fillPrices()
@@ -36,14 +46,14 @@ class BasePriceList(ViewImpl):
             if itemPrice.isActionPrice():
                 specialAlias = (None,
                  None,
-                 itemPrice.price.toMoneyTuple(),
-                 itemPrice.defPrice.toMoneyTuple(),
+                 _convertMoneyToTuple(itemPrice.price),
+                 _convertMoneyToTuple(itemPrice.defPrice),
                  True,
                  False,
                  None,
                  True)
                 return createBackportTooltipContent(specialAlias=TOOLTIPS_CONSTANTS.ACTION_PRICE, specialArgs=specialAlias)
-            shortage = self._itemsCache.items.stats.money.getShortage(itemPrice.price)
+            shortage = self._itemsCache.items.stats.money.getShortage(itemPrice.defPrice)
             if bool(shortage):
                 currency = shortage.getCurrency()
                 return createBackportTooltipContent(TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY, (shortage.get(currency), currency))
@@ -58,12 +68,38 @@ class BasePriceList(ViewImpl):
         return self._getPriceData(self._selectedCardIndex)
 
     @property
+    def selectedOperationData(self):
+        _, operationData, _ = self.selectedPriceData
+        return operationData
+
+    def getOperationUselessInfo(self, tankman, targetRole, vehicle, cost, retrainCost, isMassRetrain=False):
+        sameVehicle = vehicle.intCD == tankman.vehicleNativeDescr.type.compactDescr
+        sameRole = targetRole == tankman.role
+        isRoleChangeDisable = cost['skillsEfficiencyWithRoleChange'] < 0
+        isOperationDisable = isRoleChangeDisable and not sameRole
+        isAllOperationFree = isAllRetrainOperationFree(tankman.descriptor, retrainCost)
+        if isAllOperationFree:
+            isOperationDisable = not bool(cost['gold'])
+        newSE = self.__getMaxTmanSkillEfficiencyForEachOperation(cost, tankman, not sameRole, isOperationDisable, isMassRetrain)
+        isOperationUseless = sameVehicle and sameRole and tankman.skillsEfficiency >= newSE
+        return (isOperationUseless,
+         isOperationDisable,
+         isAllOperationFree,
+         newSE)
+
+    @property
     def _priceListPacker(self):
         return packPriceList
 
-    def _selectCard(self, vm, index=None):
-        if self._selectedCardIndex is not None:
+    def _deselectCurrentCard(self, vm):
+        if self._selectedCardIndex is None:
+            return
+        else:
             self._getCard(vm, self._selectedCardIndex).setCardState(CardState.DEFAULT)
+            return
+
+    def _selectCard(self, vm, index=None):
+        self._deselectCurrentCard(vm)
         if index is not None:
             self._getCard(vm, index).setCardState(CardState.SELECTED)
         self._selectedCardIndex = index
@@ -128,3 +164,10 @@ class BasePriceList(ViewImpl):
     def _onCardClick(self, args):
         with self.viewModel.transaction() as vm:
             self._selectCard(vm, int(args.get('index', 0)))
+
+    def __getMaxTmanSkillEfficiencyForEachOperation(self, cost, tankman, isRoleChanging, isOperationDisable, isMassRetrain):
+        changingRoleSE = cost['skillsEfficiencyWithRoleChange'] if isRoleChanging and cost['skillsEfficiencyWithRoleChange'] > 0 and not isOperationDisable else cost['skillsEfficiency']
+        if isOperationDisable and not isMassRetrain:
+            return changingRoleSE
+        isAllRetrainOptFree = isAllRetrainOperationFree(tankman.descriptor, self._retrainCost)
+        return self._retrainCost[GOLD_OPERATION]['skillsEfficiency'] if isAllRetrainOptFree else changingRoleSE

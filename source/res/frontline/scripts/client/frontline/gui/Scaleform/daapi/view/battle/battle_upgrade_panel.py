@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.meta.EpicBattleUpgradePanelMeta import EpicBattleU
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import dependency, i18n
+from helpers import dependency, i18n, isPlayerAvatar
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
@@ -116,11 +116,10 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
         randomReservesEvents.hidePanel += self.__hidePanel
         randomReservesEvents.showPanel += self.__showPanel
         player = BigWorld.player()
-        if player is not None and player.inputHandler is not None:
+        if isPlayerAvatar() and player and player.inputHandler:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
         if BattleReplay.g_replayEvents.isPlaying:
             BattleReplay.g_replayEvents.onTimeWarpStart += self.__onTimeWarpStart
-        return
 
     def _dispose(self):
         if BattleReplay.g_replayEvents.isPlaying:
@@ -131,7 +130,7 @@ class EpicBattleUpgradePanel(EpicBattleUpgradePanelMeta, IArenaVehiclesControlle
         randomReservesEvents.hidePanel -= self.__hidePanel
         randomReservesEvents.showPanel -= self.__showPanel
         player = BigWorld.player()
-        if player is not None and player.inputHandler is not None:
+        if isPlayerAvatar() and player and player.inputHandler:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.__stopPreviousTimer()
         self.__stopPreviousShowTimer()

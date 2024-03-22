@@ -20,6 +20,7 @@ from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -32,6 +33,7 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    wotPlusController = dependency.descriptor(IWotPlusController)
     __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
@@ -154,7 +156,7 @@ class BattleResultsService(IBattleResultsService):
         return arenaUniqueID in self.__appliedAddXPBonus
 
     def isAddXPBonusEnabled(self, arenaUniqueID):
-        return arenaUniqueID in self.__getAdditionalXPBattles() and self.itemsCache.items.stats.isPremium
+        return arenaUniqueID in self.__getAdditionalXPBattles() and (self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and self.itemsCache.items.stats.applyAdditionalWoTPlusXPCount > 0)
 
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)

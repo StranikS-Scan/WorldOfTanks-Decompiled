@@ -8,7 +8,7 @@ from gui.impl.gen import R
 
 class MapsTrainingGameMessagesPanel(GameMessagesPanel):
 
-    def sendEndGameMessage(self, winningTeam, reason, extraData):
+    def sendEndGameMessage(self, winningTeam, reason):
         messageType = GAME_MESSAGES_CONSTS.DRAW
         if winningTeam != 0:
             isWinner = avatar_getter.getPlayerTeam() == winningTeam

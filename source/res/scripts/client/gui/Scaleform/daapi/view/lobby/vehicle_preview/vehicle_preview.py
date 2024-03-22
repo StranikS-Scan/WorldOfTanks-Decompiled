@@ -19,7 +19,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveSta
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants import getHeroTankPreviewParams
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab import getUniqueMembers
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT, addBuiltInEquipment, getActiveOffer
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE, VEHICLE_PREVIEW_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE, VEHICLE_PREVIEW_SOUND_SPACE, COMMON_VEHICLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -32,7 +32,7 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
+from gui.impl.lobby.hangar.buy_vehicle_view import BuyVehicleWindow
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
@@ -141,6 +141,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION):
             self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
+        elif self._backAlias in (VIEW_ALIAS.LOBBY_STRONGHOLD,):
+            self._COMMON_SOUND_SPACE = COMMON_VEHICLE_PREVIEW_SOUND_SPACE
         super(VehiclePreview, self).__init__(ctx)
         self.__currentOffer = None
         self._vehicleCD = ctx['itemCD']
@@ -159,6 +161,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__buyParams = ctx.get('buyParams')
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__style = ctx.get('style')
+        self.__outfit = ctx.get('outfit')
         self.__subscriptions = ctx.get('subscriptions') or ()
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
         addBuiltInEquipment(self._itemsPack, self._itemsCache, self._vehicleCD)
@@ -198,11 +201,11 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__fullUpdate()
         if self.__hangarVehicleCD and self.__isHeroTank and self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
-            g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, style=self.__style)
+            g_currentPreviewVehicle.selectVehicle(self.__hangarVehicleCD, style=self.__style, outfit=self.__outfit)
             g_currentPreviewVehicle.resetAppearance(self.__previewAppearance)
         elif g_currentPreviewVehicle.intCD == self._vehicleCD and not self.__isHeroTank:
             g_currentPreviewVehicle.selectNoVehicle()
-        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD, style=self.__style)
+        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD, style=self.__style, outfit=self.__outfit)
         super(VehiclePreview, self)._populate()
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onVehicleInventoryChanged += self._onInventoryChanged
@@ -251,6 +254,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             g_currentVehicle.refreshModel()
         self._previewBackCb = None
         self.__unmodifiedItemsPack = None
+        self.__outfit = None
         super(VehiclePreview, self)._dispose()
         if not self._heroInteractive:
             self.__heroTanksControl.setInteractive(True)
@@ -333,6 +337,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             elif self.__offers:
                 viewPy.setOffers(self.__offers, self._title, self.__description)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
+            viewPy.setCrewText(self.__ctx.get('crewText'))
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
@@ -411,7 +416,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'hangarVehicleCD': hangarVehicleCD,
          'topPanelData': self.__topPanelData,
          'style': self.__ctx.get('style'),
-         'heroInteractive': self.__ctx.get('heroInteractive', True)})
+         'backBtnLabel': self._backBtnLabel,
+         'outfit': self.__ctx.get('outfit'),
+         'heroInteractive': self.__ctx.get('heroInteractive', True),
+         'crewText': self.__ctx.get('crewText')})
 
     def __onViewLoaded(self, event):
         if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
@@ -466,21 +474,19 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     @staticmethod
     def __getInfoPanelListDescription(vehicle):
-        descriptions = (text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREW),
-         text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWSKILLS),
-         text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWEQUIPS),
-         text_styles.main(VEHICLE_PREVIEW.INFOPANEL_TAB_LISTDESC_CREWSKILLSEQUIPS))
         hasSkillBonuses = any((tMan.skills for _, tMan in vehicle.crew))
         hasEquipBonuses = any(itertools.chain(vehicle.optDevices.installed, vehicle.battleAbilities.installed, vehicle.battleBoosters.installed, (rCons and rCons.getKpi() for rCons in vehicle.consumables.installed), (vehicle.hasOutfit(vehicle.getAnyOutfitSeason()),)))
-        return descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
+        descriptions = ('crew', 'crewSkills', 'crewEquips', 'crewSkillsEquips')
+        descr = descriptions[hasEquipBonuses << 1 | hasSkillBonuses]
+        return text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.tab.listDesc.dyn(descr)()))
 
     def _getBackBtnLabel(self):
-        if self._backBtnLabel:
+        if self._backBtnLabel is not None:
             return self._backBtnLabel
         elif self._backAlias and self._backAlias in _BACK_BTN_LABELS:
             backBtnLabel = _BACK_BTN_LABELS[self._backAlias]
             if not backBtnLabel:
-                return None
+                return
             return VEHICLE_PREVIEW.getBackBtnLabel(_BACK_BTN_LABELS[self._backAlias])
         else:
             return VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_HANGAR
@@ -511,12 +517,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return
 
     def _processBackClick(self, ctx=None):
-        if self._previewBackCb:
+        entity = ctx.get('entity', None) if ctx else None
+        if self._previewBackCb and not entity:
             self._previewBackCb()
         elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
             event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
         elif self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
-            entity = ctx.get('entity', None) if ctx else None
             if entity:
                 compactDescr = entity.typeDescriptor.type.compactDescr
                 if self._itemsCache.items.inventory.getItemData(compactDescr) is not None:

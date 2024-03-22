@@ -10,6 +10,7 @@ import Event
 from adisp import adisp_process
 from data_structures import DictObj
 from gui.wgcg.base.contexts import CommonWebRequestCtx
+from gui.wgcg.requests import WgcgRequestResponse
 from gui.wgcg.states import WebControllerStates
 from helpers import dependency, time_utils
 from skeletons.gui.web import IWebController
@@ -46,6 +47,7 @@ class BaseProvider(IBaseProvider):
         super(BaseProvider, self).__init__()
         self._eManager = Event.EventManager()
         self.onDataReceived = Event.Event(self._eManager)
+        self.onDataFailed = Event.Event(self._eManager)
         self.__isStarted = False
         self.__data = defaultdict(lambda : DictObj(isSynced=False, data=None, isWaitingResponse=False, lastUpdate=None))
 
@@ -58,7 +60,7 @@ class BaseProvider(IBaseProvider):
         self.__isStarted = False
         self._eManager.clear()
         for dataName, dataObj in self.__data.items():
-            settings = self.__getSettingsByDataName(dataName)
+            settings = self._getSettingsByDataName(dataName)
             if settings.updatePeriodType is not UpdatePeriodType.BY_TIME:
                 dataObj.isSynced = False
 
@@ -73,6 +75,10 @@ class BaseProvider(IBaseProvider):
     def _dataNameContainer(self):
         raise NotImplementedError
 
+    @property
+    def _fakeDataStorage(self):
+        return dict()
+
     @abstractmethod
     def _getSettings(self):
         raise NotImplementedError
@@ -80,44 +86,60 @@ class BaseProvider(IBaseProvider):
     def _dataReceived(self, dataName, data):
         self.onDataReceived(dataName, data)
 
-    def _getData(self, dataName):
-        data = self.__data[dataName]
-        settings = self.__getSettingsByDataName(dataName)
-        if self.__isRequestingAvailable(settings, data):
-            self._requestData(dataName)
-        return data.data
+    def _getData(self, dataName, useFake=False):
+        dataObj = self.__data[dataName]
+        settings = self._getSettingsByDataName(dataName)
+        if self.__isRequestingAvailable(settings, dataObj):
+            self._requestData(dataName, useFake=useFake)
+        return dataObj
 
     @adisp_process
-    def _requestData(self, dataName):
+    def _requestData(self, dataName, useFake=False):
         if not self.__isStarted:
             return
         elif not self._dataNameContainer.hasValue(dataName):
             return
         else:
             dataObj = self.__data[dataName]
-            settings = self.__getSettingsByDataName(dataName)
+            settings = self._getSettingsByDataName(dataName)
             if not self._isEnabled or not self.__isRequestingAvailable(settings, dataObj):
+                return
+            elif useFake and dataName not in self._fakeDataStorage:
+                _logger.error('There are not %s in fake data storage. Check _fakeDataStorage', dataName)
                 return
             ctx = settings.context
             dataObj.isWaitingResponse = True
-            response = yield self.__webController.sendRequest(ctx=ctx)
+            if not useFake:
+                response = yield self.__webController.sendRequest(ctx=ctx)
+            else:
+                response = WgcgRequestResponse(code=0, txtStr='', data=self._fakeDataStorage[dataName], extraCode=0, headers={})
             if response.isSuccess():
                 formattedData = ctx.getDataObj(response.data)
                 isSynced = True
             else:
                 formattedData = ctx.getDefDataObj() if dataObj.data is None else dataObj.data
                 isSynced = False
-                _logger.info('Failed to get Clan Supply data: %s. Code: %s', dataName, response.getCode())
+                _logger.info('Failed to get data: %s. Code: %s', dataName, response.getCode())
             dataObj.isWaitingResponse = False
-            dataObj.lastUpdate = time_utils.getServerUTCTime()
+            dataObj.lastUpdate = time_utils.getServerUTCTime() if isSynced else None
             dataObj.isSynced = isSynced
             dataObj.data = formattedData
             if isSynced:
                 self._dataReceived(dataName, formattedData)
+            else:
+                self.onDataFailed(dataName)
             return
 
-    def __getSettingsByDataName(self, dataName):
+    def _getSettingsByDataName(self, dataName):
         return self._getSettings().get(dataName)
+
+    def _updateDataCache(self, dataName, updater):
+        dataObj = self.__data[dataName]
+        if not dataObj.isSynced or not callable(updater):
+            return
+        if not updater(dataObj.data):
+            return
+        self.onDataReceived(dataName, dataObj.data)
 
     @staticmethod
     def __isRequestingAvailable(settings, dataObj):

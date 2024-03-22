@@ -11,6 +11,7 @@ class BATTLEROYALE_ALIASES(object):
     COMMANDER_COMPONENT = 'commanderComponennt'
     BOTTOM_PANEL_COMPONENT = 'bottomPanelComponent'
     PROXY_CURRENCY_PANEL_COMPONENT = 'proxyCurrencyPanelComponent'
+    BATTLE_TYPE_SELECTOR = 'battleTypeSelector'
     BATTLE_ROYALE_SUMMARY_RESULTS_CMP = 'BattleRoyaleSummaryResultsCmp'
     BATTLE_ROYALE_SCORE_RESULTS_CMP = 'BattleRoyaleScoreResultsCmp'
     BATTLE_ROYALE_PRIME_TIME = 'BattleRoyalePrimeTimeView'

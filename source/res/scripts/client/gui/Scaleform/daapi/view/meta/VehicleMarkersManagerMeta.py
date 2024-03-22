@@ -4,6 +4,9 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class VehicleMarkersManagerMeta(BaseDAAPIComponent):
 
+    def onMarkerBeingHovered(self, isHovered):
+        self._printOverrideError('onMarkerBeingHovered')
+
     def as_setMarkerDurationS(self, duration):
         return self.flashObject.as_setMarkerDuration(duration) if self._isDAAPIInited() else None
 

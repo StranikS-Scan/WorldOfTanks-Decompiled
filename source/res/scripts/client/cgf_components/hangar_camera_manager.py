@@ -134,7 +134,6 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cam.pivotMinDist = 0.0
             self.__cam.pivotPosition = Math.Vector3(0.0, 0.0, 0.0)
             self.__cam.setDynamicCollisions(True)
-            BigWorld.camera(self.__cam)
             self.__cameraParallax = HangarCameraParallax(self.__cam)
             self.__cameraIdle = HangarCameraIdle(self.__cam)
             self.__cameraFlyby = HangarCameraFlyby(self.__cam)

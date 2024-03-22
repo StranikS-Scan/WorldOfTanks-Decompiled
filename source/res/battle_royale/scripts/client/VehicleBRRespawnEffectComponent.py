@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleBRRespawnEffectComponent.py
 import CGF
-from Math import Vector3
+import GenericComponents
 import Event
 from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
@@ -19,4 +19,6 @@ class VehicleBRRespawnEffectComponent(DynamicScriptComponent):
 
     def __playEffect(self):
         prefabPath = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleRespawnEffect().effectPrefabPath
-        CGF.loadGameObjectIntoHierarchy(prefabPath, self.entity.entityGameObject, Vector3(0))
+        vehGO = self.entity.entityGameObject
+        transformComponent = vehGO.findComponentByType(GenericComponents.TransformComponent)
+        CGF.loadGameObject(prefabPath, vehGO.spaceID, transformComponent.worldPosition)

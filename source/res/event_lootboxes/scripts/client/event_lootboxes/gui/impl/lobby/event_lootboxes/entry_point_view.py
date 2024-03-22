@@ -15,7 +15,7 @@ from helpers import dependency
 from helpers.time_utils import ONE_DAY, getServerUTCTime
 from skeletons.gui.game_control import IEventLootBoxesController
 from skeletons.gui.hangar import ICarouselEventEntry
-_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.BATTLE_ROYALE)
+_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
 
 class EventLootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
     __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
@@ -29,7 +29,7 @@ class EventLootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
 
     @staticmethod
     def getIsActive(state):
-        return EventLootBoxesEntryPointWidget.__eventLootBoxes.isActive() and (any((state.isInPreQueue(preQueue) for preQueue in _ENABLED_PRE_QUEUES)) or state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE))
+        return EventLootBoxesEntryPointWidget.__eventLootBoxes.isActive() and (any((state.isInPreQueue(preQueue) for preQueue in _ENABLED_PRE_QUEUES)) or state.isInUnit(PREBATTLE_TYPE.SQUAD))
 
     def createPopOverContent(self, event):
         return EventLootBoxesPopover()

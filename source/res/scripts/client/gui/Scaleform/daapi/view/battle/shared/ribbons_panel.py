@@ -2,23 +2,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import logging
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
+from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
+from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
+from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
+from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
+from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
-from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
-from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
-from gui.battle_control import avatar_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
 from items import tankmen
 from items.battle_royale import isSpawnedBot, isBattleRoyale
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
@@ -71,9 +71,10 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
  BATTLE_EVENTS.CREW_PERKS: (_BET.PERK,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
-    vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
-    vehicleClassTag = vTypeInfoVO.classTag or ''
-    vehicleName = vTypeInfoVO.shortNameWithPrefix
+    vInfo = arenaDP.getVehicleInfo(vehArenaID)
+    vTypeInfoVO = vInfo.vehicleType
+    vehicleClassTag = vInfo.getDisplayedClassTag() if vTypeInfoVO.classTag else ''
+    vehicleName = vInfo.getDisplayedName()
     if isBattleRoyale(vTypeInfoVO.tags) and isSpawnedBot(vTypeInfoVO.tags):
         vehicleClassTag = ''
     return (vehicleName, vehicleClassTag)

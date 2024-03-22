@@ -75,9 +75,10 @@ class BoosterTradeProcessor(BoosterProcessor):
 
 class BoosterBuyer(BoosterTradeProcessor):
 
-    def __init__(self, booster, count, currency):
+    def __init__(self, booster, count, currency, doActivation=False):
         super(BoosterBuyer, self).__init__(booster, count, 'buy')
         self.buyCurrency = currency
+        self.doActivation = doActivation
         self.addPlugins((proc_plugs.MoneyValidator(self._getOpPrice().price),))
 
     def _getOpPrice(self):
@@ -92,8 +93,8 @@ class BoosterBuyer(BoosterTradeProcessor):
         return makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=sysMsgType, **self._getMsgCtx())
 
     def _request(self, callback):
-        _logger.debug('Make server request to buy booster: %s, %s, %s, %s', self.booster.boosterID, self.booster.buyPrices, self.count, self.buyCurrency)
-        BigWorld.player().shop.buyGoodie(self.booster.boosterID, self.count, self.buyCurrency == Currency.GOLD, lambda code: self._response(code, callback))
+        _logger.debug('Make server request to buy booster: %s, %s, %s, %s %s', self.booster.boosterID, self.booster.buyPrices, self.count, self.buyCurrency, self.doActivation)
+        BigWorld.player().shop.buyGoodie(self.booster.boosterID, self.count, self.buyCurrency == Currency.GOLD, self.doActivation, lambda code: self._response(code, callback))
 
 
 class BoosterSeller(BoosterTradeProcessor):

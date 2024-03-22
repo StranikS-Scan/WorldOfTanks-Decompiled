@@ -118,6 +118,10 @@ class _ReusableInfo(object):
         return self.__personal.hasAnyPremium
 
     @property
+    def isWotPlusInPostBattle(self):
+        return self.__personal.isWotPlus
+
+    @property
     def premiumState(self):
         return self.__premiumState
 

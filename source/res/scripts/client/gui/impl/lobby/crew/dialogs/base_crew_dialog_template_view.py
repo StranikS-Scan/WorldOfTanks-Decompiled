@@ -9,11 +9,12 @@ from uilogging.crew.logging_constants import CrewNavigationButtons
 class BaseCrewDialogTemplateView(DialogTemplateView):
     __slots__ = ('_isClosed', '_uiLogger')
     _COMMON_SOUND_SPACE = CREW_SOUND_OVERLAY_SPACE
+    _UI_LOGGER_CLASS = CrewDialogLogger
 
     def __init__(self, layoutID=None, uniqueID=None, *args, **kwargs):
         super(BaseCrewDialogTemplateView, self).__init__(layoutID, uniqueID, *args, **kwargs)
         self._isClosed = False
-        self._uiLogger = CrewDialogLogger(self, kwargs.get('loggingKey'), kwargs.get('parentViewKey'), kwargs.get('loggingAdditionalInfo'))
+        self._uiLogger = self._UI_LOGGER_CLASS(self, kwargs.get('loggingKey'), kwargs.get('parentViewKey'), kwargs.get('loggingAdditionalInfo'))
 
     def _onLoading(self, *args, **kwargs):
         self._uiLogger.initialize()

@@ -1296,21 +1296,6 @@ class WinbackSelectableRewardReminderDecorator(MessageDecorator):
         return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
 
 
-class WotPlusIntroViewMessageDecorator(MessageDecorator):
-    ENTITY_ID = 0
-
-    def __init__(self):
-        entity = g_settings.msgTemplates.format('WotPlusIntroAnnouncement')
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-        super(WotPlusIntroViewMessageDecorator, self).__init__(self.ENTITY_ID, entity, settings)
-
-    def getType(self):
-        return NOTIFICATION_TYPE.WOT_PLUS_INTRO
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-
 class BattleMattersReminderDecorator(MessageDecorator):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
 

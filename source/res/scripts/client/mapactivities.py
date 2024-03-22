@@ -67,6 +67,21 @@ class BaseMapActivity(object):
     def isPaused(self):
         return False
 
+    def pauseVisuals(self):
+        pass
+
+    def resumeVisuals(self):
+        pass
+
+    def canPauseVisuals(self):
+        return not self.isOver() and not self.isVisualsPaused()
+
+    def canResumeVisuals(self):
+        return not self.isOver() and self.isVisualsPaused()
+
+    def isVisualsPaused(self):
+        return False
+
     def setStartTime(self, startTime):
         self._startTime = startTime
 
@@ -86,6 +101,7 @@ class MapActivities(IMapActivities):
         self.__currActivities = []
         self.__arenaPeriod = None
         self.__previousPeriod = None
+        self.__isVisualsPaused = False
         PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
@@ -180,13 +196,14 @@ class MapActivities(IMapActivities):
                 activity.stop()
                 self.__currActivities.remove(activity)
 
-        for time, activity in self.__pendingActivities:
-            if activity.arenaPeriod == self.__arenaPeriod or activity.arenaPeriod == 0:
-                if activity.canStart():
-                    activity.start()
-                    if not activity.isRepeating():
-                        self.__currActivities.append(activity)
-                        self.__pendingActivities.remove((time, activity))
+        if not self.__isVisualsPaused:
+            for time, activity in self.__pendingActivities:
+                if activity.arenaPeriod == self.__arenaPeriod or activity.arenaPeriod == 0:
+                    if activity.canStart():
+                        activity.start()
+                        if not activity.isRepeating():
+                            self.__currActivities.append(activity)
+                            self.__pendingActivities.remove((time, activity))
 
         self.__cbID = BigWorld.callback(0.1, self.__onPeriodicTimer)
         return
@@ -222,6 +239,37 @@ class MapActivities(IMapActivities):
     def __onAvatarBecomeNonPlayer(self):
         self.__isOnArena = False
         self.stop()
+
+    def setPauseVisuals(self, isPause):
+        self.__isVisualsPaused = isPause
+        if isPause:
+            self._pauseActivitiesVisuals()
+        else:
+            self._resumeActivitiesVisuals()
+
+    def _pauseActivitiesVisuals(self):
+        for _, activity in self.__pendingActivities:
+            self._pauseActivityVisuals(activity)
+
+        for activity in self.__currActivities:
+            self._pauseActivityVisuals(activity)
+
+    @staticmethod
+    def _pauseActivityVisuals(activity):
+        if activity.canPauseVisuals():
+            activity.pauseVisuals()
+
+    def _resumeActivitiesVisuals(self):
+        for _, activity in self.__pendingActivities:
+            self._resumeActivityVisuals(activity)
+
+        for activity in self.__currActivities:
+            self._resumeActivityVisuals(activity)
+
+    @staticmethod
+    def _resumeActivityVisuals(activity):
+        if activity.canResumeVisuals():
+            activity.resumeVisuals()
 
 
 class WaveImpulse(object):
@@ -388,6 +436,21 @@ class WarplaneActivity(BaseMapActivity):
                 self.__model.delMotor(self.__motor)
             self.__model.visible = 0
         return
+
+    def pauseVisuals(self):
+        super(WarplaneActivity, self).pauseVisuals()
+        if self.__motor is not None:
+            self.__motor.pause(True)
+        return
+
+    def resumeVisuals(self):
+        super(WarplaneActivity, self).resumeVisuals()
+        if self.__motor is not None:
+            self.__motor.pause(False)
+        return
+
+    def isVisualsPaused(self):
+        return self.__motor.isPaused if self.__motor is not None else False
 
     def __waitEnterWorld(self):
         self.__cbID = None
@@ -613,6 +676,7 @@ class ScenarioActivity(BaseMapActivity):
         self.__cbID = None
         self.__currentActivities = []
         self.__pendingActivities = []
+        self.__isVisualsPaused = False
         return
 
     def create(self, settings):
@@ -671,6 +735,21 @@ class ScenarioActivity(BaseMapActivity):
         over = Timer.getTime() >= self._startTime and all(map(lambda subActivity: subActivity.isOver(), self.__currentActivities + self.__pendingActivities))
         return over
 
+    def pauseVisuals(self):
+        self.__isVisualsPaused = True
+        for nestedActivity in self.__pendingActivities + self.__currentActivities:
+            if nestedActivity.canPauseVisuals():
+                nestedActivity.pauseVisuals()
+
+    def resumeVisuals(self):
+        self.__isVisualsPaused = False
+        for nestedActivity in self.__pendingActivities + self.__currentActivities:
+            if nestedActivity.canResumeVisuals():
+                nestedActivity.resumeVisuals()
+
+    def isVisualsPaused(self):
+        return self.__isVisualsPaused
+
     def __onPeriodicTimer(self):
         self.__cbID = None
         for activity in self.__currentActivities:
@@ -681,12 +760,13 @@ class ScenarioActivity(BaseMapActivity):
                 elif not activity.isPaused():
                     activity.pause()
 
-        for activity in self.__pendingActivities:
-            if activity.canStart():
-                activity.start()
-                if not activity.isRepeating():
-                    self.__currentActivities.append(activity)
-                    self.__pendingActivities.remove(activity)
+        if not self.__isVisualsPaused:
+            for activity in self.__pendingActivities:
+                if activity.canStart():
+                    activity.start()
+                    if not activity.isRepeating():
+                        self.__currentActivities.append(activity)
+                        self.__pendingActivities.remove(activity)
 
         self.__cbID = BigWorld.callback(0.1, self.__onPeriodicTimer)
         return

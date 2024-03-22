@@ -154,7 +154,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
     LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
     LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
-    LOADING_BATTLETYPES_SUBTITLE_23 = '#menu:loading/battleTypes/subTitle/23'
     LOADING_BATTLETYPES_24 = '#menu:loading/battleTypes/24'
     LOADING_BATTLETYPES_DESC_24 = '#menu:loading/battleTypes/desc/24'
     LOADING_BATTLETYPES_25 = '#menu:loading/battleTypes/25'
@@ -171,6 +170,8 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_31 = '#menu:loading/battleTypes/desc/31'
     LOADING_BATTLETYPES_33 = '#menu:loading/battleTypes/33'
     LOADING_BATTLETYPES_DESC_33 = '#menu:loading/battleTypes/desc/33'
+    LOADING_BATTLETYPES_34 = '#menu:loading/battleTypes/34'
+    LOADING_BATTLETYPES_DESC_34 = '#menu:loading/battleTypes/desc/34'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -1287,41 +1288,9 @@ class MENU(object):
     RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
     RESEARCH_LABELS_BUTTON_TOCOLLECTION = '#menu:research/labels/button/toCollection'
     TRADE_IN = '#menu:trade/in'
-    BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
-    BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'
-    BARRACKS_BTNBUYBERTH = '#menu:barracks/btnBuyBerth'
-    BARRACKS_BTNBUYBERTHDECS = '#menu:barracks/btnBuyBerthDecs'
-    BARRACKS_MENU_ROLEFILTER_ALL = '#menu:barracks/menu/roleFilter/all'
-    BARRACKS_MENU_ROLEFILTER_COMMANDER = '#menu:barracks/menu/roleFilter/commander'
-    BARRACKS_MENU_ROLEFILTER_RADIOMAN = '#menu:barracks/menu/roleFilter/radioman'
-    BARRACKS_MENU_ROLEFILTER_GUNNER = '#menu:barracks/menu/roleFilter/gunner'
-    BARRACKS_MENU_ROLEFILTER_LOADER = '#menu:barracks/menu/roleFilter/loader'
-    BARRACKS_MENU_ROLEFILTER_DRIVER = '#menu:barracks/menu/roleFilter/driver'
-    BARRACKS_MENU_TANKTYPEFILTER_TEXTFIELD = '#menu:barracks/menu/tankTypeFilter/textfield'
-    BARRACKS_MENU_LOCATIONFILTER_TEXTFIELD = '#menu:barracks/menu/locationFilter/textfield'
-    BARRACKS_MENU_LOCATIONFILTER_TANKS = '#menu:barracks/menu/locationFilter/tanks'
-    BARRACKS_MENU_LOCATIONFILTER_BARRACKS = '#menu:barracks/menu/locationFilter/barracks'
-    BARRACKS_MENU_LOCATIONFILTER_BARRACKSANDTANKS = '#menu:barracks/menu/locationFilter/barracksAndTanks'
-    BARRACKS_MENU_LOCATIONFILTER_DISMISSED = '#menu:barracks/menu/locationFilter/dismissed'
-    BARRACKS_MENU_LOCATIONFILTER_NOTRECRUITED = '#menu:barracks/menu/locationFilter/notRecruited'
-    BARRACKS_DISMISSEDTANKMENCOUNT = '#menu:barracks/dismissedTankmenCount'
-    BARRACKS_TANKMENCOUNT = '#menu:barracks/tankmenCount'
-    BARRACKS_BTNRECRUIT = '#menu:barracks/btnRecruit'
     BARRACKS_NOTRECRUITEDACTIVATEBEFORE = '#menu:barracks/notRecruitedActivateBefore'
-    BARRACKS_PLACESCOUNT = '#menu:barracks/placesCount'
-    BARRACKS_NOTRECRUITEDCOUNT = '#menu:barracks/notRecruitedCount'
-    BARRACKS_RECOVERYCOUNT = '#menu:barracks/recoveryCount'
-    BARRACKS_BARRACKSRENDERER_PLACESCOUNT = '#menu:barracks/barracksRenderer/placesCount'
-    BARRACKS_BTNNEWPLACE = '#menu:barracks/btnNewPlace'
     BARRACKS_BTNUNLOAD = '#menu:barracks/btnUnload'
     BARRACKS_BTNDISSMISS = '#menu:barracks/btnDissmiss'
-    BARRACKS_BTNRECRUITNOTRECRUITED = '#menu:barracks/btnRecruitNotRecruited'
-    BARRACKS_BTNRECOVERY = '#menu:barracks/btnRecovery'
-    BARRACKS_NORECOVERYTANKMEN_TITLE = '#menu:barracks/noRecoveryTankmen/title'
-    BARRACKS_NORECOVERYTANKMEN_MESSAGE = '#menu:barracks/noRecoveryTankmen/message'
-    BARRACKS_NOFILTEREDRECOVERYTANKMEN_MESSAGE = '#menu:barracks/noFilteredRecoveryTankmen/message'
-    BARRACKS_NONOTRECRUITEDTANKMEN_TITLE = '#menu:barracks/noNotRecruitedTankmen/title'
-    BARRACKS_NONOTRECRUITEDTANKMEN_MESSAGE = '#menu:barracks/noNotRecruitedTankmen/message'
     STORE_MENU_NOITEMS = '#menu:store/menu/noItems'
     STORE_BACKBUTTON_LABEL = '#menu:store/backButton/label'
     STORE_BACKBUTTON_DESCRIPTION = '#menu:store/backButton/description'
@@ -1534,6 +1503,7 @@ class MENU(object):
     TRAINING_INFO_USESEPARATEVOIPCHAT = '#menu:training/info/useSeparateVoipChat'
     TRAINING_INFO_NOTUSECHAT = '#menu:training/info/notUseChat'
     TRAINING_INVITATIONS_TITLE = '#menu:training/invitations/title'
+    TRAINING_ALERTTEXT_ONLYTIERX = '#menu:training/alertText/onlyTierX'
     TANKMANRETRAININGBTN_FREE = '#menu:tankmanRetrainingBtn/free'
     VEHICLESCAROUSEL_CONTEXTMENU_VEHICLEINFO = '#menu:vehiclesCarousel/contextMenu/vehicleInfo'
     VEHICLESCAROUSEL_CONTEXTMENU_VEHICLESELL = '#menu:vehiclesCarousel/contextMenu/vehicleSell'
@@ -1647,8 +1617,6 @@ class MENU(object):
     CONTEXTMENU_MESSENGER_CLOSECURRENT = '#menu:contextMenu/messenger/closeCurrent'
     CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT = '#menu:contextMenu/messenger/closeAllExceptCurrent'
     CONTEXTMENU_CREATECONTACTNOTE = '#menu:contextMenu/createContactNote'
-    BATTLEROYALE_CONTEXTMENU_TAKETESTDRIVE = '#menu:battleRoyale/contextMenu/takeTestDrive'
-    BATTLEROYALE_CONTEXTMENU_TAKERENT = '#menu:battleRoyale/contextMenu/takeRent'
     CONTEXTMENU_EDITCONTACTNOTE = '#menu:contextMenu/editContactNote'
     CONTEXTMENU_REMOVECONTACTNOTE = '#menu:contextMenu/removeContactNote'
     CONTEXTMENU_BOTNOACTIONS = '#menu:contextMenu/botNoActions'
@@ -1673,13 +1641,6 @@ class MENU(object):
     STEAM_OTHERMETHODS = '#menu:steam/otherMethods'
     STEAM_SUBMIT = '#menu:steam/submit'
     STEAM_CANCEL = '#menu:steam/cancel'
-    SKILLDROPFORFREEWINDOW_ACTIONTIME_TITLE = '#menu:skillDropForFreeWindow/actionTime/title'
-    SKILLDROPFORFREEWINDOW_ACTIONTIME_DESCRIPTION = '#menu:skillDropForFreeWindow/actionTime/description'
-    SKILLDROPFORFREEWINDOW_DAYS = '#menu:skillDropForFreeWindow/days'
-    SKILLDROPFORFREEWINDOW_HOURS = '#menu:skillDropForFreeWindow/hours'
-    SKILLDROPFORFREEWINDOW_MINUTES = '#menu:skillDropForFreeWindow/minutes'
-    SKILLDROPFORFREEWINDOW_SECONDS = '#menu:skillDropForFreeWindow/seconds'
-    SKILLDROPFORFREEWINDOW_TIMER_TOOLTIP = '#menu:skillDropForFreeWindow/timer/tooltip'
     CENTERISAVAILABLE = '#menu:centerIsAvailable'
     CENTERISUNAVAILABLE = '#menu:centerIsUnAvailable'
     ACCOUNT_PROFILE_EMPTYBATTLELIST = '#menu:account/profile/emptyBattleList'
@@ -2785,7 +2746,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_29,
      LOADING_BATTLETYPES_DESC_30,
      LOADING_BATTLETYPES_DESC_31,
-     LOADING_BATTLETYPES_DESC_33)
+     LOADING_BATTLETYPES_DESC_33,
+     LOADING_BATTLETYPES_DESC_34)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2830,7 +2792,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22,
      LOADING_BATTLETYPES_23,
      LOADING_BATTLETYPES_DESC_23,
-     LOADING_BATTLETYPES_SUBTITLE_23,
      LOADING_BATTLETYPES_24,
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_25,
@@ -2846,7 +2807,9 @@ class MENU(object):
      LOADING_BATTLETYPES_31,
      LOADING_BATTLETYPES_DESC_31,
      LOADING_BATTLETYPES_33,
-     LOADING_BATTLETYPES_DESC_33)
+     LOADING_BATTLETYPES_DESC_33,
+     LOADING_BATTLETYPES_34,
+     LOADING_BATTLETYPES_DESC_34)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,

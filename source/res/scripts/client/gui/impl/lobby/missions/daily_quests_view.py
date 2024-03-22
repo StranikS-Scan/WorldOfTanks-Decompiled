@@ -16,7 +16,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.missions.daily_quests_view_model import DailyQuestsViewModel, DailyTypes, OffersState
 from gui.impl.gen.view_models.views.lobby.missions.winback_quest_model import WinbackQuestModel
 from gui.impl.gui_decorators import args2params
-from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel, getDailyEpicQuestToken
 from gui.impl.lobby.reroll_tooltip import RerollTooltip
 from gui.impl.lobby.winback.tooltips.main_reward_tooltip import MainRewardTooltip
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
@@ -31,7 +31,7 @@ from gui.server_events.events_helpers import premMissionsSortFunc, dailyQuestsSo
 from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showShop, showWinbackSelectRewardView
-from gui.shared.missions.packers.bonus import getDefaultBonusPacker
+from gui.shared.missions.packers.bonus import getDailyMissionsBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
@@ -41,13 +41,14 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Optional, List, Dict
+    from typing import Optional, List, Dict, Union
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
     from gui.impl.gen.view_models.views.lobby.missions.epic_quest_model import EpicQuestModel
     from gui.impl.gen.view_models.views.lobby.missions.winback_progression_model import WinbackProgressionModel
     from gui.server_events.bonuses import SimpleBonus, SelectableBonus
     from gui.server_events.event_items import Quest
     from gui.shared.missions.packers.bonus import BonusUIPacker
+    from frameworks.wulf import View
     from frameworks.wulf.view.view_event import ViewEvent
     from frameworks.wulf.windows_system.window import Window
 _logger = logging.getLogger(__name__)
@@ -87,6 +88,17 @@ class DailyQuestsView(ViewImpl):
     def viewModel(self):
         return super(DailyQuestsView, self).getViewModel()
 
+    def _getTooltipData(self, event):
+        missionParam = event.getArgument('tooltipId', '')
+        missionParams = missionParam.rsplit(':', 1)
+        if len(missionParams) != 2:
+            _logger.debug('DailyQuestsView._getTooltipData: %s', missionParam)
+            return self.__tooltipData.get(missionParam)
+        missionId, tooltipId = missionParams
+        _logger.debug('DailyQuestsView._getTooltipData: %s, %s', missionId, tooltipId)
+        tooltipsData = self.__tooltipData.get(missionId, {})
+        return tooltipsData.get(tooltipId)
+
     def createToolTipContent(self, event, contentID):
         _logger.debug('DailyQuests::createToolTipContent')
         if contentID == R.views.lobby.missions.RerollTooltip():
@@ -101,20 +113,14 @@ class DailyQuestsView(ViewImpl):
         return MainRewardTooltip(self.__winbackData.get('lastQuest', {}).get('bonuses', [])) if contentID == R.views.lobby.winback.tooltips.MainRewardTooltip() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createToolTip(self, event):
-        missionParam = event.getArgument('tooltipId', '')
-        if not missionParam:
+        if event.contentID != R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             return super(DailyQuestsView, self).createToolTip(event)
         else:
-            missionParams = missionParam.rsplit(':', 1)
-            if len(missionParams) != 2:
-                tooltipData = self.__tooltipData.get(missionParam)
-            else:
-                missionId, tooltipId = missionParams
-                _logger.debug('CreateTooltip: %s, %s', missionId, tooltipId)
-                tooltipsData = self.__tooltipData.get(missionId, {})
-                tooltipData = tooltipsData.get(tooltipId)
+            tooltipData = self._getTooltipData(event)
+            if not tooltipData:
+                return super(DailyQuestsView, self).createToolTip(event)
             if tooltipData and isinstance(tooltipData, TooltipData):
-                window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
+                window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event) if tooltipData is not None else None
                 if window is not None:
                     window.load()
             else:
@@ -200,7 +206,7 @@ class DailyQuestsView(ViewImpl):
                 _logger.info('Daily Quest Screen: Epic quest is not enabled.')
                 return
             epicQuestId = epicQuest.getID()
-            dqToken = first((t for t in epicQuest.accountReqs.getTokens() if t.isDailyQuest()))
+            dqToken = getDailyEpicQuestToken(epicQuest)
             if dqToken is None:
                 _logger.error('Epic quest does not require any dq tokens to complete.')
                 return
@@ -220,7 +226,7 @@ class DailyQuestsView(ViewImpl):
             epicQuestBonusesModel = tx.getBonuses()
             epicQuestBonusesModel.clear()
             self.__tooltipData[epicQuestId] = {}
-            packQuestBonusModelAndTooltipData(getDefaultBonusPacker(), epicQuestBonusesModel, epicQuest, tooltipData=self.__tooltipData[epicQuestId])
+            packQuestBonusModelAndTooltipData(getDailyMissionsBonusPacker(), epicQuestBonusesModel, epicQuest, tooltipData=self.__tooltipData[epicQuestId])
             epicQuestBonusesModel.invalidate()
         return
 
@@ -340,7 +346,7 @@ class DailyQuestsView(ViewImpl):
             epicQuest = self.eventsCache.getDailyEpicQuest()
             if epicQuest:
                 seenQuests.append(epicQuest)
-                dqToken = first((token for token in epicQuest.accountReqs.getTokens() if token.isDailyQuest()))
+                dqToken = getDailyEpicQuestToken(epicQuest)
                 if dqToken:
                     self.itemsCache.items.tokens.markTokenProgressAsViewed(dqToken.getID())
         settings.visitEventsGUI(seenQuests)

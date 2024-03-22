@@ -9,7 +9,10 @@ from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils impo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.battle.battle_page.personal_reserves_tab_view_model import PersonalReservesTabViewModel
 from gui.impl.gui_decorators import args2params
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import generatePersonalReserveTick
 from gui.impl.pub import ViewImpl
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from skeletons.gui.goodies import IBoostersStateProvider
 from frameworks.wulf import ViewModel
@@ -24,12 +27,13 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class PersonalReservesTabView(ViewImpl):
-    __slots__ = ()
-    boostersStateProvider = dependency.descriptor(IBoostersStateProvider)
+    __slots__ = ('_notificatorManager',)
+    _boostersStateProvider = dependency.descriptor(IBoostersStateProvider)
 
     def __init__(self):
         settings = ViewSettings(R.views.battle.battle_page.PersonalReservesTabView(), ViewFlags.VIEW, PersonalReservesTabViewModel())
         super(PersonalReservesTabView, self).__init__(settings)
+        self._notificatorManager = Notifiable()
 
     @property
     def viewModel(self):
@@ -41,27 +45,25 @@ class PersonalReservesTabView(ViewImpl):
             return ViewImpl(settings)
         return super(PersonalReservesTabView, self).createToolTipContent(event, contentID)
 
-    def _initialize(self, *args, **kwargs):
-        super(PersonalReservesTabView, self)._initialize(*args, **kwargs)
-        PersonalReservesTabView.boostersStateProvider.onStateUpdated += self.onBoostersStateChanged
-        self.viewModel.onBoosterActivate += self.onBoosterActivate
-
     def _finalize(self):
-        PersonalReservesTabView.boostersStateProvider.onStateUpdated -= self.onBoostersStateChanged
-        self.viewModel.onBoosterActivate -= self.onBoosterActivate
+        self._notificatorManager.clearNotification()
         super(PersonalReservesTabView, self)._finalize()
+
+    def _getEvents(self):
+        return ((self.viewModel.onBoosterActivate, self.onBoosterActivate), (self._boostersStateProvider.onStateUpdated, self._update))
 
     def _onLoading(self, *args, **kwargs):
         super(PersonalReservesTabView, self)._onLoading(*args, **kwargs)
-        self.fillViewModel()
+        self._notificatorManager.addNotificator(PeriodicNotifier(self._timeTillNextPersonalReserveTick, self.fillViewModel))
+        self._update()
 
     def activatePersonalReserve(self, boosterId):
         BigWorld.player().activateGoodie(boosterId)
 
     @args2params(int)
     def onBoosterActivate(self, boosterId):
-        booster = PersonalReservesTabView.boostersStateProvider.getBooster(boosterId)
-        if booster.boosterType in PersonalReservesTabView.boostersStateProvider.getActiveBoosterTypes():
+        booster = self._boostersStateProvider.getBooster(boosterId)
+        if booster.boosterType in self._boostersStateProvider.getActiveBoosterTypes():
             _logger.warning('[PersonalReservesTabView] Booster %d cannot be activated as another booster of the same type is already active in this battle.', booster.boosterID)
             return
         if booster.isInAccount:
@@ -69,16 +71,21 @@ class PersonalReservesTabView(ViewImpl):
         else:
             _logger.warning('[PersonalReservesTabView] Cannot activate booster %d, player does not have this booster in inventory. Buy and activate action is not possible during battle.', booster.boosterID)
 
-    def onBoostersStateChanged(self):
+    def _update(self):
+        self._notificatorManager.startNotification()
         self.fillViewModel()
 
     def fillViewModel(self):
-        boosterModelsArgsByType = getPersonalBoosterModelDataByResourceType(PersonalReservesTabView.boostersStateProvider)
+        boosterModelsArgsByType = getPersonalBoosterModelDataByResourceType(self._boostersStateProvider)
         with self.viewModel.transaction() as model:
             groupArray = model.getReserveGroups()
             groupArray.clear()
             for resourceType in PERSONAL_RESOURCE_ORDER:
                 addPersonalBoostersGroup(resourceType, boosterModelsArgsByType, groupArray)
 
-            addEventGroup(groupArray, PersonalReservesTabView.boostersStateProvider)
+            addEventGroup(groupArray, self._boostersStateProvider)
             groupArray.invalidate()
+
+    def _timeTillNextPersonalReserveTick(self):
+        expiringReserves = self._boostersStateProvider.getBoosters(REQ_CRITERIA.BOOSTER.LIMITED).values()
+        return generatePersonalReserveTick(expiringReserves)

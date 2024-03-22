@@ -15,12 +15,6 @@ class DateTimeFormatsEnum(Enum):
     FULLDATE = 'fullDate'
     FULLTIME = 'fullTime'
     FULLDATETIME = 'fullDateTime'
-    MONTH = 'month'
-    MONTHYEAR = 'monthYear'
-    WEEKDAY = 'weekDay'
-    WEEKDAYTIME = 'weekDayTime'
-    MONTHDAY = 'monthDay'
-    YEAR = 'year'
 
 
 class DateTimeFormats(ViewModel):

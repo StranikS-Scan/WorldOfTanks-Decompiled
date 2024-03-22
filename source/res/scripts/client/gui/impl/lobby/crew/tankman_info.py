@@ -5,7 +5,7 @@ import typing
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
-from gui.impl.dialogs.dialogs import showRetrainDialog
+from gui.impl.dialogs.dialogs import showRetrainSingleDialog
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.tankman_info_model import TankmanInfoModel
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
@@ -13,7 +13,6 @@ from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextToo
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.crew.base_crew_view import BaseCrewSoundView
 from gui.impl.lobby.crew.tooltips.premium_vehicle_tooltip import PremiumVehicleTooltip
-from gui.impl.lobby.crew.tooltips.training_level_tooltip import TrainingLevelTooltip
 from gui.impl.lobby.crew.utils import VEHICLE_TAGS_FILTER, playRecruitVoiceover
 from gui.shared import event_dispatcher
 from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -32,14 +31,14 @@ if typing.TYPE_CHECKING:
 ALT_VOICES_PREVIEW = itertools.cycle(('vo_enemy_hp_damaged_by_projectile_by_player', 'vo_enemy_fire_started_by_player', 'vo_enemy_killed_by_player'))
 
 class TankmanInfo(BaseCrewSoundView):
-    __slots__ = ('_tankman', '_tankmanCurrentVehicle', '_voiceoverParams', '_retrainPrice', '_toolTipMgr', '_uiLogger', '__sound')
+    __slots__ = ('_tankman', '_tankmanCurrentVehicle', '_voiceoverParams', '_retrainPrice', '_toolTipMgr', '_uiLogger', '__sound', '__parentViewKey')
     LAYOUT_DYN_ACCESSOR = R.views.lobby.crew.widgets.TankmanInfo
     _MODEL_CLASS = TankmanInfoModel
     _itemsCache = dependency.descriptor(IItemsCache)
     _appLoader = dependency.descriptor(IAppLoader)
     _specialSounds = dependency.descriptor(ISpecialSoundCtrl)
 
-    def __init__(self, tankmanId, layoutID=None, isUiLoggingDisabled=True):
+    def __init__(self, tankmanId, layoutID=None, isUiLoggingDisabled=True, parentViewKey=None):
         settings = ViewSettings(layoutID or self.LAYOUT_DYN_ACCESSOR())
         settings.model = self._MODEL_CLASS()
         self._tankman = self._itemsCache.items.getTankman(tankmanId)
@@ -49,12 +48,16 @@ class TankmanInfo(BaseCrewSoundView):
         self._toolTipMgr = self._appLoader.getApp().getToolTipMgr()
         self._uiLogger = CrewTankmanInfoLogger(isUiLoggingDisabled)
         self.__sound = None
+        self.__parentViewKey = parentViewKey
         super(TankmanInfo, self).__init__(settings)
         return
 
     @property
     def viewModel(self):
         return self.getViewModel()
+
+    def setParentViewKey(self, parentViewKey):
+        self.__parentViewKey = parentViewKey
 
     def setTankmanId(self, tankmanId):
         self._tankman = self._itemsCache.items.getTankman(tankmanId)
@@ -73,18 +76,25 @@ class TankmanInfo(BaseCrewSoundView):
                  self._tankman.invID,
                  event.getArgument('level', None),
                  False,
-                 True,
-                 self.getParentWindow()]
-                self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
+                 True]
+                self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
             if tooltipId == TOOLTIPS_CONSTANTS.COMMANDER_BONUS:
-                args = [self.getParentWindow()]
-                self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.COMMANDER_BONUS, args, event.mouse.positionX, event.mouse.positionY)
+                args = (self._tankman.invID,)
+                self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.COMMANDER_BONUS, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.COMMANDER_BONUS
+            if tooltipId == TOOLTIPS_CONSTANTS.CREW_SKILL_UNTRAINED:
+                args = ()
+                self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_SKILL_UNTRAINED, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
+                return TOOLTIPS_CONSTANTS.CREW_SKILL_UNTRAINED
             if tooltipId == TooltipConstants.TANKMAN:
-                args = (self.getParentWindow(), self._tankman.invID)
-                self._toolTipMgr.onCreateWulfTooltip(TooltipConstants.TANKMAN, args, event.mouse.positionX, event.mouse.positionY)
+                args = (self._tankman.invID,)
+                self._toolTipMgr.onCreateWulfTooltip(TooltipConstants.TANKMAN, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TooltipConstants.TANKMAN
+            if tooltipId == TooltipConstants.SKILLS_EFFICIENCY:
+                args = (event.getArgument('tankmanID'),)
+                self._toolTipMgr.onCreateWulfTooltip(tooltipId, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
+                return tooltipId
         return super(TankmanInfo, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
@@ -101,8 +111,6 @@ class TankmanInfo(BaseCrewSoundView):
                 return createBackportTooltipContent(specialAlias=TOOLTIPS_CONSTANTS.ACTION_PRICE, specialArgs=specialAlias)
         if contentID == R.views.lobby.crew.tooltips.PremiumVehicleTooltip():
             return PremiumVehicleTooltip(vehicleCD=self._tankman.vehicleNativeDescr.type.compactDescr)
-        elif contentID == R.views.lobby.crew.tooltips.TrainingLevelTooltip():
-            return TrainingLevelTooltip(self._tankman.invID)
         elif contentID == R.views.lobby.common.tooltips.ExtendedTextTooltip():
             text = event.getArgument('text', '')
             stringifyKwargs = event.getArgument('stringifyKwargs', '')
@@ -165,9 +173,7 @@ class TankmanInfo(BaseCrewSoundView):
         vm.setInvId(self._tankman.invID)
         vm.setHasUniqueSound(self._voiceoverParams is not None)
         vm.setIsCrewLocked(self._tankmanCurrentVehicle and self._tankmanCurrentVehicle.isCrewLocked)
-        vm.setRealRoleLevel(int(self._tankman.realRoleLevel.lvl))
-        vm.setNativeTankRealRoleLevel(self._tankman.nativeTankRealRoleLevel)
-        vm.setRoleLevel(self._tankman.roleLevel)
+        vm.setSkillsEfficiency(self._tankman.currentVehicleSkillsEfficiency)
         return
 
     def _setVehicleInfo(self, vm):
@@ -193,8 +199,8 @@ class TankmanInfo(BaseCrewSoundView):
     @wg_async
     def __onRetrain(self):
         self._uiLogger.logClick(CrewPersonalFileKeys.RETRAIN_BUTTON)
-        vehicleIntCD = self._tankmanCurrentVehicle.intCD if self._tankmanCurrentVehicle else self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr).intCD
-        yield wg_await(showRetrainDialog([self._tankman.invID], vehicleIntCD))
+        yield wg_await(showRetrainSingleDialog(self._tankman.invID, self._tankmanCurrentVehicle.intCD if self._tankmanCurrentVehicle else self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr).intCD, targetSlotIdx=self._tankman.vehicleSlotIdx if self._tankman.isInTank else None, parentViewKey=self.__parentViewKey))
+        return
 
     def __onChangeVehicle(self):
         self._uiLogger.logClick(CrewPersonalFileKeys.CHANGE_SPECIALIZATION_BUTTON)

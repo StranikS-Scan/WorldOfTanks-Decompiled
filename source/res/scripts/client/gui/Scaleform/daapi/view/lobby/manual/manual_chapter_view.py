@@ -31,13 +31,10 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
         g_eventBus.handleEvent(events.ManualEvent(events.ManualEvent.CHAPTER_CLOSED), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def pageButtonClicked(self, pageType):
-        if pageType == ManualPageTypes.BOOTCAMP_PAGE:
-            _logger.debug('ManualChapterView. Requested bootcamp start.')
-            self.manualController.runBootcamp()
-        elif pageType == ManualPageTypes.MAPS_TRAINING_PAGE:
+        if pageType == ManualPageTypes.MAPS_TRAINING_PAGE:
             self.mapsTrainingController.selectMapsTrainingMode()
 
-    def bootcampHighlighted(self):
+    def buttonHighlighted(self):
         self.soundManager.playSound(self.BC_GUIDE_ELEMENT_BUTTON_SOUND_ID)
 
     def _populate(self):

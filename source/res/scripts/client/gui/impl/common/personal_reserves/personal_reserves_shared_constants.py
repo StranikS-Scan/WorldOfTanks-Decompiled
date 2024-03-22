@@ -1,17 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/personal_reserves/personal_reserves_shared_constants.py
-import typing
-from backports.functools_lru_cache import lru_cache
 from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import PR2BoosterIDs, GOODIE_RESOURCE_TYPE, MAX_ACTIVE_PERSONAL_BOOSTERS, MAX_ACTIVE_EVENT_BOOSTERS, GOODIE_STATE, BoosterCategory
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import ReserveType, ReserveState
-from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
-from skeletons.gui.goodies import IGoodiesCache
-if typing.TYPE_CHECKING:
-    from gui.goodies import GoodiesCache
-    from gui.goodies.goodie_items import Booster
-    from typing import Set
 PERSONAL_RESOURCE_ORDER = [GOODIE_RESOURCE_TYPE.XP, GOODIE_RESOURCE_TYPE.CREDITS, GOODIE_RESOURCE_TYPE.FREE_XP_CREW_XP]
 EVENT_RESOURCE_ORDER = [GOODIE_RESOURCE_TYPE.FL_XP]
 CLAN_RESOURCE_ORDER_BY_GROUP = [(GOODIE_RESOURCE_TYPE.FREE_XP, GOODIE_RESOURCE_TYPE.CREW_XP), (GOODIE_RESOURCE_TYPE.CREDITS, GOODIE_RESOURCE_TYPE.XP)]
@@ -19,7 +10,7 @@ FRONT_LINE_BOOSTER_ID = 111001
 BATTLE_XP_PREMIUM_BOOSTER_ID = PR2BoosterIDs.XP
 CREDITS_PREMIUM_BOOSTER_ID = PR2BoosterIDs.CRED
 COMBINED_XP_BOOSTER_ID = PR2BoosterIDs.XP_CREW_FREE
-PREMIUM_BOOSTER_IDS = [BATTLE_XP_PREMIUM_BOOSTER_ID, CREDITS_PREMIUM_BOOSTER_ID, COMBINED_XP_BOOSTER_ID]
+PREMIUM_BOOSTER_IDS = PR2BoosterIDs.ADVANCED_ITEMS + PR2BoosterIDs.EXPIRABLE_ADVANCED_ITEMS
 UNATTAINABLE_BOOSTER_IDS = [CREDITS_PREMIUM_BOOSTER_ID]
 EVENT_BOOSTER_IDS = [FRONT_LINE_BOOSTER_ID]
 BOOST_CATEGORY_TO_RESERVE_TYPE_LOOKUP = {BoosterCategory.PERSONAL: ReserveType.PERSONAL,
@@ -37,9 +28,3 @@ MAX_ACTIVATED_BY_CATEGORY = {BoosterCategory.PERSONAL: MAX_ACTIVE_PERSONAL_BOOST
  BoosterCategory.EVENT: MAX_ACTIVE_EVENT_BOOSTERS,
  BoosterCategory.CLAN: 2}
 BOOSTERS_CATEGORY_VIEW_ORDER = (BoosterCategory.PERSONAL, BoosterCategory.EVENT, BoosterCategory.CLAN)
-
-@lru_cache()
-@dependency.replace_none_kwargs(goodiesCache=IGoodiesCache)
-def getAllBoosterIds(goodiesCache=None):
-    enabledBoosters = goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ENABLED)
-    return set(enabledBoosters.keys())

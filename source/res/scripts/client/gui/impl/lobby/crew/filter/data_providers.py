@@ -19,8 +19,23 @@ from gui.shared.gui_items.Tankman import Tankman, getFullUserName
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, VEHICLE_TAGS, checkForTags
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
-from items import tankmen
+from items import tankmen, crew_junk_convert_helper
 from skeletons.gui.shared import IItemsCache
+
+class _TankmenSortCriteriaMixin(object):
+
+    def _getSortKeyCriteria(self):
+
+        def key(item):
+            tdescr = item.descriptor
+            return (GUI_NATIONS_ORDER_INDICES[item.nationID],
+             -tdescr.getTotalSkillProgress(withFree=True),
+             Tankman.TANKMEN_ROLES_ORDER[tdescr.role],
+             getFullUserName(item.nationID, tdescr.firstNameID, tdescr.lastNameID))
+
+        criteria = REQ_CRITERIA.CUSTOM(key)
+        return criteria
+
 
 class FilterableItemsDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -201,7 +216,7 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         criteria |= REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
         if self.tankman:
-            criteria |= REQ_CRITERIA.VEHICLE.HAS_ROLE(self.tankman.descriptor.role)
+            criteria |= REQ_CRITERIA.VEHICLE.HAS_ROLES(self.tankman.descriptor.nativeRoles)
             criteria |= REQ_CRITERIA.NATIONS([self.tankman.nationID])
         return criteria
 
@@ -242,7 +257,27 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         return self.itemsCache.items.getVehicles(criteria)
 
 
-class TankmenDataProvider(FilterableItemsDataProvider):
+class JunkTankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider):
+
+    def __init__(self):
+        super(JunkTankmenDataProvider, self).__init__({})
+
+    def _itemsGetter(self, criteria, initial=False):
+        items = self.itemsCache.items.getInventoryTankmen().values()
+        return filter(criteria, items)
+
+    def _getFiltersList(self):
+        return [self._getFilterByInBarracksCriteria(), self._getFilterByIsJunkCriteria()]
+
+    def _getFilterByInBarracksCriteria(self):
+        return ~REQ_CRITERIA.TANKMAN.IN_TANK
+
+    def _getFilterByIsJunkCriteria(self):
+        criteria = REQ_CRITERIA.CUSTOM(lambda item: crew_junk_convert_helper.isTrashTankman(item.descriptor))
+        return criteria
+
+
+class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider):
 
     def __init__(self, state):
         super(TankmenDataProvider, self).__init__(state)
@@ -329,18 +364,6 @@ class TankmenDataProvider(FilterableItemsDataProvider):
 
     def _getSearchCriteria(self):
         return REQ_CRITERIA.TANKMAN.SPECIFIC_BY_NAME_OR_SKIN(self._state.searchString) if self._state.searchString else None
-
-    def _getSortKeyCriteria(self):
-
-        def key(item):
-            tdescr = item.descriptor
-            return (GUI_NATIONS_ORDER_INDICES[item.nationID],
-             -tdescr.totalXP(freeSkillsAsCommon=True),
-             Tankman.TANKMEN_ROLES_ORDER[tdescr.role],
-             getFullUserName(item.nationID, tdescr.firstNameID, tdescr.lastNameID))
-
-        criteria = REQ_CRITERIA.CUSTOM(key)
-        return criteria
 
     def _getConditionSortCriteria(self):
         criteria = REQ_CRITERIA.TANKMAN.ACTIVE
@@ -463,6 +486,14 @@ class TankmenChangeDataProvider(TankmenDataProvider):
         self.role = role
         super(TankmenChangeDataProvider, self).reinit()
 
+    def _getFiltersList(self):
+        return [self._getFilterByTankmanRoleCriteria(),
+         self._getFilterByVehicleCDCriteria(),
+         self._getFilterByVehicleTypeCriteria(),
+         self._getFilterByVehicleTierCriteria(),
+         self._getFilterByLocationCriteria(),
+         self._getSearchCriteria()]
+
     def _getInitialFilterCriteria(self):
         criteria = super(TankmenChangeDataProvider, self)._getInitialFilterCriteria()
         criteria |= REQ_CRITERIA.TANKMAN.NATION(nations.NAMES[self.__vehicle.nationID])
@@ -486,9 +517,7 @@ class TankmenChangeDataProvider(TankmenDataProvider):
     def _getSortKeyCriteria(self):
         criteria = REQ_CRITERIA.CUSTOM(lambda item: self.__rolesOrder[item.role])
         criteria |= REQ_CRITERIA.CUSTOM(lambda item: -int(item.vehicleNativeDescr.type.compactDescr == self.__vehicle.intCD))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -int(item.vehicleNativeType == self.__vehicle.type))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: VEHICLE_TYPES_ORDER_INDICES[item.vehicleNativeType])
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.totalXP(freeSkillsAsCommon=True))
+        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.getTotalSkillProgress(withFree=True))
         criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.fullUserName)
         return criteria
 

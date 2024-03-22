@@ -84,8 +84,8 @@ class VehicleMessages(fading_messages.FadingMessages):
 
     def __formatEntity(self, entityID):
         ctx = self.sessionProvider.getCtx()
-        vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(entityID).vehicleType
+        vInfoVO = ctx.getArenaDP().getVehicleInfo(entityID)
         playerName = ctx.getPlayerFullName(entityID, showVehShortName=False)
-        playerInfo = '%s | %s' % (playerName, vTypeInfoVO.shortNameWithPrefix)
+        playerInfo = '%s | %s' % (playerName, vInfoVO.getDisplayedName())
         entityInfo = self.__styleFormatter.format(playerInfo)
         return entityInfo

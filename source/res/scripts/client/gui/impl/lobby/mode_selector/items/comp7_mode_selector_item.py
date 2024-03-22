@@ -41,13 +41,15 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
         super(Comp7ModeSelectorItem, self)._onInitializing()
         self.__updateComp7Data()
         setBattlePassState(self.viewModel)
-        self.__comp7Controller.onStatusTick += self.__onTimerTick
+        self.__comp7Controller.onStatusTick += self.__onDataChange
+        self.__comp7Controller.onComp7ConfigChanged += self.__onDataChange
 
     def _onDisposing(self):
-        self.__comp7Controller.onStatusTick -= self.__onTimerTick
+        self.__comp7Controller.onStatusTick -= self.__onDataChange
+        self.__comp7Controller.onComp7ConfigChanged -= self.__onDataChange
         super(Comp7ModeSelectorItem, self)._onDisposing()
 
-    def __onTimerTick(self):
+    def __onDataChange(self):
         self.__updateComp7Data()
         self.onCardChange()
 
@@ -59,7 +61,9 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     def __fillViewModel(self):
         isStarted = self.__comp7Controller.hasActiveSeason()
         nextSeason = self.__comp7Controller.getNextSeason()
-        isBeforeSeasons = self.__comp7Controller.getPreviousSeason() is None and nextSeason is not None
+        prevSeason = self.__comp7Controller.getPreviousSeason()
+        isBeforeSeasons = not prevSeason and nextSeason
+        isAfterLastSeason = not nextSeason and prevSeason
         with self.viewModel.transaction() as vm:
             if isStarted:
                 vm.setTimeLeft(self.__getSeasonTimeLeft())
@@ -67,9 +71,10 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
                 self._addReward(ModeSelectorRewardID.BONES)
             elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))
+            elif isAfterLastSeason:
+                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.yearEnd()))
             else:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd.dyn(getSeasonNameEnum().value)()))
-        return
 
     def __getSeasonTimeLeft(self):
         return time_formatters.getTillTimeByResource(max(0, self.__currentSeason.getEndDate() - time_utils.getServerUTCTime()), R.strings.menu.Time.timeLeftShort, removeLeadingZeros=True) if self.__currentSeason is not None else ''

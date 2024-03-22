@@ -4,7 +4,6 @@ import time
 import typing
 import Event
 from PlayerEvents import g_playerEvents
-from bootcamp.BootCampEvents import g_bootcampEvents
 from constants import IS_DEVELOPMENT
 from gui.game_loading import loggers
 from gui.game_loading.resources.consts import MilestonesTypes, Milestones
@@ -32,12 +31,10 @@ class MilestonesHandler(object):
         self._time = time.time()
         g_playerEvents.onLoadingMilestoneReached += self._onLoadingMilestoneReached
         g_playerEvents.onAccountBecomePlayer += self._onStandardLoading
-        g_bootcampEvents.onBootcampBecomePlayer += self._onBootcampLoading
 
     def stop(self):
         g_playerEvents.onLoadingMilestoneReached -= self._onLoadingMilestoneReached
         g_playerEvents.onAccountBecomePlayer -= self._onStandardLoading
-        g_bootcampEvents.onBootcampBecomePlayer -= self._onBootcampLoading
         self.onMilestoneReached.clear()
         self.onMilestoneTypeChanged.clear()
 
@@ -46,9 +43,6 @@ class MilestonesHandler(object):
 
     def _onStandardLoading(self):
         self._chooseMilestonesType(MilestonesTypes.STANDARD)
-
-    def _onBootcampLoading(self):
-        self._chooseMilestonesType(MilestonesTypes.BOOTCAMP)
 
     def _chooseMilestonesType(self, milestonesType):
         if milestonesType not in self._milestonesSettings:

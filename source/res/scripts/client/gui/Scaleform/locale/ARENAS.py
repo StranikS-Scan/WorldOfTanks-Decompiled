@@ -35,12 +35,6 @@ class ARENAS(object):
     TYPE_FALLOUT6_NAME = '#arenas:type/fallout6/name'
     TYPE_FALLOUT6_DESCRIPTION = '#arenas:type/fallout6/description'
     TYPE_FALLOUTMUTLITEAM_DESCRIPTION = '#arenas:type/falloutMutliteam/description'
-    TYPE_BOOTCAMP_DESCRIPTION0 = '#arenas:type/bootcamp/description0'
-    TYPE_BOOTCAMP_DESCRIPTION1 = '#arenas:type/bootcamp/description1'
-    TYPE_BOOTCAMP_DESCRIPTION2 = '#arenas:type/bootcamp/description2'
-    TYPE_BOOTCAMP_DESCRIPTION3 = '#arenas:type/bootcamp/description3'
-    TYPE_BOOTCAMP_DESCRIPTION4 = '#arenas:type/bootcamp/description4'
-    TYPE_BOOTCAMP_DESCRIPTION5 = '#arenas:type/bootcamp/description5'
     TYPE_CTF30X30_NAME = '#arenas:type/ctf30x30/name'
     TYPE_CTF30X30_DESCRIPTION = '#arenas:type/ctf30x30/description'
     TYPE_DOMINATION30X30_NAME = '#arenas:type/domination30x30/name'
@@ -198,12 +192,6 @@ class ARENAS(object):
      TYPE_FALLOUT6_NAME,
      TYPE_FALLOUT6_DESCRIPTION,
      TYPE_FALLOUTMUTLITEAM_DESCRIPTION,
-     TYPE_BOOTCAMP_DESCRIPTION0,
-     TYPE_BOOTCAMP_DESCRIPTION1,
-     TYPE_BOOTCAMP_DESCRIPTION2,
-     TYPE_BOOTCAMP_DESCRIPTION3,
-     TYPE_BOOTCAMP_DESCRIPTION4,
-     TYPE_BOOTCAMP_DESCRIPTION5,
      TYPE_CTF30X30_NAME,
      TYPE_CTF30X30_DESCRIPTION,
      TYPE_DOMINATION30X30_NAME,

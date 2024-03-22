@@ -1,0 +1,499 @@
+<style_880_comp7_emblems.xml>
+  <quests>
+    <battleQuest>
+      <id>	crushing_damage_880_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_880_1/condition	</key>
+            </description>
+            <damageDealt>	25000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_2	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	crushing_damage_880_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_880_2/condition	</key>
+            </description>
+            <damageDealt>	225000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_2	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	crushing_damage_880_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulative>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/crushing_damage_880_3/condition	</key>
+            </description>
+            <damageDealt>	550000	</damageDealt>
+          </cumulative>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_2	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	demonstration_performance_880_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/demonstration_performance_880_1/condition	</key>
+              </description>
+              <styleId>	880	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_3	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	demonstration_performance_880_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/demonstration_performance_880_2/condition	</key>
+              </description>
+              <styleId>	880	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	25	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_3	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	demonstration_performance_880_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+          <vehicle>
+            <customization>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/demonstration_performance_880_3/condition	</key>
+              </description>
+              <styleId>	880	</styleId>
+            </customization>
+          </vehicle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	50	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_3	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	going_to_circle_880_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/going_to_circle_880_1/condition	</key>
+            </description>
+            <sum>
+              <droppedCapturePoints></droppedCapturePoints>
+              <capturePoints></capturePoints>
+            </sum>
+            <greaterOrEqual>	250	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_4	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	going_to_circle_880_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/going_to_circle_880_2/condition	</key>
+            </description>
+            <sum>
+              <droppedCapturePoints></droppedCapturePoints>
+              <capturePoints></capturePoints>
+            </sum>
+            <greaterOrEqual>	500	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_4	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	going_to_circle_880_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/going_to_circle_880_3/condition	</key>
+            </description>
+            <sum>
+              <droppedCapturePoints></droppedCapturePoints>
+              <capturePoints></capturePoints>
+            </sum>
+            <greaterOrEqual>	750	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_4	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	tactical_advantage_880_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_880_1/condition	</key>
+              </description>
+              <key>	poiCapturedByOwnTeam	</key>
+              <greaterOrEqual>	15	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_5	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	tactical_advantage_880_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_880_2/condition	</key>
+              </description>
+              <key>	poiCapturedByOwnTeam	</key>
+              <greaterOrEqual>	150	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_5	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	tactical_advantage_880_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/tactical_advantage_880_3/condition	</key>
+              </description>
+              <key>	poiCapturedByOwnTeam	</key>
+              <greaterOrEqual>	375	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_5	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	destroyed_vehicles_880_1	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_880_1/condition	</key>
+              </description>
+              <key>	kills	</key>
+              <greaterOrEqual>	15	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_6	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	destroyed_vehicles_880_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_880_2/condition	</key>
+              </description>
+              <key>	kills	</key>
+              <greaterOrEqual>	150	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_6	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	destroyed_vehicles_880_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeExt>
+            <results>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/destroyed_vehicles_880_3/condition	</key>
+              </description>
+              <key>	kills	</key>
+              <greaterOrEqual>	350	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_880_6	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_880_comp7_emblems.xml>

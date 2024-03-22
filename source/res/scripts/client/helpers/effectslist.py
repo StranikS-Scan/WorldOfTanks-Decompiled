@@ -5,6 +5,7 @@ import random
 import string
 from collections import namedtuple
 from functools import partial
+from enum import Enum
 import AnimationSequence
 import BigWorld
 import Math
@@ -47,6 +48,13 @@ def reload():
     import __builtin__
     from sys import modules
     __builtin__.reload(modules[reload.__module__])
+
+
+class EFFECT_DELETE_REASON(Enum):
+    LIST_DESTRUCTION = 0
+    REACHED_END_KEY = 1
+    KEEP_POSTEFFECTS = 2
+    FORCE_DELETE = 3
 
 
 class EffectsList(object):
@@ -95,28 +103,30 @@ class EffectsList(object):
         for elem in effects:
             elem['typeDesc'].reattach(elem, model)
 
-    def detachFrom(self, data, key, reason=1):
+    def detachFrom(self, data, key, reason=EFFECT_DELETE_REASON.REACHED_END_KEY):
         effects = data['_EffectsList_effects']
         for elem in effects[:]:
             if elem['typeDesc'].endKey == key:
                 if elem['typeDesc'].delete(elem, reason):
                     effects.remove(elem)
 
-    def detachAllFrom(self, data, keepPosteffects=False):
+    def detachAllFrom(self, data, keepPosteffects=False, forceDelete=False):
         effects = data.get('_EffectsList_effects', None)
         if effects is None:
             return
-        elif keepPosteffects:
+        else:
+            if keepPosteffects:
+                reason = EFFECT_DELETE_REASON.KEEP_POSTEFFECTS
+            elif forceDelete:
+                reason = EFFECT_DELETE_REASON.FORCE_DELETE
+            else:
+                reason = EFFECT_DELETE_REASON.LIST_DESTRUCTION
             for elem in effects[:]:
-                if elem['typeDesc'].delete(elem, 2):
+                if elem['typeDesc'].delete(elem, reason):
                     effects.remove(elem)
 
-            return
-        else:
-            for elem in effects[:]:
-                elem['typeDesc'].delete(elem, 0)
-                effects.remove(elem)
-
+            if not keepPosteffects:
+                return
             del data['_EffectsList_effects']
             return
 
@@ -186,7 +196,8 @@ class EffectsListPlayer(object):
             self.__model = model
             self.__callbackFunc = callbackFunc
             self.__waitForKeyOff = waitForKeyOff
-            self.__keyPointIdx = self.__getKeyPointIdx(startKeyPoint) if startKeyPoint is not None else 0
+            keyPoint = self.__getKeyPointIdx(startKeyPoint)
+            self.__keyPointIdx = keyPoint if startKeyPoint is not None and keyPoint is not None else 0
             self.__keyPointIdx -= 1
             self.__effectsList.attachTo(self.__model, self.__data, None, **self.__args)
             firstTimePoint = self.__keyPoints[self.__keyPointIdx + 1].time
@@ -234,7 +245,7 @@ class EffectsListPlayer(object):
         else:
             return (True, None)
 
-    def stop(self, keepPosteffects=False, forceCallback=False):
+    def stop(self, keepPosteffects=False, forceCallback=False, forceDelete=False):
         if self.__isStarted:
             if forceCallback and self.__callbackFunc is not None:
                 self.__callbackFunc()
@@ -245,7 +256,7 @@ class EffectsListPlayer(object):
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         if self.__effectsList is not None:
-            self.__effectsList.detachAllFrom(self.__data, keepPosteffects)
+            self.__effectsList.detachAllFrom(self.__data, keepPosteffects, forceDelete)
         self.__model = None
         self.__data = dict()
         self.__curKeyPoint = None
@@ -398,7 +409,8 @@ class _PixieEffectDesc(_EffectDesc):
         if pixieDef is not None:
             if pixieDef.pixie is not None:
                 elem['node'].detach(elem['pixie'].pixie)
-            pixieDef.destroy()
+            isForceKill = reason == EFFECT_DELETE_REASON.FORCE_DELETE
+            pixieDef.destroy(isForceKill)
         elem['pixie'] = None
         elem['node'] = None
         return True
@@ -450,7 +462,7 @@ class _AnimationEffectDesc(_EffectDesc):
     def delete(self, elem, reason):
         if elem['animator'] is None:
             return True
-        elif reason == 2:
+        elif reason == EFFECT_DELETE_REASON.KEEP_POSTEFFECTS:
             if self.endKey:
                 elem['animator'].stop()
                 return True
@@ -586,7 +598,7 @@ class _BaseSoundEvent(_EffectDesc):
     def delete(self, elem, reason):
         soundObject = elem.get('sound', None)
         if soundObject is not None:
-            if reason != 0:
+            if reason != EFFECT_DELETE_REASON.LIST_DESTRUCTION:
                 soundObject.stopAll()
             elem['sound'] = None
         if elem.has_key('node'):
@@ -731,13 +743,13 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
     def delete(self, elem, reason):
         if self.__tracerDelaySound is not None:
             self.__tracerDelaySound.delete()
-        if reason != 0:
+        if reason != EFFECT_DELETE_REASON.LIST_DESTRUCTION:
             soundObject = elem.get('sound', None)
             if soundObject is not None:
                 if self._dopplerEffect is not None:
                     soundObject.stopDopplerEffect()
                 soundObject.play(self.__stopSoundEventName)
-        super(_TracerSoundEffectDesc, self).delete(elem, 0)
+        super(_TracerSoundEffectDesc, self).delete(elem, EFFECT_DELETE_REASON.LIST_DESTRUCTION)
         return
 
     def _isPlayer(self, args):
@@ -900,7 +912,7 @@ class _SoundEffectDesc(_EffectDesc):
         return
 
     def create(self, model, effects, args):
-        if IS_EDITOR:
+        if IS_EDITOR or not args.get('playSound', True):
             return
         else:
             soundName = 'EMPTY_EVENT'
@@ -966,7 +978,7 @@ class _SoundEffectDesc(_EffectDesc):
                             soundNames = self._impactNames.impactFNPC_PC or self._impactNames.impactNPC_PC
                     if not BigWorld.entity(playerID).isAlive():
                         if self.__sessionProvider is not None:
-                            spectator = self.__sessionProvider.dynamic.spectator
+                            spectator = self.__sessionProvider.shared.spectator
                             if spectator is not None and spectator.spectatorViewMode in (EPIC_CONSTS.SPECTATOR_MODE_FREECAM, EPIC_CONSTS.SPECTATOR_MODE_FOLLOW):
                                 soundNames = self._impactNames.impactNPC_NPC
                 else:
@@ -1066,6 +1078,7 @@ class _DecalEffectDesc(_EffectDesc):
         rayStart = args['start']
         rayEnd = args['end']
         size = self._size.scale(random.uniform(1.0 - self._variation, 1.0 + self._variation))
+        size = args.get('size', size)
         center = 0.5 * (rayStart + rayEnd)
         extent = rayEnd - rayStart
         extent.normalise()

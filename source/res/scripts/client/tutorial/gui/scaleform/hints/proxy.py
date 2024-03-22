@@ -26,6 +26,7 @@ class HintsProxy(SfLobbyProxy):
         self.onEnabledChanged = Event.Event(self.__eManager)
         self.onUpdateTutorialHints = Event.Event(self.__eManager)
         self.onImportantHintShowing = Event.Event(self.__eManager)
+        self.onHintShowing = Event.Event(self.__eManager)
 
     def init(self):
         addListener = g_eventBus.addListener
@@ -54,7 +55,10 @@ class HintsProxy(SfLobbyProxy):
 
     def showHint(self, props, ignoreOutsideClick=False, silent=False):
         actionType = (ACTION_TAGS['click'],) if ignoreOutsideClick else (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])
-        return self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, actionType, silent))
+        result = self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, actionType, silent))
+        if result:
+            self.onHintShowing(props)
+        return result
 
     def hideHint(self, hintID):
         self.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, hintID)

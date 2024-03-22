@@ -88,6 +88,18 @@ def main(text):
     return _formatText('mainText', text)
 
 
+def linkText(text):
+    return _formatText('linkText', text)
+
+
+def earningsInformation(text):
+    return _formatText('earningsInformation', text)
+
+
+def goldColor(text):
+    return _formatText('goldColor', text)
+
+
 def mainSmall(text):
     return _formatText('mainTextSmall', text)
 
@@ -98,10 +110,6 @@ def mainBig(text):
 
 def neutral(text):
     return _formatText('neutralText', text)
-
-
-def stPatrick(text):
-    return _formatText('stPatrickText', text)
 
 
 def neutralBig(text):
@@ -305,10 +313,6 @@ def bpcoin(text):
 
 
 def brcoin(text):
-    return _formatText('creditsText', text)
-
-
-def stpcoin(text):
     return _formatText('creditsText', text)
 
 

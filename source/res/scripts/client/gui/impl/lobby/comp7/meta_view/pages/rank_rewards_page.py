@@ -76,7 +76,7 @@ class RankRewardsPage(PageSubModelPresenter):
             if tooltipId is not None and rank is not None:
                 bonusData = self.__bonusData[int(rank)][int(tooltipId)]
                 if bonusData is not None:
-                    window = BackportTooltipWindow(bonusData.tooltip, self.parentView.getParentWindow())
+                    window = BackportTooltipWindow(bonusData.tooltip, self.parentView.getParentWindow(), event)
                     window.load()
                     return window
         return

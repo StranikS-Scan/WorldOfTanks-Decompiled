@@ -1,5 +1,5 @@
 <extension.xml>
-  <FeatureName>	BattleRoyale	</FeatureName>
+  <FeatureName>	battle_royale	</FeatureName>
   <Components>
     <StaticComponents>
       <BattleRoyaleComponent></BattleRoyaleComponent>
@@ -26,6 +26,7 @@
       <BattleXPArenaInfo></BattleXPArenaInfo>
       <LootArenaInfo></LootArenaInfo>
       <VehicleCorrodingShotComponent></VehicleCorrodingShotComponent>
+      <VehicleCorrodingShotPreparingComponent></VehicleCorrodingShotPreparingComponent>
       <VehicleAdaptationHealthRestoreComponent></VehicleAdaptationHealthRestoreComponent>
       <VehicleThunderStrikeComponent></VehicleThunderStrikeComponent>
       <VehicleShotPassionComponent></VehicleShotPassionComponent>
@@ -37,7 +38,7 @@
       <VehicleFireCircleEffectComponent></VehicleFireCircleEffectComponent>
       <VehicleBRRespawnComponent></VehicleBRRespawnComponent>
       <VehicleBRRespawnEffectComponent></VehicleBRRespawnEffectComponent>
-      <VehicleBRStPatrickComponent></VehicleBRStPatrickComponent>
+      <BattleRoyaleObserverInfoComponent></BattleRoyaleObserverInfoComponent>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>
@@ -63,6 +64,8 @@
       <module>	client.battle_royale.abilities.thunder_strike	</module>
       <module>	client.battle_royale.mechanics.death_zones	</module>
       <module>	client.battle_royale.abilities.shot_passion	</module>
+      <module>	client.battle_royale.abilities.self_buff	</module>
+      <module>	client.battle_royale.abilities.corroding_shot_preparing	</module>
       <module>	client.battle_royale.abilities.adaptation_restore_health	</module>
     </script>
   </cgf>

@@ -7,13 +7,12 @@ from adisp import adisp_process
 from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from gui import DialogsInterface
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.game_loading import loading as gameLoading
 from gui.game_loading.state_machine.const import GameLoadingStates
 from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import LobbySimpleEvent, LoginEvent, ViewEventType, BCLoginEvent, CloseWindowEvent
+from gui.shared.events import LobbySimpleEvent, LoginEvent, ViewEventType, CloseWindowEvent
 from gui.shared.utils.decorators import ReprInjector
 from helpers import dependency, isPlayerAvatar
 from skeletons.connection_mgr import DisconnectReason, IConnectionManager
@@ -159,7 +158,6 @@ class LoginSpace(IGlobalSpace):
         self.loginManager.onConnectionInitiated += self._onTryToLogin
         self.loginManager.onConnectionRejected += self._onLoginFailed
         g_eventBus.addListener(LoginEvent.LOGIN_VIEW_READY, self._loginViewReadyHandler)
-        g_eventBus.addListener(BCLoginEvent.HIDE_GAME_LOADING, self._bcQueueHideLoadingHandler, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(LoginEvent.CONNECTION_FAILED, self._onLoginFailed)
         g_eventBus.addListener(CloseWindowEvent.EULA_CLOSED, self._onEULAClosed)
 
@@ -171,7 +169,6 @@ class LoginSpace(IGlobalSpace):
         self.loginManager.onConnectionInitiated -= self._onTryToLogin
         self.loginManager.onConnectionRejected -= self._onLoginFailed
         g_eventBus.removeListener(LoginEvent.LOGIN_VIEW_READY, self._loginViewReadyHandler)
-        g_eventBus.removeListener(BCLoginEvent.HIDE_GAME_LOADING, self._bcQueueHideLoadingHandler, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(LoginEvent.CONNECTION_FAILED, self._onLoginFailed)
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(CloseWindowEvent.EULA_CLOSED, self._onEULAClosed)
@@ -232,20 +229,9 @@ class LoginSpace(IGlobalSpace):
         if not self._isPlayerLoadingActive and not self.__isReconnectActive:
             gameLoading.getLoader().loginScreen()
 
-    def _bcQueueHideLoadingHandler(self, *_):
-        gameLoading.getLoader().loginScreen()
-
     def _loadViewHandler(self, event):
         self._isPlayerLoadingActive = False
-        alias = event.alias
-        if alias == VIEW_ALIAS.BOOTCAMP_INTRO:
-            gameLoading.getLoader().idl()
-        elif alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW:
-            pass
-        elif alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CLOSE:
-            pass
-        else:
-            gameLoading.getLoader().loginScreen()
+        gameLoading.getLoader().loginScreen()
 
     @classmethod
     def _clearEntitiesAndSpaces(cls):

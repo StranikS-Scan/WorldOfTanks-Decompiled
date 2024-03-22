@@ -3124,7 +3124,6 @@
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
-        <A36_Sherman_Jumbo_bootcamp>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_bootcamp>
         <A37_M40M43>	1.2 1.2 0.32 0.000000	</A37_M40M43>
         <A38_T92>	1.8 1.8 0.32 0.000000	</A38_T92>
         <A39_T28>	1.6 1.6 0.6 4	</A39_T28>
@@ -4080,7 +4079,6 @@
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
-        <A36_Sherman_Jumbo_bootcamp>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_bootcamp>
         <A37_M40M43>	1.2 1.2 0.32 0.000000	</A37_M40M43>
         <A38_T92>	1.8 1.8 0.32 0.000000	</A38_T92>
         <A39_T28>	1.6 1.6 0.6 4	</A39_T28>
@@ -4787,7 +4785,6 @@
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_IGR>
-        <A36_Sherman_Jumbo_bootcamp>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo_bootcamp>
         <A37_M40M43>	1.2 1.2 0.32 0.000000	</A37_M40M43>
         <A38_T92>	1.8 1.8 0.32 0.000000	</A38_T92>
         <A39_T28>	1.6 1.6 0.6 4	</A39_T28>
@@ -6950,47 +6947,6 @@
       <tilingSettings>
         <type>	relative	</type>
         <factor>	1.455990  1.458334	</factor>
-        <offset>	0.000000 0.000000	</offset>
-      </tilingSettings>
-    </camouflage>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	ALL	</season>
-    <historical>	0	</historical>
-    <priceGroup>	camouflages 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A36_Sherman_Jumbo_bootcamp	</vehicles>
-      </include>
-    </vehicleFilter>
-    <camouflage>
-      <id>	506	</id>
-      <texture>	vehicles/american/Camouflage/Cusa_1_10Tropical_tricolor.dds	</texture>
-      <description>	#vehicle_customization:camouflage/usa/tricolor/generic_custom_2_usa_summer/description	</description>
-      <scales>	1.3 1 0.8	</scales>
-      <userString>	#vehicle_customization:camouflage/usa/tricolor/generic_custom_2_usa_summer/label	</userString>
-      <tags>	hiddenInUI	</tags>
-      <invisibilityFactor>	1	</invisibilityFactor>
-      <palettes>
-        <palette>
-          <c0>	73 61 53 255	</c0>
-          <c1>	49 51 53 255	</c1>
-          <c2>	96 101 83 255	</c2>
-          <c3>	0 0 0 0	</c3>
-        </palette>
-      </palettes>
-      <rotation>
-        <HULL>	0.797965	</HULL>
-        <TURRET>	0.797965	</TURRET>
-        <GUN>	0.797965	</GUN>
-      </rotation>
-      <tiling>
-        <usa:A07_T200>	3.87 3.87 0.000000 0.000000	</usa:A07_T200>
-      </tiling>
-      <tilingSettings>
-        <type>	relative	</type>
-        <factor>	2.054469  2.056357	</factor>
         <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>

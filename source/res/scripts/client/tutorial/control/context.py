@@ -3,7 +3,6 @@
 from abc import ABCMeta, abstractmethod
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IBootcampController
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
 import SoundGroups
@@ -12,7 +11,6 @@ __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage', 'SOU
 
 class StartReqs(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bootcampController = dependency.descriptor(IBootcampController)
 
     def __del__(self):
         LOG_MEMORY('StartReqs deleted: {0:>s}'.format(self))
@@ -120,7 +118,6 @@ class GLOBAL_FLAG(object):
     MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
     HAVE_NEW_BADGE = '_HaveNewBadge'
     LOBBY_MENU_ITEM_MANUAL = '_LobbyMenuItemManual'
-    LOBBY_MENU_ITEM_BOOTCAMP = '_LobbyMenuItemBootcamp'
     HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
     COLLECTIBLE_VEHICLE_PREVIEW_ENABLED = '_CollectibleVehiclePreviewEnabled'
@@ -128,14 +125,12 @@ class GLOBAL_FLAG(object):
     VEH_POST_PROGRESSION_ENABLED = '_VehPostProgressionEnabled'
     HANGAR_VEH_POST_PROGRESSION_PURCHASABLE = '_HangarVehPostProgressionPurchasable'
     RESEARCH_VEH_POST_PROGRESSION_PURCHASABLE = '_ResearchVehPostProgressionPurchasable'
-    PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
      BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
-     DOGTAGS_ENABLED,
-     PERSONAL_RESERVES_AVAILABLE)
+     DOGTAGS_ENABLED)
 
 
 class GlobalStorage(object):
@@ -171,6 +166,8 @@ class GlobalStorage(object):
 
     @classmethod
     def clearFlags(cls):
+        if not cls.__storage:
+            return
         for flag in GLOBAL_FLAG.ALL:
             if flag in cls.__storage:
                 cls.__storage[flag] = False

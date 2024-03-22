@@ -15,7 +15,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/poland	</userString>
-      <tags>	vehicleBound addNationalEmblem	</tags>
+      <tags>	vehicleBound addNationalEmblem c11n2D	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -71,7 +71,7 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required c11n2D	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -214,7 +214,7 @@
       <id>	186	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required c11n2D	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -274,7 +274,7 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required c11n3D	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -318,7 +318,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_poland_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_poland	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
+      <tags>	progression_required addNationalEmblem c11n2D	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -399,7 +399,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_poland_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_poland	</userString>
-      <tags>	progression_required addNationalEmblem	</tags>
+      <tags>	progression_required addNationalEmblem c11n2D	</tags>
       <itemFilters>
         <projection_decal>
           <include>
@@ -482,6 +482,7 @@
       <description>	#vehicle_customization:special_style/Pl19_CS_52_LIS_autumn_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/Pl19_CS_52_LIS_autumn_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/Pl19_CS_52_LIS_autumn	</userString>
+      <tags>	c11n2D	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -541,7 +542,7 @@
       <maxNumber>	1	</maxNumber>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/Pl15_60TP_Lewandowskiego_3Dst_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:unique_style/Pl15_60TP_Lewandowskiego_3Dst	</userString>
-      <tags>	NY_style progression_required addNationalEmblem	</tags>
+      <tags>	NY_style progression_required addNationalEmblem c11n3D	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -581,7 +582,7 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Pl21_CS_63_3Dst_BV	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/Pl21_CS_63_3Dst_BV_desc/long	</longDescriptionSpecial>
-      <tags>	styleProgression progression_required	</tags>
+      <tags>	styleProgression progression_required c11n3D	</tags>
       <styleProgressions>
         <stage>
           <materials></materials>
@@ -654,7 +655,7 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/Pl15_60TP_LewandowskiegoB9BS_3DSt	</userString>
       <longDescriptionSpecial>	#vehicle_customization:main_style/Pl15_60TP_LewandowskiegoB9BS_3DSt_desc/long	</longDescriptionSpecial>
-      <tags>	styleProgression progression_required	</tags>
+      <tags>	styleProgression progression_required c11n3D	</tags>
       <styleProgressions>
         <stage>
           <materials>	tank_upgrade_01 tank_upgrade_01_skinned tank_upgrade_01_eq	</materials>
@@ -732,7 +733,7 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:styles/special_styles	</userString>
-      <tags>	addNationalEmblem	</tags>
+      <tags>	addNationalEmblem c11n2D	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -764,7 +765,7 @@
       <modelsSet>	PL24_56TP_bisontis_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <longDescriptionSpecial>	#vehicle_customization:special_style/PL24_56TP_bisontis_3Dst_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required	</tags>
+      <tags>	progression_required c11n3D	</tags>
       <userString>	#vehicle_customization:special_style/PL24_56TP_bisontis_3Dst	</userString>
       <outfits>
         <outfit>
@@ -786,6 +787,51 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl21_CS_63_OSP3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	869	</id>
+      <texture>	gui/maps/vehicles/styles/Pl21_CS_63_OSP3_3DSt.png	</texture>
+      <modelsSet>	Pl21_CS_63_OSP3_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl21_CS_63_OSP3_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <userString>	#vehicle_customization:special_style/Pl21_CS_63_OSP3_3DSt	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	79	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
 </poland.xml>

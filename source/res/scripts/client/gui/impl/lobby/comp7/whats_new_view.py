@@ -5,7 +5,7 @@ import SoundGroups
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
-from battle_modifiers_common import BattleModifiers, BattleParams
+from comp7_common import rentVehiclesQuestIDBySeasonNumber
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import GUI_SETTINGS
 from gui.impl.backport import BackportTooltipWindow
@@ -23,13 +23,13 @@ from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
-from math_common import round_int
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
-_EQUIPMENT_COOLDOWN_SECONDS = 90
 SOUND_NAME = 'comp_7_whatsnew_appear'
 
 class WhatsNewView(ViewImpl, IGlobalListener):
@@ -37,12 +37,12 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
         settings.model = WhatsNewViewModel()
         super(WhatsNewView, self).__init__(settings)
-        self.__vehicles = [57665, 52369, 52641]
 
     @property
     def viewModel(self):
@@ -76,9 +76,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             self.destroyWindow()
 
     def _finalize(self):
-        self.__vehicles = None
         self.__removeListeners()
-        return
 
     def _onLoading(self, *_, **__):
         self.__addListeners()
@@ -94,6 +92,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
         self.__comp7Controller.onComp7ConfigChanged += self.__onConfigChanged
+        self.__eventsCache.onSyncCompleted += self.__onEventsSyncCompleted
         self.startGlobalListening()
 
     def __removeListeners(self):
@@ -102,6 +101,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.__comp7Controller.onComp7ConfigChanged -= self.__onConfigChanged
+        self.__eventsCache.onSyncCompleted -= self.__onEventsSyncCompleted
         self.stopGlobalListening()
 
     def __onStatusUpdated(self, status):
@@ -115,6 +115,10 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             self.__updateData()
         return
 
+    def __onEventsSyncCompleted(self):
+        with self.viewModel.transaction() as vm:
+            self.__setVehicles(vm)
+
     def __onPollServerTime(self):
         self.__updateData()
 
@@ -122,12 +126,12 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         with self.viewModel.transaction() as vm:
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
             self.__setVehicles(vm)
-            self.__setModifiersData(vm)
 
     def __setVehicles(self, viewModel):
+        rentVehicles = self.__getRentVehicles()
         vehiclesList = viewModel.getVehicles()
         vehiclesList.clear()
-        for vehicleCD in self.__vehicles:
+        for vehicleCD in rentVehicles:
             vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
             vehicleModel = VehicleModel()
             fillVehicleModel(vehicleModel, vehicleItem)
@@ -135,25 +139,28 @@ class WhatsNewView(ViewImpl, IGlobalListener):
 
         vehiclesList.invalidate()
 
-    def __setModifiersData(self, viewModel):
-        modifiers = BattleModifiers(self.__comp7Controller.battleModifiers)
-        for param, modifier in modifiers:
-            if param == BattleParams.VEHICLE_HEALTH:
-                viewModel.setVehicleHealth(self.__toPercents(modifier.value))
-            if param == BattleParams.EQUIPMENT_COOLDOWN:
-                viewModel.setEquipmentCooldown(round_int(modifier.value * _EQUIPMENT_COOLDOWN_SECONDS))
-            if param == BattleParams.SHOT_DISPERSION_RADIUS:
-                viewModel.setShotDispersionRadius(modifier.value)
-            if param == BattleParams.VISION_TIME:
-                viewModel.setVisionTime(round_int(modifier.value))
-            if param == BattleParams.VISION_MIN_RADIUS:
-                viewModel.setVisionMinRadius(round_int(modifier.value))
-
     def __setComp7WhatsNewShown(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         stateFlags = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         stateFlags[GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = True
         self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, stateFlags)
+
+    def __getRentVehicles(self):
+        rentVehicles = []
+        actualSeasonNumber = self.__comp7Controller.getActualSeasonNumber()
+        if actualSeasonNumber is None:
+            return rentVehicles
+        else:
+            questID = rentVehiclesQuestIDBySeasonNumber(actualSeasonNumber)
+            rentVehiclesQuest = first(self.__eventsCache.getAllQuests(lambda q: q.getID() == questID).values())
+            if rentVehiclesQuest is None:
+                return rentVehicles
+            for vehBonus in rentVehiclesQuest.getBonuses('vehicles'):
+                for intCD, vehInfo in vehBonus.getValue().iteritems():
+                    rentVehicles.append((intCD, vehInfo.get('bonusOrder')))
+
+            rentVehicles = sorted(rentVehicles, key=lambda x: (x[1] is None, x[1], x[0]))
+            return [ intCD for intCD, _ in rentVehicles ]
 
     def __onClose(self):
         self.destroyWindow()
@@ -169,10 +176,6 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     @staticmethod
     def __getWhatsNewPageKey():
         pass
-
-    @staticmethod
-    def __toPercents(value):
-        return round_int(100.0 * value)
 
 
 class WhatsNewViewWindow(LobbyNotificationWindow):

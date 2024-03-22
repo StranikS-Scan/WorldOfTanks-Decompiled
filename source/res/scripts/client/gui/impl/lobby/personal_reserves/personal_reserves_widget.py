@@ -3,16 +3,15 @@
 import logging
 import typing
 import Event
-from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, ViewFlags
-from gui.ClientUpdateManager import g_clientUpdateManager
 from goodies.goodie_constants import BoosterCategory
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import BoosterModel
 from gui.impl.gen.view_models.views.lobby.personal_reserves.reserves_entry_point_model import ReservesEntryPointModel
-from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, addToReserveArrayByCategory, getTotalReadyReserves, getTotalLimitedReserves, boostersInClientUpdate, addDisabledCategories
+from gui.impl.lobby.personal_reserves.personal_reserves_utils import getActiveBoosters, getTotalReadyReserves, getTotalLimitedReserves, addDisabledCategories, getNearestExpiryTimeForToday
+from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import addToReserveArrayByCategory
 from gui.impl.pub import ViewImpl
-from helpers import dependency
+from helpers import dependency, time_utils
 from skeletons.gui.game_control import IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
@@ -51,25 +50,21 @@ class PersonalReservesWidget(ViewImpl):
     def activeBoostersCount(self):
         return len(self.viewModel.getReserves())
 
-    def _initialize(self):
-        super(PersonalReservesWidget, self)._initialize()
-        g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged,
-         'cache.activeOrders': self.__onClanInfoChanged})
-        self._boosters.onBoosterChangeNotify += self.onBoosterChangeNotify
-        self._boosters.onReserveTimerTick += self.__updateClanReserves
-        self._boosters.onGameModeStatusChange += self._update
-        g_playerEvents.onClientUpdated += self.onClientUpdate
+    def _getCallbacks(self):
+        return (('stats.clanInfo', self._onClanInfoChanged),)
+
+    def _getEvents(self):
+        return ((self._boosters.onPersonalReserveTick, self._update),
+         (self._boosters.onClanReserveTick, self._updateClanReserves),
+         (self._boosters.onGameModeStatusChange, self._update),
+         (self._boosters.onBoostersDataUpdate, self._update))
 
     def _finalize(self):
-        self._boosters.onBoosterChangeNotify -= self.onBoosterChangeNotify
-        self._boosters.onReserveTimerTick -= self.__updateClanReserves
-        self._boosters.onGameModeStatusChange -= self._update
-        g_playerEvents.onClientUpdated -= self.onClientUpdate
         self.onUpdate.clear()
-        g_clientUpdateManager.removeObjectCallbacks(self)
         super(PersonalReservesWidget, self)._finalize()
 
     def _onLoading(self):
+        super(PersonalReservesWidget, self)._onLoading()
         self._update()
 
     def _fillViewModel(self, model):
@@ -85,13 +80,8 @@ class PersonalReservesWidget(ViewImpl):
         addDisabledCategories(model.getDisabledCategories(), self._boosters)
         model.setTotalReserves(getTotalReadyReserves(cache=self._goodiesCache))
         model.setTotalLimitedReserves(getTotalLimitedReserves(cache=self._goodiesCache))
-
-    def onClientUpdate(self, diff, _):
-        if boostersInClientUpdate(diff):
-            self._update()
-
-    def onBoosterChangeNotify(self, _):
-        self._update()
+        closestExpiration = getNearestExpiryTimeForToday(cache=self._goodiesCache)
+        model.setExpiringReserveWillExpireSoon(time_utils.getServerUTCTime() + 86400 > closestExpiration > 0)
 
     def _update(self):
         self._hasActiveBoosters = False
@@ -99,10 +89,10 @@ class PersonalReservesWidget(ViewImpl):
             self._fillViewModel(model)
         self.onUpdate()
 
-    def __onClanInfoChanged(self, _):
+    def _onClanInfoChanged(self, _):
         clanProfile = self.__webCtrl.getAccountProfile()
         if clanProfile and clanProfile.isInClan():
             self._update()
 
-    def __updateClanReserves(self):
+    def _updateClanReserves(self):
         self._update()

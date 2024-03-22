@@ -5,6 +5,7 @@ from gui.gift_system.proxy import GiftSystemMessagesProxy
 from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
+from messenger.formatters import personal_reserves as _prFormatters
 from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 _AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
@@ -61,6 +62,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.rentalsExpired.index(): _sc.RentalsExpiredFormatter(),
  _SM_TYPE.potapovQuestBonus.index(): _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS),
  _SM_TYPE.goodieRemoved.index(): _sc.GoodyRemovedFormatter(),
+ _SM_TYPE.goodiesExpired.index(): _sc.GoodiesExpiredFormatter(),
  _SM_TYPE.goodieDisabled.index(): _sc.GoodyDisabledFormatter(),
  _SM_TYPE.goodieEnabled.index(): _sc.GoodieEnabledFormatter(),
  _SM_TYPE.telecomOrderCreated.index(): _sc.TelecomReceivedInvoiceFormatter(),
@@ -72,7 +74,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
  _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
  _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
- _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
  _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS),
  _SM_TYPE.prbVehicleMaxScoutKick.index(): _sc.PrbVehicleMaxScoutKickFormatter(),
@@ -99,7 +100,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.prbWrongEnqueueDataKick.index(): _sc.PrbEventEnqueueDataFormatter(),
  _SM_TYPE.dedicationReward.index(): _sc.DedicationRewardFormatter(),
  _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter(),
- _SM_TYPE.wotPlusUnlocked.index(): _wotPlusFormatters.WotPlusUnlockedFormatter(),
+ _SM_TYPE.wotPlusUnlocked.index(): _wotPlusFormatters.WotPlusUnlockedAwardFormatter(),
  _SM_TYPE.wotPlusRenewed.index(): _wotPlusFormatters.WotPlusRenewedFormatter(),
  _SM_TYPE.wotPlusExpired.index(): _wotPlusFormatters.WotPlusExpiredFormatter(),
  _SM_TYPE.bonusExcludedMap.index(): _sc.SimpleFormatter('BonusExcludedMapAvailable'),
@@ -124,7 +125,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
  _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
  _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
- _SM_TYPE.personalReservesHaveBeenConverted.index(): _sc.PersonalReservesHaveBeenConvertedFormatter(),
  _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
  _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
  _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
@@ -161,6 +161,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.rentalsExpired.index(), _sc.RentalsExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.potapovQuestBonus.index(), _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS))
     registerMessengerServerFormatter(_SM_TYPE.goodieRemoved.index(), _sc.GoodyRemovedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.goodiesExpired.index(), _sc.GoodiesExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieDisabled.index(), _sc.GoodyDisabledFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieEnabled.index(), _sc.GoodieEnabledFormatter())
     registerMessengerServerFormatter(_SM_TYPE.telecomOrderCreated.index(), _sc.TelecomReceivedInvoiceFormatter())
@@ -172,7 +173,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.vehicleGroupUnlocked.index(), _sc.RotationGroupUnlockFormatter())
     registerMessengerServerFormatter(_SM_TYPE.rankedQuests.index(), _sc.RankedQuestFormatter())
     registerMessengerServerFormatter(_SM_TYPE.royaleQuests.index(), _sc.BRQuestsFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.bootcamp.index(), _sc.BootcampResultsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxSpgKick.index(), _sc.PrbVehicleMaxSpgKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.hangarQuests.index(), _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS))
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxScoutKick.index(), _sc.PrbVehicleMaxScoutKickFormatter())
@@ -199,10 +199,10 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.prbWrongEnqueueDataKick.index(), _sc.PrbEventEnqueueDataFormatter())
     registerMessengerServerFormatter(_SM_TYPE.dedicationReward.index(), _sc.DedicationRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customizationProgressionChanged.index(), _sc.CustomizationProgressionChangedFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.wotPlusUnlocked.index(), _wotPlusFormatters.WotPlusUnlockedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPActivated.index(), _wotPlusFormatters.PassiveXpActivatedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPDeactivated.index(), _wotPlusFormatters.PassiveXpDeactivatedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPSwitched.index(), _wotPlusFormatters.PassiveXpSwitchedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.wotPlusUnlocked.index(), _wotPlusFormatters.WotPlusUnlockedAwardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.wotPlusRenewed.index(), _wotPlusFormatters.WotPlusRenewedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExcludedVehicleEnabled.index(), _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=True))
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExcludedVehicleExpired.index(), _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False))
@@ -224,7 +224,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.resourceWellReward.index(), _sc.ResourceWellRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.resourceWellNoVehicles.index(), _sc.ResourceWellNoVehiclesFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customization2dProgressionChanged.index(), _sc.Customization2DProgressionChangedFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.personalReservesHaveBeenConverted.index(), _sc.PersonalReservesHaveBeenConvertedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.fairplay.index(), _sc.FairplayFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, _sc.ClientSysMessageFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG, _sc.PremiumAccountExpiryFormatter())
@@ -242,20 +241,13 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE, _sc.MapboxSurveyAvailableFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD, token_quest_subformatters.BattleMattersClientAwardsFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FEATURE_DISABLED, _sc.SimpleFormatter('WotPlusDisabled'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_ENABLED, _sc.SimpleFormatter('WotPlusFreeDemountUnlockMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_DISABLED, _sc.SimpleFormatter('WotPlusFreeDemountExpireMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED, _sc.SimpleFormatter('GoldReserveEnabledMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED, _sc.SimpleFormatter('GoldReserveDisabledMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED, _sc.SimpleFormatter('PassiveXpEnabledMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED, _sc.SimpleFormatter('PassiveXpDisabledMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_EXCLUSIVE_VEHICLE_ENABLED, _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=True))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_EXCLUSIVE_VEHICLE_DISABLED, _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False))
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE, _sc.IntegratedAuctionLostRateFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_ENABLED, _sc.SimpleFormatter('BonusExcludedMapAvailable'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED, _sc.SimpleFormatter('BonusExcludedMapUnavailable'))
     registerMessengerServerFormatter(_SM_TYPE.collectionsItems.index(), _sc.CollectionsItemsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.collectionsReward.index(), _sc.CollectionsRewardFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_SM_TYPE, _sc.AchievementsSMFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, _sc.SimpleFormatter('DailyAttendancesEnabledMessage'))
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED, _sc.SimpleFormatter('DailyAttendancesDisabledMessage'))
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIPTION_UNLOCKED, _wotPlusFormatters.WotPlusUnlockedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prestigeLevelChanged.index(), _sc.PrestigeFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PERSONAL_RESERVES_FIRST_LOGIN, _prFormatters.ReleaseFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PERSONAL_RESERVES_SOON_EXPIRATION, _prFormatters.PersonalReservesSoonExpirationFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIBERS_ONBOARDING, _wotPlusFormatters.WotPlusSubscribersOnboardingFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH, _wotPlusFormatters.WotPlusSwitchFormatter())

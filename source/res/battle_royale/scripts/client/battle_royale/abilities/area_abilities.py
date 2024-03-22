@@ -8,7 +8,7 @@ from battle_royale.abilities.adaptation_restore_health import AdaptationHealthRe
 from cgf_script.bonus_caps_rules import bonusCapsManager
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery
-from items.artefacts import ThunderStrike, ZonesCircle
+from battle_royale_artefacts import ThunderStrike, ZonesCircle
 
 @registerComponent
 class AreaAbilityVisualizer(object):

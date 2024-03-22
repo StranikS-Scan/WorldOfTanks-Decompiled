@@ -48,7 +48,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
 from helpers import dependency, int2roman
 from shared_utils import first
-from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 STYLES_TAGS = []
 VIDEO_TAGS = []
@@ -512,22 +511,6 @@ DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
 RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
-
-@dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def setRewards(model, chapterID, battlePass=None):
-    freeArray = model.getFreeFinalRewards()
-    freeArray.clear()
-    for freeReward in battlePass.getFreeFinalRewardTypes(chapterID):
-        freeArray.addString(freeReward)
-
-    freeArray.invalidate()
-    paidArray = model.getPaidFinalRewards()
-    paidArray.clear()
-    for paidReward in battlePass.getPaidFinalRewardTypes(chapterID):
-        paidArray.addString(paidReward)
-
-    paidArray.invalidate()
-
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())

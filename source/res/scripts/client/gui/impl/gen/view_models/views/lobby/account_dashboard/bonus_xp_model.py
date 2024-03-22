@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BonusXpModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(BonusXpModel, self).__init__(properties=properties, commands=commands)
 
     def getIsEnabled(self):
@@ -32,10 +32,38 @@ class BonusXpModel(ViewModel):
     def setUsesLeft(self, value):
         self._setNumber(3, value)
 
+    def getIsWotPlusBonusEnabled(self):
+        return self._getBool(4)
+
+    def setIsWotPlusBonusEnabled(self, value):
+        self._setBool(4, value)
+
+    def getIsWotPremium(self):
+        return self._getBool(5)
+
+    def setIsWotPremium(self, value):
+        self._setBool(5, value)
+
+    def getIsWotPlus(self):
+        return self._getBool(6)
+
+    def setIsWotPlus(self, value):
+        self._setBool(6, value)
+
+    def getDailyAppliedXP(self):
+        return self._getNumber(7)
+
+    def setDailyAppliedXP(self, value):
+        self._setNumber(7, value)
+
     def _initialize(self):
         super(BonusXpModel, self)._initialize()
         self._addBoolProperty('isEnabled', True)
         self._addNumberProperty('multiplier', 1)
         self._addNumberProperty('totalUses', 0)
         self._addNumberProperty('usesLeft', 0)
+        self._addBoolProperty('isWotPlusBonusEnabled', False)
+        self._addBoolProperty('isWotPremium', False)
+        self._addBoolProperty('isWotPlus', False)
+        self._addNumberProperty('dailyAppliedXP', 0)
         self.onClick = self._addCommand('onClick')

@@ -64,13 +64,12 @@ class StoryModeBattlePage(ClassicPage):
 
     def showWinMessage(self, team, reason):
         gameMessagesPanel = self.getComponent(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL)
-        gameMessagesPanel.sendEndGameMessage(team, reason, None)
+        gameMessagesPanel.sendEndGameMessage(team, reason)
         inputHandler = BigWorld.player().inputHandler
         if inputHandler.ctrlModeName != CTRL_MODE_NAME.ARCADE:
             inputHandler.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=inputHandler.getDesiredShotPoint())
         self.__onRoundFinished()
         self._isWinMessageShown = True
-        return
 
     def _populate(self):
         super(StoryModeBattlePage, self)._populate()
@@ -106,6 +105,14 @@ class StoryModeBattlePage(ClassicPage):
         else:
             showPrebattleWindow(missionId=missionId)
         return
+
+    def _onKillCamSimulationFinish(self):
+        self._visibleComponents.discard(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+
+    def _changeCtrlMode(self, ctrlMode):
+        super(StoryModeBattlePage, self)._changeCtrlMode(ctrlMode)
+        if ctrlMode is CTRL_MODE_NAME.POSTMORTEM:
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
 
     def _setComponentsVisibility(self, visible=None, hidden=None):
         if visible is not None and BATTLE_VIEW_ALIASES.BATTLE_LOADING in visible:

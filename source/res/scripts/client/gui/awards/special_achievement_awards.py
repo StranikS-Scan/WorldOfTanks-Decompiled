@@ -93,7 +93,7 @@ class BoosterAward(ExplosionBackAward):
 
     def getDescription(self):
         localKey = '#menu:awardWindow/boosterAward/description/timeValue/%s'
-        if self._booster.expiryTime:
+        if self._booster.useby:
             timeValue = text_styles.stats(i18n.makeString(localKey % 'defined', effectTime=self._booster.getEffectTimeStr(), tillTime=self._booster.getExpiryDate()))
         else:
             timeValue = text_styles.stats(i18n.makeString(localKey % 'undefined', effectTime=self._booster.getEffectTimeStr()))

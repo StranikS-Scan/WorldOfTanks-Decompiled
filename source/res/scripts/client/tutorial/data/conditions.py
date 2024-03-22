@@ -38,6 +38,7 @@ class CONDITION_TYPE(object):
      CONDITION_AND,
      CONDITION_OR,
      CLASS_CONDITION)
+    COMPLEX = (CONDITION_AND, CONDITION_OR)
 
 
 @functools.total_ordering
@@ -313,3 +314,16 @@ class Conditions(list):
 
         while self:
             self.pop()
+
+    def getUnwrappedConditions(self):
+        return Conditions.__unwrapComplexConditions(self)
+
+    @staticmethod
+    def __unwrapComplexConditions(conditions):
+        result = []
+        for condition in conditions:
+            if condition.getType() in CONDITION_TYPE.COMPLEX:
+                result.extend(Conditions.__unwrapComplexConditions(condition.getConditionList()))
+            result.append(condition)
+
+        return result

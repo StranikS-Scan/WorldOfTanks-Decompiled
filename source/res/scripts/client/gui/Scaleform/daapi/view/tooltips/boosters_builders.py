@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/boosters_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import contexts, common
-from gui.shared.tooltips import battle_booster
-from gui.shared.tooltips import boosters
-from gui.shared.tooltips import advanced
-from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder
+from gui.shared.tooltips import advanced, battle_booster, boosters, contexts, common
+from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, TooltipWindowBuilder
 __all__ = ('getTooltipBuilders',)
 
 def _advancedBlockCondition(context):
@@ -27,10 +24,10 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.NATION_CHANGE_BATTLE_BOOSTER, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, battle_booster.BattleBoosterBlockTooltipData(contexts.NationChangeHangarContext()), advanced.HangarBoosterAdvanced(contexts.NationChangeHangarContext()), condition=_advancedBlockCondition(contexts.NationChangeHangarContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.DEFAULT_BATTLE_BOOSTER, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, battle_booster.BattleBoosterBlockTooltipData(contexts.BattleBoosterContext()), advanced.HangarBoosterAdvanced(contexts.BattleBoosterContext()), condition=_advancedBlockCondition(contexts.BattleBoosterContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, battle_booster.BattleBoosterBlockTooltipData(contexts.VehCmpConfigurationContext()), advanced.HangarBoosterAdvanced(contexts.VehCmpConfigurationContext()), condition=_advancedBlockCondition(contexts.VehCmpConfigurationContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.BoosterInfoContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.ClanReserveContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO, None, common.BoosterTooltipContent(contexts.BoosterInfoContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO, None, common.BoosterTooltipContent(contexts.ClanReserveContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BOOSTER, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.BoosterContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.SHOP_BOOSTER, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.ShopBoosterContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.SHOP_BOOSTER, None, common.QuestBoosterTooltipContent(contexts.QuestsBoosterContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BOOSTERS_QUESTS, TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI, boosters.BoosterTooltipData(contexts.QuestsBoosterContext())),
      PersonalReservesBuilder(TOOLTIPS_CONSTANTS.PERSONAL_RESERVES_WIDGET, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI))
 

@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/battle_results/components/comp7.py
 from comp7_ranks_common import EXTRA_RANK_TAG
 from constants import EntityCaptured
+from fairplay_violation_types import FairplayViolations
 from gui.Scaleform.genConsts.COMP7_CONSTS import COMP7_CONSTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_results.components import base, style
 from gui.battle_results.components.vehicles import RegularVehicleStatValuesBlock, RegularVehicleStatsBlock, TeamStatsBlock, _getStunFilter
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
-from constants import FAIRPLAY_VIOLATIONS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.qualification_battle import BattleState
@@ -20,15 +20,15 @@ def checkIfDeserter(reusable):
     if not reusable.personal.avatar.hasPenalties():
         return False
     penaltyName, _ = reusable.personal.avatar.getPenaltyDetails()
-    return penaltyName == FAIRPLAY_VIOLATIONS.COMP7_DESERTER
+    return penaltyName == FairplayViolations.COMP7_DESERTER
 
 
-def checkIsQualificationBattle(personalRecord):
-    return personalRecord['avatar'].get('comp7QualActive', False) if 'avatar' in personalRecord else False
+def isQualificationBattle(avatarResults):
+    return avatarResults.get('comp7QualActive', False)
 
 
 def getFormattedRating(rating):
-    return '{:+}'.format(rating)
+    return '{:+}'.format(rating) if rating != 0 else str(rating)
 
 
 class PrestigePointsBlock(base.StatsBlock):
@@ -41,43 +41,29 @@ class PrestigePointsBlock(base.StatsBlock):
         self.label = ''
         self.tooltip = ''
 
-    def setRecord(self, result, reusable):
-        isQualificationBattle = checkIsQualificationBattle(result)
-        self.isVisible = not isQualificationBattle
-        if not self.isVisible:
-            return
-        else:
-            achievedComp7Rating = result.get('avatar', {}).get('comp7RatingDelta', 0)
-            if achievedComp7Rating != 0:
-                achievedComp7Rating = getFormattedRating(achievedComp7Rating)
-            else:
-                achievedComp7Rating = str(achievedComp7Rating)
-            if achievedComp7Rating is not None:
-                self.value = text_styles.grandTitle(achievedComp7Rating)
-                self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
-                self.tooltip = TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_PRESTIGE_POINTS
-            return
-
-
-class TournamentPrestigePointsBlock(PrestigePointsBlock):
-
-    def setRecord(self, result, reusable):
+    def setRecord(self, result, reusable, tooltip=TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_RATING_POINTS):
         avatarResults = result.get('avatar', {})
-        isQualificationBattle = avatarResults.get('comp7QualActive', False)
-        self.isVisible = not isQualificationBattle
-        if not self.isVisible:
-            return
-        else:
-            achievedComp7Rating = result.get('avatar', {}).get('comp7RatingDelta', 0)
-            if achievedComp7Rating != 0:
-                achievedComp7Rating = getFormattedRating(achievedComp7Rating)
-            else:
-                achievedComp7Rating = str(achievedComp7Rating)
-            if achievedComp7Rating is not None:
-                self.value = text_styles.grandTitle(achievedComp7Rating)
-                self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
-                self.tooltip = TOOLTIPS_CONSTANTS.TOURNAMENT_COMP7_BATTLE_RESULTS_PRESTIGE_POINTS
-            return
+        if not isQualificationBattle(avatarResults):
+            self.isVisible = True
+            achievedComp7Rating = getFormattedRating(avatarResults.get('comp7RatingDelta', 0))
+            self.value = text_styles.grandTitle(achievedComp7Rating)
+            self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
+            self.tooltip = tooltip
+
+
+class TournamentRatingPointsBlock(PrestigePointsBlock):
+
+    def setRecord(self, result, reusable):
+        super(TournamentRatingPointsBlock, self).setRecord(result, reusable, TOOLTIPS_CONSTANTS.TOURNAMENT_COMP7_BATTLE_RESULTS_RATING_POINTS)
+
+
+class TrainingRatingPointsBlock(PrestigePointsBlock):
+
+    def setRecord(self, result, reusable):
+        self.isVisible = True
+        self.value = text_styles.grandTitle('0')
+        self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
+        self.tooltip = TOOLTIPS_CONSTANTS.TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS
 
 
 class EfficiencyTitleWithSkills(base.StatsItem):
@@ -88,9 +74,9 @@ class EfficiencyTitleWithSkills(base.StatsItem):
 
 class IsDeserterFlag(base.StatsItem):
 
-    def _convert(self, record, reusable):
+    def _convert(self, result, reusable):
         if checkIfDeserter(reusable):
-            if checkIsQualificationBattle(record):
+            if isQualificationBattle(result.get('avatar', {})):
                 return backport.text(R.strings.comp7.battleResult.header.deserterQualification())
             return backport.text(R.strings.comp7.battleResult.header.deserter())
 
@@ -115,8 +101,7 @@ class Comp7RankBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         avatarResults = result.get('avatar', {})
-        isQualificationBattle = avatarResults.get('comp7QualActive', False)
-        if isQualificationBattle:
+        if isQualificationBattle(avatarResults):
             self.__setQualificationData(avatarResults, reusable)
         else:
             self.__setProgressionData(avatarResults)
@@ -179,10 +164,7 @@ class Comp7RankBlock(base.StatsBlock):
 
     @staticmethod
     def __getRatingDiff(achievedRating):
-        formattedRating = getFormattedRating(achievedRating)
-        if achievedRating < 0:
-            return text_styles.error(formattedRating)
-        return text_styles.tutorial(str(achievedRating)) if achievedRating == 0 else text_styles.bonusAppliedText(formattedRating)
+        return text_styles.error(getFormattedRating(achievedRating)) if achievedRating < 0 else text_styles.bonusAppliedText(getFormattedRating(achievedRating))
 
     @staticmethod
     def __getQualificationTitle():

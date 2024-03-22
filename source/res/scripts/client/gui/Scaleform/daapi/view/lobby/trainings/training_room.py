@@ -32,7 +32,7 @@ class TrainingRoom(TrainingRoomBase):
         self.removeListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self._updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showTrainingSettings(self):
-        settings = TrainingSettingsCtx()
+        settings = TrainingSettingsCtx.fetch(self.prbEntity.getSettings())
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': False,
          'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
 

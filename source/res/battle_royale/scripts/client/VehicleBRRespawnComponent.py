@@ -2,7 +2,6 @@
 # Embedded file name: battle_royale/scripts/client/VehicleBRRespawnComponent.py
 import logging
 import BigWorld
-import Math
 from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -12,53 +11,58 @@ class VehicleBRRespawnComponent(DynamicScriptComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _onAvatarReady(self):
-        if self.entity.id != BigWorld.player().playerVehicleID:
+        if not self.checkCurrentVehicel():
             return
         else:
+            self.componentChanged()
             prevLives = self.lives if self.resurrectTime or self.teammateResurrectTime else None
             self.__updateLives(self.lives, prevLives)
-            self.__updateResurectTime(self.resurrectTime or self.teammateResurrectTime)
-            self.__updatePosition()
+            self.__updateResurectTime(self.resurrectTime)
+            self.__updateTeammateResurectTime(self.teammateResurrectTime)
+            self.__updateTimeBlockToRessurect()
             return
 
     def set_resurrectTime(self, prev):
-        if self.entity.id == BigWorld.player().playerVehicleID:
+        if self.checkCurrentVehicel():
             self.__updateResurectTime(self.resurrectTime)
+
+    def componentChanged(self):
+        spawnCtrl = self.sessionProvider.dynamic.spawn
+        spawnCtrl.componentChanged()
 
     def __updateResurectTime(self, resurrectTime):
         spawnCtrl = self.sessionProvider.dynamic.spawn
         respawnTime = int(resurrectTime - BigWorld.serverTime()) if resurrectTime else 0
         spawnCtrl.updateRespawnTimer(respawnTime)
 
+    def __updateTeammateResurectTime(self, teammateResurrectTime):
+        spawnCtrl = self.sessionProvider.dynamic.spawn
+        respawnTime = int(teammateResurrectTime - BigWorld.serverTime()) if teammateResurrectTime else 0
+        spawnCtrl.updateTeammateRespawnTime(respawnTime)
+
     def __updateTimeBlockToRessurect(self):
         spawnCtrl = self.sessionProvider.dynamic.spawn
         blockTime = int(self.timeBlockToRessurect - BigWorld.serverTime()) if self.timeBlockToRessurect else 0
         spawnCtrl.updateBlockToRessurecTimer(blockTime)
 
-    def set_position(self, prev):
-        if self.entity.id == BigWorld.player().playerVehicleID:
-            self.__updatePosition()
-
-    def __updatePosition(self):
-        if self.resurrectTime and self.position != Math.Vector2(0, 0):
-            self.showRespawnPoints()
-
-    def showRespawnPoints(self):
-        pass
+    def checkCurrentVehicel(self):
+        vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+        isObserver = 'observer' in vehicle.typeDescriptor.type.tags if vehicle else False
+        return self.entity.id == BigWorld.player().playerVehicleID or isObserver
 
     def set_teammateResurrectTime(self, prev):
-        if self.entity.id == BigWorld.player().playerVehicleID:
-            self.__updateResurectTime(self.teammateResurrectTime)
-            _logger.debug('set_teammateResurrectTime %s', self.teammateResurrectTime)
+        if self.checkCurrentVehicel():
+            self.__updateTeammateResurectTime(self.teammateResurrectTime)
+            _logger.info('set_teammateResurrectTime %s', self.teammateResurrectTime)
 
     def set_timeBlockToRessurect(self, prev):
-        if self.entity.id == BigWorld.player().playerVehicleID:
+        if self.checkCurrentVehicel():
             self.__updateTimeBlockToRessurect()
-            _logger.debug('set_timeBlockToRessurect %s', self.timeBlockToRessurect)
+            _logger.info('set_timeBlockToRessurect %s', self.timeBlockToRessurect)
 
     def set_lives(self, prev):
         self.__updateLives(self.lives, prev)
-        _logger.debug('set_lives %s, %s', self.lives, prev)
+        _logger.info('set_lives %s, %s', self.lives, prev)
 
     def __updateLives(self, lives, prev):
         ctrl = self.sessionProvider.dynamic.vehicleCount

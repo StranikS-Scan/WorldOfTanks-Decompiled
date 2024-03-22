@@ -57,12 +57,15 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
 
     def _fillViewModel(self, vm):
         tmanNativeVeh = self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr)
+        hasFullSkills = self._tankman.descriptor.getFullSkillsCount() > 0
         setTankmanModel(vm.tankman, self._tankman, tmanNativeVeh)
         vm.setIsRecoveryPossible(self._tankman.isRestorable())
         setTmanSkillsModel(vm.tankman.getSkills(), self._tankman)
-        if self._tankman.skills:
-            vm.setPerkName(self._tankman.descriptor.skills[-1])
-            vm.setPerkLevel(self._tankman.descriptor.lastSkillLevel)
+        skills = self._tankman.skills
+        if skills:
+            lastSkill = skills[-1]
+            vm.setPerkName(lastSkill.name)
+            vm.setPerkLevel(lastSkill.level)
         if self._tankman.isRestorable():
             tankmenRestoreConfig = self._itemsCache.items.shop.tankmenRestoreConfig
             restoreDays = tankmenRestoreConfig.billableDuration / time_utils.ONE_DAY
@@ -75,5 +78,5 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
                 replacedTman = dismissedTmenList[-1]
                 replacedTmanVeh = self._itemsCache.items.getItemByCD(replacedTman.vehicleNativeDescr.type.compactDescr)
                 setReplacedTankmanModel(vm.replacedTankman, replacedTman, replacedTmanVeh)
-        vm.setTrainingLevel(self._tankman.roleLevel)
-        self.getButton(DialogButtons.SUBMIT).isDisabled = self._tankman.roleLevel == MAX_ROLE_LEVEL
+        vm.setTrainingLevel(self._tankman.roleLevel if hasFullSkills else 0)
+        self.getButton(DialogButtons.SUBMIT).isDisabled = hasFullSkills and self._tankman.roleLevel == MAX_ROLE_LEVEL

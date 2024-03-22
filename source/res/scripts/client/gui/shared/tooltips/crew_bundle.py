@@ -13,12 +13,11 @@ _R_TOOLTIPS_TEXT = R.strings.tooltips.crewBundle
 _R_SKILLS_IMAGES = R.images.gui.maps.icons.tankmen.skills.big
 
 class _Bonuses(CONST_CONTAINER):
-    BASIC_ROLE_BOOST_100 = 'basicRoleBoost_100'
     ANY_ADDITIONAL_SKILL = 'anyAdditionalSkill'
     SAME_BLOOD_ZERO_SKILL = 'sameBloodZeroSkill'
 
 
-_BUNDLE_PRESETS = {'offspring': (_Bonuses.BASIC_ROLE_BOOST_100, _Bonuses.ANY_ADDITIONAL_SKILL, _Bonuses.SAME_BLOOD_ZERO_SKILL)}
+_BUNDLE_PRESETS = {'offspring': (_Bonuses.ANY_ADDITIONAL_SKILL, _Bonuses.SAME_BLOOD_ZERO_SKILL)}
 
 class _BonusPreset(namedtuple('BonusPreset', ('imageRPath', 'textRPath', 'top', 'left', 'bottom', 'right'))):
 
@@ -26,8 +25,7 @@ class _BonusPreset(namedtuple('BonusPreset', ('imageRPath', 'textRPath', 'top', 
         return super(_BonusPreset, cls).__new__(cls, imageRPath, textRPath, top, left, bottom, right)
 
 
-_BONUS_PRESETS = {_Bonuses.BASIC_ROLE_BOOST_100: _BonusPreset(R.images.gui.maps.icons.crewBundles.bonuses.basicRoleBoost_100, _R_TOOLTIPS_TEXT.bonus.basicRoleBoost_100, top=10, left=4, right=16),
- _Bonuses.ANY_ADDITIONAL_SKILL: _BonusPreset(_R_SKILLS_IMAGES.new_skill, _R_TOOLTIPS_TEXT.bonus.anyAdditionalSkill),
+_BONUS_PRESETS = {_Bonuses.ANY_ADDITIONAL_SKILL: _BonusPreset(_R_SKILLS_IMAGES.new_skill, _R_TOOLTIPS_TEXT.bonus.anyAdditionalSkill),
  _Bonuses.SAME_BLOOD_ZERO_SKILL: _BonusPreset(_R_SKILLS_IMAGES.offspring_brotherhood, _R_TOOLTIPS_TEXT.bonus.sameBloodZeroSkill)}
 
 class CrewBundleTooltipData(BlocksTooltipData):

@@ -12,10 +12,21 @@ from Goodies import GoodieException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
 if TYPE_CHECKING:
-    from typing import Tuple, Dict
+    from typing import Tuple, Dict, Optional
     from goodies.Goodies import Goodies
     from goodies.GoodieResources import GoodieResourceType
-GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby counter autostart condition resource')
+GoodieData = namedtuple('GoodieData', ['variety',
+ 'target',
+ 'enabled',
+ 'lifetime',
+ 'useby',
+ 'counter',
+ 'autostart',
+ 'condition',
+ 'resource',
+ 'expireAfter',
+ 'roundToEndOfGameDay'])
+GoodieExpirationData = namedtuple('GoodieExpirationData', ['booster', 'timestamp', 'amount'])
 _CONDITIONS = {GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL: MaxVehicleLevel}
 _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_BUY_SLOT: BuySlot,
@@ -82,7 +93,7 @@ def loadDefinitions(d):
      'prices': deepcopy(d['prices']),
      'notInShop': deepcopy(d['notInShop'])}
     for uid, d in d['goodies'].iteritems():
-        v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource = d
+        v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource, v_expireAfter, v_roundToEndOfGameDay = d
         if v_condition is not None:
             condition = _CONDITIONS.get(v_condition[0])(v_condition[1])
         else:
@@ -90,7 +101,7 @@ def loadDefinitions(d):
         target = _TARGETS[v_target[0]](v_target[1], v_target[2])
         resource = RESOURCES[v_resource[0]]
         value = resource.provideCompatibleValueDescr(actualVal=v_resource[1], isPercent=v_resource[2])
-        goodies['goodies'][uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
+        goodies['goodies'][uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition, expireAfter=v_expireAfter, roundToEndOfGameDay=v_roundToEndOfGameDay)
 
     return goodies
 
@@ -118,9 +129,9 @@ def getPremiumCost(premiumCosts, goodie):
 
 
 def loadPdata(pdataGoodies, goodies, logID):
-    for uid, (status, expireTime, count) in pdataGoodies.iteritems():
+    for uid, (status, finishTime, count, expirations) in pdataGoodies.iteritems():
         try:
-            goodies.load(uid, status, expireTime, count)
+            goodies.load(uid, status, finishTime, count, expirations)
         except GoodieException as detail:
             LOG_CURRENT_EXCEPTION()
             LOG_ERROR('Cannot load a goodie', detail, logID)

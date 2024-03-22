@@ -331,13 +331,6 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </receiveNotification>
-    <onEntityCheckOutEnqueued>
-      <Arg>	UINT64	</Arg>
-    </onEntityCheckOutEnqueued>
-    <onBootcampAccountMigrationComplete></onBootcampAccountMigrationComplete>
-    <chooseBootcampStart>
-      <Arg>	BOOL	</Arg>
-    </chooseBootcampStart>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>
@@ -367,13 +360,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </onMapsTrainingArenaCreated>
-    <onBootcampCreated>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-    </onBootcampCreated>
     <onKickedFromQueue>
       <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
@@ -467,22 +453,10 @@
       <Arg>	STRING	</Arg>
       <Arg>	UINT8	</Arg>
     </sendExternalNotificationReply>
-    <setAction>
-      <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <ReturnValues></ReturnValues>
-    </setAction>
     <onClientDeath></onClientDeath>
-    <onEntityCheckedOut>
-      <Arg>	MAILBOX	</Arg>
-    </onEntityCheckedOut>
     <giveClientTo>
       <Arg>	MAILBOX	</Arg>
     </giveClientTo>
-    <cancelEntityCheckOut>
-      <Exposed></Exposed>
-    </cancelEntityCheckOut>
-    <onBootcampAccountDestroyed></onBootcampAccountDestroyed>
     <onGameSessionFinish></onGameSessionFinish>
     <makeDenunciation>
       <Exposed></Exposed>

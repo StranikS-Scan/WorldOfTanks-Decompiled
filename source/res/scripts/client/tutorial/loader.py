@@ -5,13 +5,11 @@ import weakref
 import typing
 import BigWorld
 import account_helpers
-from constants import BootcampVersion
 from CurrentVehicle import g_currentVehicle
 from skeletons.tutorial import ITutorialLoader
 from tutorial.gui.Scaleform.gui_impl import ScaleformGuiImpl
 from tutorial.gui.controller import GuiController
 from tutorial.gui.impl import WulfGuiImpl
-from helpers import dependency
 from tutorial import core
 from tutorial import settings as _settings
 from tutorial import cache as _cache
@@ -19,7 +17,6 @@ from tutorial.control.context import GlobalStorage
 from tutorial.control.listener import AppLoaderListener
 from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
-from skeletons.gui.game_control import IBootcampController, IDemoAccCompletionController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from tutorial.core import Tutorial
@@ -61,7 +58,6 @@ class RunCtx(object):
 
 
 class TutorialLoader(ITutorialLoader):
-    demoAccController = dependency.descriptor(IDemoAccCompletionController)
 
     def __init__(self):
         super(TutorialLoader, self).__init__()
@@ -105,6 +101,10 @@ class TutorialLoader(ITutorialLoader):
         if self.__tutorial is not None:
             result = self.__tutorial.getID()
         return result
+
+    @property
+    def hintsManager(self):
+        return self.__hintsManager
 
     @property
     def isRunning(self):
@@ -179,25 +179,11 @@ class TutorialLoader(ITutorialLoader):
         databaseID = account_helpers.getAccountDatabaseID()
         if not databaseID:
             raise SoftException('Acoount database ID is not defined')
-        isFirstStart = databaseID not in self.__loggedDBIDs
         self.__loggedDBIDs.add(databaseID)
-        state = {'isFirstStart': isFirstStart,
-         'isAfterBattle': self.__afterBattle}
         self.__setDispatcher(_LOBBY_DISPATCHER)
         self.__restoreID = None
-        bootcampController = dependency.instance(IBootcampController)
-        isInBootcampAccount = bootcampController.isInBootcampAccount()
-        if isInBootcampAccount and not self.demoAccController.isInDemoAccRegistration:
-            if bootcampController.version == BootcampVersion.SHORT:
-                lobbySetting = _SETTINGS.SHORT_BOOTCAMP_LOBBY
-            else:
-                lobbySetting = _SETTINGS.BOOTCAMP_LOBBY
-            selectedSettings = self.__doAutoRun((lobbySetting,), state)
-        else:
-            selectedSettings = None
-        if selectedSettings is None or selectedSettings.hintsEnabled:
-            self.__hintsManager = HintsManager()
-            self.__hintsManager.start()
+        self.__hintsManager = HintsManager()
+        self.__hintsManager.start()
         return
 
     def leaveLobby(self):
@@ -267,6 +253,7 @@ class TutorialLoader(ITutorialLoader):
             self.__tutorial.onStopped -= self.__onTutorialStopped
             self.__tutorial.stop()
             self.__tutorial = None
+        GlobalStorage.clearFlags()
         return
 
     def __doStopHints(self):

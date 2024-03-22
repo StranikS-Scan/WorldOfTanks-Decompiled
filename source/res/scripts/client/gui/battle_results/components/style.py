@@ -143,7 +143,7 @@ def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=No
      'lineType': lineType}
 
 
-def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
+def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False, forceFade=False):
     formatted = backport.getGoldFormat(int(round(value)))
     if value < 0:
         formatted = markValueAsError(formatted)
@@ -151,25 +151,25 @@ def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
         formatted = _DIFF_FORMAT.format(formatted)
     if useBigIcon:
         template = 'credits_label'
-    elif canBeFaded and not value:
+    elif canBeFaded and (not value or forceFade):
         template = 'credits_small_inactive_label'
     else:
         template = 'credits_small_label'
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
 
 
-def makeGoldLabel(value, canBeFaded=False, isDiff=False):
+def makeGoldLabel(value, canBeFaded=False, isDiff=False, forceFade=False):
     formatted = backport.getGoldFormat(value)
     if isDiff:
         formatted = _DIFF_FORMAT.format(formatted)
-    if canBeFaded and not value:
+    if canBeFaded and (not value or forceFade):
         template = 'gold_small_inactive_label'
     else:
         template = 'gold_small_label'
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
 
 
-def makeXpLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
+def makeXpLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False, forceFade=False):
     formatted = backport.getIntegralFormat(int(value))
     if value < 0:
         formatted = markValueAsError(formatted)
@@ -177,15 +177,15 @@ def makeXpLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):
         formatted = _DIFF_FORMAT.format(formatted)
     if useBigIcon:
         template = 'xp_label'
-    elif canBeFaded and not value:
+    elif canBeFaded and (not value or forceFade):
         template = 'xp_small_inactive_label'
     else:
         template = 'xp_small_label'
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
 
 
-def makeFreeXpLabel(value, canBeFaded=False):
-    if canBeFaded and not value:
+def makeFreeXpLabel(value, canBeFaded=False, forceFade=False):
+    if canBeFaded and (not value or forceFade):
         template = 'free_xp_small_inactive_label'
     else:
         template = 'free_xp_small_label'

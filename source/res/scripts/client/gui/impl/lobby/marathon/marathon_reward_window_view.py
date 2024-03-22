@@ -74,7 +74,7 @@ class MarathonRewardWindowView(ViewImpl):
             return super(MarathonRewardWindowView, self).createToolTip(event)
         bonus = self.__bonusCache.get(tooltipId)
         if bonus:
-            window = BackportTooltipWindow(createTooltipData(tooltip=bonus.tooltip, isSpecial=bonus.isSpecial, specialAlias=bonus.specialAlias, specialArgs=bonus.specialArgs), self.getParentWindow())
+            window = BackportTooltipWindow(createTooltipData(tooltip=bonus.tooltip, isSpecial=bonus.isSpecial, specialAlias=bonus.specialAlias, specialArgs=bonus.specialArgs), self.getParentWindow(), event)
             window.load()
             return window
         return super(MarathonRewardWindowView, self).createToolTip(event)

@@ -24,7 +24,8 @@ def _getEmptyDescriptor():
 
 class _ProductExtraData(object):
     _MAX_ORDER_INDEX = 10000
-    _SPECIAL_CURRENCIES = {'free_xp': 'freeXP'}
+    _SPECIAL_CURRENCIES = {'free_xp': 'freeXP',
+     'equip_coin': 'equipCoin'}
     _EXTRA_ENTITLEMENTS = ('premium_plus',)
 
     def __init__(self, entitlements=None, currencies=None):

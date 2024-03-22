@@ -1,30 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/account_completion.py
-import typing
 import BigWorld
 import constants
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SHOW_DEMO_ACC_REGISTRATION
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from gui.impl.lobby.account_completion.common import errors
 from gui.platform.base.settings import CONTENT_WAITING
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
-from gui.shared.event_dispatcher import showSteamAddEmailOverlay, showDemoAddCredentialsOverlay, showDemoErrorOverlay, showDemoConfirmCredentialsOverlay, showDemoCompleteOverlay, showDemoWaitingForTokenOverlayViewOverlay, showSteamConfirmEmailOverlay
+from gui.shared.event_dispatcher import showSteamAddEmailOverlay, showSteamConfirmEmailOverlay
 from gui.shared.lock_overlays import lockNotificationManager
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IOverlayController, IBootcampController, ISteamCompletionController, IDemoAccCompletionController
+from skeletons.gui.game_control import IOverlayController, ISteamCompletionController, IDemoAccCompletionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
-from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController, IWGNPDemoAccRequestController
+from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from wg_async import wg_async, wg_await
-if typing.TYPE_CHECKING:
-    from gui.platform.wgnp.demo_account.statuses import DemoAccCredentialsStatus
 
 class SteamCompletionController(ISteamCompletionController):
     _loginManager = dependency.descriptor(ILoginManager)
@@ -119,10 +115,6 @@ class SteamCompletionController(ISteamCompletionController):
 
 
 class DemoAccCompletionController(IDemoAccCompletionController):
-    _hangarSpace = dependency.descriptor(IHangarSpace)
-    _bootcampCtrl = dependency.descriptor(IBootcampController)
-    _overlayController = dependency.descriptor(IOverlayController)
-    _wgnpDemoAccCtrl = dependency.descriptor(IWGNPDemoAccRequestController)
 
     def __init__(self):
         super(DemoAccCompletionController, self).__init__()
@@ -132,11 +124,9 @@ class DemoAccCompletionController(IDemoAccCompletionController):
 
     def init(self):
         g_playerEvents.onClientUpdated += self._onClientUpdate
-        self._hangarSpace.onSpaceCreate += self._onSpaceCreated
 
     def fini(self):
         g_playerEvents.onClientUpdated -= self._onClientUpdate
-        self._hangarSpace.onSpaceCreate -= self._onSpaceCreated
         self._controllerDestroyed = True
 
     def onDisconnected(self):
@@ -159,44 +149,6 @@ class DemoAccCompletionController(IDemoAccCompletionController):
     @isInDemoAccRegistration.setter
     def isInDemoAccRegistration(self, value):
         AccountSettings.setSettings(SHOW_DEMO_ACC_REGISTRATION, value)
-
-    def runDemoAccRegistration(self):
-        self.isInDemoAccRegistration = True
-        if self._hangarSpace.spaceInited:
-            self._showDemoAccOverlay()
-
-    @wg_async
-    def updateOverlayState(self, waitingID=None, onComplete=None):
-        status = yield wg_await(self._wgnpDemoAccCtrl.getCredentialsStatus(waitingID))
-        if self._controllerDestroyed or not self._hangarSpace.spaceInited:
-            return
-        else:
-            if status.typeIs(StatusTypes.ADD_NEEDED):
-                if status.isSpaWeakPassword:
-                    showDemoAddCredentialsOverlay(initialEmail=status.login, emailError=errors.spaPasswordIsWeak())
-                else:
-                    showDemoAddCredentialsOverlay()
-            elif status.typeIs(StatusTypes.ADDED):
-                showDemoConfirmCredentialsOverlay(email=status.login)
-            elif status.typeIs(StatusTypes.CONFIRMATION_SENT):
-                showDemoWaitingForTokenOverlayViewOverlay()
-            elif status.typeIs(StatusTypes.CONFIRMED):
-                showDemoCompleteOverlay()
-            elif status.isUndefined:
-                showDemoErrorOverlay()
-            if onComplete is not None:
-                onComplete()
-            return
-
-    def _onSpaceCreated(self):
-        if self._bootcampCtrl.isInBootcamp() and self.isInDemoAccRegistration:
-            self._showDemoAccOverlay()
-
-    @wg_async
-    def _showDemoAccOverlay(self):
-        if self._overlayController.isActive:
-            return
-        yield wg_await(self.updateOverlayState(waitingID=CONTENT_WAITING))
 
     def _onClientUpdate(self, diff, _):
         if constants.DEMO_ACCOUNT_ATTR in diff:

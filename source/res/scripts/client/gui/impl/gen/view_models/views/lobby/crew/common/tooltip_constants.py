@@ -10,6 +10,10 @@ class TooltipConstants(ViewModel):
     SKIN = 'crewSkin'
     TANKMAN = 'tankman'
     TANKMAN_NOT_RECRUITED = 'tankmanNotRecruited'
+    SKILLS_EFFICIENCY = 'skillsEfficiency'
+    CREW_SKILL_UNTRAINED = 'crewSkillUntrained'
+    VEHICLE_CREW_MEMBER_IN_HANGAR = 'vehicleCrewMemberInHangar'
+    UNIQUE_VOICEOVER_WITCHES = 'witches'
 
     def __init__(self, properties=0, commands=0):
         super(TooltipConstants, self).__init__(properties=properties, commands=commands)

@@ -24,12 +24,12 @@ class KeySensor(object):
     def __init__(self, keyMappings, sensitivity, sensitivityIncDecKeys=None, sensitivityAcceleration=None):
         self.keyMappings = keyMappings
         self.sensitivity = self.defaultSensitivity = sensitivity
-        self.__sensitivityKeys = {}
+        self._sensitivityKeys = {}
         if sensitivityIncDecKeys is not None:
-            self.__sensitivityKeys[sensitivityIncDecKeys[0]] = sensitivityAcceleration
-            self.__sensitivityKeys[sensitivityIncDecKeys[1]] = -sensitivityAcceleration
+            self._sensitivityKeys[sensitivityIncDecKeys[0]] = sensitivityAcceleration
+            self._sensitivityKeys[sensitivityIncDecKeys[1]] = -sensitivityAcceleration
         self.currentVelocity = None
-        self.__currentKeys = set()
+        self._currentKeys = set()
         return
 
     def addVelocity(self, velocity):
@@ -40,38 +40,36 @@ class KeySensor(object):
         return
 
     def reset(self, defaultVelocity):
-        self.__currentKeys.clear()
+        self._currentKeys.clear()
         self.currentVelocity = defaultVelocity
 
     def resetKeys(self):
-        self.__currentKeys.clear()
+        self._currentKeys.clear()
 
     def handleKeyEvent(self, key, isDown):
-        for senseKey, _ in self.__sensitivityKeys.iteritems():
-            if senseKey == key:
-                if isDown:
-                    self.__currentKeys.add(key)
-                else:
-                    self.__currentKeys.discard(key)
-                return True
-
-        for mappingKey, _ in self.keyMappings.iteritems():
-            if mappingKey == key:
-                if isDown:
-                    self.__currentKeys.add(key)
-                else:
-                    self.__currentKeys.discard(key)
-                return True
-
+        if key in self._sensitivityKeys:
+            if isDown:
+                self._currentKeys.add(key)
+            else:
+                self._currentKeys.discard(key)
+            return True
+        if key in self.keyMappings:
+            if isDown:
+                self._currentKeys.add(key)
+            else:
+                self._currentKeys.discard(key)
+            return True
         return False
 
-    def update(self, delta):
-        for senseKey, acceleration in self.__sensitivityKeys.iteritems():
-            if senseKey in self.__currentKeys:
+    def evaluateSensitivityKeys(self, delta):
+        for senseKey, acceleration in self._sensitivityKeys.iteritems():
+            if senseKey in self._currentKeys:
                 self.sensitivity += acceleration * delta
 
+    def update(self, delta):
+        self.evaluateSensitivityKeys(delta)
         for mappingKey, shift in self.keyMappings.iteritems():
-            if mappingKey in self.__currentKeys:
+            if mappingKey in self._currentKeys:
                 addValue = shift * self.sensitivity
                 if self.currentVelocity is None:
                     self.currentVelocity = addValue * self.sensitivity
@@ -92,19 +90,42 @@ class _Inertia(object):
         return velocity + acc * delta
 
 
+class _InertiaScalar(object):
+
+    def __init__(self, frictionCoeff):
+        self.frictionCoeff = frictionCoeff
+
+    def integrate(self, thrustToAdd, currentVelocity, delta):
+        if currentVelocity > 0.0:
+            frictionSign = -1.0
+            absVel = currentVelocity
+        else:
+            frictionSign = 1.0
+            absVel = -currentVelocity
+        frictionForce = frictionSign * min(absVel * self.frictionCoeff, absVel / delta if delta > 0.0 else absVel)
+        acc = thrustToAdd + frictionForce
+        return currentVelocity + acc * delta
+
+
 class _AlignerToLand(object):
     MIN_HEIGHT = 0.5
+    desiredHeightShift = property(lambda self: self.__desiredHeightShift)
     enabled = property(lambda self: self.__desiredHeightShift is not None)
     ignoreTerrain = property(lambda self: self.__ignoreTerrain)
 
     def __init__(self):
         self.__desiredHeightShift = None
         self.__ignoreTerrain = False
+        self.__upPointDistance = 1000
+        self.__downPointDistance = 1000
         return
+
+    def updateLandHeight(self, pos, delta):
+        pass
 
     def enable(self, position, aboveSeaLevel=False):
         self.__ignoreTerrain = aboveSeaLevel
-        landPosition = self.__getLandAt(position)
+        landPosition = self._getLandAt(position)
         if landPosition is not None:
             self.__desiredHeightShift = position - landPosition
             if self.__desiredHeightShift.y < _AlignerToLand.MIN_HEIGHT and not aboveSeaLevel:
@@ -113,16 +134,20 @@ class _AlignerToLand(object):
             self.__desiredHeightShift = None
         return
 
-    def enableWithFixedHeight(self, height, aboveSeaLevel=False):
-        self.__ignoreTerrain = aboveSeaLevel
+    def enableWithFixedHeight(self, currentPos, height, ignoreTerrain=False):
+        self.__ignoreTerrain = ignoreTerrain
         self.__desiredHeightShift = Vector3(0, height, 0)
+
+    def setupLandFindingConfig(self, upPointDistance, downPointDistance):
+        self.__upPointDistance = upPointDistance
+        self.__downPointDistance = downPointDistance
 
     def disable(self):
         self.__desiredHeightShift = None
         self.__ignoreTerrain = False
         return
 
-    def __getLandAt(self, position):
+    def _getLandAt(self, position):
         if self.__ignoreTerrain:
             return Vector3(position.x, 0, position.z)
         else:
@@ -130,9 +155,9 @@ class _AlignerToLand(object):
             if spaceID is None:
                 return
             upPoint = Math.Vector3(position)
-            upPoint.y += 1000
+            upPoint.y += self.__upPointDistance
             downPoint = Math.Vector3(position)
-            downPoint.y = -1000
+            downPoint.y -= self.__downPointDistance
             collideRes = BigWorld.wg_collideSegment(spaceID, upPoint, downPoint, 16, 8)
             return None if collideRes is None else collideRes.closestPoint
 
@@ -140,7 +165,7 @@ class _AlignerToLand(object):
         if self.__desiredHeightShift is None:
             return position
         else:
-            landPos = self.__getLandAt(position)
+            landPos = self._getLandAt(position)
             return position if landPos is None else landPos + self.__desiredHeightShift
 
 
@@ -248,26 +273,32 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._cam = BigWorld.FreeCamera()
         self._cam.invViewProvider = Math.MatrixProduct()
         self.__cameraTransition = BigWorld.TransitionCamera()
-        self.__ypr = Math.Vector3()
-        self.__position = Math.Vector3()
+        self._ypr = Math.Vector3()
+        self._position = Math.Vector3()
         self.__defaultFov = BigWorld.projection().fov
         self.__velocity = Math.Vector3()
         self.__isVerticalVelocitySeparated = False
         self.__yprVelocity = Math.Vector3()
         self.__zoomVelocity = 0.0
+        self.__heightAboveGroundVelocity = 0.0
         self._inertiaEnabled = False
         self._movementInertia = None
         self._rotationInertia = None
+        self._heightInertia = None
         self._movementSensor = None
         self._verticalMovementSensor = None
         self._rotationSensor = None
         self._zoomSensor = None
         self._targetRadiusSensor = None
+        self._heightAboveGroundSensor = None
         self._mouseSensitivity = 0.0
         self._scrollSensitivity = 0.0
+        self._horzInvert = False
+        self._vertInvert = False
         self.__rotateAroundPointEnabled = False
         self.__rotationRadius = 40.0
-        self._alignerToLand = _AlignerToLand()
+        alignerToLandClass = self.getAlignerToLandClass()
+        self._alignerToLand = alignerToLandClass()
         self.__predefinedVelocities = {}
         self.__predefinedVerticalVelocities = {}
         self._keySwitches = {}
@@ -276,6 +307,13 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__basisMProv = _VehicleBounder()
         self.__entityPicker = _VehiclePicker()
         return
+
+    @property
+    def position(self):
+        return self._position
+
+    def getAlignerToLandClass(self):
+        return _AlignerToLand
 
     def getReasonsAffectCameraDirectly(self):
         pass
@@ -306,8 +344,8 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             BigWorld.camera(self._cam)
         worldMat = Math.Matrix(self._cam.invViewMatrix)
-        self.__ypr = Math.Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
-        self.__position = worldMat.translation
+        self._ypr = Math.Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
+        self._position = worldMat.translation
         self.__velocity = Math.Vector3()
         self.__yprVelocity = Math.Vector3()
         self.__zoomVelocity = 0.0
@@ -318,7 +356,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._cam.speedTreeTarget = self._cam.invViewMatrix
         self.resetMovement()
         if isPlayerAvatar() and self.guiSessionProvider.getCtx().isPlayerObserver():
-            BigWorld.player().positionControl.moveTo(self.__position)
+            BigWorld.player().positionControl.moveTo(self._position)
             BigWorld.player().positionControl.followCamera(True)
         return
 
@@ -335,50 +373,59 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def handleKeyEvent(self, key, isDown):
         if key is None:
             return False
+        elif self._handleKeySwitches(key, isDown):
+            return True
         else:
-            if isDown:
-                if self._keySwitches['keySwitchInertia'] == key:
-                    self._inertiaEnabled = not self._inertiaEnabled
+            return True if self._handleMoveAndSensitivityKeys(key, isDown) else None
+
+    def _handleKeySwitches(self, key, isDown):
+        if isDown:
+            if self._keySwitches['keySwitchInertia'] == key:
+                self._inertiaEnabled = not self._inertiaEnabled
+                return True
+            if self._keySwitches['keySwitchRotateAroundPoint'] == key:
+                self.__rotateAroundPointEnabled = not self.__rotateAroundPointEnabled
+                return True
+            if self._keySwitches['keySwitchLandCamera'] == key:
+                if self._alignerToLand.enabled or self.__basisMProv.isBound:
+                    self._alignerToLand.disable()
+                else:
+                    self._alignerToLand.enable(self._position, BigWorld.isKeyDown(Keys.KEY_LALT) or BigWorld.isKeyDown(Keys.KEY_RALT))
+                return True
+            if self._keySwitches['keySetDefaultFov'] == key:
+                BigWorld.projection().fov = self.__defaultFov
+                return True
+            if self._keySwitches['keySetDefaultRoll'] == key:
+                self._ypr.z = 0.0
+                return True
+            if self._keySwitches['keyRevertVerticalVelocity'] == key:
+                self.__isVerticalVelocitySeparated = False
+                return True
+            if self._keySwitches['keyBindToVehicle'] == key:
+                self.__processBindToVehicleKey()
+                return True
+        return False
+
+    def _handleMoveAndSensitivityKeys(self, key, isDown):
+        if isDown:
+            if BigWorld.isKeyDown(Keys.KEY_LSHIFT) or BigWorld.isKeyDown(Keys.KEY_RSHIFT):
+                if self._verticalMovementSensor.handleKeyEvent(key, isDown) and key not in self._verticalMovementSensor.keyMappings:
+                    self.__isVerticalVelocitySeparated = True
                     return True
-                if self._keySwitches['keySwitchRotateAroundPoint'] == key:
-                    self.__rotateAroundPointEnabled = not self.__rotateAroundPointEnabled
-                    return True
-                if self._keySwitches['keySwitchLandCamera'] == key:
-                    if self._alignerToLand.enabled or self.__basisMProv.isBound:
-                        self._alignerToLand.disable()
-                    else:
-                        self._alignerToLand.enable(self.__position, BigWorld.isKeyDown(Keys.KEY_LALT) or BigWorld.isKeyDown(Keys.KEY_RALT))
-                    return True
-                if self._keySwitches['keySetDefaultFov'] == key:
-                    BigWorld.projection().fov = self.__defaultFov
-                    return True
-                if self._keySwitches['keySetDefaultRoll'] == key:
-                    self.__ypr.z = 0.0
-                    return True
-                if self._keySwitches['keyRevertVerticalVelocity'] == key:
-                    self.__isVerticalVelocitySeparated = False
-                    return True
-                if self._keySwitches['keyBindToVehicle'] == key:
-                    self.__processBindToVehicleKey()
-                    return True
-                if BigWorld.isKeyDown(Keys.KEY_LSHIFT) or BigWorld.isKeyDown(Keys.KEY_RSHIFT):
-                    if self._verticalMovementSensor.handleKeyEvent(key, isDown) and key not in self._verticalMovementSensor.keyMappings:
+                for velocityKey, velocity in self.__predefinedVerticalVelocities.iteritems():
+                    if velocityKey == key:
+                        self._verticalMovementSensor.sensitivity = velocity
                         self.__isVerticalVelocitySeparated = True
                         return True
-                    for velocityKey, velocity in self.__predefinedVerticalVelocities.iteritems():
-                        if velocityKey == key:
-                            self._verticalMovementSensor.sensitivity = velocity
-                            self.__isVerticalVelocitySeparated = True
-                            return True
 
-                for velocityKey, velocity in self.__predefinedVelocities.iteritems():
-                    if velocityKey == key:
-                        self._movementSensor.sensitivity = velocity
-                        return True
+            for velocityKey, velocity in self.__predefinedVelocities.iteritems():
+                if velocityKey == key:
+                    self._movementSensor.sensitivity = velocity
+                    return True
 
-            if key in self._verticalMovementSensor.keyMappings:
-                self._verticalMovementSensor.handleKeyEvent(key, isDown)
-            return self._movementSensor.handleKeyEvent(key, isDown) or self._rotationSensor.handleKeyEvent(key, isDown) or self._zoomSensor.handleKeyEvent(key, isDown) or self._targetRadiusSensor.handleKeyEvent(key, isDown)
+        if key in self._verticalMovementSensor.keyMappings:
+            self._verticalMovementSensor.handleKeyEvent(key, isDown)
+        return self._movementSensor.handleKeyEvent(key, isDown) or self._rotationSensor.handleKeyEvent(key, isDown) or self._zoomSensor.handleKeyEvent(key, isDown) or self._targetRadiusSensor.handleKeyEvent(key, isDown)
 
     def resetMovement(self):
         self._movementSensor.resetKeys()
@@ -397,60 +444,83 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         return delta
 
     def __getMovementDirections(self):
-        m = math_utils.createRotationMatrix(self.__ypr)
+        m = math_utils.createRotationMatrix(self._ypr)
         result = (m.applyVector(Vector3(1, 0, 0)), Vector3(0, 1, 0), m.applyVector(Vector3(0, 0, 1)))
         if self._alignerToLand.enabled:
             result[0].y = 0.0
             result[2].y = 0.0
         return result
 
+    def _alignHeightUpdate(self, currentPosition, shift):
+        if self._alignerToLand.desiredHeightShift:
+            newDesiredHeightShift = self._alignerToLand.desiredHeightShift.y + shift
+        else:
+            newDesiredHeightShift = shift
+        self._alignerToLand.enableWithFixedHeight(currentPosition, newDesiredHeightShift, self._alignerToLand.ignoreTerrain)
+
     def _update(self):
         worldMatrix = Matrix(self._cam.invViewMatrix)
         desiredPosition = self.__basisMProv.checkTurretDetachment(worldMatrix.translation)
         if desiredPosition is not None:
-            self.__position = desiredPosition
-        prevPos = Math.Vector3(self.__position)
+            self._position = desiredPosition
+        prevPos = Vector3(self._position)
         delta = self.__calcCurrentDeltaAdjusted()
         self.__updateSenses(delta)
+        self._alignerToLand.updateLandHeight(prevPos, delta)
         if self._targetRadiusSensor:
             self.__rotationRadius += self._targetRadiusSensor.currentVelocity * delta
+        if self._heightAboveGroundSensor:
+            if self._inertiaEnabled:
+                self.__heightAboveGroundVelocity = self._heightInertia.integrate(self._heightAboveGroundSensor.currentVelocity, self.__heightAboveGroundVelocity, delta)
+            else:
+                self.__heightAboveGroundVelocity = self._heightAboveGroundSensor.currentVelocity
+            self._alignHeightUpdate(prevPos, self.__heightAboveGroundVelocity * delta)
         if self.__isVerticalVelocitySeparated:
             self._verticalMovementSensor.update(delta)
         else:
             self._verticalMovementSensor.currentVelocity = self._movementSensor.currentVelocity.y
             self._verticalMovementSensor.sensitivity = self._movementSensor.sensitivity
         if self._inertiaEnabled:
-            self.__inertialMovement(delta)
+            velocity = self.__inertialMovement(delta)
         else:
-            self.__simpleMovement(delta)
-        self.__ypr += self.__yprVelocity * delta
-        self.__position += self.__velocity * delta
+            velocity = self.__simpleMovement(delta)
+        velocity = self._handleCollision(velocity)
+        self.__velocity = velocity
+        self._ypr += Vector3(self.__yprVelocity.x * (-1 if self._horzInvert else 1), self.__yprVelocity.y * (-1 if self._vertInvert else 1), self.__yprVelocity.z) * delta
+        self._position += self.__velocity * delta
         if self.__rotateAroundPointEnabled:
-            self.__position = self.__getAlignedToPointPosition(math_utils.createRotationMatrix(self.__ypr))
+            self._position = self.__getAlignedToPointPosition(math_utils.createRotationMatrix(self._ypr))
         if self._alignerToLand.enabled and not self.__basisMProv.isBound:
             if abs(self.__velocity.y) > 0.1:
-                self._alignerToLand.enable(self.__position, self._alignerToLand.ignoreTerrain)
-            self.__position = self._alignerToLand.getAlignedPosition(self.__position)
+                self._alignerToLand.enable(self._position, self._alignerToLand.ignoreTerrain)
+            self._position = self._alignerToLand.getAlignedPosition(self._position)
         lookAtPosition = self.__basisMProv.lookAtPosition
         if lookAtPosition is not None:
-            self.__ypr = self.__getLookAtYPR(lookAtPosition)
+            self._ypr = self.__getLookAtYPR(lookAtPosition)
         if BigWorld.camera() == self.__cameraTransition and self.__cameraTransition.isInTransition():
-            self.__ypr = self.__clampPR(self.__ypr)
+            self._ypr = self.__clampPR(self._ypr)
         else:
-            self.__ypr = self.__clampYPR(self.__ypr)
-        self.__position = self._checkSpaceBounds(prevPos, self.__position)
-        self._cam.invViewProvider.a = math_utils.createRTMatrix(self.__ypr, self.__position)
-        self._cam.invViewProvider.b = self.__basisMProv.matrix
+            self._ypr = self.__clampYPR(self._ypr)
+        self._position = self._checkSpaceBounds(prevPos, self._position)
+        self._setupCameraViewProvider(self._ypr, self._position)
         BigWorld.projection().fov = self.__calcFov()
         self.__resetSenses()
         return 0.0
+
+    def _setupCameraViewProvider(self, yprRotation, position):
+        self._cam.invViewProvider.a = math_utils.createRTMatrix(yprRotation, position)
+        self._cam.invViewProvider.b = self.__basisMProv.matrix
+
+    def _handleCollision(self, vel):
+        return vel
 
     def __simpleMovement(self, delta):
         self.__yprVelocity = self._rotationSensor.currentVelocity
         shift = self._movementSensor.currentVelocity
         shift.y = self._verticalMovementSensor.currentVelocity
         moveDirs = self.__getMovementDirections()
-        self.__velocity = moveDirs[0] * shift.x + moveDirs[1] * shift.y + moveDirs[2] * shift.z
+        res = moveDirs[0] * shift.x + moveDirs[1] * shift.y + moveDirs[2] * shift.z
+        return res
 
     def __inertialMovement(self, delta):
         self.__yprVelocity = self._rotationInertia.integrate(self._rotationSensor.currentVelocity, self.__yprVelocity, delta)
@@ -458,7 +528,8 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         thrust.y = self._verticalMovementSensor.currentVelocity
         moveDirs = self.__getMovementDirections()
         thrust = moveDirs[0] * thrust.x + moveDirs[1] * thrust.y + moveDirs[2] * thrust.z
-        self.__velocity = self._movementInertia.integrate(thrust, self.__velocity, delta)
+        res = self._movementInertia.integrate(thrust, self.__velocity, delta)
+        return res
 
     def __getAlignedToPointPosition(self, rotationMat):
         dirVector = Math.Vector3(0, 0, self.__rotationRadius)
@@ -546,13 +617,13 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self._zoomSensor.currentVelocity = 0.0
 
     def __getLookAtYPR(self, lookAtPosition):
-        lookDir = lookAtPosition - self.__position
+        lookDir = lookAtPosition - self._position
         camMat = Matrix()
-        camMat.lookAt(self.__position, lookDir, Vector3(0, 1, 0))
+        camMat.lookAt(self._position, lookDir, Vector3(0, 1, 0))
         camMat.invert()
         yaw = camMat.yaw
         pitch = camMat.pitch
-        return Vector3(yaw, pitch, self.__ypr.z)
+        return Vector3(yaw, pitch, self._ypr.z)
 
     def __toggleView(self):
         if not isPlayerAvatar():
@@ -581,6 +652,8 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self._zoomSensor.update(delta)
         if self._targetRadiusSensor:
             self._targetRadiusSensor.update(delta)
+        if self._heightAboveGroundSensor:
+            self._heightAboveGroundSensor.update(delta)
 
     def __resetSenses(self):
         self._movementSensor.currentVelocity = Math.Vector3()
@@ -592,6 +665,8 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self._zoomSensor.currentVelocity = 0.0
         if self._targetRadiusSensor:
             self._targetRadiusSensor.currentVelocity = 0.0
+        if self._heightAboveGroundSensor:
+            self._heightAboveGroundSensor.currentVelocity = 0.0
 
     def _checkSpaceBounds(self, startPos, endPos):
         if not isPlayerAvatar():
@@ -609,8 +684,8 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             boundMatrixInv = Matrix(self.__basisMProv.matrix)
             boundMatrixInv.invert()
             worldMat.postMultiply(boundMatrixInv)
-            self.__position = worldMat.translation
-            self.__ypr = Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
+            self._position = worldMat.translation
+            self._ypr = Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
         else:
             self.__switchBind()
 
@@ -623,12 +698,18 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         basisInv = Matrix(self.__basisMProv.matrix)
         basisInv.invert()
         localMat.postMultiply(basisInv)
-        self.__position = localMat.translation
-        self.__ypr.set(localMat.yaw, localMat.pitch, localMat.roll)
+        self._position = localMat.translation
+        self._ypr.set(localMat.yaw, localMat.pitch, localMat.roll)
         return
 
     def setViewMatrix(self, matrix):
         invMatrix = Matrix(matrix)
         invMatrix.invert()
-        self.__position = invMatrix.translation
-        self.__ypr = Vector3(invMatrix.yaw, invMatrix.pitch, invMatrix.roll)
+        self._position = invMatrix.translation
+        self._ypr = Vector3(invMatrix.yaw, invMatrix.pitch, invMatrix.roll)
+
+    def getBasisMProv(self):
+        return self.__basisMProv
+
+    def getCameraTransition(self):
+        return self.__cameraTransition

@@ -1,0 +1,84 @@
+<SimulatedVehicle.def>
+  <Properties>
+    <publicInfo>
+      <Type>	PUBLIC_VEHICLE_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </publicInfo>
+    <isPlayerVehicle>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isPlayerVehicle>
+    <realVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </realVehicleID>
+    <simulationData_position>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_position>
+    <simulationData_rotation>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_rotation>
+    <simulationData_velocity>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_velocity>
+    <simulationData_angVelocity>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_angVelocity>
+    <simulationData_simulationType>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_simulationType>
+    <simulationData_health>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_health>
+    <simulationData_engineMode>
+      <Type>	TUPLE	  <of>	UINT8	</of>
+        <size>	2	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_engineMode>
+    <simulationData_gunAngles>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_gunAngles>
+    <simulationData_turretAndGunSpeed>
+      <Type>	VECTOR2	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_turretAndGunSpeed>
+    <simulationData_damageStickers>
+      <Type>	ARRAY	  <of>	UINT64	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_damageStickers>
+    <simulationData_brokenTracks>
+      <Type>	ARRAY	  <of>	BOOL	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_brokenTracks>
+    <simulationData_siegeState>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_siegeState>
+    <simulationData_wheelsState>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_wheelsState>
+    <simulationData_wheelsSteering>
+      <Type>	ARRAY	  <of>	FLOAT	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_wheelsSteering>
+    <simulationData_tracksInAir>
+      <Type>	TUPLE	  <of>	BOOL	</of>
+        <size>	2	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </simulationData_tracksInAir>
+  </Properties>
+  <ClientMethods></ClientMethods>
+</SimulatedVehicle.def>

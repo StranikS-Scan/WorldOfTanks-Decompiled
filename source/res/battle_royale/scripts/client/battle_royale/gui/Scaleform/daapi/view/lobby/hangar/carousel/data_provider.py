@@ -5,17 +5,12 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provide
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.battle_royale.equipment_panel_cmp_rent_states import EquipmentPanelCmpRentStates
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController, IBattleRoyaleController
 _UNDEFINED_VEHICLE_TYPE = 'undefined'
 
 class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
-    __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
-    __brController = dependency.descriptor(IBattleRoyaleController)
 
     def getVehiclesIntCDs(self):
         vehicledIntCDs = []
@@ -33,7 +28,6 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
         return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
-         vehicle.isRented,
          not vehicle.isInInventory,
          not vehicle.isEvent,
          not vehicle.isOnlyForBattleRoyaleBattles,
@@ -51,23 +45,13 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
         result = super(RoyaleCarouselDataProvider, self)._buildVehicle(vehicle)
         state, _ = vehicle.getState()
         if vehicle.isOnlyForBattleRoyaleBattles:
-            rentState = self.__rentVehiclesController.getRentState(vehicle.intCD)
-            isTestDriveEnabled = rentState == EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_AVAILABLE
-            rentLeft = self.__rentVehiclesController.getFormatedRentTimeLeft(vehicle.intCD)
-            isRentActive = rentState in (EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_ACTIVE, EquipmentPanelCmpRentStates.STATE_RENT_ACTIVE)
-            isBgLocked = result.get('lockBackground', False)
-            isRentAvailable = rentState in (EquipmentPanelCmpRentStates.STATE_TEST_DRIVE_AVAILABLE, EquipmentPanelCmpRentStates.STATE_RENT_AVAILABLE)
             vState, _ = vehicle.getState()
             result.update({'label': vehicle.shortUserName,
              'tooltip': TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE,
              'level': 0,
              'tankType': vehicle.type,
              'xpImgSource': '',
-             'hasShamrockFactor': self.__brController.hasSTPDailyFactor(vehicle),
-             'isUseRightBtn': True,
-             'isTestDriveEnabled': isTestDriveEnabled,
-             'lockBackground': isBgLocked or isRentAvailable,
-             'rentLeft': rentLeft if isRentActive else ''})
+             'isUseRightBtn': True})
             if vState not in (Vehicle.VEHICLE_STATE.IN_PREBATTLE,
              Vehicle.VEHICLE_STATE.DAMAGED,
              Vehicle.VEHICLE_STATE.DESTROYED,

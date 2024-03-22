@@ -30,6 +30,10 @@ class PoiCaptureBlockerComponent(PoiBaseComponent):
     def _onAvatarReady(self):
         if self._poiGameObject is not None and self._poiGameObject.isValid():
             blockReasons = self.__getBlockReasons()
+            self.__stateComponent = self._poiGameObject.findComponentByType(PoiCaptureBlockerStateComponent)
+            if self.__stateComponent:
+                self.__stateComponent.blockReasons = blockReasons
+                return
             self.__stateComponent = self._poiGameObject.createComponent(PoiCaptureBlockerStateComponent, self.pointID, blockReasons)
         return
 

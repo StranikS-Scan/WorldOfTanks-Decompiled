@@ -403,6 +403,27 @@ class WotShopAccessor(BaseAccessor):
         return self._data_source.buy_storefront_product(callback, ctx)
 
 
+class ClanSupplyAccessor(BaseAccessor):
+
+    def get_clan_supply_quests(self, callback):
+        return self._data_source.get_clan_supply_quests(callback)
+
+    def post_clan_supply_quests(self, callback):
+        return self._data_source.post_clan_supply_quests(callback)
+
+    def claim_quest_rewards(self, callback):
+        return self._data_source.claim_quest_rewards(callback)
+
+    def get_progression_settings(self, callback):
+        return self._data_source.get_progression_settings(callback)
+
+    def get_progression_progress(self, callback):
+        return self._data_source.get_progression_progress(callback)
+
+    def purchase_progression_stage(self, callback, region_number, expected_price):
+        return self._data_source.purchase_progression_stage(callback, region_number, expected_price)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -425,6 +446,7 @@ class Requester(object):
     gifts = RequestDescriptor(GiftSystemAccessor)
     uilogging = RequestDescriptor(UILoggingAccessor)
     wot_shop = RequestDescriptor(WotShopAccessor)
+    clan_supply = RequestDescriptor(ClanSupplyAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/squad/entity.py
 from CurrentVehicle import g_currentVehicle
+from battle_royale.gui.constants import BattleRoyaleSubMode
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from battle_royale.gui.prb_control.entities.regular.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
 from battle_royale.gui.prb_control.entities.regular.scheduler import RoyaleScheduler
@@ -13,6 +14,8 @@ from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEnt
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, UNIT_RESTRICTION
 from gui.prb_control.storages import prequeue_storage_getter
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import BattleRoyalePlatoonEvent
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 
@@ -42,6 +45,7 @@ class BattleRoyaleSquadEntity(SquadEntity):
         self.storage.release()
         self.__watcher = BattleRoyaleVehiclesWatcher()
         self.__watcher.start()
+        self.__battleRoyaleController.setCurrentSubModeID(BattleRoyaleSubMode.SQUAD_MODE_ID)
         result = super(BattleRoyaleSquadEntity, self).init(ctx)
         return result
 
@@ -53,8 +57,12 @@ class BattleRoyaleSquadEntity(SquadEntity):
         return super(BattleRoyaleSquadEntity, self).fini(ctx, woEvents)
 
     def leave(self, ctx, callback=None):
+        updateNeeded = True
         if ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
             self.storage.suspend()
+            updateNeeded = False
+        self.__battleRoyaleController.setCurrentSubModeID(BattleRoyaleSubMode.SOLO_MODE_ID, updateNeeded)
+        g_eventBus.handleEvent(BattleRoyalePlatoonEvent(BattleRoyalePlatoonEvent.LEAVED_PLATOON), scope=EVENT_BUS_SCOPE.LOBBY)
         super(BattleRoyaleSquadEntity, self).leave(ctx, callback)
 
     def getQueueType(self):
@@ -74,7 +82,7 @@ class BattleRoyaleSquadEntity(SquadEntity):
 
     @property
     def _showUnitActionNames(self):
-        return (PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, PREBATTLE_ACTION_NAME.BATTLE_ROYALE)
+        return (PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,)
 
     def _createActionsValidator(self):
         return BattleRoyaleSquadActionsValidator(self)

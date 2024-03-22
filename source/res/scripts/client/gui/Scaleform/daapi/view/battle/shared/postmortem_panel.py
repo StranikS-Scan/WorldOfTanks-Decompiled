@@ -2,35 +2,38 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
 import logging
 import typing
-import WWISE
+from account_helpers.settings_core.settings_constants import GRAPHICS
 import BattleReplay
 import BigWorld
+import WWISE
+from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from constants import ATTACK_REASON_INDICES, ATTACK_REASON
+from debug_utils import LOG_CURRENT_EXCEPTION
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.components_packer import unpack_component, pack_component
-from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
-from gui.Scaleform.settings import ICONS_SIZES
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
-from gui.doc_loaders import messages_panel_reader
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from gui.impl.gen import R
-from gui.impl import backport
+from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
 from gui import makeHtmlString
+from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
+from gui.Scaleform.settings import ICONS_SIZES
+from gui.battle_control import avatar_getter
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.dog_tag_composer import layoutComposer
+from gui.battle_control.controllers.kill_cam_ctrl import KillCamInfoMarkerType
+from gui.doc_loaders import messages_panel_reader
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.badges import buildBadge
+from gui.shared.events import DeathCamEvent
 from gui.shared.gui_items import Vehicle
-from constants import ATTACK_REASON_INDICES, ATTACK_REASON
-from account_helpers.settings_core.settings_constants import GRAPHICS
-from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
 from helpers import int2roman
 from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.battle_control import avatar_getter
-from gui.battle_control.dog_tag_composer import layoutComposer
-from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
 if typing.TYPE_CHECKING:
     from typing import Iterable, Optional
 _logger = logging.getLogger(__name__)
@@ -197,7 +200,7 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):
-    __slots__ = ('__playerInfo', '_isPlayerVehicle', '__maxHealth', '__healthPercent', '__isInPostmortem', '_deathAlreadySet', '__isColorBlind')
+    __slots__ = ('__playerInfo', '_isPlayerVehicle', '__maxHealth', '__healthPercent', '_isInPostmortem', '_deathAlreadySet', '__isColorBlind')
 
     def __init__(self):
         super(PostmortemPanel, self).__init__()
@@ -205,12 +208,13 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self._isPlayerVehicle = False
         self.__maxHealth = 0
         self.__healthPercent = 0
-        self.__isInPostmortem = False
+        self._isInPostmortem = False
         self._deathAlreadySet = False
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         self.__userInfoHelper = UsersInfoHelper()
         arena = avatar_getter.getArena()
         self.__arenaInfo = arena.arenaInfo if arena is not None else None
+        self.__isPostmortemEnabled = avatar_getter.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM)
         return
 
     def _populate(self):
@@ -219,6 +223,15 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             defaultComponents = [ pack_component(comp.componentId, 0) for comp in componentConfigAdapter.getDefaultDogTag().components ]
             self._preloadDTImages(defaultComponents, False)
             self._preloadDTImages(self.__arenaInfo.dogTagsInfo.usedDogTagsComponents)
+        if self.sessionProvider.isReplayPlaying:
+            self.as_handleAsReplayS()
+
+    def _dispose(self):
+        self.__playerInfo = None
+        self.__userInfoHelper = None
+        self.__arenaInfo = None
+        super(PostmortemPanel, self)._dispose()
+        return
 
     def _addGameListeners(self):
         super(PostmortemPanel, self)._addGameListeners()
@@ -228,7 +241,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             ctrl.onVehicleControlling += self.__onVehicleControlling
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-            self.__isInPostmortem = ctrl.isInPostmortem
+            self._isInPostmortem = ctrl.isInPostmortem
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
                 self.__setPlayerInfo(vehicle.id)
@@ -239,7 +252,11 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             dogTagsCtrl.onKillerDogTagSet += self.__onKillerDogTagSet
             dogTagsCtrl.onVictimDogTagSet += self.__onVictimDogTagSet
             dogTagsCtrl.onKillerDogTagCheat += self.__onKillerDogCheat
-        if self.__arenaInfo and self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.DOG_TAG):
+        killCamCtrl = self.sessionProvider.shared.killCamCtrl
+        if killCamCtrl and self.__isSimpleDeathCam() and self.__isPostmortemEnabled:
+            killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
+        if self.__arenaInfo and hasattr(self.__arenaInfo, 'dogTagsInfo') and self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.DOG_TAG):
             self.__arenaInfo.dogTagsInfo.onUsedComponentsUpdated += self.__onUsedComponentsUpdated
         return
 
@@ -257,6 +274,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             dogTagsCtrl.onKillerDogTagSet -= self.__onKillerDogTagSet
             dogTagsCtrl.onVictimDogTagSet -= self.__onVictimDogTagSet
             dogTagsCtrl.onKillerDogTagCheat -= self.__onKillerDogCheat
+        killCamCtrl = self.sessionProvider.shared.killCamCtrl
+        if killCamCtrl and self.__isSimpleDeathCam() and self.__isPostmortemEnabled:
+            killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
         return
 
     def _deathInfoReceived(self):
@@ -277,7 +298,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     @staticmethod
     def _hasBonusCap(cap):
-        return ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, cap)
+        player = BigWorld.player()
+        return False if player is None else ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, cap)
 
     def __setHealthPercent(self, health):
         self.__healthPercent = normalizeHealthPercent(health, self.__maxHealth)
@@ -289,6 +311,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__maxHealth = vehicle.maxHealth
         self._isPlayerVehicle = vehicle.isPlayerVehicle
         self.__setHealthPercent(vehicle.health)
+        if BigWorld.player().isObserver() and vehicle.isAlive() and self._deathAlreadySet:
+            self._deathAlreadySet = False
+            self.resetDeathInfo()
         self._updateVehicleInfo()
 
     def __onVehicleStateUpdated(self, state, value):
@@ -296,6 +321,13 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             if self.__maxHealth != 0 and self.__maxHealth > value:
                 self.__setHealthPercent(value)
                 self._updateVehicleInfo()
+            if BattleReplay.g_replayCtrl.isPlaying and value > 0 and self.__maxHealth != 0 and self.__maxHealth >= value:
+                try:
+                    self.as_hideComponentsS()
+                except:
+                    pass
+
+                self.resetDeathInfo()
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
@@ -303,7 +335,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             self.__healthPercent = 0
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        self.__isInPostmortem = True
+        if self.sessionProvider.arenaVisitor.gui.isInEpicRange() and respawnAvailable:
+            self._isInPostmortem = False
+        else:
+            self._isInPostmortem = True
         self._updateVehicleInfo()
 
     def __onRespawnBaseMoving(self):
@@ -315,10 +350,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
         self.resetDeathInfo()
         self._updateVehicleInfo()
-        self.__isInPostmortem = False
+        self._isInPostmortem = False
 
     def _updateVehicleInfo(self):
-        if not self.__isInPostmortem:
+        if not self._isInPostmortem:
             return
         if self._isPlayerVehicle:
             self._showOwnDeathInfo()
@@ -337,14 +372,14 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     showVehicle = True
                     vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
                     vTypeInfoVO = vInfoVO.vehicleType
-                    vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
+                    vehClass = Vehicle.getTypeVPanelIconPath(vInfoVO.getDisplayedClassTag())
                     if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
                         vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = int2roman(vTypeInfoVO.level)
                     else:
                         vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = None
-                    vehName = vTypeInfoVO.shortNameWithPrefix
+                    vehName = vInfoVO.getDisplayedName()
                     killerUserVO = self._makeKillerVO(vInfoVO)
                 else:
                     showVehicle = False
@@ -424,7 +459,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     def __onKillerDogTagSet(self, dogTagInfo):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
         _logger.info('PostmortemPanel.__onKillerDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
-        self.as_showKillerDogTagS(dogTagModel)
+        self.as_showKillerDogTagS(dogTagModel, not self.__isSimpleDeathCam())
 
     def __onVictimDogTagSet(self, dogTagInfo):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
@@ -436,3 +471,24 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onUsedComponentsUpdated(self, usedComponents):
         self._preloadDTImages(usedComponents)
+
+    def __onKillCamStateChanged(self, killCamState, totalSceneDuration):
+        if killCamState is DeathCamEvent.State.PREPARING:
+            self.as_togglePostmortemInfoPanelS(False)
+            self.as_setInDeathCamS(True)
+        elif killCamState is DeathCamEvent.State.ACTIVE:
+            self.as_movePostmortemPanelUpS()
+        elif killCamState is DeathCamEvent.State.ENDING:
+            self.as_fadePostmortemPanelOutS()
+        elif killCamState is DeathCamEvent.State.FINISHED:
+            self.as_setInDeathCamS(False)
+            self.as_togglePostmortemInfoPanelS(True)
+            self.as_resetPostmortemPositionS()
+
+    def __onMarkerDisplayChanged(self, markerState, ctx):
+        if markerState == KillCamInfoMarkerType.DISTANCE:
+            self.as_fadePostmortemPanelOutS()
+
+    def __isSimpleDeathCam(self):
+        avatar = BigWorld.player()
+        return False if not avatar else avatar.isSimpleDeathCam()

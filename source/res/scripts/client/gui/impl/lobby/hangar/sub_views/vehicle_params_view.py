@@ -103,7 +103,7 @@ class VehicleParamsView(ViewImpl):
         self.__context = context
 
     def _getComparator(self):
-        return params_helper.idealCrewComparator(self._getVehicle())
+        return params_helper.similarCrewComparator(self._getVehicle())
 
     def _getVehicle(self):
         return self._itemsCache.items.getItemByCD(self.__vehIntCD) if self.__vehIntCD is not None else g_currentVehicle.item
@@ -125,9 +125,8 @@ class VehicleParamsView(ViewImpl):
         self.update()
 
     def _onCacheResync(self, reason, _):
-        if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
+        if reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             self.__fillViewModel()
-            return
 
     @property
     def _stockParams(self):
@@ -326,7 +325,7 @@ class VehicleSkillPreviewParamsView(VehicleParamsView):
         self.update()
 
     def _getComparator(self):
-        return params_helper.skillOnIdealCrewComparator(self._getVehicle(), self.__skillName)
+        return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillName)
 
     def _isExtraParamEnabled(self):
         return True

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
 import constants
 import gui
-from PlayerEvents import g_playerEvents
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
@@ -10,7 +9,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View, ViewKey
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -19,8 +17,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.events import LoadViewEvent, ViewEventType
+from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -35,7 +32,6 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_PROFILE,
-     VIEW_ALIAS.LOBBY_BARRACKS,
      PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
      PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY,
      VIEW_ALIAS.LOBBY_CUSTOMIZATION,
@@ -100,8 +96,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
-        self._entityEnqueueCancelCallback = None
-        return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -142,8 +136,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
-        g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
-        g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
         self.__viewLifecycleWatcher.start(self.app.containerManager, [viewLifecycleHandler])
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
@@ -161,36 +153,12 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.__viewLifecycleWatcher.stop()
-        g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
-        g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
-        if self._entityEnqueueCancelCallback:
-            self._entityEnqueueCancelCallback = None
-            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         View._dispose(self)
-        return
-
-    def _onEntityCheckoutEnqueued(self, cancelCallback):
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_SHOW)), EVENT_BUS_SCOPE.LOBBY)
-        self._entityEnqueueCancelCallback = cancelCallback
-
-    def _onEntityCheckoutCanceled(self, event):
-        if event.alias == VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG_CANCEL:
-            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-            if self._entityEnqueueCancelCallback:
-                self._entityEnqueueCancelCallback()
-            self._entityEnqueueCancelCallback = None
-        return
-
-    def _onAccountBecomeNonPlayer(self):
-        self._entityEnqueueCancelCallback = None
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
-        return
 
     def __showHelpLayout(self, _):
         self.as_showHelpLayoutS()

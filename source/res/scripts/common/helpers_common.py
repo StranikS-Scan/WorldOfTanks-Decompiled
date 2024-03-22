@@ -7,6 +7,12 @@ from battle_modifiers_common import BattleModifiers
 if TYPE_CHECKING:
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
+    from items.tankmen import TankmanDescr
+TIME_UNITS = {'w': 604800,
+ 'd': 86400,
+ 'h': 3600,
+ 'm': 60,
+ 's': 1}
 PI = math.pi
 HALF_PI = PI * 0.5
 HULL_AIMING_PITCH_BITS = 16
@@ -71,6 +77,31 @@ def computeShotMaxDistance(shot, modifiers=BattleModifiers()):
     return min(maxDistance, shot.nominalMaxDistance, computeMaxPiercingPowerDistance(shot.piercingPower, modifiers))
 
 
+def getFinalRetrainCost(tmanDescr, cost):
+    discountMult = 1.0
+    if tmanDescr:
+        discountMult = cost['discounts'].get('perk_{}'.format(tmanDescr.getFullSkillsCount()), 1.0)
+    return (cost['credits'] * discountMult, cost['gold'] * discountMult)
+
+
+def isAllRetrainOperationFree(tmanDescr, retrainCost):
+    for _, cost in enumerate(retrainCost):
+        credits, gold = getFinalRetrainCost(tmanDescr, cost)
+        if credits or gold:
+            return False
+
+    return True
+
+
+def getRetrainCost(tankmanCost, opts):
+    retrainCosts = []
+    for idx, (cost, option) in enumerate(zip(tankmanCost, opts)):
+        cost = dict(cost.items() + option.items())
+        retrainCosts.append(cost)
+
+    return retrainCosts
+
+
 def packFloat(value, minBound, maxBound, bits):
     t = (value - minBound) / (maxBound - minBound)
     t = max(0.0, min(t, 1.0))
@@ -89,3 +120,21 @@ def packHullAimingPitch(angle):
 
 def unpackHullAimingPitch(packedAngle):
     return unpacklFloat(packedAngle, -HALF_PI, HALF_PI, HULL_AIMING_PITCH_BITS)
+
+
+def parseDuration(timeStr):
+    timeStr = timeStr.strip()
+    if timeStr == '0':
+        return 0
+    negative = timeStr[0] == '-'
+    if negative:
+        timeStr = timeStr[1:]
+    parts = timeStr.split(' ')
+    duration = 0
+    for part in parts:
+        value, unit = part[:-1], part[-1]
+        duration += int(value) * TIME_UNITS[unit]
+
+    if negative:
+        duration = -duration
+    return duration

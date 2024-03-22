@@ -96,6 +96,10 @@ class BasePerksController(object):
     def vehicleID(self):
         return self._owner.id
 
+    @property
+    def isAllPlansLoaded(self):
+        return self._planHolder.checkIsAllPlansLoaded()
+
     def init(self, loadType=LoadType.DEFAULT):
         self._planHolder = PCPlanHolder(self._scopedPerks, self._owner, loadType)
         self._planHolder.loadPlans()

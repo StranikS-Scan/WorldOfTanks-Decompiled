@@ -341,7 +341,7 @@ class Shop(object):
         self.__account._doCmdInt2Str(AccountCommands.CMD_TMAN_RECRUIT, vehTypeCompDescr, roleIdx, tokenName, proxy)
         return
 
-    def buyGoodie(self, goodieID, count, forGold, callback):
+    def buyGoodie(self, goodieID, count, forGold, doActivation=False, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -352,7 +352,12 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.__getCacheRevision(), goodieID, count, forGold, proxy)
+            args = [self.__getCacheRevision(),
+             goodieID,
+             count,
+             forGold,
+             doActivation]
+            self.__account._doCmdIntArr(AccountCommands.CMD_BUY_GOODIE, args, proxy)
             return
 
     def buyAndEquipOutfit(self, vehInvID, outfitData, callback):

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/barracks_view.py
 import nations
+from constants import JUNK_TANKMAN_NOVELTY
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -18,6 +19,7 @@ from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setT
 from gui.impl.lobby.crew.filter import getTankmanKindSettings, getNationSettings, getTankmanRoleSettings, getVehicleTypeSettings, getVehicleTierSettings, getVehicleGradeSettings, SEARCH_MAX_LENGTH
 from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, TankmenDataProvider, RecruitsDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
+from gui.impl.lobby.crew.widget.conversion_banner_widget import ConversionBannerWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.tooltips.bunks_confirm_discount_tooltip import BunksConfirmDiscountTooltip
 from gui.server_events import recruit_helper
@@ -34,6 +36,7 @@ from uilogging.crew.loggers import CrewViewLogger
 from uilogging.crew.logging_constants import CrewViewKeys, CrewNavigationButtons, CrewBarracksKeys, CrewMemberAdditionalInfo
 from wg_async import wg_await, wg_async
 from PlayerEvents import g_playerEvents
+from gui.impl.auxiliary.junk_tankman_helper import JunkTankmanHelper
 
 class BarracksView(BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -51,6 +54,7 @@ class BarracksView(BaseTankmanListView):
         self.__hasFilters = location == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
         self.__filterState = FilterState({FilterState.GROUPS.TANKMANKIND.value: TankmanKind.RECRUIT.value if self.__hasFilters else TankmanKind.TANKMAN.value})
         self.__filterPanelWidget = self.__initFilterPanelWidget()
+        self.__conversionBannerWidget = ConversionBannerWidget()
         self.__dataProviders = CompoundDataProvider(tankmen=TankmenDataProvider(self.__filterState), recruits=RecruitsDataProvider(self.__filterState))
         self.__uiLogger = CrewViewLogger(self, CrewViewKeys.BARRACKS)
         super(BarracksView, self).__init__(settings)
@@ -79,15 +83,28 @@ class BarracksView(BaseTankmanListView):
                     return window
         return None
 
+    def __setIsConversionBannerVisible(self, visibleFlag=-1, transaction=None):
+        canShow = JunkTankmanHelper().canShowConversionBanner if visibleFlag == -1 else visibleFlag > 0
+        self.__conversionBannerWidget.setWidgetStates()
+        if canShow:
+            JunkTankmanHelper().setAsShowed(JUNK_TANKMAN_NOVELTY.HEADER)
+        if transaction:
+            transaction.setIsConversionBannerVisible(canShow)
+        else:
+            with self.viewModel.transaction() as tx:
+                tx.setIsConversionBannerVisible(canShow)
+
     def _onLoading(self, *args, **kwargs):
         super(BarracksView, self)._onLoading(*args, **kwargs)
         self.__uiLogger.initialize()
         self.setChildView(FilterPanelWidget.LAYOUT_ID(), self.__filterPanelWidget)
+        self.setChildView(ConversionBannerWidget.LAYOUT_ID(), self.__conversionBannerWidget)
         with self.viewModel.transaction() as tx:
             berths = self.itemsCache.items.stats.tankmenBerthsCount
             berthPrice, _ = self.itemsCache.items.shop.getTankmanBerthPrice(berths)
             defaultBerthPrice, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
             tx.setIsBerthsOnSale(berthPrice != defaultBerthPrice)
+            self.__setIsConversionBannerVisible(transaction=tx)
         self.__dataProviders.subscribe()
         self.__dataProviders.update()
 
@@ -123,7 +140,8 @@ class BarracksView(BaseTankmanListView):
          (self.__dataProviders.onDataChanged, self.__fillCardList),
          (self.itemsCache.onSyncCompleted, self.__onBerthsPricesChanged),
          (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged),
-         (self.eventsCache.onProgressUpdated, self.__onNewRecruits))
+         (self.eventsCache.onProgressUpdated, self.__onNewRecruits),
+         (JunkTankmanHelper().setIsConversionBannerVisible, self.__setIsConversionBannerVisible))
 
     @property
     def _tankmenProvider(self):

@@ -282,6 +282,9 @@ class _EquipmentItem(object):
     def getTimeRemaining(self):
         return self._timeRemaining
 
+    def isValid(self):
+        return self._descriptor is not None
+
     @property
     def index(self):
         return self._index
@@ -1310,7 +1313,8 @@ class EquipmentsController(MethodsRules, IBattleController):
         elif intCD in self._equipments and index < 0 or equipmentItem:
             item = equipmentItem if equipmentItem else self._equipments[intCD]
             item.update(quantity, stage, timeRemaining, totalTime)
-            self.onEquipmentUpdated(intCD, item)
+            if item.isValid():
+                self.onEquipmentUpdated(intCD, item)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):

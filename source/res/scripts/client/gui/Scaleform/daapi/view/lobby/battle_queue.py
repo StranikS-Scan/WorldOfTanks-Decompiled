@@ -24,7 +24,6 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -191,28 +190,6 @@ class _MapboxQueueProvider(RandomQueueProvider):
     pass
 
 
-class _BattleRoyaleQueueProvider(RandomQueueProvider):
-
-    def processQueueInfo(self, qInfo):
-        playersCount = qInfo.get('players', 0)
-        self._createCommonPlayerString(playersCount)
-        modesData = []
-        for mode in constants.BattleRoyaleMode.ALL:
-            modesData.append({'type': backport.text(R.strings.menu.prebattle.battleRoyale.dyn(mode)()),
-             'icon': RES_ICONS.getBattleRoyaleModeIconPath(mode),
-             'count': qInfo.get(mode, 0)})
-
-        self._proxy.as_setDPS(modesData)
-
-    def getLayoutStr(self):
-        pass
-
-    def getAdditionalParams(self):
-        guiType = prb_getters.getArenaGUIType(queueType=self._queueType)
-        titleRes = R.strings.menu.loading.battleTypes.subTitle.num(guiType)
-        return {'subTitle': backport.text(titleRes()) if titleRes.exists() else ''}
-
-
 class _Comp7QueueProvider(RandomQueueProvider):
 
     def processQueueInfo(self, qInfo):
@@ -281,7 +258,6 @@ class _WinbackQueueProvider(RandomQueueProvider):
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANDOMS, RandomQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.EVENT_BATTLES, _EventQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANKED, _RankedQueueProvider)
-registerBattleQueueProvider(constants.QUEUE_TYPE.BATTLE_ROYALE, _BattleRoyaleQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.MAPBOX, _MapboxQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.COMP7, _Comp7QueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.WINBACK, _WinbackQueueProvider)

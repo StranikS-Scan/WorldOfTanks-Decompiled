@@ -15,8 +15,6 @@ from uilogging.core.common import convertEnum
 from uilogging.core.core_constants import ENSURE_SESSION_TICK
 from uilogging.core.log import LogRecord
 from uilogging.core.handler import LogHandler, Delayer
-from uilogging.deprecated.bootcamp.log_record import BootcampLogRecord
-from uilogging.deprecated.logging_constants import FEATURES
 if typing.TYPE_CHECKING:
     from uilogging.types import FeatureType, GroupType, ActionType, LogLevelType
 
@@ -69,12 +67,11 @@ class UILoggingCore(IUILoggingCore):
     def _createLogRecord(self, feature, group, action, loglevel, **params):
         if not self._isEnabled:
             return None
-        record = BootcampLogRecord if feature == FEATURES.BOOTCAMP else LogRecord
-        log = record(feature=feature, group=group, action=action, level=loglevel, params=params)
-        if log.broken:
-            self._logger.warning('Broken %s.', log)
-            return None
         else:
+            log = LogRecord(feature=feature, group=group, action=action, level=loglevel, params=params)
+            if log.broken:
+                self._logger.warning('Broken %s.', log)
+                return None
             return log
 
     @property

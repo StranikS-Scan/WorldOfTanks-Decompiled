@@ -7,7 +7,6 @@ from collections import namedtuple, deque
 import BigWorld
 import BattleReplay
 from WeakMethod import WeakMethodProxy
-from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from chat_commands_consts import INVALID_VEHICLE_POSITION
 from constants import PREBATTLE_TYPE, ARENA_BONUS_TYPE
@@ -25,7 +24,7 @@ from messenger.storage import storage_getter
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS, UNIT_CHAT_COMMANDS, DEFAULT_SPAM_PROTECTION_SETTING, BattleChatCmdGameModeCoolDownData
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
-from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 _logger = logging.getLogger(__name__)
@@ -371,7 +370,7 @@ _EPIC_MINIMAP_ZOOM_MODE_SCALE = 500
 
 class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandFactory):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __settingsCore = dependency.descriptor(ISettingsCore)
+    battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
 
     def __init__(self, provider):
         super(BattleChatCommandHandler, self).__init__(provider)
@@ -404,7 +403,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             self.__startAntispamHandler()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
-                self.__isEnabled = self.__settingsCore.getSetting(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+                self.__isEnabled = self.battleCommunications.isEnabled
             return
 
     def goToReplay(self):
@@ -433,7 +432,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         for command in BATTLE_CHAT_COMMANDS:
             register(command.id, self.__onCommandReceived)
 
-        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.battleCommunications.onChanged += self.__onBattleCommunicationSettingsChanged
         super(BattleChatCommandHandler, self).registerHandlers()
 
     def unregisterHandlers(self):
@@ -441,7 +440,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         for command in BATTLE_CHAT_COMMANDS:
             unregister(command.id, self.__onCommandReceived)
 
-        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.battleCommunications.onChanged -= self.__onBattleCommunicationSettingsChanged
         super(BattleChatCommandHandler, self).unregisterHandlers()
 
     def createByName(self, name):
@@ -547,8 +546,8 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
                 self.__receivedChatCommands[key] = currTime + _MUTE_CHAT_COMMAND_AND_SENDER_DURATION
             return silentMode
 
-    def __onSettingsChanged(self, diff):
-        battleCommunicationEnabled = diff.get(BattleCommStorageKeys.ENABLE_BATTLE_COMMUNICATION)
+    def __onBattleCommunicationSettingsChanged(self):
+        battleCommunicationEnabled = self.battleCommunications.isEnabled
         if not battleCommunicationEnabled:
             return
         self.__isEnabled = bool(battleCommunicationEnabled)

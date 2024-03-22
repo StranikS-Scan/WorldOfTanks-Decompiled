@@ -1,7 +1,7 @@
 <engine_config.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -200,7 +200,7 @@
   </ParticleSystem>
   <cat_config>
     <isOnline>	true	</isOnline>
-    <clientUrl>	http://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <fullDump>	false	</fullDump>
     <collectPersonalData>	true	</collectPersonalData>
     <dxdiag>	false	</dxdiag>
@@ -273,6 +273,9 @@
         </bank>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
+        <bank>
+          <name>	death_camera.bnk	</name>
+        </bank>
         <bank>
           <name>	ambient.pck	</name>
         </bank>

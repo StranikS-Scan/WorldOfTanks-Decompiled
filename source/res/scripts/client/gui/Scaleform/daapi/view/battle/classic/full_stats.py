@@ -17,16 +17,11 @@ from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from uilogging.personal_reserves.loggers import PersonalReservesFullStatsLogger
 
 class FullStatsComponent(ClassicFullStatsMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(FullStatsComponent, self).__init__()
-        self.__pr20UILogger = PersonalReservesFullStatsLogger()
 
     def onSelectQuest(self, questID):
         qProgressCtrl = self.sessionProvider.shared.questProgress
@@ -127,9 +122,3 @@ class FullStatsComponent(ClassicFullStatsMeta):
             self.as_questProgressPerformS({'hasQuestToPerform': False,
              'noQuestTitle': text_styles.promoSubTitle(INGAME_GUI.STATISTICS_TAB_QUESTS_NOTAVAILABLE_TITLE),
              'noQuestDescr': ''})
-
-    def onPersonalReservesTabViewed(self, visible):
-        if visible:
-            self.__pr20UILogger.onViewInitialize()
-        else:
-            self.__pr20UILogger.onViewFinalize()

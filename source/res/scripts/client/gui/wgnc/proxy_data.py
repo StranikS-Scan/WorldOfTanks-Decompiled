@@ -393,6 +393,26 @@ class ShowAuctionLostRateMessage(_ProxyDataItem):
          'msgType': SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE}, SCH_CLIENT_MSG_TYPE.INTEGRATED_AUCTION_LOST_RATE)
 
 
+class ClanSupplyQuestUpdateMessage(_ProxyDataItem):
+
+    def __init__(self, name, progress, status):
+        self.__name = name
+        self.__progress = progress
+        self.__status = status
+
+    def getName(self):
+        return self.__name
+
+    def getProgress(self):
+        return self.__progress
+
+    def getStatus(self):
+        return self.__status
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.CLAN_SUPPLY_QUEST_UPDATE
+
+
 class ProxyDataHolder(object):
 
     def __init__(self, items):

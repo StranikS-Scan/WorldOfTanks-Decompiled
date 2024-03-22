@@ -306,6 +306,23 @@ class BattleFeedbackAdaptor(IBattleController):
             eventID = self.__getHitResultEventID(maxDamagedComponent, maxHitEffectCode, hasPiercedHit, damageFactor)
         self.setVehicleState(vehicleID, eventID)
 
+    def showVehicleMarker(self, showVehicleID):
+        playerVehicleID = BigWorld.player().playerVehicleID
+        if showVehicleID is not None and showVehicleID != playerVehicleID:
+            prevVehicle = BigWorld.entity(showVehicleID)
+            if prevVehicle is None:
+                return
+            vProxy = prevVehicle.proxy
+            vInfo = self.__arenaDP.getVehicleInfo(vProxy.id)
+            guiProps = self.__arenaDP.getPlayerGuiProps(vProxy.id, vInfo.team)
+            self.onVehicleMarkerAdded(vProxy, vInfo, guiProps)
+        return
+
+    def hideVehicleMarker(self, hideVehicleID):
+        if hideVehicleID is not None:
+            self.onVehicleMarkerRemoved(hideVehicleID)
+        return
+
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:
             aInfo = self.__arenaDP.getVehicleInfo(attackerID)

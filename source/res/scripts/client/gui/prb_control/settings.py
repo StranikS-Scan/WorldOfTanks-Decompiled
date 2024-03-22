@@ -48,7 +48,6 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     EVENT = 65536
     STRONGHOLD = 524288
     RANKED = 1048576
-    BOOTCAMP = 2097152
     EPIC_TRAINING = 4194304
     TOURNAMENT = 8388608
     EPIC = 16777216
@@ -60,7 +59,7 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
-    MODES_BITMASK = E_SPORT | TRAINING | BATTLE_SESSION | RANDOM | EVENT | STRONGHOLD | RANKED | BOOTCAMP | EPIC_TRAINING | TOURNAMENT | COMP7
+    MODES_BITMASK = E_SPORT | TRAINING | BATTLE_SESSION | RANDOM | EVENT | STRONGHOLD | RANKED | EPIC_TRAINING | TOURNAMENT | COMP7
     SET_GLOBAL_LISTENERS = LEGACY_BITMASK | UNIT_BITMASK | PRE_QUEUE_BITMASK
     RANGE = (UNDEFINED,
      SWITCH,
@@ -82,7 +81,6 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
      EVENT,
      STRONGHOLD,
      RANKED,
-     BOOTCAMP,
      EPIC_TRAINING,
      TOURNAMENT,
      EPIC,
@@ -180,7 +178,6 @@ class PREBATTLE_ACTION_NAME(object):
     E_SPORT = 'eSport'
     PUBLICS_LIST = 'publicsList'
     STRONGHOLD = 'stronghold'
-    BOOTCAMP = 'bootcamp'
     STRONGHOLDS_BATTLES_LIST = 'strongholdsBattlesList'
     RANKED = 'ranked'
     EPIC_TRAINING_LIST = 'epicTrainingsList'
@@ -261,6 +258,7 @@ class REQUEST_TYPE(object):
     MATCHMAKING_INFO = 44
     EPIC_SWAP_IN_TEAM = 45
     EPIC_SWAP_BETWEEN_TEAM = 46
+    CHANGE_ARENA_GUI = 48
 
 
 REQUEST_TYPE_NAMES = dict([ (v, k) for k, v in REQUEST_TYPE.__dict__.iteritems() ])
@@ -291,6 +289,7 @@ class PREBATTLE_SETTING_NAME(object):
     BATTLE_TYPE = 'type'
     WINNER_IF_DRAW = 'winnerIfDraw'
     SWITCH_TEAMS = 'switchBattleTeams'
+    ARENA_GUI_TYPE = 'arenaGuiType'
 
 
 class PREBATTLE_PROPERTY_NAME(object):
@@ -311,6 +310,7 @@ class PREBATTLE_RESTRICTION(object):
     LIMIT_AMMO = 'limits/ammo'
     LIMIT_SHELLS = 'limits/shells'
     LIMIT_TAGS = 'limits/tags'
+    LIMIT_MAX_OBSERVERS = 'limits/maxObservers'
     LIMIT_LIGHT_TANK = 'limits/classes/lightTank'
     LIMIT_MEDIUM_TANK = 'limits/classes/mediumTank'
     LIMIT_HEAVY_TANK = 'limits/classes/heavyTank'

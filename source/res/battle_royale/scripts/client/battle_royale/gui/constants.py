@@ -11,7 +11,7 @@ class BattleRoyaleEquipments(object):
     REPAIR_POINT = 'repairpoint'
     HEAL_POINT = 'healPoint'
     SMOKE = 'smoke_battle_royale'
-    BOMBER = 'arcade_bomber_battle_royale'
+    BOMBER = 'arcade_bomber_with_own_damage_battle_royale'
     KAMIKAZE = 'spawn_kamikaze'
     BERSERKER = 'berserker'
     MINE_FIELD = 'arcade_minefield_battle_royale'
@@ -81,4 +81,10 @@ class ParamTypes(object):
 BR_QUEST_ID_PREFIX = 'token:br:title'
 BATTLE_ROYALE_VEHICLES_INVOICE = 'battle_royale_vehicles_invoice'
 BR_COIN = 'brcoin'
-STP_COIN = 'stpcoin'
+SUB_MODE_ID_KEY = 'SubModeId'
+
+class BattleRoyaleSubMode(object):
+    SOLO_MODE_ID = 1
+    SOLO_DYNAMIC_MODE_ID = 2
+    SQUAD_MODE_ID = 3
+    ALL_RANGE = (SOLO_MODE_ID, SOLO_DYNAMIC_MODE_ID, SQUAD_MODE_ID)

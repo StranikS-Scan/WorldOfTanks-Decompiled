@@ -42,7 +42,7 @@ from skeletons.gui.game_control import ITradeInController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import List, Tuple
+    from typing import List, Tuple, Dict, Optional
     from gui.shared.tooltips.contexts import ExtendedAwardContext
 _logger = logging.getLogger(__name__)
 _EQUIPMENT = 'equipment'
@@ -825,7 +825,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         isClanLock = self.vehicle.clanLock or None
         isDisabledInRoaming = self.vehicle.isDisabledInRoaming
         if isClanLock or isDisabledInRoaming:
-            return (block, False)
+            return (block, False, None)
         else:
             if self.configuration.node is not None:
                 result = self.__getTechTreeVehicleStatus(self.configuration, self.vehicle)

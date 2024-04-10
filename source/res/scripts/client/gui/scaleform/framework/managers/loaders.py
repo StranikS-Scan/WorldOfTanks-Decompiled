@@ -166,11 +166,11 @@ class LoaderManager(LoaderManagerMeta):
                 item.isCancelled = True
                 self.as_cancelLoadViewS(key.name)
                 self.onViewLoadCanceled(key, item)
-                if not item.pyEntity.isDisposed():
-                    item.pyEntity.destroy()
                 if item.uid != -1:
                     uniprof.exitFromRegion('Loading {} {}'.format(key.name, item.uid))
                     BigWorld.notify(BigWorld.EventType.VIEW_LOADED, key.alias, item.uid, key.name)
+                if not item.pyEntity.isDisposed():
+                    item.pyEntity.destroy()
             return
 
     def getViewLoadingItem(self, key):

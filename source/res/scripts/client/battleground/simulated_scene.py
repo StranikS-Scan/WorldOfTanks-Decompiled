@@ -163,6 +163,9 @@ class SimulatedScene(object):
             self.__enabled = False
             return
 
+    def hideEdgeEffects(self):
+        self.__effectsController.hideEdges()
+
     def updateParticlesTimeScale(self, isPause=False):
         if isPause or not self.__isVehicleAnimationInProgress():
             timeScale = _SimulationTimeScale.PAUSED

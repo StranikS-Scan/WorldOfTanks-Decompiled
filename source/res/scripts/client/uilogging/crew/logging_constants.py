@@ -30,7 +30,6 @@ class CrewDialogKeys(Enum):
     DOCUMENT_CHANGE = 'document_change_dialog'
     RECRUIT = 'recruit_dialog'
     RESTORE_TANKMAN = 'restore_tankman_dialog'
-    PERKS_RESET = 'perks_reset_dialog'
     SKIN_APPLY = 'skin_apply_dialog'
     CONFIRM_SKILLS_LEARN = 'confirm_skills_learn_dialog'
     FREE_SKILL_CONFIRMATION = 'free_skill_confirmation_dialog'

@@ -576,6 +576,17 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, previewAlias=
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW), ctx=kwargs), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showConfigurableShopVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, hiddenBlocks=None, itemPack=None, **kwargs):
+    heroTankController = dependency.instance(IHeroTankController)
+    heroTankCD = heroTankController.getCurrentTankCD()
+    if heroTankCD and heroTankCD == vehTypeCompDescr and not itemPack:
+        goToHeroTankOnScene(vehTypeCompDescr, previewAlias, previewBackCb=previewBackCb, instantly=True)
+    else:
+        from ClientSelectableCameraObject import ClientSelectableCameraObject
+        ClientSelectableCameraObject.switchCamera()
+        showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack, **kwargs)
+
+
 def showDelayedReward():
     kwargs = {'tab': QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS,
      'openVehicleSelection': True}

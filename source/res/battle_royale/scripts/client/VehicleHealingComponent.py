@@ -4,6 +4,7 @@ import BigWorld
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
+from battle_royale.gui.constants import BattleRoyaleEquipments
 
 class VehicleHealingComponent(VehicleAbilityBaseComponent):
     __TIMER_VIEW_ID = VEHICLE_VIEW_STATE.HEALING
@@ -27,3 +28,6 @@ class VehicleHealingComponent(VehicleAbilityBaseComponent):
 
     def getIsSourceVehicle(self):
         return self.entity.id == BigWorld.player().getObservedVehicleID()
+
+    def _getDuration(self):
+        return self._getEquipment(BattleRoyaleEquipments.HEAL_POINT).duration

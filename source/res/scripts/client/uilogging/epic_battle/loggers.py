@@ -68,7 +68,7 @@ class EpicBattleTooltipLogger(EpicBattleLogger):
         if self._openedTooltip and self._openedTooltip == tooltip:
             self._openedTooltip = None
             itemName = self._overrideTooltipsId.get(tooltip, tooltip)
-            self.stopAction(EpicBattleLogActions.TOOLTIP_WATCHED.value, itemName, self._parentScreen, info=self._additionalInfo, timeLimit=self.TIME_LIMIT, itemState=EpicBattleLogItemStates.ADVANCED if self._isAdvancedTooltip else None)
+            self.stopAction(EpicBattleLogActions.TOOLTIP_WATCHED.value, itemName, self._parentScreen, info=None if self._additionalInfo is None else str(self._additionalInfo), timeLimit=self.TIME_LIMIT, itemState=EpicBattleLogItemStates.ADVANCED if self._isAdvancedTooltip else None)
             self._isAdvancedTooltip = False
         return
 

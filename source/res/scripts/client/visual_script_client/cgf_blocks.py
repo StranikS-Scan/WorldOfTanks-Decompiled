@@ -11,7 +11,7 @@ from visual_script.dependency import dependencyImporter
 from visual_script.contexts.cgf_context import GameObjectWrapper
 from constants import ROCKET_ACCELERATION_STATE
 from visual_script.cgf_blocks import CGFMeta
-Vehicle, CGF, tankStructure, RAC = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component')
+Vehicle, CGF, tankStructure, RAC, SimulatedVehicle = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle')
 _logger = logging.getLogger(__name__)
 
 class GetEntityGameObject(Block, CGFMeta):
@@ -65,7 +65,10 @@ class GetVehicleGameObject(Block, CGFMeta):
         currentGO = self._object.getValue()
         hierarchy = CGF.HierarchyManager(currentGO.spaceID)
         topGO = hierarchy.getTopMostParent(currentGO)
-        if topGO.findComponentByType(Vehicle.Vehicle) is not None:
+        isVehicle = topGO.findComponentByType(Vehicle.Vehicle) is not None
+        if not isVehicle:
+            isVehicle = topGO.findComponentByType(SimulatedVehicle.SimulatedVehicle) is not None
+        if isVehicle:
             goWrapper = GameObjectWrapper(topGO)
             self._vehicleObject.setValue(weakref.proxy(goWrapper))
         else:

@@ -169,7 +169,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             observedVehicleID = BigWorld.player().getObservedVehicleID()
             observedVehicleTeam = self.sessionProvider.getArenaDP().getVehicleInfo(observedVehicleID).team
             defeatedTeams = set(componentSystem.battleRoyaleComponent.defeatedTeams)
-            return observedVehicleTeam in defeatedTeams
+            return observedVehicleTeam in defeatedTeams or self.__isDeadAfterRespawnTimeFinished
         return False
 
     def _canShowPostmortemTips(self):
@@ -241,9 +241,7 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         if vehStateCtrl is not None:
             self._battleSessionES.subscribeToEvent(vehStateCtrl.onVehicleStateUpdated, self.__onVehicleStateUpdated)
-        ammoCtrl = self.sessionProvider.shared.ammo
-        if ammoCtrl is not None:
-            self._battleSessionES.subscribeToEvent(ammoCtrl.onGunSettingsSet, self.__onGunSettingsSet)
+            self._battleSessionES.subscribeToEvent(vehStateCtrl.onVehicleControlling, self.__onVehicleControlling)
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         if componentSystem and componentSystem.battleRoyaleComponent:
             self._battleSessionES.subscribeToEvent(componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate, self._onDefeatedTeamsUpdated)
@@ -382,12 +380,15 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self.as_updateDamageScreenS(damageScreenVisible)
         return
 
-    def __onGunSettingsSet(self, _):
+    def __onVehicleControlling(self, vehicle):
         progressionWindowCtrl = self.__getProgressionWindowCtrl()
         if progressionWindowCtrl and progressionWindowCtrl.isWindowOpened():
-            isDualGunVehicle = self.sessionProvider.getArenaDP().getVehicleInfo().vehicleType.isDualGunVehicle
-            dualGunAlias = BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL
-            if not isDualGunVehicle:
+            vTypeDesc = vehicle.typeDescriptor
+            isDualGubEnabled = False
+            if vehicle.isAlive() and vTypeDesc.isDualgunVehicle and vehicle.isPlayerVehicle:
+                isDualGubEnabled = True
+            if not isDualGubEnabled:
+                dualGunAlias = BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL
                 if dualGunAlias in self._fsToggling:
                     self._fsToggling.remove(dualGunAlias)
 
@@ -419,3 +420,9 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         if ctrl is not None and ctrl.isRadialMenuOpened():
             self._toggleRadialMenu(False)
         return
+
+    @property
+    def __isDeadAfterRespawnTimeFinished(self):
+        arenaDP = self.sessionProvider.getArenaDP()
+        arenaInfo = BigWorld.player().arena.arenaInfo
+        return arenaInfo.abilityNotifierComponent.isRespawnTimeFinished and not arenaDP.getVehicleInfo().isAlive() if arenaInfo else False

@@ -25,6 +25,7 @@ from gui.server_events.bonuses import getMergedBonusesFromDicts, getBonuses
 from gui.server_events.events_helpers import getIdxFromQuestID, isACEmailConfirmationQuest
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.money import Currency
 from helpers import dependency
 from helpers import time_utils
@@ -728,6 +729,7 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
             templateParams = {'text': fmt,
              'header': header}
             settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            settings.priorityLevel = NotificationPriorityLevel.LOW
             formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
             result.append(MessageData(formatted, settings))
         if collectionEntitlements and self.__collectionsSystem.isEnabled():

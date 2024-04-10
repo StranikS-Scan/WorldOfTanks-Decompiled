@@ -352,6 +352,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__dynamicRepo.battleField
         if ctrl is not None:
             ctrl.stopVehicleVisual(vehicleID)
+        ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None and BigWorld.player().observedVehicleID == vehicleID:
+            ctrl.refreshObserverVehicleVisual()
         return
 
     def handleShortcutChatCommand(self, key):

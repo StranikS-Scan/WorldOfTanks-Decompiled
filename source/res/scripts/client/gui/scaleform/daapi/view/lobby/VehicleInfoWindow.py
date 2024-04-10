@@ -89,7 +89,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                     if tankman.skinID != NO_CREW_SKIN_ID:
                         skinItem = self._itemsCache.items.getCrewSkin(tankman.skinID)
                         lastUserName = i18n.makeString(skinItem.getLastName())
-                    tankmanLabel = '%s %s (%d%%)' % (tankman.rankUserName, lastUserName, tankman.roleLevel)
+                    tankmanLabel = '%s %s' % (tankman.rankUserName, lastUserName)
                 tankmenParams.append({'tankmanType': i18n.convert(skillsConfig.getSkill(role).userString),
                  'value': tankmanLabel})
 

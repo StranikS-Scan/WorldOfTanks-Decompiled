@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/crew_junk_convert_helper.py
-import math
+from collections import defaultdict
 import typing
 from items import tankmen, vehicles
 if typing.TYPE_CHECKING:
@@ -58,13 +58,12 @@ def findJunkTankmen(tankmenCompDescrs, vehicles=None):
 
 
 def calculateXpFromTankmen(tankmenCompDescrs):
-    savingXPByNation = {}
+    savingXPByNation = defaultdict(int)
     cashVehicleNativeType = {}
     for tankmanDescr in tankmenCompDescrs:
         _savingTrashTankmanXP(tankmanDescr, cashVehicleNativeType, savingXPByNation)
 
-    result = {key:int(math.ceil(float(value[0]) / value[1])) for key, value in savingXPByNation.iteritems()}
-    return result
+    return savingXPByNation
 
 
 def getNationBooksFromXp(xpByNation):
@@ -100,7 +99,7 @@ def _savingTrashTankmanXP(tankmanDescr, cashVehicleNativeType, savingXPByNation)
         cashVehicleNativeType[typeID] = vehType
     xp = tankmanDescr.totalXP()
     if xp > 0:
-        savingXPByNation[nationID] = (xp + savingXPByNation.get(nationID, (0, 0))[0], len(vehType.crewRoles))
+        savingXPByNation[nationID] += xp / len(vehType.crewRoles)
 
 
 def isTrashTankman(tankman):

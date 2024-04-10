@@ -255,6 +255,7 @@ class BarracksView(BaseTankmanListView):
 
     def __fillCardList(self):
         with self.viewModel.transaction() as tx:
+            self.__setIsConversionBannerVisible(transaction=tx)
             tx.setHasFilters(self.__filterPanelWidget.hasAppliedFilters())
             slots = self.itemsCache.items.stats.tankmenBerthsCount
             self.__filterPanelWidget.updateAmountInfo(self.__dataProviders.itemsCount, self.__dataProviders.initialItemsCount)

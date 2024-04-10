@@ -12,6 +12,7 @@ from gui.impl.pub import WindowImpl
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.game_control import restore_contoller
+from PlayerEvents import g_playerEvents
 
 class JunkTankmenView(BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -34,7 +35,8 @@ class JunkTankmenView(BaseTankmanListView):
         return ((self.viewModel.onLoadCards, self._onLoadCards),
          (self.viewModel.onClose, self._onClose),
          (self.viewModel.onConfirm, self._onConfirm),
-         (self.__dataProvider.onDataChanged, self.__fillCardList))
+         (self.__dataProvider.onDataChanged, self.__fillCardList),
+         (g_playerEvents.onDisconnected, self.__onDisconnected))
 
     @property
     def _tankmenProvider(self):
@@ -74,6 +76,9 @@ class JunkTankmenView(BaseTankmanListView):
 
     def _fillRecruitCard(self, cardsList, recruitInfo):
         pass
+
+    def __onDisconnected(self):
+        self.destroyWindow()
 
     def __fillCardList(self):
         with self.viewModel.transaction() as tx:

@@ -9,7 +9,7 @@ from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
 from gui.impl.dialogs.dialogs import showRetrainMassiveDialog
 from gui.prb_control import prb_getters
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getLowEfficiencyTankmenIds
+from gui.shared.gui_items.Vehicle import Vehicle, getLowEfficiencyTankmenIds
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.processors.tankman import TankmanReturn
 from gui.shared.utils import decorators
@@ -93,10 +93,12 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             if tankman is not None:
                 tankmenToBarracksCount += 1
 
-        for lastTankmenInvID in lastCrewIDs:
+        for slotIdx, lastTankmenInvID in enumerate(lastCrewIDs):
             actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
             if actualLastTankman is None or actualLastTankman.isDismissed:
                 demobilizedMembersCounter += 1
+                continue
+            if vehicle.descriptor.type.crewRoles[slotIdx][0] != actualLastTankman.role:
                 continue
             if actualLastTankman.isInTank:
                 lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)

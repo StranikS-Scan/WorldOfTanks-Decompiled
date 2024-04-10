@@ -14,7 +14,7 @@ from helpers import i18n
 WIDE_STAT_ROW = 'wideLine'
 NORMAL_STAT_ROW = 'normalLine'
 SMALL_STAT_LINE = 'smallLineUI'
-_LINE_BRAKE_STR = '<br/>'
+LINE_BRAKE_STR = '<br/>'
 _STATS_INFOTIP_HEADER_FORMAT = '#battle_results:team/stats/infotip_{0}/header'
 _VEHICLE_STATE_PREFIX = '{0} ('
 _VEHICLE_STATE_SUFFIX = ')'
@@ -244,7 +244,7 @@ def makeAOGASFactorValue(value):
 
 
 def makeMultiLineHtmlString(seq):
-    return _LINE_BRAKE_STR.join(seq)
+    return LINE_BRAKE_STR.join(seq)
 
 
 def makeStatValue(field, value):

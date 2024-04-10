@@ -1134,7 +1134,7 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
-        if vTypeDesc.hasSpeedometer and vehicle.isAlive() and vehicle.isPlayerVehicle:
+        if vTypeDesc.hasSpeedometer and vehicle.isAlive() and (vehicle.isPlayerVehicle or avatar_getter.getIsObserverFPV()):
             if vStateCtrl.isInPostmortem:
                 self.__resetSpeedometer()
             self.__updateBurnoutWarning(vStateCtrl)

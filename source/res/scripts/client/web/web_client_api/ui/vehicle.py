@@ -5,6 +5,7 @@ from functools import partial
 from itertools import groupby
 from logging import getLogger
 from types import NoneType
+from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STYLE_PREVIEW_VEHICLES_POOL
@@ -425,7 +426,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
         if cmd.hidden_blocks is not None:
-            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
+            showPreviewFunc = partial(event_dispatcher.showConfigurableShopVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
         else:
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
@@ -580,6 +581,7 @@ class VehiclePreviewWebApiMixin(object):
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
             showStyleFunc = showStyleFunc or _getStylePreviewShowFunc(styleInfo, cmd.price)
             descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
+            ClientSelectableCameraObject.switchCamera()
             showStyleFunc(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd), **additionalStyleFuncKwargs)
             return True
         else:

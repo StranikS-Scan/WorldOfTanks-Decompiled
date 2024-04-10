@@ -15,6 +15,7 @@ from gui.shared.events import DeathCamEvent
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
+from items import vehicles
 _logger = logging.getLogger(__name__)
 
 def hasShellPenetrationDistanceLoss(shellType):
@@ -153,7 +154,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         self.viewModel.setShellCaliber(projectileData['shellCaliber'])
         self.viewModel.setShellDamageBasic(projectileData['averageDamageOfShell'])
         velocity = projectileData['velocity']
-        self.viewModel.setShellVelocityBasic(velocity.length)
+        projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
+        self.viewModel.setShellVelocityBasic(int(round(velocity.length / projSpeedFactor)))
         caliberRule = CaliberRule.NONE
         if projectileData['is3CaliberRuleActive']:
             caliberRule = CaliberRule.THREECALIBER

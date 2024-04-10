@@ -467,6 +467,7 @@ class RES_ICONS(object):
     MAPS_ICONS_AWARDS_MULTIPLEAWARDS_RAYS = '../maps/icons/awards/multipleAwards/rays.png'
     MAPS_ICONS_AWARDS_MULTIPLEAWARDS_RIBBON_GOLD = '../maps/icons/awards/multipleAwards/ribbon_gold.png'
     MAPS_ICONS_AWARDS_MULTIPLEAWARDS_RIBBON_REGULAR = '../maps/icons/awards/multipleAwards/ribbon_regular.png'
+    MAPS_ICONS_AWARDS_MULTIPLEAWARDS_RIBBON_REGULAR_SMALL = '../maps/icons/awards/multipleAwards/ribbon_regular_small.png'
     MAPS_ICONS_AWARDS_MULTIPLEAWARDS_WT_SPECIAL = '../maps/icons/awards/multipleAwards/wt_special.png'
     MAPS_ICONS_AWARDS_MULTIPLEAWARDS_TITLE_STEAMICON = '../maps/icons/awards/multipleAwards/title/SteamIcon.png'
     MAPS_ICONS_AWARDS_TELECOM_BG_DEFAULT = '../maps/icons/awards/telecom/bg/default.png'

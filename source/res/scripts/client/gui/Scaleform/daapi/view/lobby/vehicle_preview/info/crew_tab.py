@@ -121,6 +121,7 @@ class PreviewTankman(object):
         if self.hasNewSkill:
             skillsItems.append((NEW_SKILL_ICON, TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER, True))
         return (self.role,
+         NO_TANKMAN,
          self.slotIdx,
          self.fullUserName,
          self.vehicleName,
@@ -227,11 +228,10 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
 
     def _getCustomCrewComment(self):
         crew = [ tMan for _, tMan in sorted(self.__customCrew) ]
-        crewLevel = first(crew).roleLevel
         skills = [ (tMan.skills[:] + [_SimpleSkill()] if tMan.hasNewSkill else tMan.skills[:]) for tMan in crew ]
         notEmptySkills = [ s for s in skills if s ]
         if not notEmptySkills:
-            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, crewLevel),
+            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW),
              '',
              '',
              '')
@@ -243,16 +243,16 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
             notEmptySkillsLen = len(notEmptySkills)
             if notEmptySkillsLen == 1:
                 role = first((tMan.role for tMan in crew if tMan.hasNewSkill)) if firstSkill.name == 'new' else first((tMan.role for tMan in crew if tMan.skills))
-                return (getCrewComment(firstSkill, crewLevel, role, True),
+                return (getCrewComment(firstSkill, role, True),
                  icon,
                  skillName,
                  customName)
             if notEmptySkillsLen == len(skills) and all((firstSkill.name == s[0].name for s in notEmptySkills)):
-                return (getCrewComment(firstSkill, crewLevel, '', False),
+                return (getCrewComment(firstSkill, '', False),
                  icon,
                  skillName,
                  customName)
-        return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ANYSKILLS, crewLevel),
+        return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ANYSKILLS),
          '',
          '',
          '')
@@ -305,11 +305,7 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
          ItemPackType.CREW_75,
          ItemPackType.CREW_100,
          ItemPackType.CUSTOM_CREW_100):
-            pctValue = {ItemPackType.CREW_50: 50,
-             ItemPackType.CREW_75: 75,
-             ItemPackType.CREW_100: 100,
-             ItemPackType.CUSTOM_CREW_100: 100}.get(itemCrew.type)
-            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, pctValue),
+            return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW),
              '',
              '',
              '')
@@ -323,7 +319,7 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
              '')
 
 
-def getCrewComment(skill, crewLevel, role, forOne):
+def getCrewComment(skill, role, forOne):
     if skill.name == 'new':
         if forOne:
             tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_NEWSKILL_FORONE
@@ -333,7 +329,7 @@ def getCrewComment(skill, crewLevel, role, forOne):
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORONE
     else:
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORALL
-    return _ms(key=tKey, level=crewLevel, role=_ms(TOOLTIPS.crewRole(role)) if role != '' else None, skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
+    return _ms(key=tKey, role=_ms(TOOLTIPS.crewRole(role)) if role != '' else None, skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
 
 
 def _isSabatonBrotherhood(skill):

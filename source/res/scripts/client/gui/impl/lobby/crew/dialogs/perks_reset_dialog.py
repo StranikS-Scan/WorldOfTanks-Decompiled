@@ -28,16 +28,13 @@ from helpers import dependency
 from items.tankmen import TankmanDescr
 from messenger import MessengerEntry
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewViewKeys, CrewDialogKeys
-from uilogging.epic_battle.constants import EpicBattleLogActions
-from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 from base_crew_dialog_template_view import BaseCrewDialogTemplateView
 if typing.TYPE_CHECKING:
     pass
 _LOC = R.strings.dialogs.perksReset
 
 class PerksResetDialog(BaseCrewDialogTemplateView):
-    __slots__ = ('_tankman', '_priceListContent', '_uiEpicBattleLogger', '_isFreePerkReset', '_lastSoundEvent')
+    __slots__ = ('_tankman', '_priceListContent', '_isFreePerkReset', '_lastSoundEvent')
     _itemsCache = dependency.descriptor(IItemsCache)
     VIEW_MODEL = PerksResetDialogModel
 
@@ -45,7 +42,6 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
         self._tankman = self._itemsCache.items.getTankman(tankmanId)
         self._isFreePerkReset = self._tankman.descriptor.isFreeDropSkills()
         super(PerksResetDialog, self).__init__(layoutID=None if self._isFreePerkReset else R.views.lobby.crew.dialogs.PerksResetDialog())
-        self._uiEpicBattleLogger = EpicBattleTooltipLogger()
         self._lastSoundEvent = None
         if not self._isFreePerkReset:
             self._priceListContent = PerksResetPriceList(tankmanId)
@@ -63,8 +59,6 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
             self._initModel()
         self.addButton(ConfirmButton(_LOC.submit(), isDisabled=not self._isFreePerkReset))
         self.addButton(CancelButton(_LOC.cancel()))
-        self._uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=CrewDialogKeys.PERKS_RESET, parentScreen=CrewViewKeys.PERSONAL_FILE)
-        self._uiEpicBattleLogger.initialize(CrewDialogKeys.PERKS_RESET)
         if self._lastSoundEvent is None:
             self._lastSoundEvent = SOUNDS.CREW_RESET_PERK_SELECTION
             SoundGroups.g_instance.playSound2D(self._lastSoundEvent)
@@ -78,8 +72,6 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
             vm.setTitle(str(backport.text(_LOC.title(), tankmanRole=role)))
 
     def _finalize(self):
-        self._uiEpicBattleLogger.reset()
-        self._uiEpicBattleLogger = None
         super(PerksResetDialog, self)._finalize()
         self._priceListContent = None
         return
@@ -110,7 +102,6 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
         return
 
     def _setResult(self, result):
-        self._uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=result, parentScreen=CrewDialogKeys.PERKS_RESET)
         if result == DialogButtons.SUBMIT:
             if not self._resetPerks():
                 return

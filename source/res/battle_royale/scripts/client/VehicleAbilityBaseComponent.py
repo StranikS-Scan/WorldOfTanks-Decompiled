@@ -3,6 +3,7 @@
 import BigWorld
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from Event import EventsSubscriber
+from items import vehicles
 
 class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
@@ -32,6 +33,12 @@ class VehicleAbilityBaseComponent(BigWorld.DynamicScriptComponent):
 
     def getInfo(self):
         return {}
+
+    @staticmethod
+    def _getEquipment(name):
+        equipmentID = vehicles.g_cache.equipmentIDs().get(name)
+        equipment = vehicles.g_cache.equipments()[equipmentID]
+        return equipment
 
     def _onAvatarReady(self):
         pass

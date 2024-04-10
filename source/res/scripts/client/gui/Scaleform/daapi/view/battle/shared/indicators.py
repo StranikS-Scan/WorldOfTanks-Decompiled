@@ -33,6 +33,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+from gui.battle_control import avatar_getter
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
@@ -605,7 +606,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__resetDevices()
         self.__updateDevicesView()
         hasSiegeMode = vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode)
-        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack) and vehicle.isPlayerVehicle:
+        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack) and (vehicle.isPlayerVehicle or avatar_getter.getIsObserverFPV()):
             uiType = self.__getUIType(vTypeDesc)
             self.as_setSiegeModeTypeS(uiType)
             self._devices = self.__createDevicesMap(vTypeDesc)
@@ -1133,7 +1134,7 @@ class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
     def __onVehicleControlling(self, vehicle):
         self.__updater.removeRocketCmp()
         self.__isEnabled = False
-        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration and vehicle.isPlayerVehicle:
+        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration and (vehicle.isPlayerVehicle or avatar_getter.getIsObserverFPV()):
             rocketCmp = vehicle.dynamicComponents.get('rocketAccelerationController', None)
             if rocketCmp is not None:
                 self.__updater.setRocketCmp(rocketCmp)

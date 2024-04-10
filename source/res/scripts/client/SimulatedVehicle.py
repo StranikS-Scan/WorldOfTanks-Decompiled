@@ -15,6 +15,7 @@ from shared_utils.vehicle_utils import createWheelFilters
 from skeletons.vehicle_appearance_cache import IAppearanceCache
 from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from vehicle_systems.tankStructure import TankPartIndexes
+import GenericComponents
 _logger = logging.getLogger(__name__)
 _UNSPOTTED_CONE_WIDTH_SCALE = 1
 _UNSPOTTED_CONE_LENGTH_SCALE = 1
@@ -213,6 +214,7 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
             return
         else:
             self.__stopExtras()
+            self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
             self.appearance.deactivate()
             self.appearance = None
             self.isStarted = False
@@ -261,6 +263,8 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
                 self.appearance.construct(isPlayer=False, resourceRefs=self.__prereqs)
             self.appearance.addCameraCollider()
             self.appearance.setVehicle(self)
+            self.appearance.removeComponentByType(GenericComponents.HierarchyComponent)
+            self.appearance.createComponent(GenericComponents.HierarchyComponent, self.entityGameObject)
             self.appearance.activate()
             self.appearance.changeEngineMode(self.simulationData_engineMode)
             if self.typeDescriptor.hasSiegeMode:

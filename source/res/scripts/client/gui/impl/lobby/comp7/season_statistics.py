@@ -20,6 +20,7 @@ from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.shared.formatters import calculateWinRate
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
@@ -139,7 +140,7 @@ class SeasonStatistics(ViewImpl):
             vehicle = self.__itemsCache.items.getVehicleCopyByCD(vehicleCD)
             statistic = VehicleStatisticsModel()
             statistic.setBattles(vehicleStats.battlesCount)
-            statistic.setWinsPercent(round(vehicleStats.wins * 100 / float(vehicleStats.battlesCount), 2))
+            statistic.setWinsPercent(calculateWinRate(vehicleStats.wins, vehicleStats.battlesCount))
             fillVehicleModel(statistic.vehicleInfo, vehicle)
             viewModels.append(statistic)
 
@@ -179,11 +180,9 @@ class BattlesStat(SummarySeasonStat):
         return self._seasonStats.getBattlesCount()
 
     def additionalStat(self):
-        battlesCount = self._seasonStats.getBattlesCount()
-        if not battlesCount:
-            _logger.error('Battles count should not be 0')
-            return 0
-        return self._seasonStats.getWinsCount() * 100 / battlesCount
+        battles = self._seasonStats.getBattlesCount()
+        wins = self._seasonStats.getWinsCount()
+        return int(calculateWinRate(wins, battles))
 
 
 class DamageStat(SummarySeasonStat):

@@ -181,8 +181,13 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             return
 
     def updateSettings(self, diff):
-        vInfo = self._arenaDP.getVehicleInfo(self._arenaDP.getAttachedVehicleID())
-        if self.__isAlive or self.__isObserver and vInfo and vInfo.isAlive():
+        isNeedObserverUpdate = False
+        if self.__isObserver:
+            if not BattleReplay.g_replayCtrl.isPlaying:
+                vInfo = self._arenaDP.getVehicleInfo(self._arenaDP.getAttachedVehicleID())
+                if vInfo and vInfo.isAlive():
+                    isNeedObserverUpdate = True
+        if self.__isAlive or isNeedObserverUpdate:
             if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
                 value = diff[settings_constants.GAME.SHOW_VECTOR_ON_MAP]
                 if value:

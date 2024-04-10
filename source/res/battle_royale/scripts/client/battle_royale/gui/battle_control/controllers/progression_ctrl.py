@@ -798,7 +798,7 @@ class ProgressionController(IProgressionController, ViewComponentsController):
             view.setVehicleChanged(self.getCurrentVehicle(), newModuleIntCD, vehicleRecreated)
 
     def __onVehicleControlling(self, vehicle):
-        if vehicle:
+        if vehicle and vehicle.battleXP.battleXP >= 0:
             self.updateXP(vehicle.battleXP.battleXP, vehicle.id)
 
     def __onRespawnBaseMoving(self):

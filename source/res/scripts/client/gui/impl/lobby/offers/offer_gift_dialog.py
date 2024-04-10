@@ -66,7 +66,10 @@ class OffersDialogWindowMixin(object):
         if offer.showPrice:
             with self.bottomContentViewModel.transaction() as model:
                 model.valueMain.setValue(str(self._price))
-                model.valueMain.setIcon(R.images.gui.maps.icons.offers.token())
+                tokenIcon = backport.image(R.images.gui.maps.icons.offers.token())
+                if offer.cdnGiftsTokenImgPath:
+                    tokenIcon = self._offersProvider.getCdnResourcePath(offer.cdnGiftsTokenImgPath, relative=False)
+                model.valueMain.setIcon(tokenIcon)
 
     def _getResultData(self):
         return None

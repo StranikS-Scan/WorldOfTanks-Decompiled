@@ -62,4 +62,4 @@ class ArenaInfoAbilityNotifier(DynamicScriptComponent, CallbackDelayer):
 
     def set_isRespawnTimeFinished(self, prev):
         if self.isRespawnTimeFinished:
-            self.battleRoyaleComponent.setOnRespawnTimeFinished()
+            self.battleRoyaleComponent.onRespawnTimeFinished()

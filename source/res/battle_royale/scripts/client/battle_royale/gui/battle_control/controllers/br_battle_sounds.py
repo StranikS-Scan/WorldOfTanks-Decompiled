@@ -490,7 +490,7 @@ class LevelSoundPlayer(IProgressionListener):
     def updateData(self, arenaLevelData):
         progressionCtrl = self.__sessionProvider.dynamic.progression
         if self.__level != arenaLevelData.level:
-            if self.__level is not None and arenaLevelData.level < progressionCtrl.maxLevel:
+            if self.__level is not None and arenaLevelData.level < progressionCtrl.maxLevel and not arenaLevelData.observedVehicleIsChanged:
                 BREvents.playSound(BREvents.LEVEL_UP)
             self.__level = arenaLevelData.level
         return

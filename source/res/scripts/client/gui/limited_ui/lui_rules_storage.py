@@ -80,10 +80,12 @@ class _LimitedUIRules(object):
 
     def __init__(self, rules):
         super(_LimitedUIRules, self).__init__()
-        self.__rules = rules
+        self.__isInited = False
+        self.__rules = rules or {}
         self.__postponedRulesCallbackID = None
         self.__postponedCompletedRules = defaultdict(set)
-        self.__clearStoredVersionedRules()
+        if rules is not None:
+            self.__clearStoredVersionedRules()
         return
 
     def getRule(self, ruleID):
@@ -179,6 +181,8 @@ class _LimitedUIRules(object):
         self.__postponedCompletedRules.clear()
         self.clearPostponedRulesCallback()
         self.__rules = rules
+        if not self.__isInited:
+            self.__clearStoredVersionedRules()
 
     def __storePostponedRulesByDelay(self):
         self.__postponedRulesCallbackID = None
@@ -197,6 +201,7 @@ class _LimitedUIRules(object):
         versionedRules = AccountSettings.getCompletedVersionedRules()
         if versionedRules:
             AccountSettings.clearVersionedRules(set(versionedRules) - {ruleID.value for ruleID in self.getRulesIDsByTypes([LuiRuleTypes.VERSIONED])})
+        self.__isInited = True
 
     @staticmethod
     def __getServerRuleStorageInfo(rule):
@@ -213,9 +218,10 @@ class RulesStorageMaker(object):
 
     @classmethod
     def makeStorage(cls, rawRulesData=None):
-        if rawRulesData is None:
-            rawRulesData = dict()
-        return _LimitedUIRules(cls.__makeRules(rawRulesData))
+        rules = None
+        if rawRulesData is not None:
+            rules = cls.__makeRules(rawRulesData)
+        return _LimitedUIRules(rules)
 
     @classmethod
     def updateStorage(cls, storage, rawRulesData):

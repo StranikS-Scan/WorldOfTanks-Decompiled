@@ -302,7 +302,6 @@ class EPIC_BATTLE(object):
     AWARDS_SUBTITLE2 = '#epic_battle:awards/subTitle2'
     AWARDS_SUBTITLE1 = '#epic_battle:awards/subTitle1'
     AWARDS_ACCEPTBUTTON = '#epic_battle:awards/acceptButton'
-    AWARDS_ADDITIONALREWARDS_SUBTEXT = '#epic_battle:awards/additionalRewards/subText'
     AWARDS_MULTIPLIER = '#epic_battle:awards/multiplier'
     TOOLTIPS_TIMETOSTART = '#epic_battle:tooltips/timeToStart'
     TOOLTIPS_TIMETOEND = '#epic_battle:tooltips/timeToEnd'

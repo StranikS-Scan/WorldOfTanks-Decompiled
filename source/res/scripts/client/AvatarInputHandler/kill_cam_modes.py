@@ -484,7 +484,7 @@ class KillCamMode(IControlMode, CallbackDelayer):
             simulatedKillerGunInfo = (simulatedKiller.gunJointMatrix, simulatedKiller.gunFireMatrix)
         else:
             simulatedKillerGunInfo = None
-        self.guiSessionProvider.shared.killCamCtrl.killCamModeActive(self.__unspottedOrigin, simulatedKillerGunInfo, projectileData, phaseDurations, hasSpottedData, simulatedKiller is not None, playerRelativeArmor, playerIsSpotted, totalSceneDuration + _START_VISION_DELAY, causeOfDeath)
+        self.guiSessionProvider.shared.killCamCtrl.killCamModeActive(self.__unspottedOrigin, simulatedKillerGunInfo, projectileData, phaseDurations, hasSpottedData, simulatedKiller is not None, playerRelativeArmor, playerIsSpotted, totalSceneDuration - _START_VISION_DELAY, causeOfDeath)
         return
 
     @staticmethod
@@ -535,6 +535,7 @@ class KillCamMode(IControlMode, CallbackDelayer):
         uniprof.exitFromRegion('avatar.control_mode.kill_cam.vision')
         if self.__killCamState == DeathCamEvent.State.ENDING or self.__killCamState == DeathCamEvent.State.FINISHED:
             return
+        self.__simulatedScene.hideEdgeEffects()
         self.__fadeScreen(True, _LEAVE_KILLER_VISION_FADE_TIME)
         self.delayCallback(_LEAVE_KILLER_VISION_FADE_TIME, self.__leaveKillCam)
         self.__changeKillCamModeState(DeathCamEvent.State.ENDING)

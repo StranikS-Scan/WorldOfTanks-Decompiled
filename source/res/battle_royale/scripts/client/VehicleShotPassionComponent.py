@@ -29,3 +29,6 @@ class VehicleShotPassionComponent(VehicleAbilityBaseComponent):
         super(VehicleShotPassionComponent, self)._updateTimer(data)
         self._guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, data)
         return
+
+    def _getDuration(self):
+        return self._getEquipment(BattleRoyaleEquipments.SHOT_PASSION).duration

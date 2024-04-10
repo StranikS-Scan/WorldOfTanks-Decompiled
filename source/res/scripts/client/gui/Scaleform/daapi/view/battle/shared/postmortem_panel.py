@@ -200,13 +200,13 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):
-    __slots__ = ('__playerInfo', '_isPlayerVehicle', '__maxHealth', '__healthPercent', '_isInPostmortem', '_deathAlreadySet', '__isColorBlind')
+    __slots__ = ('__playerInfo', '_isPlayerVehicle', '_maxHealth', '__healthPercent', '_isInPostmortem', '_deathAlreadySet', '__isColorBlind')
 
     def __init__(self):
         super(PostmortemPanel, self).__init__()
         self.__playerInfo = None
         self._isPlayerVehicle = False
-        self.__maxHealth = 0
+        self._maxHealth = 0
         self.__healthPercent = 0
         self._isInPostmortem = False
         self._deathAlreadySet = False
@@ -238,14 +238,14 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-            ctrl.onVehicleControlling += self.__onVehicleControlling
+            ctrl.onVehicleControlling += self._onVehicleControlling
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
             self._isInPostmortem = ctrl.isInPostmortem
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
                 self.__setPlayerInfo(vehicle.id)
-                self.__onVehicleControlling(vehicle)
+                self._onVehicleControlling(vehicle)
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         dogTagsCtrl = self.sessionProvider.dynamic.dogTags
         if dogTagsCtrl is not None:
@@ -264,7 +264,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-            ctrl.onVehicleControlling -= self.__onVehicleControlling
+            ctrl.onVehicleControlling -= self._onVehicleControlling
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -301,27 +301,24 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         player = BigWorld.player()
         return False if player is None else ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, cap)
 
-    def __setHealthPercent(self, health):
-        self.__healthPercent = normalizeHealthPercent(health, self.__maxHealth)
+    def _setHealthPercent(self, health):
+        self.__healthPercent = normalizeHealthPercent(health, self._maxHealth)
 
     def __setPlayerInfo(self, vehicleID):
         self.__playerInfo = self.sessionProvider.getCtx().getPlayerFullNameParts(vID=vehicleID, showVehShortName=True)
 
-    def __onVehicleControlling(self, vehicle):
-        self.__maxHealth = vehicle.maxHealth
+    def _onVehicleControlling(self, vehicle):
+        self._maxHealth = vehicle.maxHealth
         self._isPlayerVehicle = vehicle.isPlayerVehicle
-        self.__setHealthPercent(vehicle.health)
-        if BigWorld.player().isObserver() and vehicle.isAlive() and self._deathAlreadySet:
-            self._deathAlreadySet = False
-            self.resetDeathInfo()
+        self._setHealthPercent(vehicle.health)
         self._updateVehicleInfo()
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
-            if self.__maxHealth != 0 and self.__maxHealth > value:
-                self.__setHealthPercent(value)
+            if self._maxHealth != 0 and self._maxHealth > value:
+                self._setHealthPercent(value)
                 self._updateVehicleInfo()
-            if BattleReplay.g_replayCtrl.isPlaying and value > 0 and self.__maxHealth != 0 and self.__maxHealth >= value:
+            if BattleReplay.g_replayCtrl.isPlaying and value > 0 and self._maxHealth != 0 and self._maxHealth >= value:
                 try:
                     self.as_hideComponentsS()
                 except:
@@ -331,7 +328,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
-            self.__maxHealth = 0
+            self._maxHealth = 0
             self.__healthPercent = 0
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):

@@ -6,7 +6,7 @@ import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE
-from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin
+from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin, settings as commonSettings
 from items.battle_royale import isSpawnedBot, isHunterBot
 import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import settings
@@ -66,6 +66,12 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         super(BattleRoyaleVehicleMarkerPlugin, self).stop()
         self.__cache = {}
         return
+
+    def _invokeMarker(self, markerID, function, *args):
+        if function == 'updateHealth':
+            if args[1] == commonSettings.DAMAGE_TYPE.FROM_ALLY:
+                args = args[:1] + (commonSettings.DAMAGE_TYPE.FROM_SQUAD,) + args[2:]
+        super(BattleRoyaleVehicleMarkerPlugin, self)._invokeMarker(markerID, function, *args)
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
         if not vInfo.isAlive() and (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)):

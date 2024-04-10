@@ -457,7 +457,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return
 
     def movingToRespawnBase(self):
-        if self.ctrlModeName == _CTRL_MODE.POSTMORTEM:
+        if self.ctrlModeName in _CTRL_MODE.POSTMORTEM_CONTROL_MODES:
             self.onControlModeChanged(_CTRL_MODE.RESPAWN_DEATH)
             respMode = self.__ctrls[_CTRL_MODE.RESPAWN_DEATH]
             respMode.camera.setToVehicleDirection()

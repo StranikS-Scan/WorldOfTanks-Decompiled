@@ -8106,6 +8106,7 @@ class VEHICLE_CUSTOMIZATION(object):
     QUESTPROGRESS_CUST_PROGRESS_775_13 = '#vehicle_customization:questProgress/cust_progress_775_13'
     QUESTPROGRESS_CUST_PROGRESS_775_14 = '#vehicle_customization:questProgress/cust_progress_775_14'
     QUESTPROGRESS_CUST_PROGRESS_775_15 = '#vehicle_customization:questProgress/cust_progress_775_15'
+    QUESTPROGRESS_CUST_PROGRESS_887_1 = '#vehicle_customization:questProgress/cust_progress_887_1'
     ONBOARDINGVIEW_TITLE = '#vehicle_customization:onboardingView/title'
     ONBOARDINGVIEW_BLOCK_0_HEADER = '#vehicle_customization:onboardingView/block_0/header'
     ONBOARDINGVIEW_BLOCK_0_BODY = '#vehicle_customization:onboardingView/block_0/body'

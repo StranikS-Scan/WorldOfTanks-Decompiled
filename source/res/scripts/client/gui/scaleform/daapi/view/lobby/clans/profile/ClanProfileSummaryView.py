@@ -325,7 +325,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             elif tooltipBody is None:
                 tooltipBody = None
                 tooltipHeader = None
-            if not isinstance(value, str):
+            if not isinstance(value, (str, unicode)):
                 value = backport.getIntegralFormat(value)
             icon = item.get('icon', None)
             if icon is not None:

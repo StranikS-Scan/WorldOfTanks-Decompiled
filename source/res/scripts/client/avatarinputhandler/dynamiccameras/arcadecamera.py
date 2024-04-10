@@ -462,7 +462,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         eScrollDirection = EScrollDir.convertDZ(dz)
         if eScrollDirection:
             self._ArcadeCamera__overScrollProtector.updateOnScroll(eScrollDirection)
-        self._ArcadeCamera__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._ArcadeCamera__sensitivity
+        self._ArcadeCamera__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else (self._ArcadeCamera__sensitivity * self._userCfg['sensitivity']) if self._ArcadeCamera__sensitivity else self._cfg['sensitivity']
         self._ArcadeCamera__curScrollSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._ArcadeCamera__scrollSensitivity
         self._ArcadeCamera__updatedByKeyboard = updatedByKeyboard
         if updatedByKeyboard:
@@ -586,7 +586,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         self._distRange = state.distRange if state else self._cfg['distRange']
         self._ArcadeCamera__overScrollProtectOnMax = state.overScrollProtectOnMax if state else self._cfg['overScrollProtectOnMax']
         self._ArcadeCamera__overScrollProtectOnMin = state.overScrollProtectOnMin if state else self._cfg['overScrollProtectOnMin']
-        self._ArcadeCamera__sensitivity = state.sensitivity * self._userCfg['sensitivity'] if state else self._cfg['sensitivity']
+        self._ArcadeCamera__sensitivity = state.sensitivity if state else None
         self._ArcadeCamera__scrollSensitivity = state.scrollSensitivity if state else self._cfg['scrollSensitivity']
         if state is None:
             if self._ArcadeCamera__isSettingsEnabled(GAME.PRE_COMMANDER_CAM):

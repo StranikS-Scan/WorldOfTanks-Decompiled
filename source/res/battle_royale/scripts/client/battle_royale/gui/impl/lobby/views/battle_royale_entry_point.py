@@ -74,7 +74,8 @@ class BattleRoyaleEntryPoint(ViewImpl):
          PeriodType.ALL_NOT_AVAILABLE_END,
          PeriodType.NOT_AVAILABLE_END,
          PeriodType.STANDALONE_NOT_AVAILABLE_END):
-            actualTime = None
+            status = State.POSTEVENT
+            actualTime = periodInfo.cycleBorderRight.timestamp
         elif periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):
             actualTime = periodInfo.primeDelta
         else:

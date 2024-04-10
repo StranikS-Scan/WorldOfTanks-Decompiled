@@ -922,7 +922,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         return additionalBonusLeftStr
 
     def __getWotPlusBonusEarningsStr(self, applyWoTPlusAdditionalXPCount):
-        return text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.earningsInformation(), count=text_styles.earningsInformation(backport.getIntegralFormat(int(applyWoTPlusAdditionalXPCount)))))
+        return style.LINE_BRAKE_STR + text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.earningsInformation(), count=text_styles.earningsInformation(backport.getIntegralFormat(int(applyWoTPlusAdditionalXPCount)))))
 
     def __getPremiumAndPlusExhaustedStr(self):
         return text_styles.goldColor(backport.text(R.strings.battle_results.common.plusBonus.youRock()))

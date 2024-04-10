@@ -30,6 +30,15 @@ class BattleRoyalePostmortemPanel(BattleRoyalePostmortemPanelMeta):
         if self.__isBattleRoyaleTournament and self.__isObserver:
             self.as_setPostmortemPanelVisibleS(False)
 
+    def _onVehicleControlling(self, vehicle):
+        self._maxHealth = vehicle.maxHealth
+        self._isPlayerVehicle = vehicle.isPlayerVehicle
+        self._setHealthPercent(vehicle.health)
+        if BigWorld.player().isObserver() and vehicle.isAlive() and self._deathAlreadySet:
+            self._deathAlreadySet = False
+            self.resetDeathInfo()
+        self._updateVehicleInfo()
+
     def _showOwnDeathInfo(self):
         if not self._deathAlreadySet:
             deathInfo = self.getDeathInfo()

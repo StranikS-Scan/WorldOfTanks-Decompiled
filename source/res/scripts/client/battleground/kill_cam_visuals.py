@@ -32,8 +32,11 @@ class EffectsController(CallbackDelayer):
 
     def destroy(self):
         _logger.info('[EffectsController] Destroy Kill Cam Effects')
-        self.__removeEdgeDrawer()
+        self.hideEdges()
         self.delayCallback(0.0, self.__removeGameObjects)
+
+    def hideEdges(self):
+        self.__removeEdgeDrawer()
 
     def displayKillCamEffects(self, vehicleAppearance, maxComponentIndex, hasProjectilePierced, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint, isRicochet):
         _logger.info('displayKillCamEffects (params): %s %s %s %s %s %s %s %s %s %s', vehicleAppearance, maxComponentIndex, hasProjectilePierced, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint)
@@ -58,8 +61,8 @@ class EffectsController(CallbackDelayer):
 
     def __removeEdgeDrawer(self):
         for go in self.gameObjects:
-            explosionSphere = go.findComponentByType(HighlightComponent)
-            if explosionSphere:
+            highlightComponent = go.findComponentByType(HighlightComponent)
+            if highlightComponent:
                 go.removeComponentByType(HighlightComponent)
 
     def __removeGameObjects(self):

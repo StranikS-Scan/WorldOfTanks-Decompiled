@@ -270,20 +270,14 @@ class EventsCache(IEventsCache):
 
         def userFilterFunc(q):
             qGroup = q.getGroupID()
-            qIsValid = None
+            qIsValid = q.isAvailable().isValid
             qID = q.getID()
-            if q.getType() == EVENT_TYPE.MOTIVE_QUEST:
-                if qIsValid is None:
-                    qIsValid = q.isAvailable().isValid
-                if not qIsValid:
-                    return False
+            if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not qIsValid:
+                return False
             if q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(qID):
                 return False
-            if isBattleMattersQuestID(qID) or isPremium(qGroup):
-                if qIsValid is None:
-                    qIsValid = q.isAvailable().isValid
-                if not qIsValid:
-                    return False
+            if isBattleMattersQuestID(qID) or isPremium(qGroup) and not qIsValid:
+                return False
             if not isEpicBattleEnabled and isDailyEpic(qGroup):
                 return False
             if isBattleRoyale(qGroup):
@@ -292,10 +286,9 @@ class EventsCache(IEventsCache):
                     return False
             if isMapsTraining(qGroup):
                 return q.shouldBeShown()
-            elif isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
+            if isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
                 return False
-            else:
-                return False if isFunRandomOff and isFunRandomQuest(qID) else filterFunc(q)
+            return False if isFunRandomOff and isFunRandomQuest(qID) else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 

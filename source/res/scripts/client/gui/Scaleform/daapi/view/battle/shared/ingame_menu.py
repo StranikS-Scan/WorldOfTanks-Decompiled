@@ -5,6 +5,7 @@ import constants
 import BattleReplay
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.battle_control.battle_session import BattleExitResult
 from gui.Scaleform.genConsts.INGAMEMENU_CONSTANTS import INGAMEMENU_CONSTANTS
 from wg_async import wg_async, wg_await
 from gui import DialogsInterface, GUI_SETTINGS
@@ -28,6 +29,7 @@ from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from historical_battles_common.hb_constants_extension import ARENA_GUI_TYPE
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -100,7 +102,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.as_setServerSettingS(serverName, tooltipFullData, state)
 
     def _setServerStats(self):
-        if constants.IS_SHOW_SERVER_STATS:
+        if constants.IS_SHOW_SERVER_STATS and BigWorld.player().arenaGuiType != ARENA_GUI_TYPE.HISTORICAL_BATTLES:
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def _setMenuButtonsLabels(self):
@@ -129,10 +131,10 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @wg_async
     def __doLeaveArena(self):
         self.as_setVisibilityS(False)
-        exitResult = self.sessionProvider.getExitResult()
+        exitResult = self._getExitResult()
         if exitResult.isDeserter:
             isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
-            result = yield wg_await(self.__showLeaverAliveWindow(isPlayerIGR))
+            result = yield wg_await(self._showLeaverAliveWindow(isPlayerIGR))
         elif BattleReplay.isPlaying():
             result = yield wg_await(showLeaverReplayWindow())
         else:
@@ -146,9 +148,13 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.sessionProvider.exit()
         self.destroy()
 
+    def _getExitResult(self):
+        return self.sessionProvider.getExitResult()
+
     @staticmethod
-    def __showLeaverAliveWindow(isPlayerIGR):
-        return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
+    def _showLeaverAliveWindow(isPlayerIGR):
+        arenaBonusType = BigWorld.player().arenaBonusType
+        return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
 
     @staticmethod
     def __isPlayerIGR(playerInfo):

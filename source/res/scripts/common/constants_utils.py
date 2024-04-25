@@ -51,6 +51,8 @@ def addArenaGuiTypesFromExtension(extArenaGuiType, personality):
     ARENA_GUI_TYPE.VOIP_SUPPORTED += extraValues
     ARENA_GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED += extraValues
     ARENA_GUI_TYPE_LABEL.LABELS.update({value:attr.lower() for attr, value in extraAttrs.iteritems()})
+    ARENA_BONUS_TYPE.INVITATION_PROCESS_BONUS_TYPES += extraValues
+    ARENA_BONUS_TYPE.NOT_IMMEDIATE_BATTLE_RESULTS += extraValues
 
 
 def addArenaBonusTypesFromExtension(extArenaBonusType, personality):
@@ -107,7 +109,6 @@ def addInvitationTypes(extInvitationType, personality):
 
 def addClientUnitCmd(extClientUnitCmd, personality):
     extraAttrs = extClientUnitCmd.getExtraAttrs()
-    extClientUnitCmd.inject(personality)
     CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
 
 

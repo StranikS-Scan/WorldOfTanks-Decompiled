@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	9.4	</repairCost>
+  <repairCost>	13	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -58,8 +58,8 @@
     <weight>	19450	</weight>
     <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -424,7 +424,7 @@
     <Chassis_G165_Erich_Konzept_I>
       <userString>	#germany_vehicles:Chassis_G165_Erich_Konzept_I	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	10	</level>
       <price>	62900	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -1387,14 +1387,14 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_G165_Erich_Konzept_I>
   </chassis>
   <turrets0>
     <Turret_1_G165_Erich_Konzept_I>
       <userString>	#germany_vehicles:Turret_1_G165_Erich_Konzept_I	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	9	</level>
+      <level>	10	</level>
       <price>	52000	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -1408,15 +1408,15 @@
       <maxHealth>	450	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	150	</maxHealth>
-        <maxRegenHealth>	75	</maxRegenHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	110	</maxHealth>
-        <maxRegenHealth>	55	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_150mm_Erich_Konzept_I>	shared	  <maxAmmo>	24	</maxAmmo>

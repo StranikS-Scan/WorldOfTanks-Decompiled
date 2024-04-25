@@ -869,6 +869,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_INSUFFICIENT_ROLE = '#system_messages:unit/errors/INSUFFICIENT_ROLE'
     UNIT_ERRORS_NO_UNIT = '#system_messages:unit/errors/NO_UNIT'
     UNIT_ERRORS_JOIN_CTX_LOCK = '#system_messages:unit/errors/JOIN_CTX_LOCK'
+    UNIT_ERRORS_HB_BANNED = '#system_messages:unit/errors/HB_BANNED'
     UNIT_ERRORS_CANT_INVITE = '#system_messages:unit/errors/CANT_INVITE'
     UNIT_ERRORS_NOT_READY = '#system_messages:unit/errors/NOT_READY'
     UNIT_ERRORS_NOT_IN_QUEUE = '#system_messages:unit/errors/NOT_IN_QUEUE'
@@ -1370,6 +1371,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,
@@ -2343,6 +2345,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,

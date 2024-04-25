@@ -141,4 +141,5 @@ class _QuestsTabPresenter(object):
         chapter.setTotalQuests(totalQuests)
 
     def __onAboutEvent(self):
-        showArmoryYardInfoPage(parent=self.__parent)
+        self.__blur.disable()
+        showArmoryYardInfoPage(parent=self.__parent, closeCallback=lambda *_, **__: self.__blur.enable())

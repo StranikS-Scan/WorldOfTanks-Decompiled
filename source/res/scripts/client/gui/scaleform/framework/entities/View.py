@@ -56,7 +56,6 @@ class View(AbstractViewMeta, ViewInterface):
         self.__soundExtension.initSoundManager()
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
-        self.__window = None
         return
 
     def __repr__(self):
@@ -154,11 +153,8 @@ class View(AbstractViewMeta, ViewInterface):
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, ctx={'alias': alias}))
 
-    def getParentWindow(self):
-        return self.__window
-
     def setParentWindow(self, window):
-        self.__window = window
+        super(View, self).setParentWindow(window)
         self.__uid = window.uniqueID
 
     def isVisible(self):
@@ -172,10 +168,8 @@ class View(AbstractViewMeta, ViewInterface):
         self.__soundExtension.startSoundSpace()
 
     def _destroy(self):
-        self.__window = None
         self.__soundExtension.destroySoundManager()
         if self.__key.name and self.__key.alias:
             uniprof.exitFromRegion('Scaleform {} {}'.format(self.__key.name, self.__uid))
             BigWorld.notify(BigWorld.EventType.VIEW_DESTROYED, self.__key.alias, self.__uid, self.__key.name)
         super(View, self)._destroy()
-        return

@@ -754,7 +754,7 @@ class VehicleStickers(object):
                 if not gSlot.compatibleModels:
                     compatibleGunSlots.append(gSlot)
 
-        if vehicleDesc.isDualgunVehicle:
+        if vehicleDesc.isDualgunVehicle and compatibleGunSlots:
             slotsCount = len(compatibleGunSlots)
             if slotsCount >= 2:
                 midIndex = slotsCount / 2
@@ -766,9 +766,9 @@ class VehicleStickers(object):
 
                 return ((Insignia.Types.DUAL_LEFT, compatibleGunSlots), (Insignia.Types.DUAL_RIGHT, secondHalf))
             _logger.warning('Dual gun vehicle has less then two slots for marks on gun!')
+            return None
         else:
             return ((Insignia.Types.SINGLE, compatibleGunSlots),)
-        return None
 
     def _createStickerPacks(self, vehicleDesc, outfit, insigniaRank):
         insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)

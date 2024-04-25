@@ -12,7 +12,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
-    <backward>	13	</backward>
+    <backward>	18	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.14	</moving>
@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	34700	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	900	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -3221,7 +3221,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3235,7 +3235,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_canon_DCA_45_AC>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_90mm_canon_DCA_45_AC>	shared	  <maxAmmo>	84	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -3260,7 +3260,11 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	6.3	</reloadTime>
+          <reloadTime>	36	</reloadTime>
+          <clip>
+            <count>	6	</count>
+            <rate>	26.0869	</rate>
+          </clip>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3279,7 +3283,7 @@
             <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3370,7 +3374,11 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	34	</reloadTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	24	</rate>
+          </clip>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3389,7 +3397,7 @@
             <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_mainext_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3475,8 +3483,8 @@
             </armor_6>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	34	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>

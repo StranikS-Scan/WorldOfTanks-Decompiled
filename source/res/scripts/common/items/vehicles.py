@@ -273,6 +273,11 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/canBeRammed': True,
+     'vehicle/antifragmentationLiningFactor': 1.0,
+     'deviceCanBeRepaired/leftTrackHealth': True,
+     'deviceCanBeRepaired/rightTrackHealth': True,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -299,6 +304,7 @@ def vehicleAttributeFactors():
 
 
 WHEEL_SIZE_COEF = 2.2
+VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -991,6 +997,8 @@ class VehicleDescriptor(object):
 
     def getMaxRepairCost(self):
         type = self.type
+        if 'battle_royale' in type.tags:
+            return 10000
         cost = self.maxHealth * type.repairCost
         for turretDescr, gunDescr in self.turrets:
             cost += gunDescr.maxRepairCost + turretDescr.turretRotatorHealth.maxRepairCost + turretDescr.surveyingDeviceHealth.maxRepairCost
@@ -1467,6 +1475,8 @@ class VehicleDescriptor(object):
          'radioHealthFactor': 1.0,
          'surveyingDeviceHealthFactor': 1.0,
          'gunHealthFactor': 1.0,
+         'deviceCanBeRepaired/leftTrackHealth': True,
+         'deviceCanBeRepaired/rightTrackHealth': True,
          'demaskMovingFactor': 1.0,
          'centerRotationFwdSpeedFactor': 1.0,
          'deathZones/sensitivityFactor': 1.0,
@@ -1921,7 +1931,7 @@ class VehicleType(object):
             self.extrasDict = copyMethod(commonConfig['extrasDict'])
             self.devices = copyMethod(commonConfig['_devices'])
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
-        if IS_CLIENT or IS_WEB:
+        if IS_CLIENT or IS_WEB or IS_BOT:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT or IS_UE_EDITOR:
             self.damageStickersLodDist = commonConfig['miscParams']['damageStickersLodDist']
@@ -2806,7 +2816,7 @@ class VehicleList(object):
                 _xml.raiseWrongXml(ctx, 'tags', 'vehicle %s with level %s does not have tag earn_crystals' % (vname, item.level))
             item.tags = tags
             res[innationID] = item
-            if IS_CLIENT or IS_WEB:
+            if IS_CLIENT or IS_WEB or IS_BOT:
                 item.i18n = shared_readers.readUserText(vsection)
             price = _xml.readPrice(ctx, vsection, 'price')
             if 'gold' in price:
@@ -2994,6 +3004,12 @@ def stripOptionalDeviceFromVehicleCompactDescr(compactDescr):
     return _combineVehicleCompactDescr(vehType, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
 
 
+def getSuitableShellsForVehicle(compDescr):
+    _, nationID, vehTypeID = parseIntCompactDescr(compDescr)
+    vehType = g_cache.vehicle(nationID, vehTypeID)
+    return [ shot.shell.compactDescr for turrets in vehType.turrets for turret in turrets for gun in turret.guns for shot in gun.shots ]
+
+
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
     itemTypeID, nationID, shellTypeID = parseIntCompactDescr(shellCompactDescr)
     shellID = (nationID, shellTypeID)
@@ -3130,6 +3146,28 @@ def isFlamethrower(vehTypeCD):
 
 def isAssaultSPG(vehTypeCD):
     return hasAnyOfTags(vehTypeCD, (VEHICLE_TAGS.ASSAULT_SPG,))
+
+
+def makeOutfitCD(outfitData):
+    from items import customizations
+    outfit = ''
+    if outfitData:
+        camouflages = None
+        camouflageID = outfitData.get('camouflage')
+        if camouflageID:
+            camouflages = [customizations.CamouflageComponent(camouflageID, appliedTo=ApplyArea.HULL | ApplyArea.TURRET | ApplyArea.GUN)]
+        decals = []
+        decalID = outfitData.get('decal')
+        if decalID:
+            decals.append(customizations.DecalComponent(decalID, ApplyArea.ALL))
+        paints = []
+        paintID = outfitData.get('paint')
+        if paintID:
+            flag = ApplyArea.CHASSIS | ApplyArea.HULL | ApplyArea.TURRET
+            paints.append(customizations.PaintComponent(paintID, flag))
+        styleId = outfitData.get('style', 0)
+        outfit = customizations.CustomizationOutfit(camouflages=camouflages, decals=decals, paints=paints, styleId=styleId).makeCompDescr()
+    return outfit
 
 
 def _readComponents(xmlPath, reader, nationID, itemTypeID):

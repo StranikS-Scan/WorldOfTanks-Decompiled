@@ -111,9 +111,22 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     _limitedUIController = dependency.descriptor(ILimitedUIController)
     _NEW_PLAYER_BATTLES = 2
 
+    def __init__(self):
+        super(MessengerBar, self).__init__()
+        self.__disableReferralQueues = {QUEUE_TYPE.EVENT_BATTLES}
+        self.__disableVehicleCompareQueues = {QUEUE_TYPE.EVENT_BATTLES}
+
     @prbDispatcherProperty
     def prbDispatcher(self):
         return None
+
+    def addDisableReferralQueue(self, queueType):
+        self.__disableReferralQueues.add(queueType)
+        self.__updateReferralBtnEnabled()
+
+    def addDisableVehicleCompareQueue(self, queueType):
+        self.__disableVehicleCompareQueues.add(queueType)
+        self.__updateReferralBtnEnabled()
 
     def channelButtonClick(self):
         if not self.__manageWindow(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW):
@@ -184,8 +197,18 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self.as_setReferralBtnLimitIndicationS(self._referralCtrl.isScoresLimitReached())
 
     def __handleFightButtonUpdated(self, event):
+        self.__updateReferralBtnEnabled()
+        self.__updateVehicleCompareBtnEnabled()
+
+    def __updateReferralBtnEnabled(self):
         state = self.prbDispatcher.getFunctionalState()
-        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled())
+        enabled = self.prbEntity.getQueueType() not in self.__disableReferralQueues
+        self.as_setReferralButtonEnabledS(not state.isNavigationDisabled() and enabled)
+
+    def __updateVehicleCompareBtnEnabled(self):
+        state = self.prbDispatcher.getFunctionalState()
+        enabled = self.prbEntity.getQueueType() not in self.__disableVehicleCompareQueues
+        self.as_setVehicleCompareCartButtonEnabledS(not state.isNavigationDisabled() and enabled)
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

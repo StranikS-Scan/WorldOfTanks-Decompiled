@@ -4,7 +4,7 @@ from visual_script.block import Block, Meta
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT
 from visual_script.dependency import dependencyImporter
-dependency, sound_constants, aySkeleton, settings, guiShared = dependencyImporter('helpers.dependency', 'armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants', 'armory_yard.gui.game_control.armory_yard_controller', 'Settings', 'gui.shared')
+dependency, sound_constants, aySkeleton, settings, guiShared, accountSettings = dependencyImporter('helpers.dependency', 'armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants', 'armory_yard.gui.game_control.armory_yard_controller', 'Settings', 'gui.shared', 'account_helpers.AccountSettings')
 
 class AYMeta(Meta):
 
@@ -156,9 +156,6 @@ class GetCurrentProgress(Block, AYMeta):
         self._progress.setValue(progress)
 
 
-AY_SECTION_TEMPLATE = 'armory_yard'
-AY_SECTION_LAST_LISTENED_MESSAGE = 'lastListenedMessage'
-
 class GetLastListenedMessage(Block, AYMeta):
     __ayController = dependency.descriptor(aySkeleton.IArmoryYardController)
 
@@ -171,14 +168,7 @@ class GetLastListenedMessage(Block, AYMeta):
         if currentSeason is None:
             return
         else:
-            sectionName = AY_SECTION_TEMPLATE + '_' + str(currentSeason.getSeasonID())
-            section = settings.g_instance.userPrefs
-            if not section.has_key(sectionName):
-                self._index.setValue(0)
-                return
-            subsec = section[sectionName]
-            value = subsec.readInt(AY_SECTION_LAST_LISTENED_MESSAGE, 0)
-            self._index.setValue(value)
+            self._index.setValue(accountSettings.AccountSettings.getArmoryYard(accountSettings.ArmoryYard.AY_SECTION_LAST_LISTENED_MESSAGE))
             return
 
 
@@ -196,12 +186,7 @@ class SaveLastListenedMessage(Block, AYMeta):
         if currentSeason is None:
             return
         else:
-            sectionName = AY_SECTION_TEMPLATE + '_' + str(currentSeason.getSeasonID())
-            section = settings.g_instance.userPrefs
-            section.deleteSection(sectionName)
-            subsec = section.createSection(sectionName)
-            subsec.writeInt(AY_SECTION_LAST_LISTENED_MESSAGE, self._index.getValue())
-            settings.g_instance.save()
+            accountSettings.AccountSettings.setArmoryYard(accountSettings.ArmoryYard.AY_SECTION_LAST_LISTENED_MESSAGE, self._index.getValue())
             self._out.call()
             return
 

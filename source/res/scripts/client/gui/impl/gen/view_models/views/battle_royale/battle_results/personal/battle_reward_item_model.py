@@ -10,6 +10,7 @@ class BattleRewardItemModel(ViewModel):
     PROGRESSION_POINTS = 'progression'
     BATTLE_PASS_POINTS = 'battlePassPoints'
     BATTLE_ROYALE_COIN = 'brcoin'
+    BR_PROGRESSION_TOKEN = 'brProgressionToken'
 
     def __init__(self, properties=2, commands=0):
         super(BattleRewardItemModel, self).__init__(properties=properties, commands=commands)

@@ -64,7 +64,12 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
 
     @property
     def paginatorsController(self):
-        return self._parentWnd.paginatorsController
+        try:
+            paginatorsController = self._parentWnd.paginatorsController
+        except AttributeError:
+            paginatorsController = self._parentWnd.content.paginatorsController
+
+        return paginatorsController
 
     @property
     def currentFilterName(self):
@@ -113,10 +118,18 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         self._sendSortRequest(self._getCurrentPaginator(), sort + secondSort)
 
     def formatInvitesCount(self, paginator):
-        return self._parentWnd.formatInvitesCount(paginator)
+        try:
+            formatInvitesCount = self._parentWnd.formatInvitesCount(paginator)
+        except AttributeError:
+            formatInvitesCount = self._parentWnd.content.formatInvitesCount(paginator)
+
+        return formatInvitesCount
 
     def showWaiting(self, show):
-        self._parentWnd.showWaiting(show)
+        try:
+            self._parentWnd.showWaiting(show)
+        except AttributeError:
+            self._parentWnd.content.showWaiting(show)
 
     def _getViewAlias(self):
         raise NotImplementedError

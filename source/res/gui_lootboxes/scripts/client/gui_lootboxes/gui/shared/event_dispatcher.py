@@ -34,7 +34,7 @@ def showStorageView(returnPlace=None, initialLootBoxId=0):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def showSpecificBoxInStorageView(category=None, lootBoxType=None, returnPlace=None, itemsCache=None):
+def showSpecificBoxInStorageView(category=None, lootBoxType=None, returnPlace=None, itemsCache=None, closeCallback=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.lootboxes_storage import LootBoxesStorageWindow
     from gui_lootboxes.gui.storage_context.context import ReturnPlaces
 
@@ -51,7 +51,7 @@ def showSpecificBoxInStorageView(category=None, lootBoxType=None, returnPlace=No
         boxId = box.getID()
     if returnPlace is None:
         returnPlace = ReturnPlaces.TO_HANGAR
-    window = LootBoxesStorageWindow(returnPlace, boxId)
+    window = LootBoxesStorageWindow(returnPlace, boxId, closeCallback)
     window.load()
     return
 

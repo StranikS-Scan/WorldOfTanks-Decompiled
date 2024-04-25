@@ -7,7 +7,7 @@ from gui.server_events.awards_formatters import AWARDS_SIZES, getRankedAwardsPac
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.formatters import text_styles
 _UNAVAILABLE_VALUE = -1
-_UNAVAILABLE_SYMBOL = '--'
+_UNAVAILABLE_SYMBOL = '---'
 _PERCENT_SYMBOL = '%'
 
 class _RankedAwardsComposer(CurtailingAwardsComposer):

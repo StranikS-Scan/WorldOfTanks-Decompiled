@@ -109,8 +109,9 @@ class XmppClanListener(ClientHolder):
         return
 
     def __ce_onChannelInited(self, channel):
-        if self.__channelCriteria.filter(channel):
+        if self.__channelCriteria.filter(channel) and self.__clanChannel is not None:
             self.__initClanChannel(channel)
+        return
 
     def __ce_onChannelDestroyed(self, channel):
         if self.__channelCriteria.filter(channel):

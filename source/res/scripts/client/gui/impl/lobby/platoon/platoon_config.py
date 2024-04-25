@@ -101,3 +101,8 @@ def addPlatoonLayoutData(prbType, layoutsData, personality):
         layoutData[prbType] = data
         msg = 'prbType:{prbType} was added to ePlatoonLayouts for layoutType:{layoutType}. Personality: {p}'.format(prbType=prbType, layoutType=layoutType, p=personality)
         logging.debug(msg)
+
+
+def initPlatoonControllerConfig(prbType, platoonView, layoutsData, personality):
+    addPlatoonViewByPrbType(prbType, platoonView, personality)
+    addPlatoonLayoutData(prbType, layoutsData, personality)

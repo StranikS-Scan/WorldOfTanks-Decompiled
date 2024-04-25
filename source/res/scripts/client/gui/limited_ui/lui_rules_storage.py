@@ -51,6 +51,7 @@ class LuiRules(enum.Enum):
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
     RESOURCE_WELL = 'ResourceWellFlag'
     GUI_COSMIC_ENTRY_POINT = 'CosmicEntryPoint'
+    HB_ENTRY_POINT = 'HBEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

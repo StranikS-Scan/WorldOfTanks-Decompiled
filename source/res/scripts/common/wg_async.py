@@ -10,17 +10,20 @@ from functools import wraps, partial
 from constants import IS_DEVELOPMENT, IS_CLIENT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV
 
-def wg_async(func):
+def wg_async(func=None, executorClass=None):
+    if func is None:
+        return partial(wg_async, executorClass=executorClass)
+    else:
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        gen = func(*args, **kwargs)
-        promise = _Promise()
-        executor = _AsyncExecutor(gen, promise)
-        executor.start()
-        return promise.get_future()
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            gen = func(*args, **kwargs)
+            promise = _Promise()
+            executor = (executorClass or defaultExecutorClass)(gen, promise)
+            executor.start()
+            return promise.get_future()
 
-    return wrapper
+        return wrapper
 
 
 def wg_await(future, timeout=None):
@@ -29,16 +32,19 @@ def wg_await(future, timeout=None):
     return future
 
 
-def prepare(func):
+def prepare(func=None, executorClass=None):
+    if func is None:
+        return partial(prepare, executorClass=executorClass)
+    else:
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        gen = func(*args, **kwargs)
-        promise = _Promise()
-        executor = _AsyncExecutor(gen, promise)
-        return (promise.get_future(), executor)
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            gen = func(*args, **kwargs)
+            promise = _Promise()
+            executor = (executorClass or defaultExecutorClass)(gen, promise)
+            return (promise.get_future(), executor)
 
-    return wrapper
+        return wrapper
 
 
 def post(func):
@@ -93,10 +99,7 @@ def await_deferred(d):
 
 
 def resignTickIfRequired(timeout=0.101):
-    if BigWorld.isNextTickPending():
-        return delay(timeout)
-    else:
-        return _g_alwaysReadyFuture
+    return delay(timeout) if BigWorld.isNextTickPending() else _g_alwaysReadyFuture
 
 
 def delay(timeout):
@@ -313,11 +316,11 @@ class _Promise(object):
             self.__value = value
         return
 
-    def set_exception(self, type, value=None, traceback=None):
+    def set_exception(self, etype, value=None, traceback=None):
         self.__value_set = True
         self.__cancel = None
         future = self.__future
-        exc_info = (type, value, traceback)
+        exc_info = (etype, value, traceback)
         if future is not None:
             self.__future = None
             future.set_result(_FulfilledPromiseResult(None, exc_info))
@@ -352,6 +355,9 @@ class _Promise(object):
             self.__future = future
             return future
             return
+
+    def __str__(self):
+        return '{}(value_set={}, value={}, exc_info={}, future_set={})'.format(self.__class__.__name__, self.__value_set, self.__value, self.__exc_info, self.__future_set)
 
 
 class _FulfilledPromiseResult(object):
@@ -393,9 +399,9 @@ class _AsyncExecutor(object):
         self.__step(self.__gen.send, None)
         return
 
-    def __step(self, next, *args):
+    def __step(self, nextop, *args):
         try:
-            future = next(*args)
+            future = nextop(*args)
             handler = getattr(future, 'cancel', None)
             self.__promise.set_cancel_handler(handler)
             future.then(self.__resume)
@@ -415,6 +421,50 @@ class _AsyncExecutor(object):
             self.__step(gen.send, result)
         except BaseException:
             self.__step(gen.throw, *sys.exc_info())
+
+
+class _AsyncExecutorNonRec(object):
+    __slots__ = ('__gen', '__promise')
+
+    def __init__(self, gen, promise):
+        self.__gen = gen
+        self.__promise = promise
+
+    def start(self):
+        self.__step(self.__gen.send, None)
+        return
+
+    def __step(self, nextop, *args):
+        while True:
+            try:
+                future = nextop(*args)
+                handler = getattr(future, 'cancel', None)
+                self.__promise.set_cancel_handler(handler)
+                continuation, recurse = self.__resume_cont()
+                future.then(partial(self.__resume, continuation=continuation))
+                if not recurse:
+                    return recurse.append(None)
+                nextop, args = recurse
+            except AsyncReturn as r:
+                return self.__promise.set_value(r.value)
+            except StopIteration:
+                return self.__promise.set_value(None)
+            except BaseException:
+                return self.__promise.set_exception(*sys.exc_info())
+
+        return
+
+    def __resume_cont(self):
+        storage = []
+        return (lambda first, *rest: storage.extend((first, rest)) if not storage else self.__step(first, *rest), storage)
+
+    def __resume(self, result, continuation):
+        gen = self.__gen
+        try:
+            result = result.get()
+            continuation(gen.send, result)
+        except BaseException:
+            continuation(gen.throw, *sys.exc_info())
 
 
 class AsyncScope(object):
@@ -572,3 +622,4 @@ class AsyncQueue(AsyncObject):
 
 
 _g_alwaysReadyFuture = _AlwaysReadyFuture(_FulfilledPromiseResult(None, None))
+defaultExecutorClass = _AsyncExecutorNonRec

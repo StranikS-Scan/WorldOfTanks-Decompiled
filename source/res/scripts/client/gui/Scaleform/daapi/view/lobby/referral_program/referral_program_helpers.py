@@ -24,6 +24,10 @@ def getObtainVehicleURL():
     return _getUrl('getVehicle')
 
 
+def getReferralShopURL():
+    return _getUrl('referralShop')
+
+
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def isCurrentUserRecruit(itemsCache=None):
     return bool(itemsCache.items.stats.refSystem20.get(RECRUITER_ID_ATTR, False))

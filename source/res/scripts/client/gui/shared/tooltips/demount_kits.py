@@ -5,6 +5,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.goodies.goodie_items import DemountKit
 from gui.impl import backport
+from gui.impl.backport import getIntegralFormat
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, _logger
 from gui.shared.money import Currency
@@ -95,7 +96,7 @@ class NotEnoughMoneyTooltipData(ToolTipBaseData):
     def getDisplayableData(self, value, currencyType):
         header, body, icon = self.RESOURCES_BY_CURRENCY.get(currencyType, ('', '', '', ''))
         formattedBody = makeHtmlString('html_templates:lobby/tooltips', 'not_enough_money_general', {'description': backport.text(body),
-         'value': value,
+         'value': getIntegralFormat(value),
          'icon': backport.image(icon)})
         return {'header': backport.text(header),
          'body': formattedBody}

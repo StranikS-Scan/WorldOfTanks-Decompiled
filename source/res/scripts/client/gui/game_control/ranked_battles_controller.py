@@ -104,6 +104,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.onEntitlementEvent = Event.Event()
         self.onKillWebOverlays = Event.Event()
         self.onSelectableRewardsChanged = Event.Event()
+        self.onRankedPrbClosing = Event.Event()
         self.__serverSettings = None
         self.__rankedSettings = None
         self.__battlesGroups = None
@@ -198,6 +199,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def onPrbEntitySwitching(self):
         switchedFromRanked = self.isRankedPrbActive()
         if switchedFromRanked:
+            self.onRankedPrbClosing()
             self.__updateSounds(False)
 
     def onPrbEntitySwitched(self):
@@ -209,6 +211,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def getModeSettings(self):
         return self.__rankedSettings
+
+    def getStepsList(self):
+        return self.getModeSettings().accSteps
+
+    def getStepsToEarnRank(self, rankID):
+        return self.getStepsList()[rankID - 1]
+
+    def isUnburnableRank(self, rankID):
+        return rankID in self.__rankedSettings.unburnableRanks
 
     def isAvailable(self):
         return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None

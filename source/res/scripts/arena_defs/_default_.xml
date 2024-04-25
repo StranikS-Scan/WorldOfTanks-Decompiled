@@ -354,5 +354,31 @@
         </loadBanks>
       </soundRemapping>
     </comp7>
+    <historical_battles>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	ev_secret_event_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_voiceover.pck	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_gameplay.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_gameplay.pck	</name>
+          </bank>
+          <bank>
+            <name>	env_Forest.bnk	</name>
+          </bank>
+        </loadBanks>
+        <unloadBanks>
+          <bank>
+            <name></name>
+          </bank>
+        </unloadBanks>
+      </soundRemapping>
+    </historical_battles>
   </extraSoundRemapping>
 </_default_.xml>

@@ -231,7 +231,7 @@ class BattlePassBuyView(ViewImpl):
             g_eventBus.addListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
 
     def __isShopOfferAvailable(self):
-        return not any((package.isBought() and not package.isMarathon() for package in self.__packages.itervalues()))
+        return self.__battlePass.isShopOfferActive() and not any((package.isBought() and not package.isMarathon() for package in self.__packages.itervalues()))
 
     def __onShopOfferClick(self):
         showShop(getBuyBattlePassUrl())

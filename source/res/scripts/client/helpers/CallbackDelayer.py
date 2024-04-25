@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/helpers/CallbackDelayer.py
 import functools
 import BigWorld
+from debug_utils import LOG_DEBUG_DEV
 
 class CallbackDelayer(object):
 
@@ -20,12 +21,16 @@ class CallbackDelayer(object):
         return
 
     def __funcWrapper(self, func, *args, **kwargs):
-        del self.__callbacks[func]
-        desiredDelay = func(*args, **kwargs)
-        if desiredDelay is not None and desiredDelay >= 0:
-            curId = BigWorld.callback(desiredDelay, functools.partial(self.__funcWrapper, func, *args, **kwargs))
-            self.__callbacks[func] = curId
-        return
+        if func not in self.__callbacks:
+            LOG_DEBUG_DEV('CallbackDelayer stopped func delay, func not found in callbacks', func)
+            return
+        else:
+            del self.__callbacks[func]
+            desiredDelay = func(*args, **kwargs)
+            if desiredDelay is not None and desiredDelay >= 0:
+                curId = BigWorld.callback(desiredDelay, functools.partial(self.__funcWrapper, func, *args, **kwargs))
+                self.__callbacks[func] = curId
+            return
 
     def delayCallback(self, seconds, func, *args, **kwargs):
         curId = self.__callbacks.get(func)

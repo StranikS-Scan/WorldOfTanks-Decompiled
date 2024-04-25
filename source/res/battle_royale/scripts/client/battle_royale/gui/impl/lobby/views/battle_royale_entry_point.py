@@ -34,11 +34,17 @@ class BattleRoyaleEntryPoint(ViewImpl):
         self.__isSingle = value
         self.__updateViewModel()
 
-    def _getEvents(self):
-        return ((self.viewModel.onClick, self.__onClick),
-         (self.__battleRoyaleController.onUpdated, self.__onUpdate),
-         (self.__battleRoyaleController.onPrimeTimeStatusUpdated, self.__onUpdate),
-         (self.__battleRoyaleController.onWidgetUpdate, self.__onUpdate))
+    def _initialize(self, *args, **kwargs):
+        super(BattleRoyaleEntryPoint, self)._initialize(*args, **kwargs)
+        self.viewModel.onClick += self.__onClick
+        self.__battleRoyaleController.onUpdated += self.__onUpdate
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
+
+    def _finalize(self):
+        self.viewModel.onClick -= self.__onClick
+        self.__battleRoyaleController.onUpdated -= self.__onUpdate
+        self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onUpdate
+        super(BattleRoyaleEntryPoint, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
         super(BattleRoyaleEntryPoint, self)._onLoading(*args, **kwargs)
@@ -60,6 +66,7 @@ class BattleRoyaleEntryPoint(ViewImpl):
     def __getPeriodStateAndActualTime(self):
         periodInfo = self.__battleRoyaleController.getPeriodInfo()
         status = State.DISABLED
+        actualTime = None
         if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
             status = State.ANNOUNCE
             actualTime = periodInfo.cycleBorderRight.timestamp
@@ -92,7 +99,7 @@ class BattleRoyaleEntryPoint(ViewImpl):
         if not brController.isInPrimeTime() and brController.hasAvailablePrimeTimeServers():
             event_dispatcher.showBattleRoyalePrimeTimeWindow()
         elif periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            pass
+            self.__battleRoyaleController.openURL()
         else:
             brController.selectRoyaleBattle()
             selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)

@@ -2,11 +2,9 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/managers/scene_loading_manager.py
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IArmoryYardController
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 
 class SceneLoadingManager(object):
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
         self.__isLoading = False
@@ -29,7 +27,7 @@ class SceneLoadingManager(object):
             self.__defaultSpacePath = hangarSpace.spacePath
             hangarSpace.setSelectionEnabled(True)
             hangarSpace.onSpaceCreate += self.sceneLoaded
-            g_clientHangarSpaceOverride.setPath('h00_armory_yard_ep2', visibilityMask=None, isPremium=None, isReload=True)
+            g_clientHangarSpaceOverride.setPath('h00_armory_yard_ep3', visibilityMask=None, isPremium=None, isReload=True)
             self.__isLoading = True
         return
 

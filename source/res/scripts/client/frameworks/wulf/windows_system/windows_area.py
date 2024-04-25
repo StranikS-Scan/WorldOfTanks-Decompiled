@@ -36,7 +36,7 @@ class WindowsArea(PyObjectEntity):
         return self.proxy.getNextPyNeighbor(window.uniqueID)
 
     def move(self, window, x, y, xAnchor=PositionAnchor.LEFT, yAnchor=PositionAnchor.TOP):
-        return self.proxy.movePyWindow(window.uniqueID, x, y, xAnchor, yAnchor)
+        return self.proxy.movePyWindow(window.uniqueID, int(x), int(y), xAnchor, yAnchor)
 
     def center(self, window):
         return self.proxy.centerPyWindow(window.uniqueID)

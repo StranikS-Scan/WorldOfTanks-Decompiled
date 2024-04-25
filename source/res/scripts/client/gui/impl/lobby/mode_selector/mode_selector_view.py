@@ -38,7 +38,7 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController, IWinbackController, IComp7Controller
+from skeletons.gui.game_control import IBootcampController, IWinbackController, IComp7Controller, IRankedBattlesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
@@ -64,7 +64,8 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
+ ModeSelectorTooltipsConstants.HB_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
@@ -86,12 +87,13 @@ class ModeSelectorView(ViewImpl):
     __gui = dependency.descriptor(IGuiLoader)
     __winbackController = dependency.descriptor(IWinbackController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __rankedBattleController = dependency.descriptor(IRankedBattlesController)
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
     _areWidgetsVisible = False
 
     def __init__(self, layoutId, isEventEnabled=False, provider=None, subSelectorCallback=None):
         super(ModeSelectorView, self).__init__(ViewSettings(layoutId, ViewFlags.LOBBY_TOP_SUB_VIEW, ModeSelectorModel()))
-        self.__dataProvider = provider if provider else ModeSelectorDataProvider()
+        self.__dataProvider = provider
         self.__blur = None
         self.__prevOptimizationEnabled = False
         self.__prevAppBackgroundAlpha = 0.0
@@ -177,10 +179,14 @@ class ModeSelectorView(ViewImpl):
         g_eventBus.addListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
         self.__comp7Controller.onStatusUpdated += self.__refresh
         self.__comp7Controller.onComp7ConfigChanged += self.__refresh
+        self.__rankedBattleController.onGameModeStatusUpdated += self.__refresh
+        self.__rankedBattleController.onUpdated += self.__refresh
+        self.__rankedBattleController.onGameModeStatusTick += self.__refresh
         self.viewModel.onItemClicked += self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
         self.viewModel.onInfoClicked += self.__infoClickHandler
+        self.__dataProvider = self.__dataProvider or ModeSelectorDataProvider()
         self.__dataProvider.onListChanged += self.__dataProviderListChangeHandler
         self.__updateViewModel(self.viewModel)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.MARKER)
@@ -213,6 +219,9 @@ class ModeSelectorView(ViewImpl):
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.__comp7Controller.onStatusUpdated -= self.__refresh
         self.__comp7Controller.onComp7ConfigChanged -= self.__refresh
+        self.__rankedBattleController.onGameModeStatusUpdated -= self.__refresh
+        self.__rankedBattleController.onUpdated -= self.__refresh
+        self.__rankedBattleController.onGameModeStatusTick -= self.__refresh
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked -= self.__showWidgetsClickHandler
@@ -348,7 +357,7 @@ class ModeSelectorView(ViewImpl):
             self.close()
 
     def __refresh(self, *_):
-        if self.__comp7Controller.isAvailable():
+        if self.__comp7Controller.isAvailable() or self.__rankedBattleController.isAvailable():
             self.__dataProvider.updateItems()
         else:
             self.refresh()

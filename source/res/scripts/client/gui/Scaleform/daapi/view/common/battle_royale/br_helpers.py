@@ -44,7 +44,7 @@ def getCircularVisionAngle(vehicle=None):
             _logger.warning('Player is not Avatar!')
             return
     if not hasattr(vehicle, 'coneVisibility'):
-        _logger.warning('Vehicle attribute "coneVisibility" is not found!')
+        _logger.info('Vehicle attribute "coneVisibility" is not found!')
         return
     else:
         return math.degrees(vehicle.coneVisibility.circularVisionAngle)

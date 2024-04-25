@@ -1,6 +1,4 @@
 <VehicleLivesComponent.def>
-  <CellMethods></CellMethods>
-  <ClientMethods></ClientMethods>
   <Properties>
     <lives>
       <Type>	INT8	</Type>
@@ -18,5 +16,7 @@
   <ofEntity>
     <Vehicle></Vehicle>
   </ofEntity>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
   <DefaultKeyName>	VehicleLivesComponent	</DefaultKeyName>
 </VehicleLivesComponent.def>

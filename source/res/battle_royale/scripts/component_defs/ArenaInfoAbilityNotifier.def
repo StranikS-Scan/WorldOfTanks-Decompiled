@@ -7,5 +7,16 @@
       <Arg>	FLOAT32	</Arg>
     </notifyLaunchPosition>
   </ClientMethods>
+  <Properties>
+    <nextDropWave>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </nextDropWave>
+    <defeatedTeams>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </defeatedTeams>
+  </Properties>
   <DefaultKeyName>	abilityNotifierComponent	</DefaultKeyName>
 </ArenaInfoAbilityNotifier.def>

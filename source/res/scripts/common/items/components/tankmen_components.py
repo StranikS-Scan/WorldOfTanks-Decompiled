@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/tankmen_components.py
 from debug_utils import LOG_ERROR
+import typing
 import weakref
 import itertools
 from constants import IS_CLIENT
@@ -9,6 +10,8 @@ from items.components import legacy_stuff
 from items.components import shared_components
 from items.components import skills_constants
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Dict, Optional, Set, Union
 
 class SPECIAL_VOICE_TAG(object):
     ARIA_2023 = 'AriaZhorikSpecialVoice'

@@ -18,6 +18,7 @@ class ProxyCurrencyComponentInject(InjectComponentAdaptor):
 
 
 class ProxyCurrencyView(ViewImpl):
+    __slots__ = ()
     __rentVehiclesController = dependency.descriptor(IBattleRoyaleRentVehiclesController)
 
     def __init__(self):

@@ -155,3 +155,7 @@ def getSteelHunterProductsUrl():
 
 def getCosmic2024ShopUrl():
     return _getUrl(urlName='cosm24Shop')
+
+
+def getHB24CategoryUrl():
+    return _getUrl(urlName='HB24Category')

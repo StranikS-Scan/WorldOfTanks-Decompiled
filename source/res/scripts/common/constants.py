@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+import re
 import enum
 import calendar
 import time
@@ -9,6 +10,7 @@ from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3
 from realm import CURRENT_REALM, IS_CT
+from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -367,6 +369,8 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_CLAN,
      TOURNAMENT_REGULAR,
      TOURNAMENT_EVENT)
+    INVITATION_PROCESS_BONUS_TYPES = RANDOM_RANGE + (EPIC_BATTLE, MAPBOX, EVENT_BATTLES)
+    NOT_IMMEDIATE_BATTLE_RESULTS = BATTLE_ROYALE_RANGE + (MAPS_TRAINING, EVENT_BATTLES)
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -437,6 +441,7 @@ class ARENA_SYNC_OBJECTS:
     OVERTIME = 6
     SMOKE = 7
     BR_DEATH_ZONE = 8
+    GAME_EVENT = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -493,6 +498,7 @@ class FINISH_REASON:
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
     OBJECTIVES_COMPLETED = 11
+    HB_ENEMY_EXTERMINATION = 12
 
 
 FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -1219,6 +1225,7 @@ class ATTACK_REASON(object):
     RAM = 'ramming'
     WORLD_COLLISION = 'world_collision'
     DEATH_ZONE = 'death_zone'
+    PERSONAL_DEATH_ZONE = 'personal_death_zone'
     DROWNING = 'drowning'
     GAS_ATTACK = 'gas_attack'
     OVERTURN = 'overturn'
@@ -1226,6 +1233,7 @@ class ATTACK_REASON(object):
     ARTILLERY_PROTECTION = 'artillery_protection'
     ARTILLERY_SECTOR = 'artillery_sector'
     BOMBERS = 'bombers'
+    BOMBERCAS = 'bombercas'
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
@@ -1243,11 +1251,18 @@ class ATTACK_REASON(object):
     FORT_ARTILLERY_EQ = 'fort_artillery_eq'
     STATIC_DEATH_ZONE = 'static_deathzone'
     CGF_WORLD = 'cgf_world'
+    SPAWNED_BOT_RAM = 'spawned_bot_ram'
+    ARTILLERY_ROCKET = 'artillery_rocket'
+    ARTILLERY_MORTAR = 'artillery_mortar'
     NONE = 'none'
 
     @classmethod
     def getIndex(cls, attackReason):
         return ATTACK_REASON_INDICES[attackReason]
+
+    @classmethod
+    def getValue(cls, index):
+        return ATTACK_REASON_VALUES[index]
 
 
 ATTACK_REASONS = (ATTACK_REASON.SHOT,
@@ -1255,6 +1270,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RAM,
  ATTACK_REASON.WORLD_COLLISION,
  ATTACK_REASON.DEATH_ZONE,
+ ATTACK_REASON.PERSONAL_DEATH_ZONE,
  ATTACK_REASON.DROWNING,
  ATTACK_REASON.GAS_ATTACK,
  ATTACK_REASON.OVERTURN,
@@ -1262,6 +1278,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.ARTILLERY_PROTECTION,
  ATTACK_REASON.ARTILLERY_SECTOR,
  ATTACK_REASON.BOMBERS,
+ ATTACK_REASON.BOMBERCAS,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
@@ -1279,8 +1296,12 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.BRANDER_RAM,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
- ATTACK_REASON.CGF_WORLD)
+ ATTACK_REASON.CGF_WORLD,
+ ATTACK_REASON.SPAWNED_BOT_RAM,
+ ATTACK_REASON.ARTILLERY_ROCKET,
+ ATTACK_REASON.ARTILLERY_MORTAR)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
+ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 DEATH_REASON_ALIVE = -1
@@ -1333,6 +1354,8 @@ class VEHICLE_HIT_FLAGS:
     ATTACK_IS_RICOCHET_PROJECTILE = 8388608
     ATTACK_IS_COMPRESSION = 16777216
     IS_ANY_DAMAGE_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION | DEVICE_PIERCED_BY_PROJECTILE | DEVICE_PIERCED_BY_EXPLOSION
+    IS_VEHICLE_DAMAGE_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION
+    IS_ANY_ATTACK_MASK = ATTACK_IS_DIRECT_PROJECTILE | ATTACK_IS_EXTERNAL_EXPLOSION | ATTACK_IS_RICOCHET_PROJECTILE | ATTACK_IS_COMPRESSION
     IS_ANY_PIERCING_MASK = IS_ANY_DAMAGE_MASK | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
 
 
@@ -1836,6 +1859,7 @@ class REQUEST_COOLDOWN:
     RP_INCREMENT_RECRUIT_DELTA = 1.0
     RP_RESET_RECRUIT_DELTA = 1.0
     CMD_BUY_BERTHS = 1.0
+    CMD_SELL_ITEM = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2169,7 +2193,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  76: '[Free]',
  77: 'Unit filter',
  78: '[Free]',
- 79: '[Free]',
+ 79: 'SixthSense indicator settings',
  80: 'Ranked carousel filter',
  81: 'Ranked carousel filter',
  82: 'feedback damage indicator',
@@ -2302,6 +2326,10 @@ class FAIRPLAY_VIOLATIONS:
     EVENT_AFK = 'event_afk'
     EPIC_DESERTER = 'epic_deserter'
     COMP7_DESERTER = 'comp7_deserter'
+    BATTLEROYALE_DESERTER = 'battleroyale_deserter'
+    BATTLEROYALE_AFK = 'battleroyale_afk'
+    HB_AFK = 'hb_afk'
+    HB_DESERTER = 'hb_deserter'
 
 
 FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
@@ -2310,7 +2338,11 @@ FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
  FAIRPLAY_VIOLATIONS.EVENT_DESERTER,
  FAIRPLAY_VIOLATIONS.EVENT_AFK,
  FAIRPLAY_VIOLATIONS.EPIC_DESERTER,
- FAIRPLAY_VIOLATIONS.COMP7_DESERTER)
+ FAIRPLAY_VIOLATIONS.COMP7_DESERTER,
+ FAIRPLAY_VIOLATIONS.BATTLEROYALE_DESERTER,
+ FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK,
+ FAIRPLAY_VIOLATIONS.HB_AFK,
+ FAIRPLAY_VIOLATIONS.HB_DESERTER)
 FAIRPLAY_VIOLATIONS_MASKS = {name:1 << index for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES)}
 
 class INVALID_CLIENT_STATS:
@@ -2609,6 +2641,7 @@ class RESPAWN_TYPES:
     LIMITED = 3
     EPIC = 4
     SAFE = 5
+    EVENT_LIMITED = 6
 
 
 class VISIBILITY:
@@ -2944,6 +2977,13 @@ class BattleRoyaleMode(object):
     SOLO = 'solo'
     SQUAD = 'squad'
     ALL = (SOLO, SQUAD)
+
+
+class BattleRoyaleResult(object):
+    DISQUALIFIED = -2
+    WIN = 1
+    LOSE = -1
+    DRAW = 0
 
 
 class CLIENT_COMMAND_SOURCES:
@@ -3591,6 +3631,7 @@ class EdgeColorMode(enum.IntEnum):
 class EdgeDrawMode(enum.IntEnum):
     FULL = 0
     OCCLUDED = 1
+    UNOCCLUDED = 2
 
 
 class LootBoxTiers(enum.IntEnum):
@@ -3611,3 +3652,34 @@ class MinimapLayerType(object):
 class RANDOM_FLAGS:
     IS_ONLY_10_MODE_ENABLED = 1
     IS_MAPS_IN_DEVELOPMENT_ENABLED = 2
+
+
+class EVENT:
+    DISABLE_AI_BATTLE_RESULTS_SEND = True
+    INVALID_BATTLE_PLACE = -1
+
+
+EVENT_BATTLES_TAG = 'event_battles'
+
+class BuffComponentVisibilityMode(enum.IntEnum):
+    NONE = 0
+    SELF = 1
+    OTHERS = 2
+    ALL = 3
+
+
+class BuffTarget(enum.IntEnum):
+    VICTIM = 0
+    ATTACKER = 1
+
+
+class EventStorageModifiers(enum.Enum):
+    SOUND_ON_SHOT = 'soundOnShot'
+    MARKER = 'marker'
+
+
+class EventMarkerBlinkingParams(enum.Enum):
+    BLINKING_DURATION_CUSTOM_MARKER = 10
+    BLINKING_DURATION_ARROW_MARKER = 5
+    BLINKING_SPEED_CUSTOM_MARKER_MS = 600
+    BLINKING_SPEED_ARROW_MARKER_MS = 1000

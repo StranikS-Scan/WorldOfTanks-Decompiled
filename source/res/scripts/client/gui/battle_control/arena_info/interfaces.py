@@ -118,6 +118,12 @@ class ITeamsBasesController(IArenaController):
     def removeTeamsBases(self):
         pass
 
+    def addTeamBase(self, base):
+        pass
+
+    def getTeamBases(self):
+        pass
+
 
 class IArenaPeriodController(IArenaController):
     __slots__ = ()
@@ -320,6 +326,9 @@ class ISpawnController(object):
 class IVehicleCountController(IArenaVehiclesController, ViewComponentsController):
 
     def updateAttachedVehicle(self, vehicleID):
+        raise NotImplementedError
+
+    def updateLives(self, lives):
         raise NotImplementedError
 
 

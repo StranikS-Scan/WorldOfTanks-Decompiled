@@ -42,6 +42,7 @@
     <MTU_870_P>	40	</MTU_870_P>
     <ID36S_6V_CA_LE>	41	</ID36S_6V_CA_LE>
     <SPA_Tipo_343>	42	</SPA_Tipo_343>
+    <MB_837_Ea_P6>	31001	</MB_837_Ea_P6>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -579,6 +580,23 @@
       <rpm_min>	336	</rpm_min>
       <rpm_max>	2192	</rpm_max>
     </MB_837_Ea>
+    <MB_837_Ea_P6>
+      <userString>	#italy_vehicles:MB_837_Ea_P6	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	115000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1370	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </MB_837_Ea_P6>
     <MB_822_Ka_500>
       <userString>	#italy_vehicles:MB_822_Ka_500	</userString>
       <tags>	diesel	</tags>

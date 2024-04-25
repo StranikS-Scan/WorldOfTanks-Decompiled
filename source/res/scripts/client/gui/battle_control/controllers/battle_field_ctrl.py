@@ -57,6 +57,12 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         else:
             return self._aliveEnemies.get(vehicleID, None)
 
+    def getAliveEnemies(self):
+        return self._aliveEnemies
+
+    def getAliveAllies(self):
+        return self._aliveAllies
+
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
 

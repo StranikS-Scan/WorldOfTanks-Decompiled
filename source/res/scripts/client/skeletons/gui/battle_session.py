@@ -4,6 +4,7 @@ import typing
 if typing.TYPE_CHECKING:
     from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IComp7PrebattleSetupController, IComp7VOIPController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
+    from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
 
 class ISharedControllersLocator(object):
     __slots__ = ()
@@ -557,10 +558,10 @@ class IBattleContext(object):
     def createPlayerFullNameFormatter(self, showVehShortName=True, showClan=True, showRegion=True):
         raise NotImplementedError
 
-    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True, showName=True):
         raise NotImplementedError
 
-    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True, showName=True):
         raise NotImplementedError
 
     def isSquadMan(self, vID=None, avatarSessionID=None, prebattleID=None):

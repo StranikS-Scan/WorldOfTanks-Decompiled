@@ -547,8 +547,12 @@ class DIALOGS(object):
     PUNISHMENTWINDOW_CANCEL = '#dialogs:punishmentWindow/cancel'
     PUNISHMENTWINDOW_REASON_DESERTER = '#dialogs:punishmentWindow/reason/deserter'
     PUNISHMENTWINDOW_REASON_EPIC_DESERTER = '#dialogs:punishmentWindow/reason/epic_deserter'
+    PUNISHMENTWINDOW_REASON_HB_DESERTER = '#dialogs:punishmentWindow/reason/hb_deserter'
+    PUNISHMENTWINDOW_REASON_HB_AFK = '#dialogs:punishmentWindow/reason/hb_afk'
     PUNISHMENTWINDOW_REASON_SUICIDE = '#dialogs:punishmentWindow/reason/suicide'
     PUNISHMENTWINDOW_REASON_AFK = '#dialogs:punishmentWindow/reason/afk'
+    PUNISHMENTWINDOW_REASON_BATTLEROYALE_DESERTER = '#dialogs:punishmentWindow/reason/battleroyale_deserter'
+    PUNISHMENTWINDOW_REASON_BATTLEROYALE_AFK = '#dialogs:punishmentWindow/reason/battleroyale_afk'
     REMOVEINCOMPATIBLEEQS_TITLE = '#dialogs:removeIncompatibleEqs/title'
     REMOVEINCOMPATIBLEEQS_MESSAGE = '#dialogs:removeIncompatibleEqs/message'
     REMOVEINCOMPATIBLEEQS_MESSAGE_REASON = '#dialogs:removeIncompatibleEqs/message/reason'
@@ -1636,8 +1640,12 @@ class DIALOGS(object):
      PUNISHMENTWINDOW_CANCEL,
      PUNISHMENTWINDOW_REASON_DESERTER,
      PUNISHMENTWINDOW_REASON_EPIC_DESERTER,
+     PUNISHMENTWINDOW_REASON_HB_DESERTER,
+     PUNISHMENTWINDOW_REASON_HB_AFK,
      PUNISHMENTWINDOW_REASON_SUICIDE,
      PUNISHMENTWINDOW_REASON_AFK,
+     PUNISHMENTWINDOW_REASON_BATTLEROYALE_DESERTER,
+     PUNISHMENTWINDOW_REASON_BATTLEROYALE_AFK,
      REMOVEINCOMPATIBLEEQS_TITLE,
      REMOVEINCOMPATIBLEEQS_MESSAGE,
      REMOVEINCOMPATIBLEEQS_MESSAGE_REASON,

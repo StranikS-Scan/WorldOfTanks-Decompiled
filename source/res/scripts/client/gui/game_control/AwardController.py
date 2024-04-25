@@ -27,7 +27,7 @@ from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from comp7_common import Comp7QuestType, COMP7_QUALIFICATION_QUEST_ID
-from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
+from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, ARENA_BONUS_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -374,6 +374,7 @@ class EliteWindowHandler(AwardHandler):
 
 
 class PunishWindowHandler(ServiceChannelHandler):
+    EXCLUDED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD]
 
     def __init__(self, awardCtrl):
         super(PunishWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
@@ -387,7 +388,8 @@ class PunishWindowHandler(ServiceChannelHandler):
             arenaType = None
         arenaCreateTime = message.data.get('arenaCreateTime', None)
         fairplayViolations = message.data.get('fairplayViolations', None)
-        if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
+        bonusType = message.data.get('bonusType')
+        if arenaCreateTime and arenaType and bonusType not in self.EXCLUDED_ARENA_BONUS_TYPES and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
             banDuration = message.data['restriction'][1] if 'restriction' in message.data else None
             showPunishmentDialog(arenaType, arenaCreateTime, fairplayViolations, banDuration)
         return
@@ -1059,7 +1061,7 @@ class TelecomHandler(ServiceChannelHandler):
 
     @staticmethod
     def __getVehileDesrs(data):
-        return [ vehicles_core.getVehicleType(vehDesr).compactDescr for vehDesr in data['data']['vehicles'] ]
+        return [ vehicles_core.getVehicleType(v).compactDescr for v in data['data'].get('vehicles', {}) ]
 
     def _showAward(self, ctx):
         data = ctx[1].data
@@ -1069,7 +1071,7 @@ class TelecomHandler(ServiceChannelHandler):
         if vehicleDesrs:
             award_events.showTelecomAward(vehicleDesrs, data['bundleID'], hasCrew, hasBrotherhood)
         else:
-            _logger.error("Can't show telecom award window!")
+            _logger.debug('There is no vehicle in the award. Telecom award window not needed!')
 
 
 class RankedQuestsHandler(ServiceChannelHandler):

@@ -128,8 +128,12 @@ class MessageTemplates(templates.XMLCollection):
             result = {'label': label,
              'type': buttonType,
              'action': action}
+            assertMsg = 'You cannot use "width" and "dynamicSizeByText" at the same time for button in msgs {}'
+            dynamicSizeByText = section.readBool('dynamicSizeByText')
             width = section.readInt('width')
-            if width > 0:
+            if dynamicSizeByText:
+                result['dynamicSizeByText'] = dynamicSizeByText
+            elif width > 0:
                 result['width'] = width
             return result
 

@@ -1825,7 +1825,7 @@
       <guns>
         <_122_mm_D_49>	shared	  <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <maxAmmo>	52	</maxAmmo>
           <armor>
@@ -1856,15 +1856,15 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	8.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <turretYawLimits>	-8 8	</turretYawLimits>
+          <turretYawLimits>	-10 10	</turretYawLimits>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1950,7 +1950,7 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_10RT_26E>	shared	</_10RT_26E>
+    <_10RT_26E_su122_54>	shared	</_10RT_26E_su122_54>
   </radios>
   <physics>
     <detailed>

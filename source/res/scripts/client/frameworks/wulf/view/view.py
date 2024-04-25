@@ -67,7 +67,7 @@ class ViewSettings(typing.Generic[TViewModel]):
 
 
 class View(PyObjectEntity, typing.Generic[TViewModel]):
-    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__isReady', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__')
+    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__isReady', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__', '__initialParentWindow')
     _COMMON_SOUND_SPACE = None
 
     def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
@@ -93,6 +93,7 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
         self.onFocusChanged = Event.Event()
         self.__args = settings.args
         self.__kwargs = settings.kwargs
+        self.__initialParentWindow = None
         return
 
     def __repr__(self):
@@ -137,6 +138,12 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
 
     def getViewModel(self):
         return self.__viewModel
+
+    def setInitialParentWindow(self, window):
+        self.__initialParentWindow = window
+
+    def getInitialParentWindow(self):
+        return self.__initialParentWindow
 
     def getParentWindow(self):
         return self.proxy.getParentWindow() if self.proxy is not None else None

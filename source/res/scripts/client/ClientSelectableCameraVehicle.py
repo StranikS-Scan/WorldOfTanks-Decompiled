@@ -180,13 +180,13 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         else:
             cfg = hangarCFG()
             if self.__vAppearance is not None and self.__vAppearance.isLoaded():
+                self.__setFakeShadowModelTransform(self.position)
                 appearanceTexture = self.__vAppearance.fakeShadowDefinedInHullTexture
                 shadowMapTexFileName = appearanceTexture if appearanceTexture else cfg['shadow_default_texture_name']
             else:
                 shadowMapTexFileName = cfg['shadow_empty_texture_name']
             if shadowMapTexFileName:
                 self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
-            self.__setFakeShadowModelTransform(self.position)
             return
 
     def __setFakeShadowModelTransform(self, position, rotateYPR=None, shadowModelYOffset=None):

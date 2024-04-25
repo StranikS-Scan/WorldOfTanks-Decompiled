@@ -2,20 +2,21 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/battle_royale_controller.py
 import json
 import logging
+from collections import namedtuple
 from functools import partial
+from itertools import groupby
 import BigWorld
 import typing
-from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
-from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
-from battle_royale.gui.royale_models import BattleRoyaleSeason
 import Event
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems
+from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
+from battle_royale.gui.royale_models import BattleRoyaleSeason
 from constants import QUEUE_TYPE, Configs, PREBATTLE_TYPE, ARENA_BONUS_TYPE, BATTLE_ROYALE_SCENE
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui import GUI_SETTINGS
@@ -37,6 +38,7 @@ from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
+from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -48,7 +50,7 @@ from shared_utils import first
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IHangarSpaceSwitchController, IBattleRoyaleController, IBattleRoyaleTournamentController
+from skeletons.gui.game_control import IEventsNotificationsController, IBootcampController, IHangarSpaceSwitchController, IBattleRoyaleController, IBattleRoyaleTournamentController, IBRProgressionOnTokensController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -58,6 +60,7 @@ from stats_params import BATTLE_ROYALE_STATS_ENABLED
 if typing.TYPE_CHECKING:
     from helpers.server_settings import BattleRoyaleConfig
 _logger = logging.getLogger(__name__)
+BattleRoyaleProgressionPoints = namedtuple('BattleRoyaleProgressionPoints', ['lastInRange', 'points'])
 
 class BATTLE_ROYALE_GAME_LIMIT_TYPE(object):
     SYSTEM_DATA = 0
@@ -377,12 +380,46 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return False
 
     def getIntroVideoURL(self):
-        introVideoUrl = GUI_SETTINGS.battleRoyaleVideo.get('introVideo')
-        return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(introVideoUrl)
+        if not hasattr(GUI_SETTINGS, 'battleRoyaleVideo'):
+            return None
+        else:
+            introVideoUrl = GUI_SETTINGS.battleRoyaleVideo.get('introVideo')
+            return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(introVideoUrl) if introVideoUrl else introVideoUrl
+
+    def getProgressionPointsTableData(self):
+        gameModes = sorted(self.__progressionPointsConfig().keys())
+        gameModeLists = []
+        for gameMode in gameModes:
+            gameModeLists.append(self.__getProgressionPointsPerPlace(gameMode))
+
+        return (gameModes, gameModeLists)
+
+    def __progressionPointsConfig(self):
+        return self.__battleRoyaleSettings.progressionTokenAward
+
+    def __getProgressionPointsPerPlace(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO):
+        pointsList = self.__progressionPointsConfig().get(gameMode, [])
+        if not pointsList:
+            return []
+        pointList = [ (key, len(list(group))) for key, group in groupby(zip(*pointsList)[1]) ]
+        result = []
+        count = 0
+        for points, pointsCount in pointList:
+            count += pointsCount
+            result.append(BattleRoyaleProgressionPoints(count, points))
+
+        return result
 
     def __modeEntered(self):
-        if self.isBattleRoyaleMode() and not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
+        if not self.isBattleRoyaleMode():
+            return
+        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
             SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+        introVideoUrl = self.getIntroVideoURL()
+        if AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN) or not introVideoUrl:
+            return
+        AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN, True)
+        showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
 
     def __selectRoyaleBattle(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -461,6 +498,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         if not storedVehInvID:
             criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
             criteria |= ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
+            criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
             vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID

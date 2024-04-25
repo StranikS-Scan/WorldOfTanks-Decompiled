@@ -91,6 +91,7 @@ class InjectComponentAdaptor(InjectComponentMeta):
             mainWindow = self.__gui.windowsManager.getMainWindow()
             mainView = mainWindow.content
             mainView.addChild(placeId, self.__view, loadImmediately=True)
+            self.__view.setInitialParentWindow(self.getParentWindow())
             self.as_setPlaceIdS(placeId)
             return
 

@@ -1386,24 +1386,6 @@
         </effects>
       </variant1>
     </inf_tree_apple_flowers_fall_med>
-    <tree_Live_Apple_16m_Flowers2_fall>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/trees/broadleaves/tree_live_apple_16m_flowers2_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak_small	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Live_Apple_16m_Flowers2_fall>
     <inf_sunflower_fall>
       <variant1>
         <stages>
@@ -34578,10 +34560,10 @@
             <wwsound>	obj_generative	</wwsound>
             <startKey>	base	</startKey>
             <params>
-              <debrisAmount>	60.000000	</debrisAmount>
-              <weight>	5547.000000	</weight>
+              <debrisAmount>	90.000000	</debrisAmount>
+              <weight>	6000.000000	</weight>
               <wood_2>	50.000000	</wood_2>
-              <wood_1>	39.000000	</wood_1>
+              <wood_1>	40.000000	</wood_1>
             </params>
           </destructionSound>
         </effects>
@@ -36224,11 +36206,11 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <metal_1>	28	</metal_1>
+              <metal_1>	44.000000	</metal_1>
               <metal_2>	30	</metal_2>
               <glass>	24	</glass>
-              <debrisAmount>	90	</debrisAmount>
-              <weight>	7516	</weight>
+              <debrisAmount>	100.000000	</debrisAmount>
+              <weight>	7465.000000	</weight>
               <wood_1>	5	</wood_1>
             </params>
           </destructionSound>
@@ -36250,12 +36232,12 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <metal_1>	24	</metal_1>
-              <metal_2>	30	</metal_2>
-              <glass>	20	</glass>
-              <debrisAmount>	90	</debrisAmount>
-              <weight>	7500	</weight>
+              <metal_1>	32.000000	</metal_1>
+              <metal_2>	35.000000	</metal_2>
+              <glass>	23.000000	</glass>
+              <debrisAmount>	76.000000	</debrisAmount>
               <wood_1>	5	</wood_1>
+              <weight>	7000.000000	</weight>
             </params>
           </destructionSound>
         </effects>
@@ -36502,6 +36484,80 @@
         </effects>
       </variant1>
     </hd_env_SU_1031_Rotunda>
+    <hd_bld_SU_1011_Basement_Extension>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_bld_su_1011_basement_extension.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	24.000000	</debrisAmount>
+              <weight>	1600.000000	</weight>
+              <metal_2>	18.000000	</metal_2>
+              <metal_1>	16.000000	</metal_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_SU_1011_Basement_Extension>
+    <hd_env_SU_1019_Scaffold_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/objects/hd_env_su_1019_scaffold_03.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	50.000000	</wood_1>
+              <debrisAmount>	90.000000	</debrisAmount>
+              <weight>	5000.000000	</weight>
+              <wood_2>	24.000000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_1019_Scaffold_02>
+    <hd_env_su_1033_pire_end_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/objects/hd_env_su_1033_pire_end_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	100.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+              <wood_2>	100.000000	</wood_2>
+              <wood_1>	40.000000	</wood_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1033_pire_end_02>
   </fragiles>
   <structures>
     <hd_env_AS_001_Aqueduct_01>
@@ -55658,5 +55714,78 @@
         </effects>
       </variant1>
     </hd_env_SU_1018_Wooden_Staircase_02>
+    <hd_env_su_1033_pire_tile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/objects/hd_env_su_1033_pire_tile.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	40.000000	</wood_1>
+              <debrisAmount>	100.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+              <wood_2>	100.000000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1033_pire_tile>
+    <hd_gaf_su_002_brickfence_gate>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/buildings/hd_gaf_su_002_brickfence_gate.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	50.000000	</debrisAmount>
+              <weight>	6000.000000	</weight>
+              <stone_1>	55.000000	</stone_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_su_002_brickfence_gate>
+    <hd_gaf_su_002_brickfence_gate_metal>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/buildings/hd_gaf_su_002_brickfence_gate_metal.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	50.000000	</debrisAmount>
+              <weight>	6000.000000	</weight>
+              <metal_2>	24.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_su_002_brickfence_gate_metal>
   </structures>
 </destructibles_effects.xml>

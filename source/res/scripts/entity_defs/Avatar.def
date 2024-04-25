@@ -501,6 +501,16 @@
     <setUpdatedGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
     </setUpdatedGoodiesSnapshot>
+    <sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </sendPlayerBattleLogNotification>
+    <sendEquipmentBattleLogNotification>
+      <Arg>	UINT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>

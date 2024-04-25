@@ -4,13 +4,12 @@ from helpers import dependency
 from constants import ARENA_BONUS_TYPE
 from gui.impl.gen.resources import R
 from gui.impl import backport
-from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.Scaleform.daapi.view.meta.BattleRoyaleFullStatsMeta import BattleRoyaleFullStatsMeta
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES_REVERSED
 from skeletons.gui.battle_session import IBattleSessionProvider
 from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 
-class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IVehicleCountListener):
+class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -26,50 +25,35 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IArenaVehiclesController, IV
     def onToggleVisibility(self, _):
         pass
 
-    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
-        if not vInfoVO.isAlive() and vInfoVO.vehicleID in self.__vehicleTeams:
-            del self.__vehicleTeams[vInfoVO.vehicleID]
-            self.__teamsCount = len(set(self.__vehicleTeams.values()))
-            self.__updateScore()
-
-    def updateVehiclesStats(self, updated, arenaDP):
-        for _, vStatsVO in updated:
-            if vStatsVO.vehicleID == arenaDP.getPlayerVehicleID():
-                self.__updateScore()
-
-    def addVehicleInfo(self, vInfoVO, arenaDP):
-        if vInfoVO.isAlive() and vInfoVO.isPlayer():
-            self.__vehicleTeams[vInfoVO.vehicleID] = vInfoVO.team
-        self.__updateScore()
-
     def setVehicles(self, count, vehicles, teams):
         vehiclesByType = []
         vehiclesSortedByType = sorted(vehicles.items(), key=lambda (classType, _): VEHICLE_TYPES_ORDER_INDICES_REVERSED[classType])
+        self.__vehicleTeams = {}
         for classType, data in vehiclesSortedByType:
             sortedVehicles = sorted(data.items(), key=lambda (_, isDead): isDead)
             vehiclesByType.append({'classType': classType,
              'platoons': []})
             for vehInfo in sortedVehicles:
-                _, (isDead, _, isEnemy, _) = vehInfo
+                vehicleID, (isDead, _, isEnemy, teamID, isRespawn) = vehInfo
                 data = {'isEnemy': isEnemy,
-                 'isDead': isDead}
-                if isEnemy or isDead:
+                 'isDead': isDead and not isRespawn}
+                if isEnemy or isDead and not isRespawn:
                     vehiclesByType[-1]['platoons'].append(data)
-                vehiclesByType[-1]['platoons'].insert(0, data)
+                else:
+                    vehiclesByType[-1]['platoons'].insert(0, data)
+                if not isDead or isRespawn:
+                    self.__vehicleTeams[vehicleID] = teamID
 
+        self.__teamsCount = len(set(self.__vehicleTeams.values()))
         self.as_updateVehiclesCounterS({'vehicles': vehiclesByType})
+        self.__updateScore()
 
     def setFrags(self, frags, isPlayerVehicle):
         self.__updateScore(frags)
 
     def _populate(self):
         super(FullStatsComponent, self)._populate()
-        self.sessionProvider.addArenaCtrl(self)
         self.__initPanel()
-
-    def _dispose(self):
-        self.sessionProvider.removeArenaCtrl(self)
-        super(FullStatsComponent, self)._dispose()
 
     def __initPanel(self):
         arenaDP = self.sessionProvider.getArenaDP()

@@ -35,7 +35,6 @@ if typing.TYPE_CHECKING:
     from typing import Iterable, Optional
 _logger = logging.getLogger(__name__)
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
-_VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
 _BR_VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/battleRoyale/vehicles/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['fire']: 'DEATH_FROM_FIRE',
@@ -69,26 +68,26 @@ class _ENTITIES_POSTFIX(object):
 
 
 class _BasePostmortemPanel(PostmortemPanelMeta):
-    __slots__ = ('__messages', '__deathInfo')
+    __slots__ = ('_messages', '_deathInfo')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(_BasePostmortemPanel, self).__init__()
-        self.__messages = {}
-        self.__deathInfo = None
+        self._messages = {}
+        self._deathInfo = None
         return
 
     def getDeathInfo(self):
-        return self.__deathInfo
+        return self._deathInfo
 
     def resetDeathInfo(self):
-        self.__deathInfo = None
+        self._deathInfo = None
         return
 
     def _populate(self):
         super(_BasePostmortemPanel, self)._populate()
-        _, _, self.__messages = messages_panel_reader.readXML(_POSTMORTEM_PANEL_SETTINGS_PATH)
+        _, _, self._messages = messages_panel_reader.readXML(_POSTMORTEM_PANEL_SETTINGS_PATH)
         self._addGameListeners()
 
     def _dispose(self):
@@ -111,11 +110,11 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         pass
 
     def _prepareMessage(self, code, killerVehID, device=None):
-        msgText, colors = self.__messages[code]
+        msgText, colors = self._messages[code]
         context = self.sessionProvider.getCtx()
         if context.isTeamKiller(killerVehID):
-            _, colors = self.__messages['DEATH_FROM_TEAM_KILLER']
-        self.__deathInfo = {'text': msgText,
+            _, colors = self._messages['DEATH_FROM_TEAM_KILLER']
+        self._deathInfo = {'text': msgText,
          'colors': colors,
          'killerVehicle': killerVehID,
          'device': device}
@@ -134,10 +133,10 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
                 code = '_'.join((code, name.split('_')[0].upper()))
         elif postfix:
             extCode = '{0}_{1}'.format(code, postfix)
-            if extCode in self.__messages:
+            if extCode in self._messages:
                 self._prepareMessage(extCode, entityID, device)
                 return
-        if code in self.__messages:
+        if code in self._messages:
             self._prepareMessage(code, entityID, device)
         return
 
@@ -306,10 +305,15 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self._updateVehicleInfo()
 
     def __onRespawnBaseMoving(self):
-        self.__isInPostmortem = False
         self._deathAlreadySet = False
-        self.as_hideComponentsS()
+        try:
+            self.as_hideComponentsS()
+        except:
+            pass
+
         self.resetDeathInfo()
+        self._updateVehicleInfo()
+        self.__isInPostmortem = False
 
     def _updateVehicleInfo(self):
         if not self.__isInPostmortem:
@@ -333,25 +337,25 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vTypeInfoVO = vInfoVO.vehicleType
                     vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
                     if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
-                        vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
+                        vehImg = backport.image(R.images.gui.maps.icons.vehicle.small.dyn(Vehicle.getIconResourceName(vTypeInfoVO.iconName))())
                         vehLvl = int2roman(vTypeInfoVO.level)
                     else:
                         vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = None
                     vehName = vTypeInfoVO.shortNameWithPrefix
-                    killerUserVO = self.__makeKillerVO(vInfoVO)
+                    killerUserVO = self._makeKillerVO(vInfoVO)
                 else:
                     showVehicle = False
                     vehLvl = vehImg = vehClass = vehName = None
                     killerUserVO = {}
-                reason = self.__makeReasonInfo(deathInfo)
+                reason = self._makeReasonInfo(deathInfo)
                 self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName, killerUserVO)
                 self._deathAlreadySet = True
             else:
                 self.as_setDeadReasonInfoS('', False, None, None, None, None, None)
         return
 
-    def __makeKillerVO(self, vInfoVO):
+    def _makeKillerVO(self, vInfoVO):
         fullName = self.sessionProvider.getCtx().getPlayerFullNameParts(vInfoVO.vehicleID, showVehShortName=False)
         playerVO = vInfoVO.player
         userVO = {'userName': fullName.playerName,
@@ -366,7 +370,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             userVO['badgeVisualVO'] = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True)
         return userVO
 
-    def __makeReasonInfo(self, deathInfo):
+    def _makeReasonInfo(self, deathInfo):
         colors = deathInfo['colors']
         if self.__isColorBlind:
             color = colors[1]

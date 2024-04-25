@@ -43,9 +43,9 @@ class LootBoxesStorageView(ViewImpl):
     _REWARD_SCREEN = R.views.gui_lootboxes.lobby.gui_lootboxes.LootboxRewardsView()
     _ERROR_SCREEN = R.views.gui_lootboxes.lobby.gui_lootboxes.OpenBoxErrorView()
     _CHILD_VIEWS = (_ERROR_SCREEN, _REWARD_SCREEN)
-    __slots__ = ('__context', '__currentLootBoxId', '__openingAnimEvent', '__uniqueRewardsViewId', '__uniqueRewardsViewClosedEvent', '__waitStatesHandlers', '__returnPlace', '__initialLootBox')
+    __slots__ = ('__context', '__currentLootBoxId', '__openingAnimEvent', '__uniqueRewardsViewId', '__uniqueRewardsViewClosedEvent', '__waitStatesHandlers', '__returnPlace', '__initialLootBox', '__closeCallback')
 
-    def __init__(self, layoutID, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0):
+    def __init__(self, layoutID, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0, closeCallback=None):
         settings = ViewSettings(layoutID)
         settings.model = LootboxesStorageViewModel()
         super(LootBoxesStorageView, self).__init__(settings)
@@ -56,7 +56,8 @@ class LootBoxesStorageView(ViewImpl):
         self.__uniqueRewardsViewClosedEvent = AsyncEvent(scope=self.__context.getAsyncScope())
         self.__waitStatesHandlers = defaultdict(list)
         self.__uniqueRewardsViewId = 0
-        self.__returnPlace = returnPlace
+        self.__returnPlace = ReturnPlaces(returnPlace)
+        self.__closeCallback = closeCallback
 
     @property
     def viewModel(self):
@@ -144,13 +145,14 @@ class LootBoxesStorageView(ViewImpl):
         self.__openingAnimEvent.set()
 
     def __onBuyBox(self):
-        if self.__guiLootBoxesCtr.isBuyAvailable():
-            self.__context.setReturnPlace(ReturnPlaces.TO_SHOP)
-            self.destroyWindow()
-            self.__guiLootBoxesCtr.openShop()
+        self.__context.setReturnPlace(ReturnPlaces.TO_SHOP)
+        self.destroyWindow()
+        self.__guiLootBoxesCtr.openShop(self.__currentLootBoxId)
 
     def __onClose(self):
         self.__context.setReturnPlace(self.__returnPlace)
+        if self.__closeCallback:
+            self.__closeCallback()
         self.destroyWindow()
 
     def onError(self, args):
@@ -187,7 +189,7 @@ class LootBoxesStorageView(ViewImpl):
     def __setMainData(self, model=None):
         model.setIsAnimationEnabled(self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_OPEN_ANIMATION_ENABLED))
         model.setIsBuyAvailable(self.__guiLootBoxesCtr.isBuyAvailable())
-        model.setReturnPlace(self.__returnPlace)
+        model.setReturnPlace(ReturnPlaces(self.__returnPlace))
 
     def __handleStateChanged(self, state, event):
         self.viewModel.setCurrentState(States(state))
@@ -284,5 +286,5 @@ class LootBoxesStorageView(ViewImpl):
 class LootBoxesStorageWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0):
-        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView(), returnPlace, initialLootBox), layer=WindowLayer.TOP_WINDOW)
+    def __init__(self, returnPlace=ReturnPlaces.TO_HANGAR, initialLootBox=0, closeCallback=None):
+        super(LootBoxesStorageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesStorageView(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView(), returnPlace, initialLootBox, closeCallback), layer=WindowLayer.TOP_WINDOW)

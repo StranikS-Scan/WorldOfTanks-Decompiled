@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/referral_program/__init__.py
-from constants import RP_PGB_POINT, RP_POINT
 from gui.shared.gui_items.processors.referral_program import CollectRPPgbPointsProcessor
 from helpers import dependency
-from helpers.time_utils import getServerUTCTime
 from skeletons.gui.game_control import IReferralProgramController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
+from web.common import formatReferralProgramInfo
 
 class _CloseReferralProgramViewSchema(W2CSchema):
     pass
@@ -30,18 +29,7 @@ class ReferralProgramWebApi(W2CSchema):
 
     @w2c(W2CSchema, name='get_rp_pgb_info')
     def getRPPgbInfo(self, _):
-        rpPgbPoints = self.__itemsCache.items.stats.entitlements.get(RP_PGB_POINT, 0)
-        rpPoints = self.__itemsCache.items.stats.entitlements.get(RP_POINT, 0)
-        pgbLimitPoints = self.__itemsCache.items.refProgram.getRPPgbPoints()
-        timeLeft = max(self.__itemsCache.items.refProgram.getRPExpirationTime() - int(getServerUTCTime()), 0)
-        configLimits = self.__lobbyContext.getServerSettings().getRPConfig().asDict()
-        passiveIncome = self.__itemsCache.items.refProgram.getRPPassiveIncome()
-        return {'rp_pgb_points': rpPgbPoints,
-         'rp_points': rpPoints,
-         'rp_pgb_limit_points': pgbLimitPoints,
-         'rp_time_left': timeLeft,
-         'rp_config_limits': configLimits,
-         'rp_passive_income': passiveIncome}
+        return formatReferralProgramInfo()
 
     @w2c(W2CSchema, name='collect_rp_pgb_points')
     def collectRPPgbPoints(self, _):

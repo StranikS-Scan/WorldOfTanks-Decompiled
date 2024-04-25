@@ -1,0 +1,15 @@
+<HBVehicleFireballShotComponent.def>
+  <Properties>
+    <targetOnFireTime>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <Default>	0	</Default>
+    </targetOnFireTime>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	fireballShotComponent	</DefaultKeyName>
+</HBVehicleFireballShotComponent.def>

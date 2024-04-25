@@ -104,6 +104,12 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0.000088 0.76748 -2.15138	</anchorPosition>
+        <anchorDirection>	0 0.573591 -0.819142	</anchorDirection>
+      </slot>
+      <slot>
         <slotType>	player	</slotType>
         <slotId>	13000	</slotId>
         <rayStart>	-1.075848 1.156513 -0.332029	</rayStart>
@@ -1061,9 +1067,9 @@
             <afterShot>	10.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	25.4	</reloadTime>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-8 8	</turretYawLimits>
           <pitchLimits>
@@ -1090,6 +1096,13 @@
               <rayUp>	0.121 0 0	</rayUp>
               <size>	0.629	</size>
               <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.013205 -0.004738 1.61246	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
           <customization>

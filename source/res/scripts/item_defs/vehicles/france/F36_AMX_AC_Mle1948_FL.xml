@@ -10,7 +10,7 @@
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	50	</forward>
-    <backward>	13	</backward>
+    <backward>	18	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.14	</moving>
@@ -66,7 +66,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	34700	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	900	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -2252,7 +2252,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2282,8 +2282,8 @@
             </armor_6>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	34	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>

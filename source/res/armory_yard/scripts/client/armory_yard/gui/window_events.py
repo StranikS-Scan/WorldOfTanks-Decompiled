@@ -2,6 +2,7 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/window_events.py
 import logging
 import typing
+import WWISE
 from CurrentVehicle import HeroTankPreviewAppearance
 from frameworks.wulf import WindowFlags, WindowLayer, ViewFlags
 from gui.Scaleform.Waiting import Waiting
@@ -14,6 +15,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shop import showBuyGoldWebOverlay, Source
+from gui.sounds.filters import StatesGroup, States
 from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController
 from skeletons.gui.impl import INotificationWindowController
@@ -124,8 +126,10 @@ def showArmoryYardInfoPage(parent=None, closeCallback=None, armoryYard=None):
         if closeCallback:
             closeCallback(*args, **kwargs)
         g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_UNMUTE_SOUND))
+        WWISE.WW_setState(StatesGroup.VIDEO_OVERLAY, States.VIDEO_OVERLAY_OFF)
 
     g_eventBus.handleEvent(events.ArmoryYardEvent(events.ArmoryYardEvent.STAGE_MUTE_SOUND))
+    WWISE.WW_setState(StatesGroup.VIDEO_OVERLAY, States.VIDEO_OVERLAY_ON)
     window = LobbyWindow(content=_createArmoryYardBrowserView(url=armoryYard.serverSettings.getModeSettings().infoPageLink, viewFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, returnClb=closeCallbackWrapper), wndFlags=WindowFlags.WINDOW, parent=parent, layer=WindowLayer.TOP_SUB_VIEW)
     window.load()
 

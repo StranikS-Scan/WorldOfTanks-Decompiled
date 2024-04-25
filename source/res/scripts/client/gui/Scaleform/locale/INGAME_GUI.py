@@ -168,6 +168,7 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_SUPPORTING_ALLY = '#ingame_gui:chat_example/supporting_ally'
     STATISTICS_TAB_LINE_UP_HEADER = '#ingame_gui:statistics/tab/line_up/header'
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
+    STATISTICS_TAB_LINE_UP_ENEMY = '#ingame_gui:statistics/tab/line_up/enemy'
     STATISTICS_TAB_QUESTS_HEADER = '#ingame_gui:statistics/tab/quests/header'
     STATISTICS_TAB_QUESTS_STATUS_INPROGRESS = '#ingame_gui:statistics/tab/quests/status/inProgress'
     STATISTICS_TAB_QUESTS_STATUS_ONPAUSE = '#ingame_gui:statistics/tab/quests/status/onPause'
@@ -560,6 +561,7 @@ class INGAME_GUI(object):
     POSTMORTEM_MESSAGES_DEATH_FROM_THUNDER_STRIKE = '#ingame_gui:postmortem_messages/DEATH_FROM_THUNDER_STRIKE'
     POSTMORTEM_MESSAGES_DEATH_FROM_CORRODING_SHOT = '#ingame_gui:postmortem_messages/DEATH_FROM_CORRODING_SHOT'
     POSTMORTEM_MESSAGES_DEATH_FROM_CLING_BRANDER = '#ingame_gui:postmortem_messages/DEATH_FROM_CLING_BRANDER'
+    POSTMORTEM_MESSAGES_DEATH_FROM_BR_BOT = '#ingame_gui:postmortem_messages/DEATH_FROM_BR_BOT'
     POSTMORTEM_MESSAGES_DEATH_FROM_SHOT_ARCADE_BOMBER_BATTLE_ROYALE = '#ingame_gui:postmortem_messages/DEATH_FROM_SHOT_ARCADE_BOMBER_BATTLE_ROYALE'
     PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_ALLY'
@@ -620,6 +622,8 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
     EFFICIENCYRIBBONS_STATICDEATHZONE = '#ingame_gui:efficiencyRibbons/staticDeathZone'
+    EFFICIENCYRIBBONS_HBDEATHZONE = '#ingame_gui:efficiencyRibbons/HBDeathZone'
+    EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE = '#ingame_gui:efficiencyRibbons/eventDeathOnPhaseChange'
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
@@ -1125,6 +1129,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_STATICDEATHZONE,
+     EFFICIENCYRIBBONS_HBDEATHZONE,
+     EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE,
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,

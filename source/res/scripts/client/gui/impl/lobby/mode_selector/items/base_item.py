@@ -118,6 +118,9 @@ class ModeSelectorItem(object):
         url = self._urlProcessing(GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)))
         showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
+    def update(self):
+        pass
+
     def _onInitializing(self):
         self.viewModel.setIsDisabled(self._isDisabled())
         self.viewModel.setIsNew(self._isNewLabelVisible())

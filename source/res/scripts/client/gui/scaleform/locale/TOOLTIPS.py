@@ -292,6 +292,10 @@ class TOOLTIPS(object):
     SETTINGS_FEEDBACK_INDICATORS_ANIMATION_BODY = '#tooltips:settings/feedback/indicators/animation/body'
     SETTINGS_FEEDBACK_INDICATORS_SHOWALLIES_HEADER = '#tooltips:settings/feedback/indicators/showAllies/header'
     SETTINGS_FEEDBACK_INDICATORS_SHOWALLIES_BODY = '#tooltips:settings/feedback/indicators/showAllies/body'
+    SETTINGS_FEEDBACK_SIXTHSENSE_SIZEINFO_HEADER = '#tooltips:settings/feedback/sixthSense/sizeInfo/header'
+    SETTINGS_FEEDBACK_SIXTHSENSE_SIZEINFO_BODY = '#tooltips:settings/feedback/sixthSense/sizeInfo/body'
+    SETTINGS_FEEDBACK_SIXTHSENSE_ALPHAINFO_HEADER = '#tooltips:settings/feedback/sixthSense/alphaInfo/header'
+    SETTINGS_FEEDBACK_SIXTHSENSE_ALPHAINFO_BODY = '#tooltips:settings/feedback/sixthSense/alphaInfo/body'
     SETTINGS_SOUND_DEVICEALERT_HEADER = '#tooltips:settings/sound/deviceAlert/header'
     SETTINGS_SOUND_DEVICEALERT_BODY = '#tooltips:settings/sound/deviceAlert/body'
     SETTINGS_SOUND_SUBTITLES_HEADER = '#tooltips:settings/sound/subtitles/header'
@@ -557,6 +561,7 @@ class TOOLTIPS(object):
     BATTLETYPES_RANKED_BONUSBATTLE_DAILY_BODYOTHER = '#tooltips:battleTypes/ranked/bonusBattle/daily/bodyOther'
     BATTLETYPES_RANKED_BONUSBATTLE_DESCRIPTION = '#tooltips:battleTypes/ranked/bonusBattle/description'
     BATTLETYPES_BATTLEROYALE_HEADER = '#tooltips:battleTypes/battleRoyale/header'
+    BATTLETYPES_BATTLEROYALE_WIDGET_HEADER = '#tooltips:battleTypes/battleRoyale/widget/header'
     BATTLETYPES_BATTLEROYALE_BODY = '#tooltips:battleTypes/battleRoyale/body'
     BATTLETYPES_BATTLEROYALE_BODY2 = '#tooltips:battleTypes/battleRoyale/body2'
     BATTLETYPES_BATTLEROYALE_WIDGET_BODY2 = '#tooltips:battleTypes/battleRoyale/widget/body2'
@@ -967,6 +972,10 @@ class TOOLTIPS(object):
     LOBY_MESSENGER_LISTVIEW_NEWS_TOOLTIP_BODY = '#tooltips:loby_messenger/listView/news/tooltip/body'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER = '#tooltips:lobby/header/buyPremiumAccount/disabled/header'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY = '#tooltips:lobby/header/buyPremiumAccount/disabled/body'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_HEADER = '#tooltips:loby_messenger/btnReferralDisabled/header'
+    LOBY_MESSENGER_BTNREFERRALDISABLED_BODY = '#tooltips:loby_messenger/btnReferralDisabled/body'
+    LOBY_MESSENGER_BTNVEHICLECARTDISABLED_HEADER = '#tooltips:loby_messenger/btnVehicleCartDisabled/header'
+    LOBY_MESSENGER_BTNVEHICLECARTDISABLED_BODY = '#tooltips:loby_messenger/btnVehicleCartDisabled/body'
     TRAINING_CREATE_INVITES_CHECKBOX_HEADER = '#tooltips:training/create/invites_checkbox/header'
     TRAINING_CREATE_INVITES_CHECKBOX_BODY = '#tooltips:training/create/invites_checkbox/body'
     TRAINING_OBSERVER_BTN_HEADER = '#tooltips:training/observer/btn/header'
@@ -1690,7 +1699,9 @@ class TOOLTIPS(object):
     BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY = '#tooltips:battleResults/premiumBonus/xpToTmenChanged/body'
     CONTACT_STATUS_INBATTLE_UNKNOWN = '#tooltips:Contact/status/inBattle/unknown'
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
+    CONTACT_STATUS_INBATTLE_VERSUS_AI = '#tooltips:Contact/status/inBattle/versus_ai'
     CONTACT_STATUS_INBATTLE_TRAINING = '#tooltips:Contact/status/inBattle/training'
+    CONTACT_STATUS_INBATTLE_MAPS_TRAINING = '#tooltips:Contact/status/inBattle/maps_training'
     CONTACT_STATUS_INBATTLE_EPIC_RANDOM_TRAINING = '#tooltips:Contact/status/inBattle/epic_random_training'
     CONTACT_STATUS_INBATTLE_TEAM = '#tooltips:Contact/status/inBattle/team'
     CONTACT_STATUS_INBATTLE_BOOTCAMP = '#tooltips:Contact/status/inBattle/bootcamp'
@@ -3741,6 +3752,12 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP13_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP13_3/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_DESC = '#tooltips:notrecruitedtankman/tankmen_BP13_4/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP13_4/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_ARTILLERYMAN_1_DESC = '#tooltips:notrecruitedtankman/tankmen_Artilleryman_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_ARTILLERYMAN_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_Artilleryman_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_INZHENER_2_DESC = '#tooltips:notrecruitedtankman/tankmen_Inzhener_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_INZHENER_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_Inzhener_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_RAZVEDCHIK_3_DESC = '#tooltips:notrecruitedtankman/tankmen_Razvedchik_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_RAZVEDCHIK_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_Razvedchik_3/label'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3813,7 +3830,9 @@ class TOOLTIPS(object):
      LEVEL_10)
     CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
      CONTACT_STATUS_INBATTLE_RANDOM,
+     CONTACT_STATUS_INBATTLE_VERSUS_AI,
      CONTACT_STATUS_INBATTLE_TRAINING,
+     CONTACT_STATUS_INBATTLE_MAPS_TRAINING,
      CONTACT_STATUS_INBATTLE_EPIC_RANDOM_TRAINING,
      CONTACT_STATUS_INBATTLE_TEAM,
      CONTACT_STATUS_INBATTLE_BOOTCAMP,
@@ -4501,7 +4520,10 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_1_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_2_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_3_LABEL,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_LABEL)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_ARTILLERYMAN_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_INZHENER_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_RAZVEDCHIK_3_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -4710,7 +4732,10 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_1_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_2_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP13_3_DESC,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_DESC)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP13_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_ARTILLERYMAN_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_INZHENER_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_RAZVEDCHIK_3_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,

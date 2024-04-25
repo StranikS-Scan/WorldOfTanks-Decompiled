@@ -422,7 +422,8 @@
     <tags>	notForSale crewSkillBattleBooster armor notBuyWhenAutoEquip hideIfNotInShop builtinPerkBooster	</tags>
     <notInShop>	true	</notInShop>
     <script>	SixthSenseBattleBooster	  <skillName>	commander_sixthSense	</skillName>
-      <delay>	2	</delay>
+      <turnOnDelay>	2.0	</turnOnDelay>
+      <turnOffDelay>	2.0	</turnOffDelay>
     </script>
     <kpi>
       <oneOf>

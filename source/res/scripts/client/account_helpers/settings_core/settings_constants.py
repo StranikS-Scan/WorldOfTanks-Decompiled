@@ -232,6 +232,7 @@ class FEEDBACK(CONST_CONTAINER):
     BATTLE_EVENTS = 'feedbackBattleEvents'
     BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     QUESTS_PROGRESS = 'feedbackQuestsProgress'
+    SIXTH_SENSE = 'feedbackSixthSense'
 
 
 class DAMAGE_INDICATOR(CONST_CONTAINER):
@@ -279,6 +280,11 @@ class BATTLE_EVENTS(CONST_CONTAINER):
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
     MODE_SHOW_BORDER = 'battleBorderMapMode'
     TYPE_BORDER = 'battleBorderMapType'
+
+
+class SIXTH_SENSE(CONST_CONTAINER):
+    INDICATOR_SIZE = 'indicatorSize'
+    INDICATOR_ALPHA = 'indicatorAlpha'
 
 
 class QUESTS_PROGRESS(CONST_CONTAINER):

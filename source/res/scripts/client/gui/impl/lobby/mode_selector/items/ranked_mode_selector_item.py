@@ -27,17 +27,17 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
     def viewModel(self):
         return super(RankedModeSelectorItem, self).viewModel
 
+    @property
+    def isVisible(self):
+        return self.__rankedBattleController.isAvailable()
+
+    def update(self):
+        self.__onGameModeUpdated()
+
     def _onInitializing(self):
         super(RankedModeSelectorItem, self)._onInitializing()
         self.__onGameModeUpdated()
-        self.__rankedBattleController.onGameModeStatusUpdated += self.__onGameModeUpdated
-        self.__rankedBattleController.onUpdated += self.__onGameModeUpdated
         self._addReward(ModeSelectorRewardID.OTHER)
-
-    def _onDisposing(self):
-        self.__rankedBattleController.onGameModeStatusUpdated -= self.__onGameModeUpdated
-        self.__rankedBattleController.onUpdated -= self.__onGameModeUpdated
-        super(RankedModeSelectorItem, self)._onDisposing()
 
     def _getDisabledTooltipText(self):
         if self.__rankedBattleController.isUnset():

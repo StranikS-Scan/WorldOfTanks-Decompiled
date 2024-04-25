@@ -268,13 +268,13 @@ class _ProgressionTabPresenter(object):
             self.__stageManager.gotToPositionByStage(stage, instantly=False)
         self.__stageManager.resume()
 
-    def __playProgress(self, progress, isReplay=False):
+    def __playProgress(self, progress, stageCount=1, isReplay=False):
         if isReplay:
             self.__state.setReplayAnimation()
             self.__stageManager.startStages(progress, self.__lastPlayedStageID + 1, reset=True)
         else:
             self.__state.setBuilding()
-            self.__stageManager.playProgress(progress, 1)
+            self.__stageManager.playProgress(progress, stageCount)
         with self.__viewModel.transaction() as model:
             model.setAnimationStatus(AnimationStatus.ACTIVE)
             model.setReplay(isReplay)
@@ -287,10 +287,10 @@ class _ProgressionTabPresenter(object):
         self.__playProgress(1, isReplay=True)
 
     def __updateProgress(self):
-        progress = self.__lastPlayedStageID
+        progress = max(self.__lastPlayedStageID, self.__stageManager.getLastStageIndexToPlay())
         currentTokenCount = self.__armoryYardCtrl.getCurrencyTokenCount()
         if currentTokenCount > progress:
-            self.__playProgress(progress + 1)
+            self.__playProgress(progress + 1, stageCount=currentTokenCount - progress)
 
     @decorators.adisp_process('loadPage')
     def __onCollectReward(self):
@@ -335,6 +335,9 @@ class _ProgressionTabPresenter(object):
             return
         self._showVideoRewardWindow()
         BigWorld.player().AccountArmoryYardComponent.claimFinalReward()
+        if self.__viewModel.getViewedLevel() == self.__armoryYardCtrl.getTotalSteps() - 1:
+            with self.__viewModel.transaction() as model:
+                model.setViewedLevel(self.__armoryYardCtrl.getTotalSteps())
 
     def __updateCollectRewardsButton(self):
         if self.__armoryYardCtrl.hasCurrentRewards():
@@ -349,12 +352,11 @@ class _ProgressionTabPresenter(object):
 
     @property
     def __lastPlayedStageID(self):
-        serverSettings = self.__settingsCore.serverSettings
-        return serverSettings.getArmoryYardProgress()
+        progress = self.__settingsCore.serverSettings.getArmoryYardProgress()
+        return min(progress, self.__armoryYardCtrl.getTotalSteps())
 
     def __setLastPlayedStageID(self, stage):
-        serverSettings = self.__settingsCore.serverSettings
-        serverSettings.setArmoryYardProgress(stage)
+        self.__settingsCore.serverSettings.setArmoryYardProgress(stage)
 
     def __onStartMoving(self):
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)
@@ -363,9 +365,10 @@ class _ProgressionTabPresenter(object):
         vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
         if vehicle is None:
             return
+        elif self.__state.isAnimation:
+            self.__onSkipAnimation()
+            return
         else:
-            if self.__state.isAnimation:
-                self.__onSkipAnimation()
             self.__armoryYardCtrl.isVehiclePreview = True
             showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=self.__armoryYardCtrl.goToArmoryYard, backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))
             self.__armoryYardCtrl.cameraManager.goToHangar()

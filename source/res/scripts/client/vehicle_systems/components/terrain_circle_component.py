@@ -3,8 +3,10 @@
 import logging
 import math
 import typing
+from collections import namedtuple
 import BigWorld
 from Math import Vector2
+from items import _xml
 from helpers.CallbackDelayer import CallbackDelayer
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
 if typing.TYPE_CHECKING:
@@ -12,6 +14,12 @@ if typing.TYPE_CHECKING:
 g_logger = logging.getLogger(__name__)
 MIN_OVER_TERRAIN_HEIGHT = 0
 MIN_UPDATE_INTERVAL = 0
+TerrainCircleSettings = namedtuple('TerrainCircleSettings', ('modelPath', 'color', 'enableAccurateCollision', 'maxUpdateInterval', 'overTerrainHeight', 'cutOffYDistance'))
+
+def readTerrainCircleSettings(xmlSection, xmlCtx, xmlTag):
+    settings = xmlSection[xmlTag]
+    return TerrainCircleSettings(modelPath=_xml.readString(xmlCtx, settings, 'visual'), color=int(_xml.readString(xmlCtx, settings, 'color'), 0), enableAccurateCollision=_xml.readBool(xmlCtx, settings, 'enableAccurateCollision'), maxUpdateInterval=max(MIN_UPDATE_INTERVAL, _xml.readFloat(xmlCtx, settings, 'maxUpdateInterval')), overTerrainHeight=max(MIN_OVER_TERRAIN_HEIGHT, _xml.readFloat(xmlCtx, settings, 'overTerrainHeight')), cutOffYDistance=_xml.readFloat(xmlCtx, settings, 'cutOffYDistance', -1.0))
+
 
 class TerrainCircleComponent(CallbackDelayer):
     CUT_OFF_ANGLE = math.radians(60)

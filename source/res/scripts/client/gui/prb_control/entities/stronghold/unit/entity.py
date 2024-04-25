@@ -57,7 +57,7 @@ class StrongholdDynamicRosterSettings(DynamicRosterSettings):
 
     def _extractSettings(self, unit, strongholdData):
         if not strongholdData.isValid():
-            LOG_ERROR('Unit roster is not definded')
+            LOG_DEBUG('Unit roster is not definded')
             return super(StrongholdDynamicRosterSettings, self)._extractSettings(unit)
         else:
             kwargs = {}
@@ -65,7 +65,7 @@ class StrongholdDynamicRosterSettings(DynamicRosterSettings):
             if unit is not None:
                 roster = unit.getRoster()
             if roster is None:
-                LOG_ERROR('Unit roster is not defined')
+                LOG_DEBUG('Unit roster is not defined')
                 return kwargs
             header = strongholdData.getHeader()
             maxSlots = header.getMaxPlayersCount() - 1

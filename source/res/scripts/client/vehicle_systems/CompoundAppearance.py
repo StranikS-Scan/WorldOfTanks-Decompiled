@@ -365,6 +365,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__showCircleDelayed = None
         return
 
+    def isTerrainCircleVisible(self):
+        return self.__terrainCircle.isVisible()
+
     def updateTurretVisibility(self):
         self.__requestModelsRefresh()
 
@@ -515,6 +518,9 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self._onRequestModelsRefresh()
         self._isTurretDetached = self._vehicle.isTurretDetached
         modelsSetParams = self.modelsSetParams
+        self._vehicle.compoundInvalidated = True
+        self._vehicle.clearBuffs()
+        self._vehicle.compoundInvalidated = False
         assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.spaceID, self.isTurretDetached)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.spaceID)
         BigWorld.loadResourceListBG((assembler, collisionAssembler), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self._vehicle.id))

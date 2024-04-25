@@ -69,7 +69,11 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
 
     def showWaiting(self, show):
         if show:
-            self._parentWnd.as_showWaitingS(CLANS.CLANPERSONALINVITESWINDOW_LOADING, {})
+            try:
+                self._parentWnd.as_showWaitingS(CLANS.CLANPERSONALINVITESWINDOW_LOADING, {})
+            except AttributeError:
+                self._parentWnd.content.as_showWaitingS(CLANS.CLANPERSONALINVITESWINDOW_LOADING, {})
+
         elif not self._paginator.isInProgress():
             self._parentWnd.as_hideWaitingS()
 

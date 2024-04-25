@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PersonalDeathZone.py
-import BigWorld
 import Math
 from AreaOfEffect import AreaOfEffect
 import TriggersManager
@@ -12,10 +11,10 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
     _TRIGGER_DIRECTION_AXIS = 1
 
     def __init__(self):
-        super(PersonalDeathZone, self).__init__()
         self._triggerName = self._TRIGGER_NAME_TEMPLATE.format(self.id)
         self._triggerId = None
         self._triggered = False
+        super(PersonalDeathZone, self).__init__()
         return
 
     def onEnterWorld(self, prereqs):
@@ -25,7 +24,9 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
 
     def onLeaveWorld(self):
         if self._triggered:
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0)
+            deathzonesCtrl = self.sessionProvider.shared.deathzones
+            if deathzonesCtrl:
+                deathzonesCtrl.updatePersonalDZWarningNotification(self._triggerId, False, 0)
         TriggersManager.g_manager.delListener(self)
         if self._triggerId is not None:
             TriggersManager.g_manager.delTrigger(self._triggerId)
@@ -36,9 +37,13 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
     def onTriggerActivated(self, args):
         if args['type'] == TriggersManager.TRIGGER_TYPE.AREA and args['name'] == self._triggerName:
             self._triggered = True
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(True, self.strikeTime)
+            deathzonesCtrl = self.sessionProvider.shared.deathzones
+            if deathzonesCtrl:
+                deathzonesCtrl.updatePersonalDZWarningNotification(self._triggerId, True, self.strikeTime)
 
     def onTriggerDeactivated(self, args):
         if args['type'] == TriggersManager.TRIGGER_TYPE.AREA and args['name'] == self._triggerName:
             self._triggered = False
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0)
+            deathzonesCtrl = self.sessionProvider.shared.deathzones
+            if deathzonesCtrl:
+                deathzonesCtrl.updatePersonalDZWarningNotification(self._triggerId, False, 0)

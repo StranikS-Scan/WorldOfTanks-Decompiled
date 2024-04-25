@@ -63,6 +63,9 @@ class ViewImpl(View, EventsHandler, typing.Generic[TViewModel]):
             window.load()
         return window
 
+    def getParentWindow(self):
+        return super(ViewImpl, self).getParentWindow() or self.getInitialParentWindow()
+
     def createContextMenu(self, event):
         content = self.createContextMenuContent(event)
         window = None

@@ -57,6 +57,7 @@ class SettingsCore(ISettingsCore):
         QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
         BATTLE_COMM = settings_constants.BattleCommStorageKeys
         SCORE_PANEL = settings_constants.ScorePanelStorageKeys
+        SIXTH_SENSE = settings_constants.SIXTH_SENSE
         self.__serverSettings = ServerSettingsManager(self)
         self.__interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
@@ -76,6 +77,7 @@ class SettingsCore(ISettingsCore):
         BATTLE_EVENTS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_EVENTS)
         BATTLE_BORDER_MAP_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_BORDER_MAP)
         QUESTS_PROGRESS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.QUESTS_PROGRESS)
+        SIXTH_SENSE_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SIXTH_SENSE)
         BATTLE_COMM_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_COMM)
         DOG_TAGS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DOG_TAGS)
         BATTLE_HUD_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_HUD)
@@ -106,7 +108,8 @@ class SettingsCore(ISettingsCore):
          'battleHud': BATTLE_HUD_SETTINGS_STORAGE,
          'dogTags': DOG_TAGS_SETTINGS_STORAGE,
          'spgAim': SPG_AIM_SETTINGS_STORAGE,
-         'contour': CONTOUR_SETTINGS_STORAGE}
+         'contour': CONTOUR_SETTINGS_STORAGE,
+         'sixthSense': SIXTH_SENSE_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings() if settingName != GRAPHICS.COLOR_GRADING_TECHNIQUE))
@@ -302,6 +305,8 @@ class SettingsCore(ISettingsCore):
          (BATTLE_BORDER_MAP.TYPE_BORDER, options.BattleBorderMapType(BATTLE_BORDER_MAP.TYPE_BORDER, storage=BATTLE_BORDER_MAP_SETTINGS_STORAGE)),
          (QUESTS_PROGRESS.VIEW_TYPE, options.QuestsProgressViewType(QUESTS_PROGRESS.VIEW_TYPE, storage=QUESTS_PROGRESS_SETTINGS_STORAGE)),
          (QUESTS_PROGRESS.DISPLAY_TYPE, options.QuestsProgressDisplayType(QUESTS_PROGRESS.DISPLAY_TYPE, storage=QUESTS_PROGRESS_SETTINGS_STORAGE)),
+         (SIXTH_SENSE.INDICATOR_SIZE, options.SixthSenseIndicatorSize(SIXTH_SENSE.INDICATOR_SIZE, storage=SIXTH_SENSE_SETTINGS_STORAGE)),
+         (SIXTH_SENSE.INDICATOR_ALPHA, options.SixthSenseIndicatorAlpha(SIXTH_SENSE.INDICATOR_ALPHA, storage=SIXTH_SENSE_SETTINGS_STORAGE)),
          (BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION, options.SettingTrueByDefault(BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_BASE_MARKERS, options.SettingTrueByDefault(BATTLE_COMM.SHOW_BASE_MARKERS, storage=BATTLE_COMM_SETTINGS_STORAGE)),
          (BATTLE_COMM.SHOW_CALLOUT_MESSAGES, options.SettingTrueByDefault(BATTLE_COMM.SHOW_CALLOUT_MESSAGES, storage=BATTLE_COMM_SETTINGS_STORAGE)),

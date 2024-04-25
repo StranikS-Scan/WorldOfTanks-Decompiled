@@ -1189,7 +1189,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 else:
-                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
+                    if isRoyale:
+                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD
+                    else:
+                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                     if isComp7:
                         if canDoMsg == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
                             tooltip = MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET

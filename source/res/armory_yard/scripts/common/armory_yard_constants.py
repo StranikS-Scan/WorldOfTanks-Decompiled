@@ -7,7 +7,6 @@ CMD_CLAIM_FINAL_REWARD = 31004
 DEV_CMD_ADD_TOKEN_S = 31005
 DEV_CMD_SET_CYCLE = 31009
 DEV_CMD_SET_QUEST = 31010
-MAX_TOKEN_AT_CHAPTER = 7
 DAY_BEFORE_END_STYLE_QUEST = 2
 PDATA_KEY_ARMORY_YARD = 'armoryYard'
 FEATURE_NAME_BASE = 'armory_yard'
@@ -20,14 +19,10 @@ CONVERTER_QUEST_POSTFIX = 'converter'
 PROGRESSION_LEVEL_PDATA_KEY = 'progressionLevel'
 CLAIMED_FINAL_REWARD = 'claimedFinalReward'
 POSTBATTLE_QUEST = 'postBattle'
-INTO_VIDEO = 'ay_ep2_intro'
+INTRO_VIDEO = None
 STYLE_QUEST_POSTFIX = 'style'
-VEHICLE_NAME = 'czech:Cz21_TST'
-AY_VIDEOS = ['ay_ep2_armour.usm',
- 'ay_ep2_intro.usm',
- 'ay_ep2_tracks.usm',
- 'ay_ep2_gun.usm',
- 'ay_ep2_turret.usm']
+VEHICLE_NAME = 'ussr:R75_SU122_54'
+AY_VIDEOS = ('ay_ep3_armour.usm', 'ay_ep3_tracks.usm', 'ay_ep3_gun.usm', 'ay_ep3_turret.usm')
 
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
@@ -53,10 +48,6 @@ def getEndToken(cycleID):
 
 def getGroupName(cycleID):
     return '_'.join((FEATURE_NAME_BASE, 'cycle_{}'.format(cycleID)))
-
-
-def getConverterQuestID(cycleID):
-    return '_'.join((FEATURE_NAME_BASE, 'cycle_{}'.format(cycleID), CONVERTER_QUEST_POSTFIX))
 
 
 def getEndQuestID(cycleID):

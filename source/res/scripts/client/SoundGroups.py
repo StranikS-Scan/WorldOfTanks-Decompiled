@@ -8,12 +8,15 @@ import ResMgr
 import PlayerEvents
 import MusicControllerWWISE
 import Windowing
+import typing
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from helpers import i18n, dependency
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankPartNames
+if typing.TYPE_CHECKING:
+    from typing import Optional
 ENABLE_LS = True
 ENABLE_ENGINE_N_TRACKS = True
 DEBUG_TRACE_SOUND = False
@@ -26,7 +29,9 @@ DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
 MASTER_VOLUME_DEFAULT = 0.5
-CUSTOM_MP3_EVENTS = ('sixthSense', 'soundExploring')
+OFF_POSTFIX = '_off'
+DEFAULT_SIX_SENSE = 'lightbulb'
+CUSTOM_MP3_EVENTS = ('sixthSense', 'soundExploring', 'sixthSense' + OFF_POSTFIX)
 
 class CREW_GENDER_SWITCHES(object):
     GROUP = 'SWITCH_ext_vo_gender'
@@ -505,12 +510,17 @@ class SoundGroups(object):
             traceback.print_stack()
         return self.WWgetSound(event, event + ' : ' + str(node), node)
 
-    def prepareMP3(self, event):
-        if event in CUSTOM_MP3_EVENTS:
-            if not ResMgr.isFile('audioww/%s.mp3' % event):
-                LOG_ERROR('SOUND: mp3 file is not exist', 'audioww/%s.mp3' % event)
-            else:
-                WWISE.WW_prepareMP3('%s.mp3' % event)
+    def prepareMP3(self, event=None):
+        if event is None:
+            LOG_ERROR('SOUND: event is None')
+        elif event not in CUSTOM_MP3_EVENTS:
+            LOG_ERROR('SOUND: event %s is not custom' % event)
+        elif not ResMgr.isFile('audioww/%s.mp3' % event):
+            LOG_ERROR("SOUND: mp3 file doesn't exist", 'audioww/%s.mp3' % event)
+        else:
+            WWISE.WW_prepareMP3('%s.mp3' % event)
+            return True
+        return False
 
     def getSound2D(self, event):
         if DEBUG_TRACE_SOUND is True:

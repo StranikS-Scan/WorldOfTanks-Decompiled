@@ -3,6 +3,7 @@
 from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.dialogs.dialog_template_generic_tooltip_view_model import DialogTemplateGenericTooltipViewModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.icon_view_model import IconViewModel
 
 class IconPositionLogicEnum(Enum):
@@ -14,7 +15,7 @@ class IconPositionLogicEnum(Enum):
 class IconSetViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(IconSetViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -25,35 +26,51 @@ class IconSetViewModel(ViewModel):
     def getIconType():
         return IconViewModel
 
+    @property
+    def tooltip(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getTooltipType():
+        return DialogTemplateGenericTooltipViewModel
+
     def getBackgrounds(self):
-        return self._getArray(1)
+        return self._getArray(2)
 
     def setBackgrounds(self, value):
-        self._setArray(1, value)
+        self._setArray(2, value)
 
     @staticmethod
     def getBackgroundsType():
         return IconViewModel
 
     def getOverlays(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setOverlays(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getOverlaysType():
         return IconViewModel
 
     def getIconPositionLogic(self):
-        return self._getString(3)
+        return self._getString(4)
 
     def setIconPositionLogic(self, value):
-        self._setString(3, value)
+        self._setString(4, value)
+
+    def getIsBottomPushingDown(self):
+        return self._getBool(5)
+
+    def setIsBottomPushingDown(self, value):
+        self._setBool(5, value)
 
     def _initialize(self):
         super(IconSetViewModel, self)._initialize()
         self._addViewModelProperty('icon', IconViewModel())
+        self._addViewModelProperty('tooltip', DialogTemplateGenericTooltipViewModel())
         self._addArrayProperty('backgrounds', Array())
         self._addArrayProperty('overlays', Array())
         self._addStringProperty('iconPositionLogic', 'centredAndThroughContent')
+        self._addBoolProperty('isBottomPushingDown', True)

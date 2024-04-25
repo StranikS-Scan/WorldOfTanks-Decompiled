@@ -27,6 +27,7 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import time_utils, i18n, dependency
+from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
@@ -374,7 +375,7 @@ def formatTimeLabel(hours):
     return str(int(time)) + ' ' + timeMetric
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags isWulf')
 
 class PostProcessTags(CONST_CONTAINER):
     IS_SUFFIX_BADGE = 'isSuffixBadge'
@@ -428,7 +429,8 @@ PreformattedBonus.__new__.__defaults__ = (None,
  None,
  None,
  None,
- tuple())
+ tuple(),
+ False)
 
 class QuestsBonusComposer(object):
 
@@ -454,6 +456,7 @@ class QuestsBonusComposer(object):
          'imgSource': bonus.getImage(size),
          'tooltip': bonus.tooltip,
          'isSpecial': bonus.isSpecial,
+         'isWulfTooltip': bonus.isWulf,
          'specialAlias': bonus.specialAlias,
          'specialArgs': bonus.specialArgs,
          'align': bonus.align,
@@ -738,7 +741,9 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         if tokenID.startswith(BR_PROGRESSION_TOKEN):
             return self._formatBRComplexToken(complexToken, token, bonus)
         else:
-            if complexToken.isDisplayable:
+            if tokenID.startswith(FRONT_COUPON_TOKEN_PREFIX):
+                formatted = self._formatHBCoupon(complexToken, token, bonus)
+            elif complexToken.isDisplayable:
                 formatted = self._formatComplexToken(complexToken, token, bonus)
             elif tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
                 formatted = self._formatLootBoxToken(tokenID, token, bonus)
@@ -753,6 +758,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     def _formatBRComplexToken(self, complexToken, token, bonus):
         formatted = self._formatComplexToken(complexToken, token, bonus)
         return formatted._replace(tooltip=self.__getBRProgressionTooltip())
+
+    def _formatHBCoupon(self, complexToken, token, bonus):
+        from historical_battles.gui.server_events.hb_awards_formatter import HBQuestsTokenBonusFormatter
+        return HBQuestsTokenBonusFormatter().formatHBCouponToken(complexToken.styleID, FRONT_COUPON_TOKEN_PREFIX, token, bonus)
 
     def _formatBonusLabel(self, count):
         return formatCountLabel(count)

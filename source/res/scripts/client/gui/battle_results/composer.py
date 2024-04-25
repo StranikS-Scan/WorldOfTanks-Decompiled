@@ -1,12 +1,46 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/composer.py
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_IDS
 from gui.battle_results import templates
 from gui.battle_results.components import base
 from gui.shared import event_dispatcher
 from gui.shared.system_factory import collectBattleResultsComposer, registerBattleResultsComposer
 from helpers import dependency
 from skeletons.gui.game_control import IMapsTrainingController
+from debug_utils import LOG_DEBUG, LOG_WARNING
+
+class ComposerFactory(object):
+    __COMPOSERS_REGISTRY = {}
+    __DEFAULT_COMPOSER = None
+
+    @classmethod
+    def registerDefault(cls, composerCls):
+        if cls.__DEFAULT_COMPOSER is not None:
+            LOG_WARNING('Re-registering default composer')
+        LOG_DEBUG('Registering composer {} as a default'.format(composerCls))
+        cls.__DEFAULT_COMPOSER = composerCls
+        return composerCls
+
+    @classmethod
+    def registerForBonusTypes(cls, *bonusTypes):
+
+        def wrapper(composerCls):
+            for bonusType in bonusTypes:
+                LOG_DEBUG('Registering composer {} for bonusType {}'.format(composerCls, ARENA_BONUS_TYPE_IDS[bonusType]))
+                if bonusType in cls.__COMPOSERS_REGISTRY:
+                    LOG_WARNING('Re-registering composer for bonusType {}'.format(ARENA_BONUS_TYPE_IDS[bonusType]))
+                cls.__COMPOSERS_REGISTRY[bonusType] = composerCls
+
+            return composerCls
+
+        return wrapper
+
+    @classmethod
+    def createForBonusType(cls, bonusType, *args, **kwargs):
+        composerCls = cls.__COMPOSERS_REGISTRY.get(bonusType, cls.__DEFAULT_COMPOSER)
+        LOG_DEBUG('Creating composer {} for bonusType {}'.format(composerCls, ARENA_BONUS_TYPE_IDS[bonusType]))
+        return composerCls(*args, **kwargs)
+
 
 class IStatsComposer(object):
 
@@ -91,6 +125,7 @@ class StatsComposer(IStatsComposer):
         return templates.BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
+@ComposerFactory.registerDefault
 class RegularStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
@@ -98,6 +133,7 @@ class RegularStatsComposer(StatsComposer):
         self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.EPIC_BATTLE)
 class EpicStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
@@ -107,24 +143,28 @@ class EpicStatsComposer(StatsComposer):
         self._block.addNextComponent(templates.EPIC_TABS_BLOCK.clone())
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.CYBERSPORT)
 class CyberSportStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(CyberSportStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.FORT_BATTLE_2)
 class StrongholdBattleStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(StrongholdBattleStatsComposer, self).__init__(reusable, templates.STRONGHOLD_BATTLE_COMMON_STATS_BLOCK.clone(), templates.STRONGHOLD_PERSONAL_STATS_BLOCK.clone(), templates.STRONGHOLD_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.SORTIE_2)
 class StrongholdSortieBattleStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(StrongholdSortieBattleStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.STRONGHOLD_PERSONAL_STATS_BLOCK.clone(), templates.STRONGHOLD_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.RANKED)
 class RankedBattlesStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
@@ -148,6 +188,7 @@ class RankedBattlesStatsComposer(StatsComposer):
         return self.__resultsTeamsBlock.getVO()
 
 
+@ComposerFactory.registerForBonusTypes(*ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE)
 class BattleRoyaleStatsComposer(IStatsComposer):
 
     def __init__(self, _):
@@ -179,6 +220,7 @@ class BattleRoyaleStatsComposer(IStatsComposer):
         event_dispatcher.showBattleRoyaleResultsView({'arenaUniqueID': arenaUniqueID})
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.BOOTCAMP)
 class BootcampStatsComposer(IStatsComposer):
     __slots__ = ('_block',)
 
@@ -207,6 +249,7 @@ class BootcampStatsComposer(IStatsComposer):
         event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
 
+@ComposerFactory.registerForBonusTypes(ARENA_BONUS_TYPE.MAPS_TRAINING)
 class MapsTrainingStatsComposer(IStatsComposer):
     _fromNotifications = set()
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)

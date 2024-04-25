@@ -505,6 +505,12 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def getFinalOfferTime(self):
         return self.__getConfig().finalOfferTime
 
+    def getShopOfferFinishTimeLeft(self):
+        return max(0, self.__getConfig().shopOfferFinishTime - time_utils.getServerUTCTime())
+
+    def isShopOfferActive(self):
+        return bool(self.getShopOfferFinishTimeLeft())
+
     def getStylesConfig(self):
         return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in self.__getConfig().chapters.iteritems()}
 

@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	35	</forward>
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
@@ -1110,8 +1110,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2099,7 +2099,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M62>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_122mm_M62>	shared	  <maxAmmo>	42	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -11.7 1 -11.7	</minPitch>
             <maxPitch>	0 8 0.305556 8 0.419444 4 0.580556 4 0.694444 8 1 8	</maxPitch>
@@ -2139,21 +2139,21 @@
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	13	</reloadTime>
+          <reloadTime>	14	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <clip>
-            <count>	3	</count>
+            <count>	2	</count>
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	17 15 13	</reloadTime>
+            <reloadTime>	14 19	</reloadTime>
           </autoreload>
           <models>
             <undamaged>	vehicles/russian/R172_Object_752/normal/lod0/Gun_01.model	</undamaged>
@@ -2165,7 +2165,7 @@
             <collisionModelClient>	vehicles/russian/R172_Object_752/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2684,8 +2684,8 @@
     <detailed>
       <engines>
         <V-12-6B>
-          <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	680	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </V-12-6B>
       </engines>
       <chassis>

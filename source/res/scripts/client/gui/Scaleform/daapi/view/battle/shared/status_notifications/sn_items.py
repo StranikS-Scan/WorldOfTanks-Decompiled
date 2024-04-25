@@ -36,6 +36,12 @@ class TimeSnapshotHandler(object):
         else:
             self._startTime = BigWorld.serverTime()
 
+    def setCallback(self, delay, updateFunc):
+        pass
+
+    def stopCallback(self):
+        pass
+
     def getCurrentTimeSnapshot(self):
         return BigWorld.serverTime() - self._startTime
 
@@ -159,6 +165,12 @@ class TimerSN(_VehicleStateSN):
         self._vo['totalTime'] = totalTime
         if isUpdateRequired:
             self._sendUpdate()
+
+    def _setCallback(self, delay, updateFunc):
+        self.__timeHandler.setCallback(delay, updateFunc)
+
+    def _stopCallback(self):
+        self.__timeHandler.stopCallback()
 
     def __destroyHandler(self):
         if self.__timeHandler:

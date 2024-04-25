@@ -26,7 +26,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController
+from skeletons.gui.game_control import IBattleRoyaleController, IBattlePassController, IBRProgressionOnTokensController
 from skeletons.gui.lobby_context import ILobbyContext
 from shared_utils import first
 from soft_exception import SoftException
@@ -41,39 +41,46 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from skeletons.connection_mgr import IConnectionManager
 from battle_pass_common import getPresentLevel
 from messenger.storage import storage_getter
+from messenger.formatters.service_channel_helpers import parseTokenBonusCount
 from gui.battle_pass.battle_pass_constants import ChapterState
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_vehicle_status_model import PlayerVehicleStatusModel
     from gui.impl.gen.view_models.views.lobby.battle_royale.battle_result_view.leaderboard_model import LeaderboardModel
 
-def _getAttackReason(vehicleState, hasKiller):
+def _getAttackReason(vehicleState, hasKiller, killerIsBot):
     if vehicleState == DEATH_REASON_ALIVE:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.alive()
     elif vehicleState == ATTACK_REASON_INDICES[ATTACK_REASON.DEATH_ZONE]:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByZone()
     elif hasKiller:
-        reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
+        if killerIsBot:
+            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByBot()
+        else:
+            reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.deathByPlayer()
     else:
         reason = R.strings.battle_royale.battleResult.playerVehicleStatus.reason.other()
     return reason
 
 
 _THE_BEST_PLACE = 1
+DISQUALIFIED_PLACE = 0
 _BR_POINTS_ICON = R.images.gui.maps.icons.battleRoyale.battleResult.leaderboard.br_selector_16()
-_CURRENCIES = [BattleRewardItemModel.XP,
+_BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.CREDITS,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
  BattleRewardItemModel.CRYSTALS,
- BattleRewardItemModel.BATTLE_ROYALE_COIN]
+ BattleRewardItemModel.BATTLE_ROYALE_COIN,
+ BattleRewardItemModel.BR_PROGRESSION_TOKEN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
 
 class BrBattleResultsViewInLobby(ViewImpl):
-    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType')
+    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__isDisqualified')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
+    __brProgressionController = dependency.descriptor(IBRProgressionOnTokensController)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -94,6 +101,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
             raise SoftException('There is no common info in battle results')
         vehicleInfo = first(commonData.get('playerVehicles', []))
         self.__isObserverResult = vehicleInfo.get('isObserver', False) if vehicleInfo else False
+        self.__isDisqualified = commonData['playerPlace'] == DISQUALIFIED_PLACE
         self.__arenaBonusType = self.__data[BRSections.COMMON].get('arenaBonusType', 0)
         self.__tooltipsData = {}
         self.__tooltipParametersCreator = self.__getTooltipParametersCreator()
@@ -128,8 +136,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():
-            contextMenuArgs = {}
-            contextMenuArgs['databaseID'] = event.getArgument('databaseID')
+            contextMenuArgs = {'databaseID': event.getArgument('databaseID')}
             if self.__connectionMgr.databaseID == contextMenuArgs['databaseID']:
                 return super(BrBattleResultsViewInLobby, self).createContextMenu(event)
             hiddenUserName = event.getArgument('hiddenUserName')
@@ -167,7 +174,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BrBattleResultsViewInLobby, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
-            self.__setPlayerVehicleStatus(model.playerVehicleStatus)
+            if not self.__isDisqualified:
+                self.__setPlayerVehicleStatus(model.playerVehicleStatus)
             self.__setPersonalResult(model.personalResults)
             self.__setLeaderboard(model.leaderboardLobbyModel)
 
@@ -182,7 +190,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __updateBattlePass(self):
         self.__setBattlePass(self.viewModel.personalResults.battlePassProgress)
         self.__setBattleRewards(self.viewModel.personalResults)
-        self.__setBattleRewardsWithPremium(self.viewModel.personalResults)
+        if not self.__isDisqualified:
+            self.__setBattleRewardsWithPremium(self.viewModel.personalResults)
 
     def __setPlayerVehicleStatus(self, statusModel):
         commonInfo = self.__data.get(BRSections.COMMON)
@@ -193,7 +202,7 @@ class BrBattleResultsViewInLobby(ViewImpl):
         if not self.__isObserverResult:
             killerInfo = statusInfo['killer']
             hasKiller = killerInfo and not statusInfo['isSelfDestroyer']
-            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller))
+            statusModel.setReason(_getAttackReason(statusInfo.get('vehicleState', ''), hasKiller, killerInfo.get('isBot', False)))
             if hasKiller:
                 self.__setUserName(statusModel.killer, killerInfo)
         return
@@ -205,7 +214,8 @@ class BrBattleResultsViewInLobby(ViewImpl):
             self.__setFinishResult(personalModel)
             self.__setStats(personalModel)
             self.__setBattleRewards(personalModel)
-            self.__setBattleRewardsWithPremium(personalModel)
+            if not self.__isDisqualified:
+                self.__setBattleRewardsWithPremium(personalModel)
             self.__setCompletedQuests(personalModel)
         self.__setBattlePass(personalModel.battlePassProgress)
 
@@ -254,13 +264,13 @@ class BrBattleResultsViewInLobby(ViewImpl):
             for vehicle in leaderboard:
                 vehiclesBySquad.setdefault(vehicle['squadIdx'], []).append(vehicle)
 
-            placesData = vehiclesBySquad.values()
+            placesData = [ sorted(squad, key=lambda v: v['place'], reverse=True) for squad in vehiclesBySquad.values() ]
         else:
             placesData = []
             for vehicle in leaderboard:
                 placesData.append([vehicle])
 
-        placesData.sort(key=lambda v: v[0]['place'])
+        placesData.sort(key=lambda v: 0 if v[0]['place'] == 0 else -1.0 / v[0]['place'])
         groupList = leaderboardModel.getPlacesList()
         groupList.clear()
         for placeData in placesData:
@@ -294,10 +304,14 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getFinishReason(self):
         isWinner = self.__data[BRSections.COMMON]['playerPlace'] == _THE_BEST_PLACE
-        isInSquad = self.__data[BRSections.COMMON]['isSquadMode']
-        if isWinner:
-            finishReason = R.strings.battle_royale.battleResult.title.victory()
-        elif isInSquad:
+        isWinnerPlace = self.__data[BRSections.COMMON]['playerPlace'] in (2, 3, 4, 5)
+        if self.__isDisqualified:
+            finishReason = R.strings.battle_royale.battleResult.title.vehicleDisqualified()
+        elif isWinner:
+            finishReason = R.strings.battle_royale.battleResult.title.victoryFirst()
+        elif isWinnerPlace:
+            finishReason = R.strings.battle_royale.battleResult.title.victoryOther()
+        elif self.__isSquadMode():
             finishReason = R.strings.battle_royale.battleResult.title.squadDestroyed()
         else:
             finishReason = R.strings.battle_royale.battleResult.title.vehicleDestroyed()
@@ -314,8 +328,6 @@ class BrBattleResultsViewInLobby(ViewImpl):
 
     def __getFinancialData(self, section):
         financialData = self.__data.get(BRSections.PERSONAL, {}).get(section, {})
-        if self.__brController.isBattlePassAvailable(self.__arenaBonusType):
-            financialData.update({BattleRewardItemModel.BATTLE_PASS_POINTS: self.__getBattlePassPointsTotal()})
         return financialData
 
     def __getBattlePassPointsTotal(self):
@@ -347,24 +359,43 @@ class BrBattleResultsViewInLobby(ViewImpl):
     def __setBattleRewards(self, rewardsModel):
         rewardList = rewardsModel.getBattleRewardsList()
         rewardList.clear()
-        rewards = self.__getEarnedFinance(BRSections.FINANCE)
-        for reward in rewards:
-            rewardList.addViewModel(reward)
+        if not self.__isDisqualified:
+            rewards = self.__getEarnedRewards(BRSections.FINANCE)
+            for reward in rewards:
+                rewardList.addViewModel(reward)
 
         rewardList.invalidate()
 
     def __setBattleRewardsWithPremium(self, rewardsModel):
         rewardList = rewardsModel.getBattleRewardsListWithPremium()
         rewardList.clear()
-        rewards = self.__getEarnedFinance(BRSections.FINANCE_PREM)
+        rewards = self.__getEarnedRewards(BRSections.FINANCE_PREM)
         for reward in rewards:
             rewardList.addViewModel(reward)
 
         rewardList.invalidate()
 
-    def __getEarnedFinance(self, section):
+    def __getBrProgressionTokenCount(self):
+        total = 0
+        rewardsSection = self.__data.get(BRSections.PERSONAL, {}).get(BRSections.REWARDS, {})
+        awardTokens = rewardsSection.get(BRSections.BR_AWARD_TOKENS, {})
+        total += self.__parseProgressionTokenCount(awardTokens)
+        bonusesData = rewardsSection.get(BRSections.BONUSES, {})
+        for questBonuses in bonusesData:
+            for bonus in questBonuses:
+                total += parseTokenBonusCount(bonus, self.__brProgressionController.progressionToken)
+
+        return total
+
+    def __getEarnedRewards(self, section):
         earned = self.__getFinancialData(section)
-        sortedEarned = OrderedDict(sorted(earned.iteritems(), key=lambda x: _CURRENCIES.index(x[0])))
+        if self.__brController.isBattlePassAvailable(self.__arenaBonusType):
+            earned.update({BattleRewardItemModel.BATTLE_PASS_POINTS: self.__getBattlePassPointsTotal()})
+        if self.__brProgressionController.isEnabled:
+            progressionTokensEarned = self.__getBrProgressionTokenCount()
+            if progressionTokensEarned:
+                earned[BattleRewardItemModel.BR_PROGRESSION_TOKEN] = progressionTokensEarned
+        sortedEarned = OrderedDict(sorted(earned.iteritems(), key=lambda x: _BATTLE_REWARD_TYPES.index(x[0])))
         financialList = []
         for bonusType, value in sortedEarned.iteritems():
             if value > 0 or bonusType not in _HIDDEN_BONUSES_WITH_ZERO_VALUES:
@@ -379,9 +410,9 @@ class BrBattleResultsViewInLobby(ViewImpl):
         commonData = self.__data.get(BRSections.COMMON)
         if commonData is None:
             raise SoftException('There is no common info in battle results')
-        model = self.viewModel.personalResults
-        self.viewModel.personalResults.setPlace(commonData['playerPlace'])
         vehicleInfo = first(commonData['playerVehicles'])
+        model = self.viewModel.personalResults
+        model.setPlace(commonData['playerPlace'])
         model.setVehicleName(vehicleInfo['vehicleName'])
         model.setVehicleType(vehicleInfo['vehicleType'])
         model.setHasPremium(self.__hasPremium())
@@ -423,6 +454,9 @@ class BrBattleResultsViewInLobby(ViewImpl):
     @staticmethod
     def __normalizeTooltipID(tooltipID):
         return TooltipConstantsModel.BONUS_TOOLTIP if tooltipID.startswith(TooltipConstantsModel.BONUS_TOOLTIP) else tooltipID
+
+    def __parseProgressionTokenCount(self, tokens):
+        return tokens.get(self.__brProgressionController.progressionToken, {}).get('count', 0)
 
     @staticmethod
     def __setUserName(model, info):

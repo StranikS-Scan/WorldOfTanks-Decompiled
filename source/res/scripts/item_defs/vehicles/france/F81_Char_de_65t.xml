@@ -3533,8 +3533,6 @@
       <unlocks>
         <gun>	_120mm_D_1203	  <cost>	46000	</cost>
         </gun>
-        <vehicle>	F83_AMX_M4_Mle1949_Bis	  <cost>	151700	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	220	</armor_1>
@@ -3714,7 +3712,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	9.3	</reloadTime>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.13	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -3807,7 +3805,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_100mm_SA_47>
-        <_120mm_D_1203>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_120mm_D_1203>	shared	  <unlocks>
+            <vehicle>	F83_AMX_M4_Mle1949_Bis	  <cost>	151700	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3832,7 +3834,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 8 0.416667 8 0.425 5.4 0.458333 5.4 0.466667 7 0.533333 7 0.541667 5.4 0.575 5.4 0.583333 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40278 10.00 0.42500 5.40 0.45833 5.40 0.46667 7.00 0.53333 7.00 0.54167 5.40 0.57500 5.40 0.59722 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>

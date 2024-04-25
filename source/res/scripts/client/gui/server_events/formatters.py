@@ -34,7 +34,10 @@ def getLinkedActionID(groupID, actions):
 
 def parseComplexToken(tokenID):
     match = re.match(COMPLEX_TOKEN_TEMPLATE, tokenID)
-    return TokenComplex(True, match.group('styleID'), match.group('webID')) if match else TokenComplex(False, '', '')
+    if match:
+        return TokenComplex(True, match.group('styleID'), match.group('webID'))
+    from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
+    return TokenComplex(True, tokenID, '') if FRONT_COUPON_TOKEN_PREFIX in tokenID else TokenComplex(False, '', '')
 
 
 class DISCOUNT_TYPE(CONST_CONTAINER):

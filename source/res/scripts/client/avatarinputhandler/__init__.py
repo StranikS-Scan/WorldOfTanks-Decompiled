@@ -44,7 +44,7 @@ from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker, TurboshaftModeSoundNotifications
 from Event import Event
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import ARENA_PERIOD, AIMING_MODE
+from constants import ARENA_PERIOD, AIMING_MODE, ATTACK_REASONS, ATTACK_REASON
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
@@ -152,6 +152,7 @@ class DynamicCameraSettings(object):
 
 class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -203,6 +204,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     @staticmethod
     def isHullLockEnabled():
         return SniperAimingSystem.hullLockSetting
+
+    @property
+    def ctrlMode(self):
+        return self.__curCtrl
 
     @property
     def ctrlModeName(self):
@@ -431,6 +436,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def setAutorotation(self, bValue, triggeredByKey=False):
         if not self.__curCtrl.enableSwitchAutorotationMode(triggeredByKey):
+            return
+        elif triggeredByKey and BigWorld.player().isVehicleMoving():
             return
         elif not BigWorld.player().isOnArena:
             return

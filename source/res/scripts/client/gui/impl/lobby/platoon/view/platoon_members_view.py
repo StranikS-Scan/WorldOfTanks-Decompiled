@@ -471,8 +471,12 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
             model.header.btnLeavePlatoon.setDescription(backport.text(_strButtons.leavePlatoon.description()))
             model.header.btnLeavePlatoon.setIsEnabled(not isInQueue)
             model.btnInviteFriends.setCaption(backport.text(inviteLabels.caption()))
-            model.btnInviteFriends.setDescription(backport.text(inviteLabels.description()))
-            model.btnInviteFriends.setIsEnabled(self._hasFreeSlot() and isCommander and canSendInvite and not isInQueue and not isInSearch)
+            hasFreeSlot = self._hasFreeSlot()
+            if hasFreeSlot:
+                model.btnInviteFriends.setDescription(backport.text(inviteLabels.description()))
+            else:
+                model.btnInviteFriends.setDescription(backport.text(_strButtons.invite.fullSquad.description()))
+            model.btnInviteFriends.setIsEnabled(hasFreeSlot and isCommander and canSendInvite and not isInQueue and not isInSearch)
         self._updateFindPlayersButton()
         self._updateReadyButton()
 

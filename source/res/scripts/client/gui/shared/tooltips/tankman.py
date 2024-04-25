@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
-from typing import List, Optional
+from typing import List, Optional, Dict
 import nations
 from gui import makeHtmlString
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
@@ -20,7 +20,7 @@ from helpers import i18n
 from helpers import time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, compareMastery
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -192,7 +192,7 @@ class TankmanStatusField(ToolTipDataField):
                         if role not in inactiveRoles:
                             inactiveRoles.append(role)
 
-            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID and not vehicle.isWotPlus:
+            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
                 if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
                     header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
                     text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
@@ -286,19 +286,7 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
             if item.isInTank:
                 vehicle = self._itemsCache.items.getVehicle(item.vehicleInvID)
             fullUserName = self._getFullUserName(item)
-            titleBlock = []
-            titleBlock.append(formatters.packTitleDescBlock(title=text_styles.highTitle(fullUserName), desc=text_styles.main(self._getTankmanDescription(item))))
-            if vehicle and vehicle.isXPToTman:
-                isLessMastered = True
-                for slotIdx, tman in vehicle.crew:
-                    if tman is not None:
-                        res = compareMastery(tman.descriptor, self.item.descriptor)
-                        if res < 0 or res == 0 and slotIdx < self.item.vehicleSlotIdx:
-                            isLessMastered = False
-                            break
-
-                if isLessMastered:
-                    titleBlock.append(self._makeXpToTankmanCaption())
+            titleBlock = [formatters.packTitleDescBlock(title=text_styles.highTitle(fullUserName), desc=text_styles.main(self._getTankmanDescription(item)))]
             items.append(formatters.packBuildUpBlockData(titleBlock))
             innerBlock = []
             if vehicle:
@@ -313,13 +301,16 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
             return items
 
-    def _makeXpToTankmanCaption(self):
+    @staticmethod
+    def _makeXpToTankmanCaption():
         return formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.tman_acc_training_24x24()), padding=formatters.packPadding(bottom=0, top=16, left=0), imgPadding=formatters.packPadding(top=-2, right=6), desc=text_styles.main(backport.text(R.strings.tooltips.hangar.crew.xpToTmen())))
 
-    def _getSign(self, val):
+    @staticmethod
+    def _getSign(val):
         return '' if val < 0 else '+'
 
-    def _getBonusValue(self, tankman, ids):
+    @staticmethod
+    def _getBonusValue(tankman, ids):
         result = 0
         if tankman:
             bonuses = tankman.realRoleLevel.bonuses
@@ -328,24 +319,19 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
 
         return int(result)
 
-    def _getVehicleName(self, vehicle=None, nativeVehicle=None):
+    @staticmethod
+    def _getVehicleName(vehicle=None, nativeVehicle=None):
         return text_styles.main(nativeVehicle.shortUserName) if not vehicle or nativeVehicle.shortUserName == vehicle.shortUserName else text_styles.critical(nativeVehicle.shortUserName)
 
-    def _createLabel(self, innerBlock):
+    @staticmethod
+    def _createLabel(innerBlock):
         innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': backport.text(R.strings.tooltips.hangar.crew.assignedTo())})))
 
     def _createFreeSkillsBlock(self, commonStatsBlock):
-        freeSkills = self.item.freeSkills
-        if not freeSkills:
-            return
-        commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_FREESKILLS)})))
-        for freeSkill in freeSkills:
-            commonStatsBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(freeSkill.userName), value='', icon=backport.image(R.images.gui.maps.icons.tankmen.skills.medium.dyn(freeSkill.extensionLessIconName)()), **self._skillIconNamePadding))
+        pass
 
     def _createEarnedSkillsBlock(self, commonStatsBlock):
-        field = self._getSkillList()
-        _, value = field.buildData()
-        skills = value[self.item.chosenFreeSkillsCount:]
+        skills = self._getSkillList()
         if not skills:
             return
         commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)})))
@@ -365,19 +351,24 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
             titleR = R.strings.tooltips.hangar.crew.new_skill_available.header()
         return formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': backport.text(titleR)}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': backport.text(R.strings.tooltips.hangar.crew.new_skill_available.text())}))
 
-    def _getFullUserName(self, item):
+    @staticmethod
+    def _getFullUserName(item):
         nationName = nations.NAMES[item.nationID]
         nationResId = R.strings.battle_royale.commanderInfo.fullName.dyn(nationName)()
         result = backport.text(nationResId)
         return result
 
-    def _getTankmanDescription(self, _):
+    @staticmethod
+    def _getTankmanDescription(_):
         return backport.text(R.strings.battle_royale.commanderInfo.commonRank())
 
     def _getSkillList(self):
-        return BattleRoyaleTankmanSkillListField(self, 'skills')
+        skillListField = BattleRoyaleTankmanSkillListField(self, 'skills')
+        _, value = skillListField.buildData()
+        return value if value is not None else []
 
-    def _createVehicleBlock(self, innerBlock, vehicle):
+    @staticmethod
+    def _createVehicleBlock(innerBlock, vehicle):
         vehName = vehicle.shortUserName
         innerBlock.append(formatters.packTextBlockData(text=text_styles.stats(backport.text(R.strings.battle_royale.commanderTooltip.vehicleDescription(), vehicle=vehName)), padding=formatters.packPadding(top=10, right=-50)))
 

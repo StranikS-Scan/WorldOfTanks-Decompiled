@@ -37,6 +37,7 @@ class HelpPagePriority(object):
     COMP7 = 12
     FLAMETHROWER = 11
     ASSAULT_SPG = 11
+    HB = 12
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -273,13 +274,15 @@ class BattleRoyalePagesBuilder(DetailedHelpPagesBuilder):
         pages = []
         headerTitle = backport.text(R.strings.ingame_help.detailsHelp.default.title())
         mapGeometryName = ctx['mapGeometryName']
+        isConeVisibility = ctx['isConeVisibility']
         mapResourceName = 'c_' + replaceHyphenToUnderscore(mapGeometryName)
         imagePath = R.images.gui.maps.icons.battleHelp.battleRoyale.dyn(mapResourceName)
         if not imagePath.isValid():
             raise SoftException('No icons found for map {}'.format(mapGeometryName))
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description())), [], [], backport.image(imagePath.br_radar()), hintCtx=HelpHintContext.BATTLE_ROYALE)
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description())), [], [], backport.image(imagePath.br_zone()), hintCtx=HelpHintContext.BATTLE_ROYALE)
-        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description())), [], [], backport.image(imagePath.br_sector()), hintCtx=HelpHintContext.BATTLE_ROYALE)
+        if isConeVisibility:
+            addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.coneVisibility.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.coneVisibility.description())), [], [], backport.image(imagePath.br_sector()), hintCtx=HelpHintContext.BATTLE_ROYALE)
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description())), [], [], backport.image(imagePath.br_airdrop()), hintCtx=HelpHintContext.BATTLE_ROYALE)
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description())), [], [], backport.image(imagePath.br_tree()), hintCtx=HelpHintContext.BATTLE_ROYALE)
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.uniqueAbilities.description())), [], [], backport.image(imagePath.br_unique_abilities()), hintCtx=HelpHintContext.BATTLE_ROYALE)
@@ -290,6 +293,8 @@ class BattleRoyalePagesBuilder(DetailedHelpPagesBuilder):
         ctx['isBattleRoyale'] = isRoyale = arenaVisitor.getArenaBonusType() in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isRoyale
         ctx['mapGeometryName'] = arenaVisitor.type.getGeometryName()
+        ctx['isConeVisibility'] = vehicle is not None and hasattr(vehicle, 'coneVisibility')
+        return
 
 
 class TurboshaftEnginePagesBuilder(DetailedHelpPagesBuilder):
@@ -458,6 +463,35 @@ class DevMapsPagesBuilder(DetailedHelpPagesBuilder):
         ctx['isDevMaps'] = arenaVisitor.extra.isMapsInDevelopmentEnabled()
 
 
+class HBPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isHB',)
+    _IMG_PATH = R.images.historical_battles.gui.maps.icons.hintBackground.inBattleHelp
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.HB
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        isHB = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL_BATTLES
+        ctx['isHB'] = isHB
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isHB
+
+    @classmethod
+    def buildPages(cls, ctx):
+        from historical_battles.gui.Scaleform.daapi.view.battle.slides import LoadingScreenSlidesCfg
+        from gui.battle_control import avatar_getter
+        arena = avatar_getter.getArena()
+        hintList = LoadingScreenSlidesCfg.instance().getLoadingScreen(arena.arenaType.geometryName).slides
+        pages = []
+        header = backport.text(R.strings.hb_battle.helpScreen.missionTitle.num(arena.guiType)())
+        for hintData in hintList:
+            battleData = hintData.getBattleData()
+            addPage(datailedList=pages, headerTitle=header, title=battleData.get('title', ''), descr=text_styles.mainBig(battleData.get('description', '')), vKeys=[], buttons=[], image=backport.image(HBPagesBuilder._IMG_PATH.dyn(battleData.get('background', ''))()))
+
+        return pages
+
+
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -472,4 +506,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  DualAccuracyPagesBuilder,
  DevMapsPagesBuilder,
  FlameTankPagesBuilder,
- AssaultTankPagesBuilder))
+ AssaultTankPagesBuilder,
+ HBPagesBuilder))

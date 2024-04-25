@@ -4508,6 +4508,20 @@
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <decal>
+      <id>	15977	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_260.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_260	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	sh_2023	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
     <name>	ElusiveAvengers	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -4694,6 +4708,70 @@
       <type>	inscription	</type>
       <userString>	#vehicle_customization:Kin_dza_dza_08_MT/name	</userString>
       <description>	#vehicle_customization:Kin_dza_dza_08_MT/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Steel Hunter 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	styleOnly hiddenInUI	</tags>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/other	</userString>
+    <decal>
+      <id>	31150	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/SteelHunter_Style_1_2024_Inscription_MT.dds	</texture>
+      <userString>	#vehicle_customization:SteelHunter_Style_1_2024_Inscription_MT/name	</userString>
+      <description>	#vehicle_customization:SteelHunter_Style_1_2024_Inscription_MT/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31151	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/SteelHunter_Style_2_2024_Inscription_MT.dds	</texture>
+      <userString>	#vehicle_customization:SteelHunter_Style_2_2024_Inscription_MT/name	</userString>
+      <description>	#vehicle_customization:SteelHunter_Style_2_2024_Inscription_MT/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31152	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/SteelHunter_Style_3_2024_Inscription_MT.dds	</texture>
+      <userString>	#vehicle_customization:SteelHunter_Style_3_2024_Inscription_MT/name	</userString>
+      <description>	#vehicle_customization:SteelHunter_Style_3_2024_Inscription_MT/description	</description>
+      <type>	inscription	</type>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Pve May 2024	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <decal>
+      <id>	31153	</id>
+      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_MK_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/description	</description>
+    </decal>
+    <decal>
+      <id>	31154	</id>
+      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_DK_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/description	</description>
+    </decal>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	31159	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_B_2024_MT.dds	</texture>
+      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:Pve_May_inscription_B_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Pve_May_inscription_B_2024_MT/description	</description>
     </decal>
   </itemGroup>
 </inscriptions_special.xml>

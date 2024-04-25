@@ -138,14 +138,29 @@ class AssaultCameraHintPlugin(AbstractCrosshairHintPlugin):
     def _canShowHint(self, viewId):
         return viewId == CROSSHAIR_VIEW_ID.ASSAULT
 
-    def _addHint(self):
-        super(AssaultCameraHintPlugin, self)._addHint()
-        self._updateBattleCounterOnUsed(self._settings)
-
     def _getHint(self):
         hintTextLeft = backport.text(R.strings.ingame_gui.camera.hint.press())
         hintTextRight = backport.text(R.strings.ingame_gui.camera.hint.wheeled())
         return HintData(getVirtualKey(self._CMD_NAME), getReadableKey(self._CMD_NAME), hintTextLeft, hintTextRight, offsetX=0, offsetY=0, priority=HintPriority.TRAJECTORY, reducedPanning=False, hintCtx=None, centeredMessage=False)
+
+    def _addListeners(self):
+        super(AssaultCameraHintPlugin, self)._addListeners()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onAssaultCameraStateChanged += self.__onAssaultCameraStateChanged
+        return
+
+    def _removeListeners(self):
+        super(AssaultCameraHintPlugin, self)._removeListeners()
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onAssaultCameraStateChanged -= self.__onAssaultCameraStateChanged
+        return
+
+    def __onAssaultCameraStateChanged(self, cameraState):
+        if self._isHintShown:
+            self._removeHint()
+            self._updateBattleCounterOnUsed(self._settings)
 
 
 class SiegeIndicatorHintPlugin(HintPanelPlugin):

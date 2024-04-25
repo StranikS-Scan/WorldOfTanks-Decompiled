@@ -106,7 +106,8 @@
     </stunInfo>
     <status>
       <Type>	INT8	</Type>
-      <Flags>	CELL_PUBLIC	</Flags>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </status>
     <invisibility>
       <Type>	FLOAT32	</Type>
@@ -129,6 +130,11 @@
       <Type>	BOOL	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </isObservedByEnemy>
+    <sixthSenseState>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </sixthSenseState>
     <rammingBonus>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -346,6 +352,11 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </botDisplayStatus>
+    <buffs>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </buffs>
   </Properties>
   <TempProperties>
     <events></events>
@@ -369,6 +380,7 @@
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <gameObject></gameObject>
+    <buffContainer></buffContainer>
   </TempProperties>
   <ClientMethods>
     <onVehiclePickup></onVehiclePickup>
@@ -514,7 +526,9 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
     </scheduleExtraCheck>
-    <onObservedByEnemy></onObservedByEnemy>
+    <onObservedByEnemy>
+      <Arg>	BOOL	</Arg>
+    </onObservedByEnemy>
     <onDetectedByEnemy>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
@@ -523,7 +537,6 @@
     <onConcealedFromEnemy>
       <Arg>	OBJECT_ID	</Arg>
     </onConcealedFromEnemy>
-    <onStopObservationByEnemy></onStopObservationByEnemy>
     <updateVehicleAmmo>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
@@ -610,6 +623,9 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR2	</Arg>
     </setEquipmentApplicationPoint>
+    <redrawVehicleOnRespawnAfterReconnect></redrawVehicleOnRespawnAfterReconnect>
+    <getLastDeathReason></getLastDeathReason>
+    <getDamageDealt></getDamageDealt>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

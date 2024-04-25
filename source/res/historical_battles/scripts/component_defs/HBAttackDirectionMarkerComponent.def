@@ -1,0 +1,29 @@
+<HBAttackDirectionMarkerComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <markers>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <markerID>
+              <Type>	STRING	</Type>
+            </markerID>
+            <markerType>
+              <Type>	STRING	</Type>
+            </markerType>
+            <position>
+              <Type>	VECTOR3	</Type>
+            </position>
+            <yaw>
+              <Type>	FLOAT32	</Type>
+            </yaw>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </markers>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	attackDirectionMarkerComponent	</DefaultKeyName>
+</HBAttackDirectionMarkerComponent.def>

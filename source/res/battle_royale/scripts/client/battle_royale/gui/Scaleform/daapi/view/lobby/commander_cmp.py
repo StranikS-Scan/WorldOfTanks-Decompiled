@@ -15,6 +15,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.app_loader import IAppLoader
 _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
+_IGNORED_SKILL_NAMES = ('commander_sixthSense',)
 
 class CommanderComponent(InjectComponentAdaptor):
 
@@ -91,6 +92,8 @@ class CommanderView(ViewImpl):
             commanderSkills = self.__brControl.getBrCommanderSkills()
             for skill in commanderSkills:
                 skillName = skill.name
+                if skillName in _IGNORED_SKILL_NAMES:
+                    continue
                 perkModel = CommanderCmpPerkModel()
                 perkModel.setIcon(_R_SKILLS_ICONS.dyn(skillName)())
                 perkModel.setTooltipID(skillName)

@@ -2280,31 +2280,26 @@ class PreviewSoundSetting(AccountSetting):
 
     def __init__(self, key):
         super(PreviewSoundSetting, self).__init__(key)
-        self.__previewSound = None
+        self._previewSound = None
         return
 
     def playPreviewSound(self, eventIdx):
-        eventToPlay = self._WWISE_EVENTS[eventIdx]
-        if self.__previewSound is not None:
-            playingEvent = self.__previewSound.name
-            if self._WWISE_EVENTS.index(playingEvent) != eventIdx:
+        eventToPlayName = self._WWISE_EVENTS[eventIdx]
+        if self._previewSound is not None:
+            playingEvent = self._previewSound.name
+            if self._WWISE_EVENTS.index(playingEvent) != eventIdx or playingEvent != self._USER_SOUND:
                 self.clearPreviewSound()
-                self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-                self.__playSound()
-            else:
-                if playingEvent != self._USER_SOUND:
-                    self.clearPreviewSound()
-                    self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-                self.__playSound()
-        else:
-            self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
-            self.__playSound()
+        self._previewSound = SoundGroups.g_instance.getSound2D(eventToPlayName)
+        self._playSound()
         return
 
+    def _playSound(self):
+        self._playSoundEvent(self._previewSound)
+
     def clearPreviewSound(self):
-        if self.__previewSound is not None:
-            self.__previewSound.stop()
-            self.__previewSound = None
+        if self._previewSound is not None:
+            self._previewSound.stop()
+            self._previewSound = None
         return
 
     def getEventName(self):
@@ -2340,15 +2335,48 @@ class PreviewSoundSetting(AccountSetting):
     def _save(self, eventIdx):
         super(PreviewSoundSetting, self)._save(self._WWISE_EVENTS[eventIdx])
 
-    def __playSound(self):
-        if self.__previewSound.name in SoundGroups.CUSTOM_MP3_EVENTS:
-            SoundGroups.g_instance.prepareMP3(self.__previewSound.name)
-        self.__previewSound.play()
+    @staticmethod
+    def _playSoundEvent(soundEvent):
+        if soundEvent.name in SoundGroups.CUSTOM_MP3_EVENTS:
+            if SoundGroups.g_instance.prepareMP3(soundEvent.name):
+                soundEvent.play()
+        else:
+            soundEvent.play()
 
 
 class DetectionAlertSound(PreviewSoundSetting):
     _USER_SOUND = 'sixthSense'
     _WWISE_EVENTS = ('lightbulb', 'lightbulb_02', _USER_SOUND)
+    _DELAY = 1.5
+
+    def __init__(self, key):
+        super(DetectionAlertSound, self).__init__(key)
+        self._previewSoundOff = None
+        self.__callback = None
+        return
+
+    def _playSound(self):
+        self._previewSoundOff = SoundGroups.g_instance.getSound2D(self._previewSound.name + SoundGroups.OFF_POSTFIX)
+        self._previewSound.setCallback(self.__playOffSoundCallback)
+        self._playSoundEvent(self._previewSound)
+
+    def __playOffSoundCallback(self, _):
+        self.__callback = BigWorld.callback(self._DELAY, self.__playOffSound)
+
+    def __playOffSound(self):
+        self._playSoundEvent(self._previewSoundOff)
+        self.__callback = None
+        return
+
+    def clearPreviewSound(self):
+        super(DetectionAlertSound, self).clearPreviewSound()
+        if self._previewSoundOff is not None:
+            self._previewSoundOff.stop()
+            self._previewSoundOff = None
+        if self.__callback is not None:
+            BigWorld.cancelCallback(self.__callback)
+            self.__callback = None
+        return
 
 
 class ArtyShotAlertSound(PreviewSoundSetting):
@@ -2908,6 +2936,26 @@ class BattleEventsSetting(SettingFalseByDefault):
 
     def _get(self):
         return None if not self.__callable() else super(BattleEventsSetting, self)._get()
+
+
+class SixthSenseIndicatorSize(GroupSetting):
+    BIG = 0
+    SMALL = 1
+    OPTIONS = {BIG: 'big',
+     SMALL: 'small'}
+
+    def __init__(self, settingName, storage):
+        super(SixthSenseIndicatorSize, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/sixthSense/size/%s')
+
+    def getDefaultValue(self):
+        return self.BIG
+
+
+class SixthSenseIndicatorAlpha(StorageDumpSetting):
+    _DEFAULT = 100
+
+    def getDefaultValue(self):
+        return self._DEFAULT
 
 
 class BattleBorderMapModeShow(GroupSetting):

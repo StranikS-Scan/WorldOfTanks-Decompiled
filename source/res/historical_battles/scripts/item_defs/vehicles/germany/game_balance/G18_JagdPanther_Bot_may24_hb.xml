@@ -1,0 +1,306 @@
+<G18_JagdPanther_Bot_may24_hb.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <speedLimits>
+    <forward>	55	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.138	</moving>
+    <still>	0.23	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <firePenalty>	0.1	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	6.8	</repairCost>
+  <xpFactor>	1.00	</xpFactor>
+  <freeXpFactor>	0.05	</freeXpFactor>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <creditsFactor>	0.825	</creditsFactor>
+  <healthBurnPerSec>	76.5	</healthBurnPerSec>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	135	</armor_2>
+      <armor_3>	50	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	50	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	16	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	100	</armor_10>
+      <armor_11>	80	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	80	</armor_13>
+      <armor_14>	30	</armor_14>
+      <armor_15>	30	</armor_15>
+      <armor_16>	25	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <armorHomogenization>	1	</armorHomogenization>
+    <weight>	26313	</weight>
+    <maxHealth>	680	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	4.375	</healthRegenPerSec>
+      <healthBurnPerSec>	17	</healthBurnPerSec>
+    </ammoBayHealth>
+  </hull>
+  <chassis>
+    <JgPzV_Vetstaerktketten_Bot_may24_hb>
+      <userString>	#germany_vehicles:JgPzV_Vetstaerktketten	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	32720	</price>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	49000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
+      <brakeForce>	45000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <hysteresisHealth>	36	</hysteresisHealth>
+      <repairCost>	5.0	</repairCost>
+      <healthRegenPerSec>	5.25	</healthRegenPerSec>
+      <healthBurnPerSec>	0	</healthBurnPerSec>
+    </JgPzV_Vetstaerktketten_Bot_may24_hb>
+  </chassis>
+  <turrets0>
+    <JgPzPanther_Bot_may24_hb>
+      <userString>	#germany_vehicles:JgPzPanther	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <armorHomogenization>	1	</armorHomogenization>
+      <weight>	100	</weight>
+      <maxHealth>	170	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <hysteresisHealth>	20	</hysteresisHealth>
+        <repairCost>	1.0	</repairCost>
+        <healthRegenPerSec>	1.75	</healthRegenPerSec>
+        <healthBurnPerSec>	5	</healthBurnPerSec>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <hysteresisHealth>	20	</hysteresisHealth>
+        <repairCost>	1.0	</repairCost>
+        <healthRegenPerSec>	1.75	</healthRegenPerSec>
+        <healthBurnPerSec>	5	</healthBurnPerSec>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_StuK42_L70_Bot_may24_hb>	shared	  <pitchLimits>
+            <minPitch>	0 -14 1 -14	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	80	</maxAmmo>
+          <reloadTime>	3.8	</reloadTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <armor>
+            <armor_1>	96	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	96	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+        </_75mm_StuK42_L70_Bot_may24_hb>
+      </guns>
+    </JgPzPanther_Bot_may24_hb>
+  </turrets0>
+  <engines>
+    <Maybach_HL_230_TRM_P30_Bot_may24_hb__0>	shared	</Maybach_HL_230_TRM_P30_Bot_may24_hb__0>
+  </engines>
+  <fuelTanks>
+    <Heavy_Bot_may24_hb__0>	shared	</Heavy_Bot_may24_hb__0>
+  </fuelTanks>
+  <radios>
+    <FuG12_Bot_may24_hb__1>	shared	</FuG12_Bot_may24_hb__1>
+  </radios>
+  <physics>
+    <mode>	1	</mode>
+    <useSimplifiedGearbox>	true	</useSimplifiedGearbox>
+    <detailed>
+      <gravityFactor>	1.25	</gravityFactor>
+      <engines>
+        <Maybach_HL_230_TRM_P30_Bot_may24_hb__0>
+          <startRPM>	1500	</startRPM>
+          <powerFactor>	1	</powerFactor>
+          <rotationFactor>	1	</rotationFactor>
+          <engineTorque>	500 2.7 1000 3.15 1500 3.45 2500 2.55	</engineTorque>
+          <engineLoses>	0.131612 6.580618	</engineLoses>
+          <engineSupression>	0 1 1 1	</engineSupression>
+          <engineInertia>	0.017679	</engineInertia>
+          <idleRPM>	1000	</idleRPM>
+          <idleChoker>	0.1	</idleChoker>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplBkMaxSpeed>	12	</smplBkMaxSpeed>
+          <rotationChoker>	0.9	</rotationChoker>
+        </Maybach_HL_230_TRM_P30_Bot_may24_hb__0>
+      </engines>
+      <chassis>
+        <JgPzV_Vetstaerktketten_Bot_may24_hb>
+          <angVelocityFactor0>	0.781908	</angVelocityFactor0>
+          <hullCOM>	0 1.200704 0.108571	</hullCOM>
+          <chassisMassFraction>	0.3	</chassisMassFraction>
+          <hullCOMShiftY>	-0.1	</hullCOMShiftY>
+          <wheelRadius>	0.4	</wheelRadius>
+          <bodyHeight>	1.301408	</bodyHeight>
+          <clearance>	0.65	</clearance>
+          <wheelStroke>	0.3	</wheelStroke>
+          <roadWheelPositions>	-2.449185 -1.170307 0.108571 1.387449 2.666327	</roadWheelPositions>
+          <rearDriveWheelPosition>	-3.001841 1.951408	</rearDriveWheelPosition>
+          <frontDriveWheelPosition>	3.153671 1.951408	</frontDriveWheelPosition>
+          <stiffness0>	243.0097	</stiffness0>
+          <stiffness1>	262.4166	</stiffness1>
+          <stiffnessFactors>	1 1 1 1 1	</stiffnessFactors>
+          <damping>	26.24166	</damping>
+          <movementRevertSpeed>	2	</movementRevertSpeed>
+          <isRotationAroundCenter>	True	</isRotationAroundCenter>
+          <comSideFriction>	1.5	</comSideFriction>
+          <comFrictionYOffs>	0	</comFrictionYOffs>
+          <hullInertiaFactors>	1.8 2 1.6	</hullInertiaFactors>
+          <rotationBrake>	29.9247	</rotationBrake>
+          <brake>	46038	</brake>
+          <wheelInertiaFactor>	1	</wheelInertiaFactor>
+          <angVelocityFactor>	0.664621	</angVelocityFactor>
+          <wheelSinkageResistFactor>	0	</wheelSinkageResistFactor>
+          <rotFritionFactor>	0	</rotFritionFactor>
+          <pushStop>	0.117232	</pushStop>
+          <sideFrictionConstantRatio>	0	</sideFrictionConstantRatio>
+          <centerRotationFwdSpeed>	7.492712	</centerRotationFwdSpeed>
+          <rotationByLockChoker>	0.8	</rotationByLockChoker>
+          <fwLagRatio>	0.3	</fwLagRatio>
+          <bkLagRatio>	0.4	</bkLagRatio>
+          <grounds>
+            <soft>
+              <dirtCumulationRate>	4	</dirtCumulationRate>
+              <dirtReleaseRate>	4	</dirtReleaseRate>
+              <dirtSideVelocity>	32.4	</dirtSideVelocity>
+              <maxDirt>	1	</maxDirt>
+              <sideFriction>	1.1	</sideFriction>
+              <fwdFriction>	1.3	</fwdFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
+              <hbComSideFriction>	1	</hbComSideFriction>
+              <hbSideFrictionAddition>	1	</hbSideFrictionAddition>
+              <rotationFactor>	0.45424	</rotationFactor>
+            </soft>
+            <medium>
+              <dirtCumulationRate>	3.6	</dirtCumulationRate>
+              <dirtReleaseRate>	0.7	</dirtReleaseRate>
+              <dirtSideVelocity>	32.4	</dirtSideVelocity>
+              <maxDirt>	1	</maxDirt>
+              <sideFriction>	1.1	</sideFriction>
+              <fwdFriction>	1.3	</fwdFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
+              <hbComSideFriction>	1	</hbComSideFriction>
+              <hbSideFrictionAddition>	1	</hbSideFrictionAddition>
+              <rotationFactor>	0.806976	</rotationFactor>
+            </medium>
+            <firm>
+              <dirtCumulationRate>	3.6	</dirtCumulationRate>
+              <dirtReleaseRate>	0.55	</dirtReleaseRate>
+              <dirtSideVelocity>	32.4	</dirtSideVelocity>
+              <maxDirt>	1	</maxDirt>
+              <sideFriction>	1.1	</sideFriction>
+              <fwdFriction>	1.3	</fwdFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
+              <hbComSideFriction>	1	</hbComSideFriction>
+              <hbSideFrictionAddition>	1	</hbSideFrictionAddition>
+              <rotationFactor>	0.952903	</rotationFactor>
+            </firm>
+          </grounds>
+          <gimletGoalWOnSpot>	0.601467	</gimletGoalWOnSpot>
+          <gimletPushOnSpotInit>	0.1	</gimletPushOnSpotInit>
+          <gimletPushOnSpotFinal>	4	</gimletPushOnSpotFinal>
+          <pushRotOnSpotFixedPeriod>	0.13	</pushRotOnSpotFixedPeriod>
+          <pushRotOnSpotGrowPeriod>	0.433333	</pushRotOnSpotGrowPeriod>
+          <gimletGoalWOnMove>	0.511247	</gimletGoalWOnMove>
+          <gimletPushOnMoveInit>	0.39308	</gimletPushOnMoveInit>
+          <gimletPushOnMoveFinal>	4	</gimletPushOnMoveFinal>
+          <pushRotOnMoveFixedPeriod>	0.03	</pushRotOnMoveFixedPeriod>
+          <pushRotOnMoveGrowPeriod>	0.4	</pushRotOnMoveGrowPeriod>
+          <gimletVelScaleMin>	0.1	</gimletVelScaleMin>
+          <gimletVelScaleMax>	2	</gimletVelScaleMax>
+          <chsDmgMultiplier>	1	</chsDmgMultiplier>
+        </JgPzV_Vetstaerktketten_Bot_may24_hb>
+      </chassis>
+      <fakegearbox>
+        <fwdgears>
+          <switchSpeed>	4.583333 7.638889 12.22222	</switchSpeed>
+          <switchHysteresis>	0.5 0.763889 1.222222	</switchHysteresis>
+          <lowRpm>	0.4 0.3 0.3	</lowRpm>
+          <highRpm>	1.2 1 1	</highRpm>
+        </fwdgears>
+        <bkwdgears>
+          <switchSpeed>	1 2	</switchSpeed>
+          <switchHysteresis>	1 1	</switchHysteresis>
+          <lowRpm>	0.4 0.4	</lowRpm>
+          <highRpm>	1 1	</highRpm>
+        </bkwdgears>
+      </fakegearbox>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <guns>
+      <_105mm_K18_L52>
+        <delta>	1.1698113	</delta>
+      </_105mm_K18_L52>
+    </guns>
+    <armour>	0.973669368	</armour>
+  </clientAdjustmentFactors>
+</G18_JagdPanther_Bot_may24_hb.xml>

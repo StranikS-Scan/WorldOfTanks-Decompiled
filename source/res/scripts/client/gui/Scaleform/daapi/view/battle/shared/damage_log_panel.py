@@ -454,12 +454,13 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
         self.__isFullStatsShown = False
+        self.__isWinnerScreenShown = False
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
         self._totalEvents = None
-        self.__topLog = _LogViewComponent()
-        self.__bottomLog = _LogViewComponent()
+        self._topLog = _LogViewComponent()
+        self._bottomLog = _LogViewComponent()
         return
 
     def isSwitchToVehicle(self):
@@ -470,8 +471,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
     def _populate(self):
         super(DamageLogPanel, self)._populate()
         self.__efficiencyCtrl = self.sessionProvider.shared.personalEfficiencyCtrl
-        self.__topLog.initialize(setListProxyMethod=self._updateTopLog, addToListProxyMethod=self._addToTopLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
-        self.__bottomLog.initialize(setListProxyMethod=self._updateBottomLog, addToListProxyMethod=self._addToBottomLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
+        self._topLog.initialize(setListProxyMethod=self._updateTopLog, addToListProxyMethod=self._addToTopLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
+        self._bottomLog.initialize(setListProxyMethod=self._updateBottomLog, addToListProxyMethod=self._addToBottomLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
         self._totalEvents = ((_ETYPE.DAMAGE, self._updateTotalDamageValue),
          (_ETYPE.BLOCKED_DAMAGE, self._updateTotalBlockedDamageValue),
          (_ETYPE.ASSIST_DAMAGE, self._updateTotalAssistValue),
@@ -486,6 +487,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling += self._onVehicleControlling
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onWinnerScreen += self.__onWinnerScreen
         self.addListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -500,6 +504,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling -= self._onVehicleControlling
+        deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
+        if deathScreenCtrl:
+            deathScreenCtrl.onWinnerScreen -= self.__onWinnerScreen
         self.settingsCore.onSettingsChanged -= self._onSettingsChanged
         if self.__efficiencyCtrl is not None:
             self.__efficiencyCtrl.onTotalEfficiencyUpdated -= self._onTotalEfficiencyUpdated
@@ -508,8 +515,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             self.__efficiencyCtrl = None
         self.__vehStateCtrl = None
         self.__arenaDP = None
-        self.__topLog.dispose()
-        self.__bottomLog.dispose()
+        self._topLog.dispose()
+        self._bottomLog.dispose()
         self._totalEvents = None
         super(DamageLogPanel, self)._dispose()
         return
@@ -528,8 +535,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         displayedEventsContentMask = _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK[etype]
         topLogContentMask &= displayedEventsContentMask
         bottomLogContentMask &= displayedEventsContentMask
-        self.__topLog.updateLog(topLogContentMask, self.__logViewMode, topLogRecStyle)
-        self.__bottomLog.updateLog(bottomLogContentMask, self.__logViewMode, bottomLogRecStyle)
+        self._topLog.updateLog(topLogContentMask, self.__logViewMode, topLogRecStyle)
+        self._bottomLog.updateLog(bottomLogContentMask, self.__logViewMode, bottomLogRecStyle)
 
     def _invalidateTotalDamages(self):
         contentMask = 0
@@ -554,16 +561,16 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _onPersonalEfficiencyLogSynced(self):
         if self.isSwitchToVehicle():
-            self.__topLog.invalidate()
-            self.__bottomLog.invalidate()
+            self._topLog.invalidate()
+            self._bottomLog.invalidate()
 
     def _onEfficiencyReceived(self, events):
         if self.isSwitchToVehicle():
-            self.__topLog.addToLog(events)
-            self.__bottomLog.addToLog(events)
+            self._topLog.addToLog(events)
+            self._bottomLog.addToLog(events)
 
     def _invalidatePanelVisibility(self):
-        if self.__isFullStatsShown:
+        if self.__isFullStatsShown or self.__isWinnerScreenShown:
             return
         else:
             isVisible = True
@@ -614,6 +621,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__isFullStatsShown = event.ctx['isDown']
         if not self.__isFullStatsShown:
             self._invalidatePanelVisibility()
+
+    def __onWinnerScreen(self):
+        self.__isWinnerScreenShown = True
 
     def _setTotalValue(self, etype, value):
         if BitmaskHelper.hasAnyBitSet(self.__totalDamageContentMask, etype):

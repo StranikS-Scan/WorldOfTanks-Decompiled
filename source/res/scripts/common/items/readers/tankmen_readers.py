@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/tankmen_readers.py
+import typing
 import ResMgr
 from constants import IS_CLIENT, IS_WEB, IS_BOT
 from items import _xml
 from items.components import component_constants, skills_constants
 from items.components import shared_components
 from items.components import tankmen_components
+if typing.TYPE_CHECKING:
+    from typing import Dict, Callable, Optional, Tuple
 
 def _parseName(xmlCtx, section):
     return shared_components.I18nString(_xml.readNonEmptyString(xmlCtx, section, component_constants.EMPTY_STRING)).value
@@ -15,8 +18,9 @@ def _parseIcon(xmlCtx, section):
     return _xml.readNonEmptyString(xmlCtx, section, component_constants.EMPTY_STRING)
 
 
-def _readIDs(xmlCtx, subsections, accumulator, parser=None):
+def _readIDs(xmlCtx, subsections, accumulator, parser=None, optimizationNeeded=False, optimizationCache=None):
     res = set()
+    strCache = optimizationCache if optimizationCache is not None else {}
     for sname, subsection in subsections:
         try:
             contentID = int(sname[1:])
@@ -28,14 +32,27 @@ def _readIDs(xmlCtx, subsections, accumulator, parser=None):
         if contentID in accumulator:
             _xml.raiseWrongXml(xmlCtx, sname, 'ID is not unique')
         if parser is not None:
-            accumulator[contentID] = parser((xmlCtx, sname), subsection)
+            resultStr = parser((xmlCtx, sname), subsection)
         else:
-            accumulator[contentID] = component_constants.EMPTY_STRING
+            resultStr = component_constants.EMPTY_STRING
+        if optimizationNeeded:
+            resultStr = _searchAndUpdateStrInCache(resultStr, strCache)
+        accumulator[contentID] = resultStr
         res.add(contentID)
 
     if not res:
         _xml.raiseWrongXml(xmlCtx, '', 'is empty')
     return res
+
+
+def _searchAndUpdateStrInCache(value, strCache):
+    strHash = hash(value)
+    strInCache = strCache.get(strHash)
+    if strInCache is not None:
+        value = strInCache
+    else:
+        strCache[strHash] = value
+    return value
 
 
 def _readRanks(xmlCtx, subsections):
@@ -102,13 +119,14 @@ def _readGroupRoles(xmlCtx, section, subsectionName):
     return frozenset(tags)
 
 
-def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icons):
-    if IS_CLIENT or IS_WEB or IS_BOT:
+def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icons, optimizationCache=None):
+    hasLocalizedName = IS_CLIENT or IS_WEB or IS_BOT
+    if hasLocalizedName:
         parseName = _parseName
         parseIcon = _parseIcon
     else:
         parseName = parseIcon = None
-    return tankmen_components.NationGroup(_xml.readNonNegativeInt(xmlCtx, subsection, 'groupID'), groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
+    return tankmen_components.NationGroup(_xml.readNonNegativeInt(xmlCtx, subsection, 'groupID'), groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName, optimizationNeeded=hasLocalizedName, optimizationCache=optimizationCache), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName, optimizationNeeded=hasLocalizedName, optimizationCache=optimizationCache), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
 
 
 def _readNationConfigSection(xmlCtx, section):
@@ -116,13 +134,14 @@ def _readNationConfigSection(xmlCtx, section):
     firstNames = {}
     lastNames = {}
     icons = {}
+    optimizationCache = {}
     for kindName in component_constants.TANKMEN_GROUPS:
         groups = []
         totalWeight = 0.0
         groupIDs = set()
         for sname, subsection in _xml.getChildren(xmlCtx, section, kindName):
             ctx = (xmlCtx, kindName + '/' + sname)
-            group = _readTankmenGroup(ctx, sname, subsection, firstNames, lastNames, icons)
+            group = _readTankmenGroup(ctx, sname, subsection, firstNames, lastNames, icons, optimizationCache=optimizationCache)
             groupID = group.groupID
             if groupID in groupIDs:
                 _xml.raiseWrongXml(xmlCtx, sname, 'duplicate groupID %d' % groupID)

@@ -39,6 +39,7 @@ from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_DAY
+from historical_battles.quests.quest_flag_manager import QuestFlagManager as HBQuestFlagManager
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -276,6 +277,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             showMissionsBattlePass()
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_MAPBOX:
             showMissionsMapboxProgression()
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_GROUP_HB_BATTLE:
+            showMissionsCategories(missionID=questID)
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -429,6 +432,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             eventQuests = self.__getElenQuestsVO(vehicle)
             if eventQuests:
                 quests.append(eventQuests)
+        if self.__isHistoricalBattlesEnabled():
+            hbQuestFlagManager = HBQuestFlagManager(self._headerQuestFormaterVo, self._wrapQuestGroup)
+            hbQuestGroup = hbQuestFlagManager.getWrappedQuestGroup()
+            if hbQuestGroup:
+                quests.append(hbQuestGroup)
         return quests
 
     def isPersonalMissionEnabled(self):
@@ -436,6 +444,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def isElenQuestsEnabled(self):
         return not self.__comp7Controller.isComp7PrbActive()
+
+    def __isHistoricalBattlesEnabled(self):
+        return self.__limitedUIController.isRuleCompleted(LuiRules.HB_ENTRY_POINT) and not self.__battleRoyaleController.isBattleRoyaleMode()
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []
@@ -645,7 +656,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             label = self.__getBattleRoyaleLableForQuestsTooltip(totalCount, completedQuests)
         else:
             questType = HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(enable=totalCount > 0, icon=commonQuestsIcon, label=label, questType=questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getBattleRoyaleLableForQuestsTooltip(self, totalCount, completedQuests):

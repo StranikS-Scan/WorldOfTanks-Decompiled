@@ -19,6 +19,7 @@
     <SCR_210>	19	</SCR_210>
     <A-220B_1P>	20	</A-220B_1P>
     <AN_GRC_8>	21	</AN_GRC_8>
+    <_789T>	22	</_789T>
     <_R_113_P>	26	</_R_113_P>
     <A_220B_1_QL>	252	</A_220B_1_QL>
     <A_220B_1_113>	253	</A_220B_1_113>
@@ -37,6 +38,7 @@
     <A-220B_1_SH>	64004	</A-220B_1_SH>
     <Ch00_ClingeBot_SH_Radio>	64005	</Ch00_ClingeBot_SH_Radio>
     <A-220B_1_TEST>	21003	</A-220B_1_TEST>
+    <A-220B_1_P_T>	31008	</A-220B_1_P_T>
     <A-220B_1_MT>	31003	</A-220B_1_MT>
     <A-220B_1P_Premium>	31004	</A-220B_1P_Premium>
   </ids>
@@ -123,6 +125,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B_1>
+    <A-220B_1_P_T>
+      <userString>	#china_vehicles:A-220B_1_P	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_P_T>
     <A-220B_1_MK>
       <userString>	#china_vehicles:A-220B_1_MK	</userString>
       <tags></tags>
@@ -415,6 +429,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A_220A>
+    <_789T>
+      <userString>	#china_vehicles:_789T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	45000	</price>
+      <weight>	160	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_789T>
     <A-220B_IGR>
       <userString>	#igr_vehicles:A-220B_IGR	</userString>
       <tags></tags>

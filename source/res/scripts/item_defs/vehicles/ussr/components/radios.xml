@@ -51,8 +51,12 @@
     <R113M_122>	31002	</R113M_122>
     <Radio_R219_VK4502P_G>	31004	</Radio_R219_VK4502P_G>
     <_12RT_zv>	31005	</_12RT_zv>
+    <_10RKM_gvz_B>	31017	</_10RKM_gvz_B>
+    <_10R_2SH>	31019	</_10R_2SH>
+    <_10R_U18_T>	31018	</_10R_U18_T>
     <_10RT-26M>	220	</_10RT-26M>
     <R113K>	223	</R113K>
+    <_10RT_26E_su122_54>	31020	</_10RT_26E_su122_54>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -72,6 +76,15 @@
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
     <_9RM_O_NewOnBoarding>	10012	</_9RM_O_NewOnBoarding>
+    <_9RM_Player_MT1_may24_hb>	40000	</_9RM_Player_MT1_may24_hb>
+    <_9RM_Player_MT2_may24_hb>	40001	</_9RM_Player_MT2_may24_hb>
+    <_10RK_Player_HT1_may24_hb>	40002	</_10RK_Player_HT1_may24_hb>
+    <_9RM_Player_AT1_may24_hb>	40003	</_9RM_Player_AT1_may24_hb>
+    <_10RK_Player_HT2_may24_hb>	40004	</_10RK_Player_HT2_may24_hb>
+    <_10RK_Player_AT2_may24_hb>	40005	</_10RK_Player_AT2_may24_hb>
+    <_10RKM_Player_HT2_may24_hb>	40006	</_10RKM_Player_HT2_may24_hb>
+    <_9RM_O_Player_MT2_may24_hb>	40007	</_9RM_O_Player_MT2_may24_hb>
+    <_12RT_zv_Player_AT2_may24_hb>	40008	</_12RT_zv_Player_AT2_may24_hb>
   </ids>
   <shared>
     <_71-TK-1>
@@ -260,6 +273,30 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </_10R>
+    <_10R_2SH>
+      <userString>	#ussr_vehicles:_10R_2SH	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	660	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10R_2SH>
+    <_10R_U18_T>
+      <userString>	#ussr_vehicles:_10R_U18	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	18500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	660	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10R_U18_T>
     <_10RB>
       <userString>	#ussr_vehicles:_10R	</userString>
       <tags></tags>
@@ -555,6 +592,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT_26E>
+    <_10RT_26E_su122_54>
+      <userString>	#ussr_vehicles:_10RT_26E	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	56500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	760	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </_10RT_26E_su122_54>
     <_10RKM>
       <userString>	#ussr_vehicles:_10RKM	</userString>
       <tags></tags>
@@ -579,6 +628,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </_10RT-26E_FL>
+    <_10RKM_gvz_B>
+      <userString>	#ussr_vehicles:_10RKM	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_10RKM_gvz_B>
     <R123>
       <userString>	#ussr_vehicles:R123	</userString>
       <tags></tags>
@@ -937,5 +998,116 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Radio_R219_VK4502P_G>
+    <_9RM_Player_MT1_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_9RM_Player_MT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_Player_MT1_may24_hb>
+    <_9RM_Player_MT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_9RM_Player_MT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_Player_MT2_may24_hb>
+    <_10RK_Player_HT1_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_10RK_Player_HT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </_10RK_Player_HT1_may24_hb>
+    <_9RM_Player_AT1_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_9RM_Player_MT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_Player_AT1_may24_hb>
+    <_10RK_Player_HT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_10RK_Player_HT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </_10RK_Player_HT2_may24_hb>
+    <_10RK_Player_AT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_10RK_Player_HT1_may24_hb	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	100	</weight>
+      <distance>	100	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </_10RK_Player_AT2_may24_hb>
+    <_10RKM_Player_HT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_10RKM_Player_HT2_may24_hb	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_10RKM_Player_HT2_may24_hb>
+    <_9RM_O_Player_MT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_9RM_Player_MT2_may24_hb	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_O_Player_MT2_may24_hb>
+    <_12RT_zv_Player_AT2_may24_hb>
+      <userString>	#historical_battles.ussr_vehicles.extend:_12RT_Player_AT2_may24_hb	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_zv_Player_AT2_may24_hb>
   </shared>
 </radios.xml>

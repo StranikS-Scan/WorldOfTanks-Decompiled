@@ -17,6 +17,9 @@ class States(Enum):
 class ReturnPlace(IntEnum):
     TO_HANGAR = 0
     TO_SHOP = 1
+    TO_NY_CUSTOMIZATION = 2
+    TO_SHARDS = 3
+    TO_REFERRAL = 4
 
 
 class LootboxesStorageViewModel(ViewModel):

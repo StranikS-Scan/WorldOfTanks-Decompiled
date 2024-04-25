@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_rewards_view.py
-from copy import copy
+from copy import deepcopy
 from CurrentVehicle import g_currentVehicle
 from armory_yard.gui.impl.lobby.feature.tooltips.rest_reward_tooltip_view import RestRewardTooltipView
 from armory_yard.gui.shared.bonus_packers import getArmoryYardBonusPacker
@@ -26,6 +26,11 @@ from gui.shared.events import LobbySimpleEvent
 class ArmoryYardRewardsView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __MAX_MAIN_BONUSES = 3
+    __MAIN_BONUS_SECTIONS = ['customizations',
+     'premium_plus',
+     Currency.CRYSTAL,
+     'freeXP']
     __slots__ = ('__tooltipData', '__rawBonuses', '__mainBonuses', '__vehicles', '__state', '__closeCallback', '__stages', '__bonuses')
 
     def __init__(self, layoutID, bonuses, state=None, stage=0, closeCallback=None):
@@ -33,34 +38,14 @@ class ArmoryYardRewardsView(ViewImpl):
         settings.flags = ViewFlags.VIEW
         settings.model = ArmoryYardRewardsViewModel()
         self.__tooltipData = {}
-        self.__rawBonuses = copy(bonuses)
+        self.__rawBonuses = deepcopy(bonuses)
         self.__vehicles = self.__rawBonuses.pop('vehicles', [])
         self.__mainBonuses = {}
         self.__bonuses = []
         self.__stages = stage
         self.__state = state or ArmoryYardRewardState.STAGE
         self.__closeCallback = closeCallback
-        if 'items' in self.__rawBonuses:
-            devices = {}
-            items = self.__rawBonuses['items']
-            for itemCD in items.keys():
-                if self.__itemsCache.items.getItemByCD(itemCD).itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                    devices[itemCD] = items.pop(itemCD)
-
-            if devices:
-                self.__mainBonuses['items'] = devices
-        if len(self.__mainBonuses) < 3:
-            if 'customizations' in self.__rawBonuses:
-                self.__mainBonuses['customizations'] = self.__rawBonuses.pop('customizations')
-        if len(self.__mainBonuses) < 3:
-            if 'premium_plus' in self.__rawBonuses:
-                self.__mainBonuses['premium_plus'] = self.__rawBonuses.pop('premium_plus')
-        if len(self.__mainBonuses) < 3:
-            if Currency.CRYSTAL in self.__rawBonuses:
-                self.__mainBonuses[Currency.CRYSTAL] = self.__rawBonuses.pop(Currency.CRYSTAL)
-        if len(self.__mainBonuses) < 3:
-            if 'freeXP' in self.__rawBonuses:
-                self.__mainBonuses['freeXP'] = self.__rawBonuses.pop('freeXP')
+        self.__fillMainBonuses()
         super(ArmoryYardRewardsView, self).__init__(settings)
 
     @property
@@ -123,6 +108,30 @@ class ArmoryYardRewardsView(ViewImpl):
         super(ArmoryYardRewardsView, self)._finalize()
         self.__closeCallback = None
         return
+
+    def __fillMainBonuses(self):
+        if self.__stages == 1:
+            self.__mainBonuses = self.__rawBonuses
+            self.__rawBonuses = {}
+            return
+        maxBonuses = self.__MAX_MAIN_BONUSES + 1
+        if 'items' in self.__rawBonuses:
+            devices = {}
+            items = self.__rawBonuses['items']
+            for itemCD in items.keys():
+                if self.__itemsCache.items.getItemByCD(itemCD).itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                    devices[itemCD] = items.pop(itemCD)
+                    if len(devices) == self.__MAX_MAIN_BONUSES:
+                        break
+
+            if devices:
+                self.__mainBonuses['items'] = devices
+                maxBonuses -= len(devices)
+        for section in self.__MAIN_BONUS_SECTIONS:
+            if len(self.__mainBonuses) == maxBonuses:
+                return
+            if section in self.__rawBonuses:
+                self.__mainBonuses[section] = self.__rawBonuses.pop(section)
 
     def __fillRewardsModel(self, bonuses, rewardsList):
         rewardsList.clear()

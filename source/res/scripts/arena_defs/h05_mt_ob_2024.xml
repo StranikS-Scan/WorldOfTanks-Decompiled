@@ -1,0 +1,87 @@
+<h05_mt_ob_2024.xml>
+  <wwmusic>	ev_se_h05_parallax_music	</wwmusic>
+  <wwambientSound>	ev_se_h05_parallax_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ev_secret_event_hangar.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_secret_event_hangar.pck	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>
+        <name>	hangar_premium_2018.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_premium_2018.pck	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.pck	</name>
+      </bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	shop_enter	</name>
+        <mod>	ev_se_moscow_shop_parallax_enter	</mod>
+      </event>
+      <event>
+        <name>	shop_exit	</name>
+        <mod>	ev_se_moscow_shop_parallax_exit	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_02	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	hangar_newyear_talisman_cat	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_mid_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_without_foliage_bush_big_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_coniferous_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_yellow_soft_comb_mid_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_bush_yellow_dry_small_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_green_bush_few_foliage_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_green_comb_small_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_green_comb_big_01	</name>
+        <mod>	ev_se_moscow_hangar_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -200.000000	</bottomLeft>
+    <upperRight>	300.000000 400.000000	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</h05_mt_ob_2024.xml>

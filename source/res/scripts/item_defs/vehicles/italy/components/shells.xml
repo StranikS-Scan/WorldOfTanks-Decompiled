@@ -598,6 +598,20 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_c_p_90_AP_Rh>
+  <_90mm_c_p_90_AP_Rh_P6>
+    <id>	31001	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_AP_Rh_P6	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	560	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	120	</devices>
+    </damage>
+  </_90mm_c_p_90_AP_Rh_P6>
   <_90mm_c_p_90_APDS_Rh>
     <id>	27	</id>
     <userString>	#italy_vehicles:_90mm_c_p_90_APDS_Rh	</userString>
@@ -613,6 +627,22 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_c_p_90_APDS_Rh>
+  <_90mm_c_p_90_APDS_Rh_P6>
+    <id>	31002	</id>
+    <userString>	#italy_vehicles:_90mm_c_p_90_APDS_Rh_P6	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	120	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_c_p_90_APDS_Rh_P6>
   <_90mm_c_g_90_HE_Rh>
     <id>	28	</id>
     <userString>	#italy_vehicles:_90mm_c_g_90_HE_Rh	</userString>
@@ -637,6 +667,30 @@
       </damage>
     </armorSpalls>
   </_90mm_c_g_90_HE_Rh>
+  <_90mm_c_g_90_HE_Rh_P6>
+    <id>	31003	</id>
+    <userString>	#italy_vehicles:_90mm_c_g_90_HE_Rh_P6	</userString>
+    <icon>	he_modern	</icon>
+    <price>	325	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	2.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	120	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_c_g_90_HE_Rh_P6>
   <_102mm_c_p_102_AP_Rh>
     <id>	64	</id>
     <userString>	#italy_vehicles:_102mm_c_p_102_AP_Rh	</userString>

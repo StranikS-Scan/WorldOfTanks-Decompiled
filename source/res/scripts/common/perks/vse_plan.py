@@ -145,6 +145,8 @@ class VsePlan(object):
 
     def _onPlanPreLoaded(self, future=None):
         try:
+            if self._owner is None or self._owner.isDestroyed:
+                return
             if IS_CELLAPP:
                 future.get()
             self._usedEvents = []
@@ -157,6 +159,8 @@ class VsePlan(object):
                 self.start()
         except BigWorld.FutureNotReady:
             LOG_ERROR("VsePlan: Plan xml '%s' not pre-loaded." % self._planId)
+
+        return
 
     def _clearCallBack(self):
         self.__callback = None

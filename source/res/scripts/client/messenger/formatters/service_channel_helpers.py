@@ -4,6 +4,7 @@ import typing
 import logging
 from collections import namedtuple
 from gui.collection.collections_constants import COLLECTION_ITEM_PREFIX_NAME
+from gui.server_events.bonuses import BattleTokensBonus
 from items import makeIntCompactDescrByID
 from optional_bonuses import BONUS_MERGERS
 from skeletons.gui.shared import IItemsCache
@@ -83,3 +84,7 @@ def popCollectionEntitlements(rewards):
         rewards['entitlements'].pop(eName)
 
     return entitlements
+
+
+def parseTokenBonusCount(bonus, tokenName):
+    return bonus.getValue().get(tokenName, {}).get('count', 0) if isinstance(bonus, BattleTokensBonus) else 0

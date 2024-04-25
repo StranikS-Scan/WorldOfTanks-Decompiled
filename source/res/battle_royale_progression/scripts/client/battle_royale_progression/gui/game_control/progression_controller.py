@@ -8,7 +8,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BR_PROGRESSION_POINTS_SEEN
 from gui.server_events.bonuses import getNonQuestBonuses
 from helpers import dependency
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from skeletons.gui.game_control import IBRProgressionOnTokensController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)

@@ -1,0 +1,91 @@
+<buffs_hb.xml>
+  <critTrack>
+    <server>
+      <critVehicleTrack></critVehicleTrack>
+      <assignFactor>
+        <data>	deviceCanBeRepaired/leftTrackHealth	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+      <assignFactor>
+        <data>	deviceCanBeRepaired/rightTrackHealth	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+  </critTrack>
+  <stunned>
+    <server>
+      <stunVehicle>
+        <duration>	20	</duration>
+      </stunVehicle>
+    </server>
+  </stunned>
+  <fireball>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Environment/se20/se20_burn_bullet_skill.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+    <server>
+      <fireVehicle></fireVehicle>
+    </server>
+  </fireball>
+  <multiplyMaxSpeed>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.55	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	5.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[4.0, 2.0, 2.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <exhaust>
+        <nitro>	gas	</nitro>
+      </exhaust>
+    </client>
+  </multiplyMaxSpeed>
+  <teamRepairingOwner>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_secret_event_gameplay_ability_repair	</wwsoundOnStart>
+        <wwsoundOnStop>	ev_secret_event_gameplay_ability_repair_complete	</wwsoundOnStop>
+      </sound>
+      <sequence>
+        <sequence>	particles/Environment/event_halloween_2019/our_tank_demolitiy/tank_bubble_healing_all.seq	</sequence>
+        <bindNode>	hull	</bindNode>
+      </sequence>
+    </client>
+  </teamRepairingOwner>
+  <teamRepairingParticipant>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Tank/destruction/healing_tank_sparks.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+  </teamRepairingParticipant>
+</buffs_hb.xml>

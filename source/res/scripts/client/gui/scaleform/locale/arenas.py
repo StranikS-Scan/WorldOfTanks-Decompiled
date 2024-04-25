@@ -73,6 +73,8 @@ class ARENAS(object):
     C_11_MUROVANKA_DESCRIPTION = '#arenas:11_murovanka/description'
     C_13_ERLENBERG_NAME = '#arenas:13_erlenberg/name'
     C_13_ERLENBERG_DESCRIPTION = '#arenas:13_erlenberg/description'
+    C_13_ERLENBERG_SE22_ATT_NAME = '#arenas:13_erlenberg_se22_att/name'
+    C_13_ERLENBERG_SE22_ATT_DESCRIPTION = '#arenas:13_erlenberg_se22_att/description'
     C_14_SIEGFRIED_LINE_NAME = '#arenas:14_siegfried_line/name'
     C_14_SIEGFRIED_LINE_DESCRIPTION = '#arenas:14_siegfried_line/description'
     C_17_MUNCHEN_NAME = '#arenas:17_munchen/name'
@@ -135,8 +137,11 @@ class ARENAS(object):
     C_114_CZECH_NAME = '#arenas:114_czech/name'
     C_99_POLAND_NAME = '#arenas:99_poland/name'
     C_99_POLAND_DESCRIPTION = '#arenas:99_poland/description'
+    C_99_POLAND_SE22_ATT_NAME = '#arenas:99_poland_se22_att/name'
     C_222_ER_CLIME_NAME = '#arenas:222_er_clime/name'
     C_222_ER_CLIME_DESCRIPTION = '#arenas:222_er_clime/description'
+    C_222_ER_CLIME_SE22_ATT_NAME = '#arenas:222_er_clime_se22_att/name'
+    C_222_ER_CLIME_SE22_ATT_DESCRIPTION = '#arenas:222_er_clime_se22_att/description'
     C_250_BR_BATTLE_CITY2_1_NAME = '#arenas:250_br_battle_city2-1/name'
     C_250_BR_BATTLE_CITY2_1_DESCRIPTION = '#arenas:250_br_battle_city2-1/description'
     C_95_LOST_CITY_CTF_NAME = '#arenas:95_lost_city_ctf/name'
@@ -170,6 +175,8 @@ class ARENAS(object):
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
     C_500_STALINGRAD_NAME = '#arenas:500_stalingrad/name'
     C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
+    TYPE_MAPS_TRAINING_NAME = '#arenas:type/maps_training/name'
+    TYPE_MAPS_TRAINING_DESCRIPTION = '#arenas:type/maps_training/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -240,6 +247,8 @@ class ARENAS(object):
      C_11_MUROVANKA_DESCRIPTION,
      C_13_ERLENBERG_NAME,
      C_13_ERLENBERG_DESCRIPTION,
+     C_13_ERLENBERG_SE22_ATT_NAME,
+     C_13_ERLENBERG_SE22_ATT_DESCRIPTION,
      C_14_SIEGFRIED_LINE_NAME,
      C_14_SIEGFRIED_LINE_DESCRIPTION,
      C_17_MUNCHEN_NAME,
@@ -302,8 +311,11 @@ class ARENAS(object):
      C_114_CZECH_NAME,
      C_99_POLAND_NAME,
      C_99_POLAND_DESCRIPTION,
+     C_99_POLAND_SE22_ATT_NAME,
      C_222_ER_CLIME_NAME,
      C_222_ER_CLIME_DESCRIPTION,
+     C_222_ER_CLIME_SE22_ATT_NAME,
+     C_222_ER_CLIME_SE22_ATT_DESCRIPTION,
      C_250_BR_BATTLE_CITY2_1_NAME,
      C_250_BR_BATTLE_CITY2_1_DESCRIPTION,
      C_95_LOST_CITY_CTF_NAME,
@@ -336,7 +348,9 @@ class ARENAS(object):
      C_210_BF_EPIC_DESERT_NAME,
      C_210_BF_EPIC_DESERT_DESCRIPTION,
      C_500_STALINGRAD_NAME,
-     C_500_STALINGRAD_DESCRIPTION)
+     C_500_STALINGRAD_DESCRIPTION,
+     TYPE_MAPS_TRAINING_NAME,
+     TYPE_MAPS_TRAINING_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

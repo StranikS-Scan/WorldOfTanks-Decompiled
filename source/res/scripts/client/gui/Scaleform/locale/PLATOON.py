@@ -63,6 +63,7 @@ class PLATOON(object):
     BUTTONS_INVITE_PLAYERS_DESCRIPTION = '#platoon:buttons/invite/players/description'
     BUTTONS_INVITE_PLAYER_CAPTION = '#platoon:buttons/invite/player/caption'
     BUTTONS_INVITE_PLAYER_DESCRIPTION = '#platoon:buttons/invite/player/description'
+    BUTTONS_INVITE_FULLSQUAD_DESCRIPTION = '#platoon:buttons/invite/fullSquad/description'
     BUTTONS_CANCELSEARCH_CAPTION = '#platoon:buttons/cancelSearch/caption'
     BUTTONS_CANCELSEARCH_DESCRIPTION = '#platoon:buttons/cancelSearch/description'
     BUTTONS_MUTE_CAPTION = '#platoon:buttons/mute/caption'

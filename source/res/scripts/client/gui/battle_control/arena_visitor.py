@@ -546,6 +546,9 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def vehicles(self):
         return self._vehicles
 
+    def isArenaNotStarted(self):
+        return self.getArenaPeriod() in (_PERIOD.IDLE, _PERIOD.WAITING, _PERIOD.PREBATTLE)
+
     @property
     def modifiers(self):
         return self._modifiers

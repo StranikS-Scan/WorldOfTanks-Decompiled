@@ -57,7 +57,7 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         else:
             deathZoneIcon = _LINKS.DEATHZONE_ICON
             damaginDeathZoneIcon = _LINKS.DAMAGING_DEATHZONE_ICON
-        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link)
+        self._addNotificationTimerSetting(data, _TYPES.DEATH_ZONE, deathZoneIcon, link, _COLORS.RED)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_ZONE, damaginDeathZoneIcon, _LINKS.BATTLE_ROYALE_TIMER_UI, _COLORS.RED, countdownVisible=False)
         liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
         if liftOverEnabled:
@@ -71,6 +71,7 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.OVERTURNED, overturnedIcon, link, color=overturnedColor, iconOffsetY=iconOffsetY)
         self._addNotificationTimerSetting(data, _TYPES.HALF_OVERTURNED, overturnedIcon, link, noiseVisible=False, iconOffsetY=iconOffsetY, color=overturnedColor)
         self._addNotificationTimerSetting(data, _TYPES.FIRE, _LINKS.FIRE_ICON, link)
+        self._addNotificationTimerSetting(data, _TYPES.ORANGE_ZONE, _LINKS.DESTROY_TIMER_DANGER_ZONE, _LINKS.STATUS_NOTIFICATION_TIMER, _COLORS.YELLOW, iconOffsetY=-11, iconSmallName=_LINKS.DESTROY_TIMER_DANGER_ZONE_SMALL)
         link = _LINKS.SECONDARY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True)
         self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True)
@@ -89,7 +90,6 @@ class BRStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.REPAIRING_CD, _LINKS.RECOVERY_ZONE_ICON, link, _COLORS.GREEN, noiseVisible=False)
         link = _LINKS.BATTLE_ROYALE_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.LOOT_PICKUP, _LINKS.RECOVERY_ICON_CONTENT, link, _COLORS.GREEN, noiseVisible=False)
-        self._addNotificationTimerSetting(data, _TYPES.ORANGE_ZONE, _LINKS.ORANGE_ZONE_ICON_CONTENT, link, _COLORS.ORANGE, noiseVisible=False, countdownVisible=False)
         link = _LINKS.BATTLE_ROYALE_COUNTER_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.SHOT_PASSION, _LINKS.SHOT_PASSION_ICON, link, _COLORS.GREEN, noiseVisible=False)
         self._addNotificationTimerSetting(data, _TYPES.HP_RESTORE_ON_DAMAGE, _LINKS.HP_RESTORE_ON_DAMAGE_ICON, link, _COLORS.GREEN, noiseVisible=False)

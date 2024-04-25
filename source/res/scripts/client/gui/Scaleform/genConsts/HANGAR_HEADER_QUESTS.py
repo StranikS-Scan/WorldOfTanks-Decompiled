@@ -18,3 +18,4 @@ class HANGAR_HEADER_QUESTS(object):
     QUEST_GROUP_EVENTS = 'eventsQuestsGroup'
     QUEST_GROUP_BATTLE_PASS = 'questGroupBattlePass'
     QUEST_GROUP_RANKED_DAILY = 'questGroupRankedDaily'
+    QUEST_GROUP_HB_BATTLE = 'HBBattleQuest'

@@ -13,8 +13,7 @@ from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from helpers import dependency, time_utils
-from skeletons.gui.game_control import IBattleRoyaleController
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from skeletons.gui.game_control import IBattleRoyaleController, IBRProgressionOnTokensController
 
 class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ()
@@ -38,7 +37,9 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
         return GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
 
     def _onInitializing(self):
-        super(BattleRoyaleModeSelectorItem, self)._onInitializing()
+        ModeSelectorLegacyItem._onInitializing(self)
+        self.viewModel.setName(backport.text(R.strings.mode_selector.mode.battleRoyaleQueue.title()))
+        self.viewModel.setPriority(self._legacySelectorItem.getOrder())
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
         self.__battleRoyaleController.onUpdated += self.__onUpdate
         self.brProgression.onProgressPointsUpdated += self.__fillWidgetData
@@ -56,6 +57,10 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
         ctrl = self.__battleRoyaleController
         season = ctrl.getCurrentSeason() or ctrl.getNextSeason()
         return not (ctrl.isEnabled() and season is not None)
+
+    @property
+    def isVisible(self):
+        return self.__battleRoyaleController.isActive()
 
     def _isInfoIconVisible(self):
         return True

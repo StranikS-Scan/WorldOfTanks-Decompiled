@@ -251,13 +251,13 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onBattleEvents {}'.format(battleEvents))
         avatar.onBattleEvents(battleEvents)
 
-    def onObservedByEnemy(self):
+    def onObservedByEnemy(self, isObserved):
         avatar = self._avatar()
         if not avatar:
             return
         if _DO_LOG:
-            self._doLog('onObservedByEnemy')
-        avatar.onObservedByEnemy(self.entity.id)
+            self._doLog('onObservedByEnemy {}'.format(isObserved))
+        avatar.onObservedByEnemy(self.entity.id, isObserved)
 
     def onSectorShooting(self, sectorID):
         avatar = self._avatar()
@@ -446,3 +446,6 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     def _avatar(self):
         raise NotImplementedError('_avatar must be overrided in ownVehicle')
+
+    def _entities(self):
+        raise NotImplementedError('_entities must be overrided in ownVehicle')

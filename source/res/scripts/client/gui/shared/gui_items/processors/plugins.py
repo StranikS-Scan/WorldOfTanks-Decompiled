@@ -256,7 +256,7 @@ class EliteVehiclesValidator(SyncValidator):
                 return makeError('invalid_vehicle')
             if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
                 return makeError('invalid_module_type')
-            if not item.isElite:
+            if not item.isElite and not item.isOnlyForEventBattles:
                 return makeError('vehicle_not_elite')
 
         return makeSuccess()
@@ -686,6 +686,17 @@ class PMFreeTokensValidator(_EventsCacheValidator):
 
     def _validate(self):
         return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost() else makeSuccess()
+
+
+class TokenValidator(_EventsCacheValidator):
+
+    def __init__(self, tokenID, amount, isEnabled=True):
+        super(TokenValidator, self).__init__(isEnabled)
+        self._tokenID = tokenID
+        self._amount = amount
+
+    def _validate(self):
+        return makeError('NOT_ENOUGH_TOKENS') if self.eventsCache.questsProgress.getTokenCount(self._tokenID) < self._amount else makeSuccess()
 
 
 class CheckBoxConfirmator(DialogAbstractConfirmator):
@@ -1229,3 +1240,65 @@ class AsyncDialogConfirmator(AsyncConfirmator):
             callback(makeSuccess())
             return
         callback(makeError())
+
+
+class CheckEnergy(SyncValidator):
+
+    def __init__(self, controller, purpose, vehTypeCompDescr, isEnabled=True):
+        super(CheckEnergy, self).__init__(isEnabled)
+        self.controller = controller
+        self.purpose = purpose
+        self.vehTypeCompDescr = vehTypeCompDescr
+
+    def _validate(self):
+        controller = self.controller
+        return makeError('vehicle_can_not_have_energy') if not controller.isEventVehicleCanHaveEnergy(self.purpose, self.vehTypeCompDescr) else makeSuccess()
+
+
+class CheckRewardBox(SyncValidator):
+
+    def __init__(self, controller, rewardBoxID, isSkipQuest, isEnabled=True):
+        super(CheckRewardBox, self).__init__(isEnabled)
+        self.controller = controller
+        self.rewardBoxID = rewardBoxID
+        self.isSkipQuest = isSkipQuest
+
+    def _validate(self):
+        controller = self.controller
+        rewardBox = controller.rewardBoxesConfig[self.rewardBoxID]
+        if not self.isSkipQuest:
+            if not controller.isRewardBoxRecieved(self.rewardBoxID):
+                return makeError('account_has_no_requested_rewardbox')
+            decodePrice = rewardBox.decodePrice
+            if decodePrice.currency is None or decodePrice.amount > controller.getRewardBoxKeyQuantity():
+                return makeError('not_enough_tokens_to_open_rewardbox')
+        else:
+            skipPrice = rewardBox.skipPrice
+            if skipPrice.currency is None or skipPrice.amount > controller.getRewardBoxKeyQuantity():
+                return makeError('quest_skip_for_requested_rewardbox_is_not_allowed')
+        return makeSuccess()
+
+
+class CheckEnergyItemsForExchange(SyncValidator):
+
+    def __init__(self, controller, purpose, isEnabled=True):
+        super(CheckEnergyItemsForExchange, self).__init__(isEnabled)
+        self.controller = controller
+        self.purpose = purpose
+
+
+class RandomStylesSellingAvailable(SyncValidator):
+
+    def __init__(self, isAvailable, isEnabled=True):
+        super(RandomStylesSellingAvailable, self).__init__(isEnabled)
+        self.isAvailable = isAvailable
+
+    def _validate(self):
+        return makeError('sales_disabled') if not self.isAvailable else makeSuccess()
+
+
+class VehicleInBattle(SyncValidator):
+
+    def _validate(self):
+        from CurrentVehicle import g_currentVehicle
+        return makeError('vehicle_in_battle') if g_currentVehicle.isInBattle() else makeSuccess()

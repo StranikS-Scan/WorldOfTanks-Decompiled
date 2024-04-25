@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/Scaleform/daapi/view/lobby/hangar/armory_yard_vehicle_preview.py
+from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants import ARMORY_YARD_VEHICLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview, VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -19,6 +20,7 @@ VEHICLE_PREVIEW_ALIASES.append(HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW)
 class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
+    _COMMON_SOUND_SPACE = ARMORY_YARD_VEHICLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(ArmoryYardVehiclePreview, self).__init__(ctx)

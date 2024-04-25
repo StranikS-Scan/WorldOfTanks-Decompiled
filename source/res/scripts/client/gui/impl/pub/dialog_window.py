@@ -218,3 +218,7 @@ class DialogViewMixin(object):
     def _dispose(self):
         super(DialogViewMixin, self)._dispose()
         self.__scope.destroy()
+
+    def _finalize(self):
+        super(DialogViewMixin, self)._finalize()
+        self.__scope.destroy()

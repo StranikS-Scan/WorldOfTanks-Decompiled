@@ -105,7 +105,7 @@ def _readCommanderUniversalistSkill(xmlCtx, section, subsectionName):
 
 def _readCommanderSkillWithDelaySkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.CommanderSkillWithDelay(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'delay'))
+    return skills_components.CommanderSkillWithDelay(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'turnOnDelay'), _xml.readNonNegativeFloat(xmlCtx, section, 'turnOffDelay'))
 
 
 def _readCommonSkill(xmlCtx, section, subsectionName):

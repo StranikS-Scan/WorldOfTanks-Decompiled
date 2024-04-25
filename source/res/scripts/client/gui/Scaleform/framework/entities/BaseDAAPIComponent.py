@@ -13,6 +13,7 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         self.__components = {}
         self.__alias = None
         self.__isActive = False
+        self.__parentWindow = None
         return
 
     @property
@@ -34,6 +35,12 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
 
     def setActive(self, isActive):
         self.__isActive = isActive
+
+    def setParentWindow(self, window):
+        self.__parentWindow = window
+
+    def getParentWindow(self):
+        return self.__parentWindow
 
     def getActive(self):
         return self.__isActive
@@ -59,6 +66,7 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             if alias in self.__components.keys():
                 _logger.warning('Class with alias `%s` already registered in object %r. It will be rewritten.', alias, self)
             self.__components[alias] = componentPy
+            componentPy.setParentWindow(self.__parentWindow)
             componentPy.setEnvironment(self.app)
             componentPy.create()
             self.__fireRegisteringEvent(events.ComponentEvent.COMPONENT_REGISTERED, componentPy, alias)
@@ -83,6 +91,11 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         super(BaseDAAPIComponent, self)._invalidate(*args, **kwargs)
         for c in self.__components.itervalues():
             c.validate()
+
+    def _destroy(self):
+        self.__parentWindow = None
+        super(BaseDAAPIComponent, self)._destroy()
+        return
 
     def _dispose(self):
         self.__destroyPythonComponents(pyReloading=self._getPyReloading())

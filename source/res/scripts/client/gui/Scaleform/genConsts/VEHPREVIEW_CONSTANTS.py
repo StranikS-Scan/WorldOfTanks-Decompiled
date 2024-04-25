@@ -13,6 +13,8 @@ class VEHPREVIEW_CONSTANTS(object):
     BOTTOM_PANEL_OFFER_GIFT_LINKAGE = 'VehiclePreviewBottomPanelOfferGiftUI'
     BOTTOM_PANEL_WELL = 'VehiclePreviewBottomPanelWellUI'
     BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_LINKAGE = 'VehiclePreviewBottomPanelShowcaseStyleBuyingUI'
+    HB_PANEL_LINKAGE = 'VPHBPanelUI'
+    HB_RESTORE_PANEL_LINKAGE = 'VehiclePreviewHPRestorePanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
     BROWSE_LINKAGE = 'VPBrowseUI'

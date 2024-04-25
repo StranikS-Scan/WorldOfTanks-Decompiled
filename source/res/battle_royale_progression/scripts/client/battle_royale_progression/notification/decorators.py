@@ -3,7 +3,7 @@
 from helpers import dependency
 from notification.decorators import MessageDecorator
 from notification.settings import NOTIFICATION_BUTTON_STATE
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from skeletons.gui.game_control import IBRProgressionOnTokensController
 
 class BRProgressionLockButtonDecorator(MessageDecorator):
     _brProgressionController = dependency.descriptor(IBRProgressionOnTokensController)

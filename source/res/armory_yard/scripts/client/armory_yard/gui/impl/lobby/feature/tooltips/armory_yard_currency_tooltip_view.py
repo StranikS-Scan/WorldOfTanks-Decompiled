@@ -2,7 +2,6 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/tooltips/armory_yard_currency_tooltip_view.py
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
-from armory_yard_constants import MAX_TOKEN_AT_CHAPTER
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.tooltips.armory_yard_currency_tooltip_view_model import ArmoryYardCurrencyTooltipViewModel
 from gui.impl.pub import ViewImpl
 from helpers import dependency
@@ -30,6 +29,6 @@ class ArmoryYardCurrencyTooltipView(ViewImpl):
             totalTokens, receivedTokens = self.__armoryYardCtrl.getTokensInfo()
             tx.setReceivedTokens(receivedTokens)
             tx.setTotalTokens(totalTokens)
-            tx.setQuestsForToken(MAX_TOKEN_AT_CHAPTER)
+            tx.setQuestsForToken(self.__armoryYardCtrl.totalTokensInChapter(self.__armoryYardCtrl.serverSettings.getCurrentSeason().getAllCycles().values()[0].ID))
             tx.setStartTimestamp(seasonStart)
             tx.setEndTimestamp(seasonEnd)

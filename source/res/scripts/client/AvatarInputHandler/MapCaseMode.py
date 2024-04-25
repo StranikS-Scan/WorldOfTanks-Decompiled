@@ -11,6 +11,7 @@ from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items.artefacts import ArcadeEquipmentConfigReader
+from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from AvatarInputHandler.DynamicCameras import StrategicCamera, ArcadeCamera
 import BattleReplay
@@ -23,10 +24,9 @@ from Math import Vector2, Vector3
 from AvatarInputHandler.control_modes import IControlMode
 from AvatarInputHandler import AimingSystems
 import SoundGroups
-from constants import SERVER_TICK_LENGTH
+from constants import SERVER_TICK_LENGTH, AIMING_MODE
 from debug_utils import LOG_ERROR, LOG_WARNING
 from items import vehicles as vehs_core, artefacts
-from constants import AIMING_MODE
 from items import makeIntCompactDescrByID
 from nations import NONE_INDEX
 from DynamicCameras.ArcadeCamera import ArcadeCameraState
@@ -616,6 +616,7 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     isEnabled = property(lambda self: self.__isEnabled)
     camera = property(lambda self: self.__cam)
     aimingMode = property(lambda self: self.__aimingMode)
@@ -694,6 +695,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         if BigWorld.player().gunRotator is not None:
             BigWorld.player().gunRotator.ignoreAimingMode = True
             BigWorld.player().gunRotator.stopTrackingOnServer()
+        self._showMaxRadiusCircle(equipmentID)
         self.__curVehicleID = args.get('curVehicleID')
         if self.__curVehicleID is None:
             self.__curVehicleID = BigWorld.player().playerVehicleID
@@ -712,6 +714,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             self.__cam.writeUserPreferences()
             if BigWorld.player().gunRotator is not None:
                 BigWorld.player().gunRotator.ignoreAimingMode = False
+            self._hideMaxRadiusCircle()
             self.__equipmentID = -1
             return
 
@@ -809,6 +812,27 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
         return self.__getDesiredShotPoint() if self.__aimingMode == 0 or ignoreAimingMode else None
+
+    def _showMaxRadiusCircle(self, equipmentID):
+        if equipmentID is not None:
+            equipment = getEquipment(equipmentID)
+            maxApplyRadius = getattr(equipment, 'maxApplyRadius', None)
+            player = BigWorld.player()
+            if not (maxApplyRadius and player):
+                return
+            vehicle = player.getVehicleAttached()
+            dynamicObjects = self._dynamicObjectsCache.getConfig(player.arenaGuiType)
+            if not (vehicle and dynamicObjects):
+                return
+            circleVisualSettings = dynamicObjects.getCircleRestrictionEffect()
+            if circleVisualSettings:
+                vehicle.appearance.showTerrainCircle(maxApplyRadius, circleVisualSettings)
+        return
+
+    def _hideMaxRadiusCircle(self):
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle and vehicle.appearance.isTerrainCircleVisible():
+            vehicle.appearance.hideTerrainCircle()
 
     def _createCamera(self, data, offset=Math.Vector2(0, 0)):
         raise NotImplementedError
@@ -1000,3 +1024,7 @@ def turnOffMapCase(equipmentID, controlMode):
             controlMode.deactivateCallback = None
             inputHandler.ctrl.turnOff(sendStopEquipment=False)
     return
+
+
+def getEquipment(equipmentID):
+    return vehs_core.g_cache.equipments()[equipmentID] if equipmentID else None

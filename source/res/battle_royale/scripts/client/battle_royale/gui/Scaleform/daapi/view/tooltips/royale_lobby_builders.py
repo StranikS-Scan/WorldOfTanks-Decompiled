@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/tooltips/royale_lobby_builders.py
+from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.respawn_tooltip import RespawnTooltipData
 from battle_royale.gui.impl.lobby.tooltips.br_coin_tooltip_view import BrCoinTooltipView
 from battle_royale.gui.impl.lobby.tooltips.vehicle_tooltip_view import VehicleTooltipView
 from battle_royale.gui.shared.tooltips import contexts as brContexts
@@ -15,7 +16,6 @@ from gui.shared.tooltips import contexts, ToolTipBaseData
 from battle_royale.gui.shared.tooltips.battle_royale_modules import BattleRoyaleModulesTooltip
 from gui.shared.tooltips.builders import DataBuilder, TooltipWindowBuilder
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_selector_tooltip import BattleRoyaleSelectorTooltip
-from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_widget_tooltip import BattleRoyaleWidgetTooltip
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_calendar_extended_tooltip import BattleRoyaleCalendarExtendedTooltip
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_completed_quest_tooltip import BattleRoyaleQuestsTooltip
 __all__ = ('getTooltipBuilders',)
@@ -24,10 +24,10 @@ def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_MODULES_HANGAR, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleModulesTooltip(_BattleRoyaleHangarVehInfoContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_BATTLE_PROGRESSION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleProgressionTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_EQUIPMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EquipmentsTooltipData(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_RESPAWN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, RespawnTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_SIMPLE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, PerfAttentionSimpleTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, PerfAttentionAdvancedTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleSelectorTooltip(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_WIDGET_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleWidgetTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_COMPLETED_QUESTS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleQuestsTooltip(contexts.QuestsBoosterContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE, None, VehiclePointsTooltipContentWindowData(brContexts.BattleRoyaleCarouselContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_CALENDAR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, BattleRoyaleCalendarExtendedTooltip(contexts.ToolTipContext(None))),

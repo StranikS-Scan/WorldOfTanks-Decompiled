@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/gui/game_control/referral_program_controller.py
 import logging
 import BigWorld
+from functools import partial
 from Event import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import REFERRAL_COUNTER
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from constants import RP_PGB_POINT
+from constants import RP_PGB_POINT, RP_POINT
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
@@ -14,7 +15,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import createReferralWebHandlers
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, REF_RPOGRAM_PDATA_KEY
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, REF_RPOGRAM_PDATA_KEY, getReferralShopURL
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.lobby.common.sound_constants import SUBVIEW_SOUND_SPACE
@@ -24,18 +25,20 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IReferralProgramController
+from skeletons.gui.game_control import IReferralProgramController, IGuiLootBoxesController
 from skeletons.gui.game_window_controller import GameWindowController
 from gui.ClientUpdateManager import g_clientUpdateManager
 from PlayerEvents import g_playerEvents
 _logger = logging.getLogger(__name__)
 USE_SERVER_RECRUIT_DELTA = True
 REQUEST_INCREMENT_COOLDOWN = 1
+REFERRAL_LOOTBOX_CATEGORY = 'rp_2024'
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __appLoader = dependency.descriptor(IAppLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __GUILootboxes = dependency.descriptor(IGuiLootBoxesController)
 
     def __init__(self):
         super(ReferralProgramController, self).__init__()
@@ -52,6 +55,9 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def fini(self):
         self.__clearBubbleTimeout()
         super(ReferralProgramController, self).fini()
+
+    def onLobbyStarted(self, ctx):
+        self.__GUILootboxes.addShopWindowHandler(REFERRAL_LOOTBOX_CATEGORY, partial(self.showWindow, url=getReferralShopURL()))
 
     def showWindow(self, url=None, invokedFrom=None):
         if not self.__referralDisabled:
@@ -136,7 +142,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
                 self.__onReferralProgramEnabled()
 
     def __onEntitlementsUpdated(self, diff):
-        if not self.__referralDisabled:
+        if {RP_POINT, RP_PGB_POINT} & set(diff.keys()) and not self.__referralDisabled:
             self.onPointsChanged()
 
     def __onClientUpdated(self, diff, _):

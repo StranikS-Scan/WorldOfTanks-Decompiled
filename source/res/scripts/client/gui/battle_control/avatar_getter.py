@@ -464,6 +464,18 @@ def isBecomeObserverAfterDeath(avatar=None):
     return result
 
 
+def isObserverBothTeams(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = BigWorld.player().isObserverBothTeams
+    except AttributeError as error:
+        _logger.exception('Attribute "isObserverBothTeams" not found, exception %s', error.message)
+        result = False
+
+    return result
+
+
 def getInBattleVehicleSwitchComponent():
     avatar = BigWorld.player()
     try:

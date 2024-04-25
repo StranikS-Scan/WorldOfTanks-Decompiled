@@ -308,6 +308,10 @@ class BattlePassConfig(object):
         return self._season.get('finalOfferTime', 0)
 
     @property
+    def shopOfferFinishTime(self):
+        return self._season.get('shopOfferFinishTime', 0)
+
+    @property
     def points(self):
         return self._season.get('points', {})
 
@@ -340,7 +344,10 @@ class BattlePassConfig(object):
         return self.getChapterLevels(chapterID)[-1] if chapterID else MAX_NON_CHAPTER_POINTS
 
     def getRegularChapterIds(self):
-        return self._chaptersType.get(BattlePassChapterType.DEFAULT.value, [])
+        return self._chaptersType.get(BattlePassChapterType.DEFAULT.value, set())
+
+    def getResourceChapterIds(self):
+        return self._chaptersType.get(BattlePassChapterType.RESOURCE.value, set())
 
     def getbattlePassCost(self, chapterID):
         return self.chapters.get(chapterID, {}).get('battlePassCost', {'gold': 0})

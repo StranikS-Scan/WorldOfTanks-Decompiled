@@ -29,6 +29,12 @@
       <Editable>	true	</Editable>
       <Default>	1	</Default>
     </isOver3DSound>
+    <mouseOverSoundCooldown>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0.0	</Default>
+    </mouseOverSoundCooldown>
     <clickSoundName>
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -40,6 +46,18 @@
       <Editable>	true	</Editable>
       <Default>	1	</Default>
     </isClick3DSound>
+    <clickSoundCooldown>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0.0	</Default>
+    </clickSoundCooldown>
+    <repeatOnClick>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </repeatOnClick>
     <edgeMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

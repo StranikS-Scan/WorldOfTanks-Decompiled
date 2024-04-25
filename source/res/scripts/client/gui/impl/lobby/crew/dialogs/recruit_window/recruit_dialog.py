@@ -169,7 +169,6 @@ class QuestRecruitDialog(BaseRecruitDialog):
         self.viewModel.iconModel.icon.setPath(iconID)
         if not hasBackground:
             self.viewModel.iconModel.bgIcon.setPath(getIconBackground())
-        super(QuestRecruitDialog, self)._onLoading(*args, **kwargs)
 
     def _finalize(self):
         super(QuestRecruitDialog, self)._finalize()

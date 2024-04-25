@@ -1,0 +1,33 @@
+<HangarInteractiveObject.def>
+  <Parent>	ClientSelectableObject	</Parent>
+  <Properties>
+    <boundingSphereSize>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </boundingSphereSize>
+    <boundingSphereOffset>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </boundingSphereOffset>
+    <outlineModelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Outline Model	</Title>
+        <ResourceType>	MODEL	</ResourceType>
+      </Editor>
+    </outlineModelName>
+    <animationSequence>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Animation Sequence	</Title>
+        <ResourceType>	SEQUENCE	</ResourceType>
+      </Editor>
+    </animationSequence>
+  </Properties>
+</HangarInteractiveObject.def>

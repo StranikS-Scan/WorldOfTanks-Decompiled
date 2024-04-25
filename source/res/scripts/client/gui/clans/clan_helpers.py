@@ -37,6 +37,7 @@ _RequestData = namedtuple('_RequestData', ['pattern',
 ACCOUNT_ALREADY_IN_CLAN = 'Account already invited'
 RATINGS_NOT_FOUND_ERROR = 404
 ACCOUNT_ALREADY_IN_CLAN_ERROR = 409
+INTERNAL_SERVER_ERROR = 500
 
 def showClanInviteSystemMsg(userName, isSuccess, code, data=None):
     if isSuccess:
@@ -581,10 +582,10 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                if result.getCode() != RATINGS_NOT_FOUND_ERROR:
-                    clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
-                else:
+                if result.getCode() in (RATINGS_NOT_FOUND_ERROR, INTERNAL_SERVER_ERROR):
                     clanRatings = {}
+                else:
+                    clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
                 ctx = ClansInfoCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
                 clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))

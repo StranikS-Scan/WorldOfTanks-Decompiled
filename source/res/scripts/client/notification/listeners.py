@@ -1989,6 +1989,7 @@ class WinbackSelectableRewardReminder(BaseReminderListener):
 
 class ArmoryYardListener(_NotificationListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
     __armoryYardText = R.strings.armory_yard.notifications
     __systemMessages = dependency.descriptor(ISystemMessages)
     __lastTimeErrorShown = 0
@@ -1997,6 +1998,24 @@ class ArmoryYardListener(_NotificationListener):
 
     def start(self, model):
         super(ArmoryYardListener, self).start(model)
+        if not self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT):
+            self.__limitedUIController.startObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
+        else:
+            self.__subscribe()
+        return True
+
+    def stop(self):
+        if not self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT):
+            self.__limitedUIController.stopObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
+        else:
+            self.__unsubscribe()
+        super(ArmoryYardListener, self).stop()
+
+    def __onLuiRuleCompleted(self, *_):
+        self.__limitedUIController.stopObserve(LuiRules.ARMORY_YARD_ENTRY_POINT, self.__onLuiRuleCompleted)
+        self.__subscribe()
+
+    def __subscribe(self):
         self.__armoryYardCtrl.onCheckNotify += self.__onCheckNotify
         self.__armoryYardCtrl.onAnnouncement += self.__announcement
         self.__armoryYardCtrl.onPayed += self.__payed
@@ -2009,9 +2028,8 @@ class ArmoryYardListener(_NotificationListener):
         self.__armoryYardCtrl.onBundleOutTime += self.__bundleOutTime
         self.__lastTimeErrorShown = 0
         self.__onCheckNotify()
-        return True
 
-    def stop(self):
+    def __unsubscribe(self):
         self.__armoryYardCtrl.onCheckNotify -= self.__onCheckNotify
         self.__armoryYardCtrl.onAnnouncement -= self.__announcement
         self.__armoryYardCtrl.onPayed -= self.__payed
@@ -2023,13 +2041,12 @@ class ArmoryYardListener(_NotificationListener):
         self.__armoryYardCtrl.onPayedError -= self.__payedError
         self.__armoryYardCtrl.onBundleOutTime -= self.__bundleOutTime
         self.__lastTimeErrorShown = 0
-        super(ArmoryYardListener, self).stop()
 
     def __getHeader(self):
         return backport.text(self.ARMORY_YARD_TEXT.title())
 
     def __collectReward(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
+        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
 
     def __switchChange(self):
         if self.__armoryYardCtrl.getState() != State.DISABLED:
@@ -2072,12 +2089,16 @@ class ArmoryYardListener(_NotificationListener):
 
     def __checkState(self):
         state = self.__armoryYardCtrl.getState()
-        if self.__armoryYardCtrl.isActive() and not AccountSettings.getArmoryYard(state.value):
-            AccountSettings.setArmoryYard(state.value, True)
-            if state == State.POSTPROGRESSION:
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.postProgression()), type=SystemMessages.SM_TYPE.ArmoryYardPostprogression, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-            else:
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.active()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        armoryIsActiveMessageWasShown = AccountSettings.getArmoryYard(State.ACTIVE.value)
+        currentStateMessageWasShown = AccountSettings.getArmoryYard(state.value)
+        if not self.__armoryYardCtrl.isActive() or currentStateMessageWasShown and armoryIsActiveMessageWasShown:
+            return
+        AccountSettings.setArmoryYard(state.value, True)
+        if not armoryIsActiveMessageWasShown:
+            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.active()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+            AccountSettings.setArmoryYard(State.ACTIVE.value, True)
+        if state == State.POSTPROGRESSION and not currentStateMessageWasShown and not self.__armoryYardCtrl.isCompleted():
+            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.postProgression()), type=SystemMessages.SM_TYPE.ArmoryYardPostprogression, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
 
     def __checkChapter(self):
         if self.__armoryYardCtrl.getState() != State.ACTIVE:

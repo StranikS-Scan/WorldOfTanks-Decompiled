@@ -3,7 +3,7 @@
 import CGF
 import Math
 import BigWorld
-from death_zones_helpers import ZONE_STATE, idxFrom, zoneIdFrom, ZONES_X, ZONES_Y
+from death_zones_helpers import ZONE_STATE, idxFrom, zoneIdFrom, ZONES_SIZE
 from constants import IS_CLIENT
 from cgf_script.managers_registrator import Rule, registerManager, onProcessQuery, registerRule
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes
@@ -48,8 +48,8 @@ class DeathZoneDrawManager(CGF.ComponentManager):
         boundingBox = self.__getBoundingBox()
         self._cornerPosition = Math.Vector3(boundingBox[0][0], 0, boundingBox[0][1])
         self._zoneSizeX, self._zoneSizeY = (boundingBox[1] - boundingBox[0]).tuple()
-        self._zoneSizeX /= ZONES_X
-        self._zoneSizeY /= ZONES_Y
+        self._zoneSizeX /= ZONES_SIZE
+        self._zoneSizeY /= ZONES_SIZE
         halfSizeX = self._zoneSizeX * 0.5
         halfSizeY = self._zoneSizeY * 0.5
         self._zonePositionOffset = Math.Vector3(halfSizeX, 0, halfSizeY)
@@ -90,8 +90,8 @@ class DeathZoneDrawManager(CGF.ComponentManager):
          (0, -1, (_INVISIBLE_UP, _INVISIBLE_DOWN)))
         for dx, dy, borderMsks in dxdy:
             _x, _y = x + dx, y + dy
-            if 0 <= _x < ZONES_X:
-                if 0 <= _y < ZONES_Y:
+            if 0 <= _x < ZONES_SIZE:
+                if 0 <= _y < ZONES_SIZE:
                     self._checkSide(_x, _y, borderMsks[0], state, deathZones) and visibilityMask |= borderMsks[1]
 
         return visibilityMask

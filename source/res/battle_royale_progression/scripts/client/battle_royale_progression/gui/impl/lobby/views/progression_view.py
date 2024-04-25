@@ -4,14 +4,13 @@ from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.progre
 from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.progression.progression_view_model import ProgressionViewModel
 from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker
 from battle_royale_progression.gui.impl.lobby.views.quests_packer import getEventUIDataPacker
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.server_events.events_helpers import EventInfoModel
 from gui.shared import event_dispatcher
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IBRProgressionOnTokensController
 from skeletons.gui.server_events import IEventsCache
 
 class ProgressionView(SubModelPresenter):

@@ -317,7 +317,7 @@
       <userString>	#vehicle_customization:emblem/group12/special_42	</userString>
       <vehicleFilter>
         <include>
-          <vehicles>	ussr:R95_Object_907	</vehicles>
+          <vehicles>	ussr:R95_Object_907 ussr:R175_IS_2_screen_Player_HT2_may24_hb ussr:R108_T34_85M_Player_MT2_may24_hb ussr:R47_ISU-152_Zveroboj_Player_AT2_may24_hb	</vehicles>
         </include>
       </vehicleFilter>
       <mirror>	false	</mirror>
@@ -4516,6 +4516,36 @@
       <description>	#vehicle_customization:Rush_2024_ThunderWolf_MT_Emblem_15/description	</description>
       <mirror>	false	</mirror>
       <type>	emblem	</type>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Pve May Emblem style 2024	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <decal>
+      <id>	31157	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Pve_May_Emblem_03_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Pve_May_Emblem_03_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Pve_May_Emblem_03_2024_MT/description	</description>
+      <tags>	hiddenInUI styleOnly	</tags>
+      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+      <type>	emblem	</type>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	RedClove 2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <decal>
+      <id>	31158	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/RedClove_Emblem_2024_MT.dds	</texture>
+      <tags>	hiddenInUI styleOnly	</tags>
+      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+      <type>	emblem	</type>
+      <userString>	#vehicle_customization:RedClove_Emblem_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RedClove_Emblem_2024_MT/description	</description>
     </decal>
   </itemGroup>
 </emblems_special.xml>

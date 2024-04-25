@@ -279,10 +279,11 @@ def readKpi(xmlCtx, section):
         if kpiType not in KPI.Type.ALL():
             _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported KPI type')
             return
+        kpiType = intern(kpiType)
         if kpiType == KPI.Type.ONE_OF:
-            kpi.append(KPI(KPI.Name.COMPOUND_KPI, readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
+            kpi.append(KPI(KPI.Name.COMPOUND_KPI, readKpi(xmlCtx, subsec), kpiType))
         if kpiType == KPI.Type.AGGREGATE_MUL:
-            kpi.append(_readAggregateKPI(xmlCtx, subsec, kpiType))
+            kpi.append(_readAggregateKPI(xmlCtx, subsec, KPI.Type.AGGREGATE_MUL))
         kpi.append(_readKpiValue(xmlCtx, subsec, kpiType))
 
     return kpi
@@ -290,7 +291,7 @@ def readKpi(xmlCtx, section):
 
 def _readKpiValue(xmlCtx, section, kpiType):
     from gui.shared.gui_items import KPI
-    name = section.readString('name')
+    name = intern(section.readString('name'))
     value = section.readFloat('value')
     specValue = section.readString('specValue')
     vehicleTypes = section.readString('vehicleTypes').split()

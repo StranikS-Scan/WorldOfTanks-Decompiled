@@ -1,0 +1,15 @@
+<HBArenaMinefieldComponent.def>
+  <ClientMethods>
+    <showMarker>
+      <Args>
+        <equipmentID>	OBJECT_ID	</equipmentID>
+        <position>	VECTOR3	</position>
+        <direction>	VECTOR2	</direction>
+      </Args>
+    </showMarker>
+  </ClientMethods>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	hbArenaMinefieldComponent	</DefaultKeyName>
+</HBArenaMinefieldComponent.def>

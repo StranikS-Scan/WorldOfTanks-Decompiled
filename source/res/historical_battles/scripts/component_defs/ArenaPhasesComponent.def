@@ -1,0 +1,16 @@
+<ArenaPhasesComponent.def>
+  <Properties>
+    <phasesCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </phasesCount>
+    <currentPhase>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </currentPhase>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	phasesComponent	</DefaultKeyName>
+</ArenaPhasesComponent.def>

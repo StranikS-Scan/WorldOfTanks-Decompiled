@@ -584,7 +584,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
 
     def __init__(self, module, configuration, slotIdx, leftPadding, rightPadding, colorScheme=None):
         super(CommonStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
-        self._valueWidth = 108
+        self._valueWidth = 115
         self._slotIdx = slotIdx
         self.__colorScheme = colorScheme or params_formatters.COLORLESS_SCHEME
 

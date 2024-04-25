@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Account.py
 import cPickle
-import copy
 import logging
 import weakref
 import zlib
@@ -148,7 +147,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.connectionMgr.onDisconnected -= delAccountRepository
             delAccountRepository()
         if g_accountRepository is None:
-            g_accountRepository = _AccountRepository(self.name, className, self.initialServerSettings)
+            initialServerSettings = cPickle.loads(zlib.decompress(self.initialServerSettings))
+            g_accountRepository = _AccountRepository(self.name, className, initialServerSettings)
             self.connectionMgr.onDisconnected += delAccountRepository
         self.contactInfo = g_accountRepository.contactInfo
         self.syncData = g_accountRepository.syncData
@@ -641,7 +641,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         return
 
     def update(self, diff):
-        self._update(True, cPickle.loads(diff))
+        self._update(True, cPickle.loads(zlib.decompress(diff)))
 
     def resyncDossiers(self, isFullResync):
         self.dossierCache.resynchronize(isFullResync)
@@ -1222,6 +1222,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _update(self, triggerEvents, diff):
         LOG_DEBUG_DEV('_update', diff if triggerEvents else 'full sync')
+        serverSettingsKey = ('serverSettings', '_r')
+        if serverSettingsKey in diff:
+            diff[serverSettingsKey] = cPickle.loads(zlib.decompress(diff[serverSettingsKey]))
         isFullSync = AccountSyncData.isFullSyncDiff(diff)
         if not self.syncData.updatePersistentCache(diff, isFullSync):
             return False
@@ -1469,7 +1472,7 @@ class _AccountRepository(object):
         self.className = className
         self.contactInfo = ContactInfo()
         self.commandProxy = _ClientCommandProxy()
-        self.serverSettings = copy.copy(initialServerSettings)
+        self.serverSettings = initialServerSettings
         self.syncData = AccountSyncData.AccountSyncData()
         self.inventory = Inventory.Inventory(self.syncData, self.commandProxy)
         self.stats = Stats.Stats(self.syncData)

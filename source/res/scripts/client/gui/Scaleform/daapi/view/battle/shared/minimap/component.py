@@ -5,19 +5,26 @@ import weakref
 import GUI
 import Math
 import SoundGroups
+import BigWorld
 from AvatarInputHandler import AvatarInputHandler
 from gui.Scaleform.daapi.view.battle.shared.map_zones.minimap import MapZonesEntriesPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
 from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.battle_control import minimap_utils, avatar_getter
+from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 _IMAGE_PATH_FORMATTER = 'img://{}'
 _logger = logging.getLogger(__name__)
 _DEFUALT_MINIMAP_DIMENSION = 10
+
+def getMapImagePath(minimap):
+    return getTextureLinkByID(minimap)
+
 
 class IMinimapComponent(object):
 
@@ -159,6 +166,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
          'area_markers': plugins.AreaMarkerEntriesPlugin,
          'spgShot': plugins.EnemySPGShotPlugin,
          'map_zones': MapZonesEntriesPlugin}
+        arenaBonusType = BigWorld.player().arenaBonusType
+        if arenaBonusType and BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.DEATHZONES):
+            setup['deathzones'] = plugins.DeathZonesMinimapPlugin
         return setup
 
     def _createFlashComponent(self):

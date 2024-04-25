@@ -24,6 +24,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import i18n, dependency
 from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
+from items.components import component_constants
 from points_of_interest_shared import POI_EQUIPMENT_TAG
 from shared_utils import findFirst, forEach, CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -208,7 +209,8 @@ class _EquipmentItem(object):
         self._prevStage = self._stage
         self._stage = stage
         self._timeRemaining = timeRemaining
-        self._totalTime = totalTime
+        if not self.isReusable:
+            self._totalTime = totalTime
         self._soundUpdate(self._prevQuantity, quantity)
 
     def updateMapCase(self, stage=None):
@@ -301,6 +303,12 @@ class _EquipmentItem(object):
 
     def canDeactivate(self):
         return True
+
+    def getDelay(self):
+        return self._descriptor.delay
+
+    def getDuration(self):
+        return self._descriptor.duration
 
 
 class _RefillEquipmentItem(object):
@@ -1063,6 +1071,98 @@ class _RepairPointItem(_TriggerItem):
         return []
 
 
+class EventItem(_TriggerItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(EventItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.READY):
+            self._totalTime = self._descriptor.cooldownSeconds
+        elif stage == EQUIPMENT_STAGES.ACTIVE:
+            self._totalTime = timeRemaining
+        elif stage == EQUIPMENT_STAGES.PREPARING:
+            self._totalTime = 0
+
+
+class _EventBuffItem(EventItem):
+    pass
+
+
+class _HpRepairAndCrewHeal(EventItem):
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_HpRepairAndCrewHeal, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        elif avatar_getter.isVehicleInFire(avatar):
+            return (True, None)
+        else:
+            vehicle = BigWorld.entities.get(avatar.playerVehicleID)
+            if not vehicle:
+                return (False, _ActivationError('hpRepairAndCrewHeal', {'name': self._descriptor.userString}))
+            elif vehicle.maxHealth > vehicle.health:
+                return (True, None)
+            deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+            for item in self._getDevicesIterator():
+                if item[0] in deviceStates:
+                    isEntityNotRequired = not self.isEntityRequired()
+                    return (isEntityNotRequired, None if isEntityNotRequired else NeedEntitySelection('', None))
+
+            result, error = self._checkCrew(avatar)
+            return (result, error) if result else (False, _ActivationError('hpRepairAndCrewHeal', {'name': self._descriptor.userString}))
+
+    def _checkCrew(self, avatar):
+        result = False
+        error = None
+        deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+        for item in self._getCrewIterator():
+            if item[0] in deviceStates:
+                isEntityNotRequired = not self.isEntityRequired()
+                result = isEntityNotRequired
+                error = None if isEntityNotRequired else NeedEntitySelection('', None)
+                break
+
+        return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() and self.isReusable else (False, None)
+
+    @staticmethod
+    def _getCrewIterator(avatar=None):
+        return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+    @staticmethod
+    def _getDevicesIterator(avatar=None):
+        return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+
+class _InstantReload(EventItem):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_InstantReload, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        else:
+            ammoCtrl = self.guiSessionProvider.shared.ammo
+            quantity, quantityInClip = ammoCtrl.getCurrentShells()
+            if not quantity:
+                return (False, None)
+            isGunReloading = ammoCtrl.isGunReloading()
+            if isGunReloading:
+                return (True, None)
+            if ammoCtrl.getGunSettings().isDualGun:
+                reloadingState = ammoCtrl.getGunReloadingState()
+                dualGunShellChangeTime = ammoCtrl.getDualGunShellChangeTime()
+                if reloadingState.getBaseValue() >= min(dualGunShellChangeTime.left, dualGunShellChangeTime.right):
+                    return (True, None)
+            if ammoCtrl.getGunSettings().isCassetteClip():
+                clipCapacity = ammoCtrl.getClipCapacity()
+                if clipCapacity > quantity:
+                    return (False, None)
+                if clipCapacity > quantityInClip:
+                    return (True, None)
+            return (False, _ActivationError('instantReload', {'name': self._descriptor.userString}))
+
+
 def _isBattleRoyaleBattle():
     return BigWorld.player().arena.bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE if BigWorld.player() is not None else False
 
@@ -1205,12 +1305,17 @@ class EquipmentsController(MethodsRules, IBattleController):
         item = cls._findExtendItem(False, descriptor.name, descriptor, quantity, stage, timeRemaining, totalTime)
         if item:
             return item
-        tags, clazz = _getInitialTagsAndClass(descriptor, _EQUIPMENT_TAG_TO_ITEM)
-        if tags:
-            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         else:
-            item = _EquipmentItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
-        return item
+            if descriptor.ctrlItems is not None:
+                tags = descriptor.tags
+                clazz = descriptor.ctrlItems.get(component_constants.EquipmentCtrlItemKeys.default.name)
+            else:
+                tags, clazz = _getInitialTagsAndClass(descriptor, _EQUIPMENT_TAG_TO_ITEM)
+            if clazz is not None:
+                item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+            else:
+                item = _EquipmentItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+            return item
 
     def clear(self, leave=True):
         super(EquipmentsController, self).clear(True)
@@ -1334,7 +1439,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             result, error = False, None
             item = self.getEquipment(intCD)
             if item:
-                result, error = self.__doChangeSetting(item, entityName, avatar)
+                result, error = self._doChangeSetting(item, entityName, avatar)
             return (result, error)
 
     def changeSettingByTag(self, tag, entityName=None, avatar=None):
@@ -1344,7 +1449,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             result, error = True, None
             for _, item in self._equipments.iteritems():
                 if tag in item.getTags() and _DAMAGE_PANEL_EQUIPMENT.hasValue(tag):
-                    result, error = self.__doChangeSetting(item, entityName, avatar)
+                    result, error = self._doChangeSetting(item, entityName, avatar)
                     break
 
             return (result, error)
@@ -1361,7 +1466,7 @@ class EquipmentsController(MethodsRules, IBattleController):
         self.__preferredPosition = None
         return value
 
-    def __doChangeSetting(self, item, entityName=None, avatar=None):
+    def _doChangeSetting(self, item, entityName=None, avatar=None):
         result, error = item.canActivate(entityName, avatar)
         if result and avatar_getter.isPlayerOnArena(avatar):
             if item.getStage() == EQUIPMENT_STAGES.PREPARING:
@@ -1838,12 +1943,17 @@ class EquipmentsReplayPlayer(EquipmentsController):
         item = cls._findExtendItem(True, descriptor.name, descriptor, quantity, stage, timeRemaining, totalTime)
         if item:
             return item
-        tags, clazz = _getInitialTagsAndClass(descriptor, _REPLAY_EQUIPMENT_TAG_TO_ITEM)
-        if tags:
-            item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         else:
-            item = _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
-        return item
+            if descriptor.ctrlItems is not None:
+                tags = descriptor.tags
+                clazz = descriptor.ctrlItems.get(component_constants.EquipmentCtrlItemKeys.replay.name)
+            else:
+                tags, clazz = _getInitialTagsAndClass(descriptor, _REPLAY_EQUIPMENT_TAG_TO_ITEM)
+            if clazz is not None:
+                item = clazz(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+            else:
+                item = _ReplayItem(descriptor, quantity, stage, timeRemaining, totalTime, tags)
+            return item
 
     def getActivationCode(self, intCD, entityName=None, avatar=None):
         return None

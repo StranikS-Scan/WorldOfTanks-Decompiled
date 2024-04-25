@@ -241,6 +241,51 @@
       </value>
     </badge>
     <badge>
+      <name>	tournament_legendary_seven_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31013	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	tournament_legendary_seven_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31014	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	red_clove	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31015	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	7.008	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
       <name>	ranked_beta_gold	</name>
       <type>	dict	</type>
       <value>
@@ -3828,6 +3873,24 @@
           <type>	int	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	may_2024	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	148	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.00	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>

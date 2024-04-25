@@ -157,8 +157,12 @@ class CommanderSkillWithDelay(ExtendedSkill):
     __slots__ = ()
 
     @property
-    def delay(self):
+    def turnOnDelay(self):
         return self._setOfParameters[0]
+
+    @property
+    def turnOffDelay(self):
+        return self._setOfParameters[1]
 
 
 class CommanderEnemyShotPredictor(ExtendedSkill):

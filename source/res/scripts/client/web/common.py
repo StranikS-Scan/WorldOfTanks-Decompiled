@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/common.py
 import typing
+from constants import RP_PGB_POINT, RP_POINT
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared.utils.requesters import IStatsRequester
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
+from helpers.time_utils import getServerUTCTime
 if typing.TYPE_CHECKING:
     from typing import Dict
 _BATTLE_PASS_CHAPTER_STATE_NAME = {ChapterState.NOT_STARTED: 'not_started',
@@ -36,3 +40,21 @@ def formatBattlePassInfo(battlePass=None):
                 'leftTime': battlePass.getFinalOfferTime()},
      'chapters': {chapterID:{'isBought': battlePass.isBought(chapterID=chapterID),
                   'state': _BATTLE_PASS_CHAPTER_STATE_NAME[battlePass.getChapterState(chapterID)]} for chapterID in battlePass.getRegularChapterIds()}}
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext, itemsCache=IItemsCache)
+def formatReferralProgramInfo(lobbyContext=None, itemsCache=None):
+    refProgram = itemsCache.items.refProgram
+    entitlements = itemsCache.items.stats.entitlements
+    rpPgbPoints = entitlements.get(RP_PGB_POINT, 0)
+    rpPoints = entitlements.get(RP_POINT, 0)
+    pgbLimitPoints = refProgram.getRPPgbPoints()
+    timeLeft = max(refProgram.getRPExpirationTime() - int(getServerUTCTime()), 0)
+    configLimits = lobbyContext.getServerSettings().getRPConfig().asDict()
+    passiveIncome = refProgram.getRPPassiveIncome()
+    return {'rp_pgb_points': rpPgbPoints,
+     'rp_points': rpPoints,
+     'rp_pgb_limit_points': pgbLimitPoints,
+     'rp_time_left': timeLeft,
+     'rp_config_limits': configLimits,
+     'rp_passive_income': passiveIncome}

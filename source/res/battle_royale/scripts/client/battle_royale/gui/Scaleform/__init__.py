@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.settings import config as sf_config
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as _TOOLTIPS
 
 def registerBRBattlePackages():
-    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, sf_config.BATTLE_PACKAGES + ('battle_royale.gui.Scaleform.daapi.view.battle',))
+    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, ('battle_royale.gui.Scaleform.daapi.view.battle', 'battle_royale.gui.Scaleform.daapi.view.battle.shared', 'messenger.gui.Scaleform.view.battle'))
 
 
 def registerBRLobbyPackages():

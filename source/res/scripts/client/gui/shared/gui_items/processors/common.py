@@ -165,27 +165,28 @@ class OutfitApplier(Processor):
         requestData = []
         c11nService = dependency.instance(ICustomizationService)
         for outfit, season in self.outfitData:
-            component = None
             if outfit.style:
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
                 style = self.itemsCache.items.getItemByCD(intCD)
                 outfit = removePartsFromOutfit(season, outfit)
                 if style and style.isProgressive:
                     outfit = c11nService.removeAdditionalProgressionData(outfit=outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=season)
-                    component = outfit.pack()
-            if component is None:
-                component = outfit.pack()
+            component = outfit.pack()
+            self.__removeHiddenCamouflages(component)
             if component.styleId and isEditedStyle(component):
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
                 style = self.itemsCache.items.getItemByCD(intCD)
-                baseOutfit = removePartsFromOutfit(season, style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr()))
+                vehicleCD = self.vehicle.descriptor.makeCompactDescr()
+                baseOutfit = removePartsFromOutfit(season, style.getOutfit(season, vehicleCD))
+                if style.isProgressive:
+                    baseOutfit = c11nService.removeAdditionalProgressionData(outfit=baseOutfit, style=style, vehCD=vehicleCD, season=season)
                 baseComponent = baseOutfit.pack()
+                self.__removeHiddenCamouflages(baseComponent)
                 component = component.getDiff(baseComponent)
             self.__validateOutfitComponent(component)
             requestData.append((component.makeCompDescr(), season))
 
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, requestData, lambda code: self._response(code, callback))
-        return
 
     def __validateOutfitComponent(self, outfitComponent):
         for itemType in CustomizationType.STYLE_ONLY_RANGE:
@@ -197,14 +198,16 @@ class OutfitApplier(Processor):
                 itemsComponents = []
             setattr(outfitComponent, componentsAttrName, itemsComponents)
 
+        return
+
+    @staticmethod
+    def __removeHiddenCamouflages(outfitComponent):
         camouflages = []
         for camoComponent in outfitComponent.camouflages:
             if camoComponent.id != HIDDEN_CAMOUFLAGE_ID:
                 camouflages.append(camoComponent)
-            _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
 
         outfitComponent.camouflages = camouflages
-        return
 
 
 class CustomizationsBuyer(Processor):

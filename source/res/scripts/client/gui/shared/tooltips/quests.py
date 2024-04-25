@@ -17,6 +17,7 @@ from gui.server_events import events_helpers
 from gui.server_events.awards_formatters import TokenBonusFormatter, PreformattedBonus, LABEL_ALIGN
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.server_events.cond_formatters.tooltips import MissionsAccountRequirementsFormatter
+from gui.server_events.events_helpers import filterEventAvailableQuest
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
@@ -68,6 +69,9 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
 
     def _getQuests(self, vehicle):
         return sorted(self._questController.getCurrentModeQuestsForVehicle(vehicle, True), key=events_helpers.questsSortFunc)
+
+    def _getQuestList(self, vehicle):
+        return sorted([ q for q in self._questController.getCurrentModeQuestsForVehicle(vehicle, True) if filterEventAvailableQuest(q) ], key=events_helpers.questsSortFunc)
 
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
@@ -229,6 +233,9 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setWidth(298)
+
+    def _getRequirementsOverrides(self, quest):
+        return []
 
     def _packBlocks(self, *args, **kwargs):
         source = self._eventsCache.getQuests()

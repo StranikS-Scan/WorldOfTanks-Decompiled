@@ -1,0 +1,53 @@
+<extension.xml>
+  <FeatureName>	historical_battles	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	historical_battles_personality	</Personality>
+  <EditorPersonality>	historical_battles_personality_editor	</EditorPersonality>
+  <Entities>
+    <ServerOnlyEntities>
+      <HBBattleMgr></HBBattleMgr>
+      <HBUnitMgr></HBUnitMgr>
+    </ServerOnlyEntities>
+    <ClientServerEntities>
+      <HBHangarTankObject></HBHangarTankObject>
+      <HBAllyVehicle></HBAllyVehicle>
+      <HBHeroTank></HBHeroTank>
+      <HBMainHeroTank></HBMainHeroTank>
+      <HBTacticalMine></HBTacticalMine>
+      <HBCustomizableSceneObject></HBCustomizableSceneObject>
+      <HBCameraAnchorObject></HBCameraAnchorObject>
+    </ClientServerEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <HBArenaBattleResultComponent></HBArenaBattleResultComponent>
+      <HBAccountBattleResultComponent></HBAccountBattleResultComponent>
+      <HBComponent></HBComponent>
+      <HBShopAccountComponent></HBShopAccountComponent>
+      <HBFrontCouponsComponent></HBFrontCouponsComponent>
+      <HBAccountComponent></HBAccountComponent>
+      <HBCoinsComponent></HBCoinsComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <ArenaPhasesComponent></ArenaPhasesComponent>
+      <HealthTrackerComponent></HealthTrackerComponent>
+      <HealthInfoComponent></HealthInfoComponent>
+      <MapImageComponent></MapImageComponent>
+      <VehicleAffectComponent></VehicleAffectComponent>
+      <HBArenaMinefieldComponent></HBArenaMinefieldComponent>
+      <HBVehicleFireballShotComponent></HBVehicleFireballShotComponent>
+      <HBVehicleSuperShotComponent></HBVehicleSuperShotComponent>
+      <HBVehicleRoleComponent></HBVehicleRoleComponent>
+      <HBVehicleBattleStatsComponent></HBVehicleBattleStatsComponent>
+      <HBVehiclePositionsComponent></HBVehiclePositionsComponent>
+      <HBGoalComponent></HBGoalComponent>
+      <HBTeamInfoStatsComponent></HBTeamInfoStatsComponent>
+      <HBVehicleRoleArenaComponent></HBVehicleRoleArenaComponent>
+      <HBAttackDirectionMarkerComponent></HBAttackDirectionMarkerComponent>
+      <HBBattleFeedbackComponent></HBBattleFeedbackComponent>
+      <HBVehicleNitro></HBVehicleNitro>
+      <HBVehicleAfkController></HBVehicleAfkController>
+      <HBVehicleEffect></HBVehicleEffect>
+    </DynamicComponents>
+  </Components>
+</extension.xml>

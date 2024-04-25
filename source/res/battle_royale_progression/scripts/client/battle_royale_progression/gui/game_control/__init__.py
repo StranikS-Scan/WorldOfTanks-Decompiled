@@ -8,7 +8,7 @@ from gui.shared.system_factory import registerAwardControllerHandler, registerGa
 from soft_exception import SoftException
 
 def registerBRGameControllers():
-    from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+    from skeletons.gui.game_control import IBRProgressionOnTokensController
     registerGameControllers([(IBRProgressionOnTokensController, BRProgressionController, False)])
 
 

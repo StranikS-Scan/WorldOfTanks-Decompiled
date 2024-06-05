@@ -30,8 +30,8 @@ class _DQSettings(utils.SettingRecord):
 
 class _DogTagsRootSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitedDogTagsTabIdx=None, onboardingEnabled=True, seenComps=None):
-        super(_DogTagsRootSettings, self).__init__(lastVisitedDogTagsTabIdx=lastVisitedDogTagsTabIdx, onboardingEnabled=onboardingEnabled, seenComps=seenComps or set())
+    def __init__(self, lastVisitedDogTagsTabIdx=None, onboardingEnabled=True, seenComps=None, selectedAnimated=None, selectedCustomizable=None, animatedDogTagsVisited=False, customizableDogTagsVisited=False):
+        super(_DogTagsRootSettings, self).__init__(lastVisitedDogTagsTabIdx=lastVisitedDogTagsTabIdx, onboardingEnabled=onboardingEnabled, seenComps=seenComps or set(), selectedAnimated=selectedAnimated or [], selectedCustomizable=selectedCustomizable or [], animatedDogTagsVisited=animatedDogTagsVisited, customizableDogTagsVisited=customizableDogTagsVisited)
 
     def setLastVisitedDogTagsTab(self, lastVisitedDogTagsTabIdx):
         self.update(lastVisitedDogTagsTabIdx=lastVisitedDogTagsTabIdx)
@@ -41,6 +41,18 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
     def markComponentAsSeen(self, compId):
         self.update(seenComps=self.seenComps | {compId})
+
+    def setSelectedAnimated(self, selectedAnimated):
+        self.update(selectedAnimated=selectedAnimated)
+
+    def setSelectedCustomizable(self, selectedCustomizable):
+        self.update(selectedCustomizable=selectedCustomizable)
+
+    def setAnimatedDogTagsVisited(self, animatedDogTagsVisited):
+        self.update(animatedDogTagsVisited=animatedDogTagsVisited)
+
+    def setCustomizableDogTagsVisited(self, customizableDogTagsVisited):
+        self.update(customizableDogTagsVisited=customizableDogTagsVisited)
 
     @classmethod
     def _getSettingName(cls):

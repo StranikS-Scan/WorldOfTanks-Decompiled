@@ -125,6 +125,10 @@ BLUEPRINTS_CONVERT_SALE_STARTED_SEEN = 'bcsStartedSeen'
 IS_SHOP_VISITED = 'isShopVisited'
 LAST_SHOP_ACTION_COUNTER_MODIFICATION = 'lastShopActionCounterModification'
 OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
+LIVE_OPS_WEB_EVENTS_COUNTERS = 'liveOpsWebEventsCounters'
+LIVE_OPS_WEB_EVENTS_UI_FLAGS = 'liveOpsWebEventsUIFlags'
+COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP = 'comp7BondEquipmentReminderShown'
+COMP7_YEARLY_REWARD_SEEN = 'comp7YearlyRewardSeen'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
@@ -210,6 +214,8 @@ QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
 DOG_TAGS = 'dogTags'
+DOG_TAGS_SELECTED_ANIMATED = 'selectedAnimated'
+DOG_TAGS_SELECTED_CUSTOMIZABLE = 'selectedCustomizable'
 WOT_PLUS = 'wotPlus'
 TELECOM_RENTALS = 'telecomRentals'
 PERSONAL_RESERVES = 'personalReserves'
@@ -273,6 +279,15 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
+ADVANCED_ACHIEVEMENTS = 'AdvancedAchievements'
+PREV_CATEGORY_LIST_DATA = 'prevCategoryListData'
+PREV_ACHIEVEMENT_SCORE = 'prevAchievementScore'
+PREV_PLAYER_COLLECTION_PROGRESS = 'prevPlayerCollectionProgress'
+PREV_TROPHY_COUNT = 'prevTrophyCount'
+IS_NEEDED_SHOW_HINT_ACHIEVEMENT_CATALOG = 'isNeededShowHintAchievementCatalog'
+UNSEEN_ADVANCED_ACHIEVEMENTS = 'unseenAdvancedAchievements'
+SEEN_TROPHIES_ADVANCED_ACHIEVEMENTS = 'seenTrophiesAdvancedAchievements'
+MAIN_ADVANCED_ACHIEVEMENTS_PAGE_VISITED = 'mainAdvancedAchievementsPageVisited'
 VIEWED_MODULES_SECTION = 'mua'
 LIMITED_UI_VERSIONED_RULES = 'luiVersioned'
 
@@ -934,7 +949,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                         'questsConfirmDialogShowPM2': True},
                 DOG_TAGS: {'lastVisitedDogTagsTabIdx': None,
                            'onboardingEnabled': True,
-                           'seenComps': set()},
+                           'seenComps': set(),
+                           'animatedDogTagsVisited': False,
+                           'customizableDogTagsVisited': False,
+                           DOG_TAGS_SELECTED_ANIMATED: [],
+                           DOG_TAGS_SELECTED_CUSTOMIZABLE: []},
                 WOT_PLUS: {'isFirstTime': True,
                            'isWotPlusEnabled': False,
                            'isGoldReserveEnabled': False,
@@ -1153,7 +1172,15 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     ACHIEVEMENTS_WTR_INFO: {ACHIEVEMENTS_WTR_PREV_POINTS: 0,
                                                             ACHIEVEMENTS_WTR_PREV_RANK: 0,
                                                             ACHIEVEMENTS_WTR_PREV_SUB_RANK: 0},
-                                    PREV_ACHIEVEMENTS_NAME_LIST: []}},
+                                    PREV_ACHIEVEMENTS_NAME_LIST: []},
+                ADVANCED_ACHIEVEMENTS: {PREV_ACHIEVEMENT_SCORE: 0,
+                                        PREV_TROPHY_COUNT: 0,
+                                        PREV_PLAYER_COLLECTION_PROGRESS: 0,
+                                        PREV_CATEGORY_LIST_DATA: [(0, 0), (0, 0), (0, 0)],
+                                        IS_NEEDED_SHOW_HINT_ACHIEVEMENT_CATALOG: True,
+                                        UNSEEN_ADVANCED_ACHIEVEMENTS: {},
+                                        SEEN_TROPHIES_ADVANCED_ACHIEVEMENTS: {},
+                                        MAIN_ADVANCED_ACHIEVEMENTS_PAGE_VISITED: False}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -1170,7 +1197,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 DEMOUNT_KIT_SEEN: False,
                 RECERTIFICATION_FORM_SEEN: False,
                 NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
-                VPP_ENTRY_POINT_LAST_SEEN_STEP: {}},
+                VPP_ENTRY_POINT_LAST_SEEN_STEP: {},
+                LIVE_OPS_WEB_EVENTS_COUNTERS: {}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
@@ -1191,7 +1219,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                    RESOURCE_WELL_END_SHOWN: set()},
                      COLLECTIONS_NOTIFICATIONS: {COLLECTION_START_SEEN: [],
                                                  COLLECTION_RENEW_SEEN: {},
-                                                 COLLECTIONS_UPDATED_ENTRY_SEEN: False}},
+                                                 COLLECTIONS_UPDATED_ENTRY_SEEN: False},
+                     COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP: None,
+                     COMP7_YEARLY_REWARD_SEEN: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1300,6 +1330,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                       SHOWN_COMPLETED_COLLECTIONS: set(),
                                       LAST_SHOWN_NEW_COLLECTION: 0,
                                       LAST_SHOWN_COLLECTION_BALANCE: {}},
+                LIVE_OPS_WEB_EVENTS_UI_FLAGS: {},
                 'uiSpamVisited_store': False,
                 'uiSpamVisited_profile': False,
                 'uiSpamVisited_profileHof': False,

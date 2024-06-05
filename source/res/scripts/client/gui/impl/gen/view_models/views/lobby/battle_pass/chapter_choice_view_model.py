@@ -35,10 +35,10 @@ class ChapterChoiceViewModel(ViewModel):
     def setFreePoints(self, value):
         self._setNumber(2, value)
 
-    def getIsCustomSeason(self):
+    def getIsSeasonWithAdditionalBackground(self):
         return self._getBool(3)
 
-    def setIsCustomSeason(self, value):
+    def setIsSeasonWithAdditionalBackground(self, value):
         self._setBool(3, value)
 
     def getSeasonNum(self):
@@ -52,7 +52,7 @@ class ChapterChoiceViewModel(ViewModel):
         self._addViewModelProperty('awardsWidget', AwardsWidgetModel())
         self._addArrayProperty('chapters', Array())
         self._addNumberProperty('freePoints', 0)
-        self._addBoolProperty('isCustomSeason', False)
+        self._addBoolProperty('isSeasonWithAdditionalBackground', False)
         self._addNumberProperty('seasonNum', 0)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onChapterSelect = self._addCommand('onChapterSelect')

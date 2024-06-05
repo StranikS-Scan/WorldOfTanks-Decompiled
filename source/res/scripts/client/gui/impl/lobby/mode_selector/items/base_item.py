@@ -188,16 +188,25 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
 
     def _onInitializing(self):
         super(ModeSelectorNormalCardItem, self)._onInitializing()
+        self._setResourcesFolderName()
+        self._preferredColumn, self._priority = self._getPositionByModeName()
+        self._setModeTexts()
+
+    def _setResourcesFolderName(self):
         modeName = self.modeName
         if R.images.gui.maps.icons.mode_selector.mode.dyn(modeName).isValid():
             self.viewModel.setResourcesFolderName(modeName)
-        self._preferredColumn, self._priority = self._getPositionByModeName()
+
+    def _setModeDescription(self, modeStrings):
+        description = modeStrings.dyn('description')
+        self.viewModel.setDescription(backport.text(description()) if description.exists() else '')
+
+    def _setModeTexts(self):
         modeStrings = self._getModeStringsRoot()
         if modeStrings.isValid():
             condition = modeStrings.dyn('condition')
             self.viewModel.setConditions(backport.text(condition()) if condition.exists() else '')
-            description = modeStrings.dyn('description')
-            self.viewModel.setDescription(backport.text(description()) if description.exists() else '')
+            self._setModeDescription(modeStrings)
             callToAction = modeStrings.dyn('callToAction')
             self.viewModel.setStatusActive(backport.text(callToAction()) if callToAction.exists() else '')
 

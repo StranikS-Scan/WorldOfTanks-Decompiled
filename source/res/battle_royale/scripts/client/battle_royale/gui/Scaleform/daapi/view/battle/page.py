@@ -178,8 +178,16 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def _updatePostmortemTips(self):
         self.as_onPostmortemActiveS(self.isPostmortemTipsVisible)
 
-    def _onDefeatedTeamsUpdated(self, *_):
+    def __onRespawnTimeFinished(self):
         self._updatePostmortemTips()
+
+    def _onDefeatedTeamsUpdated(self, *_):
+        observedVehicleID = BigWorld.player().getObservedVehicleID()
+        observedVehicleTeam = self.sessionProvider.getArenaDP().getVehicleInfo(observedVehicleID).team
+        playerVehicleID = BigWorld.player().playerVehicleID
+        playerVehicleTeam = self.sessionProvider.getArenaDP().getVehicleInfo(playerVehicleID).team
+        if observedVehicleTeam == playerVehicleTeam or BigWorld.player().observerSeesAll():
+            self._updatePostmortemTips()
 
     def _toggleFullStats(self, isShown, permanent=None, tabAlias=None):
         manager = self.app.containerManager
@@ -197,7 +205,6 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             if self.__selectSpawnToggling or self.__isWinnerScreenShown:
                 return
             super(BattleRoyalePage, self)._toggleFullStats(isShown, permanent, tabAlias)
-            self._updatePostmortemTips()
             return
 
     def _toggleRadialMenu(self, isShown, allowAction=True):
@@ -244,10 +251,13 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
             self._battleSessionES.subscribeToEvent(vehStateCtrl.onVehicleControlling, self.__onVehicleControlling)
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         if componentSystem and componentSystem.battleRoyaleComponent:
-            self._battleSessionES.subscribeToEvent(componentSystem.battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate, self._onDefeatedTeamsUpdated)
+            battleRoyaleComponent = componentSystem.battleRoyaleComponent
+            self._battleSessionES.subscribeToEvent(battleRoyaleComponent.onBattleRoyaleDefeatedTeamsUpdate, self._onDefeatedTeamsUpdated)
+            self._battleSessionES.subscribeToEvent(battleRoyaleComponent.onRespawnTimeFinished, self.__onRespawnTimeFinished)
         deathScreenCtrl = self.sessionProvider.dynamic.deathScreen
         if deathScreenCtrl:
             self._battleSessionES.subscribeToEvent(deathScreenCtrl.onShowDeathScreen, self.__onShowDeathScreen)
+            self._battleSessionES.subscribeToEvent(deathScreenCtrl.onHideDeathScreen, self.__onHideDeathScreen)
             self._battleSessionES.subscribeToEvent(deathScreenCtrl.onWinnerScreen, self.__onWinnerScreen)
         spawnCtrl = self.sessionProvider.dynamic.spawn
         if spawnCtrl and self not in spawnCtrl.viewComponents:
@@ -313,8 +323,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
 
     def _getComponentsVideoModeSwitching(self, ctrlMode):
         components = super(BattleRoyalePage, self)._getComponentsVideoModeSwitching(ctrlMode)
-        if not self.__panelsIsVisible:
-            components.discard(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
+        if self.__panelsIsVisible:
+            components.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
         return components
 
     def __onCameraChanged(self, ctrlMode, _=None):
@@ -391,6 +401,10 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
                 dualGunAlias = BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL
                 if dualGunAlias in self._fsToggling:
                     self._fsToggling.remove(dualGunAlias)
+
+    def __onHideDeathScreen(self):
+        if self.as_isComponentVisibleS(self._fullStatsAlias) and BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE in self._fsToggling:
+            self._fsToggling.remove(BATTLE_VIEW_ALIASES.BR_PLAYER_STATS_IN_BATTLE)
 
     def __onShowDeathScreen(self):
         self.__hideRadialMenu()

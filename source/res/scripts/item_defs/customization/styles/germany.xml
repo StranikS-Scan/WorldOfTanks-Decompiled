@@ -2206,6 +2206,39 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G172_PzVIB_Tiger_II_DIT	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	842	</id>
+      <texture>	gui/maps/vehicles/styles/G172_PzVIB_Tiger_II_DIT_3DSt.png	</texture>
+      <modelsSet>	G172_PzVIB_Tiger_II_DIT_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G172_PzVIB_Tiger_II_DIT_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G172_PzVIB_Tiger_II_DIT_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -2344,6 +2377,40 @@
       <userString>	#vehicle_customization:special_style/G55_E-75_MDXXIII4_3DSt	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/G55_E-75_MDXXIII4_3DSt_desc/long	</longDescriptionSpecial>
       <tags>	addNationalEmblem NY_style c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G173_BT42_DIT	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	844	</id>
+      <texture>	gui/maps/vehicles/styles/G173_BT42_DIT_3DSt.png	</texture>
+      <modelsSet>	G173_BT42_DIT_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G173_BT42_DIT_3DSt	</userString>
+      <description>	#vehicle_customization:special_style/G173_BT42_DIT_3DSt_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G173_BT42_DIT_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n2D	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>

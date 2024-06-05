@@ -161,6 +161,8 @@ class DebrisCrashedTrackManager(CGF.ComponentManager):
             return
         else:
             vehicleTracks = debrisComponent.wheelsGameObject.findComponentByType(Vehicular.VehicleTracks)
+            if vehicleTracks is None:
+                return
             trackGO = vehicleTracks.getTrackGameObject(debrisComponent.isLeft, debrisComponent.pairIndex)
             go = debrisComponent.createDebrisGameObject(self.spaceID)
             go.createComponent(GenericComponents.HierarchyComponent, trackGO)

@@ -8,13 +8,15 @@ from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from dict2model.fields import Field
     from dict2model.types import SchemaModelClassesType, ValidatorsType
+    from section2dict import TReaders
 _logger = logging.getLogger(__name__)
 
 class GameParamsSchema(Schema[SchemaModelType]):
-    __slots__ = ('_gameParamsKey',)
+    __slots__ = ('readers', '_gameParamsKey')
 
-    def __init__(self, gameParamsKey, fields, modelClass=dict, checkUnknown=True, serializedValidators=None, deserializedValidators=None):
+    def __init__(self, gameParamsKey, fields, modelClass=dict, checkUnknown=True, serializedValidators=None, deserializedValidators=None, readers=None):
         super(GameParamsSchema, self).__init__(fields=fields, modelClass=modelClass, checkUnknown=checkUnknown, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        self.readers = readers
         self._gameParamsKey = gameParamsKey
 
     @property

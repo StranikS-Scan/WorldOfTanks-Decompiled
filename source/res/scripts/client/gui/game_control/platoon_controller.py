@@ -839,6 +839,8 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __unitMgrOnUnitJoined(self, unitMgrID, prbType):
         _logger.debug('PlatoonController: __unitMgrOnUnitJoined')
+        if prbType not in PREBATTLE_TYPE.SQUAD_PREBATTLES:
+            return
         self.__tankDisplayPosition.clear()
         serverSettings = self.__settingsCore.serverSettings
         if not serverSettings.getOnceOnlyHintsSettings().get(OnceOnlyHints.PLATOON_BTN_HINT, False):
@@ -996,11 +998,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             return
 
     def __clearPlatoonTankInfo(self):
-        entity = self.prbEntity
-        if entity is not None and hasattr(entity, 'getRosterSettings'):
-            unitSlotCount = entity.getRosterSettings().getMaxSlots()
-            self.onPlatoonTankUpdated({i:False for i in range(unitSlotCount)})
-        return
+        self.onPlatoonTankUpdated({i:False for i in self.__availablePlatoonTanks})
 
     def __hasEnoughSlots(self, slots):
         return len(self.__availablePlatoonTanks) + 1 >= slots

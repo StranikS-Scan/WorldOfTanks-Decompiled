@@ -10,9 +10,10 @@ from story_mode.skeletons.story_mode_controller import IStoryModeController
 
 @adisp_async
 @future_async.wg_async
-def checkMissionCompleted(callback):
+def checkTasksAvailable(callback):
     ctrl = dependency.instance(IStoryModeController)
-    if ctrl.isMissionCompleted(ctrl.selectedMissionId):
+    mission = ctrl.missions.getMission(ctrl.selectedMissionId)
+    if mission and all((ctrl.isMissionTaskCompleted(mission.missionId, task.id) for task in mission.getUnlockedTasks())):
         builder = WarningDialogBuilder()
         rMsg = R.strings.sm_lobby.dialogs.missionCompleted
         builder.setMessagesAndButtons(rMsg, rMsg)
@@ -23,11 +24,11 @@ def checkMissionCompleted(callback):
         callback(True)
 
 
-def missionCompletionCheck(func):
+def tasksAvailableCheck(func):
 
     @adisp_process
     def wrapper(*args, **kwargs):
-        res = yield checkMissionCompleted()
+        res = yield checkTasksAvailable()
         if res:
             func(*args, **kwargs)
         elif kwargs.get('callback') is not None:

@@ -1,0 +1,392 @@
+<G00_Pillbox_Gun_15cm_SM24.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	32	</forward>
+    <backward>	7	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.1	</moving>
+    <still>	0.1	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.01	</camouflageNetBonus>
+    <firePenalty>	0.01	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	18	</armor_1>
+    </armor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+    <weight>	2750	</weight>
+    <maxHealth>	4000	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.0 0.36 1.0 0.05 0.34	</pitchParams>
+      <rollParams>	1.0 0.34 38.0 0.36 1.0 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.5	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	null	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0 0.509475 0	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customization>
+      <customizableVehicleAreas>
+        <paint></paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+  </hull>
+  <chassis>
+    <Chassis_G00_Pillbox_Gun_15cm_SM24>
+      <userString>	#germany_vehicles:Chassis_RhB_Waffentrager	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	240	</price>
+      <notInShop>	true	</notInShop>
+      <unlocks></unlocks>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	1200	</weight>
+      <maxLoad>	4890	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.5 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.1	</textureScale>
+        </trackPair>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.430480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 3.652850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.0377594	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L1	</name>
+          <radius>	0.0491905	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.0393124	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0 5.40018e-05 0	</hullPosition>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20484 0.541571	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <repairTime>	6	</repairTime>
+    </Chassis_G00_Pillbox_Gun_15cm_SM24>
+  </chassis>
+  <turrets0>
+    <Turret_1_G00_Pillbox_Gun_15cm_SM24>
+      <userString>	#germany_vehicles:RhB_Waffentrager_short	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	120	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_2>	16	</armor_2>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_2 armor_2 armor_2	</primaryArmor>
+      <weight>	170	</weight>
+      <maxHealth>	500	</maxHealth>
+      <rotationSpeed>	5	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Gun_1_G00_Pillbox_Gun_15cm_SM24>	shared	  <maxAmmo>	1000	</maxAmmo>
+          <unlocks></unlocks>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_large_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint></paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+        </Gun_1_G00_Pillbox_Gun_15cm_SM24>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_Pillbox_Gun_15cm_SM24/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0 1.20777 0.513632	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Turret_1_G00_Pillbox_Gun_15cm_SM24>
+  </turrets0>
+  <engines>
+    <Porsche_Deutz_Typ180_2_StoryMode_1>	shared	</Porsche_Deutz_Typ180_2_StoryMode_1>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <FuG12_StoryMode_2>	shared	</FuG12_StoryMode_2>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Deutz_Typ180_2_StoryMode_1>
+          <smplEnginePower>	888.1161	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
+        </Porsche_Deutz_Typ180_2_StoryMode_1>
+      </engines>
+      <chassis>
+        <Chassis_G00_Pillbox_Gun_15cm_SM24>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G00_Pillbox_Gun_15cm_SM24>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <destruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	3.0	</waitChangeBurnSound>
+          <stopDeath>	60	</stopDeath>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/smoke_dead_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <pixie>
+            <startKey>	flaming	</startKey>
+            <endKey>	waitChangeBurnSound	</endKey>
+            <file>	particles/Tank/destruction/fire_dead_small_02.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_small	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </destruction>
+    <flaming>
+      <variant1>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_small_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_small_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_small_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	3.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_small_02.eff	</file>
+            <position>	HP_Fire_2	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant2>
+    </flaming>
+  </effects>
+  <emblems>
+    <default>	0	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</G00_Pillbox_Gun_15cm_SM24.xml>

@@ -16,6 +16,7 @@ import arena_blocks
 import bitmask_blocks_common
 import dictionary_blocks
 import debug_manager_blocks
+import cgf_blocks
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT, ASPECT.SERVER)
 g_blockRegistrar.regBlocksFromModule(example)
 g_blockRegistrar.regTypesFromModule(example)
@@ -42,3 +43,4 @@ g_blockRegistrar.regContext(CGFGameObjectContext)
 g_blockRegistrar.regBlocksFromModule(dictionary_blocks)
 g_blockRegistrar.regTypesFromModule(dictionary_blocks)
 g_blockRegistrar.regBlocksFromModule(debug_manager_blocks)
+g_blockRegistrar.regBlocksFromModule(cgf_blocks)

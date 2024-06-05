@@ -292,8 +292,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             vStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
-        for name, setting in self.__settings.iteritems():
-            AccountSettings.setSettings(name, setting)
+        if not self.sessionProvider.isReplayPlaying:
+            for name, setting in self.__settings.iteritems():
+                AccountSettings.setSettings(name, setting)
 
         self.__callbackDelayer.destroy()
         return
@@ -662,12 +663,13 @@ class PreBattleHintPlugin(HintPanelPlugin):
                 vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             self.__callbackDelayer.destroy()
             self.__isActive = False
-            prbHintSettings = dict()
-            prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
-            prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
-            prbHintSettings[IBC_HINT_SECTION] = self.__battleComHintSettings
-            prbHintSettings[RESERVES_HINT_SECTION] = self.__reservesHintSettings
-            AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
+            if not self.sessionProvider.isReplayPlaying:
+                prbHintSettings = dict()
+                prbHintSettings[QUEST_PROGRESS_HINT_SECTION] = self.__questHintSettings
+                prbHintSettings[HELP_SCREEN_HINT_SECTION] = self.__helpHintSettings
+                prbHintSettings[IBC_HINT_SECTION] = self.__battleComHintSettings
+                prbHintSettings[RESERVES_HINT_SECTION] = self.__reservesHintSettings
+                AccountSettings.setSettings(PRE_BATTLE_HINT_SECTION, prbHintSettings)
             return
 
     def isActive(self):
@@ -710,7 +712,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return False
 
     def __onVehicleControlling(self, vehicle):
-        if not self.isActive():
+        if not self.isActive() or self.sessionProvider.isReplayPlaying:
             return
         else:
             vTypeDesc = vehicle.typeDescriptor
@@ -1060,6 +1062,7 @@ class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
 
 class HelpPlugin(HintPanelPlugin):
     __slots__ = ('__isActive', '__settings', '__isShown', '__isInDisplayPeriod', '__callbackDelayer', '__isVisible', '__settingKey', '__settingSectionName', '_localeRes', '__hintPriority', '__hintContext')
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _HINT_TIMEOUT = 6
 
     def __init__(self, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj):
@@ -1131,7 +1134,7 @@ class HelpPlugin(HintPanelPlugin):
 
     def __onBattleLoading(self, event):
         battleLoadingShown = event.ctx.get('isShown')
-        if not battleLoadingShown and self.__isInDisplayPeriod and self.__settings[self.__settingKey][HINTS_LEFT] > 0:
+        if not battleLoadingShown and self.__isInDisplayPeriod and self.__settings[self.__settingKey][HINTS_LEFT] > 0 and not self._sessionProvider.isReplayPlaying:
             self.__showHint()
 
     def __hide(self):
@@ -1144,22 +1147,20 @@ class HelpPlugin(HintPanelPlugin):
 
 
 class MapboxHelpPlugin(HelpPlugin):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, parentObj):
         super(MapboxHelpPlugin, self).__init__(MAPBOX_HINT_SECTION, 'mapbox', R.strings.ingame_gui.helpScreen.mapbox, HintPriority.MAPBOX, HelpHintContext.MAPBOX, parentObj)
 
     @classmethod
     def isSuitable(cls):
-        return cls.__sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPBOX
+        return cls._sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.MAPBOX
 
 
 class DevMapsHintPlugin(HelpPlugin):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, parentObj):
         super(DevMapsHintPlugin, self).__init__(DEV_MAPS_HINT_SECTION, 'devMaps', R.strings.ingame_gui.devMaps.hint, HintPriority.DEV_MAPS, HelpHintContext.DEV_MAPS, parentObj)
 
     @classmethod
     def isSuitable(cls):
-        return cls.__sessionProvider.arenaVisitor.extra.isMapsInDevelopmentEnabled()
+        return cls._sessionProvider.arenaVisitor.extra.isMapsInDevelopmentEnabled()

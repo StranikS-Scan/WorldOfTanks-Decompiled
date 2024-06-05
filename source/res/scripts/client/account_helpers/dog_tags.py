@@ -91,6 +91,14 @@ class DogTags(object):
         seenComps = userSettings.getDogTagsSettings().seenComps
         return allUnlockedComps - seenComps
 
+    def getUnseenCoupledComps(self):
+        allComponents = componentConfigAdapter.getAllComponents()
+        coupledComps = {compId for compId, comp in allComponents.iteritems() if comp.coupledComponentId is not None}
+        allUnlockedComps = self.getUnlockedComps()
+        unlockedCoupledComps = coupledComps.intersection(allUnlockedComps)
+        seenComps = userSettings.getDogTagsSettings().seenComps
+        return unlockedCoupledComps - seenComps
+
     def updatePlayerDT(self, backgroundId, engravingId):
         self.__account._doCmdIntArr(AccountCommands.CMD_UPDATE_PLAYER_DOG_TAG, [backgroundId, engravingId], self.__onUpdatePlayerDTCmdResponseReceived)
 

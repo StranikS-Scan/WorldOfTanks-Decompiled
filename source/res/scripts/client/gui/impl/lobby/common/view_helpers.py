@@ -23,6 +23,8 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
             tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
             bonusModelsList.addViewModel(bModel)
 
+        bonusModelsList.invalidate()
+
     return
 
 

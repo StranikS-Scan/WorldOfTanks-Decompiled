@@ -4,7 +4,7 @@ from collections import defaultdict
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
-from constants import BATTLE_LOG_SHELL_TYPES, BOT_DISPLAY_CLASS_NAMES
+from constants import BATTLE_LOG_SHELL_TYPES, BOT_DISPLAY_CLASS_NAMES, VEHICLE_BUNKER_TURRET_TAG
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
@@ -129,7 +129,10 @@ class _VehicleVOBuilder(_IVOBuilder):
 
     def _populateVO(self, vehicleVO, info, arenaDP):
         vInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID())
-        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vInfoVO.getDisplayedClassTag(), '')
+        if VEHICLE_BUNKER_TURRET_TAG in vInfoVO.vehicleType.tags:
+            vehicleVO.vehicleTypeImg = _IMAGES.WHITE_ICON_BUNKER_16X16
+        else:
+            vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vInfoVO.getDisplayedClassTag(), '')
         vehicleVO.vehicleName = vInfoVO.getDisplayedName()
 
 
@@ -140,7 +143,7 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
         if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
-        if info.isDeathZone() or info.isStaticDeathZone():
+        if info.isDeathZone() or info.isStaticDeathZone() or info.isMinefieldZone():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
         if info.isDamagingSmoke():
@@ -206,6 +209,15 @@ class _StaticDeathZoneVOBuilder(_ShellVOBuilder):
         return DAMAGE_LOG_SHELL_BG_TYPES.EMPTY
 
 
+class _MinefieldZoneVOBuilder(_ShellVOBuilder):
+
+    def _getShellTypeStr(self, info):
+        return HIDDEN_SHELL
+
+    def _getShellTypeBg(self, info, arenaDP=None):
+        return DAMAGE_LOG_SHELL_BG_TYPES.EMPTY
+
+
 class _EpicDeathZoneVOBuilder(_ShellVOBuilder):
 
     def _getShellTypeStr(self, info):
@@ -222,6 +234,8 @@ class _DamageShellVOBuilder(_ShellVOBuilder):
             shellVOBuilder = _ShellVOBuilder()
         elif info.isStaticDeathZone():
             shellVOBuilder = _StaticDeathZoneVOBuilder()
+        elif info.isMinefieldZone():
+            shellVOBuilder = _MinefieldZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
         else:
@@ -236,6 +250,8 @@ class _CritsShellVOBuilder(_ShellVOBuilder):
             shellVOBuilder = _ShellVOBuilder()
         elif info.isStaticDeathZone():
             shellVOBuilder = _StaticDeathZoneVOBuilder()
+        elif info.isMinefieldZone():
+            shellVOBuilder = _MinefieldZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
         else:
@@ -294,9 +310,9 @@ class _ActionImgVOBuilder(_IVOBuilder):
 
 
 class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
-    __slots__ = ('__shotIcon', '__fireIcon', '__ramIcon', '__wcIcon', '__berserkerIcon', '__spawnBotDmgIcon', '__mineFieldIcon', '__smokeDmgIcon', '__corrodingShotDmgIcon', '__fireCircleDmgIcon', '__clingBranderDmgIcon', '__thunderStrikeIcon', '__airstrikeIcon', '__artilleryIcon', '__airstrikeZoneIcon', '__deathZoneIcon')
+    __slots__ = ('__shotIcon', '__fireIcon', '__ramIcon', '__wcIcon', '__berserkerIcon', '__spawnBotDmgIcon', '__mineFieldIcon', '__smokeDmgIcon', '__corrodingShotDmgIcon', '__fireCircleDmgIcon', '__clingBranderDmgIcon', '__thunderStrikeIcon', '__airstrikeIcon', '__artilleryIcon', '__airstrikeZoneIcon', '__deathZoneIcon', '__battleshipIcon', '__destroyerIcon')
 
-    def __init__(self, shotIcon, fireIcon, ramIcon, wcIcon, mineFieldIcon, airstrikeIcon, artilleryIcon, airstrikeZoneIcon=None, deathZoneIcon=None, berserkerIcon=None, spawnBotDmgIcon=None, smokeDmgIcon=None, corrodingShotIcon=None, fireCircleDmgIcon=None, clingBranderDmgIcon=None, thunderStrikeIcon=None):
+    def __init__(self, shotIcon, fireIcon, ramIcon, wcIcon, mineFieldIcon, airstrikeIcon, artilleryIcon, airstrikeZoneIcon=None, deathZoneIcon=None, berserkerIcon=None, spawnBotDmgIcon=None, smokeDmgIcon=None, corrodingShotIcon=None, fireCircleDmgIcon=None, clingBranderDmgIcon=None, thunderStrikeIcon=None, battleshipIcon=None, destroyerIcon=None):
         super(_DamageActionImgVOBuilder, self).__init__('')
         self.__shotIcon = shotIcon
         self.__fireIcon = fireIcon
@@ -314,11 +330,13 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
         self.__artilleryIcon = artilleryIcon
         self.__airstrikeZoneIcon = airstrikeZoneIcon
         self.__deathZoneIcon = deathZoneIcon
+        self.__battleshipIcon = battleshipIcon
+        self.__destroyerIcon = destroyerIcon
 
     def _getImage(self, info):
         if info.isClingBrander():
             return self.__clingBranderDmgIcon
-        if info.isShot() or info.isDeathZone() or info.isFortArtilleryEqDamage() or info.isStaticDeathZone():
+        if info.isShot() or info.isDeathZone() or info.isFortArtilleryEqDamage() or info.isStaticDeathZone() or info.isMinefieldZone():
             return self.__shotIcon
         if info.isProtectionZoneDamage():
             return self.__deathZoneIcon
@@ -344,7 +362,11 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
             return self.__corrodingShotDmgIcon
         if info.isFireCircle():
             return self.__fireCircleDmgIcon
-        return self.__thunderStrikeIcon if info.isThunderStrike() else self.__ramIcon
+        if info.isThunderStrike():
+            return self.__thunderStrikeIcon
+        if info.isBattleshipStrike():
+            return self.__battleshipIcon
+        return self.__destroyerIcon if info.isDestroyerStrike() else self.__ramIcon
 
 
 class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
@@ -361,8 +383,8 @@ class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
 _DEFAULT_VEHICLE_VO_BUILDER = _VehicleVOBuilder()
 _EMPTY_SHELL_VO_BUILDER = _EmptyShellVOBuilder()
 _DAMAGE_VALUE_VO_BUILDER = _DamageValueVOBuilder()
-_ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION, mineFieldIcon=_IMAGES.DAMAGELOG_MINE_FIELD_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_16X16)),
- _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16)),
+_ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION, mineFieldIcon=_IMAGES.DAMAGELOG_MINE_FIELD_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_16X16, battleshipIcon=_IMAGES.DAMAGELOG_ARTILLERY_16X16, destroyerIcon=_IMAGES.DAMAGELOG_ARTILLERY_16X16)),
+ _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, mineFieldIcon=_IMAGES.DAMAGELOG_BY_MINE_FIELD_16X16, berserkerIcon=_IMAGES.DAMAGELOG_BERSERKER_16X16, spawnBotDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SPAWNED_BOT_16X16, smokeDmgIcon=_IMAGES.DAMAGELOG_DMG_BY_SMOKE_16X16, corrodingShotIcon=_IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16, fireCircleDmgIcon=_IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16, clingBranderDmgIcon=_IMAGES.DAMAGELOG_CLING_BRANDER_ENEMY_16X16, thunderStrikeIcon=_IMAGES.DAMAGELOG_THUNDER_STRIKE_ENEMY_16X16, airstrikeIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_EQ_ENEMY_16X16, artilleryIcon=_IMAGES.DAMAGELOG_ARTILLERY_EQ_ENEMY_16X16, airstrikeZoneIcon=_IMAGES.DAMAGELOG_AIRSTRIKE_ENEMY_16X16, deathZoneIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, battleshipIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16, destroyerIcon=_IMAGES.DAMAGELOG_ARTILLERY_ENEMY_16X16)),
  _ETYPE.BLOCKED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _ShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16)),
  _ETYPE.ASSIST_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _AssistActionImgVOBuilder()),
  _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16)),

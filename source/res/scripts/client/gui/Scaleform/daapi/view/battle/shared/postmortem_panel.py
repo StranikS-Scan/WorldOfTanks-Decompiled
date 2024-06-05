@@ -14,6 +14,7 @@ from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.components_packer import unpack_component, pack_component
 from dog_tags_common.player_dog_tag import PlayerDogTag, DisplayableDogTag
 from gui import makeHtmlString
+from dog_tags_common.config.common import ComponentPurpose, ComponentViewType
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
 from gui.Scaleform.settings import ICONS_SIZES
@@ -217,6 +218,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__isPostmortemEnabled = avatar_getter.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM)
         return
 
+    def changeCtrlMode(self, ctrlMode):
+        if ctrlMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
+            self.as_hideAnyVehDescriptionS()
+
     def _populate(self):
         super(PostmortemPanel, self)._populate()
         if self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.DOG_TAG) and self.__arenaInfo:
@@ -289,8 +294,12 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             compId, grade, teamId = unpack_component(componentPacked)
             if skipSameTeam and teamId == BigWorld.player().team:
                 continue
-            viewType = componentConfigAdapter.getComponentById(compId).viewType
-            componentImages.add('{}_{}_{}'.format(viewType.value.lower(), compId, grade))
+            component = componentConfigAdapter.getComponentById(compId)
+            if component.purpose == ComponentPurpose.COUPLED:
+                componentImages.add(layoutComposer.getBottomPlateImage(compId))
+                isEngraving = component.viewType == ComponentViewType.ENGRAVING
+                componentImages.add(layoutComposer.getComponentImage(compId, grade, localized=isEngraving))
+            componentImages.add(layoutComposer.getComponentImage(compId, grade))
 
         if componentImages:
             _logger.debug('PostmortemPanel preloading %s', str(componentImages))
@@ -456,7 +465,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     def __onKillerDogTagSet(self, dogTagInfo):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
         _logger.info('PostmortemPanel.__onKillerDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
-        self.as_showKillerDogTagS(dogTagModel, not self.__isSimpleDeathCam())
+        killCamCtrl = self.sessionProvider.shared.killCamCtrl
+        fadeOut = killCamCtrl and (killCamCtrl.killCtrlState is None or not self.__isSimpleDeathCam())
+        self.as_showKillerDogTagS(dogTagModel, fadeOut)
+        return
 
     def __onVictimDogTagSet(self, dogTagInfo):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))

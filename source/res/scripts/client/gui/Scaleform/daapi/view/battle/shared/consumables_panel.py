@@ -43,6 +43,7 @@ ASTERISK = '*'
 R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
 NO_AMMO_ICON = 'NO_{}'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
+PERMANENT_GLOW_TAG = 'permanentGlow'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 EMPTY_EQUIPMENT_TOOLTIP = backport.text(R.strings.ingame_gui.consumables_panel.equipment.tooltip.empty())
@@ -318,10 +319,13 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _updateEquipmentGlow(self, idx, item):
         if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
             glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
+            isPermanentGlow = PERMANENT_GLOW_TAG in item.getTags()
             if self.__canApplyingGlowEquipment(item):
                 self._showEquipmentGlow(idx)
             elif item.becomeReady:
-                self._showEquipmentGlow(idx, glowType)
+                self._showEquipmentGlow(idx, glowType, isPermanentGlow)
+            elif isPermanentGlow and item.getStage() == EQUIPMENT_STAGES.COOLDOWN:
+                self.as_hideGlowS(idx)
             elif idx in self._equipmentsGlowCallbacks:
                 self.__clearEquipmentGlow(idx)
 
@@ -357,15 +361,18 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             self._keys.pop(bwKey)
         self._updateEquipmentSlot(idx, item)
 
-    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
+    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE, isPermanentGlow=False):
         if BigWorld.player().isObserver():
             return
         if equipmentIndex in self._equipmentsGlowCallbacks:
             BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
             del self._equipmentsGlowCallbacks[equipmentIndex]
         else:
+            if isPermanentGlow:
+                self.as_setIdleEnabledGlowS(equipmentIndex, True)
             self.as_setGlowS(equipmentIndex, glowID=glowType)
-        self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+        if not isPermanentGlow:
+            self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings, isInfinite):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)

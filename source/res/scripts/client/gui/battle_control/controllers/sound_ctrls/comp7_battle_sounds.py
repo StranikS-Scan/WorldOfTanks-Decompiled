@@ -232,19 +232,25 @@ class _RoleSkillSoundPlayer(SoundPlayer):
         return
 
 
-_ArtilleryAreaParams = namedtuple('_ArtilleryAreaParams', ('position', 'radius', 'endTime'))
+class _ArtilleryAreaParams(object):
+
+    def __init__(self, position, radius, endTime):
+        self.position = position
+        self.radius = radius
+        self.endTime = endTime
+        self.threatsCurrentVehicle = False
+
 
 class _ArtillerySoundPlayer(SoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __COMP7_ARTILLERY_NAMES = ('comp7_redline', 'poi_artillery_aoe')
-    __ARTILLERY_START = 'comp_7_ability_arty_enter'
-    __ARTILLERY_STOP = 'comp_7_ability_arty_exit'
+    __ARTILLERY_ENTER = 'comp_7_ability_arty_enter'
+    __ARTILLERY_EXIT = 'comp_7_ability_arty_exit'
     __ARTILLERY_DAMAGE_PC = 'imp_artillery_expl_huge_NPC_PC'
 
     def __init__(self):
         super(_ArtillerySoundPlayer, self).__init__()
         self.__callbackDelayer = None
-        self.__attacked = False
         self.__artilleryAreas = []
         return
 
@@ -280,19 +286,29 @@ class _ArtillerySoundPlayer(SoundPlayer):
         return
 
     def __updateAttack(self):
-        self.__artilleryAreas = [ area for area in self.__artilleryAreas if BigWorld.serverTime() < area.endTime ]
+        aliveAreas, expiredAreas = [], []
+        srvTime = BigWorld.serverTime()
+        for area in self.__artilleryAreas:
+            if srvTime > area.endTime:
+                expiredAreas.append(area)
+            aliveAreas.append(area)
+
         vehicle = _getPlayerVehicle()
         if vehicle is not None:
-            affectAreas = [ area for area in self.__artilleryAreas if vehicle.position.flatDistTo(area.position) < area.radius ]
-            attacked = bool(affectAreas)
-        else:
-            attacked = False
-        if attacked and not self.__attacked:
-            _play2d(self.__ARTILLERY_START)
-        elif not attacked and self.__attacked:
-            _play2d(self.__ARTILLERY_STOP)
-            _playVehiclePC(self.__ARTILLERY_DAMAGE_PC, TankSoundObjectsIndexes.ENGINE)
-        self.__attacked = attacked
+            for area in aliveAreas:
+                vehicleIsInArea = vehicle.position.flatDistTo(area.position) <= area.radius
+                if not area.threatsCurrentVehicle and vehicleIsInArea:
+                    _play2d(self.__ARTILLERY_ENTER)
+                    area.threatsCurrentVehicle = True
+                if area.threatsCurrentVehicle and not vehicleIsInArea:
+                    _play2d(self.__ARTILLERY_EXIT)
+                    area.threatsCurrentVehicle = False
+
+            for area in expiredAreas:
+                if area.threatsCurrentVehicle:
+                    _playVehiclePC(self.__ARTILLERY_DAMAGE_PC, TankSoundObjectsIndexes.ENGINE)
+
+        self.__artilleryAreas = aliveAreas
         if self.__artilleryAreas:
             self.__callbackDelayer.delayCallback(0.2, self.__updateAttack)
         return

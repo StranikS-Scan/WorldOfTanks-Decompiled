@@ -18,7 +18,10 @@ class _EventHighPriorityGroup(components.StatusNotificationsGroup):
 class EventStatusNotificationTimerPanel(StatusNotificationTimerPanel):
 
     def _generateItems(self):
-        items = [_EventHighPriorityGroup, sn_items.StaticDeathZoneSN, sn_items.StunSN]
+        items = [_EventHighPriorityGroup,
+         sn_items.StaticDeathZoneSN,
+         sn_items.PersonalDeathZoneSN,
+         sn_items.StunSN]
         return items
 
     def _generateNotificationTimerSettings(self):

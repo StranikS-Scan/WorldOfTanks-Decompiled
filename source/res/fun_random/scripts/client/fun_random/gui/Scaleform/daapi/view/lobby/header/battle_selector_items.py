@@ -38,6 +38,10 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
     def getSmallIcon(self):
         return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.dyn(self._data)())
 
+    @property
+    def squadIcon(self):
+        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
+
     def _update(self, state):
         self._isVisible, self._isDisabled = self.__getIsVisible(), state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.FUN_RANDOM)

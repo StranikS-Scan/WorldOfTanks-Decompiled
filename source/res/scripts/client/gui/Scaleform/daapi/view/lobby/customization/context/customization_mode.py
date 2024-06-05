@@ -115,7 +115,7 @@ class CustomizationMode(object):
         if self._tabId == tabId:
             return
         self.unselectItem()
-        self.unselectSlot()
+        self.unselectSlot(False)
         self._tabId = tabId
         self._events.onTabChanged(tabId, itemCD)
 
@@ -123,9 +123,9 @@ class CustomizationMode(object):
         if self._selectSlot(slotId):
             self._events.onSlotSelected(self.selectedSlot)
 
-    def unselectSlot(self):
+    def unselectSlot(self, isResetCamera=True):
         if self._unselectSlot():
-            self._events.onSlotUnselected()
+            self._events.onSlotUnselected(isResetCamera)
 
     def selectItem(self, intCD, progressionLevel=-1):
         if self._selectItem(intCD, progressionLevel):

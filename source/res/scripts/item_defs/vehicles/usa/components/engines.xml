@@ -123,6 +123,8 @@
     <Continental_AVI_1790_8C>	147	</Continental_AVI_1790_8C>
     <Twin_Cadillac_series_44T4E1>	148	</Twin_Cadillac_series_44T4E1>
     <AOI_1195D>	149	</AOI_1195D>
+    <Ford_GAA_BPXIV>	153	</Ford_GAA_BPXIV>
+    <Wright_Continental_R-975C1_Crab>	152	</Wright_Continental_R-975C1_Crab>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>	60003	</Continental_AV-1790-3A1_IGR>
@@ -146,6 +148,9 @@
     <Wright_Continental_R-975C4_NewOnBoarding>	64005	</Wright_Continental_R-975C4_NewOnBoarding>
     <Ford_GAA_NewOnBoarding>	64006	</Ford_GAA_NewOnBoarding>
     <Ford_GAA_2_NewOnBoarding>	64007	</Ford_GAA_2_NewOnBoarding>
+    <Ford_GAA_StoryMode>	64008	</Ford_GAA_StoryMode>
+    <Wright_Continental_R-975C4_StoryMode>	64009	</Wright_Continental_R-975C4_StoryMode>
+    <Ford_GAA_StoryModeHard>	64010	</Ford_GAA_StoryModeHard>
   </ids>
   <shared>
     <Ford_GAC>
@@ -454,6 +459,24 @@
       <rpm_min>	374	</rpm_min>
       <rpm_max>	2601	</rpm_max>
     </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C1_Crab>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C1_Crab	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C1_Crab_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	450	</power>
+      <weight>	516	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
+    </Wright_Continental_R-975C1_Crab>
     <Wright_Continental_R-975C1L>
       <userString>	#usa_vehicles:Wright_Continental_R-975C1L	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R-975C1L_short	</shortUserString>
@@ -573,6 +596,23 @@
       <rpm_min>	299	</rpm_min>
       <rpm_max>	2841	</rpm_max>
     </Ford_GAA>
+    <Ford_GAA_BPXIV>
+      <userString>	#usa_vehicles:Ford_GAA_BPXIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+    </Ford_GAA_BPXIV>
     <Ford_GAA_A>
       <userString>	#usa_vehicles:Ford_GAA_A	</userString>
       <tags>	gasoline	</tags>
@@ -2661,5 +2701,57 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Ford_GAA_2_NewOnBoarding>
+    <Ford_GAA_StoryMode>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	500	</maxHealth>
+      <maxRegenHealth>	450	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_StoryMode>
+    <Wright_Continental_R-975C4_StoryMode>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C4	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C4_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Wright_Continental_R-975C4_StoryMode>
+    <Ford_GAA_StoryModeHard>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	500	</maxHealth>
+      <maxRegenHealth>	450	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_StoryModeHard>
   </shared>
 </engines.xml>

@@ -48,11 +48,10 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
-        self.__markersCache = None
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
-        return
+        self.__destroyAllMarkers()
 
     def __onSpaceDestroy(self, _):
         self.__destroyAllMarkers()
@@ -134,11 +133,12 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__createVehicleMarker(vehicle)
 
     def __createVehicleMarker(self, vehicle):
-        vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
-        flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
-        self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
-        self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
-        self.__updateMarkerVisibility(vehicle.id)
+        if vehicle and vehicle.typeDescriptor and vehicle.model:
+            vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
+            flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
+            self.__markersCache[vehicle.id] = GUI.WGHangarVehicleMarker()
+            self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
+            self.__updateMarkerVisibility(vehicle.id)
 
     def __createPlatoonMarker(self, vehicle, playerName):
         vClass, _, vMatrix = self.__getVehicleInfo(vehicle)
@@ -153,11 +153,13 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         return
 
     def __destroyAllMarkers(self):
-        for k in self.__markersCache.keys():
+        for k, marker in self.__markersCache.iteritems():
             self.as_removeMarkerS(k)
-            self.__markersCache.pop(k)
+            if marker is not None:
+                marker.markerSetActive(False)
 
         self.__markersCache.clear()
+        return
 
     def __onWindowStatusChanged(self, uniqueID, newStatus):
         if newStatus in (WindowStatus.LOADING, WindowStatus.DESTROYED):

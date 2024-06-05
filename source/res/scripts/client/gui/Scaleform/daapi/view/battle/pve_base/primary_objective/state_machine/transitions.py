@@ -12,13 +12,6 @@ class ToAppearanceTransition(ToStateTransition):
         super(ToAppearanceTransition, self).__init__(PrimaryObjectiveState.APPEARANCE)
 
 
-class ToNoTimerTransition(ToStateTransition):
-    __slots__ = ()
-
-    def __init__(self):
-        super(ToNoTimerTransition, self).__init__(PrimaryObjectiveState.NO_TIMER)
-
-
 class ToRegularTransition(ToStateTransition):
     __slots__ = ()
 

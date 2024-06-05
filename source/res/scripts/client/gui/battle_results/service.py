@@ -78,7 +78,7 @@ class BattleResultsService(IBattleResultsService):
             self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=ctx.needToShowIfPosted())
         else:
             results = yield BattleResultsGetter(arenaUniqueID).request()
-            if not results.success and ctx.getArenaBonusType() == ARENA_BONUS_TYPE.MAPS_TRAINING:
+            if not results.success and ctx.getArenaBonusType() in (ARENA_BONUS_TYPE.MAPS_TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE):
                 results = yield self.waitForBattleResults(arenaUniqueID)
             isSuccess = results.success
             if not isSuccess or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
@@ -156,7 +156,8 @@ class BattleResultsService(IBattleResultsService):
         return arenaUniqueID in self.__appliedAddXPBonus
 
     def isAddXPBonusEnabled(self, arenaUniqueID):
-        return arenaUniqueID in self.__getAdditionalXPBattles() and (self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and self.itemsCache.items.stats.applyAdditionalWoTPlusXPCount > 0)
+        isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
+        return arenaUniqueID in self.__getAdditionalXPBattles() and (self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and isWotPlusEnabled)
 
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)

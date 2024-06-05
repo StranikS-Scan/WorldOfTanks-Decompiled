@@ -340,7 +340,8 @@ def parseC11nProgressToken(token):
     if not validateToken(tokenID):
         return C11nStyleProgressData()
     styleID, branch = deserializeToken(tokenID)
-    return C11nStyleProgressData(styleID=styleID, branch=branch, level=token.limit)
+    level = token.limit or token.count
+    return C11nStyleProgressData(styleID=styleID, branch=branch, level=level)
 
 
 def getIdxFromQuest(quest):

@@ -1,0 +1,13 @@
+<BunkerLogicComponent.def>
+  <Properties>
+    <vehicleIDs>
+      <Type>	ARRAY	  <of>	INT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleIDs>
+  </Properties>
+  <ClientMethods>
+    <bunkerDestroyed></bunkerDestroyed>
+  </ClientMethods>
+  <DefaultKeyName>	bunkerLogicComponent	</DefaultKeyName>
+</BunkerLogicComponent.def>

@@ -47,7 +47,9 @@ class StrongholdPermissions(UnitPermissions):
         return (not self._isLegionary or self.isCommander(self._roles)) and self.isNotFreezed()
 
     def canAssignToSlot(self, dbID):
-        return super(StrongholdPermissions, self).canAssignToSlot(dbID) and self.isNotFreezed()
+        if not super(StrongholdPermissions, self).canAssignToSlot(dbID) or not self.isNotFreezed():
+            return False
+        return not self._isPlayerReady if not self.isCommander(self._roles) else True
 
     def canReassignToSlot(self):
         return super(StrongholdPermissions, self).canReassignToSlot() and self.isNotFreezed()

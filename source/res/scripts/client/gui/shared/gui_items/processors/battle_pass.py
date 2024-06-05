@@ -10,8 +10,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.shared.formatters import getBWFormatter, text_styles
-from gui.shared.gui_items.processors import Processor, makeI18nError, makeSuccess, plugins
+from gui.shared.gui_items.processors import Processor, makeSuccess, plugins, makeError
 from gui.shared.gui_items.processors.plugins import MessageConfirmator, SyncValidator
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from messenger import g_settings
 from skeletons.gui.game_control import IBattlePassController
@@ -61,7 +62,7 @@ class BattlePassActivateChapterProcessor(Processor):
     def _errorHandler(self, code, errStr='', ctx=None):
         res = super(BattlePassActivateChapterProcessor, self)._errorHandler(code, errStr, ctx)
         Waiting.hide(self.__WAITING_TEXT)
-        SystemMessages.pushMessage(backport.text(R.strings.system_messages.battlePass.switchChapter.error()), type=SM_TYPE.Error)
+        SystemMessages.pushMessage(backport.text(R.strings.system_messages.battlePass.switchChapter.error()), type=SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
         return res
 
     def _successHandler(self, code, ctx=None):
@@ -91,7 +92,7 @@ class BuyBattlePass(Processor):
         self.__priceID = priceID
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='battlePass_buy/server_error')
+        return makeError(backport.text(R.strings.system_messages.battlePass_buy.server_error()), msgPriority=NotificationPriorityLevel.HIGH)
 
     def _successHandler(self, code, ctx=None):
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(self.__chapterID)())
@@ -125,7 +126,7 @@ class BuyBattlePassLevels(Processor):
         self.__levels = levels
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='battlePassLevels_buy/server_error')
+        return makeError(backport.text(R.strings.system_messages.battlePassLevels_buy.server_error()), msgPriority=NotificationPriorityLevel.HIGH)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass levels: %d season %d', self.__levels, self.__seasonID)
@@ -142,7 +143,7 @@ class BuyBattlePassWithLevels(Processor):
         self.__priceID = priceID
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='battlePass_buy/server_error')
+        return makeError(backport.text(R.strings.system_messages.battlePass_buy.server_error()), msgPriority=NotificationPriorityLevel.HIGH)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy battle pass with levels %d for chapter %d', self.__seasonID, self.__chapterID)

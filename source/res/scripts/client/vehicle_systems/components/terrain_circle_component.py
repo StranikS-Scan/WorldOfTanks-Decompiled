@@ -116,6 +116,7 @@ class TerrainCircleComponent(CallbackDelayer):
             return
 
     def __attachAreaVisualToModel(self):
+        self.__areaVisual.setVisible(True)
         node = self.__model.node('')
         if node is not None:
             node.attach(self.__areaVisual)
@@ -124,6 +125,7 @@ class TerrainCircleComponent(CallbackDelayer):
         return
 
     def __detachAreaVisualFromModel(self):
+        self.__areaVisual.setVisible(False)
         node = self.__model.node('')
         if self.__areaVisual and node:
             node.detach(self.__areaVisual)
@@ -142,6 +144,7 @@ class TerrainCircleComponent(CallbackDelayer):
 
     def __create(self):
         self.__areaVisual = BigWorld.PyTerrainSelectedArea()
+        self.__areaVisual.setVisible(False)
         self.__model = BigWorld.Model('')
         BigWorld.player().addModel(self.__model)
 

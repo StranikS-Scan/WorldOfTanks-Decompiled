@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/constants_utils.py
 import types
 import arena_bonus_type_caps
+import constants
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
 from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
@@ -257,6 +258,7 @@ class AbstractBattleMode(object):
     _CLIENT_PRB_ACTION_NAME_SQUAD = None
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = None
     _BATTLE_RESULTS_CONFIG = None
+    _VSE_BATTLE_RESULTS_PARSER = None
     _CLIENT_GAME_SEASON_TYPE = None
     _SEASON_TYPE_BY_NAME = None
     _SEASON_TYPE = None
@@ -471,6 +473,19 @@ class AbstractBattleMode(object):
         scu.addSingletonsToStart(self._BATTLE_MGR_NAME, self._battleMgrConfig, self._personality)
         scu.addBattlesConfigToList(self._GAME_PARAMS_KEY, self._personality)
         scu.addPreBattleTypeToChatLogFlags(self._PREBATTLE_TYPE, self._BASE_CHAT_LOG_FLAGS, self._personality)
+        self.registerWinnerProcessor()
+
+    def registerCell(self):
+        self.registerVseBattleResultsParser()
+        self.registerBattleResultsConfig()
+
+    def registerVseBattleResultsParser(self):
+        if constants.IS_CELLAPP:
+            import helpers.VseBattleResultParser
+            helpers.VseBattleResultParser.registerVseBattleResultsParser(self._ARENA_BONUS_TYPE, self._VSE_BATTLE_RESULTS_PARSER)
+
+    def registerWinnerProcessor(self):
+        import server_constants_utils as scu
         if self._BASE_WINNER_PROCESSOR_CLASS:
             scu.addWinnerProcessor(self._ARENA_BONUS_TYPE, self._BASE_WINNER_PROCESSOR_CLASS, self._personality)
 
@@ -490,10 +505,14 @@ class AbstractBattleMode(object):
 
     def registerClient(self):
         from gui.prb_control import prb_utils
-        from gui.Scaleform.daapi.settings.views import addViewBattlePageAliasByArenaGUIType
         prb_utils.addArenaGUITypeByQueueType(self._QUEUE_TYPE, self._ARENA_GUI_TYPE, self._personality)
         prb_utils.addQueueTypeToPrbType(self._QUEUE_TYPE, self._PREBATTLE_TYPE, self._personality)
         prb_utils.addPrbTypeToQueueType(self._QUEUE_TYPE, self._PREBATTLE_TYPE, self._personality)
+        self.registerGuiType()
+
+    def registerGuiType(self):
+        from gui.prb_control import prb_utils
+        from gui.Scaleform.daapi.settings.views import addViewBattlePageAliasByArenaGUIType
         prb_utils.addArenaDescrs(self._ARENA_GUI_TYPE, self._client_arenaDescrClass, self._personality)
         addViewBattlePageAliasByArenaGUIType(self._ARENA_GUI_TYPE, self._CLIENT_BATTLE_PAGE, self._personality)
 
@@ -546,7 +565,9 @@ class AbstractBattleMode(object):
         registerSharedControllerRepo(self._ARENA_GUI_TYPE, self._client_sharedControllersRepository)
 
     def registerBattleResultsConfig(self):
-        addBattleResultsConfig(self._ARENA_BONUS_TYPE, self._BATTLE_RESULTS_CONFIG)
+        if self._BATTLE_RESULTS_CONFIG is not None:
+            addBattleResultsConfig(self._ARENA_BONUS_TYPE, self._BATTLE_RESULTS_CONFIG)
+        return
 
     def registerClientBattleResultsComposer(self):
         from gui.shared.system_factory import registerBattleResultsComposer
@@ -672,4 +693,4 @@ class AbstractBattleMode(object):
 
     def registerFairplayVehicleBattleStats(self):
         from server_constants_utils import addFairplayVehicleBattleStats
-        addFairplayVehicleBattleStats(self._ARENA_GUI_TYPE, self._FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT, self._personality)
+        addFairplayVehicleBattleStats(self._ARENA_BONUS_TYPE, self._FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT, self._personality)

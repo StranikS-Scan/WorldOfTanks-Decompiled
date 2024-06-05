@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
-from functools import partial
 import BigWorld
 import typing
 from adisp import adisp_process
@@ -23,14 +22,15 @@ from gui.customization.constants import CustomizationModeSource, CustomizationMo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
+from gui.impl.lobby.achievements.profile_utils import createAdvancedAchievementsCatalogInitAchievementIDs
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow, showComp7YearlyRewardsSelectionWindow
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
@@ -45,6 +45,7 @@ from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IComp7Controller, IHangarSpaceSwitchController
+from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
@@ -56,6 +57,8 @@ from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
 from uilogging.wot_plus.loggers import WotPlusNotificationLogger
 from uilogging.wot_plus.logging_constants import NotificationAdditionalData
+from uilogging.advanced_achievement.logger import AdvancedAchievementLogger
+from uilogging.advanced_achievement.logging_constants import AdvancedAchievementButtons, AdvancedAchievementViewKey
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from wg_async import wg_async, wg_await
@@ -1129,6 +1132,7 @@ class _OpenResourceWellProgressionNoVehiclesWindow(NavigationDisabledActionHandl
 
 class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
     __customizationService = dependency.descriptor(ICustomizationService)
+    __hangarSpace = dependency.descriptor(IHangarSpace)
 
     @classmethod
     def getNotType(cls):
@@ -1142,18 +1146,23 @@ class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         notificationData = notification.getSavedData() or {}
         styleID = notificationData.get('styleID')
-        if self.__customizationService.getCtx() is None:
-            self.__customizationService.showCustomization(callback=partial(self.__onCustomizationLoaded, styleID))
-        else:
-            self.__onCustomizationLoaded(styleID)
-        return
+        if styleID:
+            style = self.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
+            self.__customizationService.showCustomization(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES, itemCD=style.intCD)
+
+
+class _OpenBondEquipmentSelection(NavigationDisabledActionHandler):
 
     @classmethod
-    def __onCustomizationLoaded(cls, styleID):
-        cls.__customizationService.getCtx().changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES)
-        if styleID:
-            style = cls.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
-            cls.__customizationService.getCtx().selectItem(style.intCD)
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.COMP7_OFFER_TOKENS
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showComp7YearlyRewardsSelectionWindow()
 
 
 class _OpenIntegratedAuction(NavigationDisabledActionHandler):
@@ -1310,7 +1319,34 @@ class _OpenAchievementsScreen(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_TOTAL_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+class _OpenAdvancedAchievementsScreen(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        data = model.getNotification(self.getNotType(), entityID).getSavedData() or {}
+        isTrophy = data.get('isTrophy')
+        target = data.get('target')
+        uiLogger = AdvancedAchievementLogger(AdvancedAchievementViewKey.NOTIFICATION_CENTER)
+        closeCallbackPlaceholder = lambda *args, **kwargs: None
+        uiLogger.logClick(AdvancedAchievementButtons.TO_ACHIEVEMENT)
+        if isTrophy:
+            showTrophiesView(closeCallback=closeCallbackPlaceholder, parentScreen=AdvancedAchievementViewKey.NOTIFICATION_CENTER)
+        elif target:
+            id, category = target
+            initAchievementsIds = createAdvancedAchievementsCatalogInitAchievementIDs(id, category)
+            showAdvancedAchievementsCatalogView(initAchievementsIds, category, closeCallback=closeCallbackPlaceholder, parentScreen=AdvancedAchievementViewKey.NOTIFICATION_CENTER)
+        else:
+            showAdvancedAchievementsView()
 
 
 class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
@@ -1526,6 +1562,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenWinbackSelectableRewardView,
  _OpenWinbackSelectableRewardViewFromQuest,
  _OpenAchievementsScreen,
+ _OpenAdvancedAchievementsScreen,
  _OpenWotPlusIntroView,
  _OpenBarracksHandler,
  _OpenComp7ShopHandler,
@@ -1533,7 +1570,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenPrestigeOnboardingWindow,
  _OpenSeniorityAwardsVehicleSelection,
  _OpenSeniorityAwardsPersonalVehicleSelection,
- _OpenPunishmentWindowHandler)
+ _OpenPunishmentWindowHandler,
+ _OpenBondEquipmentSelection)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

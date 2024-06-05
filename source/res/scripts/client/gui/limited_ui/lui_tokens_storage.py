@@ -16,7 +16,7 @@ from helpers import dependency
 from items import getTypeOfCompactDescr
 from personal_missions import PM_BRANCH
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IAchievementsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -392,6 +392,17 @@ class _WereRealMoneyExpenses(LimitedUICondition):
             self._update()
 
 
+class _AdvancedAchievementsCount(LimitedUICondition):
+    __slots__ = ()
+    __advAchmntCtrl = dependency.descriptor(IAchievementsController)
+
+    def _getValue(self):
+        return self.__advAchmntCtrl.getTotalAchievementsCount()
+
+    def _getEvents(self):
+        return ((self.__advAchmntCtrl.onNewAchievementsEarned, self._update),)
+
+
 _VEHICLE_LEVEL_TOKENS = tuple((tokenInfo for tokenInfo in chain.from_iterable(((LimitedUITokenInfo('minVehicleLevel_{}'.format(vehLevel), _MinVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minNonPremiumVehicleLevel_{}'.format(vehLevel), _MinNonPremiumVehicleLevel, (vehLevel,)), LimitedUITokenInfo('minUnlockedVehicleLevel_{}'.format(vehLevel), _MinUnlockedVehicleLevel, (vehLevel,))) for vehLevel in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)))))
 _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('permanentFalse', _PermanentFalse, None),
@@ -402,7 +413,8 @@ _REGISTER_TOKENS = (LimitedUITokenInfo('permanentTrue', _PermanentTrue, None),
  LimitedUITokenInfo('pmHasActiveMission', _PersonalMissionsActive, None),
  LimitedUITokenInfo('hasBlueprint', _BluePrintsAvailability, None),
  LimitedUITokenInfo('hasPersonalReserve', _PersonalReservesAvailability, None),
- LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None)) + _VEHICLE_LEVEL_TOKENS
+ LimitedUITokenInfo('wereRealMoneyExpenses', _WereRealMoneyExpenses, None),
+ LimitedUITokenInfo('advancedAchievementsCount', _AdvancedAchievementsCount, None)) + _VEHICLE_LEVEL_TOKENS
 registerLimitedUITokens(_REGISTER_TOKENS)
 
 def getTokensInfo():

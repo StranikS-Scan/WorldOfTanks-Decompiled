@@ -187,6 +187,12 @@
     <Maybach_HL_230_TRM_P45_NewOnBoarding__0>	64012	</Maybach_HL_230_TRM_P45_NewOnBoarding__0>
     <Porsche_Typ_100_3_NewOnBoarding>	64013	</Porsche_Typ_100_3_NewOnBoarding>
     <Maybach_HL_230_TRM_P30_NewOnBoarding>	64014	</Maybach_HL_230_TRM_P30_NewOnBoarding>
+    <Maybach_HL_230_TRM_P45_StoryMode>	64015	</Maybach_HL_230_TRM_P45_StoryMode>
+    <Maybach_HL_230_TRM_P45_StoryMode__0>	64016	</Maybach_HL_230_TRM_P45_StoryMode__0>
+    <Maybach_HL_230_TRM_P30_StoryMode>	64017	</Maybach_HL_230_TRM_P30_StoryMode>
+    <MB507_StoryMode>	64018	</MB507_StoryMode>
+    <Porsche_Deutz_Typ180_2_StoryMode>	64019	</Porsche_Deutz_Typ180_2_StoryMode>
+    <Porsche_Deutz_Typ180_2_StoryMode_1>	64020	</Porsche_Deutz_Typ180_2_StoryMode_1>
   </ids>
   <shared>
     <SPA_19TB_mod_43_german>
@@ -2154,19 +2160,19 @@
     <Daimler-Benz_MB_880>
       <userString>	#germany_vehicles:Daimler-Benz_MB_880	</userString>
       <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	132000	</price>
+      <level>	8	</level>
+      <price>	50000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	950	</power>
+      <power>	700	</power>
       <weight>	700	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	266	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Daimler-Benz_MB_880>
     <Maybach_HL_234_TRM_P45_Leicht>
       <userString>	#germany_vehicles:Maybach_HL_234_TRM_P45_Leicht	</userString>
@@ -3338,5 +3344,112 @@
       <rpm_max>	2508	</rpm_max>
       <notInShop>	True	</notInShop>
     </Maybach_HL_230_TRM_P30_NewOnBoarding>
+    <Maybach_HL_230_TRM_P45_StoryMode>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_StoryMode>
+    <Maybach_HL_230_TRM_P45_StoryMode__0>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_StoryMode__0>
+    <Maybach_HL_230_TRM_P30_StoryMode>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P30_StoryMode>
+    <MB507_StoryMode>
+      <userString>	#germany_vehicles:MB507	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	250	</rpm_min>
+      <rpm_max>	2800	</rpm_max>
+    </MB507_StoryMode>
+    <Porsche_Deutz_Typ180_2_StoryMode>
+      <userString>	#germany_vehicles:Porsche_Deutz_Typ180_2	</userString>
+      <shortUserString>	#germany_vehicles:Porsche_Deutz_Typ180_2_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	296	</rpm_min>
+      <rpm_max>	2312	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Porsche_Deutz_Typ180_2_StoryMode>
+    <Porsche_Deutz_Typ180_2_StoryMode_1>
+      <userString>	#germany_vehicles:Porsche_Deutz_Typ180_2	</userString>
+      <shortUserString>	#germany_vehicles:Porsche_Deutz_Typ180_2_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	296	</rpm_min>
+      <rpm_max>	2312	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Porsche_Deutz_Typ180_2_StoryMode_1>
   </shared>
 </engines.xml>

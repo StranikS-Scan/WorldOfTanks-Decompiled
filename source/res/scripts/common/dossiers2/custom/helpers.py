@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
 import typing
+from constants import INVOICE_EMITTER
+from achievements20.cache import getCache as getAchievementsCache
+from debug_utils import LOG_SENTRY
 from dossiers2.custom.records import RECORDS, RECORD_INDICES, RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.custom.cache import getCache
 from nations import ALL_NATIONS_INDEX
-from soft_exception import SoftException
+from optional_bonuses import BONUS_MERGERS
 
 def getTankExpertRequirements(vehTypeFrags, nationID=ALL_NATIONS_INDEX):
     cache = getCache()
@@ -115,6 +118,39 @@ def updateRareAchievements(dossierDescr, achievements):
                 block.remove(abs(achievement))
             except:
                 pass
+
+
+def processAchievements20(dossierDescr, receivedItemCompDescrs, item, invoiceProcessor):
+    achievementsCache = getAchievementsCache()
+    achievements = achievementsCache.getAchievementsByItem(item, receivedItemCompDescrs)
+    if not achievements:
+        return
+    else:
+        achievementBlockBackups = {}
+        for achievement in achievements:
+            achievementType = achievement.type
+            if achievementType not in achievementBlockBackups:
+                achievementBlockBackups[achievementType] = dict(dossierDescr[achievementType])
+            achievement.updateValueInDossier(dossierDescr)
+
+        dossierChanges = dossierDescr.getChanges()
+        rewards = {}
+        for achievementType, blockBackup in achievementBlockBackups.iteritems():
+            for achievementID in dossierChanges.get(achievementType, ()):
+                achievement = achievementsCache.getAchievementByID(achievementType, achievementID)
+                currentValue, currentStage, currentTimestamp = achievement.getCurrentDataFromDossier(dossierDescr)
+                if blockBackup.get(achievementID, (0, 0))[1] != currentStage:
+                    achievementRewards = achievement.getStageBonusByValue(currentStage)
+                    if achievementRewards:
+                        for key, value in achievementRewards.iteritems():
+                            if key in BONUS_MERGERS:
+                                BONUS_MERGERS[key](rewards, key, value, False, 1, None)
+
+        if rewards:
+            status, error, invoice = invoiceProcessor.processData(rewards, 0, 0, emitterID=INVOICE_EMITTER.DEVELOPMENT, needRunInvoiceUpdaters=False)
+            if status < 0:
+                LOG_SENTRY('Failed to add achievement rewards. Error - {}, invoice - {}, dossier changes - {}'.format(error, invoice, dossierChanges))
+        return
 
 
 def convertDossierPathToDBId(path):

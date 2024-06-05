@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+import typing
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.game_loading.resources.consts import Milestones
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
@@ -25,7 +26,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.__maxAvailableItemsCount = settings.stackLength
         self.__messagesPadding = settings.padding
         self.__noDisplayingPopups = True
-        self.__lockedNotificationPriority = []
+        self.__lockedNotificationPriority = {}
         self.__pendingMessagesQueue = []
         super(NotificationPopUpViewer, self).__init__()
         self.setModel(mvc.getModel())
@@ -141,15 +142,19 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         return notificaton.getPopUpVO(flashId)
 
     def __isLocked(self, notification):
-        return notification.getPriorityLevel() in self.__lockedNotificationPriority
+        priorities = {priority for val in self.__lockedNotificationPriority.values() for priority in val}
+        return notification.getPriorityLevel() in priorities
 
-    def __onLockPopUpMassages(self, lockHigh=False):
-        self.__lockedNotificationPriority = [NotificationPriorityLevel.MEDIUM]
+    def __onLockPopUpMassages(self, key, lockHigh=False):
+        priorities = self.__lockedNotificationPriority.setdefault(key, {NotificationPriorityLevel.MEDIUM})
         if lockHigh:
-            self.__lockedNotificationPriority.append(NotificationPriorityLevel.HIGH)
+            priorities.add(NotificationPriorityLevel.HIGH)
 
-    def __onUnlockPopUpMessages(self):
-        self.__lockedNotificationPriority = []
+    def __onUnlockPopUpMessages(self, key):
+        if key in self.__lockedNotificationPriority:
+            del self.__lockedNotificationPriority[key]
+        if self.__pendingMessagesQueue and any((self.__isLocked(n) for n in self.__pendingMessagesQueue)):
+            return
         self.__showMessagesFromQueue()
 
     def __startNotifications(self):

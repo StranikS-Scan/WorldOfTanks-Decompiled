@@ -77,7 +77,7 @@ class OnboardingQueueView(BaseWaitQueueView):
 
     def _onQuitButtonClick(self):
         self._uiLogger.logClick(LogButtons.SKIP)
-        self._storyModeCtrl.skipOnboarding()
+        self._storyModeCtrl.quitBattle()
         if self.prbEntity is not None:
             self.prbEntity.exitFromQueue()
         prebattleWindow = getOpenedPrebattleView()

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/account_completion/curtain/curtain_view.py
 import typing
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import ViewSettings, WindowLayer
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.account_completion.curtain.curtain_view_model import CurtainViewModel, CurtainStateEnum
@@ -155,7 +155,7 @@ class CurtainWindow(LobbyWindow):
     guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
-        super(CurtainWindow, self).__init__(wndFlags=DialogFlags.TOP_FULLSCREEN_WINDOW, content=CurtainView())
+        super(CurtainWindow, self).__init__(wndFlags=DialogFlags.TOP_FULLSCREEN_WINDOW, layer=WindowLayer.OVERLAY, content=CurtainView())
 
     @property
     def content(self):

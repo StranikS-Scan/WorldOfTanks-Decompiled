@@ -54,7 +54,6 @@ class HangarLoadingController(IHangarLoadingController):
 
     def __hangarLoadedAfterLoginNotify(self):
         self.__hangarSpace.onSpaceCreate -= self.__hangarLoadedAfterLoginNotify
-        self.__processCrewWelcomeScreen()
         self.onHangarLoadedAfterLogin()
 
     def isHangarLoadedAfterLogin(self):

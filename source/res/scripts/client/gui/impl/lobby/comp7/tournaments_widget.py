@@ -64,7 +64,8 @@ class TournamentsWidget(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(TournamentsWidget, self)._onLoading(*args, **kwargs)
-        self.__updateState()
+        if isTournamentEnabled():
+            self.__updateState()
 
     def __onOpenTournaments(self):
         if isTournamentEnabled():

@@ -7,12 +7,6 @@ MAX_SCENARIO_PROGRESS = 1
 VEHICLE_CLASSES_ORDER = ('heavyTank', 'mediumTank', 'lightTank', 'AT-SPG', 'SPG')
 PROGRESS_DATA_MASK = 1
 
-class SCENARIO_RESULT:
-    LOSE = -1
-    PARTIAL = 0
-    WIN = 1
-
-
 class VEHICLE_TYPE:
     HEAVY = 'heavyTank'
     MEDIUM = 'mediumTank'

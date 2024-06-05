@@ -324,7 +324,7 @@ class BattleLoadingSpace(CloseGameLoadingMixin, _ArenaSpace):
 
     def _closeGameLoading(self):
         lobbyContext = dependency.instance(ILobbyContext)
-        if lobbyContext.getGuiCtx().get('skipShowGUI', False):
+        if lobbyContext.getGuiCtx().get('skipHangar', False):
             return
         if not BattleReplay.g_replayCtrl.getAutoStartFileName():
             super(BattleLoadingSpace, self)._closeGameLoading()

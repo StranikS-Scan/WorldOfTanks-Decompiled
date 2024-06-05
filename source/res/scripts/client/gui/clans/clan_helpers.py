@@ -581,7 +581,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                if result.getCode() != RATINGS_NOT_FOUND_ERROR:
+                if result.isSuccess() and result.getCode() != RATINGS_NOT_FOUND_ERROR:
                     clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
                 else:
                     clanRatings = {}

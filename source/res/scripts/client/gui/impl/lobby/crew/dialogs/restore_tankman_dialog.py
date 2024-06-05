@@ -108,8 +108,7 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
 
     def __restoreTankman(self):
         isTransfer = self._vehicle and self._vehicleSlotIdx != NO_SLOT
-        berthsNeeded = 0 if isTransfer else 1
-        doActions = [(factory.RESTORE_TANKMAN, self._tankman.invID, berthsNeeded)]
+        doActions = [(factory.RESTORE_TANKMAN, self._tankman.invID)]
         if isTransfer:
             requiredRole = self._vehicle.descriptor.type.crewRoles[self._vehicleSlotIdx][0]
             if requiredRole != self._tankman.role:

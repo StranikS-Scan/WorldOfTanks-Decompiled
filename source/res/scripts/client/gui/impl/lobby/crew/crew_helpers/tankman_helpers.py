@@ -17,3 +17,11 @@ def getPriceDiscountMassRetrain(retrainIndex, isUseless, tankmen, itemsCache=Non
             creditsSum += credits
 
     return (goldSum, creditsSum)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getBethsSlotsCount(itemsCache=None):
+    tankmenInBarracks = itemsCache.items.tankmenInBarracksCount()
+    slotsCount = itemsCache.items.stats.tankmenBerthsCount
+    freeBerthsCount = slotsCount - tankmenInBarracks
+    return (slotsCount, freeBerthsCount)

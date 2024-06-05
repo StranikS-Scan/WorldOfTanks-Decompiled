@@ -5,7 +5,7 @@ import typing
 from items.components.c11n_constants import ProjectionDecalMatchingTags
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_components import CustomizationType, DecalType
+from items.components.c11n_components import CustomizationType, DecalType, EMPTY_ITEM_ID
 from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
 from items.vehicles import getItemByCompactDescr
 from soft_exception import SoftException
@@ -224,11 +224,7 @@ class MultiSlot(object):
     def set(self, intCD, idx=0, component=None):
         itemDescriptor = getItemByCompactDescr(intCD)
         itemType = getItemType(itemDescriptor)
-        if itemType not in self._slotTypes:
-            _logger.warning('item type %s does not correspond to allowed slot types %s', itemType, self._slotTypes)
-            return False
-        if idx >= len(self._regions):
-            _logger.warning('Invalid slot idx %s', idx)
+        if not self.__isItemFitSlot(itemDescriptor, idx):
             return False
         if component and packers.isComponentComplex(component):
             component = component.copy()
@@ -318,6 +314,19 @@ class MultiSlot(object):
 
     def _cloneEmpty(self):
         return MultiSlot(self.getTypes(), self.getRegions())
+
+    def __isItemFitSlot(self, itemDescriptor, idx):
+        if idx >= len(self._regions):
+            _logger.warning('Invalid slot idx %s', idx)
+            return False
+        if itemDescriptor.id == EMPTY_ITEM_ID:
+            if itemDescriptor.itemType == CustomizationType.DECAL and GUI_ITEM_TYPE.EMBLEM in self._slotTypes:
+                return True
+        itemType = getItemType(itemDescriptor)
+        result = itemType in self._slotTypes
+        if not result:
+            _logger.warning('item type %s does not correspond to allowed slot types %s', itemType, self._slotTypes)
+        return result
 
 
 class SizableMultiSlot(MultiSlot):

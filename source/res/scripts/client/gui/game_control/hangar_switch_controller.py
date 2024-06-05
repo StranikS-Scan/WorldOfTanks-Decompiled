@@ -26,6 +26,12 @@ class DefaultHangarSpaceConfig(object):
         self._spaceIdOverride = {}
         return
 
+    def clear(self):
+        self._visibilityMask = {True: None,
+         False: None}
+        self._spaceIdOverride = {}
+        return
+
     def getVisibilityMask(self, isPremium):
         return self._visibilityMask[isPremium] if self._visibilityMask[isPremium] is not None else getHangarFullVisibilityMask(self.getHangarSpaceId(isPremium))
 
@@ -140,6 +146,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
 
     def onDisconnected(self):
         self._clear()
+        self._defaultHangarSpaceConfig.clear()
         super(HangarSpaceSwitchController, self).onDisconnected()
 
     def onAvatarBecomePlayer(self):
@@ -298,7 +305,9 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                     success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
                 if success:
                     self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
-                else:
+                elif err == ErrorFlags.DUPLICATE_REQUEST:
+                    self.onSpaceUpdated()
+                elif err != ErrorFlags.NONE:
                     raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
                 return
             if currentSceneMaskChanged and self.hangarSpace.inited:

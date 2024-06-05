@@ -50,6 +50,8 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             avatar = self._avatar()
             if not avatar:
                 return
+            if avatar.isObserver() and avatar.playerVehicleID == self.entity.id:
+                return
             for vehicleAmmo in ammoList:
                 timeRemaining = vehicleAmmo.endTime
                 if timeRemaining > 0:
@@ -370,7 +372,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
 
     def initialUpdate(self, force=False):
         if not force:
-            if self.__isInitialUpdated or not self.entity.isStarted:
+            if self.__isInitialUpdated or not self.entity.inWorld or not self.entity.isStarted:
                 return
         self.__isInitialUpdated = True
         self.__isAttachingToVehicle = True

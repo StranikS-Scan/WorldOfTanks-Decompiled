@@ -94,6 +94,8 @@ class SectorBase(BigWorld.Entity):
         self.__baseCaptureSoundObject.stopAll()
         self._baseCaptureSirenSoundIsPlaying = False
         self.__baseCaptureSoundObject = None
+        self.model.root.detach(self.__terrainSelectedArea)
+        self.__terrainSelectedArea = None
         self.__flagModel = None
         self.model = None
         return

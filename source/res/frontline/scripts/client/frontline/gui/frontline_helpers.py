@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/frontline_helpers.py
+import CommandMapping
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import TabType
-import CommandMapping
+from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES
 from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyVkList, getHotKeyList
 from gui.impl import backport
 from gui.impl.gen import R
@@ -62,27 +63,35 @@ def isHangarAvailable():
 
 
 class FLBattleTypeDescription(object):
-    __epicMetaCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def getDescription(self):
-        return self.__getDescription('description')
+    @staticmethod
+    def getDescription(reservesModifier=None):
+        return FLBattleTypeDescription.__getDescription('description', reservesModifier)
 
-    def getShortDescription(self):
-        return self.__getDescription('shortDescription')
+    @staticmethod
+    def getShortDescription(reservesModifier=None):
+        return FLBattleTypeDescription.__getDescription('shortDescription', reservesModifier)
 
-    def getTitle(self):
-        return self.__getDescription('title')
+    @staticmethod
+    def getTitle(reservesModifier=None):
+        return FLBattleTypeDescription.__getDescription('title', reservesModifier)
 
-    def getBattleTypeIconPath(self, sizeFolder='c_136x136'):
-        iconRes = self.__getRI().dyn(sizeFolder).dyn(self.__epicMetaCtrl.getEpicBattlesReservesModifier())
-        return backport.image(iconRes()) if iconRes.exists() else ''
-
-    def __getDescription(self, descriptionType):
-        modifier = self.__epicMetaCtrl.getEpicBattlesReservesModifier()
-        if modifier is None:
+    @staticmethod
+    def getBattleTypeIconPath(reservesModifier=None, sizeFolder='c_136x136'):
+        if reservesModifier is None:
             return ''
         else:
-            descriptionRes = self.__getRS().dyn(descriptionType).dyn(modifier)
+            modifier = RESERVES_MODIFIER_NAMES[reservesModifier]
+            iconRes = FLBattleTypeDescription.__getRI().dyn(sizeFolder).dyn(modifier)
+            return backport.image(iconRes()) if iconRes.exists() else ''
+
+    @staticmethod
+    def __getDescription(descriptionType, reservesModifier):
+        if reservesModifier is None:
+            return ''
+        else:
+            modifier = RESERVES_MODIFIER_NAMES[reservesModifier]
+            descriptionRes = FLBattleTypeDescription.__getRS().dyn(descriptionType).dyn(modifier)
             return backport.text(descriptionRes()) if descriptionRes.exists() else ''
 
     @staticmethod

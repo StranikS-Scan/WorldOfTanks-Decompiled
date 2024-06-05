@@ -20,6 +20,7 @@ from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.shared.money import Currency
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
+from messenger.proto.events import g_messengerEvents
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -158,6 +159,7 @@ class FullScreenDialogView(FullScreenDialogBaseView, typing.Generic[TViewModel])
 class FullScreenDialogWindowWrapper(LobbyWindow):
     __slots__ = ('_wrappedView', '_blur', '_doBlur')
     __gui = dependency.descriptor(IGuiLoader)
+    __NOTIFICATIONS_LOCK_KEY = 'FullScreenDialogLockKey'
 
     def __init__(self, wrappedView, parent=None, doBlur=True, layer=WindowLayer.UNDEFINED):
         super(FullScreenDialogWindowWrapper, self).__init__(DialogFlags.TOP_FULLSCREEN_WINDOW, content=wrappedView, parent=parent, layer=layer)
@@ -168,6 +170,7 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
 
     def _initialize(self):
         super(FullScreenDialogWindowWrapper, self)._initialize()
+        g_messengerEvents.onLockPopUpMessages(self.__makeNotificationLockKey(), lockHigh=True)
         if self._doBlur:
             self._blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
@@ -185,4 +188,8 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
     def _finalize(self):
         if self._blur:
             self._blur.fini()
+        g_messengerEvents.onUnlockPopUpMessages(self.__makeNotificationLockKey())
         super(FullScreenDialogWindowWrapper, self)._finalize()
+
+    def __makeNotificationLockKey(self):
+        return '{}{}'.format(self.__NOTIFICATIONS_LOCK_KEY, self.uniqueID)

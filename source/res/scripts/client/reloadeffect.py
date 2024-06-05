@@ -249,6 +249,9 @@ class SimpleReload(_GunReload):
     def onFull(self):
         pass
 
+    def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
+        pass
+
     def shotFail(self):
         pass
 
@@ -319,6 +322,9 @@ class BarrelReload(SimpleReload):
         pass
 
     def onFull(self):
+        pass
+
+    def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
         pass
 
     def shotFail(self):
@@ -499,6 +505,15 @@ class AutoReload(_GunReload):
             LOG_DEBUG('AutoReload::onClipLoad time = {0} {1} {2} {3}'.format(BigWorld.time(), timeLeft, shellCount, lastShell))
         self.stopCallback(self.__onAlmostComplete)
         self.stopCallback(self.__onClipShellLoad)
+        self.updateReloadTime(timeLeft, shellCount, lastShell, canBeFull)
+
+    def onFull(self):
+        if BARREL_DEBUG_ENABLED:
+            LOG_DEBUG('AutoReload::onFull')
+        playByName(self._desc.autoLoaderFull)
+        self.stopCallback(self.__onAlmostComplete)
+
+    def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
         if shellCount > 0 and not lastShell:
             time = timeLeft - self._desc.clipShellLoadT
             if time < 0.0:
@@ -509,11 +524,6 @@ class AutoReload(_GunReload):
             if time < 0.0:
                 time = 0.0
             self.delayCallback(time, self.__onAlmostComplete, BigWorld.time() + time)
-
-    def onFull(self):
-        if BARREL_DEBUG_ENABLED:
-            LOG_DEBUG('AutoReload::onFull')
-        playByName(self._desc.autoLoaderFull)
 
     def shotFail(self):
         playByName(self._desc.shotFail)
@@ -653,6 +663,11 @@ class ReloadEffectStrategy(object):
     def onFull(self):
         if self.__currentReloadEffect is not None:
             self.__currentReloadEffect.onFull()
+        return
+
+    def updateReloadTime(self, timeLeft, shellCount, lastShell, canBeFull):
+        if self.__currentReloadEffect is not None:
+            self.__currentReloadEffect.updateReloadTime(timeLeft, shellCount, lastShell, canBeFull)
         return
 
     def shotFail(self):

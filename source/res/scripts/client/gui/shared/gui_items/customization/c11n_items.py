@@ -1065,6 +1065,10 @@ class Style(Customization):
     def serialNumber(self):
         return self.__serialNumber
 
+    @property
+    def isLockedOnVehicle(self):
+        return self.descriptor.isLockedOnVehicle
+
     def getAlteredOutfit(self, itemType, itemID, vehicleCD):
         item = self.getAlternateItem(itemType, itemID)
         outfit = self.getOutfit(first(self.seasons), vehicleCD=vehicleCD)

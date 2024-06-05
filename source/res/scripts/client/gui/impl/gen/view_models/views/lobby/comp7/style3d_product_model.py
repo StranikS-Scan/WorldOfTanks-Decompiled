@@ -6,28 +6,28 @@ from gui.impl.gen.view_models.views.lobby.comp7.base_product_model import BasePr
 class Style3dProductModel(BaseProductModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(Style3dProductModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def vehicleInfo(self):
-        return self._getViewModel(8)
+        return self._getViewModel(9)
 
     @staticmethod
     def getVehicleInfoType():
         return VehicleModel
 
     def getName(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setName(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def getCanGoToCustomization(self):
-        return self._getBool(10)
+        return self._getBool(11)
 
     def setCanGoToCustomization(self, value):
-        self._setBool(10, value)
+        self._setBool(11, value)
 
     def _initialize(self):
         super(Style3dProductModel, self)._initialize()

@@ -357,6 +357,9 @@ class ArenaDataProvider(IArenaDataProvider):
         vehInfo = self.getVehicleInfo(vehicleID)
         return self.isAllyTeam(vehInfo.team)
 
+    def getReservesModifier(self):
+        return self.__description.getReservesModifier()
+
     def __findSquads(self, exclude=None):
         result = []
         prebattleID = self.getVehicleInfo().prebattleID

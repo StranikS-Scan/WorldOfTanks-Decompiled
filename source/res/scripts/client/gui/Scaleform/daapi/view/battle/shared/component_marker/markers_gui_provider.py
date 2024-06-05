@@ -48,7 +48,8 @@ class MarkerGUIProvider(object):
             if plugin is not None:
                 self.__markers2DPlugin = plugin
             vehicleMarkerPlugin = event.componentPy.getPlugin('vehicles')
-            self.__vehicleMarkerPlugin = vehicleMarkerPlugin
+            if vehicleMarkerPlugin is not None:
+                self.__vehicleMarkerPlugin = vehicleMarkerPlugin
         elif alias == BATTLE_VIEW_ALIASES.FULLSCREEN_MAP:
             plugin = event.componentPy.getPlugin(self.__pluginID)
             if plugin is not None:

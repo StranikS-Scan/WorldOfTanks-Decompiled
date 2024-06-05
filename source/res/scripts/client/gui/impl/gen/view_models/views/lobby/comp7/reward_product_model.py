@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7Bo
 class RewardProductModel(BaseProductModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(RewardProductModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def reward(self):
-        return self._getViewModel(8)
+        return self._getViewModel(9)
 
     @staticmethod
     def getRewardType():

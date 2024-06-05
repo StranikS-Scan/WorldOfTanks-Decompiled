@@ -48,46 +48,55 @@ class _AsyncEventWithTimout(AsyncEvent):
 
 
 class UseStoryModeFading(object):
-    __slots__ = ('_hide', '_show', '_layer', '_waitForLayoutReady')
+    __slots__ = ('_hide', '_show', '_layer', '_waitForLayoutReady', '_currentFunctions', '_callback')
     _fadeManager = dependency.descriptor(IStoryModeFadingController)
 
-    def __init__(self, show=True, hide=True, layer=WindowLayer.OVERLAY, waitForLayoutReady=None):
+    def __init__(self, show=True, hide=True, layer=WindowLayer.OVERLAY, waitForLayoutReady=None, callback=None):
         super(UseStoryModeFading, self).__init__()
         self._hide = hide
         self._show = show
         self._layer = layer
         self._waitForLayoutReady = waitForLayoutReady
+        self._currentFunctions = set()
+        self._callback = callback
 
     def __call__(self, func):
 
         @wraps(func)
         @wg_async
         def wrapper(*args, **kwargs):
-            try:
-                asyncEvent = _AsyncEventWithTimout('Got time-out during the fade-in/fade-out animation.')
+            if func in self._currentFunctions:
+                return
+            else:
+                self._currentFunctions.add(func)
+                try:
+                    asyncEvent = _AsyncEventWithTimout('Got time-out during the fade-in/fade-out animation.')
 
-                def viewReadyHandler(event):
-                    if event.viewID == self._waitForLayoutReady:
+                    def viewReadyHandler(event):
+                        if event.viewID == self._waitForLayoutReady:
+                            asyncEvent.set()
+
+                    if self._waitForLayoutReady is None:
                         asyncEvent.set()
+                    else:
+                        g_eventBus.addListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
+                    if not BattleReplay.isPlaying() and self._show:
+                        yield wg_await(self._fadeManager.show(self._layer))
+                    if adisp.isAsync(func):
+                        yield await_callback(func)(*args, **kwargs)
+                    else:
+                        yield wg_await(forwardAsFuture(func(*args, **kwargs)))
+                    yield wg_await(asyncEvent.wait())
+                    g_eventBus.removeListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
+                    if not BattleReplay.isPlaying() and self._hide:
+                        yield wg_await(self._fadeManager.hide(self._layer))
+                except BrokenPromiseError:
+                    _logger.debug('%s got BrokenPromiseError during the fade-in/fade-out animation.', func)
 
-                if self._waitForLayoutReady is None:
-                    asyncEvent.set()
-                else:
-                    g_eventBus.addListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
-                if not BattleReplay.isPlaying() and self._show:
-                    yield wg_await(self._fadeManager.show(self._layer))
-                if adisp.isAsync(func):
-                    yield await_callback(func)(*args, **kwargs)
-                else:
-                    yield wg_await(forwardAsFuture(func(*args, **kwargs)))
-                yield wg_await(asyncEvent.wait())
-                g_eventBus.removeListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
-                if not BattleReplay.isPlaying() and self._hide:
-                    yield wg_await(self._fadeManager.hide(self._layer))
-            except BrokenPromiseError:
-                _logger.debug('%s got BrokenPromiseError during the fade-in/fade-out animation.', func)
-
-            return
+                self._currentFunctions.remove(func)
+                if self._callback is not None:
+                    self._callback()
+                return
 
         return wrapper
 

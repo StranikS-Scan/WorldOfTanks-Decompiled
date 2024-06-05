@@ -94,6 +94,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isStaticDeathZone(self):
         return self.__damage.isStaticDeathZone()
 
+    def isMinefieldZone(self):
+        return self.__damage.isMinefieldZone()
+
     def isShellGold(self):
         return self.__damage.isShellGold()
 
@@ -114,6 +117,12 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isFortArtilleryEqDamage(self, primary=True):
         return self.__damage.isFortArtilleryEq(primary=primary)
+
+    def isBattleshipStrike(self, primary=True):
+        return self.__damage.isBattleshipStrike(primary=primary)
+
+    def isDestroyerStrike(self, primary=True):
+        return self.__damage.isDestroyerStrike(primary=primary)
 
     def getShellType(self):
         return self.__damage.getShellType()
@@ -171,6 +180,9 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isStaticDeathZone(self):
         return self.__critsExtra.isStaticDeathZone()
 
+    def isMinefieldZone(self):
+        return self.__critsExtra.isMinefieldZone()
+
     def isShellGold(self):
         return self.__critsExtra.isShellGold()
 
@@ -185,6 +197,12 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isBombersDamage(self, primary=True):
         return self.__critsExtra.isBombers(primary=primary)
+
+    def isBattleshipStrike(self, primary=True):
+        return self.__critsExtra.isBattleshipStrike(primary=primary)
+
+    def isDestroyerStrike(self, primary=True):
+        return self.__critsExtra.isDestroyerStrike(primary=primary)
 
     def isClingBrander(self):
         return self.__critsExtra.isClingBrander()
@@ -207,13 +225,16 @@ class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
         self.__damage = event.getExtra()
 
     def getDamage(self):
-        return self.__damage
+        return self.__damage.getDamage()
+
+    def getAttackReasonID(self):
+        return self.__damage.getAttackReasonID()
 
     def isProtectionZoneDamage(self):
         return False
 
     def isArtilleryEqDamage(self, primary=True):
-        return False
+        return self.__damage.isArtilleryEq(primary=primary)
 
     def isBomberEqDamage(self, primary=True):
         return False
@@ -230,8 +251,17 @@ class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isStaticDeathZone(self):
         return False
 
+    def isMinefieldZone(self):
+        return False
+
     def isClingBrander(self):
         return False
+
+    def isBattleshipStrike(self, primary=True):
+        return self.__damage.isBattleshipStrike(primary=primary)
+
+    def isDestroyerStrike(self, primary=True):
+        return self.__damage.isDestroyerStrike(primary=primary)
 
 
 _AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE,

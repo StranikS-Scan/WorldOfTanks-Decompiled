@@ -9,6 +9,7 @@ if typing.TYPE_CHECKING:
 
 class IStoryModeController(IGameController):
     onSyncDataUpdated = None
+    onMissionsConfigUpdated = None
 
     @property
     def isOnboarding(self):
@@ -22,14 +23,27 @@ class IStoryModeController(IGameController):
     def selectedMissionId(self):
         raise NotImplementedError
 
+    @property
+    def isSelectedMissionOnboarding(self):
+        raise NotImplementedError
+
     @selectedMissionId.setter
     def selectedMissionId(self, value):
+        raise NotImplementedError
+
+    def isEventEntryPointVisible(self):
+        raise NotImplementedError
+
+    def isShowActiveModeState(self):
         raise NotImplementedError
 
     def isEnabled(self):
         raise NotImplementedError
 
     def isInPrb(self):
+        raise NotImplementedError
+
+    def switchPrb(self):
         raise NotImplementedError
 
     @property
@@ -42,6 +56,13 @@ class IStoryModeController(IGameController):
 
     @property
     def needToShowAward(self):
+        raise NotImplementedError
+
+    @property
+    def isSelectedMissionEvent(self):
+        raise NotImplementedError
+
+    def popMissionProgressDiff(self, missionId):
         raise NotImplementedError
 
     def getFirstMission(self):
@@ -68,14 +89,23 @@ class IStoryModeController(IGameController):
     def goToHangar(self, guiCtx=None):
         raise NotImplementedError
 
-    def skipOnboarding(self):
+    def quitBattle(self):
+        raise NotImplementedError
+
+    def popWaitingToBeShownAwardData(self):
         raise NotImplementedError
 
     def awardShown(self):
         raise NotImplementedError
 
-    def startOnboardingMusic(self, event=None):
+    def startMusic(self):
         raise NotImplementedError
 
-    def stopOnboardingMusic(self):
+    def stopMusic(self):
+        raise NotImplementedError
+
+    def isMissionTaskCompleted(self, missionId, taskId):
+        raise NotImplementedError
+
+    def chooseSelectedMissionId(self, isEvent=False):
         raise NotImplementedError

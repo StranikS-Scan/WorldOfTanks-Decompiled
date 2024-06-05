@@ -5,13 +5,16 @@ import logging
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from CombatSelectedArea import CombatSelectedArea
+import TriggersManager
+from TriggersManager import TRIGGER_TYPE
 from aih_constants import GUN_MARKER_TYPE, CTRL_MODE_NAME, MAP_CASE_MODES
 from extension_utils import importClass
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from items.artefacts import ArcadeEquipmentConfigReader
+from items.artefacts import ArcadeEquipmentConfigReader, AreaOfEffectEquipment
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from AvatarInputHandler.DynamicCameras import StrategicCamera, ArcadeCamera
 import BattleReplay
 import BigWorld
@@ -38,11 +41,7 @@ class _DefaultStrikeSelector(CallbackDelayer):
     def __init__(self, position, equipment):
         CallbackDelayer.__init__(self)
         self.equipment = equipment
-        self.aimLimits = None
-        if isinstance(equipment, ArcadeEquipmentConfigReader):
-            self.aimLimits = (equipment.minApplyRadius, equipment.maxApplyRadius)
         self.delayCallback(self._TICK_DELAY, self.__tick)
-        return
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -86,13 +85,13 @@ class _VehiclesSelector(object):
 
     def highlightVehicles(self):
         self.__clearEdgedVehicles()
-        vehicles = [ v for v in BigWorld.player().vehicles if self.__validateVehicle(v) ]
+        vehicles = [ v for v in BigWorld.player().vehicles if self._validateVehicle(v) ]
         selected = self.__intersectChecker(vehicles)
         for v in selected:
             v.drawEdge(True)
             self.__edgedVehicles.append(v)
 
-    def __validateVehicle(self, vehicle):
+    def _validateVehicle(self, vehicle):
         return hasattr(vehicle, 'isStarted') and vehicle.isStarted and vehicle.isAlive() and (not vehicle.isPlayerVehicle or self.__selectPlayer)
 
     def __onVehicleLeaveWorld(self, vehicle):
@@ -225,7 +224,6 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
         self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, self._getAreaSize())
-        self.area.setOverTerrainOffset(10.0)
         self.maxHeightShift = None
         self.minHeightShift = None
         self.direction = direction
@@ -256,6 +254,8 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         if reset:
             return True
         self.processHover(position)
+        if isinstance(self.equipment, AreaOfEffectEquipment):
+            TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_USED_AOE_EQUIPMENT, position=Math.Vector3(self.area.position), name=self.equipment.name)
         direction = Vector2(self.direction.x, self.direction.z)
         direction.normalise()
         BigWorld.player().setEquipmentApplicationPoint(self.equipment.id[1], self.area.position, direction)
@@ -616,6 +616,7 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
     isEnabled = property(lambda self: self.__isEnabled)
     camera = property(lambda self: self.__cam)
     aimingMode = property(lambda self: self.__aimingMode)
@@ -644,6 +645,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         self.__curVehicleID = None
         self.__aimingMode = 0
         self.__aimingModeUserDisabled = False
+        self.__aimingCircleTerrainActivated = False
         self.__class__.prevCtlMode = [Vector3(0, 0, 0),
          '',
          0,
@@ -704,6 +706,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             return
         else:
             self.__isEnabled = False
+            self._clearAimingLimits()
             self.__cam.disable()
             self.__activeSelector.destroy()
             self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
@@ -822,6 +825,50 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     def _getPreferedPositionOnQuit(self):
         raise NotImplementedError
 
+    def _setAimingLimits(self, equipment):
+        if not isinstance(equipment, ArcadeEquipmentConfigReader) or equipment.maxApplyRadius <= 0:
+            self.camera.aimingSystem.setAimingLimits(None)
+            return
+        else:
+            self.camera.aimingSystem.setAimingLimits((equipment.minApplyRadius, equipment.maxApplyRadius))
+            if not equipment.applyRadiusVisible:
+                return
+            player = BigWorld.player()
+            vehicle = player.getVehicleAttached()
+            if not vehicle:
+                _logger.warning('[MapCase] Can not set aiming circle visible, no vehicle attached.')
+                return
+            dynamicObjects = self._dynamicObjectsCache.getConfig(player.arenaGuiType)
+            if dynamicObjects is None:
+                _logger.warning('[MapCase] Can not set aiming circle visible, no visual registered.')
+                return
+            aimingCircleSettings = dynamicObjects.getAimingCircleRestrictionEffect().get('ally')
+            if aimingCircleSettings is None:
+                _logger.warning('[MapCase] Can not set aiming circle visible, visual without <ally> section.')
+                return
+            if vehicle.appearance.isTerrainCircleVisible:
+                _logger.warning('[MapCase] Can not set aiming circle visible, other circle terrain visible.')
+                return
+            self.__aimingCircleTerrainActivated = True
+            vehicle.appearance.showTerrainCircle(equipment.maxApplyRadius, aimingCircleSettings)
+            return
+
+    def _clearAimingLimits(self):
+        self.camera.aimingSystem.setAimingLimits(None)
+        if not self.__aimingCircleTerrainActivated:
+            return
+        else:
+            self.__aimingCircleTerrainActivated = False
+            vehicle = BigWorld.player().getVehicleAttached()
+            if not vehicle:
+                _logger.warning('[MapCase] Can not hide aiming circle, no vehicle attached.')
+                return
+            if not vehicle.appearance.isTerrainCircleVisible:
+                _logger.debug('[MapCase] Aiming circle, already hidden.')
+                return
+            vehicle.appearance.hideTerrainCircle()
+            return
+
     def __getDesiredShotPoint(self):
         defaultPoint = self._getCameraDesiredShotPoint()
         replayCtrl = BattleReplay.g_replayCtrl
@@ -866,7 +913,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setEquipmentID(-1)
-        self.camera.aimingSystem.setAimingLimits(None)
+        self._clearAimingLimits()
         return
 
     def activateEquipment(self, equipmentID, preferredPos=None):
@@ -890,7 +937,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
             self.__activeSelector.destroy()
             pos = preferredPos or self.__getDesiredShotPoint()
             self.__activeSelector = strikeSelectorConstructor(pos, equipment)
-            self.camera.aimingSystem.setAimingLimits(self.__activeSelector.aimLimits)
+            self._setAimingLimits(equipment)
             self.__equipmentID = equipmentID
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:

@@ -98,15 +98,18 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     def isRadialMenuOpened(self):
         return self.__radialMenuIsOpen
 
-    def resetRadialMenuData(self, onStop=False):
-        isPlayerObserver = None if onStop else self.sessionProvider.getCtx().isPlayerObserver()
-        if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
-            self.__radialMenuIsOpen = False
-            self.__radialKeyDown = None
-            if self.hasDelayedCallback(self.__delayOpenRadialMenu):
-                self.stopCallback(self.__delayOpenRadialMenu)
-            self.__setAimingEnabled(isEnabled=True)
-        return
+    def resetRadialMenuData(self, onStop=False, reshow=False):
+        if reshow:
+            return
+        else:
+            isPlayerObserver = None if onStop else self.sessionProvider.getCtx().isPlayerObserver()
+            if self.__radialKeyDown is not None and avatar_getter.isVehicleAlive() and not isPlayerObserver:
+                self.__radialMenuIsOpen = False
+                self.__radialKeyDown = None
+                if self.hasDelayedCallback(self.__delayOpenRadialMenu):
+                    self.stopCallback(self.__delayOpenRadialMenu)
+                self.__setAimingEnabled(isEnabled=True)
+            return
 
     def handleCalloutAndRadialMenuKeyPress(self, key, isDown):
         cmdMap = CommandMapping.g_instance

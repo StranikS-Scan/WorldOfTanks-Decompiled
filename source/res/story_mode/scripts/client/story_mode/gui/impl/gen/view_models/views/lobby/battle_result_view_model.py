@@ -5,11 +5,12 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_progress_level_model import MissionProgressLevelModel
 from story_mode.gui.impl.gen.view_models.views.lobby.progress_level_model import ProgressLevelModel
+from story_mode.gui.impl.gen.view_models.views.lobby.reward_model import RewardModel
 
 class BattleResultViewModel(ViewModel):
     __slots__ = ('onQuit', 'onContinue')
 
-    def __init__(self, properties=10, commands=2):
+    def __init__(self, properties=13, commands=2):
         super(BattleResultViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -68,15 +69,37 @@ class BattleResultViewModel(ViewModel):
     def setPlayerStatus(self, value):
         self._setString(8, value)
 
+    def getIsDifficult(self):
+        return self._getBool(9)
+
+    def setIsDifficult(self, value):
+        self._setBool(9, value)
+
+    def getIsEvent(self):
+        return self._getBool(10)
+
+    def setIsEvent(self, value):
+        self._setBool(10, value)
+
     def getProgressLevels(self):
-        return self._getArray(9)
+        return self._getArray(11)
 
     def setProgressLevels(self, value):
-        self._setArray(9, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getProgressLevelsType():
         return ProgressLevelModel
+
+    def getRewards(self):
+        return self._getArray(12)
+
+    def setRewards(self, value):
+        self._setArray(12, value)
+
+    @staticmethod
+    def getRewardsType():
+        return RewardModel
 
     def _initialize(self):
         super(BattleResultViewModel, self)._initialize()
@@ -89,6 +112,9 @@ class BattleResultViewModel(ViewModel):
         self._addStringProperty('infoDescription', '')
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('playerStatus', '')
+        self._addBoolProperty('isDifficult', False)
+        self._addBoolProperty('isEvent', False)
         self._addArrayProperty('progressLevels', Array())
+        self._addArrayProperty('rewards', Array())
         self.onQuit = self._addCommand('onQuit')
         self.onContinue = self._addCommand('onContinue')

@@ -3,7 +3,7 @@
 from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
 from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import HAS_DEV_RESOURCES
+from constants import HAS_DEV_RESOURCES, ARENA_GUI_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG
 from gui.battle_hints import battle_hints_overlap_controller
 from gui.battle_hints.battle_hints_overlap_controller import HintScope
@@ -11,21 +11,30 @@ from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initScaleformGuiTypes
 from gui.shared.system_factory import registerScaleformBattlePackages
 from schema_manager import getSchemaManager
-from story_mode.control_modes import StoryModeArcadeControlMode, StoryModeSniperControlMode
+from story_mode import account_settings
+from story_mode.control_modes import OnboardingArcadeControlMode, OnboardingSniperControlMode, StoryModeArcadeControlMode, StoryModeSniperControlMode
 from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
-from story_mode.gui.battle_control.controllers.repository import StoryModeRepository
+from story_mode.gui.battle_control.controllers import equipments_items
+from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
+from story_mode.gui.game_control.story_mode_controller import entryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
 from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
+from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode_common import story_mode_constants, battle_mode, injectConsts
+from story_mode_common.configs.story_mode_battle_mgr_quotums import quotumsSchema
 from story_mode_common.configs.story_mode_missions import missionsSchema
 from story_mode_common.configs.story_mode_settings import settingsSchema
-from story_mode_common.story_mode_constants import ARENA_BONUS_TYPE
 
 class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = story_mode_gui_constants.PREBATTLE_ACTION_NAME.STORY_MODE
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_ENTRY_POINT
+
+    @property
+    def _client_bannerEntryPointValidatorMethod(self):
+        return entryPointValidator
 
     @property
     def _client_prbEntityClass(self):
@@ -57,6 +66,10 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
         return ['story_mode|story_mode_battle.swf', 'story_mode|storyModeComponents.swf']
 
     @property
+    def _client_lobbyRequiredLibraries(self):
+        return ['story_mode|story_mode_lobby.swf']
+
+    @property
     def _client_gameControllers(self):
         from story_mode.skeletons.story_mode_controller import IStoryModeController
         from story_mode.gui.game_control.story_mode_controller import StoryModeController
@@ -85,36 +98,75 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     def _client_battleControllersRepository(self):
         return StoryModeRepository
 
+    @property
+    def _client_sharedControllersRepository(self):
+        return StoryModeSharedRepository
+
+    @property
+    def _client_DynamicObjectCacheClass(self):
+        from story_mode.dyn_objects import StoryModeDynObjects
+        return StoryModeDynObjects
+
+
+class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
+    _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING
+    _ARENA_GUI_TYPE = ARENA_GUI_TYPE.STORY_MODE_ONBOARDING
+    _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.ONBOARDING_BATTLE_PAGE
+
+    @property
+    def _client_battleControllersRepository(self):
+        return OnboardingRepository
+
+    @property
+    def _client_lobbyRequiredLibraries(self):
+        return []
+
 
 def preInit():
     LOG_DEBUG('preInit personality:', __name__)
     schemaManager = getSchemaManager()
     schemaManager.registerClientServerSchema(settingsSchema)
+    schemaManager.registerClientServerSchema(quotumsSchema)
     schemaManager.registerClientServerSchema(missionsSchema)
     injectConsts(__name__)
     initGuiTypes(story_mode_gui_constants, __name__)
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
-    OVERWRITE_CTRLS_DESC_MAP[story_mode_constants.ARENA_BONUS_TYPE.STORY_MODE] = {CTRL_MODE_NAME.ARCADE: (StoryModeArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
+    OVERWRITE_CTRLS_DESC_MAP[ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING] = {CTRL_MODE_NAME.ARCADE: (OnboardingArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
+     CTRL_MODE_NAME.SNIPER: (OnboardingSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
+    OVERWRITE_CTRLS_DESC_MAP[ARENA_BONUS_TYPE.STORY_MODE_REGULAR] = {CTRL_MODE_NAME.ARCADE: (StoryModeArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
      CTRL_MODE_NAME.SNIPER: (StoryModeSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
-    battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
+    battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
+    equipments_items.register()
     battleMode = ClientStoryModeBattleMode(__name__)
     battleMode.registerClient()
     battleMode.registerClientSelector()
     battleMode.registerScaleformRequiredLibraries()
     battleMode.registerGameControllers()
+    battleMode.registerDynamicObjectCache()
     battleMode.registerBattleResultsConfig()
     battleMode.registerClientBattleResultsComposer()
     battleMode.registerSystemMessagesTypes()
     battleMode.registerBattleResultSysMsgType()
     battleMode.registerMessengerServerFormatters()
     battleMode.registerBattleControllersRepository()
+    battleMode.registerSharedControllersRepository()
+    battleMode.registerBannerEntryPointValidatorMethod()
+    onboardingBattleMode = ClientOnboardingBattleMode(__name__)
+    onboardingBattleMode.registerGuiType()
+    onboardingBattleMode.registerScaleformRequiredLibraries()
+    onboardingBattleMode.registerBattleResultsConfig()
+    onboardingBattleMode.registerClientBattleResultsComposer()
+    onboardingBattleMode.registerBattleResultSysMsgType()
+    onboardingBattleMode.registerBattleControllersRepository()
     observers.preInit()
 
 
 def init():
     LOG_DEBUG('init', __name__)
+    account_settings.init()
     g_overrideScaleFormViewsConfig.initExtensionLobbyPackages(__name__, ['story_mode.gui.scaleform.daapi.view.lobby'])
-    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE, ('story_mode.gui.Scaleform.daapi.view.battle',))
+    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_ONBOARDING, ('story_mode.gui.scaleform.daapi.view.battle',))
+    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_REGULAR, ('story_mode.gui.scaleform.daapi.view.battle',))
     if HAS_DEV_RESOURCES:
         from story_mode.gui.development import prb_dev
         prb_dev.prbDevInit()

@@ -285,6 +285,7 @@ class TOOLTIPS_CONSTANTS(object):
     COMP7_BATTLE_RESULTS_RATING_POINTS = 'comp7BattleResultsRatingPoints'
     TOURNAMENT_COMP7_BATTLE_RESULTS_RATING_POINTS = 'tournamentComp7BattleResultsRatingPoints'
     TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS = 'trainingComp7BattleResultsRatingPoints'
+    COMP7_GIFT_TOKEN = 'comp7GiftToken'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'

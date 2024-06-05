@@ -528,7 +528,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     @staticmethod
     def __needsMarker(vInfo):
-        return vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))
+        return (vInfo.isAlive() or not (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags))) and constants.VEHICLE_BUNKER_TURRET_TAG not in vInfo.vehicleType.tags
 
     def __setEntityName(self, vInfo, arenaDP):
         vehicleID = vInfo.vehicleID

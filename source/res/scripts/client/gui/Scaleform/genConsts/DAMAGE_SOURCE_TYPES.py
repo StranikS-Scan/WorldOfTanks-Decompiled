@@ -17,6 +17,7 @@ class DAMAGE_SOURCE_TYPES(object):
     AT_SPG_ELITE = 'AT-SPG_elite'
     SPG_ELITE = 'SPG_elite'
     BOSS = 'boss'
+    BUNKER = 'bunkerTurret'
     DAMAGE_SOURCES = [HEAVY_TANK,
      MEDIUM_TANK,
      LIGHT_TANK,
@@ -30,4 +31,5 @@ class DAMAGE_SOURCE_TYPES(object):
      LIGHT_TANK_ELITE,
      AT_SPG_ELITE,
      SPG_ELITE,
-     BOSS]
+     BOSS,
+     BUNKER]

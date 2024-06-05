@@ -76,6 +76,9 @@ class IArenaGuiDescription(object):
     def getSelectedQuestInfo(self):
         raise NotImplementedError
 
+    def getReservesModifier(self):
+        raise NotImplementedError
+
 
 class DefaultArenaGuiDescription(IArenaGuiDescription):
     __slots__ = ('_visitor', '_team', '_questInfo', '_isPersonalDataSet', '_selectedQuestIDs', '_selectedQuestInfo')
@@ -161,6 +164,9 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
 
     def getSelectedQuestInfo(self):
         return self._selectedQuestInfo
+
+    def getReservesModifier(self):
+        return None
 
 
 class ArenaWithBasesDescription(DefaultArenaGuiDescription):
@@ -257,6 +263,9 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
     def getSelectedQuestInfo(self):
         return self._decorated.getSelectedQuestInfo()
 
+    def getReservesModifier(self):
+        return None
+
 
 class BattleRoyaleDescription(ArenaWithLabelDescription):
     __slots__ = ()
@@ -271,25 +280,28 @@ class BattleRoyaleDescription(ArenaWithLabelDescription):
 class EpicBattlesDescription(ArenaWithLabelDescription):
     __slots__ = ()
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __battleTypeDescription = FLBattleTypeDescription()
 
     def getWinString(self, isInBattle=True):
-        return self.__battleTypeDescription.getDescription()
+        return FLBattleTypeDescription.getDescription(self.getReservesModifier())
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl
         return not replayCtrl.isPlaying
 
     def getBattleTypeIconPath(self, sizeFolder='c_136x136'):
-        return self.__battleTypeDescription.getBattleTypeIconPath(sizeFolder)
+        return FLBattleTypeDescription.getBattleTypeIconPath(self.getReservesModifier(), sizeFolder)
 
     def getDescriptionString(self, isInBattle=True):
-        return self.__battleTypeDescription.getTitle()
+        return FLBattleTypeDescription.getTitle(self.getReservesModifier())
 
     def getTeamName(self, team):
         from epic_constants import EPIC_BATTLE_TEAM_ID
         from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
         return EPIC_BATTLE.TEAM1NAME if team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else EPIC_BATTLE.TEAM2NAME
+
+    def getReservesModifier(self):
+        data = self._visitor.getArenaExtraData() or {}
+        return data.get('reservesModifier')
 
 
 class MapboxArenaDescription(ArenaWithLabelDescription):

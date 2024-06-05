@@ -14,9 +14,9 @@
   </speedLimits>
   <invisibility>
     <moving>	0.274	</moving>
-    <still>	0.457	</still>
+    <still>	0.456	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <firePenalty>	0.686	</firePenalty>
+    <firePenalty>	0.684	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -32,7 +32,7 @@
       <invisibilityBonus>	0.07	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	7.0	</repairCost>
+  <repairCost>	10.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -1312,7 +1312,7 @@
       <weight>	6000	</weight>
       <maxLoad>	26000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.6	</terrainResistance>
-      <brakeForce>	26000	</brakeForce>
+      <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
@@ -2170,7 +2170,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.40	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.180	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/sweden/S33_Latt_Stridsfordon_120/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S33_Latt_Stridsfordon_120/crash/lod0/Gun_01.model	</destroyed>

@@ -230,10 +230,14 @@ class BaseVehicleParamsTooltipView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BaseVehicleParamsTooltipView, self)._onLoading(*args, **kwargs)
         comparator = self._context.getComparator()
-        self._extendedData = comparator.getExtendedData(self._paramName)
-        self._hasPerksBonuses = comparator.hasBonusOfType(constants.BonusTypes.PERK)
-        with self.viewModel.transaction() as tx:
-            self._fillModel(tx)
+        if comparator is None:
+            return
+        else:
+            self._extendedData = comparator.getExtendedData(self._paramName)
+            self._hasPerksBonuses = comparator.hasBonusOfType(constants.BonusTypes.PERK)
+            with self.viewModel.transaction() as tx:
+                self._fillModel(tx)
+            return
 
     def _fillModel(self, model):
         pass

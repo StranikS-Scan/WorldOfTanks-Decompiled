@@ -12,7 +12,7 @@ from SoundGroups import CREW_GENDER_SWITCHES
 from items import tankmen
 from items.components.tankmen_components import SPECIAL_VOICE_TAG
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET
-from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted
+from items.special_crew import isMihoCrewCompleted, isYhaCrewCompleted, isWitchesCrewCompleted, isMikaCrewCompleted
 from items.vehicles import VehicleDescr
 from constants import ITEM_DEFS_PATH, CURRENT_REALM
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -30,7 +30,8 @@ _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
  'female': CREW_GENDER_SWITCHES.FEMALE}
 _isFullCrewCheckers = {SPECIAL_VOICE_TAG.MIHO: isMihoCrewCompleted,
  SPECIAL_VOICE_TAG.YHA: isYhaCrewCompleted,
- SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted}
+ SPECIAL_VOICE_TAG.WITCHES_CREW: isWitchesCrewCompleted,
+ SPECIAL_VOICE_TAG.MIKA: isMikaCrewCompleted}
 
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)

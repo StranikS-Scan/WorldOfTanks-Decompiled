@@ -15,9 +15,9 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
+from account_helpers.offers.events_data import OfferEventData, OfferGift
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Optional, Tuple, Generator
-    from account_helpers.offers.events_data import OfferEventData, OfferGift
     from gui.SystemMessages import ResultMsg
 _logger = logging.getLogger(__name__)
 
@@ -158,6 +158,15 @@ class BattlePassSelectableRewardManager(SelectableRewardManager):
     def getTabTooltipData(cls, selectableBonus):
         tokenID = selectableBonus.getValue().keys()[0]
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[_getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
+
+
+class Comp7SelectableRewardManager(SelectableRewardManager):
+    _FEATURE = Features.COMP7
+
+    @classmethod
+    def getTabTooltipData(cls, selectableBonus):
+        tokenID = selectableBonus.getValue().keys()[0]
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.COMP7_SELECTABLE_REWARD, specialArgs=[_getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
 
 
 class RankedSelectableRewardManager(SelectableRewardManager):

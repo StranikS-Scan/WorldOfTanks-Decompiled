@@ -41,6 +41,8 @@
     <AN-GRC-3RMT>	81	</AN-GRC-3RMT>
     <SCR_508_M24>	82	</SCR_508_M24>
     <AN_GRC_8D>	83	</AN_GRC_8D>
+    <SCR_506_BPXIV>	87	</SCR_506_BPXIV>
+    <N19Mk1_Crab>	86	</N19Mk1_Crab>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -60,6 +62,9 @@
     <SCR_619_NewOnBoarding>	64005	</SCR_619_NewOnBoarding>
     <SCR_506_NewOnBoarding>	64006	</SCR_506_NewOnBoarding>
     <SCR_508_1_NewOnBoarding>	64007	</SCR_508_1_NewOnBoarding>
+    <SCR_506_StoryMode>	64008	</SCR_506_StoryMode>
+    <SCR_506_StoryMode__0>	64009	</SCR_506_StoryMode__0>
+    <SCR_506_StoryModeHard>	64010	</SCR_506_StoryModeHard>
   </ids>
   <shared>
     <SCR_200>
@@ -143,6 +148,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_506>
+    <SCR_506_BPXIV>
+      <userString>	#usa_vehicles:SCR_506_BPXIV	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_506_BPXIV>
     <SCR_508>
       <userString>	#usa_vehicles:SCR_508	</userString>
       <tags></tags>
@@ -236,6 +253,18 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </British_Wireless_set_N19>
+    <N19Mk1_Crab>
+      <userString>	#usa_vehicles:N19Mk1_Crab	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N19Mk1_Crab>
     <AN_VRC-3>
       <userString>	#usa_vehicles:AN_VRC-3	</userString>
       <tags></tags>
@@ -779,5 +808,41 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_508_1_NewOnBoarding>
+    <SCR_506_StoryMode>
+      <userString>	#usa_vehicles:SCR_506	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	110	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_506_StoryMode>
+    <SCR_506_StoryMode__0>
+      <userString>	#usa_vehicles:SCR_506	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	110	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_506_StoryMode__0>
+    <SCR_506_StoryModeHard>
+      <userString>	#usa_vehicles:SCR_506	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	110	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_506_StoryModeHard>
   </shared>
 </radios.xml>

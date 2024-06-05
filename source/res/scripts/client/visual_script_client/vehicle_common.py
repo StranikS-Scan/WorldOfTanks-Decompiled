@@ -97,6 +97,8 @@ class TriggerListener(TriggersManager.ITriggerListener):
             self.onStunInfoUpdated(params['stunInfo'])
         elif triggerType == TriggersManager.TRIGGER_TYPE.SIXTH_SENSE:
             self.onSixthSenceActivated()
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_USED_AOE_EQUIPMENT:
+            self.onPlayerUsedAoEEquipment(params['name'], params['position'])
         return
 
     def onTriggerDeactivated(self, params):
@@ -148,6 +150,9 @@ class TriggerListener(TriggersManager.ITriggerListener):
         pass
 
     def onSixthSenceActivated(self):
+        pass
+
+    def onPlayerUsedAoEEquipment(self, name, position):
         pass
 
 

@@ -22,6 +22,12 @@
       <Editable>	True	</Editable>
       <Default>	POLYGONAL_ZONE	</Default>
     </markerStyle>
+    <proximityMarkerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	STATIC_DEATH_ZONE_PROXIMITY	</Default>
+    </proximityMarkerStyle>
     <isActive>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

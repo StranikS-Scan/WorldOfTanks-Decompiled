@@ -42159,4 +42159,817 @@
       <splashStrength>	6	</splashStrength>
     </physicsParams>
   </BRcorrodingShot>
+  <storymodeAirbombStrike>
+    <armorHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <armorResisted>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/shellFall_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorResisted>
+    <caliber>	125	</caliber>
+    <targetImpulse>	0.88	</targetImpulse>
+    <physicsParams>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
+    </physicsParams>
+    <artillery>
+      <optimization>
+        <default>	1	</default>
+        <sniper>	1	</sniper>
+      </optimization>
+      <smoke_variation>	0	</smoke_variation>
+      <add_variation>	0	</add_variation>
+      <ground>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_snp>
+      </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/dirtHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/dirtHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/dirtHit_HE_4.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/oilHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/oilHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/oilHit_HE_4.vfx	</effect_explosion_snp>
+      </oil>
+      <stone>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </stone>
+      <wood>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </wood>
+      <metal>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </metal>
+      <snow>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </snow>
+      <sand>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </sand>
+      <water>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </water>
+      <decal>
+        <groupName>	fast	</groupName>
+        <size>	7.0 7.0	</size>
+        <randomYaw>	True	</randomYaw>
+        <variation>	0.15	</variation>
+        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
+        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
+        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
+      </decal>
+      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
+      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
+      <wwtracer>	artilleryStrike_tracer	</wwtracer>
+    </artillery>
+  </storymodeAirbombStrike>
+  <storymodeShipStrike>
+    <armorHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <armorResisted>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/shellFall_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorResisted>
+    <caliber>	125	</caliber>
+    <targetImpulse>	0.88	</targetImpulse>
+    <physicsParams>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
+    </physicsParams>
+    <artillery>
+      <optimization>
+        <default>	1	</default>
+        <sniper>	1	</sniper>
+      </optimization>
+      <smoke_variation>	0	</smoke_variation>
+      <add_variation>	0	</add_variation>
+      <ground>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_snp>
+      </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion_snp>
+      </oil>
+      <stone>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </stone>
+      <wood>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </wood>
+      <metal>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </metal>
+      <snow>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_snowHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_snowHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_snowHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </snow>
+      <sand>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Environment/Storymode/ability_battleship_strike_groundHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </sand>
+      <water>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
+      </water>
+      <decal>
+        <groupName>	fast	</groupName>
+        <size>	18.0 18.0	</size>
+        <randomYaw>	True	</randomYaw>
+        <variation>	0.15	</variation>
+        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
+        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
+        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
+      </decal>
+      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
+      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
+      <wwtracer>	artilleryStrike_tracer	</wwtracer>
+    </artillery>
+  </storymodeShipStrike>
+  <storyModeArtilleryStrike>
+    <armorHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorHit>
+    <armorCriticalHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
+            </stage>
+            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/armorHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorCriticalHit>
+    <armorResisted>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/shellFall_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </armorResisted>
+    <caliber>	125	</caliber>
+    <targetImpulse>	0.88	</targetImpulse>
+    <physicsParams>
+      <shellVelocity>	600	</shellVelocity>
+      <shellMass>	2500	</shellMass>
+      <splashRadius>	8	</splashRadius>
+      <splashStrength>	25	</splashStrength>
+    </physicsParams>
+    <artillery>
+      <optimization>
+        <default>	1	</default>
+        <sniper>	1	</sniper>
+      </optimization>
+      <smoke_variation>	0	</smoke_variation>
+      <add_variation>	1	</add_variation>
+      <ground>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_snp.vfx	</effect_explosion_snp>
+      </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_snp.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_snp.vfx	</effect_explosion_snp>
+      </oil>
+      <stone>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_stoneHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_stoneHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </stone>
+      <wood>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </wood>
+      <metal>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </metal>
+      <snow>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_snowHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_snowHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_snowHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_snowHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </snow>
+      <sand>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_sandHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_sandHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_sandHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_sandHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </sand>
+      <water>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_waterHit.vfx	</effect_smoke>
+      </water>
+      <decal>
+        <groupName>	fast	</groupName>
+        <size>	7.0 7.0	</size>
+        <randomYaw>	True	</randomYaw>
+        <variation>	0.15	</variation>
+        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
+        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
+        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
+      </decal>
+      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
+      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
+      <wwtracer>	artilleryStrike_tracer	</wwtracer>
+    </artillery>
+  </storyModeArtilleryStrike>
 </shot_effects.xml>

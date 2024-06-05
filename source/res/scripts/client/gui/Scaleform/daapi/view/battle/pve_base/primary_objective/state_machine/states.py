@@ -3,7 +3,6 @@
 import enum
 from frameworks.state_machine import StateFlags
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.states import BaseTimerState, BaseState
-from gui.Scaleform.daapi.view.battle.pve_base.pve_helpers import generateText
 from pve_battle_hud import PrimaryObjectiveState, getPveHudLogger
 _logger = getPveHudLogger()
 
@@ -34,33 +33,7 @@ class BaseViewTimerState(BaseTimerState):
     @property
     def _subheader(self):
         serverSettings, clientSettings = self.getSettings()
-        return generateText(clientSettings.subheader, serverSettings.params)
-
-
-class NoTimerState(BaseState):
-    __slots__ = ()
-
-    def __init__(self):
-        super(NoTimerState, self).__init__(stateID=PrimaryObjectiveState.NO_TIMER, flags=StateFlags.UNDEFINED)
-
-    @property
-    def _subheader(self):
-        serverSettings, clientSettings = self.getSettings()
-        return generateText(clientSettings.subheader, serverSettings.params)
-
-    def _showView(self):
-        super(NoTimerState, self)._showView()
-        serverSettings, _ = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.NO_TIMER.value)
-        self._view.as_setTimerBackgroundS(False)
-        self._view.updateSubheader(self._subheader)
-        self._view.updateProgress(serverSettings.progresses)
-
-    def _updateView(self):
-        super(NoTimerState, self)._updateView()
-        serverSettings, _ = self.getSettings()
-        self._view.updateSubheader(self._subheader)
-        self._view.updateProgress(serverSettings.progresses)
+        return clientSettings.getSubheader(serverSettings.params)
 
 
 class AppearanceState(BaseViewTimerState):
@@ -71,17 +44,17 @@ class AppearanceState(BaseViewTimerState):
 
     def _showView(self):
         super(AppearanceState, self)._showView()
-        _, clientSettings = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.BIG.value)
+        serverSettings, clientSettings = self.getSettings()
+        self._view.setTimerState(serverSettings.timer, TimerState.BIG)
         self._view.as_setTimerBackgroundS(True)
-        self._view.updateHeaderWithSubheader(clientSettings.header, self._subheader)
+        self._view.updateHeaderWithSubheader(clientSettings.getHeader(), self._subheader)
         self._view.updateProgress(isVisible=False)
         self._view.playSound(clientSettings.startSound)
 
     def _updateView(self):
         super(AppearanceState, self)._updateView()
         _, clientSettings = self.getSettings()
-        self._view.updateHeaderWithSubheader(clientSettings.header, self._subheader)
+        self._view.updateHeaderWithSubheader(clientSettings.getHeader(), self._subheader)
 
 
 class RegularState(BaseViewTimerState):
@@ -93,7 +66,7 @@ class RegularState(BaseViewTimerState):
     def _showView(self):
         super(RegularState, self)._showView()
         serverSettings, _ = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.SMALL.value)
+        self._view.setTimerState(serverSettings.timer, TimerState.SMALL)
         self._view.as_setTimerBackgroundS(False)
         self._view.updateSubheader(self._subheader)
         self._view.updateProgress(serverSettings.progresses)
@@ -113,18 +86,18 @@ class RemindState(BaseViewTimerState):
 
     def _showView(self):
         super(RemindState, self)._showView()
-        _, clientSettings = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.BIG.value)
+        serverSettings, clientSettings = self.getSettings()
+        self._view.setTimerState(serverSettings.timer, TimerState.BIG)
         self._view.as_playFxS(True, False)
         self._view.as_setTimerBackgroundS(True)
-        self._view.updateHeaderWithSubheader(clientSettings.header, self._subheader)
+        self._view.updateHeaderWithSubheader(clientSettings.getHeader(), self._subheader)
         self._view.updateProgress(isVisible=False)
         self._view.playSound(clientSettings.remindSound)
 
     def _updateView(self):
         super(RemindState, self)._updateView()
         _, clientSettings = self.getSettings()
-        self._view.updateHeaderWithSubheader(clientSettings.header, self._subheader)
+        self._view.updateHeaderWithSubheader(clientSettings.getHeader(), self._subheader)
 
 
 class LastRemindState(RemindState):
@@ -143,7 +116,7 @@ class LargeTimerState(BaseViewTimerState):
     def _showView(self):
         super(LargeTimerState, self)._showView()
         serverSettings, _ = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.BIG.value)
+        self._view.setTimerState(serverSettings.timer, TimerState.BIG)
         self._view.as_setTimerBackgroundS(False)
         self._view.updateSubheader(self._subheader)
         self._view.updateProgress(serverSettings.progresses)
@@ -169,7 +142,7 @@ class CountdownState(BaseViewTimerState):
     def _showView(self):
         super(CountdownState, self)._showView()
         serverSettings, _ = self.getSettings()
-        self._view.as_setTimerStateS(TimerState.BIG.value)
+        self._view.setTimerState(serverSettings.timer, TimerState.BIG)
         self._view.as_setTimerBackgroundS(False)
         self._view.updateSubheader(self._subheader)
         self._view.updateProgress(serverSettings.progresses)
@@ -196,7 +169,7 @@ class SuccessState(BaseState):
         super(SuccessState, self)._showView()
         _, clientSettings = self.getSettings()
         self._view.hideObjective()
-        self._view.showMessage(True, clientSettings.successIcon, clientSettings.success)
+        self._view.showMessage(True, clientSettings.successIcon, clientSettings.getSuccess())
         self._view.playSound(clientSettings.successSound)
 
 
@@ -210,7 +183,7 @@ class FailureState(BaseState):
         super(FailureState, self)._showView()
         _, clientSettings = self.getSettings()
         self._view.hideObjective()
-        self._view.showMessage(False, clientSettings.failureIcon, clientSettings.failure)
+        self._view.showMessage(False, clientSettings.failureIcon, clientSettings.getFailure())
         self._view.as_setTimerBackgroundS(True)
         self._view.playSound(clientSettings.failureSound)
 

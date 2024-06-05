@@ -16,7 +16,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IAchievements20Controller, ILimitedUIController, ICollectionsSystemController
+from skeletons.gui.game_control import IAchievements20Controller, ILimitedUIController, ICollectionsSystemController, IAchievementsController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
@@ -29,6 +29,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     _limitedUIController = dependency.descriptor(ILimitedUIController)
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
+    __advAchmntCtrl = dependency.descriptor(IAchievementsController)
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
 
@@ -75,6 +76,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.__collectionsSystem.onServerSettingsChanged += self.__onCollectionsSettingsChanged
         self.__achievements20Controller.onUpdate += self.__onProfileVisited
+        self.__advAchmntCtrl.onUnseenAchievementsUpdate += self.__onUnseenAchievementsUpdate
         g_eventBus.addListener(CollectionsEvent.TAB_COUNTER_UPDATED, self.__onCollectionTabUpdated, EVENT_BUS_SCOPE.LOBBY)
         self._limitedUIController.startObserves(_LUI_RULES, self.__isLuiRuleProfileCompleted)
         if self.__ctx and self.__ctx.get('hofPageUrl'):
@@ -90,6 +92,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__collectionsSystem.onServerSettingsChanged -= self.__onCollectionsSettingsChanged
         self.__achievements20Controller.onUpdate -= self.__onProfileVisited
+        self.__advAchmntCtrl.onUnseenAchievementsUpdate -= self.__onUnseenAchievementsUpdate
         g_eventBus.removeListener(CollectionsEvent.TAB_COUNTER_UPDATED, self.__onCollectionTabUpdated, EVENT_BUS_SCOPE.LOBBY)
         self._limitedUIController.stopObserves(_LUI_RULES, self.__isLuiRuleProfileCompleted)
         self.__tabNavigator = None
@@ -111,48 +114,61 @@ class ProfilePage(LobbySubView, ProfileMeta):
         itemCD = None
         if selectedAlias is None or selectedAlias == VIEW_ALIAS.PROFILE_HOF and not isHofEnabled:
             itemCD = self.__ctx.get('itemCD')
-            selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE if itemCD else VIEW_ALIAS.PROFILE_SUMMARY_PAGE
+            selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE if itemCD else VIEW_ALIAS.PROFILE_TOTAL_PAGE
         if itemCD is None and not (self.__ctx and self.__ctx.get('selectedAlias')):
             event = ProfilePageEvent(ProfilePageEvent.SELECT_PROFILE_ALIAS)
             g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
             selectedAlias = event.ctx.get('selectedAlias', selectedAlias)
-        sectionsData = [(PROFILE.SECTION_SUMMARY_TITLE,
+        tabBarData = [(PROFILE.SECTION_SUMMARY_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY,
           VIEW_ALIAS.PROFILE_TOTAL_PAGE,
+          'ProfileTotalPage_UI',
           True,
           'statsSummary'),
+         (PROFILE.SECTION_ADVANCEDACHIEVEMENTS_TITLE,
+          PROFILE.PROFILE_TABS_TOOLTIP_ADVANCEDACHIEVEMENTS,
+          VIEW_ALIAS.PROFILE_ACHIEVEMENTS_PAGE,
+          'ProfileTotalPage_UI',
+          True,
+          'statsAchievements'),
          (PROFILE.SECTION_AWARDS_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_AWARDS,
           VIEW_ALIAS.PROFILE_AWARDS,
+          'ProfileAwards_UI',
           True,
           'statsAwards'),
          (PROFILE.SECTION_STATISTICS_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS,
           VIEW_ALIAS.PROFILE_STATISTICS,
+          'ProfileStatistics_UI',
           True,
           'statsStatistics'),
          (PROFILE.SECTION_TECHNIQUE_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE,
           VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
+          'ProfileTechniquePage_UI',
           True,
           'statsTechnique')]
         if isHofEnabled:
-            sectionsData.append((PROFILE.SECTION_HOF_TITLE,
+            tabBarData.append((PROFILE.SECTION_HOF_TITLE,
              PROFILE.PROFILE_TABS_TOOLTIP_HOF,
              VIEW_ALIAS.PROFILE_HOF,
+             'ProfileHofPage_UI',
              True,
              'statsHof'))
         if self.__collectionsSystem.isEnabled():
-            sectionsData.append((PROFILE.SECTION_COLLECTIONS_TITLE,
+            tabBarData.append((PROFILE.SECTION_COLLECTIONS_TITLE,
              PROFILE.PROFILE_TABS_TOOLTIP_COLLECTIONS,
              VIEW_ALIAS.PROFILE_COLLECTIONS_PAGE,
+             'ProfileCollectionsPage_UI',
              True,
              'statsCollections'))
-        return {'sectionsData': [ {'label': makeString(label),
-                          'tooltip': tooltip,
-                          'alias': alias,
-                          'enabled': isEnabled,
-                          'id': uiId} for label, tooltip, alias, isEnabled, uiId in sectionsData ],
+        return {'tabBarData': [ {'label': makeString(label),
+                        'tooltip': tooltip,
+                        'alias': alias,
+                        'linkage': linkage,
+                        'enabled': isEnabled,
+                        'id': uiId} for label, tooltip, alias, linkage, isEnabled, uiId in tabBarData ],
          'selectedAlias': selectedAlias}
 
     @property
@@ -173,11 +189,18 @@ class ProfilePage(LobbySubView, ProfileMeta):
         self.__tabNavigator.as_setInitDataS(self.__getSectionsData())
         self.__updateTabCounters()
 
+    def __getTotalUnseenAdvancedAchievementsCount(self):
+        return self.__advAchmntCtrl.getTotalUnseenAdvancedAchievementsCount()
+
     def __updateTabCounters(self):
         counters = []
         if self.__achievements20Controller.getAchievementsTabCounter():
             counters.append({'componentId': VIEW_ALIAS.PROFILE_TOTAL_PAGE,
              'count': '1'})
+        advancedAchievementsCount = self.__getTotalUnseenAdvancedAchievementsCount()
+        if advancedAchievementsCount:
+            counters.append({'componentId': VIEW_ALIAS.PROFILE_ACHIEVEMENTS_PAGE,
+             'count': str(advancedAchievementsCount)})
         if self.__isHofEnabled:
             hofCounter = getHofTabCounter()
             if hofCounter and self._limitedUIController.isRuleCompleted(LuiRules.PROFILE_HOF):
@@ -201,6 +224,9 @@ class ProfilePage(LobbySubView, ProfileMeta):
          'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)
 
     def __onProfileVisited(self):
+        self.__updateTabCounters()
+
+    def __onUnseenAchievementsUpdate(self):
         self.__updateTabCounters()
 
     def __onCollectionTabUpdated(self, *_):

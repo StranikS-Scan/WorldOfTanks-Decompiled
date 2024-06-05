@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
+    from gui.game_control.live_ops_web_events_controller import EventState
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
     from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes
@@ -44,7 +45,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import TankmanSkill
     from gui.shared.money import Money
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig, LiveOpsWebEventsConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason
     from items.artefacts import Equipment
@@ -52,6 +53,7 @@ if typing.TYPE_CHECKING:
     from renewable_subscription_common.settings_constants import WotPlusState
     from gui.entitlements.entitlement_model import AgateEntitlement
     from gui.server_events.event_items import Quest
+    from advanced_achievements_client.items import _BaseGuiAchievement
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -1320,9 +1322,6 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def hasAnyOfferGiftToken(self):
         raise NotImplementedError
 
-    def isRandomBattleReserves(self):
-        raise NotImplementedError
-
     def replaceOfferByReward(self, bonuses):
         raise NotImplementedError
 
@@ -1357,9 +1356,6 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def storeCycle(self):
-        raise NotImplementedError
-
-    def getEpicBattlesReservesModifier(self):
         raise NotImplementedError
 
 
@@ -1667,9 +1663,6 @@ class IBattlePassController(IGameController):
     def isSeasonFinished(self):
         raise NotImplementedError
 
-    def isCustomSeason(self):
-        raise NotImplementedError
-
     def isValidBattleType(self, prbEntity):
         raise NotImplementedError
 
@@ -1686,9 +1679,6 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def hasExtra(self):
-        raise NotImplementedError
-
-    def hasCustom(self):
         raise NotImplementedError
 
     def isRegularProgressionCompleted(self):
@@ -1713,9 +1703,6 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def isExtraChapter(self, chapterID):
-        raise NotImplementedError
-
-    def isCustomChapter(self, chapterID):
         raise NotImplementedError
 
     def isHoliday(self):
@@ -2891,6 +2878,10 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def isTournamentBannerEnabled(self):
         raise NotImplementedError
 
+    @property
+    def remainingOfferTokensNotifications(self):
+        raise NotImplementedError
+
     def isEnabled(self):
         raise NotImplementedError
 
@@ -2994,6 +2985,18 @@ class IComp7Controller(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getTournamentBannerData(self):
+        raise NotImplementedError
+
+    def isComp7OfferToken(self, tokenName):
+        raise NotImplementedError
+
+    def isComp7OfferGiftToken(self, tokenName):
+        raise NotImplementedError
+
+    def hasAvailableOfferTokens(self):
+        raise NotImplementedError
+
+    def updateEntitlementsCache(self, force=False, retryTimes=None):
         raise NotImplementedError
 
 
@@ -3145,6 +3148,15 @@ class IWinbackController(IGameController):
 
 class IDailyQuestIntroPresenter(IGameController):
     pass
+
+
+class IAchievements20EarningController(IGameController):
+
+    def pause(self):
+        raise NotImplementedError
+
+    def resume(self):
+        raise NotImplementedError
 
 
 class IAchievements20Controller(IGameController):
@@ -3358,4 +3370,161 @@ class IGraphicsOptimizationController(IGameController):
         raise NotImplementedError
 
     def isOptimizationAvailable(self, alias):
+        raise NotImplementedError
+
+
+class ILiveOpsWebEventsController(IGameController):
+    onSettingsChanged = None
+    onEventStateChanged = None
+
+    @property
+    def eventConfig(self):
+        raise NotImplementedError
+
+    @property
+    def eventUniqueName(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def eventUrl(self):
+        raise NotImplementedError
+
+    @property
+    def preEventStart(self):
+        raise NotImplementedError
+
+    @property
+    def eventStart(self):
+        raise NotImplementedError
+
+    @property
+    def postEventEnd(self):
+        raise NotImplementedError
+
+    @property
+    def eventEnd(self):
+        raise NotImplementedError
+
+    @property
+    def eventState(self):
+        raise NotImplementedError
+
+    @property
+    def previousEventState(self):
+        raise NotImplementedError
+
+    @property
+    def isEntryPointSmall(self):
+        raise NotImplementedError
+
+    @property
+    def isHighQualityPreset(self):
+        raise NotImplementedError
+
+    def canShowHangarEntryPoint(self):
+        raise NotImplementedError
+
+    def canShowEventsTab(self):
+        raise NotImplementedError
+
+    def getEventTabVisited(self):
+        raise NotImplementedError
+
+    def markEventTabVisited(self):
+        raise NotImplementedError
+
+    def getIsFirstEventEntry(self):
+        raise NotImplementedError
+
+    def markEventEntered(self):
+        raise NotImplementedError
+
+
+class IAchievementsController(IGameController):
+    onUpdate = None
+    onNewAchievementsEarned = None
+    onUnseenAchievementsUpdate = None
+
+    def getCurrentScore(self, userId=None):
+        raise NotImplementedError
+
+    def getTotalScore(self):
+        raise NotImplementedError
+
+    def getProgress(self, userId=None):
+        raise NotImplementedError
+
+    def getTrophiesAchievementsScore(self, userId=None):
+        raise NotImplementedError
+
+    def getTrophiesAchievements(self, userId=None):
+        raise NotImplementedError
+
+    def getTotalAchievementsCount(self, userId=None):
+        raise NotImplementedError
+
+    def getAchievementByID(self, achievementID, achievementCategory):
+        raise NotImplementedError
+
+    def getPrevAchievementsScore(self):
+        raise NotImplementedError
+
+    def setPrevAchievementsScore(self, value):
+        raise NotImplementedError
+
+    def getPrevPlayerCollectionProgress(self):
+        raise NotImplementedError
+
+    def setPrevPlayerCollectionProgress(self, value):
+        raise NotImplementedError
+
+    def getPrevTrophy(self):
+        raise NotImplementedError
+
+    def setPrevTrophy(self, value):
+        raise NotImplementedError
+
+    def getUnseenAdvancedAchievementsCount(self, achievementCategory, achievementID, userId=None):
+        raise NotImplementedError
+
+    def seeUnseenAdvancedAchievement(self, achievementCategory, achievementID):
+        raise NotImplementedError
+
+    def seeUnseenTrophiesAdvancedAchievement(self, achievementCategory, achievementID):
+        raise NotImplementedError
+
+    def getTotalUnseenAdvancedAchievementsCount(self):
+        raise NotImplementedError
+
+    def initUnseenAdvancedAchievements(self, achievementsData):
+        raise NotImplementedError
+
+    def getUnseenTrophiesAdvancedAchievementsCount(self, userId=None):
+        raise NotImplementedError
+
+    def getUnseenAdvancedAchievements(self, achievementCategory):
+        raise NotImplementedError
+
+    def getSeenTrophiesAdvancedAchievements(self, achievementCategory):
+        raise NotImplementedError
+
+    def getPrevCategoryData(self):
+        raise NotImplementedError
+
+    def setPrevCategoryData(self, value):
+        raise NotImplementedError
+
+    def getMainAdvancedAchievementsPageVisited(self):
+        raise NotImplementedError
+
+    def setMainAdvancedAchievementsPageVisited(self, value):
+        raise NotImplementedError
+
+    def getShowHint(self):
+        raise NotImplementedError
+
+    def setShowHint(self, value):
         raise NotImplementedError

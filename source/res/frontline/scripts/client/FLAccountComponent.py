@@ -3,19 +3,14 @@
 import AccountCommands
 from BaseAccountExtensionComponent import BaseAccountExtensionComponent
 from PlayerEvents import g_playerEvents as events
-from ReservesEvents import randomReservesEvents
 from debug_utils import LOG_DEBUG_DEV
 from frontline_common import frontline_account_commands
-from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES
 
 def skipResponse(resultID, errorCode):
     LOG_DEBUG_DEV('skipResponse', resultID, errorCode)
 
 
 class FLAccountComponent(BaseAccountExtensionComponent):
-
-    def setReservesModifier(self, reservesModifier):
-        randomReservesEvents.onChangedReservesModifier(RESERVES_MODIFIER_NAMES[reservesModifier])
 
     def createEpicTrainingPrebattle(self, arenaTypeID, roundLength, isOpened, comment):
         if not events.isPlayerEntityChanging:

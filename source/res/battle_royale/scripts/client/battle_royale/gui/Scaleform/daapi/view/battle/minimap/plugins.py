@@ -164,7 +164,7 @@ class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
 
     def __updateViewSector(self):
         if self.__viewRangeEntityID:
-            isVisible = self._isAlive() and self._getSelectedCameraID() == self._getCameraIDs().get(_S_NAME.ARCADE_CAMERA)
+            isVisible = self._isAlive() and not self._getIsObserver() and self._getSelectedCameraID() == self._getCameraIDs().get(_S_NAME.ARCADE_CAMERA)
             self._setActive(self.__viewRangeEntityID, isVisible)
 
     def __addSectorEntity(self, sector):

@@ -235,6 +235,7 @@ CMD_COMPLETE_QUESTS_DEV = 10113
 CMD_RECOMPUTE_PRESTIGE_POINTS = 10114
 CMD_DSTR_MODERNIZED_OPTDEV = 10115
 CMD_ADD_EXPIRING_GOODIE = 10116
+CMD_REMOVE_FORCE_ONBOARDING = 10117
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

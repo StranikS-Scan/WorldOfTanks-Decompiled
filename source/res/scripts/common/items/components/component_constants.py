@@ -71,4 +71,5 @@ ALLOWED_MISC_SLOTS = ('sequence', 'attachment')
 ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'effect', 'style')
 TANKMEN_GROUPS = ('normalGroups', 'premiumGroups')
 MAIN_TRACK_PAIR_IDX = 0
+DEFAULT_TRACK_HIT_VECTOR = Vector3(0.0, 10.0, 0.0)
 ShootImpulse = collections.namedtuple('ShootImpulse', ['magnitude', 'applicationPoint', 'isStillSafe'])

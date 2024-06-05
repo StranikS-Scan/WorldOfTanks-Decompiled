@@ -1763,4 +1763,47 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F129_ARL_44_BPXIV	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	908	</id>
+      <texture>	gui/maps/vehicles/styles/F129_ARL_44_BPXIV_3Dst.png	</texture>
+      <modelsSet>	F129_ARL_44_BPXIV_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F129_ARL_44_BPXIV_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F129_ARL_44_BPXIV_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	89	</id>
+            </item>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	90	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </france.xml>

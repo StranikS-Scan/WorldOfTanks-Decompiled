@@ -42,7 +42,7 @@ class OfflineMapCreator(object):
     mapActivities = dependency.descriptor(IMapActivities)
 
     def __init__(self):
-        self.__spaceId = None
+        self.__space = None
         self.__cam = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
@@ -62,11 +62,11 @@ class OfflineMapCreator(object):
             self.__loadCfg(cfgType, mapName)
             BigWorld.worldDrawEnabled(False)
             BigWorld.setWatcher('Visibility/GUI', False)
-            self.__spaceId = BigWorld.createSpace()
+            self.__space = BigWorld.createSpace()
             self.__isActive = True
             self.__arenaTypeID = self.__getArenaTypeId(mapName)
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, 'spaces/' + mapName)
-            self.__vEntityId = BigWorld.createEntity('Avatar', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), {})
+            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, 'spaces/' + mapName)
+            self.__vEntityId = BigWorld.createEntity('Avatar', self.__space.id, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), {})
             avatar = BigWorld.entities[self.__vEntityId]
             avatar.arenaUniqueID = 0
             avatar.arenaTypeID = self.__arenaTypeID
@@ -96,12 +96,12 @@ class OfflineMapCreator(object):
             self.__cam = None
             BigWorld.clearEntitiesAndSpaces()
             self.mapActivities.stop()
-            if self.__spaceId and BigWorld.isClientSpace(self.__spaceId):
+            if self.__space.id and BigWorld.isClientSpace(self.__space.id):
                 if self.__spaceMappingId:
-                    BigWorld.delSpaceGeometryMapping(self.__spaceId, self.__spaceMappingId)
-                BigWorld.clearSpace(self.__spaceId)
-                BigWorld.releaseSpace(self.__spaceId)
-            self.__spaceId = 0
+                    BigWorld.delSpaceGeometryMapping(self.__space.id, self.__spaceMappingId)
+                BigWorld.clearSpace(self.__space.id)
+                BigWorld.releaseSpace(self.__space.id)
+            self.__space = None
             self.__spaceMappingId = 0
             self.__arenaTypeID = 0
             self.__vEntityId = 0
@@ -120,13 +120,14 @@ class OfflineMapCreator(object):
         self.__isActive = True
 
     def cancel(self):
-        self.__spaceId = 0
+        self.__space = None
         self.__spaceMappingId = 0
         self.__vEntityId = 0
         self.__isActive = False
         BigWorld.setWatcher('Visibility/GUI', True)
         BigWorld.worldDrawEnabled(True)
         BigWorld.uniprofSceneStart()
+        return
 
     def _clamp(self, minVal, maxVal, val):
         tmpVal = val
@@ -160,7 +161,7 @@ class OfflineMapCreator(object):
         global _CAM_START_ANGLES
         global _CAM_FLUENCY
         self.__cam = BigWorld.CursorCamera()
-        self.__cam.spaceID = self.__spaceId
+        self.__cam.spaceID = self.__space.id
         self.__cam.pivotMaxDist = _CAM_START_DIST
         self.__cam.maxDistHalfLife = _CAM_FLUENCY
         self.__cam.turningHalfLife = _CAM_FLUENCY

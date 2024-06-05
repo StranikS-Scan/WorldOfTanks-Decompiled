@@ -17,7 +17,7 @@ from helpers import uniprof
 if typing.TYPE_CHECKING:
     from typing import Dict
 _SubModelInfo = typing.NamedTuple('_SubModelInfo', [('ID', AchievementsViews), ('presenter', SubModelPresenter), ('canBeLoaded', typing.Optional[typing.Callable[[], bool]])])
-AchievementsViewCtx = namedtuple('AchievementsViewCtx', ('menuName', 'userID'))
+AchievementsViewCtx = namedtuple('AchievementsViewCtx', ('menuName', 'userID', 'closeCallback'))
 
 class AchievementMainView(ViewImpl):
     __slots__ = ('__ctx', '__contentPresentersMap', '__regionName')
@@ -55,6 +55,9 @@ class AchievementMainView(ViewImpl):
     def _getEvents(self):
         return ((self.viewModel.onClose, self.__onClose),)
 
+    def _getListeners(self):
+        return ((events.Achievements20Event.CHANGE_GF_VIEW, self.__switchSubViewEventHandler, EVENT_BUS_SCOPE.LOBBY),)
+
     def _finalize(self):
         self.currentPresenter.finalize()
         if self.__regionName:
@@ -65,12 +68,19 @@ class AchievementMainView(ViewImpl):
 
         self.__contentPresentersMap.clear()
         self.__contentPresentersMap = None
+        if self.__ctx and self.__ctx.closeCallback:
+            self.__ctx.closeCallback()
         self.__ctx = None
         super(AchievementMainView, self)._finalize()
         return
 
     def __registerSubModels(self):
         self.__contentPresentersMap = _PresentersMap(self, self.__ctx.userID)
+
+    def __switchSubViewEventHandler(self, event):
+        if event.ctx.userID != self.__ctx.userID or self.__regionName == event.ctx.menuName:
+            return
+        self.__switchSubView(event.ctx)
 
     def __switchSubView(self, ctx):
         if self.__regionName:
@@ -104,7 +114,8 @@ class _PresentersMap(object):
         self.__presentersCache = {}
         self.__mainView = weakref.proxy(mainView)
         self.__userId = userId
-        self.__loadersMap = {VIEW_ALIAS.PROFILE_TOTAL_PAGE: partial(self.__makeSubModel, AchievementsViews.SUMMARY, self.__loadSummary)}
+        self.__loadersMap = {VIEW_ALIAS.PROFILE_TOTAL_PAGE: partial(self.__makeSubModel, AchievementsViews.SUMMARY, self.__loadSummary),
+         VIEW_ALIAS.PROFILE_ACHIEVEMENTS_PAGE: partial(self.__makeSubModel, AchievementsViews.ACHIEVEMENTS, self.__loadAchievements)}
 
     def itervalues(self):
         return self.__presentersCache.itervalues()
@@ -127,6 +138,10 @@ class _PresentersMap(object):
     def __loadSummary(self):
         from gui.impl.lobby.achievements.summary.summary_view import SummaryView
         return SummaryView(self.__mainView.viewModel.summaryModel, self.__mainView, self.__userId)
+
+    def __loadAchievements(self):
+        from gui.impl.lobby.achievements.achievements.advanced_achievements_view import AdvancedAchievementsView
+        return AdvancedAchievementsView(self.__mainView.viewModel.achievementsModel, self.__mainView, self.__userId)
 
     @staticmethod
     def __makeSubModel(viewAlias, loader, customPredicate=None):

@@ -11,6 +11,9 @@
     <Average_MapsTraining_Dummy_LT_2>	4	</Average_MapsTraining_Dummy_LT_2>
     <Heavy_NewOnBoarding>	1	</Heavy_NewOnBoarding>
     <Average_NewOnBoarding>	5	</Average_NewOnBoarding>
+    <Average_StoryMode>	6	</Average_StoryMode>
+    <Average_StoryMode__0>	7	</Average_StoryMode__0>
+    <Average_StoryModeHard>	8	</Average_StoryModeHard>
   </ids>
   <shared>
     <Small>
@@ -110,5 +113,33 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </Average_NewOnBoarding>
+    <Average_StoryMode>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	500	</maxHealth>
+      <maxRegenHealth>	450	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_StoryMode>
+    <Average_StoryMode__0>
+      <tags></tags>
+      <invulnerable>	True	</invulnerable>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_StoryMode__0>
+    <Average_StoryModeHard>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	500	</maxHealth>
+      <maxRegenHealth>	450	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_StoryModeHard>
   </shared>
 </fuelTanks.xml>

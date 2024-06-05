@@ -3,9 +3,9 @@
 import AccountCommands
 from BaseAccountExtensionComponent import BaseAccountExtensionComponent
 from PlayerEvents import g_playerEvents
+from constants import QUEUE_TYPE
 from helpers import dependency
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import QUEUE_TYPE
 
 class StoryModeAccountComponent(BaseAccountExtensionComponent):
     _storyModeCtrl = dependency.descriptor(IStoryModeController)

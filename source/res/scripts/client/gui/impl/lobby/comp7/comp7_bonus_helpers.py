@@ -11,8 +11,9 @@ from gui.server_events.bonuses import C11nProgressTokenBonus, DossierBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from shared_utils import first
+from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, ItemsBonus, CustomizationsBonus, GoodiesBonus, CrewBooksBonus, PlusPremiumDaysBonus, CreditsBonus, CrystalBonus, DogTagComponentBonus, VehiclesBonus
+    from gui.server_events.bonuses import SimpleBonus, ItemsBonus, CustomizationsBonus, GoodiesBonus, CrewBooksBonus, PlusPremiumDaysBonus, CreditsBonus, CrystalBonus, DogTagComponentBonus, VehiclesBonus, TokensBonus
 
 class BonusTypes(enum.IntEnum):
     NONE = 0
@@ -33,6 +34,7 @@ class BonusTypes(enum.IntEnum):
     BADGE_SUFFIX = 15
     DOGTAG_ENGRAVING = 16
     DOGTAG_BACKGROUND = 17
+    OFFER = 18
 
 
 def getBonusType(bonus):
@@ -160,6 +162,13 @@ class _StyleProgressBonusHelper(_BaseBonusHelper):
         return BonusTypes.STYLE_PROGRESS
 
 
+class _OfferBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.OFFER
+
+
 _BONUS_HELPERS_MAP = {'items': _ItemsBonusHelper,
  'customizations': _CustomizationsBonusHelper,
  'goodies': _GoodiesBonusHelper,
@@ -170,7 +179,8 @@ _BONUS_HELPERS_MAP = {'items': _ItemsBonusHelper,
  PREMIUM_ENTITLEMENTS.PLUS: _PremiumBonusHelper,
  Currency.CREDITS: _CreditsBonusHelper,
  Currency.CRYSTAL: _CrystalBonusHelper,
- C11nProgressTokenBonus.BONUS_NAME: _StyleProgressBonusHelper}
+ C11nProgressTokenBonus.BONUS_NAME: _StyleProgressBonusHelper,
+ SELECTABLE_BONUS_NAME: _OfferBonusHelper}
 
 def _splitDossierBonus(dossier):
     dossierValue = dossier.getValue()

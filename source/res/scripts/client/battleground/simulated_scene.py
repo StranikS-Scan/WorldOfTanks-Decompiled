@@ -26,9 +26,12 @@ ANIMATION_DURATION_BEFORE_SHOT = 3.0
 ANIMATION_REAL_TIME_DURATION = 1.0
 DATA_POINTS_AMOUNT = 5
 _GAMEPLAY_ENTITIES_TO_HIDE = ['Vehicle',
- 'AreaOfEffect',
+ 'DetachedTurret',
  'BasicMine',
- 'DetachedTurret']
+ 'AreaOfEffect',
+ 'AttackArtilleryFort',
+ 'AttackBomber',
+ 'PersonalDeathZone']
 PostEffectSettings = namedtuple('PostEffectSettings', 'contrast, saturation, vignette')
 _logger = logging.getLogger(__name__)
 

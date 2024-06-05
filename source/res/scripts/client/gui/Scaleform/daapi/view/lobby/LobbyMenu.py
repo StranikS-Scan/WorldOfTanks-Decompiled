@@ -18,7 +18,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.dialogs import dialogs
 from gui.prb_control import prbEntityProperty
-from gui.shared import event_dispatcher, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher, EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.sounds.ambients import LobbySubViewEnv
@@ -98,7 +98,7 @@ class LobbyMenu(LobbyMenuMeta):
             if view is not None:
                 self.destroy()
             else:
-                self.manualController.show()
+                self.manualController.show(backCallback=self.__showLobbyMenu)
         return
 
     def showLegal(self):
@@ -191,3 +191,8 @@ class LobbyMenu(LobbyMenuMeta):
         if self.__postBtnIsVisible != isVisible:
             self.as_setPostButtonVisibleS(isVisible)
             self.__postBtnIsVisible = isVisible
+
+    @staticmethod
+    def __showLobbyMenu():
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), EVENT_BUS_SCOPE.LOBBY)

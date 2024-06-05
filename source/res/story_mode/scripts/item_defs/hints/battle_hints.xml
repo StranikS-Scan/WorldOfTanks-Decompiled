@@ -146,4 +146,36 @@
       <waitTime>	1	</waitTime>
     </lifecycle>
   </hint>
+  <hint>
+    <props>
+      <name>	DDay00_HereIsTheAbility	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:dday/hint02	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/dday_hint_02.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	DDay01_FindAWayToSummonDestroyer	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:dday/hint01	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/dday_hint_01.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
 </battle_hints.xml>

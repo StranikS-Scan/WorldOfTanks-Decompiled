@@ -1,23 +1,22 @@
 <G166_LKpz_70_K_siege_mode.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
-    <driver></driver>
+    <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
+    <driver></driver>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_LT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	70	</forward>
-    <backward>	25	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.288	</moving>
-    <still>	0.288	</still>
+    <moving>	0.292	</moving>
+    <still>	0.292	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.432	</firePenalty>
+    <firePenalty>	0.438	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -33,35 +32,35 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	13.5	</repairCost>
-  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
+  <repairCost>	5.7	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	2.0	</priceFactor>
+    <priceFactor>	1.6	</priceFactor>
     <density>	1.01147 1.01147	</density>
   </camouflage>
   <hull>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
-    <weight>	10760	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <weight>	11075	</weight>
+    <maxHealth>	920	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	2.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	20	</armor_1>
-      <armor_2>	50	</armor_2>
-      <armor_3>	35	</armor_3>
-      <armor_4>	40	</armor_4>
-      <armor_5>	40	</armor_5>
+      <armor_1>	30	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	15	</armor_5>
       <armor_6>	15	</armor_6>
-      <armor_7>	20	</armor_7>
+      <armor_7>	25	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_10>	20	</armor_10>
-      <armor_11>	20	</armor_11>
-      <armor_12>	20	</armor_12>
-      <armor_13>	20	</armor_13>
+      <armor_10>	15	</armor_10>
+      <armor_11>	15	</armor_11>
+      <armor_12>	15	</armor_12>
+      <armor_13>	15	</armor_13>
       <armor_15>	50	</armor_15>
       <leftTrack>	20	</leftTrack>
       <rightTrack>	20	</rightTrack>
@@ -595,13 +594,13 @@
     <Chassis_G166_LKpz_70_K>
       <userString>	#germany_vehicles:Chassis_G166_LKpz_70_K	</userString>
       <tags></tags>
-      <level>	10	</level>
-      <price>	82500	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	6000	</weight>
-      <maxLoad>	27500	</maxLoad>
+      <weight>	7000	</weight>
+      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.2	</terrainResistance>
-      <brakeForce>	25500	</brakeForce>
+      <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
@@ -609,9 +608,9 @@
         <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	190	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -1403,60 +1402,60 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	5.71428585	</repairTime>
     </Chassis_G166_LKpz_70_K>
   </chassis>
   <turrets0>
     <Turret_1_G166_LKpz_70_K>
       <userString>	#germany_vehicles:Turret_1_G166_LKpz_70_K	</userString>
       <tags></tags>
-      <level>	10	</level>
-      <price>	66000	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
-      <primaryArmor>	armor_1 armor_15 armor_20	</primaryArmor>
+      <primaryArmor>	armor_23 armor_15 armor_20	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	170	</maxHealth>
-        <maxRegenHealth>	85	</maxRegenHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	60	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	50	</armor_1>
-        <armor_2>	25	</armor_2>
-        <armor_3>	45	</armor_3>
-        <armor_4>	30	</armor_4>
-        <armor_5>	25	</armor_5>
+        <armor_1>	40	</armor_1>
+        <armor_2>	20	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	15	</armor_5>
         <armor_7>	20	</armor_7>
-        <armor_9>	30	</armor_9>
-        <armor_10>	20	</armor_10>
-        <armor_11>	30	</armor_11>
+        <armor_9>	20	</armor_9>
+        <armor_10>	15	</armor_10>
+        <armor_11>	15	</armor_11>
         <armor_12>	15	</armor_12>
         <armor_13>	15	</armor_13>
-        <armor_14>	20	</armor_14>
-        <armor_15>	50	</armor_15>
-        <armor_16>	45	</armor_16>
-        <armor_17>	20	</armor_17>
-        <armor_18>	20	</armor_18>
-        <armor_19>	20	</armor_19>
-        <armor_20>	25	</armor_20>
+        <armor_14>	15	</armor_14>
+        <armor_15>	25	</armor_15>
+        <armor_16>	25	</armor_16>
+        <armor_17>	15	</armor_17>
+        <armor_18>	15	</armor_18>
+        <armor_19>	15	</armor_19>
+        <armor_20>	20	</armor_20>
         <armor_21>	20	</armor_21>
-        <armor_22>	20	</armor_22>
-        <armor_23>	25	</armor_23>
+        <armor_22>	15	</armor_22>
+        <armor_23>	40	</armor_23>
       </armor>
       <guns>
-        <_105mm_Rh_69_2>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_90mm_Rh_69_1>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	25	</armor_1>
+            <armor_1>	40	</armor_1>
             <armor_2>	20	</armor_2>
-            <armor_3>	20	</armor_3>
+            <armor_3>	10	</armor_3>
             <armor_4>	20	</armor_4>
             <armor_5>	15	</armor_5>
             <armor_6>	15	</armor_6>
@@ -1479,15 +1478,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	11	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1598,20 +1597,20 @@
             </customizableVehicleAreas>
           </customization>
           <models>
-            <undamaged>	vehicles/german/G166_LKpz_70_K/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G166_LKpz_70_K/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G166_LKpz_70_K/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/german/G166_LKpz_70_K/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G166_LKpz_70_K/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G166_LKpz_70_K/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G166_LKpz_70_K/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G166_LKpz_70_K/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G166_LKpz_70_K/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G166_LKpz_70_K/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload85_107	</reloadEffect>
           <camouflage>
             <density>	116.473709 116.448357	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_Rh_69_2>
+        </_90mm_Rh_69_1>
       </guns>
       <models>
         <undamaged>	vehicles/german/G166_LKpz_70_K/normal/lod0/Turret_01.model	</undamaged>
@@ -1761,8 +1760,8 @@
     <detailed>
       <engines>
         <Daimler-Benz_MB_880>
-          <smplEnginePower>	950	</smplEnginePower>
-          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Daimler-Benz_MB_880>
       </engines>
       <chassis>

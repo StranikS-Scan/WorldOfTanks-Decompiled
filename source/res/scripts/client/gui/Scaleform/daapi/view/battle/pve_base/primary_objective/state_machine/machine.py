@@ -3,13 +3,12 @@
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.machine import BaseTimerStateMachine
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.transitions import PostponedTransition, CountdownTimerCondition, RegularTimerCondition
 from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.state_machine import states
-from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.state_machine.transitions import ToAppearanceTransition, ToRegularTransition, ToLargeTimerTransition, ToCountdownTransition, ToRemindTransition, ToLastRemindTransition, ToSuccessTransition, ToFailureTransition, ToHiddenTransition, RemindTimerCondition, LastRemindTimerCondition, ToNoTimerTransition
+from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.state_machine.transitions import ToAppearanceTransition, ToRegularTransition, ToLargeTimerTransition, ToCountdownTransition, ToRemindTransition, ToLastRemindTransition, ToSuccessTransition, ToFailureTransition, ToHiddenTransition, RemindTimerCondition, LastRemindTimerCondition
 
 class PrimaryObjectiveStateMachine(BaseTimerStateMachine):
 
     def configure(self, view, widgetType, widgetId):
         initialState = states.InitialState()
-        noTimerState = states.NoTimerState()
         appearanceState = states.AppearanceState()
         regularState = states.RegularState()
         remindState = states.RemindState()
@@ -20,7 +19,6 @@ class PrimaryObjectiveStateMachine(BaseTimerStateMachine):
         failureState = states.FailureState()
         hiddenState = states.HiddenState()
         initialState.configure(view, widgetType, widgetId)
-        noTimerState.configure(view, widgetType, widgetId)
         appearanceState.configure(view, widgetType, widgetId)
         regularState.configure(view, widgetType, widgetId)
         remindState.configure(view, widgetType, widgetId)
@@ -31,14 +29,10 @@ class PrimaryObjectiveStateMachine(BaseTimerStateMachine):
         failureState.configure(view, widgetType, widgetId)
         hiddenState.configure(view, widgetType, widgetId)
         initialState.addTransition(ToAppearanceTransition(), target=appearanceState)
-        initialState.addTransition(ToNoTimerTransition(), target=noTimerState)
         initialState.addTransition(ToRegularTransition(), target=regularState)
         initialState.addTransition(ToLargeTimerTransition(), target=largeTimerState)
         initialState.addTransition(ToCountdownTransition(), target=countdownState)
         initialState.addTransition(ToHiddenTransition(), target=hiddenState)
-        noTimerState.addTransition(ToSuccessTransition(), target=successState)
-        noTimerState.addTransition(ToFailureTransition(), target=failureState)
-        noTimerState.addTransition(ToHiddenTransition(), target=hiddenState)
         appearanceState.addTransition(PostponedTransition(), target=regularState)
         appearanceState.addTransition(ToRegularTransition(), target=regularState)
         appearanceState.addTransition(ToLargeTimerTransition(), target=largeTimerState)
@@ -90,7 +84,6 @@ class PrimaryObjectiveStateMachine(BaseTimerStateMachine):
         failureState.addTransition(PostponedTransition(), target=hiddenState)
         failureState.addTransition(ToHiddenTransition(), target=hiddenState)
         self.addState(initialState)
-        self.addState(noTimerState)
         self.addState(appearanceState)
         self.addState(regularState)
         self.addState(remindState)

@@ -6,6 +6,7 @@ import BattleReplay
 import BigWorld
 from gui.Scaleform.daapi.view.battle.pve_base.base.pve_hud_widget import SingleItemPveHudWidget
 from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.settings_model import PrimaryObjectiveServerModel
+from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.state_machine.states import TimerState
 from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.state_machine.machine import PrimaryObjectiveStateMachine
 from gui.Scaleform.daapi.view.meta.PvePrimaryObjectiveMeta import PvePrimaryObjectiveMeta
 from pve_battle_hud import WidgetType, PrimaryObjectiveState, getPveHudLogger
@@ -15,6 +16,10 @@ class PvePrimaryObjective(SingleItemPveHudWidget, PvePrimaryObjectiveMeta):
 
     def __init__(self):
         super(PvePrimaryObjective, self).__init__(widgetType=WidgetType.PRIMARY_OBJECTIVE, stateMachineClass=PrimaryObjectiveStateMachine, serverSettingsModel=PrimaryObjectiveServerModel)
+
+    def setTimerState(self, timer, state):
+        self.as_setTimerStateS(TimerState.NO_TIMER.value if timer is None else state.value)
+        return
 
     def updateTimer(self, timerValue):
         if timerValue is None:

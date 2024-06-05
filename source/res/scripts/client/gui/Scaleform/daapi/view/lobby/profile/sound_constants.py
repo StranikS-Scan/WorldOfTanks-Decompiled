@@ -12,3 +12,4 @@ class SOUNDS(CONST_CONTAINER):
 
 
 ACHIEVEMENTS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_ACHIEVEMENTS}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.ACHIEVEMENTS_ENTER, exitEvent=SOUNDS.ACHIEVEMENTS_EXIT)
+ACHIEVEMENTS_REWARD_SCREEN_EXIT_EVENT = 'ach_reward_screen_exit'

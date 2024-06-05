@@ -14,6 +14,8 @@ from blueprints.FragmentTypes import getFragmentType
 from comp7_common import COMP7_WEEKLY_REWARD_TOKEN_REGEXP
 from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from dog_tags_common.components_config import componentConfigAdapter as dogTagComponentConfig
+from dog_tags_common.config.common import ComponentPurpose, ComponentViewType
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from epic_constants import EPIC_OFFER_TOKEN_PREFIX, EPIC_SELECT_BONUS_NAME
@@ -42,7 +44,7 @@ from gui.server_events.events_helpers import parseC11nProgressToken
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
+from gui.shared.gui_items import GUI_ITEM_TYPE, getItemTypeID
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
 from gui.shared.gui_items.Vehicle import getIconResourceName, getWotPlusExclusiveVehicleTypeUserName
 from gui.shared.gui_items.crew_book import orderCmp
@@ -1897,7 +1899,7 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemType = itemData.get('custType')
-            itemTypeID = self.__getItemTypeID(itemType)
+            itemTypeID = getItemTypeID(itemType)
             item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
             smallIcon = item.getBonusIcon(AWARDS_SIZES.SMALL)
             bigIcon = item.getBonusIcon(AWARDS_SIZES.BIG)
@@ -1919,7 +1921,7 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemType = itemData.get('custType')
-            itemTypeID = self.__getItemTypeID(itemType)
+            itemTypeID = getItemTypeID(itemType)
             item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
             typeStr = self.__getItemTypeStr(itemType)
             result.append({'id': item.intCD,
@@ -1965,7 +1967,7 @@ class CustomizationsBonus(SimpleBonus):
     def getC11nItem(self, item):
         itemTypeName = item.get('custType')
         itemID = item.get('id')
-        itemTypeID = self.__getItemTypeID(itemTypeName)
+        itemTypeID = getItemTypeID(itemTypeName)
         c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
         return c11nItem
 
@@ -2006,16 +2008,6 @@ class CustomizationsBonus(SimpleBonus):
         return {'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM,
          'specialArgs': CustomizationTooltipContext(itemCD=data['intCD'], showInventoryBlock=data['showPrice'])}
-
-    @staticmethod
-    def __getItemTypeID(itemTypeName):
-        if itemTypeName == 'projection_decal':
-            itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
-        elif itemTypeName == 'personal_number':
-            itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
-        else:
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
-        return itemTypeID
 
 
 class BoxBonus(SimpleBonus):
@@ -2789,8 +2781,9 @@ def _getFromTree(tree, path):
         return _getFromTree(subTree, path[1:]) if isinstance(subTree, dict) else subTree
 
 
-def _initFromTree(key, name, value, isCompensation=False, ctx=None):
-    factory = _getFromTree(_BONUSES, key)
+def _initFromTree(key, name, value, bonusesDict=None, isCompensation=False, ctx=None):
+    bonuses = bonusesDict or _BONUSES
+    factory = _getFromTree(bonuses, key)
     if factory is not None:
         result = factory(name, value, isCompensation, ctx)
         if result is not None:
@@ -2836,8 +2829,8 @@ def getEventBoardsBonusObj(name, value):
     return _initFromTree((name, _ET.ELEN_QUEST), name, value)
 
 
-def getNonQuestBonuses(name, value, ctx=None):
-    return _initFromTree((name, 'default'), name, value, ctx=ctx)
+def getNonQuestBonuses(name, value, bonusesDict=None, ctx=None):
+    return _initFromTree((name, 'default'), name, value, bonusesDict, ctx=ctx)
 
 
 def getOfferBonuses(name, value, ctx=None):
@@ -3022,6 +3015,21 @@ def getSplitBonusFunction(bonus):
         return splitSimpleBonuses if isinstance(bonus, SimpleBonus) else None
 
 
+def splitAdvancedAchievementsBonuses(bonuses):
+    split = []
+    for bonus in bonuses:
+        splitFunc = getAdvancedAchievementsSplitBonusFunction(bonus)
+        if splitFunc:
+            split.extend(splitFunc(bonus))
+        split.append(bonus)
+
+    return split
+
+
+def getAdvancedAchievementsSplitBonusFunction(bonus):
+    return splitDogTagComponentBonus if isinstance(bonus, DogTagComponentBonus) else getSplitBonusFunction(bonus)
+
+
 def splitIntegralBonuses(bonus):
     return [bonus]
 
@@ -3065,6 +3073,25 @@ def splitCustomizationsBonus(bonus):
     if camoItem is not None:
         split.append(camoItem)
     return split
+
+
+def splitDogTagComponentBonus(bonus):
+    splitDogTagBonuses = []
+    value = bonus.getValue()
+    for componentItem in value:
+        component = dogTagComponentConfig.getComponentById(componentItem['id'])
+        if component.purpose == ComponentPurpose.COUPLED:
+            if component.viewType == ComponentViewType.ENGRAVING:
+                coupledComponentItem = first((item for item in value if item is not None and component.coupledComponentId == item['id']))
+                if coupledComponentItem:
+                    splitBonus = copy.deepcopy(bonus)
+                    splitBonus.setValue([componentItem, coupledComponentItem])
+                    splitDogTagBonuses.append(splitBonus)
+        splitBonus = copy.deepcopy(bonus)
+        splitBonus.setValue([componentItem])
+        splitDogTagBonuses.append(splitBonus)
+
+    return splitDogTagBonuses
 
 
 def getVehicleCrewReward(vehiclesReward):

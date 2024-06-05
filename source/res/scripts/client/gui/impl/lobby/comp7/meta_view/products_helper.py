@@ -13,7 +13,7 @@ from gui.impl.lobby.comp7.comp7_bonus_packer import getComp7BonusPacker
 from gui.impl.lobby.comp7.comp7_c11n_helpers import getStylePreviewVehicle
 from gui.server_events.bonuses import ItemsBonus
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.tooltips import TOOLTIP_TYPE
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
 from items.vehicles import g_cache
 from skeletons.gui.customization import ICustomizationService
@@ -151,7 +151,7 @@ def _setSpecificData(model, productCD, productType):
 def _setVehicleSpecificData(model, productCD, itemsCache=None):
     vehicle = itemsCache.items.getItemByCD(productCD)
     model.setCanGoToHangar(vehicle.isInInventory)
-    model.setTooltipId(TOOLTIP_TYPE.VEHICLE)
+    model.setTooltipId(TOOLTIPS_CONSTANTS.SHOP_VEHICLE)
     fillVehicleModel(model.vehicleInfo, vehicle)
 
 
@@ -164,6 +164,7 @@ def _setStyleSpecificData(model, productCD, itemsCache=None):
     fillVehicleModel(model.vehicleInfo, vehicle)
     model.setName(style.userName)
     model.setCanGoToCustomization(vehicle.isCustomizationEnabled())
+    model.setTooltipId(TOOLTIPS_CONSTANTS.SHOP_CUSTOMIZATION_ITEM)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -176,3 +177,4 @@ def _setRewardSpecificData(model, productCD, itemsCache=None):
     model.reward.setItem(packedBonus.getItem())
     model.reward.setLabel(packedBonus.getLabel())
     model.reward.setValue(packedBonus.getValue())
+    model.setTooltipId(TOOLTIPS_CONSTANTS.AWARD_MODULE)

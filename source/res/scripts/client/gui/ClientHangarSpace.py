@@ -142,7 +142,7 @@ class ClientHangarSpace(object):
 
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
-        self.__spaceId = None
+        self.__space = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
         self.__spaceMappingId = None
@@ -164,7 +164,7 @@ class ClientHangarSpace(object):
         BigWorld.worldDrawEnabled(False)
         BigWorld.wg_setSpecialFPSMode()
         self.__onLoadedCallback = onSpaceLoadedCallback
-        self.__spaceId = BigWorld.createSpace(True)
+        self.__space = BigWorld.createSpace(isHangar=True)
         isIGR = self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM
         spacePath = _getHangarPath(isPremium, isIGR)
         spaceType = _getHangarType(isPremium)
@@ -175,16 +175,16 @@ class ClientHangarSpace(object):
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
         try:
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask)
         except Exception:
             try:
                 LOG_CURRENT_EXCEPTION()
                 spacePath = safeSpacePath
-                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask)
             except Exception:
-                BigWorld.releaseSpace(self.__spaceId)
+                BigWorld.releaseSpace(self.__space.id)
                 self.__spaceMappingId = None
-                self.__spaceId = None
+                self.__space = None
                 LOG_CURRENT_EXCEPTION()
                 return
 
@@ -193,9 +193,9 @@ class ClientHangarSpace(object):
         spaceKey = _getHangarKey(spacePath)
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.turretAndGunAngles.init()
-        self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
+        self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__space.id, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         camera = BigWorld.FreeCamera()
-        camera.spaceID = self.__spaceId
+        camera.spaceID = self.__space.id
         cameraMatrix = Math.Matrix()
         cameraMatrix.setTranslate(_CFG['v_start_pos'])
         cameraMatrix.invert()
@@ -277,13 +277,13 @@ class ClientHangarSpace(object):
 
     def updateAnchorsParams(self, *args):
         vEntity = self.getVehicleEntity()
-        if vEntity is not None and vEntity.appearance is not None:
+        if vEntity is not None and vEntity.appearance is not None and vEntity.isVehicleLoaded:
             vEntity.appearance.updateAnchorsParams(*args)
         return
 
     def getAnchorParams(self, slotId, areaId, regionId):
         vEntity = self.getVehicleEntity()
-        return vEntity.appearance.getAnchorParams(slotId, areaId, regionId) if vEntity is not None and vEntity.appearance is not None else None
+        return vEntity.appearance.getAnchorParams(slotId, areaId, regionId) if vEntity is not None and vEntity.appearance is not None and vEntity.isVehicleLoaded else None
 
     def getVehicleEntity(self):
         return BigWorld.entity(self.__vEntityId) if self.__vEntityId else None
@@ -305,13 +305,13 @@ class ClientHangarSpace(object):
         BigWorld.SetDrawInflux(False)
         BigWorld.worldDrawEnabled(False)
         self.mapActivities.stop()
-        if self.__spaceId is not None and BigWorld.isClientSpace(self.__spaceId):
+        if self.__space is not None and BigWorld.isClientSpace(self.__space.id):
             if self.__spaceMappingId is not None:
-                BigWorld.delSpaceGeometryMapping(self.__spaceId, self.__spaceMappingId)
-            BigWorld.clearSpace(self.__spaceId)
-            BigWorld.releaseSpace(self.__spaceId)
+                BigWorld.delSpaceGeometryMapping(self.__space.id, self.__spaceMappingId)
+            BigWorld.clearSpace(self.__space.id)
+            BigWorld.releaseSpace(self.__space.id)
         self.__spaceMappingId = None
-        self.__spaceId = None
+        self.__space = None
         self.__spacePath = None
         self.__spaceVisibilityMask = None
         self.__vEntityId = None
@@ -337,8 +337,11 @@ class ClientHangarSpace(object):
     def __closeOptimizedRegion(self):
         BigWorld.wg_enableGUIBackground(False, True)
 
+    def getSpace(self):
+        return self.__space
+
     def getSpaceID(self):
-        return self.__spaceId
+        return self.__space.id if self.__space is not None else None
 
     @property
     def spacePath(self):

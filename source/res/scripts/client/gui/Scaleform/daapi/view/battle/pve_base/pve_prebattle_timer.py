@@ -18,7 +18,7 @@ class PvePrebattleTimer(PreBattleTimerBase):
         if settingsCtrl:
             countdownSettings = settingsCtrl.getSettings(WidgetType.COUNTDOWN)
             if countdownSettings:
-                self.as_setWinConditionTextS(countdownSettings.subheader)
+                self.as_setWinConditionTextS(countdownSettings.getSubheader())
         self.as_setMessageS(self._getMessage())
         super(PvePrebattleTimer, self).setCountdown(state, timeLeft)
 
@@ -27,7 +27,7 @@ class PvePrebattleTimer(PreBattleTimerBase):
         if settingsCtrl:
             countdownSettings = settingsCtrl.getSettings(WidgetType.COUNTDOWN)
             if countdownSettings:
-                self.as_setMessageS(countdownSettings.battleStartMessage)
+                self.as_setMessageS(countdownSettings.getBattleStartMessage())
         self._clearTimeShiftCallback()
         self.as_hideAllS(speed != 0)
 
@@ -40,5 +40,5 @@ class PvePrebattleTimer(PreBattleTimerBase):
             if settingsCtrl:
                 countdownSettings = settingsCtrl.getSettings(WidgetType.COUNTDOWN)
                 if countdownSettings:
-                    msg = countdownSettings.header
+                    msg = countdownSettings.getHeader()
         return msg

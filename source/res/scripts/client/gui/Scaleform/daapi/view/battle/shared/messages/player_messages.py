@@ -9,11 +9,6 @@ from items import vehicles
 if TYPE_CHECKING:
     from items.artefacts import Equipment
 _logger = logging.getLogger(__name__)
-_ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
- 2: '2',
- 3: '3',
- 4: '4',
- 5: '5'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -52,7 +47,7 @@ class PlayerMessages(fading_messages.FadingMessages):
     def __onShowDestructibleEntityMessageByCode(self, code, entityID, attackerID):
         _logger.debug('onShowDestructibleEntityMessage %r %r %r', code, entityID, attackerID)
         getFullName = self.sessionProvider.getCtx().getPlayerFullName
-        self.showMessage(code, {'target': _ID_TO_DESTRUCTIBLE_ENTITY_NAME[entityID],
+        self.showMessage(code, {'target': str(entityID),
          'attacker': getFullName(attackerID, showClan=False)})
 
     def _onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID, ignoreMessages):

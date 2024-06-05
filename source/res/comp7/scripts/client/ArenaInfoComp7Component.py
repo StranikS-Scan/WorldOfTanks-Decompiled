@@ -2,26 +2,28 @@
 # Embedded file name: comp7/scripts/client/ArenaInfoComp7Component.py
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import Comp7Keys
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
+from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 
-class ArenaInfoComp7Component(DynamicScriptComponent):
+class ArenaInfoComp7Component(DynamicScriptComponent, IArenaVehiclesController):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(ArenaInfoComp7Component, self).__init__()
         self.__invalidateRanks()
+        self.__sessionProvider.addArenaCtrl(self)
 
-    def _onAvatarReady(self):
-        arena = avatar_getter.getArena()
-        if arena is not None:
-            arena.onNewVehicleListReceived += self.__onNewVehicleListReceived
-            arena.onVehicleAdded += self.__onVehicleAdded
+    def getCtrlScope(self):
+        return _SCOPE.VEHICLES
+
+    def invalidateVehiclesInfo(self, arenaDP):
         self.__invalidateRanks()
-        return
 
     def onLeaveWorld(self):
+        self.__sessionProvider.removeArenaCtrl(self)
         arena = avatar_getter.getArena()
         if arena is not None:
             arena.onNewVehicleListReceived -= self.__onNewVehicleListReceived
@@ -31,6 +33,15 @@ class ArenaInfoComp7Component(DynamicScriptComponent):
 
     def set_ranks(self, prev):
         self.__invalidateRanks()
+
+    def _onAvatarReady(self):
+        self.__sessionProvider.removeArenaCtrl(self)
+        arena = avatar_getter.getArena()
+        if arena is not None:
+            arena.onNewVehicleListReceived += self.__onNewVehicleListReceived
+            arena.onVehicleAdded += self.__onVehicleAdded
+        self.__invalidateRanks()
+        return
 
     def __invalidateRanks(self):
         vInfos = self.__sessionProvider.getArenaDP().getVehiclesInfoIterator()

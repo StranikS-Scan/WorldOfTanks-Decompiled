@@ -66,11 +66,11 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     def currentMode(self):
         return self.__currentMode
 
-    def resetCustomizationCamera(self, resetRotation=True):
+    def resetCustomizationCamera(self, resetRotation=True, resetDistance=True):
         cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
         if not cameraManager:
             return
-        cameraManager.resetCameraTarget(EASING_TRANSITION_DURATION, resetRotation)
+        cameraManager.resetCameraTarget(EASING_TRANSITION_DURATION, resetRotation, resetDistance)
         self.enableMovementByMouse()
         self.__rotateTurretAndGun()
         self.__currentMode = C11nCameraModes.PREVIEW

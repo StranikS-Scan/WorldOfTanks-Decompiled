@@ -23,7 +23,7 @@ class SeasonPointState(Enum):
 class YearlyRewardsCardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(YearlyRewardsCardModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -60,16 +60,9 @@ class YearlyRewardsCardModel(ViewModel):
     def setRewardsState(self, value):
         self._setString(3, value.value)
 
-    def getHasVehicleInHangar(self):
-        return self._getBool(4)
-
-    def setHasVehicleInHangar(self, value):
-        self._setBool(4, value)
-
     def _initialize(self):
         super(YearlyRewardsCardModel, self)._initialize()
         self._addViewModelProperty('vehicle', VehicleModel())
         self._addArrayProperty('rewards', Array())
         self._addArrayProperty('seasonPoints', Array())
         self._addStringProperty('rewardsState')
-        self._addBoolProperty('hasVehicleInHangar', False)

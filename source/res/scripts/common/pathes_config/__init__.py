@@ -15,6 +15,15 @@ def setupPaths():
                 item = os.path.join(os.path.split(os.path.abspath(__file__))[0], item)
         return os.path.normpath(item)
 
+    platformSuffix = None
+    try:
+        from pycommon import platform_info
+    except:
+        platformSuffix = None
+
+    platformSuffix = platform_info.getPlatformSuffix()
+    if not platformSuffix:
+        raise SoftException('Unable to determine platform suffix')
     addPath = [root + '/tools/bigworld/server',
      root + '/res/bigworld/scripts/common',
      root + '/res/bigworld/scripts/common/Lib',
@@ -26,7 +35,7 @@ def setupPaths():
      root + '/res/wot/scripts/base/account_helpers',
      root + '/res/wot/scripts/server_common',
      root + '/res/wot/scripts/server_common/virtual_machine',
-     root + '/res/wot/scripts/server_common/site-packages',
+     root + '/res/wot/scripts/server_common/site-packages/' + platformSuffix,
      root + '/res/wot/scripts/common',
      root + '/res/wot/scripts/development/libs',
      root + '/tools/wot/server/bw_lib/bigworld/fake']
@@ -40,3 +49,4 @@ def setupPaths():
     if not os.path.exists(bw_xml):
         from shutil import copyfile
         copyfile(expandPath(root + '/res/wot/server/bw.xml.dist'), bw_xml)
+    return

@@ -17,3 +17,11 @@ class Achievements20GeneralConst(object):
     EXTRA_SECTIONS = 'extraSections'
     ALLOWED_SECTIONS = 'allowedSections'
     MANUAL_RULES = 'manualRules'
+
+
+class AdvancedAchievementsConst(object):
+    ENABLED = 'enabled'
+    VEHICLE_ACHIEVEMENTS_ENABLED = 'vehicleAchievementsEnabled'
+    CUSTOMIZATION_ACHIEVEMENTS_ENABLED = 'customizationAchievementsEnabled'
+    EXCLUDED_VEHICLES = 'excludedVehicles'
+    EXCLUDED_CUSTOMIZATIONS = 'excludedCustomizations'

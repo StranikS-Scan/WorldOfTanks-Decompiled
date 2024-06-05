@@ -194,13 +194,13 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         dataProviderValues = []
         showDummyScreen = False
         filterWarningVO = None
+        newBoosters = []
         if boosters:
             filterExpirable = self.__filterMask & _FilterBit.EXPIRABLE
             filterNonExpirable = self.__filterMask & _FilterBit.NON_EXPIRABLE
             if filterExpirable and filterNonExpirable:
                 filterExpirable = False
                 filterNonExpirable = False
-            newBoosters = []
             for booster in boosters:
                 expirations = booster.expirations
                 if not filterNonExpirable:
@@ -209,6 +209,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                 if remaining and not filterExpirable:
                     newBoosters.append(GoodieExpirationData(booster, float('inf'), remaining))
 
+        if newBoosters:
             for booster, timestamp, amount in sorted(newBoosters, cmp=self.__sort):
                 influence = backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)())
                 limitResource = R.strings.menu.booster.limit.dyn(booster.boosterGuiType)

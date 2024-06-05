@@ -1,24 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/epic_meta_game_ctrl.py
 import logging
-import typing
 from bisect import insort_right
 from operator import itemgetter
 import BigWorld
 import Event
 import WWISE
 import adisp
+import typing
 from CurrentVehicle import g_currentVehicle
-from ReservesEvents import randomReservesEvents
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR, EPIC_LAST_CYCLE_ID
 from account_helpers.client_epic_meta_game import skipResponse
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_async, adisp_process
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
 from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
 from frontline.frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
-from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES, FLBattleReservesModifier
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.dispatcher import g_prbLoader
@@ -148,7 +145,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__isEpicSoundMode = False
         self.__showedResultsForArenas = []
         self.__eventEndedNotifier = None
-        self.__reservesModifier = None
         return
 
     def init(self):
@@ -157,10 +153,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
         self.__eventEndedNotifier = SimpleNotifier(self.getEventTimeLeft, self.__onEventEnded)
         self.addNotificator(self.__eventEndedNotifier)
-        randomReservesEvents.onChangedReservesModifier += self.onChangedReservesModifier
 
     def fini(self):
-        randomReservesEvents.onChangedReservesModifier -= self.onChangedReservesModifier
         del self.__showedResultsForArenas[:]
         self.onUpdated.clear()
         self.onPrimeTimeStatusUpdated.clear()
@@ -226,21 +220,11 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__clear()
         self.__battleResultsService.onResultPosted -= self.__showBattleResults
         self.__itemsCache.onSyncCompleted -= self.__onAvatarBecomePlayerAndSynced
-        if BONUS_CAPS.checkAny(BigWorld.player().arenaBonusType, 'EPIC'):
-            reservesModifier = BigWorld.player().arenaExtraData.get('reservesModifier')
-            if reservesModifier is None:
-                _logger.error('reservesModifier is None')
-                return
-            self.onChangedReservesModifier(RESERVES_MODIFIER_NAMES[reservesModifier])
-        return
 
     def __onAvatarBecomePlayerAndSynced(self, _, invalidItems):
         if self.getCurrentSeason() is not None:
             self.__battleResultsService.onResultPosted += self.__showBattleResults
         return
-
-    def isRandomBattleReserves(self):
-        return self.__reservesModifier == RESERVES_MODIFIER_NAMES[FLBattleReservesModifier.RANDOM]
 
     def getModeSettings(self):
         return self.__lobbyContext.getServerSettings().epicBattles
@@ -557,12 +541,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getReserveTechName(self, reserve):
         data = self.getReserveData(reserve)
         return data.get('name')
-
-    def onChangedReservesModifier(self, modifier):
-        self.__reservesModifier = modifier
-
-    def getEpicBattlesReservesModifier(self):
-        return self.__reservesModifier
 
     def showProgressionDuringSomeStates(self, showDefaultTab=False):
         from frontline.gui.frontline_helpers import isHangarAvailable, getProperTabWhileHangarUnavailable

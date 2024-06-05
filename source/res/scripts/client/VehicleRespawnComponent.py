@@ -13,6 +13,7 @@ if not IS_VS_EDITOR:
     from helpers.EffectsList import RespawnDestroyEffect
 
 class VehicleRespawnComponent(DynamicScriptComponent):
+    onVehicleRespawned = Event.Event()
     onSetSpawnTime = Event.Event()
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -51,6 +52,7 @@ class VehicleRespawnComponent(DynamicScriptComponent):
         avatar = BigWorld.player()
         avatar.startResurrecting(self.entity.id)
         avatar.redrawVehicleOnRespawn(self.entity.id, self.entity.publicInfo.compDescr, self.entity.publicInfo.outfit)
+        VehicleRespawnComponent.onVehicleRespawned(self.entity)
 
     def _onVehicleAppeared(self):
         if self.respawnState != RespawnState.VEHICLE_ALIVE:

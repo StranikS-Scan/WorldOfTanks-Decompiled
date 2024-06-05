@@ -13,9 +13,6 @@ class PostmortemPanelMeta(BasePostmortemPanelMeta):
     def onVictimDogTagInPlaySound(self):
         self._printOverrideError('onVictimDogTagInPlaySound')
 
-    def as_showDeadReasonS(self):
-        return self.flashObject.as_showDeadReason() if self._isDAAPIInited() else None
-
     def as_setPlayerInfoS(self, playerInfo):
         return self.flashObject.as_setPlayerInfo(playerInfo) if self._isDAAPIInited() else None
 

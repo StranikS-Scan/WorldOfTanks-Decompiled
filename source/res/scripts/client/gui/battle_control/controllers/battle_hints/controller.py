@@ -3,7 +3,7 @@
 import sys
 import weakref
 import typing
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict, Tuple, Union
 import BattleReplay
 import replay
 from PlayerEvents import g_playerEvents
@@ -21,6 +21,7 @@ from wotdecorators import condition
 if typing.TYPE_CHECKING:
     from hints.battle.schemas.base import CHMType
     from gui.battle_control.controllers.battle_hints.queues import BattleHintsQueue, BattleHint
+    BHComponentTypes = Optional[Union[weakref.ProxyType[BattleHintComponent], BattleHintComponent]]
 _logger = getLogger('Controller')
 
 class BattleHintsController(ViewComponentsController):
@@ -42,6 +43,11 @@ class BattleHintsController(ViewComponentsController):
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.BATTLE_HINTS
+
+    def clearViewComponents(self):
+        super(BattleHintsController, self).clearViewComponents()
+        self._components.clear()
+        _logger.debug('Views cleared.')
 
     def startControl(self, *args):
         self._started = True
@@ -110,11 +116,11 @@ class BattleHintsController(ViewComponentsController):
         self._modelsMgr = None
         self._queuesMgr.destroy()
         self._history.destroy()
-        self._components.clear()
         self._maxPriorityOffset.clear()
+        self.clearViewComponents()
         if self._closeOnRoundFinished:
             g_playerEvents.onRoundFinished -= self._onRoundFinished
-        _logger.debug('Cleared.')
+        _logger.debug('Stopped.')
         return
 
     def _prepare(self, hintName, params=None):

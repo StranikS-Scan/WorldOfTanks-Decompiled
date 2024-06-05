@@ -6,7 +6,7 @@ from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattle
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController, IBattlePassController
+from skeletons.gui.game_control import IMarathonEventsController, IBattlePassController, ILiveOpsWebEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from web.web_client_api import Field, W2CSchema, w2c
 
@@ -43,6 +43,8 @@ class MissionsWebApiMixin(object):
     def openMissionsEvents(self, cmd):
         if dependency.instance(IMarathonEventsController).isAnyActive():
             server_events.showMissionsMarathon()
+        elif dependency.instance(ILiveOpsWebEventsController).canShowEventsTab():
+            server_events.showMissionsLiveOpsWebEvents()
         else:
             server_events.showMissionsGrouped()
 

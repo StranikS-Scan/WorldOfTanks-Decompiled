@@ -13,19 +13,20 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointState, SeasonName, SeasonPointModel
 from gui.impl.gen.view_models.views.lobby.comp7.tooltips.general_rank_tooltip_model import Rank
+from gui.impl.gen.view_models.views.lobby.comp7.year_model import YearState
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
-from gui.impl.lobby.comp7.comp7_bonus_packer import packYearlyRewardsBonuses
+from gui.impl.lobby.comp7.comp7_bonus_packer import packYearlyRewardMetaView
 from gui.impl.lobby.comp7.comp7_c11n_helpers import getStylePreviewVehicle, getPreviewOutfit
 from gui.impl.lobby.comp7.comp7_model_helpers import SEASONS_NUMBERS_BY_NAME, getSeasonNameEnum, setElitePercentage
-from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating, getRankEnumValue, getPlayerDivision
+from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating, getRankEnumValue, getPlayerDivision, getProgressionYearState
 from gui.impl.lobby.comp7.meta_view.meta_view_helper import getRankDivisions, setDivisionData, setRankData
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from gui.impl.lobby.comp7.tooltips.general_rank_tooltip import GeneralRankTooltip
 from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
 from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
-from gui.shared.event_dispatcher import showStylePreview, showComp7MetaRootView, showConfigurableVehiclePreview
+from gui.shared.event_dispatcher import showStylePreview, showComp7MetaRootView, showConfigurableVehiclePreview, showComp7YearlyRewardsSelectionWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -107,6 +108,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def _getEvents(self):
         return ((self.viewModel.onGoToStylePreview, self.__onStylePreviewOpen),
          (self.viewModel.onGoToVehiclePreview, self.__onVehiclePreviewOpen),
+         (self.viewModel.onGoToRewardsSelection, self.__onGoToRewardsSelection),
          (self.__comp7Controller.onQualificationStateUpdated, self.__onQualificationStateUpdated),
          (self.__comp7Controller.onSeasonPointsUpdated, self.__onSeasonPointsUpdated),
          (self.__comp7Controller.onRankUpdated, self.__onRankUpdated),
@@ -162,8 +164,11 @@ class YearlyRewardsPage(PageSubModelPresenter):
             outfit = style.getOutfit(first(style.seasons))
         else:
             outfit = None
-        showConfigurableVehiclePreview(cd, backBtnLabel='', previewBackCb=partial(showComp7MetaRootView, self.pageId, cardIndex), heroInteractive=False, hiddenBlocks=('closeBtn',), outfit=outfit, crewText='')
+        showConfigurableVehiclePreview(cd, backBtnLabel='', previewBackCb=partial(showComp7MetaRootView, self.pageId, cardIndex), heroInteractive=False, hiddenBlocks=('closeBtn',), outfit=outfit, crewText='', skipInventoryUpdate=True)
         return
+
+    def __onGoToRewardsSelection(self):
+        showComp7YearlyRewardsSelectionWindow()
 
     def __onSyncCompleted(self, reason, *_):
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:
@@ -204,12 +209,18 @@ class YearlyRewardsPage(PageSubModelPresenter):
                 division = getPlayerDivisionByRating(self.__comp7Controller.getRatingForSeason(actualSeason))
                 model.setCurrentRank(getRankEnumValue(division))
             seasons = self.__comp7Controller.getAllSeasons()
-            if currentSeason is not None or self.__comp7Controller.getNextSeason() is not None:
-                model.setBannerState(BannerState.DEFAULT)
-            elif findFirst(lambda s: self.__comp7Controller.isQualificationPassedInSeason(s.getNumber()), seasons) is None:
-                model.setBannerState(BannerState.DEFAULT)
+            canBeRewarded = any((self.__comp7Controller.isQualificationPassedInSeason(s.getNumber()) for s in seasons))
+            yearState = getProgressionYearState()
+            if yearState == YearState.FINISHED and canBeRewarded:
+                isReceivedRewards = self.__comp7Controller.isYearlyRewardReceived()
+                if not isReceivedRewards:
+                    model.setBannerState(BannerState.NOTACCRUEDREWARDS)
+                elif self.__comp7Controller.hasAvailableOfferTokens():
+                    model.setBannerState(BannerState.REWARDSSELECTIONAVAILABLE)
+                else:
+                    model.setBannerState(BannerState.REWARDSRECEIVED)
             else:
-                model.setBannerState(BannerState.NOTACCRUEDREWARDS)
+                model.setBannerState(BannerState.DEFAULT)
             return
 
     def __setLegendData(self, model):
@@ -253,7 +264,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def __fillRewards(self, cardModel, bonuses):
         rewards = cardModel.getRewards()
         rewards.clear()
-        bonusModels, tooltipsData = packYearlyRewardsBonuses(bonuses)
+        bonusModels, tooltipsData = packYearlyRewardMetaView(bonuses)
         for idx, bonusModel in enumerate(bonusModels):
             bonusModel.setTooltipId(str(len(self.__tooltips)))
             rewards.addViewModel(bonusModel)
@@ -282,7 +293,6 @@ class YearlyRewardsPage(PageSubModelPresenter):
         if vehicleBonus is not None:
             vehicleItem = self.__itemsCache.items.getItemByCD(first(vehicleBonus.keys()))
             fillVehicleModel(model.vehicle, vehicleItem)
-            model.setHasVehicleInHangar(vehicleItem.isInInventory)
         return
 
 

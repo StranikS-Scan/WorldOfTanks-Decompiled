@@ -745,10 +745,10 @@
     <shortUserString>	#usa_vehicles:A151_TS_60_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A151_TS_60_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A151_TS_60_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	12250	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special builtinRepairkit_user	</tags>
     <level>	9	</level>
   </A151_TS_60>
   <A150_MBT_B>
@@ -980,6 +980,19 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A141_M_IV_Y>
+  <A172_M4A3E8_Sherman_BPXIV>
+    <id>	194	</id>
+    <userString>	#usa_vehicles:A172_M4A3E8_Sherman_BPXIV	</userString>
+    <description>	#usa_vehicles:A172_M4A3E8_Sherman_BPXIV_descr	</description>
+    <shortUserString>	#usa_vehicles:A172_M4A3E8_Sherman_BPXIV_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A172_M4A3E8_Sherman_BPXIV_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A172_M4A3E8_Sherman_BPXIV_long_special	</longDescriptionSpecial>
+    <price>	3450	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
+    <level>	6	</level>
+  </A172_M4A3E8_Sherman_BPXIV>
   <A160_M24_594>
     <id>	196	</id>
     <userString>	#usa_vehicles:A160_M24_594	</userString>
@@ -1648,4 +1661,44 @@
     <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	6	</level>
   </A1118_M4_Thunderbolt_NewOnBoarding>
+  <A173_Sherman_Crab>
+    <id>	53	</id>
+    <userString>	#usa_vehicles:A173_Sherman_Crab	</userString>
+    <description>	#usa_vehicles:A173_Sherman_Crab_descr	</description>
+    <shortUserString>	#usa_vehicles:A173_Sherman_Crab_short	</shortUserString>
+    <price>	360000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret private event_battles	</tags>
+    <level>	5	</level>
+  </A173_Sherman_Crab>
+  <A1006_M4A3E8_Sherman_StoryMode>
+    <id>	403	</id>
+    <userString>	#usa_vehicles:M4A3E8_Sherman	</userString>
+    <description>	#usa_vehicles:M4A3E8_Sherman_descr	</description>
+    <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
+    <price>	930500	</price>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	6	</level>
+    <notInShop>	True	</notInShop>
+  </A1006_M4A3E8_Sherman_StoryMode>
+  <A1005_M4_Sherman_StoryMode>
+    <id>	404	</id>
+    <userString>	#usa_vehicles:M4_Sherman	</userString>
+    <description>	#usa_vehicles:M4_Sherman_descr	</description>
+    <shortUserString>	#usa_vehicles:M4_Sherman_short	</shortUserString>
+    <price>	350500	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </A1005_M4_Sherman_StoryMode>
+  <A1006_M4A3E8_Sherman_StoryModeHard>
+    <id>	405	</id>
+    <userString>	#usa_vehicles:M4A3E8_Sherman	</userString>
+    <description>	#usa_vehicles:M4A3E8_Sherman_descr	</description>
+    <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
+    <price>	930500	</price>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret	private	</tags>
+    <level>	6	</level>
+    <notInShop>	True	</notInShop>
+  </A1006_M4A3E8_Sherman_StoryModeHard>
 </list.xml>

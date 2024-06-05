@@ -607,4 +607,269 @@
     <directVisionRadius>	445	</directVisionRadius>
     <normalRadioDistance>	5000	</normalRadioDistance>
   </type>
+  <type>
+    <id>	4	</id>
+    <display_name>	Bunker AT gun	</display_name>
+    <health>	3000	</health>
+    <materials>
+      <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	false	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	10	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_078_PillboxRight/normal/lod0/hd_mle_UNI_078_PillboxRight_01_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_078_PillboxRight/normal/lod0/hd_mle_UNI_078_PillboxRight_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints></observationPoints>
+    <observedPoints></observedPoints>
+    <editorDummyModel>	content/MilitaryEnvironment/hd_mle_UNI_078_PillboxRight/normal/lod0/hd_mle_UNI_078_PillboxRight_01.model	</editorDummyModel>
+  </type>
+  <type>
+    <id>	5	</id>
+    <display_name>	Bunker	</display_name>
+    <health>	3000	</health>
+    <materials>
+      <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	false	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	10	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_01_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints></observationPoints>
+    <observedPoints></observedPoints>
+    <editorDummyModel>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_01.model	</editorDummyModel>
+  </type>
+  <type>
+    <id>	6	</id>
+    <display_name>	Bunker AT gun	</display_name>
+    <health>	3000	</health>
+    <materials>
+      <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	false	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	10	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_072_PillboxLeft/normal/lod0/hd_mle_UNI_072_PillboxLeft_01_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_072_PillboxLeft/normal/lod0/hd_mle_UNI_072_PillboxLeft_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints></observationPoints>
+    <observedPoints></observedPoints>
+    <editorDummyModel>	content/MilitaryEnvironment/hd_mle_UNI_072_PillboxLeft/normal/lod0/hd_mle_UNI_072_PillboxLeft_01.model	</editorDummyModel>
+  </type>
+  <type>
+    <id>	7	</id>
+    <display_name>	Big artillery bunker	</display_name>
+    <health>	10000	</health>
+    <materials>
+      <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	false	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	10	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_075_PillboxBunker/normal/lod0/hd_mle_UNI_075_PillboxBunker_01_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_075_PillboxBunker/normal/lod0/hd_mle_UNI_075_PillboxBunker_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints></observationPoints>
+    <observedPoints></observedPoints>
+    <editorDummyModel>	content/MilitaryEnvironment/hd_mle_UNI_075_PillboxBunker/normal/lod0/hd_mle_UNI_075_PillboxBunker_01.model	</editorDummyModel>
+  </type>
+  <type>
+    <id>	8	</id>
+    <display_name>	artillery bunker	</display_name>
+    <health>	4000	</health>
+    <materials>
+      <undamaged_1>
+        <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	false	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	2000	</armor>
+        <effectMaterial>	stone	</effectMaterial>
+      </undamaged_1>
+      <undamaged_2>
+        <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        <useHitAngle>	true	</useHitAngle>
+        <mayRicochet>	true	</mayRicochet>
+        <checkCaliberForRichet>	false	</checkCaliberForRichet>
+        <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
+        <armor>	10	</armor>
+        <effectMaterial>	metal	</effectMaterial>
+      </undamaged_2>
+    </materials>
+    <states>
+      <state>
+        <name>	alive	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	true	</destructible>
+            <gui_node>	HP_gui	</gui_node>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_066_PillboxGun/normal/lod0/hd_mle_UNI_066_PillboxGun_01_B.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_066_PillboxGun/normal/lod0/hd_mle_UNI_066_PillboxGun_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+      <state>
+        <name>	destroyed	</name>
+        <components>
+          <component>
+            <id>	structure	</id>
+            <destructible>	false	</destructible>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</physics_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_076_PillboxTank/normal/lod0/hd_mle_UNI_076_PillboxTank_dummy_crash_01.model	</visual_model>
+          </component>
+        </components>
+      </state>
+    </states>
+    <observationPoints></observationPoints>
+    <observedPoints></observedPoints>
+    <editorDummyModel>	content/MilitaryEnvironment/hd_mle_UNI_066_PillboxGun/normal/lod0/hd_mle_UNI_066_PillboxGun_01.model	</editorDummyModel>
+  </type>
 </destructible_entities.xml>

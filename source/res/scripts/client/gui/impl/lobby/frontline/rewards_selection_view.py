@@ -93,12 +93,6 @@ class RewardsSelectionView(SelectableRewardBase):
     def _getReceivedRewards(self, rewardName):
         pass
 
-    def _iterSelectableBonus(self, cart):
-        for tab in cart.itervalues():
-            for rewardName, reward in tab.iteritems():
-                for bonus in reward[:self._getRewardsInCartCount(rewardName)]:
-                    yield bonus
-
     def __onViewLoaded(self):
         if not self.__isViewLoaded:
             self.__safeCall(self.__onLoadedCallback)

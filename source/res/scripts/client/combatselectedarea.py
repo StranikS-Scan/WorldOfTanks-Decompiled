@@ -115,7 +115,10 @@ class CombatSelectedArea(object):
             return
 
     def setGUIVisible(self, isVisible):
-        self.__fakeModel.visible = isVisible
+        if self.__terrainSelectedArea:
+            self.__terrainSelectedArea.setVisible(isVisible)
+        if self.__terrainRotatedArea:
+            self.__terrainRotatedArea.setVisible(isVisible)
 
     def setNextPosition(self, nextPosition, direction):
         self.relocate(self.__nextPosition, direction)
@@ -134,14 +137,23 @@ class CombatSelectedArea(object):
         self.setup(position, direction, size, DEFAULT_RADIUS_MODEL, COLOR_WHITE, marker)
 
     def destroy(self):
-        BigWorld.player().delModel(self.__fakeModel)
-        self.__terrainSelectedArea = None
-        self.__terrainRotatedArea = None
-        self.__pixelQuad = None
+        rootNode = self.__fakeModel.node('')
+        if self.__terrainSelectedArea is not None:
+            rootNode.detach(self.__terrainSelectedArea)
+            self.__terrainSelectedArea = None
+            self.__area = None
+        if self.__pixelQuad is not None:
+            rootNode.detach(self.__pixelQuad)
+            self.__pixelQuad = None
+        if self.__rotateModelNode is not None:
+            if self.__terrainRotatedArea is not None:
+                self.__rotateModelNode.detach(self.__terrainRotatedArea)
+                self.__terrainRotatedArea = None
+            self.__rotateModelNode = None
+        if self.__fakeModel.inWorld:
+            BigWorld.player().delModel(self.__fakeModel)
         self.__fakeModel = None
         self.__matrix = None
-        self.__rotateModelNode = None
-        self.__area = None
         return
 
     def pointInside(self, point):

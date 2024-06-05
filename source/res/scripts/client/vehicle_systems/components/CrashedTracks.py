@@ -6,7 +6,7 @@ import Math
 import BigWorld
 from cgf_obsolete_script.auto_properties import AutoProperty
 from cgf_obsolete_script.py_component import Component
-from items.components.component_constants import MAIN_TRACK_PAIR_IDX
+from items.components.component_constants import MAIN_TRACK_PAIR_IDX, DEFAULT_TRACK_HIT_VECTOR
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
@@ -23,22 +23,22 @@ class CrashedTrackController(Component):
         self.__baseTrackFashion = trackFashion
         self.baseTracksComponent = None
         pairsCount = self.getPairsCnt()
-        self.__crashedTracks = {'left': [False] * pairsCount,
-         'right': [False] * pairsCount}
+        self.__crashedTracks = {'left': [None] * pairsCount,
+         'right': [None] * pairsCount}
         self.__model = None
         self.__fashion = None
         self.__loading = False
         self.__isActive = False
         self.__visibilityMask = 15
-        self.__debrisCrashedTracks = {'left': [False] * pairsCount,
-         'right': [False] * pairsCount}
+        self.__debrisCrashedTracks = {'left': [None] * pairsCount,
+         'right': [None] * pairsCount}
         return
 
     def isLeftTrackBroken(self):
-        return True in self.__crashedTracks['left']
+        return any(self.__crashedTracks['left'])
 
     def isRightTrackBroken(self):
-        return True in self.__crashedTracks['right']
+        return any(self.__crashedTracks['right'])
 
     def getLeftTrackStates(self):
         return tuple(self.__makeCombinedTrackState('left'))
@@ -85,13 +85,14 @@ class CrashedTrackController(Component):
         self.__applyVisibilityMask()
         self.__setupTracksHiding()
 
-    def addDebrisCrashedTrack(self, isLeft, pairIndex):
+    def addDebrisCrashedTrack(self, isLeft, pairIndex, hitPoint):
         side = 'left' if isLeft else 'right'
-        self.__debrisCrashedTracks[side][pairIndex] = True
+        self.__debrisCrashedTracks[side][pairIndex] = hitPoint
 
     def delDebrisCrashedTrack(self, isLeft, pairIndex):
         side = 'left' if isLeft else 'right'
-        self.__debrisCrashedTracks[side][pairIndex] = False
+        self.__debrisCrashedTracks[side][pairIndex] = None
+        return
 
     def __setupTrackAssembler(self, entity):
         modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(self.__modelsSet, 'destroyed', []))
@@ -109,12 +110,12 @@ class CrashedTrackController(Component):
 
         return False
 
-    def addCrashedTrack(self, isLeft, pairIndex, isFlying=False):
+    def addCrashedTrack(self, isLeft, pairIndex, hitPoint=None, isFlying=False):
         if self.__entity is None:
             return
         else:
             side = 'left' if isLeft else 'right'
-            self.__crashedTracks[side][pairIndex] = True
+            self.__crashedTracks[side][pairIndex] = hitPoint if hitPoint else DEFAULT_TRACK_HIT_VECTOR
             trackAssembler = self.__setupTrackAssembler(self.__entity)
             if self.__model is None and not isFlying:
                 if not self.__loading:
@@ -141,7 +142,7 @@ class CrashedTrackController(Component):
 
     def delCrashedTrack(self, isLeft, pairIndex):
         side = 'left' if isLeft else 'right'
-        self.__crashedTracks[side][pairIndex] = False
+        self.__crashedTracks[side][pairIndex] = None
         hasCrashedTracks = self.__hasCrashedTracks()
         self.__loading = hasCrashedTracks and self.__loading
         if self.__entity is None:
@@ -166,10 +167,10 @@ class CrashedTrackController(Component):
                 pairsCount = len(self.__vehicleDesc.chassis.tracks.trackPairs)
             else:
                 pairsCount = 1
-            self.__crashedTracks = {'left': [False] * pairsCount,
-             'right': [False] * pairsCount}
-            self.__debrisCrashedTracks = {'left': [False] * pairsCount,
-             'right': [False] * pairsCount}
+            self.__crashedTracks = {'left': [None] * pairsCount,
+             'right': [None] * pairsCount}
+            self.__debrisCrashedTracks = {'left': [None] * pairsCount,
+             'right': [None] * pairsCount}
             if self.__model is not None:
                 if self.__model.isInWorld:
                     self.__entity.delModel(self.__model)

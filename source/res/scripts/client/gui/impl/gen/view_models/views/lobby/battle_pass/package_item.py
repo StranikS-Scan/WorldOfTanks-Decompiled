@@ -26,7 +26,7 @@ class ChapterType(Enum):
 class PackageItem(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(PackageItem, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -85,23 +85,17 @@ class PackageItem(ViewModel):
     def setCurrentLevel(self, value):
         self._setNumber(8, value)
 
-    def getIsCustom(self):
-        return self._getBool(9)
-
-    def setIsCustom(self, value):
-        self._setBool(9, value)
-
     def getChapterType(self):
-        return ChapterType(self._getString(10))
+        return ChapterType(self._getString(9))
 
     def setChapterType(self, value):
-        self._setString(10, value.value)
+        self._setString(9, value.value)
 
     def getExpireTime(self):
-        return self._getNumber(11)
+        return self._getNumber(10)
 
     def setExpireTime(self, value):
-        self._setNumber(11, value)
+        self._setNumber(10, value)
 
     def _initialize(self):
         super(PackageItem, self)._initialize()
@@ -114,6 +108,5 @@ class PackageItem(ViewModel):
         self._addNumberProperty('chapterID', 0)
         self._addNumberProperty('chapterState')
         self._addNumberProperty('currentLevel', 0)
-        self._addBoolProperty('isCustom', False)
         self._addStringProperty('chapterType')
         self._addNumberProperty('expireTime', 0)

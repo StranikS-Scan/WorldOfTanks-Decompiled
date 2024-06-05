@@ -35,7 +35,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IComp7Controller
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -407,6 +407,65 @@ class C2DProgressionStyleDecorator(C11nMessageDecorator):
 
     def _getVehicle(self):
         return g_currentVehicle.item if self.itemsCache is not None and self.itemsCache.isSynced() else None
+
+
+class Comp7BondEquipmentDecorator(MessageDecorator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+
+    def __init__(self, entityID, notificationType, savedData, model, template, priority, useCounterOnce=True, isNotify=True):
+        self.__notificationType = notificationType
+        self.__useCounterOnce = useCounterOnce
+        entity = g_settings.msgTemplates.format(template, ctx={'title': savedData['title']})
+        settings = NotificationGuiSettings(isNotify=isNotify, priorityLevel=priority, groupID=self.getGroup())
+        super(Comp7BondEquipmentDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
+        self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
+
+    def getType(self):
+        return self.__notificationType
+
+    def getGroup(self):
+        return NotificationGroup.OFFER
+
+    def getSavedData(self):
+        return self._entity.get('linkageData')
+
+    def isShouldCountOnlyOnce(self):
+        return self.__useCounterOnce
+
+    @staticmethod
+    def isPinned():
+        return True
+
+    def clear(self):
+        self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
+        super(Comp7BondEquipmentDecorator, self).clear()
+
+    def _make(self, entity=None, settings=None):
+        self.__updateEntityButtons()
+        super(Comp7BondEquipmentDecorator, self)._make(entity, settings)
+
+    def __onItemsSyncCompleted(self, *_):
+        if self._model is not None:
+            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+        return
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            if not buttonsLayout:
+                return
+            state = self.__getButtonState()
+            self._entity.setdefault('buttonsStates', {}).update({'submit': state})
+            return
+
+    def __getButtonState(self):
+        state = NOTIFICATION_BUTTON_STATE.VISIBLE
+        if self.__comp7Controller.hasAvailableOfferTokens():
+            state |= NOTIFICATION_BUTTON_STATE.ENABLED
+        return state
 
 
 class PrbInviteDecorator(_NotificationDecorator):

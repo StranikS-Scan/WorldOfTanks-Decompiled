@@ -386,6 +386,7 @@ class SETTINGS(object):
     GAME_SHOWVICTIMSDOGTAG = '#settings:game/showVictimsDogTag'
     GAME_SHOWKILLERSDOGTAG = '#settings:game/showKillersDogTag'
     GAME_SHOWDOGTAGTOKILLER = '#settings:game/showDogTagToKiller'
+    GAME_SHOWPERSONALANIMATEDDOGTAG = '#settings:game/showPersonalAnimatedDogTag'
     GAME_FIELDSET_HEADERCHAT = '#settings:game/fieldset/headerChat'
     GAME_FIELDSET_HEADERBATTLECOMMUNICATION = '#settings:game/fieldset/headerBattleCommunication'
     GAME_FIELDSET_HEADERGAMEPLAY = '#settings:game/fieldset/headerGameplay'

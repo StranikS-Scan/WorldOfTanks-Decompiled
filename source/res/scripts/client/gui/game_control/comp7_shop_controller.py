@@ -173,6 +173,7 @@ class Comp7ShopController(IComp7ShopController):
         if rank in self.__notifiedRanks:
             return
         self.__notifiedRanks.append(rank)
+        _logger.info('Request new products due to onHighestRankAchieved event')
         yield self.__requestProducts(force=True)
         if self.hasNewProducts(rank):
             self.__sendNewProductsForRankMessage()

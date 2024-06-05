@@ -1081,6 +1081,20 @@ def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
     return None
 
 
+VEHICLE_ACHIEVEMENTS_DEPENDENCIES = {}
+VEHICLE_ACHIEVEMENTS_POP_UPS = []
+CUSTOMIZATION_ACHIEVEMENTS_DEPENDENCIES = {}
+CUSTOMIZATION_ACHIEVEMENTS_POP_UPS = []
+
+def _processAchievementDependency(achievement, requiredAchievements, dossierDescr, dossierBlockDescr, key, value, prevValue):
+    currentValue, currentStage, currentTimestamp = achievement.getCurrentDataFromDossier(dossierDescr)
+    activeStage = achievement.getActiveStage(currentValue, currentStage)
+    if not (requiredAchievements and activeStage) or achievement.isAchievementCompleted(currentValue):
+        return
+    if all((requiredAchievement.isAchievementCompleted(requiredAchievement.getCurrentDataFromDossier(dossierDescr)[0]) for requiredAchievement in requiredAchievements)):
+        achievement.updateValueInDossier(dossierDescr, currentValue, currentStage, currentTimestamp)
+
+
 def init():
     _set_A15X15_STATS_DEPENDENCIES()
     _set_A7X7_STATS_DEPENDENCIES()

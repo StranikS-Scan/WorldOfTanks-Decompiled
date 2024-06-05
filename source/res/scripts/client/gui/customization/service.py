@@ -49,6 +49,7 @@ if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationModes, CustomizationTabs
     from gui.shared.gui_items.customization.c11n_items import Style
 _logger = logging.getLogger(__name__)
+CUSTOMIZATION_CAMERA_NAME = 'Customization'
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -235,7 +236,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return
 
     @adisp.adisp_process
-    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
+    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
         if self.__customizationCtx is None:
             lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
             if not lobbyHeaderNavigationPossible:
@@ -248,7 +249,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
          'callback': callback,
          'season': season,
          'modeId': modeId,
-         'tabId': tabId}
+         'tabId': tabId,
+         'itemCD': itemCD}
         shouldSelectVehicle = False
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
@@ -298,12 +300,13 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         modeId = self.__showCustomizationKwargs.get('modeId', None)
         tabId = self.__showCustomizationKwargs.get('tabId', None)
         vehInvID = self.__showCustomizationKwargs.get('vehInvID', None)
+        itemCD = self.__showCustomizationKwargs.get('itemCD', None)
         callback = self.__showCustomizationKwargs.get('callback', None)
-        loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId)
+        loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId, itemCD)
         if self.__showCustomizationCallbackId is None:
             cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
-                cameraManager.switchByCameraName('Customization')
+                cameraManager.switchByCameraName(CUSTOMIZATION_CAMERA_NAME)
             ClientSelectableCameraObject.deselectAll()
             self.hangarSpace.space.getVehicleEntity().onSelect()
             self.__moveHangarVehicleToCustomizationRoom()
@@ -316,7 +319,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self.hangarSpace.space.turretAndGunAngles.reset()
             cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
-                cameraManager.switchToTank()
+                if cameraManager.getCurrentCameraName() == CUSTOMIZATION_CAMERA_NAME:
+                    cameraManager.switchToTank()
         self.__destroyCtx()
         self.onVisibilityChanged(False)
         return
@@ -324,10 +328,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def getCtx(self):
         return self.__customizationCtx
 
-    def __createCtx(self, season=None, modeId=None, tabId=None, source=None):
+    def __createCtx(self, season=None, modeId=None, tabId=None, source=None, itemCD=None):
         if self.__customizationCtx is None:
             self.__customizationCtx = CustomizationContext()
-            self.__customizationCtx.init(season, modeId, tabId)
+            self.__customizationCtx.init(season, modeId, tabId, itemCD)
             return
         else:
             if season is not None:
@@ -522,8 +526,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_CUSTOMIZATION), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def __loadCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None):
-        self.__createCtx(season, modeId, tabId)
+    def __loadCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
+        self.__createCtx(season, modeId, tabId, itemCD=itemCD)
         if vehInvID is not None and vehInvID != g_currentVehicle.item.invID:
             return g_currentVehicle.selectVehicle(vehInvID, lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId), True)
         else:

@@ -90,6 +90,18 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      PERSONAL_NUMBER)
 
 
+def getItemTypeID(bonusName):
+    if bonusName in GUI_ITEM_TYPE_INDICES:
+        return GUI_ITEM_TYPE_INDICES[bonusName]
+    else:
+        itemTypeID = None
+        if bonusName == 'projection_decal':
+            itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+        elif bonusName == 'personal_number':
+            itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
+        return itemTypeID
+
+
 def formatMoneyError(currency):
     return '{}_error'.format(currency)
 

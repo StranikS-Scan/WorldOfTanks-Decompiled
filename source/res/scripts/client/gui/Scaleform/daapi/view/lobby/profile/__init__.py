@@ -18,6 +18,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.profile.profile_collections_page import ProfileCollectionsPage
     from gui.Scaleform.daapi.view.lobby.profile.ProfilePage import ProfilePage
     from gui.Scaleform.daapi.view.lobby.profile.ProfileTotalPage import ProfileTotalPage
+    from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementPage import ProfileAchievementPage
     from gui.Scaleform.daapi.view.lobby.profile.ProfileStatistics import ProfileStatistics
     from gui.Scaleform.daapi.view.lobby.profile.ProfileSummaryPage import ProfileSummaryPage
     from gui.Scaleform.daapi.view.lobby.profile.ProfileSummaryWindow import ProfileSummaryWindow
@@ -33,6 +34,7 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.PROFILE_STATISTICS, ProfileStatistics, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_SUMMARY_PAGE, ProfileSummaryPage, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_TOTAL_PAGE, ProfileTotalPage, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.PROFILE_ACHIEVEMENTS_PAGE, ProfileAchievementPage, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_SUMMARY_WINDOW, ProfileSummaryWindow, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_TAB_NAVIGATOR, ProfileTabNavigator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE, ProfileTechniquePage, ScopeTemplates.DEFAULT_SCOPE),

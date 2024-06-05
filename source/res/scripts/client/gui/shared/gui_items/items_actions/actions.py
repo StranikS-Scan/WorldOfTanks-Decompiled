@@ -736,15 +736,14 @@ class BuyBerthsAction(CachedItemAction):
 
 class TankmanRestoreAction(GroupedItemAction):
 
-    def __init__(self, tankmanInvID, berthsNeeded, groupID=0, groupSize=1):
+    def __init__(self, tankmanInvID, groupID=0, groupSize=1):
         super(TankmanRestoreAction, self).__init__(groupID, groupSize)
         self.__tankmanInvID = tankmanInvID
-        self.__berthsNeeded = berthsNeeded
 
     @decorators.adisp_process('updating')
     def doAction(self):
         tankman = self._itemsCache.items.getTankman(self.__tankmanInvID)
-        result = yield TankmanRestore(tankman, self.__berthsNeeded, self._groupID, self._groupSize).request()
+        result = yield TankmanRestore(tankman, self._groupID, self._groupSize).request()
         self._pushGroupedMessages(result)
 
 

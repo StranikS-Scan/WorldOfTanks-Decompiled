@@ -958,6 +958,74 @@
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_LEGEND	</glossaryName>
   </component>
+  <component>
+    <componentId>	635	</componentId>
+    <resourceRoot>	#dogtags:component/background/coupled/635	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 5	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	636	</coupledComponentId>
+    <animation>	vehicle_sparks_1	</animation>
+    <glossaryName>	VEHICLE_COUNT_LOW_BACKGROUND	</glossaryName>
+  </component>
+  <component>
+    <componentId>	636	</componentId>
+    <resourceRoot>	#dogtags:component/engraving/coupled/636	</resourceRoot>
+    <viewType>	engraving	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 5	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	635	</coupledComponentId>
+    <animation>	vehicle_sparks_1	</animation>
+    <glossaryName>	VEHICLE_COUNT_LOW_ENGRAVING	</glossaryName>
+  </component>
+  <component>
+    <componentId>	637	</componentId>
+    <resourceRoot>	#dogtags:component/background/coupled/637	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 8	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	638	</coupledComponentId>
+    <animation>	vehicle_sparks_2	</animation>
+    <glossaryName>	VEHICLE_COUNT_MID_BACKGROUND	</glossaryName>
+  </component>
+  <component>
+    <componentId>	638	</componentId>
+    <resourceRoot>	#dogtags:component/engraving/coupled/638	</resourceRoot>
+    <viewType>	engraving	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 8	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	637	</coupledComponentId>
+    <animation>	vehicle_sparks_2	</animation>
+    <glossaryName>	VEHICLE_COUNT_MID_ENGRAVING	</glossaryName>
+  </component>
+  <component>
+    <componentId>	639	</componentId>
+    <resourceRoot>	#dogtags:component/background/coupled/639	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 11	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	640	</coupledComponentId>
+    <animation>	vehicle_sparks_3	</animation>
+    <isShowInPrebattle>	true	</isShowInPrebattle>
+    <glossaryName>	VEHICLE_COUNT_MAX_BACKGROUND	</glossaryName>
+  </component>
+  <component>
+    <componentId>	640	</componentId>
+    <resourceRoot>	#dogtags:component/engraving/coupled/640	</resourceRoot>
+    <viewType>	engraving	</viewType>
+    <purpose>	COUPLED	</purpose>
+    <unlockKey>	vehicleAchievements 359 11	</unlockKey>
+    <progressKey>	stats_api.advancedAchievementsTotalVehiclesProgress	</progressKey>
+    <coupledComponentId>	639	</coupledComponentId>
+    <animation>	vehicle_sparks_3	</animation>
+    <isShowInPrebattle>	true	</isShowInPrebattle>
+    <glossaryName>	VEHICLE_COUNT_MAX_ENGRAVING	</glossaryName>
+  </component>
   <startingComponents>
     <components>	66 300	</components>
   </startingComponents>

@@ -13,6 +13,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, TIMER_VIEW_S
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from gui.battle_control.battle_constants import DestroyTimerViewState, DeathZoneTimerViewState
@@ -232,6 +233,43 @@ class StaticDeathZoneSN(_DestroyTimerSN):
 
     def _getSupportedLevel(self):
         return None
+
+
+class PersonalDeathZoneSN(TimerSN):
+
+    def __init__(self, updateCallback):
+        super(PersonalDeathZoneSN, self).__init__(updateCallback)
+        self.__callbackDelayer = CallbackDelayer()
+
+    def destroy(self):
+        self.__callbackDelayer.destroy()
+        super(PersonalDeathZoneSN, self).destroy()
+
+    def getItemID(self):
+        return VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE
+
+    def getViewTypeID(self):
+        return BATTLE_NOTIFICATIONS_TIMER_TYPES.SECTOR_AIRSTRIKE
+
+    def _getDescription(self, value):
+        return backport.text(R.strings.ingame_gui.statusNotificationTimers.staticDeathZone())
+
+    def _update(self, value):
+        self.__callbackDelayer.clearCallbacks()
+        visible, strikeDelay, launchTime = value
+        if visible:
+            finishTime = launchTime + strikeDelay
+            self._updateTimeParams(strikeDelay, finishTime)
+            if strikeDelay > 0:
+                self.__callbackDelayer.delayCallback(finishTime - BigWorld.serverTime(), self.__hideTimer)
+            self._isVisible = True
+            self._sendUpdate()
+            return
+        self._setVisible(False)
+
+    def __hideTimer(self):
+        params = (self._isVisible, 0, 0)
+        self._update(params)
 
 
 class DeathZoneDamagingSN(_DeathZoneSN):

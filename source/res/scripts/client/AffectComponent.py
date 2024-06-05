@@ -5,7 +5,6 @@ import BigWorld
 import CGF
 import GenericComponents
 from skeletons.gui.battle_session import IBattleSessionProvider
-from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
 from helpers import dependency
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
@@ -20,7 +19,7 @@ _ZONE_DEACTIVATE_EVENT_ = {_HEAL_OVER_TIME_ZONE_: BREvents.REPAIR_POINT_EXIT,
  _DAMAGE_OVER_TIME_ZONE_: BREvents.TRAP_POINT_EXIT,
  _FIRE_CIRCLE_ZONE_: BREvents.BR_FIRE_CIRCLE_LEFT}
 
-class AffectComponent(IVehicleCountListener):
+class AffectComponent(object):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, gameObject, zoneType, isPlayerVehicle, spaceID, hasDebuff, vehicleID=None):
@@ -39,27 +38,21 @@ class AffectComponent(IVehicleCountListener):
         if self.__isPlayerVehicle:
             self._activateSoundEvent()
         self._createParticles()
-        ctrl = self.__guiSessionProvider.dynamic.vehicleCount
-        if ctrl:
-            ctrl.addRuntimeView(self)
         self.__guiSessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
+        arenaSubscription = self.__guiSessionProvider.arenaVisitor.getArenaSubscription()
+        if arenaSubscription is not None:
+            arenaSubscription.onVehicleKilled += self._onVehicleKilled
+        return
 
     def deactivate(self):
         self._deactivateSoundEvent()
         self._removeParticles()
         self.__ownVehicleID = None
-        ctrl = self.__guiSessionProvider.dynamic.vehicleCount
-        if ctrl:
-            ctrl.removeRuntimeView(self)
         self.__guiSessionProvider.onUpdateObservedVehicleData -= self._onUpdateObservedVehicleData
+        arenaSubscription = self.__guiSessionProvider.arenaVisitor.getArenaSubscription()
+        if arenaSubscription is not None:
+            arenaSubscription.onVehicleKilled -= self._onVehicleKilled
         return
-
-    def setPlayerVehicleAlive(self, isAlive):
-        if not isAlive and BigWorld.player().isObserver():
-            attachedVehicle = BigWorld.player().getVehicleAttached()
-            isAlive = attachedVehicle.isAlive() if attachedVehicle else isAlive
-        if not isAlive and self.__soundPlaying:
-            self._deactivateSoundEvent()
 
     def _createParticles(self):
         if self.__vehicleEffectConfig is not None:
@@ -103,6 +96,11 @@ class AffectComponent(IVehicleCountListener):
         if vehicleID == self.__ownVehicleID:
             self._activateSoundEvent()
         else:
+            self._deactivateSoundEvent()
+
+    def _onVehicleKilled(self, targetID, *_):
+        if targetID == self.__ownVehicleID:
+            self._removeParticles()
             self._deactivateSoundEvent()
 
 

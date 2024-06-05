@@ -38,6 +38,7 @@
     <_130mm_vz_54_2A_CN>	36	</_130mm_vz_54_2A_CN>
     <_24_mm_Panzerwagen_Kanone_1938>	39	</_24_mm_Panzerwagen_Kanone_1938>
     <_130mm_59-130T_56G>	41	</_130mm_59-130T_56G>
+    <_122mm_vz_122_L52>	47	</_122mm_vz_122_L52>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -1927,6 +1928,64 @@
         </_122mm_Narazovy_vz_48>
       </shots>
     </_122mm_vz_44_51_2A>
+    <_122mm_vz_122_L52>
+      <userString>	#czech_vehicles:_122mm_vz_122_L52	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	13	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.4	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.43	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_Prurazny_vz_52>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1040	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	257 237	</piercingPower>
+        </_122mm_Prurazny_vz_52>
+        <_122mm_Prurazny_vz_52_s_oc_jadrem>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1270	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	325 297	</piercingPower>
+        </_122mm_Prurazny_vz_52_s_oc_jadrem>
+        <_122mm_Narazovy_vz_52>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1040	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_122mm_Narazovy_vz_52>
+      </shots>
+    </_122mm_vz_122_L52>
     <_130mm_Skoda_R_14>
       <userString>	#czech_vehicles:_130mm_Skoda_R_14	</userString>
       <tags></tags>

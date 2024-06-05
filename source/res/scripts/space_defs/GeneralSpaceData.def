@@ -17,17 +17,15 @@
     <isRecording>
       <Type>	STRING	</Type>
     </isRecording>
-    <geometryLoaded>
-      <Type>	BOOL	</Type>
-    </geometryLoaded>
-    <weather>
-      <Type>	STRING	</Type>
-      <Exposed></Exposed>
-    </weather>
     <itemsVisibilityMask>
       <Type>	UINT32	</Type>
       <Exposed></Exposed>
       <ExposedForReplay>	true	</ExposedForReplay>
     </itemsVisibilityMask>
+    <environment>
+      <Type>	STRING	</Type>
+      <Exposed></Exposed>
+      <ExposedForReplay>	true	</ExposedForReplay>
+    </environment>
   </Properties>
 </GeneralSpaceData.def>

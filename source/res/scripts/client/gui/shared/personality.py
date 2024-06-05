@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/personality.py
 import logging
 import time
+from functools import partial
 import typing
 import weakref
 import BigWorld
@@ -103,43 +104,33 @@ class ServicesLocator(object):
         cls.clear()
 
 
-@future_async.wg_async
 def onAccountShowGUI(ctx):
     g_playerEvents.onLoadingMilestoneReached(Milestones.ENTER)
-    Waiting.show('enter')
-    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
-    for func in [__runUiLogging,
-     __runItemsCacheSync,
-     __validateInventoryVehicles,
-     __validateInventoryOutfit,
-     __validateInventoryTankmen,
-     __cacheVehicles,
-     __runQuestSync,
-     __runSettingsSync,
-     __processEULA,
-     __notifyOnSyncComplete,
-     __requestDossier,
-     __initializeHangarSpace,
-     __initializeHangar,
-     __processWebCtrl,
-     __processElen]:
-        try:
-            if BigWorld.player():
-                ts = time.time()
-                result = yield future_async.await_callback(func)(ctx)
-                te = time.time()
-                rt = te - ts
-                _logger.info('%s elapsed time: %s sec', func.__name__, rt)
-                if not result:
-                    break
-                yield future_async.resignTickIfRequired(0.0)
-            else:
-                _logger.warn('onAccountShowGUI(): %s has been called for an already deleted PlayerAccount object.', func.__name__)
-                break
-        except future_async.BrokenPromiseError:
-            _logger.debug('%s has been destroyed without user decision', func.__name__)
-            break
+    skippedHangar = ctx.get('skipHangar', False)
+    if skippedHangar:
+        __runComponentsSync(ctx, [partial(__processWebCtrl, force=False, skipLogin=True),
+         partial(__runUiLogging, ensureSession=True),
+         __runItemsCacheSync,
+         __runSettingsSync])
+    else:
+        Waiting.show('enter')
+        ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
+        __runComponentsSync(ctx, [__runUiLogging,
+         __runItemsCacheSync,
+         __validateInventoryVehicles,
+         __validateInventoryOutfit,
+         __validateInventoryTankmen,
+         __cacheVehicles,
+         __runQuestSync,
+         __runSettingsSync,
+         __processEULA,
+         __notifyOnSyncComplete,
+         __requestDossier,
+         __initializeHangarSpace,
+         __initializeHangar,
+         __processWebCtrl,
+         __processElen])
 
 
 def onAccountBecomeNonPlayer():
@@ -168,7 +159,7 @@ def onServerReplayExiting():
 def onAvatarBecomePlayer():
     ServicesLocator.battleResults.clear()
     yield ServicesLocator.settingsCache.update()
-    ServicesLocator.settingsCore.serverSettings.applySettings()
+    yield ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
     ServicesLocator.webCtrl.stop(logout=False)
     ServicesLocator.eventsCache.stop()
@@ -251,6 +242,7 @@ def init():
     global onServerReplayExiting
     global onKickedFromServer
     global onServerReplayEntering
+    global onAvatarBecomeNonPlayer
     global onShopResync
     miniclient.configure_state()
     ServicesLocator.connectionMgr.onKickedFromServer += onKickedFromServer
@@ -371,6 +363,34 @@ def onRecreateDevice():
             LOG_CURRENT_EXCEPTION()
 
 
+@future_async.wg_async
+def __runComponentsSync(ctx, funcs):
+    success = True
+    for func in funcs:
+        funcName = func.func.__name__ if hasattr(func, 'func') else func.__name__
+        try:
+            if BigWorld.player():
+                ts = time.time()
+                result = yield future_async.await_callback(func)(ctx)
+                te = time.time()
+                rt = te - ts
+                _logger.info('%s elapsed time: %s sec', funcName, rt)
+                if not result:
+                    success = False
+                    break
+                yield future_async.resignTickIfRequired(0.0)
+            else:
+                _logger.warn('__runCacheSync(): %s has been called for an already deleted PlayerAccount object.', funcName)
+                success = False
+                break
+        except future_async.BrokenPromiseError:
+            _logger.debug('%s has been destroyed without user decision', funcName)
+            success = False
+            break
+
+    g_playerEvents.onAccountComponentsSynced(ctx, success)
+
+
 @adisp_process
 def __runItemsCacheSync(_, callback=None):
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
@@ -393,7 +413,7 @@ def __runQuestSync(_, callback=None):
 def __runSettingsSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
-    ServicesLocator.settingsCore.serverSettings.applySettings()
+    yield ServicesLocator.settingsCore.serverSettings.applySettings()
     callback(True)
 
 
@@ -479,16 +499,16 @@ def __initializeHangar(ctx=None, callback=None):
 
 
 @adisp_process
-def __processWebCtrl(_, callback=None):
+def __processWebCtrl(_, force=True, skipLogin=False, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
-    ServicesLocator.webCtrl.start()
-    if serverSettings.wgcg.getLoginOnStart():
+    ServicesLocator.webCtrl.start(force=force)
+    if not skipLogin and serverSettings.wgcg.getLoginOnStart():
         yield ServicesLocator.webCtrl.login()
     callback(True)
 
 
-def __runUiLogging(_, callback=None):
-    ServicesLocator.uiLoggingCore.start()
+def __runUiLogging(_, ensureSession=False, callback=None):
+    ServicesLocator.uiLoggingCore.start(ensureSession=ensureSession)
     ServicesLocator.uiLoggingCore.send()
     modsStatisticLogger = ModsStatisticLogger()
     modsStatisticLogger.log()

@@ -33,7 +33,7 @@ class BaseViewTimerState(BaseTimerState):
 
     def _updateView(self):
         serverSettings, clientSettings = self.getSettings()
-        self._view.updateTitle(serverSettings.id, clientSettings.header, serverSettings.params)
+        self._view.updateTitle(serverSettings.id, clientSettings.getHeader(serverSettings.params))
         self._view.updateProgress(serverSettings.id, serverSettings.progress)
 
 

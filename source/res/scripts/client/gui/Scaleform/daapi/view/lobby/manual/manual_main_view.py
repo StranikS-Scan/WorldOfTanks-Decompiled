@@ -48,6 +48,7 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
         chapters = self.addCounter(self.chaptersUIData)
         self.as_setChaptersS(chapters)
         self.as_setPageBackgroundS(RES_ICONS.MAPS_ICONS_MANUAL_MAINPAGE_BACKGROUND)
+        self.as_setDescrLabelBackBtnS(self.manualController.getDescrLabelBackBtn())
         self.__updateButtons()
         self.addListener(events.ManualEvent.CHAPTER_OPENED, self.__onChapterOpened, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.ManualEvent.CHAPTER_CLOSED, self.__onChapterClosed, EVENT_BUS_SCOPE.LOBBY)

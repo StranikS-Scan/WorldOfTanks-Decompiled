@@ -5,7 +5,6 @@
 class CREW_OPERATIONS(object):
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP = '#crew_operations:return/warning/membersInBattle/tooltip'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP = '#crew_operations:return/warning/memberDemobilized/tooltip'
-    RETURN_WARNING_NOSPACE_TOOLTIP = '#crew_operations:return/warning/noSpace/tooltip'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP = '#crew_operations:dropInBarrack/warning/noSpace/tooltip'
     DROPINBARRACK_WARNING_INBATTLE_TOOLTIP = '#crew_operations:dropInBarrack/warning/inBattle/tooltip'
     DROPINBARRACK_WARNING_CREWISLOCKED_TOOLTIP = '#crew_operations:dropInBarrack/warning/crewIsLocked/tooltip'
@@ -28,8 +27,6 @@ class CREW_OPERATIONS(object):
     RETURN_ERROR_VEHICLEINBATTLE = '#crew_operations:return/error/vehicleInBattle'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP_HEADER = '#crew_operations:return/warning/memberDemobilized/tooltip/header'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP_BODY = '#crew_operations:return/warning/memberDemobilized/tooltip/body'
-    RETURN_WARNING_NOSPACE_TOOLTIP_HEADER = '#crew_operations:return/warning/noSpace/tooltip/header'
-    RETURN_WARNING_NOSPACE_TOOLTIP_BODY = '#crew_operations:return/warning/noSpace/tooltip/body'
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP_HEADER = '#crew_operations:return/warning/membersInBattle/tooltip/header'
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP_BODY = '#crew_operations:return/warning/membersInBattle/tooltip/body'
     DROPINBARRACK_TITLE = '#crew_operations:dropInBarrack/title'

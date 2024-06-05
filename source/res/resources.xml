@@ -186,16 +186,23 @@
       <module>	client.cgf_components.on_shot_components	</module>
       <module>	client.cgf_components.on_death_components	</module>
       <module>	client.cgf_components.shot_color_transmission_component	</module>
+      <module>	client.cgf_components.bunkers	</module>
       <module>	common.cgf_components_common.shots_receiver	</module>
       <module>	common.cgf_components_common.state_components	</module>
       <module>	common.cgf_components_common.vehicle_components	</module>
       <module>	common.cgf_components_common.scenario.sequence_network_sync	</module>
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
+      <module>	common.cgf_components_common.bunkers	</module>
       <module>	cell.cgf_cell.damage.shot_damage	</module>
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>
       <module>	cell.cgf_cell.cgf_loggers	</module>
+      <module>	cell.cgf_cell.damage_on_collision_manager	</module>
+      <module>	cell.cgf_cell.heightmap_patch_manager	</module>
+      <module>	cell.cgf_cell.static_obstacle_manager	</module>
+      <module>	cell.cgf_cell.vehicle_destroying_manager	</module>
+      <module>	cell.cgf_cell.bunkers	</module>
       <module>	editor.cgf_editor.entity_follower	</module>
       <module>	client.cgf_components.visual_effect_component_manager	</module>
     </script>

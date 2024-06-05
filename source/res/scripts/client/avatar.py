@@ -1251,7 +1251,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         vehicle.set_health(prevHealth)
             if not isAlive and wasAlive or not isAlive and wasRespawnAvailable and not isRespawn:
                 vehicle = BigWorld.entities.get(self.playerVehicleID)
-                noRespawnPossible = not (self.respawnEnabled or bool(vehicle.enableExternalRespawn))
+                isManualRespawnEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
+                noRespawnPossible = not (self.respawnEnabled or bool(vehicle.enableExternalRespawn) or isManualRespawnEnabled)
                 self.guiSessionProvider.switchToPostmortem(noRespawnPossible, isRespawn)
             return
 
@@ -1512,8 +1513,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             value = DeathZoneTimerViewState(zoneID, isCausingDamage, time, state, finishTime, entered)
         self.guiSessionProvider.invalidateVehicleState(timer, value)
 
-    def updatePersonalDeathZoneWarningNotification(self, enable, time):
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, (enable, time))
+    def updatePersonalDeathZoneWarningNotification(self, visible, strikeDelay, launchTime):
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, (visible, strikeDelay, launchTime))
 
     def updateDeathZoneWarningNotification(self, enable, playerEntering, strikeTime, waveDuration):
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE, (enable,
@@ -2680,7 +2681,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'TANKMAN_HIT_AT_WORLD_COLLISION',
      'TANKMAN_HIT_AT_DROWNING',
      'ENGINE_DESTROYED_AT_UNLIMITED_RPM',
-     'ENGINE_DESTROYED_AT_BURNOUT')
+     'ENGINE_DESTROYED_AT_BURNOUT',
+     'DEVICE_DESTROYED_AT_MINEFIELD_ZONE')
     __damageInfoHealings = ('DEVICE_REPAIRED', 'TANKMAN_RESTORED', 'FIRE_STOPPED')
     __damageInfoNoNotification = ('DEVICE_CRITICAL',
      'DEVICE_DESTROYED',

@@ -8,7 +8,7 @@ from enum import Enum
 import nations
 from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, FinalReward, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
+from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
@@ -32,7 +32,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
-    from typing import Dict, List
+    from typing import Any, Dict, List, Set
     from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
     from gui.server_events.bonuses import TmanTemplateTokensBonus
     from gui.shared.gui_items.customization.c11n_items import Customization
@@ -109,6 +109,43 @@ def getIntroSlidesNames():
     return GUI_SETTINGS.battlePassIntroSlides
 
 
+def getSeasonVisualSettings():
+    if 'season' not in GUI_SETTINGS.battlePassVisuals:
+        _logger.warning('"season" section is missing in "battlePassVisuals" settings')
+        return {}
+    return GUI_SETTINGS.battlePassVisuals['season']
+
+
+def isSeasonWithAdditionalBackground():
+    hasAdditionalBackground = getSeasonVisualSettings().get('hasAdditionalBackground')
+    if hasAdditionalBackground is None:
+        _logger.warning('"hasAdditionalBackground" section is missing in "battlePassVisuals->season" settings')
+        return False
+    else:
+        return hasAdditionalBackground
+
+
+def isSeasonWithSpecialTankmenScreen():
+    hasSpecialTankmenScreen = getSeasonVisualSettings().get('hasSpecialTankmenScreen')
+    if hasSpecialTankmenScreen is None:
+        _logger.warning('"hasSpecialTankmenScreen" section is missing in "battlePassVisuals->season" settings')
+        return False
+    else:
+        return hasSpecialTankmenScreen
+
+
+def chaptersWithLogoBg():
+    if 'chapter' not in GUI_SETTINGS.battlePassVisuals:
+        _logger.warning('"chapter" section is missing in "battlePassVisuals" settings')
+        return set()
+    else:
+        chaptersInfo = GUI_SETTINGS.battlePassVisuals['chapter'].get('hasChapterLogoInBg')
+        if chaptersInfo is None:
+            _logger.warning('"hasChapterLogoInBg" section is missed in battlePassVisuals->chapter settings')
+            return set()
+        return {int(chapterID) for chapterID, hasLogo in chaptersInfo.iteritems() if hasLogo}
+
+
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def getChaptersNumbers(battlePass=None):
     return {chapterID:chapterNum for chapterNum, chapterID in enumerate(sorted(battlePass.getChapterIDs()), 1)}
@@ -181,12 +218,6 @@ def showBPFullscreenVideo(videoName, audioName, onVideoClosed=None):
     from gui.impl.lobby.battle_pass.fullscreen_video_view import FullscreenVideoWindow
     window = FullscreenVideoWindow(videoName, audioName, onVideoClosed=onVideoClosed)
     window.load()
-
-
-@replace_none_kwargs(battlePass=IBattlePassController)
-def isCommonBattlePassChapter(chapterID, battlePass=None):
-    isProgressiveStyle = FinalReward.PROGRESSIVE_STYLE in battlePass.getFreeFinalRewardTypes(chapterID)
-    return isProgressiveStyle and not battlePass.getPaidFinalRewardTypes(chapterID)
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
@@ -342,6 +373,16 @@ def fillBattlePassCompoundPrice(compoundPriceModel, compoundPrice):
 
 def getCompoundPriceDefaultID(compoundPrice):
     return next((priceID for currency in _BATTLE_PASS_PRICE_CURRENCY_PRIORITY for priceID, priceData in compoundPrice.iteritems() if currency in priceData and priceData[currency]))
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getFinalTankmen(chapterID, awardType, battlePass=None):
+    maxLevel = battlePass.getMaxLevelInChapter(chapterID)
+    rewards = battlePass.getSingleAward(chapterID, maxLevel, awardType=awardType)
+    characterBonuses = [ reward for reward in rewards if reward.getName() == TANKMAN_BONUS_NAME ]
+    if not characterBonuses:
+        _logger.warning('%s chapter does not have tankman at final level!', chapterID)
+    return [ getTankmanInfo(bonus) for bonus in characterBonuses ]
 
 
 @replace_none_kwargs(settingsCore=ISettingsCore, battlePass=IBattlePassController)

@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class DogTagModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(DogTagModel, self).__init__(properties=properties, commands=commands)
 
     def getEngravingCompId(self):
@@ -44,6 +44,18 @@ class DogTagModel(ViewModel):
     def setEngraving(self, value):
         self._setString(5, value)
 
+    def getPurpose(self):
+        return self._getString(6)
+
+    def setPurpose(self, value):
+        self._setString(6, value)
+
+    def getAnimation(self):
+        return self._getString(7)
+
+    def setAnimation(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(DogTagModel, self)._initialize()
         self._addNumberProperty('engravingCompId', 0)
@@ -52,3 +64,5 @@ class DogTagModel(ViewModel):
         self._addBoolProperty('isHighlighted', False)
         self._addStringProperty('background', '')
         self._addStringProperty('engraving', '')
+        self._addStringProperty('purpose', '')
+        self._addStringProperty('animation', '')

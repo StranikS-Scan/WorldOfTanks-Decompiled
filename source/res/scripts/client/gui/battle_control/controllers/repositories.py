@@ -404,7 +404,7 @@ class SharedControllersRepository(_ControllersRepository):
         state = vehicle_state_ctrl.createCtrl(setup)
         repository.addController(state)
         repository.addController(avatar_stats_ctrl.AvatarStatsController())
-        messages = msgs_ctrl.createBattleMessagesCtrl(setup)
+        messages = cls.getMessagesController(setup)
         feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         repository.addController(feedback)
         repository.addController(messages)
@@ -428,13 +428,21 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
         repository.addViewController(callout_ctrl.createCalloutController(setup), setup)
         repository.addViewController(spectator_ctrl.SpectatorViewController(), setup)
-        from gui.battle_control.controllers import area_marker_ctrl
-        repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
+        repository.addArenaController(cls.getAreaMarkersController(), setup)
         repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
         repository.addController(ingame_help_ctrl.IngameHelpController(setup))
         repository.addController(map_zones_ctrl.MapZonesController(setup))
         repository.addController(aiming_sounds_ctrl.AimingSoundsCtrl())
         return repository
+
+    @classmethod
+    def getMessagesController(cls, setup):
+        return msgs_ctrl.createBattleMessagesCtrl(setup)
+
+    @classmethod
+    def getAreaMarkersController(cls):
+        from gui.battle_control.controllers import area_marker_ctrl
+        return area_marker_ctrl.AreaMarkersController()
 
 
 class _ControllersRepositoryByBonuses(_ControllersRepository):

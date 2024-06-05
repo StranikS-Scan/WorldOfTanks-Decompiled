@@ -364,22 +364,6 @@ class VehicleSellsLeftValidator(SyncValidator):
         return makeError('vehicle_sell_limit') if self.itemsCache.items.stats.vehicleSellsLeft <= 0 else makeSuccess()
 
 
-class BarracksSlotsValidator(SyncValidator):
-
-    def __init__(self, berthsNeeded=1, isEnabled=True, addWarning=False):
-        super(BarracksSlotsValidator, self).__init__(isEnabled)
-        self.berthsNeeded = berthsNeeded
-        self.addWarning = addWarning
-
-    def _validate(self):
-        if 0 < self.berthsNeeded > self.itemsCache.items.freeTankmenBerthsCount():
-            if self.addWarning:
-                showWarning(text='', type=SM_TYPE.NotEnoughBerthWarning)
-            else:
-                return makeError('not_enough_space')
-        return makeSuccess()
-
-
 class FreeTankmanValidator(SyncValidator):
 
     def _validate(self):

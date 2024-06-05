@@ -31,7 +31,7 @@ class OverrideSettingsController(IOverrideSettingsController):
         if self.settingsCache.settings.isSynced():
             self.__onSettingsReady()
         else:
-            self.settingsCache.onSyncCompleted += self.__onSettingsReady
+            self.settingsCore.onSettingsChanged += self.__onSettingsReady
 
     def stopControl(self):
         self.settingsCache.onSyncCompleted -= self.__onSettingsReady
@@ -40,8 +40,10 @@ class OverrideSettingsController(IOverrideSettingsController):
     def getControllerID(self):
         return BATTLE_CTRL_ID.OVERRIDE_SETTINGS
 
-    def __onSettingsReady(self):
-        self.settingsCache.onSyncCompleted -= self.__onSettingsReady
+    def __onSettingsReady(self, *_):
+        if not self.settingsCache.getVersion():
+            return
+        self.settingsCore.onSettingsChanged -= self.__onSettingsReady
         settings = {}
         storages = set()
         for control in self._data.overrides:

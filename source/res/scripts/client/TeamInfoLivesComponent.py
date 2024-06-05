@@ -6,7 +6,14 @@ from helpers import isPlayerAvatar
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 
 class TeamInfoLivesComponent(DynamicScriptComponent):
-    onTeamLivesUpdated = Event.Event()
+
+    def __init__(self, *_, **__):
+        super(TeamInfoLivesComponent, self).__init__(*_, **__)
+        self.onTeamLivesUpdated = Event.SafeEvent()
+
+    def onDestroy(self):
+        self.onTeamLivesUpdated.clear()
+        super(TeamInfoLivesComponent, self).onDestroy()
 
     def _onAvatarReady(self):
         self.onTeamLivesUpdated()

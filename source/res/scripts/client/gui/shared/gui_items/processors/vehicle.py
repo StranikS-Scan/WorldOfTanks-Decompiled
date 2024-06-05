@@ -17,7 +17,6 @@ from gui.shared.formatters import formatPrice, text_styles, getStyle, getBWForma
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getCrewCount
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
@@ -221,12 +220,7 @@ class VehicleTradeInProcessorBase(VehicleBuyer):
         super(VehicleTradeInProcessorBase, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        nationGroupVehs = self.itemToTradeOff.getAllNationGroupVehs(self.itemsCache.items)
-        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
-        return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True),
-         proc_plugs.VehicleSellValidator(self.itemToTradeOff),
-         proc_plugs.MoneyValidator(self.price),
-         proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded))
+        return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True), proc_plugs.VehicleSellValidator(self.itemToTradeOff), proc_plugs.MoneyValidator(self.price))
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(sysMsgKey='vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())

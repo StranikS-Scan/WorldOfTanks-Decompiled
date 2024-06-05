@@ -15,3 +15,4 @@ class BATTLE_MARKERS_CONSTS(object):
     COLOR_GREEN = 'green'
     COLOR_YELLOW = 'yellow'
     COLOR_RED = 'red'
+    COLORS = [COLOR_GREEN, COLOR_YELLOW, COLOR_RED]

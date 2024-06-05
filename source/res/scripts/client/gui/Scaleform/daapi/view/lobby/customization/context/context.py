@@ -3,7 +3,7 @@
 import logging
 import typing
 import Event
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 import adisp
 from gui import g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
@@ -15,9 +15,10 @@ from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
 from gui.shared.utils.decorators import adisp_process
+from functools import partial
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
-from shared_utils import first
+from shared_utils import first, nextTick
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -88,6 +89,7 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__carouselItems = None
+        self.__initialItemCD = None
         return
 
     @property
@@ -155,7 +157,7 @@ class CustomizationContext(object):
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
 
-    def init(self, season=None, modeId=None, tabId=None):
+    def init(self, season=None, modeId=None, tabId=None, itemCD=None):
         if not g_currentVehicle.isPresent():
             raise SoftException('There is no vehicle in hangar for customization.')
         self._vehicle = g_currentVehicle.item
@@ -170,6 +172,14 @@ class CustomizationContext(object):
         self.__events = _CustomizationEvents()
         self.__vehicleAnchorsUpdater.startUpdater()
         self.__c11nCameraManager.init()
+        if itemCD is not None:
+            if g_currentPreviewVehicle.isPresent():
+                g_currentPreviewVehicle.selectNoVehicle()
+                g_currentPreviewVehicle.onChanged += self.__onPreviewVehicleChanged
+                self.__initialItemCD = itemCD
+            else:
+                self.selectItem(itemCD)
+        return
 
     def fini(self):
         self.__stylesDiffsCache.fini()
@@ -184,6 +194,7 @@ class CustomizationContext(object):
         self._service.onOutfitChanged -= self.__onOutfitChanged
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
+        g_currentPreviewVehicle.onChanged -= self.__onPreviewVehicleChanged
         for mode in self.__modes.itervalues():
             mode.fini()
 
@@ -331,6 +342,12 @@ class CustomizationContext(object):
 
             self.refreshOutfit()
             return
+
+    def __onPreviewVehicleChanged(self):
+        nextTick(partial(self.selectItem, self.__initialItemCD))()
+        self.__initialItemCD = None
+        g_currentPreviewVehicle.onChanged -= self.__onPreviewVehicleChanged
+        return
 
     def __onVehicleChangeStarted(self):
         if self._vehicle is None or not g_currentVehicle.isPresent():

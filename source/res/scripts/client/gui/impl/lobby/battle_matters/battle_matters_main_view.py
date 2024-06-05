@@ -39,6 +39,7 @@ from skeletons.gui.game_control import IManualController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.locale.MENU import MENU
 if typing.TYPE_CHECKING:
     from typing import List, Union
     from gui.impl.gen.view_models.views.lobby.battle_matters.quest_progress_model import QuestProgressModel
@@ -322,14 +323,14 @@ class BattleMattersMainView(ViewImpl):
         return quest.isCompleted() or self.__compensationQuestsStatus.get(quest.getOrder(), False)
 
     def __onShowManual(self):
-        self.__manualController.show(backCallback=showBattleMatters)
+        self.__manualController.show(backCallback=showBattleMatters, descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
 
     def __onShowManualForQuest(self, args):
         questID = args.get(BattleMattersMainViewModel.ARG_QUEST_ID)
         if questID is not None:
             lessonID = self.__questCardsDescriptions.get(questID, {}).get(QuestCardSections.LESSON_ID)
             if lessonID is not None:
-                self.__manualController.show(lessonID, backCallback=showBattleMatters)
+                self.__manualController.show(lessonID, backCallback=showBattleMatters, descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
             else:
                 _logger.warning('Quest id=%s does not have lessonId for manual', questID)
         else:

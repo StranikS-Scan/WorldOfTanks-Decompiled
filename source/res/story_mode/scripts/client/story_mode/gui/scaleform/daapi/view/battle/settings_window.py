@@ -10,7 +10,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import WindowLogger
 
-class StoryModeSettingsWindow(SettingsWindow):
+class OnboardingSettingsWindow(SettingsWindow):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _TAB_NAME_TO_INDEX = {SETTINGS_GROUP.GAME_SETTINGS: SettingsTabIndex.GAME,
      SETTINGS_GROUP.GRAPHICS_SETTINGS: SettingsTabIndex.GRAPHICS,
@@ -21,7 +21,7 @@ class StoryModeSettingsWindow(SettingsWindow):
      SETTINGS_GROUP.FEEDBACK_SETTINGS: SettingsTabIndex.FEEDBACK}
 
     def __init__(self):
-        super(StoryModeSettingsWindow, self).__init__(ctx={'redefinedKeyMode': True,
+        super(OnboardingSettingsWindow, self).__init__(ctx={'redefinedKeyMode': True,
          'isBattleSettings': True,
          'tabIndex': self.sessionProvider.dynamic.overrideSettingsController.defaultTab})
         self._uiLogger = WindowLogger(LogWindows.SETTINGS_MENU)
@@ -29,21 +29,21 @@ class StoryModeSettingsWindow(SettingsWindow):
     def as_setCountersDataS(self, countersData):
         disabledTabs = self.sessionProvider.dynamic.overrideSettingsController.disabledTabs
         countersData = [ item for item in countersData if self._TAB_NAME_TO_INDEX[item['tabId']] not in disabledTabs ]
-        super(StoryModeSettingsWindow, self).as_setCountersDataS(countersData)
+        super(OnboardingSettingsWindow, self).as_setCountersDataS(countersData)
 
     def applySettings(self, settings, isCloseWnd):
         self._uiLogger.logClick(LogButtons.OK if isCloseWnd else LogButtons.APPLY)
-        super(StoryModeSettingsWindow, self).applySettings(settings, isCloseWnd)
+        super(OnboardingSettingsWindow, self).applySettings(settings, isCloseWnd)
 
     def onTabSelected(self, tabId):
         self._uiLogger.logClick(button=LogButtons.TAB, state=str(tabId))
-        super(StoryModeSettingsWindow, self).onTabSelected(tabId)
+        super(OnboardingSettingsWindow, self).onTabSelected(tabId)
 
     def _populate(self):
-        super(StoryModeSettingsWindow, self)._populate()
+        super(OnboardingSettingsWindow, self)._populate()
         self.as_setDisabledTabsOverlayS(self.sessionProvider.dynamic.overrideSettingsController.disabledTabs, backport.text(R.strings.sm_battle.settings.disabledTabsOverlay()))
         self._uiLogger.logOpen()
 
     def _dispose(self):
         self._uiLogger.logClose()
-        super(StoryModeSettingsWindow, self)._dispose()
+        super(OnboardingSettingsWindow, self)._dispose()

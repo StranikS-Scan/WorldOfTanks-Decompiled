@@ -5,7 +5,7 @@ from collections import defaultdict
 import typing
 from enum import Enum
 import nations
-from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE, BOT_DISPLAY_STATUS, BOT_DISPLAY_CLASS_NAMES
+from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE, BOT_DISPLAY_STATUS, BOT_DISPLAY_CLASS_NAMES, LocalizableBotName, BotNamingType
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -194,6 +194,13 @@ class PlayerInfoVO(object):
     def isBot(self):
         return not self.avatarSessionID
 
+    @property
+    def isBotWithCustomName(self):
+        if self.isBot:
+            namingType, _ = LocalizableBotName.parse(self.getPlayerFakeLabel())
+            return namingType == BotNamingType.CUSTOM
+        return False
+
     def update(self, invalidate=_INVALIDATE_OP.NONE, name=None, accountDBID=0, avatarSessionID='', clanAbbrev='', isPrebattleCreator=False, igrType=IGR_TYPE.NONE, forbidInBattleInvitations=False, fakeName='', **kwargs):
         if name != self.name:
             self.name = name
@@ -315,7 +322,7 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID', 'teamPanelMode', 'botDisplayStatus')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag', 'prestigeLevel', 'prestigeGradeMarkID', 'teamPanelMode', 'botDisplayStatus', 'dogTagModel')
 
     def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, prestigeLevel=None, prestigeGradeMarkID=None, teamPanelMode=None, botDisplayStatus=BOT_DISPLAY_STATUS.REGULAR, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
@@ -336,7 +343,7 @@ class VehicleArenaInfoVO(object):
         self.overriddenBadge = overriddenBadge
         self.badges = badges or ((), ())
         self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges[0])
-        self.dogTag = None
+        self.dogTagModel = None
         self.prestigeLevel = prestigeLevel
         self.prestigeGradeMarkID = prestigeGradeMarkID
         self.teamPanelMode = teamPanelMode
@@ -344,7 +351,7 @@ class VehicleArenaInfoVO(object):
         return
 
     def __repr__(self):
-        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s}), dogTag={7!r:s}'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID, self.dogTag)
+        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s}), dogTagModel={7!r:s}'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID, self.dogTagModel)
 
     def __eq__(self, other):
         return self.vehicleID == other.vehicleID
@@ -437,7 +444,7 @@ class VehicleArenaInfoVO(object):
 
     def updateVehicleDogTag(self, invalidate=_INVALIDATE_OP.NONE, dogTag=None, **kwargs):
         if dogTag:
-            self.dogTag = layoutComposer.getModelFromDict(dogTag)
+            self.dogTagModel = layoutComposer.getModelFromDict(dogTag)
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATUS)
         return invalidate
 
@@ -545,7 +552,12 @@ class VehicleArenaInfoVO(object):
     def getDisplayedName(self, name=None):
         if name is None:
             name = self.vehicleType.shortNameWithPrefix
-        return self._applyBotName(name) if self.player.isBot else name
+        if self.player.isBot:
+            if self.player.isBotWithCustomName:
+                return self.player.getPlayerLabel()
+            return self._applyBotName(name)
+        else:
+            return name
 
     def getDisplayedClassTag(self):
         defaultClassTag = self.vehicleType.getClassName()

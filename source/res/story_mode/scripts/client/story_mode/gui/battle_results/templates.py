@@ -3,7 +3,7 @@
 from gui.battle_results.components import base
 from gui.battle_results.components.common import ArenaDurationItem, ArenaDateTimeItem
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
-from story_mode.gui.battle_results.components import FinishResultItem, FinishReasonItem, MissionIdItem, VehicleNameItem, VehicleBlock, IsForceOnboardingItem
+from story_mode.gui.battle_results.components import FinishResultItem, FinishReasonItem, MissionIdItem, VehicleNameItem, VehicleBlock, IsForceOnboardingItem, RewardsBlock, ProgressionInfoItem
 _STORY_MODE_VO_META = base.DictMeta({'finishResult': '',
  'finishReason': None,
  'missionId': 1,
@@ -11,7 +11,9 @@ _STORY_MODE_VO_META = base.DictMeta({'finishResult': '',
  'arenaDuration': '',
  'arenaDateTime': '',
  'vehicleName': '',
- 'vehicle': {}})
+ 'vehicle': {},
+ 'rewards': {},
+ 'progressionInfo': {}})
 _VEHICLE_VO_META = base.DictMeta({'deathReason': -1,
  'damageDealt': 0,
  'kills': 0,
@@ -26,3 +28,5 @@ STORY_MODE_RESULTS_BLOCK.addNextComponent(ArenaDurationItem('arenaDuration', _RE
 STORY_MODE_RESULTS_BLOCK.addNextComponent(ArenaDateTimeItem('arenaDateTime', _RECORD.COMMON, 'arenaCreateTime'))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(VehicleNameItem('vehicleName'))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(VehicleBlock(_VEHICLE_VO_META, 'vehicle'))
+STORY_MODE_RESULTS_BLOCK.addNextComponent(RewardsBlock(base.ListMeta(), 'rewards'))
+STORY_MODE_RESULTS_BLOCK.addNextComponent(ProgressionInfoItem('progressionInfo', _RECORD.PERSONAL))

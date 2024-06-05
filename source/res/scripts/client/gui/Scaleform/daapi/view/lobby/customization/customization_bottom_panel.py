@@ -216,7 +216,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__updatePopoverBtnIcon()
         self.__updateFilterMessage()
 
-    def __onSlotUnselected(self):
+    def __onSlotUnselected(self, _):
         if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             prevSelected = self._selectedItem
             self.__rebuildCarousel()

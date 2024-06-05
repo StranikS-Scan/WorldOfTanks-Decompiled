@@ -12,6 +12,7 @@ from gui.app_loader import settings as app_settings
 from gui.impl.lobby.battle_pass.battle_pass_view import BattlePassViewsHolderComponent
 from gui.impl.lobby.mapbox.mapbox_progression_view import MapboxProgressionsComponent
 from gui.impl.lobby.battle_matters.battle_matters_main_view import BattleMattersMissionComponent
+from gui.impl.lobby.live_ops_web_events.browser_view import LiveOpsWebEventsInjectView
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -45,6 +46,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS, LiveOpsWebEventsInjectView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassViewsHolderComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, BattleMattersMissionComponent, ScopeTemplates.VIEW_SCOPE),

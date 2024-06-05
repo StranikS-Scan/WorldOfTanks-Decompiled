@@ -916,7 +916,7 @@ class BattleReplay(object):
                     return
             if forceControlMode is None and not self.isControllingCamera and recordedControlMode in _IGNORED_SWITCHING_CTRL_MODES or recordedControlMode == CTRL_MODE_NAME.MAP_CASE_EPIC:
                 return
-            elif self.__equipmentId is None and recordedControlMode == CTRL_MODE_NAME.MAP_CASE_ARCADE:
+            elif self.__equipmentId is None and recordedControlMode in (CTRL_MODE_NAME.MAP_CASE_ARCADE, CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD):
                 return
             preferredPos = self.getGunRotatorTargetPoint()
             if recordedControlMode == CTRL_MODE_NAME.MAP_CASE:

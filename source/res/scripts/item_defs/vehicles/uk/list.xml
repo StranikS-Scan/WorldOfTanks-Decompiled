@@ -1193,6 +1193,19 @@
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB133_Charioteer_MkVII>
+  <GB136_Churchill_BPXIV>
+    <id>	245	</id>
+    <userString>	#gb_vehicles:GB136_Churchill_BPXIV	</userString>
+    <shortUserString>	#gb_vehicles:GB136_Churchill_BPXIV_short	</shortUserString>
+    <description>	#gb_vehicles:GB136_Churchill_BPXIV_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB136_Churchill_BPXIV_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB136_Churchill_BPXIV_long_special	</longDescriptionSpecial>
+    <price>	3550	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
+    <level>	6	</level>
+  </GB136_Churchill_BPXIV>
   <GB1020_Crusader_NewOnBoarding>
     <id>	400	</id>
     <userString>	#gb_vehicles:GB20_Crusader	</userString>
@@ -1213,4 +1226,17 @@
     <level>	6	</level>
     <notInShop>	True	</notInShop>
   </GB1019_Sherman_Firefly_NewOnBoarding>
+  <GB131_Crusher>
+    <id>	243	</id>
+    <userString>	#gb_vehicles:GB131_Crusher	</userString>
+    <description>	#gb_vehicles:GB131_Crusher_descr	</description>
+    <shortUserString>	#gb_vehicles:GB131_Crusher_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB131_Crusher_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB131_Crusher_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </GB131_Crusher>
 </list.xml>

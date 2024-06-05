@@ -234,7 +234,7 @@ class CustomizationsBuyer(Processor):
         return {'itemType': styleItemType if self.item.itemTypeID == GUI_ITEM_TYPE.STYLE else self.item.userType,
          'itemName': self.item.userName,
          'count': backport.getIntegralFormat(int(self.count)),
-         'money': formatPrice(self._getTotalPrice())}
+         'money': formatPrice(self._getTotalPrice(), useStyle=True)}
 
     def _successHandler(self, code, ctx=None):
         currency = self.item.buyPrices.itemPrice.price.getCurrency(byWeight=True)

@@ -14,21 +14,14 @@ from visual_script.cgf_blocks import CGFMeta
 Vehicle, CGF, tankStructure, RAC, SimulatedVehicle = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle')
 _logger = logging.getLogger(__name__)
 
-class GetEntityGameObject(Block, CGFMeta):
+class CGFClientMeta(CGFMeta):
 
-    def __init__(self, *args, **kwargs):
-        super(GetEntityGameObject, self).__init__(*args, **kwargs)
-        self._entity = self._makeDataInputSlot('entity', SLOT_TYPE.ENTITY)
-        self._gameObject = self._makeDataOutputSlot('gameObject', SLOT_TYPE.GAME_OBJECT, self._exec)
-
-    def _exec(self):
-        entity = self._entity.getValue()
-        gameObject = entity.entityGameObject
-        goWrapper = GameObjectWrapper(gameObject)
-        self._gameObject.setValue(weakref.proxy(goWrapper))
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.HANGAR]
 
 
-class GetVehicleAppearanceGameObject(Block, CGFMeta):
+class GetVehicleAppearanceGameObject(Block, CGFClientMeta):
 
     def __init__(self, *args, **kwargs):
         super(GetVehicleAppearanceGameObject, self).__init__(*args, **kwargs)
@@ -51,7 +44,7 @@ class GetVehicleAppearanceGameObject(Block, CGFMeta):
         return
 
 
-class GetVehicleGameObject(Block, CGFMeta):
+class GetVehicleGameObject(Block, CGFClientMeta):
 
     def __init__(self, *args, **kwargs):
         super(GetVehicleGameObject, self).__init__(*args, **kwargs)
@@ -76,7 +69,7 @@ class GetVehicleGameObject(Block, CGFMeta):
         return
 
 
-class RocketAcceleratorEvents(Block, CGFMeta):
+class RocketAcceleratorEvents(Block, CGFClientMeta):
 
     def __init__(self, *args, **kwargs):
         super(RocketAcceleratorEvents, self).__init__(*args, **kwargs)
@@ -143,7 +136,7 @@ class RocketAcceleratorEvents(Block, CGFMeta):
         return [ASPECT.CLIENT]
 
 
-class RocketAcceleratorSettings(Block, CGFMeta):
+class RocketAcceleratorSettings(Block, CGFClientMeta):
 
     def __init__(self, *args, **kwargs):
         super(RocketAcceleratorSettings, self).__init__(*args, **kwargs)

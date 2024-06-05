@@ -6,22 +6,23 @@ import time
 import weakref
 from collections import defaultdict
 from functools import partial
-from typing import TYPE_CHECKING
 import WWISE
+from adisp import adisp_process
+from shared_utils import first, findFirst
+from typing import TYPE_CHECKING
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters, COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP, COMP7_YEARLY_REWARD_SEEN
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
-from adisp import adisp_process
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from frameworks.wulf import ViewStatus
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.SystemMessages import SM_TYPE
-from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter, isCommonBattlePassChapter
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
@@ -30,14 +31,16 @@ from gui.collection.collections_constants import COLLECTIONS_RENEW_EVENT_TYPE, C
 from gui.game_control.seniority_awards_controller import WDR_CURRENCY
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.comp7.rewards_screen import YearlyRewardsWindow
+from gui.impl.lobby.comp7.yearly_rewards_selection_screen import YearlyRewardsSelectionWindow
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
-from gui.prestige.prestige_helpers import mapGradeIDToUI, MAX_GRADE_ID, isFirstEntryNotificationShown, setFirstEntryNotificationShown
 from gui.impl.lobby.seniority_awards.seniority_awards_helper import isSeniorityAwardsSystemNotificationShowed, setSeniorityAwardEventStateSetting
 from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prestige.prestige_helpers import mapGradeIDToUI, MAX_GRADE_ID, isFirstEntryNotificationShown, setFirstEntryNotificationShown
 from gui.server_events.recruit_helper import getAllRecruitsInfo
 from gui.shared import events, g_eventBus
 from gui.shared.formatters import text_styles, time_formatters
@@ -45,7 +48,7 @@ from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
 from gui.shared.utils import showInvitationInWindowsBar
-from gui.shared.utils.scheduled_notifications import SimpleNotifier
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
@@ -59,12 +62,12 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator, Comp7BondEquipmentDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
-from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IComp7Controller
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
@@ -1183,14 +1186,6 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __pushFinished(self):
-        styles = []
-        for chapterID in self.__battlePass.getChapterIDs():
-            if isCommonBattlePassChapter(chapterID):
-                styleCD, styleLevel = getStyleInfoForChapter(chapterID)
-                style = self.__itemsCache.items.getItemByCD(styleCD)
-                if style.fullInventoryCount() and styleLevel != style.getMaxProgressionLevel():
-                    styles.append(backport.text(R.strings.system_messages.battlePass.switch_disable.incompleteStyle(), styleName=style.userName))
-
         if self.__battlePass.isHoliday():
             text = backport.text(R.strings.system_messages.battlePassH.switch_disable.body())
             header = backport.text(R.strings.system_messages.battlePassH.switch_disable.title(), seasonName=backport.text(R.strings.battle_pass.season.fullName.num(self.__battlePass.getSeasonNum())()))
@@ -1198,12 +1193,12 @@ class BattlePassListener(_NotificationListener):
             text = backport.text(R.strings.system_messages.battlePass.switch_disable.body())
             header = backport.text(R.strings.system_messages.battlePass.switch_disable.title(), seasonNum=self.__battlePass.getSeasonNum())
         SystemMessages.pushMessage(text=text, priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassDefault, messageData={'header': header,
-         'additionalText': '\n'.join(styles)})
+         'additionalText': ''})
 
     def __pushStarted(self):
         if self.__battlePass.isHoliday():
             text = backport.text(R.strings.system_messages.battlePassH.switch_started.body())
-            header = backport.text(R.strings.system_messages.battlePassH.switch_disable.title(), seasonName=backport.text(R.strings.battle_pass.season.fullName.num(self.__battlePass.getSeasonNum())()))
+            header = backport.text(R.strings.system_messages.battlePassH.switch_started.title(), seasonName=backport.text(R.strings.battle_pass.season.fullName.num(self.__battlePass.getSeasonNum())()))
         else:
             text = backport.text(R.strings.system_messages.battlePass.switch_started.body())
             header = backport.text(R.strings.system_messages.battlePass.switch_started.title(), seasonNum=self.__battlePass.getSeasonNum())
@@ -2252,6 +2247,102 @@ class PrestigeListener(_NotificationListener):
             return
 
 
+class Comp7OfferTokenListener(BaseReminderListener, Notifiable):
+    __comp7Controller = dependency.descriptor(IComp7Controller)
+    __guiLoader = dependency.descriptor(IGuiLoader)
+    __TYPE = NOTIFICATION_TYPE.COMP7_OFFER_TOKENS
+    __ENTITY_ID = 0
+    __TEMPLATE = 'BondEquipmentChoosingMessage'
+
+    def __init__(self):
+        super(Comp7OfferTokenListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
+
+    def start(self, model):
+        result = super(Comp7OfferTokenListener, self).start(model)
+        if result:
+            self.__comp7Controller.onComp7ConfigChanged += self.__onComp7ConfigChanged
+            if self.__guiLoader.windowsManager is not None:
+                self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
+            g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(Comp7OfferTokenListener, self).stop()
+        self.__comp7Controller.onComp7ConfigChanged -= self.__onComp7ConfigChanged
+        if self.__guiLoader.windowsManager is not None:
+            self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        self.clearNotification()
+        return
+
+    def _createNotificationData(self, priority, **__):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.bondEquipmentChoosing())
+        data = {'title': title}
+        return NotificationData(self._getNotificationId(), data, priority, None)
+
+    def _createDecorator(self, data):
+        return Comp7BondEquipmentDecorator(data.entityID, self._getNotificationType(), data.savedData, self._model(), self.__TEMPLATE, data.priorityLevel)
+
+    def __onTokensUpdate(self, *_):
+        self.__tryNotify()
+
+    def __onComp7ConfigChanged(self, *_):
+        self.__tryNotify()
+
+    def __onYearlyRewardsOpened(self, *_):
+        self.__tryNotify()
+
+    def __onViewStatusChanged(self, viewID, status):
+        view = self.__guiLoader.windowsManager.getView(viewID)
+        if status == ViewStatus.DESTROYING:
+            view = self.__guiLoader.windowsManager.getView(viewID)
+            if view and view.layoutID == R.views.lobby.comp7.YearlyRewardsSelectionScreen():
+                self.__tryNotify()
+
+    def __tryNotify(self):
+        self.clearNotification()
+        if not self.__comp7Controller.hasAvailableOfferTokens():
+            self._removeNotification()
+            return
+        elif not AccountSettings.getNotifications(COMP7_YEARLY_REWARD_SEEN):
+            return
+        elif YearlyRewardsSelectionWindow.getInstances() or YearlyRewardsWindow.getInstances():
+            return
+        else:
+            notificationTimes = self.__comp7Controller.remainingOfferTokensNotifications
+            if not notificationTimes:
+                return
+            currentTimestamp = time_utils.getServerUTCTime()
+            if currentTimestamp < notificationTimes[0]:
+                self.__addNotifier(notificationTimes[0])
+                return
+            lastShownTime = AccountSettings.getNotifications(COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP) or 0
+            potentialNotifications = (notificationTime for notificationTime in notificationTimes if currentTimestamp >= notificationTime)
+            shouldNotify = next((notificationTime for notificationTime in potentialNotifications if lastShownTime < notificationTime), False)
+            if not shouldNotify:
+                nextNotificationTime = findFirst(lambda t: t > currentTimestamp, notificationTimes)
+                if nextNotificationTime is not None:
+                    self.__addNotifier(nextNotificationTime)
+                    return
+            if self._notify(priority=NotificationPriorityLevel.MEDIUM):
+                self.__updateLastShownTimestamp()
+            return
+
+    def __addNotifier(self, notificationTime):
+        notificator = SimpleNotifier(partial(self.__getTimeToStart, notificationTime), self.__tryNotify)
+        self.addNotificator(notificator)
+        self.startNotification()
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    @staticmethod
+    def __updateLastShownTimestamp():
+        currentTimestamp = time_utils.getServerUTCTime()
+        AccountSettings.setNotifications(COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP, currentTimestamp)
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2278,7 +2369,8 @@ registerNotificationsListeners((ServiceChannelListener,
  BattleMattersTaskReminderListener,
  PrestigeListener,
  SeniorityAwardsVehicleSelectionListener,
- NDQSwitcherListener))
+ NDQSwitcherListener,
+ Comp7OfferTokenListener))
 
 class NotificationsListeners(_NotificationListener):
 

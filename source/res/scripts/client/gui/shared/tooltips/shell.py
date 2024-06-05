@@ -50,7 +50,7 @@ class ShellBlockToolTipData(BlocksTooltipData):
         textGap = -2
         vDescr = paramsConfig.vehicle.descriptor if paramsConfig.vehicle is not None else None
         params = params_helper.getParameters(shell, vDescr)
-        showBasicData = self.__basicDataAllowed and params['isBasic']
+        showBasicData = self.__basicDataAllowed and params.get('isBasic')
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(shell, statsConfig, leftPadding, rightPadding, params).construct(), padding=formatters.packPadding(left=35, right=rightPadding, top=14)))
         priceBlock, invalidWidth = PriceBlockConstructor(shell, statsConfig, 80).construct()
         if priceBlock:

@@ -167,7 +167,6 @@ class StaticDeathZone(BigWorld.Entity):
 class _DeathZoneMarkerHandler(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     SEARCH_RADIUS_EXTENSION = 2.0
-    STATIC_DEATH_ZONE_PROXIMITY_MARKER = 'STATIC_DEATH_ZONE_PROXIMITY'
 
     def __init__(self, zone):
         self._zone = zone
@@ -178,7 +177,7 @@ class _DeathZoneMarkerHandler(object):
         areaMarkerCtrl = self.sessionProvider.shared.areaMarker
         if areaMarkerCtrl:
             self._matrix = Math.Matrix()
-            marker = areaMarkerCtrl.createMarker(self._matrix, self.STATIC_DEATH_ZONE_PROXIMITY_MARKER)
+            marker = areaMarkerCtrl.createMarker(self._matrix, self._zone.proximityMarkerStyle)
             self._searchRadius = marker.disappearingRadius + self.SEARCH_RADIUS_EXTENSION
             self._markerId = areaMarkerCtrl.addMarker(marker)
             areaMarkerCtrl.onTickUpdate += self._tickUpdate

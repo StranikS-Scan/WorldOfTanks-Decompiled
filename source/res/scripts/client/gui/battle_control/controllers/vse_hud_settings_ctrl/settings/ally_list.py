@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vse_hud_settings_ctrl/settings/ally_list.py
+from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.base_models import BaseClientModel
 
-
-class AllyListClientModel(object):
+class AllyListClientModel(BaseClientModel):
     __slots__ = ('showFrags', 'showVehicleTypeIcon', 'highlightElite')
 
     def __init__(self, showFrags, showVehicleTypeIcon, highlightElite):

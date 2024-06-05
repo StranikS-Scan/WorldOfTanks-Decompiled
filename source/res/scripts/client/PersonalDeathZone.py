@@ -25,7 +25,7 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
 
     def onLeaveWorld(self):
         if self._triggered:
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0)
+            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0, 0)
         TriggersManager.g_manager.delListener(self)
         if self._triggerId is not None:
             TriggersManager.g_manager.delTrigger(self._triggerId)
@@ -36,9 +36,9 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
     def onTriggerActivated(self, args):
         if args['type'] == TriggersManager.TRIGGER_TYPE.AREA and args['name'] == self._triggerName:
             self._triggered = True
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(True, self.strikeTime)
+            BigWorld.player().updatePersonalDeathZoneWarningNotification(True, self._equipment.delay, self.launchTime)
 
     def onTriggerDeactivated(self, args):
         if args['type'] == TriggersManager.TRIGGER_TYPE.AREA and args['name'] == self._triggerName:
             self._triggered = False
-            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0)
+            BigWorld.player().updatePersonalDeathZoneWarningNotification(False, 0, 0)

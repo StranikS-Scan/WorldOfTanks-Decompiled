@@ -16,7 +16,7 @@ from Event import Event
 from debug_utils import LOG_ERROR
 from aih_constants import ShakeReason
 from shared_utils import findFirst
-from items.components.component_constants import MAIN_TRACK_PAIR_IDX
+from items.components.component_constants import MAIN_TRACK_PAIR_IDX, DEFAULT_TRACK_HIT_VECTOR
 from vehicle_systems.components.terrain_circle_component import TerrainCircleComponent
 from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
@@ -384,6 +384,10 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__showCircleDelayed = None
         return
 
+    @property
+    def isTerrainCircleVisible(self):
+        return bool(self.__terrainCircle and self.__terrainCircle.isVisible())
+
     def updateTurretVisibility(self):
         self.__requestModelsRefresh()
 
@@ -467,14 +471,15 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self._addCrashedTrack(isLeft, pairIndex, self.isLeftSideFlying if isLeft else self.isRightSideFlying, self._vehicle.getExtraHitPoint(index))
         self.onChassisDestroySound(isLeft, True, trackPairIdx=pairIndex)
 
-    def addSimulatedCrashedTrack(self, index, trackInAir):
+    def addSimulatedCrashedTrack(self, index, trackInAir, hitPoint=None):
         if not self._vehicle.isAlive() or self.crashedTracksController is None:
             return
         else:
-            hitPoint = (0.0, 10.0, 0.0)
             pairsCnt = self.crashedTracksController.getPairsCnt()
             isLeftTrack = True if index < pairsCnt else False
             trackIndex = index % pairsCnt
+            if hitPoint is None:
+                hitPoint = DEFAULT_TRACK_HIT_VECTOR
             self._addCrashedTrack(isLeftTrack, trackIndex, trackInAir[0] if isLeftTrack else trackInAir[1], Math.Vector3(hitPoint))
             return
 

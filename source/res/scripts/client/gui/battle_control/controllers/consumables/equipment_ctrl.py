@@ -4,7 +4,7 @@ import itertools
 import logging
 from collections import namedtuple
 from functools import partial
-from typing import TYPE_CHECKING
+from typing import Optional
 import BigWorld
 import Event
 import SoundGroups
@@ -25,13 +25,11 @@ from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import i18n, dependency
-from items import vehicles, EQUIPMENT_TYPES, ITEM_TYPES
+from items import vehicles, artefacts, EQUIPMENT_TYPES, ITEM_TYPES
 from points_of_interest_shared import POI_EQUIPMENT_TAG, PoiTypesByPoiEquipmentName
 from shared_utils import findFirst, forEach, CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-if TYPE_CHECKING:
-    from items.artefacts import Equipment
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 _ROLE_EQUIPMENT_ANIMATION_TYPE = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE
 _logger = logging.getLogger(__name__)
@@ -296,16 +294,16 @@ class _EquipmentItem(object):
         return self._totalTime
 
     def getMarker(self):
-        return self._descriptor.name.split('_')[0]
+        return self._getMarkerConfigName(enemy=False) or self._descriptor.name.split('_')[0]
 
     def getEnemyMarker(self):
-        return self.getMarker()
+        return self._getMarkerConfigName(enemy=True) or self.getMarker()
 
     def getMarkerColor(self):
-        return BATTLE_MARKERS_CONSTS.COLOR_GREEN
+        return self._getMarkerConfigTextColor(enemy=False) or BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
     def getEnemyMarkerColor(self):
-        return self.getMarkerColor()
+        return self._getMarkerConfigTextColor(enemy=True) or self.getMarkerColor()
 
     def getEquipmentID(self):
         _, innationID = self._descriptor.id
@@ -323,6 +321,23 @@ class _EquipmentItem(object):
 
     def canDeactivate(self):
         return True
+
+    def _getMarkerConfig(self, enemy=False):
+        if not isinstance(self._descriptor, artefacts.MarkersConfigReader):
+            return
+        else:
+            markers = self._descriptor.markers
+            if markers is None:
+                return
+            return self._descriptor.markers.enemy if enemy else self._descriptor.markers.ally
+
+    def _getMarkerConfigName(self, enemy=False):
+        marker = self._getMarkerConfig(enemy=enemy)
+        return marker and marker.name
+
+    def _getMarkerConfigTextColor(self, enemy=False):
+        marker = self._getMarkerConfig(enemy=enemy)
+        return marker and marker.textColor
 
 
 class _RefillEquipmentItem(object):
@@ -533,7 +548,7 @@ class _OrderItem(_TriggerItem):
                 if currentTime - _OrderItem._lastActivationTime > _OrderItem._ACTIVATION_COOLDOWN:
                     _OrderItem._lastActivationTime = currentTime
                 else:
-                    _logger.info('Attempt to use Arcade equipments simultaneously!')
+                    _logger.debug('Attempt to use Arcade equipments simultaneously!')
                     return (False, None)
             return (result, error)
 
@@ -614,10 +629,10 @@ class _ArcadeArtilleryItem(_ArtilleryItem):
         return ArcadeMapCaseControlMode
 
     def getMarker(self):
-        pass
+        return self._getMarkerConfigName(enemy=False) or 'artillery'
 
     def getMarkerColor(self):
-        return BATTLE_MARKERS_CONSTS.COLOR_GREEN
+        return self._getMarkerConfigTextColor(enemy=False) or BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
 
 class _BomberItem(_OrderItem):
@@ -1537,7 +1552,10 @@ class _ReplayArtilleryAOEFort(_ReplayArtilleryItem):
 class _ReplayArcadeArtilleryItem(_ReplayOrderItem):
 
     def getMarker(self):
-        pass
+        return self._getMarkerConfigName(enemy=False) or 'artillery'
+
+    def getMarkerColor(self):
+        return self._getMarkerConfigTextColor(enemy=False) or BATTLE_MARKERS_CONSTS.COLOR_GREEN
 
 
 class _ReplayBomberItem(_ReplayOrderItem):

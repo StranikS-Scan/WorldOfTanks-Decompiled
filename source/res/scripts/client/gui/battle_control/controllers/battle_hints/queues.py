@@ -13,6 +13,7 @@ from wotdecorators import condition
 from debug_utils import LOG_WARNING
 from PlayerEvents import g_playerEvents
 if typing.TYPE_CHECKING:
+    import weakref
     from hints.battle.schemas.base import CHMType
     from gui.battle_control.controllers.battle_hints.component import BattleHintComponent
     from gui.battle_control.controllers.battle_hints.history import BattleHintsHistory
@@ -83,17 +84,26 @@ class BattleHint(object):
         self._enqueueTime = 0
         self._startDisplayTime = time.time()
         self._playSound()
-        self._component.showHint(self._model, self._params)
-        _hintLogger.debug('<%s> shown.', self.uniqueName)
+        try:
+            self._component.showHint(self._model, self._params)
+            _hintLogger.debug('<%s> shown.', self.uniqueName)
+        except ReferenceError:
+            _hintLogger.debug('Component already destroyed and cannot be shown.')
 
     def hide(self):
         self._startDisplayTime = 0
-        self._component.hideHint()
-        _hintLogger.debug('<%s> hidden.', self.uniqueName)
+        try:
+            self._component.hideHint()
+            _hintLogger.debug('<%s> hidden.', self.uniqueName)
+        except ReferenceError:
+            _hintLogger.debug('Component already destroyed and cannot be hidden.')
 
     def cancelFadeOut(self):
-        self._component.cancelFadeOut()
-        _hintLogger.debug('<%s> fade out cancelled.', self.uniqueName)
+        try:
+            self._component.cancelFadeOut()
+            _hintLogger.debug('<%s> fade out cancelled.', self.uniqueName)
+        except ReferenceError:
+            _hintLogger.debug('Component already destroyed, fadeout cannot be canceled.')
 
     def isOutdated(self, currentTime):
         if not self.canBeShown(currentTime):
@@ -153,8 +163,8 @@ class BattleHintsQueue(object):
         if len(self._queue) >= self._maxSize:
             self._logger.error('Max hints limit <%s> reached.', self._maxSize)
             return
-        if hint.unique and hint in self._queue:
-            self._logger.debug('Unique hint <%s> already in queue.', hint.uniqueName)
+        if hint.unique and (self._displayed and hint == self._displayed or hint in self._queue):
+            self._logger.debug('Unique hint <%s> already in queue or displayed.', hint.uniqueName)
             return
         hint.enqueued()
         self._queue.append(hint)

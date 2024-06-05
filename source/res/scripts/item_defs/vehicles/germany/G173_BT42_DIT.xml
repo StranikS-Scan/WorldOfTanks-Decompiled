@@ -65,6 +65,13 @@
       <undamaged>	vehicles/german/G173_BT42_DIT/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G173_BT42_DIT/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G173_BT42_DIT/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G173_BT42_DIT_3DSt>
+          <undamaged>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Hull.model	</exploded>
+        </G173_BT42_DIT_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -147,6 +154,13 @@
         <undamaged>	vehicles/german/G173_BT42_DIT/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G173_BT42_DIT/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G173_BT42_DIT/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G173_BT42_DIT_3DSt>
+            <undamaged>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G173_BT42_DIT_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1074,6 +1088,13 @@
             <undamaged>	vehicles/german/G173_BT42_DIT/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G173_BT42_DIT/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G173_BT42_DIT/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G173_BT42_DIT_3DSt>
+                <undamaged>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G173_BT42_DIT_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G173_BT42_DIT/collision/Gun_01.model	</collisionModelServer>
@@ -1091,6 +1112,13 @@
         <undamaged>	vehicles/german/G173_BT42_DIT/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G173_BT42_DIT/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G173_BT42_DIT/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G173_BT42_DIT_3DSt>
+            <undamaged>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G173_BT42_DIT/_skins/G173_BT42_DIT_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G173_BT42_DIT_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G173_BT42_DIT/collision/Turret_01.model	</collisionModelServer>
@@ -1197,6 +1225,686 @@
   </physics>
   <effects>
     <collision></collision>
+    <destruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </destruction>
+    <flaming>
+      <variant1>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_medium_01.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant1>
+      <variant2>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/flaming_medium_02.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	fire	</startKey>
+            <endKey>	noEmission	</endKey>
+            <stopSyncVisual>	true	</stopSyncVisual>
+            <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+            <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+          </sound>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </variant2>
+    </flaming>
+    <ammoBayExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </ammoBayExplosion>
+    <instantExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </instantExplosion>
+    <ammoBayBurnOff>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </ammoBayBurnOff>
+    <fuelExplosion>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </fuelExplosion>
+    <crewDeath>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/death_crew_medium.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_m	</wwsound>
+            <wwsoundPC>	expl_crew_death_m_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_m_NPC	</wwsoundNPC>
+          </sound>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/smoke_dead_white_small.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+        </effects>
+      </variant1>
+    </crewDeath>
+    <rammingDestruction>
+      <variant1>
+        <timeline>
+          <death>	0.01	</death>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+          <stopDeath>	36000	</stopDeath>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	death	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	death	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopDeath	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </rammingDestruction>
+    <submersionDeath>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/sink_medium.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_submersion_death	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </submersionDeath>
+    <explosionCandle1>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle1>
+    <explosionCandle2>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle2>
+    <explosionCandle3>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle3>
+    <explosionCandle4>
+      <variant1>
+        <timeline>
+          <explosion>	0.01	</explosion>
+          <flaming>	0.015	</flaming>
+          <static>	0.02	</static>
+          <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+          <stopExplosion>	36000	</stopExplosion>
+        </timeline>
+        <effects>
+          <flashBang>
+            <startKey>	start	</startKey>
+            <stages>
+              <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+              </stage>
+              <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+              </stage>
+              <stage>	0.0	  <color>	0 0 0 0	</color>
+              </stage>
+            </stages>
+          </flashBang>
+          <pixie>
+            <startKey>	explosion	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <alwaysUpdateModel>	true	</alwaysUpdateModel>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_destruction.eff	</file>
+            <position>	Scene Root	</position>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	explosion	</startKey>
+            <wwsound>	expl_crew_death_l_PC	</wwsound>
+            <wwsoundPC>	expl_crew_death_l_PC	</wwsoundPC>
+            <wwsoundNPC>	expl_crew_death_l_NPC	</wwsoundNPC>
+          </sound>
+          <decal>
+            <startKey>	static	</startKey>
+            <groupName>	slow	</groupName>
+            <texName>	explosion_ground_AM	</texName>
+            <bumpTexName>	explosion_ground_NM	</bumpTexName>
+            <smTexName>	explosion_stone_NO_GMM	</smTexName>
+            <size>	12 12	</size>
+            <randomYaw>	true	</randomYaw>
+          </decal>
+          <pixie>
+            <startKey>	static	</startKey>
+            <endKey>	stopExplosion	</endKey>
+            <file>	particles/Tank/destruction/Pz_IV_GuP_smoke_post.eff	</file>
+            <position>	HP_Fire_1	</position>
+          </pixie>
+          <sound>
+            <startKey>	flaming	</startKey>
+            <wwsound>	burning_tank_medium	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </explosionCandle4>
   </effects>
   <emblems>
     <default>	15979	</default>

@@ -34,16 +34,15 @@ class ProgressCounterState(enum.IntEnum):
 @enum.unique
 class PrimaryObjectiveState(enum.IntEnum):
     INITIAL = 1
-    NO_TIMER = 2
-    APPEARANCE = 3
-    REGULAR = 4
-    HIDDEN = 5
-    REMIND = 6
-    LAST_REMIND = 7
-    LARGE_TIMER = 8
-    COUNTDOWN = 9
-    SUCCESS = 10
-    FAILURE = 11
+    APPEARANCE = 2
+    REGULAR = 3
+    HIDDEN = 4
+    REMIND = 5
+    LAST_REMIND = 6
+    LARGE_TIMER = 7
+    COUNTDOWN = 8
+    SUCCESS = 9
+    FAILURE = 10
 
     def isCompleted(self):
         return self in [PrimaryObjectiveState.HIDDEN, PrimaryObjectiveState.SUCCESS, PrimaryObjectiveState.FAILURE]

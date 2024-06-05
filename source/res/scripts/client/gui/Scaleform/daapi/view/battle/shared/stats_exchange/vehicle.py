@@ -202,7 +202,7 @@ class VehicleStatusComponent(broker.ExchangeComponent):
     def addVehicleInfo(self, vInfoVO):
         self._vehicleID = vInfoVO.vehicleID
         self._status = vInfoVO.vehicleStatus
-        self._dogTag = vInfoVO.dogTag
+        self._dogTag = vInfoVO.dogTagModel
 
     def addTotalStats(self, stats):
         for composer in self._statsComposers:

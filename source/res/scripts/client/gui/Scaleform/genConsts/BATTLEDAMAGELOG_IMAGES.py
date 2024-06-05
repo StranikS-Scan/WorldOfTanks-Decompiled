@@ -34,6 +34,7 @@ class BATTLEDAMAGELOG_IMAGES(object):
     WHITE_ICON_MEDIUM_TANK_ELITE_16X16 = 'whiteIconMediumTank_elite16x16'
     WHITE_ICON_SPG_16X16 = 'whiteIconSPG16x16'
     WHITE_ICON_SPG_ELITE_16X16 = 'whiteIconSPG_elite16x16'
+    WHITE_ICON_BUNKER_16X16 = 'whiteIconBunker16x16'
     DAMAGELOG_ARTILLERY_16X16 = 'damageLog_artillery_16x16'
     DAMAGELOG_BERSERKER_16X16 = 'damageLog_berserker_16x16'
     DAMAGELOG_YOUR_SPAWNED_BOT_DMG_16X16 = 'damageLog_spawned_bot_16x16'

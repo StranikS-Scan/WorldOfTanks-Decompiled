@@ -5,14 +5,14 @@ from story_mode.gui.impl.gen.view_models.views.lobby.progress_level_model import
 class MissionProgressLevelModel(ProgressLevelModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(MissionProgressLevelModel, self).__init__(properties=properties, commands=commands)
 
     def getTotal(self):
-        return self._getNumber(3)
+        return self._getNumber(4)
 
     def setTotal(self, value):
-        self._setNumber(3, value)
+        self._setNumber(4, value)
 
     def _initialize(self):
         super(MissionProgressLevelModel, self)._initialize()

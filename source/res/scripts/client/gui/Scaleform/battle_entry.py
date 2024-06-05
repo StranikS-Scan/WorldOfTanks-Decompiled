@@ -108,7 +108,7 @@ class BattleEntry(AppEntry):
         return LoaderManager(weakref.proxy(self))
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.HIDDEN_SERVICE_LAYOUT), DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), TopWindowContainer(WindowLayer.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(WindowLayer.SERVICE_LAYOUT), PopUpContainer(WindowLayer.OVERLAY))
+        return ContainerManager(self._loaderMgr, DefaultContainer(WindowLayer.HIDDEN_SERVICE_LAYOUT), DefaultContainer(WindowLayer.MARKER), DefaultContainer(WindowLayer.VIEW), DefaultContainer(WindowLayer.CURSOR), PopUpContainer(WindowLayer.WINDOW), PopUpContainer(WindowLayer.FULLSCREEN_WINDOW), TopWindowContainer(WindowLayer.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(WindowLayer.SERVICE_LAYOUT), PopUpContainer(WindowLayer.OVERLAY))
 
     def _createToolTipManager(self):
         builders = collectBattleTooltipsBuilders()

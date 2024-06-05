@@ -11,17 +11,11 @@ class VehicleProductModel(BaseProductModel):
 
     @property
     def vehicleInfo(self):
-        return self._getViewModel(8)
+        return self._getViewModel(9)
 
     @staticmethod
     def getVehicleInfoType():
         return VehicleModel
-
-    def getTooltipId(self):
-        return self._getString(9)
-
-    def setTooltipId(self, value):
-        self._setString(9, value)
 
     def getCanGoToHangar(self):
         return self._getBool(10)
@@ -32,5 +26,4 @@ class VehicleProductModel(BaseProductModel):
     def _initialize(self):
         super(VehicleProductModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleModel())
-        self._addStringProperty('tooltipId', '')
         self._addBoolProperty('canGoToHangar', False)

@@ -23,6 +23,7 @@ class ManualController(IManualController):
         super(ManualController, self).__init__()
         self.__chapters = None
         self._isChapterViewOnScreen = False
+        self._descrLabelBackBtn = ''
         return
 
     def init(self):
@@ -70,7 +71,11 @@ class ManualController(IManualController):
         windowContainer = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         return windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.WIKI_VIEW})
 
-    def show(self, lessonID=None, backCallback=None):
+    def getDescrLabelBackBtn(self):
+        return self._descrLabelBackBtn
+
+    def show(self, lessonID=None, backCallback=None, descrLabelBackBtn=''):
+        self._descrLabelBackBtn = descrLabelBackBtn
         view = self.getView()
         ctx = {'backCallback': backCallback}
         if not lessonID:

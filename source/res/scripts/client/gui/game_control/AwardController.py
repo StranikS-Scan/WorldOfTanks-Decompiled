@@ -2,37 +2,36 @@
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import logging
 import types
-import typing
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 from copy import deepcopy
 from functools import partial
 from itertools import chain, ifilter
-import ArenaType
 import BigWorld
-from blueprints.BlueprintTypes import BlueprintTypes
-from blueprints.FragmentTypes import getFragmentType
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
-from gui.impl import backport
-from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
+import typing
+from adisp import adisp_process
+from shared_utils import first, findFirst
+import ArenaType
 import gui.awards.event_dispatcher as award_events
-from gui.shared.account_settings_helper import AccountSettingsHelper
 import personal_missions
 import wg_async
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND
-from adisp import adisp_process
+from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
+from blueprints.BlueprintTypes import BlueprintTypes
+from blueprints.FragmentTypes import getFragmentType
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from comp7_common import Comp7QuestType, qualificationQuestIDBySeasonNumber
+from comp7_common import Comp7QuestType, qualificationQuestIDBySeasonNumber, COMP7_YEARLY_REWARD_TOKEN
 from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, ARENA_BONUS_TYPE, PENALTY_TYPES
-from fairplay_violation_types import getPenaltyTypeAndViolationName, getFairplayViolationLocale, FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
+from fairplay_violation_types import getPenaltyTypeAndViolationName, getFairplayViolationLocale, FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -47,18 +46,20 @@ from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken, defaultEventMethod, multipleBattlePassPurchasedEventMethod
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, BlueprintBonusTypes
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
-from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyRewardWindow
 from gui.impl.lobby.clan_supply.bonus_packers import extractBonuses
+from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyRewardWindow
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, getRequiredTokensCountToComplete
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
-from gui.prestige.prestige_helpers import hasVehiclePrestige, showPrestigeRewardWindow, needShowPrestigeRewardWindow
+from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prestige.prestige_helpers import hasVehiclePrestige, showPrestigeRewardWindow, needShowPrestigeRewardWindow
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
@@ -68,7 +69,8 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow
+from gui.shared.account_settings_helper import AccountSettingsHelper
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showComp7YearlyRewardsScreen
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -84,7 +86,6 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
-from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -1292,11 +1293,11 @@ class VehicleCollectorAchievementHandler(ServiceChannelHandler):
 
     def __setAwards(self, ctx):
         _, message = ctx
-        medals = message.data.get(_POPUP_RECORDS, {})
-        if not medals:
+        achievements = message.data.get(_POPUP_RECORDS, {})
+        if not achievements:
             return
-        for _, medalName in medals:
-            if not medalName.startswith(self._PATTERN):
+        for achievementType, medalName in achievements:
+            if achievementType in ALLOWED_ACHIEVEMENT_TYPES or not medalName.startswith(self._PATTERN):
                 continue
             if len(medalName) == len(self._PATTERN):
                 self.__isCollectionAssembled = True
@@ -1694,17 +1695,17 @@ class ResourceWellRewardHandler(ServiceChannelHandler):
         showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))
 
 
-class Comp7RewardHandler(MultiTypeServiceChannelHandler):
+class Comp7QuestRewardHandler(MultiTypeServiceChannelHandler):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
 
     def __init__(self, awardCtrl):
-        super(Comp7RewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        super(Comp7QuestRewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
         self.__completedQuestIDs = set()
 
     def fini(self):
         self.__completedQuestIDs.clear()
         self.eventsCache.onSyncCompleted -= self.__showAward
-        super(Comp7RewardHandler, self).fini()
+        super(Comp7QuestRewardHandler, self).fini()
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1774,6 +1775,26 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
     @staticmethod
     def __getTokensQuestSortKey(quest):
         return getRequiredTokensCountToComplete(quest.getID())
+
+
+class Comp7InvoiceRewardHandler(ServiceChannelHandler):
+    __comp7Ctrl = dependency.descriptor(IComp7Controller)
+    __RETRY_TIMES = [2, 3, 5]
+
+    def __init__(self, awardCtrl):
+        super(Comp7InvoiceRewardHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
+
+    @adisp_process
+    def _showAward(self, ctx):
+        _, message = ctx
+        invoiceData = message.data
+        if invoiceData.get('assetType', 0) == INVOICE_ASSET.PURCHASE:
+            bonuses = invoiceData.get('data', {})
+            if COMP7_YEARLY_REWARD_TOKEN in bonuses.get('tokens', ()):
+                areEntitlemenetsUpdated = yield self.__comp7Ctrl.updateEntitlementsCache(True, self.__RETRY_TIMES)
+                if not areEntitlemenetsUpdated:
+                    _logger.warning('Could not show season results due to unsuccessful entitlements request')
+                showComp7YearlyRewardsScreen(bonuses, showSeasonResults=areEntitlemenetsUpdated)
 
 
 class DailyQuestHandlerBase(MultiTypeServiceChannelHandler):
@@ -2040,8 +2061,9 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  RenewableSubscriptionHandler,
  BattleMattersQuestsHandler,
  ResourceWellRewardHandler,
- Comp7RewardHandler,
  DailyQuestHandler,
+ Comp7QuestRewardHandler,
+ Comp7InvoiceRewardHandler,
  WinbackQuestHandler,
  PrestigeAwardWindowHandler,
  EmailConfirmationQuestHandler,

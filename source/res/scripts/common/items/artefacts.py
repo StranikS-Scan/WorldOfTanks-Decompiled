@@ -4,13 +4,14 @@ import math
 import os
 from re import findall
 from enum import Enum, unique
-from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
+from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple, List
 import items
 import nations
 from ArenaType import readVisualScriptSection
 from ResMgr import DataSection
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH, SkillProcessorArgs, GroupSkillProcessorArgs, TTC_TOOLTIP_SECTIONS
 from debug_utils import LOG_DEBUG_DEV
+from extension_utils import importClass
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
 from items import _xml, vehicles
 from items.artefacts_helpers import VehicleFilter, _ArtefactFilter, readKpi
@@ -40,13 +41,20 @@ else:
             raise SoftException('Unexpected call "i18n.makeString"')
 
 
-if IS_CELLAPP:
-    from actions import vehicle as vehicleActions
-
 @unique
 class ExportParamsTag(Enum):
     VSE = 'vse'
     TOOLTIP = 'tooltip'
+
+
+@unique
+class OrderTypes(str, Enum):
+    RANDOM = 'random'
+    SEQUENTIALLY = 'sequentially'
+
+    @classmethod
+    def values(cls):
+        return [ obj.value for obj in cls.__members__.values() ]
 
 
 class CommonXmlSectionReader(object):
@@ -789,18 +797,22 @@ class RageEquipmentConfigReader(object):
 
 
 class SharedCooldownConsumableConfigReader(object):
-    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage', 'setUnavailableAfterAmmoLeft')
+    _SHARED_COOLDOWN_CONSUMABLE_SLOTS = ('prepareTime', 'cooldownTime', 'cooldownFactors', 'sharedCooldownTime', 'consumeAmmo', 'disableAllyDamage', 'setUnavailableAfterAmmoLeft')
 
     def initSharedCooldownConsumableSlots(self):
         self.cooldownTime = component_constants.ZERO_FLOAT
         self.cooldownFactors = component_constants.EMPTY_DICT
+        self.prepareTime = None
         self.consumeAmmo = False
         self.disableAllyDamage = False
         self.setUnavailableAfterAmmoLeft = False
+        return
 
     def readSharedCooldownConsumableConfig(self, xmlCtx, section):
         self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTime')
         self.cooldownFactors = self._readCooldownFactors(xmlCtx, section, 'cooldownFactors')
+        if section.has_key('prepareTime'):
+            self.prepareTime = _xml.readNonNegativeFloat(xmlCtx, section, 'prepareTime')
         self.sharedCooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'sharedCooldownTime')
         self.consumeAmmo = _xml.readBool(xmlCtx, section, 'consumeAmmo')
         self.disableAllyDamage = _xml.readBool(xmlCtx, section, 'disableAllyDamage')
@@ -896,8 +908,12 @@ class EffectsConfigReader(object):
         if not section:
             return None
         else:
+            sOrderTypeName = section.readString('sequencesOrderType', OrderTypes.RANDOM.value)
+            if sOrderTypeName not in OrderTypes.values():
+                raise SoftException('Wrong sequencesOrderType. <{}> not in {}.'.format(sOrderTypeName, OrderTypes.values()))
             effect = {'shotEffects': section.readString('shotEffects').split(),
              'sequences': self._readSequencesConfig(section['sequences']),
+             'sequencesOrderType': OrderTypes(sOrderTypeName),
              'groundRaycast': section.readBool('groundRaycast'),
              'offsetDeviation': section.readFloat('offsetDeviation'),
              'repeatCount': section.readInt('repeatCount', 1),
@@ -1224,12 +1240,76 @@ class ArenaAimLimits(object):
             return result
 
 
+class Marker(object):
+    __slots__ = ('name', 'textColor', '_sectionName')
+
+    def __init__(self, sectionName):
+        self._sectionName = sectionName
+        self.name = None
+        self.textColor = None
+        return
+
+    def readConfig(self, xmlCtx, section):
+        if not self._sectionName or not section.has_key(self._sectionName):
+            return None
+        else:
+            markerSection = section[self._sectionName]
+            self.name = _xml.readStringOrNone(xmlCtx, markerSection, 'name')
+            self.textColor = _xml.readStringOrNone(xmlCtx, markerSection, 'textColor')
+            self._validate()
+            return None
+
+    def _validate(self):
+        if IS_CLIENT:
+            from gui.Scaleform.daapi.view.battle.shared.minimap.settings import EQ_MARKER_TO_SYMBOL
+            from gui.Scaleform.genConsts.BATTLE_MARKERS_CONSTS import BATTLE_MARKERS_CONSTS
+            if self.name is not None and EQ_MARKER_TO_SYMBOL.get(self.name) is None:
+                raise SoftException('Unknown minimap symbol for marker: {}. Supported: {}.'.format(self.name, list(EQ_MARKER_TO_SYMBOL)))
+            if self.textColor is not None and self.textColor not in BATTLE_MARKERS_CONSTS.COLORS:
+                raise SoftException('Unknown text colors for marker: {}. Supported: {}.'.format(self.name, BATTLE_MARKERS_CONSTS.COLORS))
+        return
+
+
+class Markers(object):
+    __slots__ = ('ally', 'enemy', '_sectionName')
+
+    def __init__(self, sectionName):
+        self._sectionName = sectionName
+        self.ally = None
+        self.enemy = None
+        return
+
+    def readConfig(self, xmlCtx, section):
+        if not self._sectionName or not section.has_key(self._sectionName):
+            return None
+        else:
+            markersSection = section[self._sectionName]
+            self.ally = Marker('ally')
+            self.enemy = Marker('enemy')
+            self.ally.readConfig(xmlCtx, markersSection)
+            self.enemy.readConfig(xmlCtx, markersSection)
+            return None
+
+
+class MarkersConfigReader(object):
+    _MARKERS_CONFIG_SLOTS = ('markers',)
+
+    def initMarkers(self):
+        self.markers = None
+        return
+
+    def readMarkersConfig(self, xmlCtx, section):
+        self.markers = Markers('markers')
+        self.markers.readConfig(xmlCtx, section)
+
+
 class ArcadeEquipmentConfigReader(object):
-    _SHARED_ARCADE_SLOTS = ('minApplyRadius', 'maxApplyRadius', 'cameraPivotPosMin', 'cameraPivotPosMax', 'arenaAimLimits')
+    _SHARED_ARCADE_SLOTS = ('minApplyRadius', 'maxApplyRadius', 'applyRadiusVisible', 'cameraPivotPosMin', 'cameraPivotPosMax', 'arenaAimLimits')
 
     def initArcadeInformation(self):
         self.minApplyRadius = component_constants.ZERO_FLOAT
         self.maxApplyRadius = component_constants.ZERO_FLOAT
+        self.applyRadiusVisible = False
         self.cameraPivotPosMin = Vector3()
         self.cameraPivotPosMax = Vector3()
         self.arenaAimLimits = None
@@ -1238,6 +1318,9 @@ class ArcadeEquipmentConfigReader(object):
     def readArcadeInformation(self, xmlCtx, section):
         self.minApplyRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'minApplyRadius', component_constants.ZERO_FLOAT)
         self.maxApplyRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'maxApplyRadius', component_constants.ZERO_FLOAT)
+        self.applyRadiusVisible = _xml.readBool(xmlCtx, section, 'applyRadiusVisible', False)
+        if (self.minApplyRadius or self.maxApplyRadius) and self.minApplyRadius >= self.maxApplyRadius:
+            raise SoftException('Aiming radius limits: min[{}] >= max[{}]'.format(self.minApplyRadius, self.maxApplyRadius))
         self.arenaAimLimits = ArenaAimLimits.readConfig(xmlCtx, section, 'arenaAimLimits')
         if IS_CLIENT:
             self.cameraPivotPosMin = _xml.readVector3OrNone(xmlCtx, section, 'cameraPivotPosMin')
@@ -1633,12 +1716,13 @@ class FortConsumableInspire(ConsumableInspire):
     pass
 
 
-class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader, EffectsConfigReader):
-    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaColorBlind', 'areaShow', 'noOwner', 'attackerType', 'areaVisibleToEnemies', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'actionsConfig', 'explodeDestructible', 'areaUsedPrefab', 'areaAccurateCollision') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + EffectsConfigReader._EFFECTS_SLOTS_
+class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsumableConfigReader, ArcadeEquipmentConfigReader, EffectsConfigReader, MarkersConfigReader):
+    __slots__ = ('delay', 'duration', 'lifetime', 'shotsNumber', 'areaRadius', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'areaColorBlind', 'areaShow', 'noOwner', 'attackerType', 'areaVisibleToEnemies', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed', 'shotEffect', 'actionsConfig', 'explodeDestructible', 'areaUsedPrefab', 'areaAccurateCollision') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + SharedCooldownConsumableConfigReader._SHARED_COOLDOWN_CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + EffectsConfigReader._EFFECTS_SLOTS_ + MarkersConfigReader._MARKERS_CONFIG_SLOTS
 
     def __init__(self):
         super(AreaOfEffectEquipment, self).__init__()
         self.initEffectsInformation()
+        self.initSharedCooldownConsumableSlots()
 
     def _readConfig(self, xmlCtx, section):
         super(AreaOfEffectEquipment, self)._readConfig(xmlCtx, section)
@@ -1646,6 +1730,7 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
         self.readSharedCooldownConsumableConfig(xmlCtx, section)
         self.readArcadeInformation(xmlCtx, section)
         self.readEffectConfig(xmlCtx, section)
+        self.readMarkersConfig(xmlCtx, section)
         self.delay = section.readFloat('delay')
         self.duration = section.readFloat('duration')
         self.lifetime = section.readFloat('lifetime')
@@ -1679,9 +1764,9 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
             return None
         else:
             actionType = section.readString('type')
-            actionClass = getattr(vehicleActions, actionType)
+            actionClass = importClass(actionType, 'actions.vehicle')
             return {'type': actionType,
-             'applyTo': section.readString('applyTo'),
+             'applyTo': section.readString('applyTo', ''),
              'args': actionClass.parseXML(section['args'])}
 
 

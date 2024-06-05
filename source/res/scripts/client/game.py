@@ -98,6 +98,8 @@ def init(scriptConfig, engineConfig, userPreferences):
         import dossiers2
         dossiers2.init()
         gameLoading.step()
+        import achievements20
+        achievements20.init()
         import personal_missions
         personal_missions.init()
         import motivation_quests

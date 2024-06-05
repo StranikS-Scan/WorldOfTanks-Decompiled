@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/consumables_panel.py
-import BigWorld
 from functools import partial
-from frontline.gui.frontline_helpers import getReserveIconPath
+import BigWorld
 from ReservesEvents import randomReservesEvents
+from frontline.gui.frontline_helpers import getReserveIconPath
+from frontline_common.frontline_constants import FLBattleReservesModifier
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.daapi.view.meta.EpicBattleConsumablesPanelMeta import EpicBattleConsumablesPanelMeta
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
@@ -11,17 +12,12 @@ from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import dependency
 from helpers.epic_game import searchRankForSlot
 from items import EQUIPMENT_TYPES
 from items.vehicles import getVehicleClassFromVehicleType
-from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
 class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPanel):
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _EMPTY_LOCKED_SLOT = -1
     _GLOW_DELAY = 0.5
     _WAITED_SLOT_GLOW_TIME = 3
@@ -35,6 +31,11 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
         self.__indicatedSlots = set()
         self.__currentSlotIdx = None
         return
+
+    @property
+    def isRandomBattleReserves(self):
+        arenaDP = self.sessionProvider.getArenaDP()
+        return arenaDP and arenaDP.getReservesModifier() == FLBattleReservesModifier.RANDOM
 
     def _addListeners(self):
         eqCtrl = self.sessionProvider.shared.equipments
@@ -89,7 +90,7 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
         self._handleEquipmentPressed(intCD, idx=serverIdx)
 
     def _getToolTipEquipmentSlot(self, item, idx=None):
-        return TOOLTIPS_CONSTANTS.FRONTLINE_RANDOM_RESERVE if self.__epicController.isRandomBattleReserves() and not self._isEquipmentSlot(self.__currentSlotIdx if idx is None else idx) else super(EpicBattleConsumablesPanel, self)._getToolTipEquipmentSlot(item)
+        return TOOLTIPS_CONSTANTS.FRONTLINE_RANDOM_RESERVE if self.isRandomBattleReserves and not self._isEquipmentSlot(self.__currentSlotIdx if idx is None else idx) else super(EpicBattleConsumablesPanel, self)._getToolTipEquipmentSlot(item)
 
     def _getSlotIndex(self, index):
         return self._ORDERS_START_IDX + index
@@ -99,25 +100,25 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
             index = item.index
             slotIndex = self._getSlotIndex(index - 1)
             self._addEquipmentSlot(slotIndex, intCD, item)
-            if self.__sessionProvider.isReplayPlaying:
+            if self.sessionProvider.isReplayPlaying:
                 randomReservesEvents.onSelectedReserve(item.getDescriptor().compactDescr, False)
         else:
             super(EpicBattleConsumablesPanel, self)._onEquipmentAdded(intCD, item)
 
-    def __addEquipmentSlotS(self, index, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, isTooltipSpecial=True):
+    def __addEquipmentSlotS(self, index, bwKey, sfKey, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, isTooltipSpecial=False):
         self.as_addEpicBattleEquipmentSlotS(idx=index, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, isTooltipSpecial=isTooltipSpecial, tooltipText=tooltipText, animation=animation)
 
     def _onSlotBlocked(self, slotId):
         index = self._getSlotIndex(slotId)
         bwKey, _ = self._genKey(slotId)
         self.as_hideGlowS(index)
-        self.__addEquipmentSlotS(index, bwKey, self.__EMPTY_SCALE_FORM_KEY, 0, 0, 0, getReserveIconPath('empty_slot'), self._getToolTipEquipmentSlot(None, slotId), ANIMATION_TYPES.NONE)
+        self.__addEquipmentSlotS(index, bwKey, self.__EMPTY_SCALE_FORM_KEY, 0, 0, 0, getReserveIconPath('empty_slot'), self._getToolTipEquipmentSlot(None, slotId), ANIMATION_TYPES.NONE, self.isRandomBattleReserves)
         return
 
     def _onSlotWaited(self, slotId, quantity):
         index = self._getSlotIndex(slotId)
         bwKey, sfKey = self._genKey(index)
-        self.__addEquipmentSlotS(index, bwKey, sfKey, quantity + 1, 0, 0, getReserveIconPath('empty_slot'), '', ANIMATION_TYPES.NONE)
+        self.__addEquipmentSlotS(index, bwKey, sfKey, quantity + 1, 0, 0, getReserveIconPath('empty_slot'), '', ANIMATION_TYPES.NONE, self.isRandomBattleReserves)
         if index not in self.__indicatedSlots:
             self.__addLockedInformationToEpicEquipment(index)
 
@@ -141,15 +142,15 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
             else:
                 bwKey, sfKey = (None, None)
             iconPath = self._getEquipmentIcon(idx, item, descriptor.icon[0])
-            self.__addEquipmentSlotS(idx, bwKey, sfKey, quantity, item.getTimeRemaining(), item.getTotalTime(), iconPath, self._getToolTipEquipmentSlot(item), item.getAnimationType(), self.__epicController.isRandomBattleReserves())
+            self.__addEquipmentSlotS(idx, bwKey, sfKey, quantity, item.getTimeRemaining(), item.getTotalTime(), iconPath, self._getToolTipEquipmentSlot(item), item.getAnimationType(), self.isRandomBattleReserves and self._ORDERS_START_IDX <= idx <= self._ORDERS_END_IDX)
             if idx < self._ORDERS_START_IDX:
                 return
             if idx not in self.__battleReserveSlots:
                 self.__battleReserveSlots[idx] = (intCD, item.getQuantity())
                 self.__addEquipmentLevelToSlot(idx, item)
-                if not self.__epicController.isRandomBattleReserves():
+                if not self.isRandomBattleReserves:
                     self.__addLockedInformationToEpicEquipment(idx)
-            if self.__epicController.isRandomBattleReserves():
+            if self.isRandomBattleReserves:
                 self.__updateLockedInformation(idx)
             return
 
@@ -176,7 +177,7 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
 
     def _updateLockedSlot(self, slotId):
         index = self._getSlotIndex(slotId)
-        self.__updateLockedInformation(index, isSlotEmpty=self.__epicController.isRandomBattleReserves())
+        self.__updateLockedInformation(index, isSlotEmpty=self.isRandomBattleReserves)
         if index not in self.__indicatedSlots:
             self.__indicatedSlots.add(index)
             self.__glowUpdateInfo[index] = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL
@@ -191,7 +192,7 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
         _, prevQuantity = self.__battleReserveSlots[idx]
         quantity = item.getQuantity()
         if prevQuantity < quantity:
-            self.__updateLockedInformation(idx, isSlotEmpty=self.__epicController.isRandomBattleReserves())
+            self.__updateLockedInformation(idx, isSlotEmpty=self.isRandomBattleReserves)
             self.__battleReserveSlots[idx] = (self._cds[idx], quantity)
             if quantity > 1:
                 self.delayCallback(self._GLOW_DELAY, self.__possibleStacksDelayCB, idx, quantity)
@@ -200,7 +201,7 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
             else:
                 self.__glowUpdateInfo[idx] = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_UNLOCK
             self.delayCallback(self._GLOW_DELAY, self.__updateEquipmentGlowCB)
-        elif quantity < 1 and not self.__epicController.isRandomBattleReserves():
+        elif quantity < 1 and not self.isRandomBattleReserves:
             self.__addLockedInformationToEpicEquipment(idx)
         self.__addEquipmentLevelToSlot(idx, item)
 
@@ -226,13 +227,8 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
             return
         else:
             vehClass = getVehicleClassFromVehicleType(vehicle.typeDescriptor.type)
-            if self.__epicController.isRandomBattleReserves():
-                slotEventsConfig = [[0],
-                 [1],
-                 [2],
-                 [],
-                 [],
-                 []]
+            if self.isRandomBattleReserves:
+                slotEventsConfig = list(([idx] for idx in range(self._ORDERS_END_IDX - self._ORDERS_START_IDX + 1)))
             else:
                 slotEventsConfig = arena.settings.get('epic_config', {}).get('epicMetaGame', {}).get('inBattleReservesByRank').get('slotActions', {}).get(vehClass, {})
             if not slotEventsConfig:
@@ -243,8 +239,8 @@ class EpicBattleConsumablesPanel(EpicBattleConsumablesPanelMeta, ConsumablesPane
             if rank is None or rank <= currentRank - 1:
                 return
             rank += 1
-            tooltipId = TOOLTIPS_CONSTANTS.EPIC_RANK_UNLOCK_INFO if rank > 1 or self.__epicController.isRandomBattleReserves() else ''
-            self.__updateLockedInformation(idx, rank, tooltipId, bool(tooltipId) if self.__epicController.isRandomBattleReserves() else False)
+            tooltipId = TOOLTIPS_CONSTANTS.EPIC_RANK_UNLOCK_INFO if rank > 1 or self.isRandomBattleReserves else ''
+            self.__updateLockedInformation(idx, rank, tooltipId, bool(tooltipId) if self.isRandomBattleReserves else False)
             return
 
     def __addEquipmentLevelToSlot(self, idx, item):

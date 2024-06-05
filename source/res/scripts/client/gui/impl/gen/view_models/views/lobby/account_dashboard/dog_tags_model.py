@@ -1,48 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/account_dashboard/dog_tags_model.py
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.account_dashboard.dog_tag_model import DogTagModel
 
 class DogTagsModel(ViewModel):
-    __slots__ = ('onClick',)
+    __slots__ = ()
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=3, commands=0):
         super(DogTagsModel, self).__init__(properties=properties, commands=commands)
 
+    @property
+    def customizableDogTag(self):
+        return self._getViewModel(0)
+
+    @staticmethod
+    def getCustomizableDogTagType():
+        return DogTagModel
+
+    @property
+    def animatedDogTag(self):
+        return self._getViewModel(1)
+
+    @staticmethod
+    def getAnimatedDogTagType():
+        return DogTagModel
+
     def getIsEnabled(self):
-        return self._getBool(0)
+        return self._getBool(2)
 
     def setIsEnabled(self, value):
-        self._setBool(0, value)
-
-    def getIsHighlighted(self):
-        return self._getBool(1)
-
-    def setIsHighlighted(self, value):
-        self._setBool(1, value)
-
-    def getBackground(self):
-        return self._getString(2)
-
-    def setBackground(self, value):
-        self._setString(2, value)
-
-    def getEngraving(self):
-        return self._getString(3)
-
-    def setEngraving(self, value):
-        self._setString(3, value)
-
-    def getCounter(self):
-        return self._getNumber(4)
-
-    def setCounter(self, value):
-        self._setNumber(4, value)
+        self._setBool(2, value)
 
     def _initialize(self):
         super(DogTagsModel, self)._initialize()
+        self._addViewModelProperty('customizableDogTag', DogTagModel())
+        self._addViewModelProperty('animatedDogTag', DogTagModel())
         self._addBoolProperty('isEnabled', True)
-        self._addBoolProperty('isHighlighted', False)
-        self._addStringProperty('background', '')
-        self._addStringProperty('engraving', '')
-        self._addNumberProperty('counter', -1)
-        self.onClick = self._addCommand('onClick')

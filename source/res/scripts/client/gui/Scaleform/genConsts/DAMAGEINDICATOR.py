@@ -25,6 +25,7 @@ class DAMAGEINDICATOR(object):
     BLOCKED_STANDARD = 'blockedStandard'
     BOMBER = 'bomber'
     BOSS = 'boss'
+    BUNKER_TURRET = 'bunkerTurret'
     COMMANDER_CIRCLE = 'commanderCircle'
     CRIT = 'crit'
     CRIT_BLIND = 'critBlind'

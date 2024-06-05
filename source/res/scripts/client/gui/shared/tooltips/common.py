@@ -610,9 +610,9 @@ class ClanCommonInfoTooltipData(ToolTipBaseData):
             name = formatField(getter=data.getName)
             motto = formatField(getter=data.getMotto)
             userName = '{} {}'.format(self.__usersInfoHelper.getUserName(data.getLeaderDbID()), clans_fmts.getClanAbbrevString(abbrev))
-            isActive = text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_NO))
+            isActive = text_styles.error(backport.text(R.strings.tooltips.clanCommonInfo.no()))
             if data.isActive():
-                isActive = text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_YES))
+                isActive = text_styles.successBright(backport.text(R.strings.tooltips.clanCommonInfo.yes()))
             return {'clanName': i18n.makeString(TOOLTIPS.CLANCOMMONINFO_CLANNAME, clanAbbrev=abbrev, clanName=name),
              'slogan': text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_SLOGAN, slogan=text_styles.standard(motto))),
              'statValues': statValues,

@@ -573,10 +573,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 self.isLongDisconnectedFromCenter = isLongDisconnectedFromCenter
                 events.onCenterIsLongDisconnected(isLongDisconnectedFromCenter)
         events.isPlayerEntityChanging = False
-        if ctx.get('skipShowGUI', False):
-            events.onAccountShowGUISkipped(ctx)
-        else:
-            events.onAccountShowGUI(ctx)
+        events.onAccountShowGUI(ctx)
 
     def receiveQueueInfo(self, queueInfo):
         events.onQueueInfoReceived(queueInfo)

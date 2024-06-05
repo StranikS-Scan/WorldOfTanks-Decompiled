@@ -3,6 +3,7 @@
 import SoundGroups
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from constants import EQUIPMENT_STAGES
+from frontline_common.frontline_constants import FLBattleReservesModifier
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, PROGRESS_CIRCLE_TYPE
@@ -11,7 +12,6 @@ from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicBattleSoundController(SoundPlayersController):
 
@@ -35,7 +35,6 @@ class EpicBattleSoundController(SoundPlayersController):
 
 class _EquipmentSoundPlayer(object):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def init(self):
         equipmentsCtrl = self.__sessionProvider.shared.equipments
@@ -92,7 +91,8 @@ class _EquipmentSoundPlayer(object):
         return
 
     def __onPlayerRankUpdated(self, rank):
-        if self.__epicController.isRandomBattleReserves():
+        arenaDP = self.__sessionProvider.getArenaDP()
+        if arenaDP and arenaDP.getReservesModifier() == FLBattleReservesModifier.RANDOM:
             return
         missionsCtrl = self.__sessionProvider.dynamic.missions
         firstUnlocked, _ = missionsCtrl.getRankUpdateData(rank)

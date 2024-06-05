@@ -36,7 +36,7 @@ class LoreSettingsModel(models.Model):
 
 
 missionLoreSchema = schemas.Schema(fields={'id': fields.Integer(required=True, serializedValidators=validate.Range(minValue=1), deserializedValidators=validate.Range(minValue=1)),
- 'music': fields.String(required=True),
+ 'music': fields.String(required=False, default=''),
  'vo': fields.String(required=True),
  'battleMusic': fields.String(required=True)}, modelClass=MissionLoreModel, checkUnknown=True)
 epilogueLoreSchema = schemas.Schema(fields={'music': fields.String(required=True),

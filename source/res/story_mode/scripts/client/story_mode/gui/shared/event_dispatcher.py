@@ -13,10 +13,11 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
+from story_mode.gui.scaleform.daapi.view.model.intro_video_settings_model import getSettings
 from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import LOGGER_NAME
+from story_mode_common.story_mode_constants import LOGGER_NAME, FIRST_MISSION_ID
 from wg_async import wg_async, wg_await
 _logger = getLogger(LOGGER_NAME)
 
@@ -49,10 +50,27 @@ def ifNotArenaLoaded(func):
     return wrapper
 
 
+def isViewLoaded(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    return True if not uiLoader or not uiLoader.windowsManager or uiLoader.windowsManager.getViewByLayoutID(layoutID) else False
+
+
 @ifNotArenaLoaded
-def showIntroVideo():
-    _logger.debug('showIntroVideo')
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORY_MODE_INTRO_VIDEO_WINDOW)), EVENT_BUS_SCOPE.BATTLE)
+def showIntro(missionId):
+    missionId = missionId or FIRST_MISSION_ID
+    videoData = getSettings()
+    isMissionHasVideo = next((mission for mission in videoData.missions if mission.id == missionId), None)
+    if isMissionHasVideo:
+        showIntroVideo(missionId)
+    else:
+        showPrebattleWindow(missionId)
+    return
+
+
+@ifNotArenaLoaded
+def showIntroVideo(missionId):
+    _logger.debug('showIntroVideo for mission with id: %s', missionId)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORY_MODE_INTRO_VIDEO_WINDOW), ctx={'missionId': missionId}), EVENT_BUS_SCOPE.BATTLE)
 
 
 @ifNotArenaLoaded
@@ -94,10 +112,10 @@ def showQueueWindow(isSkipButtonVisible=False):
 
 
 @UseStoryModeFading(show=False, waitForLayoutReady=R.views.story_mode.common.CongratulationsWindow())
-def showCongratulationsWindow(isCloseVisible=False, onClose=None):
+def showCongratulationsWindow(isCloseVisible=False, onClose=None, awardData=None):
     _logger.debug('showCongratulationsWindow')
     from story_mode.gui.impl.common.congratulations_window import CongratulationsWindow
-    window = CongratulationsWindow(isCloseVisible=isCloseVisible, onClose=onClose)
+    window = CongratulationsWindow(isCloseVisible=isCloseVisible, onClose=onClose, awardData=awardData)
     window.load()
 
 
@@ -125,3 +143,8 @@ def showBattleResultWindow(arenaUniqueId):
 def sendViewLoadedEvent(layoutID):
     from story_mode.gui.shared.event import StoryModeViewReadyEvent
     g_eventBus.handleEvent(StoryModeViewReadyEvent(layoutID))
+
+
+def showWelcomeWindow():
+    from story_mode.gui.impl.lobby.welcome_view import WelcomeWindow
+    WelcomeWindow(R.views.story_mode.lobby.WelcomeView()).load()

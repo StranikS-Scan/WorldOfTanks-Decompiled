@@ -12,6 +12,7 @@ from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from frontline_common.frontline_constants import FLBattleReservesModifier
 
 class FLRandomReserve(BlocksTooltipData):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -36,7 +37,8 @@ class FLRandomReserve(BlocksTooltipData):
         self.itemCD = item.getDescriptor().compactDescr
         equipment = self.__getEquipmentByIntCD(self.itemCD)
         isStacked = self.__epicController.isReserveStack(equipment.extraName()) and item.getQuantity() > 1
-        hasRandomBonusCap = self.__epicController.isRandomBattleReserves()
+        arenaDP = self.__sessionProvider.getArenaDP()
+        hasRandomBonusCap = arenaDP and arenaDP.getReservesModifier() == FLBattleReservesModifier.RANDOM
         index = args[0]
         width = self._DISABLED_TOOLTIP_MIN_WIDTH if self.__isDisabled(index) else (self._STACK_TOOLTIP_MIN_WIDTH if isStacked else self._NO_STACK_TOOLTIP_MIN_WIDTH)
         self._setWidth(width)

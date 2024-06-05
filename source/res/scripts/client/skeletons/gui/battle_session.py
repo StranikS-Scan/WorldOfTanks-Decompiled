@@ -545,6 +545,9 @@ class IArenaDataProvider(object):
     def isAlly(self, attackerID):
         raise NotImplementedError
 
+    def getReservesModifier(self):
+        raise NotImplementedError
+
 
 class IBattleContext(object):
 

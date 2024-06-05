@@ -14,6 +14,7 @@ import ResMgr
 import bwdeprecations
 from bwdebug import NOTICE_MSG
 DEFAULT_ENCODING = 'utf-8'
+PLATFORM_SUFFIX = BWUtil.getPlatformSuffix()
 
 class _Helper(object):
 
@@ -53,10 +54,16 @@ def resMgrDirExists(path):
 def getsitepackages():
     sitepackages = []
     seen = set()
+    from soft_exception import SoftException
+    if not PLATFORM_SUFFIX:
+        raise SoftException('Unable to determine platform suffix')
     for prefix in sys.path:
         if not prefix or prefix in seen:
             continue
         seen.add(prefix)
+        if prefix.endswith('scripts/server_common'):
+            fullPath = os.path.join(prefix, 'site-packages') + '/' + PLATFORM_SUFFIX
+            sitepackages.append(fullPath)
         sitepackages.append(os.path.join(prefix, 'site-packages'))
 
     return sitepackages

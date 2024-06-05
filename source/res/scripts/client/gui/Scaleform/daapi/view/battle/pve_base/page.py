@@ -51,8 +51,8 @@ _EXTENDED_CONFIG = _PVE_BASE_CONFIG + EXTENDED_CLASSIC_CONFIG
 
 class PveBaseBattlePage(ClassicPage):
 
-    def __init__(self, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
-        components = _COMMON_CONFIG if self.sessionProvider.isReplayPlaying else _EXTENDED_CONFIG
+    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
+        components = components if components is not None else (_COMMON_CONFIG if self.sessionProvider.isReplayPlaying else _EXTENDED_CONFIG)
         super(PveBaseBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
         self.__isFullMapVisible = False
         self.__defaultStateVisibleComponents = set()
@@ -100,8 +100,8 @@ class PveBaseBattlePage(ClassicPage):
             return
 
     def _setComponentsVisibility(self, visible=None, hidden=None):
-        visibleAliases = visible - _REMOVED_COMPONENTS if visible else set()
-        hiddenAliases = hidden - _REMOVED_COMPONENTS if hidden else set()
+        visibleAliases = self._filterExistingViewAliases(visible)
+        hiddenAliases = self._filterExistingViewAliases(hidden)
         if self.__isChatHidden:
             visibleAliases.discard(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER)
         self.__defaultStateVisibleComponents.update(visibleAliases)
@@ -109,6 +109,9 @@ class PveBaseBattlePage(ClassicPage):
         if self.__isFullMapVisible:
             return
         super(PveBaseBattlePage, self)._setComponentsVisibility(visibleAliases, hiddenAliases)
+
+    def _filterExistingViewAliases(self, income):
+        return income - _REMOVED_COMPONENTS if income is not None else set()
 
     def as_isComponentVisibleS(self, componentKey):
         return super(PveBaseBattlePage, self).as_isComponentVisibleS(componentKey) if componentKey in self.components else False
@@ -167,11 +170,11 @@ class PveBaseBattlePage(ClassicPage):
         if self.__canToggleFullMap and self.__isFullMapVisible:
             self._toggleFullMap(False)
         super(PveBaseBattlePage, self)._onPostMortemSwitched(noRespawnPossible, respawnAvailable)
-        self._setComponentsVisibility(hidden=_POSTMORTEM_HIDDEN_COMPONENTS)
+        self._setComponentsVisibility(hidden=_POSTMORTEM_HIDDEN_COMPONENTS, visible={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
 
     def _onRespawnBaseMoving(self):
         super(PveBaseBattlePage, self)._onRespawnBaseMoving()
-        self._setComponentsVisibility(visible=_POSTMORTEM_HIDDEN_COMPONENTS)
+        self._setComponentsVisibility(visible=_POSTMORTEM_HIDDEN_COMPONENTS, hidden={BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL})
 
     def _canShowPostmortemTips(self):
         return super(PveBaseBattlePage, self)._canShowPostmortemTips() or BattleReplay.g_replayCtrl.isPlaying

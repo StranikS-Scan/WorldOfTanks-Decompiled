@@ -361,7 +361,6 @@ class SYSTEM_MESSAGES(object):
     UNLOAD_TANKMAN_BUTTON = '#system_messages:unload_tankman/button'
     UNLOAD_CREW_SUCCESS = '#system_messages:unload_crew/success'
     UNLOAD_CREW_SERVER_ERROR = '#system_messages:unload_crew/server_error'
-    UNLOAD_CREW_NOT_ENOUGH_SPACE = '#system_messages:unload_crew/not_enough_space'
     UNLOAD_CREW_INVALID_VEHICLE = '#system_messages:unload_crew/invalid_vehicle'
     UNLOAD_CREW_VEHICLE_NEED_REPAIR = '#system_messages:unload_crew/vehicle_need_repair'
     UNLOAD_CREW_VEHICLE_LOCKED = '#system_messages:unload_crew/vehicle_locked'
@@ -1241,7 +1240,6 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
     BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
     BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
-    BATTLEPASS_SWITCH_DISABLE_INCOMPLETESTYLE = '#system_messages:battlePass/switch_disable/incompleteStyle'
     BATTLEPASS_SWITCH_ENABLED_BODY = '#system_messages:battlePass/switch_enabled/body'
     BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY = '#system_messages:battlePass/switch_disable/battle_royale/body'
     BATTLEPASS_SWITCH_ENABLED_RANKED_BODY = '#system_messages:battlePass/switch_enabled/ranked/body'
@@ -1265,11 +1263,6 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_GAMEMODEENABLED_BODY_37 = '#system_messages:battlePass/gameModeEnabled/body/37'
     BATTLEPASS_GAMEMODEENABLED_BODY_43 = '#system_messages:battlePass/gameModeEnabled/body/43'
     BATTLEPASS_SEASONEND_TEXT = '#system_messages:battlePass/seasonEnd/text'
-    BATTLEPASS_SEASONEND_REWARDS_STYLE = '#system_messages:battlePass/seasonEnd/rewards/style'
-    BATTLEPASS_SEASONEND_REWARDS_CREWBOOK = '#system_messages:battlePass/seasonEnd/rewards/crewBook'
-    BATTLEPASS_SEASONEND_REWARDS_DEVICE = '#system_messages:battlePass/seasonEnd/rewards/device'
-    BATTLEPASS_SEASONEND_REWARDS_TROPHY = '#system_messages:battlePass/seasonEnd/rewards/trophy'
-    BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS = '#system_messages:battlePass/seasonEnd/rewards/blueprints'
     BATTLEPASS_SWITCHCHAPTER_ERROR = '#system_messages:battlePass/switchChapter/error'
     BATTLEPASS_SWITCHCHAPTER_SUCCESS = '#system_messages:battlePass/switchChapter/success'
     BATTLEPASS_SWITCHCHAPTER_REMINDER = '#system_messages:battlePass/switchChapter/reminder'
@@ -1367,6 +1360,13 @@ class SYSTEM_MESSAGES(object):
     ACHIEVEMENTS_SERVER_ERROR = '#system_messages:achievements/server_error'
     LIMITEDUI_SWITCHON = '#system_messages:limitedUI/switchOn'
     LIMITEDUI_SWITCHOFF = '#system_messages:limitedUI/switchOff'
+    EARNING_TITLE = '#system_messages:earning/title'
+    EARNING_BUTTON_SINGLE = '#system_messages:earning/button/single'
+    EARNING_BUTTON_MULTIPLE = '#system_messages:earning/button/multiple'
+    EARNING_COMMON_SINGLE = '#system_messages:earning/common/single'
+    EARNING_COMMON_MULTIPLE = '#system_messages:earning/common/multiple'
+    EARNING_TROPHY_SINGLE = '#system_messages:earning/trophy/single'
+    EARNING_TROPHY_MULTIPLE = '#system_messages:earning/trophy/multiple'
     SENIORITYAWARDS_SWITCH_PAUSE_ON_BODY = '#system_messages:seniorityAwards/switch_pause_on/body'
     SENIORITYAWARDS_SWITCH_PAUSE_OFF_BODY = '#system_messages:seniorityAwards/switch_pause_off/body'
     CONVERSION_TITLE = '#system_messages:conversion/title'
@@ -1865,7 +1865,6 @@ class SYSTEM_MESSAGES(object):
      UNLOAD_TANKMAN_BUTTON,
      UNLOAD_CREW_SUCCESS,
      UNLOAD_CREW_SERVER_ERROR,
-     UNLOAD_CREW_NOT_ENOUGH_SPACE,
      UNLOAD_CREW_INVALID_VEHICLE,
      UNLOAD_CREW_VEHICLE_NEED_REPAIR,
      UNLOAD_CREW_VEHICLE_LOCKED,
@@ -2745,7 +2744,6 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_PAUSE_BODY,
      BATTLEPASS_SWITCH_DISABLE_TITLE,
      BATTLEPASS_SWITCH_DISABLE_BODY,
-     BATTLEPASS_SWITCH_DISABLE_INCOMPLETESTYLE,
      BATTLEPASS_SWITCH_ENABLED_BODY,
      BATTLEPASS_SWITCH_DISABLE_BATTLE_ROYALE_BODY,
      BATTLEPASS_SWITCH_ENABLED_RANKED_BODY,
@@ -2769,11 +2767,6 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_GAMEMODEENABLED_BODY_37,
      BATTLEPASS_GAMEMODEENABLED_BODY_43,
      BATTLEPASS_SEASONEND_TEXT,
-     BATTLEPASS_SEASONEND_REWARDS_STYLE,
-     BATTLEPASS_SEASONEND_REWARDS_CREWBOOK,
-     BATTLEPASS_SEASONEND_REWARDS_DEVICE,
-     BATTLEPASS_SEASONEND_REWARDS_TROPHY,
-     BATTLEPASS_SEASONEND_REWARDS_BLUEPRINTS,
      BATTLEPASS_SWITCHCHAPTER_ERROR,
      BATTLEPASS_SWITCHCHAPTER_SUCCESS,
      BATTLEPASS_SWITCHCHAPTER_REMINDER,
@@ -2871,6 +2864,13 @@ class SYSTEM_MESSAGES(object):
      ACHIEVEMENTS_SERVER_ERROR,
      LIMITEDUI_SWITCHON,
      LIMITEDUI_SWITCHOFF,
+     EARNING_TITLE,
+     EARNING_BUTTON_SINGLE,
+     EARNING_BUTTON_MULTIPLE,
+     EARNING_COMMON_SINGLE,
+     EARNING_COMMON_MULTIPLE,
+     EARNING_TROPHY_SINGLE,
+     EARNING_TROPHY_MULTIPLE,
      SENIORITYAWARDS_SWITCH_PAUSE_ON_BODY,
      SENIORITYAWARDS_SWITCH_PAUSE_OFF_BODY,
      CONVERSION_TITLE,

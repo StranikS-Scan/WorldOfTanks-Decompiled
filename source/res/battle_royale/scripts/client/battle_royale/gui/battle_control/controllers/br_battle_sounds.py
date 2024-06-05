@@ -88,6 +88,9 @@ class BREvents(object):
     BATTLE_STARTED = 'BR_start_battle'
     BATTLE_WIN = 'BR_win'
     BATTLE_DEFEAT = 'BR_defeat'
+    BERSERKER_ACTIVATION = 'BR_perk_berserker_activation'
+    BERSERKER_DEACTIVATION = 'BR_perk_berserker_deactivation'
+    BERSERKER_PULSE_RED = 'BR_perk_berserker_pulse_red'
     EQUIPMENT_ACTIVATED = {BattleRoyaleEquipments.LARGE_REPAIRKIT: 'BR_perk_repair_activation',
      BattleRoyaleEquipments.REGENERATION_KIT: 'BR_perk_hp_restore_activation',
      BattleRoyaleEquipments.SELF_BUFF: 'BR_perk_selfbuff_activation',
@@ -102,10 +105,12 @@ class BREvents(object):
      BattleRoyaleEquipments.CLING_BRANDER: 'BR_perk_clingbrander_zone_applied',
      BattleRoyaleEquipments.SHOT_PASSION: 'BR_perk_shotpassion_activation',
      BattleRoyaleEquipments.BOMBER: 'BR_perk_airstrike_zone_applied',
-     BattleRoyaleEquipments.THUNDER_STRIKE: 'BR_perk_thundersrtike_zone_applied'}
+     BattleRoyaleEquipments.THUNDER_STRIKE: 'BR_perk_thundersrtike_zone_applied',
+     BattleRoyaleEquipments.BERSERKER: BERSERKER_ACTIVATION}
     EQUIPMENT_DEACTIVATED = {BattleRoyaleEquipments.REGENERATION_KIT: 'BR_perk_hp_restore_deactivation',
      BattleRoyaleEquipments.SELF_BUFF: 'BR_perk_selfbuff_deactivation',
-     BattleRoyaleEquipments.ADAPTATION_HEALTH_RESTORE: 'BR_perk_hp_restore2_deactivation'}
+     BattleRoyaleEquipments.ADAPTATION_HEALTH_RESTORE: 'BR_perk_hp_restore2_deactivation',
+     BattleRoyaleEquipments.BERSERKER: BERSERKER_DEACTIVATION}
     TRAP_POINT_ENTER = 'BR_perk_trap_slowdown_affects'
     TRAP_POINT_EXIT = 'BR_perk_trap_slowdown_affects_off'
     REPAIR_POINT_ENTER = 'BR_perk_repairpoint_affects'
@@ -113,9 +118,6 @@ class BREvents(object):
     HEAL_POINT_ENTER = 'BR_perk_healzone_affects'
     HEAL_POINT_EXIT = 'BR_perk_healzone_affects_off'
     AIRSTRIKE_AFFECTS = 'BR_perk_airstrike_affects'
-    BERSERKER_ACTIVATION = 'BR_perk_berserker_activation'
-    BERSERKER_DEACTIVATION = 'BR_perk_berserker_deactivation'
-    BERSERKER_PULSE_RED = 'BR_perk_berserker_pulse_red'
     KAMIKAZE_HITS_TARGET = 'BR_perk_kamikaze_hits_target'
     KAMIKAZE_TARGET_LOST = 'BR_perk_kamikaze_target_lost'
     KAMIKAZE_DETECTED = 'BR_brander_detected'
@@ -774,7 +776,6 @@ class BerserkerSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
             if berserkerData['duration'] <= 0:
                 self.__stopEffect()
                 return
-            BREvents.playSound(BREvents.BERSERKER_ACTIVATION)
             self.__stopEffect()
             self.__period = berserkerData['tickInterval']
             self.delayCallback(self.__period, self.__updateEffect)
@@ -790,7 +791,6 @@ class BerserkerSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
         if self.__period is not None:
             self.stopCallback(self.__updateEffect)
             self.__period = None
-            BREvents.playSound(BREvents.BERSERKER_DEACTIVATION)
         return
 
 

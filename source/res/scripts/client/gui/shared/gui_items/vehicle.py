@@ -2154,10 +2154,6 @@ def getVehicleClassTag(tags):
     return result
 
 
-def getCrewCount(vehs):
-    return reduce(lambda acc, value: acc + value, [ len([ tankman for _, tankman in veh.crew if tankman is not None ]) for veh in vehs ])
-
-
 _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_BATTLE,
  Vehicle.VEHICLE_STATE.IN_PREBATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_INPREBATTLE,
  Vehicle.VEHICLE_STATE.DAMAGED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,

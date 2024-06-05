@@ -51,6 +51,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
 from gui.sounds.filters import States, StatesGroup
+from gui.tournament.tournament_helpers import isTournamentEnabled
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.i18n import makeString as _ms
@@ -712,12 +713,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     @ifComponentAvailable(HANGAR_CONSTS.COMP7_TOURNAMENT_BANNER)
     def __updateComp7TournamentWidget(self):
-        self.as_setComp7TournamentBannerVisibleS(self.__comp7Controller.isTournamentBannerEnabled)
+        isBannerVisible = self.__comp7Controller.isTournamentBannerEnabled and isTournamentEnabled()
+        self.as_setComp7TournamentBannerVisibleS(isBannerVisible)
 
     def __updatePrestigeProgressWidget(self):
-        if g_currentVehicle.intCD is not None:
+        visible = False
+        if not self.battleRoyaleController.isBattleRoyaleMode() and g_currentVehicle.intCD is not None:
             visible = hasVehiclePrestige(g_currentVehicle.intCD, checkElite=True, lobbyContext=self.lobbyContext, itemsCache=self.itemsCache)
-        else:
-            visible = False
         self.as_setPrestigeWidgetVisibleS(visible)
         return

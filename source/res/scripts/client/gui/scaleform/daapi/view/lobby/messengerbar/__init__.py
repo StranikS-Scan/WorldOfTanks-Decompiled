@@ -4,6 +4,7 @@ from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.messengerBar.VehicleCompareCartButton import VehicleCompareCartButton
 from gui.Scaleform.daapi.view.lobby.messengerBar.session_stats_button import SessionStatsButton
+from gui.Scaleform.daapi.view.lobby.profile.earning_pop_up_view import EarningPopUpView
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -30,7 +31,8 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.MESSENGER_BAR, MessengerBar, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.NOTIFICATION_LIST_BUTTON, NotificationListButton, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(SESSION_STATS_CONSTANTS.SESSION_STATS_BUTTON_ALIAS, SessionStatsButton, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.SYSTEM_MESSAGES, NotificationPopUpViewer, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(VIEW_ALIAS.SYSTEM_MESSAGES, NotificationPopUpViewer, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.ADVANCED_ACHIEVEMENTS_EARNING_VIEW, EarningPopUpView, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

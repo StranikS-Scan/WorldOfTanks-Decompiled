@@ -4802,6 +4802,20 @@
         </effects>
       </variant1>
     </hd_env_UNI_073_BurntTree_01_touchdown>
+    <hd_env403_TownEnv_StreetLamp1_night_lifetime>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/interior/33_fjord_nb_streetlamp_glow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env403_TownEnv_StreetLamp1_night_lifetime>
     <hd_env_UNI_073_BurntTreeStump_01_touchdown>
       <variant1>
         <stages>
@@ -23662,6 +23676,54 @@
         </effects>
       </variant1>
     </inf_envAF_005_ClayJug_1_01_hit>
+    <inf_envAF_005_ClayJug_1_02_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	26	</stone_1>
+              <glass>	1	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAF_005_ClayJug_1_02_01>
+    <inf_envAF_005_ClayJug_1_02_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAF_005_ClayJug_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	26	</stone_1>
+              <glass>	1	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAF_005_ClayJug_1_02_hit>
     <inf_envAF_005_ClayJug_1_03_01>
       <variant1>
         <stages>

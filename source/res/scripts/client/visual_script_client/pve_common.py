@@ -12,8 +12,6 @@ from visual_script.slot_types import SLOT_TYPE
 if not IS_VS_EDITOR:
     from skeletons.gui.battle_session import IBattleSessionProvider
     from helpers import dependency
-    from gui.impl.gen import R
-    from gui.impl import backport
 _logger = getPveHudLogger()
 
 class SettingType(IntEnum):
@@ -32,33 +30,7 @@ class PropertySlotSpec(object):
         self.required = required
 
 
-class ClientPVEBattleHUD(PVEBattleHUDMeta):
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-    @staticmethod
-    def _getText(template):
-        if template is None:
-            return ''
-        else:
-            if template.startswith('#'):
-                resNames = template.replace('#', '').replace(':', '/').split('/')
-                res = R.strings
-                for name in resNames:
-                    res = res.dyn(name)
-
-                text = backport.text(res())
-                if not text:
-                    _logger.error('Text for key=%s not found.', template)
-                    text = template
-            else:
-                text = template.replace('\\n', '\n')
-            return text
-
-
-class ClientBattleHUDWidgetSettings(Block, ClientPVEBattleHUD):
+class ClientBattleHUDWidgetSettings(Block, PVEBattleHUDMeta):
     _SETTINGS_MODEL = None
     _WIDGET_TYPE = None
     _SETTINGS_CONFIG = list()
@@ -80,6 +52,10 @@ class ClientBattleHUDWidgetSettings(Block, ClientPVEBattleHUD):
             self._slotSpecs.insert(0, self._ID_SLOT)
         self._settingsSlots = [ self.__makeSettingsSlot(slotSpec) for slotSpec in self._slotSpecs ]
         return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
 
     def validate(self):
         for idx, slotSpec in enumerate(self._slotSpecs):
@@ -110,7 +86,8 @@ class ClientBattleHUDWidgetSettings(Block, ClientPVEBattleHUD):
             slot.setEditorData(slotSpec.editorData)
         return slot
 
-    def __getSettingValue(self, slot, slotType):
+    @staticmethod
+    def __getSettingValue(slot, slotType):
         if not slot.hasValue():
             if slotType == SLOT_TYPE.BOOL:
                 resultValue = False
@@ -122,8 +99,6 @@ class ClientBattleHUDWidgetSettings(Block, ClientPVEBattleHUD):
             value = slot.getValue()
             if slotType == SLOT_TYPE.SOUND:
                 resultValue = value.name
-            elif slotType == SLOT_TYPE.STR:
-                resultValue = self._getText(value)
             else:
                 resultValue = value
         return resultValue

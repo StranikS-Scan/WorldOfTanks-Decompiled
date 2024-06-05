@@ -11,6 +11,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.rewards_selection_view_mod
 from gui.impl.lobby.common.selectable_reward_base import SelectableRewardBase
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.selectable_reward.common import BattlePassSelectableRewardManager
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -64,7 +65,7 @@ class RewardsSelectionView(SelectableRewardBase):
                 rewardsGenerator = ({group: rewards} for group, rewards in successRewards.iteritems())
                 self.__safeCall(self.__onRewardsReceivedCallback, rewardsGenerator)
         else:
-            SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error)
+            SystemMessages.pushI18nMessage(backport.text(R.strings.system_messages.battlePass.rewardChoice.error()), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
         self.destroyWindow()
 
     @staticmethod

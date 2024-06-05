@@ -5,6 +5,12 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </upgradeReadinessTime>
+    <isVehicleUpgrading>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <default>	FALSE	</default>
+    </isVehicleUpgrading>
   </Properties>
   <CellMethods>
     <upgradeVehicle>

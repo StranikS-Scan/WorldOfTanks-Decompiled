@@ -3,13 +3,13 @@
 import logging
 import SoundGroups
 from PlayerEvents import g_playerEvents
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus, Array
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground, chaptersWithLogoBg
 from gui.battle_pass.battle_pass_package import generatePackages
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
@@ -132,8 +132,13 @@ class BattlePassBuyView(ViewImpl):
     def __setGeneralFields(self):
         with self.viewModel.transaction() as tx:
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
-            tx.setIsCustomSeason(self.__battlePass.isCustomSeason())
+            tx.setIsSeasonWithAdditionalBackground(isSeasonWithAdditionalBackground())
             tx.setIsShopOfferAvailable(self.__isShopOfferAvailable())
+            chapterIDs = Array()
+            for chapterID in chaptersWithLogoBg():
+                chapterIDs.addNumber(chapterID)
+
+            tx.setChaptersWithLogoBg(chapterIDs)
 
     def __clearTooltips(self):
         self.__tooltipItems.clear()
@@ -280,7 +285,6 @@ class BattlePassBuyView(ViewImpl):
             item.setType(PackageType.BATTLEPASS)
             item.setIsLocked(package.isLocked())
             item.setChapterID(package.getChapterID())
-            item.setIsCustom(package.isCustom())
             item.setChapterType(ChapterType(getChapterType(package.getChapterID())))
             item.setChapterState(_CHAPTER_STATES.get(package.getChapterState()))
             item.setCurrentLevel(package.getCurrentLevel() + 1)

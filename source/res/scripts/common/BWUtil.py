@@ -4,6 +4,7 @@ import sys
 import os
 from functools import partial, wraps
 from types import GeneratorType
+import platform
 import ResMgr
 import BigWorld
 from bwdebug import TRACE_MSG
@@ -124,6 +125,69 @@ def extendPath(path, name):
             path.append(subdir)
 
     return path
+
+
+def longDistroNameToShort(longDistroName):
+    if longDistroName.startswith('Red Hat'):
+        return 'rhel'
+    return 'CentOS' if longDistroName.startswith('CentOS') else longDistroName
+
+
+SHORT_NAME_ENTERPRISE_LINUX = 'el'
+ENTERPRISE_LINUX_DISTROS = ['centos', 'rhel']
+ALLOWED_DISTROS = ENTERPRISE_LINUX_DISTROS + ['fedora']
+
+def finaliseShortNameFromReleaseInfo(longDistroName, versionStr, releaseName):
+    majorVerStr = versionStr
+    if '.' in versionStr:
+        majorVerStr = versionStr[0:versionStr.index('.')]
+    versionNum = int(majorVerStr)
+    shortDistroName = longDistroNameToShort(longDistroName).lower()
+    if shortDistroName not in ALLOWED_DISTROS:
+        sys.stderr.write("Distribution '%s' is not supported\n" % shortDistroName)
+        return None
+    else:
+        if shortDistroName in ENTERPRISE_LINUX_DISTROS:
+            shortDistroName = SHORT_NAME_ENTERPRISE_LINUX
+        return '%s%d' % (shortDistroName, versionNum)
+
+
+def findPlatformName():
+    if platform.system() == 'Windows':
+        return 'win64'
+    else:
+        try:
+            platformData = platform.linux_distribution()
+        except AttributeError:
+            sys.stderr.write('Unable to detect linux distribution. An old version of Python may be present. BigWorld requires Python 2.7.\n')
+            return None
+
+        return finaliseShortNameFromReleaseInfo(*platformData)
+        return None
+
+
+def getPlatformArchitecutre():
+    try:
+        return platform.processor()
+    except:
+        sys.stderr.write('Unable to detect platform architecture')
+        return None
+
+    return None
+
+
+def getPlatformSuffix():
+    platformName = findPlatformName()
+    if not platformName:
+        return None
+    else:
+        platformArchitecture = getPlatformArchitecutre()
+        if not platformArchitecture:
+            return None
+        platformSuffix = platformName
+        if platformName == 'el9':
+            platformSuffix += '/' + platformArchitecture
+        return platformSuffix
 
 
 class AsyncReturn(StopIteration):

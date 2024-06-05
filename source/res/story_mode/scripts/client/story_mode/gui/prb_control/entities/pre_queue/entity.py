@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/prb_control/entities/pre_queue/entity.py
 import BigWorld
+from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control import prbDispatcherProperty
@@ -14,7 +15,7 @@ from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from story_mode.gui.impl.battle.prebattle_window import getOpenedPrebattleView
-from story_mode.gui.prb_control.entities.pre_queue import missionCompletionCheck
+from story_mode.gui.prb_control.entities.pre_queue import tasksAvailableCheck
 from story_mode.gui.prb_control.entities.pre_queue.actions_validator import StoryModeActionsValidator
 from story_mode.gui.prb_control.entities.pre_queue.ctx import StoryModeQueueCtx
 from story_mode.gui.prb_control.entities.pre_queue.permissions import StoryModePermissions
@@ -22,7 +23,6 @@ from story_mode.gui.shared.event_dispatcher import showQueueWindow
 from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode_common.story_mode_constants import QUEUE_TYPE
 from wg_async import wg_async, wg_await
 
 class StoryModeEntryPoint(PreQueueEntryPoint):
@@ -92,7 +92,7 @@ class StoryModeEntity(PreQueueEntity):
     def getConfirmDialogMeta(self, ctx):
         return None
 
-    @missionCompletionCheck
+    @tasksAvailableCheck
     def queue(self, ctx, callback=None):
         super(StoryModeEntity, self).queue(ctx, callback=callback)
 
@@ -107,7 +107,7 @@ class StoryModeEntity(PreQueueEntity):
 
     @property
     def _skippedShowGUI(self):
-        return self._guiCtx.get('skipShowGUI', False)
+        return self._guiCtx.get('skipHangar', False)
 
     @property
     def _accountComponent(self):

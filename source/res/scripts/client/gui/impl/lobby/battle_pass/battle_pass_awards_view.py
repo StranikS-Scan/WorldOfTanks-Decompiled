@@ -120,7 +120,7 @@ class BattlePassAwardsView(ViewImpl):
         return
 
     def __setAwards(self, bonuses, isFinalReward):
-        rewards = BattlePassAwardsManager.composeBonuses(bonuses)
+        rewards = BattlePassAwardsManager.hideInvisible(BattlePassAwardsManager.composeBonuses(bonuses))
         rewards = BattlePassAwardsManager.sortBonuses(BattlePassAwardsManager.uniteTokenBonuses(rewards))
         if not rewards:
             return

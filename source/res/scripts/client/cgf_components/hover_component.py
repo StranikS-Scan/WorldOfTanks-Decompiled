@@ -6,7 +6,7 @@ import GUI
 import Event
 from GenericComponents import VSEComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
-from cgf_script.component_meta_class import registerComponent
+from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
 from constants import IS_CLIENT, CollisionFlags
 from vehicle_systems.tankStructure import ColliderTypes
 from helpers import dependency
@@ -19,6 +19,7 @@ class SelectionComponent(object):
     editorTitle = 'Selection'
     category = 'Common'
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    highlight = ComponentProperty(type=CGFMetaTypes.BOOL, value=True, editorName='highlight')
 
     def __init__(self):
         super(SelectionComponent, self).__init__()

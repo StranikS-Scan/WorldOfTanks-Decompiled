@@ -68,6 +68,9 @@ class TutorialStateWaitScene(_TutorialState):
             else:
                 self._tutorial.evaluateState()
 
+    def setInput(self, event):
+        self._processEvent(event, self._funcChapterCtx, isGlobal=True)
+
 
 class TutorialStateNextScene(_TutorialState):
 

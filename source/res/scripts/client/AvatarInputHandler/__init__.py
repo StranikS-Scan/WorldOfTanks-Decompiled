@@ -810,7 +810,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
         vehicleID = None
         if isObserverMode:
-            vehicleID = self.__observerVehicle
+            if self.__observerVehicle is not None:
+                vehicleID = self.__observerVehicle
+            elif player.observedVehicleID and player.observedVehicleID != player.playerVehicleID:
+                vehicleID = player.observedVehicleID
         else:
             vehicle = player.getVehicleAttached()
             if vehicle is not None and BattleReplay.g_replayCtrl.isPlaying:

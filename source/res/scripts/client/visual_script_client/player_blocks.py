@@ -777,3 +777,18 @@ class OnVehicleSixthSenseActivated(TunablePlayerVehicleEventBlock, PlayerEventMe
     @TunableEventBlock.eventProcessor
     def onSixthSenceActivated(self):
         pass
+
+
+class OnPlayerUsedAOEEquipment(TunablePlayerVehicleEventBlock, PlayerEventMeta):
+    _EVENT_SLOT_NAMES = ['onEquipmentUsed']
+
+    def __init__(self, *args, **kwargs):
+        super(OnPlayerUsedAOEEquipment, self).__init__(*args, **kwargs)
+        self._name = self._makeDataOutputSlot('name', SLOT_TYPE.STR, None)
+        self._position = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, None)
+        return
+
+    @TunableEventBlock.eventProcessor
+    def onPlayerUsedAoEEquipment(self, name, position):
+        self._name.setValue(name)
+        self._position.setValue(position)

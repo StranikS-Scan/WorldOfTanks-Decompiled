@@ -8,12 +8,9 @@ from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicBattleModificationPanel(EpicModificationPanelMeta, IArenaVehiclesController):
     __slots__ = ('_isVisible', '_lastPeriod')
-    __description = FLBattleTypeDescription()
-    __epicMetaCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -54,6 +51,8 @@ class EpicBattleModificationPanel(EpicModificationPanelMeta, IArenaVehiclesContr
         self._lastPeriod = period
 
     def __getData(self):
-        return {'modificationIconPath': self.__description.getBattleTypeIconPath('c_64x64'),
-         'modificationTitle': self.__description.getTitle(),
-         'modificationDescription': self.__description.getShortDescription()}
+        arenaDP = self.__sessionProvider.getArenaDP()
+        modifier = arenaDP.getReservesModifier() if arenaDP else None
+        return {'modificationIconPath': FLBattleTypeDescription.getBattleTypeIconPath(modifier, 'c_64x64'),
+         'modificationTitle': FLBattleTypeDescription.getTitle(modifier),
+         'modificationDescription': FLBattleTypeDescription.getShortDescription(modifier)}

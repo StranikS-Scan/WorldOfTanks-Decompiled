@@ -10,10 +10,10 @@ class MissionSelectionTooltipModel(ViewModel):
         super(MissionSelectionTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleName(self):
-        return self._getResource(0)
+        return self._getString(0)
 
     def setVehicleName(self, value):
-        self._setResource(0, value)
+        self._setString(0, value)
 
     def getVehicleIcon(self):
         return self._getResource(1)
@@ -22,13 +22,13 @@ class MissionSelectionTooltipModel(ViewModel):
         self._setResource(1, value)
 
     def getVehicleDescription(self):
-        return self._getResource(2)
+        return self._getString(2)
 
     def setVehicleDescription(self, value):
-        self._setResource(2, value)
+        self._setString(2, value)
 
     def _initialize(self):
         super(MissionSelectionTooltipModel, self)._initialize()
-        self._addResourceProperty('vehicleName', R.invalid())
+        self._addStringProperty('vehicleName', '')
         self._addResourceProperty('vehicleIcon', R.invalid())
-        self._addResourceProperty('vehicleDescription', R.invalid())
+        self._addStringProperty('vehicleDescription', '')

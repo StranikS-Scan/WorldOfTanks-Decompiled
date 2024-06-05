@@ -85,13 +85,17 @@ class BorderVisual(object):
             return
 
     def destroy(self):
+        for model, node in zip(self.__terrainModels, self.__attachNodes):
+            if model.attached:
+                node.detach(model)
+
+        self.__attachNodes = None
+        self.__modelOffsets = None
+        self.__terrainModels = None
         self.__rootMatrix = None
         if self.__rootModel.inWorld:
             BigWorld.player().delModel(self.__rootModel)
         self.__rootModel = None
-        self.__attachNodes = None
-        self.__modelOffsets = None
-        self.__terrainModels = None
         self.__numModelsPerEdgeState = None
         self.__length = None
         self.__direction = None
@@ -99,9 +103,15 @@ class BorderVisual(object):
 
     def showState(self, edgeState):
         if edgeState == SECTOR_EDGE_STATE.NONE:
-            self.__rootModel.visible = False
+            for terrainModel in self.__terrainModels:
+                if terrainModel.attached:
+                    terrainModel.setVisible(False)
+
             return
-        self.__rootModel.visible = True
+        for terrainModel in self.__terrainModels:
+            if terrainModel.attached:
+                terrainModel.setVisible(True)
+
         if self.__edgeState == edgeState:
             return
         self.__edgeState = edgeState
@@ -111,6 +121,7 @@ class BorderVisual(object):
             terrainModel.setColor(dashesParams.color)
             if not terrainModel.attached:
                 attachNode.attach(terrainModel)
+                terrainModel.setVisible(True)
             offset.translation = dashesParams.offset
             terrainModel.setSize(dashesParams.size)
             terrainModel.updateHeights()
@@ -119,6 +130,7 @@ class BorderVisual(object):
         for idx in range(numModels, len(self.__attachNodes)):
             if self.__terrainModels[idx].attached:
                 self.__attachNodes[idx].detach(self.__terrainModels[idx])
+                self.__terrainModels[idx].setVisible(False)
             break
 
     def __getDashesParams(self, edgeState):

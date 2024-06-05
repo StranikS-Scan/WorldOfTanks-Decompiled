@@ -31,7 +31,7 @@ class ProductState(Enum):
 class BaseProductModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(BaseProductModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -84,6 +84,12 @@ class BaseProductModel(ViewModel):
     def setDescription(self, value):
         self._setString(7, value)
 
+    def getTooltipId(self):
+        return self._getString(8)
+
+    def setTooltipId(self, value):
+        self._setString(8, value)
+
     def _initialize(self):
         super(BaseProductModel, self)._initialize()
         self._addViewModelProperty('price', ProductPriceModel())
@@ -94,3 +100,4 @@ class BaseProductModel(ViewModel):
         self._addStringProperty('state')
         self._addBoolProperty('isNew', False)
         self._addStringProperty('description', '')
+        self._addStringProperty('tooltipId', '')

@@ -233,6 +233,8 @@ class ClassicPage(SharedPage):
             self._setComponentsVisibility(hidden=components)
         else:
             self._setComponentsVisibility(visible=components)
+        postmortemPanel = self.getComponent(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+        postmortemPanel.changeCtrlMode(ctrlMode)
 
     def _getComponentsVideoModeSwitching(self, ctrlMode):
 

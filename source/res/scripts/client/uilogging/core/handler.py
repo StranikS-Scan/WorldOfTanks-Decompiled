@@ -188,20 +188,23 @@ class LogHandler(object):
         self._startSender()
 
     def destroy(self, flush=False):
+        self._logger.debug('Destroy in progress.')
         self._stopSender()
         self._logsBatchWaitingTime = 0
+        self._destroyed = True
         session = self._session.get()
         if session and flush and self._logs:
             BigWorld.setFinalFlushURLRequestsTimeout(FINAL_FLUSH_TIMEOUT)
             for logs in grouper(self._logs, session.maxLogsCount):
                 self._send(session, logs, wait=False)
 
-        self._destroyed = True
         self._logs = []
-        self._session.destroy()
-        self._session = None
-        self._features.destroy()
-        self._features = None
+        if self._session is not None:
+            self._session.destroy()
+            self._session = None
+        if self._features is not None:
+            self._features.destroy()
+            self._features = None
         self.onDestroy()
         self.onDestroy.clear()
         self._logger.debug('Destroyed.')

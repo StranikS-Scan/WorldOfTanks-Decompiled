@@ -137,12 +137,14 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
 class DictDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
-    def __init__(self, name, dossierDescr, compDescr, eventsHandlers, keyFormat, valueFormat):
+    def __init__(self, name, dossierDescr, compDescr, eventsHandlers, keyFormat, valueFormat, popUpRecords, logRecords):
         self.name = name
         self.__dossierDescrRef = weakref.ref(dossierDescr)
         self.__eventsHandlers = eventsHandlers
         self.__itemFormat = keyFormat + valueFormat
         self.__itemSize = struct.calcsize('<' + self.__itemFormat)
+        self.__popUpRecords = popUpRecords
+        self.__logRecords = logRecords
         self.__isExpanded = False
         keyLength = len(keyFormat)
         valueLength = len(valueFormat)
@@ -171,6 +173,10 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
             return
         else:
             self.__data[key] = value
+            if key in self.__popUpRecords:
+                self.__dossierDescrRef().addPopUp(self.name, key, value, addLogRecord=False)
+            if key in self.__logRecords:
+                self.__dossierDescrRef().addLogRecord(self.name, key, value)
             if prevValue is None:
                 self.__added.add(key)
                 _callEventHandlers(eventsEnabled=self.eventsEnabled, handlers=self.__eventsHandlers.get('_insert_', []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=(key, value))
@@ -243,7 +249,7 @@ class DictDossierBlockDescr(DossierBlockDescrInterface):
         return self
 
     def getChanges(self):
-        return self.__changed
+        return self.__changed | self.__added
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
         data = self.__data

@@ -101,7 +101,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def bwProto(self):
         return None
 
-    def showWaiting(self, message, _=False):
+    def showWaiting(self, message, softStart=False, showBg=True):
         self.as_showWaitingS(backport.text(message))
 
     def hideWaiting(self):

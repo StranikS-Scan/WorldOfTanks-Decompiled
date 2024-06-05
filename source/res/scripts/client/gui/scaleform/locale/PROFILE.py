@@ -44,6 +44,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_AVGVICTORYPOINTS = '#profile:profile/params/tooltip/avgVictoryPoints'
     PROFILE_PARAMS_TOOLTIP_MAXVICTORYPOINTS = '#profile:profile/params/tooltip/maxVictoryPoints'
     PROFILE_PARAMS_TOOLTIP_KDR = '#profile:profile/params/tooltip/kdr'
+    PROFILE_TABS_TOOLTIP_ADVANCEDACHIEVEMENTS = '#profile:profile/tabs/tooltip/advancedAchievements'
     PROFILE_TABS_TOOLTIP_AWARDS = '#profile:profile/tabs/tooltip/awards'
     PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_BATTLES = '#profile:profile/params/tooltip/unavailable/fort/battles'
     PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_WINSEFFICIENCY = '#profile:profile/params/tooltip/unavailable/fort/winsEfficiency'
@@ -137,6 +138,8 @@ class PROFILE(object):
     PROFILE_TABS_TOOLTIP_FORMATIONS_BODY = '#profile:profile/tabs/tooltip/formations/body'
     PROFILE_TABS_TOOLTIP_COLLECTIONS_HEADER = '#profile:profile/tabs/tooltip/collections/header'
     PROFILE_TABS_TOOLTIP_COLLECTIONS_BODY = '#profile:profile/tabs/tooltip/collections/body'
+    PROFILE_TABS_TOOLTIP_ADVANCEDACHIEVEMENTS_HEADER = '#profile:profile/tabs/tooltip/advancedAchievements/header'
+    PROFILE_TABS_TOOLTIP_ADVANCEDACHIEVEMENTS_BODY = '#profile:profile/tabs/tooltip/advancedAchievements/body'
     SECTION_SUMMARY_TITLE = '#profile:section/summary/title'
     SECTION_SUMMARY_SCORES_TOTALBATTLES = '#profile:section/summary/scores/totalBattles'
     SECTION_SUMMARY_SCORES_TOTALWINS = '#profile:section/summary/scores/totalWins'
@@ -684,6 +687,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_HEADER = '#profile:profile/params/tooltip/maxHealthRepair/header'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_BODY = '#profile:profile/params/tooltip/maxHealthRepair/body'
     SEASONS_DROPDOWN_LABEL = '#profile:seasons/dropdown_label'
+    SECTION_ADVANCEDACHIEVEMENTS_TITLE = '#profile:section/advancedAchievements/title'
     PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
      PROFILE_DROPDOWN_LABELS_RANDOM,
      PROFILE_DROPDOWN_LABELS_EPICRANDOM,

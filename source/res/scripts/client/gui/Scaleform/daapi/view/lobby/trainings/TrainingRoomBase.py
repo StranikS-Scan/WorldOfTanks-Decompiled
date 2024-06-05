@@ -170,6 +170,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         if isinstance(self.prbEntity, TrainingEntity) and accountInfo.isCurrentPlayer():
             if self._isObserverModeEnabled():
                 self.as_setObserverS(self.prbEntity.storage.isObserver)
+        self.__currentPlayerEntered()
         self._updateStartButton(entity)
 
     def onPlayerTeamNumberChanged(self, entity, team):

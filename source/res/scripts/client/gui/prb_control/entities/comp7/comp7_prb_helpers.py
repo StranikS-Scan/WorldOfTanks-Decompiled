@@ -3,11 +3,10 @@
 import adisp
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
-from comp7_common import seasonPointsCodeBySeasonNumber
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import sf_lobby
+from gui.impl.lobby.comp7.comp7_gui_helpers import isComp7OnboardingShouldBeShown, isComp7WhatsNewShouldBeShown
 from gui.prb_control.entities.base.ctx import Comp7PrbAction, PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import event_dispatcher
@@ -51,7 +50,6 @@ class Comp7ViewPresenter(object):
         pass
 
     def init(self):
-        self.__addListeners()
         if self.__isHangarViewLoaded():
             self.__showView()
         else:
@@ -59,10 +57,6 @@ class Comp7ViewPresenter(object):
 
     def fini(self):
         self.__unsubscribe()
-        self.__removeListeners()
-
-    def __addListeners(self):
-        self.__comp7Ctrl.onSeasonPointsUpdated += self.__onSeasonPointsUpdated
 
     def __subscribe(self):
         self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
@@ -70,26 +64,16 @@ class Comp7ViewPresenter(object):
     def __unsubscribe(self):
         self.__app.loaderManager.onViewLoaded -= self.__onViewLoaded
 
-    def __removeListeners(self):
-        self.__comp7Ctrl.onSeasonPointsUpdated -= self.__onSeasonPointsUpdated
-
     def __onViewLoaded(self, view, *_, **__):
         self.__unsubscribe()
         if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
             self.__showView()
 
-    def __onSeasonPointsUpdated(self):
-        if not self.__isComp7SeasonStasticsShouldBeShown():
-            return
-        self.__showSeasonStatistic()
-
     def __showView(self):
-        if self.__isComp7OnboardingShouldBeShown():
+        if isComp7OnboardingShouldBeShown():
             self.__showOnboarding()
-        elif self.__isComp7WhatsNewShouldBeShown():
+        elif isComp7WhatsNewShouldBeShown():
             self.__showWhatsNew()
-        elif self.__isComp7SeasonStasticsShouldBeShown():
-            self.__showSeasonStatistic()
 
     @classmethod
     def __isHangarViewLoaded(cls):
@@ -99,25 +83,6 @@ class Comp7ViewPresenter(object):
             if hasattr(view, 'alias'):
                 return view.alias == VIEW_ALIAS.LOBBY_HANGAR
         return False
-
-    def __isComp7OnboardingShouldBeShown(self):
-        return not self.__isViewShown(GuiSettingsBehavior.COMP7_INTRO_SHOWN)
-
-    def __isComp7WhatsNewShouldBeShown(self):
-        return not self.__isViewShown(GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN)
-
-    def __isComp7SeasonStasticsShouldBeShown(self):
-        currentSeason = self.__comp7Ctrl.getCurrentSeason()
-        if currentSeason:
-            return False
-        previousSeason = self.__comp7Ctrl.getPreviousSeason()
-        if not previousSeason:
-            return False
-        if self.__isViewShown(GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN):
-            return False
-        seasonPointsCode = seasonPointsCodeBySeasonNumber(previousSeason.getNumber())
-        receivedSeasonPoints = self.__comp7Ctrl.getReceivedSeasonPoints().get(seasonPointsCode)
-        return False if not receivedSeasonPoints else True
 
     @classmethod
     def __isViewShown(cls, key):
@@ -131,7 +96,3 @@ class Comp7ViewPresenter(object):
     @staticmethod
     def __showWhatsNew():
         event_dispatcher.showComp7WhatsNewScreen()
-
-    @staticmethod
-    def __showSeasonStatistic():
-        event_dispatcher.showComp7SeasonStatisticsScreen()

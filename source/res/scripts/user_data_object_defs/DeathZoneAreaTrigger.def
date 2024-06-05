@@ -27,6 +27,12 @@
       <Editable>	True	</Editable>
       <Default>	STATIC_DEATH_ZONE	</Default>
     </MarkerStyle>
+    <ProximityMarkerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	STATIC_DEATH_ZONE_PROXIMITY	</Default>
+    </ProximityMarkerStyle>
     <DrawBorder>
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

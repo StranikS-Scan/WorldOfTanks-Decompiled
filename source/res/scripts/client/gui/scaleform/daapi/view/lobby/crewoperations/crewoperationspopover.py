@@ -6,7 +6,7 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
-from gui.impl.dialogs.dialogs import showRetrainMassiveDialog
+from gui.impl.dialogs.dialogs import showRetrainMassiveDialog, showRetrainSingleDialog
 from gui.prb_control import prb_getters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle, getLowEfficiencyTankmenIds
@@ -54,7 +54,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             if self._ctxData:
                 tankmenIds = self._ctxData.get('tankmenIds', [])
                 vehicleCD = self._ctxData.get('vehicleCD', None)
-                showRetrainMassiveDialog(tankmenIds, vehicleCD)
+                if len(tankmenIds) == 1:
+                    showRetrainSingleDialog(tankmenIds[0], vehicleCD)
+                else:
+                    showRetrainMassiveDialog(tankmenIds, vehicleCD)
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
         else:
@@ -72,7 +75,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew
-        if vehicle.isDisabled or len(getLowEfficiencyTankmenIds(vehicle)) == 1:
+        if vehicle.isDisabled:
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'locked')
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
@@ -112,9 +115,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             isCrewAlreadyInCurrentVehicle = False
             freeBerths += 1
 
-        if tankmenToBarracksCount > 0 and tankmenToBarracksCount > freeBerths:
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_NOSPACE_TOOLTIP)
-        elif demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
+        if demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'allDemobilized')
         elif isCrewAlreadyInCurrentVehicle:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')

@@ -375,8 +375,10 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
 
     def updateBrokenTracks(self, trackState):
         if not self.__brokenTrackVisible:
-            self.__brokenTrackVisible = [False] * len(trackState)
-        for index, isTrackBroken in enumerate(trackState):
-            if isTrackBroken and self.__brokenTrackVisible[index] != isTrackBroken:
-                self.__brokenTrackVisible[index] = isTrackBroken
-                self.appearance.addSimulatedCrashedTrack(index, self.simulationData_tracksInAir)
+            self.__brokenTrackVisible = [None] * len(trackState)
+        for index, hitVector in enumerate(trackState):
+            if hitVector and self.__brokenTrackVisible[index] is None:
+                self.__brokenTrackVisible[index] = hitVector
+                self.appearance.addSimulatedCrashedTrack(index, self.simulationData_tracksInAir, trackState[index])
+
+        return

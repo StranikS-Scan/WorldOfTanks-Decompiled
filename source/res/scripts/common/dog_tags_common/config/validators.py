@@ -62,6 +62,14 @@ def validateRankedSkill(component):
     return
 
 
+def validateCoupled(component):
+    if component.coupledComponentId is None:
+        raise ValidateException(ValidateException.WRONG_COUPLED_COMPONENT_ID, component.componentId, component.coupledComponentId)
+    if component.isDefault:
+        raise ValidateException(ValidateException.CANNOT_BE_DEFAULT, component.componentId)
+    return
+
+
 def validateBase(component):
     if component.unlockKey is not None and len(component.unlockKey) != 0:
         raise ValidateException(ValidateException.HAS_UNLOCK_KEY, component.componentId, component.unlockKey)

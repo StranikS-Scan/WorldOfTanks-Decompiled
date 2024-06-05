@@ -98,7 +98,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         vehicleArenaInfoVO = self.__sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
         if isSpawnedBot(vehicleArenaInfoVO.vehicleType.tags):
             return settings.BRmarkersSymbolsNames.BRANDER_BOT_SYMBOL
-        return settings.BRmarkersSymbolsNames.BOT_SYMBOL if isHunterBot(vehicleArenaInfoVO.vehicleType.tags) else super(BattleRoyaleVehicleMarkerPlugin, self)._getMarkerSymbol(vehicleID)
+        return settings.BRmarkersSymbolsNames.BOT_SYMBOL if isHunterBot(vehicleArenaInfoVO.vehicleType.tags) else settings.BRmarkersSymbolsNames.VEHICLE_MARKER
 
     def _getMarkerStatusPriority(self, statusID):
         try:

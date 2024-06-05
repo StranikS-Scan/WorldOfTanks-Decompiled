@@ -125,20 +125,20 @@ class PvePostmortemPanel(PvePostmortemPanelMeta):
             return
         self._livesState = livesState
         if self._livesState == LivesState.HAS_LIVES:
-            self.as_setHintTitleS(self._settings.dynamicRespawnHeader)
-            self.as_setHintDescrS(self._settings.dynamicRespawnSubheader)
+            self.as_setHintTitleS(self._settings.getDynamicRespawnHeader())
+            self.as_setHintDescrS(self._settings.getDynamicRespawnSubheader())
             self.as_setTimerS(self._respawnComponent.delay, self._respawnComponent.delay - self._currentRespawnDelay)
             self._playSound(self._settings.dynamicRespawnSound)
             self.as_setCanExitS(False)
         elif self._livesState == LivesState.HAS_LOCKED_LIVES:
-            self.as_setHintTitleS(self._settings.staticRespawnHeader)
-            self.as_setHintDescrS(self._settings.staticRespawnSubheader)
+            self.as_setHintTitleS(self._settings.getStaticRespawnHeader())
+            self.as_setHintDescrS(self._settings.getStaticRespawnSubheader())
             self.as_showLockedLivesS()
             self._playSound(self._settings.staticRespawnSound)
             self.as_setCanExitS(False)
         elif self._livesState == LivesState.NO_LIVES:
-            self.as_setHintTitleS(self._settings.battleOverHeader)
-            self.as_setHintDescrS(self._settings.battleOverSubheader)
+            self.as_setHintTitleS(self._settings.getBattleOverHeader())
+            self.as_setHintDescrS(self._settings.getBattleOverSubheader())
             self._playSound(self._settings.battleOverSound)
             self.as_setCanExitS(True)
 
@@ -148,4 +148,5 @@ class PvePostmortemPanel(PvePostmortemPanelMeta):
 
     @staticmethod
     def _playSound(name):
-        WWISE.WW_eventGlobal(name)
+        if name:
+            WWISE.WW_eventGlobal(name)

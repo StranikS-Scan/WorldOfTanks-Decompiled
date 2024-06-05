@@ -2,6 +2,7 @@
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/ingame_menu.py
 import BattleReplay
 from BWUtil import AsyncReturn
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.battle.shared.premature_leave import showResDialogWindow, showLeaverReplayWindow, closeDialogWindow as closePrematureLeaveWindow
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.INGAMEMENU_CONSTANTS import INGAMEMENU_CONSTANTS
@@ -34,7 +35,7 @@ class StoryModeIngameMenu(IngameMenu):
         wantToExit = yield wg_await(confirmExitDialog())
         if wantToExit:
             self._uiLogger.logClick(LogButtons.SKIP)
-            self._storyModeCtrl.skipOnboarding()
+            self._storyModeCtrl.quitBattle()
         else:
             self.destroy()
 
@@ -43,7 +44,10 @@ class StoryModeIngameMenu(IngameMenu):
 
     def settingsClick(self):
         self._uiLogger.logClick(LogButtons.SETTINGS)
-        g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORY_MODE_SETTINGS_WINDOW)), scope=EVENT_BUS_SCOPE.BATTLE)
+        if self.__isOnboardingGuiType:
+            g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ONBOARDING_SETTINGS_WINDOW)), scope=EVENT_BUS_SCOPE.BATTLE)
+        else:
+            super(StoryModeIngameMenu, self).settingsClick()
 
     def helpClick(self):
         self._uiLogger.logClick(LogButtons.HELP)
@@ -97,10 +101,15 @@ class StoryModeIngameMenu(IngameMenu):
 
     @wg_async
     def _openConfirmExitDialog(self):
-        window = showResDialogWindow(title=R.strings.sm_battle.confirmExit.title(), confirm=R.strings.sm_battle.confirmExit.exit(), cancel=R.strings.sm_battle.confirmExit.stay())
+        locale = R.strings.sm_battle.confirmExit
+        window = showResDialogWindow(title=locale.title() if self.__isOnboardingGuiType else locale.titleRegular(), confirm=locale.exit() if self.__isOnboardingGuiType else locale.exitRegular(), cancel=locale.stay())
         result = yield wg_await(window)
         raise AsyncReturn(result)
 
     @property
     def __isForceOnboarding(self):
         return self.sessionProvider.arenaVisitor.extra.getValue('isForceOnboarding')
+
+    @property
+    def __isOnboardingGuiType(self):
+        return self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.STORY_MODE_ONBOARDING

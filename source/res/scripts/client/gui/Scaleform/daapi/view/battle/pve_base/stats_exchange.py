@@ -121,14 +121,20 @@ class PveStatisticsDataController(ClassicStatisticsDataController):
         settingsCtrl = self._sessionProvider.dynamic.vseHUDSettings
         if settingsCtrl:
             settingsCtrl.onSettingsChanged += self._settingsChangeHandler
-        TeamInfoLivesComponent.onTeamLivesUpdated += self._onTeamLivesUpdated
+        teamLives = TeamInfoLivesComponent.getInstance()
+        if teamLives is not None:
+            teamLives.onTeamLivesUpdated += self._onTeamLivesUpdated
+        return
 
     def stopControl(self):
         settingsCtrl = self._sessionProvider.dynamic.vseHUDSettings
         if settingsCtrl:
             settingsCtrl.onSettingsChanged -= self._settingsChangeHandler
-        TeamInfoLivesComponent.onTeamLivesUpdated -= self._onTeamLivesUpdated
+        teamLives = TeamInfoLivesComponent.getInstance()
+        if teamLives is not None:
+            teamLives.onTeamLivesUpdated -= self._onTeamLivesUpdated
         super(PveStatisticsDataController, self).stopControl()
+        return
 
     def _settingsChangeHandler(self, settingsID):
         arenaDP = self._sessionProvider.getArenaDP()

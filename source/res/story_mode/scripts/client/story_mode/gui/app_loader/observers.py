@@ -10,7 +10,7 @@ from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS, IS_ONBOARDING_SE
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.application import AppEntry
-    from story_mode.gui.scaleform.daapi.view.battle import StoryModeBattlePage
+    from story_mode.gui.scaleform.daapi.view.battle.page_base import StoryModeBattlePageBase
 
 def getStoryModeBattle():
     appLoader = dependency.instance(IAppLoader)
@@ -19,7 +19,7 @@ def getStoryModeBattle():
         return
     else:
         containerManager = app.containerManager
-        return None if containerManager is None else containerManager.getViewByKey(ViewKey(VIEW_ALIAS.STORY_MODE_BATTLE_PAGE))
+        return None if containerManager is None else containerManager.getViewByKey(ViewKey(VIEW_ALIAS.ONBOARDING_BATTLE_PAGE)) or containerManager.getViewByKey(ViewKey(VIEW_ALIAS.STORY_MODE_BATTLE_PAGE))
 
 
 def isInStoryModeBattle():
@@ -51,7 +51,7 @@ class StoryModeBattlePageObserver(BattlePageObserver):
         else:
             battlePage = getStoryModeBattle()
             if battlePage is not None:
-                battlePage.hideAll()
+                battlePage.hideAndStop()
         return
 
 

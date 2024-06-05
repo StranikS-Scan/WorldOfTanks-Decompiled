@@ -150,9 +150,6 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def isSeasonFinished(self):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
-    def isCustomSeason(self):
-        return self.__getConfig().isCustomSeason()
-
     def isValidBattleType(self, prbEntity):
         return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.WINBACK)
 
@@ -176,9 +173,6 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def hasExtra(self):
         return self.__doesAnyChapterFitCriteria(self.isExtraChapter)
-
-    def hasCustom(self):
-        return self.__doesAnyChapterFitCriteria(self.isCustomChapter)
 
     def isRegularProgressionCompleted(self):
         chapterIDs = []
@@ -215,9 +209,6 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
     def isExtraChapter(self, chapterID):
         return self.__getConfig().isExtraChapter(chapterID)
-
-    def isCustomChapter(self, chapterID):
-        return self.__getConfig().isCustomChapter(chapterID)
 
     def isHoliday(self):
         return self.__getConfig().isHoliday

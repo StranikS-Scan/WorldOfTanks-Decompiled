@@ -88,7 +88,7 @@ class BattlePassBuyer(object):
             return
         else:
             if result.userMsg is not None:
-                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, messageData=result.auxData)
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, messageData=result.auxData, priority=result.msgPriority)
             callback(result.success)
             return
 
@@ -98,7 +98,7 @@ class BattlePassBuyer(object):
     def __buyBattlePassLevels(seasonID, chapterID, levels, callback):
         result = yield BuyBattlePassLevels(seasonID, chapterID, levels).request()
         if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
         callback(result.success)
 
     @classmethod
@@ -107,5 +107,5 @@ class BattlePassBuyer(object):
     def __buyBattlePassWithLevels(cls, seasonID, chapterID, priceID, callback):
         result = yield BuyBattlePassWithLevels(seasonID, chapterID, priceID).request()
         if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
         callback(result.success)

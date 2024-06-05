@@ -54,7 +54,7 @@ class EpilogueView(ViewImpl):
     def _onCloseHandler(self):
         self._uiLogger.logClick(LogButtons.CONTINUE)
         if self._storyModeCtrl.needToShowAward:
-            showCongratulationsWindow(onClose=self._goToHangarAnimated)
+            showCongratulationsWindow(onClose=self._goToHangarAnimated, awardData=self._storyModeCtrl.popWaitingToBeShownAwardData())
         else:
             self._storyModeCtrl.goToHangar()
         self.destroyWindow()

@@ -1265,6 +1265,16 @@ def _migrateTo125(core, data, initialized):
             clear['onceOnlyHints2'] = clear.get('onceOnlyHints2', 0) | settingOffset
 
 
+def _migrateTo126(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
+    data[SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE] = 0
+
+
+def _migrateTo127(core, data, initialized):
+    dtData = data['dogTags']
+    dtData[GAME.SHOW_PERSONAL_ANIMATED_DOGTAG] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1759,6 +1769,14 @@ _versions = ((1,
   False),
  (125,
   _migrateTo125,
+  False,
+  False),
+ (126,
+  _migrateTo126,
+  False,
+  False),
+ (127,
+  _migrateTo127,
   False,
   False))
 

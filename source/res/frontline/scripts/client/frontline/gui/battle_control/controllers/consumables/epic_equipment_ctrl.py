@@ -2,24 +2,28 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/battle_control/controllers/consumables/epic_equipment_ctrl.py
 import BigWorld
 from constants import EQUIPMENT_STAGES as STAGES
+from frontline_common.frontline_constants import FLBattleReservesModifier
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.shared.utils.MethodsRules import MethodsRules
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
-    _epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, setup):
         self.slotStage = dict()
         super(EpicEquipmentsController, self).__init__(setup)
 
     def setServerPrevStage(self, **kwargs):
-        index = kwargs.get('index')
-        prevStage = kwargs.get('previousStage')
-        equipment = self._equipmentsIdxSlot.get(index - 1)
-        if equipment and equipment[0]:
-            equipment[0].setServerPrevStage(prevStage)
+        index = kwargs.get('index', 0)
+        if index > 0:
+            prevStage = kwargs.get('previousStage')
+            equipment = self._equipmentsIdxSlot.get(index - 1)
+            if equipment and equipment[0]:
+                equipment[0].setServerPrevStage(prevStage)
+            return
+        super(EpicEquipmentsController, self).setServerPrevStage(**kwargs)
 
     def cancel(self):
         for equipment in self._equipmentsIdxSlot.itervalues():
@@ -33,7 +37,7 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime, index=0):
         index -= 1
-        slot = self._equipmentsIdxSlot.get(index, None)
+        slot = self._equipmentsIdxSlot.get(index)
         slotIdx = len(self._equipmentsIdxSlot)
         if stage == STAGES.WAIT_FOR_CHOICE:
             if slot and slot[3] == stage:
@@ -54,7 +58,6 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
             self.onSlotBlocked(index)
         else:
             super(EpicEquipmentsController, self).setEquipment(intCD, quantity, stage, timeRemaining, totalTime, index + 1)
-        return
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')
     def resetEquipment(self, oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime, index):
@@ -88,6 +91,7 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
             return self.getEquipmentByIDx(index - 1) if index > 0 else self.getEquipment(intCD)
 
     def clear(self, leave=True):
+        arenaDP = self.sessionProvider.getArenaDP()
         if leave:
             if self.__callbackID is not None:
                 BigWorld.cancelCallback(self.__callbackID)
@@ -99,7 +103,7 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
             self.__percentGetters.clear()
             self.__times.clear()
             self.__timeGetters.clear()
-        elif not self._epicController.isRandomBattleReserves():
+        elif arenaDP is None or arenaDP.getReservesModifier() != FLBattleReservesModifier.RANDOM:
             for idx, equipment in enumerate(self._equipmentsIdxSlot.itervalues()):
                 key = self.getEquipmentKey(equipment[1], idx + 1)
                 self.__percents.pop(key, None)

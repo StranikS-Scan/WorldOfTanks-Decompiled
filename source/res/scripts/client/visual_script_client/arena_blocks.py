@@ -389,7 +389,7 @@ class GetVehicles(Block, ArenaMeta):
     def _execute(self):
         if helpers.isPlayerAvatar():
             avatar = BigWorld.player()
-            vehicles = avatar.vehicles
+            vehicles = (v for v in avatar.vehicles if not v.isDestroyed)
             team = self._team.getValue() if self._team.hasValue() else None
             if team is not None:
                 vehicles = (v for v in vehicles if v.publicInfo.team == team)
@@ -487,3 +487,20 @@ class GetControlPointPosition(Block, ArenaMeta):
     @classmethod
     def blockIcon(cls):
         pass
+
+
+class SetEnvironment(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetEnvironment, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._name = self._makeDataInputSlot('name', SLOT_TYPE.STR)
+        self._out = self._makeEventOutputSlot('out')
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def _execute(self):
+        BigWorld.spaces[BigWorld.player().spaceID].setEnvironment(self._name.getValue())
+        self._out.call()

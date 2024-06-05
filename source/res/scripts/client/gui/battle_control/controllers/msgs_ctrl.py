@@ -27,6 +27,7 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  _AR_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
  _AR_INDICES['static_deathzone']: 'DEATH_FROM_STATIC_DEATH_ZONE',
+ _AR_INDICES['minefield_zone']: 'DEATH_FROM_MINEFIELD_ZONE',
  _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING',
  _AR_INDICES['overturn']: 'DEATH_FROM_OVERTURN',
  _AR_INDICES['artillery_protection']: 'DEATH_FROM_ARTILLERY_PROTECTION',
@@ -41,7 +42,9 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['thunderStrike']: 'DEATH_FROM_SHOT',
  _AR_INDICES['corrodingShot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['fireCircle']: 'DEATH_FROM_SHOT',
- _AR_INDICES['clingBrander']: 'DEATH_FROM_SHOT'}
+ _AR_INDICES['clingBrander']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['battleship']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['destroyer']: 'DEATH_FROM_SHOT'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'

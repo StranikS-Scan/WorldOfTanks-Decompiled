@@ -38,6 +38,7 @@ class TRIGGER_TYPE(object):
     PLAYER_ENTER_SPG_SNIPER_MODE = 27
     PLAYER_LEAVE_SPG_MODE = 28
     CTRL_MODE_CHANGE = 29
+    PLAYER_USED_AOE_EQUIPMENT = 30
 
 
 class ITriggerListener(object):

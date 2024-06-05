@@ -65,6 +65,11 @@
     <FuG8_MapsTraining_Dummy_ATSPG_2>	35	</FuG8_MapsTraining_Dummy_ATSPG_2>
     <FuG12_NewOnBoarding>	64005	</FuG12_NewOnBoarding>
     <FuG5_NewOnBoarding>	64008	</FuG5_NewOnBoarding>
+    <FuG12_StoryMode__0>	64010	</FuG12_StoryMode__0>
+    <FuG12_StoryMode>	64011	</FuG12_StoryMode>
+    <_10WSc_StoryMode>	64012	</_10WSc_StoryMode>
+    <FuG12_StoryMode__1>	64013	</FuG12_StoryMode__1>
+    <FuG12_StoryMode_2>	64014	</FuG12_StoryMode_2>
   </ids>
   <shared>
     <FuG2>
@@ -842,5 +847,65 @@
       <repairCost>	0.5	</repairCost>
       <notInShop>	True	</notInShop>
     </FuG5_NewOnBoarding>
+    <FuG12_StoryMode__0>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <weight>	150	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG12_StoryMode__0>
+    <FuG12_StoryMode>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <weight>	150	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG12_StoryMode>
+    <_10WSc_StoryMode>
+      <userString>	#germany_vehicles:_10WSc	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc_StoryMode>
+    <FuG12_StoryMode__1>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <weight>	150	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG12_StoryMode__1>
+    <FuG12_StoryMode_2>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <weight>	150	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG12_StoryMode_2>
   </shared>
 </radios.xml>

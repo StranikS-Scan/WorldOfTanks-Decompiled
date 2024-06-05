@@ -20,6 +20,7 @@ class LogWindows(str, Enum):
     ESCAPE_MENU = 'escape_menu'
     SETTINGS_MENU = 'settings_menu'
     INFO_PAGE = 'info_page'
+    ENTRY_POINT = 'entry_point'
 
 
 class LogButtons(str, Enum):
@@ -48,6 +49,7 @@ class LogActions(str, Enum):
     PLAY = 'play'
     WATCHED = 'watched'
     GAME_LOADING_CLOSE = 'game_loading_close'
+    UNHOVER = 'unhover'
 
 
 class LogBattleResultStats(str, Enum):

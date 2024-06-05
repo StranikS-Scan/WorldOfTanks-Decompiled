@@ -19,6 +19,7 @@ from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from frontline_common.frontline_constants import FLBattleReservesModifier
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 EMPTY_NAME = 'empty'
@@ -343,7 +344,8 @@ class BattleAbilitiesBlock(BaseBlock):
         model.setImageSource(R.images.gui.maps.icons.epicBattles.skills.c_48x48.dyn(slotItem.descriptor.iconName)())
         categoryName = self._getSlotCategoryName(idx)
         model.setIsInstalled(slotItem in self._getInstalled())
-        if self.__epicMetaGameCtrl.isRandomBattleReserves():
+        arenaDP = self.__sessionProvider.getArenaDP()
+        if arenaDP and arenaDP.getReservesModifier() == FLBattleReservesModifier.RANDOM:
             return
         if categoryName:
             model.setCategoryImgSource(R.images.gui.maps.icons.tanksetup.panel.dyn(categoryName)())

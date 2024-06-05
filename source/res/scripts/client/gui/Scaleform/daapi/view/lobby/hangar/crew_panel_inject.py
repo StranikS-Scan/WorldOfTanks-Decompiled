@@ -11,4 +11,6 @@ class CrewPanelInject(InjectComponentAdaptor, CrewPanelInjectMeta, IGlobalListen
         return HangarCrewWidget()
 
     def updateTankmen(self):
-        self._injectView.updateTankmen()
+        if self._injectView is not None:
+            self._injectView.updateTankmen()
+        return

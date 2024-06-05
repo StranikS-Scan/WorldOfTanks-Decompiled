@@ -146,6 +146,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__crosshairData = None
         self.__stateData = None
         self.__isVisible = False
+        self.__hideReshow = False
         return
 
     def handleEscKey(self, isDown):
@@ -181,11 +182,12 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__setVisibility(False)
         ctrl = self.sessionProvider.shared.calloutCtrl
         if ctrl is not None and ctrl.isRadialMenuOpened():
-            ctrl.resetRadialMenuData()
-        if self.app is not None:
+            ctrl.resetRadialMenuData(reshow=self.__hideReshow)
+        if self.app is not None and not self.__hideReshow:
             self.app.unregisterGuiKeyHandler(self)
             if self.app.hasGuiControlModeConsumers(self.getAlias()):
                 self.app.leaveGuiControlMode(self.getAlias())
+        self.__hideReshow = False
         return
 
     def onRefresh(self):
@@ -420,6 +422,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         else:
             if self.__crosshairData is not None:
                 if self.__crosshairData.targetID == removedID and markerType == self.__crosshairData.targetMarkerType:
+                    self.__hideReshow = True
                     self.hide(allowAction=False)
                     self.show(reshowPreviousState)
             return
@@ -458,6 +461,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             _, targetMarkerType, targetMarkerSubtype, replyState, _ = chatCommands.getAimedAtTargetData()
             if RadialMenu.__isCanRespondToAlly(targetMarkerType, targetMarkerSubtype, replyState):
                 return self._REFRESH_TIME_IN_SECONDS
+            self.__hideReshow = True
             self.hide(allowAction=False)
             self.show(reshowPreviousState=False)
             return -1

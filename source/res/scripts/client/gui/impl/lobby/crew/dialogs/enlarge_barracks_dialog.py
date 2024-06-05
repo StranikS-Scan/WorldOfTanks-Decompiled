@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/dialogs/enlarge_barracks_dialog.py
 import BigWorld
 from base_crew_dialog_template_view import BaseCrewDialogTemplateView
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.dialogs.sub_views.icon.icon_set import IconSet
@@ -12,9 +13,9 @@ from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model im
 from gui.impl.gen.view_models.views.dialogs.template_settings.default_dialog_template_settings import DisplayFlags
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.enlarge_barracks_dialog_model import EnlargeBarracksDialogModel
 from gui.impl.gui_decorators import args2params
+from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getBethsSlotsCount
 from gui.impl.lobby.crew.tooltips.bunks_confirm_discount_tooltip import BunksConfirmDiscountTooltip
 from gui.impl.pub.dialog_window import DialogButtons
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Currency
@@ -58,7 +59,7 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
         return ((self.viewModel.onBunksCountChange, self.__onBunksCountChange), (self.itemsCache.onSyncCompleted, self.__onCacheResync))
 
     def _onLoading(self, *args, **kwargs):
-        slotsCount, freeBerthsCount = self.__getCountSlotsAndFreeBerths()
+        slotsCount, freeBerthsCount = getBethsSlotsCount()
         self.setDisplayFlags(DisplayFlags.RESPONSIVEHEADER.value)
         self.setSubView(Placeholder.TOP_RIGHT, MoneyBalance())
         self.setSubView(Placeholder.ICON, IconSet(R.images.gui.maps.icons.crew.place_in_barracks()))
@@ -99,12 +100,6 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
         self.__defaultBerthPrice, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
         self.__isDiscount = self.__berthPrice != self.__defaultBerthPrice
         self.__pricePacksBerths = self.__berthPrice * self.__countPacksBerths
-
-    def __getCountSlotsAndFreeBerths(self):
-        tankmenInBarracks = self.itemsCache.items.tankmenInBarracksCount()
-        slotsCount = self.itemsCache.items.stats.tankmenBerthsCount
-        freeBerthsCount = max(slotsCount - tankmenInBarracks, 0)
-        return (slotsCount, freeBerthsCount)
 
     @args2params(int)
     def __onBunksCountChange(self, selectedCount):

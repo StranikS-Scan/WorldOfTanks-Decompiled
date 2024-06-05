@@ -30,6 +30,7 @@ class ComponentPurpose(Enum):
     DEDICATION = 'DEDICATION'
     SKILL = 'SKILL'
     RANKED_SKILL = 'RANKED_SKILL'
+    COUPLED = 'COUPLED'
 
 
 SEND_NEW_GRADING_NOTIFICATION = (ComponentPurpose.TRIUMPH, ComponentPurpose.DEDICATION)
@@ -82,6 +83,7 @@ class ValidateException(DogTagsException):
     DEFAULT_HIDDEN = 12
     CANNOT_BE_DEFAULT = 13
     UNLOCK_KEY_AND_EXTERNAL_UNLOCK = 14
+    WRONG_COUPLED_COMPONENT_ID = 15
     ERR_STR = {HAS_GRADES: PREFIX + 'Component with id = %s cannot have grades. Grades: %s',
      HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s cannot have unlockKey. UnlockKey: %s',
      WRONG_NUMBER_OF_GRADES: PREFIX + 'Component with id = %s has wrong number of grades. It should have %s grades.',
@@ -93,7 +95,8 @@ class ValidateException(DogTagsException):
      SHOULD_BE_DEFAULT_OR_HAS_UNLOCK_KEY: PREFIX + 'Component with id = %s should be default or has unlock key or has external unlock flag',
      DEFAULT_HIDDEN: PREFIX + 'Component with id=%s is default AND hidden. This is forbidden.',
      CANNOT_BE_DEFAULT: PREFIX + 'Component with id=%s is default but this is forbidden.',
-     UNLOCK_KEY_AND_EXTERNAL_UNLOCK: PREFIX + 'Component with id=%s has unlock key and external unlock flag.'}
+     UNLOCK_KEY_AND_EXTERNAL_UNLOCK: PREFIX + 'Component with id=%s has unlock key and external unlock flag.',
+     WRONG_COUPLED_COMPONENT_ID: PREFIX + 'Component with id=%s has coupledComponentId=%s.'}
 
     def __str__(self):
         return ValidateException.ERR_STR[self.err] % ((self.err,) + self.args)

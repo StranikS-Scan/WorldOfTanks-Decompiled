@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/progress_counter/state_machine/states.py
 from frameworks.state_machine import StateFlags
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.states import BaseState
-from gui.Scaleform.daapi.view.battle.pve_base.pve_helpers import generateText
 from pve_battle_hud import ProgressCounterState
 
 class InitialState(BaseState):
@@ -17,7 +16,7 @@ class BaseProgressCounterState(BaseState):
     def _showProgress(self, isAnimated):
         serverSettings, clientSettings = self.getSettings()
         icon = clientSettings.icon
-        title = generateText(clientSettings.header, serverSettings.params)
+        title = clientSettings.getHeader(serverSettings.params)
         self._view.as_setDataS(icon, title, isAnimated=isAnimated)
 
     def _updateView(self):

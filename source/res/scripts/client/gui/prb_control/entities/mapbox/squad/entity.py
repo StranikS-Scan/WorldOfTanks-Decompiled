@@ -143,7 +143,7 @@ class MapboxSquadEntity(SquadEntity):
 
     @property
     def _showUnitActionNames(self):
-        return (PREBATTLE_ACTION_NAME.MAPBOX_SQUAD,)
+        return (PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, PREBATTLE_ACTION_NAME.MAPBOX)
 
     def _createActionsHandler(self):
         return MapboxSquadActionsHandler(self)

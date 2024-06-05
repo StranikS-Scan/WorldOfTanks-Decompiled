@@ -41,7 +41,7 @@ from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController
+from skeletons.gui.game_control import IBattlePassController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, ILiveOpsWebEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -247,6 +247,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __resourceWell = dependency.descriptor(IResourceWellController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
+    __liveOpsWebEventsController = dependency.descriptor(ILiveOpsWebEventsController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
@@ -295,7 +296,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
         self.__updateWidget()
-        self.__updateResourceWellEntryPoint()
+        self.__updateRightWidget()
 
     def updateRankedHeader(self, *_):
         self.__updateWidget()
@@ -317,12 +318,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
         self.__resourceWell.onEventUpdated += self.update
+        self.__liveOpsWebEventsController.onSettingsChanged += self.__updateRightWidget
+        self.__liveOpsWebEventsController.onEventStateChanged += self.__updateRightWidget
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish += self.__onBattleMattersStateChanged
         self.__limitedUIController.startObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
         self.__limitedUIController.startObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
         self.__limitedUIController.startObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
         self.__limitedUIController.startObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
+        self.__limitedUIController.startObserve(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT, self.__updateRightWidget)
         self.__updateBattleMattersEntryPoint()
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update})
         if self._eventsController:
@@ -344,12 +348,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__resourceWell.onEventUpdated -= self.update
+        self.__liveOpsWebEventsController.onEventStateChanged -= self.__updateRightWidget
+        self.__liveOpsWebEventsController.onSettingsChanged -= self.__updateRightWidget
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish -= self.__onBattleMattersStateChanged
         self.__limitedUIController.stopObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
         self.__limitedUIController.stopObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
         self.__limitedUIController.stopObserve(LuiRules.BM_FLAG, self.__updateVisibilityBattleMatter)
         self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
+        self.__limitedUIController.stopObserve(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT, self.__updateRightWidget)
         self._currentVehicle = None
         self.__screenWidth = None
         self.__activeWidgets = None
@@ -827,10 +834,14 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
 
-    def __updateResourceWellEntryPoint(self):
+    def __updateRightWidget(self, *_):
         isRandom = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.WINBACK)
-        isResourceWellVisible = self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted()
-        alias = HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT if isRandom and isResourceWellVisible else ''
+        alias = ''
+        if isRandom:
+            if self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted():
+                alias = HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT
+            elif self.__liveOpsWebEventsController.canShowHangarEntryPoint() and self.__limitedUIController.isRuleCompleted(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT):
+                alias = HANGAR_ALIASES.LIVE_OPS_WEB_EVENTS_ENTRY_POINT
         if self.__activeWidgets.update(ActiveWidgets.RIGHT, alias):
             self.as_addSecondaryEntryPointS(alias, True)
 

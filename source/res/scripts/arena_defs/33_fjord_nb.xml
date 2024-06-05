@@ -1,0 +1,43 @@
+<33_fjord_nb.xml>
+  <name>	#arenas:33_fjord_nb/name	</name>
+  <description>	#arenas:33_fjord_nb/description	</description>
+  <geometry>	spaces/33_fjord_nb	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/33_fjord/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_fjords_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_fjords_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_fjords_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_fjords_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_fjords_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_fjords_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_33_fjord_nb_ambient	</wwambientSound>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	399.095856 -42.143211	</position1>
+        </team1>
+        <team2>
+          <position1>	-392.068329 127.515427	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</33_fjord_nb.xml>

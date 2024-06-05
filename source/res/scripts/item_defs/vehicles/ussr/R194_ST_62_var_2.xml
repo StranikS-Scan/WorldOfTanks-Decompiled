@@ -7,11 +7,11 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_universal	</postProgressionTree>
+  <postProgressionTree>	role_MT_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	25	</backward>
+    <forward>	50	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.217	</moving>
@@ -33,46 +33,56 @@
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	5.7	</repairCost>
-  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <repairCost>	13.00	</repairCost>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	2.0	</priceFactor>
     <density>	0.96 0.96	</density>
   </camouflage>
   <hull>
     <armor>
       <armor_1>	100	</armor_1>
-      <armor_2>	90	</armor_2>
-      <armor_3>	50	</armor_3>
+      <armor_2>	95	</armor_2>
+      <armor_3>	75	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	70	</armor_6>
-      <armor_7>	70	</armor_7>
+      <armor_7>	65	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	45	</armor_9>
       <armor_10>	20	</armor_10>
-      <armor_11>	50	</armor_11>
-      <armor_12>	40	</armor_12>
-      <armor_13>	90	</armor_13>
-      <armor_14>	100	</armor_14>
-      <armor_15>	160	</armor_15>
-      <armor_16>	140	</armor_16>
+      <armor_11>	100	</armor_11>
+      <armor_12>	35	</armor_12>
+      <armor_13>	85	</armor_13>
+      <armor_14>	95	</armor_14>
+      <armor_15>	175	</armor_15>
+      <armor_16>	160	</armor_16>
       <armor_17>	40	</armor_17>
-      <armor_18>	60	</armor_18>
-      <armor_19>	50	</armor_19>
-      <armor_20>	50	</armor_20>
-      <armor_21>	20	</armor_21>
+      <armor_18>	45	</armor_18>
+      <armor_19>	41	</armor_19>
+      <armor_20>	30	</armor_20>
+      <armor_21>	25	</armor_21>
       <armor_22>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_22>
+      <armor_23>	55	</armor_23>
+      <armor_24>	40	</armor_24>
+      <armor_25>	140	</armor_25>
+      <armor_26>	45	</armor_26>
+      <armor_27>	45	</armor_27>
+      <armor_28>	50	</armor_28>
+      <armor_29>	70	</armor_29>
+      <armor_30>	80	</armor_30>
+      <armor_31>	75	</armor_31>
+      <armor_32>	90	</armor_32>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	16245	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <weight>	18110	</weight>
+    <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	2.0	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Hull.model	</undamaged>
@@ -659,27 +669,27 @@
     <Chassis_R194_ST_62_var_2>
       <userString>	#ussr_vehicles:Chassis_R194_ST_62_var_2	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	30000	</price>
+      <level>	10	</level>
+      <price>	82500	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	8000	</weight>
-      <maxLoad>	40000	</maxLoad>
+      <weight>	7500	</weight>
+      <maxLoad>	43000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.6	</terrainResistance>
-      <brakeForce>	35000	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	60	</rotationSpeed>
+      <brakeForce>	38000	</brakeForce>
+      <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Chassis.model	</destroyed>
@@ -1098,7 +1108,6 @@
             <length>	0.085455	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.60637	</xStart>
@@ -1343,7 +1352,6 @@
             <length>	0.086032	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.60636	</xStart>
@@ -1581,83 +1589,115 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_R194_ST_62_var_2>
   </chassis>
   <turrets0>
     <Turret_1_R194_ST_62_var_2>
       <userString>	#ussr_vehicles:Turret_1_R194_ST_62_var_2	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	30000	</price>
+      <level>	10	</level>
+      <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	190	</armor_1>
-        <armor_2>	180	</armor_2>
-        <armor_3>	70	</armor_3>
+        <armor_1>	260	</armor_1>
+        <armor_2>	220	</armor_2>
+        <armor_3>	150	</armor_3>
         <armor_4>	50	</armor_4>
         <armor_5>	40	</armor_5>
-        <armor_6>	170	</armor_6>
-        <armor_7>	160	</armor_7>
+        <armor_6>	160	</armor_6>
+        <armor_7>	130	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	50	</armor_9>
+        <armor_9>	70	</armor_9>
         <armor_10>	55	</armor_10>
-        <armor_11>	90	</armor_11>
-        <armor_12>	70	</armor_12>
-        <armor_13>	150	</armor_13>
-        <armor_14>	130	</armor_14>
-        <armor_15>	90	</armor_15>
-        <armor_16>	90	</armor_16>
-        <armor_17>	60	</armor_17>
+        <armor_11>	110	</armor_11>
+        <armor_12>	100	</armor_12>
+        <armor_13>	110	</armor_13>
+        <armor_14>	235	</armor_14>
+        <armor_15>	190	</armor_15>
+        <armor_16>	100	</armor_16>
+        <armor_17>	90	</armor_17>
         <armor_18>	50	</armor_18>
-        <armor_20>	100	</armor_20>
-        <armor_21>	90	</armor_21>
-        <armor_22>	90	</armor_22>
+        <armor_19>	90	</armor_19>
+        <armor_20>	190	</armor_20>
+        <armor_21>	130	</armor_21>
+        <armor_22>	150	</armor_22>
+        <armor_23>	120	</armor_23>
+        <armor_24>	215	</armor_24>
+        <armor_25>	265	</armor_25>
+        <armor_26>	290	</armor_26>
+        <armor_27>	270	</armor_27>
+        <armor_28>	200	</armor_28>
+        <armor_29>	260	</armor_29>
+        <armor_30>	100	</armor_30>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	9800	</weight>
-      <maxHealth>	250	</maxHealth>
-      <rotationSpeed>	52	</rotationSpeed>
+      <primaryArmor>	armor_26 armor_3 armor_4	</primaryArmor>
+      <weight>	8500	</weight>
+      <maxHealth>	390	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_NT_12>	shared	  <maxAmmo>	55	</maxAmmo>
+        <_100mm_NT_12>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	295	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	215	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
             <gun>	35	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	30	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	14 11 8	</reloadTime>
+          </autoreload>
           <models>
             <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Gun_01.model	</destroyed>
@@ -1726,7 +1766,7 @@
       </hitTester>
       <gunPosition>	-0.000001 0.197063 1.17429	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.001 0.007 1.032 0 0.632 0.217 0.723 0.534 0.37 0.5 0.325 0.5 0.002 0.661 0.137	</physicsShape>
+      <physicsShape>	1.042 0.007 1.003 0 1.016 0.007 0.586 0.417 0.37 0.5 0.365 0.5 0.309 0.661 0.293	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2255,18 +2295,18 @@
     <_5TDF_O>	shared	</_5TDF_O>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <R113M>	shared	</R113M>
+    <R113A>	shared	</R113A>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
         <_5TDF_O>
-          <smplEnginePower>	600	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_5TDF_O>
       </engines>
       <chassis>

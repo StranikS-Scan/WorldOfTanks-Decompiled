@@ -18,7 +18,7 @@ from gui.shared.events import MarkersManagerEvent
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from items import vehicles
-from items.artefacts import AoeEffects, AreaShow
+from items.artefacts import AoeEffects, AreaShow, OrderTypes
 from skeletons.account_helpers.settings_core import ISettingsCore
 from random_utils import getValueWithDeviationInPercent
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -97,18 +97,24 @@ class EffectRunner(object):
             if artilleryID is not None:
                 self.salvo.addProjectile(artilleryID, self.GRAVITY, targetPosition + altitude, self.SHELL_VELOCITY)
         if effect['sequences']:
-            sequenceID, sequenceData = random.choice(effect['sequences'].items())
-            matrix = Math.Matrix()
-            matrix.setRotateY(self._entity.yaw)
-            matrix.setScale(sequenceData['scale'])
-            matrix.translation = targetPosition
-            loader = AnimationSequence.Loader(sequenceID, self._entity.spaceID)
-            animator = loader.loadSync()
-            animator.bindToWorld(matrix)
-            animator.speed = 1
-            animator.loopCount = 1
-            animator.start()
-            self._sequences.append(animator)
+            sequencesOrderType = effect.get('sequencesOrderType', OrderTypes.RANDOM)
+            sequencesIds = effect['sequences'].keys()
+            if sequencesOrderType == OrderTypes.RANDOM:
+                sequencesIds = random.sample(sequencesIds, 1)
+            for sequenceID in sequencesIds:
+                sequenceData = effect['sequences'][sequenceID]
+                matrix = Math.Matrix()
+                matrix.setRotateY(self._entity.yaw)
+                matrix.setScale(sequenceData['scale'])
+                matrix.translation = targetPosition
+                loader = AnimationSequence.Loader(sequenceID, self._entity.spaceID)
+                animator = loader.loadSync()
+                animator.bindToWorld(matrix)
+                animator.speed = 1
+                animator.loopCount = 1
+                animator.start()
+                self._sequences.append(animator)
+
         return
 
 

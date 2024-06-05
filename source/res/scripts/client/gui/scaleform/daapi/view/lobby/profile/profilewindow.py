@@ -110,16 +110,18 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     def registerFlashComponent(self, component, alias, *args):
         if alias == VIEW_ALIAS.PROFILE_TAB_NAVIGATOR:
             super(ProfileWindow, self).registerFlashComponent(component, alias, self.__userName, self.__databaseID, self.__databaseID, {'selectedAlias': self.__selectedAlias,
-             'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_TOTAL_PAGE, 'statsSummary'),
-                              self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS, 'statsAwards'),
-                              self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS, 'statsStatistics'),
-                              self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, 'statsTechnique')]}, {'eventOwner': self.__eventOwner})
+             'tabBarData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_TOTAL_PAGE, 'ProfileTotalPage_UI', 'statsSummary'),
+                            self.__getSectionDataObject(PROFILE.SECTION_ADVANCEDACHIEVEMENTS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_ADVANCEDACHIEVEMENTS, VIEW_ALIAS.PROFILE_ACHIEVEMENTS_PAGE, 'ProfileTotalPage_UI', 'statsAchievements'),
+                            self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS, 'ProfileAwards_UI', 'statsAwards'),
+                            self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS, 'ProfileStatistics_UI', 'statsStatistics'),
+                            self.__getSectionDataObject(PROFILE.SECTION_TECHNIQUE_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE, VIEW_ALIAS.PROFILE_TECHNIQUE_WINDOW, 'ProfileTechniqueWindow_UI', 'statsTechnique')]}, {'eventOwner': self.__eventOwner})
         else:
             super(ProfileWindow, self).registerFlashComponent(component, alias)
 
-    def __getSectionDataObject(self, label, tooltip, alias, uiId):
+    def __getSectionDataObject(self, label, tooltip, alias, linkage, uiId):
         return {'label': makeString(label),
          'alias': alias,
+         'linkage': linkage,
          'tooltip': tooltip,
          'enabled': True,
          'id': uiId}

@@ -20,7 +20,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.achievements.achievements_constants import KPITypes
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.statistic_item_model import StatisticItemModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.summary.summary_view_model import SummaryViewModel, EditState
-from gui.impl.lobby.achievements.profile_utils import getProfileCommonInfo, formatPercent, getFormattedValue, getNormalizedValue, isSummaryEnabled, isWTREnabled, getRating, isEditingEnabled, isLayoutEnabled
+from gui.impl.lobby.achievements.profile_utils import getProfileCommonInfo, formatPercent, getFormattedValue, getNormalizedValue, isSummaryEnabled, isWTREnabled, getRating, isEditingEnabled, isLayoutEnabled, getMasteryStatistic
 from gui.impl.lobby.achievements.tooltips.battles_kpi_tooltip import BattlesKPITooltip
 from gui.impl.lobby.achievements.tooltips.editing_tooltip import EditingTooltip
 from gui.impl.lobby.achievements.tooltips.kpi_tooltip import KPITooltip
@@ -28,6 +28,7 @@ from gui.impl.lobby.achievements.tooltips.wotpr_main_tooltip import WOTPRMainToo
 from gui.impl.lobby.achievements.tooltips.wtr_info_tooltip import WTRInfoTooltip
 from gui.impl.lobby.achievements.tooltips.wtr_main_tooltip import WTRMainTooltip
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
+from gui.impl.lobby.dog_tags.animated_dog_tag_grade_tooltip import AnimatedDogTagGradeTooltip
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showAchievementEditView, showClanProfileWindow
 from gui.shared.gui_items.dossier import dumpDossier
@@ -38,6 +39,7 @@ from skeletons.gui.game_control import IAchievements20Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared import events, EVENT_BUS_SCOPE
+from dog_tags_common.components_config import componentConfigAdapter
 if typing.TYPE_CHECKING:
     from typing import Dict
 _STATISTIC_LIST_ORDER = (KPITypes.DAMAGE,
@@ -94,7 +96,13 @@ class SummaryView(SubModelPresenter):
             return WTRMainTooltip(self.__userId)
         if contentID == R.views.lobby.achievements.tooltips.EditingTooltip():
             return EditingTooltip(str(event.getArgument('tooltipType')))
-        return WOTPRMainTooltip() if contentID == R.views.lobby.achievements.tooltips.WOTPRMainTooltip() else super(SummaryView, self).createToolTipContent(event, contentID)
+        if contentID == R.views.lobby.achievements.tooltips.WOTPRMainTooltip():
+            return WOTPRMainTooltip()
+        if contentID == R.views.lobby.dog_tags.AnimatedDogTagGradeTooltip():
+            params = {'engravingId': event.getArgument('engravingId'),
+             'backgroundId': event.getArgument('backgroundId')}
+            return AnimatedDogTagGradeTooltip(params=params)
+        return super(SummaryView, self).createToolTipContent(event, contentID)
 
     def initialize(self, *args, **kwargs):
         super(SummaryView, self).initialize(*args, **kwargs)
@@ -146,8 +154,11 @@ class SummaryView(SubModelPresenter):
 
     def __getStatistic(self):
         if self.__dossier is not None:
+            currentMastery, totalMastery = getMasteryStatistic(self.__dossier)
             mainStats, additionalStats = self.__fillStatistic()
             with self.viewModel.transaction() as model:
+                model.setCurrentMastery(currentMastery)
+                model.setTotalMastery(totalMastery)
                 statistic = model.getStatistic()
                 statistic.clear()
                 for statisticItem in _STATISTIC_LIST_ORDER:
@@ -319,13 +330,19 @@ class SummaryView(SubModelPresenter):
             background = dogTag.getComponentByType(ComponentViewType.BACKGROUND)
             engravingImage = DogTagComposerClient.getComponentImage(engraving.compId, engraving.grade)
             bgImage = DogTagComposerClient.getComponentImage(background.compId)
+            component = componentConfigAdapter.getComponentById(background.compId)
             model.setEngravingCompId(engraving.compId)
             model.setBackgroundCompId(background.compId)
             model.setEngraving(engravingImage)
             model.setBackground(bgImage)
+            model.setPurpose(component.purpose.value.lower())
+            animation = background.componentDefinition.animation
+            if animation is not None:
+                model.setAnimation(animation)
             grades = engraving.componentDefinition.grades
             if engraving and grades and engraving.grade == len(grades) - 1:
                 model.setIsHighlighted(True)
+        return
 
     def __openClanStatistic(self):
         if self.__lobbyContext.getServerSettings().clanProfile.isEnabled():

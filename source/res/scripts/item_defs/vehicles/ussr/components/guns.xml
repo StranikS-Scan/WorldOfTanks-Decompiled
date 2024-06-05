@@ -580,7 +580,7 @@
         <amplitude>	0.4	</amplitude>
         <recoilEffect>	auto	</recoilEffect>
       </recoil>
-      <effects>	shot_auto	</effects>
+      <effects>	shot_small_auto	</effects>
       <reloadEffect>	reload20_45	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -5340,8 +5340,8 @@
     <_100mm_NT_12>
       <userString>	#ussr_vehicles:_100mm_NT_12	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	115000	</price>
+      <level>	10	</level>
+      <price>	240000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
       <recoil>
@@ -5350,45 +5350,52 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_mainext_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
       </pitchLimits>
       <rotationSpeed>	33.25	</rotationSpeed>
-      <reloadTime>	8.0	</reloadTime>
-      <maxAmmo>	24	</maxAmmo>
-      <aimingTime>	2.85714285714286	</aimingTime>
+      <reloadTime>	8	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
       <weight>	2300	</weight>
-      <maxHealth>	164	</maxHealth>
-      <maxRegenHealth>	82	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.388571428571429	</shotDispersionRadius>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.37	</shotDispersionRadius>
       <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3	</afterShot>
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
+      <clip>
+        <count>	3	</count>
+        <rate>	30	</rate>
+      </clip>
+      <autoreload>
+        <reloadTime>	14 11 8	</reloadTime>
+      </autoreload>
       <shots>
         <_100mm_ZUBM_101>
-          <defaultPortion>	0.80	</defaultPortion>
-          <speed>	1223	</speed>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1320	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	200 180	</piercingPower>
+          <piercingPower>	260 250	</piercingPower>
         </_100mm_ZUBM_101>
         <_100mm_ZUBK_81>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1052	</speed>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	255 255	</piercingPower>
+          <piercingPower>	330 330	</piercingPower>
         </_100mm_ZUBK_81>
         <_100mm_ZUOF_121>
-          <defaultPortion>	0.20	</defaultPortion>
-          <speed>	895	</speed>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	50 50	</piercingPower>

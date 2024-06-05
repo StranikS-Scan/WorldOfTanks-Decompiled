@@ -69,6 +69,16 @@
       <type>	include	</type>
     </rule>
     <rule>
+      <pattern>	gui/player_messages_panel\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	messages	</params>
+    </rule>
+    <rule>
+      <pattern>	gui/postmortem_panel\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	messages	</params>
+    </rule>
+    <rule>
       <pattern>	.*/development/test_xml/.*/.*\.xml$	</pattern>
       <type>	include	</type>
     </rule>

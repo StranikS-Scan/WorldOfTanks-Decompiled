@@ -5,12 +5,12 @@ from collections import defaultdict
 import typing
 from enum import Enum
 from cache import cached_property
+from dog_tags_common.config.common import ComponentPurpose
 from dog_tags_common.config.dog_tag_parser import readDogTags
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import List, Optional
     from dog_tags_common.config.dog_tag_framework import ComponentDefinition, StartingComponents
-    from dog_tags_common.config.common import ComponentPurpose
 
 class SourceData(Enum):
     ALL = 0
@@ -65,6 +65,7 @@ class _ComponentConfigAdapter(object):
         self._createAllCache(components)
         self._createGroupByTypeCache(components)
         self._createIsDefaultCache(components)
+        self._createDefaultAnimatedDogTag(components)
 
     def _createAllCache(self, components):
         self._components = dict(((c.componentId, c) for c in components if not c.isDeprecated and not c.isHidden))
@@ -84,8 +85,15 @@ class _ComponentConfigAdapter(object):
                 self._types_d[component.purpose][component.componentId] = component
             self._types[component.purpose][component.componentId] = component
 
+    def _createDefaultAnimatedDogTag(self, components):
+        firstAnimatedDogTag = next((c for c in components if not c.isHidden and c.purpose == ComponentPurpose.COUPLED))
+        self._defaultAnimatedDogTag = [firstAnimatedDogTag.componentId, firstAnimatedDogTag.coupledComponentId]
+
     def getDefaultDogTag(self):
         return self._startingDogTag
+
+    def getDefaultAnimatedDogTag(self):
+        return self._defaultAnimatedDogTag
 
     def getComponentById(self, id_val, sourceData=SourceData.ALL):
         depr = None

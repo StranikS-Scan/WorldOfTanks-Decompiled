@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/intro_video.py
+from logging import getLogger
 import BattleReplay
 import BigWorld
+import SoundGroups
+import typing
 import WWISE
 import Windowing
 from account_helpers import AccountSettings
@@ -17,10 +20,12 @@ from story_mode.gui.fade_in_out import UseStoryModeFading
 from story_mode.gui.scaleform.daapi.view.meta.IntroVideoMeta import IntroVideoMeta
 from story_mode.gui.scaleform.daapi.view.model.intro_video_settings_model import getSettings
 from story_mode.gui.shared.event_dispatcher import showPrebattleWindow
+from story_mode.gui.story_mode_gui_constants import EventMusicState, Music, Ambience
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import IntroVideoLogger
-from story_mode_common.story_mode_constants import FIRST_MISSION_ID
+from story_mode_common.story_mode_constants import LOGGER_NAME
+_logger = getLogger(LOGGER_NAME)
 
 def sendWWISEEventGlobal(event):
     if event:
@@ -31,11 +36,23 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
-    def __init__(self):
-        super(IntroVideo, self).__init__()
-        self._data = getSettings()
+    def __init__(self, ctx):
+        super(IntroVideo, self).__init__(ctx)
         self._uiLogger = IntroVideoLogger()
         self._isVideoStarted = False
+        self._missionId = ctx.get('missionId')
+        if self._missionId is None:
+            _logger.error('missionId is None')
+            return
+        else:
+            data = getSettings()
+            if data is None:
+                _logger.error('data not exists for IntroVideoSettingsModel')
+                return
+            self._introVideoSettings = next((mission for mission in data.missions if mission.id == self._missionId), None)
+            if self._introVideoSettings is None:
+                _logger.error('_introVideoSettings is None for mission ID=%s', self._missionId)
+            return
 
     def spaceLoadCompleted(self):
         loading.getLoader().idl()
@@ -47,23 +64,28 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
 
     def onVideoStarted(self):
         self._isVideoStarted = True
-        self._uiLogger.logVideoStarted()
-        self._storyModeCtrl.stopOnboardingMusic()
-        self._storyModeCtrl.startOnboardingMusic(self._data.music.start)
-        self.soundManager.playSound(self._data.vo)
+        self._uiLogger.logVideoStarted(self._missionId)
+        if self._storyModeCtrl.isSelectedMissionEvent:
+            WWISE.WW_setState(EventMusicState.GROUP, EventMusicState.VIDEO)
+        else:
+            SoundGroups.g_instance.playSound2D(Music.ONBOARDING_STOP)
+            SoundGroups.g_instance.playSound2D(Ambience.ONBOARDING_STOP)
+        if self._introVideoSettings.music.start:
+            self.soundManager.playSound(self._introVideoSettings.music.start)
+        self.soundManager.playSound(self._introVideoSettings.vo)
         g_keyEventHandlers.add(self._handleKeyEvent)
 
     @UseStoryModeFading(hide=False)
     def onVideoComplete(self):
         self._closeWindow()
-        showPrebattleWindow(missionId=FIRST_MISSION_ID)
+        showPrebattleWindow(self._missionId)
 
     def onSkipButtonVisible(self):
-        self._uiLogger.logButtonShown(LogButtons.SKIP, once=True)
+        self._uiLogger.logButtonShown(LogButtons.SKIP, once=True, state=str(self._missionId))
         self.app.attachCursor()
 
     def onSkipButtonClicked(self):
-        self._uiLogger.logClick(LogButtons.SKIP)
+        self._uiLogger.logClick(LogButtons.SKIP, state=str(self._missionId))
         self.onVideoComplete()
 
     @property
@@ -80,14 +102,15 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
         self.as_setDataS({'skipButtonLabel': backport.text(R.strings.sm_battle.common.skipBtn()),
          'loadingText': backport.text(R.strings.sm_battle.introVideo.loading()),
          'loadingImage': backport.image(R.images.story_mode.gui.maps.icons.queue.back()),
-         'video': self._data.videoPath,
+         'video': self._introVideoSettings.videoPath,
          'isPausedAfterLoad': isPausedAfterLoad})
         self._sessionProvider.addArenaCtrl(self)
+        if not self._storyModeCtrl.isSelectedMissionEvent:
+            self._storyModeCtrl.startMusic()
         if AccountSettings.getSettings(SOUND.SUBTITLES):
             WWISE.WW_addMarkerListener(self._soundMarkerHandler)
-        self._storyModeCtrl.startOnboardingMusic()
         self.app.detachCursor()
-        self._uiLogger.logOpen()
+        self._uiLogger.logOpen(state=str(self._missionId))
 
     def _dispose(self):
         self._sessionProvider.removeArenaCtrl(self)
@@ -95,12 +118,14 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
             Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
         WWISE.WW_removeMarkerListener(self._soundMarkerHandler)
         g_keyEventHandlers.discard(self._handleKeyEvent)
-        self._uiLogger.logClose()
+        self._uiLogger.logClose(state=str(self._missionId))
         super(IntroVideo, self)._dispose()
 
     def _closeWindow(self):
-        sendWWISEEventGlobal(self._data.music.stop)
-        self.soundManager.stopSound(self._data.vo)
+        sendWWISEEventGlobal(self._introVideoSettings.music.stop)
+        self.soundManager.stopSound(self._introVideoSettings.vo)
+        if not self._storyModeCtrl.isSelectedMissionEvent:
+            SoundGroups.g_instance.playSound2D(Music.ONBOARDING_START)
         self.destroy()
 
     def _onWindowAccessibilityChanged(self, isAccessible):
@@ -110,9 +135,9 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
             self.as_pausePlaybackS()
         if self._isVideoStarted:
             if isAccessible:
-                sendWWISEEventGlobal(self._data.music.resume)
+                sendWWISEEventGlobal(self._introVideoSettings.music.resume)
             else:
-                sendWWISEEventGlobal(self._data.music.pause)
+                sendWWISEEventGlobal(self._introVideoSettings.music.pause)
 
     def _soundMarkerHandler(self, marker):
         if marker == '#end':

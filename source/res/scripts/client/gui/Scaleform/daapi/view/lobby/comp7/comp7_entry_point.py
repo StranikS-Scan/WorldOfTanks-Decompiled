@@ -113,7 +113,7 @@ class Comp7EntryPointView(ViewImpl, Notifiable):
             status = State.ACTIVE
         return status
 
-    @staticmethod
-    def __onOpen():
+    def __onOpen(self):
+        self.destroy()
         comp7_prb_helpers.selectComp7()
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.COMP7)

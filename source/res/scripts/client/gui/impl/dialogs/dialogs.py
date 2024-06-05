@@ -15,7 +15,7 @@ from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirma
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
 from skeletons.gui.impl import IGuiLoader
-from frameworks.wulf import WindowStatus, WindowLayer
+from frameworks.wulf import WindowStatus
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
 
@@ -157,7 +157,7 @@ def showRecruitNewTankmanDialog(vehicleCD, slotIdx, putInTank=False):
 @wg_async
 def showEnlargeBarracksDialog():
     from gui.impl.lobby.crew.dialogs.enlarge_barracks_dialog import EnlargeBarracksDialog
-    result = yield wg_await(showSimple(FullScreenDialogWindowWrapper(EnlargeBarracksDialog(), layer=WindowLayer.FULLSCREEN_WINDOW)))
+    result = yield wg_await(showSimple(FullScreenDialogWindowWrapper(EnlargeBarracksDialog())))
     raise AsyncReturn(result)
 
 

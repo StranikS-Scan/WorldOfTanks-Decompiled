@@ -821,6 +821,9 @@ class Achievements20Event(HasCtxEvent):
     LAYOUT_CHANGED = 'layoutChanged'
     CLOSE_SUMMARY_VIEW = 'closeSummaryView'
     CLOSE_EDIT_VIEW = 'closeEditView'
+    CHANGE_GF_VIEW = 'changeGamefaceView'
+    ACHIEVEMENT_EARNED = 'achievementEarned'
+    ACHIEVEMENT_EARNED_SHOWNED = 'achievementEarnedShowned'
 
 
 class PrebattleEvent(HasCtxEvent):

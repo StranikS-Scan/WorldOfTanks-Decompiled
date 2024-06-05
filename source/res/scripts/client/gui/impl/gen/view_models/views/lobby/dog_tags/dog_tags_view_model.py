@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.dog_tags.dt_dog_tag import DtDogTag
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_grid_section import DtGridSection
 
 class DogTagsViewModel(ViewModel):
-    __slots__ = ('onExit', 'onEquip', 'onReset', 'onTabSelect', 'onInfoButtonClick', 'onPlayVideo', 'onOnboardingCloseClick', 'onNewComponentHover')
+    __slots__ = ('onExit', 'onEquip', 'onReset', 'onTabSelect', 'onInfoButtonClick', 'onPlayVideo', 'onUpdateSelectedDT', 'onOnboardingCloseClick', 'onNewComponentHover')
 
-    def __init__(self, properties=11, commands=8):
+    def __init__(self, properties=12, commands=9):
         super(DogTagsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -87,6 +87,12 @@ class DogTagsViewModel(ViewModel):
     def setIsTopView(self, value):
         self._setBool(10, value)
 
+    def getIsAnimatedDogTagSelected(self):
+        return self._getBool(11)
+
+    def setIsAnimatedDogTagSelected(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(DogTagsViewModel, self)._initialize()
         self._addViewModelProperty('equippedDogTag', DtDogTag())
@@ -100,11 +106,13 @@ class DogTagsViewModel(ViewModel):
         self._addArrayProperty('engravingGrid', Array())
         self._addBoolProperty('onboardingEnabled', False)
         self._addBoolProperty('isTopView', False)
+        self._addBoolProperty('isAnimatedDogTagSelected', False)
         self.onExit = self._addCommand('onExit')
         self.onEquip = self._addCommand('onEquip')
         self.onReset = self._addCommand('onReset')
         self.onTabSelect = self._addCommand('onTabSelect')
         self.onInfoButtonClick = self._addCommand('onInfoButtonClick')
         self.onPlayVideo = self._addCommand('onPlayVideo')
+        self.onUpdateSelectedDT = self._addCommand('onUpdateSelectedDT')
         self.onOnboardingCloseClick = self._addCommand('onOnboardingCloseClick')
         self.onNewComponentHover = self._addCommand('onNewComponentHover')

@@ -264,6 +264,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         self.areaTriggerTarget = self.createComponent(Triggers.AreaTriggerTarget)
         self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)
+        self.__filter.setFlyingInfo(DataLinks.createBoolLink(self.flyingInfoProvider, 'isFlying'))
         compoundModel = self.compoundModel
         if self.isAlive:
             self.detailedEngineState, self.gearbox = model_assembler.assembleDrivetrain(self, isPlayer)
@@ -857,7 +858,7 @@ class CommonTankAppearance(ScriptGameObject):
         return self.outfit.modelsSet if has3DStyle else 'default'
 
     def getTrackStates(self):
-        return False if self.crashedTracksController is None else list(self.crashedTracksController.getLeftTrackStates() + self.crashedTracksController.getRightTrackStates())
+        return [] if self.crashedTracksController is None else list(self.crashedTracksController.getLeftTrackStates() + self.crashedTracksController.getRightTrackStates())
 
     def __shouldCreatePhysicalDestroyedTracks(self):
         quality = BigWorld.trackPhysicsQuality()
@@ -889,7 +890,7 @@ class CommonTankAppearance(ScriptGameObject):
         if not self.__shouldUseTrackCrashWithDebris(pairIndex, shouldCreateDebris):
             if self.crashedTracksController is not None:
                 for idx in indices:
-                    self.crashedTracksController.addCrashedTrack(isLeft, idx, isSideFlying)
+                    self.crashedTracksController.addCrashedTrack(isLeft, idx, hitPoint, isSideFlying)
 
             return
         else:
@@ -898,7 +899,7 @@ class CommonTankAppearance(ScriptGameObject):
                 track = self.tracks.getTrackGameObject(isLeft, idx)
                 track.createComponent(DebrisCrashedTrackComponent, isLeft, idx, self.typeDescriptor, self.gameObject, self.boundEffects, self.filter, self._vehicle.isPlayerVehicle, shouldCreateDebris, hitPoint, modelsSet)
                 if self.crashedTracksController is not None:
-                    self.crashedTracksController.addDebrisCrashedTrack(isLeft, idx)
+                    self.crashedTracksController.addDebrisCrashedTrack(isLeft, idx, hitPoint)
 
             return
 

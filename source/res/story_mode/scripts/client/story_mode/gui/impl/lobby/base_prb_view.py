@@ -33,7 +33,6 @@ class BasePrbView(ViewImpl, LobbyHeaderVisibility):
 
     @adisp_process
     def _quit(self):
-        self.destroyWindow()
         prbDispatcher = g_prbLoader.getDispatcher()
         if prbDispatcher is not None:
             result = yield prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))

@@ -59,14 +59,20 @@ class StaticSizeBlockBuilder(IBlockBuilderWithRecordsLayout):
 
 class DictBlockBuilder(object):
 
-    def __init__(self, name, keyFormat, valueFormat, eventsHandlers):
+    def __init__(self, name, keyFormat, valueFormat, eventsHandlers, popUpRecords=None, logRecords=None):
         self.name = name
         self.__keyFormat = keyFormat
         self.__valueFormat = valueFormat
         self.__eventsHandlers = eventsHandlers
+        self.__popUpRecords = popUpRecords
+        self.__logRecords = logRecords
 
     def build(self, dossierDescr, compDescr=''):
-        return DictDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, keyFormat=self.__keyFormat, valueFormat=self.__valueFormat)
+        if not isinstance(self.__popUpRecords, set):
+            self.__popUpRecords = set(self.__popUpRecords) if self.__popUpRecords else set()
+        if not isinstance(self.__logRecords, set):
+            self.__logRecords = set(self.__logRecords) if self.__logRecords else self.__popUpRecords
+        return DictDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, keyFormat=self.__keyFormat, valueFormat=self.__valueFormat, popUpRecords=self.__popUpRecords, logRecords=self.__logRecords)
 
 
 class ListBlockBuilder(object):

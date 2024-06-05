@@ -26,6 +26,7 @@ class BATTLE_EFFICIENCY_TYPES(object):
     STUN = 'stun'
     PERK = 'perk'
     STATIC_DEATH_ZONE = 'staticDeathZone'
+    MINEFIELD_ZONE = 'minefieldZone'
     VEHICLE_HEALTH_ADDED = 'healthAdded'
     VEHICLE_RECOVERY = 'vehicleRecovery'
     ENEMY_SECTOR_CAPTURED = 'enemySectorCaptured'
@@ -55,3 +56,5 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BY_CLING_BRANDER = 'receivedByClingBrander'
     DEALT_DMG_BY_THUNDER_STRIKE = 'dealtDamageByThunderStrike'
     RECEIVED_BY_THUNDER_STRIKE = 'receivedByThunderStrike'
+    DAMAGE_BY_BATTLESHIP = 'damageByBattleship'
+    DAMAGE_BY_DESTROYER = 'damageByDestroyer'

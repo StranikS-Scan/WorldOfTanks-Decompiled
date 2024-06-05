@@ -1,23 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/FLAvatarComponent.py
-import BigWorld
+import BattleReplay
 from ReservesEvents import randomReservesEvents
-from frontline.FLReplayController import FLReplayController, CallbackDataNames
-from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from frontline_common.constants import CallbackDataNames
+from script_component.DynamicScriptComponent import DynamicScriptComponent
+from frontline.FLReplayController import FLReplayController
 
-class FLAvatarComponent(BigWorld.DynamicScriptComponent):
-    __epicMetaCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-
-    def __init__(self):
-        super(FLAvatarComponent, self).__init__()
-        FLReplayController.serializeCallbackData(CallbackDataNames.FL_MODIFIER, (self.__epicMetaCtrl.getEpicBattlesReservesModifier(),))
-        FLReplayController.setDataCallback(CallbackDataNames.FL_MODIFIER, self.__restoreReplayReservesModifier)
+class FLAvatarComponent(DynamicScriptComponent):
 
     def onDestroy(self):
-        FLReplayController.delDataCallback(CallbackDataNames.FL_MODIFIER, self.__restoreModifier)
+        FLReplayController.delDataCallback(CallbackDataNames.FL_MODIFIER, randomReservesEvents.onChangedReservesModifier)
         super(FLAvatarComponent, self).onDestroy()
 
-    @staticmethod
-    def __restoreReplayReservesModifier(value):
-        randomReservesEvents.onChangedReservesModifier(value)
+    def _onAvatarReady(self):
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            modifier = self.entity.arenaExtraData.get('reservesModifier')
+            FLReplayController.serializeCallbackData(CallbackDataNames.FL_MODIFIER, (modifier,))
+            randomReservesEvents.onChangedReservesModifier(modifier)
+        FLReplayController.setDataCallback(CallbackDataNames.FL_MODIFIER, randomReservesEvents.onChangedReservesModifier)

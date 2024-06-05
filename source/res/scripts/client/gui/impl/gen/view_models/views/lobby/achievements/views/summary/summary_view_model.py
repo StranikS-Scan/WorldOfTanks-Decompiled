@@ -16,7 +16,7 @@ class EditState(Enum):
 class SummaryViewModel(ViewModel):
     __slots__ = ('onAchievementsSettings',)
 
-    def __init__(self, properties=23, commands=1):
+    def __init__(self, properties=25, commands=1):
         super(SummaryViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -127,45 +127,57 @@ class SummaryViewModel(ViewModel):
     def setTotalAwards(self, value):
         self._setNumber(16, value)
 
-    def getAchievementRibbonLength(self):
+    def getCurrentMastery(self):
         return self._getNumber(17)
 
-    def setAchievementRibbonLength(self, value):
+    def setCurrentMastery(self, value):
         self._setNumber(17, value)
 
+    def getTotalMastery(self):
+        return self._getNumber(18)
+
+    def setTotalMastery(self, value):
+        self._setNumber(18, value)
+
+    def getAchievementRibbonLength(self):
+        return self._getNumber(19)
+
+    def setAchievementRibbonLength(self, value):
+        self._setNumber(19, value)
+
     def getSignificantAchievements(self):
-        return self._getArray(18)
+        return self._getArray(20)
 
     def setSignificantAchievements(self, value):
-        self._setArray(18, value)
+        self._setArray(20, value)
 
     @staticmethod
     def getSignificantAchievementsType():
         return AchievementModel
 
     def getRegistrationDate(self):
-        return self._getString(19)
-
-    def setRegistrationDate(self, value):
-        self._setString(19, value)
-
-    def getLastVisitDate(self):
-        return self._getString(20)
-
-    def setLastVisitDate(self, value):
-        self._setString(20, value)
-
-    def getLastVisitTime(self):
         return self._getString(21)
 
-    def setLastVisitTime(self, value):
+    def setRegistrationDate(self, value):
         self._setString(21, value)
 
+    def getLastVisitDate(self):
+        return self._getString(22)
+
+    def setLastVisitDate(self, value):
+        self._setString(22, value)
+
+    def getLastVisitTime(self):
+        return self._getString(23)
+
+    def setLastVisitTime(self, value):
+        self._setString(23, value)
+
     def getIsSuccessfullyEdited(self):
-        return self._getBool(22)
+        return self._getBool(24)
 
     def setIsSuccessfullyEdited(self, value):
-        self._setBool(22, value)
+        self._setBool(24, value)
 
     def _initialize(self):
         super(SummaryViewModel, self)._initialize()
@@ -186,6 +198,8 @@ class SummaryViewModel(ViewModel):
         self._addStringProperty('editState')
         self._addNumberProperty('numberOfUniqueAwards', 0)
         self._addNumberProperty('totalAwards', 0)
+        self._addNumberProperty('currentMastery', 0)
+        self._addNumberProperty('totalMastery', 0)
         self._addNumberProperty('achievementRibbonLength', 0)
         self._addArrayProperty('significantAchievements', Array())
         self._addStringProperty('registrationDate', '')

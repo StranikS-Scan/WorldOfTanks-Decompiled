@@ -191,6 +191,17 @@ def showMissionsBattlePass(layoutID=None, chapterID=0):
     _showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, layoutID=layoutID, chapterID=chapterID)
 
 
+def showMissionsLiveOpsWebEvents():
+
+    def __battleQueueViewPredicate(window):
+        return window.content is not None and getattr(window.content, 'alias', None) == VIEW_ALIAS.BATTLE_QUEUE
+
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.findWindows(__battleQueueViewPredicate):
+        return
+    _showMissions(tab=QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS)
+
+
 def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
     _showMissions(**{'tab': tab,
      'subTab': subTab,
@@ -471,3 +482,9 @@ def showComp7BanWindow(arenaTypeID, time, duration, penalty, isQualification, no
         wnd.load()
     else:
         notificationMgr.append(WindowNotificationCommand(wnd))
+
+
+def showComp7YearlyRewardsSelectionWindow():
+    from gui.impl.lobby.comp7.yearly_rewards_selection_screen import YearlyRewardsSelectionWindow
+    window = YearlyRewardsSelectionWindow()
+    window.load()

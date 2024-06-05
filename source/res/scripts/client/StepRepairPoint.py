@@ -71,6 +71,9 @@ class StepRepairPoint(BigWorld.Entity):
         self.__stepRepairPointSoundObject.stopAll()
         self.__stepRepairPointSoundObject = None
         self.__animator = None
+        self.model.root.detach(self.__terrainSelectedArea)
+        self.__terrainSelectedArea = None
+        self.model = None
         return
 
     def isActiveForPlayerTeam(self):

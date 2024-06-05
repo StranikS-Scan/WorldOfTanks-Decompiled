@@ -105,6 +105,7 @@ class LimitedUIController(ILimitedUIController):
         self.__skippedObserves = defaultdict(list)
         self.__serverSettings = None
         self.__isEnabled = False
+        self.__needCheckNoviceRules = False
         self.__em = EventManager()
         self.onStateChanged = Event(self.__em)
         self.onConfigChanged = Event(self.__em)
@@ -213,6 +214,7 @@ class LimitedUIController(ILimitedUIController):
             self.__luiService.destroy()
             self.__luiService = None
             self.__isEnabled = False
+            self.__needCheckNoviceRules = False
             self.__serverSettings = None
             self.__luiConfig = None
             return
@@ -234,7 +236,11 @@ class LimitedUIController(ILimitedUIController):
         return
 
     def __onServerSettingsSyncCompleted(self):
-        self.__updateConfig()
+        needUpdate = True
+        if self.__needCheckNoviceRules:
+            needUpdate = not self.__checkNoviceRulesCompletion()
+        if needUpdate:
+            self.__updateConfig()
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:
@@ -273,6 +279,8 @@ class LimitedUIController(ILimitedUIController):
             self.__updateConfig()
 
     def __updateConfig(self):
+        if not self.__itemsCache.isSynced():
+            return
         self.__luiConfig = self.__serverSettings.limitedUIConfig
         self.__buildRules()
         if not self.__updateStatus():
@@ -404,10 +412,16 @@ class LimitedUIController(ILimitedUIController):
         return all((self.__isRuleCompleted(ruleID) or self.__checkCondition(ruleID) for ruleID in self.__rules.getRulesIDsByTypes(LuiRuleTypes.NOVICE)))
 
     def __checkNoviceRulesCompletion(self):
-        if not self.__isNoviceRulesTurnedOff() and self.__isRulesForNoviceCompleted():
-            self.__turnOffNoviceRules()
-            self.__rules.storePostponedRules()
-            self.__updateConfig()
+        if self.__settingsCore.serverSettings.settingsCache.isSynced():
+            self.__needCheckNoviceRules = False
+            if not self.__isNoviceRulesTurnedOff() and self.__isRulesForNoviceCompleted():
+                self.__turnOffNoviceRules()
+                self.__rules.storePostponedRules()
+                self.__updateConfig()
+                return True
+        else:
+            self.__needCheckNoviceRules = True
+        return False
 
     def __isNoviceRulesTurnedOff(self):
         return self.__settingsCore.serverSettings.isLimitedUICompleted()

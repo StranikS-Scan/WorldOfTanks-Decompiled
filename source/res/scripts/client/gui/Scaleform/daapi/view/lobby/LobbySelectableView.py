@@ -2,9 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbySelectableView.py
 from gui.Scaleform.daapi import LobbySubView
 from hangar_selectable_objects import ISelectableLogicCallback, HangarSelectableLogic
-from SelectableObjectTooltipController import SelectableObjectTooltipController
 
-class LobbySelectableView(LobbySubView, ISelectableLogicCallback, SelectableObjectTooltipController):
+class LobbySelectableView(LobbySubView, ISelectableLogicCallback):
 
     def __init__(self, ctx=None):
         super(LobbySelectableView, self).__init__(ctx)

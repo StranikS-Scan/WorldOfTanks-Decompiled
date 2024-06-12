@@ -32,7 +32,7 @@ from potapov_quests import ClassifierByAlliance, ClassifierByClass
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IEarlyAccessController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -519,6 +519,22 @@ class DebutBoxesQuestPostBattleInfo(QuestPostBattleInfo):
                      'progressDiffTooltip': backport.text(R.strings.tooltips.quests.progress.debutBoxes())})
 
         return progresses
+
+
+class EarlyAccessQuestPostBattleInfo(QuestPostBattleInfo):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData=None):
+        info = super(EarlyAccessQuestPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        isEarlyAccessOn = self.__earlyAccessController.isQuestActive()
+        progressTooltip = backport.text(R.strings.tooltips.quests.progress.earlyAccess())
+        for progress in info['progressList']:
+            progress.update({'progressDiffTooltip': progressTooltip})
+            progress.update({'progrTooltip': {'body': progressTooltip}})
+
+        info.update({'isLinkBtnVisible': isEarlyAccessOn})
+        info['questInfo'].update({'linkTooltip': backport.text(R.strings.tooltips.quests.linkBtn.earlyAccess())})
+        return info
 
 
 class _BattleMattersQuestInfo(QuestPostBattleInfo):

@@ -701,7 +701,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_MAPSTRAINING = '#menu:headerButtons/battle/types/mapsTraining'
-    HEADERBUTTONS_BATTLE_TYPES_EVENTBATTLE = '#menu:headerButtons/battle/types/eventBattle'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
     HEADERBUTTONS_BATTLE_TYPES_SPEC_DESCR = '#menu:headerButtons/battle/types/spec/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVESPEC_DESCR = '#menu:headerButtons/battle/types/leaveSpec/descr'
@@ -1276,6 +1275,8 @@ class MENU(object):
     RESEARCH_LABELS_BUTTON_TRADE_IN = '#menu:research/labels/button/trade-in'
     RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
     RESEARCH_LABELS_BUTTON_TOCOLLECTION = '#menu:research/labels/button/toCollection'
+    RESEARCH_LABELS_BUTTON_TOEARLYACCESSQUESTSBUTTON = '#menu:research/labels/button/toEarlyAccessQuestsButton'
+    RESEARCH_STATUS_EARLYACCESS = '#menu:research/status/earlyAccess'
     TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
     BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'
@@ -1621,7 +1622,6 @@ class MENU(object):
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
-    CONTEXTMENU_CREATEHISTORICALBATTLESQUAD = '#menu:contextMenu/createHistoricalBattleSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1969,7 +1969,6 @@ class MENU(object):
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
     BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
-    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
@@ -2056,6 +2055,8 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
     TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
+    TECHTREE_EARLYACCESSLOCK = '#menu:techtree/EarlyAccessLock'
+    TECHTREE_EARLYACCESSBUTTON = '#menu:techtree/EarlyAccessButton'
     TECHTREE_PREMIUMPANEL_TITLE = '#menu:techtree/premiumPanel/title'
     TECHTREE_PREMIUMPANEL_BTNLABEL = '#menu:techtree/premiumPanel/btnLabel'
     TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
@@ -2332,7 +2333,6 @@ class MENU(object):
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
-     CONTEXTMENU_CREATEHISTORICALBATTLESQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,

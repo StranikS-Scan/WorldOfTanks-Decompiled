@@ -293,7 +293,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     @adisp_async
     @adisp_process
-    def togglePlayerReadyAction(self, callback, checkAmmo=True):
+    def togglePlayerReadyAction(self, callback):
         if self.__waitingReadyAccept:
             callback(False)
             return
@@ -302,7 +302,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady and not self.prbEntity.isCommander() and checkAmmo:
+        if changeStatePossible and notReady and not self.prbEntity.isCommander():
             changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
@@ -802,9 +802,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__currentlyDisplayedTanks.clear()
         if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
             self.__updatePlatoonTankInfo()
-            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
-            if cameraManager:
-                cameraManager.enablePlatoonMode(True)
 
     def __stopListening(self):
         _logger.debug('PlatoonController: stop listening')
@@ -957,6 +954,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def hsSpaceDestroy(self, inited):
         if inited:
             self.__availablePlatoonTanks.clear()
+            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+            if cameraManager:
+                cameraManager.enablePlatoonMode(False)
 
     def __updatePlatoonTankInfo(self):
         entity = self.prbEntity

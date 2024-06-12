@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOU
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView
 from gui.shared import event_dispatcher as shared_events
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
@@ -34,6 +35,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
 
     def goToBlueprintView(self, vehicleCD):
         shared_events.showBlueprintView(vehicleCD, self._createExitEvent())
+
+    def goToEarlyAccess(self):
+        showEarlyAccessQuestsView()
 
     def goToNationChangeView(self, vehicleCD):
         shared_events.showChangeVehicleNationDialog(vehicleCD)

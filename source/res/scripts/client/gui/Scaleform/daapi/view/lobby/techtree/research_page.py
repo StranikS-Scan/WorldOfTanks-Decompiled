@@ -8,7 +8,7 @@ from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnDescription
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
-from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
+from gui.Scaleform.daapi.view.lobby.techtree.data.research_items_data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_entry_point import VehPostProgressionEntryPoint
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip

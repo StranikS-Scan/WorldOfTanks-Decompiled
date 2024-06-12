@@ -20,7 +20,7 @@ if typing.TYPE_CHECKING:
     from cgf_components.marker_component import LobbyFlashMarker
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
-    _LAYERS_WITHOUT_MARKERS = {WindowLayer.FULLSCREEN_WINDOW,
+    __LAYERS_WITHOUT_MARKERS = {WindowLayer.FULLSCREEN_WINDOW,
      WindowLayer.OVERLAY,
      WindowLayer.SUB_VIEW,
      WindowLayer.TOP_SUB_VIEW}
@@ -105,7 +105,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def _canShowMarkers(self):
         windowsManager = self.guiLoader.windowsManager
-        windows = windowsManager.findWindows(lambda w: w.layer in self._LAYERS_WITHOUT_MARKERS)
+        windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS)
         hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LOBBY_HANGAR)) > 0
         return len(windows) == 1 and hangarIsExist
 

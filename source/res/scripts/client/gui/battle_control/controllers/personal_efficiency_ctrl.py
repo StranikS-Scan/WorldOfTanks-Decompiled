@@ -2,15 +2,12 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/personal_efficiency_ctrl.py
 import weakref
 from collections import defaultdict, deque
-from typing import TYPE_CHECKING
 import Event
 from shared_utils import BitmaskHelper
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
-if TYPE_CHECKING:
-    from gui.battle_control.controllers.feedback_events import _DamageExtra
 _LOG_MAX_LEN = 100
 
 class _EfficiencyInfo(object):
@@ -91,9 +88,6 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isDeathZone(self):
         return self.__damage.isDeathZone()
 
-    def isPersonalDeathZone(self):
-        return self.__damage.isPersonalDeathZone()
-
     def isStaticDeathZone(self):
         return self.__damage.isStaticDeathZone()
 
@@ -106,17 +100,8 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isArtilleryEqDamage(self, primary=True):
         return self.__damage.isArtilleryEq(primary=primary)
 
-    def isArtilleryRocketDamage(self, primary=True):
-        return self.__damage.isArtilleryRocket(primary=primary)
-
-    def isArtilleryMortarDamage(self, primary=True):
-        return self.__damage.isArtilleryMortar(primary=primary)
-
     def isBomberEqDamage(self, primary=True):
         return self.__damage.isBomberEq(primary=primary)
-
-    def isBombercasDamage(self, primary=True):
-        return self.__damage.isBombercas(primary=primary)
 
     def isBombersDamage(self, primary=True):
         return self.__damage.isBombers(primary=primary)

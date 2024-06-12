@@ -37,7 +37,20 @@ DOFParams = namedtuple('DOFParams', ['nearStart',
 class CameraMode(object):
     DEFAULT = 'Tank'
     PLATOON = 'Platoon'
-    ALL = (DEFAULT, PLATOON)
+    SHIFTED = 'ShiftedTank'
+    SHIFTED_PLATOON = 'ShiftedPlatoon'
+    ALL = (DEFAULT,
+     PLATOON,
+     SHIFTED,
+     SHIFTED_PLATOON)
+
+    @classmethod
+    def getCameraMode(cls, isShifted, isPlatoon):
+        if isShifted:
+            if isPlatoon:
+                return cls.SHIFTED_PLATOON
+            return cls.SHIFTED
+        return cls.PLATOON if isPlatoon else cls.DEFAULT
 
 
 class _MouseMoveParams(object):
@@ -120,6 +133,8 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__cameraMode = CameraMode.DEFAULT
         self.__cameraName = None
         self.__isActive = False
+        self.__isShifted = False
+        self.__isPlatoon = False
         return
 
     def activate(self):
@@ -187,6 +202,10 @@ class HangarCameraManager(CGF.ComponentManager):
 
     def getCurrentCameraDirection(self):
         return self.__cam.direction
+
+    def enableShiftedMode(self, enable):
+        self.__isShifted = enable
+        self.__cameraMode = CameraMode.getCameraMode(self.__isShifted, self.__isPlatoon)
 
     def switchToTank(self, instantly=True, resetTransform=True):
         self.switchByCameraName(self.__cameraMode, instantly, resetTransform)
@@ -271,7 +290,8 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__zoomEnabled = enableZoom
 
     def enablePlatoonMode(self, enable=True):
-        cameraMode = CameraMode.PLATOON if enable else CameraMode.DEFAULT
+        self.__isPlatoon = enable
+        cameraMode = CameraMode.getCameraMode(self.__isShifted, self.__isPlatoon)
         if self.__cameraMode != cameraMode and self.__cameraName in CameraMode.ALL:
             self.__cameraMode = cameraMode
             self.switchToTank(False, False)

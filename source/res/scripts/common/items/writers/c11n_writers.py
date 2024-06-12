@@ -11,7 +11,7 @@ import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from serializable_types.types import C11nSerializationTypes as _C11nSerializationTypes
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED
 from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
@@ -526,6 +526,7 @@ class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= rewriteString(section, 'glossTexture', item, 'glossTexture', getDefaultGlossTexture())
         changed |= rewriteInt(section, 'scaleFactorId', item, 'scaleFactorId', DEFAULT_SCALE_FACTOR_ID)
         changed |= self.writeBaseGroup(item, section)
+        changed |= rewriteEmissionSettings(section, item.emissionSettings)
         return changed
 
 
@@ -540,11 +541,13 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= self.writeBaseGroup(item, section)
         if group:
             changed |= rewriteFloat(section, 'invisibilityFactor', item, 'invisibilityFactor', 1.0)
+            changed |= rewriteFloat(section, 'exclusionImpact', item, 'exclusionImpact', 1.0)
             changed |= rewritePalettes(section, item)
             changed |= rewriteCamouflageRotation(section, item)
             changed |= rewriteCamouflageTiling(section, item)
             changed |= rewriteCamouflageTilingSettings(section, item)
             changed |= rewriteCamouflageGlossMetallicSettings(section, item)
+            changed |= rewriteEmissionSettings(section, item.emissionSettings)
         return changed
 
 
@@ -1169,6 +1172,15 @@ def rewriteCamouflageGlossMetallicSettings(section, camouflageItem):
         changed |= section.deleteSection('gloss')
         changed |= section.deleteSection('metallic')
         changed |= _xml.rewriteString(section, 'glossMetallicMap', camouflageItem.glossMetallicSettings['glossMetallicMap'])
+    return changed
+
+
+def rewriteEmissionSettings(section, emissionSettings):
+    changed = _xml.rewriteString(section, 'emissionMap', emissionSettings['emissionMap'], '')
+    changed |= _xml.rewriteString(section, 'emissionPatternMap', emissionSettings['emissionPatternMap'], '')
+    changed |= _xml.rewriteFloat(section, 'forwardEmissionBrightness', emissionSettings['forwardEmissionBrightness'], DEFAULT_FORWARD_EMISSION)
+    changed |= _xml.rewriteFloat(section, 'deferredEmissionBrightness', emissionSettings['deferredEmissionBrightness'], DEFAULT_DEFERRED_EMISSION)
+    changed |= _xml.rewriteFloat(section, 'emissionAnimationSpeed', emissionSettings['emissionAnimationSpeed'], DEFAULT_EMISSION_ANIMATION_SPEED)
     return changed
 
 

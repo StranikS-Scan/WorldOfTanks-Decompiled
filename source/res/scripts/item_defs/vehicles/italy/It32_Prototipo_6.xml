@@ -10,8 +10,8 @@
   <postProgressionTree>	role_MT_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	23	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.208	</moving>
@@ -1034,8 +1034,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2069,14 +2069,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	460	</maxHealth>
+      <maxHealth>	410	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -2127,11 +2127,11 @@
             <maxPitch>	0 10 0.375 10 0.397222 2 0.466667 1 0.533333 1 0.602778 2 0.625 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <reloadTime>	6.8	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	7	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.15	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2140,7 +2140,7 @@
             <rate>	40	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	6.8 7.6 8.5 9.6 10.7	</reloadTime>
+            <reloadTime>	7 8 10 11 12	</reloadTime>
           </autoreload>
           <customizationSlots>
             <slot>
@@ -2772,7 +2772,7 @@
       <engines>
         <MB_837_Ea_P6>
           <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </MB_837_Ea_P6>
       </engines>
       <chassis>

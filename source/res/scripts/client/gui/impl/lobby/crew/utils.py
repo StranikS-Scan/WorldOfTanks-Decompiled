@@ -47,7 +47,6 @@ def buildPopoverTankFilterCriteria(filters):
     criteria = REQ_CRITERIA.UNLOCKED
     criteria |= REQ_CRITERIA.INVENTORY
     criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
-    criteria |= ~getRentCriteria()
     criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
     criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
     for field, value in filters.items():
@@ -93,6 +92,14 @@ def buildPopoverTankKeySortCriteria(field):
 
 def getRentCriteria():
     return REQ_CRITERIA.CUSTOM(lambda item: item.isRented and not item.isWotPlus)
+
+
+def getSecretWithoutRentCriteria():
+    return REQ_CRITERIA.CUSTOM(lambda item: item.isSecret and not item.isRented)
+
+
+def getPremiumWithoutRentCriteria():
+    return REQ_CRITERIA.CUSTOM(lambda item: item.isPremium and not item.isRented)
 
 
 def getDocGroupValues(tankman, config, listGetter, valueGetter, sortNeeded=True):

@@ -57,6 +57,8 @@
       </armor_14>
       <armor_16>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_16>
+      <armor_17>	120	</armor_17>
+      <armor_18>	80	</armor_18>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24280	</weight>
@@ -89,6 +91,15 @@
       <collisionModelClient>	vehicles/russian/R61_Object252_02/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	0.459665 0.544976 2.40467	</rayStart>
+        <rayEnd>	0.459675 0.364112 2.31931	</rayEnd>
+        <rayUp>	-0.000024 0.426811 -0.904341	</rayUp>
+        <size>	0.26	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
       <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>

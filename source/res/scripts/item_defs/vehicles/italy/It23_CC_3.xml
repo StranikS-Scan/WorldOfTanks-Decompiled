@@ -77,6 +77,11 @@
           <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Hull.model	</exploded>
         </It23_CC_3_MD22_III_3DSt>
+        <It23_CC_3_3DSt>
+          <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Hull.model	</exploded>
+        </It23_CC_3_3DSt>
       </sets>
     </models>
     <swinging>
@@ -466,6 +471,12 @@
         <clipAngle>	1.37926	</clipAngle>
         <anchorShift>	0.08	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -513,6 +524,11 @@
             <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Chassis.model	</exploded>
           </It23_CC_3_MD22_III_3DSt>
+          <It23_CC_3_3DSt>
+            <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Chassis.model	</exploded>
+          </It23_CC_3_3DSt>
         </sets>
       </models>
       <traces>
@@ -600,6 +616,45 @@
                   <row3>	-1.748607 0.927536 0.089394	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	It23_CC_3_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.828650 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.209210 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.919760	</row2>
+                  <row3>	0.000000 1.099920 -0.009310	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.020860	</row2>
+                  <row3>	0.000000 1.341220 0.089394	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.202766 0.221102	</row1>
+                  <row2>	0.000000 -0.394133 0.361448	</row2>
+                  <row3>	0.000000 1.218140 3.662390	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000002	</row0>
+                  <row1>	0.000000 0.173324 -0.244865	</row1>
+                  <row2>	0.000000 0.444651 0.314739	</row2>
+                  <row3>	0.000000 1.186860 -3.518480	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000002	</row0>
+                  <row1>	0.000000 -0.019576 -0.299361	</row1>
+                  <row2>	0.000000 0.543610 -0.035548	</row2>
+                  <row3>	0.000000 0.822341 -3.685130	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.686990 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.349620	</row2>
+                  <row3>	-1.748610 0.927536 0.089394	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -671,6 +726,45 @@
                   <row0>	0.300000 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.686990 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.349622	</row2>
+                  <row3>	1.749000 0.927536 0.089394	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	It23_CC_3_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.828650 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.209210 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.919760	</row2>
+                  <row3>	0.000000 1.099920 -0.009310	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.020860	</row2>
+                  <row3>	0.000000 1.341220 0.089394	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.202766 0.221102	</row1>
+                  <row2>	0.000000 -0.394133 0.361448	</row2>
+                  <row3>	0.000000 1.218140 3.662390	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000002	</row0>
+                  <row1>	0.000000 0.173324 -0.244865	</row1>
+                  <row2>	0.000000 0.444651 0.314739	</row2>
+                  <row3>	0.000000 1.186860 -3.518480	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.284340 0.000000 0.000002	</row0>
+                  <row1>	0.000000 -0.019576 -0.299361	</row1>
+                  <row2>	0.000000 0.543610 -0.035548	</row2>
+                  <row3>	0.000000 0.822341 -3.685130	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.686990 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.349620	</row2>
                   <row3>	1.749000 0.927536 0.089394	</row3>
                 </boxCollider>
               </hullCollider>
@@ -1596,6 +1690,11 @@
                 <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Gun_01.model	</exploded>
               </It23_CC_3_MD22_III_3DSt>
+              <It23_CC_3_3DSt>
+                <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </It23_CC_3_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -1650,6 +1749,11 @@
             <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_MD22_III_3DSt/crash/lod0/Turret_01.model	</exploded>
           </It23_CC_3_MD22_III_3DSt>
+          <It23_CC_3_3DSt>
+            <undamaged>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It23_CC_3/_skins/It23_CC_3_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </It23_CC_3_3DSt>
         </sets>
       </models>
       <hitTester>

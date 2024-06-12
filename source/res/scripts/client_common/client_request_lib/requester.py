@@ -115,8 +115,8 @@ class AgateAccessor(BaseAccessor):
     def agate_v4_fetch_product_list_state(self, callback, params, fields=None):
         return self._data_source.agate_v4_fetch_product_list_state(callback, params, fields=fields)
 
-    def agate_v5_get_user_subscriptions(self, callback, params, fields=None):
-        return self._data_source.agate_v5_get_user_subscriptions(callback, params, fields=fields)
+    def agate_v6_get_user_subscriptions(self, callback, params, fields=None):
+        return self._data_source.agate_v6_get_user_subscriptions(callback, params, fields=fields)
 
     def get_inventory_entitlements(self, callback, entitlement_codes):
         return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
@@ -291,6 +291,9 @@ class WgshAccessor(BaseAccessor):
 
     def get_event_frozen_vehicles(self, callback, fields=None):
         return self._data_source.wgsh_event_get_frozen_vehicles(callback, fields=fields)
+
+    def get_event_forbidden_vehicles(self, callback, fields=None):
+        return self._data_source.wgsh_get_forbidden_vehicles(callback, fields=fields)
 
 
 class RblbAccessor(BaseAccessor):

@@ -4,6 +4,8 @@ from helpers import i18n
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from shared_utils import CONST_CONTAINER
+from gui.impl import backport
+from gui.impl.gen import R
 MASTERY_IS_NOT_ACHIEVED = 0
 
 def isMarkOfMasteryAchieved(markOfMasterVal):
@@ -39,6 +41,9 @@ class MarkOfMasteryAchievement(ClassProgressAchievement):
 
     def setCompDescr(self, compDescr):
         self.__compDescr = compDescr
+
+    def getUserDescription(self):
+        return backport.text(R.strings.achievements.markOfMasteryContent(), val=backport.text(R.strings.achievements.markOfMasteryContent.num(self._value)()))
 
     def _getUserNameCtx(self):
         return {'name': i18n.makeString('#achievements:achievement/master%d' % (self._value or self.MIN_LVL))}

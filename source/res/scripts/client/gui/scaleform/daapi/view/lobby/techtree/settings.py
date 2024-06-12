@@ -165,6 +165,10 @@ class NODE_STATE(object):
         return state & NODE_STATE_FLAGS.BLUEPRINT
 
     @classmethod
+    def isEarlyAccess(cls, state):
+        return state & NODE_STATE_FLAGS.EARLY_ACCESS
+
+    @classmethod
     def printStates(cls, state):
         states = []
         for k, v in NODE_STATE_FLAGS.__dict__.iteritems():

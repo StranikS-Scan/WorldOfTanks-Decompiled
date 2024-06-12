@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/referral_program_controller.py
 import logging
 import BigWorld
+import Keys
 from functools import partial
 from Event import Event
 from account_helpers import AccountSettings
@@ -9,7 +10,7 @@ from account_helpers.AccountSettings import REFERRAL_COUNTER
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from constants import RP_PGB_POINT, RP_POINT
 from frameworks.wulf import WindowLayer
-from gui import SystemMessages
+from gui import SystemMessages, InputHandler
 from gui.SystemMessages import SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
@@ -115,12 +116,14 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         g_playerEvents.onClientUpdated += self.__onClientUpdated
         g_clientUpdateManager.addCallbacks({'cache.entitlements': self.__onEntitlementsUpdated})
+        InputHandler.g_instance.onKeyDown += self.__handleKeyDown
 
     def _removeListeners(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_playerEvents.onClientUpdated -= self.__onClientUpdated
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_eventBus.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onReferralProgramButtonClicked, scope=EVENT_BUS_SCOPE.LOBBY)
+        InputHandler.g_instance.onKeyDown -= self.__handleKeyDown
 
     def __getBrowserView(self):
         app = self.__appLoader.getApp()
@@ -210,3 +213,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def __processButtonPress(self, **_):
         self.showWindow()
+
+    def __handleKeyDown(self, event):
+        if event.isKeyDown() and event.key == Keys.KEY_R and event.isShiftDown() and event.isAltDown() and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
+            self.showWindow()

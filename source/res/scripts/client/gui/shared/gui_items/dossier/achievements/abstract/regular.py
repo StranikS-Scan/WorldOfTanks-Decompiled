@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/regular.py
+import logging
+from traceback import print_stack
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n
+_logger = logging.getLogger(__name__)
 
 def dyn_or_num(accessor, name, default=None):
     return accessor.num(name, default=default) if name and name[0].isdigit() else accessor.dyn(name, default=default)
@@ -160,7 +163,13 @@ class RegularAchievement(GUIItem):
         return backport.text(resource())
 
     def getUserDescription(self):
-        return backport.text(dyn_or_num(R.strings.achievements, '%s_descr' % self._getActualName())())
+        resource = R.strings.achievements.dyn('{}_descr'.format(self._getActualName()))
+        if resource.isValid():
+            return backport.text(resource())
+        else:
+            print_stack(limit=2)
+            _logger.error('Invalid key "#achievements:{}_descr"'.format(self._getActualName()))
+            return ''
 
     def getUserWebDescription(self):
         return self.getUserDescription()

@@ -29,11 +29,7 @@ def __groupsParser(bitmask, _, bonusValue, parentLimitIds, bonusLimitIds, ctx):
 def __defaultParser(bitmask, bonusType, bonusValue, parentLimitIds, bonusLimitIds, ctx):
     bonuses = getNonQuestBonuses(bonusType, bonusValue)
     limitsToUpdate = bonusLimitIds.union(parentLimitIds)
-    if __isEmptySlotsBitmask(bitmask) and bonusType == 'tokens':
-        slotSettings = ctx['slotSettings']
-        slotGuiParams = slotSettings.setdefault(ctx['slotId'], [])
-        slotGuiParams.extend(sum([ bonus.getValue().keys() for bonus in bonuses ], []))
-    elif __isCommonSlotsBitmask(bitmask, ctx['probabilityStageCount']):
+    if __isCommonSlotsBitmask(bitmask, ctx['probabilityStageCount']):
         commonSlots = ctx['commonSlots']
         slot = commonSlots.setdefault(ctx['slotId'], __getEmptySlotData())
         __extendSlot(slot, bonuses, limitsToUpdate)
@@ -57,25 +53,23 @@ __PARSERS = {'allof': __allOfParser,
 def parseBonusSection(data, probabilityStageCount):
     rotationSlots = [ {} for _ in range(probabilityStageCount) ]
     commonSlot = {}
-    slotSettings = {}
     rawSlots = data.get('allof', [])
     for idx, slotsData in enumerate(rawSlots):
         slotBonusInfo = BonusInfo(*slotsData)
         bitmask = __getProbabilityBitmask(slotBonusInfo.probabilitiesList[0])
-        ctx = __makeParserContext(idx, rotationSlots, commonSlot, probabilityStageCount, slotSettings)
+        ctx = __makeParserContext(idx, rotationSlots, commonSlot, probabilityStageCount)
         __parseSubsection(bitmask=bitmask, section=slotBonusInfo.subBonusRawData, parentLimitIds=__makeLimitIdsSet(slotBonusInfo.limitIDs), bonusLimitIds=set(), ctx=ctx)
         for rotationId in __iterateBitsPositions(bitmask):
-            __updateSlotInfo(rotationSlots[rotationId].get(idx), slotBonusInfo.probabilitiesList, slotSettings.get(idx, []))
+            __updateSlotInfo(rotationSlots[rotationId].get(idx), slotBonusInfo.probabilitiesList)
 
-        __updateSlotInfo(commonSlot.get(idx), slotBonusInfo.probabilitiesList, slotSettings.get(idx, []))
+        __updateSlotInfo(commonSlot.get(idx), slotBonusInfo.probabilitiesList)
 
     return (rotationSlots, commonSlot)
 
 
-def __updateSlotInfo(slot, probabilityList, slotSettings):
+def __updateSlotInfo(slot, probabilityList):
     if slot:
         slot['probability'] = probabilityList
-        slot['slotSettings'] = slotSettings
 
 
 def __parseSubsection(bitmask, section, parentLimitIds, bonusLimitIds, ctx):
@@ -99,10 +93,6 @@ def __isCommonSlotsBitmask(bitmask, probabilityStageCount):
     return bitmask == __getFullBitmask(probabilityStageCount)
 
 
-def __isEmptySlotsBitmask(bitmask):
-    return bitmask == 0
-
-
 def __getFullBitmask(probabilityStageCount):
     return (1 << probabilityStageCount) - 1
 
@@ -110,16 +100,14 @@ def __getFullBitmask(probabilityStageCount):
 def __getEmptySlotData():
     return {'probability': None,
      'bonuses': [],
-     'limitIDsMap': {},
-     'slotSettings': {}}
+     'limitIDsMap': {}}
 
 
-def __makeParserContext(slotId, rotationSlots, commonSlots, probabilityStageCount, slotSettings):
+def __makeParserContext(slotId, rotationSlots, commonSlots, probabilityStageCount):
     return {'slotId': slotId,
      'probabilityStageCount': probabilityStageCount,
      'rotationSlots': rotationSlots,
-     'commonSlots': commonSlots,
-     'slotSettings': slotSettings}
+     'commonSlots': commonSlots}
 
 
 def __makeLimitIdsSet(limitIds):

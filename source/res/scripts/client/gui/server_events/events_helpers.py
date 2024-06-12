@@ -19,7 +19,7 @@ from gui.shared.gui_items.customization import C11nStyleProgressData
 from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -329,10 +329,6 @@ def isRegularQuest(eventID):
     return not (isMarathon(eventID) or isBattleMattersQuestID(eventID) or isPremium(eventID) or idGameModeEvent)
 
 
-def filterEventAvailableQuest(quest):
-    return quest.isAvailable()[0]
-
-
 @dependency.replace_none_kwargs(c11nService=ICustomizationService)
 def isC11nQuest(eventID, c11nService=None):
     return c11nService.isProgressionQuests(eventID)
@@ -507,17 +503,6 @@ def isArmoryYardQuest(eventID, armoryYardCtrl=None):
     return armoryYardCtrl.isProgressionQuest(eventID)
 
 
-def getPreviousBattleQuest(quest):
-    eventsCache = dependency.instance(IEventsCache)
-    group = eventsCache.getGroups().get(quest.getGroupID())
-    if group is not None:
-        questID = quest.getID()
-        quests = eventsCache.getQuests()
-        groupContent = group.getGroupContent(quests)
-        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
-        for idx, quest_ in enumerate(sortedQuests):
-            if quest_.getID() == questID:
-                if idx != 0:
-                    return sortedQuests[idx - 1]
-
-    return
+@dependency.replace_none_kwargs(earlyAccessCtrl=IEarlyAccessController)
+def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
+    return earlyAccessCtrl.isQuestActive() and (earlyAccessCtrl.isProgressionQuest(eventID) or earlyAccessCtrl.isPostProgressionQuest(eventID))

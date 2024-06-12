@@ -13,8 +13,6 @@ class VEHPREVIEW_CONSTANTS(object):
     BOTTOM_PANEL_OFFER_GIFT_LINKAGE = 'VehiclePreviewBottomPanelOfferGiftUI'
     BOTTOM_PANEL_WELL = 'VehiclePreviewBottomPanelWellUI'
     BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_LINKAGE = 'VehiclePreviewBottomPanelShowcaseStyleBuyingUI'
-    HB_PANEL_LINKAGE = 'VPHBPanelUI'
-    HB_RESTORE_PANEL_LINKAGE = 'VehiclePreviewHPRestorePanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
     BROWSE_LINKAGE = 'VPBrowseUI'
@@ -32,6 +30,7 @@ class VEHPREVIEW_CONSTANTS(object):
     BOTTOM_PANEL_TRADE_IN_PY_ALIAS = 'vehPreviewBottomPanelTradeIn'
     BOTTOM_PANEL_OFFER_GIFT_PY_ALIAS = 'vehPreviewBottomPanelOfferGift'
     BOTTOM_PANEL_WELL_PY_ALIAS = 'vehPreviewBottomPanelWell'
+    BOTTOM_PANEL_EARLY_ACCESS_PY_ALIAS = 'vehPreviewBottomPanelEarlyAccess'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
     BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_PY_ALIAS = 'vehPreviewBottomPanelShowcaseStyleBuying'
     CREW_BONUS = 0

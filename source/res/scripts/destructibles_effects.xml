@@ -1386,6 +1386,24 @@
         </effects>
       </variant1>
     </inf_tree_apple_flowers_fall_med>
+    <tree_Live_Apple_16m_Flowers2_fall>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/trees/broadleaves/tree_live_apple_16m_flowers2_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Live_Apple_16m_Flowers2_fall>
     <inf_sunflower_fall>
       <variant1>
         <stages>
@@ -55787,5 +55805,30 @@
         </effects>
       </variant1>
     </hd_gaf_su_002_brickfence_gate_metal>
+    <hd_bld_SU_1011_Basement_Extension>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/environment/objects/hd_bld_su_1011_basement_extension.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	24.000000	</debrisAmount>
+              <weight>	1600.000000	</weight>
+              <metal_2>	18.000000	</metal_2>
+              <metal_1>	16.000000	</metal_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_SU_1011_Basement_Extension>
   </structures>
 </destructibles_effects.xml>

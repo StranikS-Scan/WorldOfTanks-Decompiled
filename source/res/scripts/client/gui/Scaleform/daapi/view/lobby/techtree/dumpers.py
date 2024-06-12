@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
 import gui
-from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
+from account_helpers.AccountSettings import AccountSettings, EarlyAccess
+from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.techtree.event_helpers import TechTreeFormatters
@@ -115,6 +116,8 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
          'earnedXP': node.getEarnedXP(),
          'unlockProps': node.getUnlockTuple(),
          'buyPrice': node.getBuyPrices()})
+        if NODE_STATE.isEarlyAccess(node.getState()):
+            data.update(_getEarlyAccessVehicleData(node))
         return data
 
 
@@ -154,7 +157,7 @@ class NationObjDumper(_BaseDumper):
     def _getVehicleData(self, node):
         tags = node.getTags()
         blueprints = node.getBpfProps()
-        return {'id': node.getNodeCD(),
+        data = {'id': node.getNodeCD(),
          'state': node.getState(),
          'type': node.getTypeName(),
          'nameString': node.getShortUserName(),
@@ -173,6 +176,9 @@ class NationObjDumper(_BaseDumper):
          'isNationChangeAvailable': node.hasItemNationGroup(),
          'isTopActionNode': g_techTreeDP.isActionEndNode(node),
          'actionMessage': self.__getTooltipString(node)}
+        if NODE_STATE.isEarlyAccess(node.getState()):
+            data.update(_getEarlyAccessVehicleData(node))
+        return data
 
     def __getTooltipString(self, node):
         isActionNode = node.getState() & NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT > 0
@@ -182,3 +188,11 @@ class NationObjDumper(_BaseDumper):
             eventsListener = g_techTreeDP.techTreeEventsListener
             actionID = eventsListener.getActiveAction(vehicleCD=node.getNodeCD(), nationID=node.getNationID())
             return TechTreeFormatters.getActionInfoStr(eventsListener.getUserName(actionID), eventsListener.getFinishTime(actionID))
+
+
+def _getEarlyAccessVehicleData(node):
+    return {'isFirstTimeEarlyAccessShow': not AccountSettings.getEarlyAccess(EarlyAccess.TREE_SEEN),
+     'isEarlyAccessLocked': node.getNodeCD() in g_techTreeDP.earlyAccessController.getBlockedVehicles(),
+     'isEarlyAccessPaused': g_techTreeDP.earlyAccessController.isPaused(),
+     'earlyAccessCurrentTokens': g_techTreeDP.earlyAccessController.getTokensBalance(),
+     'earlyAccessTotalTokens': g_techTreeDP.earlyAccessController.getVehiclePrice(node.getNodeCD())}

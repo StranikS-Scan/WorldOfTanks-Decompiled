@@ -196,7 +196,7 @@ class BaseOptDeviceProvider(VehicleBaseArrayProvider):
         if item.isModernized:
             model.setDestroyTooltipBodyPath('destroy_modernized')
             return
-        if item.isDeluxe and not self._lobbyContext.getServerSettings().isFreeDeluxeEquipmentDemountingEnabled():
+        if item.isRegular and self._lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled():
             model.setDestroyTooltipBodyPath('destroy_without_wotplus_demount')
             return
         model.setDestroyTooltipBodyPath('destroy')

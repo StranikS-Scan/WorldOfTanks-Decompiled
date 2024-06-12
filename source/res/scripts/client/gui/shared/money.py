@@ -431,7 +431,7 @@ class DynamicMoney(Money):
             self.WEIGHT = Currency.BY_WEIGHT + currencies
 
     def isCompound(self):
-        return self.isCompound() and self.isDynCompound()
+        return super(DynamicMoney, self).isCompound() and self.isDynCompound()
 
     def isDynCompound(self):
         consist = [ currency for currency in self._values if currency not in Currency.ALL and self.get(currency, 0) != 0 ]

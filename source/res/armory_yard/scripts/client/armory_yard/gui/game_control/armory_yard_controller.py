@@ -21,7 +21,6 @@ from Event import Event, EventManager
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.server_events.event_items import Group
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.utils.HangarSpace import g_execute_after_hangar_space_inited
 from gui.game_control.season_provider import SeasonProvider
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier, Notifiable, SimpleNotifier
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
@@ -387,7 +386,6 @@ class ArmoryYardController(IArmoryYardController):
             return State.BEFOREPROGRESSION
         return State.POSTPROGRESSION if currDate >= finishProgressionTime else State.ACTIVE
 
-    @g_execute_after_hangar_space_inited
     def goToArmoryYard(self, tabId=TabId.PROGRESS, loadBuyView=False):
         if not self.isActive():
             return

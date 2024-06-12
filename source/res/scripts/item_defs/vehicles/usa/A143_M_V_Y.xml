@@ -78,6 +78,11 @@
       <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Hull.model	</exploded>
       <sets>
+        <A143_M_V_Y_3DSt>
+          <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Hull.model	</exploded>
+        </A143_M_V_Y_3DSt>
         <A143_M_V_Y_NL_3DSt>
           <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Hull.model	</undamaged>
           <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Hull.model	</destroyed>
@@ -912,6 +917,11 @@
         <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Chassis.model	</exploded>
         <sets>
+          <A143_M_V_Y_3DSt>
+            <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Chassis.model	</exploded>
+          </A143_M_V_Y_3DSt>
           <A143_M_V_Y_NL_3DSt>
             <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Chassis.model	</undamaged>
             <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Chassis.model	</destroyed>
@@ -1016,6 +1026,33 @@
                   <row1>	0.000000 0.236355 -0.184759	</row1>
                   <row2>	0.000000 0.252614 0.323159	</row2>
                   <row3>	0.000000 1.195648 -2.767166	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A143_M_V_Y_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.777760 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.406500 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.535700	</row2>
+                  <row3>	0.000000 1.149850 0.197380	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.764960	</row2>
+                  <row3>	0.000000 1.250390 0.160750	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.253290 0.160761	</row1>
+                  <row2>	0.000000 -0.219801 0.346313	</row2>
+                  <row3>	0.000000 1.189900 3.063300	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236355 -0.184759	</row1>
+                  <row2>	0.000000 0.252614 0.323159	</row2>
+                  <row3>	0.000000 1.195650 -2.767170	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -1126,6 +1163,33 @@
                   <row1>	0.000000 0.236355 -0.184759	</row1>
                   <row2>	0.000000 0.252614 0.323159	</row2>
                   <row3>	0.000000 1.195648 -2.767166	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A143_M_V_Y_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.777760 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.406500 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.535700	</row2>
+                  <row3>	0.000000 1.149850 0.197380	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.764960	</row2>
+                  <row3>	0.000000 1.250390 0.160750	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.253290 0.160761	</row1>
+                  <row2>	0.000000 -0.219801 0.346313	</row2>
+                  <row3>	0.000000 1.189900 3.063300	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.348010 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.236355 -0.184759	</row1>
+                  <row2>	0.000000 0.252614 0.323159	</row2>
+                  <row3>	0.000000 1.195650 -2.767170	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -3122,6 +3186,11 @@
             <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_01.model	</exploded>
             <sets>
+              <A143_M_V_Y_3DSt>
+                <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </A143_M_V_Y_3DSt>
               <A143_M_V_Y_NL_3DSt>
                 <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Gun_01.model	</undamaged>
                 <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_01.model	</destroyed>
@@ -3780,6 +3849,11 @@
             <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Gun_02.model	</exploded>
             <sets>
+              <A143_M_V_Y_3DSt>
+                <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </A143_M_V_Y_3DSt>
               <A143_M_V_Y_NL_3DSt>
                 <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Gun_02.model	</undamaged>
                 <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Gun_02.model	</destroyed>
@@ -3810,6 +3884,11 @@
         <destroyed>	vehicles/american/A143_M_V_Y/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A143_M_V_Y/crash/lod0/Turret_01.model	</exploded>
         <sets>
+          <A143_M_V_Y_3DSt>
+            <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </A143_M_V_Y_3DSt>
           <A143_M_V_Y_NL_3DSt>
             <undamaged>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/normal/lod0/Turret_01.model	</undamaged>
             <destroyed>	vehicles/american/A143_M_V_Y/_skins/A143_M_V_Y_NL_3DSt/crash/lod0/Turret_01.model	</destroyed>

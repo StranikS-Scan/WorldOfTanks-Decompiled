@@ -175,6 +175,10 @@ def getAllSeasonCycleInfos(config, inSeasonID):
     return cycleInfoList
 
 
+def getSeasonConfig(config, seasonID):
+    return config['seasons'].get(seasonID)
+
+
 def getSeasonCycleInfo(config, inCycleID):
     for cycleInfo in config['cycleTimes']:
         _, _, _, cycleID = cycleInfo

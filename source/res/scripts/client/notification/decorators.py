@@ -34,7 +34,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IEarlyAccessController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
@@ -1354,3 +1354,45 @@ class BattleMattersReminderDecorator(MessageDecorator):
         if self.__battleMattersController.isActive():
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
         return (state, tooltip)
+
+
+class EarlyAccessDecorator(MessageDecorator):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(EarlyAccessDecorator, self).__init__(entityID, entity, settings, model)
+        self.__earlyAccessController.onFeatureStateChanged += self.__update
+        self.__earlyAccessController.onUpdated += self.__update
+
+    def _make(self, entity=None, settings=None):
+        self.__updateEntityButtons()
+        super(EarlyAccessDecorator, self)._make(entity, settings)
+
+    def clear(self):
+        self.__earlyAccessController.onFeatureStateChanged -= self.__update
+        self.__earlyAccessController.onUpdated -= self.__update
+
+    def __update(self, *args):
+        if not self.__earlyAccessController.isEnabled() and self._model is not None:
+            self._model.removeNotification(self.getType(), self._entityID)
+            return
+        else:
+            self.__updateEntityButtons()
+            if self._model is not None:
+                self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+            return
+
+    def __updateEntityButtons(self):
+        if self._entity is None:
+            return
+        else:
+            buttonsLayout = self._entity.get('buttonsLayout')
+            buttonsStates = self._entity.get('buttonsStates')
+            if not buttonsLayout or buttonsStates is None:
+                return
+            if not self.__earlyAccessController.isQuestActive():
+                state = NOTIFICATION_BUTTON_STATE.VISIBLE
+            else:
+                state = NOTIFICATION_BUTTON_STATE.DEFAULT
+            buttonsStates['submit'] = state
+            return

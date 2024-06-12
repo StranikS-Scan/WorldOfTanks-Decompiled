@@ -3,6 +3,7 @@
 from logging import getLogger
 import Keys
 import nations
+from account_helpers.AccountSettings import AccountSettings, EarlyAccess
 from blueprints.BlueprintTypes import BlueprintTypes
 from constants import IS_DEVELOPMENT
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -10,8 +11,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPremiumVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
-from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
-from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
+from gui.Scaleform.daapi.view.lobby.techtree.data.nation_tree_data import NationTreeData
+from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
@@ -21,6 +22,7 @@ from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
+from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessVehicleView
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -84,7 +86,11 @@ class TechTree(TechTreeMeta):
         self.__setVehicleCollectorState()
         self._data.load(nationIdx)
         self.__playBlueprintPlusSound()
-        return self._data.dump()
+        dump = self._data.dump()
+        hasEarlyAccessNodes = any((NODE_STATE.isEarlyAccess(node.getState()) for node in self._data.getNodes()))
+        if hasEarlyAccessNodes and not AccountSettings.getEarlyAccess(EarlyAccess.TREE_SEEN):
+            AccountSettings.setEarlyAccess(EarlyAccess.TREE_SEEN, True)
+        return dump
 
     def clearSelectedNation(self):
         SelectedNation.clear()
@@ -145,6 +151,9 @@ class TechTree(TechTreeMeta):
          'level': level,
          'vehicleFilterByUrl': _VEHICLE_URL_FILTER_PARAM}
         shared_events.showShop(url=getPremiumVehiclesUrl(), params=params)
+
+    def onGoToEarlyAccess(self):
+        showEarlyAccessVehicleView(isFromTechTree=True)
 
     def onPlayHintAnimation(self, isEnabled=True):
         if isEnabled:

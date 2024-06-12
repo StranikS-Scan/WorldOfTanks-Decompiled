@@ -46,6 +46,8 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_FAVORITE_BODY = '#tank_carousel_filter:tooltip/favorite/body'
     TOOLTIP_BONUS_HEADER = '#tank_carousel_filter:tooltip/bonus/header'
     TOOLTIP_BONUS_BODY = '#tank_carousel_filter:tooltip/bonus/body'
+    TOOLTIP_EARLY_ACCESS_HEADER = '#tank_carousel_filter:tooltip/early_access/header'
+    TOOLTIP_EARLY_ACCESS_BODY = '#tank_carousel_filter:tooltip/early_access/body'
     TOOLTIP_RENTED_HEADER = '#tank_carousel_filter:tooltip/rented/header'
     TOOLTIP_RENTED_BODY = '#tank_carousel_filter:tooltip/rented/body'
     TOOLTIP_RANKED_HEADER = '#tank_carousel_filter:tooltip/ranked/header'

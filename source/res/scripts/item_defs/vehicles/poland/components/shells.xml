@@ -709,6 +709,34 @@
       </damage>
     </armorSpalls>
   </_100mm_pocisk_wybuchowy>
+  <_100_162mm_slpgr_fm>
+    <id>	109	</id>
+    <userString>	#poland_vehicles:_100_162mm_slpgr_fm	</userString>
+    <icon>	ap	</icon>
+    <price>	1120	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	162	</devices>
+    </damage>
+  </_100_162mm_slpgr_fm>
+  <_100_162mm_slpprj_m>
+    <id>	110	</id>
+    <userString>	#poland_vehicles:_100_162mm_slpprj_m	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	980	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	162	</devices>
+    </damage>
+  </_100_162mm_slpprj_m>
   <_100mm_pocisk_przeciwpancerny>
     <id>	81	</id>
     <userString>	#poland_vehicles:_100mm_pocisk_przeciwpancerny	</userString>

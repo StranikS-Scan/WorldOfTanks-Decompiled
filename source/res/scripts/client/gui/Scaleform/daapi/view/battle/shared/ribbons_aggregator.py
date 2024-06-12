@@ -767,9 +767,9 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
                 ribbonCls = self.__fireCls
         elif damageExtra.isWorldCollision():
             ribbonCls = self.__wcCls
-        elif damageExtra.isProtectionZone() or damageExtra.isArtilleryEq():
+        elif damageExtra.isProtectionZone():
             ribbonCls = self.__artDmgCls
-        elif damageExtra.isBombers() or damageExtra.isBomberEq():
+        elif damageExtra.isBombers():
             ribbonCls = self.__bombDmgCls
         elif damageExtra.isAttackReason(ATTACK_REASON.RECOVERY):
             ribbonCls = self.__recoveryCls

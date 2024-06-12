@@ -63,9 +63,6 @@ class EpicEntity(PreQueueEntity):
         return result
 
     def fini(self, ctx=None, woEvents=False):
-        if not woEvents:
-            if not self.canSwitch(ctx):
-                g_eventDispatcher.loadHangar()
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None

@@ -24,3 +24,6 @@ class HangarHeaderMeta(BaseDAAPIComponent):
 
     def as_setArmoryYardEntryPointS(self, value):
         return self.flashObject.as_setArmoryYardEntryPoint(value) if self._isDAAPIInited() else None
+
+    def as_setEarlyAccessEntryPointS(self, value):
+        return self.flashObject.as_setEarlyAccessEntryPoint(value) if self._isDAAPIInited() else None

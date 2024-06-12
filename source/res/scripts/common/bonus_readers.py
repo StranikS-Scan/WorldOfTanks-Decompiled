@@ -21,7 +21,6 @@ from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
-from collections import OrderedDict
 if TYPE_CHECKING:
     from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -1187,20 +1186,20 @@ def __readBonusConfig(section):
     return config
 
 
-def readBonusSection(bonusRange, section, eventType=None, checkLimit=True, orderedBonuses=False):
+def readBonusSection(bonusRange, section, eventType=None, checkLimit=True):
     if section is None:
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
         config = __readBonusConfig(section['config']) if section.has_key('config') else {}
-        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit, orderedBonuses)
+        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit)
         if config:
             bonus['config'] = config
         return bonus
 
 
-def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True, orderedBonuses=False):
-    bonus = {} if not orderedBonuses else OrderedDict()
+def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True):
+    bonus = {}
     resultLimitIDs = set()
     for name, subSection in section.items():
         if name in __PROBABILITY_READERS:

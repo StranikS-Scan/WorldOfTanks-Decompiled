@@ -15,7 +15,6 @@ from story_mode.gui.prb_control.entities.pre_queue.permissions import StoryModeP
 from story_mode.gui.shared.event_dispatcher import showQueueWindow
 from story_mode_common.story_mode_constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from story_mode.gui.story_mode_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
@@ -36,7 +35,7 @@ class StoryModeEntity(PreQueueEntity):
 
     def __init__(self):
         self._queueWindow = None
-        super(StoryModeEntity, self).__init__(FUNCTIONAL_FLAG.STORY_MODE, QUEUE_TYPE.STORY_MODE, PreQueueSubscriber())
+        super(StoryModeEntity, self).__init__(FUNCTIONAL_FLAG.STORY_MODE, QUEUE_TYPE.STORY_MODE, PreQueueSubscriber(), False)
         return
 
     @prbDispatcherProperty
@@ -81,7 +80,6 @@ class StoryModeEntity(PreQueueEntity):
             isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
             isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
             if isExit or isSwitch and not isLoadPage:
-                g_eventDispatcher.loadHangar()
                 self.storage.queueType = QUEUE_TYPE.UNKNOWN
         return super(StoryModeEntity, self).fini(ctx=ctx, woEvents=woEvents)
 

@@ -86,6 +86,13 @@
       <undamaged>	vehicles/chinese/Ch56_BZ_74_1/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Ch56_BZ_74_1_3Dst>
+          <undamaged>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Hull.model	</exploded>
+        </Ch56_BZ_74_1_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -579,17 +586,6 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15041	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	Ch56_BZ_74_1_3Dst	</compatibleModels>
-        <position>	1.41242 1.4336 3.53003	</position>
-        <rotation>	0.560121 -0.00177 3.14158	</rotation>
-        <scale>	0.546104 0.546103 0.546106	</scale>
-        <showOn>	16	</showOn>
-        <clipAngle>	1.20445	</clipAngle>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
         <slotId>	15042	</slotId>
         <tags>	formfactor_square	</tags>
         <compatibleModels>	Ch56_BZ_74_1_3Dst	</compatibleModels>
@@ -664,8 +660,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.11	</vehicleMovement>
+        <vehicleRotation>	0.11	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -675,6 +671,13 @@
         <undamaged>	vehicles/chinese/Ch56_BZ_74_1/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Ch56_BZ_74_1_3Dst>
+            <undamaged>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Ch56_BZ_74_1_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -776,6 +779,45 @@
                   <row3>	0.000000 1.358324 -3.404610	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch56_BZ_74_1_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.166770 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.327000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.854000	</row2>
+                  <row3>	0.000000 1.065900 0.033000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.573000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.450301 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.593570	</row2>
+                  <row3>	0.000000 0.802000 0.033000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.923000	</row2>
+                  <row3>	0.000000 1.588000 -0.003000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.179608 0.240294	</row1>
+                  <row2>	0.000000 -0.563485 0.421177	</row2>
+                  <row3>	0.000000 1.386490 3.612260	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.292327 0.067416	</row1>
+                  <row2>	0.000000 -0.120787 0.523749	</row2>
+                  <row3>	0.000000 1.548120 3.415120	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 -0.000004 0.000003	</row0>
+                  <row1>	0.000000 0.192301 -0.230262	</row1>
+                  <row2>	0.000000 0.539959 0.450943	</row2>
+                  <row3>	0.000000 1.358320 -3.404610	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -828,6 +870,45 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	2.166770 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.327000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.854000	</row2>
+                  <row3>	0.000000 1.065900 0.033000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.573000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.450301 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.593570	</row2>
+                  <row3>	0.000000 0.802000 0.033000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.923000	</row2>
+                  <row3>	0.000000 1.588000 -0.003000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.179608 0.240294	</row1>
+                  <row2>	0.000000 -0.563485 0.421177	</row2>
+                  <row3>	0.000000 1.386490 3.612260	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.292327 0.067416	</row1>
+                  <row2>	0.000000 -0.120787 0.523749	</row2>
+                  <row3>	0.000000 1.548120 3.415120	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.652000 -0.000004 0.000003	</row0>
+                  <row1>	0.000000 0.192301 -0.230262	</row1>
+                  <row2>	0.000000 0.539959 0.450943	</row2>
+                  <row3>	0.000000 1.358320 -3.404610	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch56_BZ_74_1_3Dst	</modelsSet>
                 <boxCollider>
                   <row0>	2.166770 0.000000 0.000000	</row0>
                   <row1>	0.000000 1.327000 0.000000	</row1>
@@ -1715,7 +1796,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	13800	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	500	</maxHealth>
       <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1797,7 +1878,7 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	14.4	</reloadTime>
+          <reloadTime>	13.8	</reloadTime>
           <aimingTime>	2.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
@@ -1830,10 +1911,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0 0 2.98	</rayStart>
-              <rayEnd>	0 0 3.62	</rayEnd>
-              <rayUp>	0.12 0 0	</rayUp>
-              <size>	0.64	</size>
+              <rayStart>	0 0 3.03	</rayStart>
+              <rayEnd>	0 0 3.63	</rayEnd>
+              <rayUp>	0.116 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <size>	0.6	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -1847,6 +1929,13 @@
             <undamaged>	vehicles/chinese/Ch56_BZ_74_1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Ch56_BZ_74_1_3Dst>
+                <undamaged>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </Ch56_BZ_74_1_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/chinese/Ch56_BZ_74_1/collision/Gun_01.model	</collisionModelServer>
@@ -1899,6 +1988,13 @@
         <undamaged>	vehicles/chinese/Ch56_BZ_74_1/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/chinese/Ch56_BZ_74_1/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Ch56_BZ_74_1_3Dst>
+            <undamaged>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch56_BZ_74_1/_skins/Ch56_BZ_74_1_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Ch56_BZ_74_1_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch56_BZ_74_1/collision/Turret_01.model	</collisionModelServer>
@@ -2411,7 +2507,7 @@
           <compatibleModels>	Ch56_BZ_74_1_3Dst	</compatibleModels>
           <position>	-0.000636 2.321803 1.559849	</position>
           <rotation>	0.138178 -0.000242 3.13984	</rotation>
-          <scale>	0.69821 0.390465 0.698209	</scale>
+          <scale>	0.755388 0.422441 0.755386	</scale>
           <showOn>	256	</showOn>
           <clipAngle>	1.20445	</clipAngle>
           <verticalMirror>	true	</verticalMirror>
@@ -2446,7 +2542,7 @@
     <detailed>
       <engines>
         <_12V150_1>
-          <smplEnginePower>	850	</smplEnginePower>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </_12V150_1>
       </engines>

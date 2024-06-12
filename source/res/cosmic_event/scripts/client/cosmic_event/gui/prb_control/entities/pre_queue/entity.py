@@ -63,12 +63,6 @@ class CosmicEventBattleEntity(PreQueueEntity):
         self.__cosmicEventBattleCtrl.onPrbLeave()
 
     def fini(self, ctx=None, woEvents=False):
-        if ctx:
-            isExit = ctx.hasFlags(FUNCTIONAL_FLAG.EXIT)
-            isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
-            isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-            if isExit or isSwitch and not isLoadPage:
-                g_eventDispatcher.loadHangar()
         return super(CosmicEventBattleEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     @storage_getter(RECENT_PRB_STORAGE)

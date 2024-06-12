@@ -144,7 +144,7 @@ class _VehicleCondition(LimitedUICondition):
 
     def _getCriteria(self, level):
         criteria = REQ_CRITERIA.VEHICLE.LEVELS(range(level, MAX_VEHICLE_LEVEL + 1))
-        criteria |= ~REQ_CRITERIA.VEHICLE.RENT
+        criteria |= REQ_CRITERIA.CUSTOM(lambda item: not (REQ_CRITERIA.VEHICLE.RENT(item) and not REQ_CRITERIA.VEHICLE.WOT_PLUS_VEHICLE(item)))
         criteria |= ~REQ_CRITERIA.SECRET
         criteria |= ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(BATTLE_MODE_VEHICLE_TAGS)
         return criteria

@@ -24,8 +24,8 @@ class ChatSubview(ViewImpl, GFChannelViewInterface):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __anonymizerController = dependency.descriptor(IAnonymizerController)
 
-    def __init__(self, layoutID=R.views.lobby.platoon.subViews.Chat()):
-        settings = ViewSettings(layoutID=layoutID, model=ChatModel())
+    def __init__(self):
+        settings = ViewSettings(layoutID=R.views.lobby.platoon.subViews.Chat(), model=ChatModel())
         super(ChatSubview, self).__init__(settings)
         self.__messageCount = 0
 

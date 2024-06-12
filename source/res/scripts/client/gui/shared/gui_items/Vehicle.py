@@ -47,8 +47,7 @@ from post_progression_common import TankSetupGroupsId
 from rent_common import parseRentID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController
-from skeletons.gui.game_control import ITradeInController, IWotPlusController
+from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController, ITradeInController, IWotPlusController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -256,6 +255,7 @@ class Vehicle(FittingItem):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __customizationService = dependency.descriptor(ICustomizationService)
     __postProgressionCtrl = dependency.descriptor(IVehiclePostProgressionController)
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
@@ -449,6 +449,10 @@ class Vehicle(FittingItem):
         else:
             buyPrice = currentPrice
         return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
+
+    @property
+    def isEarlyAccess(self):
+        return self.__earlyAccessController.isEnabled() and (self.intCD in self.__earlyAccessController.getAffectedVehicles() or self.intCD in self.__earlyAccessController.getBlockedVehicles())
 
     @property
     def searchableUserName(self):

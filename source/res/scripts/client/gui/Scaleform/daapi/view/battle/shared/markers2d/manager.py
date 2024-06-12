@@ -8,9 +8,9 @@ from account_helpers.settings_core.settings_constants import BattleCommStorageKe
 from chat_commands_consts import INVALID_MARKER_SUBTYPE, MarkerType, INVALID_MARKER_ID
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.map_zones.markers2d import MapZonesPlugin
+from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
-from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
@@ -75,7 +75,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def createMarker(self, symbol, matrixProvider=None, active=True, markerType=CommonMarkerType.NORMAL):
         if active and matrixProvider is None:
             raise SoftException('Active marker {} must has matrixProvider'.format(symbol))
-        markerID = self.__canvas.addMarker(matrixProvider, symbol, active, markerType.value)
+        markerID = self.__canvas.addMarker(matrixProvider, symbol, active, markerType)
         self.__ids.add(markerID)
         return markerID
 
@@ -102,14 +102,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         if not self._isMarkerHoveringEnabled:
             return
         self.__canvas.markerSetMarkerObjectInFocus(markerID, inFocus)
-
-    def setMarkerCustomDistanceStr(self, markerID, customStr):
-        if self._isMarkerHoveringEnabled:
-            self.__canvas.markerSetCustomDistanceStr(markerID, customStr)
-
-    def setMarkerTextLabelEnabled(self, markerID, enabled):
-        if self._isMarkerHoveringEnabled:
-            self.__canvas.markerSetTextLabelEnabled(markerID, enabled)
 
     def setMarkerMinScale(self, markerID, minScale):
         self.__canvas.markerSetMinScale(markerID, minScale)

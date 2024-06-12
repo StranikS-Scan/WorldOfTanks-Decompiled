@@ -23,7 +23,7 @@ from gui.shared import events
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import getShopVehicleIconPath
 from gui.shared.utils.requesters.ItemsRequester import RequestCriteria, PredicateCondition, REQ_CRITERIA
-from helpers import dependency, func_utils
+from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -65,11 +65,17 @@ class ExtendedCriteriesGroup(BasicCriteriesGroup):
             self._criteria |= RequestCriteria(PredicateCondition(self.__availableToUnlock))
         if filters['can_convert']:
             self._criteria |= RequestCriteria(PredicateCondition(self.__canConvert))
+        if self._earlyAccessController.isEnabled():
+            self._criteria |= ~REQ_CRITERIA.CUSTOM(self.__earlyAccessVehiclesCriteria)
 
     @classmethod
     def __availableToUnlock(cls, vehicle):
         unlockAvailable, _ = g_techTreeDP.isNext2Unlock(vehicle.intCD, unlocked=cls.__itemsCache.items.stats.unlocks, xps=cls.__itemsCache.items.stats.vehiclesXPs, freeXP=cls.__itemsCache.items.stats.actualFreeXP, level=vehicle.level)
         return unlockAvailable
+
+    @classmethod
+    def __earlyAccessVehiclesCriteria(cls, vehicle):
+        return vehicle.intCD in set(cls._earlyAccessController.getAffectedVehicles().keys()) or vehicle.intCD in cls._earlyAccessController.getBlockedVehicles()
 
     @classmethod
     def __canConvert(cls, vehicle):

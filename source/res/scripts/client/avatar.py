@@ -97,7 +97,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULTS
-from avatar_components.battle_hints_controller import BattleHintsController
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
@@ -164,8 +163,7 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  VehicleHealthBroadcastListenerComponent,
  AvatarChatKeyHandling,
  TriggersController,
- VisualScriptController,
- BattleHintsController}
+ VisualScriptController}
 
 class VehicleDeinitFailureException(SoftException):
 
@@ -173,7 +171,7 @@ class VehicleDeinitFailureException(SoftException):
         super(VehicleDeinitFailureException, self).__init__('Exception during vehicle deinit has been detected, thus leading to unstable state of it. Please, check the first exception happened in this function call instead of analyzing c++ crash.')
 
 
-class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController, BattleHintsController):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULTS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -876,13 +874,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     return True
                 if not isGuiEnabled and self.guiSessionProvider.shared.drrScale is not None and self.guiSessionProvider.shared.drrScale.handleKey(key, isDown):
                     return True
-                if cmdMap.isFiredList((CommandMapping.CMD_MINIMAP_SIZE_DOWN, CommandMapping.CMD_MINIMAP_SIZE_UP), key) and isDown:
+                if cmdMap.isFiredList((CommandMapping.CMD_MINIMAP_SIZE_DOWN, CommandMapping.CMD_MINIMAP_SIZE_UP, CommandMapping.CMD_MINIMAP_VISIBLE), key) and isDown:
                     gui_event_dispatcher.setMinimapCmd(key)
-                    return True
-                if cmdMap.isFired(CommandMapping.CMD_MINIMAP_VISIBLE, key):
-                    if isDown:
-                        gui_event_dispatcher.setMinimapCmd(key)
-                    gui_event_dispatcher.setFullMapCmd(key, isDown)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_RELOAD_PARTIAL_CLIP, key) and isDown:
                     self.guiSessionProvider.shared.ammo.reloadPartialClip(self)
@@ -1475,16 +1468,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.invalidateVehicleState(timer, value)
 
     def updatePersonalDeathZoneWarningNotification(self, enable, time):
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, DeathZoneTimerViewState(DeathZoneTimerViewState.DEFAULT_ZONE_ID, False, max(time - BigWorld.serverTime(), 0), 'warning' if enable else None, 0))
-        return
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, (enable, time))
 
-    def updateDeathZoneWarningNotification(self, enable, playerEntering, strikeTime, waveDuration, isCausingDamage):
-        if isCausingDamage:
-            value = DeathZoneTimerViewState.makeCloseTimerState(1, isCausingDamage)
-        else:
-            value = DeathZoneTimerViewState(DeathZoneTimerViewState.DEFAULT_ZONE_ID, isCausingDamage, waveDuration, 'warning' if enable else None, strikeTime)
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE, value)
-        return
+    def updateDeathZoneWarningNotification(self, enable, playerEntering, strikeTime, waveDuration):
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE, (enable,
+         playerEntering,
+         strikeTime,
+         waveDuration))
 
     def showOwnVehicleHitDirection(self, hitDirYaw, attackerID, damage, crits, isBlocked, isShellHE, damagedID, attackReasonID):
         if not self.__isVehicleAlive and not self.isObserver():
@@ -1754,8 +1744,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         g_bootcamp.onBattleAction(details[0], details[1:])
 
     def updateArena(self, updateType, argStr):
-        if self.arena:
-            self.arena.update(updateType, argStr)
+        self.arena.update(updateType, argStr)
 
     def updatePositions(self, indices, positions):
         try:
@@ -1832,19 +1821,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def isVehicleMoving(self):
         return self.__isVehicleMoving
-
-    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
-        self.guiSessionProvider.sendPlayerBattleLogNotification(messageKey, messageParams)
-
-    def sendEquipmentBattleLogNotification(self, compactDescr, playerName, isOwner):
-        descriptor = vehicles.getItemByCompactDescr(compactDescr)
-        if isOwner:
-            params = {'equipment_name': descriptor.shortUserString}
-            self.sendPlayerBattleLogNotification('EQUIPMENT_USAGE', params)
-        else:
-            params = {'equipment_name': descriptor.shortUserString,
-             'player_name': playerName}
-            self.sendPlayerBattleLogNotification('TEAM_EQUIPMENT_USAGE', params)
 
     def receiveAccountStats(self, requestID, stats):
         callback = self.__onCmdResponse.pop(requestID, None)

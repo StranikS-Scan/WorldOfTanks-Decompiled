@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/dialog_template_focus.py
 import typing
-from Event import Event
 from gui.impl.gen.view_models.views.dialogs.dialog_base_focus_view_model import DialogBaseFocusViewModel
 from gui.impl.gen.view_models.views.dialogs.dialog_focus_view_model import DialogFocusViewModel
 from gui.impl.pub import ViewImpl
@@ -13,21 +12,12 @@ def clampFocusIndex(value, topLimit):
     return -1 if not -1 < value < topLimit else value
 
 
-class IFocusPresenter(object):
-    focusElementCount = 0
-    onGotFocus = Event()
-
-    def updateFocusIndex(self, value):
-        raise NotImplementedError
-
-
-class BaseFocusPresenter(ViewImpl, IFocusPresenter):
+class BaseFocusPresenter(ViewImpl):
     __slots__ = ()
     focusElementCount = 0
 
     def __init__(self, settings, *args, **kwargs):
         msg = 'Model must be an instance of DialogBaseFocusViewModel'
-        settings.model.onGotFocus += self.__gotFocusHandler
         super(BaseFocusPresenter, self).__init__(settings, *args, **kwargs)
 
     def updateFocusIndex(self, value):
@@ -35,16 +25,8 @@ class BaseFocusPresenter(ViewImpl, IFocusPresenter):
         viewModel.setFocusedIndex(value)
         return value != -1
 
-    def _finalize(self):
-        viewModel = self.getViewModel()
-        viewModel.onGotFocus -= self.__gotFocusHandler
-        super(BaseFocusPresenter, self)._finalize()
 
-    def __gotFocusHandler(self, args):
-        self.onGotFocus(args.get('index', 0), self)
-
-
-class ButtonFocusingHandler(IFocusPresenter):
+class ButtonFocusingHandler(object):
     __slots__ = ('__dialogTemplateViewModel',)
 
     def __init__(self, dialogTemplateViewModel):
@@ -98,9 +80,6 @@ class DialogTemplateFocusingSystem(object):
     def dispose(self):
         self.__dialogTemplateViewModel.focus.onTabPressed -= self.__tabPressHandler
         self.__dialogTemplateViewModel = None
-        for presenter in self.__presenters:
-            presenter.onGotFocus -= self.__gotFocusHandler
-
         self.__presenters = None
         self.__indexShifting = None
         self.__buttonFocusing.dispose()
@@ -109,7 +88,6 @@ class DialogTemplateFocusingSystem(object):
 
     def addFocusPresenter(self, presenter):
         self.__presenters.append(presenter)
-        presenter.onGotFocus += self.__gotFocusHandler
 
     def setFocusingIndex(self, value):
         if not self.__isStarted:
@@ -133,17 +111,11 @@ class DialogTemplateFocusingSystem(object):
             hasFocused = self.__next(isShiftPressed)
 
     def __next(self, backwards):
-        self.__currentFocusIndex = (self.__currentFocusIndex - (int(backwards) * 2 - 1)) % (self.__maxIndex + 1)
-        return self.__setFocusToPresenters()
-
-    def __setFocusToPresenters(self):
         hasFocusedItem = False
+        if self.__maxIndex == DialogFocusViewModel.NOT_FOCUSED_INDEX:
+            return hasFocusedItem
+        self.__currentFocusIndex = (self.__currentFocusIndex - (int(backwards) * 2 - 1)) % (self.__maxIndex + 1)
         for presenter in self.__presenters:
             hasFocusedItem |= self.__setFocus(presenter, self.__currentFocusIndex)
 
         return hasFocusedItem
-
-    def __gotFocusHandler(self, focusedIndex, presenter):
-        shift = self.__indexShifting[presenter]
-        self.__currentFocusIndex = focusedIndex + shift
-        self.__setFocusToPresenters()

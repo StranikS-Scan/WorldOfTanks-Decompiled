@@ -3,7 +3,6 @@
 import BigWorld
 from BWUtil import AsyncReturn
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_session import BattleExitResult
 from wg_async import wg_async
 from gui.Scaleform.daapi.view.battle.shared.ingame_menu import IngameMenu
 
@@ -24,10 +23,6 @@ class BRIngameMenu(IngameMenu):
         return showBattleRoyaleLeaverAliveWindow()
 
     def _getExitResult(self):
-        arenaDP = self.sessionProvider.getArenaDP()
-        vInfo = arenaDP.getVehicleInfo()
         vehicle = BigWorld.entities.get(avatar_getter.getPlayerVehicleID())
-        vehicleBRRespawnComponent = vehicle.dynamicComponents.get('vehicleBRRespawnComponent')
-        isRespawning = vehicleBRRespawnComponent is not None
-        isAlive = avatar_getter.isVehicleAlive()
-        return BattleExitResult(isAlive or isRespawning, vInfo.player)
+        isLeaverWhileRespawning = not self.sessionProvider.isReplayPlaying and vehicle.dynamicComponents.get('vehicleBRRespawnComponent') and self.sessionProvider.arenaVisitor.hasFairplay()
+        return isLeaverWhileRespawning or super(BRIngameMenu, self)._getExitResult()

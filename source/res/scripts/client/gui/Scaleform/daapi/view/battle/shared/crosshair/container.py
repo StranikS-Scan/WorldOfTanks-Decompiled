@@ -170,9 +170,6 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def as_playSound(self, value):
         AutoloaderBoostSoundEvents.play(value)
 
-    def _createPlugins(self):
-        return plugins.createPlugins()
-
     def _populate(self):
         super(CrosshairPanelContainer, self)._populate()
         self.__plugins.init()

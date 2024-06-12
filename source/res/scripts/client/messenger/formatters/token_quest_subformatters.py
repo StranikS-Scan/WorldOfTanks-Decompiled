@@ -764,7 +764,7 @@ class WotPlusAttendanceRewardsFormatter(SyncTokenQuestsSubFormatter):
     _BIG_TEMPLATE_LVL_1 = 'WotPlusAttendanceRewardsBigLvl1'
     _SMALL_TEMPLATE = 'WotPlusAttendanceRewardsSmall'
     _STEP_DAILY_ATTENDANCE = re.compile('attendance_reward:step_(\\d)+')
-    _WOT_PLUS_CONST = constants.WoTPlusDailyAttendance
+    _PREMIUM_SUBS_CONST = constants.PremiumSubsDailyAttendance
 
     def format(self, message, *args):
         if not message:
@@ -798,7 +798,7 @@ class WotPlusAttendanceRewardsFormatter(SyncTokenQuestsSubFormatter):
                 level, isInitQuest = self.__getNotificationType(questID)
                 uiReward['level'] = level
                 questDataRewards = detailedRewards[questID]
-                if isInitQuest or level not in range(self._WOT_PLUS_CONST.INITIAL_CYCLE_STEP, self._WOT_PLUS_CONST.CYCLE_STEPS):
+                if isInitQuest or level not in range(self._PREMIUM_SUBS_CONST.INITIAL_CYCLE_STEP, self._PREMIUM_SUBS_CONST.CYCLE_STEPS):
                     questBonuses = [ getBonuses(currentQuest, bonusName, questDataRewards[bonusName]) for bonusName in questDataRewards ]
                     chainedBonuses = chain.from_iterable(questBonuses)
                     bonuses = [ bonus for bonus in chainedBonuses if bonus.getName() != 'battleToken' ]
@@ -821,7 +821,7 @@ class WotPlusAttendanceRewardsFormatter(SyncTokenQuestsSubFormatter):
         startText = backport.text(r.cycleEnded.startText())
         endText = backport.text(r.cycleEnded.endText())
         bigTemplateName = self._BIG_TEMPLATE
-        if formattedUiRewards['level'] == self._WOT_PLUS_CONST.INITIAL_CYCLE_STEP:
+        if formattedUiRewards['level'] == self._PREMIUM_SUBS_CONST.INITIAL_CYCLE_STEP:
             startText = backport.text(r.cycleStarted.startText())
             endText = backport.text(r.cycleStarted.endText())
             bigTemplateName = self._BIG_TEMPLATE_LVL_1
@@ -831,7 +831,7 @@ class WotPlusAttendanceRewardsFormatter(SyncTokenQuestsSubFormatter):
 
     def __getNotificationType(self, questID):
         matchObject = self._STEP_DAILY_ATTENDANCE.search(questID)
-        return (int(matchObject.group(1)), False) if matchObject else (self._WOT_PLUS_CONST.INITIAL_CYCLE_STEP, True)
+        return (int(matchObject.group(1)), False) if matchObject else (self._PREMIUM_SUBS_CONST.INITIAL_CYCLE_STEP, True)
 
     @classmethod
     def _isQuestOfThisGroup(cls, questID):

@@ -80,7 +80,6 @@ class DataBuilder(SimpleBuilder):
 class TooltipWindowBuilder(DataBuilder):
 
     def build(self, formatType, advanced_, *args, **kwargs):
-        self._buildData(advanced_, *args, **kwargs)
         return self._provider
 
 

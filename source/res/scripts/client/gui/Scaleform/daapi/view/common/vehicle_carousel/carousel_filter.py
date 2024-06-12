@@ -12,7 +12,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_ROLES_LABELS, VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IDebutBoxesController
+from skeletons.gui.game_control import IDebutBoxesController, IEarlyAccessController
 
 class FILTER_KEYS(object):
     ELITE = 'elite'
@@ -28,6 +28,7 @@ class FILTER_KEYS(object):
     BATTLE_ROYALE = 'battleRoyale'
     RANKED = 'ranked'
     DEBUT_BOXES = 'debut_boxes'
+    EARLY_ACCESS = 'early_access'
 
 
 def _filterDict(dictionary, keys):
@@ -238,6 +239,7 @@ class SessionCarouselFilter(_CarouselFilter):
 
 class BasicCriteriesGroup(CriteriesGroup):
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
+    _earlyAccessController = dependency.descriptor(IEarlyAccessController)
 
     @staticmethod
     def isApplicableFor(vehicle):
@@ -256,6 +258,7 @@ class BasicCriteriesGroup(CriteriesGroup):
         self._setEarnCrystalsCriteria(filters)
         self._setVehicleNameCriteria(filters)
         self._setDebutBoxesCriteria(filters)
+        self._setEarlyAccessCriteria(filters)
 
     def _setNationsCriteria(self, filters):
         selectedVehiclesIds = []
@@ -327,6 +330,14 @@ class BasicCriteriesGroup(CriteriesGroup):
     @classmethod
     def _debutBoxesCriteria(cls, vehicle):
         return cls.__debutBoxesController.isQuestsAvailableOnVehicle(vehicle)
+
+    def _setEarlyAccessCriteria(self, filters):
+        if filters.get(FILTER_KEYS.EARLY_ACCESS):
+            self._criteria |= REQ_CRITERIA.CUSTOM(self._earlyAccessCriteria)
+
+    @classmethod
+    def _earlyAccessCriteria(cls, vehicle):
+        return vehicle.intCD in cls._earlyAccessController.getAffectedVehicles()
 
 
 class RoleCriteriesGroup(BasicCriteriesGroup):

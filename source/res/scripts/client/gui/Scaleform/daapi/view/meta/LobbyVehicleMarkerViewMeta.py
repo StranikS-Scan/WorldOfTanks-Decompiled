@@ -16,8 +16,5 @@ class LobbyVehicleMarkerViewMeta(View):
     def as_createCustomMarkerS(self, id, icon, text):
         return self.flashObject.as_createCustomMarker(id, icon, text) if self._isDAAPIInited() else None
 
-    def as_createHBMarkerS(self, id, vType, vName, pName, pClan):
-        return self.flashObject.as_createHBMarker(id, vType, vName, pName, pClan) if self._isDAAPIInited() else None
-
     def as_removeMarkerS(self, id):
         return self.flashObject.as_removeMarker(id) if self._isDAAPIInited() else None

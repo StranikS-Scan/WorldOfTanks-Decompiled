@@ -186,8 +186,8 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v6/commerce/fetchProductListPersonal/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
-    def agate_v5_get_user_subscriptions(self, callback, request_data, fields=None):
-        url = '/agate/api/v5/commerce/getUserSubscriptions/'
+    def agate_v6_get_user_subscriptions(self, callback, request_data, fields=None):
+        url = '/agate/api/v6/commerce/getUserSubscriptions/'
         return self._request_data(callback, url, method='POST', post_data=request_data)
 
     def get_clan_members(self, callback, clan_id, fields=None):
@@ -516,6 +516,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
     def wgsh_event_get_frozen_vehicles(self, callback, fields=None):
         url = '/wgshevents/frozen_vehicle'
+        return self._request_data(callback, url, method='GET')
+
+    def wgsh_get_forbidden_vehicles(self, callback, fields=None):
+        url = '/wgsh/forbidden_vehicles/'
         return self._request_data(callback, url, method='GET')
 
     def clan_statistics(self, callback, clan_id, fields=None):

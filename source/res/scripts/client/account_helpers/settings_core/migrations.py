@@ -1174,6 +1174,24 @@ def _migrateTo120(core, data, initialized):
     data['feedbackSixthSense']['indicatorSize'] = 0
 
 
+def _migrateTo121(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
+
+
+def _migrateTo122(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+    settingOffset = 536870912
+
+    def clearEarlyAccess(carouselFilter):
+        storedValue = _getSettingsCache().getSectionSettings(carouselFilter, 0)
+        if storedValue & settingOffset:
+            clear[carouselFilter] = clear.get(carouselFilter, 0) | settingOffset
+
+    clearEarlyAccess(SETTINGS_SECTIONS.CAROUSEL_FILTER_2)
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1648,6 +1666,14 @@ _versions = ((1,
   False),
  (120,
   _migrateTo120,
+  False,
+  False),
+ (121,
+  _migrateTo121,
+  False,
+  False),
+ (122,
+  _migrateTo122,
   False,
   False))
 

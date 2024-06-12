@@ -4,7 +4,7 @@ import logging
 import BigWorld
 from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers, nodes
-from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
+from gui.Scaleform.daapi.view.lobby.techtree.data.research_items_data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 from gui.Scaleform.daapi.view.meta.VehicleModulesViewMeta import VehicleModulesViewMeta

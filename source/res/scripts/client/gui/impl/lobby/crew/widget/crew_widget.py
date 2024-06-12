@@ -37,7 +37,8 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency, int2roman
 from helpers.dependency import descriptor
 from items.tankmen import compareMastery, MAX_SKILL_LEVEL
-from renewable_subscription_common.passive_xp import isTagsSetOk
+from items.vehicles import getVehicleType
+from renewable_subscription_common.passive_xp import isTagsSetOk, CrewValidator
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -492,9 +493,19 @@ class CrewWidget(ViewImpl):
     def __updateWotPlusButtonModel(self, vmWotPlusButton):
         wotPlusState = ToggleState.HIDDEN
         vehicle = self.__currentVehicle
+        allCrewValid = self.__checkValidCrew()
         if vehicle and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled():
-            wotPlusState = ToggleState.DISABLED if not self.wotPlusCtrl.isEnabled() or not isTagsSetOk(vehicle.tags) else (ToggleState.ON if self.wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID) else ToggleState.OFF)
+            wotPlusState = ToggleState.DISABLED if not self.wotPlusCtrl.isEnabled() or not isTagsSetOk(vehicle.tags) or not allCrewValid else (ToggleState.ON if self.wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID) else ToggleState.OFF)
         vmWotPlusButton.setState(wotPlusState)
+
+    def __checkValidCrew(self):
+        vehicle = self.__currentVehicle
+        validator = CrewValidator(getVehicleType(vehicle.compactDescr))
+        allCrewValid = False
+        if vehicle.isCrewFull:
+            compactsDescr = [ crew[1].strCD for crew in vehicle.crew ]
+            allCrewValid = all((crewResult.tManValidRes.isValid for crewResult in validator.validateCrew(compactsDescr)))
+        return allCrewValid
 
     def __onDogMoreInfoClick(self):
         from gui.impl.dialogs import dialogs
@@ -546,6 +557,8 @@ class CrewWidget(ViewImpl):
             return IdleCrewBonusEnum.DISABLED
         if not isTagsSetOk(self.__currentVehicle.tags):
             return IdleCrewBonusEnum.INCOMPATIBLEWITHCURRENTVEHICLE
+        if not self.__checkValidCrew():
+            return IdleCrewBonusEnum.INCOMPATIBLEWITHCURRENTCREW
         if self.wotPlusCtrl.hasVehicleCrewIdleXP(self.__currentVehicle.invID):
             return IdleCrewBonusEnum.ACTIVEONCURRENTVEHICLE
         return IdleCrewBonusEnum.ACTIVEONANOTHERVEHICLE if self.wotPlusCtrl.getVehicleIDWithIdleXP() else IdleCrewBonusEnum.ENABLED

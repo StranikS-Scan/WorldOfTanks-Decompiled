@@ -59,10 +59,6 @@ def setMinimapCmd(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_CMD, _makeKeyCtx(key=key)), scope=_SCOPE)
 
 
-def setFullMapCmd(key, isDown):
-    g_eventBus.handleEvent(GameEvent(GameEvent.FULL_MAP_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
-
-
 def setRadialMenuCmd(key, isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.RADIAL_MENU_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 

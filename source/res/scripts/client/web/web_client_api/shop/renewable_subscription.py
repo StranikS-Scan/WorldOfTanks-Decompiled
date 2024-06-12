@@ -28,7 +28,8 @@ class RenewableSubWebApiMixin(object):
         return {'period_start': self._wotPlusCtrl.getStartTime(),
          'period_end': self._wotPlusCtrl.getExpiryTime(),
          'enabled_bonuses': self.getEnabledBonuses(serverSettings),
-         'is_free_deluxe_demount_included': serverSettings.isFreeDeluxeEquipmentDemountingEnabled()}
+         'is_free_deluxe_demount_included': serverSettings.isFreeDeluxeEquipmentDemountingEnabled(),
+         'status': self._wotPlusCtrl.getState().name}
 
     def getEnabledBonuses(self, serverSettings):
         enabledBonuses = []
@@ -44,6 +45,10 @@ class RenewableSubWebApiMixin(object):
             enabledBonuses.append(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
         if serverSettings.isDailyAttendancesEnabled():
             enabledBonuses.append(WoTPlusBonusType.ATTENDANCE_REWARD)
+        if serverSettings.isDailyQuestsExtraRewardsEnabled():
+            enabledBonuses.append(WoTPlusBonusType.DAILY_QUESTS_REWARDS)
+        if serverSettings.isTeamCreditsBonusEnabled():
+            enabledBonuses.append(WoTPlusBonusType.TEAM_CREDITS_BONUS)
         return enabledBonuses
 
     @w2c(W2CSchema, 'subscription_info_window')

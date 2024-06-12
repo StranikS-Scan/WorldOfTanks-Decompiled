@@ -5,6 +5,7 @@ from itertools import chain
 import typing
 import constants
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -15,7 +16,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO, getMoneyVO
+from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO, getMoneyVO, icons
 from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice, ItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
@@ -38,7 +39,7 @@ from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IBootcampController, IWotPlusController, IDebutBoxesController
+from skeletons.gui.game_control import ITradeInController, IBootcampController, IWotPlusController, IDebutBoxesController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -138,11 +139,15 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
-        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+        if vehicle.isEarlyAccess and not vehicle.isUnlocked:
+            priceBlockConstructor, pricePadding = EarlyAccessPriceBlockConstructor, 30
+        else:
+            priceBlockConstructor, pricePadding = PriceBlockConstructor, 98
+        priceBlock, invalidWidth = priceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, 500, rightPadding).construct()
         shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
-            items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
+            items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=pricePadding), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
         if not vehicle.isRotationGroupLocked and not self.context.getParams().get(_HIDE_STATUS, False):
             statusBlock, operationError, _ = StatusBlockConstructor(vehicle, statusConfig).construct()
             if statusBlock and not (operationError and shouldBeCut):
@@ -204,7 +209,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                 dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
-        if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item):
+        if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item) and not vehicle.isWotPlus:
             items.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=82, top=-2, bottom=10), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
         if statsConfig.restorePrice:
             if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
@@ -430,6 +435,8 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         else:
             vehicleType = TOOLTIPS.tankcaruseltooltip_vehicletype_normal(self.vehicle.type)
             bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_NORMAL_VEHICLE_BG_LINKAGE
+        if self.vehicle.isEarlyAccess:
+            bgLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_EARLY_ACCESS_VEHICLE_BG_LINKAGE
         userName = self.vehicle.userName
         if self.__bootcamp.isInBootcamp():
             awardVehicles = self.__bootcamp.getAwardVehicles()
@@ -477,26 +484,27 @@ class CrystalBlockConstructor(VehicleTooltipBlockConstructor):
 class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
     __itemsCache = dependency.descriptor(IItemsCache)
     __wotPlusController = dependency.descriptor(IWotPlusController)
+    __debutBoxController = dependency.descriptor(IDebutBoxesController)
 
     def construct(self):
         blocks = []
         linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_YELLOW_LINKAGE
         state = self.__wotPlusController.getState()
-        if state is WotPlusState.CANCELLED:
+        isEnableSubscription = self.__wotPlusController.isWotPlusEnabled()
+        if state is WotPlusState.CANCELLED and isEnableSubscription:
             expiryTime = self.__wotPlusController.getExpiryTime()
             localExpiryTime = time_utils.makeLocalServerTime(expiryTime)
             formattedDate = backport.getShortDateFormat(localExpiryTime)
             formattedHour = backport.getShortTimeFormat(localExpiryTime)
             formattedTime = '{}, {}'.format(formattedDate, formattedHour)
-            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.wotPlusRenting.remainingTime()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=60, padding=formatters.packPadding(top=5, bottom=-15)))
-        if state in [WotPlusState.CANCELLED, WotPlusState.ACTIVE]:
-            attrs = self.__itemsCache.items.stats.attributes
-            if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
-                dailyXPText = text_styles.main(text_styles.expText('x{}'.format(backport.getIntegralFormat(self.vehicle.dailyXPFactor))))
-                blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=60, gap=0, padding=formatters.packPadding(left=0, top=0, bottom=10)))
-        else:
-            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_WOTPLUSRENTING_INACTIVE), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=60, padding=formatters.packPadding(left=0, top=0, bottom=-7)))
-        blocks.append(formatters.packTextParameterBlockData(name=text_styles.stats(backport.text(R.strings.tooltips.vehicle.wotPlusRenting())), value='', valueWidth=0, padding=formatters.packPadding(left=0, top=0, bottom=10)))
+            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.wotPlusRenting.remainingTime()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=60, padding=formatters.packPadding(left=-2, top=-7, bottom=-15)))
+        blocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.wotPlusRenting())), icon=backport.image(R.images.gui.maps.icons.library.wotplus_16x16()), padding=formatters.packPadding(left=60, top=0, bottom=0), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
+        attrs = self.__itemsCache.items.stats.attributes
+        if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
+            dailyXPText = text_styles.main(text_styles.expText('x{}'.format(backport.getIntegralFormat(self.vehicle.dailyXPFactor))))
+            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=60, gap=0, padding=formatters.packPadding(left=-2, top=0, bottom=2)))
+        if self.configuration.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.vehicle.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.vehicle):
+            blocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=60, top=0, bottom=-5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
         return (blocks, linkage)
 
 
@@ -608,6 +616,28 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         notEnoughMoney = neededValue > 0
         hasAction = actionPrc > 0
         return (block, notEnoughMoney or hasAction)
+
+
+class EarlyAccessPriceBlockConstructor(PriceBlockConstructor):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+
+    def construct(self):
+        vehicle = self.vehicle
+        isNextToUnlock, _ = g_techTreeDP.isNext2Unlock(vehicle.intCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs)
+        balance = self.__earlyAccessController.getTokensBalance() if isNextToUnlock else 0
+        cost = self.__earlyAccessController.getVehiclePrice(vehicle.intCD)
+        if vehicle.intCD in self.__earlyAccessController.getBlockedVehicles():
+            imgBlock = [formatters.packImageTextBlockData(title=formatters.makeHtmlString('html_templates:lobby/textStyle', 'robotoCondensed', {'message': backport.text(R.strings.menu.techtree.EarlyAccessLock())}), img=backport.image(R.images.gui.maps.icons.library.EaSoonIcon()), txtPadding=formatters.packPadding(left=-125, bottom=-6), padding=formatters.packPadding(top=13))]
+        else:
+            imgBlock = [formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.VEHICLE_EA_PRICE), desc=text_styles.concatStylesWithSpace(text_styles.expTextBig(backport.getIntegralFormat(balance)), text_styles.main('/ {}'.format(backport.getIntegralFormat(cost)))), img=backport.image(R.images.gui.maps.icons.library.EaIcon()), imgPadding=formatters.packPadding(left=0, top=4), imgAtLeft=True, snapImage=False, txtGap=-2, txtOffset=0, txtPadding=formatters.packPadding(left=10), padding=formatters.packPadding(top=5, bottom=0))]
+        blocks = [formatters.packBuildUpBlockData(imgBlock, blockWidth=180, padding=formatters.packPadding(bottom=-8)), formatters.packTextBlockData(text=self.__formXpTextWithIcon(), blockWidth=200)]
+        return (blocks, False)
+
+    def __formXpTextWithIcon(self):
+        vehicle = self.vehicle
+        _, xpCost, _, _, _ = getUnlockPrice(vehicle.intCD)
+        xpIcon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.XpCostIcon()), width=18, height=18)
+        return text_styles.concatStylesWithSpace(text_styles.main(TOOLTIPS.VEHICLE_UNLOCKPRICEAFTEREA), text_styles.concatStylesToSingleLine(text_styles.stats(backport.getIntegralFormat(xpCost)), xpIcon))
 
 
 class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
@@ -849,6 +879,7 @@ class ClanLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructo
 class StatusBlockConstructor(VehicleTooltipBlockConstructor):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __bootcamp = dependency.descriptor(IBootcampController)
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
 
     def construct(self):
         block = []
@@ -901,7 +932,14 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             parentCD = int(config.node.unlockProps.parentID) or None
         _, _, need2Unlock, _, _ = getUnlockPrice(vehicle.intCD, parentCD, vehicle.level)
         if not nodeState & NODE_STATE_FLAGS.UNLOCKED and not nodeState & NODE_STATE_FLAGS.COLLECTIBLE:
-            if self.__bootcamp.isInBootcamp() and nodeState & NODE_STATE_FLAGS.PURCHASE_DISABLED:
+            if nodeState & NODE_STATE_FLAGS.EARLY_ACCESS:
+                if nodeState & NODE_STATE_FLAGS.NEXT_2_UNLOCK:
+                    tooltip = TOOLTIPS.RESEARCHPAGE_VEHICLE_STATUS_EARLYACCESSNOTENOUGHTOKENS
+                elif vehicle.intCD in self.__earlyAccessController.getBlockedVehicles():
+                    tooltip = TOOLTIPS.RESEARCHPAGE_VEHICLE_STATUS_EARLYACCESSSOON
+                else:
+                    tooltip = TOOLTIPS.RESEARCHPAGE_VEHICLE_STATUS_EARLYACCESSPARENTVEHICLEISLOCKED
+            elif self.__bootcamp.isInBootcamp() and nodeState & NODE_STATE_FLAGS.PURCHASE_DISABLED:
                 tooltip = None
             elif not nodeState & NODE_STATE_FLAGS.NEXT_2_UNLOCK:
                 tooltip = TOOLTIPS.RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED

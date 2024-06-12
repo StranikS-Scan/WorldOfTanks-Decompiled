@@ -11,3 +11,6 @@ class RentLogInfo(Enum):
     ADD = 'excl_veh:add'
     START = 'excl_veh:on'
     END = 'excl_veh:off'
+
+
+TEAM_SUBS_BONUS = 'subscription:team_bonus'

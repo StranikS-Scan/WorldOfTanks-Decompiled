@@ -260,7 +260,7 @@ class _Comp7QueueProvider(RandomQueueProvider):
         pass
 
     def __getRankData(self, rankName, playersCount, isHighlight):
-        rankImg = R.images.gui.maps.icons.comp7.ranks.c_40.dyn(rankName)
+        rankImg = R.images.comp7.gui.maps.icons.comp7.ranks.c_40.dyn(rankName)
         rankStr = R.strings.comp7.rank.dyn(rankName)
         return {'type': backport.text(rankStr()),
          'icon': backport.image(rankImg()),

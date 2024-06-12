@@ -128,7 +128,9 @@ class WotPlusDescriptor(SubscriptionDescriptor):
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     _COMMON_TO_UI_STATE_DICT = {WotPlusState.INACTIVE: WotSubscriptionStateEnum.INACTIVE,
      WotPlusState.ACTIVE: WotSubscriptionStateEnum.ACTIVE,
-     WotPlusState.CANCELLED: WotSubscriptionStateEnum.CANCELLED}
+     WotPlusState.TRIAL: WotSubscriptionStateEnum.TRIAL,
+     WotPlusState.CANCELLED: WotSubscriptionStateEnum.CANCELLED,
+     WotPlusState.ERROR: WotSubscriptionStateEnum.ERROR}
 
     @property
     def type(self):

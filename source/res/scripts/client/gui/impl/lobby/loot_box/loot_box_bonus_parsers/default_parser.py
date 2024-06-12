@@ -22,14 +22,20 @@ def parseLimitBoxInfoSection(data):
 
 def __parseSlotBonusInfoSection(slotBonusInfo):
     if slotBonusInfo is not None:
-        sectionLimitIDsMap, sectionBonuses = __parseGroupsBonusInfoSection(slotBonusInfo)
+        sectionLimitIDsMap, sectionBonuses = {}, []
+        for key, data in slotBonusInfo.subBonusRawData.iteritems():
+            if key == 'groups':
+                groupsSectionLimitIDsmap, groupsSectionBonuses = __parseGroupsBonusInfoSection(data, slotBonusInfo)
+                sectionLimitIDsMap = groupsSectionLimitIDsmap
+                sectionBonuses.extend(groupsSectionBonuses)
+            sectionBonuses.extend(getNonQuestBonuses(key, data))
+
         return (slotBonusInfo.probabilitiesList, sectionBonuses, sectionLimitIDsMap)
     else:
         return (0, [], {})
 
 
-def __parseGroupsBonusInfoSection(slotBonusInfo):
-    groups = slotBonusInfo.subBonusRawData.get('groups', [])
+def __parseGroupsBonusInfoSection(groups, slotBonusInfo):
     limitIDsMap = dict()
     bonuses = []
     for groupData in groups:
@@ -52,7 +58,7 @@ def __parseOneOfBonusInfoSection(oneOfBonusInfo):
             if bonusInfo and bonusInfo.subBonusRawData:
                 for k, v in bonusInfo.subBonusRawData.iteritems():
                     if k == 'groups':
-                        sectionLimitIDsMap, sectionBonuses = __parseGroupsBonusInfoSection(bonusInfo)
+                        sectionLimitIDsMap, sectionBonuses = __parseGroupsBonusInfoSection(v, bonusInfo)
                         __updateLimitIDsMap(limitIDsMap, bonusInfo, sectionLimitIDsMap, sectionBonuses)
                         bonuses.extend(sectionBonuses)
                     sectionBonuses = getNonQuestBonuses(k, v)

@@ -29,7 +29,6 @@ from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from historical_battles_common.hb_constants_extension import ARENA_GUI_TYPE
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -102,7 +101,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.as_setServerSettingS(serverName, tooltipFullData, state)
 
     def _setServerStats(self):
-        if constants.IS_SHOW_SERVER_STATS and BigWorld.player().arenaGuiType != ARENA_GUI_TYPE.HISTORICAL_BATTLES:
+        if constants.IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def _setMenuButtonsLabels(self):
@@ -131,7 +130,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @wg_async
     def __doLeaveArena(self):
         self.as_setVisibilityS(False)
-        exitResult = self._getExitResult()
+        vInfo = self.sessionProvider.getArenaDP().getVehicleInfo()
+        exitResult = BattleExitResult(self._getExitResult(), vInfo.player)
         if exitResult.isDeserter:
             isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
             result = yield wg_await(self._showLeaverAliveWindow(isPlayerIGR))

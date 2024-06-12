@@ -1140,13 +1140,12 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
  'squadRatingRestriction',
  'squadSizes',
  'createVivoxTeamChannels',
- 'qualification',
- 'seasonVehicles'))):
+ 'qualification'))):
     __slots__ = ()
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}), seasonVehicles=set())
+        return dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
 
     @classmethod
     def _preprocessData(cls, data):
@@ -1355,11 +1354,11 @@ class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'vers
         return cls()
 
 
-class RPConfig(namedtuple('RPConfig', ('pgbCapacity', 'pgbDayLimit'))):
+class RPConfig(namedtuple('RPConfig', ('messageBarGUIEnabled', 'pgbCapacity', 'pgbDayLimit'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(pgbCapacity=0, pgbDayLimit=0)
+        defaults = dict(messageBarGUIEnabled=True, pgbCapacity=0, pgbDayLimit=0)
         defaults.update(kwargs)
         return super(RPConfig, cls).__new__(cls, **defaults)
 
@@ -1443,57 +1442,33 @@ class DebutBoxesConfig(namedtuple('DebutBoxesConfig', ('isEnabled',
         return cls()
 
 
-class HBConfig(namedtuple('HBConfig', ('startDate',
- 'fronts',
- 'points',
- 'endDate',
- 'eventProgression',
- 'frontmen',
- 'isBattlesEnabled',
- 'isEnabled',
- 'heroVehicle',
- 'rewardBox',
- 'hangarEnvironmentSettings',
- 'difficulty'))):
+class EarlyAccessConfig(namedtuple('EarlyAccessConfig', ('isEnabled',
+ 'isPaused',
+ 'infoPageLink',
+ 'seasons'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(startDate={}, fronts={}, points={}, endDate={}, eventProgression={}, frontmen={}, isBattlesEnabled=False, isEnabled=False, heroVehicle=False, rewardBox={}, hangarEnvironmentSettings={}, difficulty={})
+        defaults = dict(isEnabled=False, isPaused=False, infoPageLink='', seasons={})
         defaults.update(kwargs)
-        return super(HBConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
+        return super(EarlyAccessConfig, cls).__new__(cls, **defaults)
 
     def replace(self, data):
         allowedFields = self._fields
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
 
-    @classmethod
-    def defaults(cls):
-        return cls()
+    def getAffectedVehicles(self, seasonID):
+        return self.seasons.get(seasonID, {}).get('affectedVehicles', {})
 
+    def getBlockedVehicles(self, seasonID):
+        return self.seasons.get(seasonID, {}).get('blockedVehicles', set())
 
-class HBShop(namedtuple('HBShop', ('enabled', 'shopBundles', 'groups'))):
-    __slots__ = ()
+    def getTokenCompensation(self, seasonID):
+        return self.seasons.get(seasonID, {}).get('tokenCompensation', {})
 
-    def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, shopBundles={}, groups={})
-        defaults.update(kwargs)
-        return super(HBShop, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
+    def getTokenCost(self, seasonID):
+        return self.seasons.get(seasonID, {}).get('tokenCost', {})
 
 
 class ServerSettings(object):
@@ -1550,9 +1525,8 @@ class ServerSettings(object):
         self.__restoreConfig = RestoreConfig()
         self.__versusAISettings = VersusAIConfig()
         self.__debutBoxesConfig = DebutBoxesConfig()
+        self.__earlyAccessConfig = EarlyAccessConfig()
         self.__schemaManager = getSchemaManager()
-        self.__hbConfig = HBConfig()
-        self.__hbShop = HBShop()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1719,14 +1693,8 @@ class ServerSettings(object):
             self.__debutBoxesConfig = makeTupleByDict(DebutBoxesConfig, self.__serverSettings[Configs.DEBUT_BOXES_CONFIG.value])
         else:
             self.__debutBoxesConfig = DebutBoxesConfig.defaults()
-        if 'historical_battles' in self.__serverSettings:
-            self.__hbConfig = makeTupleByDict(HBConfig, self.__serverSettings['historical_battles'])
-        else:
-            self.__hbConfig = HBConfig.defaults()
-        if 'historical_battles_shop' in self.__serverSettings:
-            self.__hbShop = makeTupleByDict(HBShop, self.__serverSettings['historical_battles_shop'])
-        else:
-            self.__hbShop = HBShop.defaults()
+        if Configs.EARLY_ACCESS_CONFIG.value in self.__serverSettings:
+            self.__earlyAccessConfig = makeTupleByDict(EarlyAccessConfig, self.__serverSettings[Configs.EARLY_ACCESS_CONFIG.value])
         self.__schemaManager.set(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
@@ -1847,11 +1815,9 @@ class ServerSettings(object):
         if Configs.RESTORE_CONFIG.value in serverSettingsDiff:
             self.__updateRestoreConfig(serverSettingsDiff)
         if Configs.DEBUT_BOXES_CONFIG.value in serverSettingsDiff:
-            self.__updateDebutBoxesCoinfig(serverSettingsDiff)
-        if 'historical_battles' in serverSettingsDiff:
-            self.__updateHBConfig(serverSettingsDiff)
-        if 'historical_battles_shop' in serverSettingsDiff:
-            self.__updateHBShop(serverSettingsDiff)
+            self.__updateDebutBoxesConfig(serverSettingsDiff)
+        if Configs.EARLY_ACCESS_CONFIG.value in serverSettingsDiff:
+            self.__updateEarlyAccessConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -1943,14 +1909,6 @@ class ServerSettings(object):
     @property
     def battleRoyale(self):
         return self.__battleRoyaleSettings
-
-    @property
-    def hbConfig(self):
-        return self.__hbConfig
-
-    @property
-    def hbShop(self):
-        return self.__hbShop
 
     @property
     def mapbox(self):
@@ -2055,6 +2013,10 @@ class ServerSettings(object):
     @property
     def debutBoxesConfig(self):
         return self.__debutBoxesConfig
+
+    @property
+    def earlyAccessConfig(self):
+        return self.__earlyAccessConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2213,6 +2175,12 @@ class ServerSettings(object):
 
     def isDailyAttendancesEnabled(self):
         return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableDailyAttendances', False)
+
+    def isDailyQuestsExtraRewardsEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableDailyQuestsExtraRewards', False)
+
+    def isTeamCreditsBonusEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableTeamCreditsBonus', False)
 
     def getWotPlusExclusiveVehicleInfo(self):
         return self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('exclusiveVehicle', {})
@@ -2456,14 +2424,6 @@ class ServerSettings(object):
         data = targetSettings[Configs.BATTLE_ROYALE_CONFIG.value]
         self.__battleRoyaleSettings = self.__battleRoyaleSettings.replace(data)
 
-    def __updateHBConfig(self, serverSettingsDiff):
-        data = serverSettingsDiff['historical_battles']
-        self.__hbConfig = self.__hbConfig.replace(data)
-
-    def __updateHBShop(self, serverSettingsDiff):
-        data = serverSettingsDiff['historical_battles_shop']
-        self.__hbShop = self.__hbShop.replace(data)
-
     def __updateMapbox(self, targetSettings):
         self.__mapboxSettings = self.__mapboxSettings.replace(targetSettings[Configs.MAPBOX_CONFIG.value])
 
@@ -2566,12 +2526,15 @@ class ServerSettings(object):
     def __updateRestoreConfig(self, serverSettingsDiff):
         self.__restoreConfig = self.__restoreConfig.replace(serverSettingsDiff[Configs.RESTORE_CONFIG.value])
 
-    def __updateDebutBoxesCoinfig(self, diff):
+    def __updateDebutBoxesConfig(self, diff):
         self.__debutBoxesConfig = self.__debutBoxesConfig.replace(diff[Configs.DEBUT_BOXES_CONFIG.value])
 
     def __updateVersusAI(self, targetSettings):
         data = targetSettings[Configs.VERSUS_AI_CONFIG.value]
         self.__versusAISettings = self.__versusAISettings.replace(data)
+
+    def __updateEarlyAccessConfig(self, diff):
+        self.__earlyAccessConfig = self.__earlyAccessConfig.replace(diff[Configs.EARLY_ACCESS_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

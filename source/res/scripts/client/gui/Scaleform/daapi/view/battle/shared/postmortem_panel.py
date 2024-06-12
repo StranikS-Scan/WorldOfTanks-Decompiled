@@ -35,6 +35,7 @@ if typing.TYPE_CHECKING:
     from typing import Iterable, Optional
 _logger = logging.getLogger(__name__)
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
+_VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
 _BR_VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/battleRoyale/vehicles/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['fire']: 'DEATH_FROM_FIRE',
@@ -337,7 +338,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vTypeInfoVO = vInfoVO.vehicleType
                     vehClass = Vehicle.getTypeVPanelIconPath(vTypeInfoVO.classTag)
                     if not vTypeInfoVO.isOnlyForBattleRoyaleBattles:
-                        vehImg = backport.image(R.images.gui.maps.icons.vehicle.small.dyn(Vehicle.getIconResourceName(vTypeInfoVO.iconName))())
+                        vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                         vehLvl = int2roman(vTypeInfoVO.level)
                     else:
                         vehImg = _BR_VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)

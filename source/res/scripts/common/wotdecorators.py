@@ -4,7 +4,7 @@ import inspect
 from functools import update_wrapper
 from typing import TypeVar, Type, Generic
 from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR
-from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
+from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR, wraps
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
@@ -122,13 +122,15 @@ def condition(attributeName, logFunc=None, logStack=True):
 
     def decorator(func):
 
+        @wraps(func)
         def wrapper(*args, **kwargs):
             attribute = getattr(args[0], attributeName)
             if not bool(attribute):
                 if logFunc:
-                    logFunc('Method condition failed', func, args, kwargs, stack=logStack)
+                    logFunc('Method condition failed', attributeName, attribute, getattr(args[0], 'id', None), func.__name__, args, kwargs, stack=logStack)
                 return
-            return func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
 
         return decorate(func, wrapper)
 

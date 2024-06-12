@@ -622,8 +622,6 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
     EFFICIENCYRIBBONS_STATICDEATHZONE = '#ingame_gui:efficiencyRibbons/staticDeathZone'
-    EFFICIENCYRIBBONS_HBDEATHZONE = '#ingame_gui:efficiencyRibbons/HBDeathZone'
-    EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE = '#ingame_gui:efficiencyRibbons/eventDeathOnPhaseChange'
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
@@ -1129,8 +1127,6 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_STATICDEATHZONE,
-     EFFICIENCYRIBBONS_HBDEATHZONE,
-     EFFICIENCYRIBBONS_EVENTDEATHONPHASECHANGE,
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,

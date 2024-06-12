@@ -5126,7 +5126,6 @@
       <color>	25 25 25 255	</color>
       <gloss>	0.65	</gloss>
       <metallic>	0.235	</metallic>
-      <priceGroup>	paints 20g notInShop	</priceGroup>
       <tags>	hiddenInUI	</tags>
       <userString>	#vehicle_customization:repaint/Tankist_Day_2023_MT	</userString>
       <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
@@ -5332,7 +5331,7 @@
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
@@ -6064,6 +6063,244 @@
           <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
         </exclude>
       </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	WebEvent_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31099	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_01.png	</texture>
+      <userString>	#vehicle_customization:WebEvent_03_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:WebEvent_03_Paint_2024_MT/description	</description>
+      <color>	95 78 43 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Kupalle_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31100	</id>
+      <color>	17 17 33 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <userString>	#vehicle_customization:Kupalle_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Kupalle_Paint_2024_MT/description	</description>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP14_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31101	</id>
+      <color>	37 47 66 255	</color>
+      <gloss>	0.57	</gloss>
+      <metallic>	0.31	</metallic>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:BP14_01_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP14_01_Paint_2024_MT/description	</description>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31102	</id>
+      <color>	99 58 49 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <texture>	gui/maps/vehicles/repaints/italy_color_07.png	</texture>
+      <userString>	#vehicle_customization:BP14_02_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP14_02_Paint_2024_MT/description	</description>
+      <tags>	hiddenInUI	</tags>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31103	</id>
+      <color>	43 50 56 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
+      <userString>	#vehicle_customization:BP14_03_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP14_03_Paint_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31104	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <color>	33 66 75 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:BP14_04_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP14_04_Paint_2024_MT/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	80thBelarus_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31111	</id>
+      <color>	55 81 102 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
+      <userString>	#vehicle_customization:80thBelarus_Paint_2024_MT/name	</userString>
+      <description>	#vehicle_customization:80thBelarus_Paint_2024_MT/description	</description>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	RushStoneWolf_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31105	</id>
+      <color>	35 35 35 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_01_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_01_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31106	</id>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_02_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_02_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31107	</id>
+      <color>	56 56 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_03_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_03_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31108	</id>
+      <color>	27 27 27 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_04_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_04_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31109	</id>
+      <color>	22 22 22 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_05_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_05_2024_MT/description	</description>
+    </paint>
+    <paint>
+      <id>	31110	</id>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushStoneWolf_Paint_06_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushStoneWolf_Paint_06_2024_MT/description	</description>
     </paint>
   </itemGroup>
 </custom_paints.xml>

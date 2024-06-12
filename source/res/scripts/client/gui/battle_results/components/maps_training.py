@@ -26,7 +26,7 @@ class BattleResultBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        teamResultStr = backport.text(R.strings.maps_training.result.title.dyn(teamResult.title())())
+        teamResultStr = backport.text(R.strings.maps_training.result.title.dyn(teamResult)())
         self.addNextComponent(base.DirectStatsItem('win', teamResult == PLAYER_TEAM_RESULT.WIN))
         self.addNextComponent(base.DirectStatsItem('value', teamResult))
         self.addNextComponent(base.DirectStatsItem('str', teamResultStr))

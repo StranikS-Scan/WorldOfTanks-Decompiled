@@ -84,14 +84,17 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
 class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
     _QUEUE_TIMEOUT_MSG_KEY = '#system_messages:arena_start_errors/prb/kick/timeout'
 
-    def __init__(self, modeFlags, queueType, subscriber):
+    def __init__(self, modeFlags, queueType, subscriber, isForceToHangar=True):
         super(PreQueueEntity, self).__init__(entityFlags=FUNCTIONAL_FLAG.PRE_QUEUE, modeFlags=modeFlags)
         self._queueType = queueType
         self._subscriber = subscriber
         self._setListenerClass(IPreQueueListener)
         self._requestCtx = PrbCtrlRequestCtx()
+        self._isForceToHangar = isForceToHangar
 
     def init(self, ctx=None):
+        if self._isForceToHangar:
+            g_eventDispatcher.loadHangar()
         self._subscriber.subscribe(self)
         result = super(PreQueueEntity, self).init(ctx=ctx)
         if self.isInQueue():

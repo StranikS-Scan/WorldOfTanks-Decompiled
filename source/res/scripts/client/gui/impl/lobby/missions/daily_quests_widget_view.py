@@ -18,9 +18,14 @@ from gui.shared.missions.packers.events import getEventUIDataPacker, findFirstCo
 from gui.shared.events import LobbySimpleEvent
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.server_events.events_helpers import dailyQuestsSortFunc, EventInfoModel
+from constants import DailyQuestsLevels
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.lobby_context import ILobbyContext
+from shared_utils import first
+from gui.impl.gen.view_models.common.missions.event_model import EventStatus
+from skeletons.gui.game_control import IWotPlusController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
     from gui.server_events.event_items import ServerEventAbstract, DailyQuest
@@ -40,6 +45,8 @@ def predicateTooltipWindow(window):
 class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     __slots__ = ('__parentId', '__tooltipEnabled', '__layout', '__visitedQuests', '__markVisitedCallbackID')
     eventsCache = dependency.descriptor(IEventsCache)
+    subscriptionController = dependency.descriptor(IWotPlusController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
@@ -62,11 +69,19 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         else:
             if contentID == R.views.lobby.missions.DailyQuestsTooltip():
                 missionId = event.getArgument('missionId')
-                quests = self.eventsCache.getDailyQuests().values()
+                quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
                 for quest in quests:
                     if quest.getID() == missionId:
+                        questSub = first(self.eventsCache.getDailyQuestsSub(lambda q, qu=quest: q.getLevel() == DailyQuestsLevels.MAP_DAILY_QUESTS.get(qu.getLevel())).values())
                         questUIPacker = getEventUIDataPacker(quest)
                         model = questUIPacker.pack()
+                        model.setIsEnabledSubscription(self.lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled())
+                        model.setIsActiveSubscription(self.subscriptionController.isEnabled())
+                        if questSub and self.lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled():
+                            questSubUIPacker = getEventUIDataPacker(questSub)
+                            questSubUIPacker.pack(model=model)
+                            if quest.isCompleted() and not questSub.isCompleted():
+                                model.setStatus(EventStatus.UNDONESUBSCRIPTION)
                         self.eventsCache.questsProgress.markQuestProgressAsViewed(missionId)
                         return ViewImpl(ViewSettings(R.views.lobby.missions.DailyQuestsTooltip(), model=model))
 

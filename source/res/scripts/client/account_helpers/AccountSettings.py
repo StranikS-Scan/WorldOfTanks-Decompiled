@@ -227,6 +227,10 @@ INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 TRADING_CARAVAN_NOTIFICATIONS = 'tradingCaravanNotifications'
 SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
+SHOWN_WOT_PLUS_COUNTER = 'shownWotPlusCounter'
+SUBSCRIPTION_DAILY_QUESTS_INTRO_SHOWN = 'subscriptionDailyQuestsIntroShown'
+SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN = 'subscriptionDailyQuestsShineShown'
+SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION = 'subscriptionLastExpirationNotification'
 HAS_LEFT_VERSUS_AI = 'hasLeftVersusAI'
 MINIMAP_SIZE = 'minimapSize'
 COMP7_UI_SECTION = 'comp7'
@@ -309,6 +313,23 @@ class ArmoryYard(object):
     STYLE_QUEST_ENDS = 'style_quest_ends'
     ARMORY_YARD_CURRENT_SEASON = 'armoryYardCurrSeason'
     AY_SECTION_LAST_LISTENED_MESSAGE = 'lastListenedMessage'
+
+
+class EarlyAccess(object):
+    EARLY_ACCESS_SETTINGS = 'earlyAccessSettings'
+    EARLY_ACCESS_CURRENT_SEASON = 'earlyAccessCurrentSeason'
+    INTRO_SEEN = 'earlyAccessIntroSeen'
+    TREE_SEEN = 'earlyAccessTreeSeen'
+    EVENT_FINISHED = 'earlyAccessEventFinished'
+    EVENT_ANNOUNCEMENT = 'eventAnnouncement'
+    EVENT_PAUSED = 'eventPaused'
+    STARTED_CHAPTER_PREFIX = 'startedChapter'
+    FINISHED_PROGRESSION = 'finishedProgression'
+    FINISHED_POSTRPOGRESSION = 'finishedPostprogression'
+    COMPLETED_PROGRESSION_PREFIX = 'completedProgression'
+    COMPLETED_POSTPROGRESSION = 'completedPostprogression'
+    ALL_TOKENS_RECEIVED = 'allTokensReceived'
+    PREV_COMPLETED_QUESTS = 'prevCompletedQuests'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -402,6 +423,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'favorite': False,
                                    'bonus': False,
                                    'crystals': False,
+                                   'early_access': False,
                                    'debut_boxes': False,
                                    'role_HT_assault': False,
                                    'role_HT_break': False,
@@ -540,8 +562,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'level_5': False,
                                               'level_6': False,
                                               'level_7': False,
-                                              'level_8': False,
-                                              'level_9': True,
+                                              'level_8': True,
+                                              'level_9': False,
                                               'level_10': False},
                EPICBATTLE_CAROUSEL_FILTER_2: {'premium': False,
                                               'elite': False,
@@ -570,11 +592,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_SPG_flame': False,
                                               'role_SPG_assault': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'epicBattleSeason': 0,
-                                                     'level_9': True,
+                                                     'level_8': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_2: {'epicBattleSeason': 0,
-                                                     'level_9': True,
+                                                     'level_8': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
@@ -1030,11 +1052,14 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'onboardingEnabled': True,
                            'seenComps': set()},
                 WOT_PLUS: {'isFirstTime': True,
-                           'isWotPlusEnabled': False,
+                           'isWotPlusEnabled': True,
                            'isGoldReserveEnabled': True,
                            'isPassiveXpEnabled': True,
                            'isFreeDemountingEnabled': True,
-                           'isExcludedMapEnabled': True,
+                           'isExcludedMapEnabled': False,
+                           'isExclusiveVehicleEnabled': True,
+                           'isDailyQuestsExtraRewardsEnabled': True,
+                           'isTeamCreditsBonusEnabled': True,
                            'amountOfDailyAttendance': 0},
                 TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
                                   'isTelecomRentalsBlocked': True},
@@ -1216,7 +1241,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
                 CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
                 SHOWN_PERSONAL_RESERVES_INTRO: False,
-                SHOWN_WOT_PLUS_INTRO: False,
+                SHOWN_WOT_PLUS_INTRO: True,
+                SHOWN_WOT_PLUS_COUNTER: False,
+                SUBSCRIPTION_DAILY_QUESTS_INTRO_SHOWN: False,
+                SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN: False,
+                SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION: 0,
                 HAS_LEFT_VERSUS_AI: False,
                 OPT_DEVICE_TAB_VISITED: {},
                 BattleMatters.BATTLE_MATTERS_SETTINGS: {BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS: 0,
@@ -1444,7 +1473,20 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    ArmoryYard.FINISH_CHAPTER_PREFIX: False,
                                    ArmoryYard.STYLE_QUEST_ENDS: False,
                                    ArmoryYard.ARMORY_YARD_CURRENT_SEASON: None,
-                                   ArmoryYard.AY_SECTION_LAST_LISTENED_MESSAGE: 0}}
+                                   ArmoryYard.AY_SECTION_LAST_LISTENED_MESSAGE: 0},
+ EarlyAccess.EARLY_ACCESS_SETTINGS: {EarlyAccess.EARLY_ACCESS_CURRENT_SEASON: None,
+                                     EarlyAccess.EVENT_ANNOUNCEMENT: False,
+                                     EarlyAccess.EVENT_PAUSED: False,
+                                     EarlyAccess.INTRO_SEEN: False,
+                                     EarlyAccess.TREE_SEEN: False,
+                                     EarlyAccess.EVENT_FINISHED: False,
+                                     EarlyAccess.STARTED_CHAPTER_PREFIX: False,
+                                     EarlyAccess.FINISHED_PROGRESSION: False,
+                                     EarlyAccess.FINISHED_POSTRPOGRESSION: False,
+                                     EarlyAccess.COMPLETED_PROGRESSION_PREFIX: False,
+                                     EarlyAccess.COMPLETED_POSTPROGRESSION: False,
+                                     EarlyAccess.ALL_TOKENS_RECEIVED: False,
+                                     EarlyAccess.PREV_COMPLETED_QUESTS: {}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1479,7 +1521,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 69
+    version = 71
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2143,6 +2185,18 @@ class AccountSettings(object):
                     if SOUND.DETECTION_ALERT_SOUND in keySettings.keys():
                         keySettings.write(SOUND.DETECTION_ALERT_SOUND, _pack('lightbulb'))
 
+            if currVersion < 70:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if SHOWN_WOT_PLUS_INTRO in keySettings.keys():
+                        keySettings.write(SHOWN_WOT_PLUS_INTRO, _pack(True))
+
+            if currVersion < 71:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if WOT_PLUS in keySettings.keys():
+                        keySettings.deleteSection(WOT_PLUS)
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2312,6 +2366,20 @@ class AccountSettings(object):
     @staticmethod
     def clearArmoryYard():
         fds = AccountSettings._readSection(AccountSettings._readUserSection(), ArmoryYard.ARMORY_YARD_SETTINGS)
+        for name in fds.keys():
+            fds.deleteSection(name)
+
+    @staticmethod
+    def getEarlyAccess(name):
+        return AccountSettings._getValue(name, EarlyAccess.EARLY_ACCESS_SETTINGS, True)
+
+    @staticmethod
+    def setEarlyAccess(name, value):
+        AccountSettings._setValue(name, value, EarlyAccess.EARLY_ACCESS_SETTINGS, True)
+
+    @staticmethod
+    def clearEarlyAccess():
+        fds = AccountSettings._readSection(AccountSettings._readUserSection(), EarlyAccess.EARLY_ACCESS_SETTINGS)
         for name in fds.keys():
             fds.deleteSection(name)
 

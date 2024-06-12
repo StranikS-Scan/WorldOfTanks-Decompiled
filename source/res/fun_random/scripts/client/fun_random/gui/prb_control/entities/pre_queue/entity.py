@@ -78,8 +78,6 @@ class FunRandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents and not self.canSwitch(ctx) and (ctx is None or not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)):
-            g_eventDispatcher.loadHangar()
         return super(FunRandomEntity, self).fini(ctx, woEvents)
 
     def getPermissions(self, pID=None, **kwargs):

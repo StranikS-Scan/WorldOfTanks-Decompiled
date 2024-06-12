@@ -38,7 +38,7 @@ class Comp7PrimeTimeView(Comp7PrimeTimeMeta):
     def _populate(self):
         super(Comp7PrimeTimeView, self)._populate()
         self.as_setHeaderTextS(backport.text(R.strings.comp7.primeTimeView.title()))
-        self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.comp7.backgrounds.prime_time_back()))
+        self.as_setBackgroundSourceS(backport.image(R.images.comp7.gui.maps.icons.comp7.backgrounds.prime_time_back()))
 
     def _getController(self):
         return self.__comp7Ctrl

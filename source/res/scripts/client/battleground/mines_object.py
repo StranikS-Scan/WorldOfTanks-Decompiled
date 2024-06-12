@@ -23,10 +23,9 @@ def _getEffectResourceMapping(name):
 
 
 @dependency.replace_none_kwargs(dynamicObjectsCache=IBattleDynamicObjectsCache, battleSession=IBattleSessionProvider)
-def loadMines(ownerVehicleID, callback, startEffectEnabled=True, dynamicObjectsCache=None, battleSession=None, effDescr=None):
+def loadMines(ownerVehicleID, callback, startEffectEnabled=True, dynamicObjectsCache=None, battleSession=None):
     loaders = {}
-    if effDescr is None:
-        effDescr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getMinesEffect()
+    effDescr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getMinesEffect()
     isAlly = False
     ownerVehicleInfo = battleSession.getArenaDP().getVehicleInfo(ownerVehicleID)
     if not avatar_getter.isObserver():

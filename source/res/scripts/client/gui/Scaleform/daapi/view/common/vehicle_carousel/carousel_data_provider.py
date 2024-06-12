@@ -3,23 +3,23 @@
 import typing
 from CurrentVehicle import g_currentVehicle
 from constants import SEASON_NAME_BY_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl.gen import R
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers.i18n import makeString as ms
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController
+from helpers.i18n import makeString as ms
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -63,12 +63,12 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController)
-def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None):
-    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl)
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController, earlyAccessCtrl=IEarlyAccessController)
+def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, earlyAccessCtrl=None):
+    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl)
 
 
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
+def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -111,7 +111,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
     isCrystalsLimitReached = current == maximum
     showIcon = vehicle.isTelecomRent and not vehicle.rentExpiryState
     extraImage = RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG if showIcon else ''
-    return {'id': vehicle.invID,
+    data = {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
      'infoHoverText': largeHoverStatus,
@@ -146,6 +146,9 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl):
      'tooltip': TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE,
      'isWotPlusSlot': vehicle.isWotPlus,
      'extraImage': extraImage}
+    if earlyAccessCtrl.isEnabled() and vehicle.intCD in earlyAccessCtrl.getAffectedVehicles():
+        data.update({'isEarlyAccess': vehicle.intCD in earlyAccessCtrl.getPostProgressionVehicles() and earlyAccessCtrl.isPostProgressionQueueSelected()})
+    return data
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):

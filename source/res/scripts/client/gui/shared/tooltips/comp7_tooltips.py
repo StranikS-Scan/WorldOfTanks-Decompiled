@@ -12,6 +12,8 @@ from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from gui.shared.utils.functions import stripColorTagDescrTags
+from helpers import dependency
+from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
     from items.artefacts import Equipment, VisualScriptEquipment
 _logger = logging.getLogger(__name__)
@@ -48,6 +50,7 @@ class RoleSkillBattleTooltipData(BlocksTooltipData):
 
 class RoleSkillLobbyTooltipData(BlocksTooltipData):
     _PARAMS_TEMPLATE = g_htmlTemplates['html_templates:comp7/tooltips/']['roleSkill']
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, context):
         super(RoleSkillLobbyTooltipData, self).__init__(context, None)
@@ -55,13 +58,16 @@ class RoleSkillLobbyTooltipData(BlocksTooltipData):
         self._setWidth(width=400)
         return
 
-    def _packBlocks(self, equipmentName):
+    def _packBlocks(self, equipmentName, roleName):
         equipment = self.context.buildItem(equipmentName)
         if equipment is None:
             _logger.error('Missing Role Skill = %s', equipmentName)
             return []
         else:
-            items = filter(None, [self.__packHeaderBlock(equipment), self.__packDescriptionBlock(equipment), self.__packInfoBlock()])
+            items = filter(None, [self.__packHeaderBlock(equipment),
+             self.__packDescriptionBlock(equipment),
+             self.__packChargeBlock(roleName),
+             self.__packInfoBlock()])
             return items
 
     @classmethod
@@ -78,6 +84,15 @@ class RoleSkillLobbyTooltipData(BlocksTooltipData):
         if active:
             blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.roleSkill.description.active())), desc=text_styles.main(cls.__formatEquipmentParams(active))))
         return None if not blocks else formatters.packBuildUpBlockData(blocks=blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+    @classmethod
+    def __packChargeBlock(cls, roleName):
+        level = cls.__comp7Controller.getEquipmentStartLevel(roleName)
+        if level <= 0:
+            return None
+        else:
+            text = text_styles.main(backport.text(R.strings.tooltips.roleSkill.start_charge(), level=level))
+            return formatters.packTextBlockData(text=text)
 
     @classmethod
     def __formatEquipmentParams(cls, description):

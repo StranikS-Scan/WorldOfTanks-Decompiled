@@ -1038,4 +1038,43 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It23_CC_3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31121	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/It23_CC_3_3DSt.png	</texture>
+      <userString>	#vehicle_customization:3D_Style_It23_MT/name	</userString>
+      <description>	#vehicle_customization:3D_Style_It23_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:3D_Style_It23_MT/longDescription	</longDescriptionSpecial>
+      <modelsSet>	It23_CC_3_3DSt	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <attachments>
+            <item>
+              <id>	31018	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </italy.xml>

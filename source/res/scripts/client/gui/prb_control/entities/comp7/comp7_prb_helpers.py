@@ -28,7 +28,7 @@ def selectComp7(comp7Controller=None):
             if prbDispatcher is not None:
                 yield prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.COMP7))
         else:
-            event_dispatcher.showComp7IntroScreen()
+            event_dispatcher.showComp7WhatsNewScreen(isIntro=True)
         return
 
 
@@ -49,7 +49,7 @@ class Comp7IntroPresenter(object):
         pass
 
     def init(self):
-        if self.__isComp7OnboardingShown() and self.__isComp7WhatsNewShown():
+        if self.__isComp7IntroShown() and self.__isComp7WhatsNewShown():
             return
         if self.__isHangarViewLoaded():
             self.__showIntro()
@@ -71,10 +71,8 @@ class Comp7IntroPresenter(object):
             self.__showIntro()
 
     def __showIntro(self):
-        if not self.__isComp7OnboardingShown():
-            self.__showOnboarding()
-        else:
-            self.__showWhatsNew()
+        isIntro = not self.__isComp7IntroShown()
+        event_dispatcher.showComp7WhatsNewScreen(isIntro=isIntro)
 
     @classmethod
     def __isHangarViewLoaded(cls):
@@ -86,7 +84,7 @@ class Comp7IntroPresenter(object):
         return False
 
     @classmethod
-    def __isComp7OnboardingShown(cls):
+    def __isComp7IntroShown(cls):
         section = cls.__settingsCore.serverSettings.getSection(section=GUI_START_BEHAVIOR, defaults=AccountSettings.getFilterDefault(GUI_START_BEHAVIOR))
         return section.get(GuiSettingsBehavior.COMP7_INTRO_SHOWN)
 
@@ -94,11 +92,3 @@ class Comp7IntroPresenter(object):
     def __isComp7WhatsNewShown(cls):
         section = cls.__settingsCore.serverSettings.getSection(section=GUI_START_BEHAVIOR, defaults=AccountSettings.getFilterDefault(GUI_START_BEHAVIOR))
         return section.get(GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN)
-
-    @staticmethod
-    def __showOnboarding():
-        event_dispatcher.showComp7IntroScreen()
-
-    @staticmethod
-    def __showWhatsNew():
-        event_dispatcher.showComp7WhatsNewScreen()

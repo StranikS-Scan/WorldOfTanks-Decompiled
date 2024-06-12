@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class RoleSkillSlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(RoleSkillSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getRoleSkill(self):
@@ -14,27 +14,34 @@ class RoleSkillSlotModel(ViewModel):
     def setRoleSkill(self, value):
         self._setString(0, value)
 
-    def getTooltipId(self):
+    def getRoleName(self):
         return self._getString(1)
 
-    def setTooltipId(self, value):
+    def setRoleName(self, value):
         self._setString(1, value)
 
-    def getTooltipHeader(self):
+    def getTooltipId(self):
         return self._getString(2)
 
-    def setTooltipHeader(self, value):
+    def setTooltipId(self, value):
         self._setString(2, value)
 
-    def getTooltipBody(self):
+    def getTooltipHeader(self):
         return self._getString(3)
 
-    def setTooltipBody(self, value):
+    def setTooltipHeader(self, value):
         self._setString(3, value)
+
+    def getTooltipBody(self):
+        return self._getString(4)
+
+    def setTooltipBody(self, value):
+        self._setString(4, value)
 
     def _initialize(self):
         super(RoleSkillSlotModel, self)._initialize()
         self._addStringProperty('roleSkill', '')
+        self._addStringProperty('roleName', '')
         self._addStringProperty('tooltipId', '')
         self._addStringProperty('tooltipHeader', '')
         self._addStringProperty('tooltipBody', '')

@@ -41,8 +41,6 @@ class WinbackEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        if not woEvents:
-            g_eventDispatcher.loadHangar()
         return super(WinbackEntity, self).fini(ctx, woEvents)
 
     @vehicleAmmoCheck

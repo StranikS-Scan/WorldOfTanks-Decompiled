@@ -4,23 +4,23 @@
       <Arg>	ARRAY	  <of>	SPAWN_AVAILABLE_VEHICLE	</of>
       </Arg>
       <Arg>	RESPAWN_INFO_VEHICLE	</Arg>
-      <Arg>	INT64	</Arg>
+      <Arg>	VEH_TYPE_CD	</Arg>
     </sendVehicleSpawnList>
     <confirmVehicleSelection>
       <Exposed></Exposed>
     </confirmVehicleSelection>
     <chooseVehicle>
       <Exposed></Exposed>
-      <Arg>	INT64	</Arg>
+      <Arg>	VEH_TYPE_CD	</Arg>
     </chooseVehicle>
     <requestSwitch>
       <Arg>	PYTHON	</Arg>
       <Arg>	ARRAY	  <of>	MAILBOX	</of>
       </Arg>
-      <Arg>	INT64	</Arg>
+      <Arg>	VEH_TYPE_CD	</Arg>
     </requestSwitch>
     <switchSetup>
-      <Arg>	UINT16	</Arg>
+      <Arg>	VEH_TYPE_CD	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Exposed></Exposed>

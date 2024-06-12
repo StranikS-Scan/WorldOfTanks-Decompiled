@@ -10,7 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl, getComp7ProductsUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -20,11 +20,9 @@ from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModeSource, CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView, showEarlyAccessVehicleView
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
-from gui.prb_control import settings as prb_control_settings
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.entities.base.ctx import PrbAction
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
@@ -56,22 +54,10 @@ from uilogging.wot_plus.logging_constants import NotificationAdditionalData
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from wg_async import wg_async, wg_await
-from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
-
-@adisp_process
-def showRandomHangar():
-    yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(prb_control_settings.PREBATTLE_ACTION_NAME.RANDOM))
-
-
-def preprocessInHBMode():
-    gameEventController = dependency.instance(IGameEventController)
-    if gameEventController.isHistoricalBattlesMode():
-        showRandomHangar()
-
 
 class ActionHandler(object):
 
@@ -1337,7 +1323,6 @@ class _OpenArmoryYardMain(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        preprocessInHBMode()
         self.__ctrl.goToArmoryYard()
 
 
@@ -1353,7 +1338,6 @@ class _OpenArmoryYardBuyView(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        preprocessInHBMode()
         self.__ctrl.goToArmoryYard(loadBuyView=True)
 
 
@@ -1369,7 +1353,6 @@ class _OpenArmoryYardQuest(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        preprocessInHBMode()
         self.__ctrl.goToArmoryYardQuests()
 
 
@@ -1417,6 +1400,48 @@ class _OpenPremShopHandler(ActionHandler):
 
     def handleAction(self, model, entityID, action):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
+
+
+class _OpenComp7ShopHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showShop(getComp7ProductsUrl())
+
+
+class _OpenEarlyAccessVehicleHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showEarlyAccessVehicleView()
+
+
+class _OpenEarlyAccessQuestsHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showEarlyAccessQuestsView()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1487,10 +1512,11 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenArmoryYardQuest,
  _OpenArmoryYardBuyView,
  _OpenAchievementsScreen,
- _OpenWotPlusIntroView,
- _OpenWotDailyRewardView,
  _OpenBarracksHandler,
- _OpenPremShopHandler)
+ _OpenPremShopHandler,
+ _OpenComp7ShopHandler,
+ _OpenEarlyAccessVehicleHandler,
+ _OpenEarlyAccessQuestsHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

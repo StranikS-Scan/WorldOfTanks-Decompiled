@@ -24,4 +24,5 @@ class PROFILE_DROPDOWN_KEYS(object):
     COMP7_SEASON_1 = 'comp7_season_1'
     COMP7_SEASON_2 = 'comp7_season_2'
     COMP7_SEASON_3 = 'comp7_season_3'
+    COMP7_SEASON_4 = 'comp7_season_4'
     VERSUS_AI = 'versusAI'

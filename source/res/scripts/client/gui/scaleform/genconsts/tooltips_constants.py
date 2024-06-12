@@ -22,6 +22,11 @@ class TOOLTIPS_CONSTANTS(object):
     TECHTREE_VEHICLE = 'techtreeVehicle'
     TECHTREE_VEHICLE_ANNOUNCEMENT = 'techtreeVehicleAnnouncement'
     TECHTREE_VEHICLE_STATUS = 'techtreeVehicleStatus'
+    EARLY_ACCESS_PAUSED = 'earlyAccessPaused'
+    EARLY_ACCESS_CAROUSEL_VEHICLE_POST_PROGRESSION = 'earlyAccessCarouselVehiclePostProgression'
+    EARLY_ACCESS_COMMON_INFO = 'earlyAccessCommonInfo'
+    EARLY_ACCESS_VEHICLE_LOCKED = 'earlyAccessVehicleLocked'
+    EARLY_ACCESS_CURRENCY = 'earlyAccessCurrency'
     HISTORICAL_VEHICLE = 'historicalVehicle'
     INVENTORY_SHELL = 'inventoryShell'
     INVENTORY_MODULE = 'inventoryModule'
@@ -80,8 +85,6 @@ class TOOLTIPS_CONSTANTS(object):
     NOT_ENOUGH_MONEY = 'notEnoughMoney'
     CREW_PERK_GF = 'crewPerkGf'
     COMMANDER_BONUS = 'commanderBonus'
-    TANKMAN_SKILL = 'tankmanSkill'
-    PREVIEW_CREW_SKILL = 'previewCrewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
@@ -189,7 +192,6 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
-    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
@@ -346,8 +348,6 @@ class TOOLTIPS_CONSTANTS(object):
     SETTINGS_KEY_CHARGE_FIRE = 'SettingsKeyChargeFire'
     SETTINGS_KEY_CHARGE_FIRE_UI = 'ToolTipInblocksDefaultUI'
     VEH_CMP_SKILLS = 'vehCmpSkills'
-    TANKMAN_SKILL_EXTENDED = 'tankmanSkillExtended'
-    TANKMAN_SKILL_EXTENDED_UI = 'ToolTipInblocksDefaultUI'
     MISSIONS_TOKEN = 'missionsToken'
     MISSIONS_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     BOOTCAMP_AWARD_MEDAL = 'BSTooltipMedalContainer'
@@ -390,14 +390,6 @@ class TOOLTIPS_CONSTANTS(object):
     OPTDEV_SLOT_STATE_EMPTY = 'empty'
     OPTDEV_SLOT_STATE_EMPTY_SELECTED = 'emptySelected'
     OPTDEV_SLOT_STATE_ACTIVE_SELECTED = 'activeSelected'
-    HB_QUESTS_PREVIEW = 'HBBattleQuest'
-    HANGAR_INTERACTIVE_OBJECT = 'hangarInteractiveObject'
-    ENTRY_POINT_TOOLTIP = 'EntryPointTooltip'
-    HB_ORDER_TOOLTIP = 'HBOrderTooltip'
-    HB_UNAVAILABLE_QUEST = 'HBUnavailableQuest'
-    HB_VEHICLE = 'HBVehicle'
-    HB_CALENDAR_TOOLTIP = 'HBCalendarTooltip'
-    HB_SPECIAL_VEHICLES_TOOLTIP = 'HBSpecialVehiclesTooltip'
     LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT = 'lootBoxesVehicleBlueprintFragment'
     LOOT_BOX_TOOLTIP = 'lootBoxTooltip'
     LOOT_BOX_GUARANTEED_REWARD_TOOLTIP = 'lootBoxGuaranteedRewardTooltip'
@@ -672,12 +664,8 @@ class TOOLTIPS_CONSTANTS(object):
     LB_LOBBY_SET = [LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT, LOOT_BOX_TOOLTIP, LOOT_BOX_GUARANTEED_REWARD_TOOLTIP]
     ARMORY_YARD_LOBBY_SET = [ARMORY_YARD_AWARD_VEHICLE]
     WOT_PLUS_SET = [WOT_PLUS]
-    EVENT_SET = [EVENT_SELECTOR_INFO]
-    HISTORICAL_BATTLES_SET = [HB_QUESTS_PREVIEW,
-     HANGAR_INTERACTIVE_OBJECT,
-     ENTRY_POINT_TOOLTIP,
-     HB_ORDER_TOOLTIP,
-     HB_UNAVAILABLE_QUEST,
-     HB_VEHICLE,
-     HB_CALENDAR_TOOLTIP,
-     HB_SPECIAL_VEHICLES_TOOLTIP]
+    EARLY_ACCESS_LOBBY_SET = [EARLY_ACCESS_COMMON_INFO,
+     EARLY_ACCESS_VEHICLE_LOCKED,
+     EARLY_ACCESS_PAUSED,
+     EARLY_ACCESS_CAROUSEL_VEHICLE_POST_PROGRESSION,
+     EARLY_ACCESS_CURRENCY]

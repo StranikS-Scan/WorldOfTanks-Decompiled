@@ -46,12 +46,13 @@ class LuiRules(enum.Enum):
     STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'
     BR_ENTRY_POINT = 'BREntryPoint'
     ARMORY_YARD_ENTRY_POINT = 'ArmoryYardEntryPoint'
+    EARLY_ACCESS_ENTRY_POINT = 'EarlyAccessEntryPoint'
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
     RESOURCE_WELL = 'ResourceWellFlag'
     GUI_COSMIC_ENTRY_POINT = 'CosmicEntryPoint'
-    HB_ENTRY_POINT = 'HBEntryPoint'
+    SUBSCRIPTION_STATE = 'SubscriptionState'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

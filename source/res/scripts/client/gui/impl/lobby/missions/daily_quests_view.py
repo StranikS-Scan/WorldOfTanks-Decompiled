@@ -4,7 +4,7 @@ import logging
 from collections import defaultdict, OrderedDict
 from copy import deepcopy
 import typing
-from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, OFFERS_ENABLED_KEY
+from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, OFFERS_ENABLED_KEY, DailyQuestsLevels
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -21,6 +21,7 @@ from gui.impl.lobby.reroll_tooltip import RerollTooltip
 from gui.impl.lobby.winback.tooltips.main_reward_tooltip import MainRewardTooltip
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
 from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses, packWinBackBonusModelAndTooltipData, cutWinbackTokens
+from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes, getWinbackCompletedQuestsCount
 from gui.impl.pub import ViewImpl
 from gui.selectable_reward.common import WinbackSelectableRewardManager
@@ -35,11 +36,14 @@ from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
+from account_helpers.AccountSettings import AccountSettings, SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from frameworks.wulf import ViewModel
+import itertools
 if typing.TYPE_CHECKING:
     from typing import Optional, List, Dict
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
@@ -70,6 +74,7 @@ class DailyQuestsView(ViewImpl):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    subscriptionController = dependency.descriptor(IWotPlusController)
     battlePassController = dependency.descriptor(IBattlePassController)
     __winbackController = dependency.descriptor(IWinbackController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -93,6 +98,8 @@ class DailyQuestsView(ViewImpl):
             return RerollTooltip(self.__getCountdown(), getRerollTimeout())
         if contentID == R.views.lobby.missions.RerollTooltipWithCountdown():
             return RerollTooltip(self.__getCountdown(), getRerollTimeout(), True)
+        if contentID == R.views.lobby.missions.LockedSubscriptionBonusTooltip():
+            return ViewImpl(ViewSettings(R.views.lobby.missions.LockedSubscriptionBonusTooltip(), model=ViewModel()))
         if contentID == R.views.lobby.winback.tooltips.SelectableRewardTooltip():
             tooltipId = event.getArgument('tooltipId')
             tooltipData = self.__tooltipData.get(tooltipId)
@@ -188,17 +195,29 @@ class DailyQuestsView(ViewImpl):
         _logger.debug('DailyQuestsView::_updateDailyQuestModel')
         isEnabled = isDailyQuestsEnable()
         quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
-        newBonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
+        questsSub = sorted(self.eventsCache.getDailyQuestsSub().values(), key=dailyQuestsSortFunc)
+        newBonusQuest = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
+        newBonusQuestSub = settings.getNewCommonEvents([ q for q in questsSub if q.isBonus() ])
         self._updateRerollEnabledFlag(model)
         with model.dailyQuests.transaction() as tx:
             tx.setIsEnabled(isEnabled)
             if not isEnabled:
                 return
-            if not fullUpdate and not needToUpdateQuestsInModel(quests + newBonusQuests, tx.getQuests()):
+            if not fullUpdate and not needToUpdateQuestsInModel(quests + newBonusQuest + questsSub + newBonusQuestSub, tx.getQuests()):
                 return
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
-            tx.setBonusMissionVisited(not newBonusQuests)
+            tx.setBonusMissionVisited(not newBonusQuest)
+            self._updateDailyQuestSubscriptionModel(tx)
+
+    def _updateDailyQuestSubscriptionModel(self, model):
+        _logger.debug('DailyQuestsView::_updateDailyQuestSubscriptionModel')
+        isEnableSubsQuest = self.lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled()
+        if not isEnableSubsQuest:
+            return
+        quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
+        questsSub = {quest.getID():first(self.eventsCache.getDailyQuestsSub(lambda q, qu=quest: q.getLevel() == DailyQuestsLevels.MAP_DAILY_QUESTS.get(qu.getLevel())).values()) for quest in quests}
+        self.__addSubscriptionQuestsInModel(model.getQuests(), quests, questsSub)
 
     def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
@@ -373,7 +392,8 @@ class DailyQuestsView(ViewImpl):
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged),
          (self.battlePassController.onBattlePassSettingsChange, self.__updateBattlePassData),
          (self.__comp7Controller.onComp7ConfigChanged, self.__updateComp7Data),
-         (self.__winbackController.onConfigUpdated, self.__onWinbackConfigUpdated))
+         (self.__winbackController.onConfigUpdated, self.__onWinbackConfigUpdated),
+         (self.subscriptionController.onDataChanged, self.__updateSubscriptionData))
 
     def __onBuyPremiumBtn(self):
         showShop(getBuyPremiumUrl())
@@ -448,6 +468,23 @@ class DailyQuestsView(ViewImpl):
         questsInModelToUpdate.invalidate()
         return
 
+    def __addSubscriptionQuestsInModel(self, questsInModelToUpdate, sortedQuests, subQuests):
+        _logger.debug('DailyQuestsView::__addSubscriptionQuestsInModel')
+        subscriptionEnable = self.subscriptionController.isWotPlusEnabled()
+        subscriptionActive = self.subscriptionController.isEnabled()
+        for questModel, quest in itertools.izip(questsInModelToUpdate, sortedQuests):
+            questSub = subQuests.get(quest.getID())
+            if questSub:
+                packer = getEventUIDataPacker(questSub, self.__tooltipData[quest.getID()])
+                packer.pack(model=questModel)
+                self.__tooltipData[quest.getID()] = packer.getTooltipData()
+                questModel.setIsEnabledSubscription(subscriptionEnable)
+                questModel.setIsActiveSubscription(subscriptionActive)
+                if quest.isCompleted() and not questSub.isCompleted():
+                    questModel.setStatus(EventStatus.UNDONESUBSCRIPTION)
+
+        questsInModelToUpdate.invalidate()
+
     def __updateMissionVisitedArray(self, missionVisitedArray, quests):
         missionVisitedArray.clear()
         missionVisitedArray.reserve(len(quests))
@@ -462,6 +499,22 @@ class DailyQuestsView(ViewImpl):
         self.__updateBattlePassData()
         self.__updateComp7Data()
         self.__updateOffersData()
+        self.__updateSubscriptionData()
+
+    def __updateSubscriptionData(self, *_):
+        subscriptionEnable = self.subscriptionController.isWotPlusEnabled()
+        subscriptionActive = self.subscriptionController.isEnabled()
+        settingShine = AccountSettings.getSettings(SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN)
+        with self.viewModel.dailyQuests.transaction() as tx:
+            quests = tx.getQuests()
+            for quest in quests:
+                quest.setIsEnabledSubscription(subscriptionEnable)
+                quest.setIsActiveSubscription(subscriptionActive)
+                quest.setIsFirstView(not settingShine)
+
+            quests.invalidate()
+        if subscriptionActive:
+            AccountSettings.setSettings(SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN, True)
 
     def __updateDailyType(self, *_):
         if self.__winbackData:

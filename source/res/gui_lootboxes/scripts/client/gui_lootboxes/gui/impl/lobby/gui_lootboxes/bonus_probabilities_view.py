@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/bonus_probabilities_view.py
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer, Array
-from frameworks.wulf.view.array import fillStringsArray, fillFloatsArray
+from frameworks.wulf.view.array import fillFloatsArray
 from gui.impl.gen import R
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
@@ -22,18 +22,15 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip im
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
 from skeletons.gui.shared import IItemsCache
-_VEHICLES_BONUS_NAME = 'vehicles'
-_SHOW_VEHICLE_ICONS = 'showVehicleIcons'
 SLOT_BONUSES_PROCESSORS = []
 
 class LootBoxSlot(object):
-    __slots__ = ('__id', '__probabilities', '__bonuses', '__bonusType', '__slotSettings')
+    __slots__ = ('__id', '__probabilities', '__bonuses', '__bonusType')
 
-    def __init__(self, id, probabilities, bonuses, bonusesSortTags, slotSettings):
+    def __init__(self, id, probabilities, bonuses, bonusesSortTags):
         self.__id = id
         self.__probabilities = [ round(probability * 100, 2) for probability in probabilities ]
         self.__bonusType = detectBonusType(bonuses)
-        self.__slotSettings = slotSettings
         self.__bonuses = [ b for b in bonuses if self.__isValidBonus(b) ]
         self.__bonuses = sortBonuses(self.__bonuses, bonusesSortTags)
         self.__bonuses = aggregateSimilarBonuses(self.__bonuses)
@@ -51,14 +48,13 @@ class LootBoxSlot(object):
         slotModel.setId(self.__id)
         fillFloatsArray(self.__probabilities, slotModel.getProbabilities())
         slotModel.setBonusType(BonusType(self.__bonusType))
-        fillStringsArray(self.__slotSettings, slotModel.getExtraSlotSettings())
         bonusesModelArray = slotModel.getBonuses()
         packBonusModelAndTooltipData(self.__bonuses, bonusesModelArray, tooltipData, getLootboxesWithPossibleCompensationBonusPacker())
         bonusesModelArray.invalidate()
         return slotModel
 
     def __isValidBonus(self, bonus):
-        return bonus.isShowInGUI() and (self.__bonusType in (BonusType.VEHICLE, BonusType.RENTEDVEHICLE) and bonus.getName() == _VEHICLES_BONUS_NAME or self.__bonusType == BonusType.DEFAULT or _SHOW_VEHICLE_ICONS in self.__slotSettings)
+        return bonus.isShowInGUI()
 
 
 class BonusProbabilitiesView(ViewImpl):
@@ -140,7 +136,7 @@ class BonusProbabilitiesView(ViewImpl):
         lbSlots = []
         for idx, slot in slots.iteritems():
             bonusesSortTags = self.__guiLootBoxes.getBonusesOrder(self.__lootBox.getCategory())
-            lbSlot = LootBoxSlot(id=idx, probabilities=slot.get('probability', [[0]])[0], bonuses=slot.get('bonuses', []), bonusesSortTags=bonusesSortTags, slotSettings=slot.get('slotSettings', []))
+            lbSlot = LootBoxSlot(id=idx, probabilities=slot.get('probability', [[0]])[0], bonuses=slot.get('bonuses', []), bonusesSortTags=bonusesSortTags)
             lbSlots.append(lbSlot)
 
         lbSlots = sorted(lbSlots, key=lambda x: (x.getBonusType().value, -x.getProbabilities()[0]))

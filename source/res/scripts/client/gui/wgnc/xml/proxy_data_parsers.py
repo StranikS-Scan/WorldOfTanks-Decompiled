@@ -178,6 +178,15 @@ class _ReferralBubbleParser(SectionParser):
         return proxy_data.UpdateRefferalBubbleItem()
 
 
+class _SubscriptionStateParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.UpdateSubscriptionStateItem()
+
+
 class _ReferralProgramEnabledChecker(SectionParser):
 
     def getTagName(self):
@@ -386,4 +395,5 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _IntegratedAuctionRateErrorParser(),
          _IntegratedAuctionBelowCompetitiveRateParser(),
          _IntegratedAuctionResultParser(),
-         _IntegratedAuctionLostRateParser()))
+         _IntegratedAuctionLostRateParser(),
+         _SubscriptionStateParser()))

@@ -60,7 +60,6 @@ class BattleRoyaleEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
     def resetPlayerState(self):

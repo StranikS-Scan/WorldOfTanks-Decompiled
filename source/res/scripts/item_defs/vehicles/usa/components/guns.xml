@@ -168,6 +168,7 @@
     <_120mm_Gun_M58_7x7>	31001	</_120mm_Gun_M58_7x7>
     <_75mm_Gun_M6_594>	31003	</_75mm_Gun_M6_594>
     <_105mm_Gun_T141_7x7>	31004	</_105mm_Gun_T141_7x7>
+    <_120mm_Gun_T179_M169_8L>	31005	</_120mm_Gun_T179_M169_8L>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -6949,6 +6950,64 @@
         </_120mm_HE_M356>
       </shots>
     </_120mm_Gun_T179_M169>
+    <_120mm_Gun_T179_M169_8L>
+      <userString>	#usa_vehicles:_120mm_Gun_T179_M169_8L	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	210000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	10.97142857142860	</reloadTime>
+      <maxAmmo>	22	</maxAmmo>
+      <aimingTime>	2.62857142857143	</aimingTime>
+      <weight>	2849	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_APBC_M358_8L>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	218 210	</piercingPower>
+        </_120mm_APBC_M358_8L>
+        <_120mm_HEAT_M830_8L>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1143	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 280	</piercingPower>
+        </_120mm_HEAT_M830_8L>
+        <_120mm_HE_M356_8L>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	762	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE_M356_8L>
+      </shots>
+    </_120mm_Gun_T179_M169_8L>
     <_120mm_Gun_T53A1>
       <userString>	#usa_vehicles:_120mm_Gun_T53A1	</userString>
       <tags></tags>

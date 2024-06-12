@@ -55,6 +55,7 @@ class QUESTS(object):
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
     BONUSES_ITEM_LOOTBOXES = '#quests:bonuses/item/lootBoxes'
+    BONUSES_ITEM_EARLYACCESSTOKEN = '#quests:bonuses/item/earlyAccessToken'
     BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSES_CREWBOOK_TEXT = '#quests:bonuses/crewBook/text'
     BONUSES_CREWSKIN_TEXT = '#quests:bonuses/crewSkin/text'
@@ -1275,6 +1276,8 @@ class QUESTS(object):
     BONUSNAME_FREE_EQUIPMENT_DEMOUNTING = '#quests:bonusName/free_equipment_demounting'
     BONUSNAME_EXCLUSIVE_VEHICLE = '#quests:bonusName/exclusive_vehicle'
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
+    BONUSNAME_TEAM_CREDITS_BONUS = '#quests:bonusName/team_credits_bonus'
+    BONUSNAME_DAILY_QUESTS_REWARDS = '#quests:bonusName/daily_quests_rewards'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1636,6 +1639,10 @@ class QUESTS(object):
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_EASY = '#quests:dailyQuests/postBattle/genericTitle_easy'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_MEDIUM = '#quests:dailyQuests/postBattle/genericTitle_medium'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_HARD = '#quests:dailyQuests/postBattle/genericTitle_hard'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_EASY_SUBS = '#quests:dailyQuests/postBattle/genericTitle_easy_subs'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_MEDIUM_SUBS = '#quests:dailyQuests/postBattle/genericTitle_medium_subs'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_HARD_SUBS = '#quests:dailyQuests/postBattle/genericTitle_hard_subs'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_BONUS_SUBS = '#quests:dailyQuests/postBattle/genericTitle_bonus_subs'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_BONUS = '#quests:dailyQuests/postBattle/genericTitle_bonus'
     DAILYQUESTS_POSTBATTLE_GENERICTITLE_EPIC = '#quests:dailyQuests/postBattle/genericTitle_epic'
     DAILYQUESTS_BONUSQUEST_BONUSMISSIONTITLE = '#quests:dailyQuests/bonusQuest/bonusMissionTitle'
@@ -1672,6 +1679,7 @@ class QUESTS(object):
     INFOPAGE_DAILYMISSIONTITLE = '#quests:infoPage/dailyMissionTitle'
     INFOPAGE_PREMIUMMISSIONSTITLE = '#quests:infoPage/premiumMissionsTitle'
     INFOPAGE_DAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/default'
+    INFOPAGE_DAILYMISSIONS_SUBSCRIPTION_DEFAULT = '#quests:infoPage/dailyMissions/subscription/default'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/battlePassDailyMissions/default'
     INFOPAGE_DAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/winback'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/battlePassDailyMissions/winback'
@@ -1835,7 +1843,9 @@ class QUESTS(object):
      BONUSNAME_EXCLUDED_MAP,
      BONUSNAME_FREE_EQUIPMENT_DEMOUNTING,
      BONUSNAME_EXCLUSIVE_VEHICLE,
-     BONUSNAME_ATTENDANCE_REWARD)
+     BONUSNAME_ATTENDANCE_REWARD,
+     BONUSNAME_TEAM_CREDITS_BONUS,
+     BONUSNAME_DAILY_QUESTS_REWARDS)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

@@ -37,7 +37,6 @@ class HelpPagePriority(object):
     COMP7 = 12
     FLAMETHROWER = 11
     ASSAULT_SPG = 11
-    HB = 12
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -409,7 +408,7 @@ class Comp7PagesBuilder(DetailedHelpPagesBuilder):
         pages = []
         comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
         for pageName in ('seasonModifiers', 'poi', 'roleSkills', 'rules'):
-            addPage(datailedList=pages, headerTitle=comp7Header, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
+            addPage(datailedList=pages, headerTitle=comp7Header, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.comp7.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
 
         return pages
 
@@ -463,35 +462,6 @@ class DevMapsPagesBuilder(DetailedHelpPagesBuilder):
         ctx['isDevMaps'] = arenaVisitor.extra.isMapsInDevelopmentEnabled()
 
 
-class HBPagesBuilder(DetailedHelpPagesBuilder):
-    _SUITABLE_CTX_KEYS = ('isHB',)
-    _IMG_PATH = R.images.historical_battles.gui.maps.icons.hintBackground.inBattleHelp
-
-    @classmethod
-    def priority(cls):
-        return HelpPagePriority.HB
-
-    @classmethod
-    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        isHB = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL_BATTLES
-        ctx['isHB'] = isHB
-        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isHB
-
-    @classmethod
-    def buildPages(cls, ctx):
-        from historical_battles.gui.Scaleform.daapi.view.battle.slides import LoadingScreenSlidesCfg
-        from gui.battle_control import avatar_getter
-        arena = avatar_getter.getArena()
-        hintList = LoadingScreenSlidesCfg.instance().getLoadingScreen(arena.arenaType.geometryName).slides
-        pages = []
-        header = backport.text(R.strings.hb_battle.helpScreen.missionTitle.num(arena.guiType)())
-        for hintData in hintList:
-            battleData = hintData.getBattleData()
-            addPage(datailedList=pages, headerTitle=header, title=battleData.get('title', ''), descr=text_styles.mainBig(battleData.get('description', '')), vKeys=[], buttons=[], image=backport.image(HBPagesBuilder._IMG_PATH.dyn(battleData.get('background', ''))()))
-
-        return pages
-
-
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -506,5 +476,4 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  DualAccuracyPagesBuilder,
  DevMapsPagesBuilder,
  FlameTankPagesBuilder,
- AssaultTankPagesBuilder,
- HBPagesBuilder))
+ AssaultTankPagesBuilder))

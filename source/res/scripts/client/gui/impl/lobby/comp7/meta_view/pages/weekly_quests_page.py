@@ -99,7 +99,12 @@ class WeeklyQuestsPage(PageSubModelPresenter):
 
     def __updateQuests(self, model):
         questCards = []
-        sortedQuestsIds = sorted(self.__quests.keys())
+        questIDs = self.__quests.keys()
+
+        def parseQuestID(questID):
+            return int(questID.split('_')[-1])
+
+        sortedQuestsIds = sorted(questIDs, key=parseQuestID)
         for qID in sortedQuestsIds:
             quest = self.__quests[qID]
             questCardModel = Comp7WeeklyQuestPacker(quest, self.__getPeriodState()).pack()

@@ -18,7 +18,6 @@ from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.utils import decorators
 from helpers import i18n
 from messenger.formatters import TimeFormatter
-from PlayerEvents import g_extPlayerEvents
 
 class _DialogCallbackWrapper(object):
 
@@ -122,17 +121,8 @@ def showPunishmentDialog(arenaType, arenaCreateTime, fairplayViolations, banDura
         messageCtx = {'penaltyType': penaltyType,
          'arenaName': i18n.makeString(arenaType.name),
          'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-         'reason': i18n.makeString(_getLocalizationPunishmentString(msgID, violationName)),
-         'violationName': violationName}
-    ctx = {'messageCtx': messageCtx,
-     'showWindowCallback': None}
-    g_extPlayerEvents.onExtGetCustomPunishmentWindow(ctx)
-    showWindowCallback = ctx.get('showWindowCallback')
-    if showWindowCallback is not None:
-        showWindowCallback()
-        ctx = None
-    else:
-        showDialog(metaClass(key, None, messageCtx), lambda *args: None)
+         'reason': i18n.makeString(_getLocalizationPunishmentString(msgID, violationName))}
+    showDialog(metaClass(key, None, messageCtx), lambda *args: None)
     return
 
 

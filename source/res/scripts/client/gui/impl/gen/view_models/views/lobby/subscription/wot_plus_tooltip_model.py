@@ -9,6 +9,8 @@ class SubscriptionState(IntEnum):
     INACTIVE = 0
     ACTIVE = 1
     CANCELED = 2
+    ERROR = 3
+    TRIAL = 4
 
 
 class WotPlusTooltipModel(ViewModel):

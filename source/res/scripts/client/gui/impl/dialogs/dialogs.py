@@ -99,8 +99,8 @@ def showSingleDialog(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
 
 
 @wg_async
-def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, layer=WindowLayer.UNDEFINED, *args, **kwargs):
-    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, layer, *args, **kwargs)
+def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *args, **kwargs):
+    dialog = FullScreenDialogWindowWrapper.createIfNotExist(layoutID, wrappedViewClass, parent, *args, **kwargs)
     if dialog is not None:
         result = yield wg_await(showSimpleWithResultData(dialog))
         raise AsyncReturn(SingleDialogResult(busy=False, result=result))

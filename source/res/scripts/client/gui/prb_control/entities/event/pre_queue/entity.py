@@ -29,17 +29,7 @@ class EventBattleEntity(PreQueueEntity):
 
     def init(self, ctx=None):
         self.storage.release()
-        g_eventDispatcher.loadHangar()
         return super(EventBattleEntity, self).init(ctx=ctx)
-
-    def fini(self, ctx=None, woEvents=False):
-        if ctx:
-            isExit = ctx.hasFlags(FUNCTIONAL_FLAG.EXIT)
-            isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
-            isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-            if isExit or isSwitch and not isLoadPage:
-                g_eventDispatcher.loadHangar()
-        return super(EventBattleEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def doSelectAction(self, action):
         return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.EVENT_BATTLE else super(EventBattleEntity, self).doSelectAction(action)

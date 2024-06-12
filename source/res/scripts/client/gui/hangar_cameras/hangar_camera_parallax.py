@@ -134,7 +134,7 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
                 k = self.__smoothingMultiplier * min(self.measureDeltaTime(), self.MAX_DT)
                 self.__smoothedCursorPosition = cursorPosition * k + self.__smoothedCursorPosition * (1.0 - k)
             pivotPositionDelta = Math.Vector3(linearEasing(self.__distanceDelta.x, self.__smoothedCursorPosition.x) - linearEasing(self.__distanceDelta.x, prevSmoothedCursorPosition.x), linearEasing(self.__distanceDelta.y, self.__smoothedCursorPosition.y) - linearEasing(self.__distanceDelta.y, prevSmoothedCursorPosition.y), 0)
-            self.__camera.pivotPosition += pivotPositionDelta
+            self.__camera.pivotPosition = self.__camera.targetPivotPosition + pivotPositionDelta
             matrix = Math.Matrix(self.__camera.source)
             yawDelta = cubicEasing(self.__anglesDelta.x, self.__smoothedCursorPosition.x) - cubicEasing(self.__anglesDelta.x, prevSmoothedCursorPosition.x)
             pitchDelta = cubicEasing(self.__anglesDelta.y, self.__smoothedCursorPosition.y) - cubicEasing(self.__anglesDelta.y, prevSmoothedCursorPosition.y)

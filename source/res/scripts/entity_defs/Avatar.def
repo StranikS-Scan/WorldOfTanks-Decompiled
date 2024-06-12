@@ -501,16 +501,6 @@
     <setUpdatedGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
     </setUpdatedGoodiesSnapshot>
-    <sendPlayerBattleLogNotification>
-      <Arg>	STRING	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </sendPlayerBattleLogNotification>
-    <sendEquipmentBattleLogNotification>
-      <Arg>	UINT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
-    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -579,7 +569,7 @@
       </Arg>
     </explodeProjectile>
     <refreshVehicle>
-      <Arg>	UINT16	</Arg>
+      <Arg>	VEH_TYPE_CD	</Arg>
     </refreshVehicle>
     <activateEquipment>
       <Exposed>	OWN_CLIENT	</Exposed>

@@ -885,4 +885,100 @@
     </style>
     <maxNumber>	1	</maxNumber>
   </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch56_BZ_74_1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31112	</id>
+      <tags>	progression_required styleSerialNumber	</tags>
+      <texture>	gui/maps/vehicles/styles/Ch56_BZ_74_1_3DSt.png	</texture>
+      <modelsSet>	Ch56_BZ_74_1_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:3D_Style_Ch56_MT/name	</userString>
+      <description>	#vehicle_customization:3D_Style_Ch56_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:3D_Style_Ch56_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <attachments>
+            <item>
+              <id>	31014	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31016	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	15315	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <attachments>
+            <item>
+              <id>	31014	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31015	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	15301	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <attachments>
+            <item>
+              <id>	31014	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31015	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	31103	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
 </china.xml>

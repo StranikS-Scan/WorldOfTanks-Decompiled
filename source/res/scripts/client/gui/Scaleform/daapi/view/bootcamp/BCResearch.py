@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCResearch.py
 from bootcamp.Bootcamp import g_bootcamp, DISABLED_TANK_LEVELS
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
-from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
+from gui.Scaleform.daapi.view.lobby.techtree.data.research_items_data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS

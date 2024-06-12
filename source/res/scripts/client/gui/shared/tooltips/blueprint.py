@@ -13,8 +13,9 @@ from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData, DynamicBlocksTooltipData
 from gui.shared.utils.requesters.blueprints_requester import SPECIAL_BLUEPRINT_LEVEL
-from helpers import int2roman, i18n
+from helpers import int2roman, i18n, dependency
 from helpers.blueprint_generator import g_blueprintGenerator
+from skeletons.gui.game_control import IEarlyAccessController
 
 class BlueprintTooltipData(BlocksTooltipData):
 
@@ -108,6 +109,7 @@ class ConvertInfoBlueprintTooltipData(BlueprintTooltipData):
 
 
 class VehicleBlueprintTooltipData(BlueprintTooltipData, DynamicBlocksTooltipData):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
 
     def __init__(self, context):
         super(VehicleBlueprintTooltipData, self).__init__(context)
@@ -146,6 +148,15 @@ class VehicleBlueprintTooltipData(BlueprintTooltipData, DynamicBlocksTooltipData
             if self.__vehicle.isUnlocked:
                 self._setWidth(350)
                 return [formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleUnlocked.header())), desc=text_styles.main(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleUnlocked.body())), gap=3, padding=formatters.packPadding(top=1, bottom=-10, left=-1, right=12))]
+            if self.__vehicle.isEarlyAccess:
+                self._setWidth(350)
+                if self.__vehicle.intCD in self.__earlyAccessController.getBlockedVehicles():
+                    title = text_styles.middleTitle(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleIsInEarlyAccessBlocked.header()))
+                    desc = text_styles.main(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleIsInEarlyAccessBlocked.body()))
+                else:
+                    title = text_styles.middleTitle(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleIsInEarlyAccess.header()))
+                    desc = text_styles.main(backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.vehicleIsInEarlyAccess.body()))
+                return [formatters.packTitleDescBlock(title=title, desc=desc, gap=3, padding=formatters.packPadding(top=1, bottom=-10, left=-1, right=12))]
             self._setWidth(420)
             self._setNationFlagCornerBg(self.__vehicle.nationName)
             items.append(self.__packTitleBlock(isShortForm))

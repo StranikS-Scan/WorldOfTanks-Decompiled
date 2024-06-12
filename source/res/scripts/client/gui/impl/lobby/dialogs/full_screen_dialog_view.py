@@ -178,9 +178,9 @@ class FullScreenDialogWindowWrapper(LobbyWindow):
         self._wrappedView.stopWaiting(result)
 
     @classmethod
-    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, layer=WindowLayer.UNDEFINED, *args, **kwargs):
+    def createIfNotExist(cls, layoutID, wrappedViewClass, parent=None, *args, **kwargs):
         currentView = cls.__gui.windowsManager.getViewByLayoutID(layoutID)
-        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, layer=layer) if currentView is None else None
+        return FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent) if currentView is None else None
 
     def _finalize(self):
         if self._blur:

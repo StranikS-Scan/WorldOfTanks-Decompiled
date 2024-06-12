@@ -82,7 +82,7 @@ class BattleHintsController(ViewComponentsController):
         pass
 
     def stopControl(self):
-        pass
+        self.__cancelCurrentHintCallback()
 
     def showHint(self, hintName, data=None):
         component, hint = self.__getComponentAndHint(hintName)

@@ -81,8 +81,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def onSelectionChanged(self, itemID, toInventory, currency):
         item = self.__items[itemID]
-        item.toInventory = toInventory
-        item.removeCurrency = currency
+        if item.itemType == FITTING_TYPES.OPTIONAL_DEVICE:
+            self.__updateItemData(item, toInventory, currency)
         self.__updateTotalCost()
         self.__updateSubmitButton()
 
@@ -243,6 +243,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'icon': self.__vehicle.icon,
          'level': self.__vehicle.level,
          'isElite': self.__vehicle.isElite,
+         'isWotPlus': self.__vehicle.isWotPlus,
          'isPremium': self.__vehicle.isPremium,
          'hasNationGroup': self.__vehicle.hasNationGroup,
          'type': vehType,
@@ -432,6 +433,12 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             self.onWindowClose()
             if self.__isDemountKitEnabled != self.__getIsDemountKitEnabled():
                 event_dispatcher.showVehicleSellDialog(self.__vehInvID)
+
+    def __updateItemData(self, item, toInventory, currency):
+        item.toInventory = toInventory
+        item.removeCurrency = currency
+        item.setAlertIconTooltip(toInventory=toInventory)
+        self.as_updateDeviceS(item.toFlashVO())
 
     def __updateTotalCost(self):
         optionalDevices = _VSDMoney()
@@ -701,7 +708,7 @@ _DEMOUNT_KIT_ONE = _VSDMoney(**{_DK_CURRENCY: 1})
 _WOT_PLUS_ONE = _VSDMoney(**{_WP_CURRENCY: 1})
 
 class _OptionalDeviceData(_VSDItemData):
-    __slots__ = ()
+    __slots__ = ('isRegular',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wotPlus = dependency.descriptor(IWotPlusController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -712,6 +719,8 @@ class _OptionalDeviceData(_VSDItemData):
         self._flashData['isRemovable'] = optDevice.isRemovable
         self._flashData['isModernized'] = optDevice.isModernized
         self._flashData['isWotPlusEnabled'] = isWotPlusEnabled
+        self._flashData['alertIconDataID'] = None
+        self.isRegular = optDevice.isRegular
         removalPrice = optDevice.getRemovalPrice(self.__itemsCache.items)
         if removalPrice.isActionPrice():
             self._flashData['removeActionPrice'] = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
@@ -724,8 +733,20 @@ class _OptionalDeviceData(_VSDItemData):
             if isDemountKitApplicableTo(optDevice):
                 self._itemRemovalPrice += _DEMOUNT_KIT_ONE
         self._flashData['removePrice'] = self._itemRemovalPrice.toDict()
-        self._flashData['alertIconDataID'] = self.__getAlertIconTooltip(optDevice)
+        self.setAlertIconTooltip()
+        return
 
-    @classmethod
-    def __getAlertIconTooltip(cls, optDevice):
-        return '#tooltips:vehicleSellDialog/renderer/alertIconSell' if not optDevice.isModernized else '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct'
+    def setAlertIconTooltip(self, toInventory=True):
+        isSubscriptionEnabled = self.__wotPlus.isEnabled()
+        isFreeEquipmentDemountingEnabled = self.__lobbyContext.getServerSettings().isFreeEquipmentDemountingEnabled()
+        if not toInventory:
+            self._flashData['isAlertVisible'] = True
+            if not self._flashData['isModernized']:
+                self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconSell'
+            else:
+                self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconDeconstruct'
+        elif self.isRegular and not isSubscriptionEnabled and isFreeEquipmentDemountingEnabled:
+            self._flashData['isAlertVisible'] = True
+            self._flashData['alertIconDataID'] = '#tooltips:vehicleSellDialog/renderer/alertIconRemove'
+        else:
+            self._flashData['isAlertVisible'] = False

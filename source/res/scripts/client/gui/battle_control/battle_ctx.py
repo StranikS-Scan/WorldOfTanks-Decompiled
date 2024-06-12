@@ -63,19 +63,17 @@ class BattleContext(IBattleContext):
     def createPlayerFullNameFormatter(self, showVehShortName=True, showClan=True, showRegion=True):
         return self.__playerFormatter.create(showVehShortName and self.__isShowVehShortName, showClan, showRegion)
 
-    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True, showName=True):
+    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         if vID is None:
             vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         vInfo = self.__arenaDP.getVehicleInfo(vID)
-        pf = self.__playerFormatter
-        pf.setVehicleShortNameShown(showVehShortName and self.__isShowVehShortName)
-        pf.setClanShown(showClan)
-        pf.setRegionShown(showRegion)
-        pf.setPlayerNameShown(showName)
-        return pf.format(vInfo, playerName=pName)
+        self.__playerFormatter.setVehicleShortNameShown(showVehShortName and self.__isShowVehShortName)
+        self.__playerFormatter.setClanShown(showClan)
+        self.__playerFormatter.setRegionShown(showRegion)
+        return self.__playerFormatter.format(vInfo, playerName=pName)
 
-    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True, showName=True):
-        return self.getPlayerFullNameParts(vID, avatarSessionID, pName, showVehShortName, showClan, showRegion, showName).playerFullName
+    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+        return self.getPlayerFullNameParts(vID, avatarSessionID, pName, showVehShortName, showClan, showRegion).playerFullName
 
     def isSquadMan(self, vID=None, avatarSessionID=None, prebattleID=None):
         if vID is None:

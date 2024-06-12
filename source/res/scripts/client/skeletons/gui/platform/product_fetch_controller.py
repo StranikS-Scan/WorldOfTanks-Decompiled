@@ -18,3 +18,6 @@ class IUserSubscriptionsFetchController(IProductFetchController):
 
     def getProducts(self, showWaiting=True):
         raise NotImplementedError
+
+    def resetFetch(self):
+        raise NotImplementedError

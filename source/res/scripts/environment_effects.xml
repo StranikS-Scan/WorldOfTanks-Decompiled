@@ -262,9 +262,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_03.srt	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
+      <offset>	0 1.5 0	</offset>
       <wwsoundName></wwsoundName>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_04.srt	</modelName>
@@ -498,9 +497,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_06.srt	</modelName>
-      <offset>	0.000000 1.400000 0.000000	</offset>
+      <offset>	0 0.5 0	</offset>
       <wwsoundName></wwsoundName>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Rose/Rose_White_1m.srt	</modelName>
@@ -1709,9 +1707,8 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn/Hawthorn_08_small.srt	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
+      <offset>	0.000000 0.800000 0.000000	</offset>
       <wwsoundName></wwsoundName>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dry/Bush_Wild_Dry_6m_Small_Ragged.srt	</modelName>
@@ -2344,144 +2341,14 @@
       <wwsound>	ambient_burn_static_mid	</wwsound>
     </model>
     <model>
-      <modelName>	particles/environment/se22/burning_tank.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_small	</wwsound>
+      <modelName>	vegetation/Broadleaves/Live_Oak/Live_Oak_03.srt	</modelName>
+      <offset>	0.000000 10.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_comb_big_01	</wwsound>
     </model>
     <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_07.model	</modelName>
+      <modelName>	content/Hangars/hangar_v3/enviroment/normal/lod0/hd_hv3_013_Bonfire.model	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/fire01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_05.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_window_02.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_window_03_small.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_window_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/normal/lod0/fire_big_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_gasoline_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_Tank_Wheel_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_small	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_big_01.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/se22/firesmoke_long.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/interior/19_monastery_fire_big_all_2.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_small	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/interior/83_kharkiv_fire_big_bld_su_094_kharkivhouse.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/interior/222_fire_big_2.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/interior/83_kharkiv_fire_med_bld_su_094_kharkivhouse.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/interior/99_poland_smoke_firegrass_01.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/se22/fire_window_01.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/se22/fire_window_02.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/se22/firesmoke_big.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se20/grass_fire.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/environment/se22/firesmoke_plane.eff	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/Fire_gasoline_02.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_02.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_04.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/content_deferred/GFX_models/environment/event_se22/FireGrass_03.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_burn_static_grass	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Ivy_Tree/Ivy_Tree_01.srt	</modelName>
-      <offset>	0.000000 7.200000 0.000000	</offset>
-      <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
+      <wwsound>	hangar_summer_07_bonfire	</wwsound>
     </model>
   </lightSounds>
   <birds>

@@ -121,9 +121,6 @@ class SharedPage(BattlePageMeta):
             if self.sessionProvider.isReplayPlaying:
                 component.invokeRegisterComponentForReplay()
 
-    def hasFullScreenView(self, ignoreAlias=None):
-        return False
-
     @uniprof.regionDecorator(label='avatar.show_gui', scope='enter')
     def _populate(self):
         self._startBattleSession()
@@ -273,13 +270,13 @@ class SharedPage(BattlePageMeta):
         self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
-        self._blToggling.difference_update(self._getBattleLoadingVisibleAliases())
+        self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
         if self._hasBattleMessenger() and not avatar_getter.isObserverSeesAll():
             self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)
         if hintPanel and hintPanel.getActiveHint():
             self._blToggling.add(_ALIASES.HINT_PANEL)
-        visible, additionalToggling = self._getBattleLoadingVisibleAliases(), set()
+        visible, additionalToggling = {_ALIASES.BATTLE_LOADING}, set()
         if self.getComponent(_ALIASES.PREBATTLE_AMMUNITION_PANEL) is not None:
             visible.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
             additionalToggling.add(_ALIASES.PREBATTLE_AMMUNITION_PANEL)
@@ -290,7 +287,7 @@ class SharedPage(BattlePageMeta):
 
     def _onBattleLoadingFinish(self):
         self._isBattleLoading = False
-        self._setComponentsVisibility(visible=self._blToggling, hidden=self._getBattleLoadingVisibleAliases())
+        self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
         self._blToggling.clear()
         for component in self._external:
             component.active(True)
@@ -298,9 +295,6 @@ class SharedPage(BattlePageMeta):
         if self.sessionProvider.shared.hitDirection is not None:
             self.sessionProvider.shared.hitDirection.setVisible(True)
         return
-
-    def _getBattleLoadingVisibleAliases(self):
-        return {_ALIASES.BATTLE_LOADING}
 
     def _onDestroyTimerStart(self):
         hintPanel = self.getComponent(_ALIASES.HINT_PANEL)

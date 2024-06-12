@@ -51,10 +51,10 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isExclusiveVehicleEnabled=False, rentPendingVehCD=None, **kwargs):
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, isDailyQuestsExtraRewardsEnabled=False, isTeamCreditsBonusEnabled=False, isExclusiveVehicleEnabled=False, rentPendingVehCD=None, amountOfDailyAttendance=0, **kwargs):
         if kwargs:
             _logger.warning('Not expected argument in WotPlus settings. Check preference.xml. kwargs=%r', kwargs)
-        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance)
+        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, isExclusiveVehicleEnabled=isExclusiveVehicleEnabled, isDailyQuestsExtraRewardsEnabled=isDailyQuestsExtraRewardsEnabled, isTeamCreditsBonusEnabled=isTeamCreditsBonusEnabled, amountOfDailyAttendance=amountOfDailyAttendance)
 
     def setIsFirstTime(self, isFirstTime):
         self.update(isFirstTime=isFirstTime)
@@ -76,6 +76,15 @@ class _WotPlusSettings(utils.SettingRootRecord):
 
     def setDailyAttendancesState(self, isEnabled):
         self.update(isDailyAttendancesEnabled=isEnabled)
+
+    def setDailyQuestsExtraRewardsState(self, isEnabled):
+        self.update(isDailyQuestsExtraRewardsEnabled=isEnabled)
+
+    def setExclusiveVehicleState(self, isEnabled):
+        self.update(isExclusiveVehicleEnabled=isEnabled)
+
+    def setTeamCreditsBonusState(self, isEnabled):
+        self.update(isTeamCreditsBonusEnabled=isEnabled)
 
     def setAmountOfDailyAttendance(self, amount):
         self.update(amountOfDailyAttendance=amount)

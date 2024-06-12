@@ -34,10 +34,7 @@ def getLinkedActionID(groupID, actions):
 
 def parseComplexToken(tokenID):
     match = re.match(COMPLEX_TOKEN_TEMPLATE, tokenID)
-    if match:
-        return TokenComplex(True, match.group('styleID'), match.group('webID'))
-    from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
-    return TokenComplex(True, tokenID, '') if FRONT_COUPON_TOKEN_PREFIX in tokenID else TokenComplex(False, '', '')
+    return TokenComplex(True, match.group('styleID'), match.group('webID')) if match else TokenComplex(False, '', '')
 
 
 class DISCOUNT_TYPE(CONST_CONTAINER):
@@ -272,6 +269,17 @@ def packSimpleBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
      'ellipsis': '..',
      'endline': endlineSymbol,
      'complexTooltip': complexTooltip}
+    return UiElement(data)
+
+
+def packWulfTooltipSimpleBonusesBlock(bonusesList, endlineSymbol='', wulfTooltip='', wulfTooltipArg=''):
+    data = {'linkage': 'QuestTextAwardBlockUI',
+     'items': bonusesList,
+     'separator': ', ',
+     'ellipsis': '..',
+     'endline': endlineSymbol,
+     'wulfTooltip': wulfTooltip,
+     'wulfTooltipArg': wulfTooltipArg}
     return UiElement(data)
 
 

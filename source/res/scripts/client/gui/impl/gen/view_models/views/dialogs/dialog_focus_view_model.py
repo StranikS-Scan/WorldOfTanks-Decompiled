@@ -7,7 +7,7 @@ class DialogFocusViewModel(DialogBaseFocusViewModel):
     NOT_FOCUSED_INDEX = -1
     DEFAULT_FOCUSED_INDEX = 0
 
-    def __init__(self, properties=1, commands=2):
+    def __init__(self, properties=1, commands=1):
         super(DialogFocusViewModel, self).__init__(properties=properties, commands=commands)
 
     def _initialize(self):

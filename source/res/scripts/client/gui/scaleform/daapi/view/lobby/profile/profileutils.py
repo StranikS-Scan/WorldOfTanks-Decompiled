@@ -391,7 +391,7 @@ class _MaxPrestigePointsField(_AbstractField):
 class _MaxWinSeriesField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return '{}/{}'.format(backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxWinSeries())), backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxSquadWinSeries())))
+        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getMaxWinSeries()))
 
 
 class _MaxEquipmentDamageDealtField(_AbstractField):

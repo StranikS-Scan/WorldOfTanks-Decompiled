@@ -4,6 +4,7 @@ from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode, hasSpecifiedSubMode
 from gui.impl import backport
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.periodic_battles.prb_control.scheduler import PeriodicScheduler
 
 class FunRandomScheduler(PeriodicScheduler, FunAssetPacksMixin, FunSubModesWatcher):
@@ -29,6 +30,13 @@ class FunRandomScheduler(PeriodicScheduler, FunAssetPacksMixin, FunSubModesWatch
         self.stopSubSelectionListening(self.__onDesiredSubSelection)
         self.stopSubSettingsListening(self.__onDesiredSubUpdate, desiredOnly=True)
         self.stopSubStatusListening(self.__onDesiredSubUpdate, desiredOnly=True)
+
+    def _getPrimeTimeStatus(self, controller=None):
+        status = super(FunRandomScheduler, self)._getPrimeTimeStatus(controller)
+        if status != PrimeTimeStatus.AVAILABLE:
+            controller = controller or self._getController()
+            status = controller.hasAvailablePrimeTimeServers()
+        return status
 
     @hasDesiredSubMode(defReturn=UNKNOWN_EVENT_ID)
     def __getDesiredSubModeID(self):

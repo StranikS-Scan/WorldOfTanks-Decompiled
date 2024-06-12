@@ -73,6 +73,11 @@
           <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Hull.model	</exploded>
         </G73_E50_Ausf_M_3DSt_ChP21>
+        <G73_E50_Ausf_M_3DSt>
+          <undamaged>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Hull.model	</exploded>
+        </G73_E50_Ausf_M_3DSt>
       </sets>
     </models>
     <swinging>
@@ -966,11 +971,10 @@
         <anchorShift>	-0.123497	</anchorShift>
       </slot>
       <slot>
-        <slotType>	sequence	</slotType>
+        <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
-        <attachNode>	HP_light2	</attachNode>
       </slot>
     </customizationSlots>
     <customization>
@@ -1024,6 +1028,11 @@
             <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Chassis.model	</exploded>
           </G73_E50_Ausf_M_3DSt_ChP21>
+          <G73_E50_Ausf_M_3DSt>
+            <undamaged>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Chassis.model	</exploded>
+          </G73_E50_Ausf_M_3DSt>
         </sets>
       </models>
       <traces>
@@ -1105,6 +1114,51 @@
                   <row3>	-2.018441 1.122693 -0.153608	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G73_E50_Ausf_M_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.100000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.293480 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.040000	</row2>
+                  <row3>	0.000000 1.250830 -0.138090	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.646230	</row2>
+                  <row3>	0.000000 1.466570 -0.308807	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.259303 -0.150871	</row1>
+                  <row2>	0.000000 0.320111 0.550177	</row2>
+                  <row3>	0.000000 1.347710 -3.553150	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.244735 0.173508	</row1>
+                  <row2>	0.000000 -0.368141 0.519267	</row2>
+                  <row3>	0.000000 1.346500 3.114650	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.452688 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.674031	</row2>
+                  <row3>	-2.039176 1.122689 -0.153618	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.200000 -0.000001 -0.000007	</row0>
+                  <row1>	0.000000 0.290419 -0.075213	</row1>
+                  <row2>	0.000001 0.150427 0.580837	</row2>
+                  <row3>	0.000001 0.509142 3.397266	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.090000 0.000243 0.000063	</row0>
+                  <row1>	-0.000034 0.241890 0.177453	</row1>
+                  <row2>	0.000027 -0.354905 0.483780	</row2>
+                  <row3>	0.000927 0.554328 -3.276990	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1171,6 +1225,51 @@
                   <row1>	0.000000 0.452688 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.674032	</row2>
                   <row3>	2.018441 1.122693 -0.153608	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G73_E50_Ausf_M_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	2.100000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.293480 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.040000	</row2>
+                  <row3>	0.000000 1.250830 -0.138090	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.646230	</row2>
+                  <row3>	0.000000 1.466570 -0.308807	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.259303 -0.150871	</row1>
+                  <row2>	0.000000 0.320111 0.550177	</row2>
+                  <row3>	0.000000 1.347710 -3.553150	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.896300 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.244735 0.173508	</row1>
+                  <row2>	0.000000 -0.368141 0.519267	</row2>
+                  <row3>	0.000000 1.346500 3.114650	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.452688 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.674030	</row2>
+                  <row3>	2.039000 1.122690 -0.153608	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.200000 -0.000001 -0.000007	</row0>
+                  <row1>	0.000000 0.290419 -0.075213	</row1>
+                  <row2>	0.000001 0.150427 0.580837	</row2>
+                  <row3>	0.000016 0.444679 3.396683	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.090000 0.000243 0.000063	</row0>
+                  <row1>	-0.000034 0.241890 0.177453	</row1>
+                  <row2>	0.000027 -0.354905 0.483780	</row2>
+                  <row3>	0.000927 0.554328 -3.276985	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -2077,6 +2176,11 @@
                 <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Gun_01.model	</exploded>
               </G73_E50_Ausf_M_3DSt_ChP21>
+              <G73_E50_Ausf_M_3DSt>
+                <undamaged>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </G73_E50_Ausf_M_3DSt>
             </sets>
           </models>
           <hitTester>
@@ -2144,6 +2248,11 @@
             <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt_ChP21/crash/lod0/Turret_01.model	</exploded>
           </G73_E50_Ausf_M_3DSt_ChP21>
+          <G73_E50_Ausf_M_3DSt>
+            <undamaged>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G73_E50_Ausf_M/_skin/G73_E50_Ausf_M_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </G73_E50_Ausf_M_3DSt>
         </sets>
       </models>
       <hitTester>
@@ -2151,7 +2260,7 @@
         <collisionModelClient>	vehicles/german/G73_E50_Ausf_M/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.012205 0.457285 1.11576	</gunPosition>
-      <physicsShape>	0.948 -0.135 0.987 0 0.61 0.1 0.931 0.485 0.398 0.5 0.309 0.5 0.209 0.509 0	</physicsShape>
+      <physicsShape>	0.948 -0.135 1.005 0 0.699 0.06 0.931 0.475 0.367 0.5 0.309 0.5 0.209 0.509 0	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customizationSlots>
         <slot>

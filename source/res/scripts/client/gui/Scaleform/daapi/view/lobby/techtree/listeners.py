@@ -9,7 +9,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController
+from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = getLogger(__name__)
@@ -254,34 +254,42 @@ class _PrbGlobalListener(_Listener, IGlobalListener):
         self._page.clearSelectedNation()
 
 
+class _EarlyAccessListener(_Listener):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+
+    def startListen(self, page):
+        super(_EarlyAccessListener, self).startListen(page)
+        self.__earlyAccessController.onUpdated += self.__onUpdated
+        self.__earlyAccessController.onBalanceUpdated += self.__onUpdated
+
+    def stopListen(self):
+        self.__earlyAccessController.onUpdated -= self.__onUpdated
+        self.__earlyAccessController.onBalanceUpdated -= self.__onUpdated
+        super(_EarlyAccessListener, self).stopListen()
+
+    def __onUpdated(self):
+        self._page.redraw()
+
+
 class TTListenerDecorator(_Listener):
-    __slots__ = ('_stats', '_items', '_wallet', '_prbListener', '_rent', '_restore', '_blueprints')
+    __slots__ = ('_listeners',)
 
     def __init__(self):
         super(TTListenerDecorator, self).__init__()
-        self._stats = _StatsListener()
-        self._items = _ItemsCacheListener()
-        self._wallet = _WalletStatusListener()
-        self._prbListener = _PrbGlobalListener()
-        self._rent = _RentChangeListener()
-        self._restore = _RestoreListener()
-        self._blueprints = _BlueprintsListener()
+        self._listeners = [_StatsListener(),
+         _ItemsCacheListener(),
+         _WalletStatusListener(),
+         _PrbGlobalListener(),
+         _RentChangeListener(),
+         _RestoreListener(),
+         _BlueprintsListener(),
+         _EarlyAccessListener()]
 
     def startListen(self, page):
         proxy = weakref.proxy(page)
-        self._stats.startListen(proxy)
-        self._items.startListen(proxy)
-        self._wallet.startListen(proxy)
-        self._prbListener.startListen(proxy)
-        self._rent.startListen(proxy)
-        self._restore.startListen(proxy)
-        self._blueprints.startListen(proxy)
+        for listener in self._listeners:
+            listener.startListen(proxy)
 
     def stopListen(self):
-        self._stats.stopListen()
-        self._items.stopListen()
-        self._wallet.stopListen()
-        self._prbListener.stopListen()
-        self._rent.stopListen()
-        self._restore.stopListen()
-        self._blueprints.stopListen()
+        for listener in self._listeners:
+            listener.stopListen()

@@ -115,7 +115,7 @@ class Comp7RankBlock(base.StatsBlock):
         currentRankValue = comp7_shared.getRankEnumValue(currentDivision).value
         rankName = comp7_i18n_helpers.RANK_MAP[currentRankValue]
         self.linkage = COMP7_CONSTS.COMP7_RANK_SUB_TASK_UI
-        self.icon = backport.image(R.images.gui.maps.icons.comp7.ranks.c_64.dyn(rankName)())
+        self.icon = backport.image(R.images.comp7.gui.maps.icons.comp7.ranks.c_64.dyn(rankName)())
         self.title = self.__getTitle(currentDivision, prevDivision)
         self.descr = self.__getDescription(achievedRating, currentDivision)
         self.ratingDiff = self.__getRatingDiff(achievedRating)
@@ -178,7 +178,7 @@ class Comp7RankBlock(base.StatsBlock):
             battleState = BattleState.VICTORY
         else:
             battleState = BattleState.DEFEAT
-        return backport.image(R.images.gui.maps.icons.comp7.icons.dyn('battle_{}'.format(battleState.value))())
+        return backport.image(R.images.comp7.gui.maps.icons.comp7.icons.dyn('battle_{}'.format(battleState.value))())
 
 
 class Comp7VehicleStatsBlock(RegularVehicleStatsBlock):

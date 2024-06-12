@@ -2729,6 +2729,10 @@
       <tags></tags>
       <level>	7	</level>
       <price>	18000	</price>
+      <unlocks>
+        <turret>	Turret_2_Cz07_TVP_46	  <cost>	16200	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	65	</armor_1>
         <armor_2>	30	</armor_2>
@@ -2750,7 +2754,7 @@
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2759,8 +2763,6 @@
       <guns>
         <_88mm_Vz_37N>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
-            <gun>	_88mm_vz_41N	  <cost>	17100	</cost>
-            </gun>
             <gun>	_100mm_vz_44S	  <cost>	16550	</cost>
             </gun>
           </unlocks>
@@ -2866,10 +2868,6 @@
           </camouflage>
         </_88mm_Vz_37N>
         <_88mm_vz_41N>	shared	  <maxAmmo>	53	</maxAmmo>
-          <unlocks>
-            <gun>	_105mm_vz_39N	  <cost>	17800	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2974,10 +2972,6 @@
           </camouflage>
         </_88mm_vz_41N>
         <_100mm_vz_44S>	shared	  <maxAmmo>	66	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Cz07_TVP_46	  <cost>	16200	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2999,14 +2993,14 @@
             <maxPitch>	0 8 0.383333 8 0.386111 7.5 0.513889 7.5 0.516667 7 0.519444 6.5 0.522222 6 0.525 6 0.527778 6.5 0.533333 7 0.536111 7.5 0.613889 7.5 0.616667 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	8.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_03.model	</destroyed>
@@ -3103,13 +3097,14 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	10.3	</reloadTime>
+          <reloadTime>	9.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_04.model	</destroyed>
@@ -3669,8 +3664,10 @@
       <level>	8	</level>
       <price>	31800	</price>
       <unlocks>
-        <vehicle>	Cz02_TVP_T50	  <cost>	156150	</cost>
-        </vehicle>
+        <gun>	_105mm_vz_39N	  <cost>	17800	</cost>
+        </gun>
+        <gun>	_88mm_vz_41N	  <cost>	17100	</cost>
+        </gun>
       </unlocks>
       <armor>
         <armor_1>	65	</armor_1>
@@ -3695,7 +3692,7 @@
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -3905,14 +3902,14 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_07.model	</destroyed>
@@ -3978,6 +3975,10 @@
           </camouflage>
         </_100mm_vz_44S>
         <_105mm_vz_39N>	shared	  <maxAmmo>	74	</maxAmmo>
+          <unlocks>
+            <vehicle>	Cz02_TVP_T50	  <cost>	156150	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3997,13 +3998,14 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	9.8	</reloadTime>
+          <reloadTime>	8.8	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_08.model	</destroyed>

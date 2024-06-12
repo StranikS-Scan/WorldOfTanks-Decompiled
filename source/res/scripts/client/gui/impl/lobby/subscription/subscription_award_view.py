@@ -18,6 +18,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
 from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, WotPlusKeys
 from uilogging.wot_plus.loggers import WotPlusRewardTooltipLogger, WotPlusRewardScreenLogger
+from account_helpers.AccountSettings import AccountSettings, SHOWN_WOT_PLUS_COUNTER, SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN
+from renewable_subscription_common.settings_constants import WotPlusState
 if TYPE_CHECKING:
     from typing import Dict, List, Optional
     from gui.impl.backport import TooltipData
@@ -89,12 +91,16 @@ class SubscriptionAwardView(ViewImpl):
                         rewardsList.addViewModel(bonusModel)
                         self.__tooltips[index] = tooltip
 
+            model.setState(self._wotPlusCtrl.getState())
             model.setNextCharge(makeLocalServerTime(self._wotPlusCtrl.getExpiryTime()) or 0)
             rewardsList.invalidate()
 
     def _onLoading(self, *args, **kwargs):
         self._fillViewModel()
         self._soundsOnOpen()
+        if self._wotPlusCtrl.getState() == WotPlusState.ACTIVE:
+            AccountSettings.setSettings(SHOWN_WOT_PLUS_COUNTER, True)
+        AccountSettings.setSettings(SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN, False)
 
     def _onClose(self):
         self.destroyWindow()

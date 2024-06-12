@@ -37,7 +37,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
@@ -66,7 +65,6 @@ class USER(object):
     END_REFERRAL_COMPANY = 'endReferralCompany'
     CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
     CREATE_COMP7_SQUAD = 'createComp7Squad'
-    CREATE_HISTORICAL_BATTLE_SQUAD = 'createHistoricalBattleSquad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
@@ -83,7 +81,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
     __winbackController = dependency.descriptor(IWinbackController)
-    __historicalBattleController = dependency.descriptor(IGameEventController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -186,9 +183,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createComp7Squad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.COMP7_SQUAD, (self.databaseID,))
 
-    def createHistoricalBattleSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.HISTORICAL_BATTLES_SQUAD, (self.databaseID,))
-
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -214,8 +208,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship',
          USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad',
-         USER.CREATE_COMP7_SQUAD: 'createComp7Squad',
-         USER.CREATE_HISTORICAL_BATTLE_SQUAD: 'createHistoricalBattleSquad'}
+         USER.CREATE_COMP7_SQUAD: 'createComp7Squad'}
         if not IS_CHINA:
             handlers.update({USER.SET_MUTED: 'setMuted',
              USER.UNSET_MUTED: 'unsetMuted'})
@@ -314,10 +307,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 primeTimeStatus, _, _ = self.__comp7Ctrl.getPrimeTimeStatus()
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and not self.__comp7Ctrl.isBanned and not self.__comp7Ctrl.isOffline and self.__comp7Ctrl.hasSuitableVehicles() and self.__comp7Ctrl.isQualificationSquadAllowed()
                 options.append(self._makeItem(USER.CREATE_COMP7_SQUAD, MENU.contextmenu(USER.CREATE_COMP7_SQUAD), optInitData={'enabled': canCreate and isEnabled,
-                 'textColor': 13347959}))
-            hbContoller = self.__historicalBattleController
-            if hbContoller.isEnabled() and hbContoller.isBattlesEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.HISTORICAL_BATTLES) and not hbContoller.isBanned:
-                options.append(self._makeItem(USER.CREATE_HISTORICAL_BATTLE_SQUAD, MENU.contextmenu(USER.CREATE_HISTORICAL_BATTLE_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
         return options
 

@@ -8,14 +8,6 @@ from gui.battle_control.controllers.consumables import comp7_equipment_ctrl
 _EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7EquipmentController}
 _REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController}
 
-def updateEquipmentControllers(key, value):
-    _EQUIPMENT_CONTROLLERS.update({key: value})
-
-
-def updateReplayEquipmentControllers(key, value):
-    _REPLAY_EQUIPMENT_CONTROLLERS.update({key: value})
-
-
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:
         return ammo_ctrl.AmmoReplayRecorder(setup.replayCtrl)

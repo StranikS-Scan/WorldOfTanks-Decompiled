@@ -182,6 +182,10 @@
           <state>	visible	</state>
           <value>	True	</value>
         </simple-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
       </checked-ui-state>
       <condition>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>

@@ -201,9 +201,6 @@ class DynObjectsBase(object):
     def getHealPointEffect(self):
         return {}
 
-    def getCircleRestrictionEffect(self):
-        return {}
-
 
 class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 

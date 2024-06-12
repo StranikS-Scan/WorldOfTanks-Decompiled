@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	32	</forward>
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
@@ -77,7 +77,7 @@
     </armor>
     <primaryArmor>	armor_11 armor_17 armor_4	</primaryArmor>
     <weight>	21600	</weight>
-    <maxHealth>	1500	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -2138,23 +2138,16 @@
             <armor_31>	90	</armor_31>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	14	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	14.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.8	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <clip>
-            <count>	2	</count>
-            <rate>	15	</rate>
-          </clip>
-          <autoreload>
-            <reloadTime>	14 19	</reloadTime>
-          </autoreload>
           <models>
             <undamaged>	vehicles/russian/R172_Object_752/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R172_Object_752/crash/lod0/Gun_01.model	</destroyed>
@@ -2165,7 +2158,7 @@
             <collisionModelClient>	vehicles/russian/R172_Object_752/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large_mb	</effects>
-          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2685,7 +2678,7 @@
       <engines>
         <V-12-6B>
           <smplEnginePower>	680	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
         </V-12-6B>
       </engines>
       <chassis>

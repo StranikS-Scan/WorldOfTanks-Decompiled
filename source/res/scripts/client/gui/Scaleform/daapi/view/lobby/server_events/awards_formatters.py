@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
 import typing
+from early_access_common import EARLY_ACCESS_PREFIX
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl import auxiliary
@@ -9,10 +12,15 @@ from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes, formatBlueprint
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
+from gui.shared.money import Currency
+from helpers import dependency
 from nations import NAMES
+from skeletons.gui.game_control import IEarlyAccessController
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import VehiclesBonus
+    from typing import Optional, List
+    from gui.server_events.bonuses import SimpleBonus, VehiclesBonus
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -225,20 +233,59 @@ class NewStyleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
-def getFormattersMap(event):
+class BattleTokenFormatter(OldStyleBonusFormatter):
+    _TOKEN_FORMATTER_PREFIXES = (EARLY_ACCESS_PREFIX,)
+    __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
+
+    def hasCorrespondingTokenFormatter(self, bonus):
+        for tokenID in bonus.getTokens().iterkeys():
+            if any((tokenID.startswith(prefix) for prefix in self._TOKEN_FORMATTER_PREFIXES)):
+                return True
+
+        return False
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        bonuses = super(BattleTokenFormatter, self).extractFormattedBonuses()
+        result = []
+        if not bonuses:
+            return result
+        else:
+            for bonusToken in bonuses:
+                for tokenID, token in bonusToken.getTokens().iteritems():
+                    formattedBlock = None
+                    if tokenID.startswith(EARLY_ACCESS_PREFIX):
+                        formattedBlock = self.__formatEarlyAccessToken(token)
+                    if formattedBlock:
+                        result.append(formattedBlock)
+
+            return result
+
+    def __formatEarlyAccessToken(self, token):
+        tokenCount = token.count
+        if self.__earlyAccessCtrl.getReceivedTokensCount() >= self.__earlyAccessCtrl.getTotalVehiclesPrice():
+            compensation = self.__earlyAccessCtrl.getTokenCompensation(Currency.CREDITS).credits
+            creditsStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'credits', {'value': compensation * tokenCount})
+            resultStr = text_styles.concatStylesWithSpace(backport.text(R.strings.early_access.battleResults.tokenCompensation()), creditsStr)
+            return formatters.packSimpleBonusesBlock([resultStr], endlineSymbol=_EMPTY_STRING)
+        resultStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'earlyAccessToken', {'count': tokenCount})
+        return formatters.packWulfTooltipSimpleBonusesBlock([resultStr], wulfTooltip=TOOLTIPS_CONSTANTS.EARLY_ACCESS_CURRENCY, endlineSymbol=_EMPTY_STRING)
+
+
+def _getFormattersMap(event):
     return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
      'vehicles': VehiclesFormatter(event),
      'crewBooks': CrewBookFormatter(),
      'blueprints': BlueprintsFormatter(),
      'crewSkins': CrewSkinFormatter(),
-     'battlePassPoints': BattlePassPointsFormatter()}
+     'battlePassPoints': BattlePassPointsFormatter(),
+     'battleToken': BattleTokenFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):
 
     def __init__(self, event):
-        super(OldStyleAwardsPacker, self).__init__(getFormattersMap(event))
+        super(OldStyleAwardsPacker, self).__init__(_getFormattersMap(event))
         self.__defaultFormatter = SimpleBonusFormatter()
         self.__newStyleFormatter = NewStyleBonusFormatter()
 
@@ -247,21 +294,29 @@ class OldStyleAwardsPacker(AwardsPacker):
         isCustomizationBonusExist = False
         for b in bonuses:
             if b.isShowInGUI():
-                formatter = self._getBonusFormatter(b.getName())
+                formatter = self._getBonusFormatter(b)
                 if formatter:
                     formatter.accumulateBonuses(b)
                 if b.getName() == 'customizations':
                     isCustomizationBonusExist = True
 
         fmts = [self.__defaultFormatter, self.__newStyleFormatter]
-        fmts.extend(sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()))
+        fmts.extend(sorted(self.getFormattersMap().itervalues(), key=lambda f: f.getOrder()))
         for formatter in fmts:
             formattedBonuses.extend(formatter.extractFormattedBonuses(isCustomizationBonusExist))
 
         return formattedBonuses
 
-    def _getBonusFormatter(self, bonusName):
-        return self.__newStyleFormatter if bonusName in auxiliary.rewards_helper.NEW_STYLE_FORMATTED_BONUSES else self.getFormatters().get(bonusName, self.__defaultFormatter)
+    def _getBonusFormatter(self, bonus):
+        if bonus.getName() in auxiliary.rewards_helper.NEW_STYLE_FORMATTED_BONUSES:
+            return self.__newStyleFormatter
+        elif bonus.getName() == 'battleToken':
+            battleTokenFormatter = self.getFormattersMap().get('battleToken', None)
+            if battleTokenFormatter and battleTokenFormatter.hasCorrespondingTokenFormatter(bonus):
+                return battleTokenFormatter
+            return self.__defaultFormatter
+        else:
+            return self.getFormattersMap().get(bonus.getName(), self.__defaultFormatter)
 
 
 def getTextFormattersMap():
@@ -279,17 +334,18 @@ class BattlePassTextBonusesPacker(AwardsPacker):
         formattedBonuses = []
         for b in bonuses:
             if b.isShowInGUI():
-                formatter = self._getBonusFormatter(b.getName())
+                formatter = self._getBonusFormatter(b)
                 if formatter:
                     formatter.accumulateBonuses(b)
 
-        for formatter in sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()):
+        for formatter in sorted(self.getFormattersMap().itervalues(), key=lambda f: f.getOrder()):
             formattedBonuses.extend(formatter.extractFormattedBonuses())
 
         return formattedBonuses
 
-    def _getBonusFormatter(self, bonusName):
-        formattersMap = self.getFormatters()
+    def _getBonusFormatter(self, bonus):
+        formattersMap = self.getFormattersMap()
+        bonusName = bonus.getName()
         return formattersMap[bonusName] if bonusName in formattersMap else formattersMap.get('default', None)
 
 

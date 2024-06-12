@@ -7,7 +7,6 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQu
 from gui.prb_control.entities.maps_training.pre_queue.actions_validator import MapsTrainingActionsValidator
 from gui.prb_control.entities.maps_training.pre_queue.ctx import MapsTrainingQueueCtx
 from gui.prb_control.entities.maps_training.pre_queue.permissions import MapsTrainingPermissions
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
@@ -38,12 +37,6 @@ class MapsTrainingEntity(PreQueueEntity):
     def leave(self, ctx, callback=None):
         self.storage.suspend()
         self.mapsTrainingController.onExit()
-        if ctx:
-            isExit = ctx.hasFlags(FUNCTIONAL_FLAG.EXIT)
-            isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
-            isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-            if isExit or isSwitch and not isLoadPage:
-                g_eventDispatcher.loadHangar()
         super(MapsTrainingEntity, self).leave(ctx, callback)
 
     def doSelectAction(self, action):

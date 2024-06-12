@@ -4,10 +4,11 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarous
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.comp7.carousel_data_provider import Comp7CarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.comp7.carousel_filter import Comp7CarouselFilter
 from helpers import dependency
-from skeletons.gui.game_control import IDebutBoxesController
+from skeletons.gui.game_control import IDebutBoxesController, IEarlyAccessController
 
 class Comp7TankCarousel(BattlePassTankCarousel):
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
 
     def __init__(self):
         super(Comp7TankCarousel, self).__init__()

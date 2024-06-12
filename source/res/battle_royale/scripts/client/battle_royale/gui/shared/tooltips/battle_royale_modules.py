@@ -67,12 +67,12 @@ class ParamsBlockConstructor(object):
     @staticmethod
     def construct(module, currentModule, vehicle):
         block = []
-        if module.itemTypeID != GUI_ITEM_TYPE.VEHICLE:
-            params = getModuleParameters(module, vehicle, currentModule)
-            leftPadding = 40
-        else:
+        if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             params = getVehicleParameters(vehicle)
             leftPadding = -45
+        else:
+            params = getModuleParameters(module, vehicle, currentModule)
+            leftPadding = 35
         for item in params:
             bottomPadding = 10 if item.get('isLastInGroup', False) else 0
             block.append(formatters.packTextParameterBlockData(name=item['description'], value=item['value'], valueWidth=110, padding=formatters.packPadding(left=leftPadding, bottom=bottomPadding)))

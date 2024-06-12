@@ -155,17 +155,19 @@ class Comp7PrebattleAmmunitionPanelView(PrebattleAmmunitionPanelView):
 
     def updateViewVehicle(self, vehicle, fullUpdate=True):
         super(Comp7PrebattleAmmunitionPanelView, self).updateViewVehicle(vehicle, fullUpdate)
-        roleSkill = self.__getVehicleRoleSkill(vehicle)
-        if roleSkill is None:
+        roleSkill, roleName = self.__getVehicleRoleInfo(vehicle)
+        if roleSkill is None or roleName is None:
             return
         else:
             header, body = getRoleEquipmentTooltipParts(roleSkill)
             with self.viewModel.transaction() as tx:
                 tx.roleSkillSlot.setRoleSkill(roleSkill.name)
+                tx.roleSkillSlot.setRoleName(roleName)
                 tx.roleSkillSlot.setTooltipHeader(header)
                 tx.roleSkillSlot.setTooltipBody(body)
             return
 
-    def __getVehicleRoleSkill(self, vehicle):
+    def __getVehicleRoleInfo(self, vehicle):
         roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-        return self.__comp7Controller.getRoleEquipment(roleName)
+        roleSkill = self.__comp7Controller.getRoleEquipment(roleName)
+        return (roleSkill, roleName)

@@ -14,7 +14,6 @@ from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from soft_exception import SoftException
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 
 class RandomEntryPoint(PreQueueEntryPoint):
 
@@ -38,8 +37,6 @@ class RandomEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), (VIEW_ALIAS.VEH_POST_PROGRESSION,)):
-            g_eventDispatcher.loadHangar()
         return super(RandomEntity, self).fini(ctx, woEvents)
 
     @vehicleAmmoCheck

@@ -373,9 +373,12 @@ class BlinkingLaserSight(EntityExtra):
 
     @staticmethod
     def __onSequenceLoaded(seqName, data, resourceRefs):
-        if seqName not in resourceRefs.failedIDs and data['beamModelRef'] is not None:
-            data['animatorRefs'][seqName].bindTo(AnimationSequence.ModelWrapperContainer(data['beamModelRef'], BigWorld.player().spaceID))
-        return
+        if data['entity'].id == BigWorld.player().vehicle.id:
+            return
+        else:
+            if seqName not in resourceRefs.failedIDs and data['beamModelRef'] is not None:
+                data['animatorRefs'][seqName].bindTo(AnimationSequence.ModelWrapperContainer(data['beamModelRef'], BigWorld.player().spaceID))
+            return
 
     @staticmethod
     def __stopAnimator(data):

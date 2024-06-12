@@ -34,6 +34,8 @@ class RewardScreenTooltips(Enum):
     EXCLUDED_MAP = 'excluded_map_tooltip'
     FREE_EQUIPMENT_MOVEMENT = 'free_equipment_movement_tooltip'
     ATTENDANCE_REWARD = 'attendance_reward_tooltip'
+    TEAM_CREDITS_BONUS = 'team_credits_bonus_tooltip'
+    DAILY_QUESTS_REWARDS = 'daily_quests_rewards_tooltip'
 
 
 class ReservesKeys(Enum):
@@ -47,7 +49,9 @@ class ReservesKeys(Enum):
 class WotPlusStateStr(Enum):
     ACTIVE = 'active'
     INACTIVE = 'inactive'
+    TRIAL = 'trial'
     SUSPENDED = 'suspended'
+    ERROR = 'error'
 
 
 class PremiumAccountStateStr(Enum):

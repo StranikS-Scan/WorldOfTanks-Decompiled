@@ -50,7 +50,6 @@ from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBa
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control.context import GLOBAL_FLAG
 from uilogging.shop.loggers import getPreviewUILoggers
 from uilogging.shop.logging_constants import ShopCloseItemStates
@@ -63,7 +62,8 @@ VEHICLE_PREVIEW_ALIASES = [VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
  VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW,
  VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW]
+ VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW,
+ VIEW_ALIAS.EARLY_ACCESS_VEHICLE_PREVIEW]
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -132,7 +132,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
@@ -215,8 +214,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.__hangarSpace.onSpaceRefresh += self.closeView
         self.__hangarSpace.setVehicleSelectable(True)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        serverSettings.onServerSettingsChange += self.__onServerSettingsChanged
         if not g_currentPreviewVehicle.isPresent():
             event_dispatcher.showHangar()
         if not self._heroInteractive:
@@ -254,8 +251,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__hangarSpace.onSpaceRefresh -= self.closeView
         self.__hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        serverSettings.onServerSettingsChange -= self.__onServerSettingsChanged
         isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingPage()) is not None
         if self._needToResetAppearance and not isMapsTrainingViewOpened:
             g_currentPreviewVehicle.selectNoVehicle()
@@ -445,10 +440,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             elif customizationItem.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
                 g_currentPreviewVehicle.previewCamouflage(customizationItem)
         return
-
-    def __onServerSettingsChanged(self, diff):
-        if not self.__lobbyContext.getServerSettings().isIngamePreviewEnabled():
-            event_dispatcher.showHangar()
 
     def __fullUpdate(self):
         self.__updateHeaderData()

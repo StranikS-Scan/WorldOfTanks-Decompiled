@@ -14,7 +14,8 @@ from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
 from gui.wgnc.image_notification_helper import showPaymentMethodLinkNotification, showPaymentMethodUnlinkNotification
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController, IClanNotificationController
+from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController, IClanNotificationController, IWotPlusController
+from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.system_messages import ISystemMessages
 
@@ -252,6 +253,19 @@ class UpdateRefferalBubbleItem(_ProxyDataItem):
 
     def show(self, _):
         self._referralCtrl.updateBubble()
+
+
+class UpdateSubscriptionStateItem(_ProxyDataItem):
+    _subscriptionCtrl = dependency.descriptor(IWotPlusController)
+    _subscriptionFetchCtrl = dependency.descriptor(IUserSubscriptionsFetchController)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.UNDEFINED
+
+    def show(self, _):
+        if self._subscriptionCtrl.isWotPlusEnabled():
+            self._subscriptionFetchCtrl.resetFetch()
+            self._subscriptionCtrl.resolveState()
 
 
 class UpdateClanNotificationItem(_ProxyDataItem):

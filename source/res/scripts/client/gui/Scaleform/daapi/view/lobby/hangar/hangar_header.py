@@ -39,12 +39,11 @@ from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_DAY
-from historical_battles.quests.quest_flag_manager import QuestFlagManager as HBQuestFlagManager
 from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -256,6 +255,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
@@ -277,8 +277,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             showMissionsBattlePass()
         elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_MAPBOX:
             showMissionsMapboxProgression()
-        elif questType == HANGAR_HEADER_QUESTS.QUEST_GROUP_HB_BATTLE:
-            showMissionsCategories(missionID=questID)
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -308,6 +306,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__updateResourceWellEntryPoint()
         self.__updateCollectiveGoalEntryPoint()
         self.__updateArmoryYardEntryPoint()
+        self.__updateEarlyAccessEntryPoint()
 
     def updateRankedHeader(self, *_):
         self.__updateWidget()
@@ -339,6 +338,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__limitedUIController.startObserve(LuiRules.RESOURCE_WELL, self.__updateResourceWell)
         self.__updateBattleMattersEntryPoint()
         self.__armoryYardCtrl.onUpdated += self.update
+        self.__earlyAccessCtrl.onUpdated += self.update
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update,
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
@@ -370,6 +370,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
         self.__limitedUIController.stopObserve(LuiRules.RESOURCE_WELL, self.__updateResourceWell)
         self.__armoryYardCtrl.onUpdated -= self.update
+        self.__earlyAccessCtrl.onUpdated -= self.update
         self._currentVehicle = None
         self.__screenWidth = None
         self.__activeWidgets = None
@@ -432,11 +433,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             eventQuests = self.__getElenQuestsVO(vehicle)
             if eventQuests:
                 quests.append(eventQuests)
-        if self.__isHistoricalBattlesEnabled():
-            hbQuestFlagManager = HBQuestFlagManager(self._headerQuestFormaterVo, self._wrapQuestGroup)
-            hbQuestGroup = hbQuestFlagManager.getWrappedQuestGroup()
-            if hbQuestGroup:
-                quests.append(hbQuestGroup)
         return quests
 
     def isPersonalMissionEnabled(self):
@@ -444,9 +440,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def isElenQuestsEnabled(self):
         return not self.__comp7Controller.isComp7PrbActive()
-
-    def __isHistoricalBattlesEnabled(self):
-        return self.__limitedUIController.isRuleCompleted(LuiRules.HB_ENTRY_POINT) and not self.__battleRoyaleController.isBattleRoyaleMode()
 
     def __getRankedQuestsToHeaderVO(self):
         quests = []
@@ -656,7 +649,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             label = self.__getBattleRoyaleLableForQuestsTooltip(totalCount, completedQuests)
         else:
             questType = HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON
-        quests = [self._headerQuestFormaterVo(enable=totalCount > 0, icon=commonQuestsIcon, label=label, questType=questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getBattleRoyaleLableForQuestsTooltip(self, totalCount, completedQuests):
@@ -879,6 +872,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateArmoryYardEntryPoint(self):
         self.as_setArmoryYardEntryPointS(self.__armoryYardCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT) and self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7))
+
+    def __updateEarlyAccessEntryPoint(self):
+        self.as_setEarlyAccessEntryPointS(self.__earlyAccessCtrl.isEnabled() and self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7))
 
     def __updateBattleMattersEntryPoint(self):
         isRandom = self.__getCurentArenaBonusType() == constants.ARENA_BONUS_TYPE.REGULAR

@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableObject.py
-from time import time
 import BigWorld
 import SoundGroups
-import Math
 from vehicle_systems.tankStructure import ColliderTypes
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from hangar_selectable_objects import ISelectableObject
@@ -22,8 +20,6 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
-        self.__clickLastPlayTime = 0
-        self.__mouseOverLastPlayTime = 0
         self.model = None
         return
 
@@ -43,7 +39,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
             self.collisions = self.createComponent(BigWorld.CollisionComponent, prereqs['collisionAssembler'])
-            collisionData = ((0, self._getCollisionDataMatrix()),)
+            collisionData = ((0, self.model.matrix),)
             self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
         ScriptGameObject.activate(self)
 
@@ -79,39 +75,18 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         pass
 
     def onMouseClick(self):
-        if not self.clickSoundName or not self.__enabled:
-            return
-        else:
-            if self.__clickSound is None:
+        if self.__clickSound is None:
+            if self.clickSoundName and self.__enabled:
                 if self.isClick3DSound:
                     self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
                 else:
                     self.__clickSound = SoundGroups.g_instance.getSound2D(self.clickSoundName)
-            elif not self.repeatOnClick and self.__clickSound.isPlaying:
-                self.__clickSound.stop()
-                return
-            curTime = time()
-            dt = curTime - self.__clickLastPlayTime
-            if dt < self.clickSoundCooldown:
-                return
-            if self.repeatOnClick and self.__clickSound.isPlaying:
-                self.__clickSound.stop()
-            self.__clickSound.play()
-            self.__clickLastPlayTime = curTime
-            return
-
-    def onMouseEnterPlaySound(self):
-        if not self.mouseOverSoundName or not self.__enabled:
-            return
-        curTime = time()
-        dt = curTime - self.__mouseOverLastPlayTime
-        if dt < self.mouseOverSoundCooldown:
-            return
-        if self.isOver3DSound:
-            SoundGroups.g_instance.playSoundPos(self.mouseOverSoundName, self.model.root.position)
+                self.__clickSound.play()
+        elif self.__clickSound.isPlaying:
+            self.__clickSound.stop()
         else:
-            SoundGroups.g_instance.playSound2D(self.mouseOverSoundName)
-        self.__mouseOverLastPlayTime = curTime
+            self.__clickSound.play()
+        return
 
     def _getModelHeight(self):
         return self.model.height
@@ -119,9 +94,6 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
     def _getCollisionModelsPrereqs(self):
         collisionModels = ((0, self.modelName),)
         return collisionModels
-
-    def _getCollisionDataMatrix(self):
-        return Math.Matrix() if self.model is None else self.model.matrix
 
     def _addEdgeDetect(self):
         BigWorld.wgAddEdgeDetectEntity(self, None, 0, self.edgeMode, False)

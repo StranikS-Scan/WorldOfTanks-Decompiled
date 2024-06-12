@@ -21,7 +21,7 @@ from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
 from vehicles import VEHICLE_CLASS_TAGS, EXTENDED_VEHICLE_TYPE_ID_FLAG
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
-from constants import ITEM_DEFS_PATH, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG
+from constants import ITEM_DEFS_PATH, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
 from account_shared import AmmoIterator
 from soft_exception import SoftException
 if TYPE_CHECKING:
@@ -382,7 +382,7 @@ class TankmanDescr(object):
     def efficiencyFactorOnVehicle(self, vehicleDescrType):
         _, _, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescrType.compactDescr)
         factor = 1.0
-        if any((tag in vehicleDescrType.tags for tag in [VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG])):
+        if any((tag in vehicleDescrType.tags for tag in [VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG])):
             return factor
         if vehicleTypeID != self.vehicleTypeID:
             isPremium, isSameClass = self.__paramsOnVehicle(vehicleDescrType)
@@ -400,8 +400,7 @@ class TankmanDescr(object):
     def getBattleXpGainFactor(self, vehicleType, commanderTutorXpBonusFactor):
         factor = 1.0
         nationID, vehicleTypeID = vehicleType.id
-        vehicleTags = vehicleType.tags
-        if vehicleTypeID != self.vehicleTypeID and VEHICLE_WOT_PLUS_TAG not in vehicleTags:
+        if vehicleTypeID != self.vehicleTypeID:
             isPremium, isSameClass = self.__paramsOnVehicle(vehicleType)
             if isPremium:
                 factor *= 1.0 if isSameClass else 0.5

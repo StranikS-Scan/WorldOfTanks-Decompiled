@@ -2489,4 +2489,42 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A143_M_V_Y	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31126	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/A143_M_V_Y_3DSt.png	</texture>
+      <userString>	#vehicle_customization:3D_Style_A143_MT/name	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:3D_Style_A143_MT/longDescription	</longDescriptionSpecial>
+      <modelsSet>	A143_M_V_Y_3DSt	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31019	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </usa.xml>

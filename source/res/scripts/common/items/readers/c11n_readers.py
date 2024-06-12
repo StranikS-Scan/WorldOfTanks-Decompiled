@@ -12,7 +12,7 @@ import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
 from constants import IS_CLIENT, IS_EDITOR, IS_UE_EDITOR, IS_WEB, IS_LOAD_GLOSSARY, DEFAULT_QUEST_FINISH_TIME
 from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
@@ -177,6 +177,11 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'tags', 'mirror must be false when onlyVerticalMirror set')
             if 'disableVerticalMirror' in target.tags:
                 ix.raiseWrongXml(xmlCtx, 'tags', 'disableVerticalMirror and onlyVerticalMirror cannot be set at the same time')
+        target.emissionSettings = {'emissionMap': section.readString('emissionMap', ''),
+         'emissionPatternMap': section.readString('emissionPatternMap', ''),
+         'forwardEmissionBrightness': section.readFloat('forwardEmissionBrightness', DEFAULT_FORWARD_EMISSION),
+         'deferredEmissionBrightness': section.readFloat('deferredEmissionBrightness', DEFAULT_DEFERRED_EMISSION),
+         'emissionAnimationSpeed': section.readFloat('emissionAnimationSpeed', DEFAULT_EMISSION_ANIMATION_SPEED)}
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
@@ -269,9 +274,15 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
         target.compatibleParts = readFlagEnum(xmlCtx, section, 'compatibleParts', ApplyArea, target.compatibleParts)
         target.componentsCovering = readFlagEnum(xmlCtx, section, 'componentsCovering', ApplyArea, target.componentsCovering)
         target.invisibilityFactor = section.readFloat('invisibilityFactor', 1.0)
+        target.exclusionImpact = section.readFloat('exclusionImpact', 1.0)
         target.glossMetallicSettings = {'glossMetallicMap': section.readString('glossMetallicMap', ''),
          'gloss': section.readVector4('gloss', Math.Vector4(DEFAULT_GLOSS)),
          'metallic': section.readVector4('metallic', Math.Vector4(DEFAULT_METALLIC))}
+        target.emissionSettings = {'emissionMap': section.readString('emissionMap', ''),
+         'emissionPatternMap': section.readString('emissionPatternMap', ''),
+         'forwardEmissionBrightness': section.readFloat('forwardEmissionBrightness', DEFAULT_FORWARD_EMISSION),
+         'deferredEmissionBrightness': section.readFloat('deferredEmissionBrightness', DEFAULT_DEFERRED_EMISSION),
+         'emissionAnimationSpeed': section.readFloat('emissionAnimationSpeed', DEFAULT_EMISSION_ANIMATION_SPEED)}
         if IS_EDITOR:
             if target.camoTypeIndex == -1 and callable(getattr(target, 'setCamoType', None)):
                 try:
@@ -436,7 +447,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
             fn.types = types
         if section.has_key('historical'):
-            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.HISTORICAL, CustomizationDisplayType.FANTASTICAL)
+            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.NON_HISTORICAL)
         return fn
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):

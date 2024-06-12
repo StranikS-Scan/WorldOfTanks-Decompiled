@@ -61,6 +61,8 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+            app.loaderManager.onViewLoadCanceled += self.__onViewLoadCanceled
+            app.loaderManager.onViewLoadError += self.__onViewLoadError
         g_eventBus.addListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -71,6 +73,8 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+            app.loaderManager.onViewLoadCanceled -= self.__onViewLoadCanceled
+            app.loaderManager.onViewLoadError -= self.__onViewLoadError
         g_eventBus.removeListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -431,6 +435,16 @@ class EventDispatcher(object):
             entity = self.__prbDispatcher.getEntity()
             if entity:
                 entity.invalidate()
+        return
+
+    def __onViewLoadError(self, view, *args, **kwargs):
+        if view.alias == self.__loadingEvent:
+            self.__loadingEvent = None
+        return
+
+    def __onViewLoadCanceled(self, view, *args, **kwargs):
+        if view.alias == self.__loadingEvent:
+            self.__loadingEvent = None
         return
 
     def __onViewAddedToContainer(self, _, pyEntity):

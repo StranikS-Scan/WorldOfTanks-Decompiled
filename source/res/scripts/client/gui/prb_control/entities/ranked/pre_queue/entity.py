@@ -56,10 +56,6 @@ class RankedEntity(PreQueueEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        if not woEvents:
-            if not self.canSwitch(ctx):
-                if ctx is None or not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE):
-                    g_eventDispatcher.loadHangar()
         return super(RankedEntity, self).fini(ctx, woEvents)
 
     def invalidate(self):

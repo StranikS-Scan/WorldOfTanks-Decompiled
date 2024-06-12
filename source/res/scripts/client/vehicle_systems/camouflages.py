@@ -23,7 +23,7 @@ from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
@@ -45,9 +45,10 @@ RepaintParams.__new__.__defaults__ = (False,
  Math.Vector4(0.0),
  0.0,
  0.0)
-CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3', 'gloss', 'metallic', 'useGMTexture', 'glossMetallicMap'))
+CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'exclusionImpact', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3', 'gloss', 'metallic', 'useGMTexture', 'glossMetallicMap', 'useEmission', 'forwardEmissionBrightness', 'deferredEmissionBrightness', 'emissionMap', 'emissionAnimationSpeed', 'emissionPatternMap'))
 CamoParams.__new__.__defaults__ = ('',
  '',
+ 1.0,
  Math.Vector4(0.0),
  0,
  Math.Vector4(0.0),
@@ -58,8 +59,14 @@ CamoParams.__new__.__defaults__ = ('',
  Math.Vector4(DEFAULT_GLOSS),
  Math.Vector4(DEFAULT_METALLIC),
  False,
+ '',
+ False,
+ DEFAULT_FORWARD_EMISSION,
+ DEFAULT_DEFERRED_EMISSION,
+ '',
+ DEFAULT_EMISSION_ANIMATION_SPEED,
  '')
-ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'glossDecalMap', 'applyAreas', 'clipAngle', 'mirroredHorizontally', 'mirroredVertically', 'doubleSided', 'scaleBySlotSize'))
+ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'glossDecalMap', 'applyAreas', 'clipAngle', 'mirroredHorizontally', 'mirroredVertically', 'doubleSided', 'scaleBySlotSize', 'useEmission', 'forwardEmissionBrightness', 'deferredEmissionBrightness', 'emissionMap', 'emissionAnimationSpeed', 'emissionPatternMap'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
  Math.Vector3(0.0, 1.0, 0.0),
@@ -71,7 +78,13 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  False,
  False,
- True)
+ True,
+ False,
+ DEFAULT_FORWARD_EMISSION,
+ DEFAULT_DEFERRED_EMISSION,
+ '',
+ DEFAULT_EMISSION_ANIMATION_SPEED,
+ '')
 ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
@@ -366,12 +379,19 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             if not area:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
+            exclusionImpact = camouflage.exclusionImpact
             glossMetallicMap = camouflage.glossMetallicSettings['glossMetallicMap']
             useGMTexture = bool(glossMetallicMap)
             gloss = camouflage.glossMetallicSettings['gloss']
             metallic = camouflage.glossMetallicSettings['metallic']
+            emissionMap = camouflage.emissionSettings['emissionMap']
+            useEmission = bool(emissionMap)
+            emissionPatternMap = camouflage.emissionSettings['emissionPatternMap']
+            forwardEmissionBrightness = camouflage.emissionSettings['forwardEmissionBrightness']
+            deferredEmissionBrightness = camouflage.emissionSettings['deferredEmissionBrightness']
+            emissionAnimationSpeed = camouflage.emissionSettings['emissionAnimationSpeed']
             camoAngle = camouflage.rotation[descId]
-            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3], gloss, metallic, useGMTexture, glossMetallicMap)
+            result = CamoParams(camouflage.texture, exclusionMap or '', exclusionImpact, tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3], gloss, metallic, useGMTexture, glossMetallicMap, useEmission, forwardEmissionBrightness, deferredEmissionBrightness, emissionMap, emissionAnimationSpeed, emissionPatternMap)
         return result
 
 
@@ -839,12 +859,12 @@ def __getFixedProjectionDecalParams(slotParams):
     tintColor = __getProjectionDecalTintColor()
     mirroredHorizontally = slotParams.options & Options.MIRRORED_HORIZONTALLY
     mirroredVertically = slotParams.options & Options.MIRRORED_VERTICALLY
-    params = ProjectionDecalGenericParams(tintColor=tintColor, position=Math.Vector3(slotParams.position), rotation=Math.Vector3(slotParams.rotation), scale=Math.Vector3(slotParams.scale), decalMap=item.texture, glossDecalMap=item.glossTexture, applyAreas=slotParams.showOn, clipAngle=slotParams.clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=slotParams.doubleSided, scaleBySlotSize=True)
+    params = ProjectionDecalGenericParams(tintColor=tintColor, position=Math.Vector3(slotParams.position), rotation=Math.Vector3(slotParams.rotation), scale=Math.Vector3(slotParams.scale), decalMap=item.texture, glossDecalMap=item.glossTexture, applyAreas=slotParams.showOn, clipAngle=slotParams.clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=slotParams.doubleSided, scaleBySlotSize=True, useEmission=bool(item.emissionSettings['emissionMap']), forwardEmissionBrightness=item.emissionSettings['forwardEmissionBrightness'], deferredEmissionBrightness=item.emissionSettings['deferredEmissionBrightness'], emissionMap=item.emissionSettings['emissionMap'], emissionAnimationSpeed=item.emissionSettings['emissionAnimationSpeed'], emissionPatternMap=item.emissionSettings['emissionPatternMap'])
     return params
 
 
 def __getProjectionDecalParams(vehDesc, item, component, slotParams=None):
-    texture, glossTexture = __getProjectionDecalTextures(item, component, vehDesc)
+    texture, glossTexture, emissionTexture, patternTexture = __getProjectionDecalTextures(item, component, vehDesc)
     if texture is None or glossTexture is None:
         _logger.error('Failed to get textures for Projection Decal: %(itemId)s; Vehicle: %(vehName)s; Component: %(component)s', {'itemId': item.id,
          'vehName': vehDesc.type.name,
@@ -867,7 +887,7 @@ def __getProjectionDecalParams(vehDesc, item, component, slotParams=None):
             applyAreas = slotParams.showOn
             clipAngle = slotParams.clipAngle
             doubleSided = slotParams.doubleSided
-        params = ProjectionDecalGenericParams(tintColor=tintColor, position=position, rotation=rotation, scale=scale, decalMap=texture, glossDecalMap=glossTexture, applyAreas=applyAreas, clipAngle=clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=doubleSided, scaleBySlotSize=True)
+        params = ProjectionDecalGenericParams(tintColor=tintColor, position=position, rotation=rotation, scale=scale, decalMap=texture, glossDecalMap=glossTexture, applyAreas=applyAreas, clipAngle=clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=doubleSided, scaleBySlotSize=True, useEmission=bool(emissionTexture), forwardEmissionBrightness=item.emissionSettings['forwardEmissionBrightness'], deferredEmissionBrightness=item.emissionSettings['deferredEmissionBrightness'], emissionMap=emissionTexture, emissionAnimationSpeed=item.emissionSettings['emissionAnimationSpeed'], emissionPatternMap=patternTexture)
         return params
 
 
@@ -897,8 +917,13 @@ def __getProjectionDecalScale(component, slotParams=None):
 def __getProjectionDecalTextures(item, component, vehDesc):
     texture = item.texture
     glossTexture = item.glossTexture
+    emissionTexture = item.emissionSettings['emissionMap']
+    patternTexture = item.emissionSettings['emissionPatternMap']
     if IS_EDITOR:
-        return (texture, glossTexture)
+        return (texture,
+         glossTexture,
+         emissionTexture,
+         patternTexture)
     else:
         if item.isProgressive():
             progressionLevel = component.progressionLevel
@@ -913,9 +938,16 @@ def __getProjectionDecalTextures(item, component, vehDesc):
                 texture = Customization.getTextureByProgressionLevel(texture, progressionLevel)
                 if glossTexture:
                     glossTexture = Customization.getTextureByProgressionLevel(glossTexture, progressionLevel)
+                if emissionTexture:
+                    emissionTexture = Customization.getTextureByProgressionLevel(emissionTexture, progressionLevel)
+                if patternTexture:
+                    patternTexture = Customization.getTextureByProgressionLevel(patternTexture, progressionLevel)
             else:
-                return (None, None)
-        return (texture, glossTexture)
+                return (None, None, None, None)
+        return (texture,
+         glossTexture,
+         emissionTexture,
+         patternTexture)
 
 
 def getOutfitData(appearance, outfit, vehicleDescr, isDamaged):

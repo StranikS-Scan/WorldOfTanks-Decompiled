@@ -789,7 +789,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <tags>	heavyTank role_HT_break HD heavyTank2 tankRammer_class1_user improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals wotPlus debutBoxes private	</tags>
     <level>	9	</level>
   </R172_Object_752>
   <R165_Object_703_II_2>
@@ -950,7 +950,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal	</tags>
+    <tags>	mediumTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user role_MT_universal private secret	</tags>
     <level>	10	</level>
   </R97_Object_140_cl>
   <R193_M4A2_T_34>
@@ -2327,73 +2327,4 @@
     <tags>	SPG role_SPG_assault spgOnlyArtyMode assaultSPG HD heavySPG tankRammer_class1_user extraHealthReserve_class1_user improvedVentilation_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
     <level>	8	</level>
   </R164_U_18_T>
-  <R04_T-34_Player_MT1_may24_hb>
-    <id>	2293	</id>
-    <userString>	#ussr_vehicles:T-34_Player_MT1_may24_hb	</userString>
-    <description>	#ussr_vehicles:T-34_descr_Player_MT1_may24_hb	</description>
-    <price>	356700	</price>
-    <notInShop>	True	</notInShop>
-    <tags>	mediumTank private HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	1	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-  </R04_T-34_Player_MT1_may24_hb>
-  <R13_KV1s_Player_HT1_may24_hb>
-    <id>	2295	</id>
-    <userString>	#ussr_vehicles:R13_KV1s_Player_HT1_may24_hb	</userString>
-    <description>	#ussr_vehicles:R13_KV1s_Player_HT1_may24_hb_descr	</description>
-    <price>	390000	</price>
-    <notInShop>	True	</notInShop>
-    <tags>	heavyTank private HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	1	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-  </R13_KV1s_Player_HT1_may24_hb>
-  <R02_SU_85_Player_AT1_may24_hb>
-    <id>	2296	</id>
-    <userString>	#ussr_vehicles:R02_SU_85_Player_AT1_may24_hb	</userString>
-    <description>	#ussr_vehicles:R02_SU_85_Player_AT1_may24_hb_descr	</description>
-    <price>	390000	</price>
-    <notInShop>	True	</notInShop>
-    <tags>	AT-SPG private HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	1	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-  </R02_SU_85_Player_AT1_may24_hb>
-  <R175_IS_2_screen_Player_HT2_may24_hb>
-    <id>	2299	</id>
-    <userString>	#ussr_vehicles:R175_IS_2_screen_Player_HT2_may24_hb	</userString>
-    <shortUserString>	#ussr_vehicles:R175_IS_2_screen_short_Player_HT2_may24_hb	</shortUserString>
-    <description>	#ussr_vehicles:R175_IS_2_screen_descr_Player_HT2_may24_hb	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R175_IS_2_screen_long_special	</longDescriptionSpecial>
-    <price>	8000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank private HD sinai improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	2	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-  </R175_IS_2_screen_Player_HT2_may24_hb>
-  <R108_T34_85M_Player_MT2_may24_hb>
-    <id>	2230	</id>
-    <userString>	#ussr_vehicles:R108_T34_85M_Player_MT2_may24_hb	</userString>
-    <shortUserString>	#ussr_vehicles:R108_T34_85M_short_Player_HT2_may24_hb	</shortUserString>
-    <description>	#ussr_vehicles:R108_T34_85M_descr_Player_MT2_may24_hb	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_long_special	</longDescriptionSpecial>
-    <price>	6000	</price>
-    <tags>	mediumTank private HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	2	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R108_T34_85M_Player_MT2_may24_hb>
-  <R47_ISU-152_Zveroboj_Player_AT2_may24_hb>
-    <id>	2231	</id>
-    <userString>	#ussr_vehicles:R47_ISU-152_Zveroboj_Player_AT2_may24_hb	</userString>
-    <description>	#ussr_vehicles:R47_ISU-152_Zveroboj_descr_Player_AT2_may24_hb	</description>
-    <shortUserString>	#ussr_vehicles:R47_ISU-152_Zveroboj_short_Player_AT2_may24_hb	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R47_ISU-152_Zveroboj_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R47_ISU-152_Zveroboj_long_special	</longDescriptionSpecial>
-    <price>	11000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG private HD sinai heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user shellCasingsEjection hidden_in_hangar event_battles event_overturn_recovery cannot_be_sold lockOutfit lockCrew secret	</tags>
-    <level>	2	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-  </R47_ISU-152_Zveroboj_Player_AT2_may24_hb>
 </list.xml>

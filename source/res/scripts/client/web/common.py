@@ -50,11 +50,12 @@ def formatReferralProgramInfo(lobbyContext=None, itemsCache=None):
     rpPoints = entitlements.get(RP_POINT, 0)
     pgbLimitPoints = refProgram.getRPPgbPoints()
     timeLeft = max(refProgram.getRPExpirationTime() - int(getServerUTCTime()), 0)
-    configLimits = lobbyContext.getServerSettings().getRPConfig().asDict()
+    configLimits = lobbyContext.getServerSettings().getRPConfig()
     passiveIncome = refProgram.getRPPassiveIncome()
     return {'rp_pgb_points': rpPgbPoints,
      'rp_points': rpPoints,
      'rp_pgb_limit_points': pgbLimitPoints,
      'rp_time_left': timeLeft,
-     'rp_config_limits': configLimits,
+     'rp_config_limits': {'pgbCapacity': configLimits.pgbCapacity,
+                          'pgbDayLimit': configLimits.pgbDayLimit},
      'rp_passive_income': passiveIncome}

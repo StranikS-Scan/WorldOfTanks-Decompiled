@@ -58,7 +58,7 @@ from helpers.time_utils import ONE_MINUTE
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController
+from skeletons.gui.game_control import IWotPlusController, IBattlePassController, IBattleRoyaleController, IBootcampController, IComp7Controller, IEpicBattleMetaGameController, IGuiLootBoxesController, IFunRandomController, IIGRController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IHangarGuiController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -111,6 +111,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -260,6 +261,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.battlePassController.onSeasonStateChanged += self.__switchCarousels
         self.__debutBoxesController.onStateChanged += self.__onDebutBoxesStatusChange
+        self.__earlyAccessController.onUpdated += self.__onEarlyAccessStatusChange
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -320,6 +322,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.__earlyAccessController.onUpdated -= self.__onEarlyAccessStatusChange
         self.__debutBoxesController.onStateChanged -= self.__onDebutBoxesStatusChange
         self.battlePassController.onSeasonStateChanged -= self.__switchCarousels
         self.__timer.clearCallbacks()
@@ -731,6 +734,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateDogTagsState()
 
     def __onDebutBoxesStatusChange(self):
+        self.__switchCarousels(True)
+
+    def __onEarlyAccessStatusChange(self):
         self.__switchCarousels(True)
 
     def __updateCarouselEventEntryState(self):

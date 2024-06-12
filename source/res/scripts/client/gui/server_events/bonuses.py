@@ -11,7 +11,7 @@ from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID
+from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID, COMP7_TOKEN_COUPON_REWARD_NAME, COMP7_TOKEN_COUPON_REWARD_ID
 from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -55,7 +55,6 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
-from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items import tankmen, vehicles
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -623,22 +622,6 @@ class BattleTokensBonus(TokensBonus):
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
 
-class HBCouponTokenBonus(BattleTokensBonus):
-
-    def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(HBCouponTokenBonus, self).__init__(name, value, isCompensation, ctx)
-        self._name = 'HBCoupon'
-
-    def formatValue(self):
-        result = []
-        awardTemplate = R.strings.hb_tooltips.quest.award
-        for tokenID, tokenData in self._value.iteritems():
-            userName = backport.text(awardTemplate(), bonusName=tokenID.split('_')[-1], count=tokenData['count'])
-            result.append(userName)
-
-        return ', '.join(result) if result else None
-
-
 class BattlePassTokensBonus(TokensBonus):
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
@@ -654,6 +637,20 @@ class Comp7TokenWeeklyRewardBonus(TokensBonus):
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(Comp7TokenWeeklyRewardBonus, self).__init__(name, value, isCompensation, ctx)
         self._name = COMP7_TOKEN_WEEKLY_REWARD_NAME
+
+    def isShowInGUI(self):
+        return True
+
+    def getTooltip(self):
+        header = TOOLTIPS.getAwardHeader(self.getName())
+        body = TOOLTIPS.getAwardBody(self.getName())
+        return makeTooltip(header or None, body or None)
+
+
+class Comp7TokenCouponBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(Comp7TokenCouponBonus, self).__init__(COMP7_TOKEN_COUPON_REWARD_NAME, value, isCompensation, ctx)
 
     def isShowInGUI(self):
         return True
@@ -1237,10 +1234,10 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(COMP7_TOKEN_WEEKLY_REWARD_ID):
             result.append(Comp7TokenWeeklyRewardBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(COMP7_TOKEN_COUPON_REWARD_ID):
+            result.append(Comp7TokenCouponBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(COLLECTION_ITEM_TOKEN_PREFIX_NAME):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
-        if tID.startswith(FRONT_COUPON_TOKEN_PREFIX):
-            result.append(HBCouponTokenBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1800,11 +1797,6 @@ class BadgesGroupBonus(SimpleBonus):
 
 
 class DossierBonus(SimpleBonus):
-    DOSSIER_BONUS = 'dossier'
-
-    @staticmethod
-    def hasBadges(bonus):
-        return False if not isinstance(bonus, DossierBonus) else len(bonus.getBadges()) > 0
 
     def getRecords(self):
         records = {}
@@ -2240,6 +2232,18 @@ class UniversalCrewbook(SimpleBonus):
         return first(bonusCls(options.get('name'), options.get('value')))
 
 
+def subscriptionBonusFactory(name, value, isCompensation=False, ctx=None):
+    subsBonus = {WoTPlusBonusType.GOLD_BANK: GoldBank,
+     WoTPlusBonusType.IDLE_CREW_XP: IdleCrewXP,
+     WoTPlusBonusType.EXCLUDED_MAP: ExcludedMap,
+     WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: FreeEquipmentDemounting,
+     WoTPlusBonusType.EXCLUSIVE_VEHICLE: WoTPlusExclusiveVehicle,
+     WoTPlusBonusType.ATTENDANCE_REWARD: AttendanceReward,
+     WoTPlusBonusType.TEAM_CREDITS_BONUS: TeamCreditsBonus,
+     WoTPlusBonusType.DAILY_QUESTS_REWARDS: DailyQuestsRewards}
+    return subsBonus.get(value)()
+
+
 class WoTPlusBonus(SimpleBonus):
 
     def __init__(self, name):
@@ -2283,6 +2287,18 @@ class FreeEquipmentDemounting(WoTPlusBonus):
 
     def __init__(self):
         super(FreeEquipmentDemounting, self).__init__(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
+
+
+class TeamCreditsBonus(WoTPlusBonus):
+
+    def __init__(self):
+        super(TeamCreditsBonus, self).__init__(WoTPlusBonusType.TEAM_CREDITS_BONUS)
+
+
+class DailyQuestsRewards(WoTPlusBonus):
+
+    def __init__(self):
+        super(DailyQuestsRewards, self).__init__(WoTPlusBonusType.DAILY_QUESTS_REWARDS)
 
 
 class WoTPlusExclusiveVehicle(WoTPlusBonus):
@@ -2902,12 +2918,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'selectableCrewbook': UniversalCrewbook,
  'randomCrewbook': UniversalCrewbook,
  'currencies': CurrenciesBonus,
- WoTPlusBonusType.GOLD_BANK: GoldBank,
- WoTPlusBonusType.IDLE_CREW_XP: IdleCrewXP,
- WoTPlusBonusType.EXCLUDED_MAP: ExcludedMap,
- WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: FreeEquipmentDemounting,
- WoTPlusBonusType.EXCLUSIVE_VEHICLE: WoTPlusExclusiveVehicle,
- WoTPlusBonusType.ATTENDANCE_REWARD: AttendanceReward}
+ 'subscriptionBonus': subscriptionBonusFactory}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

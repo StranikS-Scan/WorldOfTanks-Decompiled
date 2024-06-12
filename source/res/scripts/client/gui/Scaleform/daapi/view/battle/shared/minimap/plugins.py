@@ -775,9 +775,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self._hideVehicle(entry)
                 self._notifyVehicleRemoved(vehicleID)
 
-    def eventSwitchToVehicle(self, prevCtrlID):
-        self.__switchToVehicle(prevCtrlID)
-
     def _notifyVehicleAdded(self, vehicleID):
         pass
 
@@ -791,18 +788,15 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vehicleType = vInfo.vehicleType
         return vehicleType.shortNameWithPrefix
 
-    def _getClassTag(self, vInfo):
-        return vInfo.vehicleType.classTag
-
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
-        classTag = self._getClassTag(vInfo)
+        classTag = vInfo.vehicleType.classTag
         name = self._getDisplayedName(vInfo)
         if classTag is not None:
             entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, entry.getClassTag(), name, entry.getGUILabel(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -1083,26 +1077,23 @@ class EquipmentsPlugin(common.IntervalPlugin):
         super(EquipmentsPlugin, self).stop()
         return
 
-    def _getMarkerSymbol(self, marker):
-        return settings.EQ_MARKER_TO_SYMBOL.get(marker)
-
     def __onEquipmentMarkerShown(self, equipment, position, _, interval, team=None):
         uniqueID = self.__generator.next()
         arenaDP = self.sessionProvider.getArenaDP()
         isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
         marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
-        symbol = self._getMarkerSymbol(marker)
-        if symbol is None:
+        if marker in settings.EQ_MARKER_TO_SYMBOL:
+            symbol = settings.EQ_MARKER_TO_SYMBOL[marker]
+        else:
             LOG_ERROR('Symbol is not found for equipment', equipment)
             return
-        else:
-            matrix = minimap_utils.makePositionMatrix(position)
-            model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
-            if model is not None:
-                if team is not None:
-                    self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
-                self._setCallback(uniqueID, interval)
-            return
+        matrix = minimap_utils.makePositionMatrix(position)
+        model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
+        if model is not None:
+            if team is not None:
+                self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
+            self._setCallback(uniqueID, interval)
+        return
 
 
 class AreaStaticMarkerPlugin(common.EntriesPlugin):
@@ -1531,48 +1522,6 @@ class RadarPlugin(common.SimplePlugin, IRadarListener):
 
 class AreaMarkerEntriesPlugin(common.BaseAreaMarkerEntriesPlugin):
     pass
-
-
-class DeathZonesMinimapPlugin(common.EntriesPlugin):
-    __slots__ = ('_activeDeathZones', '_scaleCoefX', '_scaleCoefY')
-    _SYMBOL_NAME = 'EventDeathZoneMinimapEntryUI'
-    _MINIMAP_1M_IN_PX = 0.21
-
-    def __init__(self, parentObj):
-        super(DeathZonesMinimapPlugin, self).__init__(parentObj)
-        self._activeDeathZones = {}
-        self._updateScaleCoefs()
-
-    def start(self):
-        super(DeathZonesMinimapPlugin, self).start()
-        g_playerEvents.onStaticDeathZoneActivated += self._onStaticDeathZoneActivated
-        g_playerEvents.onStaticDeathZoneDeactivated += self._onStaticDeathZoneDeactivated
-
-    def fini(self):
-        g_playerEvents.onStaticDeathZoneActivated -= self._onStaticDeathZoneActivated
-        g_playerEvents.onStaticDeathZoneDeactivated -= self._onStaticDeathZoneDeactivated
-        super(DeathZonesMinimapPlugin, self).fini()
-
-    def _onStaticDeathZoneActivated(self, zone):
-        zoneId = zone.zoneId
-        topLeft, bottomRight = zone.getCorners()
-        if zoneId in self._activeDeathZones:
-            return
-        matrix = minimap_utils.makePositionMatrix(topLeft)
-        entryID = self._addEntry(self._SYMBOL_NAME, _C_NAME.ICONS, matrix=matrix, active=True)
-        self._activeDeathZones[zoneId] = entryID
-        self._invoke(entryID, 'setZoneSize', abs(bottomRight[0] - topLeft[0]) * self._scaleCoefX, abs(bottomRight[2] - topLeft[2]) * self._scaleCoefY)
-
-    def _onStaticDeathZoneDeactivated(self, zoneId):
-        entryID = self._activeDeathZones.pop(zoneId, None)
-        if entryID:
-            self._delEntry(entryID)
-        return
-
-    def _updateScaleCoefs(self):
-        arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
-        self._scaleCoefX = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
-        self._scaleCoefY = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
 
 
 class _BaseEnemySPGImpl(object):

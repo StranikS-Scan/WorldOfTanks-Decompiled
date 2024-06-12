@@ -4,7 +4,7 @@ import operator
 from collections import defaultdict
 from enum import Enum
 import nations
-from constants import IGR_TYPE, FLAG_ACTION, ROLE_TYPE
+from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE, ROLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
@@ -16,7 +16,6 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
-from historical_battles_common.hb_constants_extension import ARENA_GUI_TYPE
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
@@ -158,15 +157,8 @@ class PlayerInfoVO(object):
         self.forbidInBattleInvitations = forbidInBattleInvitations
         self.isTeamKiller = False
 
-    def __repr__(self):
-        return 'PlayerInfoVO(accountDBID={}, avatarSessionID={}, name={}, fakeName={}, clanAbbrev={}, igrType={}, personaMissionIDs={}, personalMissionInfo={}, isPrebattleCreator={}, forbidInBattleInvitations={}, isTeamKiller={})'.format(self.accountDBID, self.avatarSessionID, self.name, self.fakeName, self.clanAbbrev, self.igrType, self.personaMissionIDs, self.personalMissionInfo, self.isPrebattleCreator, self.forbidInBattleInvitations, self.isTeamKiller)
-
     def __cmp__(self, other):
         return cmp(self.name, other.name)
-
-    @property
-    def isBot(self):
-        return self.accountDBID <= 0
 
     def update(self, invalidate=_INVALIDATE_OP.NONE, name=None, accountDBID=0, avatarSessionID='', clanAbbrev='', isPrebattleCreator=False, igrType=IGR_TYPE.NONE, forbidInBattleInvitations=False, fakeName='', **kwargs):
         if name != self.name:
@@ -295,7 +287,7 @@ class VehicleTypeInfoVO(object):
 class VehicleArenaInfoVO(object):
     __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge', 'dogTag')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, isClientConnected=False, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -303,7 +295,7 @@ class VehicleArenaInfoVO(object):
         self.vehicleType = VehicleTypeInfoVO(**kwargs)
         self.prebattleID = prebattleID
         self.vehicleStatus = self.__getVehicleStatus(isAlive, isAvatarReady)
-        self.playerStatus = self.__getPlayerStatus(isTeamKiller, isClientConnected)
+        self.playerStatus = self.__getPlayerStatus(isTeamKiller)
         self.invitationDeliveryStatus = self.__getInvitationStatus(forbidInBattleInvitations)
         self.events = events or {}
         self.squadIndex = 0
@@ -341,10 +333,6 @@ class VehicleArenaInfoVO(object):
     def selectedSuffixBadge(self):
         return self.__suffixBadge
 
-    @property
-    def isBot(self):
-        return self.player.isBot
-
     def getBadgeExtraInfo(self):
         if self.badges:
             _, extraInfo = self.badges
@@ -362,7 +350,7 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updateEvents(invalidate=invalidate, **kwargs)
         return invalidate
 
-    def updatePlayerStatus(self, invalidate=_INVALIDATE_OP.NONE, isTeamKiller=None, isSquadMan=None, isClientConnected=False, **kwargs):
+    def updatePlayerStatus(self, invalidate=_INVALIDATE_OP.NONE, isTeamKiller=None, isSquadMan=None, **kwargs):
         if isTeamKiller:
             status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_TEAM_KILLER)
             if self.playerStatus ^ status:
@@ -375,16 +363,6 @@ class VehicleArenaInfoVO(object):
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
         if isSquadMan:
             status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_SQUAD_MAN)
-            if self.playerStatus ^ status:
-                self.playerStatus = status
-                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
-        if isClientConnected:
-            status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_CONNECTED)
-            if self.playerStatus ^ status:
-                self.playerStatus = status
-                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
-        else:
-            status = _PLAYER_STATUS.removeIfHas(self.playerStatus, _PLAYER_STATUS.IS_CONNECTED)
             if self.playerStatus ^ status:
                 self.playerStatus = status
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
@@ -439,9 +417,6 @@ class VehicleArenaInfoVO(object):
 
     def getSquadID(self):
         return self.prebattleID if self.isSquadMan() else 0
-
-    def isConnected(self):
-        return self.playerStatus & _PLAYER_STATUS.IS_CONNECTED > 0
 
     def isSquadMan(self, prebattleID=None, playerTeam=None):
         if playerTeam and self.team != playerTeam:
@@ -500,7 +475,7 @@ class VehicleArenaInfoVO(object):
 
     def isChatCommandsDisabled(self, isAlly):
         arena = avatar_getter.getArena()
-        isEvent = arena.guiType in (ARENA_GUI_TYPE.EVENT_BATTLES, ARENA_GUI_TYPE.HISTORICAL_BATTLES) if arena else False
+        isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
         if not (self.player.avatarSessionID or isEvent):
             if isAlly:
                 return True
@@ -541,14 +516,12 @@ class VehicleArenaInfoVO(object):
             vehicleStatus |= _VEHICLE_STATUS.STOP_RESPAWN
         return vehicleStatus
 
-    def __getPlayerStatus(self, isTeamKiller=None, isClientConnected=False):
+    def __getPlayerStatus(self, isTeamKiller=None):
         playerStatus = _PLAYER_STATUS.DEFAULT
         if isTeamKiller:
             playerStatus |= _PLAYER_STATUS.IS_TEAM_KILLER
         if self.isActionsDisabled():
             playerStatus |= _PLAYER_STATUS.IS_ACTION_DISABLED
-        if isClientConnected:
-            playerStatus |= _PLAYER_STATUS.IS_CONNECTED
         return playerStatus
 
     @staticmethod

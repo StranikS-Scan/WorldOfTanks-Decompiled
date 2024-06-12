@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	30	</forward>
-    <backward>	13	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.055	</moving>
@@ -1094,10 +1094,10 @@
       <terrainResistance>	1 1.4 2.1	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	23	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.33	</vehicleMovement>
+        <vehicleRotation>	0.33	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2037,7 +2037,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11500	</weight>
       <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -2110,14 +2110,14 @@
           <reloadTime>	42	</reloadTime>
           <clip>
             <count>	2	</count>
-            <rate>	20	</rate>
+            <rate>	12	</rate>
           </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.3	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.7	</aimingTime>
+          <aimingTime>	4	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.36 10 0.4 1 0.6 1 0.64 10 1 10	</maxPitch>
@@ -2148,8 +2148,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.03 0 2	</rayStart>
-              <rayEnd>	-0.03 0 2.41	</rayEnd>
+              <rayStart>	0 0 2	</rayStart>
+              <rayEnd>	0 0 2.41	</rayEnd>
               <rayUp>	0.16 0 0	</rayUp>
               <size>	0.41	</size>
             </slot>
@@ -2161,15 +2161,16 @@
             </customizableVehicleAreas>
           </customization>
           <models>
-            <undamaged>	vehicles/chinese/Ch71_GPT_166/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/chinese/Ch71_GPT_166/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch71_GPT_166/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch71_GPT_166/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch71_GPT_166/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch71_GPT_166/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <shotOffset>	-0.000001 0.026418 0.000156	</shotOffset>
           <camouflage>
             <density>	100.221527 103.414749	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2177,15 +2178,15 @@
         </_160mm_Type_60_BZS_P_T>
       </guns>
       <models>
-        <undamaged>	vehicles/chinese/Ch71_GPT_166/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/chinese/Ch71_GPT_166/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch71_GPT_166/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/chinese/Ch71_GPT_166/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/chinese/Ch71_GPT_166/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/chinese/Ch71_GPT_166/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch71_GPT_166/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.024946 0.341999 1.249998	</gunPosition>
+      <gunPosition>	0.000000 0.343037 1.213382	</gunPosition>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2238,9 +2239,9 @@
           <tags>	formfactor_square	</tags>
           <position>	0.003868 2.315004 1.397812	</position>
           <rotation>	0.238436 -0.001737 3.141559	</rotation>
-          <scale>	0.71936 0.138807 0.719361	</scale>
+          <scale>	1.34697 0.1 1.346973	</scale>
           <showOn>	256	</showOn>
-          <clipAngle>	1.00001	</clipAngle>
+          <clipAngle>	1.047198	</clipAngle>
           <anchorShift>	0.06	</anchorShift>
         </slot>
         <slot>

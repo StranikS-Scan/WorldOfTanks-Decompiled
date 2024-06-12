@@ -31,7 +31,7 @@ class RosterSlot10(BaseUnitRosterSlot):
 
 
 class EpicSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (9, 9)
+    DEFAULT_LEVELS = (8, 8)
 
 
 class Comp7Slot(BaseUnitRosterSlot):
@@ -98,8 +98,8 @@ class FunRandomRoster(BaseUnitRoster):
 
 
 class Comp7Roster(BaseUnitRoster):
-    MAX_SLOTS = 7
-    MAX_EMPTY_SLOTS = 6
+    MAX_SLOTS = 2
+    MAX_EMPTY_SLOTS = 1
     SLOT_TYPE = Comp7Slot
     DEFAULT_SLOT_PACK = Comp7Slot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits

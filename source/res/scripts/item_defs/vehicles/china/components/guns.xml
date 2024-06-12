@@ -96,6 +96,10 @@
     <_122-mm_60-122TG_7x7>	31004	</_122-mm_60-122TG_7x7>
     <_152mm_59_152JG_FT_7x7>	31005	</_152mm_59_152JG_FT_7x7>
     <_122-mm_60-122TP_Premium>	31006	</_122-mm_60-122TP_Premium>
+    <_122mm_Type_54>	31007	</_122mm_Type_54>
+    <_180mm_Type_65>	31008	</_180mm_Type_65>
+    <_160mm_Type_60_BZS_P>	31009	</_160mm_Type_60_BZS_P>
+    <_160mm_Type_60_BZS_P2>	31010	</_160mm_Type_60_BZS_P2>
   </ids>
   <shared>
     <_37mm_APX_SA18>
@@ -3656,6 +3660,57 @@
         </_122mm_SB-472>
       </shots>
     </_122mm_60_122TG_FT_A>
+    <_122mm_Type_54>
+      <userString>	#china_vehicles:_122mm_Type_54	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	84980	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.59	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.7428571428571	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	174	</maxHealth>
+      <maxRegenHealth>	87	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_Type_54_HE>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	490	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	145 145	</piercingPower>
+        </_122mm_Type_54_HE>
+        <_122mm_Type_54_AP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	490	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	192 177	</piercingPower>
+        </_122mm_Type_54_AP>
+      </shots>
+    </_122mm_Type_54>
     <_130mm_Type_61>
       <userString>	#china_vehicles:_130mm_Type_61	</userString>
       <tags></tags>
@@ -3665,7 +3720,7 @@
       <impulse>	0.62	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.42	</amplitude>
+        <amplitude>	0.22	</amplitude>
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_largeext_mb	</effects>
@@ -4922,6 +4977,56 @@
         </_160mm_Sha_bao_76B>
       </shots>
     </_160mm_56_160_BZS>
+    <_160mm_Type_60_BZS_P>
+      <userString>	#china_vehicles:_160mm_Type_60_BZS_P	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	132000	</price>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -23.0 1.0 -23.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21	</rotationSpeed>
+      <reloadTime>	18.8571428571429	</reloadTime>
+      <maxAmmo>	18	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	2300	</weight>
+      <maxHealth>	192	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.2	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_160mm_HESH_65_P>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	180 180	</piercingPower>
+        </_160mm_HESH_65_P>
+        <_160mm_AP_65_P>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	232 211	</piercingPower>
+        </_160mm_AP_65_P>
+      </shots>
+    </_160mm_Type_60_BZS_P>
     <_160mm_Type_60_BZS_P_T>
       <userString>	#china_vehicles:_160mm_Type_60_BZS_P	</userString>
       <tags></tags>
@@ -4973,6 +5078,107 @@
         </_160mm_AP_65_P>
       </shots>
     </_160mm_Type_60_BZS_P_T>
+    <_160mm_Type_60_BZS_P2>
+      <userString>	#china_vehicles:_160mm_Type_60_BZS_P2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	132000	</price>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -23.0 1.0 -23.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21	</rotationSpeed>
+      <reloadTime>	18.8571428571429	</reloadTime>
+      <maxAmmo>	18	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	2300	</weight>
+      <maxHealth>	192	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.2	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_160mm_HESH_65_P2>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	195 195	</piercingPower>
+        </_160mm_HESH_65_P2>
+        <_160mm_AP_65_P2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 230	</piercingPower>
+        </_160mm_AP_65_P2>
+      </shots>
+    </_160mm_Type_60_BZS_P2>
+    <_180mm_Type_65>
+      <userString>	#china_vehicles:_180mm_Type_65	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	335000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	18	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	5400	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	12	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_180mm_HESH_65>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	550	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	211 211	</piercingPower>
+        </_180mm_HESH_65>
+        <_180mm_AP_65>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	550	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	278 250	</piercingPower>
+        </_180mm_AP_65>
+      </shots>
+    </_180mm_Type_65>
     <_180mm_Type_65_T>
       <userString>	#china_vehicles:_180mm_Type_65	</userString>
       <tags></tags>
@@ -5013,7 +5219,7 @@
           <speed>	550	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	221 221	</piercingPower>
+          <piercingPower>	211 211	</piercingPower>
         </_180mm_HESH_65>
         <_180mm_AP_65>
           <defaultPortion>	0.0	</defaultPortion>

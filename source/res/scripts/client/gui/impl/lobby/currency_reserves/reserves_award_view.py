@@ -46,12 +46,11 @@ class ReservesAwardView(ViewImpl):
         self.viewModel.onSubscriptionExtend -= self._onSubscriptionExtend
 
     def _onLoading(self, creditsEarned, goldEarned):
-        showCreditWarning = self._isPiggyBankEnabled() and not self._isPremiumPlusActive() and creditsEarned
-        showGoldWarning = self._isGoldReserveEnabled() and not self._wotPlusCtrl.isEnabled() and goldEarned
         self.viewModel.setCreditAmount(creditsEarned)
         self.viewModel.setGoldAmount(goldEarned)
-        self.viewModel.setShowCreditWarning(showCreditWarning)
-        self.viewModel.setShowGoldWarning(showGoldWarning)
+        self.viewModel.setIsPremiumActive(self._isPremiumPlusActive())
+        self.viewModel.setIsSubscriptionActive(self._wotPlusCtrl.isEnabled())
+        self.viewModel.setIsSubscriptionEnabled(self._wotPlusCtrl.isWotPlusEnabled())
 
     def _isPremiumPlusActive(self):
         return self._itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)

@@ -78,7 +78,6 @@ class PlayerInfo(shared.ItemInfo):
 
 class PlayersInfo(shared.UnpackedInfo):
     __slots__ = ('__players',)
-    _PLAYER_INFO_CLS = PlayerInfo
 
     def __init__(self, players):
         super(PlayersInfo, self).__init__()
@@ -88,7 +87,7 @@ class PlayersInfo(shared.UnpackedInfo):
             if info is None:
                 self._addUnpackedItemID(dbID)
                 info = {}
-            return (item[0], self._PLAYER_INFO_CLS(dbID, **info))
+            return (item[0], PlayerInfo(dbID, **info))
 
         self.__players = dict(map(_convert, players.iteritems()))
 
@@ -96,13 +95,13 @@ class PlayersInfo(shared.UnpackedInfo):
         if dbID in self.__players:
             info = self.__players[dbID]
         else:
-            info = self._PLAYER_INFO_CLS(dbID=dbID, wasInBattle=False)
+            info = PlayerInfo(dbID=dbID, wasInBattle=False)
         return info
 
-    @classmethod
-    def makePlayerInfo(cls, dbID=0, realName='', fakeName='', isEnemy=False, wasInBattle=False):
+    @staticmethod
+    def makePlayerInfo(dbID=0, realName='', fakeName='', isEnemy=False, wasInBattle=False):
         unknownPlayerName = style.getUnknownPlayerName(isEnemy=isEnemy)
-        return cls._PLAYER_INFO_CLS(dbID=dbID, name=fakeName or unknownPlayerName, realName=realName or unknownPlayerName, wasInBattle=wasInBattle)
+        return PlayerInfo(dbID=dbID, name=fakeName or unknownPlayerName, realName=realName or unknownPlayerName, wasInBattle=wasInBattle)
 
     def setSquadIndex(self, dbID, index):
         if dbID in self.__players:
@@ -117,5 +116,5 @@ class PlayersInfo(shared.UnpackedInfo):
         return result.clanInfo
 
     def getFirstEnemyClan(self, team):
-        result = findFirst(lambda player: player.clanDBID and player.team != team, self.__players.itervalues(), self._PLAYER_INFO_CLS())
+        result = findFirst(lambda player: player.clanDBID and player.team != team, self.__players.itervalues(), PlayerInfo())
         return result.clanInfo

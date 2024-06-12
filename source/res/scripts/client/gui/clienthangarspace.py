@@ -86,7 +86,7 @@ def secondaryHangarCFG():
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
-    defaultSpace = 'h01_victory_day_2023'
+    defaultSpace = 'h01_victory_day_2024'
     if hangarsXml.has_key('hangar_scene_spaces'):
         switchItems = hangarsXml['hangar_scene_spaces']
         for item in switchItems.values():
@@ -158,10 +158,6 @@ class ClientHangarSpace(object):
         self._vsePlans = makeMultiPlanProvider(ASPECT.HANGAR, CallableProviderType.HANGAR)
         _HANGAR_CFGS = _readHangarSettings()
         return
-
-    @property
-    def spaceId(self):
-        return self.__spaceId
 
     def create(self, isPremium, onSpaceLoadedCallback=None):
         global _CFG
@@ -379,12 +375,6 @@ class _ClientHangarSpacePathOverride(object):
             else:
                 event()
         return
-
-    def setEnvironmentAndVisibilityMask(self, environmentName, visibilityMask):
-        if not constants.IS_DEVELOPMENT:
-            return
-        BigWorld.CustomizationEnvironment().enable(True, environmentName)
-        BigWorld.wg_setSpaceItemsVisibilityMask(self.hangarSpace.space.spaceId, visibilityMask)
 
     def __onDisconnected(self):
         global _EVENT_HANGAR_PATHS

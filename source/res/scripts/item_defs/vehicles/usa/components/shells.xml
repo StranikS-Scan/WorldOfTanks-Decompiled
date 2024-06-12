@@ -2204,6 +2204,20 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_APBC_M358>
+  <_120mm_APBC_M358_8L>
+    <id>	31006	</id>
+    <userString>	#usa_vehicles:_120mm_APBC_M358	</userString>
+    <icon>	ap	</icon>
+    <price>	1040	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120.5	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_APBC_M358_8L>
   <_120mm_HEAT_M830>
     <id>	164	</id>
     <userString>	#usa_vehicles:_120mm_HEAT_M830	</userString>
@@ -2220,6 +2234,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_HEAT_M830>
+  <_120mm_HEAT_M830_8L>
+    <id>	31007	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_M830	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120.5	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_M830_8L>
   <_120mm_HE_M356>
     <id>	165	</id>
     <userString>	#usa_vehicles:_120mm_HE_M356	</userString>
@@ -2244,6 +2274,30 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_M356>
+  <_120mm_HE_M356_8L>
+    <id>	31008	</id>
+    <userString>	#usa_vehicles:_120mm_HE_M356	</userString>
+    <icon>	he_modern	</icon>
+    <price>	680	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120.5	</caliber>
+    <explosionRadius>	2.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	550	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_M356_8L>
   <_120mm_AP_T42>
     <id>	30	</id>
     <userString>	#usa_vehicles:_120mm_AP_T42	</userString>

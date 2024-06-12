@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/TeamInfoComp7Component.py
+import logging
 import typing
 import VOIP
 from constants import REQUEST_COOLDOWN
@@ -11,6 +12,7 @@ from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from VOIP.VOIPManager import VOIPManager
+logger = logging.getLogger(__name__)
 
 class TeamInfoComp7Component(DynamicScriptComponent):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -80,5 +82,9 @@ class TeamInfoComp7Component(DynamicScriptComponent):
     def __updateVivoxPresence(self):
         isVoipEnabled = VOIP.getVOIPManager().isCurrentChannelEnabled()
         if self.teamVivoxChannel.get(avatar_getter.getPlayerVehicleID(), False) != isVoipEnabled:
-            self.cell.setVivoxPresence(isVoipEnabled)
+            try:
+                self.cell.setVivoxPresence(isVoipEnabled)
+            except:
+                logger.warning('Cell is not ready')
+
             self.__callbackDelayer.delayCallback(REQUEST_COOLDOWN.SET_VIVOX_PRESENCE + 1.0, self.__updateVivoxPresence)

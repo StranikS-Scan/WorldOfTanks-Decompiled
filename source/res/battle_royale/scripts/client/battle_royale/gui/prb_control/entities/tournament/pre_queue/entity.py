@@ -2,7 +2,7 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/tournament/pre_queue/entity.py
 import logging
 from constants import PREBATTLE_TYPE
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import g_eventBus
@@ -84,10 +84,6 @@ class BattleRoyaleTournamentEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        if g_currentPreviewVehicle.isPresent():
-            reqFlags = FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH | FUNCTIONAL_FLAG.TRAINING
-            if ctx and not ctx.hasFlags(reqFlags):
-                g_eventDispatcher.loadHangar()
         return super(BattleRoyaleTournamentEntity, self).fini(ctx, woEvents)
 
     def _makeQueueCtxByAction(self, action=None):

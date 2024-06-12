@@ -557,6 +557,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         elif offers and offers[0].eventType == 'telecom_rentals':
             viewAlias = VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW
+        elif vehicle.isEarlyAccess:
+            viewAlias = VIEW_ALIAS.EARLY_ACCESS_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
         app = dependency.instance(IAppLoader).getApp()
@@ -627,8 +629,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, viewAlias=VIEW_ALIAS.HERO_VEHICLE_PREVIEW, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
@@ -984,15 +986,6 @@ def showDedicationRewardWindow(bonuses, data, closeCallback=None):
     from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
     window = DedicationRewardWindow(bonuses, data, closeCallback)
     window.load()
-
-
-def isViewLoaded(layoutID):
-    uiLoader = dependency.instance(IGuiLoader)
-    if not uiLoader or not uiLoader.windowsManager:
-        return False
-    else:
-        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
-        return view is not None
 
 
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
@@ -1424,6 +1417,13 @@ def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
     result = yield wg_await(dialogs.showSingleDialog(layoutID=R.views.lobby.matchmaker.ActiveTestConfirmView(), wrappedViewClass=ActiveTestConfirmView, startTime=startTime, finishTime=finishTime, link=link, parent=parent))
     isOK = result.result
     raise AsyncReturn(isOK)
+
+
+def showSubscriptionDailyQuestsIntroWindow(parent=None):
+    from gui.impl.lobby.subscription.subscription_daily_quests_intro import SubscriptionDailyQuestsIntroWindow
+    window = SubscriptionDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
+    window.load()
+    return
 
 
 def showBattlePassDailyQuestsIntroWindow(parent=None):
@@ -1871,7 +1871,7 @@ def showWotPlusInfoPage(source, useCustomSoundSpace=False, includeSubscriptionIn
      'callbackOnLoad': None,
      'webHandlers': None,
      'forcedSkipEscape': False,
-     'browserParams': None,
+     'browserParams': {},
      'hiddenLayers': (),
      'useCustomSoundSpace': useCustomSoundSpace}), EVENT_BUS_SCOPE.LOBBY)
     return
@@ -2089,16 +2089,10 @@ def showComp7NoVehiclesScreen():
         NoVehiclesScreenWindow(parent=getParentWindow()).load()
 
 
-def showComp7IntroScreen():
-    from gui.impl.lobby.comp7.intro_screen import IntroScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.comp7.IntroScreen(), IntroScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7WhatsNewScreen(notificationMgr=None):
+def showComp7WhatsNewScreen(isIntro=False, notificationMgr=None):
     from gui.impl.lobby.comp7.whats_new_view import WhatsNewViewWindow
-    notificationMgr.append(WindowNotificationCommand(WhatsNewViewWindow()))
+    notificationMgr.append(WindowNotificationCommand(WhatsNewViewWindow(isIntro)))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

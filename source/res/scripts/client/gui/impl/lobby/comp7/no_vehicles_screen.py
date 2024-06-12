@@ -10,12 +10,12 @@ from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import 
 from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 
-class NoVehiclesScreen(ViewImpl):
+class NoVehiclesScreen(ViewImpl, IGlobalListener):
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __slots__ = ()
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -39,6 +39,18 @@ class NoVehiclesScreen(ViewImpl):
                 return window
         return super(NoVehiclesScreen, self).createToolTip(event)
 
+    def onPrbEntitySwitching(self):
+        if self.prbEntity is None:
+            return
+        else:
+            if not self.__comp7Controller.isComp7PrbActive():
+                self.destroyWindow()
+            return
+
+    def onPrbEntitySwitched(self):
+        if not self.__comp7Controller.isComp7PrbActive():
+            self.destroyWindow()
+
     def _finalize(self):
         self.__removeListeners()
         super(NoVehiclesScreen, self)._finalize()
@@ -50,9 +62,11 @@ class NoVehiclesScreen(ViewImpl):
 
     def __addListeners(self):
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onPollServerTime
+        self.startGlobalListening()
 
     def __removeListeners(self):
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onPollServerTime
+        self.stopGlobalListening()
 
     def _getEvents(self):
         return ((self.viewModel.onClose, self.__onClose), (self.__comp7Controller.onComp7ConfigChanged, self.__onComp7ConfigChanged), (self.__comp7Controller.onStatusUpdated, self.__onStatusUpdated))

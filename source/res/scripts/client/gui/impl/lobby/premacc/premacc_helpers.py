@@ -13,6 +13,7 @@ class BattleResultsBonusConstants(object):
 
 class PiggyBankConstants(object):
     MAX_AMOUNT = 750000
+    MAX_AMOUNT_GOLD = 500
     SMASH_MAX_DELAY = 300
     OPEN_SOON_THRESHOLD_DEFAULT = 86400
     PIGGY_BANK_CREDITS = 'piggyBank.credits'

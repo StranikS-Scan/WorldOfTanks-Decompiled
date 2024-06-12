@@ -498,7 +498,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         if not storedVehInvID:
             criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
             criteria |= ~REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE])
-            criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
             vehicle = first(self.__itemsCache.items.getVehicles(criteria=criteria).values())
             if vehicle:
                 storedVehInvID = vehicle.invID

@@ -5,7 +5,6 @@ from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7IntroPresenter
 from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
-from gui.prb_control.entities.base.ctx import Comp7PrbAction
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.entities.comp7.scheduler import Comp7Scheduler
@@ -23,18 +22,12 @@ class Comp7SquadEntryPoint(SquadEntryPoint):
 
     def __init__(self, accountsToInvite=None):
         super(Comp7SquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.COMP7, accountsToInvite)
-        self.__squadSize = self.__comp7Ctrl.getModeSettings().numPlayers
 
     def makeDefCtx(self):
         return SquadSettingsCtx(PREBATTLE_TYPE.COMP7, waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)
 
-    def configure(self, action):
-        super(Comp7SquadEntryPoint, self).configure(action)
-        if isinstance(action, Comp7PrbAction):
-            self.__squadSize = action.getSquadSize()
-
     def _doCreate(self, unitMgr, ctx):
-        unitMgr.createComp7Squad(self.__squadSize)
+        unitMgr.createComp7Squad(squadSize=2)
 
 
 class Comp7SquadEntity(SquadEntity):

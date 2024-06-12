@@ -134,9 +134,23 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
             checkSelectedFunc = lambda vo: False
         vState, _ = vehicle.getState()
         isFrozen = False
+        forbiddenVehicles = []
         if self.prbEntity is not None and self.prbEntity.getQueueType() == QUEUE_TYPE.STRONGHOLD_UNITS:
             frozenVehicles = self.prbEntity.getEventFrozenVehicles()
+            if self.prbEntity.isSortie():
+                forbiddenVehicles = self.prbEntity.getSortieBattleForbiddenVehicles()
+            else:
+                forbiddenVehicles = self.prbEntity.getFortBattleForbiddenVehicles()
             isFrozen = frozenVehicles is not None and (frozenVehicles == FrozenVehiclesConstants.ALL_VEHICLES_FROZEN or vehicle.intCD in frozenVehicles)
+        isForbiddenVehicle = vehicle.intCD in forbiddenVehicles
+        enabled = not isForbiddenVehicle and vehicle.isReadyToFight
+        if isForbiddenVehicle:
+            state = 'forbiddenVehicle'
+        elif isFrozen and vehicle.isReadyToFight:
+            state = 'frozenVehicle'
+        else:
+            state = convertState(vState)
+        isReadyToFight = vehicle.isReadyToFight and not isFrozen and not isForbiddenVehicle
         return {'dbID': vehicle.intCD,
          'level': vehicle.level,
          'shortUserName': vehicle.shortUserName,
@@ -147,11 +161,12 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
          'selected': checkSelectedFunc(vehicle),
          'inHangar': False,
          'isMultiSelect': self._isMultiSelect,
-         'isReadyToFight': vehicle.isReadyToFight and not isFrozen,
-         'enabled': vehicle.isReadyToFight,
+         'isReadyToFight': isReadyToFight,
+         'enabled': enabled,
          'isFrozen': isFrozen,
+         'isForbidden': isForbiddenVehicle,
          'tooltip': makeTooltip('#tooltips:vehicleStatus/%s/header' % vState, '#tooltips:vehicleStatus/body'),
-         'state': 'frozenVehicle' if isFrozen and vehicle.isReadyToFight else convertState(vState)}
+         'state': state}
 
     def _isSelected(self, entry):
         return entry.intCD in self._selectedVehicles

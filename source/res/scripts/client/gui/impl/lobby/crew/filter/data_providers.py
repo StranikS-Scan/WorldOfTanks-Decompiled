@@ -12,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model 
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
 from gui.impl.lobby.crew.crew_helpers.sort_helpers import SortHeap
 from gui.impl.lobby.crew.filter import VEHICLE_LOCATION_IN_HANGAR, GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
-from gui.impl.lobby.crew.utils import getDocGroupValues
+from gui.impl.lobby.crew.utils import getDocGroupValues, getSecretWithoutRentCriteria, getPremiumWithoutRentCriteria
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman, getFullUserName
@@ -218,7 +218,7 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
         criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET
+        criteria |= ~getSecretWithoutRentCriteria()
         criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         criteria |= REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
         if self.tankman:
@@ -237,7 +237,7 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
 
     def _getFilterByVehicleGradeCriteria(self):
         vehicleGrades = self._state[ToggleGroupType.VEHICLEGRADE.value]
-        criteria = REQ_CRITERIA.VEHICLE.PREMIUM
+        criteria = getPremiumWithoutRentCriteria()
         return criteria if GRADE_PREMIUM in vehicleGrades else ~criteria
 
     def _getFilterByVehicleLocationCriteria(self):

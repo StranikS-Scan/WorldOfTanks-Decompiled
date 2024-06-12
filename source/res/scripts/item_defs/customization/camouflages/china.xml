@@ -1,15 +1,15 @@
 <china.xml>
-  <china:Ch19_1211>	ussr	</china:Ch19_1211>
-  <china:Ch04_T34_14>	germany	</china:Ch04_T34_14>
-  <china:Ch19_1210>	usa	</china:Ch19_1210>
-  <china:Ch04_T34_11>	china	</china:Ch04_T34_11>
-  <china:Ch04_T34_13>	france	</china:Ch04_T34_13>
-  <china:Ch04_T34_19>	uk	</china:Ch04_T34_19>
-  <china:Ch04_T34_16>	japan	</china:Ch04_T34_16>
-  <china:Ch04_T34_12>	czech	</china:Ch04_T34_12>
-  <china:Ch04_T34_18>	sweden	</china:Ch04_T34_18>
-  <china:Ch04_T34_17>	poland	</china:Ch04_T34_17>
-  <china:Ch04_T34_15>	italy	</china:Ch04_T34_15>
+  <china:Ch19_1212>	ussr	</china:Ch19_1212>
+  <china:Ch04_T34_15>	germany	</china:Ch04_T34_15>
+  <china:Ch19_1211>	usa	</china:Ch19_1211>
+  <china:Ch04_T34_12>	china	</china:Ch04_T34_12>
+  <china:Ch04_T34_14>	france	</china:Ch04_T34_14>
+  <china:Ch19_1210>	uk	</china:Ch19_1210>
+  <china:Ch04_T34_17>	japan	</china:Ch04_T34_17>
+  <china:Ch04_T34_13>	czech	</china:Ch04_T34_13>
+  <china:Ch04_T34_19>	sweden	</china:Ch04_T34_19>
+  <china:Ch04_T34_18>	poland	</china:Ch04_T34_18>
+  <china:Ch04_T34_16>	italy	</china:Ch04_T34_16>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -181,6 +181,7 @@
         <Ch41_WZ_111_MT>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch43_WZ_122_2>	3.5 3.5 0.07 0.000000	</china:Ch43_WZ_122_2>
         <china:Ch42_WalkerBulldog_M41D>	2.65 2.65 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
+        <china:Ch04_T34_11>	3.2 1.9 1.45 -0.53	</china:Ch04_T34_11>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -1342,6 +1343,7 @@
         <Ch41_WZ_111_5A_7x7>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A_7x7>
         <Ch41_WZ_111_MT>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_MT>
         <china:Ch42_WalkerBulldog_M41D>	2.8 2.8 0.000000 0.000000	</china:Ch42_WalkerBulldog_M41D>
+        <china:Ch04_T34_11>	2.05 1.06 1.02 1.06	</china:Ch04_T34_11>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -3714,5 +3716,43 @@
         <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <camouflage>
+      <id>	31103	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_13.dds	</texture>
+      <userString>	#vehicle_customization:Type74_Camo_MT/name	</userString>
+      <description>	#vehicle_customization:Type74_Camo_MT/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	176 130 84 255	</c0>
+          <c1>	66 51 37 115	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <china:Ch04_T34_11>	3.58 2.37 1.12 1	</china:Ch04_T34_11>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.78746 3.788719	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <priceGroup>	MT camouflages 50g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
 </china.xml>

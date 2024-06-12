@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_utils.py
 import logging
-from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS, BATTLES_SELECTOR_SQUAD_ITEMS
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS
 from gui.prb_control.factories.PreQueueFactory import DEFAULT_QUEUE_TYPE_PRIORITIES
@@ -169,25 +168,3 @@ def initRequestType(guiConstants, personality):
 
 def initScaleformGuiTypes(guiConstants, personality):
     guiConstants.VIEW_ALIAS.inject(personality)
-
-
-def initPrbGetter(prbConfig, arenaGUITypeValue, queueTypeValue, personality):
-    prbConfig.PREBATTLE_ACTION_NAME.inject(personality)
-    addFunctionalFlags(prbConfig.FUNCTIONAL_FLAG, personality)
-    addArenaGUITypeByQueueType(queueTypeValue, arenaGUITypeValue, personality)
-
-
-def initPrbSelector(prbConfig, prebattleActionName, modeSelectorColumns, modeSelectorItemConstructor, battleEntryPoint, addBattleSelectorItemFun, personality):
-    prbConfig.SELECTOR_BATTLE_TYPES.inject(personality)
-    addBattleItemToColumnSelector(prebattleActionName, modeSelectorColumns, personality)
-    addModeSelectorItem(prebattleActionName, modeSelectorItemConstructor, personality)
-    addBattleSelectorItem(prebattleActionName, addBattleSelectorItemFun, personality)
-    addSupportedEntryByAction(prebattleActionName, battleEntryPoint, personality)
-
-
-def initPrbSquadSelector(prbType, prebattleActionName, squadEntity, squadEntryPoint, addBattleSelectorItemFun, personality):
-    addSupportedUnitEntryByAction(prebattleActionName, squadEntryPoint, personality)
-    addSupportedUnitEntryByType(prbType, squadEntryPoint, personality)
-    addSupportedUnitByType(prbType, squadEntity, personality)
-    addBattleSelectorSquadItem(prebattleActionName, addBattleSelectorItemFun, personality)
-    addPrbClientCombinedIds(prbType, PREBATTLE_TYPE.UNIT, personality)

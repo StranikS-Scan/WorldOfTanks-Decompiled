@@ -258,6 +258,9 @@ def showMission(eventID, eventType=None):
                 return showBattleMatters()
             if events_helpers.isArmoryYardQuest(eventID):
                 return goToArmoryYardQuests()
+            if events_helpers.isActiveEarlyAccessQuest(eventID):
+                from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView
+                return showEarlyAccessQuestsView()
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
         elif quest is not None and quest.showMissionAction() is not None:

@@ -25,6 +25,9 @@ class ResearchViewMeta(View):
     def goToVehicleCollection(self, nation):
         self._printOverrideError('goToVehicleCollection')
 
+    def goToEarlyAccess(self):
+        self._printOverrideError('goToEarlyAccess')
+
     def as_setNodesStatesS(self, primary, data, isRequiredInvalidation=False):
         return self.flashObject.as_setNodesStates(primary, data, isRequiredInvalidation) if self._isDAAPIInited() else None
 

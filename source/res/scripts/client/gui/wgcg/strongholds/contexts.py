@@ -476,3 +476,12 @@ class StrongholdEventGetFrozenVehiclesCtx(CommonWebRequestCtx):
 
     def isAuthorizationRequired(self):
         return True
+
+
+class StrongholdGetForbiddenVehiclesCtx(CommonWebRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.STRONGHOLD_GET_FORBIDDEN_VEHICLES
+
+    def isAuthorizationRequired(self):
+        return True

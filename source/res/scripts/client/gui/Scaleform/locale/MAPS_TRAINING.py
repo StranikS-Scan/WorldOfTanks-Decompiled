@@ -622,7 +622,7 @@ class MAPS_TRAINING(object):
     RESULT_TITLE_WIN = '#maps_training:result/title/win'
     RESULT_TITLE_LOSE = '#maps_training:result/title/lose'
     RESULT_TITLE_PARTIAL = '#maps_training:result/title/partial'
-    RESULT_TITLE_TIE = '#maps_training:result/title/Tie'
+    RESULT_TITLE_TIE = '#maps_training:result/title/tie'
     RESULT_MAPNAME = '#maps_training:result/mapName'
     RESULT_SCENARIO = '#maps_training:result/scenario'
     RESULT_KILLS = '#maps_training:result/kills'

@@ -114,7 +114,7 @@ class EmptyStatRow(StatRow):
         return
 
 
-def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=None, column4=None, htmlKey=''):
+def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=None, column4=None, htmlKey='', tooltip=None):
     if column2 is not None:
         lineType = WIDE_STAT_ROW
     elif not any((column2, column3, column4)):
@@ -140,7 +140,8 @@ def makeStatRow(label='', labelArgs=None, column1=None, column2=None, column3=No
      'col2': column2 if column2 is not None else _LINE_FEED,
      'col3': column3 if column3 is not None else _LINE_FEED,
      'col4': column4 if column4 is not None else _LINE_FEED,
-     'lineType': lineType}
+     'lineType': lineType,
+     'tooltip': tooltip}
 
 
 def makeCreditsLabel(value, canBeFaded=False, isDiff=False, useBigIcon=False):

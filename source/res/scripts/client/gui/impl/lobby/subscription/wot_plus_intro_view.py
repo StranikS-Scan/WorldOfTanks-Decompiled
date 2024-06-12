@@ -38,7 +38,7 @@ class WotPlusIntroView(ViewImpl, EventSystemEntity):
         self.viewModel.onInfo += self._onInfo
         self.addListener(ViewEventType.LOAD_VIEW, self.__onLobbyViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.setSettings(SHOWN_WOT_PLUS_INTRO, True)
-        self._wotPlusCtrl.onIntroShown()
+        self._wotPlusCtrl.onStateUpdate()
         self._wotPlusLogger.onViewInitialize()
 
     def _finalize(self):

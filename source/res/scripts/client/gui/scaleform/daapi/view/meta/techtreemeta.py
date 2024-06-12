@@ -31,6 +31,9 @@ class TechTreeMeta(ResearchView):
     def onGoToPremiumShop(self, nationName, level):
         self._printOverrideError('onGoToPremiumShop')
 
+    def onGoToEarlyAccess(self):
+        self._printOverrideError('onGoToEarlyAccess')
+
     def onPlayHintAnimation(self, isEnabled):
         self._printOverrideError('onPlayHintAnimation')
 

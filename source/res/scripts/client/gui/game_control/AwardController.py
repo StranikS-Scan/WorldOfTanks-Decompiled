@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
+import datetime
 import logging
 import types
 import typing
@@ -14,7 +15,6 @@ import BigWorld
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
-from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 import gui.awards.event_dispatcher as award_events
 from gui.shared.account_settings_helper import AccountSettingsHelper
 import personal_missions
@@ -26,8 +26,8 @@ from adisp import adisp_process
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from comp7_common import Comp7QuestType, COMP7_QUALIFICATION_QUEST_ID
-from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, ARENA_BONUS_TYPE
+from comp7_common import Comp7QuestType, COMP7_QUALIFICATION_QUEST_ID, COMP7_TOKEN_COUPON_REWARD_ID
+from constants import DOSSIER_TYPE, EVENT_TYPE, INVOICE_ASSET, ARENA_BONUS_TYPE, SUBSCRIPTION_ENTITLEMENT
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import BADGES_BLOCK
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -48,6 +48,8 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, BlueprintBonusTypes
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
+from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessRewardsView
+from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, parseComp7TokensQuestID
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
@@ -58,7 +60,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
 from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
-from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showPiggyBankRewardWindow, showSubscriptionAwardWindow
+from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showSubscriptionAwardWindow
 from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
@@ -77,11 +79,12 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
+from renewable_subscription_common.settings_constants import WotPlusState
 from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -600,35 +603,21 @@ class PiggyBankOpenHandler(ServiceChannelHandler):
             creditsEarned = data.get('credits', 0)
             goldEarned = data.get('gold', 0)
             if creditsEarned or goldEarned:
-                self._showWindow(creditsEarned, goldEarned, self.__isPremiumEnable())
-
-    @staticmethod
-    def _showWindow(creditsEarned, goldEarned, isPremium):
-        showNewWindow = PiggyBankOpenHandler._canShowWotPlusWindow(goldEarned)
-        if not showNewWindow and goldEarned:
-            _logger.info('There is hidden gold in piggy bank award screen.')
-        if showNewWindow:
-            showCurrencyReserveAwardWindow(creditsEarned, goldEarned)
-        else:
-            showPiggyBankRewardWindow(creditsEarned, isPremium)
-
-    @staticmethod
-    def _canShowWotPlusWindow(goldEarned):
-        wotPlusCtrl = dependency.instance(IWotPlusController)
-        isWotPlusEnabled = wotPlusCtrl.isWotPlusEnabled()
-        hasWotPlusActive = wotPlusCtrl.isEnabled()
-        return isWotPlusEnabled and (hasWotPlusActive or goldEarned)
-
-    def __isPremiumEnable(self):
-        return self.itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
+                showCurrencyReserveAwardWindow(creditsEarned, goldEarned)
 
 
 class RenewableSubscriptionHandler(ServiceChannelHandler):
+    subscriptionCtrl = dependency.descriptor(IWotPlusController)
 
     def __init__(self, awardCtrl):
         super(RenewableSubscriptionHandler, self).__init__(SYS_MESSAGE_TYPE.wotPlusUnlocked.index(), awardCtrl)
 
     def _showAward(self, ctx):
+        self.__showArwardScren()
+
+    @adisp_process
+    def __showArwardScren(self):
+        yield self.subscriptionCtrl.synchronize()
         showSubscriptionAwardWindow()
 
 
@@ -1422,6 +1411,33 @@ class BattlePassCapHandler(ServiceChannelHandler):
         showBattlePassVehicleAwardWindow(message.data)
 
 
+class Comp7CouponHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(Comp7CouponHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__questTypes and message.data is not None
+
+    def _showAward(self, ctx):
+        messageData = ctx[1].data
+        if 'data' in messageData:
+            data = messageData['data']
+        else:
+            data = messageData
+        tokensDict = data.get('tokens', {})
+        for tokenName, value in tokensDict.iteritems():
+            if tokenName.startswith(COMP7_TOKEN_COUPON_REWARD_ID):
+                self._showWindow(value.get('count', 1))
+                return
+
+    @staticmethod
+    def _showWindow(count):
+        SystemMessages.pushMessage('', type=SystemMessages.SM_TYPE.Comp7CouponReceived, messageData={'count': count})
+
+
 class DynamicBonusHandler(ServiceChannelHandler):
     AVAILABLE_TAGS = ['wgcq.clan_reward', 'wgcq.player_reward']
 
@@ -1649,8 +1665,9 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
                     ranksQuests.append(quest)
                 elif qType == Comp7QuestType.TOKENS:
                     tokensQuests.append(quest)
-                elif qType == Comp7QuestType.PERIODIC:
-                    periodicQuests.append(quest)
+                periodicQuest = self.__getPeriodicQuest(qID, allQuests)
+                if periodicQuest:
+                    periodicQuests.append(periodicQuest)
                 if qID == COMP7_QUALIFICATION_QUEST_ID:
                     isQualification = True
 
@@ -1664,6 +1681,12 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
     def __onEventCacheSyncCompleted(self, *_):
         self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         self.__showAward()
+
+    @staticmethod
+    def __getPeriodicQuest(questID, allQuests):
+        periodicID = questID.replace(Comp7QuestType.RANKS.value, Comp7QuestType.PERIODIC.value)
+        qType = getComp7QuestType(periodicID)
+        return allQuests.get(periodicID) if qType == Comp7QuestType.PERIODIC else None
 
     @staticmethod
     def __getRanksQuestSortKey(quest):
@@ -1828,6 +1851,74 @@ class CollectionsRewardHandler(ServiceChannelHandler):
         showCollectionAwardsWindow(data['collectionId'], [data['reward']], isFinal=True)
 
 
+class PremiumSubsEntitlementReceivedHandler(MultiTypeServiceChannelHandler):
+    _SUBSCRIPTION_TRIAL_TOKEN = 'premium_subs_trial_day'
+    __premiumSubsCtrl = dependency.descriptor(IWotPlusController)
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def __init__(self, awardCtrl):
+        super(PremiumSubsEntitlementReceivedHandler, self).__init__((SYS_MESSAGE_TYPE.invoiceReceived.index(),), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        if not super(PremiumSubsEntitlementReceivedHandler, self)._needToShowAward(ctx):
+            return False
+        _, message = ctx
+        days = self.__getEntitlementsDaysReceived(message)
+        return True if days and self.__premiumSubsCtrl.isWotPlusEnabled() else None
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        self.__sentReceivedMsg(self.__getEntitlementsDaysReceived(message), message)
+
+    def __getEntitlementsDaysReceived(self, message):
+        days = 0
+        data = message.data
+        dataEx = data.get('data', {}) if message.type == SYS_MESSAGE_TYPE.invoiceReceived.index() else data
+        premiumSubsData = dataEx.get('entitlements', {}).get(SUBSCRIPTION_ENTITLEMENT, {})
+        premiumSubsTrialTokenData = first((v for k, v in dataEx.get('tokens', {}).iteritems() if self._SUBSCRIPTION_TRIAL_TOKEN in k), {})
+        if premiumSubsData:
+            days = datetime.timedelta(seconds=premiumSubsData.get('count', 0)).days
+        elif premiumSubsTrialTokenData:
+            days = premiumSubsTrialTokenData.get('count', 0)
+        return days
+
+    @adisp_process
+    def __sentReceivedMsg(self, days, message):
+        if days and self.__premiumSubsCtrl.isWotPlusEnabled():
+            if self.__premiumSubsCtrl.getState() == WotPlusState.INACTIVE:
+                yield self.__premiumSubsCtrl.synchronize()
+            savedData = message.data.setdefault('savedData', {})
+            savedData['premium_subs_days'] = days
+            self.__systemMessages.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.PREMIUM_SUBS_RECEIVED_FROM_INVOICE)
+
+
+class EarlyAccessQuestHandler(ServiceChannelHandler):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+
+    def __init__(self, awardCtrl):
+        super(EarlyAccessQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        self.__mergedBonuses = {}
+
+    def _showAward(self, ctx):
+        showEarlyAccessRewardsView(self.__mergedBonuses)
+
+    def _needToShowAward(self, ctx):
+        if not super(EarlyAccessQuestHandler, self)._needToShowAward(ctx):
+            return False
+        _, message = ctx
+        return bool(self.__checkEarlyAccessQuests(message.data))
+
+    def __checkEarlyAccessQuests(self, data):
+        completedQuestIDs = data.get('completedQuestIDs', ())
+        rewards = []
+        for qID in completedQuestIDs:
+            if self.__earlyAccessController.isPostProgressionQuest(qID):
+                rewards.append(data.get('detailedRewards', {}).get(qID, {}))
+
+        self.__mergedBonuses = getMergedBonusesFromDicts(rewards)
+        return bool(self.__mergedBonuses)
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -1868,4 +1959,7 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  ResourceWellRewardHandler,
  Comp7RewardHandler,
  WinbackQuestHandler,
- CollectionsRewardHandler))
+ CollectionsRewardHandler,
+ PremiumSubsEntitlementReceivedHandler,
+ Comp7CouponHandler,
+ EarlyAccessQuestHandler))

@@ -115,7 +115,7 @@
         <item>	31007	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	6.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -190,7 +190,7 @@
         <item>	31010	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	7.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -279,6 +279,81 @@
         </item>
         <item>	7.008	  <name>	weight	</name>
           <type>	float	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	mt_comp_3_4_master	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31016	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.251	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	mt_comp_3_4_elite	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31017	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.252	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	mt_comp_3_4_elite_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31018	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	9.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
@@ -1904,7 +1979,7 @@
         <item>	57	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	2.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -2643,7 +2718,7 @@
         <item>	94	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	3.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -3462,7 +3537,7 @@
         <item>	126	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	4.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -3635,7 +3710,7 @@
         <item>	133	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	5.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>
@@ -3857,7 +3932,7 @@
         <item>	147	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.0	  <name>	weight	</name>
+        <item>	8.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	19	  <name>	group	</name>

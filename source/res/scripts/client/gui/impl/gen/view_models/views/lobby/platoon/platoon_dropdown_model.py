@@ -12,7 +12,7 @@ class Type(Enum):
 class PlatoonDropdownModel(ViewModel):
     __slots__ = ('onOutsideClick',)
 
-    def __init__(self, properties=9, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(PlatoonDropdownModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -39,50 +39,41 @@ class PlatoonDropdownModel(ViewModel):
     def getBtnCreateForTwoType():
         return ButtonModel
 
-    @property
-    def btnCreateForSeven(self):
-        return self._getViewModel(3)
-
-    @staticmethod
-    def getBtnCreateForSevenType():
-        return ButtonModel
-
     def getType(self):
-        return Type(self._getString(4))
+        return Type(self._getString(3))
 
     def setType(self, value):
-        self._setString(4, value.value)
+        self._setString(3, value.value)
 
     def getBattleType(self):
-        return self._getString(5)
+        return self._getString(4)
 
     def setBattleType(self, value):
-        self._setString(5, value)
+        self._setString(4, value)
 
     def getIsSettingsVisible(self):
-        return self._getBool(6)
+        return self._getBool(5)
 
     def setIsSettingsVisible(self, value):
-        self._setBool(6, value)
+        self._setBool(5, value)
 
     def getIsRibbonVisible(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setIsRibbonVisible(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def getBackgroundImage(self):
-        return self._getString(8)
+        return self._getString(7)
 
     def setBackgroundImage(self, value):
-        self._setString(8, value)
+        self._setString(7, value)
 
     def _initialize(self):
         super(PlatoonDropdownModel, self)._initialize()
         self._addViewModelProperty('btnFind', ButtonModel())
         self._addViewModelProperty('btnCreate', ButtonModel())
         self._addViewModelProperty('btnCreateForTwo', ButtonModel())
-        self._addViewModelProperty('btnCreateForSeven', ButtonModel())
         self._addStringProperty('type')
         self._addStringProperty('battleType', '')
         self._addBoolProperty('isSettingsVisible', False)

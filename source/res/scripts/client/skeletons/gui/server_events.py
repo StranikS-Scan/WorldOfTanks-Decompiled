@@ -4,7 +4,7 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from Event import Event
-    from gui.server_events.event_items import DailyEpicTokenQuest, Quest, DailyQuest, PremiumQuest
+    from gui.server_events.event_items import DailyTokenQuest, Quest, DailyQuest, PremiumQuest
 
 class IEventsCache(object):
     onSyncStarted = None
@@ -71,6 +71,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getDailyQuests(self, filterFunc=None, includeEpic=False):
+        raise NotImplementedError
+
+    def getDailyQuestsSub(self, filterFunc=None):
         raise NotImplementedError
 
     def getDailyEpicQuest(self):

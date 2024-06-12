@@ -962,6 +962,9 @@
       <componentsData>
         <Type>	PYTHON	</Type>
       </componentsData>
+      <isPremiumSubs>
+        <Type>	BOOL	</Type>
+      </isPremiumSubs>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1556,57 +1559,6 @@
       </vehDisabledSetupSwitches>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <EVENT_RESPAWN_INFO_VEHICLE>	FIXED_DICT	  <Properties>
-      <compDescr>
-        <Type>	STRING	</Type>
-      </compDescr>
-      <crewCompactDescrs>
-        <Type>	ARRAY	  <of>	STRING	</of>
-        </Type>
-      </crewCompactDescrs>
-      <commanderSkinID>
-        <Type>	UINT16	</Type>
-      </commanderSkinID>
-      <marksOnGun>
-        <Type>	UINT8	</Type>
-      </marksOnGun>
-      <index>
-        <Type>	UINT16	</Type>
-      </index>
-      <onRespawnSettings>
-        <Type>	PYTHON	</Type>
-      </onRespawnSettings>
-      <ammo>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </ammo>
-      <positionList>	&gt;	  <Type>	PYTHON	</Type>
-      </positionList>
-      <outfit>
-        <Type>	STRING	</Type>
-      </outfit>
-      <vehPerks>
-        <Type>	PYTHON	</Type>
-      </vehPerks>
-      <vehSetups>
-        <Type>	PYTHON	</Type>
-      </vehSetups>
-      <vehSetupsIndexes>
-        <Type>	PYTHON	</Type>
-      </vehSetupsIndexes>
-      <vehPostProgression>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </vehPostProgression>
-      <customRoleSlotTypeId>
-        <Type>	UINT8	</Type>
-      </customRoleSlotTypeId>
-      <vehDisabledSetupSwitches>
-        <Type>	ARRAY	  <of>	UINT8	</of>
-        </Type>
-      </vehDisabledSetupSwitches>
-    </Properties>
-  </EVENT_RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
@@ -1844,9 +1796,6 @@
       <botDisplayStatus>
         <Type>	UINT8	</Type>
       </botDisplayStatus>
-      <isClientConnected>
-        <Type>	INT8	</Type>
-      </isClientConnected>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -2308,15 +2257,6 @@
       </isEndOfFlight>
     </Properties>
   </PLANE_TRAJECTORY>
-  <UDO_INFO>	FIXED_DICT	  <Properties>
-      <guid>
-        <Type>	STRING	</Type>
-      </guid>
-      <position>
-        <Type>	VECTOR2	</Type>
-      </position>
-    </Properties>
-  </UDO_INFO>
   <FIRE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <deviceExtraIndex>

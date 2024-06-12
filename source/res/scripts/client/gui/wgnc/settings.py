@@ -56,7 +56,8 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'box': 'referralCoin',
  'craftmachine_resource': 'craftmachineResource',
  'ClanQuestNotification': 'ClanQuestNotification',
- 'rankedYearLb': 'RankedYearLB'}
+ 'rankedYearLb': 'RankedYearLB',
+ 'error': 'ErrorIcon'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON

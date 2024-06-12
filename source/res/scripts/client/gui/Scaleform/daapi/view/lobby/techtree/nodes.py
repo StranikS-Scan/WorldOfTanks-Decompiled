@@ -215,7 +215,7 @@ class RealNode(ExposedNode):
         return self.__item.buyPrices.itemPrice.getActionPrc()
 
     def getCompareData(self):
-        if self.__item is not None and self.__item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+        if self.__item is not None and self.isVehicle():
             from gui.Scaleform.daapi.view.lobby.vehicle_compare import formatters
             return formatters.getTreeNodeCompareData(self.__item)
         else:

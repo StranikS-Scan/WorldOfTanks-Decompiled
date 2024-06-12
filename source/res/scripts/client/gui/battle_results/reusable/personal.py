@@ -300,6 +300,19 @@ class _EconomicsRecordsChains(object):
         self._addXPResults(connector, results)
         self._addCrystalResults(connector, results)
 
+    def addAvatarResults(self, infoAvatar):
+        avatarCreditsEvent = sum((creditEvent[1] for creditEvent in infoAvatar.get('eventCreditsList', [])))
+        self._baseCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
+        self._premiumCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
+        self._premiumPlusCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
+        avatarFreeXPEvent = sum((creditEvent[1] for creditEvent in infoAvatar.get('eventFreeXPList', [])))
+        self._premiumPlusFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        self._premiumPlusFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        self._premiumFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        self._premiumFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        self._baseFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        self._baseFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+
     def _addMoneyResults(self, connector, results):
         if 'creditsReplay' in results and results['creditsReplay'] is not None:
             replay = ValueReplay(connector, recordName='credits', replay=results['creditsReplay'])
@@ -616,6 +629,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__xpProgress[intCD] = {'xp': data.get('xp', 0),
              'xpByTmen': data.get('xpByTmen', [])}
 
+        self._economicsRecords.addAvatarResults(infoAvatar)
         if lifeTimes:
             self.__lifeTimeInfo = _LifeTimeInfo(True, min(lifeTimes))
         return

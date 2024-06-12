@@ -13,7 +13,7 @@ from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo, EarlyAccessQuestPostBattleInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
@@ -41,7 +41,7 @@ from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from skeletons.gui.game_control import IBattlePassController, IDebutBoxesController
+from skeletons.gui.game_control import IBattlePassController, IDebutBoxesController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -451,6 +451,7 @@ class Comp7BattlePassProgressBlock(BattlePassProgressBlock):
 class QuestsProgressBlock(base.StatsBlock):
     eventsCache = dependency.descriptor(IEventsCache)
     __debutBoxesController = dependency.descriptor(IDebutBoxesController)
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __slots__ = ()
 
     def getVO(self):
@@ -462,6 +463,7 @@ class QuestsProgressBlock(base.StatsBlock):
         c11nQuests = []
         personalMissions = {}
         debutBoxesQuests = []
+        earlyAccessQuests = []
         allCommonQuests = self.eventsCache.getQuests()
         allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
         battleMattersProgressData = []
@@ -487,6 +489,10 @@ class QuestsProgressBlock(base.StatsBlock):
                     data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
                         debutBoxesQuests.append(data)
+                if self.__earlyAccessController.isProgressionQuest(qID) or self.__earlyAccessController.isPostProgressionQuest(qID):
+                    data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
+                    if data:
+                        earlyAccessQuests.append(data)
                 if qID in allCommonQuests:
                     data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
@@ -505,6 +511,11 @@ class QuestsProgressBlock(base.StatsBlock):
 
         for e, pCur, pPrev, reset, complete in debutBoxesQuests:
             info = DebutBoxesQuestPostBattleInfo(e).getPostBattleInfo(allCommonQuests, pCur, pPrev, reset, complete, {'vehicleCDs': vehicleCDs})
+            if info is not None:
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
+
+        for e, pCur, pPrev, reset, complete in earlyAccessQuests:
+            info = EarlyAccessQuestPostBattleInfo(e).getPostBattleInfo(allCommonQuests, pCur, pPrev, reset, complete)
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 

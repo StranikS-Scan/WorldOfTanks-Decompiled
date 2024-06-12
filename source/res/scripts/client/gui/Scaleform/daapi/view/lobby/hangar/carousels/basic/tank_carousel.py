@@ -15,7 +15,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
-from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import IRestoreController, IEarlyAccessController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -23,6 +23,7 @@ class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     restoreCtrl = dependency.descriptor(IRestoreController)
+    __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -67,6 +68,12 @@ class TankCarousel(TankCarouselMeta):
         self.filter.switch(self._usedFilters[idx])
         self.blinkCounter()
         self.applyFilter()
+
+    def getCustomParams(self):
+        popupFilters = super(TankCarousel, self).getCustomParams()
+        if self.__earlyAccessCtrl.isEnabled() and self.__earlyAccessCtrl.isPostProgressionQueueSelected():
+            popupFilters.update({'early_access': True})
+        return popupFilters
 
     def hasRoles(self):
         return True

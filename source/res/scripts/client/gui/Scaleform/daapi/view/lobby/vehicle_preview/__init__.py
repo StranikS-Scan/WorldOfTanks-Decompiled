@@ -29,6 +29,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_style_progression import VehiclePreviewBottomPanelStyleProgression
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.rental_vehicle_preview import VehiclePreviewBottomPanelRental
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_resource_well import VehiclePreviewBottomPanelResourceWell
+    from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.bottom_panel_early_access import VehiclePreviewBottomPanelEarlyAccess
     return (ComponentSettings(VEHPREVIEW_CONSTANTS.PARAMETERS_PY_ALIAS, VehiclePreviewParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_PY_ALIAS, VehiclePreviewTopPanelTabs, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_PY_ALIAS, VehiclePreviewBottomPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -38,6 +39,7 @@ def getViewSettings():
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_PY_ALIAS, VehiclePreviewBottomPanelShowcaseStyleBuying, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_OFFER_GIFT_PY_ALIAS, VehiclePreviewBottomPanelOfferGift, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_WELL_PY_ALIAS, VehiclePreviewBottomPanelResourceWell, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_EARLY_ACCESS_PY_ALIAS, VehiclePreviewBottomPanelEarlyAccess, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE, VehiclePreviewBrowseTab, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.MODULES_LINKAGE, VehiclePreviewModulesTab, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHPREVIEW_CONSTANTS.MODULES_PY_ALIAS, ModulesPanel, ScopeTemplates.DEFAULT_SCOPE),

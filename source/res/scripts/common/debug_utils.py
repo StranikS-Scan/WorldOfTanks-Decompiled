@@ -117,8 +117,8 @@ def init():
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def CRITICAL_ERROR(msg, *kargs):
-    msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
+def CRITICAL_ERROR(msg, *kargs, **kwargs):
+    msg = '{0}:{1}:{2}:{3}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs, kwargs)
     BigWorld.logCritical('CRITICAL', msg, None)
     if IS_CLIENT:
         BigWorld.quit()
@@ -172,8 +172,8 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_CODEPOINT_WARNING(*kargs):
-    _doLog('WARNING', 'this code point should have never been reached', kargs)
+def LOG_CODEPOINT_WARNING(*kargs, **kwargs):
+    _doLog('WARNING', 'this code point should have never been reached', kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
@@ -182,9 +182,9 @@ def LOG_ERROR(msg, *kargs, **kwargs):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_SENTRY(msg, *kargs):
+def LOG_SENTRY(msg, *kargs, **kwargs):
     try:
-        raise SoftException('{} {}'.format(msg, kargs))
+        raise SoftException('{} {} {}'.format(msg, kargs, kwargs))
     except:
         LOG_CURRENT_EXCEPTION(frame=2)
 
@@ -204,8 +204,8 @@ def LOG_WARNING(msg, *kargs, **kwargs):
     _doLog('WARNING', msg, kargs, kwargs)
 
 
-def LOG_OBSOLETE(msg, *kargs):
-    _doLog('OBSOLETE', msg, kargs)
+def LOG_OBSOLETE(msg, *kargs, **kwargs):
+    _doLog('OBSOLETE', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
@@ -230,15 +230,17 @@ def LOG_DEBUG_DEV_NICE(msg, *kargs, **kwargs):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_UNEXPECTED(msg, *kargs):
-    _doLog('LOG_UNEXPECTED', msg, kargs)
+def LOG_UNEXPECTED(msg, *kargs, **kwargs):
+    _doLog('LOG_UNEXPECTED', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_WRONG_CLIENT(entity, *kargs):
-    if hasattr(entity, 'id'):
-        entity = entity.id
-    BigWorld.logError('WRONG_CLIENT', ' '.join(map(str, [_makeMsgHeader(sys._getframe(1)), entity, kargs])), None)
+def LOG_WRONG_CLIENT(entity, *kargs, **kwargs):
+    entity = getattr(entity, 'id', entity)
+    BigWorld.logError('WRONG_CLIENT', ' '.join(map(str, [_makeMsgHeader(sys._getframe(1)),
+     entity,
+     kargs,
+     kwargs])), None)
     return
 
 
@@ -471,24 +473,6 @@ def traceCalls(func):
         return ret
 
     return wrapper
-
-
-class CatchNativeCallstack(object):
-
-    def __init__(self):
-        self._stack = None
-        return
-
-    def __enter__(self):
-        self._stack = traceback.extract_stack()
-        return self
-
-    def __exit__(self, exctype, value, tb):
-        if exctype:
-            LOG_ERROR('Original callstack:')
-            traceback.print_list(self._stack[:-1])
-            traceback.print_exception(exctype, value, tb)
-        return True
 
 
 def wg_extract_stack(f=None, limit=None):

@@ -12,7 +12,6 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from items.battle_royale import isSpawnedBot, isHunterBot
 from skeletons.gui.battle_session import IBattleSessionProvider
-from historical_battles_common.hb_constants_extension import ARENA_GUI_TYPE
 
 class _ENTITY_TYPE(object):
     UNKNOWN = 'unknown'
@@ -42,8 +41,7 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['thunderStrike']: 'DEATH_FROM_SHOT',
  _AR_INDICES['corrodingShot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['fireCircle']: 'DEATH_FROM_SHOT',
- _AR_INDICES['clingBrander']: 'DEATH_FROM_SHOT',
- _AR_INDICES['personal_death_zone']: 'DEATH_FROM_DEATH_ZONE_ARTILLERY'}
+ _AR_INDICES['clingBrander']: 'DEATH_FROM_SHOT'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
@@ -304,17 +302,6 @@ class EpicBattleMessagesController(BattleMessagesController):
         return True
 
 
-class HistoricalBattlesMessagesController(BattleMessagesController):
-
-    def __init__(self, setup):
-        super(HistoricalBattlesMessagesController, self).__init__(setup)
-        self._attackReasonCodes[_AR_INDICES['artillery_mortar']] = 'ARTILLERY_MORTAR'
-        self._attackReasonCodes[_AR_INDICES['bombercas']] = 'DEATH_FROM_BOMBER_CAS'
-        self._attackReasonCodes[_AR_INDICES['artillery_eq']] = 'ARTILLERY_EQ'
-        self._attackReasonCodes[_AR_INDICES['artillery_rocket']] = 'ARTILLERY_ROCKET'
-        self._attackReasonCodes[_AR_INDICES['bomber_eq']] = 'BOMBER_EQ'
-
-
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
 def _isHideVehicleKilledMsg(vehicleID, battleSessionProvider=None):
     ctx = battleSessionProvider.getCtx()
@@ -395,11 +382,6 @@ def createBattleMessagesCtrl(setup):
             ctrl = BattleRoyaleBattleMessagesPlayer(setup)
         else:
             ctrl = BattleRoyaleBattleMessagesController(setup)
-    elif BigWorld.player().arena.guiType == ARENA_GUI_TYPE.HISTORICAL_BATTLES:
-        if setup.isReplayPlaying:
-            ctrl = BattleMessagesPlayer(setup)
-        else:
-            ctrl = HistoricalBattlesMessagesController(setup)
     elif setup.isReplayPlaying:
         ctrl = BattleMessagesPlayer(setup)
     else:

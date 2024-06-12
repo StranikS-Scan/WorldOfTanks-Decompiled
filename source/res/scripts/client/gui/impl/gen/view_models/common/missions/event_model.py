@@ -5,6 +5,7 @@ from frameworks.wulf import ViewModel
 
 class EventStatus(Enum):
     DONE = 'done'
+    UNDONESUBSCRIPTION = 'undoneSubscription'
     LOCKED = 'notAvailable'
     ACTIVE = ''
 

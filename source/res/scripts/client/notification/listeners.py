@@ -3,6 +3,7 @@
 import json
 import logging
 import time
+import datetime
 import weakref
 from collections import defaultdict
 from functools import partial
@@ -10,17 +11,20 @@ from typing import TYPE_CHECKING
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, BattleMatters
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess
 from adisp import adisp_process
 from armory_yard_constants import State
+from renewable_subscription_common.settings_constants import WotPlusState
+from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.SystemMessages import SM_TYPE
 from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
@@ -40,7 +44,7 @@ from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import settings as settings_records
 from gui.server_events.recruit_helper import getAllRecruitsInfo
-from gui.shared import events, g_eventBus
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.money import Currency
 from gui.shared.notifications import NotificationPriorityLevel
@@ -52,7 +56,7 @@ from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN, TRADING_
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from helpers import dependency, i18n, time_utils
+from helpers import dependency, i18n, time_utils, int2roman
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
@@ -61,11 +65,12 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator
+from nations import AVAILABLE_NAMES
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController, IReferralProgramController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -129,8 +134,8 @@ class _StateExtractor(object):
         return cls.__lobbyContext.getServerSettings().isDogTagEnabled()
 
     @classmethod
-    def getPlayerSubscriptionsState(cls):
-        return cls.__lobbyContext.getServerSettings().isPlayerSubscriptionsEnabled()
+    def getRenewableSubscriptionsState(cls):
+        return cls.__lobbyContext.getServerSettings().isRenewableSubEnabled()
 
     @classmethod
     def getMapsTrainingState(cls):
@@ -161,9 +166,6 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
  DOG_TAGS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.dog_tags.switch_on.title(), R.strings.system_messages.dog_tags.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                    _FeatureState.OFF: (R.strings.system_messages.dog_tags.switch_off.title(), R.strings.system_messages.dog_tags.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                    _FUNCTION: _StateExtractor.getDogTagsUnlockingState},
- PLAYER_SUBSCRIPTIONS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.player_subscriptions.switch_on.title(), R.strings.system_messages.player_subscriptions.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                               _FeatureState.OFF: (R.strings.system_messages.player_subscriptions.switch_off.title(), R.strings.system_messages.player_subscriptions.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                               _FUNCTION: _StateExtractor.getPlayerSubscriptionsState},
  MAPS_TRAINING_ENABLED_KEY: {_FeatureState.ON: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                              _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                              _FUNCTION: _StateExtractor.getMapsTrainingState}}
@@ -239,6 +241,10 @@ class ServiceChannelListener(_NotificationListener):
         auxData = getattr(settings, 'auxData', (None,))
         return SM_TYPE.lookup(auxData[0]) in (SM_TYPE.CollectionsEntry, SM_TYPE.CollectionRenew, SM_TYPE.CollectionStart) if auxData else None
 
+    def __isEarlyAccessSMType(self, settings):
+        auxData = getattr(settings, 'auxData', (None,))
+        return SM_TYPE.lookup(auxData[0]) in (SM_TYPE.EarlyAccessStartEvent, SM_TYPE.EarlyAccessStartChapter, SM_TYPE.EarlyAccessCommon) if auxData else None
+
     def __getMessageDecorator(self, settings, messageType, messageSubtype):
         if settings.decorator is not None:
             return settings.decorator
@@ -263,6 +269,8 @@ class ServiceChannelListener(_NotificationListener):
                     return C2DProgressionStyleDecorator
                 if self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
                     return CollectionsLockButtonDecorator
+                if self.__isEarlyAccessSMType(settings) or messageType == SYS_MESSAGE_TYPE.earlyAccessVehicle.index():
+                    return EarlyAccessDecorator
             return MessageDecorator
 
 
@@ -985,11 +993,12 @@ class TankPremiumListener(_NotificationListener):
 
     def __addListeners(self):
         self.__gameSession.onPremiumNotify += self.__onTankPremiumActiveChanged
-        g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK_CREDITS: self.__onPiggyBankCreditsChanged})
+        g_clientUpdateManager.addCallbacks({PiggyBankConstants.PIGGY_BANK_CREDITS: self.__onPiggyBankCreditsChanged,
+         PiggyBankConstants.PIGGY_BANK_GOLD: self.__onPiggyBankGoldChanged})
 
     def __removeListeners(self):
         self.__gameSession.onPremiumNotify -= self.__onTankPremiumActiveChanged
-        g_clientUpdateManager.removeCallback(PiggyBankConstants.PIGGY_BANK_CREDITS, self.__onPiggyBankCreditsChanged)
+        g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __onPiggyBankCreditsChanged(self, credits_=None):
         config = self.__lobbyContext.getServerSettings().getPiggyBankConfig()
@@ -998,6 +1007,11 @@ class TankPremiumListener(_NotificationListener):
         if credits_ >= maxAmount:
             timeLeft = time_formatters.getTillTimeByResource(getDeltaTimeHelper(config, data), R.strings.premacc.piggyBankCard.timeLeft)
             SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(R.strings.system_messages.piggyBank.piggyBankFull(), timeValue=timeLeft))
+
+    def __onPiggyBankGoldChanged(self, gold_=None):
+        maxAmount = self.__lobbyContext.getServerSettings().getRenewableSubMaxGoldReserveCapacity()
+        if gold_ >= max(maxAmount, PiggyBankConstants.MAX_AMOUNT_GOLD):
+            SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, text=backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.goldReserve.isFull.title(), type=SystemMessages.SM_TYPE.Warning))
 
     def __onTankPremiumActiveChanged(self, isPremActive, *_):
         if not isPremActive:
@@ -2160,6 +2174,37 @@ class ReferralProgramListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.ReferralProgramPGBFull, priority=NotificationPriorityLevel.MEDIUM)
 
 
+class SubscriptionListener(_NotificationListener):
+    __wotPlusCtrl = dependency.descriptor(IWotPlusController)
+
+    def start(self, model):
+        result = super(SubscriptionListener, self).start(model)
+        self.__expirateSubscription()
+        g_eventBus.addListener(events.ViewEventType.LOAD_VIEW, self.__spaceUpdate, EVENT_BUS_SCOPE.LOBBY)
+        return result
+
+    def stop(self):
+        super(SubscriptionListener, self).stop()
+        g_eventBus.removeListener(events.ViewEventType.LOAD_VIEW, self.__spaceUpdate, EVENT_BUS_SCOPE.LOBBY)
+
+    def __spaceUpdate(self, event):
+        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            self.__expirateSubscription()
+
+    def __expirateSubscription(self):
+        if self.__wotPlusCtrl.isEnabled():
+            subscriptionText = R.strings.subscription.notification.subscriptionExpiration
+            timeNotification = datetime.timedelta(days=3).total_seconds()
+            timeNow = time.time()
+            lastNotification = AccountSettings.getSettings(SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION)
+            if self.__wotPlusCtrl.getExpiryTime() - timeNow < timeNotification and lastNotification + timeNotification < timeNow:
+                AccountSettings.setSettings(SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, timeNow)
+                if self.__wotPlusCtrl.getState() == WotPlusState.ACTIVE:
+                    SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, type=SM_TYPE.InformationHeader, text=backport.text(subscriptionText.active.text(), timeExpiration=backport.getShortDateFormat(self.__wotPlusCtrl.getExpiryTime())), messageData={'header': backport.text(subscriptionText.active.header())})
+                elif self.__wotPlusCtrl.getState() == WotPlusState.CANCELLED:
+                    SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, type=SM_TYPE.InformationHeader, text=backport.text(subscriptionText.cancel.text(), timeExpiration=backport.getShortDateFormat(self.__wotPlusCtrl.getExpiryTime())), messageData={'header': backport.text(subscriptionText.cancel.header())})
+
+
 class WotPlusIntroViewListener(_NotificationListener):
     __wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -2302,6 +2347,132 @@ class Birthday2023Listener(_NotificationListener):
                 showBirthday2023Intro()
 
 
+class EarlyAccessListener(_NotificationListener):
+    __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __EARLY_ACCESS_TEXT = R.strings.early_access.clientNotifications
+    __SEPARATOR = '\n'
+
+    def start(self, model):
+        result = super(EarlyAccessListener, self).start(model)
+        self.__subscribe()
+        return result
+
+    def stop(self):
+        self.__unsubscribe()
+        super(EarlyAccessListener, self).stop()
+
+    def __subscribe(self):
+        self.__earlyAccessController.onStartEvent += self.__onStartEvent
+        self.__earlyAccessController.onFinishEvent += self.__onFinishEvent
+        self.__earlyAccessController.onStartAnnouncement += self.__onStartAnnouncement
+        self.__earlyAccessController.onFinishAnnouncement += self.__onFinishAnnouncement
+        self.__earlyAccessController.onQuestsUpdated += self.__onQuestsUpdated
+        self.__earlyAccessController.onPayed += self.__onPayed
+        self.__earlyAccessController.onFeatureStateChanged += self.__onFeatureStateChanged
+        self.__onCheckNotify()
+
+    def __unsubscribe(self):
+        self.__earlyAccessController.onStartEvent -= self.__onStartEvent
+        self.__earlyAccessController.onFinishEvent -= self.__onFinishEvent
+        self.__earlyAccessController.onStartAnnouncement -= self.__onStartAnnouncement
+        self.__earlyAccessController.onFinishAnnouncement -= self.__onFinishAnnouncement
+        self.__earlyAccessController.onQuestsUpdated -= self.__onQuestsUpdated
+        self.__earlyAccessController.onPayed -= self.__onPayed
+        self.__earlyAccessController.onFeatureStateChanged -= self.__onFeatureStateChanged
+
+    def __onStartEvent(self):
+        key = EarlyAccess.EVENT_ANNOUNCEMENT
+        if not AccountSettings.getEarlyAccess(key):
+            self.__earlyAccessController.setEarlyAccessSetting(key)
+            vehicles = self.__earlyAccessController.getAffectedVehicles().keys()
+            if vehicles:
+                nationID = self.__itemsCache.items.getItemByCD(vehicles[0]).nationID
+                nation = AVAILABLE_NAMES[nationID]
+                SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.start.event.body(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase())), type=SystemMessages.SM_TYPE.EarlyAccessStartEvent, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+
+    def __onFinishEvent(self):
+        key = EarlyAccess.EVENT_FINISHED
+        if not AccountSettings.getEarlyAccess(key):
+            self.__earlyAccessController.setEarlyAccessSetting(key)
+            SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.feature.state.finished()), type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM)
+
+    def __onStartAnnouncement(self, cycleID, cycleIndex=None):
+        key = '%s_%s' % (EarlyAccess.STARTED_CHAPTER_PREFIX, cycleID)
+        if AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN) and not AccountSettings.getEarlyAccess(key):
+            self.__earlyAccessController.setEarlyAccessSetting(key)
+            SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.start.chapter.body(), count=int2roman(cycleIndex)) if cycleIndex is not None else backport.text(self.__EARLY_ACCESS_TEXT.start.postprogression.chapter.body()), type=SystemMessages.SM_TYPE.EarlyAccessStartChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        return
+
+    def __onFinishAnnouncement(self, endDate, isProgression=True):
+        text = backport.text(self.__EARLY_ACCESS_TEXT.progression.finishSoon.body() if isProgression else self.__EARLY_ACCESS_TEXT.postprogression.finishSoon.body(), endDate=backport.getDateTimeFormat(endDate))
+        key = EarlyAccess.FINISHED_PROGRESSION if isProgression else EarlyAccess.FINISHED_POSTRPOGRESSION
+        if not AccountSettings.getEarlyAccess(key):
+            self.__earlyAccessController.setEarlyAccessSetting(key)
+            self.__pushCommonMessage(text)
+
+    def __onPayed(self, result, buyTokensAmount):
+        ctrl = self.__earlyAccessController
+        if result:
+            priceInGold = ctrl.getTokenCost() * buyTokensAmount
+            isAllTokensRecieved = ctrl.getReceivedTokensCount() >= ctrl.getTotalVehiclesPrice()
+            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.buy.success.body(), tokenAmount=text_styles.eventCoin(buyTokensAmount), goldAmount=text_styles.gold(backport.getGoldFormat(priceInGold.getSignValue(Currency.GOLD)))))
+            if isAllTokensRecieved:
+                self.__earlyAccessController.setEarlyAccessSetting(EarlyAccess.ALL_TOKENS_RECEIVED)
+                self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.buy.success.allTokens.body()), NotificationPriorityLevel.LOW, self.__getRewardHeader())
+
+    def __onQuestsUpdated(self):
+        ctrl = self.__earlyAccessController
+        allCycles = list(ctrl.iterAllCycles())
+        for idx, (cycleID, cycle) in enumerate(allCycles):
+            key = '%s_%s' % (EarlyAccess.COMPLETED_PROGRESSION_PREFIX, cycleID)
+            if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(cycleID):
+                ctrl.setEarlyAccessSetting(key)
+                self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.progression.completed(), count=int2roman(cycle.ordinalNumber)), header=self.__getRewardHeader())
+                currSeason = ctrl.getCurrentSeason()
+                if currSeason:
+                    nowTime = time_utils.getServerUTCTime()
+                    _, nextCycle = allCycles[idx + 1] if idx + 1 < len(allCycles) else (None, None)
+                    if nextCycle is not None and nowTime < nextCycle.startDate:
+                        self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.nextchapter.available(), count=int2roman(nextCycle.ordinalNumber), date=backport.getDateTimeFormat(nextCycle.startDate)))
+
+        key = EarlyAccess.COMPLETED_POSTPROGRESSION
+        if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(EARLY_ACCESS_POSTPR_KEY):
+            ctrl.setEarlyAccessSetting(key)
+            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.postprogression.completed()), header=self.__getRewardHeader())
+        isAllTokensRecieved = ctrl.getReceivedTokensCount() >= ctrl.getTotalVehiclesPrice()
+        if isAllTokensRecieved and not AccountSettings.getEarlyAccess(EarlyAccess.ALL_TOKENS_RECEIVED):
+            self.__earlyAccessController.setEarlyAccessSetting(EarlyAccess.ALL_TOKENS_RECEIVED)
+            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.buy.success.allTokens.body()), NotificationPriorityLevel.LOW, self.__getRewardHeader())
+        return
+
+    def __onFeatureStateChanged(self, isPaused, newEndDate=None):
+        if isPaused:
+            SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.feature.state.paused()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        else:
+            endDate = '' if newEndDate is None else self.__SEPARATOR + backport.text(self.__EARLY_ACCESS_TEXT.feature.state.available.newEndDate(), newDate=backport.getDateTimeFormat(newEndDate))
+            SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.feature.state.available(), newEndDate=endDate), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        return
+
+    def __pushCommonMessage(self, text, priority=NotificationPriorityLevel.MEDIUM, header=None):
+        if self.__earlyAccessController.isEnabled():
+            SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.EarlyAccessCommon, priority=priority, messageData={'header': self.__getHeader() if header is None else header})
+        return
+
+    def __getHeader(self):
+        return backport.text(self.__EARLY_ACCESS_TEXT.header())
+
+    def __getRewardHeader(self):
+        return backport.text(self.__EARLY_ACCESS_TEXT.rewardHeader())
+
+    def __onCheckNotify(self):
+        if self.__earlyAccessController.isEnabled():
+            self.__earlyAccessController.checkFeatureStateChanged()
+            self.__earlyAccessController.sysMessageController.checkNotify()
+        self.__earlyAccessController.sysMessageController.checkFinishEvent()
+        self.__onQuestsUpdated()
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2325,10 +2496,11 @@ registerNotificationsListeners((ServiceChannelListener,
  WinbackSelectableRewardReminder,
  ArmoryYardListener,
  ReferralProgramListener,
- WotPlusIntroViewListener,
  Birthday2023Listener,
  BattleMattersTaskReminderListener,
- TradingCaravanListener))
+ TradingCaravanListener,
+ SubscriptionListener,
+ EarlyAccessListener))
 
 class NotificationsListeners(_NotificationListener):
 

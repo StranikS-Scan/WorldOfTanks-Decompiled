@@ -177,6 +177,9 @@ def getRandomTooltipData(result):
     elif state == PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE:
         header = backport.text(_STR_PATH.wotPlusExclusiveUnavailable.header())
         body = backport.text(_STR_PATH.wotPlusExclusiveUnavailable.body())
+    elif state == PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE:
+        header = None
+        body = backport.text(R.strings.tooltips.hangar.startBtn.preview.body())
     else:
         return ''
     return makeTooltip(header, body)
@@ -244,6 +247,9 @@ def getComp7FightBtnTooltipData(result):
     elif state == PRE_QUEUE_RESTRICTION.QUALIFICATION_RESULTS_PROCESSING:
         header = backport.text(resShortCut.comp7RatingCalculation.header())
         body = backport.text(resShortCut.comp7RatingCalculation.body())
+    elif state == PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE:
+        header = None
+        body = backport.text(R.strings.tooltips.hangar.startBtn.preview.body())
     else:
         return ''
     return makeTooltip(header, body)

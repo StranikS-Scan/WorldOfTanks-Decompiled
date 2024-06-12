@@ -697,7 +697,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         elif self.__isHeroTank:
             if not self._heroTanks.isAdventHero() and not self._heroTanks.getCurrentShopUrl():
                 url = self._heroTanks.getCurrentRelatedURL()
-        callback(self.__linksCtrl.externalAllowed(url) if url and not url.startswith('fake://') else False)
+        callback(self.__linksCtrl.externalAllowed(url) if url else False)
 
     @adisp_process
     def __purchaseMarathonPackage(self):

@@ -21,7 +21,7 @@ from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from gui.shared.missions.packers.conditions import BonusConditionPacker
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.game_control import IComp7Controller, IWotPlusController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
@@ -114,6 +114,34 @@ class TokenUIDataPacker(_EventUIDataPacker):
             model = model if model is not None else QuestModel()
             self._packModel(model)
             return model
+
+
+class DailySubscriptionQuestUIDataPacker(_EventUIDataPacker):
+    __subscriptionController = dependency.descriptor(IWotPlusController)
+
+    def __init__(self, event, bonusPackerGetter=getDefaultBonusPacker, tooltipData=None):
+        super(DailySubscriptionQuestUIDataPacker, self).__init__(event)
+        self._tooltipData = tooltipData if tooltipData else {}
+        self.__bonusPackerGetter = bonusPackerGetter
+
+    def pack(self, model=None):
+        if model is not None and not isinstance(model, DailyQuestModel):
+            _logger.error('Provided model type is not matching quest type. Expected DailyQuestModel')
+            return
+        else:
+            model = model if model is not None else DailyQuestModel()
+            self._packModel(model)
+            return model
+
+    def getTooltipData(self):
+        return self._tooltipData
+
+    def _packModel(self, model):
+        self._packBonuses(model)
+
+    def _packBonuses(self, model):
+        packer = self.__bonusPackerGetter()
+        packQuestBonusModelAndTooltipData(packer, model.getSubscriptionBonuses(), self._event, tooltipData=self._tooltipData)
 
 
 class PrivateMissionUIDataPacker(_EventUIDataPacker):
@@ -230,8 +258,10 @@ def preformatEventBonuses(event, bonusFormatter=CurtailingAwardsComposer(DEFAULT
     return bonusFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
 
 
-def getEventUIDataPacker(event):
-    if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
+def getEventUIDataPacker(event, tooltipData=None):
+    if event.getLevel() in constants.DailyQuestsLevels.SUBS:
+        return DailySubscriptionQuestUIDataPacker(event, tooltipData=tooltipData)
+    elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return TokenUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PrivateMissionUIDataPacker(event)

@@ -215,6 +215,9 @@ class ServerEventAbstract(object):
     def getBonuses(self, bonusName=None, isCompensation=False):
         return []
 
+    def getLevel(self):
+        pass
+
     def getParents(self):
         return []
 
@@ -543,8 +546,14 @@ class DailyQuest(Quest):
     def getLevel(self):
         return self._meta and self._meta.get('level')
 
+    def isSimple(self):
+        return self.getLevel() in constants.DailyQuestsLevels.DAILY_SIMPLE
+
     def isBonus(self):
         return self.getLevel() == constants.DailyQuestsLevels.BONUS
+
+    def isEpic(self):
+        return self.getLevel() == constants.DailyQuestsLevels.EPIC
 
     def getSortKey(self):
         return constants.DailyQuestsLevels.DAILY.index(self.getLevel())
@@ -553,10 +562,19 @@ class DailyQuest(Quest):
         return backport.text(R.strings.quests.dailyQuests.postBattle.dyn('genericTitle_%s' % self.getLevel())())
 
 
-class DailyEpicTokenQuest(TokenQuest):
+class DailyTokenQuest(TokenQuest):
+
+    def getLevel(self):
+        return self._meta and self._meta.get('level')
+
+    def isBonus(self):
+        return self.getLevel() == constants.DailyQuestsLevels.BONUS_SUBS
+
+    def getSortKey(self):
+        return constants.DailyQuestsLevels.SUBS.index(self.getLevel())
 
     def getUserName(self):
-        return backport.text(R.strings.quests.dailyQuests.postBattle.genericTitle_epic())
+        return backport.text(R.strings.quests.dailyQuests.postBattle.dyn('genericTitle_%s' % self.getLevel())())
 
 
 class PersonalQuest(Quest):
@@ -1386,7 +1404,7 @@ class DailyTokenQuestBuilder(IQuestBuilder):
 
     @classmethod
     def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
-        return DailyEpicTokenQuest(qID, data, progress)
+        return DailyTokenQuest(qID, data, progress)
 
 
 class TokenQuestBuilder(IQuestBuilder):

@@ -21,10 +21,14 @@ BONUS_NAME_TO_ITEM_MAP = {WoTPlusBonusType.EXCLUDED_MAP: RewardScreenTooltips.EX
  WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING: RewardScreenTooltips.FREE_EQUIPMENT_MOVEMENT,
  WoTPlusBonusType.GOLD_BANK: RewardScreenTooltips.GOLD_RESERVE,
  WoTPlusBonusType.IDLE_CREW_XP: RewardScreenTooltips.PASSIVE_CREW_XP,
- WoTPlusBonusType.ATTENDANCE_REWARD: RewardScreenTooltips.ATTENDANCE_REWARD}
+ WoTPlusBonusType.ATTENDANCE_REWARD: RewardScreenTooltips.ATTENDANCE_REWARD,
+ WoTPlusBonusType.TEAM_CREDITS_BONUS: RewardScreenTooltips.TEAM_CREDITS_BONUS,
+ WoTPlusBonusType.DAILY_QUESTS_REWARDS: RewardScreenTooltips.DAILY_QUESTS_REWARDS}
 WOT_PLUS_STATE_TO_LOG_STATE_MAP = {WotPlusState.ACTIVE: WotPlusStateStr.ACTIVE,
  WotPlusState.INACTIVE: WotPlusStateStr.INACTIVE,
- WotPlusState.CANCELLED: WotPlusStateStr.SUSPENDED}
+ WotPlusState.TRIAL: WotPlusStateStr.TRIAL,
+ WotPlusState.CANCELLED: WotPlusStateStr.SUSPENDED,
+ WotPlusState.ERROR: WotPlusStateStr.ERROR}
 
 class SubscriptionsStateMixin(object):
     __slots__ = ()

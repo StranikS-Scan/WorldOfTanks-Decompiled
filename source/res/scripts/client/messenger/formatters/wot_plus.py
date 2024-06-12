@@ -1,11 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/wot_plus.py
+import datetime
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items.Vehicle import getUserName
 from items.vehicles import getVehicleType
-from messenger.formatters.service_channel import SimpleFormatter
+from messenger.formatters.service_channel import SimpleFormatter, ServiceChannelFormatter
+from skeletons.gui.game_control import IWotPlusController
+from helpers import dependency, time_utils
+from messenger import g_settings
+from adisp import adisp_async, adisp_process
+from messenger.formatters import TimeFormatter
+from renewable_subscription_common.settings_constants import WotPlusState
+from messenger.formatters.service_channel_helpers import MessageData
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
     from typing import Dict, Tuple
@@ -34,32 +42,75 @@ class IStandardMessageFormatter(SimpleFormatter):
         return None
 
 
-class WotPlusUnlockedFormatter(IStandardMessageFormatter):
+class PremiumSubsAsyncFormatter(ServiceChannelFormatter):
+    subscriptionCtrl = dependency.descriptor(IWotPlusController)
 
-    def __init__(self):
-        super(WotPlusUnlockedFormatter, self).__init__('WotPlusUnlockMessage')
+    def isAsync(self):
+        return True
 
-    def getTitle(self, message, *args):
-        startTime = message.data.get('startTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.unlockMessage.title(), startTime=self.getConvertedDateTime(startTime))
+    def getConvertedDateTime(self, dTime):
+        return TimeFormatter.getShortDatetimeFormat(time_utils.makeLocalServerTime(dTime))
 
-    def getText(self, message, *args):
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback, *args):
+        yield self.subscriptionCtrl.synchronize()
+        callback(self._format(message))
+
+    def _format(self, message):
+        return []
+
+
+class WotPlusUnlockedFormatter(PremiumSubsAsyncFormatter):
+    subscriptionCtrl = dependency.descriptor(IWotPlusController)
+
+    def isAsync(self):
+        return True
+
+    def getConvertedDateTime(self, dTime):
+        return TimeFormatter.getShortDatetimeFormat(time_utils.makeLocalServerTime(dTime))
+
+    def _format(self, message):
         expiryTime = message.data.get('expiryTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self.getConvertedDateTime(expiryTime))
+        title = backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.unlockMessage.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self.getConvertedDateTime(expiryTime))
+        if self.subscriptionCtrl.getState() == WotPlusState.TRIAL:
+            title = backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.unlockTrialMessage.title())
+            text = backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.unlockTrialMessage.text(), time=self.getConvertedDateTime(expiryTime))
+        formatted = g_settings.msgTemplates.format('WotPlusUnlockMessage', ctx={'title': title,
+         'text': text})
+        return [MessageData(formatted, self._getGuiSettings(message, 'WotPlusUnlockMessage'))]
 
 
-class WotPlusRenewedFormatter(IStandardMessageFormatter):
+class PremiumSubsUpdatedFormatter(PremiumSubsAsyncFormatter):
+    _MSG_TEMPLATE = 'InformationHeaderSysMessage'
 
-    def __init__(self):
-        super(WotPlusRenewedFormatter, self).__init__('WotPlusRenewMessage')
-
-    def getTitle(self, message, *args):
-        renewTime = message.data.get('renewTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.renewMessage.title(), time=self.getConvertedDateTime(renewTime))
-
-    def getText(self, message, *args):
+    def _format(self, message):
         expiryTime = message.data.get('expiryTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self.getConvertedDateTime(expiryTime))
+        oldExpiryTime = message.data.get('oldExpiryTime', 0)
+        if self.subscriptionCtrl.getState() == WotPlusState.TRIAL:
+            days = datetime.timedelta(seconds=max(expiryTime - oldExpiryTime, 0)).days
+            title = backport.text(R.strings.messenger.serviceChannelMessages.premiumSubs.premiumSubsTrialUpdated.title(), days=days)
+            text = backport.text(R.strings.messenger.serviceChannelMessages.premiumSubs.premiumSubsTrialUpdated.body(), days=days)
+            formatted = g_settings.msgTemplates.format(self._MSG_TEMPLATE, ctx={'header': title,
+             'text': text})
+            return [MessageData(formatted, self._getGuiSettings(message, self._MSG_TEMPLATE))]
+        return []
+
+
+class PremiumSubsReceivedFromInvoiceFormatter(ServiceChannelFormatter):
+    _MSG_TEMPLATE = 'InformationHeaderSysMessage'
+    __subscriptionCtrl = dependency.descriptor(IWotPlusController)
+
+    def format(self, message, *args):
+        days = message.data.get('savedData', {}).get('premium_subs_days', 0)
+        if self.__subscriptionCtrl.getState() in (WotPlusState.ACTIVE, WotPlusState.CANCELLED):
+            title = backport.text(R.strings.messenger.serviceChannelMessages.premiumSubs.premiumSubsInvoiceReceived.title(), days=days)
+            text = backport.text(R.strings.messenger.serviceChannelMessages.premiumSubs.premiumSubsInvoiceReceived.body(), days=days)
+            formatted = g_settings.msgTemplates.format(self._MSG_TEMPLATE, ctx={'header': title,
+             'text': text})
+            return [MessageData(formatted, self._getGuiSettings(message, self._MSG_TEMPLATE))]
+        return []
 
 
 class WotPlusExpiredFormatter(IStandardMessageFormatter):
@@ -112,6 +163,17 @@ class PassiveXpIncompatibleCrewFormatter(IStandardMessageFormatter):
 
     def __init__(self):
         super(PassiveXpIncompatibleCrewFormatter, self).__init__('PassiveXPIncompatibleCrewMessage')
+
+    def getValues(self, message, *args):
+        vehTypeCD = message.data.get('vehTypeCD')
+        vehName = getUserName(getVehicleType(vehTypeCD))
+        return {'vehicleName': vehName}
+
+
+class PassiveXpInvalidCrewFormatter(IStandardMessageFormatter):
+
+    def __init__(self):
+        super(PassiveXpInvalidCrewFormatter, self).__init__('PassiveXpInvalidCrewMessage')
 
     def getValues(self, message, *args):
         vehTypeCD = message.data.get('vehTypeCD')

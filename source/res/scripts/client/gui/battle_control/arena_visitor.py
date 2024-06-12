@@ -344,6 +344,12 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasRespawns(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.RESPAWN)
 
+    def hasLiftOver(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.LIFT_OVER)
+
+    def hasFairplay(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.FAIRPLAY)
+
     def isSquadSupported(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SQUADS)
 
@@ -546,9 +552,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def vehicles(self):
         return self._vehicles
 
-    def isArenaNotStarted(self):
-        return self.getArenaPeriod() in (_PERIOD.IDLE, _PERIOD.WAITING, _PERIOD.PREBATTLE)
-
     @property
     def modifiers(self):
         return self._modifiers
@@ -567,6 +570,12 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasRespawns(self):
         return self._bonus.hasRespawns()
+
+    def hasFairplay(self):
+        return self._bonus.hasFairplay()
+
+    def hasLiftOver(self):
+        return self._bonus.hasLiftOver()
 
     def isEnableExternalRespawn(self):
         ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)

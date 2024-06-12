@@ -191,9 +191,9 @@ class LobbyContext(ILobbyContext):
 
     @adisp_async
     @adisp_process
-    def isHeaderNavigationPossible(self, callback=None):
+    def isHeaderNavigationPossible(self, callback=None, alias=None):
         for confirmator in set(self.__headerNavigationConfirmators):
-            confirmed = yield confirmator()
+            confirmed = yield confirmator(alias=alias)
             if not confirmed:
                 callback(False)
 

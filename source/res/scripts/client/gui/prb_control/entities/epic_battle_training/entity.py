@@ -78,9 +78,6 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(EpicBattleTrainingIntroEntity, self).fini()
         if not woEvents:
-            aliasToLoad = [PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY]
-            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
-                g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeEpicTrainingFromCarousel()
         else:
             g_eventDispatcher.removeEpicTrainingFromCarousel(closeWindow=False)
